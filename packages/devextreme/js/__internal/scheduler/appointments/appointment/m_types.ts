@@ -17,6 +17,7 @@ export interface AppointmentProperties extends Record<string, unknown> {
   allowDelete: boolean;
   allDay: boolean;
   reduced: string;
+  hideReducedIcon: boolean;
   isCompact: boolean;
   startDate: Date;
   cellWidth: number;

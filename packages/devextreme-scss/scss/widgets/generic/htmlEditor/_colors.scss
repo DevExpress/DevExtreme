@@ -1,11 +1,7 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
 @use "../color" as extcolor;
-
-// adduse
-
 
 $htmleditor-border-color: $base-border-color !default;
 
@@ -24,7 +20,6 @@ $htmleditor-mention-bg: null !default;
 $htmleditor-mention-color: null !default;
 $htmleditor-table-border-color: $base-border-color !default;
 $htmleditor-cells-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
-
 
 @if $color == "carmine" {
   $htmleditor-normal-format-active-bg: color.adjust($base-element-bg, $lightness: -10%, $space: hsl) !default;
@@ -97,4 +92,3 @@ $htmleditor-cells-separator-bg: color.change($base-accent, $alpha: 0.5) !default
   $htmleditor-mention-bg: color.adjust($base-bg, $lightness: -13.5%, $space: hsl) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
-

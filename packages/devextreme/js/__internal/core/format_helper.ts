@@ -12,7 +12,7 @@ import {
   isPlainObject,
   isString,
 } from '@js/core/utils/type';
-import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
+import { injector as dependencyInjector } from '@ts/core/utils/dependency_injector';
 
 import { getGlobalFormatByDataType } from './global_format_config';
 

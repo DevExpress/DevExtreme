@@ -3,7 +3,7 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
 import dateUtils from '@ts/ui/date_box/date_utils';
@@ -219,12 +219,12 @@ class TimeView extends Editor<TimeViewProperties> {
     return !use24HourFormat && format12Value === TIMEVIEW_FORMAT12_PM;
   }
 
-  _onHourBoxValueChanged({ value, component }: { value: number; component: NumberBox }): void {
+  _onHourBoxValueChanged({ value }: { value?: number | null }): void {
     const currentValue = this._getValue();
     const newValue = new Date(currentValue);
-    let newHours = this._convertMaxHourToMin(value);
+    let newHours = this._convertMaxHourToMin(value ?? 0);
 
-    component.option('value', newHours);
+    this._hourBox.option('value', newHours);
 
     if (this._isPM()) {
       newHours += 12;
@@ -251,9 +251,9 @@ class TimeView extends Editor<TimeViewProperties> {
         max: 60,
         value: this._getValue().getMinutes(),
         onKeyboardHandled: (opts: KeyboardKeyDownEvent) => this._keyboardHandler(opts),
-        onValueChanged: ({ value, component }: { value: number; component: NumberBox }) => {
-          const newMinutes = (60 + value) % 60;
-          component.option('value', newMinutes);
+        onValueChanged: ({ value }: { value?: number | null }): void => {
+          const newMinutes = (60 + (value ?? 0)) % 60;
+          this._minuteBox.option('value', newMinutes);
 
           const time = new Date(this._getValue());
           time.setMinutes(newMinutes);

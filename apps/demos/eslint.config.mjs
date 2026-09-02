@@ -99,6 +99,7 @@ export default [
           'axe',
           'canvg',
           'devextreme',
+          'dnd',
           'dxo',
           'jsx',
           'luxon',
@@ -113,6 +114,7 @@ export default [
           'callstack',
           'Deprecations',
           'ignoreDeprecations',
+          'reseller',
         ];
 
         return spellcheckRule;
@@ -489,6 +491,14 @@ export default [
       globals: {
         testUtils: true,
       },
+    },
+  },
+
+  {
+    files: ['testing/apiMocks/xmla/**/*.ts'],
+    rules: {
+      '@stylistic/quotes': 'off',
+      'spellcheck/spell-checker': 'off',
     },
   },
 

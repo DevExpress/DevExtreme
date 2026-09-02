@@ -41,7 +41,8 @@ class TestCommand extends BaseCommand<TestCommandParams, string> {
     return data;
   }
 
-  parseResult(response: string): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  parseResult(response: string, params?: TestCommandParams): string {
     return `Parsed result: ${response}`;
   }
 }

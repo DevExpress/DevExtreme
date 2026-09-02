@@ -8,7 +8,7 @@ import registerComponent from 'core/component_registrator';
 import { logger } from 'core/utils/console';
 import resizeObserverSingleton from 'core/resize_observer';
 import { isFunction } from 'core/utils/type';
-import BaseWidget from '__internal/viz/core/m_base_widget';
+import BaseWidget from '__internal/viz/core/base_widget';
 import { DEBUG_createEventTrigger, DEBUG_createResizeHandler } from '__internal/viz/core/base_widget.utils';
 import { BaseThemeManager } from 'viz/core/base_theme_manager';
 import rendererModule from 'viz/core/renderers/renderer_default';
@@ -161,6 +161,12 @@ QUnit.test('Theme manager callback', function(assert) {
     }], 'renderer animation options');
 });
 
+QUnit.test('encodeHtml is false by default (T1334517)', function(assert) {
+    this.createWidget();
+
+    assert.strictEqual(this.widget.option('encodeHtml'), false);
+});
+
 // T190525
 QUnit.test('Event is triggered from "_clean"', function(assert) {
     this.onClean = function() {
@@ -254,7 +260,7 @@ QUnit.test('Handler is called inside the renderer lock', function(assert) {
     this.createWidget();
     const spy = sinon.spy(this.widget, '_applyChanges');
 
-    this.widget.option('encodeHtml', false);
+    this.widget.option('encodeHtml', true);
 
     assert.ok(this.renderer.lock.lastCall.calledBefore(spy.lastCall) && this.renderer.unlock.lastCall.calledAfter(spy.lastCall));
 });
@@ -272,7 +278,7 @@ QUnit.test('Another handler is called if option is changed inside the handler', 
         }
     });
 
-    this.widget.option('encodeHtml', false);
+    this.widget.option('encodeHtml', true);
 
     assert.strictEqual(spy.callCount, 2, 'call count');
 });
@@ -286,7 +292,7 @@ QUnit.test('Count the actual number of changes', function(assert) {
     });
 
     widget.beginUpdate();
-    widget.option('encodeHtml', false);
+    widget.option('encodeHtml', true);
     widget.option({ redrawOnResize: true });
     widget.endUpdate();
 

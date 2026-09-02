@@ -254,6 +254,18 @@ document.querySelectorAll('.edge-toggle').forEach(function(cb) {
   }
 });
 
+/* ── Shared: Edge type select all (optional, only if the template renders it) ── */
+var toggleAllEdges = document.getElementById('toggle-all-edges');
+if (toggleAllEdges) {
+  toggleAllEdges.addEventListener('change', function() {
+    var checked = this.checked;
+    document.querySelectorAll('.edge-toggle').forEach(function(cb) {
+      cb.checked = checked;
+      cb.dispatchEvent(new Event('change'));
+    });
+  });
+}
+
 /* ── Shared: Search ── */
 document.getElementById('search').addEventListener('input', function() {
   var q = this.value.toLowerCase().trim();
@@ -271,8 +283,9 @@ var infoPanel = document.getElementById('info-content');
 var defaultInfoHtml = '<p style="color:#888;">Click a node or edge to see details.</p>';
 
 cy.on('tap', 'node, edge', function(e) {
-  cy.nodes().removeClass('search-match');
   var t = e.target;
+  if (t.hasClass('no-select')) return;
+  cy.nodes().removeClass('search-match');
   var infoTarget = typeof normalizeClickTarget === 'function' ? normalizeClickTarget(t) : t;
   var checkId = infoTarget.id();
   if (selectedTarget && selectedTarget.id() === checkId) {

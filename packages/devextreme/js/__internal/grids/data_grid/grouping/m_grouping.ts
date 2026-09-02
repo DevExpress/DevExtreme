@@ -1,22 +1,17 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/method-signature-style */
-import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
-import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
-import { isDefined, isString } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import { restoreFocus, setTabIndex } from '@js/ui/shared/accessibility';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
-import type { ColumnsController } from '../../grid_core/columns_controller/m_columns_controller';
-import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
 import gridCore from '../m_core';
@@ -63,13 +58,13 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  protected totalItemsCount() {
+  public totalItemsCount() {
     const totalCount = super.totalItemsCount();
 
     return totalCount > 0 && this._dataSource.group() && this._dataSource.requireTotalCount() ? totalCount + this._grouping.totalCountCorrection() : totalCount;
   }
 
-  protected itemsCount() {
+  public itemsCount() {
     return this._dataSource.group() ? this._grouping.itemsCount() || 0 : super.itemsCount.apply(this, arguments as any);
   }
 
@@ -126,7 +121,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._grouping.refresh.apply(this._grouping, arguments);
   }
 
-  protected changeRowExpand(path) {
+  public changeRowExpand(path) {
     const that = this;
     const dataSource = that._dataSource;
 
@@ -188,193 +183,16 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._grouping.handleDataLoading(options);
   }
 
-  protected _handleDataLoaded(options) {
-    return this._grouping.handleDataLoaded(options, super._handleDataLoaded.bind(this));
+  public customizeLoadResultHandler(options) {
+    return this._grouping.handleDataLoaded(options, super.customizeLoadResultHandler.bind(this));
   }
 
-  protected _handleDataLoadedCore(options) {
-    return this._grouping.handleDataLoadedCore(options, super._handleDataLoadedCore.bind(this));
+  protected customizeLoadResultHandlerCore(options) {
+    return this._grouping.handleDataLoadedCore(options, super.customizeLoadResultHandlerCore.bind(this));
   }
 };
 
 dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
-
-const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => class GroupingDataControllerExtender extends Base {
-  public init() {
-    const that = this;
-    super.init();
-
-    that.createAction('onRowExpanding');
-    that.createAction('onRowExpanded');
-    that.createAction('onRowCollapsing');
-    that.createAction('onRowCollapsed');
-  }
-
-  protected _beforeProcessItems(items) {
-    const groupColumns = this._columnsController.getGroupColumns();
-
-    items = super._beforeProcessItems(items);
-    if (items.length && groupColumns.length) {
-      items = this._processGroupItems(items, groupColumns.length);
-    }
-    return items;
-  }
-
-  protected _processItem(item, options) {
-    if (isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf('group') === 0) {
-      item = this._processGroupItem(item, options);
-      options.dataIndex = 0;
-    } else {
-      // @ts-expect-error
-      item = super._processItem.apply(this, arguments);
-    }
-    return item;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _processGroupItem(item, options?) {
-    return item;
-  }
-
-  private _processGroupItems(items, groupsCount, options?) {
-    const that = this;
-    const groupedColumns = that._columnsController.getGroupColumns();
-    const column = groupedColumns[groupedColumns.length - groupsCount];
-
-    if (!options) {
-      const scrollingMode = that.option('scrolling.mode');
-      options = {
-        collectContinuationItems: scrollingMode !== 'virtual' && scrollingMode !== 'infinite',
-        resultItems: [],
-        path: [],
-        values: [],
-      };
-    }
-
-    const { resultItems } = options;
-
-    if (options.data) {
-      if (options.collectContinuationItems || !options.data.isContinuation) {
-        resultItems.push({
-          rowType: 'group',
-          data: options.data,
-          groupIndex: options.path.length - 1,
-          isExpanded: !!options.data.items,
-          key: options.path.slice(0),
-          values: options.values.slice(0),
-        });
-      }
-    }
-    if (items) {
-      if (groupsCount === 0) {
-        resultItems.push.apply(resultItems, items);
-      } else {
-        for (let i = 0; i < items.length; i++) {
-          const item = items[i];
-          if (item && 'items' in item) {
-            options.data = item;
-            options.path.push(item.key);
-            options.values.push(column && column.deserializeValue && !column.calculateDisplayValue ? column.deserializeValue(item.key) : item.key);
-            that._processGroupItems(item.items, groupsCount - 1, options);
-            options.data = undefined;
-            options.path.pop();
-            options.values.pop();
-          } else {
-            resultItems.push(item);
-          }
-        }
-      }
-    }
-
-    return resultItems;
-  }
-
-  public publicMethods() {
-    return super.publicMethods().concat(['collapseAll', 'expandAll', 'isRowExpanded', 'expandRow', 'collapseRow']);
-  }
-
-  private collapseAll(groupIndex) {
-    const dataSource = this._dataSource;
-    if (dataSource && dataSource.collapseAll(groupIndex)) {
-      dataSource.pageIndex(0);
-      dataSource.reload();
-    }
-  }
-
-  private expandAll(groupIndex) {
-    const dataSource = this._dataSource;
-    if (dataSource && dataSource.expandAll(groupIndex)) {
-      dataSource.pageIndex(0);
-      dataSource.reload();
-    }
-  }
-
-  private changeRowExpand(key) {
-    const that = this;
-    const expanded = that.isRowExpanded(key);
-    const args: any = {
-      key,
-      expanded,
-    };
-
-    that.executeAction(expanded ? 'onRowCollapsing' : 'onRowExpanding', args);
-
-    if (!args.cancel) {
-      return when(that._changeRowExpandCore(key)).done(() => {
-        args.expanded = !expanded;
-        that.executeAction(expanded ? 'onRowCollapsed' : 'onRowExpanded', args);
-      });
-    }
-
-    // @ts-expect-error
-    return new Deferred().resolve();
-  }
-
-  protected _changeRowExpandCore(key) {
-    const that = this;
-    const dataSource = this._dataSource;
-
-    // @ts-expect-error
-    const d = new Deferred();
-    if (!dataSource) {
-      d.resolve();
-    } else {
-      when(dataSource.changeRowExpand(key)).done(() => {
-        that.load().done(d.resolve).fail(d.reject);
-      }).fail(d.reject);
-    }
-    return d;
-  }
-
-  private isRowExpanded(key) {
-    const dataSource = this._dataSource;
-
-    return dataSource && dataSource.isRowExpanded(key);
-  }
-
-  private expandRow(key) {
-    if (!this.isRowExpanded(key)) {
-      return this.changeRowExpand(key);
-    }
-    // @ts-expect-error
-    return new Deferred().resolve();
-  }
-
-  private collapseRow(key) {
-    if (this.isRowExpanded(key)) {
-      return this.changeRowExpand(key);
-    }
-    // @ts-expect-error
-    return new Deferred().resolve();
-  }
-
-  public optionChanged(args) {
-    if (args.name === 'grouping'/* autoExpandAll */) {
-      args.name = 'dataSource';
-    }
-    super.optionChanged(args);
-  }
-};
 
 const onGroupingMenuItemClick = function (column, rowIndex, params) {
   const keyboardNavigationController = this.getKeyboardNavigationController?.();
@@ -634,7 +452,7 @@ export const GroupingHeaderPanelExtender = (
   }
 };
 
-const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingRowsViewExtender extends Base {
+export const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingRowsViewExtender extends Base {
   private getContextMenuItems(options) {
     const that = this;
     const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
@@ -697,7 +515,7 @@ const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingR
   }
 };
 
-const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class GroupingHeadersViewExtender extends Base {
+export const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class GroupingHeadersViewExtender extends Base {
   public getContextMenuItems(options) {
     const that = this;
     const groupItems: any[] = [];
@@ -745,54 +563,3 @@ const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class
     return allowDragging(groupPanelOptions, column) || super.allowDragging(column);
   }
 };
-
-gridCore.registerModule('grouping', {
-  defaultOptions() {
-    return {
-      grouping: {
-        autoExpandAll: true,
-        allowCollapsing: true,
-        contextMenuEnabled: true,
-        expandMode: 'buttonClick',
-        texts: {
-          groupContinuesMessage: messageLocalization.format('dxDataGrid-groupContinuesMessage'),
-          groupContinuedMessage: messageLocalization.format('dxDataGrid-groupContinuedMessage'),
-          groupByThisColumn: messageLocalization.format('dxDataGrid-groupHeaderText'),
-          ungroup: messageLocalization.format('dxDataGrid-ungroupHeaderText'),
-          ungroupAll: messageLocalization.format('dxDataGrid-ungroupAllText'),
-        },
-      },
-      groupPanel: {
-        visible: false,
-        emptyPanelText: messageLocalization.format('dxDataGrid-groupPanelEmptyText'),
-        allowColumnDragging: true,
-      },
-    };
-  },
-  extenders: {
-    controllers: {
-      data: GroupingDataControllerExtender,
-      columns: (Base: ModuleType<ColumnsController>) => class GroupingColumnsExtender extends Base {
-        public _getExpandColumnOptions() {
-          // @ts-expect-error
-          const options = super._getExpandColumnOptions.apply(this, arguments);
-
-          // @ts-expect-error
-          options.cellTemplate = gridCore.getExpandCellTemplate();
-
-          return options;
-        }
-      },
-      editing: (Base: ModuleType<EditingController>) => class GroupingEditingExtender extends Base {
-        protected _isProcessedItem(item) {
-          return isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf('group') === 0;
-        }
-      },
-    },
-    views: {
-      headerPanel: GroupingHeaderPanelExtender,
-      rowsView: GroupingRowsViewExtender,
-      columnHeadersView: columnHeadersViewExtender,
-    },
-  },
-});

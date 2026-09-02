@@ -17,7 +17,6 @@ import type {
   ShowingEvent,
   ToolbarItem,
 } from '@js/ui/popup';
-import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { current, isFluent } from '@js/ui/themes';
@@ -56,7 +55,7 @@ export interface AppointmentPopupState {
 
 interface AppointmentFormOpeningArgs {
   form: AppointmentForm['dxForm'];
-  popup: dxPopup;
+  popup: Popup;
   appointmentData: SafeAppointment | null;
   cancel: boolean;
 }

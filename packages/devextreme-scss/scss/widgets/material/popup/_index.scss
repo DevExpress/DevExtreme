@@ -1,15 +1,11 @@
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../overlay/colors" as *;
 @use "../toolbar/mixins" as *;
 @use "../toolbar/sizes" as *;
 @use "../typography/sizes" as *;
 @use "../../base/popup";
-
-// adduse
 @use "../overlay";
 
 $material-popup-toolbar-label-font-size: $material-m-font-size;

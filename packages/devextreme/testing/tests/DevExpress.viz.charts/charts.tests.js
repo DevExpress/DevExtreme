@@ -1,6 +1,6 @@
 import testGlobalExports from '../../helpers/publicModulesHelper.js';
-import * as AdvancedChartModule from '__internal/viz/chart_components/m_advanced_chart';
-import * as baseChartModule from '__internal/viz/chart_components/m_base_chart';
+import * as AdvancedChartModule from '__internal/viz/chart_components/advanced_chart';
+import * as baseChartModule from '__internal/viz/chart_components/base_chart';
 import CrosshairModule from 'viz/chart_components/crosshair';
 import LayoutManagerModule from 'viz/chart_components/layout_manager';
 import multiAxesSynchronizer from '__internal/viz/chart_components/multi_axes_synchronizer';

@@ -1,15 +1,32 @@
-import type { DataSource } from '@js/common/data';
 import type { SearchOperation } from '@js/common/data.types';
 import type { ScalarFilterValue } from '@js/common/grids';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { DataSource } from '@ts/data/data_source/types';
 
 import type { Column } from '../columns_controller/types';
 import type { ChangedEvent, OperationTypes, RawItemData } from '../data_source_adapter/types';
 
 /** rows */
 
-export interface ItemProcessingOptions {
-  visibleColumns: Column[];
+export interface RefreshOptions {
+  load?: boolean;
+  reload?: boolean;
+  changesOnly?: boolean;
+  lookup?: boolean;
+  selection?: boolean;
+  allowCancelEditing?: boolean;
+  isPageChanged?: boolean;
+}
+
+export interface UserState {
+  searchText: string | undefined;
+  pageIndex: number;
+  pageSize: number;
+  expandedRowKeys?: unknown[];
+}
+
+export interface ItemProcessingOptions<TColumn extends Column = Column> {
+  visibleColumns: TColumn[];
   dataIndex: number;
   rowIndex?: number;
   detailColumnIndex?: number;
@@ -26,6 +43,7 @@ export type RowWatch = (
 
 export interface Cell {
   column?: Column;
+  isEditing?: boolean;
   update?: RowUpdate;
 }
 
@@ -62,7 +80,7 @@ export type RowChangeType = 'update' | 'insert' | 'remove';
 
 export type RowOperation = RowChangeType | 'replace';
 
-interface DataChangeBase {
+export interface DataChangeBase {
   isFirstRender?: boolean;
   repaintChangesOnly?: boolean;
   needUpdateDimensions?: boolean;
@@ -72,6 +90,7 @@ interface DataChangeBase {
   changes?: unknown[];
   cancel?: boolean;
   isLiveUpdate?: boolean;
+  totalColumnIndices?: number[];
 }
 
 export interface UpdateChange extends DataChangeBase {
@@ -104,16 +123,39 @@ export type DataChange = | UpdateChange
   | (DataChangeBase & { changeType: 'refresh', event: unknown; virtualColumnsScrolling: boolean })
   | (DataChangeBase & { changeType: 'refresh', useProcessedItemsCache: boolean; cancelEmptyChanges: boolean });
 
-export type ChangedRows = Required<
-  Pick<UpdateChange, 'items' | 'rowIndices' | 'changeTypes' | 'columnIndices'>
->;
-
-export interface UpdateRowChange {
+export interface UpdateItemChange {
   changeType: RowChangeType;
   rowIndex: number;
   item?: ProcessedItem;
   columnIndices?: number[];
 }
+
+export type GetUpdatedColumnIndices = (
+  oldItem: ProcessedItem,
+  newItem: ProcessedItem,
+  visibleRowIndex: number,
+  isLiveUpdate?: boolean,
+) => number[] | undefined;
+
+export interface ItemChangeOptions {
+  rowIndexDelta: number;
+  isPartialUpdate: boolean;
+  isLiveUpdate?: boolean;
+}
+
+export interface ItemOperationOptions extends ItemChangeOptions {
+  newItems: ProcessedItem[];
+}
+
+export type RowIndexByKey = Record<string, number | undefined>;
+
+export type RowIndexCorrection = (rowIndex: number) => number;
+
+export type ItemChange = | { type: 'insert'; index: number; data: ProcessedItem }
+  | { type: 'update'; index: number; data: ProcessedItem; oldItem: ProcessedItem }
+  | { type: 'remove'; index: number; oldItem: ProcessedItem }
+  | { type: 'replace'; index: number; data: ProcessedItem }
+  | { type: 'updateVisibility'; index: number; data: ProcessedItem };
 
 /** data source */
 

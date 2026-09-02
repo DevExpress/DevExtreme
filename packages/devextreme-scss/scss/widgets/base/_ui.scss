@@ -1,7 +1,5 @@
 @use "./mixins" as *;
 
-// adduse
-
 .dx-clearfix {
   @include dx-clearfix-mixin();
 }

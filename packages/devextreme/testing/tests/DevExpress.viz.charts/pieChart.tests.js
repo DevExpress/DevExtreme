@@ -18,7 +18,7 @@ import {
 } from './chartParts/commons.js';
 import exportModule from '__internal/viz/core/exportModule';
 import seriesModule from 'viz/series/base_series';
-import { BaseChart } from '__internal/viz/chart_components/m_base_chart';
+import { BaseChart } from '__internal/viz/chart_components/base_chart';
 import labelModule from 'viz/series/points/label';
 import dataValidatorModule from 'viz/components/data_validator';
 import translator1DModule from 'viz/translators/translator1d';
@@ -32,7 +32,7 @@ import {
     insertMockFactory, restoreMockFactory, seriesMockData
 } from '../../helpers/chartMocks.js';
 import TemplateManagerModule from '__internal/core/m_template_manager';
-import graphicObjects from '__internal/common/m_charts';
+import graphicObjects from '__internal/common/charts';
 import eventsEngine from 'common/core/events/core/events_engine';
 import devices from '__internal/core/m_devices';
 import { stubSeam } from '../../helpers/moduleSeam.js';

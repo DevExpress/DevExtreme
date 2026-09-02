@@ -1,8 +1,5 @@
 @use "../mixins" as *;
 
-// adduse
-
-
 $color-view-container-width: 450px;
 $color-view-palette-width: 288px;
 $color-view-palette-height: 299px;
@@ -15,7 +12,6 @@ $colorview-transparent-background-color: #ccc;
 
 $colorview-handle-first-side-size: 36px;
 $colorview-handle-second-side-size: 17px;
-
 
 .dx-colorview-container {
   width: $color-view-container-width;
@@ -132,7 +128,6 @@ $colorview-handle-second-side-size: 17px;
 .dx-colorbox-input-container {
   height: 100%;
 }
-
 
 .dx-colorview-palette-gradient-white {
   $palette-white-bg: 270deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1);

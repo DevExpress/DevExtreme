@@ -3,12 +3,8 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "../../material/tooltip/colors" as *;
 @use "../../base/slider";
-
-
-// adduse
 
 $material-slider-radius: 50%;
 $material-slider-handle-active-border-width: 2px;

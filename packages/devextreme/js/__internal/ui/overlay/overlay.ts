@@ -1,4 +1,5 @@
-import type { AnimationConfig } from '@js/common/core/animation';
+import type { HorizontalAlignment, VerticalAlignment } from '@js/common';
+import type { AnimationConfig, AnimationState, PositionConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { hideCallback as hideTopOverlayCallback } from '@js/common/core/environment/hide_callback';
 import type { NativeEventInfo } from '@js/common/core/events';
@@ -101,10 +102,31 @@ export interface GeometryOptions {
   isDimensionChange?: boolean;
 }
 
-export interface OverlayProperties extends Properties {
-  container?: string | dxElementWrapper | Element;
+export type InternalAnimationState = AnimationState | {
+  [key: string]: number | string | (() => number | string);
+};
 
-  visualContainer?: string | Element | null;
+export type InternalAnimationConfig = Omit<AnimationConfig, 'from' | 'to'> & {
+  from?: InternalAnimationState;
+  to?: InternalAnimationState;
+};
+
+export type InternalPositionAlignment = NonNullable<PositionConfig['my']>
+  | `${VerticalAlignment} ${HorizontalAlignment}`;
+
+export type InternalPositionConfig = Omit<PositionConfig, 'of' | 'offset' | 'my' | 'at'> & {
+  of?: PositionConfig['of'] | dxElementWrapper;
+  offset?: PositionConfig['offset'] | { h?: number; v?: number };
+  my?: InternalPositionAlignment;
+  at?: InternalPositionAlignment;
+};
+
+export interface OverlayInternalProperties {
+  _ignoreFunctionValueDeprecation?: boolean;
+
+  visualContainer?: string | Element | dxElementWrapper | Window | null;
+
+  onPositioned?: ((e: PositioningEvent) => void) | null;
 
   innerOverlay?: boolean;
 
@@ -134,7 +156,21 @@ export interface OverlayProperties extends Properties {
 
   _checkParentVisibility?: boolean;
 
-  hideTopOverlayHandler?: () => void;
+  hideTopOverlayHandler?: (() => void) | null;
+}
+
+export interface OverlayProperties extends Omit<Properties, 'animation' | 'width' | 'height'>,
+  OverlayInternalProperties {
+  width?: Properties['width'] | (() => number | string);
+
+  height?: Properties['height'] | (() => number | string);
+
+  animation?: dxOverlayAnimation | {
+    show?: InternalAnimationConfig;
+    hide?: InternalAnimationConfig;
+  } | null;
+
+  container?: string | dxElementWrapper | Element | null;
 }
 
 export type PositioningEvent<
@@ -344,13 +380,11 @@ class Overlay<
     return this._$content;
   }
 
-  ctor(element: Element, options: TProperties): void {
-    super.ctor(element, options);
+  _initOptions(options: TProperties): void {
+    super._initOptions(options);
 
-    if (options) {
-      if ('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
-        this._logDeprecatedPreventScrollEventsInfo();
-      }
+    if ('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
+      this._logDeprecatedPreventScrollEventsInfo();
     }
   }
 
@@ -406,7 +440,7 @@ class Overlay<
     this._$content?.toggleClass(INNER_OVERLAY_CLASS, innerOverlay);
   }
 
-  _initHideTopOverlayHandler(handler?: () => void): void {
+  _initHideTopOverlayHandler(handler?: (() => void) | null): void {
     if (handler) {
       this._hideTopOverlayHandler = handler;
     }

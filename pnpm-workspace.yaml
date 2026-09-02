@@ -70,12 +70,12 @@ catalog:
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.29
   devexpress-gantt: 4.1.69
-  devextreme-exceljs-fork: 4.4.11
+  devextreme-exceljs-fork: 4.4.13
   devextreme-quill: 1.8.0
   "@eslint/js": 9.39.4
   eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
-  eslint-config-devextreme: 1.1.11
+  eslint-config-devextreme: 1.1.12
   eslint-plugin-i18n: 2.4.0
   eslint-plugin-import: 2.32.0
   eslint-plugin-jsx-a11y: 6.10.2
@@ -91,6 +91,7 @@ catalog:
   zod: 3.24.4
   zod-to-json-schema: 3.24.6
   "@babel/eslint-parser": 7.29.7
+  "@playwright/test": 1.62.1
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.3.5
   "@stylistic/eslint-plugin": 5.10.0

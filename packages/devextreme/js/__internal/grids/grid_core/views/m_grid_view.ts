@@ -23,6 +23,7 @@ import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/data_controller';
+import type { DataChange } from '../data_controller/types';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import type { RowsView } from './m_rows_view';
@@ -115,7 +116,7 @@ export class ResizingController extends modules.ViewController {
 
   private _lastHeight: any;
 
-  protected _adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsController;
 
   private _editorFactoryController!: EditorFactory;
 
@@ -132,7 +133,7 @@ export class ResizingController extends modules.ViewController {
     this._dataController = this.getController('data');
     this._columnsController = this.getController('columns');
     this._columnHeadersView = this.getView('columnHeadersView');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
     this._editorFactoryController = this.getController('editorFactory');
     this._footerView = this.getView('footerView');
     this._rowsView = this.getView('rowsView');
@@ -141,11 +142,12 @@ export class ResizingController extends modules.ViewController {
 
   private _initPostRenderHandlers() {
     if (!this._refreshSizesHandler) {
-      this._refreshSizesHandler = (e) => {
+      this._refreshSizesHandler = (change: DataChange) => {
         // @ts-expect-error
         let resizeDeferred = new Deferred<null>().resolve(null);
-        const changeType = e?.changeType;
-        const isDelayed = e?.isDelayed;
+        const changeType = change?.changeType;
+        // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
+        const isDelayed = change?.isDelayed;
         const needFireContentReady = changeType
           && changeType !== 'updateSelection'
           && changeType !== 'updateFocusedRow'
@@ -155,12 +157,12 @@ export class ResizingController extends modules.ViewController {
         this._dataController.changed.remove(this._refreshSizesHandler);
 
         if (this._checkSize()) {
-          resizeDeferred = this._refreshSizes(e);
+          resizeDeferred = this._refreshSizes(change);
         }
 
         if (needFireContentReady) {
           when(resizeDeferred).done(() => {
-            this._setAriaLabel(e);
+            this._setAriaLabel(change);
             this.fireContentReadyAction();
           });
         }

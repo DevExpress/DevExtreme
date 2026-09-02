@@ -57,6 +57,8 @@ export interface ComponentProperties<TComponent> extends ComponentOptions<
   InitializedEventInfo<TComponent>,
   OptionChangedEventInfo<TComponent>
 > {
+  integrationOptions?: Record<string, unknown>;
+
   onInitializing?: ((e: [ComponentProperties<TComponent>]) => void) | undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -360,7 +362,10 @@ export class Component<
     }
   }
 
-  initialOption(name: string): TProperties {
+  initialOption<TPropertyName extends string>(
+    name: TPropertyName,
+  ): TPropertyName extends keyof TProperties ? TProperties[TPropertyName] : unknown;
+  initialOption(name: string): unknown {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.initial(name);
   }
@@ -372,9 +377,9 @@ export class Component<
     };
   }
 
-  _defaultActionArgs(): DefaultActionArgs<TComponent> {
+  _defaultActionArgs(): DefaultActionArgs<unknown> {
     return {
-      component: this as unknown as TComponent,
+      component: this,
     };
   }
 
@@ -512,7 +517,7 @@ export class Component<
 
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-  _getOptionValue(name: keyof TProperties, context?: any): any {
+  _getOptionValue(name: string, context?: any): any {
     const value = this.option(name);
 
     if (isFunction(value)) {
@@ -522,9 +527,20 @@ export class Component<
     return value;
   }
 
-  // @ts-expect-error
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  option(...args): TProperties {
+  option(): TProperties;
+  option<TPropertyName extends string>(
+    optionName: TPropertyName,
+  ): TPropertyName extends keyof TProperties ? TProperties[TPropertyName] : unknown;
+  option<TPropertyName extends string>(
+    optionName: TPropertyName,
+    optionValue: TPropertyName extends keyof TProperties ? TProperties[TPropertyName] : unknown,
+  ): void;
+  option(optionName: string, optionValue: unknown): void;
+  option(options: Partial<TProperties>): void;
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any,
+     @typescript-eslint/unified-signatures */
+  option(...args: any[]): TProperties;
+  option(...args: unknown[]): unknown {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.option(...args as [never, never]);
   }

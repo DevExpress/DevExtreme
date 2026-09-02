@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $pivotgrid-area-background: $base-bg !default;
 $pivotgrid-border-color: $base-border-color !default;
@@ -146,4 +143,3 @@ $pivotgrid-spin-icon-color: null !default;
   $pivotgrid-position-indicator-color: gray !default;
   $pivotgrid-spin-icon-color: $base-icon-color !default;
 }
-

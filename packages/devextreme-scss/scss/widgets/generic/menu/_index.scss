@@ -5,11 +5,8 @@
 @use "../sizes" as *;
 @use "../menuBase/sizes" as *;
 @use "../../base/icon_fonts" as *;
-
-// adduse
 @use "../menuBase" as *;
 @use "../../base/menu";
-
 
 .dx-context-menu-container-border {
   background-color: transparent;
@@ -24,7 +21,7 @@
   border-width: 1px;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 100%;
     height: 100%;
@@ -114,6 +111,6 @@
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
     border-bottom: 1px solid;
-    border-bottom-color: $menu-popup-border-color
+    border-bottom-color: $menu-popup-border-color;
   }
 }

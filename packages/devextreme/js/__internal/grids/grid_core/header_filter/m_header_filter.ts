@@ -124,8 +124,6 @@ export class HeaderFilterController extends Modules.ViewController {
 
   private _headerFilterView!: HeaderFilterView;
 
-  private _currentColumn: any;
-
   public init() {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
@@ -253,9 +251,7 @@ export class HeaderFilterController extends Modules.ViewController {
       isLookup = true;
 
       if (this.option('syncLookupFilterValues')) {
-        this._currentColumn = column;
-        const filter = this._dataController.getCombinedFilter();
-        this._currentColumn = null;
+        const filter = this._dataController.getCombinedFilterWithExcludedColumn(column);
 
         options.dataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
       } else {
@@ -264,9 +260,7 @@ export class HeaderFilterController extends Modules.ViewController {
     } else {
       const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
 
-      this._currentColumn = column;
-      const filter = this._dataController.getCombinedFilter();
-      this._currentColumn = null;
+      const filter = this._dataController.getCombinedFilterWithExcludedColumn(column);
 
       options.dataSource = {
         filter,
@@ -325,10 +319,6 @@ export class HeaderFilterController extends Modules.ViewController {
     };
 
     return options.dataSource;
-  }
-
-  public getCurrentColumn() {
-    return this._currentColumn;
   }
 
   public showHeaderFilterMenu(columnIndex, isGroupPanel) {
@@ -508,21 +498,20 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
     return false;
   }
 
-  protected _calculateAdditionalFilter() {
+  protected calculateAdditionalFilter() {
     if (this.skipCalculateColumnFilters()) {
-      return super._calculateAdditionalFilter();
+      return super.calculateAdditionalFilter();
     }
 
     const that = this;
-    const filters = [super._calculateAdditionalFilter()];
+    const filters = [super.calculateAdditionalFilter()];
     const columns = that._columnsController.getVisibleColumns(null, true);
-    const headerFilterController = this._headerFilterController;
-    const currentColumn = headerFilterController.getCurrentColumn();
+    const excludedColumn = this.getFilterExcludedColumn();
 
     each(columns, (_, column) => {
       let filter;
 
-      if (currentColumn && currentColumn.index === column.index) {
+      if (excludedColumn && excludedColumn.index === column.index) {
         return;
       }
 
