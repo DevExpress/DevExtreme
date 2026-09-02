@@ -54,8 +54,9 @@ its accent disc and white icon, and a disabled one looked exactly like a live on
     background-color: var(--dx-speed-dial-action-bg-disabled);
   }
 
-  .dx-icon,
-  .dx-fa-button-label {
+  /* The label is painted through the overlay chain, so a two-class selector loses to it. */
+  .dx-overlay-content .dx-fa-button-label-wrapper .dx-fa-button-label,
+  .dx-icon {
     color: var(--dx-speed-dial-action-content-disabled);
   }
 }

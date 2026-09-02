@@ -26,3 +26,9 @@
   0,
 );
 @include dx-scrollable-scrollbars-alwaysvisible(var(--dx-scrollable-scrollbar-thin-size));
+
+/* The scrollbar thumb keeps its full-strength surface inside a disabled widget, where there is
+nothing to scroll. It is shared by every scrollable component, so one rule covers them all. */
+.dx-state-disabled .dx-scrollable-scroll-content {
+  background-color: var(--dx-scrollable-scroll-bg-disabled);
+}

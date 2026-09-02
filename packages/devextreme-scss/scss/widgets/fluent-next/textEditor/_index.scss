@@ -49,7 +49,10 @@
     }
   }
 
-  &.dx-state-disabled {
+  /* Also for an editor nested in a disabled container: DevExtreme puts the state on the
+  container, and the editors inside a ColorView, a Pagination or a Form never carry it. */
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     background-color: transparent;
     border-color: var(--dx-text-editor-border-disabled);
   }
@@ -131,7 +134,10 @@
     background-color: var(--dx-text-editor-filled-bg-focused);
   }
 
-  &.dx-state-disabled {
+  /* Also for an editor nested in a disabled container: DevExtreme puts the state on the
+  container, and the editors inside a ColorView, a Pagination or a Form never carry it. */
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     background-color: transparent;
     border-color: var(--dx-text-editor-border-disabled);
   }
@@ -188,6 +194,7 @@
   }
 
   &.dx-state-disabled,
+  .dx-state-disabled &,
   &.dx-state-readonly {
     &::after {
       border-bottom-color: var(--dx-text-editor-border-disabled);
@@ -339,7 +346,8 @@
     }
   }
 
-  &.dx-state-disabled {
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     background-color: transparent;
 
     .dx-texteditor-label,
@@ -412,7 +420,8 @@
     color: var(--dx-text-editor-clear-button-icon);
   }
 
-  &.dx-state-disabled {
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     .dx-icon-clear {
       color: var(--dx-text-editor-content-disabled);
     }

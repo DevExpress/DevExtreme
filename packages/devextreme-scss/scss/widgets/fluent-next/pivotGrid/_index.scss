@@ -264,6 +264,15 @@
   .dx-area-description-cell {
     color: var(--dx-pivot-grid-content-disabled);
   }
+
+  /* The header cells paint their own text, so colouring the container above never reached the
+  row and column captions inside them. */
+  .dx-pivotgrid-vertical-headers td,
+  .dx-pivotgrid-vertical-headers td span,
+  .dx-pivotgrid-horizontal-headers td,
+  .dx-pivotgrid-horizontal-headers td span {
+    color: var(--dx-pivot-grid-content-disabled);
+  }
 }
 
 /* Total cells paint their own colour, and the state sits above the table rather than on the

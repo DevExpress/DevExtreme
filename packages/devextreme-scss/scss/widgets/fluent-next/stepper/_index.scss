@@ -67,6 +67,12 @@
   .dx-step-caption {
     color: var(--dx-stepper-step-content-disabled);
   }
+
+  .dx-step-selected .dx-step-indicator {
+    color: var(--dx-stepper-step-content-selected-disabled);
+    border-color: var(--dx-stepper-step-bg-selected-disabled);
+    background-color: var(--dx-stepper-step-bg-selected-disabled);
+  }
 }
 
 /* The filled connector kept the accent colour while the steps around it greyed. */

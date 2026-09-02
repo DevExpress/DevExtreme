@@ -28,6 +28,12 @@ $stepper-step-base-label-content: ds.$color-content !default;
 
 $stepper-step-content-selected: ds.$color-content-static-dark !default;
 
+/* A disabled stepper lost the difference between the selected step and the rest: both became a
+white disc with a grey ring. The selected one is filled when enabled, so it stays filled here -
+in the disabled scale - and its numeral inverts against that fill. */
+$stepper-step-bg-selected-disabled: ds.$color-content-disabled !default;
+$stepper-step-content-selected-disabled: ds.$color-content-inverted !default;
+
 $stepper-step-label-content-selected: ds.$color-content-primary !default;
 
 $stepper-step-invalid-content: ds.$color-content-danger !default;
