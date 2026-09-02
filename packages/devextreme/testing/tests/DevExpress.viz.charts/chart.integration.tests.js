@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import rendererModule from 'viz/core/renderers/renderer_default';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import legendModule from 'viz/components/legend';
 import titleModule from 'viz/core/title';
 import dxChart from 'viz/chart';
@@ -12,7 +13,6 @@ import seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
-const mutableRendererModule = rendererModule.default ?? rendererModule;
 const seriesFamilyNativeConstructor = seriesFamilyModule.SeriesFamily;
 setupSeriesFamily();
 QUnit.testStart(function() {
@@ -3301,14 +3301,14 @@ QUnit.module('Option changing in onDrawn after zooming', {
     beforeEach: function() {
         this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, 'move');
         this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, 'move');
-        sinon.stub(mutableRendererModule, 'Renderer').callsFake(function() {
+        stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(function() {
             return new Renderer();
         });
     },
     afterEach: function() {
         legendModule.Legend.prototype.move.restore();
         titleModule.Title.prototype.move.restore();
-        mutableRendererModule.Renderer.restore();
+        rendererModule.Renderer.restore();
     }
 });
 

@@ -68,7 +68,7 @@ const createData = function(featureType, items) {
 const environment = {
     beforeEach: function() {
         const renderer = this.renderer = new Renderer();
-        rendererModule.Renderer = function() { return renderer; };
+        rendererModule.DEBUG_set_Renderer(function() { return renderer; });
     },
 
     createLayer: function(options) {
@@ -473,7 +473,7 @@ QUnit.test('Line labels', function(assert) {
 QUnit.module('Layers management', {
     beforeEach: function() {
         const renderer = this.renderer = new Renderer();
-        rendererModule.Renderer = function() { return renderer; };
+        rendererModule.DEBUG_set_Renderer(function() { return renderer; });
     },
 
     createLayers: function(options) {

@@ -106,7 +106,7 @@ class TestPointerElement extends TestElement {
 }
 
 (function circularGauge() {
-    rendererModule.Renderer = sinon.stub();
+    rendererModule.DEBUG_set_Renderer(sinon.stub());
 
     stubSeam(axisModule, 'Axis', 'DEBUG_set_Axis').callsFake(function(parameters) {
         const axis = new Axis(parameters);

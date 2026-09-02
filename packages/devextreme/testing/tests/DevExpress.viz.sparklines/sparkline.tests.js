@@ -31,13 +31,13 @@ QUnit.begin(function() {
     const StubSeries = Series;
     const StubTooltip = Tooltip;
 
-    rendererModule.Renderer = sinon.spy(function() {
+    rendererModule.DEBUG_set_Renderer(sinon.spy(function() {
         return currentTest().renderer;
-    });
+    }));
 
-    translator2DModule.Translator2D = sinon.spy(function() {
+    translator2DModule.DEBUG_set_Translator2D(sinon.spy(function() {
         return new FakeTranslator();
-    });
+    }));
 
     seriesModule.DEBUG_set_Series(sinon.spy(function() {
         return currentTest().series;

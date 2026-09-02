@@ -24,7 +24,7 @@ const { BarWrapper, stubBarWrapper, restoreBarWrapper } = barGaugeModule;
 $('<div id="test-container">').appendTo('#qunit-fixture');
 let renderer;
 QUnit.begin(function() {
-    rendererModule.Renderer = sinon.spy(function() {
+    rendererModule.DEBUG_set_Renderer(sinon.spy(function() {
         const test = currentTest();
         test.renderer = renderer || new Renderer();
         test.renderer.g = sinon.spy(function() {
@@ -93,7 +93,7 @@ QUnit.begin(function() {
         });
 
         return test.renderer;
-    });
+    }));
     titleModule.DEBUG_set_title(sinon.spy(function() {
         const title = new Title();
         title.getLayoutOptions = () => ({

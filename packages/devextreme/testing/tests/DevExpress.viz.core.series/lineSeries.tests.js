@@ -4,6 +4,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
 import vizUtils from 'viz/core/utils_default';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
 import {
@@ -2277,7 +2278,7 @@ function setDiscreteType(series) {
     QUnit.module('polar Series', {
         beforeEach: function() {
             environmentWithSinonStubPoint.beforeEach.call(this);
-            sinon.stub(vizUtils, 'getCosAndSin');
+            stubSeam(vizUtils, 'getCosAndSin', 'DEBUG_set_getCosAndSin');
             vizUtils.getCosAndSin.returns({ cos: 1, sin: -1 });
         },
         afterEach: function() {

@@ -23,9 +23,9 @@ QUnit.module('Export', {
     beforeEach: function() {
         this.$container = $('#test-container');
         const renderer = this.renderer = new Renderer();
-        rendererModule.Renderer = function() {
+        rendererModule.DEBUG_set_Renderer(function() {
             return renderer;
-        };
+        });
 
         const exportMenu = this.exportMenu = new ExportMenu();
         exportModule.DEBUG_set_ExportMenu(sinon.spy(function() { return exportMenu; }));

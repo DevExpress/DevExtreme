@@ -8,7 +8,7 @@ import tickGeneratorModule from 'viz/axes/tick_generator';
 import rangeModule from 'viz/translators/range';
 import { Axis } from 'viz/axes/base_axis';
 import { extend } from 'core/utils/extend';
-import { stubSeam } from '../../helpers/moduleSeam.js';
+import { stubSeam, spySeam } from '../../helpers/moduleSeam.js';
 
 const TranslatorStubCtor = new ObjectPool(translator2DModule.Translator2D);
 const RangeStubCtor = new ObjectPool(rangeModule.Range);
@@ -96,7 +96,7 @@ const environment = {
         br.isEmpty.returns(true);
         this.translator.getBusinessRange.returns(br);
 
-        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
+        stubSeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D').callsFake(function() {
             return that.translator;
         });
     },
@@ -140,7 +140,7 @@ QUnit.module('Translators in axis', {
     beforeEach: function() {
         environment.beforeEach.call(this);
         translator2DModule.Translator2D.restore();
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
     },
     afterEach: function() {
         environment.afterEach.call(this);
@@ -2231,7 +2231,7 @@ QUnit.module('Circular axis. Margins', $.extend({}, environment, {
         environment.beforeEach.call(this);
 
         translator2DModule.Translator2D.restore();
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
 
         $.extend(this.renderSettings, {
             axisType: 'polarAxes',
@@ -2329,7 +2329,7 @@ QUnit.module('Linear axis. Margins', $.extend({}, environment, {
         environment.beforeEach.call(this);
 
         translator2DModule.Translator2D.restore();
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
 
         $.extend(this.renderSettings, {
             axisType: 'polarAxes',

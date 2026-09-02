@@ -2,12 +2,12 @@ import * as fs from 'node:fs';
 import { IncomingMessage, ServerResponse } from 'node:http';
 import * as path from 'node:path';
 
-import { findHandWrittenMutableFacade, tryBuildAutoMutableFacade } from './autoMutableFacade';
 import {
   isQunitTestOrHelperPath,
   rewriteAspnetArtifactToEsm,
   rewriteQunitTestHelperSource,
 } from './cjsInterop';
+import { findHandWrittenShim } from './handWrittenShims';
 import { setNoCacheHeaders as applyNoCacheHeaders } from './http';
 
 interface StaticFileServiceDeps {
@@ -378,7 +378,7 @@ function sendJsonAsEsmModule(res: ServerResponse, filePath: string): boolean {
 
 // --- Mutable artifact facades ---------------------------------------------------
 
-function sendMutableFacadeModule(res: ServerResponse, shimUrl: string): boolean {
+function sendShimModule(res: ServerResponse, shimUrl: string): boolean {
   // Serve a re-export at the artifact URL so relative library imports and
   // bare import-map entries share the same shim module graph.
   return sendJsModuleBody(
@@ -575,21 +575,11 @@ export function createStaticFileService({
       );
     }
 
-    // Relative library imports bypass import maps — serve mutable facades
-    // at the artifact URL unless ?dx-original=1 (used by the facade itself).
-    // Hand-written shims (themes, …) win; otherwise auto-generate.
-    if (!searchParams.has('dx-original')) {
-      const shimUrl = findHandWrittenMutableFacade(relativeUrlPath);
-      if (shimUrl) {
-        return sendMutableFacadeModule(res, shimUrl);
-      }
-      const autoFacade = tryBuildAutoMutableFacade(
-        relativeUrlPath,
-        rootDirectory,
-      );
-      if (autoFacade) {
-        return sendJsModuleBody(res, autoFacade);
-      }
+    // Relative library imports bypass import maps, so hand-written shims are
+    // also served at the artifact URL to keep one module instance.
+    const shimUrl = findHandWrittenShim(relativeUrlPath);
+    if (shimUrl) {
+      return sendShimModule(res, shimUrl);
     }
 
     if (isJs) {

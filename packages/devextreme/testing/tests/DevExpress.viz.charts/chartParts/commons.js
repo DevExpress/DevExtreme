@@ -79,7 +79,7 @@ const defaultCrosshairOptions = {
 };
 
 // stubs
-sinon.stub(rendererModule, 'Renderer').callsFake((parameters) => {
+stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake((parameters) => {
     return new Renderer(parameters);
 });
 
@@ -247,7 +247,7 @@ const environment = {
         tooltipModule.DEBUG_set_tooltip(sinon.spy(function(parameters) {
             return that.tooltip;
         }));
-        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes, canvas) {
+        stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
             });

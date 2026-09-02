@@ -26,9 +26,9 @@ const StubTooltip = stubClass(tooltipModule.Tooltip, { isEnabled: function() { r
 tooltipModule.DEBUG_set_tooltip(function(parameters) {
     return new StubTooltip(parameters);
 });
-rendererModule.Renderer = function() {
+rendererModule.DEBUG_set_Renderer(function() {
     return currentTest().renderer;
-};
+});
 
 baseThemeManagerModule.DEBUG_set_BaseThemeManager(function() {
     return currentTest().themeManager;

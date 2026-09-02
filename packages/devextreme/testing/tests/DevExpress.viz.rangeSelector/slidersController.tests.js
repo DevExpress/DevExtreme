@@ -12,9 +12,9 @@ const environment = {
     beforeEach: function() {
         const renderer = this.renderer = new Renderer();
 
-        rendererModule.Renderer = function() {
+        rendererModule.DEBUG_set_Renderer(function() {
             return renderer;
-        };
+        });
         this.translator = new translator2DModule.Translator2D({}, {});
         this.translator.update({ min: 10, max: 30 }, { left: 1000, width: 3000 }, { isHorizontal: true });
         this.root = new Element();

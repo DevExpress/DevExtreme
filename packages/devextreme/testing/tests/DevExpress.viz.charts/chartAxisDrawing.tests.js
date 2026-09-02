@@ -18,7 +18,7 @@ import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const TitleOrig = titleModule.Title;
 
-rendererModule.Renderer = sinon.stub();
+rendererModule.DEBUG_set_Renderer(sinon.stub());
 
 const environment = {
     beforeEach: function() {

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable func-names */
 /* eslint-disable no-return-assign */
@@ -91,7 +92,7 @@ export const degreesToRadians = function (value) {
 
 //  Calculates sin and cos for <angle> in degrees
 //  Expects number, no validation
-export const getCosAndSin = function (angle) {
+export let getCosAndSin = function (angle) {
   const angleInRadians = degreesToRadians(angle);
   return { cos: _cos(angleInRadians), sin: _sin(angleInRadians) };
 };
@@ -276,7 +277,7 @@ export const enumParser = function (values) {
   };
 };
 
-export const patchFontOptions = function (options) {
+export let patchFontOptions = function (options) {
   const fontOptions = {};
   each(options || {}, (key, value) => {
     if (/^(cursor)$/i.test(key)) {
@@ -422,7 +423,7 @@ export function normalizePanesHeight(panes) {
   }
 }
 
-export function updatePanesCanvases(panes, canvas, rotated) {
+export let updatePanesCanvases = function (panes, canvas, rotated) {
   let distributedSpace = 0;
   const padding = PANE_PADDING;
   const paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom;
@@ -441,7 +442,7 @@ export function updatePanesCanvases(panes, canvas, rotated) {
     distributedSpace = distributedSpace + calcLength + padding;
     setCanvasValues(pane.canvas);
   });
-}
+};
 
 export const unique = function (array) {
   const values = {};
@@ -671,7 +672,7 @@ export function pointInCanvas(canvas, x, y) {
   return x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom;
 }
 
-export const getNextDefsSvgId = () => `DevExpress_${numDefsSvgElements++}`;
+export let getNextDefsSvgId = () => `DevExpress_${numDefsSvgElements++}`;
 
 export function extractColor(color, isBase?) {
   if (isString(color) || !color) {
@@ -681,3 +682,21 @@ export function extractColor(color, isBase?) {
   }
   return color.fillId || color.base;
 }
+
+/// #DEBUG
+export function DEBUG_set_getCosAndSin(value: typeof getCosAndSin): void {
+  getCosAndSin = value;
+}
+
+export function DEBUG_set_patchFontOptions(value: typeof patchFontOptions): void {
+  patchFontOptions = value;
+}
+
+export function DEBUG_set_updatePanesCanvases(value: typeof updatePanesCanvases): void {
+  updatePanesCanvases = value;
+}
+
+export function DEBUG_set_getNextDefsSvgId(value: typeof getNextDefsSvgId): void {
+  getNextDefsSvgId = value;
+}
+/// #ENDDEBUG

@@ -1,8 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-import { buildMutableModuleImportMapEntries } from './autoMutableFacade';
-
 const ESM_ROOT = '/packages/devextreme/artifacts/transpiled-esm-npm/esm';
 const SHIMS = '/packages/devextreme/testing/helpers/esm-shims';
 const NODE_MODULES = '/packages/devextreme/node_modules';
@@ -298,8 +296,6 @@ export function buildQunitImportMap({
 
     // Exact package-root entries (exporter, color, localization, events, …)
     ...collectPackageRootEntries(),
-    // Forced mutable facades → ESM artifacts (generated at serve-time).
-    ...buildMutableModuleImportMapEntries(ESM_ROOT),
 
     jquery: jqueryUrl.includes('noJQuery') ? jqueryUrl : `${SHIMS}/jquery.js`,
 
@@ -351,8 +347,7 @@ export function buildQunitImportMap({
     'material_blue_light.css!': `${SHIMS}/material_blue_light.css.js`,
     'gantt.css!': `${SHIMS}/gantt.css.js`,
 
-    // Auto-mutable modules are provided by buildMutableModuleImportMapEntries above.
-    // Hand-written only where composition is custom (themes).
+    // Hand-written shim: theme composition is custom.
     'ui/themes': `${SHIMS}/themes.js`,
     '__internal/ui/themes': `${SHIMS}/themes.js`,
 

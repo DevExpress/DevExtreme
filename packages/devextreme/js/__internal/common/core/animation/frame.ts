@@ -1,3 +1,7 @@
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable func-names */
+
 import callOnce from '@js/core/utils/call_once';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 
@@ -46,14 +50,28 @@ const setAnimationFrameMethods = callOnce(() => {
 });
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function requestAnimationFrame(...args): number {
+export let requestAnimationFrame = function (...args): number {
   setAnimationFrameMethods();
 
   // @ts-ignore
   return request.apply(window, args);
-}
+};
 
-export function cancelAnimationFrame(requestID: number): void {
+export let cancelAnimationFrame = function (requestID: number): void {
   setAnimationFrameMethods();
   cancel.apply(window, [requestID]);
+};
+
+/// #DEBUG
+export function DEBUG_set_requestAnimationFrame(
+  value: typeof requestAnimationFrame,
+): void {
+  requestAnimationFrame = value;
 }
+
+export function DEBUG_set_cancelAnimationFrame(
+  value: typeof cancelAnimationFrame,
+): void {
+  cancelAnimationFrame = value;
+}
+/// #ENDDEBUG

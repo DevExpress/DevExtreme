@@ -896,7 +896,7 @@ QUnit.test('Get coordinates using argument and location `edge`', function(assert
 QUnit.module('Lifecycle', {
     beforeEach() {
         this.renderer = new Renderer();
-        rendererModule.Renderer = sinon.spy(() => this.renderer);
+        rendererModule.DEBUG_set_Renderer(sinon.spy(() => this.renderer));
 
         this.createAnnotationStub = sinon.stub().returns([{ draw: sinon.spy(), plaque: { clear: sinon.spy() } }]);
         __test_utils.stub_createAnnotations(this.createAnnotationStub);
@@ -1289,7 +1289,7 @@ QUnit.module('Lifecycle', {
 const environment = {
     beforeEach() {
         this.renderer = new Renderer();
-        rendererModule.Renderer = sinon.spy(() => this.renderer);
+        rendererModule.DEBUG_set_Renderer(sinon.spy(() => this.renderer));
 
         TooltipModule.DEBUG_set_tooltip(sinon.spy((options) => {
             this.tooltip = new Tooltip(options);

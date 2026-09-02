@@ -170,7 +170,7 @@ const environment = {
             };
         };
 
-        that.createRenderer = sinon.stub(rendererModule, 'Renderer').callsFake(function() {
+        that.createRenderer = stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(function() {
             const stubRenderer = new Renderer();
             stubRenderer.clipCircle = that.clipFunc;
             stubRenderer.clipRect = that.clipFunc;

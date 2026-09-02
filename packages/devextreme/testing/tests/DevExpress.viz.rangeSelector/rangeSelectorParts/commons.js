@@ -76,13 +76,13 @@ export const environment = {
         this.axis.calculateInterval = function(a, b) { return a - b; };
         this.seriesDataSource = new StubSeriesDataSource();
 
-        rendererModule.Renderer = returnValue(this.renderer);
+        rendererModule.DEBUG_set_Renderer(returnValue(this.renderer));
         themeManagerModule.DEBUG_set_BaseThemeManager(returnValue(this.themeManager));
         rangeViewModule.DEBUG_set_RangeView(returnValue(this.rangeView));
         slidersControllerModule.DEBUG_set_SlidersController(returnValue(this.slidersController));
         trackerModule.DEBUG_set_Tracker(returnValue(this.tracker));
         seriesDataSourceModule.DEBUG_set_SeriesDataSource(returnValue(this.seriesDataSource));
-        translator2DModule.Translator2D = returnValue(this.translator);
+        translator2DModule.DEBUG_set_Translator2D(returnValue(this.translator));
 
         stubSeam(axisModule, 'Axis', 'DEBUG_set_Axis');
         axisModule.Axis.returns(this.axis);

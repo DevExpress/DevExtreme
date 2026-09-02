@@ -37,7 +37,7 @@ const stubLayersEnvironment = $.extend({}, environment, {
 QUnit.module('Map - elements', stubLayersEnvironment);
 
 QUnit.test('Renderer', function(assert) {
-    const spy = sinon.spy(rendererModule, 'Renderer');
+    const spy = spySeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer');
 
     this.createMap({ pathModified: 'path-modified' });
 

@@ -34,9 +34,9 @@ StubThemeManager.prototype.setTheme = function() {
 tooltipModule.DEBUG_set_tooltip(function(parameters) {
     return new StubTooltip(parameters);
 });
-rendererModule.Renderer = function() {
+rendererModule.DEBUG_set_Renderer(function() {
     return new Renderer();
-};
+});
 
 baseThemeManagerModule.DEBUG_set_BaseThemeManager(function() {
     return currentTest().themeManager;

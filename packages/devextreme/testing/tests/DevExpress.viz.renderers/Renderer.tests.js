@@ -19,7 +19,7 @@ function getMockElement() {
     };
 }
 
-utils.getNextDefsSvgId = sinon.stub().returns('DevExpressId');
+utils.DEBUG_set_getNextDefsSvgId(sinon.stub().returns('DevExpressId'));
 
 QUnit.testDone(function() {
     renderers.SvgElement.resetHistory && renderers.SvgElement.resetHistory();

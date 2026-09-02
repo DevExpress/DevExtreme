@@ -47,9 +47,9 @@ const dataSourceTemplate = [
     { cat: 'Third', val: 300 }
 ];
 
-rendererModule.Renderer = sinon.spy(function(parameters) {
+rendererModule.DEBUG_set_Renderer(sinon.spy(function(parameters) {
     return new Renderer(parameters);
-});
+}));
 
 function createPieChart(options) {
     this.container = $('#chartContainer');

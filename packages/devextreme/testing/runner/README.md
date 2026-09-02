@@ -25,9 +25,7 @@ HTTP static file server for the QUnit runner.
   - `aspnet.js` UMD artifact → `cjsInterop.rewriteAspnetArtifactToEsm`
   - Vendor / Globalize / Intl / VectorMap bundles → wrap as ESM modules
   - JSON (`?esm-export=1`) → `export default …`
-- Serve **generated** mutable facades for modules in `MUTABLE_MODULE_GROUPS` / viz namespace-reexports; redirect only special hand-written cases (e.g. themes).
-- For pure `import * as X; export default X` viz reexports, generate facades on the fly via `autoMutableFacade.tryBuildAutoMutableFacade`.
-- Support `?dx-original=1` so a shim can import the **real** artifact without being redirected back to itself.
+- Redirect the few artifact URLs that have a hand-written shim (themes) — see `handWrittenShims.ts`.
 
 This module is the integration point: almost every special-case rewrite for QUnit ESM loading goes through `tryServeStatic`.
 
@@ -51,40 +49,54 @@ Serve-time **CJS → ESM** source rewrites for QUnit tests, helpers, and bundle 
 
 ---
 
-## `lib/autoMutableFacade.ts`
+## Stubbing a module from a test
 
-Generates **mutable ESM facades** at request time so QUnit can `sinon.stub` module APIs without editing `packages/devextreme/js`.
+Modules are served as plain ESM artifacts. A module namespace object is frozen, so
+`sinon.stub(module, 'name')` and `module.name = fn` both throw — the exporting module
+is the only thing that can reassign its own binding.
 
-**Two sources of facades:**
-
-1. **`MUTABLE_MODULE_GROUPS`** ([`mutableModuleGroups.ts`](./lib/mutableModuleGroups.ts)) — explicit list of stub-able modules (animation frame, viz renderer, exporter, …). All aliases share one `globalThis` api; named exports use `wrapCtor` / live forwards. Import map points at the ESM artifact URL; `static.ts` serves the generated facade unless `?dx-original=1`. Codegen lives in `autoMutableFacade.ts`.
-2. **Namespace-default reexports** (`import * as X; export default X`) under `viz/` — discovered automatically.
-
-Hand-written files under `esm-shims/` remain only for **non-generic** cases (themes composition, CSS inject, jquery/knockout globals, vendor stubs).
-
-Typical generated shape:
-
-```js
-import * as original from '.../module.js?dx-original=1';
-import { createMutableApi, wrapCtor } from '.../mutable_facade.js';
-
-const api = createMutableApi(original, '__dxAutoMutable_…');
-export const Foo = wrapCtor(api, 'Foo');
-export default api;
-```
-
-To stub a new module, add a group entry in [`mutableModuleGroups.ts`](./lib/mutableModuleGroups.ts):
+The house pattern is a **`DEBUG_set_*` seam**: turn the export into a `let` and add a
+setter inside a `/// #DEBUG` block, which `-c qunit` builds keep and production builds
+strip.
 
 ```ts
-{
-  internal: '__internal/viz/core/title.js', // real module under esm/
-  also: ['viz/core/title.js'],            // extra artifact URLs → same facade
-  extraKeys: ['animation/frame'],         // optional bare import-map keys
-  apiFromDefault: true,                   // when default export is the stub target
+export let Renderer = function (options) { /* … */ };
+
+/// #DEBUG
+export function DEBUG_set_Renderer(value: typeof Renderer): void {
+  Renderer = value;
 }
+/// #ENDDEBUG
 ```
 
-Import-map keys are derived as `strip(.js)` of `internal`/`also`, plus `extraKeys`. Prefer this over a new hand-written shim.
+Product code that does `import { Renderer } from '…'` sees the new value, because ESM
+named exports are live bindings.
+
+In tests, drive the seam through [`testing/helpers/moduleSeam.js`](../helpers/moduleSeam.js),
+which re-attaches the `.restore()` that an anonymous `sinon.stub()` lacks:
+
+```js
+import { stubSeam, spySeam } from '../../helpers/moduleSeam.js';
+
+// was: sinon.stub(rendererModule, 'Renderer')
+const stub = stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer');
+// …
+stub.restore();
+
+// was: rendererModule.Renderer = fn;
+rendererModule.DEBUG_set_Renderer(fn);
+```
+
+**Import the barrel that has a default export.** `cjsInterop` rewrites a default import
+from a bare specifier to `('default' in ns ? ns.default : { ...ns })`. A barrel with no
+default (`viz/core/utils.js`, `viz/core/renderers/renderer.js`) therefore hands the test
+a dead **copy** — seams installed elsewhere stay invisible. Use the `_default` barrel
+(`viz/core/utils_default`, `viz/core/renderers/renderer_default`), which is
+`import * as X; export default X`.
+
+Older sources use `exports.DEBUG_set_X = DEBUG_set_X` instead of `export function`;
+`static.ts` rewrites that to a real ESM export at serve time, so both spellings work.
+
 ---
 
 ## `testing/helpers/esm-shims/`
@@ -93,10 +105,10 @@ Browser modules that the import map (and/or `static.ts` artifact redirects) subs
 
 **Why they exist:**
 
-- **Stubbing / mutation** — prefer `MUTABLE_MODULE_GROUPS` in `mutableModuleGroups.ts` (serve-time generated facades via `autoMutableFacade.ts`). Keep a hand-written shim only for custom composition (e.g. themes).
+- **Custom composition** — e.g. `themes.js`, which the import map and `static.ts` both point at. Stubbing is *not* a reason to add a shim; use a `DEBUG_set_*` seam instead.
 - **Globals bridge** — e.g. `jquery.js` / `knockout.js` re-export the classic `<script>` globals after `noConflict()`.
 - **CSS plugin imports** — suites still write `import 'fluent_blue_light.css!'`; `*.css.js` shims call `injectStylesheet.js` to append `<link>` tags.
 - **Vendor / interop quirks** — thin adapters (`jspdf_autotable.js`, `tslib.js`, `zod.js`, …) when the stock ESM build is awkward for the runner.
-- **Shared helpers** — `mutable_facade.js` (`createMutableApi`, `wrapCtor`) used by generated and hand-written facades; `injectStylesheet.js` for theme CSS.
+- **Shared helpers** — `injectStylesheet.js` for theme CSS.
 
-Do **not** put product fixes in these shims — they are test-runner adapters only. To stub a new module, add it to `MUTABLE_MODULE_GROUPS` first (`internal` / `also` / `extraKeys`).
+Do **not** put product fixes in these shims — they are test-runner adapters only.

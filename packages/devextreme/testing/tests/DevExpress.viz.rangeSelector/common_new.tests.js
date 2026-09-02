@@ -28,7 +28,7 @@ QUnit.module('RangeSelector', {
         const that = this;
         this.$container = $('#test-container');
         const renderer = this.renderer = new Renderer();
-        rendererModule.Renderer = function() { return renderer; };
+        rendererModule.DEBUG_set_Renderer(function() { return renderer; });
         this.axis = new StubAxis();
         this.axis.stub('getVisibleArea').returns([]);
         stubSeam(axisModule, 'Axis', 'DEBUG_set_Axis').callsFake(function() {

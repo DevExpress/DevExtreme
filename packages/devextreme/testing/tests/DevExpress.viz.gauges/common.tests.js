@@ -182,7 +182,7 @@ loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
     return new LoadingIndicator(parameters);
 });
 
-sinon.stub(rendererModule, 'Renderer').callsFake(function() {
+stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(function() {
     return currentTest().renderer;
 });
 

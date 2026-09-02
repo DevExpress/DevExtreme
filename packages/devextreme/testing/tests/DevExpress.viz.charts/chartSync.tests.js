@@ -38,9 +38,9 @@ const ScrollBar = scrollBarModule.ScrollBar;
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 setupSeriesFamily();
 
-rendererModule.Renderer = function(parameters) {
+rendererModule.DEBUG_set_Renderer(function(parameters) {
     return new Renderer(parameters);
-};
+});
 
 const defaultCrosshairOptions = {
     horizontalLine: {},
@@ -171,7 +171,7 @@ const environment = {
             return new StubTooltip(parameters);
         });
 
-        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes, canvas) {
+        stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
             });
@@ -220,7 +220,7 @@ const environment = {
         const spyLayoutManager = layoutManagerModule.LayoutManager;
 
         vizUtils.updatePanesCanvases.restore();
-        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
+        stubSeam(vizUtils, 'updatePanesCanvases', 'DEBUG_set_updatePanesCanvases').callsFake(function(panes) {
             panes[0].canvas = rect;
         });
 

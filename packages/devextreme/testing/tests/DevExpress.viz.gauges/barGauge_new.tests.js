@@ -8,6 +8,7 @@ import {
     stubClass
 } from '../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer_default';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import titleModule from 'viz/core/title';
 import tooltipModule from 'viz/core/tooltip';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
@@ -21,7 +22,7 @@ const environment = {
     beforeEach() {
         this.renderer = new Renderer();
 
-        sinon.stub(rendererModule, 'Renderer').callsFake(() => {
+        stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(() => {
             return this.renderer;
         });
     },
@@ -55,7 +56,7 @@ loadingIndicatorModule.DEBUG_set_LoadingIndicator(LoadingIndicator);
 QUnit.module('Misc', {
     beforeEach: function() {
         const renderer = this.renderer = new Renderer();
-        rendererModule.Renderer = function() { return renderer; };
+        rendererModule.DEBUG_set_Renderer(function() { return renderer; });
     },
 
     create: function(options) {
@@ -171,7 +172,7 @@ QUnit.module('Legend', {
     beforeEach() {
         this.renderer = new Renderer();
 
-        sinon.stub(rendererModule, 'Renderer').callsFake(() => {
+        stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(() => {
             return this.renderer;
         });
 

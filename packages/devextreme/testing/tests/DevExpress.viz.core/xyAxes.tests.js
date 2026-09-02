@@ -9,7 +9,7 @@ import rangeModule from 'viz/translators/range';
 import { Axis } from 'viz/axes/base_axis';
 import { MockSeries } from '../../helpers/chartMocks.js';
 import { patchFontOptions } from 'viz/core/utils';
-import { stubSeam } from '../../helpers/moduleSeam.js';
+import { stubSeam, spySeam } from '../../helpers/moduleSeam.js';
 
 const Translator2D = translator2DModule.Translator2D;
 
@@ -50,7 +50,7 @@ const environment = {
             return that.tickGeneratorSpy;
         });
 
-        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
+        stubSeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D').callsFake(function() {
             return that.translator;
         });
 
@@ -209,7 +209,7 @@ QUnit.module('Translators in axis', {
     beforeEach: function() {
         environment.beforeEach.call(this);
         translator2DModule.Translator2D.restore();
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
     },
     afterEach: function() {
         environment.afterEach.call(this);
@@ -4378,7 +4378,7 @@ QUnit.module('XY axes margin calculation', {
         environment.beforeEach.call(this);
 
         translator2DModule.Translator2D.restore();
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
 
         this.canvas = {
             top: 200,
@@ -5085,7 +5085,7 @@ QUnit.module('Custom positioning', {
         };
 
         translator2DModule.Translator2D.restore();
-        sinon.spy(translator2DModule, 'Translator2D');
+        spySeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D');
     },
     afterEach: function() {
         environment.afterEach.call(this);

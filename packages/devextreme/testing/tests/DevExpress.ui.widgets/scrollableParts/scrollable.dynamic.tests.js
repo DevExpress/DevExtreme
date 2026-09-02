@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../../helpers/moduleSeam.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import pointerMock from '../../../helpers/pointerMock.js';
 
@@ -33,7 +34,7 @@ const moduleConfig = {
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+        this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake((callback) => {
             callback();
         });
     },
@@ -176,9 +177,9 @@ QUnit.test('gesture prevent when scrollable is full and bounce enabled false', f
 QUnit.test('stop inertia on click', function(assert) {
     assert.expect(1);
 
-    animationFrame.requestAnimationFrame = function(callback) {
+    animationFrame.DEBUG_set_requestAnimationFrame(function(callback) {
         setTimeout(callback, 0);
-    };
+    });
 
     const moveDistance = -10;
     const moveDuration = 10;
@@ -209,9 +210,9 @@ QUnit.test('stop inertia on click', function(assert) {
 QUnit.test('scrollbar is hidden on stop', function(assert) {
     assert.expect(1);
 
-    animationFrame.requestAnimationFrame = function(callback) {
+    animationFrame.DEBUG_set_requestAnimationFrame(function(callback) {
         setTimeout(callback, 0);
-    };
+    });
 
     const $scrollable = $('#scrollable').dxScrollable({
         showScrollbar: 'onScroll',
@@ -285,9 +286,9 @@ QUnit.test('bounce up', function(assert) {
 
     let scroll = 0;
 
-    animationFrame.requestAnimationFrame = function(callback) {
+    animationFrame.DEBUG_set_requestAnimationFrame(function(callback) {
         setTimeout(callback, 0);
-    };
+    });
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
@@ -313,9 +314,9 @@ QUnit.test('bounce up', function(assert) {
 QUnit.test('stop bounce on click', function(assert) {
     assert.expect(1);
 
-    animationFrame.requestAnimationFrame = function(callback) {
+    animationFrame.DEBUG_set_requestAnimationFrame(function(callback) {
         setTimeout(callback, 0);
-    };
+    });
 
     const moveDistance = -10;
     const moveDuration = 10;
@@ -346,9 +347,9 @@ QUnit.test('stop bounce on click', function(assert) {
 QUnit.test('stop inertia bounce on after mouse up', function(assert) {
     assert.expect(1);
 
-    animationFrame.requestAnimationFrame = function(callback) {
+    animationFrame.DEBUG_set_requestAnimationFrame(function(callback) {
         setTimeout(callback, 0);
-    };
+    });
 
     const moveDistance = -10;
     const moveDuration = 10;

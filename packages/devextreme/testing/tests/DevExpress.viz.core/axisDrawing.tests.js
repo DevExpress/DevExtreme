@@ -47,7 +47,7 @@ const environment = {
         };
 
         const that = this;
-        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
+        stubSeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D').callsFake(function() {
             return that.translator;
         });
         this.renderer = new Renderer();

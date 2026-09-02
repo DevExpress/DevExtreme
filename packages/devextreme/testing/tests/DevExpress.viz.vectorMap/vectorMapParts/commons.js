@@ -48,7 +48,7 @@ StubThemeManager.prototype.setTheme = function() {
 };
 
 function stubComponentConstructors(test) {
-    rendererModule.Renderer = returnValue(test.renderer);
+    rendererModule.DEBUG_set_Renderer(returnValue(test.renderer));
     titleModule.DEBUG_set_title(returnValue(test.title));
     tooltipModule.DEBUG_set_tooltip(returnValue(test.tooltip));
     exportModule.DEBUG_set_ExportMenu(returnValue(test.exportMenu));
