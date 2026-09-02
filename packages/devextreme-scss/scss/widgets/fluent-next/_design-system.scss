@@ -2,6 +2,7 @@
 @use "colors";
 @use "../../_design-system/fluent/semantic/colors/light" as light-roles;
 @use "../../_design-system/fluent/semantic/colors/dark" as dark-roles;
+@use "../../_design-system/fluent/mode-aliases" as mode-aliases;
 
 $accent: colors.$color;
 
@@ -13,18 +14,44 @@ $accent: colors.$color;
  * to every stylesheet. Component size tokens are absent for the same reason plus one more:
  * fluent-next maps sizes onto the base scales (spacing, font-size, border-radius, border-width),
  * so no widget would read the layout names either.
+ *
+ * What is loaded here is what does NOT depend on the colour mode. The rest goes through
+ * `mode-values` below, because a custom property resolves where it is DECLARED: an alias onto a
+ * mode-dependent role, left on `:root`, freezes at the bundle's mode and ignores every mode class
+ * under it. That is why `mode-aliases` exists rather than a plain `:root` box-shadow layer.
  */
 @include meta.load-css("../../_design-system/base");
 @include meta.load-css("../../_design-system/fluent/base");
 @include meta.load-css("../../_design-system/fluent/accents/#{$accent}");
 @include meta.load-css("../../_design-system/fluent/semantic/typography");
-@include meta.load-css("../../_design-system/fluent/semantic/box-shadow");
 
 /*
- * The colour roles are the only mode-dependent tier, so both modes ship in every bundle and a class
- * picks between them: `dx-theme-mode-light` / `-dark` name a mode outright, `dx-theme-mode-inverted`
- * asks for the opposite of its surroundings. Everything downstream reads the roles through custom
- * properties, so any element carrying one of these classes repaints itself and its subtree.
+ * Everything a colour mode decides, in one place so the three scopes below cannot drift apart:
+ * the roles for that mode, the aliases that read them, and `--dx-theme-mode` naming the outcome.
+ *
+ * The marker is what the JS reads. `dx-theme-mode-inverted` means "the opposite of my
+ * surroundings", so no amount of class-reading tells you which mode an element ended up in - only
+ * the cascade knows. Overlays are reparented to the viewport and have to be given the mode their
+ * owner resolved to, so `core/utils/swatch_container.ts` asks the browser for this property
+ * instead of walking up the ancestor classes.
+ */
+@mixin mode-values($mode) {
+  --dx-theme-mode: #{$mode};
+
+  @if $mode == "light" {
+    @include light-roles.roles();
+  } @else {
+    @include dark-roles.roles();
+  }
+
+  @include mode-aliases.aliases();
+}
+
+/*
+ * Both modes ship in every bundle and a class picks between them: `dx-theme-mode-light` / `-dark`
+ * name a mode outright, `dx-theme-mode-inverted` asks for the opposite of its surroundings.
+ * Everything downstream reads these values through custom properties, so any element carrying one
+ * of the classes repaints itself and its subtree.
  *
  * Selector weight is one class throughout, `:root` included, so an override still wins by coming
  * after the theme - the rule that held before the classes existed. The third block is what makes
@@ -32,37 +59,38 @@ $accent: colors.$color;
  * whenever the page names its mode by class. `:where()` keeps that block at the same one-class
  * weight as the rest.
  *
- * "Inverted" is not recursive: an inverted island inside an inverted island stays inverted rather
- * than flipping back. Name the mode outright for the inner one.
+ * Two limits of that third block, both inherent to descendant selectors - CSS cannot ask for the
+ * NEAREST matching ancestor:
+ *
+ *   - "inverted" flips the bundle's mode unless it sits anywhere inside a scope naming the
+ *     opposite mode, at any distance. `dark > light > inverted` therefore resolves against the
+ *     dark, not against the light next to it. Name the mode outright when that matters.
+ *   - it is not recursive: an inverted island inside an inverted island stays inverted rather than
+ *     flipping back.
+ *
+ * `--dx-theme-mode` keeps the JS honest about both: whatever these rules resolve to is what the
+ * overlay container is given.
  */
+@mixin mode-scopes($own, $other) {
+  :root,
+  .dx-theme-mode-#{$own} {
+    @include mode-values($own);
+  }
+
+  .dx-theme-mode-#{$other},
+  .dx-theme-mode-inverted {
+    @include mode-values($other);
+  }
+
+  :where(.dx-theme-mode-#{$other}) .dx-theme-mode-inverted {
+    @include mode-values($own);
+  }
+}
+
 @if colors.$mode == "light" {
-  :root,
-  .dx-theme-mode-light {
-    @include light-roles.roles();
-  }
-
-  .dx-theme-mode-dark,
-  .dx-theme-mode-inverted {
-    @include dark-roles.roles();
-  }
-
-  :where(.dx-theme-mode-dark) .dx-theme-mode-inverted {
-    @include light-roles.roles();
-  }
+  @include mode-scopes("light", "dark");
 } @else if colors.$mode == "dark" {
-  :root,
-  .dx-theme-mode-dark {
-    @include dark-roles.roles();
-  }
-
-  .dx-theme-mode-light,
-  .dx-theme-mode-inverted {
-    @include light-roles.roles();
-  }
-
-  :where(.dx-theme-mode-light) .dx-theme-mode-inverted {
-    @include dark-roles.roles();
-  }
+  @include mode-scopes("dark", "light");
 } @else {
   @error "fluent-next: unknown colour mode #{meta.inspect(colors.$mode)}; expected \"light\" or \"dark\".";
 }

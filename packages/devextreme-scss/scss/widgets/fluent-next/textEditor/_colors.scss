@@ -32,7 +32,15 @@ $text-editor-content-disabled: ds.$color-content-disabled !default;
 
 $text-editor-label-content-focused: ds.$color-content-primary;
 
-:root {
+/*
+ * Declared on the document root and on every element that names a theme mode. A custom property
+ * resolves where it is DECLARED, so a `:root`-only alias onto a mode-dependent role would freeze
+ * at the bundle's mode and ignore a mode class further down (see _design-system.scss).
+ */
+:root,
+.dx-theme-mode-light,
+.dx-theme-mode-dark,
+.dx-theme-mode-inverted {
   --dx-texteditor-color-text: #{$text-editor-content};
   --dx-texteditor-color-label: #{$text-editor-placeholder};
 }

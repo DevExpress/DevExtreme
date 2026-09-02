@@ -59,7 +59,15 @@ $grid-text-stub-bg: data-uri("images/widgets/fluent-next/grid/text-stub.png") !d
 $grid-filter-panel-content: ds.$color-content-primary !default;
 $grid-draggable-column-content: ds.$color-content !default;
 
-:root {
+/*
+ * Declared on the document root and on every element that names a theme mode. A custom property
+ * resolves where it is DECLARED, so a `:root`-only alias onto a mode-dependent role would freeze
+ * at the bundle's mode and ignore a mode class further down (see _design-system.scss).
+ */
+:root,
+.dx-theme-mode-light,
+.dx-theme-mode-dark,
+.dx-theme-mode-inverted {
   --dx-datagrid-row-alternation-bg: #{$grid-row-alternation-bg};
 }
 
