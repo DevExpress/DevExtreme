@@ -11,6 +11,7 @@ import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } fr
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
+import type { FilterValue } from './data_controller/types';
 import type { EditingController } from './editing/m_editing';
 import type { ModuleItem } from './m_modules';
 
@@ -143,6 +144,8 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   selection?: InternalSelection;
 
   scrolling?: DataGridScrolling | TreeListScrolling;
+
+  filterValue?: FilterValue;
 }
 
 // todo: move to upper .d.ts files
