@@ -1,15 +1,25 @@
-import { adjust, roundFloatPart } from '@js/core/utils/math';
+import { adjust } from '@js/core/utils/math';
+import { isString } from '@js/core/utils/type';
+import type { Format } from '@js/localization';
 
-const getRealSeparatorIndex = function (str) {
+export interface SeparatorPosition {
+  occurrence: number;
+  index: number;
+}
+
+const asPattern = (format: Format): string => (isString(format) ? format : '');
+
+const getRealSeparatorIndex = (format: Format): SeparatorPosition => {
+  const pattern = asPattern(format);
   let quoteBalance = 0;
   let separatorCount = 0;
 
-  for (let i = 0; i < str.length; ++i) {
-    if (str[i] === '\'') {
-      quoteBalance++;
+  for (let i = 0; i < pattern.length; i += 1) {
+    if (pattern[i] === '\'') {
+      quoteBalance += 1;
     }
-    if (str[i] === '.') {
-      ++separatorCount;
+    if (pattern[i] === '.') {
+      separatorCount += 1;
       if (quoteBalance % 2 === 0) {
         return {
           occurrence: separatorCount,
@@ -22,17 +32,21 @@ const getRealSeparatorIndex = function (str) {
   return { occurrence: 1, index: -1 };
 };
 
-const getNthOccurrence = function (str, c, n) {
-  let i = -1;
+const getNthOccurrence = (str: string, char: string, occurrence: number): number => {
+  let index = -1;
 
-  while (n-- && i++ < str.length) {
-    i = str.indexOf(c, i);
+  for (let remaining = occurrence; remaining > 0; remaining -= 1) {
+    index = str.indexOf(char, index + 1);
+
+    if (index === -1) {
+      return -1;
+    }
   }
 
-  return i;
+  return index;
 };
 
-const splitByIndex = function (str, index) {
+const splitByIndex = (str: string, index: number): string[] => {
   if (index === -1) {
     return [str];
   }
@@ -40,7 +54,10 @@ const splitByIndex = function (str, index) {
   return [str.slice(0, index), str.slice(index + 1)];
 };
 
-const adjustPercentValue = function (rawValue, interval) {
+const adjustPercentValue = (
+  rawValue: number | null | undefined,
+  interval: number,
+): number | null | undefined => {
   if (!rawValue) {
     return rawValue;
   }
@@ -48,17 +65,10 @@ const adjustPercentValue = function (rawValue, interval) {
   return adjust(rawValue / 100, interval / 100);
 };
 
-const roundFloatPartPercentValue = function (rawValue: number, precision: number) {
-  if (!rawValue) {
-    return rawValue;
-  }
-  return roundFloatPart(rawValue / 100, precision);
-};
-
 export {
   adjustPercentValue,
+  asPattern,
   getNthOccurrence,
   getRealSeparatorIndex,
-  roundFloatPartPercentValue,
   splitByIndex,
 };

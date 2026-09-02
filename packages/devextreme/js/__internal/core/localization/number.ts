@@ -286,7 +286,7 @@ const numberLocalizationBase = {
     return value.replace(regExp, (char) => String.fromCharCode(char.charCodeAt(0) + (toFirstDigit.charCodeAt(0) - fromFirstDigit.charCodeAt(0)))) as TValue;
   },
 
-  getNegativeEtalonRegExp(format: FormatConfig | string): RegExp {
+  getNegativeEtalonRegExp(format: LocalizationFormat): RegExp {
     const separators: FormatterConfig = this._getSeparators();
     const digitalRegExp = new RegExp(`[0-9${escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator)}]+`, 'g');
     const specialCharacters = ['\\', '(', ')', '[', ']', '*', '+', '$', '^', '?', '|', '{', '}'];
@@ -301,7 +301,7 @@ const numberLocalizationBase = {
     return new RegExp(negativeEtalon, 'g');
   },
 
-  getSign(text: string, format?: FormatConfig | string): 1 | -1 {
+  getSign(text: string, format?: LocalizationFormat): 1 | -1 {
     if (!format) {
       if (text.replace(/[^0-9-]/g, '').startsWith('-')) {
         return -1;
