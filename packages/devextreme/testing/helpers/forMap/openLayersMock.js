@@ -11,10 +11,10 @@
             return [...coordinate];
         }
         if(source === GEOGRAPHIC_PROJECTION && destination === WEB_MERCATOR_PROJECTION) {
-            return coordinate.map(value => value * PROJECTION_SCALE);
+            return coordinate.map((value) => value * PROJECTION_SCALE);
         }
         if(source === WEB_MERCATOR_PROJECTION && destination === GEOGRAPHIC_PROJECTION) {
-            return coordinate.map(value => value / PROJECTION_SCALE);
+            return coordinate.map((value) => value / PROJECTION_SCALE);
         }
         return [...coordinate];
     };
@@ -120,11 +120,11 @@
             api.viewZoomSetCount += 1;
         }
         trigger(type) {
-            (this.eventHandlers[type] || []).slice().forEach(handler => handler());
+            (this.eventHandlers[type] || []).slice().forEach((handler) => handler());
         }
         un(type, listener) {
             const handlers = this.eventHandlers[type] || [];
-            this.eventHandlers[type] = handlers.filter(handler => handler !== listener);
+            this.eventHandlers[type] = handlers.filter((handler) => handler !== listener);
         }
     }
     class MockMap {
@@ -198,10 +198,10 @@
         }
         un(type, listener) {
             const handlers = this.eventHandlers[type] || [];
-            this.eventHandlers[type] = handlers.filter(handler => handler !== listener);
+            this.eventHandlers[type] = handlers.filter((handler) => handler !== listener);
         }
         trigger(type, event) {
-            (this.eventHandlers[type] || []).slice().forEach(handler => handler(event || {}));
+            (this.eventHandlers[type] || []).slice().forEach((handler) => handler(event || {}));
         }
     }
     class MockImageTile {
