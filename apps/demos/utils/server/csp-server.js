@@ -131,6 +131,9 @@ const CSP_DEMO_ALLOWLIST = {
   'DataGrid/AIColumns': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
+  'DataGrid/AIPoweredDetailView': {
+    'connect-src': DEMO_OPENAI_CONNECT_SRC,
+  },
   'Form/SmartPaste': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
@@ -198,6 +201,9 @@ const CSP_FRAMEWORK_ALLOWLIST = {
       'script-src': ["'unsafe-inline'"],
     },
     'DataGrid/AIColumns': {
+      'script-src': ["'unsafe-inline'"],
+    },
+    'DataGrid/AIPoweredDetailView': {
       'script-src': ["'unsafe-inline'"],
     },
     // The OpenAI SDK additionally uses eval() in this demo.
