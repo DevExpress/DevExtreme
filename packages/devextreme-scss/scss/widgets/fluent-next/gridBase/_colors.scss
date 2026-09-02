@@ -55,17 +55,9 @@ $grid-column-chooser-message-content: ds.$color-content-subtle !default;
 $grid-column-separator-bg: ds.$color-bg-primary !default;
 $grid-filter-row-bg: ds.$color-bg-canvas !default;
 $grid-header-filter-icon-active: ds.$color-content-primary !default;
-$grid-text-stub-bg: null !default;
+$grid-text-stub-bg: data-uri("images/widgets/fluent-next/grid/text-stub.png") !default;
 $grid-filter-panel-content: ds.$color-content-primary !default;
 $grid-draggable-column-content: ds.$color-content !default;
-
-@if $mode == "light" {
-  $grid-text-stub-bg: data-uri("images/widgets/fluent-next/color-schemes/light/grid/text-stub.png") !default;
-}
-
-@if $mode == "dark" {
-  $grid-text-stub-bg: data-uri("images/widgets/fluent-next/color-schemes/dark/grid/text-stub.png") !default;
-}
 
 :root {
   --dx-datagrid-row-alternation-bg: #{$grid-row-alternation-bg};
