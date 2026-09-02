@@ -602,3 +602,14 @@
   $button-icon-margin-block-start-with-text: var(--dx-text-editor-button-icon-with-text-margin-block-start),
   $button-icononly-padding: var(--dx-text-editor-button-icon-only-padding),
 );
+
+/* An invalid editor reddens its label, and it kept doing so after being disabled - a red caption
+over a grey field, an error you are not allowed to correct. The state wins over the validity. */
+.dx-texteditor.dx-invalid.dx-state-disabled,
+.dx-state-disabled .dx-texteditor.dx-invalid {
+  .dx-label,
+  .dx-label span,
+  .dx-texteditor-label {
+    color: var(--dx-text-editor-content-disabled);
+  }
+}
