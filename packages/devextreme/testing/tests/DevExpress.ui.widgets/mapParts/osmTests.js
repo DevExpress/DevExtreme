@@ -1515,6 +1515,34 @@ QUnit.module('OSM: markers', moduleConfig, () => {
             }
         });
     });
+    QUnit.test('autoAdjust refits the view after an HTML marker image loads', function(assert) {
+        const done = assert.async();
+        let imageLoaded = false;
+        openLayersMock.getOverlayRect = () => imageLoaded ? {
+            height: 60,
+            width: 80
+        } : {
+            height: 0,
+            width: 0
+        };
+        $('#map').dxMap({
+            provider: 'osm',
+            markers: [{
+                location: [40.7, -74],
+                html: '<img alt="">'
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                assert.deepEqual(openLayersMock.fitOptions.padding, [0, 25, 41, 0], 'fallback size is used while the HTML image loads');
+                imageLoaded = true;
+                openLayersMock.addedOverlays[0].options.element.querySelector('img').dispatchEvent(new Event('load'));
+                assert.deepEqual(openLayersMock.fitOptions.padding, [0, 80, 60, 0], 'loaded HTML image size is included in fit padding');
+                done();
+            }
+        });
+    });
     QUnit.test('HTML marker padding is measured after a hidden map becomes visible', function(assert) {
         const done = assert.async();
         const container = document.createElement('div');

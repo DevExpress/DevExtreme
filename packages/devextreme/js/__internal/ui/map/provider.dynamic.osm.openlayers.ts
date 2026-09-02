@@ -213,7 +213,8 @@ class OpenLayersMap implements MapEngineMap {
         element.click();
       }
       : undefined;
-    const imageLoadHandler: EventListener | undefined = element.tagName === 'IMG'
+    const hasImage = element.tagName === 'IMG' || element.querySelector('img') !== null;
+    const imageLoadHandler: EventListener | undefined = hasImage
       ? (): void => this._eventHandlers?.markerSizeChange()
       : undefined;
 
@@ -236,7 +237,7 @@ class OpenLayersMap implements MapEngineMap {
       element.addEventListener(KEY_RELEASE_EVENT, keyReleaseHandler);
     }
     if (imageLoadHandler) {
-      element.addEventListener('load', imageLoadHandler);
+      element.addEventListener('load', imageLoadHandler, true);
     }
 
     return {
@@ -252,7 +253,7 @@ class OpenLayersMap implements MapEngineMap {
           element.removeEventListener(KEY_RELEASE_EVENT, keyReleaseHandler);
         }
         if (imageLoadHandler) {
-          element.removeEventListener('load', imageLoadHandler);
+          element.removeEventListener('load', imageLoadHandler, true);
         }
       },
     };
