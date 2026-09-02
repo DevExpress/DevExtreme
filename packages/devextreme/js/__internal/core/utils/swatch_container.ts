@@ -1,86 +1,107 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { value } from '@js/core/utils/view_port';
+import { getWindow, hasWindow } from '@js/core/utils/window';
 
 const SWATCH_CONTAINER_CLASS_PREFIX = 'dx-swatch-';
 const THEME_MODE_CLASS_PREFIX = 'dx-theme-mode-';
-
-const LIGHT_THEME_MODE_CLASS = `${THEME_MODE_CLASS_PREFIX}light`;
-const DARK_THEME_MODE_CLASS = `${THEME_MODE_CLASS_PREFIX}dark`;
-const INVERTED_THEME_MODE_CLASS = `${THEME_MODE_CLASS_PREFIX}inverted`;
-
-const closestByClassPrefix = (
-  $element: dxElementWrapper,
-  prefix: string,
-): dxElementWrapper => $element.closest(`[class^="${prefix}"], [class*=" ${prefix}"]`);
+const THEME_MODE_PROPERTY = '--dx-theme-mode';
 
 const classesByPrefix = (
   element: Element,
   prefix: string,
 ): string[] => [...element.classList].filter((cssClass) => cssClass.startsWith(prefix));
 
-const getThemeModeClasses = ($element: dxElementWrapper): string[] => {
-  const $scope = closestByClassPrefix($element, THEME_MODE_CLASS_PREFIX);
+const closestClassesByPrefix = (
+  $element: dxElementWrapper,
+  prefix: string,
+): string[] => {
+  const $scope = $element.closest(`[class^="${prefix}"], [class*=" ${prefix}"]`);
 
-  if (!$scope.length) {
+  return $scope.length ? classesByPrefix($scope.get(0), prefix) : [];
+};
+
+/*
+ * The mode an element ended up in is what the cascade decided, not what its ancestor classes
+ * spell: `dx-theme-mode-inverted` asks for the opposite of its surroundings, and the container is
+ * reparented to the viewport, whose surroundings are different ones. The theme names the outcome
+ * in `--dx-theme-mode` (widgets/fluent-next/_design-system.scss), so ask the browser for it.
+ * Themes that ship one mode per bundle declare nothing and get no class, as before.
+ */
+const themeModeClasses = ($element: dxElementWrapper): string[] => {
+  const element = $element.get(0);
+  const window = hasWindow() ? getWindow() : undefined;
+
+  if (!element || !window?.getComputedStyle) {
     return [];
   }
 
-  const classes = classesByPrefix($scope[0], THEME_MODE_CLASS_PREFIX);
+  const mode = window.getComputedStyle(element).getPropertyValue(THEME_MODE_PROPERTY).trim();
 
-  if (!classes.includes(INVERTED_THEME_MODE_CLASS)) {
-    return classes;
-  }
-
-  // The container hangs off the viewport, so "the opposite of my surroundings" would be read
-  // against the viewport rather than against the element the overlay belongs to. Name the mode the
-  // element resolves to instead. Without a named mode above it that is the mode the stylesheet
-  // falls back to, which the container inherits too, so the relative class carries over as is.
-  const $named = $scope.parent().closest(`.${LIGHT_THEME_MODE_CLASS}, .${DARK_THEME_MODE_CLASS}`);
-
-  if (!$named.length) {
-    return classes;
-  }
-
-  return [
-    $named[0].classList.contains(DARK_THEME_MODE_CLASS)
-      ? LIGHT_THEME_MODE_CLASS
-      : DARK_THEME_MODE_CLASS,
-  ];
+  return mode ? [`${THEME_MODE_CLASS_PREFIX}${mode}`] : [];
 };
 
-const getContainerClasses = ($element: dxElementWrapper): string[] => {
-  const $swatch = closestByClassPrefix($element, SWATCH_CONTAINER_CLASS_PREFIX);
-  const swatchClasses = $swatch.length
-    ? classesByPrefix($swatch[0], SWATCH_CONTAINER_CLASS_PREFIX)
-    : [];
+const scopeClasses = ($element: dxElementWrapper): string[] => [
+  ...closestClassesByPrefix($element, SWATCH_CONTAINER_CLASS_PREFIX),
+  ...themeModeClasses($element),
+];
 
-  return [...swatchClasses, ...getThemeModeClasses($element)];
+const getContainerClasses = (
+  $element: dxElementWrapper,
+  $viewport: dxElementWrapper,
+): string[] => {
+  const classes = scopeClasses($element);
+  // A scope the viewport already resolves to needs no container of its own: it would be a wrapper
+  // that repaints nothing, and one that measures nothing - callers reading the container as a
+  // geometric area (popup drag and resize) would be clamped to its zero height.
+  const sorted = (cssClasses: string[]): string => [...cssClasses].sort().join(' ');
+
+  return sorted(classes) === sorted(scopeClasses($viewport)) ? [] : classes;
 };
 
+// A container carrying a swatch or a mode class beyond the ones asked for belongs to a scope the
+// element itself is not in. A class with neither prefix says nothing about the scope, so it does
+// not disqualify a container - anything on the page may have tagged it.
+const isExactScope = (
+  node: Element,
+  containerClasses: string[],
+): boolean => [SWATCH_CONTAINER_CLASS_PREFIX, THEME_MODE_CLASS_PREFIX]
+  .every((prefix) => classesByPrefix(node, prefix)
+    .every((cssClass) => containerClasses.includes(cssClass)));
+
+/*
+ * Where an overlay belonging to `element` should be rendered: the viewport itself, or a child of it
+ * repeating the swatch and the theme mode the element resolved to.
+ *
+ * Undefined while the viewport is unset - before documentReady - which callers read as "not ready
+ * yet" (speed_dial_action defers to ready(); T713615, T1143527).
+ */
 const getSwatchContainer = (
   element: Element | dxElementWrapper,
-): dxElementWrapper => {
-  const containerClasses = getContainerClasses($(element));
-  const viewport: dxElementWrapper = value();
+): dxElementWrapper | undefined => {
+  const $viewport = value() as dxElementWrapper | undefined;
+
+  if (!$viewport?.length) {
+    return $viewport;
+  }
+
+  const containerClasses = getContainerClasses($(element), $viewport);
 
   if (!containerClasses.length) {
-    return viewport;
+    return $viewport;
   }
 
   const selector = containerClasses.map((cssClass) => `.${cssClass}`).join('');
-  // A container carrying more classes than asked for would hand the overlay a swatch or a mode the
-  // element itself is not in.
-  let viewportContainer = $(viewport
+  let $container = $($viewport
     .children(selector)
     .toArray()
-    .filter((node) => node.classList.length === containerClasses.length));
+    .filter((node) => isExactScope(node, containerClasses)));
 
-  if (!viewportContainer.length) {
-    viewportContainer = $('<div>').addClass(containerClasses.join(' ')).appendTo(viewport);
+  if (!$container.length) {
+    $container = $('<div>').addClass(containerClasses.join(' ')).appendTo($viewport);
   }
 
-  return viewportContainer;
+  return $container;
 };
 
 export default { getSwatchContainer };
