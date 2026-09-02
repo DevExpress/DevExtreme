@@ -1,5 +1,7 @@
 @use "sass:meta";
 @use "colors";
+@use "../../_design-system/fluent/semantic/colors/light" as light-roles;
+@use "../../_design-system/fluent/semantic/colors/dark" as dark-roles;
 
 $accent: colors.$color;
 
@@ -17,4 +19,50 @@ $accent: colors.$color;
 @include meta.load-css("../../_design-system/fluent/accents/#{$accent}");
 @include meta.load-css("../../_design-system/fluent/semantic/typography");
 @include meta.load-css("../../_design-system/fluent/semantic/box-shadow");
-@include meta.load-css("../../_design-system/fluent/semantic/colors/#{colors.$mode}");
+
+/*
+ * The colour roles are the only mode-dependent tier, so both modes ship in every bundle and a class
+ * picks between them: `dx-theme-mode-light` / `-dark` name a mode outright, `dx-theme-mode-inverted`
+ * asks for the opposite of its surroundings. Everything downstream reads the roles through custom
+ * properties, so any element carrying one of these classes repaints itself and its subtree.
+ *
+ * Selector weight is one class throughout, `:root` included, so an override still wins by coming
+ * after the theme - the rule that held before the classes existed. The third block is what makes
+ * "inverted" relative: without it an island would keep inverting the bundle rather than the page
+ * whenever the page names its mode by class. `:where()` keeps that block at the same one-class
+ * weight as the rest.
+ *
+ * "Inverted" is not recursive: an inverted island inside an inverted island stays inverted rather
+ * than flipping back. Name the mode outright for the inner one.
+ */
+@if colors.$mode == "light" {
+  :root,
+  .dx-theme-mode-light {
+    @include light-roles.roles();
+  }
+
+  .dx-theme-mode-dark,
+  .dx-theme-mode-inverted {
+    @include dark-roles.roles();
+  }
+
+  :where(.dx-theme-mode-dark) .dx-theme-mode-inverted {
+    @include light-roles.roles();
+  }
+} @else if colors.$mode == "dark" {
+  :root,
+  .dx-theme-mode-dark {
+    @include dark-roles.roles();
+  }
+
+  .dx-theme-mode-light,
+  .dx-theme-mode-inverted {
+    @include light-roles.roles();
+  }
+
+  :where(.dx-theme-mode-light) .dx-theme-mode-inverted {
+    @include dark-roles.roles();
+  }
+} @else {
+  @error "fluent-next: unknown colour mode #{meta.inspect(colors.$mode)}; expected \"light\" or \"dark\".";
+}

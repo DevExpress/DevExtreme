@@ -3,6 +3,7 @@ import url from 'node:url';
 import { createRequire } from 'node:module';
 import { readdir, readFile, rm } from 'node:fs/promises';
 import StyleDictionary from 'style-dictionary';
+import { fileHeader, formattedVariables } from 'style-dictionary/utils';
 import { registerTransforms } from './transforms.mjs';
 import {
   buildAvailableNames,
@@ -175,6 +176,9 @@ const buildPath = `${path.resolve(dirname, '../../scss/_design-system')}/`;
 const THEME_NAME = 'fluent';
 const THEME_FOLDER = 'fluent-next';
 
+// Kept in step with the @include in widgets/fluent-next/_design-system.scss.
+const MODE_ROLES_MIXIN = 'roles';
+
 const themePath = path.resolve(dirname, `../../scss/widgets/${THEME_FOLDER}`);
 
 const FLUENT_PALETTES = [
@@ -230,6 +234,31 @@ const getModeFiles = (mode) => [
 // alias the semantic roles the theme already reads, so emitting them added unreferenced custom
 // properties. Absent from the bridge, `ds.$button-color-bg-rest` is now a Sass error.
 const getBridgeFiles = () => getModeFiles('light');
+
+// The mode role layer is the one generated file every bundle needs twice: once for the mode it was
+// built for and once for the opposite one, under the mode classes. A `:root` block cannot be
+// re-scoped on load — `meta.load-css` emits it verbatim and `@use` paths take no interpolation — so
+// the roles ship as a mixin the theme places under the selectors it wants.
+StyleDictionary.registerFormat({
+  name: 'dx/mode-roles-mixin',
+  format: async ({ dictionary, file, options }) => {
+    const {
+      outputReferences, outputReferenceFallbacks, usesDtcg, formatting, sort,
+    } = options;
+    const header = await fileHeader({ file, formatting, options });
+    const variables = formattedVariables({
+      format: 'css',
+      dictionary,
+      outputReferences,
+      outputReferenceFallbacks,
+      formatting: { ...formatting, indentation: '  ' },
+      usesDtcg,
+      sort,
+    });
+
+    return `${header}@mixin ${MODE_ROLES_MIXIN}() {\n${variables}\n}\n`;
+  },
+});
 
 StyleDictionary.registerFormat({
   name: 'scssToCss',
@@ -338,7 +367,7 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
   },
   {
     destination: `${THEME_NAME}/semantic/colors/${mode}.scss`,
-    format: 'css/variables',
+    format: 'dx/mode-roles-mixin',
     filter: (token) => {
       const filePath = normalizeFilePath(token);
 
