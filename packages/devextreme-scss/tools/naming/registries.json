@@ -332,7 +332,9 @@
       ".dx-header-filter-menu",
       ".dx-datagrid-drag-header",
       ".dx-treelist-drag-header",
-      ".dx-ai-chat"
+      ".dx-ai-chat",
+      ".dx-datagrid-ai-assistant-confirm-dialog",
+      ".dx-treelist-ai-assistant-confirm-dialog"
     ],
     "data-grid": [
       ".dx-datagrid"
@@ -1991,7 +1993,16 @@
       "button",
       "content",
       "text",
-      "header-row"
+      "header-row",
+      "expand-column",
+      "toolbar",
+      "regenerate-button",
+      "confirm-dialog",
+      "menu-bar",
+      "menu-caption",
+      "search-panel",
+      "bottom-load-panel",
+      "rowsview"
     ],
     "data-grid": [
       "group-panel",

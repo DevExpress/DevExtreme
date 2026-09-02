@@ -6,20 +6,20 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 269,
+    "occurrences": 226,
     "byCategory": {
-      "inline": 126,
+      "inline": 91,
       "geometry": 69,
-      "local-var": 49,
+      "local-var": 41,
       "calc": 9,
       "structural": 8,
       "mixin-arg": 6,
       "media": 2
     },
     "byWidget": {
-      "gridBase": 71,
       "colorView": 45,
       "scheduler": 33,
+      "gridBase": 28,
       "textEditor": 26,
       "htmlEditor": 16,
       "cardView": 15,
@@ -47,9 +47,9 @@
       "toolbar": 1,
       "treeView": 1
     },
-    "unmarked": 58,
+    "unmarked": 9,
     "unmarkedByWidget": {
-      "gridBase": 55,
+      "gridBase": 6,
       "colorView": 3
     }
   },
@@ -1119,8 +1119,8 @@
         "5px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "margin-right: 5px !important; // stylelint-disable-line declaration-no-important",
+      "marker": "dx-fixed-size",
+      "text": "margin-right: 5px !important; // stylelint-disable-line declaration-no-important -- dx-fixed-size: legacy compat helper class, kept for the Foundation layout below",
       "category": "inline"
     },
     {
@@ -1143,94 +1143,8 @@
         "1px"
       ],
       "occurrences": 1,
-      "marker": null,
-      "text": "padding-top: 1px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 91,
-      "widget": "gridBase",
-      "literals": [
-        "7px",
-        "30px",
-        "5px"
-      ],
-      "occurrences": 4,
-      "marker": null,
-      "text": "padding: 7px 30px 7px 5px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 159,
-      "widget": "gridBase",
-      "literals": [
-        "16px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "font-size: 16px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 162,
-      "widget": "gridBase",
-      "literals": [
-        "16px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "font-size: 16px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 167,
-      "widget": "gridBase",
-      "literals": [
-        "20px"
-      ],
-      "occurrences": 3,
-      "marker": null,
-      "text": "padding: 0 20px 20px 20px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 171,
-      "widget": "gridBase",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-bottom: 10px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 196,
-      "widget": "gridBase",
-      "literals": [
-        "4px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding-inline-start: 4px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 224,
-      "widget": "gridBase",
-      "literals": [
-        "3px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "width: 3px;",
+      "marker": "dx-px-nudge",
+      "text": "padding-top: 1px; // dx-px-nudge: lifts the first submenu row off the menu border",
       "category": "inline"
     },
     {
@@ -1343,44 +1257,6 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 645,
-      "widget": "gridBase",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: 5px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 646,
-      "widget": "gridBase",
-      "literals": [
-        "30px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding-right: 30px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 650,
-      "widget": "gridBase",
-      "literals": [
-        "8px",
-        "5px",
-        "7px"
-      ],
-      "occurrences": 4,
-      "marker": null,
-      "text": "padding: 8px 5px 7px 5px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
       "line": 654,
       "widget": "gridBase",
       "literals": [
@@ -1389,82 +1265,8 @@
         "8px"
       ],
       "occurrences": 4,
-      "marker": null,
-      "text": "padding: 9px 6px 8px 6px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 658,
-      "widget": "gridBase",
-      "literals": [
-        "6px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding-left: 6px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 680,
-      "widget": "gridBase",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: 10px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 695,
-      "widget": "gridBase",
-      "literals": [
-        "15px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-left: 15px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 719,
-      "widget": "gridBase",
-      "literals": [
-        "100px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "height: 100px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 820,
-      "widget": "gridBase",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: 10px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 894,
-      "widget": "gridBase",
-      "literals": [
-        "7px",
-        "5px",
-        "30px"
-      ],
-      "occurrences": 4,
-      "marker": null,
-      "text": "padding: 7px 5px 7px 30px;",
+      "marker": "dx-px-nudge",
+      "text": "padding: 9px 6px 8px 6px; // dx-px-nudge: +1px on each side of the resting padding above, compensating the border the disabled item loses on hover",
       "category": "inline"
     },
     {
@@ -1477,102 +1279,6 @@
       "occurrences": 1,
       "marker": "dx-px-nudge",
       "text": "margin-right: -2px; // dx-px-nudge: RTL mirror — pulls the menu out by its own border",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 957,
-      "widget": "gridBase",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: 5px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 958,
-      "widget": "gridBase",
-      "literals": [
-        "30px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding-left: 30px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 962,
-      "widget": "gridBase",
-      "literals": [
-        "6px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding-right: 6px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 976,
-      "widget": "gridBase",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-right: 10px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 983,
-      "widget": "gridBase",
-      "literals": [
-        "15px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-right: 15px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 996,
-      "widget": "gridBase",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding: 10px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 1009,
-      "widget": "gridBase",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "padding-right: 10px;",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 1014,
-      "widget": "gridBase",
-      "literals": [
-        "7px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "margin-right: 7px;",
       "category": "inline"
     },
     {
@@ -1597,30 +1303,6 @@
       "occurrences": 1,
       "marker": null,
       "text": "$grid-total-footer-paddings: 7px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 7,
-      "widget": "gridBase",
-      "literals": [
-        "30px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-command-expand-column-width: 30px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 8,
-      "widget": "gridBase",
-      "literals": [
-        "36px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-command-adaptive-column-width: 36px;",
       "category": "local-var"
     },
     {
@@ -1672,18 +1354,6 @@
       "category": "local-var"
     },
     {
-      "file": "scss/widgets/base/gridBase/_variables.scss",
-      "line": 13,
-      "widget": "gridBase",
-      "literals": [
-        "50px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$grid-ai-assistant-confirm-dialog-button-width: 50px;",
-      "category": "local-var"
-    },
-    {
       "file": "scss/widgets/base/gridBase/layout/aiChat/_mixins.scss",
       "line": 47,
       "widget": "gridBase",
@@ -1694,66 +1364,6 @@
       "marker": "dx-line-width",
       "text": "border-width: 1px; // dx-line-width: hairline border of the incoming message bubble",
       "category": "geometry"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/layout/aiChat/_variables.scss",
-      "line": 1,
-      "widget": "gridBase",
-      "literals": [
-        "4px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$ai-chat-toolbar-item-spacing: 4px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/layout/aiChat/_variables.scss",
-      "line": 2,
-      "widget": "gridBase",
-      "literals": [
-        "8px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$ai-chat-message-gap: 8px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/layout/aiChat/_variables.scss",
-      "line": 3,
-      "widget": "gridBase",
-      "literals": [
-        "4px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$ai-chat-message-content-gap: 4px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/layout/aiChat/_variables.scss",
-      "line": 4,
-      "widget": "gridBase",
-      "literals": [
-        "280px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$ai-chat-message-width: 280px;",
-      "category": "local-var"
-    },
-    {
-      "file": "scss/widgets/base/gridBase/layout/aiChat/_variables.scss",
-      "line": 5,
-      "widget": "gridBase",
-      "literals": [
-        "4px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$ai-chat-message-regenerate-button-border-radius: 4px;",
-      "category": "local-var"
     },
     {
       "file": "scss/widgets/base/lookup/_index.scss",

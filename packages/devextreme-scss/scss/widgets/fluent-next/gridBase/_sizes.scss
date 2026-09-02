@@ -150,3 +150,33 @@ $grid-hidden-border: ds.$border-width-10 solid transparent !default;
 $grid-row-border: ds.$border-width-10 solid transparent !default;
 $grid-link-icon-min-width: ds.$spacing-200 !default;
 $grid-editor-input-border-block-end-width: ds.$border-width-10 !default;
+
+// Command column widths the shared layer used to pin; the theme owns them now
+$grid-command-expand-column-width: ds.$spacing-300 !default;
+
+/*
+ * The same expression the theme's own .dx-command-adaptive rule computes, so the shared layer
+ * stops asserting 36px while the theme renders something else.
+ */
+$grid-command-adaptive-column-width: calc(2 * #{$grid-cell-padding-inline} + #{$global-icon-size}) !default;
+$grid-ai-confirm-dialog-button-width: 50px !default; // dx-offscale: 50px
+
+// Sizes hoisted out of the shared layer's rules; values match what it used to pin
+$grid-context-menu-item-padding-block: ds.$spacing-70 !default;
+$grid-context-menu-item-padding-inline-start: ds.$spacing-50 !default;
+$grid-context-menu-item-padding-inline-end: ds.$spacing-300 !default;
+$grid-context-menu-overlay-item-padding: ds.$spacing-50 !default;
+$grid-context-menu-overlay-item-padding-inline-end: ds.$spacing-300 !default;
+$grid-menu-bar-item-padding: ds.$spacing-80 ds.$spacing-50 ds.$spacing-70 ds.$spacing-50 !default;
+$grid-menu-caption-padding-inline-start: ds.$spacing-60 !default;
+$grid-column-chooser-title-font-size: ds.$font-size-160 !default;
+$grid-column-chooser-content-padding: 0 ds.$spacing-200 ds.$spacing-200 ds.$spacing-200 !default;
+$grid-column-chooser-item-margin-block-end: ds.$spacing-100 !default;
+$grid-column-chooser-tree-view-item-padding-inline-start: ds.$spacing-40 !default;
+$grid-column-separator-width: ds.$spacing-30 !default;
+$grid-toolbar-button-margin-inline-start: ds.$spacing-100 !default;
+$grid-search-panel-margin-inline-start: ds.$spacing-150 !default;
+$grid-rowsview-empty-height: ds.$spacing-1000 !default;
+$grid-bottom-load-panel-padding: ds.$spacing-100 !default;
+$grid-filter-panel-checkbox-padding-inline-end: ds.$spacing-100 !default;
+$grid-filter-panel-icon-margin-inline-end: ds.$spacing-70 !default;

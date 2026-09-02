@@ -337,7 +337,15 @@ const OVERRIDES = {
        * metrics came out unpainted. The AI assistant is a Popup whose wrapper carries
        * .dx-ai-chat .dx-aidialog (grid_core/ai_chat: wrapperAttr), likewise outside the grid.
        */
-      '.dx-datagrid-drag-header', '.dx-treelist-drag-header', '.dx-ai-chat'],
+      '.dx-datagrid-drag-header', '.dx-treelist-drag-header', '.dx-ai-chat',
+      /*
+       * The AI assistant's "abort the running request?" dialog is a standalone dx dialog
+       * (grid_core/ai_assistant/ai_assistant_view: createConfirmDialog with elementAttr), so it
+       * renders at body level and not inside the grid. Its button width is a grid size, so the
+       * component tier has to be published on the dialog itself — the reachability gate caught
+       * this the moment the width stopped being a literal.
+       */
+      '.dx-datagrid-ai-assistant-confirm-dialog', '.dx-treelist-ai-assistant-confirm-dialog'],
     /*
      * The dragged clone is created as $('<div>').appendTo(container) — the container defaults to
      * the viewport — and the placeholder is inserted next to it, so both live outside .dx-sortable
@@ -1052,6 +1060,17 @@ const OVERRIDES = {
       'adaptive-column', 'tree-view', 'node', 'select-all', 'sort-index', 'error-message', 'popup',
       'overlay', 'revert-button', 'validation', 'input', 'progress-bar', 'prompt-editor', 'after',
       'lines', 'title', 'ai', 'operation', 'list', 'button', 'content', 'text', 'header-row',
+      /*
+       * Opening the last of the base-layer fixed sizes: `expand-column` completes the
+       * select/edit/adaptive column family that was already here, `toolbar` and
+       * `regenerate-button` name the AI chat parts the base layer sizes
+       * (.dx-ai-chat .dx-popup-title .dx-toolbar-item, .dx-ai-chat__message-regenerate-button),
+       * and `confirm-dialog` the AI assistant dialog whose buttons carry a fixed width.
+       */
+      'expand-column', 'toolbar', 'regenerate-button', 'confirm-dialog',
+      // the last of the base-layer sizes: menu bar and caption, the search panel, the bottom
+      // load panel and the rows view, each named after the class the shared layer sizes
+      'menu-bar', 'menu-caption', 'search-panel', 'bottom-load-panel', 'rowsview',
     ],
     // dataGrid's own deltas on top of the chassis: the group panel and the edit-form buttons.
     // `group-panel-item` and `block-separator` are compounds — one anatomy level each, not two.

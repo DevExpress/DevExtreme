@@ -31,11 +31,40 @@
  * rendered min-width of the command columns is the theme's (50px / 115px / 93px) and the filter
  * row input padding is the theme's 40px, so the base literals below them never reach the page.
  */
-@use "../../base/gridBase/variables" with (
+@use "../../base/gridBase/variables" as baseGridVariables with (
   $grid-texteditor-input-padding: var(--dx-grid-editor-input-padding),
   $grid-command-select-column-width: var(--dx-grid-command-select-column-width),
   $grid-command-edit-column-width: var(--dx-grid-command-edit-column-width),
   $grid-command-edit-column-with-icons-width: var(--dx-grid-command-edit-column-with-icons-width),
+  $grid-command-expand-column-width: var(--dx-grid-command-expand-column-width),
+  $grid-command-adaptive-column-width: var(--dx-grid-command-adaptive-column-width),
+  $grid-ai-assistant-confirm-dialog-button-width: var(--dx-grid-ai-confirm-dialog-button-width),
+  $grid-context-menu-item-padding-block: var(--dx-grid-context-menu-item-padding-block),
+  $grid-context-menu-item-padding-inline-start: var(--dx-grid-context-menu-item-padding-inline-start),
+  $grid-context-menu-item-padding-inline-end: var(--dx-grid-context-menu-item-padding-inline-end),
+  $grid-context-menu-overlay-item-padding: var(--dx-grid-context-menu-overlay-item-padding),
+  $grid-context-menu-overlay-item-padding-inline-end: var(--dx-grid-context-menu-overlay-item-padding-inline-end),
+  $grid-menu-bar-item-padding: var(--dx-grid-menu-bar-item-padding),
+  $grid-menu-caption-padding-inline-start: var(--dx-grid-menu-caption-padding-inline-start),
+  $grid-column-chooser-title-font-size: var(--dx-grid-column-chooser-title-font-size),
+  $grid-column-chooser-content-padding: var(--dx-grid-column-chooser-content-padding),
+  $grid-column-chooser-item-margin-block-end: var(--dx-grid-column-chooser-item-margin-block-end),
+  $grid-column-chooser-tree-view-item-padding-inline-start: var(--dx-grid-column-chooser-tree-view-item-padding-inline-start),
+  $grid-column-separator-width: var(--dx-grid-column-separator-width),
+  $grid-toolbar-button-margin-inline-start: var(--dx-grid-toolbar-button-margin-inline-start),
+  $grid-search-panel-margin-inline-start: var(--dx-grid-search-panel-margin-inline-start),
+  $grid-rowsview-empty-height: var(--dx-grid-rowsview-empty-height),
+  $grid-bottom-load-panel-padding: var(--dx-grid-bottom-load-panel-padding),
+  $grid-filter-panel-padding: var(--dx-grid-filter-panel-padding),
+  $grid-filter-panel-checkbox-padding-inline-end: var(--dx-grid-filter-panel-checkbox-padding-inline-end),
+  $grid-filter-panel-icon-margin-inline-end: var(--dx-grid-filter-panel-icon-margin-inline-end),
+);
+@use "../../base/gridBase/layout/aiChat/variables" as baseAiChatVariables with (
+  $ai-chat-toolbar-item-spacing: var(--dx-grid-ai-chat-toolbar-item-padding-inline-end),
+  $ai-chat-message-gap: var(--dx-grid-ai-chat-message-gap),
+  $ai-chat-message-content-gap: var(--dx-grid-ai-chat-message-content-gap),
+  $ai-chat-message-width: var(--dx-grid-ai-chat-message-min-width),
+  $ai-chat-message-regenerate-button-border-radius: var(--dx-grid-ai-chat-message-regenerate-button-border-radius),
 );
 @use "variables" as *;
 @forward "variables";

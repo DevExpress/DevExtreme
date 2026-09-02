@@ -34,7 +34,7 @@
   }
 
   .dx-#{$widget-name}-important-margin {
-    margin-right: 5px !important; // stylelint-disable-line declaration-no-important
+    margin-right: 5px !important; // stylelint-disable-line declaration-no-important -- dx-fixed-size: legacy compat helper class, kept for the Foundation layout below
   }
 
   // for Foundation Responsive Framework
@@ -83,12 +83,12 @@
         padding-top: 0;
 
         &:first-child {
-          padding-top: 1px;
+          padding-top: 1px; // dx-px-nudge: lifts the first submenu row off the menu border
         }
       }
 
       .dx-menu-item {
-        padding: 7px 30px 7px 5px;
+        padding: $grid-context-menu-item-padding-block $grid-context-menu-item-padding-inline-end $grid-context-menu-item-padding-block $grid-context-menu-item-padding-inline-start;
 
         .dx-menu-image {
           background-position-x: left;
@@ -156,19 +156,19 @@
     .dx-overlay-content {
       .dx-popup-title {
         border-bottom: none;
-        font-size: 16px;
+        font-size: $grid-column-chooser-title-font-size;
 
         .dx-toolbar-label {
-          font-size: 16px;
+          font-size: $grid-column-chooser-title-font-size;
         }
       }
 
       .dx-popup-content {
-        padding: 0 20px 20px 20px;
+        padding: $grid-column-chooser-content-padding;
 
         .dx-column-chooser-item {
           opacity: 0.5;
-          margin-bottom: 10px;
+          margin-bottom: $grid-column-chooser-item-margin-block-end;
 
           &.dx-#{$widget-name}-drag-action {
             opacity: 1;
@@ -193,7 +193,7 @@
       .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
         .dx-treeview-node {
           .dx-treeview-item {
-            padding-inline-start: 4px;
+            padding-inline-start: $grid-column-chooser-tree-view-item-padding-inline-start;
           }
         }
       }
@@ -221,7 +221,7 @@
   .dx-#{$widget-name}-columns-separator {
     position: absolute;
     z-index: 4;
-    width: 3px;
+    width: $grid-column-separator-width;
   }
 
   .dx-#{$widget-name}-columns-separator-transparent {
@@ -642,20 +642,20 @@
     }
 
     .dx-menu-horizontal .dx-overlay-content ul .dx-menu-item {
-      padding: 5px;
-      padding-right: 30px;
+      padding: $grid-context-menu-overlay-item-padding;
+      padding-right: $grid-context-menu-overlay-item-padding-inline-end;
     }
 
     .dx-menu ul.dx-menu-horizontal > li > .dx-menu-item {
-      padding: 8px 5px 7px 5px;
+      padding: $grid-menu-bar-item-padding;
     }
 
     .dx-menu ul.dx-menu-horizontal > li > .dx-menu-item.dx-state-disabled:hover {
-      padding: 9px 6px 8px 6px;
+      padding: 9px 6px 8px 6px; // dx-px-nudge: +1px on each side of the resting padding above, compensating the border the disabled item loses on hover
     }
 
     .dx-menu-caption {
-      padding-left: 6px;
+      padding-left: $grid-menu-caption-padding-inline-start;
     }
 
     .dx-menu ul .dx-menu-item .dx-menu-chouser-down {
@@ -677,7 +677,7 @@
 
     .dx-toolbar-menu-container {
       .dx-button {
-        margin-left: 10px;
+        margin-left: $grid-toolbar-button-margin-inline-start;
       }
     }
   }
@@ -692,7 +692,7 @@
 
   .dx-#{$widget-name}-search-panel {
     margin: 0;
-    margin-left: 15px;
+    margin-left: $grid-search-panel-margin-inline-start;
   }
 
   .dx-gridbase-container > .dx-#{$widget-name}-rowsview {
@@ -716,7 +716,7 @@
     overflow: hidden;
 
     &.dx-empty {
-      height: 100px;
+      height: $grid-rowsview-empty-height;
 
       .dx-scrollable-content {
         height: 100%;
@@ -817,7 +817,7 @@
 
   .dx-#{$widget-name}-bottom-load-panel {
     text-align: center;
-    padding: 10px;
+    padding: $grid-bottom-load-panel-padding;
   }
 
   .dx-#{$widget-name}-hidden-column > * {
@@ -891,7 +891,7 @@
   .dx-#{$widget-name}.dx-rtl {
     .dx-menu-subitem {
       .dx-menu-item {
-        padding: 7px 5px 7px 30px;
+        padding: $grid-context-menu-item-padding-block $grid-context-menu-item-padding-inline-start $grid-context-menu-item-padding-block $grid-context-menu-item-padding-inline-end;
 
         .dx-menu-image {
           background-position-x: right;
@@ -954,12 +954,12 @@
       }
 
       .dx-menu-horizontal .dx-overlay-content ul .dx-menu-item {
-        padding: 5px;
-        padding-left: 30px;
+        padding: $grid-context-menu-overlay-item-padding;
+        padding-left: $grid-context-menu-overlay-item-padding-inline-end;
       }
 
       .dx-menu-caption {
-        padding-right: 6px;
+        padding-right: $grid-menu-caption-padding-inline-start;
       }
     }
 
@@ -973,14 +973,14 @@
       .dx-toolbar-menu-container {
         .dx-button {
           margin-left: 0;
-          margin-right: 10px;
+          margin-right: $grid-toolbar-button-margin-inline-start;
         }
       }
     }
 
     .dx-#{$widget-name}-search-panel {
       margin: 0;
-      margin-right: 15px;
+      margin-right: $grid-search-panel-margin-inline-start;
     }
   }
 
@@ -993,7 +993,7 @@
   }
 
   .dx-#{$widget-name}-filter-panel {
-    padding: 10px;
+    padding: $grid-filter-panel-padding;
 
     .dx-#{$widget-name}-filter-panel-text {
       @include dx-overflow();
@@ -1006,12 +1006,12 @@
     }
 
     .dx-#{$widget-name}-filter-panel-checkbox {
-      padding-right: 10px;
+      padding-right: $grid-filter-panel-checkbox-padding-inline-end;
     }
 
     .dx-icon-filter {
       margin: auto;
-      margin-right: 7px;
+      margin-right: $grid-filter-panel-icon-margin-inline-end;
       cursor: pointer;
     }
   }

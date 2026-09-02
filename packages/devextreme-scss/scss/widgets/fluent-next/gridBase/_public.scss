@@ -4,13 +4,37 @@
 @use "layout/aiChat/sizes" as *;
 
 @mixin publish {
+  --dx-grid-context-menu-item-padding-block: #{$grid-context-menu-item-padding-block};
+  --dx-grid-context-menu-item-padding-inline-start: #{$grid-context-menu-item-padding-inline-start};
+  --dx-grid-context-menu-item-padding-inline-end: #{$grid-context-menu-item-padding-inline-end};
+  --dx-grid-context-menu-overlay-item-padding: #{$grid-context-menu-overlay-item-padding};
+  --dx-grid-context-menu-overlay-item-padding-inline-end: #{$grid-context-menu-overlay-item-padding-inline-end};
+  --dx-grid-menu-bar-item-padding: #{$grid-menu-bar-item-padding};
+  --dx-grid-menu-caption-padding-inline-start: #{$grid-menu-caption-padding-inline-start};
+  --dx-grid-column-chooser-title-font-size: #{$grid-column-chooser-title-font-size};
+  --dx-grid-column-chooser-content-padding: #{$grid-column-chooser-content-padding};
+  --dx-grid-column-chooser-item-margin-block-end: #{$grid-column-chooser-item-margin-block-end};
+  --dx-grid-column-chooser-tree-view-item-padding-inline-start: #{$grid-column-chooser-tree-view-item-padding-inline-start};
+  --dx-grid-column-separator-width: #{$grid-column-separator-width};
+  --dx-grid-toolbar-button-margin-inline-start: #{$grid-toolbar-button-margin-inline-start};
+  --dx-grid-search-panel-margin-inline-start: #{$grid-search-panel-margin-inline-start};
+  --dx-grid-rowsview-empty-height: #{$grid-rowsview-empty-height};
+  --dx-grid-bottom-load-panel-padding: #{$grid-bottom-load-panel-padding};
+  --dx-grid-filter-panel-checkbox-padding-inline-end: #{$grid-filter-panel-checkbox-padding-inline-end};
+  --dx-grid-filter-panel-icon-margin-inline-end: #{$grid-filter-panel-icon-margin-inline-end};
   --dx-grid-adaptive-column-height: #{$grid-adaptive-column-height};
   --dx-grid-after-inset-inline-end: #{$grid-after-inset-inline-end};
   --dx-grid-ai-chat-message-border: #{$grid-ai-chat-message-border};
+  --dx-grid-ai-chat-message-content-gap: #{$grid-ai-chat-message-content-gap};
   --dx-grid-ai-chat-message-error-content: #{$grid-ai-chat-message-error-content};
+  --dx-grid-ai-chat-message-gap: #{$grid-ai-chat-message-gap};
   --dx-grid-ai-chat-message-icon-size: #{$grid-ai-chat-message-icon-size};
+  --dx-grid-ai-chat-message-min-width: #{$grid-ai-chat-message-min-width};
   --dx-grid-ai-chat-message-pending-content: #{$grid-ai-chat-message-pending-content};
+  --dx-grid-ai-chat-message-regenerate-button-border-radius: #{$grid-ai-chat-message-regenerate-button-border-radius};
   --dx-grid-ai-chat-message-success-content: #{$grid-ai-chat-message-success-content};
+  --dx-grid-ai-chat-toolbar-item-padding-inline-end: #{$grid-ai-chat-toolbar-item-padding-inline-end};
+  --dx-grid-ai-confirm-dialog-button-width: #{$grid-ai-confirm-dialog-button-width};
   --dx-grid-ai-prompt-editor-progress-bar-height: #{$grid-ai-prompt-editor-progress-bar-height};
   --dx-grid-bg: #{$grid-bg};
   --dx-grid-border-width: #{$grid-border-width};
@@ -40,6 +64,7 @@
   --dx-grid-column-chooser-padding: #{$grid-column-chooser-padding};
   --dx-grid-column-chooser-padding-inline: #{$grid-column-chooser-padding-inline};
   --dx-grid-column-separator-bg: #{$grid-column-separator-bg};
+  --dx-grid-command-adaptive-column-width: #{$grid-command-adaptive-column-width};
   --dx-grid-command-ai-button-max-width: #{$grid-command-ai-button-max-width};
   --dx-grid-command-ai-content-padding-inline-start: #{$grid-command-ai-content-padding-inline-start};
   --dx-grid-command-ai-icon-size: #{$grid-command-ai-icon-size};
@@ -48,6 +73,7 @@
   --dx-grid-command-edit-icon-margin: #{$grid-command-edit-icon-margin};
   --dx-grid-command-edit-icon-size: #{$grid-command-edit-icon-size};
   --dx-grid-command-edit-text-margin: #{$grid-command-edit-text-margin};
+  --dx-grid-command-expand-column-width: #{$grid-command-expand-column-width};
   --dx-grid-command-select-column-width: #{$grid-command-select-column-width};
   --dx-grid-content-focused: #{$grid-content-focused};
   --dx-grid-content-padding: #{$grid-content-padding};
