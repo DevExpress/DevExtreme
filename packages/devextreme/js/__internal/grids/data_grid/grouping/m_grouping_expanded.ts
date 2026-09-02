@@ -5,19 +5,20 @@ import { toComparable } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 
 import dataGridCore from '../m_core';
 import { createGroupFilter } from '../m_utils';
 import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
 import type { DataItem, GroupInfoData, GroupItemData } from './types';
 
-const loadTotalCount = function (dataSource, options) {
+const loadTotalCount = function (dataSource: DataSourceAdapter, options) {
   // @ts-expect-error
   const d = new Deferred();
   const loadOptions = extend({ skip: 0, take: 1, requireTotalCount: true }, options);
 
-  dataSource.customLoader.load(loadOptions).done((data, extra) => {
-    d.resolve(extra && extra.totalCount);
+  dataSource.customLoader.load(loadOptions).done(({ extra }) => {
+    d.resolve(extra!.totalCount);
   }).fail(d.reject.bind(d));
   return d;
 };
@@ -377,10 +378,13 @@ export class GroupingHelper extends GroupingHelperCore {
   private changeRowExpand(path) {
     const that = this;
     const dataSource = that._dataSource;
+    // @ts-expect-error badly typedDataSourceAdapter.beginPageIndex
     const beginPageIndex = dataSource.beginPageIndex
+      // @ts-expect-error badly typedDataSourceAdapter.beginPageIndex
       ? dataSource.beginPageIndex()
       : dataSource.pageIndex();
     const dataSourceItems = dataSource.items();
+    // @ts-expect-error badly typedDataSourceAdapter.pageSize
     const offset = correctSkipLoadOption(that, beginPageIndex * dataSource.pageSize());
     const groupInfo = that.findGroupInfo(path);
     let groupCountQuery;
@@ -418,6 +422,7 @@ export class GroupingHelper extends GroupingHelperCore {
       }
       that.updateTotalItemsCount();
     }).fail(function () {
+      // @ts-expect-error badly typedDataSourceAdapter._eventsStrategy
       dataSource._eventsStrategy.fireEvent('loadError', arguments);
     });
   }

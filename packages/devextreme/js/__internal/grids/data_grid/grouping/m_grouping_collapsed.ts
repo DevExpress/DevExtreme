@@ -3,6 +3,8 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import errors from '@js/ui/widget/ui.errors';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import dataGridCore from '../m_core';
 import { createGroupFilter } from '../m_utils';
@@ -196,7 +198,7 @@ function makeDataDeferred(options) {
   }
 }
 
-function loadGroupItems(that, options, loadedGroupCount, expandedInfo, groupLevel, data) {
+function loadGroupItems(that: GroupingHelper, options, loadedGroupCount, expandedInfo, groupLevel, data) {
   if (!options.isCustomLoading) {
     expandedInfo = {};
 
@@ -218,7 +220,7 @@ function loadGroupItems(that, options, loadedGroupCount, expandedInfo, groupLeve
   }
 }
 
-function loadExpandedGroups(that, options, expandedInfo, loadedGroupCount, groupLevel, data) {
+function loadExpandedGroups(that: GroupingHelper, options, expandedInfo, loadedGroupCount, groupLevel, data) {
   const groups = options.group || [];
   const currentGroup = groups[groupLevel + 1];
   const deferreds: any[] = [];
@@ -245,19 +247,20 @@ function loadExpandedGroups(that, options, expandedInfo, loadedGroupCount, group
       loadOptions.take = expandedInfo.take;
     }
 
-    const loadResult = loadOptions.take === 0
-      ? []
+    const loadDeferred = loadOptions.take === 0
+      ? { data: [] as RawItemData[] }
       : that._dataSource.customLoader.loadFromStore(loadOptions);
 
-    when(loadResult).done((data) => {
-      const item = expandedInfo.items[expandedItemIndex];
+    when(loadDeferred)
+      .done((loadResult) => {
+        const item = expandedInfo.items[expandedItemIndex];
 
-      applyContinuationToGroupItem(options, expandedInfo, groupLevel, expandedItemIndex);
+        applyContinuationToGroupItem(options, expandedInfo, groupLevel, expandedItemIndex);
 
-      item.items = data;
-    });
+        item.items = loadResult.data;
+      });
 
-    deferreds.push(loadResult);
+    deferreds.push(loadDeferred);
   });
 
   when.apply(null, deferreds).done(() => {
@@ -267,7 +270,7 @@ function loadExpandedGroups(that, options, expandedInfo, loadedGroupCount, group
   });
 }
 
-function loadLastLevelGroupItems(that, options, expandedInfo, data) {
+function loadLastLevelGroupItems(that: GroupingHelper, options, expandedInfo, data) {
   const expandedFilters: any[] = [];
   const groups = options.group || [];
 
@@ -291,6 +294,7 @@ function loadLastLevelGroupItems(that, options, expandedInfo, data) {
     filter,
   });
 
+  // @ts-expect-error badly typed GroupingHelper.dataSource
   const isPagingLocal = that._dataSource.isLastLevelGroupItemsPagingLocal();
 
   if (!isPagingLocal) {
@@ -298,12 +302,15 @@ function loadLastLevelGroupItems(that, options, expandedInfo, data) {
     loadOptions.take = expandedInfo.take;
   }
 
-  const loadResult = expandedInfo.take === 0
-    ? []
+  const loadDeferred = expandedInfo.take === 0
+    ? { data: [] as RawItemData[] }
     : that._dataSource.customLoader.loadFromStore(loadOptions);
 
-  when(loadResult).done((items) => {
+  when(loadDeferred).done((loadResult) => {
+    let items = loadResult.data;
+
     if (isPagingLocal) {
+      // @ts-expect-error badly typed GroupingHelper.dataSource
       items = that._dataSource.sortLastLevelGroupItems(items, groups, expandedInfo.paths);
       items = expandedInfo.skip ? items.slice(expandedInfo.skip) : items;
       items = expandedInfo.take ? items.slice(0, expandedInfo.take) : items;
@@ -319,7 +326,7 @@ function loadLastLevelGroupItems(that, options, expandedInfo, data) {
   }).fail(options.data.reject);
 }
 
-const loadGroupTotalCount = function (dataSource, options) {
+const loadGroupTotalCount = function (dataSource: DataSourceAdapter, options) {
   // @ts-expect-error
   const d = new Deferred();
   const isGrouping = !!(options.group && options.group.length);
@@ -327,10 +334,10 @@ const loadGroupTotalCount = function (dataSource, options) {
     skip: 0, take: 1, requireGroupCount: isGrouping, requireTotalCount: !isGrouping,
   }, options, { group: isGrouping ? options.group : null });
 
-  dataSource.customLoader.load(loadOptions).done((data, extra) => {
+  dataSource.customLoader.load(loadOptions).done(({ extra }) => {
     const count = extra && (isGrouping ? extra.groupCount : extra.totalCount);
 
-    if (!isFinite(count)) {
+    if (count && !isFinite(count)) {
       d.reject(dataErrors.Error(isGrouping ? 'E4022' : 'E4021'));
       return;
     }
@@ -344,6 +351,7 @@ export class GroupingHelper extends GroupingHelperCore {
     let totalItemsCount = 0;
     const totalCount = options.extra && options.extra.totalCount || 0;
     const groupCount = options.extra && options.extra.groupCount || 0;
+    // @ts-expect-error badly typedDataSourceAdapter.pageSize
     const pageSize = this._dataSource.pageSize();
     const isVirtualPaging = this._isVirtualPaging();
 
@@ -375,6 +383,7 @@ export class GroupingHelper extends GroupingHelperCore {
   private _updatePagingOptions(options, callback?) {
     const that = this;
     const isVirtualPaging = that._isVirtualPaging();
+    // @ts-expect-error badly typedDataSourceAdapter.pageSize
     const pageSize = that._dataSource.pageSize();
     const skips: any[] = [];
     const takes: any[] = [];

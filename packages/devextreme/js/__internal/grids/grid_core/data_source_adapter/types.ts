@@ -51,6 +51,7 @@ export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
   extra?: {
     totalCount?: number;
     summary?: unknown[];
+    groupCount?: number;
   };
 }
 

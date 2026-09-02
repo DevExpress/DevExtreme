@@ -731,24 +731,25 @@ const focusDataControllerExtender = (
       filter: this._concatWithCombinedFilter(filter),
       skip: 0,
       take: 1,
-    }).done((data) => {
+    }).done(({ data }) => {
       if (this._dataSource !== dataSource) {
         deferred.resolve(-1);
         return;
       }
-      if ((data as unknown[]).length > 0) {
-        filter = this._generateOperationFilterByKey(key, (data as unknown[])[0], useGroup);
+      if (data.length > 0) {
+        filter = this._generateOperationFilterByKey(key, data[0], useGroup);
+
         dataSource.customLoader.load({
           filter: this._concatWithCombinedFilter(filter, groupFilter),
           skip: 0,
           take: 1,
           requireTotalCount: true,
-        }).done((_, extra) => {
+        }).done(({ extra }) => {
           if (this._dataSource !== dataSource) {
             deferred.resolve(-1);
             return;
           }
-          deferred.resolve((extra as { totalCount: number }).totalCount);
+          deferred.resolve(extra!.totalCount);
         });
       } else {
         deferred.resolve(-1);

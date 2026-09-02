@@ -10,7 +10,9 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
-import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
+import type Store from '@ts/data/abstract_store';
+import type { DataSource } from '@ts/data/data_source/data_source';
+import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
@@ -202,8 +204,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return (this._dataSource.requireTotalCount as (...a: unknown[]) => unknown)(value);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public store(): any {
+  public store(): Store {
     return this._dataSource.store();
   }
 

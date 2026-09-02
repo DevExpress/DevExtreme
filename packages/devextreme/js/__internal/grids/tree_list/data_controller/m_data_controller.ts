@@ -88,11 +88,7 @@ export class TreeListDataController extends DataController {
   }
 
   public key() {
-    const dataSource = this._dataSource;
-
-    if (dataSource) {
-      return dataSource.getKeyExpr();
-    }
+    return this._dataSource?.getKeyExpr();
   }
 
   public publicMethods() {

@@ -1,6 +1,7 @@
 import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import gridCore from '../m_core';
@@ -102,7 +103,7 @@ const calculateItemsCount = function (that, items, groupsCount) {
 };
 
 export class GroupingHelper {
-  protected readonly _dataSource: any;
+  public readonly _dataSource: DataSourceAdapter;
 
   private _groupsInfo: any;
 
@@ -110,7 +111,7 @@ export class GroupingHelper {
 
   protected _group: any;
 
-  constructor(dataSourceAdapter) {
+  constructor(dataSourceAdapter: DataSourceAdapter) {
     this._dataSource = dataSourceAdapter;
     this.reset();
   }

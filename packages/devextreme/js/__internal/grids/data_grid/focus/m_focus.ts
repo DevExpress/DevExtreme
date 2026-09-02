@@ -111,8 +111,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     dataSource.customLoader.load({
       filter: this._concatWithCombinedFilter(filter),
       group,
-    }).done((data) => {
-      // @ts-expect-error badly typed DataSourceAdapter
+    }).done(({ data }) => {
       const hasData = isDefined(data) && data.length > 0;
 
       if (this._dataSource !== dataSource || !hasData) {

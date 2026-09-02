@@ -28,6 +28,7 @@ import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
 import { AI_COLUMN_NAME } from './ai_column/const';
+import type DataSourceAdapter from './data_source_adapter/m_data_source_adapter';
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
 
 const BASE_LOAD_PANEL_Z_INDEX = 1000;
@@ -677,7 +678,7 @@ export default {
     return normalizeDataSourceOptions(lookupDataSourceOptions);
   },
 
-  getWrappedLookupDataSource(column, dataSource, filter) {
+  getWrappedLookupDataSource(column, dataSource: DataSourceAdapter, filter) {
     if (!dataSource) {
       return [];
     }
@@ -723,9 +724,9 @@ export default {
           group,
           take: hasGroupPaging ? loadOptions.take : undefined,
           skip: hasGroupPaging ? loadOptions.skip : undefined,
-        }).done((items) => {
-          cachedUniqueRelevantItems = items;
-          d.resolve(hasGroupPaging ? items : sliceItems(items, loadOptions));
+        }).done(({ data }) => {
+          cachedUniqueRelevantItems = data;
+          d.resolve(hasGroupPaging ? data : sliceItems(data, loadOptions));
         }).fail(d.fail);
       }
 
