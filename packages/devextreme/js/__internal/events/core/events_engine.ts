@@ -18,7 +18,7 @@ import {
   NATIVE_EVENTS_TO_SUBSCRIBE,
   NATIVE_EVENTS_TO_TRIGGER,
   NO_BUBBLE_EVENTS,
-} from '@ts/events/core/m_consts';
+} from '@ts/events/core/consts';
 
 const window = getWindow();
 

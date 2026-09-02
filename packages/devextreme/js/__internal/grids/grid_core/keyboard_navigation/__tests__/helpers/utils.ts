@@ -1,6 +1,6 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import $ from '@js/core/renderer';
-import { keyboard } from '@ts/events/m_short';
+import { keyboard } from '@ts/events/short';
 import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 
 import { CLICK_EVENT, NAV_KEYS } from './const';

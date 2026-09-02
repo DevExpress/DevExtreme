@@ -7,7 +7,7 @@ import { getWidth, setWidth } from '@ts/core/utils/m_size';
 import { styleProp } from '@ts/core/utils/m_style';
 import supportUtils from '@ts/core/utils/m_support';
 import { getWindow } from '@ts/core/utils/m_window';
-import eventsEngine from '@ts/events/core/m_events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const window = getWindow();
 
