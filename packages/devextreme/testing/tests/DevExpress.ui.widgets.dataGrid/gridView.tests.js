@@ -913,6 +913,8 @@ QUnit.module('Grid view', {
 
         this.createGridView(this.defaultOptions);
 
+        const triggerShownEventInitial = visibilityChange.triggerShownEvent;
+
         visibilityChange.DEBUG_set_triggerShownEvent(function() {
             isShownEventTriggered = true;
         });
@@ -921,15 +923,19 @@ QUnit.module('Grid view', {
             isContentReadyCalled = true;
         };
 
-        // act
-        this.resizingController._initPostRenderHandlers();
-        this.resizingController._refreshSizesHandler({
-            changeType: 'updateSelection',
-        });
+        try {
+            // act
+            this.resizingController._initPostRenderHandlers();
+            this.resizingController._refreshSizesHandler({
+                changeType: 'updateSelection',
+            });
 
-        // assert
-        assert.ok(!isShownEventTriggered, 'shown event');
-        assert.ok(!isContentReadyCalled, 'content ready');
+            // assert
+            assert.ok(!isShownEventTriggered, 'shown event');
+            assert.ok(!isContentReadyCalled, 'content ready');
+        } finally {
+            visibilityChange.DEBUG_set_triggerShownEvent(triggerShownEventInitial);
+        }
     });
 
     QUnit.test('Render scrollable when there is max height (T427967)', function(assert) {
