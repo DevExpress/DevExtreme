@@ -254,7 +254,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  public resetCurrentTotalCount() {
+  public resetCurrentTotalCount(): void {
     this._currentTotalCount = 0;
     this._totalCountCorrection = 0;
   }
@@ -799,9 +799,11 @@ export default class DataSourceAdapter extends modules.Controller {
    * @extended: TreeLists's data_source_adapter
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public changeRowExpand(path?: any): any {}
+  public changeRowExpand(path?: unknown): DeferredObj<unknown> | undefined {
+    return undefined;
+  }
 
-  public totalCount() {
+  public totalCount(): number {
     // eslint-disable-next-line radix
     return parseInt((this._currentTotalCount || this._dataSourceTotalCount()) + this._totalCountCorrection);
   }
@@ -819,14 +821,14 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  public itemsCount() {
+  public itemsCount(): number {
     return this._dataSource.items().length;
   }
 
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  public totalItemsCount() {
+  public totalItemsCount(): number {
     return this.totalCount();
   }
 
@@ -841,7 +843,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._dataSource.pageSize(value);
   }
 
-  public pageCount() {
+  public pageCount(): number {
     const count = this.totalItemsCount() - this._totalCountCorrection;
     const pageSize = this.pageSize();
 
@@ -851,7 +853,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return 1;
   }
 
-  public hasKnownLastPage() {
+  public hasKnownLastPage(): boolean {
     return this._hasLastPage || this._dataSource.totalCount() >= 0;
   }
 
@@ -905,11 +907,15 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @exended: virtual_scrolling
    */
-  public isLoaded(): any {}
+  public isLoaded(): boolean {
+    return this._dataSource.isLoaded();
+  }
 
   /**
    * @extended: virtual_scrolling
    */
+  public pageIndex(): number;
+  public pageIndex(pageIndex: number): void;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public pageIndex(pageIndex?) {}
+  public pageIndex(pageIndex?: number): number | void {}
 }

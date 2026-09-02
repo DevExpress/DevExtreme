@@ -85,11 +85,9 @@ const data = (
 
     that.getParentKey(key).done((parentKey) => {
       if (dataSource && parentKey !== undefined && parentKey !== that.option('rootValue')) {
-        // @ts-expect-error badly typed DataSourceAdapter
         dataSource._isNodesInitializing = true;
         // @ts-expect-error
         that.expandRow(parentKey);
-        // @ts-expect-error badly typed DataSourceAdapter
         dataSource._isNodesInitializing = false;
         that.expandAscendants(parentKey).done(d.resolve).fail(d.reject);
       } else {
