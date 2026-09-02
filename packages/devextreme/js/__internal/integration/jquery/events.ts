@@ -1,6 +1,6 @@
 import registerEventCallbacks from '@js/common/core/events/core/event_registrator_callbacks';
 import domAdapter from '@ts/core/m_dom_adapter';
-import eventsEngine from '@ts/events/core/m_events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
 

@@ -3,7 +3,7 @@ import { removeEvent } from 'common/core/events/remove';
 import {
     subscribeNodesDisposing,
     unsubscribeNodesDisposing,
-} from '__internal/events/utils/m_event_nodes_disposing';
+} from '__internal/events/utils/event_nodes_disposing';
 
 QUnit.testStart(function() {
     const markup = '<button id="test-element">Test</button>';
