@@ -4,6 +4,7 @@ import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
 import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { getThemeName } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`CardView - Sortable`
   .page(url(__dirname, '../../container.html'));
@@ -16,10 +17,11 @@ const DRAG_MOVE_Y_COEFFICIENT = 1;
 
 const a11yCheckConfig = {
   rules: {
-    // Real failure, not a false positive: the drag source keeps dxSortable's 0.5 dim and the
-    // disabled colours - 1.61 generic, 1.65 fluent, 2.61 material. Undimming it is a design
-    // decision, so only this rule is off and the rest still run.
-    'color-contrast': { enabled: false },
+    /* Legacy paints the drag source with the disabled colour roles and dims it to 0.5 on top -
+    1.61 generic, 1.65 fluent, 2.61 material - so the rule is off for them. fluent-next paints the
+    source with the item's own resting colours and does not dim it, so it runs the check; leaving
+    the rule off there would switch off the only rule that theme runs at all. */
+    ...(getThemeName() === 'fluent-next' ? {} : { 'color-contrast': { enabled: false } }),
     // NOTE: Draggable template is outside the role="main" landmark
     region: { enabled: false },
   },

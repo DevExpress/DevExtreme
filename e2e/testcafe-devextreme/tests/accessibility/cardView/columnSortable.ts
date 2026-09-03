@@ -3,6 +3,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { getColumnItem, triggerDragEnd, triggerDragStart } from '../../cardView/columnSortable/utils';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { getThemeName } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`CardView - ColumnSortable`
   .page(url(__dirname, '../../container.html'));
@@ -16,10 +17,13 @@ test('headerPanel dragging column when it has sorting and headerFilter', async (
   await triggerDragStart(columnElement);
 
   const a11yCheckConfig = {
-    // Real failure, not a false positive: the drag source keeps dxSortable's 0.5 dim and the
-    // disabled colours - 1.61 generic, 1.65 fluent, 2.61 material. Undimming it is a design
-    // decision, so only this rule is off and the rest still run.
-    rules: { 'color-contrast': { enabled: false } },
+    rules: {
+      /* Legacy paints the drag source with the disabled colour roles and dims it to 0.5 on top -
+      1.61 generic, 1.65 fluent, 2.61 material - so the rule is off for them. fluent-next paints
+      the source with the item's own resting colours and does not dim it, so it runs the check;
+      leaving the rule off there would switch off the only rule that theme runs at all. */
+      ...(getThemeName() === 'fluent-next' ? {} : { 'color-contrast': { enabled: false } }),
+    },
   };
   await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
