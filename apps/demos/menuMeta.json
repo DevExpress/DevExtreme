@@ -39,6 +39,21 @@
             ]
           },
           {
+            "Name": "AI-powered Detail View",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "AI-powered Detail View",
+                "Name": "AIPoweredDetailView",
+                "Widget": "DataGrid",
+                "DemoType": "Web",
+                "Badge": "AI",
+                "Equivalents": "AI Row Insights, Contextual AI Rows, Master-Detail Copilot, Smart Row Summary, AI-Powered Detail View, AI Master-Detail Analysis",
+                "Modules": "openai"
+              }
+            ]
+          },
+          {
             "Name": "Semantic Search",
             "Equivalents": "",
             "Demos": [
@@ -865,8 +880,9 @@
                 "Name": "AIPoweredDetailView",
                 "Widget": "DataGrid",
                 "DemoType": "Web",
-                "Badge": "Roadmap",
-                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-ai-powered-detail-view.xml"
+                "Badge": "AI",
+                "Equivalents": "AI Row Insights, Contextual AI Rows, Master-Detail Copilot, Smart Row Summary, AI-Powered Detail View, AI Master-Detail Analysis",
+                "Modules": "openai"
               },
               {
                 "Title": "Advanced Master-Detail View",
