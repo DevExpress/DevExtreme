@@ -1107,3 +1107,7 @@
 .dx-scheduler-header-panel-empty-cell {
   margin-top: 0;
 }
+
+.dx-scheduler-work-space.dx-scheduler-work-space-month .dx-scheduler-date-table-other-month.dx-state-hover {
+  color: var(--dx-scheduler-workspace-cell-content-hovered);
+}
