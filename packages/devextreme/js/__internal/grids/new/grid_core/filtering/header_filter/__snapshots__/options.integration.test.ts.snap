@@ -267,6 +267,12 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource 1`] = `
             style="width: 222px; height: 90px;"
           />
         </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 2
+        </div>
       </div>
     </div>
     <div
@@ -634,6 +640,12 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
             class="dx-overlay-content"
             style="width: 222px; height: 90px;"
           />
+        </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 2
         </div>
       </div>
     </div>
@@ -1003,6 +1015,12 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
             style="width: 222px; height: 90px;"
           />
         </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 2
+        </div>
       </div>
     </div>
     <div
@@ -1370,6 +1388,12 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with filter v
             class="dx-overlay-content"
             style="width: 222px; height: 90px;"
           />
+        </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 2
         </div>
       </div>
     </div>
@@ -1850,6 +1874,12 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter 1`] = `
             style="width: 222px; height: 90px;"
           />
         </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 5
+        </div>
       </div>
     </div>
     <div
@@ -2328,6 +2358,12 @@ exports[`Options Column.HeaderFilter filterType + values: exclude filter with va
             class="dx-overlay-content"
             style="width: 222px; height: 90px;"
           />
+        </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 5
         </div>
       </div>
     </div>
@@ -2808,6 +2844,12 @@ exports[`Options Column.HeaderFilter filterType + values: filter values 1`] = `
             style="width: 222px; height: 90px;"
           />
         </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 5
+        </div>
       </div>
     </div>
     <div
@@ -3139,6 +3181,12 @@ exports[`Options HeaderFilter texts: custom translations 1`] = `
             style="width: 222px; height: 90px;"
           />
         </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 1
+        </div>
       </div>
     </div>
     <div
@@ -3469,6 +3517,12 @@ exports[`Options HeaderFilter texts: default translation 1`] = `
             class="dx-overlay-content"
             style="width: 222px; height: 90px;"
           />
+        </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 1
         </div>
       </div>
     </div>
