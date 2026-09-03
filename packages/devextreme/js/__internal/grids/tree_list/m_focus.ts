@@ -63,10 +63,10 @@ const data = (
     if (node) {
       d.resolve(node.parent ? node.parent.key : undefined);
     } else {
-      dataSource.load({
+      dataSource.customLoader.load({
         filter: [dataSource.getKeyExpr(), '=', key],
-      }).done((items) => {
-        const parentData = (items as unknown[])[0];
+      }).done((loadResult) => {
+        const parentData = loadResult.data[0];
 
         if (parentData) {
           d.resolve(dataSource.parentKeyOf(parentData));
@@ -106,9 +106,9 @@ const data = (
     const d = new Deferred();
 
     this.expandAscendants(key).done(() => {
-      dataSource.load({
+      dataSource.customLoader.load({
         parentIds: [],
-      }).done((nodes) => {
+      }).done(({ data: nodes }) => {
         if (this._dataSource !== dataSource) {
           d.resolve(-1);
           return;
