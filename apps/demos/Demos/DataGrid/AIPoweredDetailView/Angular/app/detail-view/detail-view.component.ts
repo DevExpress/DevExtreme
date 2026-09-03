@@ -1,9 +1,9 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxTextBoxModule, DxButtonGroupModule, DxButtonModule, DxTextAreaModule, DxLoadPanelModule } from 'devextreme-angular';
-import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
-import { DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
+import { type DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
+import { type DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
+import { type DxButtonTypes } from 'devextreme-angular/ui/button';
 import { type Vehicle } from '../app.service';
 import { AiService, type AIMessage } from '../ai/ai.service';
 
