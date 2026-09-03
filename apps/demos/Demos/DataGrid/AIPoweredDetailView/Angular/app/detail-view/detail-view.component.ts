@@ -7,7 +7,7 @@ import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { type Vehicle } from '../app.service';
 import { AiService, type AIMessage } from '../ai/ai.service';
 
-type SubmitEvent = DxButtonTypes.ClickEvent['event'] | DxTextBoxTypes.EnterKeyEvent['event'];
+type SubmitEvent = DxButtonTypes.ClickEvent | DxTextBoxTypes.EnterKeyEvent;
 
 let modulePrefix = '';
 // @ts-ignore
@@ -64,39 +64,21 @@ export class DetailViewComponent {
     }
   }
 
-  onPromptEnterKey({ event }: DxTextBoxTypes.EnterKeyEvent) {
-    this.submit(event, this.rowData);
-  }
-
   onSuggestionClick({ itemData: suggestion }: DxButtonGroupTypes.ItemClickEvent) {
     this.promptValue = suggestion.prompt;
   }
 
-  async onSubmitClick({ event }: DxButtonTypes.ClickEvent) {
-    await this.submit(event, this.rowData);
-  }
-
-  toggleLoadingState(isLoading: boolean, event: SubmitEvent) {
-    this.isLoading = isLoading;
-
-    const eventTarget = event?.target as HTMLElement;
-    if (isLoading) {
-      eventTarget.blur();
-    } else {
-      eventTarget.focus();
-    }
-  }
-
-  async submit(event: SubmitEvent, rowData: Vehicle) {
+  async handleSubmit({ event }: SubmitEvent) {
     if (this.promptValue === '') return;
 
     this.isError = false;
-    this.toggleLoadingState(true, event);
+    this.isLoading = true;
+    (event?.target as HTMLElement).blur();
 
     try {
       const messages: AIMessage[] = [
         { role: 'system', content: this.aiService.getSystemPrompt() },
-        { role: 'user', content: `User prompt: ${this.promptValue}\nRow data: ${JSON.stringify(rowData)}` },
+        { role: 'user', content: `User prompt: ${this.promptValue}\nRow data: ${JSON.stringify(this.rowData)}` },
       ];
       const aiResponse = await this.aiService.getAIResponse(messages);
       this.responseValue = aiResponse!;
@@ -104,9 +86,10 @@ export class DetailViewComponent {
       this.responseValue = '';
       this.isError = true;
     } finally {
-      this.toggleLoadingState(false, event);
+      this.isLoading = false;
+      this.changeDetectorRef.detectChanges();
+      (event?.target as HTMLElement).focus();
     }
 
-    this.changeDetectorRef.detectChanges();
   }
 }
