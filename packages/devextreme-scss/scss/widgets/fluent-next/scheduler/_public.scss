@@ -2,6 +2,12 @@
 @use "sizes" as *;
 
 @mixin publish {
+  /* $scheduler-appointment-bg-focused and $scheduler-appointment-shadow-focused are deliberately
+  NOT published. They are build-time flags, not values: base reads them as `@if` conditions
+  (`$fill-focused-appointment`, `$is-shadow-color-for-focused-state`) that decide whether rules
+  exist at all. Published, they emitted `--dx-scheduler-appointment-bg-focused: false` into the
+  shipped CSS - a name that reads as a colour role holding a Sass boolean, which any var() reading
+  it would turn into an invalid declaration with nothing in the console. */
   --dx-scheduler-content-disabled: #{$scheduler-content-disabled};
   --dx-scheduler-time-panel-content-disabled: #{$scheduler-time-panel-content-disabled};
   --dx-scheduler-tooltip-date-content: #{$scheduler-tooltip-date-content};
@@ -46,7 +52,6 @@
   --dx-scheduler-appointment-20min-recurrence-padding-inline-end: #{$scheduler-appointment-20min-recurrence-padding-inline-end};
   --dx-scheduler-appointment-25min-height: #{$scheduler-appointment-25min-height};
   --dx-scheduler-appointment-base-content: #{$scheduler-appointment-base-content};
-  --dx-scheduler-appointment-bg-focused: #{$scheduler-appointment-bg-focused};
   --dx-scheduler-appointment-border-radius: #{$scheduler-appointment-border-radius};
   --dx-scheduler-appointment-collector-height: #{$scheduler-appointment-collector-height};
   --dx-scheduler-appointment-collector-margin-inline-end: #{$scheduler-appointment-collector-margin-inline-end};
@@ -84,7 +89,6 @@
   --dx-scheduler-appointment-reduced-icon-inset-block-start: #{$scheduler-appointment-reduced-icon-inset-block-start};
   --dx-scheduler-appointment-reduced-icon-rtl-inset-inline-start: #{$scheduler-appointment-reduced-icon-rtl-inset-inline-start};
   --dx-scheduler-appointment-resizing-opacity: #{$scheduler-appointment-resizing-opacity};
-  --dx-scheduler-appointment-shadow-focused: #{$scheduler-appointment-shadow-focused};
   --dx-scheduler-appointment-short-content-padding: #{$scheduler-appointment-short-content-padding};
   --dx-scheduler-appointment-start-content: #{$scheduler-appointment-start-content};
   --dx-scheduler-appointment-strip-bg: #{$scheduler-appointment-strip-bg};
