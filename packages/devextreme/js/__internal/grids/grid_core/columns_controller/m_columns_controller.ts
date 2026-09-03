@@ -20,9 +20,8 @@ import Store from '@js/data/abstract_store';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
-import type {
-  Column, ColumnsChanges, FilterChangeDetector, FilterField,
-} from '@ts/grids/grid_core/columns_controller/types';
+import type { Column, ColumnsChanges, FilterField } from '@ts/grids/grid_core/columns_controller/types';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
@@ -133,7 +132,7 @@ export class ColumnsController extends modules.Controller {
 
   public _columnChanges?: ColumnsChanges;
 
-  private filterChangeDetector?: FilterChangeDetector;
+  protected _dataController!: DataController;
 
   protected _stateStoringController!: StateStoringController;
 
@@ -160,11 +159,8 @@ export class ColumnsController extends modules.Controller {
     };
   }
 
-  public setFilterChangeDetector(detector: FilterChangeDetector): void {
-    this.filterChangeDetector = detector;
-  }
-
   public init(isApplyingUserState?: boolean): void {
+    this._dataController = this.getController('data');
     this._stateStoringController = this.getController('stateStoring');
     const columns = this.option('columns');
 
@@ -1336,7 +1332,8 @@ export class ColumnsController extends modules.Controller {
       updateColumnChanges(this, 'grouping');
     }
 
-    if (this.filterChangeDetector?.(parameters.filtering, langParams)) {
+    if (this._dataController
+      && !gridCoreUtils.equalFilterParameters(parameters.filtering, this._dataController.getCombinedFilter(), langParams)) {
       updateColumnChanges(this, 'filtering');
     }
     updateColumnChanges(this, 'columns');

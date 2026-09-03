@@ -532,11 +532,8 @@ const focusEditorFactoryViewControllerExtender = (
 const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExtender extends Base {
   protected focusController!: FocusController;
 
-  protected dataController!: DataController;
-
   public init(isApplyingUserState?: boolean): void {
     this.focusController = this.getController('focus');
-    this.dataController = this.getController('data');
 
     super.init(isApplyingUserState);
   }
@@ -544,7 +541,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
   public getSortDataSourceParameters(_, sortByKey?) {
     // @ts-expect-error
     let result = super.getSortDataSourceParameters.apply(this, arguments);
-    const dataSource = this.dataController._dataSource;
+    const dataSource = this._dataController._dataSource;
     let key = dataSource?.store()?.key();
     const remoteOperations = dataSource && dataSource.remoteOperations() || {};
     const isLocalOperations = Object.keys(remoteOperations).every((operationName) => !remoteOperations[operationName]);
