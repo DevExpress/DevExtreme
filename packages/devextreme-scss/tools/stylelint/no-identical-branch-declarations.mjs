@@ -177,6 +177,9 @@ const ruleFunction = (primary) => (root, result) => {
         const live = branches.filter((branch) => branch.parent);
         const tidy = () => {
           dropEmptyBranches(live, independent);
+          live.forEach((branch) => {
+            if (branch.parent && branch.first) branch.first.raws.before = branch.first.raws.before.replace(/^\s*\n/, '\n');
+          });
           parent.raws.semicolon = true;
           if (parent.type === 'root' && parent.first) parent.first.raws.before = '';
         };

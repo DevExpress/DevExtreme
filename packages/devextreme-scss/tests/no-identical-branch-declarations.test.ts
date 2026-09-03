@@ -119,6 +119,36 @@ test('--fix puts a value that reads a branch-bound variable after the chain', ()
   ));
 });
 
+test('--fix leaves no blank first line when the removed declaration opened its group', () => {
+  const { output } = fix('fix-first-line.scss', scss(
+    '$same: null !default;',
+    '',
+    '@if $size == "default" {',
+    '  $same: 1px !default;',
+    '',
+    '  $width: 36px !default;',
+    '}',
+    '',
+    '@else if $size == "compact" {',
+    '  $same: 1px !default;',
+    '',
+    '  $width: 32px !default;',
+    '}',
+  ));
+
+  expect(output).toBe(scss(
+    '$same: 1px !default;',
+    '',
+    '@if $size == "default" {',
+    '  $width: 36px !default;',
+    '}',
+    '',
+    '@else if $size == "compact" {',
+    '  $width: 32px !default;',
+    '}',
+  ));
+});
+
 test('--fix moves a value that reads a variable declared below its pre-declaration to just before the chain', () => {
   const { output } = fix('fix-before.scss', scss(
     '$padding: null !default;',

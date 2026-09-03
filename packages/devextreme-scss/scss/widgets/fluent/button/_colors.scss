@@ -309,8 +309,6 @@ $button-accent-foreground-color: null !default;
   $button-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 }
 
-$button-success-outlined-selected-color: $button-success-outlined-color-hover !default;
-
 /**
 * $name 40. Focused state background color
 * $type color
@@ -319,6 +317,7 @@ $button-success-focused-bg: $button-success-hover-bg !default;
 $button-danger-outlined-focused-bg: $button-danger-outlined-hover-bg !default;
 $button-success-outlined-focused-bg: $button-success-outlined-hover-bg !default;
 $button-default-outlined-focused-bg: $button-default-outlined-hover-bg !default;
+$button-success-outlined-selected-color: $button-success-outlined-color-hover !default;
 
 $button-default-icon-color: $button-default-color !default;
 $button-normal-icon-color: $button-normal-color !default;
