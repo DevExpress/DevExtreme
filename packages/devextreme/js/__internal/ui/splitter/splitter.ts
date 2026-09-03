@@ -60,7 +60,7 @@ import {
   setFlexProp,
   tryConvertToNumber,
 } from './utils/layout';
-import { getDefaultLayout } from './utils/layout_default';
+import { fitAutoSizesIntoLayout, getDefaultLayout } from './utils/layout_default';
 import { compareNumbersWithPrecision } from './utils/number_comparison';
 import {
   CollapseExpandDirection,
@@ -141,7 +141,11 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   private _collapseDirection?: CollapseExpandDirection;
 
-  private _initialPaneSizes: (string | number | undefined)[] = [];
+  // @ts-expect-error ts-error
+  private _initialPaneSizes: (string | number | undefined)[];
+
+  // @ts-expect-error ts-error
+  private _measuredPaneSizes: (number | undefined)[];
 
   private _itemRestrictions: PaneRestrictions[] = [];
 
@@ -184,6 +188,12 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     super._init();
 
     this._initializeRenderQueue();
+
+    // initialized here and not in the field declarations: field initializers run
+    // after the base constructor has already rendered the widget, wiping the
+    // state captured during the initial render
+    this._initialPaneSizes = [];
+    this._measuredPaneSizes = [];
   }
 
   _initializeRenderQueue(): void {
@@ -253,7 +263,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     const { _ignoreSizeConstraints } = this.option();
 
     if (this._shouldRecalculateLayout) {
-      this._layout = this._getDefaultLayoutBasedOnSize();
+      this._layout = this._getDefaultLayoutBasedOnSize(undefined, true);
       this._idealLayout = this._layout;
 
       this._applyStylesFromLayout(this._layout);
@@ -272,10 +282,20 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
-    this._initialPaneSizes = items.map((item: Item): string | number | undefined => item.size);
+    this._initialPaneSizes = items.map(
+      (item: Item, index: number): string | number | undefined => {
+        // a size equal to the one measured on the previous render was written back
+        // by _updateItemSizes, not declared by the user — the pane stays auto-sized
+        if (isDefined(item.size) && item.size === this._measuredPaneSizes[index]) {
+          return this._initialPaneSizes[index];
+        }
+
+        return item.size;
+      },
+    );
 
     if (this._isVisible()) {
-      this._layout = this._getDefaultLayoutBasedOnSize();
+      this._layout = this._getDefaultLayoutBasedOnSize(undefined, true);
       this._idealLayout = this._layout;
       this._applyStylesFromLayout(this._layout);
       this._setPanesCacheSize();
@@ -1046,10 +1066,16 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     this._itemEventHandler($item, eventName, actionArgs);
   }
 
-  _getDefaultLayoutBasedOnSize(item?: Item): number[] {
+  _getDefaultLayoutBasedOnSize(item?: Item, shouldFitAutoSizes = false): number[] {
     this._updateItemsRestrictions(item);
 
-    return getDefaultLayout(this._itemRestrictions);
+    // on render the stored sizes may have been measured for another container size;
+    // option-change recalculations keep resolving conflicts positionally
+    const layoutRestrictions = shouldFitAutoSizes
+      ? fitAutoSizesIntoLayout(this._itemRestrictions)
+      : this._itemRestrictions;
+
+    return getDefaultLayout(layoutRestrictions);
   }
 
   _updateItemsRestrictions(currentItem?: Item): void {
@@ -1071,7 +1097,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       });
     }
 
-    items.forEach((item) => {
+    items.forEach((item, index) => {
       const sizeRatio = convertSizeToRatio(item.size, elementSize, handlesSizeSum);
       const minSizeRatio = convertSizeToRatio(item.minSize, elementSize, handlesSizeSum);
       const userMaxSize = convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum);
@@ -1094,6 +1120,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         size: sizeRatio,
         maxSize: effectiveMaxSize,
         minSize: minSizeRatio,
+        isSizeAuto: !isDefined(this._initialPaneSizes[index]),
       });
     });
   }
@@ -1111,7 +1138,10 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   _updateItemSizes(): void {
     this._iterateItems((index, itemElement) => {
-      this._updateItemData('size', index, this._getItemDimension(itemElement));
+      const size = this._getItemDimension(itemElement);
+
+      this._measuredPaneSizes[index] = size;
+      this._updateItemData('size', index, size);
     });
   }
 
