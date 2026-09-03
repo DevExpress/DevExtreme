@@ -49,48 +49,60 @@ $accent: colors.$color;
 
 /*
  * Both modes ship in every bundle and a class picks between them: `dx-theme-mode-light` / `-dark`
- * name a mode outright, `dx-theme-mode-inverted` asks for the opposite of its surroundings.
- * Everything downstream reads these values through custom properties, so any element carrying one
- * of the classes repaints itself and its subtree.
+ * name a mode outright, `dx-theme-mode-inverted` asks for the opposite of the nearest enclosing
+ * mode. Everything downstream reads these values through custom properties, so any element
+ * carrying one of the classes repaints itself and its subtree.
  *
  * Selector weight is one class throughout, `:root` included, so an override still wins by coming
- * after the theme - the rule that held before the classes existed. The third block is what makes
- * "inverted" relative: without it an island would keep inverting the bundle rather than the page
- * whenever the page names its mode by class. `:where()` keeps that block at the same one-class
- * weight as the rest.
- *
- * Two limits of that third block, both inherent to descendant selectors - CSS cannot ask for the
- * NEAREST matching ancestor:
- *
- *   - "inverted" flips the bundle's mode unless it sits anywhere inside a scope naming the
- *     opposite mode, at any distance. `dark > light > inverted` therefore resolves against the
- *     dark, not against the light next to it. Name the mode outright when that matters.
- *   - it is not recursive: an inverted island inside an inverted island stays inverted rather than
- *     flipping back.
- *
- * `--dx-theme-mode` keeps the JS honest about both: whatever these rules resolve to is what the
- * overlay container is given.
+ * after the theme - the rule that held before the classes existed.
  */
-@mixin mode-scopes($own, $other) {
+@mixin named-scopes($own, $other) {
   :root,
   .dx-theme-mode-#{$own} {
     @include mode-values($own);
   }
 
-  .dx-theme-mode-#{$other},
-  .dx-theme-mode-inverted {
+  .dx-theme-mode-#{$other} {
     @include mode-values($other);
   }
+}
 
-  :where(.dx-theme-mode-#{$other}) .dx-theme-mode-inverted {
-    @include mode-values($own);
+/*
+ * "The nearest enclosing mode" is what a style query answers: it is evaluated against the nearest
+ * ancestor, and `--dx-theme-mode` inherits, so the value read here is the one the enclosing scope
+ * resolved to - at any depth, and whether that scope named its mode or was itself inverted. A
+ * descendant selector cannot ask for the NEAREST matching ancestor, only for ANY of them, so the
+ * rule this replaces resolved `dark > light > inverted` against the dark rather than against the
+ * light next to it, and nesting did not compose.
+ *
+ * Both blocks are the same in either bundle: flipping the enclosing mode says nothing about the
+ * mode the bundle was built for. That is what makes the semantics exact rather than approximate.
+ *
+ * Where style queries are unsupported these blocks are dropped and an inverted island renders as
+ * its surroundings instead of the opposite of them. Nothing breaks: it is still a correctly
+ * painted scope, `--dx-theme-mode` still describes it, and the JS keeps agreeing with the screen.
+ */
+@mixin inverted-scope() {
+  @container style(--dx-theme-mode: light) {
+    .dx-theme-mode-inverted {
+      @include mode-values("dark");
+    }
+  }
+
+  @container style(--dx-theme-mode: dark) {
+    .dx-theme-mode-inverted {
+      @include mode-values("light");
+    }
   }
 }
 
-@if colors.$mode == "light" {
-  @include mode-scopes("light", "dark");
-} @else if colors.$mode == "dark" {
-  @include mode-scopes("dark", "light");
-} @else {
+@if colors.$mode != "light" and colors.$mode != "dark" {
   @error "fluent-next: unknown colour mode #{meta.inspect(colors.$mode)}; expected \"light\" or \"dark\".";
 }
+
+/*
+ * Inverted first: a named class on the SAME element states the mode outright and has to win, and
+ * since every rule here weighs one class, source order is what decides.
+ */
+@include inverted-scope();
+@include named-scopes(colors.$mode, if(colors.$mode == "light", "dark", "light"));
