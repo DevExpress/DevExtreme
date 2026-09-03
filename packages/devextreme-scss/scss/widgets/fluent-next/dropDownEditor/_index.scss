@@ -3,7 +3,7 @@
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../../base/icon_fonts" as *;
 @use "../../base/dropDownEditor" with (
-  $dropdowneditor-icon-idle-opacity: var(--dx-drop-down-editor-icon-opacity),
+  $dropdowneditor-icon-idle-opacity: false,
 );
 @use "../../base/dropDownEditor/mixins" as *;
 

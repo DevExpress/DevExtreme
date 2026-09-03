@@ -3,7 +3,6 @@
 @use "../../../colors" as *;
 @use "../../../button/colors" as buttonColors;
 @use "./sizes" as *;
-@use "../../../common/mixins" as commonMixins;
 @include ai-chat-messagelist-empty(
   buttonColors.$button-default-contained-bg,
   buttonColors.$button-default-outlined-bg-hovered,
@@ -15,8 +14,13 @@
 @include ai-chat-message-regenerate-button(buttonColors.$button-normal-contained-bg-active);
 @include ai-chat-message-icon(var(--dx-grid-ai-chat-message-icon-size));
 
+/* This button was the last place still dimming a disabled state, and dimming it took the icon and
+the label down together while stating no contrast of its own. The two behavioural parts of the
+disabled-widget mixin are what it actually needed; the third is a colour, and the theme has a role
+for it. */
 .dx-ai-chat--disabled .dx-ai-chat__message-regenerate-button {
-  /* The theme's own mixin, not base's: base defaults to 0.3 and this button was the one place
-  that ignored the theme's global disabled opacity. */
-  @include commonMixins.disabled-widget();
+  color: var(--dx-grid-ai-chat-message-regenerate-button-content-disabled);
+  cursor: default;
+  user-select: none;
+  -webkit-touch-callout: none;
 }

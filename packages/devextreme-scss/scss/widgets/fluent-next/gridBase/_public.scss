@@ -122,7 +122,6 @@
   --dx-grid-header-row-padding-block-start: #{$grid-header-row-padding-block-start};
   --dx-grid-hidden-border: #{$grid-hidden-border};
   --dx-grid-icon-button-border-radius: #{$grid-icon-button-border-radius};
-  --dx-grid-icon-link-opacity-disabled: #{$grid-icon-link-opacity-disabled};
   --dx-grid-icon-margin: #{$grid-icon-margin};
   --dx-grid-icon: #{$grid-icon};
   --dx-grid-link-content: #{$grid-link-content};
@@ -164,7 +163,8 @@
   --dx-grid-sort-index-icon-padding-inline-end: #{$grid-sort-index-icon-padding-inline-end};
   --dx-grid-summary-bg: var(--dx-grid-bg);
   --dx-grid-summary-content: #{$grid-summary-content};
-  --dx-grid-text-link-opacity-disabled: #{$grid-text-link-opacity-disabled};
+  --dx-grid-link-content-disabled: #{$grid-link-content-disabled};
+  --dx-grid-ai-chat-message-regenerate-button-content-disabled: #{$grid-ai-chat-message-regenerate-button-content-disabled};
   --dx-grid-tree-view-node-padding-inline-start: #{$grid-tree-view-node-padding-inline-start};
   --dx-grid-tree-view-search-margin-block-end: #{$grid-tree-view-search-margin-block-end};
   --dx-grid-tree-view-select-all-item-padding-inline-start: #{$grid-tree-view-select-all-item-padding-inline-start};

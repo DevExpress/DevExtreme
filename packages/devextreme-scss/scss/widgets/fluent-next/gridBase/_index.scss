@@ -349,12 +349,9 @@
           }
 
           .dx-state-disabled {
-            &.dx-link {
-              opacity: var(--dx-grid-text-link-opacity-disabled);
-            }
-
+            &.dx-link,
             &.dx-link-icon {
-              opacity: var(--dx-grid-icon-link-opacity-disabled);
+              color: var(--dx-grid-link-content-disabled);
             }
           }
         }

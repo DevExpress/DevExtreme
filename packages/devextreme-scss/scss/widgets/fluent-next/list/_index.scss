@@ -12,6 +12,9 @@
   $list-slide-menu-button-padding: var(--dx-list-slide-menu-button-padding),
   $list-static-delete-button-padding: var(--dx-list-delete-button-static-padding),
   $list-next-button-padding: var(--dx-list-next-button-padding),
+  /* Stays an opacity, deliberately. base pairs it with `transition: opacity 0.2s linear`, so this
+  is a fade while the item waits for a server response - motion, not the paint of a state - and a
+  loading affordance is the one thing the package does express with opacity (skeleton, spinner). */
   $list-response-wait-opacity: var(--dx-list-response-wait-opacity),
   $list-searchbox-margin-bottom: var(--dx-list-search-box-margin-block-end),
 );
