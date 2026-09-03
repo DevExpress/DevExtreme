@@ -45,3 +45,53 @@ test('no tier variable ships a Sass literal instead of a value', () => {
 test('no tier variable ships an empty value', () => {
   expect([...new Set(scan(EMPTY_VALUE))]).toEqual([]);
 });
+
+/*
+ * An opacity in the component tier has to be able to change something.
+ *
+ * Two shapes say nothing and were both found in the theme: a variable whose value is `1`, which
+ * dims by zero (`--dx-scheduler-other-month-cell-opacity` sat at 1 while the adjacent-month cell
+ * was already painted with content-subtle), and a variable published with no `var()` reading it,
+ * which is a knob wired to nothing (`--dx-tabs-nav-button-opacity-disabled` hid the content of a
+ * button that `visibility: hidden` had already removed).
+ *
+ * Scoped to `--dx-*` and never `--dxds-*`: the design-system tier publishes the whole opacity
+ * ladder - 0, 10, 15 … 100 - as a complete, stable set, so an unused rung there is the contract
+ * working as intended, and `--dxds-opacity-100` is meant to be 1.
+ */
+
+const resolve = (css: string, value: string, depth = 0): string => {
+  const link = /^var\(\s*(--[a-z0-9-]+)\s*\)$/.exec(value.trim());
+  if (!link || depth > 5) return value.trim();
+  const target = new RegExp(`${link[1]}\\s*:\\s*([^;}]*)`).exec(css);
+  return target ? resolve(css, target[1], depth + 1) : value.trim();
+};
+
+const componentOpacities = (css: string): Map<string, string> => {
+  const found = new Map<string, string>();
+  [...css.matchAll(/(--dx-[a-z0-9-]*opacity[a-z0-9-]*)\s*:\s*([^;}]*)/g)]
+    .forEach((m) => found.set(m[1], m[2].trim()));
+  return found;
+};
+
+test('no component-tier opacity is set to 1', () => {
+  const found = bundleNames.flatMap((name) => {
+    const css = readFileSync(join(artifactsCss, name), 'utf8');
+    return [...componentOpacities(css)]
+      .filter(([, value]) => ['1', '1.0'].includes(resolve(css, value)))
+      .map(([variable]) => `${name}: ${variable}`);
+  });
+
+  expect(found).toEqual([]);
+});
+
+test('every component-tier opacity is read by something', () => {
+  const found = bundleNames.flatMap((name) => {
+    const css = readFileSync(join(artifactsCss, name), 'utf8');
+    return [...componentOpacities(css).keys()]
+      .filter((variable) => !css.includes(`var(${variable}`))
+      .map((variable) => `${name}: ${variable}`);
+  });
+
+  expect(found).toEqual([]);
+});

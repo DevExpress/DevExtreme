@@ -277,18 +277,6 @@
 
   // dataGrid keeps .dx-datagrid on the container one level below it.
 
-  // The dim sits on the widget root, and opacity on a child cannot undo a parent's group opacity,
-
-  // so it has to be cancelled there. treeList carries its class on the root and is reached
-
-  // directly; dataGrid only through :has(), with the direct-child combinator keeping the match on
-
-  // the grid's own root rather than any disabled container that holds a grid deeper down.
-  .dx-#{$widget-name}.dx-state-disabled,
-  .dx-state-disabled:has(> .dx-#{$widget-name}) {
-    opacity: 1;
-  }
-
   .dx-#{$widget-name}.dx-state-disabled,
   .dx-state-disabled > .dx-#{$widget-name} {
     color: var(--dx-grid-content-disabled);

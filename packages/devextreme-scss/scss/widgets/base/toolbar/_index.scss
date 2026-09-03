@@ -27,11 +27,9 @@ $toolbar-texteditor-width: 150px !default;
     }
   }
 
-  /* No opt-out from the blanket disabled dim here. It used to sit in this file with nothing in its
-  place, and because the toolbar root carries dx-state-disabled and dx-widget on the same element,
-  the "do not dim nested widgets" rule cleared the dim from the item widgets too - a disabled
-  toolbar rendered exactly like an enabled one in every theme. A theme that paints the state
-  itself opts out in its own layer, as fluent-next does. */
+  &.dx-state-disabled {
+    opacity: 1;
+  }
 }
 
 .dx-toolbar .dx-button .dx-icon {
