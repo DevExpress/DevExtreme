@@ -47,24 +47,37 @@ const removeAllCommentsFromContent = (content: string): string => content
   .filter((_, index) => index % 2 === 0)
   .join('');
 
-const extractVariables = (filePath: string): string[] => {
+const variableRegex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'g');
+
+type VariableUsage = { declared: Set<string>; read: Set<string> };
+
+const collectVariableUsage = (filePath: string, usage: VariableUsage): void => {
   const content = removeAllCommentsFromContent(readFileSync(filePath, 'utf8'));
-  const regex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'g');
-  return content.match(regex) ?? [];
+  let depth = 0;
+  let index = 0;
+  while (index < content.length) {
+    const char = content[index];
+    if (char === '(') depth += 1;
+    if (char === ')') depth -= 1;
+    if (char === '$') {
+      variableRegex.lastIndex = index;
+      const [variable] = variableRegex.exec(content) ?? [''];
+      const assigned = /^\s*:/.test(content.slice(index + variable.length));
+      if (assigned && depth === 0) usage.declared.add(variable);
+      if (!assigned) usage.read.add(variable);
+      index += variable.length;
+      continue;
+    }
+    index += 1;
+  }
 };
 
-const findUniqueVariables = (variables: string[]): string[] => {
-  const variableCounts = new Map<string, number>();
-  variables.forEach((variable) => {
-    variableCounts.set(variable, (variableCounts.get(variable) ?? 0) + 1);
-  });
-  return Array.from(variableCounts.entries())
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // @ts-ignore
-    .filter(([variable, count]) => count === 1)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // @ts-ignore
-    .map(([variable, count]) => variable);
+const variableUsageOf = (directories: string[]): VariableUsage => {
+  const usage: VariableUsage = { declared: new Set(), read: new Set() };
+  directories
+    .flatMap((directory) => getFilesFromDirectory(join('scss', 'widgets', directory), ['.scss']))
+    .forEach((filePath) => collectVariableUsage(filePath, usage));
+  return usage;
 };
 
 test('There are no unused images in repository', () => {
@@ -85,29 +98,14 @@ test('There are no unused images in repository', () => {
   expect(fullImagesFileList).toEqual(usedImagesFileList);
 });
 
-['generic', 'material', 'fluent'].forEach((themeName) => {
+const themes = ['generic', 'material', 'fluent'];
+const readAnywhere = variableUsageOf(['base', ...themes]).read;
+
+themes.forEach((themeName) => {
   test(`There are no unused variables in ${themeName} SCSS files`, () => {
-    const baseScssFiles = getFilesFromDirectory(join('scss', 'widgets', 'base'), ['.scss'])
-      .map((fileName) => resolve(fileName));
+    const { declared } = variableUsageOf(['base', themeName]);
+    const unused = [...declared].filter((variable) => !readAnywhere.has(variable)).sort();
 
-    const genericScssFiles = getFilesFromDirectory(join('scss', 'widgets', themeName), ['.scss'])
-      .map((fileName) => resolve(fileName));
-
-    const scssFiles = [...baseScssFiles, ...genericScssFiles];
-
-    let variables: string[] = [];
-    scssFiles.forEach((filePath) => {
-      variables = variables.concat(extractVariables(getFilePath(filePath.substring(filePath.indexOf('/scss')))));
-    });
-
-    const uniqueVariables = findUniqueVariables(variables);
-
-    const exclusions: { generic: string[]; material: string[]; fluent: string[] } = {
-      generic: [],
-      material: [],
-      fluent: [],
-    };
-
-    expect(uniqueVariables).toEqual(exclusions[themeName]);
+    expect(unused).toEqual([]);
   });
 });
