@@ -4,8 +4,8 @@
 @use "../../base/mixins" as *;
 @use "../../base/switch";
 
-$generic-switch-border-weight: 1px;
-$generic-switch-inner-size: $generic-switch-height - $generic-switch-border-weight * 2;
+$generic-switch-border-weight: 1px !default;
+$generic-switch-inner-size: $generic-switch-height - $generic-switch-border-weight * 2 !default;
 
 .dx-switch {
   width: $generic-switch-width;

@@ -159,8 +159,8 @@ $datagrid-text-stub-background-image-path: null !default;
 $datagrid-filter-panel-color: $base-accent !default;
 $datagrid-draggable-column-text-color: null !default;
 
-$datagrid-text-link-disabled-opacity: $base-disabled-opacity;
-$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
+$datagrid-text-link-disabled-opacity: $base-disabled-opacity !default;
+$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity !default;
 
 @if $mode == "light" {
   @if $color == "blue" {

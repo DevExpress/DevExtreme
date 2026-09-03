@@ -53,17 +53,17 @@
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
-$scheduler-appointment-recurrence-content-padding: 5px 25px 5px 7px;
-$scheduler-appointment-recurrence-content-padding-rtl: 5px 7px 5px 25px;
+$scheduler-appointment-recurrence-content-padding: 5px 25px 5px 7px !default;
+$scheduler-appointment-recurrence-content-padding-rtl: 5px 7px 5px 25px !default;
 
-$material-scheduler-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 1.5;
-$material-scheduler-collapsed-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 0.5;
+$material-scheduler-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 1.5 !default;
+$material-scheduler-collapsed-all-day-table-cell-height: $material-scheduler-workspace-date-table-cell-height * 0.5 !default;
 
-$material-scheduler-month-date-text-size: 14px;
+$material-scheduler-month-date-text-size: 14px !default;
 
-$scheduler-first-of-month-border: 1px solid;
+$scheduler-first-of-month-border: 1px solid !default;
 
-$material-scheduler-agenda-time-panel-cell-padding: 8px;
+$material-scheduler-agenda-time-panel-cell-padding: 8px !default;
 
 @include baseScheduler.scheduler-mixin();
 

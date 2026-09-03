@@ -2,7 +2,7 @@
 @use "sizes" as *;
 @use "../../base/rangeSlider";
 
-$generic-slider-handle-margin: -7px;
+$generic-slider-handle-margin: -7px !default;
 
 .dx-rangeslider-start-handle {
   margin-inline-start: $generic-slider-handle-margin;

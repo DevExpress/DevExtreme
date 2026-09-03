@@ -13,7 +13,7 @@ $generic-treeview-item-element-gap: 8px !default;
 $generic-select-all-item-border-visible-padding: 20px !default;
 
 @if $size == "default" {
-  $generic-treeview-item-height: 32px;
+  $generic-treeview-item-height: 32px !default;
   $generic-treeview-base-container-size: 22px !default;
   $generic-treeview-container-with-border-offset: 7px !default;
   $generic-checkbox-container-size: 22px !default;
@@ -24,7 +24,7 @@ $generic-select-all-item-border-visible-padding: 20px !default;
 }
 
 @else if $size == "compact" {
-  $generic-treeview-item-height: 28px;
+  $generic-treeview-item-height: 28px !default;
   $generic-treeview-container-with-border-offset: 6px !default;
   $generic-treeview-base-container-size: 16px !default;
   $generic-checkbox-container-size: 16px !default;

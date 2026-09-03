@@ -8,7 +8,7 @@
 @use "../../base/popup";
 @use "../overlay";
 
-$material-popup-toolbar-label-font-size: $material-m-font-size;
+$material-popup-toolbar-label-font-size: $material-m-font-size !default;
 
 .dx-popup-wrapper {
   & > .dx-overlay-content {

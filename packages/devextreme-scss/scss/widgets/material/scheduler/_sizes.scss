@@ -42,7 +42,7 @@ $material-scheduler-appointment-20min-icon-right: 4px !default;
 
 $scheduler-left-column-width: 65px !default;
 $material-scheduler-timeline-date-table-cell-height: 50px !default;
-$material-scheduler-navigator-icon-font-size: $material-base-icon-size;
+$material-scheduler-navigator-icon-font-size: $material-base-icon-size !default;
 $material-scheduler-appointment-month-text-size: 12px !default;
 $material-scheduler-workspace-info-text-size: 16px !default;
 $material-scheduler-all-day-title-font-size: 12px !default;
@@ -118,7 +118,7 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-appointment-popup-days-of-week-buttons-gap: 8px !default;
   $material-scheduler-appointment-popup-repeat-end-item-height: 48px !default;
 
-  $agenda-appointment-title-font-size: 14px;
+  $agenda-appointment-title-font-size: 14px !default;
 
   $material-scheduler-appointment-15min-recurrence-padding-right: 18px !default;
   $material-scheduler-appointment-15min-title-line-height: 18px !default;
@@ -166,7 +166,7 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-appointment-popup-days-of-week-buttons-gap: 4px !default;
   $material-scheduler-appointment-popup-repeat-end-item-height: 32px !default;
 
-  $agenda-appointment-title-font-size: 13px;
+  $agenda-appointment-title-font-size: 13px !default;
 
   $material-scheduler-appointment-15min-recurrence-padding-right: 14px !default;
   $material-scheduler-appointment-15min-title-line-height: 12px !default;

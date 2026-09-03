@@ -84,8 +84,8 @@ $scheduler-time-panel-background-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-appointment-overlay-bg: null !default;
 
-$month-text-color-light: #757575;
-$month-text-color-dark: #9c9c9c;
+$month-text-color-light: #757575 !default;
+$month-text-color-dark: #9c9c9c !default;
 
 // Agenda
 $agenda-appointment-recurrence-icon-color: null !default;
@@ -393,4 +393,4 @@ $agenda-appointment-text-color: $base-text-color !default;
 
 $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
 
-$scheduler-appointment-active-color: $scheduler-appointment-start-color;
+$scheduler-appointment-active-color: $scheduler-appointment-start-color !default;

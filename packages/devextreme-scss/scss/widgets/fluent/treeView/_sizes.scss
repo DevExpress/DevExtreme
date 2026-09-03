@@ -3,16 +3,16 @@
 $fluent-treeview-toggle-item-width: null !default;
 $fluent-treeview-item-height: null !default;
 $fluent-checkbox-container-size: null !default;
-$fluent-treeview-container-with-border-offset: 8px;
+$fluent-treeview-container-with-border-offset: 8px !default;
 $fluent-treeview-item-element-gap: 8px !default;
-$fluent-treeview-item-margin: 1px 0;
-$fluent-treeview-item-border-radius: 4px;
-$fluent-treeview-border-padding: 1px;
+$fluent-treeview-item-margin: 1px 0 !default;
+$fluent-treeview-item-border-radius: 4px !default;
+$fluent-treeview-border-padding: 1px !default;
 $fluent-treeview-container-padding:
   $fluent-treeview-border-padding
   $fluent-treeview-border-padding
   $fluent-treeview-border-padding
-  $fluent-treeview-container-with-border-offset;
+  $fluent-treeview-container-with-border-offset !default;
 
 $fluent-treeview-checkbox-offset: null !default;
 $fluent-select-all-item-padding: null !default;
@@ -32,7 +32,7 @@ $fluent-select-all-item-border-visible-padding: 26px !default;
   $fluent-treeview-item-padding: 12px $fluent-treeview-item-side-padding !default;
   $fluent-treeview-load-indicator-size: 20px !default;
   $fluent-treeview-searchbox-margin-bottom: 8px !default;
-  $fluent-treeview-search-editor-height: 48px;
+  $fluent-treeview-search-editor-height: 48px !default;
 }
 
 @else if $size == "compact" {
@@ -44,5 +44,5 @@ $fluent-select-all-item-border-visible-padding: 26px !default;
   $fluent-treeview-item-padding: 10px $fluent-treeview-item-side-padding !default;
   $fluent-treeview-load-indicator-size: 16px !default;
   $fluent-treeview-searchbox-margin-bottom: 4px !default;
-  $fluent-treeview-search-editor-height: 32px;
+  $fluent-treeview-search-editor-height: 32px !default;
 }

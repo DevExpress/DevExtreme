@@ -1,7 +1,7 @@
 @use "sass:math";
 
-$loadindicator-width: 32px;
-$loadindicator-height: 32px;
+$loadindicator-width: 32px !default;
+$loadindicator-height: 32px !default;
 
 .dx-loadindicator {
   width: $loadindicator-width;

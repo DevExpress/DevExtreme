@@ -13,21 +13,21 @@
 @use "../../base/textEditor/mixins" as *;
 @use "../colorBox/sizes" as *;
 
-$generic-texteditor-border-width: $generic-base-border-width;
+$generic-texteditor-border-width: $generic-base-border-width !default;
 $generic-texteditor-input-padding:
   $generic-base-inline-borderedwidget-top-padding
   $generic-base-inline-borderedwidget-horizontal-padding
-  $generic-base-inline-borderedwidget-bottom-padding;
+  $generic-base-inline-borderedwidget-bottom-padding !default;
 
-$generic-texteditor-input-height: math.round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding;
+$generic-texteditor-input-height: math.round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding !default;
 
-$generic-texteditor-icon-container-size: $generic-base-inline-borderedwidget-inner-size;
-$generic-texteditor-icon-size: $generic-base-icon-size;
+$generic-texteditor-icon-container-size: $generic-base-inline-borderedwidget-inner-size !default;
+$generic-texteditor-icon-size: $generic-base-icon-size !default;
 
-$generic-texteditor-clear-icon-size: $generic-texteditor-icon-size + $generic-texteditor-clear-icon-oversize;
+$generic-texteditor-clear-icon-size: $generic-texteditor-icon-size + $generic-texteditor-clear-icon-oversize !default;
 
-$generic-texteditor-custom-button-margin: 1px;
-$generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $generic-invalid-badge-horizontal-padding;
+$generic-texteditor-custom-button-margin: 1px !default;
+$generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $generic-invalid-badge-horizontal-padding !default;
 
 @mixin dx-texteditor-icon() {
   position: absolute;

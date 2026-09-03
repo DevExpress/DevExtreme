@@ -164,8 +164,8 @@ $datagrid-text-stub-background-image-path: null !default;
 $datagrid-filter-panel-color: $base-accent !default;
 $datagrid-draggable-column-text-color: color.change($base-text-color, $alpha: 0.38) !default;
 
-$datagrid-text-link-disabled-opacity: $base-disabled-opacity;
-$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
+$datagrid-text-link-disabled-opacity: $base-disabled-opacity !default;
+$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity !default;
 
 @if $mode == "light" {
   $datagrid-cell-modified-border-color: color.adjust($base-success, $lightness: 51%, $space: hsl) !default;

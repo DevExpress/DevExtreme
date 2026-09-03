@@ -214,7 +214,6 @@ $button-success-outlined-color: $base-success !default;
 $button-success-outlined-border-color: $base-success !default;
 $button-success-outlined-color-hover: null !default;
 $button-success-outlined-color-active: null !default;
-$button-success-outlined-selected-color: null !default;
 $button-success-outlined-bg: transparent !default;
 $button-success-outlined-hover-bg: null !default;
 $button-success-outlined-active-bg: null !default;
@@ -264,7 +263,6 @@ $button-accent-foreground-color: null !default;
 
   $button-success-outlined-color-hover: color.adjust($base-success, $saturation: -0.22%, $space: hsl, $lightness: -12.16%) !default;
   $button-success-outlined-color-active: color.adjust($base-success, $saturation: -0.95%, $space: hsl, $lightness: -19.22%) !default;
-  $button-success-outlined-selected-color: $button-success-outlined-color-hover;
 
   $button-default-color: $base-inverted-text-color !default;
   $button-default-selected-color: $base-inverted-text-color !default;
@@ -297,7 +295,6 @@ $button-accent-foreground-color: null !default;
 
   $button-success-outlined-color-hover: color.adjust($base-success, $saturation: 10.6%, $space: hsl, $lightness: 45.3%) !default;
   $button-success-outlined-color-active: $button-success-outlined-color-hover !default;
-  $button-success-outlined-selected-color: $button-success-outlined-color-hover !default;
 
   $button-success-outlined-hover-bg: color.adjust($base-success, $saturation: 39.4%, $space: hsl, $lightness: -42.7%) !default;
   $button-success-outlined-active-bg: color.adjust($base-success, $saturation: 39%, $space: hsl, $lightness: -33.1%) !default;
@@ -311,6 +308,8 @@ $button-accent-foreground-color: null !default;
   $button-success-selected-color: $base-typography-bg !default;
   $button-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 }
+
+$button-success-outlined-selected-color: $button-success-outlined-color-hover !default;
 
 /**
 * $name 40. Focused state background color

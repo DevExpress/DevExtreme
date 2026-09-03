@@ -10,15 +10,15 @@ $generic-aidialog-content-padding: null !default;
 @if $size == "default" {
   $generic-toolbar-size-editor-width: 105px !default;
   $generic-html-editor-add-image-dialog-fileuploader-padding: 60px 20px !default;
-  $generic-aidialog-selects-gap: 10px;
-  $generic-aidialog-content-gap: 20px;
-  $generic-aidialog-content-padding: 20px;
+  $generic-aidialog-selects-gap: 10px !default;
+  $generic-aidialog-content-gap: 20px !default;
+  $generic-aidialog-content-padding: 20px !default;
 }
 
 @else if $size == "compact" {
   $generic-toolbar-size-editor-width: 80px !default;
   $generic-html-editor-add-image-dialog-fileuploader-padding: 40px 20px !default;
-  $generic-aidialog-selects-gap: 5px;
-  $generic-aidialog-content-gap: 10px;
-  $generic-aidialog-content-padding: 10px;
+  $generic-aidialog-selects-gap: 5px !default;
+  $generic-aidialog-content-gap: 10px !default;
+  $generic-aidialog-content-padding: 10px !default;
 }

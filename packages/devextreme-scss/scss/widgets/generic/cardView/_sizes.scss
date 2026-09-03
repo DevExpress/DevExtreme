@@ -190,8 +190,8 @@ $cardview-generic-header-panel__item--disabled__sort-index-text-weight: $cardvie
 */
 $cardview-generic-header-panel__item--dragged-text-weight: $cardview-generic-header-panel__item-text-weight !default;
 
-$cardview-generic-header-item__sort-indicator__border-size: null;
-$cardview-generic-header-item__sort-indicator__border-radius: null;
+$cardview-generic-header-item__sort-indicator__border-size: null !default;
+$cardview-generic-header-item__sort-indicator__border-radius: null !default;
 
 // #endregion
 

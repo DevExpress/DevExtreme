@@ -9,7 +9,7 @@
 @use "../../base/icon_fonts" as *;
 @use "../textEditor" as *;
 
-$fluent-editor-custom-button-margin: 6px;
+$fluent-editor-custom-button-margin: 6px !default;
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(daterangepicker);

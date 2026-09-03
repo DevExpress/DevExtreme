@@ -14,7 +14,7 @@ $fluent-button-box-shadow-size: 0 1px 3px !default;
 @if $size == "default" {
   $fluent-button-horizontal-padding: 12px !default;
   $fluent-button-vertical-padding: 6px !default;
-  $fluent-button-icon-padding: 6px;
+  $fluent-button-icon-padding: 6px !default;
 }
 
 @else if $size == "compact" {

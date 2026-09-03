@@ -38,7 +38,7 @@ $treeview-item-content-disabled: null !default;
 */
 $treeview-spin-icon-color: null !default;
 
-$generic-treeview-focused-row-load-indicator-color: #fff;
+$generic-treeview-focused-row-load-indicator-color: #fff !default;
 
 @if $color == "carmine" {
   $treeview-color: $base-text-color !default;

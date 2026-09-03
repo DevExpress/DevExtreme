@@ -188,8 +188,8 @@ $cardview-fluent-header-panel__item--disabled__sort-index-text-weight: $cardview
 */
 $cardview-fluent-header-panel__item--dragged-text-weight: $cardview-fluent-header-panel__item-text-weight !default;
 
-$cardview-fluent-header-item__sort-indicator__border-size: null;
-$cardview-fluent-header-item__sort-indicator__border-radius: null;
+$cardview-fluent-header-item__sort-indicator__border-size: null !default;
+$cardview-fluent-header-item__sort-indicator__border-radius: null !default;
 
 // #endregion
 

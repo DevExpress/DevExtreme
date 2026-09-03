@@ -196,8 +196,8 @@ $cardview-material-header-panel__item--disabled__sort-index-text-weight: $cardvi
 */
 $cardview-material-header-panel__item--dragged-text-weight: $cardview-material-header-panel__item-text-weight !default;
 
-$cardview-material-header-item__sort-indicator__border-size: null;
-$cardview-material-header-item__sort-indicator__border-radius: null;
+$cardview-material-header-item__sort-indicator__border-size: null !default;
+$cardview-material-header-item__sort-indicator__border-radius: null !default;
 
 // #endregion
 

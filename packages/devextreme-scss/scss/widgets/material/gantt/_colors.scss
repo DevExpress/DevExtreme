@@ -12,8 +12,8 @@ $gantt-task-background-color: null !default;
 @if $color == "lime" {
   $gantt-parent-task-background-color: #f44336 !default;
   $gantt-task-progress-background-color: rgba(0, 0, 0, 0.2) !default;
-  $gantt-task-color: #fff;
-  $gantt-task-background-color: #999;
+  $gantt-task-color: #fff !default;
+  $gantt-task-background-color: #999 !default;
 }
 
 @if $color == "blue" {
@@ -34,8 +34,8 @@ $gantt-task-background-color: null !default;
 @if $color == "orange" or $color == "purple" or $color == "teal" {
   $gantt-parent-task-background-color: #8bc34a !default;
   $gantt-task-progress-background-color: rgba(0, 0, 0, 0.2) !default;
-  $gantt-task-color: #fff;
-  $gantt-task-background-color: #999;
+  $gantt-task-color: #fff !default;
+  $gantt-task-background-color: #999 !default;
 }
 
 @if $mode == "light" {

@@ -87,7 +87,7 @@ $texteditor-input-border-radius: $base-border-radius !default;
 $texteditor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
-  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms !default;
 
 @if $mode == "light" {
   $texteditor-outlined-bg: $base-element-bg !default;
@@ -141,8 +141,8 @@ $texteditor-filled-bg-hover: $texteditor-filled-bg !default;
 */
 $texteditor-filled-bg-focused: $texteditor-filled-bg !default;
 
-$texteditor-label-color: $texteditor-placeholder-color;
-$texteditor-label-color-focused: $base-accent;
+$texteditor-label-color: $texteditor-placeholder-color !default;
+$texteditor-label-color-focused: $base-accent !default;
 
 :root {
   --dx-texteditor-color-text: #{$texteditor-color};

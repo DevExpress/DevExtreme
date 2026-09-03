@@ -2,7 +2,7 @@
 @use "../sizes" as *;
 
 $fluent-tooltip-padding: null !default;
-$fluent-tooltip-font-size: 12px;
+$fluent-tooltip-font-size: 12px !default;
 $fluent-tooltip-arrow-border-radius: 2px !default;
 $fluent-tooltip-shadow: 0 0 2px 0 $base-dropdown-shadow-color1 !default;
 
