@@ -11,6 +11,7 @@ import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } fr
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
+import type { FilterValue } from './data_controller/types';
 import type { EditingController } from './editing/m_editing';
 import type { ModuleItem } from './m_modules';
 
@@ -143,6 +144,8 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   selection?: InternalSelection;
 
   scrolling?: DataGridScrolling | TreeListScrolling;
+
+  filterValue?: FilterValue;
 }
 
 // todo: move to upper .d.ts files
@@ -194,7 +197,7 @@ export type OptionChanged = OptionChangedFor<InternalGridOptions>;
 
 export interface Controllers {
   adaptiveColumns: import('./adaptivity/m_adaptivity').AdaptiveColumnsController;
-  applyFilter: import('./filter/m_filter_row').ApplyFilterViewController;
+  applyFilter: import('./filter_row/m_filter_row').ApplyFilterViewController;
   columnChooser: import('./column_chooser/m_column_chooser').ColumnChooserController;
   columns: import('./columns_controller/m_columns_controller').ColumnsController;
   columnsResizer: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsResizerViewController;
@@ -206,7 +209,7 @@ export interface Controllers {
   editorFactory: import('./editor_factory/m_editor_factory').EditorFactory;
   errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
   export: import('../data_grid/export/m_export').ExportController;
-  filterSync: import('./filter/m_filter_sync').FilterSyncController;
+  filterSync: import('./filter_sync/m_filter_sync').FilterSyncController;
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
@@ -245,8 +248,8 @@ export interface Views {
   contextMenuView: import('./context_menu/m_context_menu').ContextMenuView;
   footerView: import('../data_grid/summary/m_summary').FooterView;
   gridView: import('./views/m_grid_view').GridView;
-  filterBuilderView: import('./filter/m_filter_builder').FilterBuilderView;
-  filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
+  filterBuilderView: import('./filter_builder/m_filter_builder').FilterBuilderView;
+  filterPanelView: import('./filter_panel/m_filter_panel').FilterPanelView;
   toastView: import('./toast/m_toast_view').ToastView;
   aiPromptEditorView: import('./ai_column/views/m_ai_prompt_editor_view').AIPromptEditorView;
   aiAssistantView: import('./ai_assistant/ai_assistant_view').AIAssistantView;

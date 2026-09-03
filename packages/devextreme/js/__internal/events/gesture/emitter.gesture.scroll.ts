@@ -31,7 +31,7 @@ const FRAME_DURATION = Math.round(1000 / 60);
 
 type ScrollLockerElement = Element | dxElementWrapper;
 
-type ScrollEvent = EmitterEvent & {
+export type ScrollEvent = EmitterEvent & {
   isScrollingEvent?: boolean;
 };
 

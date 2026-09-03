@@ -1,12 +1,11 @@
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
-import { isDefined } from '@js/core/utils/type';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { focusModule } from '@ts/grids/grid_core/focus/m_focus';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
-import type { GroupingDataControllerExtension } from '../grouping/m_grouping';
+import type { GroupingDataControllerExtension, GroupingDataSourceAdapter } from '../grouping/m_grouping';
 import gridCore from '../m_core';
 import { createGroupFilter } from '../m_utils';
 
@@ -25,6 +24,8 @@ DataController
 & GroupingDataControllerExtension>;
 
 const data = (Base: DataControllerBase) => class FocusDataControllerExtender extends focusModule.extenders.controllers.data(Base) {
+  public declare _dataSource?: GroupingDataSourceAdapter | null;
+
   private changeRowExpand(path, isRowClick) {
     // @ts-expect-error
     if (this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {
@@ -93,11 +94,12 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     // @ts-expect-error
     const deferred = new Deferred();
     const isGroupKey = Array.isArray(key);
-    const group = dataSource.group();
 
-    if (isGroupKey) {
+    if (isGroupKey || !dataSource) {
       return deferred.resolve(-1).promise();
     }
+
+    const group = dataSource.group();
 
     if (!dataSource._grouping._updatePagingOptions) {
       this._calculateGlobalRowIndexByFlatData(key, null, true)
@@ -106,17 +108,17 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
       return deferred;
     }
 
-    dataSource.load({
+    dataSource.customLoader.load({
       filter: this._concatWithCombinedFilter(filter),
       group,
-    }).done((data) => {
-      const hasData = isDefined(data) && data.length > 0;
+    }).done(({ data }) => {
+      const hasData = Array.isArray(data) && data.length > 0;
 
       if (this._dataSource !== dataSource || !hasData) {
         return deferred.resolve(-1).promise();
       }
 
-      const groupPath = this._getGroupPath(data, group.length);
+      const groupPath = this._getGroupPath(data, gridCore.normalizeSortingInfo(group).length);
 
       this._expandGroupByPath(this, groupPath, 0).done(() => {
         this._calculateExpandedRowGlobalIndex(deferred, key, groupPath, group, dataSource);

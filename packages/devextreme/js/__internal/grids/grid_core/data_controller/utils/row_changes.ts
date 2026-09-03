@@ -1,8 +1,9 @@
 import { equalByValue } from '@js/core/utils/common';
 
+import type { OperationTypes } from '../../data_source_adapter/types';
 import type {
-  ChangedRows, DataChange, ItemChange, ProcessedItem, RowIndexByKey,
-  RowOperation, UpdateChange, UpdateRowChange,
+  DataChange, GetUpdatedColumnIndices, ItemChange, ProcessedItem,
+  RowIndexByKey, RowOperation, UpdateChange, UpdateItemChange,
 } from '../types';
 
 export function isSameItem(
@@ -30,6 +31,23 @@ export function isSameGroupRowState(item1: ProcessedItem, item2: ProcessedItem):
   return item1.isExpanded === item2.isExpanded
     && item1.data?.isContinuation === item2.data?.isContinuation
     && item1.data?.isContinuationOnNextPage === item2.data?.isContinuationOnNextPage;
+}
+
+export function canDiffColumns(oldItem: ProcessedItem, newItem: ProcessedItem): boolean {
+  return oldItem.rowType === newItem.rowType && newItem.rowType !== 'groupFooter';
+}
+
+export function getGroupColumnIndices(
+  oldItem: ProcessedItem,
+  newItem: ProcessedItem,
+): number[] | undefined {
+  if (!oldItem.cells || !isSameGroupRowState(oldItem, newItem)) {
+    return undefined;
+  }
+
+  return oldItem.cells
+    .map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1))
+    .filter((index) => index >= 0);
 }
 
 /**
@@ -70,6 +88,16 @@ export function updateRowCells(oldItem: ProcessedItem, newItem: ProcessedItem): 
   });
 }
 
+function getChangedItem(itemChange: ItemChange): ProcessedItem {
+  switch (itemChange.type) {
+    case 'update':
+    case 'remove':
+      return itemChange.oldItem;
+    default:
+      return itemChange.data;
+  }
+}
+
 export function updateKeptRows(
   oldItems: ProcessedItem[],
   newItems: ProcessedItem[],
@@ -79,9 +107,7 @@ export function updateKeptRows(
   const changedItemKeys = new Set<string>();
 
   itemChanges.forEach((itemChange) => {
-    changedItemKeys.add(getRowKey(
-      itemChange.type === 'insert' ? itemChange.data : itemChange.oldItem,
-    ));
+    changedItemKeys.add(getRowKey(getChangedItem(itemChange)));
   });
 
   oldItems.forEach((oldItem) => {
@@ -151,63 +177,157 @@ export function getRowOperation(
   return newItem ? 'replace' : undefined;
 }
 
-export function initChangedRows(): ChangedRows {
-  return {
-    items: [],
-    rowIndices: [],
-    changeTypes: [],
-    columnIndices: [],
-  };
+export function getItemChange(
+  items: ProcessedItem[],
+  newItems: ProcessedItem[],
+  index: number,
+): ItemChange | undefined {
+  const oldItem = items[index];
+  const newItem = newItems[index];
+
+  if (newItem) {
+    newItem.rowIndex = index;
+  }
+
+  switch (getRowOperation(items, newItems, index)) {
+    case 'update':
+      if (oldItem.visible !== newItem.visible) {
+        return { type: 'updateVisibility', index, data: newItem };
+      }
+
+      return {
+        type: 'update', index, data: newItem, oldItem,
+      };
+    case 'insert':
+      return { type: 'insert', index, data: newItem };
+    case 'remove':
+      return { type: 'remove', index, oldItem };
+    case 'replace':
+      return { type: 'replace', index, data: newItem };
+    default:
+      return undefined;
+  }
 }
 
-function attachChangedRows(change: UpdateChange, changedRows: ChangedRows): void {
-  change.rowIndices = changedRows.rowIndices;
-  change.columnIndices = changedRows.columnIndices;
-  change.changeTypes = changedRows.changeTypes;
-  change.items = changedRows.items;
-}
+export function attachChangedItems(change: UpdateChange, changedRows: UpdateItemChange[]): void {
+  change.items = changedRows
+    .map(({ item }) => item)
+    .filter((item): item is ProcessedItem => !!item);
 
-export function resetChangedRows(change: UpdateChange): ChangedRows {
-  const changedRows = initChangedRows();
-
-  attachChangedRows(change, changedRows);
-
-  return changedRows;
-}
-
-function toChangedRows(updateRowChanges: UpdateRowChange[]): ChangedRows {
-  return {
-    items: updateRowChanges
-      .map(({ item }) => item)
-      .filter((item): item is ProcessedItem => !!item),
-    rowIndices: updateRowChanges.map(({ rowIndex }) => rowIndex),
-    changeTypes: updateRowChanges.map(({ changeType }) => changeType),
-    columnIndices: updateRowChanges.map(({ columnIndices }) => columnIndices),
-  };
+  change.rowIndices = changedRows.map(({ rowIndex }) => rowIndex);
+  change.changeTypes = changedRows.map(({ changeType }) => changeType);
+  change.columnIndices = changedRows.map(({ columnIndices }) => columnIndices);
 }
 
 export function convertToUpdateChange(
   change: DataChange,
-  updateRowChanges: UpdateRowChange[],
+  changedRows: UpdateItemChange[],
 ): void {
   const updateChange = change as UpdateChange;
 
   updateChange.repaintChangesOnly = true;
   updateChange.changeType = 'update';
 
-  attachChangedRows(updateChange, toChangedRows(updateRowChanges));
+  attachChangedItems(updateChange, changedRows);
 }
 
-export function pushChangedRow(changedRows: ChangedRows, changedRow: UpdateRowChange): void {
-  const {
-    item, rowIndex, changeType, columnIndices,
-  } = changedRow;
-
-  if (item) {
-    changedRows.items.push(item);
+function partialUpdateItemCore(
+  oldItem: ProcessedItem,
+  newItem: ProcessedItem,
+  columnIndices: number[] | undefined,
+  isLiveUpdate?: boolean,
+): void {
+  if (!columnIndices) {
+    return;
   }
 
-  changedRows.rowIndices.push(rowIndex);
-  changedRows.changeTypes.push(changeType);
-  changedRows.columnIndices.push(columnIndices);
+  oldItem.cells?.forEach((cell, columnIndex) => {
+    const isCellChanged = columnIndices.includes(columnIndex);
+    if (!isCellChanged && cell?.update) {
+      cell.update(newItem);
+    }
+  });
+
+  newItem.update = oldItem.update;
+  newItem.watch = oldItem.watch;
+  newItem.cells = oldItem.cells;
+
+  if (isLiveUpdate) {
+    newItem.oldValues = oldItem.values;
+  }
+
+  oldItem.update?.(newItem);
+}
+
+export function partialUpdateItem(
+  visibleRowIndex: number,
+  options: {
+    oldItem: ProcessedItem;
+    newItem: ProcessedItem;
+    isLiveUpdate?: boolean;
+    getUpdatedColumnIndices?: GetUpdatedColumnIndices;
+  },
+): UpdateItemChange {
+  const {
+    oldItem,
+    newItem,
+    isLiveUpdate,
+    getUpdatedColumnIndices,
+  } = options;
+  const columnIndices = getUpdatedColumnIndices?.(
+    oldItem,
+    newItem,
+    visibleRowIndex,
+    isLiveUpdate,
+  );
+
+  partialUpdateItemCore(oldItem, newItem, columnIndices, isLiveUpdate);
+
+  return {
+    changeType: 'update',
+    rowIndex: visibleRowIndex,
+    item: newItem,
+    columnIndices,
+  };
+}
+
+/**
+ * Grouping and filtering rebuild the rows, so a diff is pointless there. Missing operation
+ * types leave the mode unset rather than off: a pending `refresh({ changesOnly })` still
+ * fills it in when the change is applied later.
+ */
+export function resolveRepaintChangesOnly(
+  operationTypes: OperationTypes | undefined,
+  repaintChangesOnly: boolean | undefined,
+): boolean | undefined {
+  if (!operationTypes) {
+    return undefined;
+  }
+
+  return !operationTypes.grouping && !operationTypes.filtering && repaintChangesOnly;
+}
+
+export function syncRowsAfterChange(
+  items: ProcessedItem[],
+  options: {
+    newItems: ProcessedItem[];
+    oldItems: ProcessedItem[] | null;
+    rowIndexDelta: number;
+  },
+): void {
+  const { newItems, oldItems, rowIndexDelta } = options;
+
+  items.forEach((item, index) => {
+    item.rowIndex = index - rowIndexDelta;
+
+    if (oldItems) {
+      item.cells = oldItems[index].cells ?? [];
+    }
+
+    const newItem = newItems[index];
+
+    if (newItem) {
+      item.loadIndex = newItem.loadIndex;
+    }
+  });
 }

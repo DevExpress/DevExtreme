@@ -4,16 +4,11 @@ import { addNamespace, eventSource, fireEvent } from '@js/common/core/events/uti
 import domAdapter from '@js/core/dom_adapter';
 import browser from '@js/core/utils/browser';
 import type { EmitterEvent } from '@ts/events/core/emitter';
+import type { HandleObject } from '@ts/events/core/events_engine';
 
 const POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
 
-export interface PointerEventHandleObj {
-  selector?: string | null;
-  type?: string;
-  data?: Record<string, unknown>;
-}
-
-export interface PointerEventInit {
+export interface PointerStrategyEventArgs {
   type: string;
   pointerType: string;
   originalEvent: EmitterEvent;
@@ -50,7 +45,7 @@ class BaseStrategy {
   _handler(e: EmitterEvent): EmitterEvent | undefined {
     const delegateTarget = this._getDelegateTarget(e);
 
-    const event: PointerEventInit = {
+    const event: PointerStrategyEventArgs = {
       type: this._eventName,
       pointerType: e.pointerType || eventSource(e),
       originalEvent: e,
@@ -76,13 +71,13 @@ class BaseStrategy {
     return delegateTarget;
   }
 
-  _fireEvent(args: PointerEventInit): EmitterEvent {
+  _fireEvent(args: PointerStrategyEventArgs): EmitterEvent {
     const event: EmitterEvent = fireEvent(args);
 
     return event;
   }
 
-  _setSelector(handleObj?: PointerEventHandleObj): void {
+  _setSelector(handleObj?: HandleObject): void {
     this._selector = this.noBubble && handleObj ? handleObj.selector : null;
   }
 
@@ -94,7 +89,7 @@ class BaseStrategy {
     return true;
   }
 
-  add(element: Element, handleObj: PointerEventHandleObj): void {
+  add(element: Element, handleObj: HandleObject): void {
     if (this._handlerCount <= 0 || this.noBubble) {
       const target = this.noBubble ? element : domAdapter.getDocument();
       this._setSelector(handleObj);
@@ -109,8 +104,8 @@ class BaseStrategy {
     }
   }
 
-  remove(handleObj: PointerEventHandleObj): void {
-    this._setSelector(handleObj);
+  remove(): void {
+    this._selector = null;
 
     if (!this.noBubble) {
       this._handlerCount -= 1;

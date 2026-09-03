@@ -5,6 +5,7 @@ import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { convertRulesToOptions, createDefaultOptionRules } from '@js/core/options/utils';
 import { getImageSourceType } from '@js/core/utils/icon';
 import { camelize } from '@js/core/utils/inflector';
+import type { DxEvent } from '@js/events';
 import type { Properties as ButtonProperties, TemplateData } from '@js/ui/button.d';
 import { current, isMaterial } from '@js/ui/themes';
 import type { BaseWidgetProps } from '@ts/core/r1/base_props';
@@ -92,7 +93,7 @@ const omit = <T extends Record<string, unknown>, K extends keyof T>(
 
 export type ButtonProps = Record<string, unknown> & BaseWidgetProps & ButtonProperties & {
   iconPosition?: string;
-  onSubmit?: (e: { event: Event; submitInput: HTMLInputElement | null }) => void;
+  onSubmit?: (e: { event: DxEvent; submitInput: HTMLInputElement | null }) => void;
   pressed?: boolean;
   template?: TemplateComponent;
   iconTemplate?: TemplateComponent;
@@ -170,7 +171,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     if (useSubmitBehavior && onSubmit) {
       click.on(
         submitInput,
-        (event: Event) => onSubmit({ event, submitInput }),
+        (event: DxEvent) => onSubmit({ event, submitInput }),
         { namespace },
       );
 

@@ -76,7 +76,6 @@ export const KoTemplate = class extends TemplateBase {
     let $result;
     ko.renderTemplate(this._template.get(0), model, {
       afterRender(nodes) {
-        // @ts-expect-error
         $result = $(nodes);
       },
     }, $placeholder.get(0), 'replaceNode');

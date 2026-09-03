@@ -24,9 +24,11 @@ import sharedFiltering from '@js/ui/shared/filtering';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { isNumeric } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
 import { AI_COLUMN_NAME } from './ai_column/const';
+import type DataSourceAdapter from './data_source_adapter/m_data_source_adapter';
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
 
 const BASE_LOAD_PANEL_Z_INDEX = 1000;
@@ -304,7 +306,7 @@ export default {
     return index;
   },
 
-  combineFilters(filters, operation?): any {
+  combineFilters(filters, operation?): DataFilter {
     let resultFilter: any[] = [];
 
     operation = operation || 'and';
@@ -330,7 +332,7 @@ export default {
       resultFilter = resultFilter[0];
     }
     if (resultFilter.length) {
-      return resultFilter;
+      return resultFilter as DataFilter;
     }
 
     return undefined;
@@ -428,6 +430,7 @@ export default {
           selector: dataField,
           groupInterval: interval,
           isExpanded: index < groupInterval.length - 1,
+          // @ts-ignore
         } : getIntervalSelector.bind(column, interval));
       });
 
@@ -675,7 +678,7 @@ export default {
     return normalizeDataSourceOptions(lookupDataSourceOptions);
   },
 
-  getWrappedLookupDataSource(column, dataSource, filter) {
+  getWrappedLookupDataSource(column, dataSource: DataSourceAdapter | undefined, filter) {
     if (!dataSource) {
       return [];
     }
@@ -716,14 +719,14 @@ export default {
       } else {
         previousSkip = loadOptions.skip;
         previousTake = loadOptions.take;
-        dataSource.load({
+        dataSource.customLoader.load({
           filter,
           group,
           take: hasGroupPaging ? loadOptions.take : undefined,
           skip: hasGroupPaging ? loadOptions.skip : undefined,
-        }).done((items) => {
-          cachedUniqueRelevantItems = items;
-          d.resolve(hasGroupPaging ? items : sliceItems(items, loadOptions));
+        }).done(({ data }) => {
+          cachedUniqueRelevantItems = data;
+          d.resolve(hasGroupPaging ? data : sliceItems(data, loadOptions));
         }).fail(d.fail);
       }
 

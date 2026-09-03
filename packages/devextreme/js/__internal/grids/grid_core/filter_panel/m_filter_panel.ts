@@ -1,0 +1,359 @@
+/* eslint-disable max-classes-per-file */
+import eventsEngine from '@js/common/core/events/core/events_engine';
+import messageLocalization from '@js/common/core/localization/message';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { isDefined } from '@js/core/utils/type';
+import CheckBox from '@js/ui/check_box';
+import inflector from '@ts/core/utils/m_inflector';
+import {
+  getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
+  getCustomOperation, getField, getGroupValue, isCondition, isGroup,
+} from '@ts/filter_builder/m_utils';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
+import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
+import modules from '@ts/grids/grid_core/m_modules';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import gridUtils from '@ts/grids/grid_core/m_utils';
+
+const FILTER_PANEL_CLASS = 'filter-panel';
+const FILTER_PANEL_TEXT_CLASS = `${FILTER_PANEL_CLASS}-text`;
+const FILTER_PANEL_CHECKBOX_CLASS = `${FILTER_PANEL_CLASS}-checkbox`;
+const FILTER_PANEL_CLEAR_FILTER_CLASS = `${FILTER_PANEL_CLASS}-clear-filter`;
+const FILTER_PANEL_LEFT_CONTAINER = `${FILTER_PANEL_CLASS}-left`;
+
+const FILTER_PANEL_TARGET = 'filterPanel';
+
+export class FilterPanelView extends modules.View {
+  private _columnsController!: ColumnsController;
+
+  private _dataController!: DataController;
+
+  private _filterSyncController!: FilterSyncController;
+
+  private readonly _filterValueBuffer: any;
+
+  public init() {
+    this._dataController = this.getController('data');
+    this._columnsController = this.getController('columns');
+    this._filterSyncController = this.getController('filterSync');
+
+    this._dataController.dataSourceChanged.add(() => this.render());
+  }
+
+  public isVisible() {
+    return !!(this.option('filterPanel.visible') && this._dataController.dataSource());
+  }
+
+  protected _renderCore() {
+    const $element = this.element();
+
+    $element.empty();
+
+    const isColumnsDefined = !!this._columnsController.getColumns().length;
+
+    if (!isColumnsDefined) {
+      return;
+    }
+
+    $element
+      .addClass(this.addWidgetPrefix(FILTER_PANEL_CLASS));
+
+    const $leftContainer = $('<div>')
+      .addClass(this.addWidgetPrefix(FILTER_PANEL_LEFT_CONTAINER))
+      .appendTo($element);
+
+    this._renderFilterBuilderText($element, $leftContainer);
+  }
+
+  private _renderFilterBuilderText($element: dxElementWrapper, $leftContainer: dxElementWrapper): void {
+    const $filterElement = this._getFilterElement();
+    const $textElement = this._getTextElement();
+
+    if (this.option('filterValue') || this._filterValueBuffer) {
+      const $checkElement = this._getCheckElement();
+      const $removeButtonElement = this._getRemoveButtonElement();
+
+      $leftContainer
+        .append($checkElement)
+        .append($filterElement)
+        .append($textElement);
+
+      $element.append($removeButtonElement);
+
+      return;
+    }
+
+    $leftContainer
+      .append($filterElement)
+      .append($textElement);
+  }
+
+  private _getCheckElement() {
+    const that = this;
+    const $element = $('<div>')
+      .addClass(this.addWidgetPrefix(FILTER_PANEL_CHECKBOX_CLASS));
+
+    that._createComponent($element, CheckBox, {
+      value: that.option('filterPanel.filterEnabled'),
+      onValueChanged(e) {
+        that.option('filterPanel.filterEnabled', e.value);
+      },
+    });
+    const filterEnabledHint = this.option('filterPanel.texts.filterEnabledHint')
+      ?? messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint');
+    $element.attr('title', filterEnabledHint);
+    return $element;
+  }
+
+  private _getFilterElement() {
+    const that = this;
+    const $element = $('<div>').addClass('dx-icon-filter');
+
+    eventsEngine.on($element, 'click', () => that._showFilterBuilder());
+
+    registerKeyboardAction('filterPanel', that, $element, undefined, () => that._showFilterBuilder());
+
+    that._addTabIndexToElement($element);
+
+    return $element;
+  }
+
+  private _getTextElement() {
+    const that = this;
+    const $textElement = $('<div>').addClass(that.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS));
+    let filterText;
+    const filterValue = that.option('filterValue');
+    if (filterValue) {
+      when(that.getFilterText(filterValue, this._filterSyncController.getCustomFilterOperations())).done((filterText) => {
+        const customizeText = that.option('filterPanel.customizeText');
+        if (customizeText) {
+          const customText = customizeText({
+            component: that.component,
+            filterValue,
+            text: filterText,
+          });
+          if (typeof customText === 'string') {
+            filterText = customText;
+          }
+        }
+        $textElement.text(filterText);
+      });
+    } else {
+      filterText = that.option('filterPanel.texts.createFilter')
+        ?? messageLocalization.format('dxDataGrid-filterPanelCreateFilter');
+      $textElement.text(filterText);
+    }
+
+    eventsEngine.on($textElement, 'click', () => that._showFilterBuilder());
+
+    registerKeyboardAction('filterPanel', that, $textElement, undefined, () => that._showFilterBuilder());
+
+    that._addTabIndexToElement($textElement);
+
+    return $textElement;
+  }
+
+  private _showFilterBuilder() {
+    this.option('filterBuilderPopup.visible', true);
+  }
+
+  private _getRemoveButtonElement() {
+    const that = this;
+    const clearFilterValue = () => that.option('filterValue', null);
+    const clearFilterText = that.option('filterPanel.texts.clearFilter')
+      ?? messageLocalization.format('dxDataGrid-filterPanelClearFilter');
+    const $element = $('<div>')
+      .addClass(that.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
+      .text(clearFilterText);
+
+    eventsEngine.on($element, 'click', clearFilterValue);
+
+    registerKeyboardAction('filterPanel', this, $element, undefined, clearFilterValue);
+
+    that._addTabIndexToElement($element);
+
+    return $element;
+  }
+
+  private _addTabIndexToElement($element) {
+    if (!this.option('useLegacyKeyboardNavigation')) {
+      const tabindex = this.option('tabindex') || 0;
+      $element.attr('tabindex', tabindex);
+    }
+  }
+
+  public optionChanged(args) {
+    switch (args.name) {
+      case 'filterValue':
+        this._invalidate();
+        this.option('filterPanel.filterEnabled', true);
+        args.handled = true;
+        break;
+      case 'filterPanel':
+        this._invalidate();
+        args.handled = true;
+        break;
+      default:
+        super.optionChanged(args);
+    }
+  }
+
+  private _getConditionText(fieldText, operationText, valueText) {
+    let result = `[${fieldText}] ${operationText}`;
+    if (isDefined(valueText)) {
+      result += valueText;
+    }
+    return result;
+  }
+
+  private _getValueMaskedText(value) {
+    return Array.isArray(value) ? `('${value.join('\', \'')}')` : ` '${value}'`;
+  }
+
+  private _getValueText(field, customOperation, value) {
+    // @ts-expect-error
+    const deferred = new Deferred();
+    const hasCustomOperation = customOperation && customOperation.customizeText;
+    if (isDefined(value) || hasCustomOperation) {
+      if (!hasCustomOperation && field.lookup) {
+        getCurrentLookupValueText(field, value, (data) => {
+          deferred.resolve(this._getValueMaskedText(data));
+        });
+      } else {
+        const displayValue = Array.isArray(value) ? value : gridUtils.getDisplayValue(field, value, null);
+        when(getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done((data) => {
+          deferred.resolve(this._getValueMaskedText(data));
+        });
+      }
+    } else {
+      deferred.resolve('');
+    }
+    return deferred.promise();
+  }
+
+  private getFilterOperationDescriptions() {
+    return {
+      between: this.option('filterBuilder.filterOperationDescriptions.between') ?? messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
+      equal: this.option('filterBuilder.filterOperationDescriptions.equal') ?? messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
+      notEqual: this.option('filterBuilder.filterOperationDescriptions.notEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
+      lessThan: this.option('filterBuilder.filterOperationDescriptions.lessThan') ?? messageLocalization.format('dxFilterBuilder-filterOperationLess'),
+      lessThanOrEqual: this.option('filterBuilder.filterOperationDescriptions.lessThanOrEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
+      greaterThan: this.option('filterBuilder.filterOperationDescriptions.greaterThan') ?? messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
+      greaterThanOrEqual: this.option('filterBuilder.filterOperationDescriptions.greaterThanOrEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
+      startsWith: this.option('filterBuilder.filterOperationDescriptions.startsWith') ?? messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
+      contains: this.option('filterBuilder.filterOperationDescriptions.contains') ?? messageLocalization.format('dxFilterBuilder-filterOperationContains'),
+      notContains: this.option('filterBuilder.filterOperationDescriptions.notContains') ?? messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
+      endsWith: this.option('filterBuilder.filterOperationDescriptions.endsWith') ?? messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
+      isBlank: this.option('filterBuilder.filterOperationDescriptions.isBlank') ?? messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
+      isNotBlank: this.option('filterBuilder.filterOperationDescriptions.isNotBlank') ?? messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
+    };
+  }
+
+  private getConditionText(filterValue, options) {
+    const that = this;
+    const operation = filterValue[1];
+    // @ts-expect-error
+    const deferred = new Deferred();
+    const customOperation = getCustomOperation(options.customOperations, operation);
+    let operationText;
+    const field = getField(filterValue[0], options.columns);
+    const fieldText = field.caption || '';
+    const value = filterValue[2];
+    const filterOperationDescriptions = this.getFilterOperationDescriptions();
+
+    if (customOperation) {
+      operationText = customOperation.caption || inflector.captionize(customOperation.name);
+    } else if (value === null) {
+      operationText = getCaptionByOperation(operation === '=' ? 'isblank' : 'isnotblank', filterOperationDescriptions);
+    } else {
+      operationText = getCaptionByOperation(operation, filterOperationDescriptions);
+    }
+    this._getValueText(field, customOperation, value).done((valueText) => {
+      deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
+    });
+    return deferred;
+  }
+
+  private getGroupText(filterValue, options, isInnerGroup?) {
+    const that = this;
+    // @ts-expect-error
+    const result = new Deferred();
+    const textParts: string[] = [];
+    const groupValue = getGroupValue(filterValue);
+
+    filterValue.forEach((item) => {
+      if (isCondition(item)) {
+        textParts.push(that.getConditionText(item, options));
+      } else if (isGroup(item)) {
+        textParts.push(that.getGroupText(item, options, true));
+      }
+    });
+
+    when.apply(this, textParts).done((...args) => {
+      let text;
+      if (groupValue.startsWith('!')) {
+        const groupText = options.groupOperationDescriptions[`not${groupValue.substring(1, 2).toUpperCase()}${groupValue.substring(2)}`].split(' ');
+        text = `${groupText[0]} ${args[0]}`;
+      } else {
+        text = args.join(` ${options.groupOperationDescriptions[groupValue]} `);
+      }
+      if (isInnerGroup) {
+        text = `(${text})`;
+      }
+      result.resolve(text);
+    });
+    return result;
+  }
+
+  public getFilterText(filterValue, customOperations): DeferredObj<string> {
+    const options = {
+      customOperations,
+      columns: this._columnsController.getFilteringColumns(),
+      filterOperationDescriptions: this.getFilterOperationDescriptions(),
+      groupOperationDescriptions: {
+        and: this.option('filterBuilder.groupOperationDescriptions.and') ?? messageLocalization.format('dxFilterBuilder-and'),
+        or: this.option('filterBuilder.groupOperationDescriptions.or') ?? messageLocalization.format('dxFilterBuilder-or'),
+        notAnd: this.option('filterBuilder.groupOperationDescriptions.notAnd') ?? messageLocalization.format('dxFilterBuilder-notAnd'),
+        notOr: this.option('filterBuilder.groupOperationDescriptions.notOr') ?? messageLocalization.format('dxFilterBuilder-notOr'),
+      },
+    };
+    return isCondition(filterValue) ? this.getConditionText(filterValue, options) : this.getGroupText(filterValue, options);
+  }
+}
+
+const data = (Base: ModuleType<DataController>) => class FilterPanelDataControllerExtender extends Base {
+  public optionChanged(args) {
+    switch (args.name) {
+      case 'filterPanel':
+        this.applyFilter();
+        args.handled = true;
+        break;
+      default:
+        super.optionChanged(args);
+    }
+  }
+};
+
+export const filterPanelModule = {
+  defaultOptions() {
+    return {
+      filterPanel: {
+        visible: false,
+        filterEnabled: true,
+      },
+    };
+  },
+  views: {
+    filterPanelView: FilterPanelView,
+  },
+  extenders: {
+    controllers: {
+      data,
+    },
+  },
+};

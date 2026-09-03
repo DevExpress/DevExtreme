@@ -34,8 +34,10 @@ export interface GroupingDataControllerExtension {
   changeRowExpand(key, isRowClick?): any;
 }
 
+export type GroupingDataSourceAdapter = InstanceType<ReturnType<typeof dataSourceAdapterExtender>>;
+
 const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class GroupingDataSourceAdapterExtender extends Base {
-  private _grouping: any;
+  public _grouping: any;
 
   public init() {
     super.init.apply(this, arguments as any);
@@ -58,13 +60,13 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  protected totalItemsCount() {
+  public totalItemsCount() {
     const totalCount = super.totalItemsCount();
 
     return totalCount > 0 && this._dataSource.group() && this._dataSource.requireTotalCount() ? totalCount + this._grouping.totalCountCorrection() : totalCount;
   }
 
-  protected itemsCount() {
+  public itemsCount() {
     return this._dataSource.group() ? this._grouping.itemsCount() || 0 : super.itemsCount.apply(this, arguments as any);
   }
 
@@ -76,16 +78,16 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._grouping.isGroupItemCountable(item);
   }
 
-  private isRowExpanded(key) {
+  public isRowExpanded(key) {
     const groupInfo = this._grouping.findGroupInfo(key);
     return groupInfo ? groupInfo.isExpanded : !this._grouping.allowCollapseAll();
   }
 
-  private collapseAll(groupIndex) {
+  public collapseAll(groupIndex) {
     return this._collapseExpandAll(groupIndex, false);
   }
 
-  private expandAll(groupIndex) {
+  public expandAll(groupIndex) {
     return this._collapseExpandAll(groupIndex, true);
   }
 
@@ -121,7 +123,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._grouping.refresh.apply(this._grouping, arguments);
   }
 
-  protected changeRowExpand(path) {
+  public changeRowExpand(path) {
     const that = this;
     const dataSource = that._dataSource;
 
@@ -183,7 +185,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._grouping.handleDataLoading(options);
   }
 
-  protected customizeLoadResultHandler(options) {
+  public customizeLoadResultHandler(options) {
     return this._grouping.handleDataLoaded(options, super.customizeLoadResultHandler.bind(this));
   }
 

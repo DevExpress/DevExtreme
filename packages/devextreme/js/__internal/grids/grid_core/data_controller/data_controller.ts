@@ -1,4 +1,3 @@
-import type { Store } from '@js/common/data';
 import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -12,30 +11,32 @@ import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
-import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
+import type Store from '@ts/data/abstract_store';
+import type { DataSource } from '@ts/data/data_source/data_source';
+import type { ChangingEvent } from '@ts/data/data_source/types';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
   ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
-import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
   Controllers, Module, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
+import type { CustomLoadResult } from '../data_source_adapter/custom_loader';
 import type {
   BinaryDataFilterExpression,
   CallbackFlags,
   DataChange,
   DataFilter,
-  DataSourceAdapterLike,
   GeneratedItem,
+  GetUpdatedColumnIndices,
   ItemChange,
+  ItemChangeOptions,
+  ItemOperationOptions,
   ItemProcessingOptions,
   PagingChanges,
   PagingDataSource,
@@ -46,28 +47,30 @@ import type {
   RowIndexByKey,
   RowIndexCorrection,
   UpdateChange,
-  UpdateRowChange,
+  UpdateItemChange,
   UserState,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
+  attachChangedItems,
+  canDiffColumns,
   convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
+  getGroupColumnIndices,
+  getItemChange,
   getRowKey,
-  getRowOperation,
   indexRowsByKey,
-  isSameGroupRowState,
-  pushChangedRow,
-  resetChangedRows,
+  partialUpdateItem,
+  resolveRepaintChangesOnly,
+  syncRowsAfterChange,
   updateKeptRows,
 } from './utils/row_changes';
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends modules.Controller {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public _dataSource?: any;
+  public _dataSource?: DataSourceAdapter | null;
 
   protected isSharedDataSource?: boolean;
 
@@ -123,21 +126,10 @@ export class DataController extends modules.Controller {
 
   public rowIndicesChanged!: Callback<[RowIndexCorrection]>;
 
-  protected _lastRenderingPageIndex?: number;
-
-  protected _isPagingByRendering?: boolean;
-
   // TODO public controller
   public _columnsController!: Controllers['columns'];
 
-  // TODO public controller
-  public _rowsScrollController?: VirtualScrollController | null;
-
-  protected _filterSyncController!: FilterSyncController;
-
   private _filterExcludedColumn: Column | null = null;
-
-  protected _focusController!: FocusController;
 
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
@@ -149,8 +141,6 @@ export class DataController extends modules.Controller {
     this._items = [];
     this._cachedProcessedItems = null;
     this._columnsController = this.getController('columns');
-    this._filterSyncController = this.getController('filterSync');
-    this._focusController = this.getController('focus');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -188,7 +178,8 @@ export class DataController extends modules.Controller {
    * @extended: virtual_scrolling
    */
   protected _getPagingOptionValue(optionName: PagingOptionName): number {
-    return this._dataSource[optionName]() as number;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this._dataSource![optionName]();
   }
 
   protected callbackNames(): string[] {
@@ -332,9 +323,8 @@ export class DataController extends modules.Controller {
     return !this._isLoading;
   }
 
-  public getDataSource(): DataSource | null | undefined {
-    const adapter: DataSourceAdapterLike | null | undefined = this._dataSource;
-    return adapter ? adapter._dataSource : null;
+  public getDataSource(): DataSource | null {
+    return this._dataSource?._dataSource ?? null;
   }
 
   public getCombinedFilter(returnDataField?: boolean): DataFilter {
@@ -368,7 +358,7 @@ export class DataController extends modules.Controller {
       || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
-      const additionalFilter = this._calculateAdditionalFilter();
+      const additionalFilter = this.calculateAdditionalFilter();
 
       combined = additionalFilter
         ? gridCoreUtils.combineFilters([additionalFilter, combined])
@@ -418,6 +408,9 @@ export class DataController extends modules.Controller {
   private readonly customizeStoreLoadOptionsHandler = (e: LoadOperation): void => {
     const columnsController = this._columnsController;
     const dataSource = this._dataSource;
+    if (!dataSource) {
+      return;
+    }
     const { storeLoadOptions } = e;
 
     if (e.isCustomLoading && !storeLoadOptions.isLoadingAll) {
@@ -529,7 +522,7 @@ export class DataController extends modules.Controller {
       }
     } else if (changeTypes.columns) {
       if (this.shouldApplyFilter(e)) {
-        this._applyFilter();
+        this.applyFilter();
         filterApplied = true;
       }
 
@@ -542,7 +535,7 @@ export class DataController extends modules.Controller {
         const hasFilterValue = isDefined(column?.filterValue) || isDefined(column?.filterValues);
 
         if (hasFilterValue) {
-          this._applyFilter();
+          this.applyFilter();
           filterApplied = true;
         }
       }
@@ -579,7 +572,7 @@ export class DataController extends modules.Controller {
         this._isDataSourceApplying = false;
 
         const hasAdditionalFilter = (): boolean => {
-          const additionalFilter = this._calculateAdditionalFilter();
+          const additionalFilter = this.calculateAdditionalFilter();
           return Boolean(additionalFilter?.length);
         };
 
@@ -588,7 +581,7 @@ export class DataController extends modules.Controller {
 
         if (needApplyFilter && !this._isAllDataTypesDefined && hasAdditionalFilter()) {
           errors.log('W1005', this.component.NAME);
-          this._applyFilter();
+          this.applyFilter();
         } else {
           this._currentOperationTypes = dataSource.operationTypes();
 
@@ -726,7 +719,7 @@ export class DataController extends modules.Controller {
         dataSource.load().done((...args: unknown[]) => {
           this._isPaging = false;
           result.resolve(...args);
-        }).fail(result.reject);
+        }).fail((...args: unknown[]) => { result.reject(...args); });
       } else {
         result.resolve();
       }
@@ -845,59 +838,84 @@ export class DataController extends modules.Controller {
     this._items = (change.items ?? []).slice();
   }
 
-  private updateRow(
-    newItem: ProcessedItem,
-    rowIndex: number,
-    visibleRowIndex: number,
-    isPartialUpdate: boolean,
-  ): UpdateRowChange {
-    const oldItem = this._items[rowIndex];
+  private applyItemOperations(
+    rowIndices: number[],
+    options: ItemOperationOptions,
+  ): UpdateItemChange[] {
+    const changedRows: UpdateItemChange[] = [];
+    let prevRowIndex = -1;
+    let rowIndexCorrection = 0;
 
-    this._items[rowIndex] = newItem;
+    rowIndices.forEach((changedRowIndex) => {
+      const rowIndex = changedRowIndex + rowIndexCorrection + options.rowIndexDelta;
 
-    if (oldItem.visible !== newItem.visible) {
-      return {
-        changeType: 'update',
-        rowIndex: visibleRowIndex,
-        item: { visible: newItem.visible } as ProcessedItem,
-      };
-    }
+      if (prevRowIndex === rowIndex) {
+        return;
+      }
 
-    return {
-      changeType: 'update',
-      rowIndex: visibleRowIndex,
-      item: newItem,
-      columnIndices: isPartialUpdate
-        ? this._partialUpdateRow(oldItem, newItem, visibleRowIndex)
-        : undefined,
-    };
+      prevRowIndex = rowIndex;
+
+      const itemChange = getItemChange(this._items, options.newItems, rowIndex);
+
+      if (!itemChange) {
+        return;
+      }
+
+      const changedItem = this.applyItemChange(itemChange, options);
+
+      if (!changedItem) {
+        return;
+      }
+
+      changedRows.push(changedItem);
+
+      if (changedItem.changeType === 'insert') {
+        rowIndexCorrection += 1;
+      } else if (changedItem.changeType === 'remove') {
+        rowIndexCorrection -= 1;
+        prevRowIndex = -1;
+      }
+    });
+
+    return changedRows;
   }
 
-  private applyRowOperation(
-    newItems: ProcessedItem[],
-    rowIndex: number,
-    rowIndexDelta: number,
-    isPartialUpdate: boolean,
-  ): UpdateRowChange | undefined {
-    const visibleRowIndex = rowIndex - rowIndexDelta;
-    const item = newItems[rowIndex];
+  private applyItemChange(
+    itemChange: ItemChange,
+    options: ItemChangeOptions,
+  ): UpdateItemChange | undefined {
+    const items = this._items;
+    const { index } = itemChange;
+    const rowIndex = index - options.rowIndexDelta;
 
-    if (item) {
-      item.rowIndex = rowIndex;
-    }
-
-    switch (getRowOperation(this._items, newItems, rowIndex)) {
-      case 'update':
-        return this.updateRow(item, rowIndex, visibleRowIndex, isPartialUpdate);
+    switch (itemChange.type) {
       case 'insert':
-        this._items.splice(rowIndex, 0, item);
-        return { changeType: 'insert', rowIndex: visibleRowIndex, item };
+        items.splice(index, 0, itemChange.data);
+        return { changeType: 'insert', rowIndex, item: itemChange.data };
       case 'remove':
-        this._items.splice(rowIndex, 1);
-        return { changeType: 'remove', rowIndex: visibleRowIndex, item };
+        items.splice(index, 1);
+        return { changeType: 'remove', rowIndex, item: itemChange.oldItem };
       case 'replace':
-        this._items[rowIndex] = item;
-        return { changeType: 'update', rowIndex: visibleRowIndex, item };
+        items[index] = itemChange.data;
+        return { changeType: 'update', rowIndex, item: itemChange.data };
+      case 'updateVisibility':
+        items[index] = itemChange.data;
+        return {
+          changeType: 'update',
+          rowIndex,
+          item: { visible: itemChange.data.visible } as ProcessedItem,
+        };
+      case 'update':
+        items[index] = itemChange.data;
+
+        return partialUpdateItem(rowIndex, {
+          oldItem: itemChange.oldItem,
+          newItem: itemChange.data,
+          isLiveUpdate: options.isLiveUpdate,
+          getUpdatedColumnIndices: options.isPartialUpdate
+            ? this.getUpdatedColumnIndices
+            : undefined,
+        });
       default:
         return undefined;
     }
@@ -907,7 +925,6 @@ export class DataController extends modules.Controller {
    * @extended: editing
    */
   protected applyChangeUpdate(change: UpdateChange): void {
-    const newItems = change.items ?? [];
     const rowIndexDelta = this.getRowIndexDelta();
     const isPartialUpdate = Boolean(this.option('repaintChangesOnly')) && !change.isFullUpdate;
     const rowIndices = getChangedRowIndices(
@@ -915,34 +932,14 @@ export class DataController extends modules.Controller {
       rowIndexDelta,
       change.allowInvisibleRowIndices,
     );
-    const changedRows = resetChangedRows(change);
-    let prevRowIndex = -1;
-    let rowIndexCorrection = 0;
 
-    rowIndices.forEach((changedRowIndex: number) => {
-      const rowIndex = changedRowIndex + rowIndexCorrection + rowIndexDelta;
-
-      if (prevRowIndex === rowIndex) {
-        return;
-      }
-
-      prevRowIndex = rowIndex;
-
-      const changedRow = this.applyRowOperation(newItems, rowIndex, rowIndexDelta, isPartialUpdate);
-
-      if (!changedRow) {
-        return;
-      }
-
-      pushChangedRow(changedRows, changedRow);
-
-      if (changedRow.changeType === 'insert') {
-        rowIndexCorrection += 1;
-      } else if (changedRow.changeType === 'remove') {
-        rowIndexCorrection -= 1;
-        prevRowIndex = -1;
-      }
+    const changedRows = this.applyItemOperations(rowIndices, {
+      newItems: change.items ?? [],
+      rowIndexDelta,
+      isPartialUpdate,
     });
+
+    attachChangedItems(change, changedRows);
   }
 
   /**
@@ -973,35 +970,33 @@ export class DataController extends modules.Controller {
   /**
    * @extended: editing_row_based, editing, editing_form_based
    */
-  protected _getChangedColumnIndices(
+  protected getChangedColumnIndices(
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
   ): number[] | undefined {
-    if (oldItem.rowType !== newItem.rowType) {
+    if (!canDiffColumns(oldItem, newItem)) {
       return undefined;
     }
 
-    if (newItem.rowType === 'group') {
-      if (!oldItem.cells || !isSameGroupRowState(oldItem, newItem)) {
-        return undefined;
-      }
-
-      return oldItem.cells
-        .map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1))
-        .filter((index) => index >= 0);
+    switch (newItem.rowType) {
+      case 'group':
+        return getGroupColumnIndices(oldItem, newItem);
+      case 'detail':
+        return [];
+      default:
+        return this.getChangedColumnIndicesCore(oldItem, newItem, visibleRowIndex, isLiveUpdate);
     }
+  }
 
-    if (newItem.rowType === 'groupFooter') {
-      return undefined;
-    }
-
+  private getChangedColumnIndicesCore(
+    oldItem: ProcessedItem,
+    newItem: ProcessedItem,
+    visibleRowIndex: number,
+    isLiveUpdate?: boolean,
+  ): number[] {
     const columnIndices: number[] = [];
-
-    if (newItem.rowType === 'detail') {
-      return columnIndices;
-    }
 
     for (let columnIndex = 0; columnIndex < oldItem.values.length; columnIndex += 1) {
       if (this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
@@ -1012,44 +1007,22 @@ export class DataController extends modules.Controller {
     return columnIndices;
   }
 
-  private _partialUpdateRow(
+  private readonly getUpdatedColumnIndices: GetUpdatedColumnIndices = (
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
-  ): number[] | undefined {
-    const changedColumnIndices = this
-      ._getChangedColumnIndices(
-        oldItem,
-        newItem,
-        visibleRowIndex,
-        isLiveUpdate,
-      );
-    const columnIndices = changedColumnIndices?.length && this.option('dataRowTemplate')
-      ? undefined
-      : changedColumnIndices;
+  ) => {
+    const changedColumnIndices = this.getChangedColumnIndices(
+      oldItem,
+      newItem,
+      visibleRowIndex,
+      isLiveUpdate,
+    );
+    const hasDataRowTemplate = !!this.option('dataRowTemplate');
 
-    if (columnIndices) {
-      oldItem.cells?.forEach((cell, columnIndex) => {
-        const isCellChanged = columnIndices.includes(columnIndex);
-        if (!isCellChanged && cell?.update) {
-          cell.update(newItem);
-        }
-      });
-
-      newItem.update = oldItem.update;
-      newItem.watch = oldItem.watch;
-      newItem.cells = oldItem.cells;
-
-      if (isLiveUpdate) {
-        newItem.oldValues = oldItem.values;
-      }
-
-      oldItem.update?.(newItem);
-    }
-
-    return columnIndices;
-  }
+    return changedColumnIndices?.length && hasDataRowTemplate ? undefined : changedColumnIndices;
+  };
 
   /**
    * @extended: editing, grouping (DataGrid), summary (DataGrid), treelist
@@ -1058,43 +1031,14 @@ export class DataController extends modules.Controller {
     return JSON.stringify(item1.values) === JSON.stringify(item2.values);
   }
 
-  private applyItemChange(
-    itemChange: ItemChange,
-    isLiveUpdate: boolean,
-  ): UpdateRowChange | undefined {
-    const { index } = itemChange;
-
-    switch (itemChange.type) {
-      case 'update': {
-        const newItem = itemChange.data;
-        const columnIndices = this._partialUpdateRow(
-          itemChange.oldItem,
-          newItem,
-          index,
-          isLiveUpdate,
-        );
-
-        this._items[index] = newItem;
-
-        return {
-          changeType: 'update', rowIndex: index, item: newItem, columnIndices,
-        };
-      }
-      case 'insert':
-        this._items.splice(index, 0, itemChange.data);
-        return { changeType: 'insert', rowIndex: index, item: itemChange.data };
-      case 'remove':
-        this._items.splice(index, 1);
-        return { changeType: 'remove', rowIndex: index, item: itemChange.oldItem };
-      default:
-        return undefined;
-    }
-  }
-
-  private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): UpdateRowChange[] {
+  private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): UpdateItemChange[] {
     return itemChanges
-      .map((itemChange) => this.applyItemChange(itemChange, isLiveUpdate))
-      .filter((rowChange): rowChange is UpdateRowChange => rowChange !== undefined);
+      .map((itemChange) => this.applyItemChange(itemChange, {
+        rowIndexDelta: 0,
+        isPartialUpdate: true,
+        isLiveUpdate,
+      }))
+      .filter((changedItem): changedItem is UpdateItemChange => changedItem !== undefined);
   }
 
   private getRowIndexCorrection(
@@ -1162,55 +1106,47 @@ export class DataController extends modules.Controller {
    * @extende: virtual_scrolling, editing
    */
   protected _updateItemsCore(change: DataChange): void {
-    const dataSource = this._dataSource;
-
     change.operationTypes ??= this._currentOperationTypes;
     this._currentOperationTypes = null;
 
-    if (dataSource) {
-      const getProcessedItems = (): ProcessedItem[] => {
-        const cachedProcessedItems = this._cachedProcessedItems;
-        const useProcessedItemsCache = 'useProcessedItemsCache' in change && change.useProcessedItemsCache;
-
-        if (useProcessedItemsCache && cachedProcessedItems) {
-          return cachedProcessedItems;
-        }
-
-        // change.items at this stage is defined only if virtualScrolling
-        // + legacyScrollingMode enabled
-        const dataItems = this._beforeProcessItems(change.items ?? dataSource.items());
-        const processedItems = this._processItems(dataItems, change);
-
-        this._cachedProcessedItems = processedItems;
-
-        return processedItems;
-      };
-
-      const items = this._afterProcessItems(getProcessedItems());
-      const oldItems = this._items.length === items.length ? this._items : null;
-
-      change.items = items;
-
-      this._applyChange(change);
-
-      const rowIndexDelta = this.getRowIndexDelta();
-
-      this._items.forEach((item, index) => {
-        item.rowIndex = index - rowIndexDelta;
-        if (oldItems) {
-          item.cells = oldItems[index].cells ?? [];
-        }
-
-        const newItem = items[index];
-        if (newItem) {
-          item.loadIndex = newItem.loadIndex;
-        }
-      });
-
-      this._rowIndexOffset = this.getRowIndexOffset();
-    } else {
+    if (!this._dataSource) {
       this._items = [];
+      return;
     }
+
+    const newItems = this._afterProcessItems(this.getProcessedItems(change));
+    const oldItems = this._items.length === newItems.length ? this._items : null;
+
+    change.items = newItems;
+
+    this._applyChange(change);
+
+    syncRowsAfterChange(this._items, {
+      newItems,
+      oldItems,
+      rowIndexDelta: this.getRowIndexDelta(),
+    });
+
+    this._rowIndexOffset = this.getRowIndexOffset();
+  }
+
+  private getProcessedItems(change: DataChange): ProcessedItem[] {
+    const useProcessedItemsCache = 'useProcessedItemsCache' in change && change.useProcessedItemsCache;
+
+    if (useProcessedItemsCache && this._cachedProcessedItems) {
+      return this._cachedProcessedItems;
+    }
+
+    // change.items at this stage is defined only if virtualScrolling
+    // + legacyScrollingMode enabled
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const items = (change.items ?? this._dataSource!.items()) as RawItemData[];
+    const dataItems = this._beforeProcessItems(items);
+    const processedItems = this._processItems(dataItems, change);
+
+    this._cachedProcessedItems = processedItems;
+
+    return processedItems;
   }
 
   private readonly changingHandler = (e: ChangingEvent): void => {
@@ -1232,24 +1168,7 @@ export class DataController extends modules.Controller {
     change: DataChange = { changeType: 'refresh' },
     isDataChanged?: boolean,
   ): void {
-    change.isFirstRender = !this.changed.fired();
-
-    if (this._repaintChangesOnly !== undefined) {
-      change.repaintChangesOnly ??= this._repaintChangesOnly;
-      change.needUpdateDimensions = change.needUpdateDimensions || this._needUpdateDimensions;
-    } else if (change.changes) {
-      change.repaintChangesOnly = this.option('repaintChangesOnly');
-    } else if (isDataChanged) {
-      const operationTypes: OperationTypes | undefined = this.dataSource().operationTypes();
-
-      change.isDataChanged = true;
-      change.repaintChangesOnly = operationTypes && !operationTypes.grouping
-        && !operationTypes.filtering && this.option('repaintChangesOnly');
-
-      if (this.needUpdateDimensions(operationTypes)) {
-        change.needUpdateDimensions = true;
-      }
-    }
+    this.fillChangeFlags(change, isDataChanged);
 
     if (this._updateLockCount && !change.cancel) {
       this.changes.push(change);
@@ -1258,9 +1177,42 @@ export class DataController extends modules.Controller {
 
     this._updateItemsCore(change);
 
-    if (change.cancel) return;
+    if (change.cancel) {
+      return;
+    }
 
     this._fireChanged(change);
+  }
+
+  private fillChangeFlags(change: DataChange, isDataChanged?: boolean): void {
+    change.isFirstRender = !this.changed.fired();
+
+    if (this._repaintChangesOnly !== undefined) {
+      change.repaintChangesOnly ??= this._repaintChangesOnly;
+      change.needUpdateDimensions ||= this._needUpdateDimensions;
+      return;
+    }
+
+    if (change.changes) {
+      change.repaintChangesOnly = this.option('repaintChangesOnly');
+      return;
+    }
+
+    if (!isDataChanged) {
+      return;
+    }
+
+    const operationTypes = this.dataSource()?.operationTypes() ?? undefined;
+
+    change.isDataChanged = true;
+    change.repaintChangesOnly = resolveRepaintChangesOnly(
+      operationTypes,
+      this.option('repaintChangesOnly'),
+    );
+
+    if (this.needUpdateDimensions(operationTypes)) {
+      change.needUpdateDimensions = true;
+    }
   }
 
   /**
@@ -1303,14 +1255,14 @@ export class DataController extends modules.Controller {
   /**
    * @extended: filter_row, filter_sync, header_filter, search
    */
-  protected _calculateAdditionalFilter(): DataFilter {
+  protected calculateAdditionalFilter(): DataFilter {
     return null;
   }
 
   /**
    * @extended: filter_sync, virtual_scrolling
    */
-  protected _applyFilter(): DeferredObj<unknown> {
+  protected applyFilter(): DeferredObj<unknown> {
     const dataSource = this._dataSource;
 
     if (dataSource) {
@@ -1352,7 +1304,7 @@ export class DataController extends modules.Controller {
     }
 
     this._dataSource?.filter(filterExpr);
-    this._applyFilter();
+    this.applyFilter();
 
     return undefined;
   }
@@ -1372,7 +1324,7 @@ export class DataController extends modules.Controller {
 
     this.component.beginUpdate();
 
-    if (arguments.length > 0) {
+    if (filterName !== undefined) {
       switch (filterName) {
         case 'dataSource':
           this.filter(null);
@@ -1478,74 +1430,60 @@ export class DataController extends modules.Controller {
   }
 
   public pageCount(): number {
-    return this._dataSource ? this._dataSource.pageCount() as number : 1;
+    return this._dataSource ? this._dataSource.pageCount() : 1;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public dataSource(): any {
-    return this._dataSource;
+  public dataSource(): DataSourceAdapter | undefined {
+    return this._dataSource ?? undefined;
   }
 
   public store(): Store | undefined {
-    return this._dataSource?.store() as Store | undefined;
+    return this._dataSource?.store();
   }
 
-  public loadAll(data?: RawItemData[], skipFilter = false): DeferredObj<ProcessedItem[]> {
+  public loadAllItems(
+    data?: RawItemData[],
+    skipFilter = false,
+  ): DeferredObj<ProcessedItem[]> {
     const d = Deferred<ProcessedItem[]>();
     const dataSource = this._dataSource;
 
-    if (dataSource) {
-      if (data) {
-        const loadOperation: Omit<LoadOperation, 'data'> & Required<Pick<LoadOperation, 'data'>> = {
-          data,
-          isCustomLoading: true,
-          storeLoadOptions: { isLoadingAll: true },
-          loadOptions: {
-            filter: skipFilter ? null : this.getCombinedFilter(),
-            group: dataSource.group(),
-            sort: dataSource.sort(),
-          },
-        };
-        dataSource.customizeLoadResultHandler(loadOperation);
-
-        when<RawItemData[]>(loadOperation.data)
-          .done((loadedData: RawItemData[]): void => {
-            const items = this._processItems(
-              this._beforeProcessItems(loadedData),
-              { changeType: 'loadingAll' },
-            );
-            // @ts-expect-error DataGrid-only summary leaks into grid_core
-            d.resolve(items, loadOperation.extra?.summary);
-          })
-          .fail(d.reject as (...args: unknown[]) => void);
-      } else if (!dataSource.isLoading()) {
-        const loadOptions: StoreLoadOptions & { isLoadingAll: boolean } = {
-          ...dataSource.loadOptions(),
-          isLoadingAll: true,
-          requireTotalCount: false,
-        };
-        dataSource.load(loadOptions)
-          .done((loadedItems: RawItemData[], extra: LoadOperation['extra']): void => {
-            const items = this._processItems(
-              this._beforeProcessItems(loadedItems),
-              { changeType: 'loadingAll' },
-            );
-            // @ts-expect-error DataGrid-only summary leaks into grid_core
-            d.resolve(items, extra?.summary);
-          })
-          .fail(d.reject);
-      } else {
-        d.reject();
-      }
-    } else {
+    if (!dataSource) {
       d.resolve([]);
+      return d;
+    }
+
+    const resolveWithProcessedItems = (loadResult: CustomLoadResult): void => {
+      const items = this._processItems(
+        this._beforeProcessItems(loadResult.data),
+        { changeType: 'loadingAll' },
+      );
+
+      // @ts-expect-error DataGrid-only summary leaks into grid_core
+      d.resolve(items, loadResult.extra?.summary);
+    };
+
+    if (data) {
+      dataSource.customLoader.processLoadedData(data, {
+        filter: skipFilter ? null : this.getCombinedFilter(),
+        group: dataSource.group(),
+        sort: dataSource.sort(),
+      })
+        .done(resolveWithProcessedItems)
+        .fail(d.reject as (...args: unknown[]) => void);
+    } else if (!dataSource.isLoading()) {
+      dataSource.customLoader.loadAll()
+        .done(resolveWithProcessedItems)
+        .fail(d.reject as (...args: unknown[]) => void);
+    } else {
+      d.reject();
     }
 
     return d;
   }
 
   public async getAllDataRowKeys(): Promise<RowKey[]> {
-    const items = await Promise.resolve(this.loadAll(undefined));
+    const items = await Promise.resolve(this.loadAllItems());
 
     return items
       .filter((item) => item.rowType === 'data')
@@ -1608,7 +1546,7 @@ export class DataController extends modules.Controller {
     }
 
     if (value === undefined) {
-      return dataSource[optionName]() as number;
+      return dataSource[optionName]();
     }
 
     const oldValue = this._getPagingOptionValue(optionName);
@@ -1655,7 +1593,7 @@ export class DataController extends modules.Controller {
   }
 
   public isCustomLoading(): boolean {
-    return this._isCustomLoading || !!this._dataSource?.isCustomLoading();
+    return this._isCustomLoading || !!this._dataSource?.customLoader.isLoading();
   }
 
   public beginCustomLoading(messageText?: string): void {
@@ -1754,7 +1692,7 @@ export class DataController extends modules.Controller {
   }
 
   public getCachedStoreData(): RawItemData[] | undefined {
-    return this._dataSource?.getCachedStoreData() as RawItemData[] | undefined;
+    return this._dataSource?.getCachedStoreData();
   }
 
   /**
@@ -1778,31 +1716,31 @@ export class DataController extends modules.Controller {
     return this._dataSource?.reload(reload, changesOnly) as DeferredObj<unknown>;
   }
 
-  public push(...args: unknown[]): unknown {
-    return this._dataSource?.push(...args);
+  public push(changes: StoreChange[], fromStore = false): void {
+    this._dataSource?.push(changes, fromStore);
   }
 
   private itemsCount(): number {
-    return (this._dataSource ? this._dataSource.itemsCount() : 0) as number;
+    return (this._dataSource ? this._dataSource.itemsCount() : 0);
   }
 
   public totalItemsCount(): number {
-    return (this._dataSource ? this._dataSource.totalItemsCount() : 0) as number;
+    return (this._dataSource ? this._dataSource.totalItemsCount() : 0);
   }
 
   public hasKnownLastPage(): boolean {
-    return (this._dataSource ? this._dataSource.hasKnownLastPage() : true) as boolean;
+    return (this._dataSource ? this._dataSource.hasKnownLastPage() : true);
   }
 
   /**
    * @extended: state_storing
    */
   public isLoaded(): boolean {
-    return (this._dataSource ? this._dataSource.isLoaded() : true) as boolean;
+    return (this._dataSource ? this._dataSource.isLoaded() : true);
   }
 
   public totalCount(): number {
-    return (this._dataSource ? this._dataSource.totalCount() : 0) as number;
+    return (this._dataSource ? this._dataSource.totalCount() : 0);
   }
 
   public hasLoadOperation(): boolean {

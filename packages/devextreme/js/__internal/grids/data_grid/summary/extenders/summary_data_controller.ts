@@ -15,6 +15,7 @@ import { isSameContinuationState } from '../../grouping/utils';
 import gridCore from '../../m_core';
 import { isDataColumn } from '../../m_utils';
 import { DATAGRID_GROUP_FOOTER_ROW_TYPE, DATAGRID_TOTAL_FOOTER_ROW_TYPE } from '../const';
+import type { SummaryDataSourceAdapter } from '../m_summary';
 import type {
   CalculateSummaryCellsArgs, ColumnMap, FooterItem, SummaryCellItem,
   SummaryGroupItem,
@@ -26,6 +27,8 @@ import { getSummaryItemIndex } from '../utils/get_summary_item_index';
 export const summaryDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class SummaryDataControllerExtender extends Base {
+  public declare _dataSource?: SummaryDataSourceAdapter | null;
+
   private _footerItems!: FooterItem[];
 
   public init(): void {
@@ -43,7 +46,7 @@ export const summaryDataControllerExtender = (
 
   public getTotalSummaryValue(summaryItemName?: string | number | null): unknown {
     const summaryItemIndex = getSummaryItemIndex(this.option('summary.totalItems'), summaryItemName);
-    const aggregates = this._dataSource.totalAggregates();
+    const aggregates = this._dataSource?.totalAggregates() ?? [];
 
     if (aggregates.length && summaryItemIndex > -1) {
       return aggregates[summaryItemIndex];

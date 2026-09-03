@@ -31,7 +31,7 @@ const createCallbacks = (): {
   failure: jest.fn((message?: string) => ({ status: 'failure' as const, message: message ?? '' })),
 });
 
-// The local "allPages" path calls loadAll(), which defers behind the grid's
+// The local "allPages" path calls loadAllItems(), which defers behind the grid's
 // loading timer. Under fake timers that timer must be advanced while the
 // command is in flight, otherwise the awaited result never settles.
 const executeWithTimers = async (
@@ -669,9 +669,9 @@ describe('selectionByIndexesCommand', () => {
     });
 
     describe('scope "allPages" — local paging', () => {
-      it('resolves keys via loadAll (no store.load) and selects with preserve=true', async () => {
+      it('resolves keys via loadAllItems (no store.load) and selects with preserve=true', async () => {
         const instance = await createGrid();
-        const loadAllSpy = jest.spyOn(instance.getController('data'), 'loadAll');
+        const loadAllItemsSpy = jest.spyOn(instance.getController('data'), 'loadAllItems');
         const loadSpy = jest.spyOn(instance.getDataSource().store(), 'load');
         const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
         const callbacks = createCallbacks();
@@ -682,13 +682,13 @@ describe('selectionByIndexesCommand', () => {
           }),
         );
 
-        expect(loadAllSpy).toHaveBeenCalled();
+        expect(loadAllItemsSpy).toHaveBeenCalled();
         expect(loadSpy).not.toHaveBeenCalled();
         expect(selectSpy).toHaveBeenCalledWith([1, 3], true);
         expect(result.status).toBe('success');
       });
 
-      it('resolves keys via loadAll and calls deselectRows when deselecting', async () => {
+      it('resolves keys via loadAllItems and calls deselectRows when deselecting', async () => {
         const instance = await createGrid();
         const deselectSpy = jest.spyOn(instance, 'deselectRows').mockReturnValue(Promise.resolve([]) as never);
         const callbacks = createCallbacks();
@@ -738,7 +738,7 @@ describe('selectionByIndexesCommand', () => {
         expect(result.status).toBe('success');
       });
 
-      it('indexes within the filtered dataset (combined filter applied via loadAll)', async () => {
+      it('indexes within the filtered dataset (combined filter applied via loadAllItems)', async () => {
         const instance = await createGrid({
           columns: [
             { dataField: 'id', dataType: 'number' },
