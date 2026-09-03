@@ -73,8 +73,8 @@ $filterbuilder-scrollable-max-height: null !default;
 
         .dx-texteditor {
           vertical-align: middle;
-          margin-top: -7px;
-          margin-bottom: -4px;
+          margin-top: -7px; // dx-fixed-size: pulls the row onto the group line
+          margin-bottom: -4px; // dx-fixed-size: pulls the row onto the group line
           display: inline-block;
         }
       }

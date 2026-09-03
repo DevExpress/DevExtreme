@@ -1,3 +1,5 @@
+@use "sass:math";
+@use "sass:meta";
 @use "sass:string";
 @use "../string" as *;
 
@@ -9,11 +11,22 @@
   background-image: string.unquote($uri);
 }
 
-@mixin clock-action-icons-mixin($accent-color, $background-color, $digit-color) {
+@mixin clock-action-icons-mixin(
+  $accent-color,
+  $background-color,
+  $digit-color,
+  // The clock face is the SVG behind it, so its size scales the whole dial; the arrows are centred
+  // on the dial with half their own width, which is why the offset is a knob of its own.
+  $clock-size: 182px,
+  $arrow-width: 10px,
+  $arrow-offset: if(
+    meta.type-of($arrow-width) == number,
+    math.div(-$arrow-width, 2),
+    calc(#{$arrow-width} / -2)
+  ),
+) {
   .dx-timeview-clock {
     @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"), $accent-color, $background-color, $digit-color);
-
-    $clock-size: 182px;
 
     min-width: $clock-size;
     min-height: $clock-size;
@@ -27,8 +40,8 @@
   .dx-timeview-minutearrow {
     position: absolute;
     left: 50%;
-    width: 10px;
-    margin-left: -5px;
+    width: $arrow-width;
+    margin-left: $arrow-offset;
     height: 50%;
     background-position: bottom;
     background-repeat: no-repeat;

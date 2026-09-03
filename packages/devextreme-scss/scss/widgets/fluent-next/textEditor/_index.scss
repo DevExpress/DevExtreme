@@ -517,6 +517,9 @@
   1px, // dx-px-nudge: 1px label margin-top difference
   var(--dx-text-editor-font-size),
   var(--dx-text-editor-label-outside-height),
+  $label-padding-inline: var(--dx-text-editor-label-padding-inline),
+  $label-border-radius: var(--dx-text-editor-label-border-radius),
+  $label-backdrop-height: var(--dx-text-editor-label-backdrop-height),
 );
 @include dx-editor-filled(
   $text-editor-label-transition,
@@ -573,4 +576,9 @@
   0,
   var(--dx-text-editor-spin-button-padding-inline),
   buttonSizes.$button-padding-block,
+  $button-margin-block-start: var(--dx-text-editor-button-margin-block-start),
+  $button-margin-block-end: var(--dx-text-editor-button-margin-block-end),
+  $button-icon-margin-block-start: var(--dx-text-editor-button-icon-margin-block-start),
+  $button-icon-margin-block-start-with-text: var(--dx-text-editor-button-icon-with-text-margin-block-start),
+  $button-icononly-padding: var(--dx-text-editor-button-icon-only-padding),
 );

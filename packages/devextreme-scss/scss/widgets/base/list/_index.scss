@@ -3,7 +3,7 @@
 
 $list-response-wait-opacity: 0.5 !default;
 
-$list-searchbox-margin-bottom: 5px;
+$list-searchbox-margin-bottom: 5px !default;
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $list-item-badge-container-width: 20px !default;

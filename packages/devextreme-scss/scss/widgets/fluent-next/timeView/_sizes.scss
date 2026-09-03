@@ -12,3 +12,10 @@ $time-view-number-box-spin-touch-friendly-width: 110px !default; // dx-offscale:
 // Base-layer sizing injected with design tokens (wave B2)
 $time-view-field-number-box-width: 70px !default; // dx-offscale: 70px
 $time-view-field-number-box-spin-touch-friendly-width: 110px !default; // dx-offscale: 110px
+
+// Base-layer sizing injected with design tokens (wave B8)
+$time-view-clock-size: 182px !default; // dx-offscale: 182px, the size of the dial SVG behind it
+$time-view-clock-arrow-width: ds.$spacing-100 !default;
+
+// Derived once and published: the arrows are centred on the dial with half their own width.
+$time-view-clock-arrow-offset: calc(#{$time-view-clock-arrow-width} / -2) !default;

@@ -3,6 +3,7 @@ $validation-summary-margin-top: 20px !default;
 $validation-message-content-padding: 10px !default;
 
 $validation-message-font-size: 0.85em !default; // dx-relative
+$validation-summary-item-border-bottom-width: 1px !default;
 
 @mixin dx-base-validation($summary-color, $message-color, $message-bg-color, $border-radius) {
   .dx-validationsummary-item {
@@ -82,7 +83,7 @@ $validation-message-font-size: 0.85em !default; // dx-relative
 }
 
 .dx-validationsummary-item-content {
-  border-bottom: 1px dashed;
+  border-bottom: $validation-summary-item-border-bottom-width dashed;
   display: inline-block;
   line-height: normal;
 }

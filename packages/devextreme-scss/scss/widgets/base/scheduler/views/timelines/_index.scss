@@ -185,7 +185,7 @@ $scheduler-timeline-cell-width: null !default;
     }
 
     .dx-scheduler-header-panel-empty-cell {
-      border-bottom: 1px solid;
+      border-bottom: 1px solid; // dx-line-width: hairline under the empty header cell
       border-bottom-color: $scheduler-accent-border-color;
     }
   }

@@ -24,3 +24,6 @@ $validation-message-font-size: ds.$font-size-caption-md !default;
   $validation-message-padding-inline: ds.$spacing-60 !default;
   $validation-message-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
 }
+
+// Base-layer sizing injected with design tokens (wave B12)
+$validation-summary-item-border-block-end-width: ds.$border-width-10 !default;
