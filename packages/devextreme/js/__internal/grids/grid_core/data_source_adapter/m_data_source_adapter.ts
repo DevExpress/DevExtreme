@@ -576,7 +576,7 @@ export default class DataSourceAdapter extends modules.Controller {
    */
   public customizeLoadResultHandler(options: LoadOperation): void {
     const { loadOptions } = options;
-    const localPaging = options.remoteOperations && !(options.remoteOperations as RemoteOperationsOptions).paging;
+    const localPaging = options.remoteOperations && !options.remoteOperations.paging;
     const { cachedData } = options;
     const { storeLoadOptions } = options;
     const needCache = this.option('cacheEnabled') !== false && storeLoadOptions;
@@ -598,7 +598,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
 
     if (loadOptions.group) {
-      loadOptions.group = (options.group as StoreLoadOptions['group']) || loadOptions.group;
+      loadOptions.group = options.group || loadOptions.group;
     }
 
     const groupCount = gridCoreUtils.normalizeSortingInfo(options.group || storeLoadOptions.group || loadOptions.group).length;
