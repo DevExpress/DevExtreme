@@ -329,4 +329,24 @@ them at full contrast next to greyed surroundings. */
   .dx-filemanager-progress-panel-infos-container {
     color: var(--dx-file-manager-content-disabled);
   }
+
+  /* The status icons are SVG data-uri backgrounds with their colour baked in at build time, so
+  `color` cannot reach them and the toolbar refresh icon stayed at full contrast. The image has to
+  be emitted a second time with the disabled colour substituted. */
+  .dx-filemanager-i,
+  .dx-filemanager-i.dx-icon {
+    &.dx-filemanager-i-refresh,
+    &.dx-filemanager-i-progress {
+      @include filemanager-icon-colored(
+        data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"),
+        $file-manager-icon-disabled,
+        $file-manager-icon-success-content,
+        $file-manager-icon-inverted-content,
+        $file-manager-icon-danger-content,
+        $file-manager-icon-inverted-content,
+        $file-manager-large-icon-size,
+        $file-manager-large-icon-size
+      );
+    }
+  }
 }
