@@ -5,6 +5,7 @@
   --dx-switch-bg: #{$switch-bg};
   --dx-switch-border-disabled: #{$switch-border-disabled};
   --dx-switch-box-shadow: #{$switch-box-shadow};
+  --dx-switch-container-border-radius: #{$switch-container-border-radius};
   --dx-switch-container-height: var(--dx-switch-height);
   --dx-switch-container-margin-block: #{$switch-container-margin-block};
   --dx-switch-container-padding-inline: var(--dx-switch-handle-margin);
@@ -22,9 +23,11 @@
   --dx-switch-invalid-border-focused: #{$switch-invalid-border-focused};
   --dx-switch-invalid-border-hovered: #{$switch-invalid-border-hovered};
   --dx-switch-invalid-border: #{$switch-invalid-border};
+  --dx-switch-label-padding: #{$switch-label-padding};
   --dx-switch-off-border-active: #{$switch-off-border-active};
   --dx-switch-off-border-hovered: #{$switch-off-border-hovered};
   --dx-switch-off-border: #{$switch-off-border};
+  --dx-switch-off-padding-block-end: #{$switch-off-padding-block-end};
   --dx-switch-on-bg-disabled: #{$switch-on-bg-disabled};
   --dx-switch-on-bg: #{$switch-on-bg};
   --dx-switch-on-border-focused: #{$switch-on-border-focused};

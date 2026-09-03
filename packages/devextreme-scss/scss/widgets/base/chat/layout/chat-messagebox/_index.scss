@@ -1,7 +1,10 @@
+// Sized from base/chat, which owns the default and forwards a theme's value down (as chat-fileview does).
+$messagebox-border-block-start-width: null !default;
+
 .dx-chat-messagebox {
   display: flex;
   flex-direction: column;
-  border-top-width: 1px;
+  border-top-width: $messagebox-border-block-start-width;
   border-top-style: solid;
 }
 

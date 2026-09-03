@@ -6,6 +6,8 @@
 @use "../../base/calendar/calendar" with (
   $calendar-week-day-header-font-size: var(--dx-calendar-week-day-header-font-size),
   $calendar-week-day-header-font-weight: var(--dx-calendar-week-day-header-font-weight),
+  $calendar-border-width: var(--dx-calendar-border-width),
+  $calendar-multiview-table-padding: 0 var(--dx-calendar-view-multiview-padding-inline),
 );
 @use "../../base/calendar/mixins" as *;
 @include dx-calendar-mixin(
@@ -48,6 +50,8 @@
   var(--dx-calendar-cell-other-content-hovered),
   var(--dx-calendar-cell-border-hovered),
   999em,
+  $cell-today-border-width: var(--dx-calendar-cell-today-border-width),
+  $cell-contoured-ring-width: var(--dx-calendar-cell-contoured-outline-width),
 );
 @include dx-calendar-cell-in-range-mixin(
   "::before",

@@ -1,6 +1,7 @@
 @mixin dx-dropdownbutton(
   $dropdownbutton-icon-spindown-size,
   $dropdownbutton-action-horizontal-padding,
+  $dropdownbutton-icon-right-margin-inline-start: 4px,
 ) {
   .dx-dropdownbutton-toggle {
     .dx-icon-spindown {
@@ -19,7 +20,7 @@
     &.dx-button-has-icon,
     &.dx-button-has-text {
       .dx-icon.dx-icon-right {
-        margin-inline-start: 4px;
+        margin-inline-start: $dropdownbutton-icon-right-margin-inline-start;
         margin-inline-end: 0;
       }
     }

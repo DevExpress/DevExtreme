@@ -13,6 +13,7 @@
   $list-static-delete-button-padding: var(--dx-list-delete-button-static-padding),
   $list-next-button-padding: var(--dx-list-next-button-padding),
   $list-response-wait-opacity: var(--dx-list-response-wait-opacity),
+  $list-searchbox-margin-bottom: var(--dx-list-search-box-margin-block-end),
 );
 @use "../../base/list/mixins" as *;
 @use "../radioButton/colors" as radioButtonColors;

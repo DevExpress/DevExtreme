@@ -9,6 +9,23 @@
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
+  $scheduler-appointment-collector-height: var(--dx-scheduler-appointment-collector-height),
+  $scheduler-appointment-min-size: var(--dx-scheduler-appointment-min-size),
+  $scheduler-appointment-content-padding: var(--dx-scheduler-appointment-content-padding),
+  $scheduler-appointment-reduced-content-padding: var(--dx-scheduler-appointment-reduced-content-padding),
+  $scheduler-grouped-appointment-month-text-size: var(--dx-scheduler-appointment-month-text-font-size),
+  $scheduler-border-width: var(--dx-scheduler-border-width),
+  $scheduler-workspace-info-font-size: var(--dx-scheduler-workspace-info-font-size),
+  $scheduler-small-font-size: var(--dx-scheduler-small-font-size),
+  $scheduler-group-header-table-cell-height: var(--dx-scheduler-group-header-cell-height),
+  $scheduler-month-date-text-size: var(--dx-scheduler-month-date-text-font-size),
+  $scheduler-month-date-text-padding: var(--dx-scheduler-month-date-text-padding),
+  $scheduler-reduced-icon-offset: var(--dx-scheduler-reduced-icon-inset-inline),
+  $scheduler-recurrence-icon-offset: var(--dx-scheduler-recurrence-icon-inset-inline),
+  $scheduler-agenda-appointment-margin: var(--dx-scheduler-agenda-appointment-margin),
+  $scheduler-agenda-last-in-date-appointment-margin: var(--dx-scheduler-agenda-appointment-last-margin),
+  $scheduler-time-indicator-font-size: var(--dx-scheduler-time-indicator-font-size),
+  $scheduler-time-indicator-size: var(--dx-scheduler-time-indicator-size),
   $scheduler-appointment-reduced-icon-top: var(--dx-scheduler-appointment-reduced-icon-inset-block-start),
   $scheduler-appointment-active-marker-border-radius: var(--dx-scheduler-appointment-marker-border-radius-active),
   $scheduler-appointment-content-details-margin-top: var(--dx-scheduler-appointment-content-details-margin-block-start),
@@ -815,11 +832,6 @@
   }
 }
 
-.dx-scheduler-header-panel,
-.dx-scheduler-time-panel {
-  font-size: var(--dx-scheduler-workspace-info-font-size);
-}
-
 .dx-scheduler-work-space-grouped:not(.dx-scheduler-agenda) .dx-scheduler-group-row th,
 .dx-scheduler-work-space.dx-scheduler-work-space-grouped:not(.dx-scheduler-work-space-vertical-grouped):not(.dx-scheduler-timeline) .dx-scheduler-last-group-cell {
   border-right: var(--dx-scheduler-last-group-cell-border-inline-end);
@@ -981,10 +993,6 @@
       }
     }
   }
-}
-
-.dx-scheduler-agenda-nodata {
-  font-size: var(--dx-scheduler-workspace-info-font-size);
 }
 
 .dx-popup-content .dx-scheduler-dropdown-appointment-buttons-block {

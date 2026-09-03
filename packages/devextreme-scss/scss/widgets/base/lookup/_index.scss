@@ -7,7 +7,7 @@ $lookup-popup-search-list-height: 90% !default; // dx-relative-%
 
   .dx-popup-content {
     .dx-scrollable {
-      height: calc(100% - 45px);
+      height: calc(100% - 45px); // dx-fixed-size: the height the popup toolbar takes from the list
     }
   }
 

@@ -2,6 +2,9 @@
   $accent-color,
   $border-radius,
   $section-horizontal-margin,
+  // The focus ring's geometry, on the same role as its colour and radius.
+  $outline-width: 2px,
+  $outline-offset: 1px,
 ) {
   .dx-dropdownmenu-popup-wrapper.dx-dropdownmenu-list-focus-mode {
     .dx-dropdownmenu-list {
@@ -9,8 +12,8 @@
       .dx-list-item[tabindex="0"]:focus-visible {
         position: relative;
         z-index: 1;
-        outline: 2px solid $accent-color;
-        outline-offset: 1px;
+        outline: $outline-width solid $accent-color;
+        outline-offset: $outline-offset;
         border-radius: $border-radius;
       }
     }
