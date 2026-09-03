@@ -1,6 +1,8 @@
 import Guid from '@js/core/guid';
 import { isObject } from '@js/core/utils/type';
 
+import type { ProcessedItem } from '../data_controller/types';
+
 const NEW_ROW_TEMP_KEY_PREFIX = '_DX_KEY_';
 const GUID_LENGTH = 36;
 
@@ -80,3 +82,8 @@ export const forEachFormItems = (items, callBack) => {
     }
   });
 };
+
+export const isCellModified = (
+  row: ProcessedItem,
+  columnIndex: number,
+): boolean => row.modifiedValues?.[columnIndex] !== undefined;

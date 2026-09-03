@@ -15,6 +15,7 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
 import type { EditingController } from '../m_editing';
+import { isCellModified } from '../m_editing_utils';
 
 export interface EditingDataControllerExtension {
   _editingController: EditingController;
@@ -144,6 +145,10 @@ export const editingDataControllerExtender = (
     }
 
     if (cell?.column && !cell.column.showEditorAlways && cell.isEditing !== isEditing) {
+      return true;
+    }
+
+    if (isCellModified(oldRow, columnIndex) !== isCellModified(newRow, columnIndex)) {
       return true;
     }
 
