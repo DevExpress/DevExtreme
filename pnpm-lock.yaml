@@ -182,7 +182,7 @@ overrides:
   axios@<1.18.0: ^1.18.0
   braces@<3.0.3: ^3.0.3
   semver@<5.7.2: ^5.7.2
-  qs: '>=6.15.2'
+  qs: '>=6.16.0'
   vite@>=7.0.0 <=7.3.4: ^7.3.5
   hono@<4.12.34: ^4.12.34
   minimatch@>=9.0.0 < 9.0.7: 9.0.9
@@ -220,7 +220,7 @@ overrides:
   shell-quote@<=1.8.4: ^1.9.0
   babel-traverse: npm:@babel/traverse@^7.23.2
   systemjs-builder>terser: 5.46.2
-  fast-uri@>=3.0.0 <3.1.5: ^3.1.5
+  fast-uri@>=3.0.0 <3.1.6: ^3.1.6
   '@hono/node-server@<2.0.12': ^2.0.12
   nanoid@<3.3.18: ^3.3.18
   stylelint-config-recommended-vue>stylelint-config-html: 1.1.0
@@ -365,7 +365,7 @@ importers:
     dependencies:
       '@angular-devkit/build-angular':
         specifier: ^22.0.9
-        version: 22.1.2(b192cc97f9f903533cf6da00631c7a4d)
+        version: 22.1.2(d1dc67a4b6df99196cc139ed2f3e5474)
       '@angular/animations':
         specifier: ^22.0.8
         version: 22.1.0(@angular/core@22.1.0(@angular/compiler@22.1.0)(rxjs@7.8.2)(zone.js@0.16.2))
@@ -6028,6 +6028,18 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
+  '@rolldown/binding-darwin-arm64@1.1.5':
+    resolution: {integrity: sha512-51Bnx9pNiMRKSUNtBfySkNJ9vMU9Hh3I1ozDd6gyPPYzaXCfnptUcEZxXGYFn+ul2dtcMUiqGR1Yai2K10uoTw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@rolldown/binding-darwin-arm64@1.2.0':
+    resolution: {integrity: sha512-pexNaW9ACLUOaBITOpU6qVu4VrsOFIjTv6bzgu0YUATo4eUJx0V605PxwZfndpPOn0ilqGqvGQ0M8UW0IE24jg==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm64]
+    os: [darwin]
+
   '@rolldown/binding-darwin-x64@1.0.3':
     resolution: {integrity: sha512-9YpfeUvSE2RS7wysJ81uOZkXJz7f7Q55H2Gvp3VEw/EsahqDtrphrZ0EwDLK5vvKOzaCrBsjF8JmnMLcUt78Gg==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -7994,10 +8006,6 @@ packages:
 
   app-module-path@2.2.0:
     resolution: {integrity: sha512-gkco+qxENJV+8vFcDiiFhuoSvRXb2a/QPqpSoWhVz829VNJfOTnELbBmPmNKFxf3xdNnw4DWCkzkDaavcX/1YQ==}
-
-  archiver-utils@5.0.2:
-    resolution: {integrity: sha512-wuLJMmIBQYCsGZgYLTy5FIB2pF6Lfb6cXMSF8Qywwk3t20zWnAi7zLcQFdKQmIB8wyZpY5ER38x08GbwtR2cLA==}
-    engines: {node: '>= 14'}
 
   archiver@8.0.0:
     resolution: {integrity: sha512-fV1orZfsnPn9BaSByR/qE67rJCLJEy2Ox5bq7nJh+jquWaNh6Sfec75kJ2T6PtdGUbPQlrVoSVCEOa5SdiTQ1g==}
@@ -10189,6 +10197,7 @@ packages:
   eslint@9.39.4:
     resolution: {integrity: sha512-XoMjdBOwe/esVgEvLmNsD3IRHkm7fbKIUGvrleloJXUZgDHig2IPWNniv+GwjyJXzuNqVjlr5+4yVUZjycJwfQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -10382,8 +10391,8 @@ packages:
   fast-string-width@3.0.2:
     resolution: {integrity: sha512-gX8LrtNEI5hq8DVUfRQMbr5lpaS4nMIWV+7XEbXk2b8kiQIizgnlr12B4dA3ZEx3308ze0O4Q1R+cHts8kyUJg==}
 
-  fast-uri@3.1.5:
-    resolution: {integrity: sha512-gHwA1O9LDIcKunMKhObS/HimwtehO1nPUECKAu5TpKgaO19fcWEl4bliWe1jWxVFvIXztJjjQ4L8XQ1EU9f7Jw==}
+  fast-uri@3.1.6:
+    resolution: {integrity: sha512-7Ical1vFEMr0onbVzEDIreM22I4khW+fzyQPwvAFWBp1iwdshSZRsL4jjRvPG9JP1uiqMHRto+YU6R2/CzDz5Q==}
 
   fast-wrap-ansi@0.2.2:
     resolution: {integrity: sha512-7F2Fl+TjRSenLqlU3UjSH0iyqopqoZIu7eZVpEirP2g1GtWa2G/ecEmBdgz31+Mxr+ELclgg6sokpSFIQiZ02Q==}
@@ -13885,8 +13894,8 @@ packages:
     resolution: {integrity: sha512-ZvWjbAj4MWAj6bnCc9CnculsXnJr7eoKsvH/8rVpZbqYxP2z05HNQa43ZVwe/dVRcFxgfFHE2CkUqn0sCyLfHw==}
     hasBin: true
 
-  qs@6.15.3:
-    resolution: {integrity: sha512-O9gl3zCl5h5blw1KGUzQKhA5oUXSl8rwUIM5o0S3nCXMliSvy5Dzx7/DJcI+SwgICv+IneSZwhBh1oSyEHA71A==}
+  qs@6.16.0:
+    resolution: {integrity: sha512-h6fhOIaRrID2CbEY2fqs+7t+UXZo+MLAnU5gRIq85uFtdiUPCdsApMlHhXogKVM4HM2DVbIjGNTTYH2OcmP1vA==}
     engines: {node: '>=0.6'}
 
   querystring-es3@0.2.1:
@@ -16865,13 +16874,13 @@ snapshots:
       - webpack-cli
       - yaml
 
-  '@angular-devkit/build-angular@22.1.2(b192cc97f9f903533cf6da00631c7a4d)':
+  '@angular-devkit/build-angular@22.1.2(d1dc67a4b6df99196cc139ed2f3e5474)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2201.2(chokidar@5.0.0)
       '@angular-devkit/build-webpack': 0.2201.2(chokidar@5.0.0)(webpack-dev-server@5.2.6(tslib@2.8.1)(webpack@5.109.2(@swc/core@1.15.47(@swc/helpers@0.5.23))(esbuild@0.28.1)(postcss@8.5.25)))(webpack@5.109.2(@swc/core@1.15.47(@swc/helpers@0.5.23))(esbuild@0.28.1)(postcss@8.5.25))
       '@angular-devkit/core': 22.1.2(chokidar@5.0.0)
-      '@angular/build': 22.1.2(f2c6f0244958832d42f34f07650eaf4c)
+      '@angular/build': 22.1.2(878ab1ec029c8be34c761fa4c12a80b7)
       '@angular/compiler-cli': 22.1.0(@angular/compiler@22.1.0)(typescript@6.0.3)
       '@babel/core': 8.0.1
       '@babel/generator': 8.0.0
@@ -16931,7 +16940,6 @@ snapshots:
       ng-packagr: 22.1.0(@angular/compiler-cli@22.1.0(@angular/compiler@22.1.0)(typescript@6.0.3))(tslib@2.8.1)(typescript@6.0.3)
     transitivePeerDependencies:
       - '@angular/compiler'
-      - '@emnapi/core'
       - '@minify-html/node'
       - '@rspack/core'
       - '@swc/core'
@@ -17210,7 +17218,7 @@ snapshots:
       - tsx
       - yaml
 
-  '@angular/build@22.1.2(f2c6f0244958832d42f34f07650eaf4c)':
+  '@angular/build@22.1.2(878ab1ec029c8be34c761fa4c12a80b7)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2201.2(chokidar@5.0.0)
@@ -17229,11 +17237,11 @@ snapshots:
       listr2: 10.2.2
       magic-string: 1.0.0
       mrmime: 2.0.1
-      oxc-parser: 0.142.0(@emnapi/core@1.11.2)
+      oxc-parser: 0.142.0
       parse5-html-rewriting-stream: 8.0.1
       picomatch: 4.0.5
       piscina: 5.2.0
-      rolldown: 1.2.0(@emnapi/core@1.11.2)
+      rolldown: 1.2.0
       sass: 1.101.0
       semver: 7.8.5
       source-map-support: 0.5.21
@@ -17254,7 +17262,6 @@ snapshots:
       postcss: 8.5.25
       rollup: 4.59.0
     transitivePeerDependencies:
-      - '@emnapi/core'
       - '@types/node'
       - '@vitejs/devtools'
       - chokidar
@@ -21155,12 +21162,11 @@ snapshots:
   '@oxc-parser/binding-openharmony-arm64@0.142.0':
     optional: true
 
-  '@oxc-parser/binding-wasm32-wasi@0.142.0(@emnapi/core@1.11.2)':
+  '@oxc-parser/binding-wasm32-wasi@0.142.0':
     dependencies:
+      '@emnapi/core': 1.11.2
       '@emnapi/runtime': 1.11.2
       '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
-    transitivePeerDependencies:
-      - '@emnapi/core'
     optional: true
 
   '@oxc-parser/binding-win32-arm64-msvc@0.142.0':
@@ -21955,6 +21961,12 @@ snapshots:
   '@rolldown/binding-darwin-arm64@1.0.3':
     optional: true
 
+  '@rolldown/binding-darwin-arm64@1.1.5':
+    optional: true
+
+  '@rolldown/binding-darwin-arm64@1.2.0':
+    optional: true
+
   '@rolldown/binding-darwin-x64@1.0.3':
     optional: true
 
@@ -22059,12 +22071,11 @@ snapshots:
       '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     optional: true
 
-  '@rolldown/binding-wasm32-wasi@1.2.0(@emnapi/core@1.11.2)':
+  '@rolldown/binding-wasm32-wasi@1.2.0':
     dependencies:
+      '@emnapi/core': 1.11.2
       '@emnapi/runtime': 1.11.2
       '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
-    transitivePeerDependencies:
-      - '@emnapi/core'
     optional: true
 
   '@rolldown/binding-win32-arm64-msvc@1.0.3':
@@ -24301,14 +24312,14 @@ snapshots:
   ajv@8.18.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.5
+      fast-uri: 3.1.6
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
   ajv@8.20.0:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.1.5
+      fast-uri: 3.1.6
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -24385,16 +24396,6 @@ snapshots:
       picomatch: 2.3.2
 
   app-module-path@2.2.0: {}
-
-  archiver-utils@5.0.2:
-    dependencies:
-      glob: 10.5.0
-      graceful-fs: 4.2.11
-      is-stream: 2.0.1
-      lazystream: 1.0.1
-      lodash: 4.18.1
-      normalize-path: 3.0.0
-      readable-stream: 4.7.0
 
   archiver@8.0.0:
     dependencies:
@@ -25100,7 +25101,7 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.4.24
       on-finished: 2.4.1
-      qs: 6.15.3
+      qs: 6.16.0
       raw-body: 2.5.3
       type-is: 1.6.18
       unpipe: 1.0.0
@@ -25115,7 +25116,7 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.3
       on-finished: 2.4.1
-      qs: 6.15.3
+      qs: 6.16.0
       raw-body: 3.0.2
       type-is: 2.1.0
     transitivePeerDependencies:
@@ -27849,7 +27850,7 @@ snapshots:
       parseurl: 1.3.3
       path-to-regexp: 0.1.13
       proxy-addr: 2.0.7
-      qs: 6.15.3
+      qs: 6.16.0
       range-parser: 1.2.1
       safe-buffer: 5.2.1
       send: 0.19.2
@@ -27884,7 +27885,7 @@ snapshots:
       once: 1.4.0
       parseurl: 1.3.3
       proxy-addr: 2.0.7
-      qs: 6.15.3
+      qs: 6.16.0
       range-parser: 1.3.0
       router: 2.2.0(supports-color@7.2.0)
       send: 1.2.1(supports-color@7.2.0)
@@ -27952,7 +27953,7 @@ snapshots:
     dependencies:
       fast-string-truncated-width: 3.0.3
 
-  fast-uri@3.1.5: {}
+  fast-uri@3.1.6: {}
 
   fast-wrap-ansi@0.2.2:
     dependencies:
@@ -32183,7 +32184,7 @@ snapshots:
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
 
-  oxc-parser@0.142.0(@emnapi/core@1.11.2):
+  oxc-parser@0.142.0:
     dependencies:
       '@oxc-project/types': 0.142.0
     optionalDependencies:
@@ -32203,12 +32204,10 @@ snapshots:
       '@oxc-parser/binding-linux-x64-gnu': 0.142.0
       '@oxc-parser/binding-linux-x64-musl': 0.142.0
       '@oxc-parser/binding-openharmony-arm64': 0.142.0
-      '@oxc-parser/binding-wasm32-wasi': 0.142.0(@emnapi/core@1.11.2)
+      '@oxc-parser/binding-wasm32-wasi': 0.142.0
       '@oxc-parser/binding-win32-arm64-msvc': 0.142.0
       '@oxc-parser/binding-win32-ia32-msvc': 0.142.0
       '@oxc-parser/binding-win32-x64-msvc': 0.142.0
-    transitivePeerDependencies:
-      - '@emnapi/core'
 
   p-finally@2.0.1: {}
 
@@ -32779,7 +32778,7 @@ snapshots:
 
   qrcode-terminal@0.10.0: {}
 
-  qs@6.15.3:
+  qs@6.16.0:
     dependencies:
       es-define-property: 1.0.1
       side-channel: 1.1.1
@@ -33261,6 +33260,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.1
     optionalDependencies:
       '@rolldown/binding-android-arm64': 1.1.5
+      '@rolldown/binding-darwin-arm64': 1.1.5
       '@rolldown/binding-darwin-x64': 1.1.5
       '@rolldown/binding-freebsd-x64': 1.1.5
       '@rolldown/binding-linux-arm-gnueabihf': 1.1.5
@@ -33275,12 +33275,13 @@ snapshots:
       '@rolldown/binding-win32-arm64-msvc': 1.1.5
       '@rolldown/binding-win32-x64-msvc': 1.1.5
 
-  rolldown@1.2.0(@emnapi/core@1.11.2):
+  rolldown@1.2.0:
     dependencies:
       '@oxc-project/types': 0.140.0
       '@rolldown/pluginutils': 1.0.1
     optionalDependencies:
       '@rolldown/binding-android-arm64': 1.2.0
+      '@rolldown/binding-darwin-arm64': 1.2.0
       '@rolldown/binding-darwin-x64': 1.2.0
       '@rolldown/binding-freebsd-x64': 1.2.0
       '@rolldown/binding-linux-arm-gnueabihf': 1.2.0
@@ -33291,11 +33292,9 @@ snapshots:
       '@rolldown/binding-linux-x64-gnu': 1.2.0
       '@rolldown/binding-linux-x64-musl': 1.2.0
       '@rolldown/binding-openharmony-arm64': 1.2.0
-      '@rolldown/binding-wasm32-wasi': 1.2.0(@emnapi/core@1.11.2)
+      '@rolldown/binding-wasm32-wasi': 1.2.0
       '@rolldown/binding-win32-arm64-msvc': 1.2.0
       '@rolldown/binding-win32-x64-msvc': 1.2.0
-    transitivePeerDependencies:
-      - '@emnapi/core'
 
   rollup-plugin-dts@6.4.1(rollup@4.59.0)(typescript@4.9.5):
     dependencies:
@@ -35514,7 +35513,7 @@ snapshots:
 
   union@0.5.0:
     dependencies:
-      qs: 6.15.3
+      qs: 6.16.0
 
   unist-util-find-after@4.0.1:
     dependencies:
@@ -35631,7 +35630,7 @@ snapshots:
   url@0.11.4:
     dependencies:
       punycode: 1.4.1
-      qs: 6.15.3
+      qs: 6.16.0
 
   use-sync-external-store@1.6.0(react@18.3.1):
     dependencies:
