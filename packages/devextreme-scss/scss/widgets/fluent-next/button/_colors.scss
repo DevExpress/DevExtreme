@@ -36,19 +36,15 @@ $button-default-contained-content-selected: ds.$color-content-static-dark !defau
 
 $button-default-contained-bg-hovered: ds.$color-bg-primary-hovered !default;
 
-// The package has no focus state for a filled button - rest, hovered, active and disabled only -
+/* The package defines no focus state for a filled button - rest, hovered, active and disabled
+only - so the focused background is the theme's own choice, and it used to reuse the hovered step.
+In the dark palette that step lightens rather than darkening, which drops white content to 4.21:1
+on primary and 4.18:1 on success, both under AA. The active step is the same colour in both modes,
+keeps the state visible, and passes in either: 11.17:1 primary, 11.83:1 danger, 10.59:1 success.
 
-// so the focused background is the theme's own choice, and it used to reuse the hovered step. In
-
-// the dark palette that step lightens instead of darkening, which drops white content to 4.21:1
-
-// on primary and 4.18:1 on success. The active step is the same colour in both modes, keeps the
-
-// state visible and passes: 11.17:1 primary, 8.6:1 danger, 9.0:1 success. Hover keeps the
-
-// package's own mapping and stays below AA in dark - that is a palette defect, see
-
-// the palette, not the theme.
+Hover itself is left alone. That pair is the package's own - bg-*-hovered with content-static-dark -
+Blazor maps it identically, and no content role in the package reaches 4.5:1 on #2b7ecf: white
+gives 4.21, black 4.3. The theme cannot fix it; the palette has to. */
 $button-default-contained-bg-focused: ds.$color-bg-primary-active !default;
 
 $button-default-contained-bg-active: ds.$color-bg-primary-active !default;
