@@ -39,6 +39,7 @@ import type {
 } from '@js/events';
 import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import uiErrors from '@js/ui/widget/ui.errors';
+import documentSizeCallbacks from '@ts/core/utils/document_size_callbacks';
 import domUtils from '@ts/core/utils/m_dom';
 import selectors from '@ts/core/utils/m_selectors';
 import windowUtils from '@ts/core/utils/m_window';
@@ -261,6 +262,8 @@ class Overlay<
   _isAnimationPaused?: boolean;
 
   _hideTopOverlayHandler!: () => void;
+
+  _documentSizeChangedHandler?: () => void;
 
   _hideAnimationProcessing?: boolean;
 
@@ -1104,6 +1107,21 @@ class Overlay<
     if (windowUtils.hasWindow()) {
       this._toggleHideTopOverlayCallback(enabled);
       this._toggleHideOnParentsScrollSubscription(enabled);
+      this._toggleDocumentSizeSubscription(enabled);
+    }
+  }
+
+  _toggleDocumentSizeSubscription(subscribe: boolean): void {
+    this._documentSizeChangedHandler ??= (): void => {
+      this._renderGeometry();
+    };
+
+    const isVisualContainerWindow = isWindow(this._positionController.$visualContainer?.get(0));
+
+    if (subscribe && isVisualContainerWindow) {
+      documentSizeCallbacks.add(this._documentSizeChangedHandler);
+    } else {
+      documentSizeCallbacks.remove(this._documentSizeChangedHandler);
     }
   }
 
