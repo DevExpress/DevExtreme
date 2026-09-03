@@ -195,7 +195,7 @@ async function runCommand(text, { form, gridInstance, aiIntegration }) {
     form,
   );
 
-  if (target === "none") {
+  if (target === 'none') {
     throw new ChatCommandError(
       "❌ This request doesn't appear to be related to Form or DataGrid. Please try rephrasing it.",
     );
