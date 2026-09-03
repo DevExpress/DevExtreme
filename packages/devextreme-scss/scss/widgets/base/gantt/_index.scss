@@ -57,7 +57,7 @@ $gantt-view-min-width: 1px !default;
     min-width: $gantt-view-min-width;
 
     .dx-gantt-tac-hb {
-      margin-top: -1px;
+      margin-top: -1px; // dx-px-nudge: a one-pixel correction on top of the row height
     }
 
     .dx-scrollable-scrollbar {

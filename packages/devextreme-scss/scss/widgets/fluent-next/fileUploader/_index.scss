@@ -4,7 +4,7 @@
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
 @use "../../base/fileUploader" with (
-  $fileuploader-file-container-padding: null,
+  $fileuploader-file-container-padding: false,
   $fileuploader-button-margin-left: var(--dx-file-uploader-button-margin-inline-start),
   $fileuploader-upload-button-margin-top: var(--dx-file-uploader-upload-button-margin-block-start),
   $fileuploader-show-file-list-padding-top: var(--dx-file-uploader-show-file-list-padding-block-start),

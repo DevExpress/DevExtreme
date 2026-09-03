@@ -36,8 +36,8 @@
 }
 
 .dx-multiview-item-hidden {
-  top: -9999px;
-  left: -9999px;
+  top: -9999px; // dx-structural: parks the hidden slide off-screen
+  left: -9999px; // dx-structural: parks the hidden slide off-screen
   visibility: hidden;
 
   .dx-accordion-item-opened .dx-accordion-item-body {

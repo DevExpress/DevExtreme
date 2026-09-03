@@ -1,7 +1,10 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-time-view-clock-arrow-offset: #{$time-view-clock-arrow-offset};
+  --dx-time-view-clock-arrow-width: #{$time-view-clock-arrow-width};
   --dx-time-view-clock-margin-block-end: #{$time-view-clock-margin-block-end};
+  --dx-time-view-clock-size: #{$time-view-clock-size};
   --dx-time-view-field-min-height: #{$time-view-field-min-height};
   --dx-time-view-field-number-box-spin-touch-friendly-width: #{$time-view-field-number-box-spin-touch-friendly-width};
   --dx-time-view-field-number-box-width: #{$time-view-field-number-box-width};

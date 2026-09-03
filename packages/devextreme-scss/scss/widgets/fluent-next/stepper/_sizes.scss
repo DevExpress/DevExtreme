@@ -30,3 +30,8 @@ $stepper-step-transition-duration: 0.4s !default;
 }
 
 $stepper-connector-thickness: ds.$spacing-20 !default;
+
+// Base-layer sizing injected with design tokens (wave B3)
+$stepper-step-indicator-ring-inset: ds.$spacing-20 !default;
+$stepper-step-indicator-ring-size: ds.$spacing-40 !default;
+$stepper-step-indicator-halo-size: ds.$spacing-80 !default;

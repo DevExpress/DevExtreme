@@ -21,15 +21,25 @@ $pagination-pages-count-padding-left: 6px !default;
 $pagination-info-opacity: 0.7 !default;
 $pagination-nav-disabled-opacity: 0.3 !default;
 
-$pagination-paddings: 8px;
-$pagination-info-paddings: 9px;
+// Not a knob itself: the shared source of the two fallbacks below, which are.
+$pagination-paddings: 8px; // dx-fixed-size: the shared source of the two fallbacks below
+$pagination-info-paddings: 9px !default;
+
+// The pager's own padding and the nav button's, as fallbacks fluent-next switches off with false.
+$pagination-padding-block-fallback: $pagination-paddings !default;
+$pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !default;
 
 .dx-pager,
 .dx-pagination {
   overflow: hidden;
   width: 100%;
-  padding-top: $pagination-paddings;
-  padding-bottom: $pagination-paddings;
+
+  // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
+  @if $pagination-padding-block-fallback {
+    padding-top: $pagination-padding-block-fallback;
+    padding-bottom: $pagination-padding-block-fallback;
+  }
+
   line-height: normal;
 
   @include user-select(none);
@@ -46,7 +56,7 @@ $pagination-info-paddings: 9px;
       display: inline-block;
       cursor: pointer;
 
-      // fluent-next passes null: its own rule paints this box, the base copy would be dead weight
+      // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
       @if $pagination-page-padding-fallback {
         padding: $pagination-page-padding-fallback;
       }
@@ -69,7 +79,7 @@ $pagination-info-paddings: 9px;
 
     .dx-navigate-button {
 
-      // fluent-next passes null: its own rule paints this box, the base copy would be dead weight
+      // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
       @if $pagination-navigate-button-width-fallback {
         width: $pagination-navigate-button-width-fallback;
       }
@@ -78,7 +88,12 @@ $pagination-info-paddings: 9px;
       cursor: pointer;
       display: inline-block;
       vertical-align: top;
-      padding: $pagination-paddings - 1px $pagination-page-horizontal-padding;
+
+      // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
+      @if $pagination-navigate-button-padding-block-fallback {
+        padding: $pagination-navigate-button-padding-block-fallback $pagination-page-horizontal-padding;
+      }
+
       box-sizing: content-box;
 
       &.dx-button-disable {
