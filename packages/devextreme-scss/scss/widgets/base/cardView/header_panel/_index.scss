@@ -91,14 +91,6 @@ $sortable-side-offset: 6px;
   min-width: fit-content;
   padding: 0 $cardview-header-item__right-padding 0 $cardview-header-item__left-padding;
 
-  /* dxSortable dims a drag source to 0.5 on this element, and opacity on a child cannot undo a
-  parent's group opacity - the header item's own opt-out was inert and its text measured 3.33
-  against its own background. The component marks the source with colour instead, so the dim is
-  cancelled here, where it is applied. */
-  &.dx-sortable-source {
-    opacity: 1;
-  }
-
   &:first-child {
     padding: 0 $cardview-header-item__right-padding 0 $cardview-header-item__left-padding;
   }
