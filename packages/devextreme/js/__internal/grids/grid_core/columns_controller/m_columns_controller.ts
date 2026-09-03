@@ -22,7 +22,6 @@ import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
 import type { Column, ColumnsChanges, FilterField } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { StateStoringController } from '@ts/grids/grid_core/state_storing/state_storing_controller_core';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
@@ -134,8 +133,6 @@ export class ColumnsController extends modules.Controller {
 
   protected _dataController!: DataController;
 
-  protected _stateStoringController!: StateStoringController;
-
   public _isWarnedAboutUnsupportedProperties?: boolean;
 
   private getCommonColumnSettings(column): Partial<Column> {
@@ -161,7 +158,6 @@ export class ColumnsController extends modules.Controller {
 
   public init(isApplyingUserState?: boolean): void {
     this._dataController = this.getController('data');
-    this._stateStoringController = this.getController('stateStoring');
     const columns = this.option('columns');
 
     this._commandColumns = this._commandColumns || [];
@@ -478,7 +474,7 @@ export class ColumnsController extends modules.Controller {
   /**
    * @extended: state_storing
    */
-  protected _shouldReturnVisibleColumns() {
+  protected _shouldReturnVisibleColumns(): boolean {
     return true;
   }
 
