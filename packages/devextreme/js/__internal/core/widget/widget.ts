@@ -569,12 +569,14 @@ class Widget<
     const $element = this.$element();
 
     $element.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+
+    const $ariaTarget = this._getAriaTarget();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const state = value || undefined;
 
-    this.setAria('disabled', state);
+    this.setAria('disabled', state, $ariaTarget);
 
-    if (this._needsDisabledStateOnRoot() && this._getAriaTarget().get(0) !== $element.get(0)) {
+    if (this._needsDisabledStateOnRoot() && $ariaTarget.get(0) !== $element.get(0)) {
       this.setAria('disabled', state, $element);
     }
   }
