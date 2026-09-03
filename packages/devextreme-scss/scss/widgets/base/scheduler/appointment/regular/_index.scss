@@ -144,7 +144,7 @@ $appointment-reduced-icon-rtl-left: null !default;
   }
 
   .dx-resizable-handle-left {
-    left: -1px;
+    left: -1px; // dx-px-nudge: pulls the resize handle onto the appointment's 1px border
   }
 
   .dx-scheduler-appointment-recurrence-icon {

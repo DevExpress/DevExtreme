@@ -34,3 +34,6 @@ $slider-label-top-inset-block-start: -15px !default; // dx-offscale: -15px
 // Base-layer sizing injected with design tokens (wave B2)
 $slider-label-bottom-padding-block-end: ds.$spacing-140 !default;
 $slider-label-top-padding-block-start: ds.$spacing-140 !default;
+
+// Base-layer sizing injected with design tokens (wave B12)
+$slider-tooltip-height: ds.$spacing-280 !default;

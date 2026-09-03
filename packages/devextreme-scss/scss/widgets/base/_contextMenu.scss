@@ -11,7 +11,7 @@ $contextmenu-menu-separator-margin: 5px 0 !default;
 
   .dx-menu-items-container {
 
-    // fluent-next passes null: its own rule paints this box, the base copy would be dead weight
+    // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
     @if $contextmenu-menu-items-container-padding {
       padding: $contextmenu-menu-items-container-padding;
     }

@@ -52,3 +52,14 @@ $html-editor-border-block-end-active: ds.$border-width-20 solid !default;
 
 // Base-layer values injected with design tokens (wave B1)
 $html-editor-ai-dialog-title-font-weight: ds.$font-weight-title-default !default;
+
+// Base-layer sizing injected with design tokens (wave B14)
+$html-editor-border-width: ds.$border-width-10 !default;
+$html-editor-variable-padding: ds.$spacing-30 ds.$spacing-60 !default;
+$html-editor-variable-border-radius: ds.$border-radius-80 !default;
+$html-editor-blockquote-padding-inline-start: ds.$spacing-120 !default;
+$html-editor-blockquote-border-inline-start-width: ds.$border-width-40 !default;
+$html-editor-table-cell-padding: ds.$spacing-20 ds.$spacing-50 !default;
+$html-editor-placeholder-inset-inline: ds.$spacing-150 !default;
+$html-editor-table-resizer-thickness: ds.$spacing-50 !default;
+$html-editor-table-resizer-highlight-thickness: ds.$spacing-30 !default;

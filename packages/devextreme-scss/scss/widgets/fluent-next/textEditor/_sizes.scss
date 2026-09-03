@@ -106,3 +106,13 @@ $text-editor-line-border-block-end-width-active: ds.$border-width-20 !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
 $text-editor-clear-button-width: ds.$spacing-340 !default;
+
+// Base-layer sizing injected with design tokens (wave B13)
+$text-editor-label-padding-inline: ds.$spacing-20 !default;
+$text-editor-label-border-radius: ds.$border-radius-10 !default;
+$text-editor-label-backdrop-height: ds.$spacing-30 !default;
+$text-editor-button-margin-block-start: ds.$spacing-10 !default;
+$text-editor-button-margin-block-end: ds.$spacing-30 !default;
+$text-editor-button-icon-margin-block-start: ds.$spacing-10 !default;
+$text-editor-button-icon-with-text-margin-block-start: ds.$spacing-30 !default;
+$text-editor-button-icon-only-padding: ds.$spacing-20 !default;

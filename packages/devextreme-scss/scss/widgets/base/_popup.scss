@@ -11,7 +11,7 @@ $popup-dialog-message-padding: 10px 10px 5px 10px !default;
 .dx-popup-title {
   padding: $popup-title-padding;
 
-  // fluent-next passes null: its own rule paints this box, the base copy would be dead weight
+  // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
   @if $popup-title-min-height-fallback {
     min-height: $popup-title-min-height-fallback;
   }

@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   background-color: $cardview-nodata-view__icon-bg-color;
-  border-radius: 999px;
+  border-radius: 999px; // dx-fixed-size: a pill radius; the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
   margin: $cardview-nodata-view__icon-container-margin;
 
   .dx-icon {

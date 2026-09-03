@@ -2,7 +2,7 @@
 @use "./popover/mixins" as *;
 
 $slider-tooltip-content-height: 28px !default;
-$slider-tooltip-arrow-height: 7px !default;
+$slider-tooltip-arrow-height: 7px; // dx-fixed-size: feeds dx-popover-arrow-size, which divides by sqrt(2)
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $slider-label-position-bottom-padding-bottom: 14px !default;

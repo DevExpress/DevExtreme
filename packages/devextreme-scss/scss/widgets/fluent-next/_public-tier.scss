@@ -177,7 +177,9 @@
 .dx-header-filter-menu,
 .dx-datagrid-drag-header,
 .dx-treelist-drag-header,
-.dx-ai-chat {
+.dx-ai-chat,
+.dx-datagrid-ai-assistant-confirm-dialog,
+.dx-treelist-ai-assistant-confirm-dialog {
   @include gridBasePublic.publish();
 }
 

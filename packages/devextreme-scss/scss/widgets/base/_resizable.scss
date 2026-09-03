@@ -1,6 +1,6 @@
-$handle-offset: 0 !default;
-$one-side-handle-size: 3px + $handle-offset !default;
-$two-side-handle-size: 6px + $handle-offset !default;
+$handle-offset: 0;
+$one-side-handle-size: 3px + $handle-offset; // dx-fixed-size: handle thickness ($handle-offset is 0)
+$two-side-handle-size: 6px + $handle-offset; // dx-fixed-size: handle thickness ($handle-offset is 0)
 
 .dx-resizable {
   display: block;
