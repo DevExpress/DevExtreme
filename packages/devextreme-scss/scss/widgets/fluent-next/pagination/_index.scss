@@ -20,7 +20,7 @@
   $pagination-page-size-margin-left: var(--dx-pagination-page-size-margin-inline-start),
   $pagination-page-index-width: var(--dx-pagination-page-index-width),
   $pagination-pages-count-padding-left: var(--dx-pagination-pages-count-padding-inline-start),
-  $pagination-info-opacity: var(--dx-pagination-info-opacity),
+  $pagination-info-opacity: false,
   // no dim: the disabled navigation button is painted from the content role below
   $pagination-nav-disabled-opacity: false,
   $pagination-page-horizontal-padding: var(--dx-pagination-page-padding-inline),
@@ -131,6 +131,14 @@
 .dx-state-disabled .dx-pagination .dx-page-sizes .dx-selection {
   background-color: var(--dx-pagination-page-bg-selected-disabled);
   color: var(--dx-pagination-content-disabled);
+}
+
+/* The page-count line is secondary text. It used to be the content colour at 70%, which drags the
+whole element - not just its text - and states no contrast; content-subtle is the package's own
+role for it. */
+.dx-pager .dx-pages .dx-info,
+.dx-pagination .dx-pages .dx-info {
+  color: var(--dx-pagination-info-content);
 }
 
 .dx-pagination.dx-state-disabled {

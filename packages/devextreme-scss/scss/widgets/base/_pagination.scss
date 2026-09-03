@@ -74,7 +74,12 @@ $pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !
     .dx-info {
       display: inline-block;
       margin-right: $pagination-info-paddings;
-      opacity: $pagination-info-opacity;
+
+      /* Guarded so a theme can switch it off with `false`: the info line is secondary text, and a
+      theme that has a role for that paints the role instead of dimming the element. */
+      @if $pagination-info-opacity {
+        opacity: $pagination-info-opacity;
+      }
     }
 
     .dx-navigate-button {

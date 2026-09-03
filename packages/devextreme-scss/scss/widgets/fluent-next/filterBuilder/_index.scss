@@ -14,7 +14,6 @@
   $filterbuilder-treeview-node-margin-left: var(--dx-filter-builder-tree-view-node-margin-inline-start),
   $filterbuilder-treeview-node-margin-right: var(--dx-filter-builder-tree-view-node-margin-inline-end),
   $filterbuilder-scrollable-max-height: var(--dx-filter-builder-scrollable-max-height),
-  $filterbuilder-range-separator-opacity: var(--dx-filter-builder-range-separator-opacity),
   $filterbuilder-bg: var(--dx-filter-builder-bg),
   $filterbuilder-text-color: var(--dx-filter-builder-content),
   $filterbuilder-text-focus-color: var(--dx-filter-builder-text-content-focused),
@@ -38,7 +37,6 @@
   $filterbuilder-remove-icon-focus-color: var(--dx-filter-builder-remove-icon-content-focused),
   $filterbuilder-menu-icon-color: var(--dx-filter-builder-menu-icon),
 );
-@use "../textEditor/colors" as textEditorColors;
 
 .dx-filterbuilder {
   .dx-filterbuilder-action-icon {
@@ -69,8 +67,11 @@
   }
 }
 
+/* The separator between a range's two ends is secondary text, and it used to say so with 30% of
+the content colour - 1.9:1 on the theme's own ground, for a word the reader has to read. The
+package's role for secondary text carries a contrast of its own. */
 .dx-filterbuilder-range-separator {
-  color: textEditorColors.$text-editor-content;
+  color: var(--dx-filter-builder-range-separator-content);
 }
 
 .dx-filterbuilder-overlay {
