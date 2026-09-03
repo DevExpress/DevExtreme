@@ -10,7 +10,8 @@
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "lib": ["es2022", "DOM", "DOM.Iterable"]
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
+    "resolveJsonModule": true
   },
   "include": [
     "./Demos/**/React/**/*.ts",

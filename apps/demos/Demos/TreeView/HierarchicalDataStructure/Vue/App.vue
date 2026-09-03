@@ -32,7 +32,7 @@ function selectItem({ itemData }: DxTreeViewTypes.ItemClickEvent) {
 }
 
 </script>
-<style scoped>
+<style>
 #simple-treeview,
 #product-details {
   display: inline-block;

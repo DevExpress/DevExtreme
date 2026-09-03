@@ -68,7 +68,7 @@ import DxStepper from 'devextreme-vue/stepper';
 import { steps } from './data.ts';
 </script>
 
-<style scoped>
+<style>
 #app {
   display: flex;
   flex-direction: column;

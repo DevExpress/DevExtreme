@@ -64,7 +64,7 @@ const onSelectionChanged = (
   selectedRowPicture.value = data?.Picture;
 };
 </script>
-<style scoped>
+<style>
 #employee-info .employee-photo {
   height: 100px;
   float: left;

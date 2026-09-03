@@ -27,7 +27,7 @@ const tasksStore = AspNetData.createStore({
   },
 });
 </script>
-<style scoped>
+<style>
 .tables {
   display: flex;
 }
