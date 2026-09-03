@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
 /* eslint-disable func-names */
@@ -71,6 +69,7 @@ function getLabelCheckerPosition(x, y, isHorizontal, canvas) {
   };
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let Crosshair = function (renderer, options, params, group) {
   const that = this;
   that._renderer = renderer;
@@ -327,6 +326,8 @@ Crosshair.prototype = {
 };
 
 /// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_Crosshair(value: typeof Crosshair): void {
   Crosshair = value;
 }

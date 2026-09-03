@@ -1,5 +1,4 @@
 /* eslint-disable import/no-import-module-exports */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable new-cap */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @stylistic/no-mixed-operators */
@@ -74,6 +73,7 @@ COMMAND_TO_TYPE_MAP[COMMAND_MOVE_UP] = COMMAND_TO_TYPE_MAP[COMMAND_MOVE_RIGHT] =
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_IN] = COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_OUT] = ZoomCommand;
 COMMAND_TO_TYPE_MAP[COMMAND_ZOOM_DRAG] = ZoomDragCommand;
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let ControlBar = function (parameters) {
   const that = this;
   that._params = parameters;

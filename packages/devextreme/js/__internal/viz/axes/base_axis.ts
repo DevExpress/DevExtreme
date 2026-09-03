@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable max-depth */
@@ -314,6 +313,7 @@ function getConstantLineSharpDirection(coord, axisCanvas) {
   return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let Axis = function (renderSettings) {
   const that = this;
 

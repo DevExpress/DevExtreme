@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -208,6 +207,7 @@ function applyLayout(canvas, items) {
   }
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let LayoutControl = function (widget) {
   const that = this;
   that._items = [];

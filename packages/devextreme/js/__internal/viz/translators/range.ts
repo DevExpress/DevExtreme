@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-param-reassign */
@@ -44,6 +43,7 @@ function compareAndReplace(thisValue, otherValue, setValue, compare) {
   }
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let Range = function (range?) {
   range && extend(this, range);
 };

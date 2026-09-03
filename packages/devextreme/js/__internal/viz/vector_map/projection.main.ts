@@ -1,5 +1,4 @@
 /* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -66,6 +65,7 @@ function getEngine(engine) {
   return (engine instanceof Engine && engine) || projection.get(engine) || projection(engine) || projection.get(DEFAULT_ENGINE_NAME);
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let Projection = function (parameters) {
   const that = this;
   that._initEvents();

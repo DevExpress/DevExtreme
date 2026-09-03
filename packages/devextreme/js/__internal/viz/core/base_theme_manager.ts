@@ -1,6 +1,4 @@
 /* eslint-disable no-return-assign */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
@@ -34,6 +32,7 @@ function getThemePart(theme, path) {
   return _theme;
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let BaseThemeManager = Class.inherit({ // TODO: test hack
   ctor(options) {
     this._themeSection = options.themeSection;

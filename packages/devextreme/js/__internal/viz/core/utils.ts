@@ -1,4 +1,3 @@
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable func-names */
 /* eslint-disable no-return-assign */
@@ -92,6 +91,7 @@ export const degreesToRadians = function (value) {
 
 //  Calculates sin and cos for <angle> in degrees
 //  Expects number, no validation
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let getCosAndSin = function (angle) {
   const angleInRadians = degreesToRadians(angle);
   return { cos: _cos(angleInRadians), sin: _sin(angleInRadians) };
@@ -277,6 +277,7 @@ export const enumParser = function (values) {
   };
 };
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let patchFontOptions = function (options) {
   const fontOptions = {};
   each(options || {}, (key, value) => {
@@ -423,6 +424,7 @@ export function normalizePanesHeight(panes) {
   }
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let updatePanesCanvases = function (panes, canvas, rotated) {
   let distributedSpace = 0;
   const padding = PANE_PADDING;
@@ -672,6 +674,7 @@ export function pointInCanvas(canvas, x, y) {
   return x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom;
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let getNextDefsSvgId = () => `DevExpress_${numDefsSvgElements++}`;
 
 export function extractColor(color, isBase?) {

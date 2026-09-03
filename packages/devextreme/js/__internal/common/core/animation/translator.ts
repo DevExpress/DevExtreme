@@ -1,6 +1,4 @@
 /* eslint-disable func-names */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { data as elementData, removeData } from '@js/core/element_data';
@@ -126,6 +124,7 @@ export const move = function (
   }
 };
 
+/* eslint-disable import/no-mutable-exports -- description seam for tests */
 export let resetPosition = function (
   $element: dxElementWrapper | Element | undefined,
   finishTransition?: boolean,
@@ -174,6 +173,8 @@ export const parseTranslate = function (translateString: string): TranslateVecto
 };
 
 /// #DEBUG
+/* eslint-disable @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_resetPosition(value: typeof resetPosition): void {
   resetPosition = value;
 }

@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -225,6 +222,7 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
   return docEvents;
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let Tracker = function (params) {
   const state = this._state = {};
   const targets = params.controller.getTrackerTargets();
@@ -265,6 +263,8 @@ Tracker.prototype = {
 };
 
 /// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_Tracker(value: typeof Tracker): void {
   Tracker = value;
 }

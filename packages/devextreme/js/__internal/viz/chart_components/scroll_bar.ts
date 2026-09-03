@@ -1,5 +1,4 @@
 /* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
@@ -24,6 +23,7 @@ const _min = Math.min;
 const _max = Math.max;
 const MIN_SCROLL_BAR_SIZE = 10;
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let ScrollBar = function (renderer, group) {
   this._translator = new Translator2D({}, {}, {});
   this._scroll = renderer.rect().append(group);

@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable func-names */
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -11,6 +9,7 @@
 const TOOLTIP_OFFSET = 12;
 
 // TODO: Somehow it should be merged with the core.Tooltip
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let TooltipViewer = function (params) {
   this._subscribeToTracker(params.tracker, params.tooltip, params.layerCollection);
 };
@@ -49,6 +48,8 @@ TooltipViewer.prototype = {
 };
 
 /// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_TooltipViewer(value: typeof TooltipViewer): void {
   TooltipViewer = value;
 }

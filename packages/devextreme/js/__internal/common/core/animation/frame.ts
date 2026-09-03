@@ -1,7 +1,3 @@
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable func-names */
-
 import callOnce from '@js/core/utils/call_once';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 
@@ -21,11 +17,13 @@ const window: ExtendedWindow = (hasWindow() ? getWindow() : {}) as ExtendedWindo
 
 const FRAME_ANIMATION_STEP_TIME = 1000 / 60;
 
+// eslint-disable-next-line func-names -- description seam for tests
 let request = function (callback: FrameRequestCallback): number {
   /* eslint-disable no-restricted-globals */
   return setTimeout(callback, FRAME_ANIMATION_STEP_TIME);
 };
 
+// eslint-disable-next-line func-names -- description seam for tests
 let cancel = function (requestID: number): void {
   clearTimeout(requestID);
 };
@@ -49,7 +47,9 @@ const setAnimationFrameMethods = callOnce(() => {
   }
 });
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+/* eslint-disable-next-line
+  @typescript-eslint/explicit-module-boundary-types, import/no-mutable-exports
+  -- description seam for tests */
 export let requestAnimationFrame = function (...args): number {
   setAnimationFrameMethods();
 
@@ -57,18 +57,24 @@ export let requestAnimationFrame = function (...args): number {
   return request.apply(window, args);
 };
 
+/* eslint-disable-next-line
+  import/no-mutable-exports
+  -- description seam for tests */
 export let cancelAnimationFrame = function (requestID: number): void {
   setAnimationFrameMethods();
   cancel.apply(window, [requestID]);
 };
 
 /// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_requestAnimationFrame(
   value: typeof requestAnimationFrame,
 ): void {
   requestAnimationFrame = value;
 }
-
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_cancelAnimationFrame(
   value: typeof cancelAnimationFrame,
 ): void {

@@ -1,6 +1,4 @@
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 import type { Format } from '@ts/core/localization/date';
 import { escapeRegExp } from '@ts/core/utils/m_common';
 import { logger } from '@ts/core/utils/m_console';
@@ -237,6 +235,7 @@ export const isPossibleForParsingFormat = (patterns: string[]): boolean => {
   });
 };
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let getRegExpInfo = (
   format: string,
   dateParts: LdlmDateLocalization,
@@ -385,6 +384,8 @@ export const getParser = (format: string, dateParts: LdlmDateLocalization) => {
 };
 
 /// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_getRegExpInfo(value: typeof getRegExpInfo): void {
   getRegExpInfo = value;
 }

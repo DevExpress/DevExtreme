@@ -1,6 +1,4 @@
 /* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -292,6 +290,7 @@ function formatText(data, options) {
   return options.customizeText ? options.customizeText.call(data, data) : options.displayFormat ? processDisplayFormat(options.displayFormat, data) : data.valueText;
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let Label = function (renderSettings) {
   this._renderer = renderSettings.renderer;
   this._container = renderSettings.labelsGroup;

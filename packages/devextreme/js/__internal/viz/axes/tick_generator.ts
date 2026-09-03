@@ -1,6 +1,4 @@
 /* eslint-disable prefer-destructuring */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable prefer-spread */
@@ -808,6 +806,7 @@ function dateGenerator(options) {
   );
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let tickGenerator = function (options) {
   let result;
 
@@ -827,6 +826,8 @@ export let tickGenerator = function (options) {
 };
 
 /// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_tickGenerator(value: typeof tickGenerator): void {
   tickGenerator = value;
 }

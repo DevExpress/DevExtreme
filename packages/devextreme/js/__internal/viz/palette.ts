@@ -1,5 +1,4 @@
 /* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable max-depth */
 /* eslint-disable no-continue */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -195,6 +194,7 @@ export function registerPalette(name, palette) {
   }
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let getAccentColor = function (palette, themeDefault) {
   palette = getPalette(palette, { themeDefault });
   return palette.accentColor || palette[0];
@@ -431,6 +431,7 @@ function getColorMixer(palette, parameters) {
   };
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let createPalette = function (palette, parameters, themeDefaultPalette?) {
   const paletteObj = {
     dispose() {
@@ -496,6 +497,7 @@ function getLightness(color) {
   return color.r * 0.3 + color.g * 0.59 + color.b * 0.11;
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let getDiscretePalette = function (source, size, themeDefaultPalette) {
   const palette = size > 0 ? createDiscreteColors(getPalette(source, { type: 'gradientSet', themeDefault: themeDefaultPalette }), size) : [];
 

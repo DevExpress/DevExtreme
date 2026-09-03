@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-depth */
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
 /* eslint-disable no-bitwise */
@@ -181,6 +179,7 @@ function mergePointOptions(base, extra) {
   return options;
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let Series = function (settings, options) {
   const that = this;
   that.fullState = 0;
@@ -1386,6 +1385,8 @@ Series.prototype = {
 export const mixins = seriesNS.mixins;
 
 /// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_Series(value: typeof Series): void {
   Series = value;
 }

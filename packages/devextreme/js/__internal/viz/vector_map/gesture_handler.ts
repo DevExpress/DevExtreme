@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-multi-assign */
@@ -10,6 +8,7 @@
 const _ln = Math.log;
 const _LN2 = Math.LN2;
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let GestureHandler = function (params) {
   const that = this;
   that._projection = params.projection;

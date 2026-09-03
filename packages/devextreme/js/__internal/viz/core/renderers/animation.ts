@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -146,6 +144,7 @@ Animation.prototype = {
   },
 };
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let AnimationController = function (element) {
   const that = this;
   that._animationCount = 0;
@@ -243,6 +242,8 @@ AnimationController.prototype = {
 };
 
 /// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_AnimationController(value: typeof AnimationController): void {
   AnimationController = value;
 }

@@ -1,5 +1,4 @@
 /* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/prefer-for-of */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
@@ -459,6 +458,7 @@ function adjustBubbleSeriesDimensions() {
   });
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let SeriesFamily = function (options) {
   /// #DEBUG
   debug.assert(options.type, 'type was not passed or empty');

@@ -1,6 +1,4 @@
 /* eslint-disable max-depth */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -77,6 +75,7 @@ function restoreSetSelectedRange(controller) {
   delete controller.setSelectedRange;
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let SlidersController = function (params) {
   const that = this;
   const sliderParams = {
@@ -523,6 +522,8 @@ SlidersController.prototype = {
 };
 
 /// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_SlidersController(value: typeof SlidersController): void {
   SlidersController = value;
 }

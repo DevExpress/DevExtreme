@@ -1,5 +1,4 @@
 /* eslint-disable @stylistic/max-len */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -506,6 +505,7 @@ function verifyData(source, incidentOccurred) {
   return data;
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let validateData = function (data, groupsData, incidentOccurred, options) {
   data = verifyData(data, incidentOccurred);
 

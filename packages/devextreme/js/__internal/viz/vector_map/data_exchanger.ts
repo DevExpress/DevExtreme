@@ -1,7 +1,4 @@
 /* eslint-disable no-return-assign */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -9,6 +6,7 @@
 
 import Callbacks from '@js/core/utils/callbacks';
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let DataExchanger = function () {
   this._store = {};
 };
@@ -48,6 +46,8 @@ DataExchanger.prototype = {
 };
 
 /// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
 export function DEBUG_set_DataExchanger(value: typeof DataExchanger): void {
   DataExchanger = value;
 }

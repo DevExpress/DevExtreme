@@ -1,6 +1,4 @@
 /* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable func-names */
 /* eslint-disable no-continue */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
@@ -124,6 +122,7 @@ function getInnerRadius({ type, innerRadius }) {
   return type === 'pie' ? 0 : _isNumber(innerRadius) ? Number(innerRadius) : DEFAULT_INNER_RADIUS;
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 let LayoutManager = function () {
 };
 

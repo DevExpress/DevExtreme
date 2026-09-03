@@ -1,5 +1,4 @@
 /* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
@@ -224,6 +223,7 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
   return buildPath('M', points, 'Z');
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let Plaque = class {
   widget;
 

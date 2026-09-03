@@ -1,5 +1,4 @@
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable new-cap */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @stylistic/no-mixed-operators */
@@ -1597,6 +1596,7 @@ function projectLineLabel(coordinates) {
   return resultData || [[], []];
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let MapLayerCollection = function (params) {
   const that = this;
   const renderer = params.renderer;

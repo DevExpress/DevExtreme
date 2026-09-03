@@ -1,4 +1,3 @@
-/* eslint-disable import/no-mutable-exports */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
@@ -165,6 +164,7 @@ function getCheckingMethodsAboutBreaks(inverted) {
   };
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 let _Translator2d = function (businessRange, canvas, options) {
   this.update(businessRange, canvas, options);
 };

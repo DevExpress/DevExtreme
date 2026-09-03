@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
-/* eslint-disable import/no-mutable-exports */
-/* eslint-disable func-names */
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable no-restricted-syntax */
@@ -91,6 +89,7 @@ function isNoneMode(mode) {
   return _normalizeEnum(mode) === 'none';
 }
 
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
 export let Point = function (series, dataItem, options) {
   this.fullState = NORMAL_STATE;
   this.series = series;
