@@ -1018,6 +1018,57 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
+    QUnit.test('position should return window.width() if the browser has not reported window.outerWidth yet', function(assert) {
+        const $what = $('#what').width(300);
+        const initialInnerWidth = window.innerWidth;
+        const initialOuterWidth = window.outerWidth;
+
+        const widthStub = sinon.stub(implementationsMap, 'getWidth').returns(1000);
+
+        try {
+            window.innerWidth = 500;
+            window.outerWidth = 0;
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.h.location, 350, 50, 'horizontal location is correct');
+        } finally {
+            window.innerWidth = initialInnerWidth;
+            window.outerWidth = initialOuterWidth;
+            widthStub.restore();
+        }
+    });
+
+    QUnit.test('position should return window.height() if the browser has not reported window.outerHeight yet', function(assert) {
+        if(browser.safari) {
+            assert.ok(true, 'actual only for desktop browsers except Safari');
+            return;
+        }
+
+        const $what = $('#what').height(300);
+        const initialInnerHeight = window.innerHeight;
+        const initialOuterHeight = window.outerHeight;
+
+        const heightStub = sinon.stub(implementationsMap, 'getHeight').returns(1000);
+
+        try {
+            window.innerHeight = 500;
+            window.outerHeight = 0;
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.v.location, 350, 50, 'vertical location is correct');
+        } finally {
+            window.innerHeight = initialInnerHeight;
+            window.outerHeight = initialOuterHeight;
+            heightStub.restore();
+        }
+    });
+
     // T664522
     QUnit.test('setup should call resetPosition with finishTransition argument', function(assert) {
         const resetPositionStub = sinon.stub(translator, 'resetPosition').callsFake(($element, finishTransition) => {

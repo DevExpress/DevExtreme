@@ -264,8 +264,14 @@ const calculatePosition = function (what, options) {
         h.atSize = of[0].visualViewport.width;
         v.atSize = of[0].visualViewport.height;
       } else {
-        h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : getWidth(of);
-        v.atSize = of[0].innerHeight > of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : getHeight(of);
+        const isOuterSizeKnown = of[0].outerWidth > 0 && of[0].outerHeight > 0;
+
+        h.atSize = isOuterSizeKnown && of[0].innerWidth > of[0].outerWidth
+          ? of[0].innerWidth
+          : getWidth(of);
+        v.atSize = (isOuterSizeKnown && of[0].innerHeight > of[0].outerHeight) || IS_SAFARI
+          ? of[0].innerHeight
+          : getHeight(of);
       }
     } else if (of[0].nodeType === 9) {
       h.atLocation = 0;
