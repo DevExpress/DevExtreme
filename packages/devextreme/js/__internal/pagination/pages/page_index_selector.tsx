@@ -56,7 +56,7 @@ const PageIndexSelectorDefaultProps: PageIndexSelectorPropsType = {
   itemCount: PaginationDefaultProps.itemCount,
 };
 
-interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' > { navigate: LightButtonProps['onClick'] }
+interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' | 'disabled' > { navigate: LightButtonProps['onClick'] }
 
 interface NavigationButtonPropsCache {
   prevButtonProps: NavigationButtonProps | undefined;
@@ -104,6 +104,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
     return {
       className,
       tabIndex: canNavigate ? 0 : -1,
+      disabled: !canNavigate,
       navigate: () => this.navigateToPage(rtlAwareDirection),
     };
   }
@@ -182,6 +183,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
     const {
       className,
       tabIndex,
+      disabled,
       navigate,
     } = this.getPrevButtonProps();
 
@@ -200,6 +202,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
             label={this.getPrevButtonLabel()}
             className={className}
             tabIndex={tabIndex}
+            disabled={disabled}
             onClick={navigate}
           />
         )}
@@ -224,6 +227,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
             label={this.getNextButtonLabel()}
             className={this.getNextButtonProps().className}
             tabIndex={this.getNextButtonProps().tabIndex}
+            disabled={this.getNextButtonProps().disabled}
             onClick={this.getNextButtonProps().navigate}
           />
         )}
