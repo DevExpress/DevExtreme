@@ -50,7 +50,6 @@ describe('DataGrid editing', () => {
   });
   afterEach(afterTest);
 
-  // T1293181
   describe('Disabled command button', () => {
     it('should expose the disabled state on the command link', async () => {
       await createDataGrid({
@@ -75,6 +74,7 @@ describe('DataGrid editing', () => {
     });
   });
 
+  // T1293181
   describe('Recovered (undeleted) row', () => {
     it('should have correct data when placed before inserted row in batch editing', async () => {
       const recoveringRowIndex = dataSource.length - 1;
