@@ -16,29 +16,29 @@ $material-scheduler-dropdown-button-height: null !default;
 $material-scheduler-dropdown-button-padding: null !default;
 $material-scheduler-dropdown-button-margin: null !default;
 $material-scheduler-dropdown-button-vertical-margin: null !default;
-$material-scheduler-dropdown-button-adaptive-margin: null !default;
-$material-scheduler-dropdown-button-adaptive-vertical-margin: null !default;
+$material-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+$material-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 1px !default;
 $material-scheduler-appointment-tooltip-content-margin-left: null !default;
 $material-tooltip-marker-dimension: null !default;
 $material-scheduler-appointment-tooltip-title-margin-top: null !default;
 $material-scheduler-appointment-tooltip-remove-padding-top: null !default;
 
-$material-scheduler-appointment-short-content-padding: null !default;
-$material-scheduler-appointment-15min-height: null !default;
-$material-scheduler-appointment-20min-height: null !default;
-$material-scheduler-appointment-25min-height: null !default;
-$material-scheduler-appointment-10min-recurrence-padding-right: null !default;
-$material-scheduler-appointment-10min-title-font-size: null !default;
-$material-scheduler-appointment-10min-title-line-height: null !default;
-$material-scheduler-appointment-10min-icon-font-size: null !default;
-$material-scheduler-appointment-10min-icon-right: null !default;
+$material-scheduler-appointment-short-content-padding: 0 7px !default;
+$material-scheduler-appointment-15min-height: 17px !default;
+$material-scheduler-appointment-20min-height: 24px !default;
+$material-scheduler-appointment-25min-height: 32px !default;
+$material-scheduler-appointment-10min-recurrence-padding-right: 14px !default;
+$material-scheduler-appointment-10min-title-font-size: 8px !default;
+$material-scheduler-appointment-10min-title-line-height: 12px !default;
+$material-scheduler-appointment-10min-icon-font-size: 12px !default;
+$material-scheduler-appointment-10min-icon-right: 2px !default;
 $material-scheduler-appointment-15min-recurrence-padding-right: null !default;
-$material-scheduler-appointment-15min-title-font-size: null !default;
+$material-scheduler-appointment-15min-title-font-size: 12px !default;
 $material-scheduler-appointment-15min-title-line-height: null !default;
 $material-scheduler-appointment-15min-icon-font-size: null !default;
-$material-scheduler-appointment-15min-icon-right: null !default;
-$material-scheduler-appointment-20min-recurrence-padding-right: null !default;
-$material-scheduler-appointment-20min-icon-right: null !default;
+$material-scheduler-appointment-15min-icon-right: 2px !default;
+$material-scheduler-appointment-20min-recurrence-padding-right: 25px !default;
+$material-scheduler-appointment-20min-icon-right: 4px !default;
 
 $scheduler-left-column-width: 65px !default;
 $material-scheduler-timeline-date-table-cell-height: 50px !default;
@@ -97,8 +97,6 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-dropdown-button-padding: 4px !default;
   $material-scheduler-dropdown-button-margin: 5px 1px 3px 3px !default;
   $material-scheduler-dropdown-button-vertical-margin: 5px 2px 3px 1px !default;
-  $material-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
-  $material-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 1px !default;
 
   $material-scheduler-appointment-tooltip-content-margin-left: 10px !default;
   $material-tooltip-marker-dimension: 24px !default;
@@ -122,25 +120,9 @@ $scheduler-timeline-cell-height: 50px !default;
 
   $agenda-appointment-title-font-size: 14px;
 
-  $material-scheduler-appointment-short-content-padding: 0 7px !default;
-  $material-scheduler-appointment-15min-height: 17px !default;
-  $material-scheduler-appointment-20min-height: 24px !default;
-  $material-scheduler-appointment-25min-height: 32px !default;
-
-  $material-scheduler-appointment-10min-recurrence-padding-right: 14px !default;
-  $material-scheduler-appointment-10min-title-font-size: 8px !default;
-  $material-scheduler-appointment-10min-title-line-height: 12px !default;
-  $material-scheduler-appointment-10min-icon-font-size: 12px !default;
-  $material-scheduler-appointment-10min-icon-right: 2px !default;
-
   $material-scheduler-appointment-15min-recurrence-padding-right: 18px !default;
-  $material-scheduler-appointment-15min-title-font-size: 12px !default;
   $material-scheduler-appointment-15min-title-line-height: 18px !default;
   $material-scheduler-appointment-15min-icon-font-size: 16px !default;
-  $material-scheduler-appointment-15min-icon-right: 2px !default;
-
-  $material-scheduler-appointment-20min-recurrence-padding-right: 25px !default;
-  $material-scheduler-appointment-20min-icon-right: 4px !default;
 }
 
 @else if $size == "compact" {
@@ -163,8 +145,6 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-dropdown-button-padding: 2px !default;
   $material-scheduler-dropdown-button-margin: 2px 1px 2px 2px !default;
   $material-scheduler-dropdown-button-vertical-margin: 2px 1px 2px 1px !default;
-  $material-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
-  $material-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 1px !default;
 
   $material-scheduler-appointment-tooltip-content-margin-left: 8px !default;
   $material-tooltip-marker-dimension: 18px !default;
@@ -188,23 +168,7 @@ $scheduler-timeline-cell-height: 50px !default;
 
   $agenda-appointment-title-font-size: 13px;
 
-  $material-scheduler-appointment-short-content-padding: 0 7px !default;
-  $material-scheduler-appointment-15min-height: 17px !default;
-  $material-scheduler-appointment-20min-height: 24px !default;
-  $material-scheduler-appointment-25min-height: 32px !default;
-
-  $material-scheduler-appointment-10min-recurrence-padding-right: 14px !default;
-  $material-scheduler-appointment-10min-title-font-size: 8px !default;
-  $material-scheduler-appointment-10min-title-line-height: 12px !default;
-  $material-scheduler-appointment-10min-icon-font-size: 12px !default;
-  $material-scheduler-appointment-10min-icon-right: 2px !default;
-
   $material-scheduler-appointment-15min-recurrence-padding-right: 14px !default;
-  $material-scheduler-appointment-15min-title-font-size: 12px !default;
   $material-scheduler-appointment-15min-title-line-height: 12px !default;
   $material-scheduler-appointment-15min-icon-font-size: 12px !default;
-  $material-scheduler-appointment-15min-icon-right: 2px !default;
-
-  $material-scheduler-appointment-20min-recurrence-padding-right: 25px !default;
-  $material-scheduler-appointment-20min-icon-right: 4px !default;
 }

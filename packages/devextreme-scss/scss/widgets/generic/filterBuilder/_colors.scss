@@ -67,7 +67,7 @@ $filterbuilder-item-value-focus-color: null !default;
 * $name 10. Menu icon color
 * $type color
 */
-$filterbuilder-menu-icon-color: null !default;
+$filterbuilder-menu-icon-color: $base-text-color !default;
 
 @if $color == "carmine" {
   $filterbuilder-text-color: $base-text-color !default;
@@ -90,7 +90,6 @@ $filterbuilder-menu-icon-color: null !default;
   $filterbuilder-item-value-color: color.change($base-border-color, $alpha: 0.5) !default;
   $filterbuilder-item-value-hover-color: $filterbuilder-item-value-color !default;
   $filterbuilder-item-value-focus-color: color.adjust($filterbuilder-item-value-color, $alpha: 0.7) !default;
-  $filterbuilder-menu-icon-color: $base-text-color !default;
 }
 
 @if $color == "contrast" {
@@ -114,7 +113,6 @@ $filterbuilder-menu-icon-color: null !default;
   $filterbuilder-item-value-focus-color: $filterbuilder-item-value-color !default;
   $filterbuilder-text-color: $base-text-color !default;
   $filterbuilder-text-focus-color: $base-text-color !default;
-  $filterbuilder-menu-icon-color: $base-text-color !default;
 }
 
 @if $color == "dark" {
@@ -138,13 +136,11 @@ $filterbuilder-menu-icon-color: null !default;
   $filterbuilder-item-value-color: rgba(204, 204, 204, 0.8) !default;
   $filterbuilder-item-value-hover-color: color.adjust($filterbuilder-item-value-color, $alpha: -0.1) !default;
   $filterbuilder-item-value-focus-color: color.adjust($filterbuilder-item-value-color, $alpha: 0.2) !default;
-  $filterbuilder-menu-icon-color: $base-text-color !default;
 }
 
 @if $color == "darkmoon" {
   $filterbuilder-text-color: #000 !default;
   $filterbuilder-text-focus-color: $filterbuilder-text-color !default;
-  $filterbuilder-menu-icon-color: $base-text-color !default;
   $filterbuilder-plus-icon-color: color.change($base-success, $alpha: 0.8) !default;
   $filterbuilder-plus-icon-hover-color: color.adjust($filterbuilder-plus-icon-color, $alpha: -0.1) !default;
   $filterbuilder-plus-icon-focus-color: color.adjust($filterbuilder-plus-icon-color, $alpha: 0.2) !default;
@@ -186,7 +182,6 @@ $filterbuilder-menu-icon-color: null !default;
   $filterbuilder-item-value-color: rgba(204, 204, 204, 0.8) !default;
   $filterbuilder-item-value-hover-color: color.adjust($filterbuilder-item-value-color, $alpha: -0.1) !default;
   $filterbuilder-item-value-focus-color: color.adjust($filterbuilder-item-value-color, $alpha: 0.2) !default;
-  $filterbuilder-menu-icon-color: $base-text-color !default;
 }
 
 @if $color == "greenmist" {
@@ -210,7 +205,6 @@ $filterbuilder-menu-icon-color: null !default;
   $filterbuilder-item-value-color: color.change($base-border-color, $alpha: 0.5) !default;
   $filterbuilder-item-value-hover-color: $filterbuilder-item-value-color !default;
   $filterbuilder-item-value-focus-color: color.adjust($filterbuilder-item-value-color, $alpha: 0.7) !default;
-  $filterbuilder-menu-icon-color: $base-text-color !default;
 }
 
 @if $color == "light" {
@@ -234,7 +228,6 @@ $filterbuilder-menu-icon-color: null !default;
   $filterbuilder-item-value-color: color.change($base-border-color, $alpha: 0.5) !default;
   $filterbuilder-item-value-hover-color: $filterbuilder-item-value-color !default;
   $filterbuilder-item-value-focus-color: color.adjust($filterbuilder-item-value-color, $alpha: 0.7) !default;
-  $filterbuilder-menu-icon-color: $base-text-color !default;
 }
 
 @if $color == "softblue" {
@@ -258,5 +251,4 @@ $filterbuilder-menu-icon-color: null !default;
   $filterbuilder-item-value-color: color.change($base-border-color, $alpha: 0.5) !default;
   $filterbuilder-item-value-hover-color: $filterbuilder-item-value-color !default;
   $filterbuilder-item-value-focus-color: color.adjust($filterbuilder-item-value-color, $alpha: 0.7) !default;
-  $filterbuilder-menu-icon-color: $base-text-color !default;
 }

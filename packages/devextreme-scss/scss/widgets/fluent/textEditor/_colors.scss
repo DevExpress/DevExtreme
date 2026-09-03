@@ -90,17 +90,17 @@ $texteditor-label-transition:
   top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 @if $mode == "light" {
+  $texteditor-outlined-bg: $base-element-bg !default;
+
   @if $color == "blue" {
     $texteditor-color: $base-text-color !default;
     $texteditor-placeholder-color: color.adjust($base-text-color, $lightness: 29.80%, $space: hsl) !default;
-    $texteditor-outlined-bg: $base-element-bg !default;
     $texteditor-filled-bg: color.adjust($base-element-bg, $lightness: -3.9%, $space: hsl) !default;
   }
 
   @if $color == "saas" {
     $texteditor-color: rgba(66, 81, 118, 1) !default;
     $texteditor-placeholder-color: rgba(144, 158, 192, 1) !default;
-    $texteditor-outlined-bg: $base-element-bg !default;
     $texteditor-filled-bg: rgba(243, 245, 248, 1) !default;
   }
 

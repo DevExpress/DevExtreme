@@ -15,7 +15,7 @@ $material-grid-base-grouppanel-item-margin: null !default;
 $material-grid-base-command-edit-column-width: null !default;
 $material-grid-base-command-edit-column-with-icons-width: null !default;
 $material-grid-base-adaptive-column-height: null !default;
-$material-grid-base-treeview-search-margin: null !default;
+$material-grid-base-treeview-search-margin: 10px !default;
 $material-grid-base-nodata-font-size: null !default;
 $material-command-edit-icon-size: null !default;
 $material-filter-row-between-editor-padding: null !default;
@@ -51,7 +51,6 @@ $material-grid-base-ai-prompt-editor-progressbar-height: 4px !default;
   $material-grid-base-command-edit-column-width: 115px !default;
   $material-grid-base-command-edit-column-with-icons-width: 93px !default;
   $material-grid-base-adaptive-column-height: 40px !default;
-  $material-grid-base-treeview-search-margin: 10px !default;
   $material-grid-base-nodata-font-size: 17px !default;
   $material-command-edit-icon-size: 18px !default;
 
@@ -83,7 +82,6 @@ $material-grid-base-ai-prompt-editor-progressbar-height: 4px !default;
   $material-grid-base-command-edit-column-width: 105px !default;
   $material-grid-base-command-edit-column-with-icons-width: 80px !default;
   $material-grid-base-adaptive-column-height: 26px !default;
-  $material-grid-base-treeview-search-margin: 10px !default;
   $material-grid-base-nodata-font-size: 14px !default;
   $material-command-edit-icon-size: 16px !default;
 

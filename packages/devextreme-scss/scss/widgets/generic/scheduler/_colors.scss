@@ -67,7 +67,6 @@ $scheduler-dd-appointment-hover-text-color: null !default;
 $scheduler-form-icon-color: $base-icon-color !default;
 $scheduler-workspace-month-text-color: null !default;
 $scheduler-dropdown-appointment-date-color: null !default;
-$scheduler-workspace-active-cell-color: null !default;
 $scheduler-workspace-hovered-cell-color: null !default;
 $scheduler-group-header-color: null !default;
 $scheduler-header-bg: null !default;
@@ -92,7 +91,7 @@ $month-text-color-dark: #9c9c9c;
 $agenda-appointment-recurrence-icon-color: null !default;
 $agenda-appointment-hover-bg: $base-hover-bg !default;
 $agenda-appointment-active-bg: null !default;
-$agenda-appointment-text-color: null !default;
+$agenda-appointment-text-color: $base-text-color !default;
 
 @if $color == "carmine" {
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
@@ -112,7 +111,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
   $scheduler-workspace-month-text-color: $month-text-color-light !default;
   $scheduler-dropdown-appointment-date-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
-  $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
   $scheduler-header-bg: color.adjust($base-bg, $lightness: -4%, $space: hsl) !default;
@@ -129,7 +127,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
 
   $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
-  $agenda-appointment-text-color: $base-text-color !default;
   $agenda-appointment-active-bg: color.change($base-accent, $alpha: 0.15) !default;
 }
 
@@ -149,7 +146,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-workspace-focused-cell-color: color.adjust($base-accent, $lightness: 5%, $space: hsl) !default;
   $scheduler-panel-text-color: $base-text-color !default;
   $scheduler-dropdown-appointment-date-color: $base-text-color !default;
-  $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: extcolor.difference(#fff, $base-text-color) !default;
   $scheduler-group-header-color: $base-text-color !default;
   $scheduler-header-bg: $base-bg !default;
@@ -167,7 +163,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-appointment-overlay-bg: $base-inverted-bg !default;
 
   $agenda-appointment-recurrence-icon-color: $base-text-color !default;
-  $agenda-appointment-text-color: $base-text-color !default;
   $agenda-appointment-active-bg: $base-accent !default;
 }
 
@@ -189,7 +184,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
   $scheduler-workspace-month-text-color: $month-text-color-dark !default;
   $scheduler-dropdown-appointment-date-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
-  $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
   $scheduler-header-bg: $base-hover-bg !default;
@@ -206,7 +200,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
 
   $agenda-appointment-recurrence-icon-color: $base-text-color !default;
-  $agenda-appointment-text-color: $base-text-color !default;
   $agenda-appointment-active-bg: color.change(#fff, $alpha: 0.15) !default;
 }
 
@@ -230,7 +223,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-dd-appointment-hover-text-color: #fff !default;
   $scheduler-workspace-month-text-color: $month-text-color-dark !default;
   $scheduler-dropdown-appointment-date-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
-  $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
   $scheduler-header-bg: $base-hover-bg !default;
@@ -247,7 +239,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
 
   $agenda-appointment-recurrence-icon-color: $base-text-color !default;
-  $agenda-appointment-text-color: $base-text-color !default;
   $agenda-appointment-active-bg: color.change(#000, $alpha: 0.15) !default;
 }
 
@@ -269,7 +260,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-dd-appointment-hover-text-color: $base-text-color !default;
   $scheduler-workspace-month-text-color: $month-text-color-dark !default;
   $scheduler-dropdown-appointment-date-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
-  $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
   $scheduler-header-bg: $base-hover-bg !default;
@@ -286,7 +276,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
 
   $agenda-appointment-recurrence-icon-color: $base-text-color !default;
-  $agenda-appointment-text-color: $base-text-color !default;
   $agenda-appointment-active-bg: color.change(#9e9ec5, $alpha: 0.35) !default;
 }
 
@@ -309,7 +298,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-workspace-month-text-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
   $scheduler-dropdown-appointment-date-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
   $scheduler-time-panel-background-color: $scheduler-workspace-background-color !default;
-  $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
   $scheduler-header-bg: $base-hover-bg !default;
@@ -326,7 +314,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
 
   $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
-  $agenda-appointment-text-color: $base-text-color !default;
   $agenda-appointment-active-bg: color.change(#000, $alpha: 0.15) !default;
 }
 
@@ -349,7 +336,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
   $scheduler-workspace-month-text-color: $month-text-color-light !default;
   $scheduler-dropdown-appointment-date-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
-  $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
   $scheduler-alldaypanel-bg: $base-element-bg !default;
@@ -365,7 +351,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
 
   $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
-  $agenda-appointment-text-color: $base-text-color !default;
   $agenda-appointment-active-bg: color.change(#000, $alpha: 0.08) !default;
 }
 
@@ -387,7 +372,6 @@ $agenda-appointment-text-color: null !default;
   $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
   $scheduler-workspace-month-text-color: $month-text-color-light !default;
   $scheduler-dropdown-appointment-date-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
-  $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
   $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
   $scheduler-group-header-color: $scheduler-panel-text-color !default;
   $scheduler-header-bg: $base-hover-bg !default;
@@ -404,8 +388,9 @@ $agenda-appointment-text-color: null !default;
   $scheduler-appointment-overlay-bg: $base-bg !default;
 
   $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
-  $agenda-appointment-text-color: $base-text-color !default;
   $agenda-appointment-active-bg: color.change(#000, $alpha: 0.08) !default;
 }
+
+$scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
 
 $scheduler-appointment-active-color: $scheduler-appointment-start-color;
