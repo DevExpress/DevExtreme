@@ -371,6 +371,19 @@ QUnit.module('option changed', {
     });
 });
 
+QUnit.module('aria accessibility', () => {
+    QUnit.test('the item wrapper is not marked as disabled', function(assert) {
+        const $buttonGroup = $('#buttonGroup').dxButtonGroup({
+            items: [{ text: 'button 1' }, { text: 'button 2' }],
+            disabled: true,
+        });
+
+        assert.strictEqual($buttonGroup.attr('aria-disabled'), 'true', 'group root is marked');
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_GROUP_CLASS}-wrapper`).attr('aria-disabled'), undefined, 'item wrapper is not marked');
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CLASS}`).first().attr('aria-disabled'), 'true', 'button is marked');
+    });
+});
+
 QUnit.module('Events', () => {
     class ButtonGroupEventsTestHelper {
         constructor(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled) {

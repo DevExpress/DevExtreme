@@ -8,6 +8,7 @@ import {
   beforeTest,
   createDataGrid,
   flushAsync,
+  GRID_CONTAINER_ID,
 } from '../../__tests__/__mock__/helpers/utils';
 
 describe('DataGrid editing', () => {
@@ -48,6 +49,30 @@ describe('DataGrid editing', () => {
     }];
   });
   afterEach(afterTest);
+
+  describe('Disabled command button', () => {
+    it('should expose the disabled state on the command link', async () => {
+      await createDataGrid({
+        dataSource,
+        keyExpr: 'ID',
+        columns: ['FirstName', {
+          type: 'buttons',
+          buttons: [
+            { text: 'Enabled', disabled: false },
+            { text: 'Disabled', disabled: true },
+          ],
+        }],
+      });
+      await flushAsync();
+
+      const links = document.querySelectorAll(`#${GRID_CONTAINER_ID} .dx-command-edit .dx-link`);
+
+      expect(links.length).toBe(dataSource.length * 2);
+      expect(links[0].getAttribute('aria-disabled')).toBe(null);
+      expect(links[1].getAttribute('aria-disabled')).toBe('true');
+      expect(links[1].classList.contains('dx-state-disabled')).toBe(true);
+    });
+  });
 
   // T1293181
   describe('Recovered (undeleted) row', () => {

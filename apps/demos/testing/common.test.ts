@@ -64,9 +64,6 @@ const getIgnoredRules = (testName) => {
 
   if ((isMaterial() || isFluent())
     && [
-      // False positive: contrast rules do not apply to disabled tags
-      'Accordion-Overview',
-      'TagBox-Overview',
       'TreeList-StatePersistence',
       // False positive: contrast rules do not apply to custom orange color
       'CardView-FieldTemplate',

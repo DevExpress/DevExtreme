@@ -2356,6 +2356,7 @@ class EditingControllerImpl extends modules.ViewController {
 
       if (this._isButtonDisabled(button, options)) {
         $button.addClass('dx-state-disabled');
+        this.setAria('disabled', 'true', $button);
       } else if (!button.template || button.onClick) {
         eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction((e) => {
           button.onClick?.call(button, extend({}, e, { row: options.row, column: options.column }));
