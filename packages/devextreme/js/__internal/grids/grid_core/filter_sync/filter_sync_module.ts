@@ -1,7 +1,8 @@
 import type { InternalGridOptions } from '@ts/grids/grid_core/m_types';
 
+import { filterSyncColumnHeadersViewExtender } from './extenders/filter_sync_column_headers_view';
 import { filterSyncDataControllerExtender } from './extenders/filter_sync_data_controller';
-import { columnHeadersView, FilterSyncController } from './m_filter_sync';
+import { FilterSyncController } from './m_filter_sync';
 
 export const filterSyncModule = {
   defaultOptions(): Pick<InternalGridOptions, 'filterValue' | 'filterSyncEnabled'> {
@@ -18,7 +19,7 @@ export const filterSyncModule = {
       data: filterSyncDataControllerExtender,
     },
     views: {
-      columnHeadersView,
+      columnHeadersView: filterSyncColumnHeadersViewExtender,
     },
   },
 };
