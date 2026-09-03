@@ -56,7 +56,7 @@ describe('selectionByIndexesCommand on TreeList — "allPages" scope', () => {
     jest.useRealTimers();
   });
 
-  it('resolves keys by walking the node tree (no loadAll pipeline crash)', async () => {
+  it('resolves keys by walking the node tree (no loadAllItems pipeline crash)', async () => {
     const instance = await createTreeList();
     const selectSpy = jest.spyOn(instance, 'selectRows').mockReturnValue(Promise.resolve([]) as never);
     const callbacks = createCallbacks();

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
-import type { Store } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import { applyBatch } from '@js/common/data/array_utils';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -12,12 +11,13 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import type { StoreKey } from '@ts/data/abstract_store';
-import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
+import type Store from '@ts/data/abstract_store';
+import type { DataSource } from '@ts/data/data_source/data_source';
+import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
-import type { CustomLoadOptions, CustomLoadResult } from './custom_loader';
 import { CustomLoader } from './custom_loader';
 import {
   calculateOperationTypes,
@@ -98,7 +98,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private changingHandlerProxy!: (e: ChangingEvent) => void;
 
-  private customLoader!: CustomLoader;
+  public customLoader!: CustomLoader;
 
   public init(dataSource?: DataSource): void {
     if (!dataSource) {
@@ -859,38 +859,11 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._hasLastPage || this._dataSource.totalCount() >= 0;
   }
 
-  protected loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<unknown> {
-    return this.customLoader.loadFromStore(loadOptions);
-  }
-
-  public isCustomLoading(): boolean {
-    return this.customLoader.isLoading();
-  }
-
-  protected isCustomLoadingAll(): boolean {
-    return this.customLoader.isLoadingAll();
-  }
-
   /**
    * @extended: virtual_scrolling
    */
-  public load(options?: CustomLoadOptions): DeferredObj<unknown> {
-    if (options) {
-      return this.customLoader.load(options);
-    }
-
+  public load(): DeferredObj<unknown> {
     return this._dataSource.load() as unknown as DeferredObj<unknown>;
-  }
-
-  public customLoadAll(): DeferredObj<CustomLoadResult> {
-    return this.customLoader.loadAll();
-  }
-
-  public customProcessLoadedData(
-    data: RawItemData[],
-    loadOptions: StoreLoadOptions,
-  ): DeferredObj<CustomLoadResult> {
-    return this.customLoader.processLoadedData(data, loadOptions);
   }
 
   /**

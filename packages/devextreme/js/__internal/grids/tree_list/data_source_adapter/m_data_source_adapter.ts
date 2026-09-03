@@ -1,4 +1,3 @@
-import type { Store } from '@js/common/data';
 import ArrayStore from '@js/common/data/array_store';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
 import query from '@js/common/data/query';
@@ -10,8 +9,10 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
+import type Store from '@ts/data/abstract_store';
 import type { ChangingEvent } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
+import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import { createDataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/provider';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -465,10 +466,12 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
     const loadBranchItemsDeferred = options.fullData
       ? new ArrayStore(options.fullData).load(loadOptions)
-      : this.loadFromStore(loadOptions);
+      : this.customLoader.loadFromStore(loadOptions);
 
     loadBranchItemsDeferred
-      .done((loadedData: any) => {
+      .done((loadResult: CustomLoadResult | unknown[]) => {
+        let loadedData = Array.isArray(loadResult) ? loadResult : loadResult.data;
+
         if (this._isOperationIdOutdated(options.operationId)) {
           d.reject();
           return;
@@ -479,6 +482,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
             // @ts-expect-error
             loadedData = query(loadedData).filter(filter).toArray();
           }
+
           this._loadParentsOrChildren(concatLoadedData(loadedData), options, needChildren).done(d.resolve).fail(d.reject);
         } else {
           d.resolve(data);
@@ -895,7 +899,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     const loadOptions = that._dataSource._createStoreLoadOptions();
     loadOptions.parentIds = keys;
 
-    that.load(loadOptions)
+    that.customLoader.load(loadOptions)
       .done(() => {
         if (!childrenOnly) {
           const childKeys = getChildKeys(that, keys);

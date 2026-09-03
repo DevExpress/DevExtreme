@@ -6978,9 +6978,9 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             filter: ['this', '>', 8]
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7019,12 +7019,12 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             filter: ['this', '>', '1'],
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7061,12 +7061,12 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             filter: ['this', '>', '5'],
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7103,9 +7103,9 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             group: function(data) { return data % 2; }
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7141,12 +7141,12 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
         this.loadingCount = 0;
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             filter: ['this', '>', '5'],
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7184,11 +7184,11 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
         this.loadingCount = 0;
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             group: 'this',
             skip: 0,
             take: 3
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7226,11 +7226,11 @@ QUnit.module('Custom Load', {
         this.loadingCount = 0;
         // act
 
-        dataSource.load({
+        dataSource.customLoader.load({
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7268,11 +7268,11 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
         this.loadingCount = 0;
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             group: [{ selector: 'this', groupInterval: 2 }],
             skip: 0,
             take: 3
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7296,11 +7296,11 @@ QUnit.module('Custom Load', {
 
         let customLoadData = false;
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             filter: ['this', '>=', '5'],
             group: 'this',
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7387,11 +7387,11 @@ QUnit.module('Custom Load', {
         this.loadingCount = 0;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             isLoadingAll: true,
             filter: ['this', '>', '5'],
             group: 'this'
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
@@ -7439,11 +7439,11 @@ QUnit.module('Custom Load', {
         let customLoadData = false;
 
         // act
-        dataSource.load({
+        dataSource.customLoader.load({
             group: 'this',
             skip: 2,
             take: 2
-        }).done(function(data) {
+        }).done(function({ data }) {
             customLoadData = data;
         });
 
