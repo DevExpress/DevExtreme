@@ -54,4 +54,14 @@ describe('Editing data controller row changes', () => {
     expect(change.rowIndices).toEqual([0]);
     expect(change.columnIndices).toEqual([undefined]);
   });
+
+  it('should report a cell whose modified mark appeared without a new value', async () => {
+    const change = await refreshRow(
+      dataRow(),
+      dataRow({ modified: true, modifiedValues: [undefined, 15] }),
+    );
+
+    expect(change.rowIndices).toEqual([0]);
+    expect(change.columnIndices).toEqual([[1]]);
+  });
 });
