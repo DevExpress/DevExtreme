@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import DxNumberBox from 'devextreme-vue/number-box';
 </script>
-<style scoped>
+<style>
   .dx-field {
     margin-bottom: 20px;
   }

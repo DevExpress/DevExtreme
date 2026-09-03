@@ -57,7 +57,6 @@ overrides:
   "tar@<7.5.19": "^7.5.19"
   "shell-quote@<=1.8.4": ^1.9.0
   "babel-traverse": "npm:@babel/traverse@^7.23.2"
-  "systemjs-builder>terser": 5.46.2
   "fast-uri@>=3.0.0 <3.1.5": "^3.1.5"
   "@hono/node-server@<2.0.12": "^2.0.12"
   "dompurify@<=3.4.12": "^3.4.13"
@@ -144,5 +143,3 @@ allowBuilds:
 
 patchedDependencies:
   testcafe-hammerhead@31.7.8: patches/testcafe-hammerhead@31.7.8.patch
-  systemjs-builder@0.16.15: patches/systemjs-builder@0.16.15.patch
-  babel-core@6.26.3: patches/babel-core@6.26.3.patch

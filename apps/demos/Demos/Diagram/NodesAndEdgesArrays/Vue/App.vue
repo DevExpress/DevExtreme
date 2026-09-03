@@ -40,7 +40,7 @@ const flowEdgesDataSource = new ArrayStore({
   data: service.getFlowEdges(),
 });
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 725px;
     }

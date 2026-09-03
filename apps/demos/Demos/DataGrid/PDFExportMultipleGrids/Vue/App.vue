@@ -152,7 +152,7 @@ const setAlternatingRowsBackground = (
 };
 </script>
 
-<style scoped>
+<style>
 #priceDataGrid,
 #ratingDataGrid {
   padding: 10px;

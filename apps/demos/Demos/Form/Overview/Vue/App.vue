@@ -111,7 +111,7 @@ const companySelectorLabelMode = computed(() => {
   return labelMode.value;
 });
 </script>
-<style scoped>
+<style>
 .widget-container {
   margin-right: 320px;
   padding: 20px;
