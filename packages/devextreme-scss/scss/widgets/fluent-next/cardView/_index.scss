@@ -2,6 +2,18 @@
 @use 'sizes';
 @use '../../base/cardView/index' as *;
 
+/* The header item being dragged keeps its resting look. What moves is what gets marked: the clone
+carries the sortable shadow and the insertion point carries the accent line, which is how pivotGrid
+does it here and how Blazor does it too - it lifts the dragged tab with a plain surface and an
+elevation shadow (tabs/layout.scss) and leaves the origin alone.
+
+dxSortable puts .dx-sortable-source on the item's CONTAINER, so the `opacity: 1` base already sets
+on the item cannot reach the 0.5 dim - it has to be cancelled where it is applied. Scoped to the
+header panel rather than switched off globally: every other sortable keeps the dim it has. */
+.dx-cardview-header-panel .dx-sortable-source {
+  opacity: 1;
+}
+
 // The widget-level disabled state was carried entirely by the blanket dim, so the component showed
 // nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 // The existing `…header-panel-item-*-disabled` names are not reused here: base applies those to

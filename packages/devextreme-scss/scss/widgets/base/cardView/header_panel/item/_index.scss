@@ -57,33 +57,24 @@
     outline-offset: -2px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
   }
 
-  /* The element being dragged is ordinary, active content, not a disabled one: the parameters are
-  named after the state they mark, and the colours a theme feeds them have to keep the content
-  readable - Blazor marks a drag source and leaves the content alone
-  (ds-themes/components/tabs/layout.scss).
-
-  Both selectors are needed: dxSortable puts dx-sortable-source on the item's container here, and
-  matching only the item left the component's own opt-out from the generic .dx-sortable-source dim
-  (0.5) inert - the header text measured 3.33 against its own background. */
-  &.dx-sortable-source,
-  .dx-sortable-source > & {
+  &.dx-sortable-source {
     opacity: 1.0;
-    background-color: $cardview-header-panel__item--drag-source-bg-color;
-    border-color: $cardview-header-panel__item--drag-source-border-color;
-    color: $cardview-header-panel__item--drag-source-text-color;
-    font-weight: $cardview-header-panel__item--drag-source-text-weight;
+    background-color: $cardview-header-panel__item--disabled-bg-color;
+    border-color: $cardview-header-panel__item--disabled-border-color;
+    color: $cardview-header-panel__item--disabled-text-color;
+    font-weight: $cardview-header-panel__item--disabled-text-weight;
 
     .dx-icon {
-      color: $cardview-header-panel__item--drag-source__icon-color;
+      color: $cardview-header-panel__item--disabled__icon-color;
     }
 
     .dx-header-filter-icon--selected {
-      color: $cardview-header-panel__item--drag-source__header-filter-icon--selected-color;
+      color: $cardview-header-panel__item--disabled__header-filter-icon--selected-color;
     }
 
     .dx-cardview-header-item-sorting-order {
-      color: $cardview-header-panel__item--drag-source__sort-index-text-color;
-      font-weight: $cardview-header-panel__item--drag-source__sort-index-text-weight;
+      color: $cardview-header-panel__item--disabled__sort-index-text-color;
+      font-weight: $cardview-header-panel__item--disabled__sort-index-text-weight;
     }
   }
 

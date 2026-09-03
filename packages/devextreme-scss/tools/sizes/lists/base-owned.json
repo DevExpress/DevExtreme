@@ -658,7 +658,7 @@
     },
     {
       "file": "scss/widgets/base/cardView/header_panel/item/_index.scss",
-      "line": 98,
+      "line": 89,
       "widget": "cardView",
       "literals": [
         "1px",
@@ -671,7 +671,7 @@
     },
     {
       "file": "scss/widgets/base/cardView/header_panel/item/_index.scss",
-      "line": 99,
+      "line": 90,
       "widget": "cardView",
       "literals": [
         "6px",
