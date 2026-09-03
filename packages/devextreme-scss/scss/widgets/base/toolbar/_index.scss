@@ -21,6 +21,10 @@
       flex: 0 1 auto;
     }
   }
+
+  &.dx-state-disabled {
+    opacity: 1;
+  }
 }
 
 .dx-toolbar .dx-button .dx-icon {
