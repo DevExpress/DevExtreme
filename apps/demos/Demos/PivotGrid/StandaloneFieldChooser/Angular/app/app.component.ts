@@ -24,7 +24,6 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
-  // Avoids NG8023: DxPivotGridModule's texts submodule collides with DxPivotGridFieldChooserModule's under AOT.
   imports: [
     DxPivotGridComponent,
     DxoPivotGridFieldChooserModule,
