@@ -136,8 +136,9 @@ export const groupingDataControllerExtender = (
   }
 
   protected adjustInsertRowIndex(visibleRowIndex: number): number {
-    return super.adjustInsertRowIndex(visibleRowIndex)
-      + countRowsBefore(this.getVisibleRows(), visibleRowIndex, 'group');
+    const groupRowCount = countRowsBefore(this.getVisibleRows(), visibleRowIndex, 'group');
+
+    return super.adjustInsertRowIndex(visibleRowIndex) + groupRowCount;
   }
 
   protected getChangedColumnIndices(

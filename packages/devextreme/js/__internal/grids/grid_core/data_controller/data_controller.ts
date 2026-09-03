@@ -998,7 +998,9 @@ export class DataController extends modules.Controller {
     if (oldItem.rowType !== newItem.rowType) {
       return undefined;
     }
-
+    // The detail type is not owned by a single module: Master-Detail creates these rows,
+    // while form-based editing reuses the same type for its edit row. Therefore, the check
+    // remains in the base module for now.
     if (newItem.rowType === 'detail') {
       return [];
     }
