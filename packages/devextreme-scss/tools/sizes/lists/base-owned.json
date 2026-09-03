@@ -1605,7 +1605,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
-      "line": 147,
+      "line": 152,
       "widget": "scheduler",
       "literals": [
         "-1px"

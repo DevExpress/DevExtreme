@@ -28,7 +28,7 @@
   --dx-scheduler-agenda-appointment-title-font-size: #{$scheduler-agenda-appointment-title-font-size};
   --dx-scheduler-agenda-date-table-padding-block-start: #{$scheduler-agenda-date-table-padding-block-start};
   --dx-scheduler-agenda-details-font-size: #{$scheduler-agenda-details-font-size};
-  --dx-scheduler-agenda-details-opacity: #{$scheduler-agenda-details-opacity};
+  --dx-scheduler-agenda-details-content: #{$scheduler-agenda-details-content};
   --dx-scheduler-agenda-left-column-width: #{$scheduler-agenda-left-column-width};
   --dx-scheduler-agenda-time-panel-cell-padding: #{$scheduler-agenda-time-panel-cell-padding};
   --dx-scheduler-agenda-title-font-weight: #{$scheduler-agenda-title-font-weight};
@@ -65,7 +65,7 @@
   --dx-scheduler-appointment-content-focused: var(--dx-scheduler-appointment-content);
   --dx-scheduler-appointment-content-padding-inline-end: #{$scheduler-appointment-content-padding-inline-end};
   --dx-scheduler-appointment-content-rtl-padding: #{$scheduler-appointment-content-rtl-padding};
-  --dx-scheduler-appointment-date-opacity: #{$scheduler-appointment-date-opacity};
+  --dx-scheduler-appointment-date-content: #{$scheduler-appointment-date-content};
   --dx-scheduler-appointment-details-font-size: #{$scheduler-appointment-details-font-size};
   --dx-scheduler-appointment-drag-source-opacity: #{$scheduler-appointment-drag-source-opacity};
   --dx-scheduler-appointment-dragging-shadow: #{$scheduler-appointment-dragging-shadow};

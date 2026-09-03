@@ -74,13 +74,13 @@
   $scheduler-views-vertical-group-min-height: var(--dx-scheduler-views-vertical-group-min-height),
   $scheduler-tooltip-shadow: var(--dx-scheduler-tooltip-shadow),
   $scheduler-appointment-icon-font-size: var(--dx-scheduler-appointment-icon-font-size),
-  $scheduler-appointment-date-opacity: var(--dx-scheduler-appointment-date-opacity),
   $scheduler-appointment-resizing-opacity: var(--dx-scheduler-appointment-resizing-opacity),
+  $scheduler-appointment-date-opacity: false,
+  $agenda-appointment-details-opacity: false,
   $scheduler-appointment-disabled-opacity: var(--dx-scheduler-appointment-opacity-disabled),
   $scheduler-appointment-drag-source-opacity: var(--dx-scheduler-appointment-drag-source-opacity),
   $agenda-appointment-title-font-weight: var(--dx-scheduler-agenda-title-font-weight),
   $agenda-appointment-details-font-size: var(--dx-scheduler-agenda-details-font-size),
-  $agenda-appointment-details-opacity: var(--dx-scheduler-agenda-details-opacity),
   $scheduler-appointment-dragging-shadow: var(--dx-scheduler-appointment-dragging-shadow),
   $scheduler-tooltip-appointment-text-color: var(--dx-scheduler-tooltip-appointment-content),
   $scheduler-appointment-overlay-bg: var(--dx-scheduler-appointment-overlay-bg),
@@ -1121,7 +1121,10 @@
   .dx-scheduler-header-panel,
   .dx-scheduler-time-panel,
   .dx-scheduler-all-day-title,
-  .dx-scheduler-work-space {
+  .dx-scheduler-work-space,
+  /* Both now paint their own subtle colour, so they no longer inherit this one */
+  .dx-scheduler-appointment-content-date,
+  .dx-scheduler-appointment-content-details {
     color: var(--dx-scheduler-content-disabled);
   }
 
@@ -1145,6 +1148,19 @@ defines rather than a second colour, which keeps the title readable against its 
 .dx-scheduler.dx-state-disabled .dx-scheduler-appointment,
 .dx-state-disabled .dx-scheduler .dx-scheduler-appointment {
   opacity: var(--dx-scheduler-appointment-opacity-disabled);
+}
+
+/* The date under an appointment's subject, and the details line in the agenda view, are the same
+kind of secondary text as the tooltip's date below - and were the same 70% of the content colour.
+The appointment paints its own text with a fixed role whatever the resource colour behind it, so
+the subtle role is the consistent answer here too, and it does not drag the recurrence icon with
+it the way the element's opacity did. */
+.dx-scheduler-appointment-content-date {
+  color: var(--dx-scheduler-appointment-date-content);
+}
+
+.dx-scheduler-agenda .dx-scheduler-appointment-content-details {
+  color: var(--dx-scheduler-agenda-details-content);
 }
 
 /* The tooltip's date line is secondary text and takes the subtle content role; it used to be the

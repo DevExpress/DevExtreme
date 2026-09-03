@@ -80,7 +80,10 @@ $agenda-rtl-margin-right: null !default;
   .dx-scheduler-appointment-content-details {
     display: flex;
     font-size: $details-font-size;
-    opacity: $details-opacity;
+
+    @if $details-opacity {
+      opacity: $details-opacity;
+    }
   }
 
   .dx-scheduler-appointment-content-allday {

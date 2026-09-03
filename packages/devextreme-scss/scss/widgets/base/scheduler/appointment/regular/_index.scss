@@ -86,7 +86,12 @@ $appointment-reduced-icon-rtl-left: null !default;
 }
 
 .dx-scheduler-appointment-content-date {
-  opacity: $appointment-date-opacity;
+  /* Guarded so a theme can pass false: the date is secondary text, and a theme with a role for
+  that paints the role instead of dimming the element and its icons with it. */
+  @if $appointment-date-opacity {
+    opacity: $appointment-date-opacity;
+  }
+
   display: inline-block;
   white-space: pre-wrap;
 }
