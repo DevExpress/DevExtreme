@@ -2,7 +2,6 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-load-indicator-offset: #{$load-indicator-offset};
   --dx-load-indicator-segment-border: #{$load-indicator-segment-border};
   --dx-load-indicator-segment-border-width: #{$load-indicator-segment-border-width};
   --dx-load-indicator-segment-inner-border: #{$load-indicator-segment-inner-border};

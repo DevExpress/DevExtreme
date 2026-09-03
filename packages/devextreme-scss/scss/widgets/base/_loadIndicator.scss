@@ -5,23 +5,6 @@
 $loadindicator-width: 32px !default;
 $loadindicator-height: 32px !default;
 
-/*
- * The container centres the indicator by pulling it back half its own size. A theme that feeds a
- * var() into the sizes above leaves Sass nothing to halve, so the halves are knobs of their own: the
- * theme passes one derived token instead of four calc() expressions reaching the browser. The
- * defaults compute at build time and keep every other theme byte-identical.
- */
-$loadindicator-offset-top: if(
-  meta.type-of($loadindicator-height) == number,
-  math.div(-$loadindicator-height, 2),
-  calc(#{$loadindicator-height} / -2)
-) !default;
-$loadindicator-offset-left: if(
-  meta.type-of($loadindicator-width) == number,
-  math.div(-$loadindicator-width, 2),
-  calc(#{$loadindicator-width} / -2)
-) !default;
-
 .dx-loadindicator {
   width: $loadindicator-width;
   height: $loadindicator-height;
@@ -68,13 +51,13 @@ $loadindicator-offset-left: if(
     top: 50%;
     left: 50%;
     position: absolute;
-    margin-top: $loadindicator-offset-top;
-    margin-left: $loadindicator-offset-left;
 
-    &.dx-loadindicator {
-      margin-top: $loadindicator-offset-top;
-      margin-left: $loadindicator-offset-left;
-    }
+    /*
+     * Centred with translate rather than negative half-size margins: nothing has to halve the
+     * size, so it can be a token, and a consumer's own margin can no longer knock the indicator
+     * off centre — which is what the duplicated .dx-loadindicator specificity bump guarded.
+     */
+    transform: translate(-50%, -50%);
   }
 }
 

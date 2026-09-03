@@ -27,9 +27,10 @@
  * this is the first load of that module in the graph: the theme's gridBase is used before
  * base/dataGrid and base/treeList, which are what pull base/gridBase in.
  *
- * Only the four whose value the theme already wins on are passed: measured in the browser, the
- * rendered min-width of the command columns is the theme's (50px / 115px / 93px) and the filter
- * row input padding is the theme's 40px, so the base literals below them never reach the page.
+ * Every size the shared layer used to pin is passed from here. Where the theme already won the
+ * cascade the wiring is visually neutral by construction; where it did not, the token carries the
+ * value the layer used to hold, so nothing moves either way. Both were measured in the browser
+ * against the previous build, not assumed — see .claude/measure/.
  */
 @use "../../base/gridBase/variables" as baseGridVariables with (
   $grid-texteditor-input-padding: var(--dx-grid-editor-input-padding),

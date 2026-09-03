@@ -3,9 +3,10 @@
  * set from a theme, or classified with a marker saying why it stays.
  *
  * The layer is compiled once per bundle, so a number written into it reaches generic, material,
- * fluent and fluent-next at the same time. That makes it the opposite of the theme, where the bar is
- * zero unmarked (tests/fluent-next-size-markers.test.ts): 444 places cannot be classified in one
- * commit, and the layer belongs to the base owners, so this is a RATCHET. The counts are compared
+ * fluent and fluent-next at the same time. 444 places could not be classified in one commit, so
+ * this is a RATCHET rather than a flat "zero unmarked" like the theme gate
+ * (tests/fluent-next-size-markers.test.ts). The ratchet has since reached zero, which means it now
+ * behaves like that flat bar: any new unmarked place fails the gate. The counts are compared
  * against tests/base-size-markers.baseline.json and must only ever shrink. Regenerate it
  * deliberately, as part of a batch, with:
  *
@@ -69,6 +70,25 @@ test('the inventory accounts for every px literal in the layer', () => {
     0,
   );
   expect(summary.settable.occurrences + summary.owned.occurrences + summary.comments).toBe(raw);
+});
+
+test('the generated inventory lists are not stale', () => {
+  /*
+   * inventory.mjs writes base-owned.json and theme-settable.json, which people read instead of
+   * running the tool — the numbers in a batch report come from there. Nothing regenerated them
+   * automatically, so a batch that changed the layer and forgot to rerun the tool left them
+   * describing the previous state. --check reruns the scan and exits 1 when the files on disk
+   * disagree with it; the fix is `node tools/sizes/inventory.mjs`.
+   */
+  let failure: string | null = null;
+
+  try {
+    execFileSync(process.execPath, [tool, '--check'], { encoding: 'utf8', cwd: packageRoot, stdio: 'pipe' });
+  } catch {
+    failure = 'tools/sizes/lists/* are out of date — run: node tools/sizes/inventory.mjs';
+  }
+
+  expect(failure).toBeNull();
 });
 
 test('no marker name is a substring of a custom property name used in the layer', () => {

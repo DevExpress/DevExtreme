@@ -521,7 +521,7 @@ $table-resizer-highlight-thickness: 3px !default;
       position: absolute;
       width: $resize-handle-size;
       height: $resize-handle-size;
-      border: 1px solid white; // dx-line-width: hairline around a resize handle // dx-line-width: hairline around a resize handle
+      border: 1px solid white; // dx-line-width: hairline around a resize handle
 
       @at-root #{selector.append(".dx-touch-device", &)} {
         width: $touch-resize-handle-size;

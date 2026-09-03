@@ -3,8 +3,6 @@
 @use "../../base/loadIndicator" as baseLoadIndicator with (
   $loadindicator-width: var(--dx-load-indicator-size),
   $loadindicator-height: var(--dx-load-indicator-size),
-  $loadindicator-offset-top: var(--dx-load-indicator-offset),
-  $loadindicator-offset-left: var(--dx-load-indicator-offset),
 );
 
 .dx-loadindicator {

@@ -2288,7 +2288,7 @@
     },
     {
       "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 7,
+      "line": 5,
       "widget": "colorBox",
       "literals": [
         "40px"
@@ -2304,7 +2304,7 @@
     },
     {
       "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 10,
+      "line": 8,
       "widget": "colorBox",
       "literals": [
         "15px"
@@ -2320,7 +2320,7 @@
     },
     {
       "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 11,
+      "line": 9,
       "widget": "colorBox",
       "literals": [
         "15px"
@@ -2336,7 +2336,7 @@
     },
     {
       "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 12,
+      "line": 10,
       "widget": "colorBox",
       "literals": [
         "14px"
@@ -2352,7 +2352,7 @@
     },
     {
       "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 20,
+      "line": 12,
       "widget": "colorBox",
       "literals": [
         "20px"
@@ -2368,7 +2368,7 @@
     },
     {
       "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 21,
+      "line": 13,
       "widget": "colorBox",
       "literals": [
         "10px"

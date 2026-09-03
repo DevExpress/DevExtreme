@@ -263,69 +263,6 @@ const ownedJson = (owned) => ({
   places: owned,
 });
 
-const agenda = (settable, owned, comments) => {
-  // The agenda is a to-do list: a place that already carries a marker is a decision, not an item.
-  const backlog = owned.filter((row) => !row.marker);
-  const byWidget = descending(tally(backlog, 'widget'));
-  const categories = Object.keys(descending(tally(backlog, 'category')));
-  const lines = [
-    '# Fixed sizes in the shared layer',
-    '',
-    `_${GENERATED}_`,
-    '',
-    'The layer `scss/widgets/base/**` is compiled once per bundle, so a size written into it reaches',
-    'generic, material, fluent and fluent-next at the same time. This is the agenda for the base',
-    'owners: for every number below, either the theme gets a knob, or the number is agreed to stay',
-    'and carries a marker saying why.',
-    '',
-    '## Totals',
-    '',
-    '| | occurrences |',
-    '|---|---|',
-    `| a raw grep of the layer | ${sum(settable) + sum(owned) + comments} |`,
-    `| …of those, inside comments (commented-out code, prose) | ${comments} |`,
-    `| **in code** | **${sum(settable) + sum(owned)}** |`,
-    `| — the theme can already set from outside | ${sum(settable)} |`,
-    `| — nailed into the shared layer | ${sum(owned)} |`,
-    '',
-    '## What the theme can already set',
-    '',
-    `${sum(settable)} occurrences in ${new Set(settable.map((row) => row.variable)).size} \`!default\` variables. `
-    + `fluent-next already passes ${sum(settable.filter((row) => row.status === 'injected'))}; `
-    + `${sum(settable.filter((row) => row.status === 'open'))} are open knobs nobody turns.`,
-    '',
-    ...(settable.some((row) => row.status === 'open') ? [
-      'Open knobs — theme-side work, the shared layer stays untouched:',
-      '',
-      ...settable.filter((row) => row.status === 'open')
-        .map((row) => `- \`$${row.variable}\` — ${row.file}:${row.line}`),
-      '',
-    ] : []),
-    '## What is nailed into the layer',
-    '',
-    `| widget | ${categories.join(' | ')} | total |`,
-    `|---|${categories.map(() => '---').join('|')}|---|`,
-    ...Object.keys(byWidget).map((widget) => {
-  const rows = backlog.filter((row) => row.widget === widget);
-      const counts = categories.map((category) => sum(rows.filter((row) => row.category === category)) || '');
-      return `| ${widget} | ${counts.join(' | ')} | **${byWidget[widget]}** |`;
-    }),
-    '',
-    '## Places, by widget',
-    '',
-  ];
-
-  Object.keys(byWidget).forEach((widget) => {
-    lines.push(`### ${widget} — ${byWidget[widget]}`, '');
-    backlog.filter((row) => row.widget === widget).forEach((row) => {
-      lines.push(`- \`${row.file}:${row.line}\` · ${row.category}`, `  \`${row.text}\``);
-    });
-    lines.push('');
-  });
-
-  return `${lines.join('\n')}`;
-};
-
 /* --------------------------------------------------------------------- output */
 
 /* The raw grep counts px inside comments too; the scan does not. Report the gap instead of hiding it. */
@@ -360,7 +297,6 @@ export const inventory = () => {
     artefacts: [
       ['theme-settable.json', `${JSON.stringify(settableJson(settable), null, 2)}\n`],
       ['base-owned.json', `${JSON.stringify(ownedJson(owned), null, 2)}\n`],
-      ['BASE-SIZES.md', agenda(settable, owned, comments)],
     ],
   };
 };

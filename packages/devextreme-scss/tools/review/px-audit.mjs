@@ -11,9 +11,9 @@
  * exists. The marker is the only channel to the scales card, not decoration.
  *
  * The shared layer scss/widgets/base/** is scanned by tests/base-size-markers.test.ts, which points
- * --root at it and compares against a baseline: 444 places cannot be classified in one commit, and
- * the layer belongs to the base owners, so there the count ratchets down instead of having to be
- * zero. The default run stays the theme, where the bar is zero unmarked.
+ * --root at it and compares against a baseline: 444 places could not be classified in one commit,
+ * so there the count ratchets down instead of having to be zero. The ratchet has since reached
+ * zero, so in practice both roots now hold the same bar. The default run stays the theme.
  *
  * Deliberately out of scope: em/% values — those carry the dx-relative marker but have no gate of
  * their own.

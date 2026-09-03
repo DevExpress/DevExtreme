@@ -121,16 +121,6 @@
       "scale": "spacing"
     },
     {
-      "id": "shared",
-      "marker": "dx-base-shared",
-      "source": "sources",
-      "title": "J. Sizes owned by the shared layer",
-      "question": "does the theme get a knob, or does the number stay shared",
-      "literals": "px",
-      "why": "A value in scss/widgets/base/** that every theme compiles. The marker is the record of a decision by the base owners: the number is the same for generic, material, fluent and fluent-next, and opening a knob for one theme would buy nothing. Base-layer marker: in the theme itself there is no shared layer to own a value, so a theme literal marked this way is a mistake.",
-      "scale": "spacing"
-    },
-    {
       "id": "structural",
       "marker": "dx-structural",
       "source": "sources",

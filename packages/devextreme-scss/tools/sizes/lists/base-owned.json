@@ -252,12 +252,12 @@
       ],
       "occurrences": 1,
       "marker": "dx-line-width",
-      "text": "border: 1px solid white; // dx-line-width: hairline around a resize handle // dx-line-width: hairline around a resize handle",
+      "text": "border: 1px solid white; // dx-line-width: hairline around a resize handle",
       "category": "geometry"
     },
     {
       "file": "scss/widgets/base/_icon_fonts.scss",
-      "line": 307,
+      "line": 313,
       "widget": "icon_fonts",
       "literals": [
         "14px"
@@ -269,7 +269,7 @@
     },
     {
       "file": "scss/widgets/base/_icon_fonts.scss",
-      "line": 675,
+      "line": 681,
       "widget": "icon_fonts",
       "literals": [
         "14px"
@@ -684,7 +684,7 @@
     },
     {
       "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 31,
+      "line": 23,
       "widget": "colorBox",
       "literals": [
         "25px"

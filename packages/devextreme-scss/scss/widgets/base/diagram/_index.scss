@@ -324,16 +324,11 @@ $diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
 
 .dx-diagram-loading-indicator {
   position: absolute;
-  top: if(
-    meta.type-of($diagram-loading-indicator-height) == number,
-    calc(50% - #{math.div($diagram-loading-indicator-height, 2)}),
-    calc(50% - #{$diagram-loading-indicator-height} / 2)
-  );
-  left: if(
-    meta.type-of($diagram-loading-indicator-width) == number,
-    calc(50% - #{math.div($diagram-loading-indicator-width, 2)}),
-    calc(50% - #{$diagram-loading-indicator-width} / 2)
-  );
+  top: 50%;
+  left: 50%;
+
+  // centred with translate, so neither side has to be halved at build time
+  transform: translate(-50%, -50%);
   width: $diagram-loading-indicator-width;
   height: $diagram-loading-indicator-height;
 }
