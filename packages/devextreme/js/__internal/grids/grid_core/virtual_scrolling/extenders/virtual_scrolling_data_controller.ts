@@ -51,6 +51,8 @@ import {
 
 export interface VirtualScrollingDataControllerExtension {
   virtualItemsCount: () => VirtualItemsCount | undefined;
+  // TODO public controller
+  _rowsScrollController?: VirtualScrollController | null;
 }
 
 export const virtualScrollingDataControllerExtender = (
@@ -59,6 +61,9 @@ export const virtualScrollingDataControllerExtender = (
   DataController & VirtualScrollingDataControllerExtension
 > => class VirtualScrollingDataControllerExtender extends Base {
   public declare _dataSource?: VirtualScrollingDataSourceAdapter | null;
+
+  // TODO public controller
+  public _rowsScrollController?: VirtualScrollController | null;
 
   private _loadViewportParams: any;
 

@@ -17,6 +17,7 @@ import core from '../m_modules';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
+import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
 import { UiGridCoreFocusUtils } from './m_focus_utils';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
@@ -33,7 +34,8 @@ export class FocusController extends core.ViewController {
     return this.getController('keyboardNavigation');
   }
 
-  private getDataController(): DataController {
+  private getDataController(): DataController
+  & Partial<VirtualScrollingDataControllerExtension> {
     return this.getController('data');
   }
 
@@ -565,13 +567,20 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
 };
 
 const focusDataControllerExtender = (
-  Base: ModuleType<DataController>,
+  Base: ModuleType<DataController & Partial<VirtualScrollingDataControllerExtension>>,
 ) => class FocusDataControllerExtender extends Base {
   private _isDataPushed = false;
+
+  private _lastRenderingPageIndex?: number;
+
+  private _isPagingByRendering?: boolean;
+
+  protected _focusController!: FocusController;
 
   protected keyboardNavigationController!: KeyboardNavigationController;
 
   public init(): void {
+    this._focusController = this.getController('focus');
     this.keyboardNavigationController = this.getController('keyboardNavigation');
     super.init();
   }
