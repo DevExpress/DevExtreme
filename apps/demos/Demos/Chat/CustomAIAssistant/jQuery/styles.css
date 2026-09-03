@@ -34,7 +34,7 @@
   font-size: 18px;
   font-weight: 400;
   text-align: center;
-  color: #242424;
+  color: var(--dx-color-text);
   margin-bottom: 8px;
 }
 
@@ -50,7 +50,7 @@
   margin-right: 8px;
 }
 
-.dx-popup-content {
+#aiAssistantContainer .dx-popup-content {
   padding: 0;
 }
 

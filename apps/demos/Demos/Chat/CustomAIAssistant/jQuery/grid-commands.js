@@ -267,7 +267,7 @@ function buildGridPromptSection(columnNames) {
 }
 
 function getGridColumnNames(gridInstance) {
-  return gridInstance.getVisibleColumns().map((col) => col.dataField);
+  return gridInstance.option('columns').map((col) => col.dataField);
 }
 
 function applyGridActions(grid, actions, rawText) {

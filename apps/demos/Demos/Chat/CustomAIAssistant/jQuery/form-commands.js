@@ -47,6 +47,7 @@ function applyFormClearAction(form, formAction) {
 function applyFormSmartPaste(form, text) {
   return new Promise((resolve) => {
     let settled = false;
+    let timedOut = false;
 
     const finish = (result) => {
       if (settled) return;
@@ -57,6 +58,10 @@ function applyFormSmartPaste(form, text) {
     };
 
     const handleSmartPasted = (e) => {
+      if (timedOut) {
+        return;
+      }
+
       const fieldCount = Object.keys(e.aiResult ?? {}).length;
       finish(
         fieldCount > 0
@@ -69,6 +74,7 @@ function applyFormSmartPaste(form, text) {
     };
 
     const timeoutId = setTimeout(() => {
+      timedOut = true;
       finish({
         status: 'failure',
         message: "I couldn't process your request. Please try rephrasing it.",
