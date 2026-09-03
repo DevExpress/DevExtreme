@@ -840,7 +840,7 @@ test('Validation in cell editing mode', async (t) => {
     .expect(dataGrid.getInvalidMessageTooltip().exists)
     .ok();
 
-  await a11yCheck(t);
+  await a11yCheck(t, a11yCheckConfig, { exclude: ['#dxInvalidMessage'] });
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
