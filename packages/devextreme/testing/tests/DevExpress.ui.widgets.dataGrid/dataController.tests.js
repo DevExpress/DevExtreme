@@ -3683,7 +3683,7 @@ const setupVirtualRenderingModule = function() {
 
     this.dataController.viewportItemSize(10);
     this.dataController.viewportSize(10);
-    this.dataController._dataSource._renderTime = 50;
+    this.dataController._dataSource.setRenderTime(50);
 
     this.clock.tick(10);
 

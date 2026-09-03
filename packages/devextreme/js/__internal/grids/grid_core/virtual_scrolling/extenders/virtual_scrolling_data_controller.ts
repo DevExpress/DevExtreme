@@ -36,7 +36,7 @@ import {
 } from '../const';
 import type { dataSourceAdapterExtender } from '../m_virtual_scrolling';
 import { VirtualScrollController } from '../m_virtual_scrolling_core';
-import type { ChangedLoadParams } from '../types';
+import type { ChangedLoadParams, VirtualScrollingDataControllerExtension } from '../types';
 import type { GroupCountableDataSource } from '../utils/items';
 import {
   correctCount,
@@ -48,10 +48,6 @@ import {
   isVirtualMode,
   isVirtualPaging,
 } from '../utils/scrolling_mode';
-
-export interface VirtualScrollingDataControllerExtension {
-  virtualItemsCount: () => VirtualItemsCount | undefined;
-}
 
 type VirtualScrollingDataSourceAdapter = InstanceType<ReturnType<typeof dataSourceAdapterExtender>>;
 
@@ -292,13 +288,13 @@ export const virtualScrollingDataControllerExtender = (
       onChanged() {
       },
       changingDuration() {
-        const dataSource = that.dataSource();
+        const dataSource = that._dataSource;
 
         if (dataSource?.isLoading() && that.option(LEGACY_SCROLLING_MODE) !== false) {
           return LOAD_TIMEOUT;
         }
 
-        return dataSource?._renderTime || 0;
+        return dataSource?.getRenderTime() || 0;
       },
     };
   }

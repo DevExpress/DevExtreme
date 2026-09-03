@@ -33,6 +33,7 @@ import {
   VIRTUAL_ROW_CLASS,
 } from './const';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
+import type { VirtualScrollingDataSourceHolder } from './types';
 import type { GroupCountableDataSource } from './utils/items';
 import { isItemCountableByDataSource } from './utils/items';
 import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
@@ -89,7 +90,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
 
   private _virtualScrollController!: VirtualScrollController;
 
-  private readonly _renderTime: any;
+  private renderTime?: number;
 
   private _isLoading: any;
 
@@ -108,6 +109,14 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
   public dispose() {
     this._virtualScrollController.dispose();
     super.dispose.apply(this, arguments as any);
+  }
+
+  public getRenderTime(): number | undefined {
+    return this.renderTime;
+  }
+
+  public setRenderTime(value: number): void {
+    this.renderTime = value;
   }
 
   private _getVirtualScrollDataOptions() {
@@ -157,7 +166,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
           return LOAD_TIMEOUT;
         }
 
-        return that._renderTime || 0;
+        return that.getRenderTime() || 0;
       },
     };
   }
@@ -207,7 +216,9 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     let renderAsync = this.option('scrolling.renderAsync');
 
     if (!isDefined(renderAsync)) {
-      renderAsync = this._renderTime >= this.option('scrolling.renderingThreshold');
+      const renderTime = this.getRenderTime();
+      renderAsync = isDefined(renderTime)
+        && renderTime >= this.option('scrolling.renderingThreshold');
     }
 
     if ((isVirtualMode(this) || (isInfiniteMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && !renderAsync) {
@@ -484,7 +495,9 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
 };
 
 export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRowsViewExtender extends Base {
-  protected _dataController!: DataController & Partial<StateStoringDataControllerExtension>;
+  protected _dataController!: DataController
+  & Partial<StateStoringDataControllerExtension>
+  & VirtualScrollingDataSourceHolder;
 
   protected _errorHandlingController!: ErrorHandlingViewController;
 
@@ -588,11 +601,9 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
         .viewportSize() || 20;
 
       if (gridCoreUtils.isVirtualRowRendering(this) && itemCount > 0 && this.option(LEGACY_SCROLLING_MODE) !== false) {
-        // @ts-expect-error badly typed DataSourceAdapter
-        dataSource._renderTime = (Date.now() - startRenderTime) * viewportSize / itemCount;
+        dataSource.setRenderTime((Date.now() - startRenderTime) * viewportSize / itemCount);
       } else {
-        // @ts-expect-error badly typed DataSourceAdapter
-        dataSource._renderTime = Date.now() - startRenderTime;
+        dataSource.setRenderTime(Date.now() - startRenderTime);
       }
     }
     return deferred;
