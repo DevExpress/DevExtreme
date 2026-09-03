@@ -1,4 +1,5 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { Selector } from 'testcafe';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
@@ -179,6 +180,10 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
     await t
       .expect(recurrenceIcon.getAttribute('aria-label'))
       .eql('Recurring appointment');
+
+    if (currentView === 'month') {
+      await t.hover(Selector('.dx-scheduler-date-table-other-month'));
+    }
 
     await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
