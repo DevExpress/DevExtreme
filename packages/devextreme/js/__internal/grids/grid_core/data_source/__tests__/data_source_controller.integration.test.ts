@@ -14,6 +14,7 @@ import {
   afterTest,
   beforeTest,
   createDataGrid,
+  flushAsync,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import type { Controllers, InternalGrid } from '@ts/grids/grid_core/m_types';
 
@@ -24,6 +25,10 @@ const TREELIST_CONTAINER_ID = 'treeListContainer';
 const DATA = [
   { id: 1, parentId: 0, value: 'a' },
   { id: 2, parentId: 1, value: 'b' },
+];
+
+const OTHER_DATA = [
+  { id: 3, parentId: 0, value: 'c' },
 ];
 
 interface TreeListInstance extends TreeList {
@@ -76,12 +81,6 @@ describe('dataSource module registration', () => {
     }
   });
 
-  it('holds no adapter yet, because DataController does not wire it', async () => {
-    const { instance } = await createDataGrid({ dataSource: DATA });
-
-    expect(instance.getController('dataSource').hasAdapter()).toBe(false);
-  });
-
   it('leaves the getDataSource public method on DataController', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
 
@@ -92,5 +91,139 @@ describe('dataSource module registration', () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
 
     expect(getControllerNames(instance)[0]).toBe('dataSource');
+  });
+});
+
+describe('dataSource controller holds the adapter', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('holds the same adapter object as DataController', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+    const dataSourceController = instance.getController('dataSource');
+    const adapter = instance.getController('data')._dataSource;
+
+    expect(adapter).toBeTruthy();
+    expect(dataSourceController.hasAdapter()).toBe(true);
+    expect(dataSourceController.getAdapter()).toBe(adapter);
+  });
+
+  it('follows the rebuilt adapter when the dataSource option changes', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+    const dataSourceController = instance.getController('dataSource');
+    const dataController = instance.getController('data');
+    const firstAdapter = dataSourceController.getAdapter();
+
+    instance.option('dataSource', OTHER_DATA);
+    await flushAsync();
+
+    expect(dataSourceController.getAdapter()).not.toBe(firstAdapter);
+    expect(dataSourceController.getAdapter()).toBe(dataController._dataSource);
+  });
+
+  it('releases the adapter when the dataSource option is cleared', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+    const dataSourceController = instance.getController('dataSource');
+
+    instance.option('dataSource', undefined);
+    await flushAsync();
+
+    expect(instance.getController('data')._dataSource).toBeNull();
+    expect(dataSourceController.hasAdapter()).toBe(false);
+    expect(dataSourceController.getAdapter()).toBeNull();
+    expect(dataSourceController.getDataSource()).toBeNull();
+    expect(dataSourceController.store()).toBeUndefined();
+  });
+
+  it('recovers after the dataSource option is set again', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+    const dataSourceController = instance.getController('dataSource');
+
+    instance.option('dataSource', undefined);
+    await flushAsync();
+    instance.option('dataSource', OTHER_DATA);
+    await flushAsync();
+
+    expect(dataSourceController.hasAdapter()).toBe(true);
+    expect(dataSourceController.getAdapter()).toBe(instance.getController('data')._dataSource);
+  });
+
+  it('still holds the same adapter after a refresh', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+    const dataSourceController = instance.getController('dataSource');
+
+    const refreshed = instance.refresh();
+    await flushAsync();
+    await refreshed;
+
+    expect(dataSourceController.hasAdapter()).toBe(true);
+    expect(dataSourceController.getAdapter()).toBe(instance.getController('data')._dataSource);
+  });
+
+  it('releases the adapter on dispose', async () => {
+    const { $container, instance } = await createDataGrid({ dataSource: DATA });
+    const dataSourceController = instance.getController('dataSource');
+    const dataController = instance.getController('data');
+
+    instance.dispose();
+    $container.remove();
+
+    expect(dataController._dataSource).toBeNull();
+    expect(dataSourceController.hasAdapter()).toBe(false);
+  });
+
+  it('holds the adapter in TreeList too', () => {
+    const { $container, instance } = createTreeList({ dataSource: DATA });
+
+    try {
+      const dataSourceController = instance.getController('dataSource');
+
+      expect(dataSourceController.hasAdapter()).toBe(true);
+      expect(dataSourceController.getAdapter()).toBe(instance.getController('data')._dataSource);
+    } finally {
+      disposeTreeList($container);
+    }
+  });
+});
+
+describe('dataSource controller reads delegate to the adapter', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('delegates store', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+
+    expect(instance.getController('dataSource').store())
+      .toBe(instance.getController('data').store());
+  });
+
+  it('delegates key', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+
+    expect(instance.getController('dataSource').key()).toBe('id');
+  });
+
+  it('unwraps one hop for getDataSource', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+    const dataSourceController = instance.getController('dataSource');
+
+    expect(dataSourceController.getDataSource())
+      .toBe(instance.getController('data').getDataSource());
+    expect(dataSourceController.getDataSource())
+      .not.toBe(dataSourceController.getAdapter());
+  });
+
+  it('delegates remoteOperations instead of falling back to an empty object', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+    const dataSourceController = instance.getController('dataSource');
+    const adapter = dataSourceController.getAdapter();
+
+    expect(dataSourceController.remoteOperations()).toBe(adapter?.remoteOperations());
+  });
+
+  it('delegates getDataIndexGetter', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+
+    expect(typeof instance.getController('dataSource').getDataIndexGetter()).toBe('function');
   });
 });
