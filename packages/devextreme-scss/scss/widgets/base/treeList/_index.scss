@@ -16,9 +16,11 @@ $base-focus-color: null !default;
 @use "../mixins" as *;
 @use "../icon_fonts" as *;
 $treelist-draggable-column-opacity: 0.5 !default;
+$treelist-column-chooser-item-opacity: 0.5 !default;
 
 @use "./common" as * with (
   $draggable-column-opacity: $treelist-draggable-column-opacity,
+  $column-chooser-item-opacity: $treelist-column-chooser-item-opacity,
 );
 $treelist-expandable-node-line-height: 1px !default;
 

@@ -26,7 +26,7 @@
   clip-path: polygon(0 0);
 }
 
-@mixin grid-base($widget-name, $draggable-column-opacity: 0.5) {
+@mixin grid-base($widget-name, $draggable-column-opacity: 0.5, $column-chooser-item-opacity: 0.5) {
   @include grid-base-cell($widget-name);
 
   .dx-#{$widget-name}-checkbox-size {
@@ -167,7 +167,12 @@
         padding: $grid-column-chooser-content-padding;
 
         .dx-column-chooser-item {
-          opacity: 0.5;
+          /* Parametrized so a theme can pass false: a chooser item is faint until it can be
+          dragged, which is a state, and a theme with roles for that paints them instead. */
+          @if $column-chooser-item-opacity {
+            opacity: $column-chooser-item-opacity;
+          }
+
           margin-bottom: $grid-column-chooser-item-margin-block-end;
 
           &.dx-#{$widget-name}-drag-action {

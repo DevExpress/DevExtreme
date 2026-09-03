@@ -22,7 +22,14 @@ $sortable-placeholder-inside-border-width: 2px !default;
   top: 0;
   left: 0;
   box-sizing: border-box;
-  opacity: $sortable-clone-opacity;
+
+  /* Guarded so a theme can pass false. The clone already carries the shadow that lifts it off the
+  page, which is how a dragged thing is marked - 90% on top of that is imperceptible and still
+  costs a compositing layer. */
+  @if $sortable-clone-opacity {
+    opacity: $sortable-clone-opacity;
+  }
+
   z-index: $max-integer;
 
   .dx-inkripple {
@@ -35,7 +42,11 @@ $sortable-placeholder-inside-border-width: 2px !default;
 }
 
 .dx-sortable-source {
-  opacity: $sortable-source-opacity;
+  /* Guarded so a theme can pass false: what is left behind needs no mark of its own when the clone
+  and the insertion line already say where the item went. */
+  @if $sortable-source-opacity {
+    opacity: $sortable-source-opacity;
+  }
 }
 
 .dx-sortable-source-hidden {

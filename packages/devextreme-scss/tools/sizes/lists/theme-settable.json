@@ -2865,7 +2865,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 52,
+      "line": 54,
       "widget": "dataGrid",
       "literals": [
         "2px"
@@ -2881,7 +2881,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 53,
+      "line": 55,
       "widget": "dataGrid",
       "literals": [
         "2px"
@@ -2897,7 +2897,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 54,
+      "line": 56,
       "widget": "dataGrid",
       "literals": [
         "3px"
@@ -2913,7 +2913,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 55,
+      "line": 57,
       "widget": "dataGrid",
       "literals": [
         "10px"
@@ -2929,7 +2929,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 56,
+      "line": 58,
       "widget": "dataGrid",
       "literals": [
         "10px"
@@ -2945,7 +2945,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 57,
+      "line": 59,
       "widget": "dataGrid",
       "literals": [
         "20px"
@@ -2961,7 +2961,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 58,
+      "line": 60,
       "widget": "dataGrid",
       "literals": [
         "10px"
@@ -5080,7 +5080,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 4,
+      "line": 5,
       "widget": "pivotGrid",
       "literals": [
         "2px"
@@ -5096,7 +5096,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 5,
+      "line": 6,
       "widget": "pivotGrid",
       "literals": [
         "2px"
@@ -5112,7 +5112,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 6,
+      "line": 7,
       "widget": "pivotGrid",
       "literals": [
         "3px"
@@ -5128,7 +5128,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 7,
+      "line": 8,
       "widget": "pivotGrid",
       "literals": [
         "4px"
@@ -5144,7 +5144,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 8,
+      "line": 9,
       "widget": "pivotGrid",
       "literals": [
         "2px"
@@ -5160,7 +5160,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 9,
+      "line": 10,
       "widget": "pivotGrid",
       "literals": [
         "10px"
@@ -5176,7 +5176,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 10,
+      "line": 11,
       "widget": "pivotGrid",
       "literals": [
         "4px"
@@ -5192,7 +5192,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 11,
+      "line": 12,
       "widget": "pivotGrid",
       "literals": [
         "1px"
@@ -5208,7 +5208,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 12,
+      "line": 13,
       "widget": "pivotGrid",
       "literals": [
         "50px"
@@ -5224,7 +5224,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 13,
+      "line": 14,
       "widget": "pivotGrid",
       "literals": [
         "5px"
@@ -5240,7 +5240,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 14,
+      "line": 15,
       "widget": "pivotGrid",
       "literals": [
         "2px"
@@ -5256,7 +5256,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 15,
+      "line": 16,
       "widget": "pivotGrid",
       "literals": [
         "5px"
@@ -5272,7 +5272,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 16,
+      "line": 17,
       "widget": "pivotGrid",
       "literals": [
         "5px"
@@ -5288,7 +5288,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 17,
+      "line": 18,
       "widget": "pivotGrid",
       "literals": [
         "3px"
@@ -5304,7 +5304,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 18,
+      "line": 19,
       "widget": "pivotGrid",
       "literals": [
         "1px"
@@ -5320,7 +5320,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 19,
+      "line": 20,
       "widget": "pivotGrid",
       "literals": [
         "10px"
@@ -5336,7 +5336,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 20,
+      "line": 21,
       "widget": "pivotGrid",
       "literals": [
         "4px"
@@ -5352,7 +5352,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 21,
+      "line": 22,
       "widget": "pivotGrid",
       "literals": [
         "2px"
@@ -5368,7 +5368,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 22,
+      "line": 23,
       "widget": "pivotGrid",
       "literals": [
         "5px"
@@ -5384,7 +5384,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 23,
+      "line": 24,
       "widget": "pivotGrid",
       "literals": [
         "2px"
@@ -5400,7 +5400,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 24,
+      "line": 25,
       "widget": "pivotGrid",
       "literals": [
         "2px"
@@ -5416,7 +5416,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 49,
+      "line": 50,
       "widget": "pivotGrid",
       "literals": [
         "100px"
@@ -5432,7 +5432,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 50,
+      "line": 51,
       "widget": "pivotGrid",
       "literals": [
         "100px"
@@ -5448,7 +5448,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 58,
+      "line": 59,
       "widget": "pivotGrid",
       "literals": [
         "1px"
@@ -5464,7 +5464,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 59,
+      "line": 60,
       "widget": "pivotGrid",
       "literals": [
         "2px"
@@ -5480,7 +5480,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 60,
+      "line": 61,
       "widget": "pivotGrid",
       "literals": [
         "-2px"
@@ -5496,7 +5496,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 65,
+      "line": 66,
       "widget": "pivotGrid",
       "literals": [
         "14px"
@@ -5512,7 +5512,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 66,
+      "line": 67,
       "widget": "pivotGrid",
       "literals": [
         "2px"
@@ -7562,7 +7562,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 23,
+      "line": 25,
       "widget": "treeList",
       "literals": [
         "1px"
@@ -7578,7 +7578,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 28,
+      "line": 30,
       "widget": "treeList",
       "literals": [
         "2px"
@@ -7594,7 +7594,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 29,
+      "line": 31,
       "widget": "treeList",
       "literals": [
         "2px"
@@ -7610,7 +7610,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 52,
+      "line": 54,
       "widget": "treeList",
       "literals": [
         "2px"
@@ -7626,7 +7626,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 53,
+      "line": 55,
       "widget": "treeList",
       "literals": [
         "2px"
@@ -7642,7 +7642,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 54,
+      "line": 56,
       "widget": "treeList",
       "literals": [
         "10px"
@@ -7658,7 +7658,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 55,
+      "line": 57,
       "widget": "treeList",
       "literals": [
         "10px"
@@ -7674,7 +7674,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 56,
+      "line": 58,
       "widget": "treeList",
       "literals": [
         "20px"
@@ -7690,7 +7690,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 57,
+      "line": 59,
       "widget": "treeList",
       "literals": [
         "10px"

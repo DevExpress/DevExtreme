@@ -2,11 +2,9 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-sortable-clone-opacity: #{$sortable-clone-opacity};
   --dx-sortable-clone-shadow-ambient: #{$sortable-clone-shadow-ambient};
   --dx-sortable-clone-shadow-key: #{$sortable-clone-shadow-key};
   --dx-sortable-placeholder-border-width: #{$sortable-placeholder-border-width};
   --dx-sortable-placeholder-border: #{$sortable-placeholder-border};
   --dx-sortable-placeholder-inside-border-width: #{$sortable-placeholder-inside-border-width};
-  --dx-sortable-source-opacity: #{$sortable-source-opacity};
 }

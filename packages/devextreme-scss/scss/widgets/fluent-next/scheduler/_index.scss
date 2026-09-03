@@ -74,11 +74,14 @@
   $scheduler-views-vertical-group-min-height: var(--dx-scheduler-views-vertical-group-min-height),
   $scheduler-tooltip-shadow: var(--dx-scheduler-tooltip-shadow),
   $scheduler-appointment-icon-font-size: var(--dx-scheduler-appointment-icon-font-size),
+  /* Kept: a resize has no floating copy, so the appointment being stretched is what moves, and its
+  surface is a resource colour nobody controls - the same reason the disabled appointment keeps its
+  own dim rather than a role. */
   $scheduler-appointment-resizing-opacity: var(--dx-scheduler-appointment-resizing-opacity),
   $scheduler-appointment-date-opacity: false,
   $agenda-appointment-details-opacity: false,
   $scheduler-appointment-disabled-opacity: var(--dx-scheduler-appointment-opacity-disabled),
-  $scheduler-appointment-drag-source-opacity: var(--dx-scheduler-appointment-drag-source-opacity),
+  $scheduler-appointment-drag-source-opacity: false,
   $agenda-appointment-title-font-weight: var(--dx-scheduler-agenda-title-font-weight),
   $agenda-appointment-details-font-size: var(--dx-scheduler-agenda-details-font-size),
   $scheduler-appointment-dragging-shadow: var(--dx-scheduler-appointment-dragging-shadow),

@@ -391,7 +391,7 @@
     },
     {
       "file": "scss/widgets/base/_sortable.scss",
-      "line": 61,
+      "line": 72,
       "widget": "sortable",
       "literals": [
         "1px",
@@ -894,7 +894,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 149,
+      "line": 151,
       "widget": "dataGrid",
       "literals": [
         "-2px"
@@ -906,7 +906,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 185,
+      "line": 187,
       "widget": "dataGrid",
       "literals": [
         "14px"
@@ -918,7 +918,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 304,
+      "line": 306,
       "widget": "dataGrid",
       "literals": [
         "21px"
@@ -930,7 +930,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 368,
+      "line": 370,
       "widget": "dataGrid",
       "literals": [
         "-1px"
@@ -1110,7 +1110,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 313,
+      "line": 318,
       "widget": "gridBase",
       "literals": [
         "10px"
@@ -1122,7 +1122,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 430,
+      "line": 435,
       "widget": "gridBase",
       "literals": [
         "2px"
@@ -1134,7 +1134,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 432,
+      "line": 437,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1146,7 +1146,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 480,
+      "line": 485,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1158,7 +1158,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 556,
+      "line": 561,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1170,7 +1170,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 557,
+      "line": 562,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1182,7 +1182,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 558,
+      "line": 563,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1194,7 +1194,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 559,
+      "line": 564,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1206,7 +1206,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 566,
+      "line": 571,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1218,7 +1218,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 660,
+      "line": 665,
       "widget": "gridBase",
       "literals": [
         "9px",
@@ -1232,7 +1232,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 955,
+      "line": 960,
       "widget": "gridBase",
       "literals": [
         "-2px"
@@ -1280,7 +1280,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 62,
+      "line": 63,
       "widget": "pivotGrid",
       "literals": [
         "1px"
@@ -1292,7 +1292,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 63,
+      "line": 64,
       "widget": "pivotGrid",
       "literals": [
         "1px",
@@ -1305,7 +1305,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 68,
+      "line": 69,
       "widget": "pivotGrid",
       "literals": [
         "-5px"
@@ -1317,7 +1317,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 76,
+      "line": 77,
       "widget": "pivotGrid",
       "literals": [
         "-4px"
@@ -1329,7 +1329,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 77,
+      "line": 78,
       "widget": "pivotGrid",
       "literals": [
         "-1px"
@@ -1341,7 +1341,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 81,
+      "line": 82,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
@@ -1353,7 +1353,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 86,
+      "line": 87,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
@@ -1365,7 +1365,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 339,
+      "line": 344,
       "widget": "pivotGrid",
       "literals": [
         "-1px"
@@ -1377,7 +1377,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 610,
+      "line": 615,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
@@ -1934,7 +1934,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 172,
+      "line": 174,
       "widget": "treeList",
       "literals": [
         "14px"
@@ -1946,7 +1946,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 260,
+      "line": 262,
       "widget": "treeList",
       "literals": [
         "16px"
@@ -1958,7 +1958,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 268,
+      "line": 270,
       "widget": "treeList",
       "literals": [
         "21px"

@@ -14,6 +14,9 @@
   marks its draggable header with a background, a border and a colour and never with opacity
   (pivot/pivot-table/layout.scss), which is also what cardView and the grid do here. */
   $pivotgrid-drag-source-opacity: false,
+  /* The panel is not what moves either - a field being dragged carries its own header, with the
+  border and the shadow above. */
+  $pivotgrid-fields-container-drag-opacity: false,
   $pivotgrid-common-field-chooser-drag-width: var(--dx-pivot-grid-field-chooser-drag-width),
   $pivotgrid-common-field-chooser-drag-height: var(--dx-pivot-grid-field-chooser-drag-height),
   $pivotgrid-position-indicator-vertical-height: var(--dx-pivot-grid-position-indicator-vertical-height),
