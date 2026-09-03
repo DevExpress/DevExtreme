@@ -60,11 +60,11 @@ function applyFormSmartPaste(form, text) {
       const fieldCount = Object.keys(e.aiResult ?? {}).length;
       finish(
         fieldCount > 0
-            ? { status: 'success', message: 'Updated the form.' }
+          ? { status: 'success', message: 'Updated the form.' }
           : {
-              status: 'failure',
-              message: "I couldn't find any Form fields matching the request.",
-            },
+            status: 'failure',
+            message: "I couldn't find any Form fields matching the request.",
+          },
       );
     };
 

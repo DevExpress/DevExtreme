@@ -120,7 +120,6 @@ function buildGridResultsPromise(gridInstance, aiIntegration, text) {
 
   return executeAiCommand(prompt, aiIntegration)
     .then((parsed) => {
-
       const actions = Array.isArray(parsed.actions) ? parsed.actions : [];
 
       if (actions.length === 0) {
@@ -255,7 +254,7 @@ function reportAiResult(promise, pushMessage) {
           : '❌ I couldn\'t reach the AI service. Please check your connection and try again.';
 
       pushMessage({
-        author: { id: "ai", name: "AI Assistant" },
+        author: { id: 'ai', name: 'AI Assistant' },
         text,
       });
     });

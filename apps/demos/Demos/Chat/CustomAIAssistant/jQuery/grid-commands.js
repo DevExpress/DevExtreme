@@ -14,33 +14,33 @@ const gridCommands = {
       'cannot be inferred from elsewhere in the request (e.g. plain "in May" with no year anywhere), do ' +
       'not guess it - omit this action entirely instead of adding it with a made-up year.',
     schema: {
-      type: "object",
+      type: 'object',
       properties: {
-        column: { type: "string" },
+        column: { type: 'string' },
         operator: {
-          type: "string",
+          type: 'string',
           enum: [
-            "=",
-            "<>",
-            "<",
-            "<=",
-            ">",
-            ">=",
-            "contains",
-            "notcontains",
-            "startswith",
-            "endswith",
-            "anyof",
+            '=',
+            '<>',
+            '<',
+            '<=',
+            '>',
+            '>=',
+            'contains',
+            'notcontains',
+            'startswith',
+            'endswith',
+            'anyof',
           ],
         },
         value: {
           anyOf: [
-            { type: ["string", "number", "boolean"] },
-            { type: "array", items: { type: "string" } },
+            { type: ['string', 'number', 'boolean'] },
+            { type: 'array', items: { type: 'string' } },
           ],
         },
       },
-      required: ["column", "operator", "value"],
+      required: ['column', 'operator', 'value'],
     },
     execute(grid, args, rawText) {
       const { column, failure } = getColumnOrFail(grid, args.column);
@@ -68,13 +68,13 @@ const gridCommands = {
 
       if (args.operator === 'anyof' && Array.isArray(value)) {
         const mentionedYears = new Set(
-          String(rawText ?? "").match(/\b\d{4}\b/g),
+          String(rawText ?? '').match(/\b\d{4}\b/g),
         );
-        const hasUngroundedYear = value.some(
-          (entry) => !mentionedYears.has(String(entry).split("/")[0]),
+        const hasUnrecognizedYear = value.some(
+          (entry) => !mentionedYears.has(String(entry).split('/')[0]),
         );
 
-        if (hasUngroundedYear) {
+        if (hasUnrecognizedYear) {
           return {
             status: 'failure',
             message: 'No field or column exists with such a name, or the entered value is invalid.',
@@ -98,8 +98,8 @@ const gridCommands = {
   },
 
   clearFilter: {
-    description: "Clear all filters on the grid.",
-    schema: { type: "object", properties: {} },
+    description: 'Clear all filters on the grid.',
+    schema: { type: 'object', properties: {} },
     execute(grid) {
       try {
         grid.clearFilter();
@@ -117,12 +117,12 @@ const gridCommands = {
     description:
       'Sort a column ascending or descending. Pass sortOrder "none" to remove sorting from this column only.',
     schema: {
-      type: "object",
+      type: 'object',
       properties: {
-        column: { type: "string" },
-        sortOrder: { type: "string", enum: ["asc", "desc", "none"] },
+        column: { type: 'string' },
+        sortOrder: { type: 'string', enum: ['asc', 'desc', 'none'] },
       },
-      required: ["column", "sortOrder"],
+      required: ['column', 'sortOrder'],
     },
     execute(grid, args) {
       const { column, failure } = getColumnOrFail(grid, args.column);
@@ -142,10 +142,10 @@ const gridCommands = {
             ? `Cleared sorting on '${caption}'.`
             : `Sorted by '${caption}' (${args.sortOrder === 'asc' ? 'ascending' : 'descending'}).`;
 
-        return { status: "success", message };
+        return { status: 'success', message };
       } catch {
         return {
-          status: "failure",
+          status: 'failure',
           message: `I couldn't sort by '${caption}'.`,
         };
       }
@@ -153,8 +153,8 @@ const gridCommands = {
   },
 
   clearSorting: {
-    description: "Remove sorting from all columns.",
-    schema: { type: "object", properties: {} },
+    description: 'Remove sorting from all columns.',
+    schema: { type: 'object', properties: {} },
     execute(grid) {
       try {
         grid.clearSorting();
@@ -169,14 +169,14 @@ const gridCommands = {
   },
 
   columnsVisibility: {
-    description: "Show or hide a column.",
+    description: 'Show or hide a column.',
     schema: {
-      type: "object",
+      type: 'object',
       properties: {
-        column: { type: "string" },
-        visible: { type: "boolean" },
+        column: { type: 'string' },
+        visible: { type: 'boolean' },
       },
-      required: ["column", "visible"],
+      required: ['column', 'visible'],
     },
     execute(grid, args) {
       const { column, failure } = getColumnOrFail(grid, args.column);
@@ -185,7 +185,7 @@ const gridCommands = {
       const caption = column.caption ?? args.column;
 
       try {
-        grid.columnOption(args.column, "visible", args.visible);
+        grid.columnOption(args.column, 'visible', args.visible);
         return {
           status: 'success',
           message: args.visible
@@ -219,51 +219,51 @@ function getColumnOrFail(grid, columnName) {
 }
 
 function buildGridResponseSchema() {
-  const branches = Object.entries(gridCommands).map(([name, cmd]) => ({
-    type: "object",
+  const branches = Object.entries(gridCommands).map(([name, command]) => ({
+    type: 'object',
     properties: {
-      name: { type: "string", enum: [name] },
-      args: cmd.schema,
+      name: { type: 'string', enum: [name] },
+      args: command.schema,
     },
-    required: ["name", "args"],
+    required: ['name', 'args'],
   }));
 
   return {
-    type: "object",
+    type: 'object',
     properties: {
       actions: {
-        type: "array",
-        description: "List of grid commands to execute, in order.",
+        type: 'array',
+        description: 'List of grid commands to execute, in order.',
         items: { anyOf: branches },
       },
     },
-    required: ["actions"],
+    required: ['actions'],
   };
 }
 
 function buildGridPromptSection(columnNames) {
   const commandDescriptions = Object.entries(gridCommands)
-    .map(([name, cmd]) => `- '${name}': ${cmd.description}`)
-    .join("\n");
+    .map(([name, command]) => `- '${name}': ${command.description}`)
+    .join('\n');
 
   return [
     'GRID: translate any part of the request that affects the task grid into one or more grid commands (the "actions" array).',
     `Available columns (dataField): ${columnNames.join(', ')}.`,
-    "CRITICAL RULE: a column mentioned in the request must clearly correspond to one of the available " +
+    'CRITICAL RULE: a column mentioned in the request must clearly correspond to one of the available ' +
       'columns above (matching by meaning is fine, e.g. "due date" -> "DueDate"). If it does not - even ' +
-      "if it superficially looks like it could be a column name - you must NOT invent or substitute the " +
-      "closest-sounding available column. Instead, still emit the action using the column name exactly " +
+      'if it superficially looks like it could be a column name - you must NOT invent or substitute the ' +
+      'closest-sounding available column. Instead, still emit the action using the column name exactly ' +
       "as written in the request, so the app can report that the column wasn't found - never replace it " +
-      "with a different, existing column just to make the action valid.",
+      'with a different, existing column just to make the action valid.',
     'Example: request "filter the ZXQ column by foo" - ZXQ matches no available column, so emit ' +
       '{"column": "ZXQ", ...} as-is (it will correctly fail as "column not found") - do NOT emit an ' +
       "action for 'Subject' or any other real column instead.",
     'The "Completion" column is a boolean: true means the task is completed, false means it is not. ' +
       "To filter for 'completed' tasks, use {'column': 'Completion', 'operator': '=', 'value': true}. " +
       "To filter for 'not completed' tasks, use {'column': 'Completion', 'operator': '=', 'value': false}.",
-    "Available grid commands:",
+    'Available grid commands:',
     commandDescriptions,
-  ].join("\n");
+  ].join('\n');
 }
 
 function getGridColumnNames(gridInstance) {

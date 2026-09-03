@@ -1,4 +1,4 @@
-$(function () {
+$(() => {
   DevExpress.config({
     editorStylingMode: 'filled',
   });
@@ -21,13 +21,11 @@ $(function () {
   });
 
   let chatInstance;
-  let popupInstance;
   let clearButtonInstance;
   let formInstance;
   let gridInstance;
-  let toastInstance;
 
-  toastInstance = $('#toast')
+  const toastInstance = $('#toast')
     .dxToast({
       displayTime: 600,
       closeOnClick: true,
@@ -93,7 +91,7 @@ $(function () {
     routed.finally(finish);
   }
 
-  popupInstance = $('#aiAssistantContainer')
+  const popupInstance = $('#aiAssistantContainer')
     .dxPopup({
       title: 'AI Assistant',
       width: 400,
@@ -221,66 +219,66 @@ $(function () {
           },
         },
         {
-          dataField: "FirstName",
-          label: { text: "First Name" },
+          dataField: 'FirstName',
+          label: { text: 'First Name' },
           aiOptions: {
             instruction:
               "Only fill this field if the text clearly refers to a person's given name. " +
-              "Never use grid/task-related words like Subject, Priority, Status, Due Date, " +
-              "Completion, or generic verbs like sort/filter/show as a name.",
+              'Never use grid/task-related words like Subject, Priority, Status, Due Date, ' +
+              'Completion, or generic verbs like sort/filter/show as a name.',
           },
         },
         {
-          dataField: "LastName",
-          label: { text: "Last Name" },
+          dataField: 'LastName',
+          label: { text: 'Last Name' },
           aiOptions: {
             instruction:
               "If the text gives a full person name (e.g. 'customer name', 'employee name') " +
-              "without separately labeled first/last names, use only the first word as First " +
-              "Name and the rest of the name as Last Name.",
+              'without separately labeled first/last names, use only the first word as First ' +
+              'Name and the rest of the name as Last Name.',
           },
         },
         {
-          dataField: "Position",
-          editorType: "dxSelectBox",
+          dataField: 'Position',
+          editorType: 'dxSelectBox',
           editorOptions: { items: positions, searchEnabled: true },
           aiOptions: {
             instruction:
-              "Only fill this field with one of the allowed job position values if the text " +
+              'Only fill this field with one of the allowed job position values if the text ' +
               "explicitly refers to the employee's own job title/role.",
           },
         },
         {
-          dataField: "State",
-          editorType: "dxSelectBox",
+          dataField: 'State',
+          editorType: 'dxSelectBox',
           editorOptions: { items: states, searchEnabled: true },
           aiOptions: {
             instruction:
-              "Only fill this field with one of the allowed US state values if the text " +
+              'Only fill this field with one of the allowed US state values if the text ' +
               "explicitly refers to the employee's home/office state",
           },
         },
         {
-          dataField: "BirthDate",
-          editorType: "dxDateBox",
-          editorOptions: { displayFormat: "M/d/yyyy" },
+          dataField: 'BirthDate',
+          editorType: 'dxDateBox',
+          editorOptions: { displayFormat: 'M/d/yyyy' },
           aiOptions: {
             instruction:
               "Only fill this field if the text explicitly refers to the employee's own birth " +
-              "date or date of birth.",
+              'date or date of birth.',
           },
         },
         {
-          itemType: "button",
-          name: "Save",
+          itemType: 'button',
+          name: 'Save',
           colSpan: 3,
-          cssClass: "save-button",
+          cssClass: 'save-button',
           buttonOptions: {
-            text: "Save",
-            type: "default",
+            text: 'Save',
+            type: 'default',
             disabled: true,
             useSubmitBehavior: true,
-            width: "120px",
+            width: '120px',
             onClick: () => {
               toastInstance.show();
             },
@@ -346,7 +344,7 @@ $(function () {
     .dxSpeedDialAction({
       icon: 'sparkle',
       label: 'AI Assistant',
-      onClick: function (e) {
+      onClick() {
         popupInstance.toggle();
       },
     })

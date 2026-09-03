@@ -64,8 +64,8 @@ function createAiIntegration() {
         : (prompt.system ?? '');
 
       const aiPrompt = [
-        { role: "system", content: system },
-        { role: "user", content: prompt.user },
+        { role: 'system', content: system },
+        { role: 'user', content: prompt.user },
       ];
       const promise = getAIResponseRecursive(aiPrompt, signal);
 
