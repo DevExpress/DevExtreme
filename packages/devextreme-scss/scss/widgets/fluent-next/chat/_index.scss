@@ -190,7 +190,10 @@ The attachment was already following the state, being a control that downloads o
   .dx-chat-messagegroup-time,
   .dx-chat-message-edited,
   .dx-chat-messagelist-empty-message,
-  .dx-chat-messagelist-empty-prompt {
+  .dx-chat-messagelist-empty-prompt,
+  /* The empty view's icon reads content-subtle when enabled, the same role as the prompt beside
+  it, so it greys with the prompt instead of staying at #444444 next to greyed text. */
+  .dx-chat-messagelist-empty-image {
     color: var(--dx-chat-information-content-disabled);
   }
 }

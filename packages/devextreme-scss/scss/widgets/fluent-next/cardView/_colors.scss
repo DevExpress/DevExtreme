@@ -99,7 +99,11 @@ $card-view-header-panel-item-sort-index-content-hovered: var(--dx-card-view-head
 
 /* The item stays in place while it is dragged, so the fill is what marks it; the content keeps
 the ordinary colours so it stays readable. */
-$card-view-header-panel-item-dragging-bg: ds.$color-bg-low !default;
+/* The drag source has to stay distinguishable without dimming its text - that text measured 2.11
+against its own background before, which is why the disabled roles came off it. bg-low is the
+item's own resting surface, so it marked nothing at all; the active step of the same family is the
+next one past hover and reads as the pressed-and-held slot the item is being lifted out of. */
+$card-view-header-panel-item-dragging-bg: ds.$color-bg-low-active !default;
 
 $card-view-header-panel-item-dragging-border: var(--dx-card-view-header-panel-item-border) !default;
 

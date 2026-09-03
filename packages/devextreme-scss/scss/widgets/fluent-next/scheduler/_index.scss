@@ -1135,10 +1135,17 @@
   }
 }
 
-/* The appointment paints its own text, so it kept full contrast inside a disabled scheduler. */
-.dx-state-disabled .dx-scheduler-appointment-title,
-.dx-state-disabled .dx-scheduler-appointment-content-date {
-  color: var(--dx-scheduler-content-disabled);
+/* An appointment already carries its own disabled signal: base dims it to
+$appointment-disabled-opacity when the appointment itself is disabled. Greying its text on top of
+that stacked a second dim - the title composited to #cdcdcd against the faded surface, 1.22:1 -
+so the text keeps the appointment's own colour and the dim stays the only signal.
+
+The case that genuinely had nothing is a disabled scheduler, where .dx-state-disabled lands on the
+scheduler root and never reaches the appointment. It takes the same dim the component already
+defines rather than a second colour, which keeps the title readable against its own surface. */
+.dx-scheduler.dx-state-disabled .dx-scheduler-appointment,
+.dx-state-disabled .dx-scheduler .dx-scheduler-appointment {
+  opacity: var(--dx-scheduler-appointment-opacity-disabled);
 }
 
 /* The tooltip's date line is secondary text and takes the subtle content role; it used to be the

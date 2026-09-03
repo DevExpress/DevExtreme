@@ -273,6 +273,10 @@ test('no component arrives without a disabled rule of its own', () => {
  * Nine rules still dim, each for a reason that has not been decided yet:
  *   - tabs nav button uses opacity 0, which hides rather than dims;
  *   - scheduler appointments and grid modified-cell links sit on user-supplied colours;
+ *     the appointment's allowance is three because a disabled scheduler reuses the dim the
+ *     component already defines for a disabled appointment, rather than adding a second signal:
+ *     greying the title instead put content-disabled on the appointment's own surface and
+ *     composited to 1.22:1. Same variable, same mechanism, two more selectors;
  *   - the AI chat regenerate button dims a whole composite;
  *   - the number box spin container dims a pair of arrows.
  *
@@ -283,7 +287,7 @@ const ALLOWED_DIMS: Record<string, number> = {
   '--dx-grid-icon-link-opacity-disabled': 2,
   '--dx-grid-text-link-opacity-disabled': 2,
   '--dx-number-box-spin-opacity': 1,
-  '--dx-scheduler-appointment-opacity-disabled': 1,
+  '--dx-scheduler-appointment-opacity-disabled': 3,
   '--dx-tabs-nav-button-opacity-disabled': 1,
 };
 
