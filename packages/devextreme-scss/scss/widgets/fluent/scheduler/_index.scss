@@ -1045,13 +1045,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   margin-top: 0;
 }
 
-// A cell from the adjacent month keeps its dimmed colour while hovered: its rule outranks the
-
-// shared hover rule, so only the background changes. In the dark palette that lands the date on
-
-// 3.81:1, below AA. The theme already has a colour for a hovered cell - apply it here so the
-
-// hover rule's existing intent wins for these cells too.
 .dx-scheduler-work-space.dx-scheduler-work-space-month .dx-scheduler-date-table-other-month.dx-state-hover {
   color: $scheduler-workspace-hovered-cell-color;
 }

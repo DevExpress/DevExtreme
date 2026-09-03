@@ -198,9 +198,7 @@ test('Filter row - filter menu', async (t) => {
     ...a11yCheckConfig,
     rules: {
       'aria-command-name': { enabled: true },
-      // The filter menu is rendered into body, outside the role="main" landmark, so its
-      // scrollable content trips the best-practice `region` rule the way every portalled
-      // overlay does here (see cardView/sortable.ts and the overlay checks in pivotGrid.ts).
+      // The filter menu is portalled into body, outside the role="main" landmark
       region: { enabled: false },
     },
   });

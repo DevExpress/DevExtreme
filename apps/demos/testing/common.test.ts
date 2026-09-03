@@ -62,8 +62,6 @@ const getIgnoredRules = (testName) => {
 
   if ((isMaterial() || isFluent())
     && [
-      // Cause not reproduced: the demo has no disabled element, so the original
-      // "disabled tags" reason does not apply to it. Needs a measurement in CI.
       'TreeList-StatePersistence',
       // False positive: contrast rules do not apply to custom orange color
       'CardView-FieldTemplate',
