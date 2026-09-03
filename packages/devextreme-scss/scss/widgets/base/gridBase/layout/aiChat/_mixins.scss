@@ -44,7 +44,7 @@
   $border-color,
 ) {
   .dx-ai-chat__content .dx-chat-messagegroup-alignment-start .dx-chat-messagebubble {
-    border-width: 1px;
+    border-width: 1px; // dx-line-width: hairline border of the incoming message bubble
     border-style: solid;
     border-color: $border-color;
   }

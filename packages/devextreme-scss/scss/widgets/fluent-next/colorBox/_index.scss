@@ -3,6 +3,7 @@
 @use "sizes" as *;
 @use "../colorView/colors" as colorViewColors;
 @use "../../base/colorBox" with (
+  $colorbox-input-left-padding: var(--dx-color-box-input-min-width),
   $colorbox-texteditor-input-container-width: var(--dx-color-box-input-container-width),
   $colorbox-texteditor-input-container-height: var(--dx-color-box-input-container-height),
   $colorbox-texteditor-input-container-inset-inline-start: var(--dx-color-box-input-container-inset-inline-start),

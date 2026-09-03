@@ -68,11 +68,20 @@
   $disabled-text-color,
   $disabled-bg,
   $disabled-shadow,
+  /*
+   * The indicator is a dot on top of the connector line. Three box-shadow rings shape it, from the
+   * inside out: the selection ring starts at $indicator-ring-inset and ends at $indicator-ring-size,
+   * and $indicator-halo-size is the gap the indicator punches in the connector behind it. The
+   * defaults are the values every theme drew before the sizes were opened.
+   */
+  $indicator-ring-inset: 2px,
+  $indicator-ring-size: 4px,
+  $indicator-halo-size: 8px,
 ) {
   .dx-step-indicator {
     background-color: $base-bg;
     border-color: $base-border-color;
-    box-shadow: 0 0 0 8px $shadow-color;
+    box-shadow: 0 0 0 $indicator-halo-size $shadow-color;
     color: $base-text-color;
   }
 
@@ -108,7 +117,7 @@
         color: $selected-text-color;
         border-color: $selected-bg;
         background-color: $selected-bg;
-        box-shadow: 0 0 0 8px $shadow-color;
+        box-shadow: 0 0 0 $indicator-halo-size $shadow-color;
       }
 
       .dx-step-caption {
@@ -119,7 +128,7 @@
         .dx-step-indicator {
           border-color: $selected-invalid-bg;
           background-color: $selected-invalid-bg;
-          box-shadow: 0 0 0 8px $shadow-color;
+          box-shadow: 0 0 0 $indicator-halo-size $shadow-color;
         }
 
         .dx-step-caption {
@@ -138,7 +147,7 @@
         color: $selected-text-color;
         border-color: $selected-bg;
         background-color: $selected-bg;
-        box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-bg, 0 0 0 8px $shadow-color;
+        box-shadow: 0 0 0 $indicator-ring-inset $shadow-color, 0 0 0 $indicator-ring-size $selected-bg, 0 0 0 $indicator-halo-size $shadow-color;
       }
 
       .dx-step-caption {
@@ -149,7 +158,7 @@
         .dx-step-indicator {
           border-color: $selected-invalid-bg;
           background-color: $selected-invalid-bg;
-          box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-invalid-bg, 0 0 0 8px $shadow-color;
+          box-shadow: 0 0 0 $indicator-ring-inset $shadow-color, 0 0 0 $indicator-ring-size $selected-invalid-bg, 0 0 0 $indicator-halo-size $shadow-color;
         }
 
         .dx-step-caption {
@@ -192,7 +201,7 @@
 
     &.dx-state-focused {
       .dx-step-indicator {
-        box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-bg, 0 0 0 8px $shadow-color;
+        box-shadow: 0 0 0 $indicator-ring-inset $shadow-color, 0 0 0 $indicator-ring-size $selected-bg, 0 0 0 $indicator-halo-size $shadow-color;
       }
 
       &.dx-step-completed {
@@ -206,19 +215,19 @@
         .dx-step-indicator {
           border-color: $selected-hover-bg;
           background-color: $selected-hover-bg;
-          box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-hover-bg, 0 0 0 8px $shadow-color;
+          box-shadow: 0 0 0 $indicator-ring-inset $shadow-color, 0 0 0 $indicator-ring-size $selected-hover-bg, 0 0 0 $indicator-halo-size $shadow-color;
         }
       }
 
       &.dx-state-hover {
         .dx-step-indicator {
-          box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-hover-bg, 0 0 0 8px $shadow-color;
+          box-shadow: 0 0 0 $indicator-ring-inset $shadow-color, 0 0 0 $indicator-ring-size $selected-hover-bg, 0 0 0 $indicator-halo-size $shadow-color;
         }
       }
 
       &.dx-step-invalid {
         .dx-step-indicator {
-          box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-invalid-bg, 0 0 0 8px $shadow-color;
+          box-shadow: 0 0 0 $indicator-ring-inset $shadow-color, 0 0 0 $indicator-ring-size $selected-invalid-bg, 0 0 0 $indicator-halo-size $shadow-color;
         }
 
         &.dx-step-completed {
@@ -232,25 +241,25 @@
           .dx-step-indicator {
             border-color: $selected-invalid-hover-bg;
             background-color: $selected-invalid-hover-bg;
-            box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-invalid-hover-bg, 0 0 0 8px $shadow-color;
+            box-shadow: 0 0 0 $indicator-ring-inset $shadow-color, 0 0 0 $indicator-ring-size $selected-invalid-hover-bg, 0 0 0 $indicator-halo-size $shadow-color;
           }
         }
 
         &.dx-state-hover {
           .dx-step-indicator {
-            box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-invalid-hover-bg, 0 0 0 8px $shadow-color;
+            box-shadow: 0 0 0 $indicator-ring-inset $shadow-color, 0 0 0 $indicator-ring-size $selected-invalid-hover-bg, 0 0 0 $indicator-halo-size $shadow-color;
           }
         }
       }
 
       &.dx-state-disabled {
         .dx-step-indicator {
-          box-shadow: 0 0 0 2px $disabled-shadow, 0 0 0 4px $selected-bg, 0 0 0 8px $disabled-shadow;
+          box-shadow: 0 0 0 $indicator-ring-inset $disabled-shadow, 0 0 0 $indicator-ring-size $selected-bg, 0 0 0 $indicator-halo-size $disabled-shadow;
         }
 
         &.dx-step-invalid {
           .dx-step-indicator {
-            box-shadow: 0 0 0 2px $disabled-shadow, 0 0 0 4px $selected-invalid-bg, 0 0 0 8px $disabled-shadow;
+            box-shadow: 0 0 0 $indicator-ring-inset $disabled-shadow, 0 0 0 $indicator-ring-size $selected-invalid-bg, 0 0 0 $indicator-halo-size $disabled-shadow;
           }
         }
       }
@@ -309,17 +318,17 @@
     &.dx-state-focused {
       .dx-step-selected {
         .dx-step-indicator {
-          box-shadow: 0 0 0 8px $shadow-color;
+          box-shadow: 0 0 0 $indicator-halo-size $shadow-color;
         }
 
         &.dx-state-focused {
           .dx-step-indicator {
-            box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-hover-bg, 0 0 0 8px $shadow-color;
+            box-shadow: 0 0 0 $indicator-ring-inset $shadow-color, 0 0 0 $indicator-ring-size $selected-hover-bg, 0 0 0 $indicator-halo-size $shadow-color;
           }
 
           &.dx-step-invalid {
             .dx-step-indicator {
-              box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-invalid-hover-bg, 0 0 0 8px $shadow-color;
+              box-shadow: 0 0 0 $indicator-ring-inset $shadow-color, 0 0 0 $indicator-ring-size $selected-invalid-hover-bg, 0 0 0 $indicator-halo-size $shadow-color;
             }
           }
         }

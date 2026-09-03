@@ -6,7 +6,7 @@
   align-items: center;
   padding: $cardview-header-panel__item-padding-vertical $cardview-header-panel__item-padding-horizontal;
   user-select: none;
-  gap: 4px;
+  gap: 4px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
   border: solid $cardview-header-panel__item-border-width;
   border-radius: $cardview-header-panel__item-border-radius;
   line-height: $cardview-header-panel__item-line-height;
@@ -52,9 +52,9 @@
   }
 
   &:focus-visible {
-    outline: 2px solid;
+    outline: 2px solid; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
     outline-color: $cardview-header-panel__item--focused-outline-color;
-    outline-offset: -2px;
+    outline-offset: -2px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
   }
 
   &.dx-sortable-source {
@@ -83,6 +83,8 @@
     border-color: $cardview-header-panel__item--dragged-border-color;
     color: $cardview-header-panel__item--dragged-text-color;
     font-weight: $cardview-header-panel__item--dragged-text-weight;
+
+    // dx-shadow-geometry: two-layer drag shadow; whether a shadow role replaces it is design's call
     box-shadow:
       0 1px 3px $cardview-header-panel__item--dragged-box-shadow-color,
       0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;

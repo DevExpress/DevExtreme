@@ -16,3 +16,6 @@ $drop-down-button-action-spindown-icon-size: null !default;
   $drop-down-button-toggle-spindown-icon-size: ds.$spacing-180;
   $drop-down-button-action-spindown-icon-size: ds.$spacing-120 !default;
 }
+
+// Base-layer sizing injected with design tokens (wave B12)
+$drop-down-button-icon-right-margin-inline-start: ds.$spacing-40 !default;
