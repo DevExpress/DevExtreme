@@ -46,6 +46,13 @@ export interface ButtonCollectionProperties extends CollectionWidgetEditProperti
 }
 
 class ButtonCollection extends CollectionWidgetEdit<ButtonCollectionProperties> {
+  // The group above carries the role and the buttons carry the item role. aria-disabled is a
+  // global ARIA attribute, so marking this wrapper puts a roleless div where the role requires
+  // items - axe reports aria-required-children on a split button's role="menu".
+  _needsDisabledStateOnRoot(): boolean {
+    return false;
+  }
+
   _initTemplates(): void {
     super._initTemplates();
 

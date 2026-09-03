@@ -561,6 +561,10 @@ class Widget<
     }
   }
 
+  _needsDisabledStateOnRoot(): boolean {
+    return true;
+  }
+
   _toggleDisabledState(value: boolean | undefined): void {
     const $element = this.$element();
 
@@ -570,11 +574,7 @@ class Widget<
 
     this.setAria('disabled', state);
 
-    // The aria target is the focus target, and in a composite widget that is a descendant:
-    // the input of a text editor, the item container of a list. Assistive technology and
-    // axe resolve the state from the element or an ancestor, so the parts that live outside
-    // the focus target - tags, labels, file lists - need the root marked as well.
-    if (this._getAriaTarget().get(0) !== $element.get(0)) {
+    if (this._needsDisabledStateOnRoot() && this._getAriaTarget().get(0) !== $element.get(0)) {
       this.setAria('disabled', state, $element);
     }
   }
