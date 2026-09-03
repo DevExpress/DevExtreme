@@ -1637,6 +1637,8 @@ QUnit.module('aria accessibility', {}, () => {
 
         assert.strictEqual($target.attr('aria-disabled'), undefined, 'aria target is cleared');
         assert.strictEqual($element.attr('aria-disabled'), undefined, 'root is cleared');
+
+        instance.dispose();
     });
 
     QUnit.test('aria-disabled is kept off the root when a widget opts out', function(assert) {
@@ -1669,6 +1671,8 @@ QUnit.module('aria accessibility', {}, () => {
 
         assert.strictEqual($element.find('.aria-target').attr('aria-disabled'), 'true', 'aria target is marked');
         assert.strictEqual($element.attr('aria-disabled'), undefined, 'root is not marked');
+
+        instance.dispose();
     });
 
     QUnit.test('aria-hidden', function(assert) {

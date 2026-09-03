@@ -56,7 +56,10 @@ const PageIndexSelectorDefaultProps: PageIndexSelectorPropsType = {
   itemCount: PaginationDefaultProps.itemCount,
 };
 
-interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' | 'disabled' > { navigate: LightButtonProps['onClick'] }
+interface NavigationButtonProps
+  extends Pick<LightButtonProps, 'className' | 'tabIndex' | 'disabled'> {
+  navigate: LightButtonProps['onClick'];
+}
 
 interface NavigationButtonPropsCache {
   prevButtonProps: NavigationButtonProps | undefined;
