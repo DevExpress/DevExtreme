@@ -94,6 +94,9 @@ $(() => {
   const popupInstance = $('#aiAssistantContainer')
     .dxPopup({
       title: 'AI Assistant',
+      wrapperAttr: {
+        class: 'chat-popup',
+      },
       width: 400,
       height: '90%',
       dragEnabled: true,
