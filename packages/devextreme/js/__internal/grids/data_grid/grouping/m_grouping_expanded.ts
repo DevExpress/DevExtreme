@@ -384,7 +384,6 @@ export class GroupingHelper extends GroupingHelperCore {
       ? dataSource.beginPageIndex()
       : dataSource.pageIndex();
     const dataSourceItems = dataSource.items();
-    // @ts-expect-error badly typedDataSourceAdapter.pageSize
     const offset = correctSkipLoadOption(that, beginPageIndex * dataSource.pageSize());
     const groupInfo = that.findGroupInfo(path);
     let groupCountQuery;

@@ -58,16 +58,19 @@ export class CustomLoader {
       const store = this.dataSource.store();
 
       if (!store) {
-        // @ts-expect-error badly type Deferred.reject
+        // @ts-expect-error badly typed Deferred.reject
         d.reject('canceled');
         return;
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      when<any>(operation.data ?? this.loadFromStore(operation.storeLoadOptions))
-        .done((data: RawItemData[], extra?: LoadOperation['extra']) => {
-          operation.data = data;
-          operation.extra = extra;
+      const loadDeferred = operation.data ?? this.loadFromStore(operation.storeLoadOptions);
+
+      when<CustomLoadResult | RawItemData[]>(loadDeferred)
+        .done((result) => {
+          const loaded: CustomLoadResult = Array.isArray(result) ? { data: result } : result;
+
+          operation.data = loaded.data;
+          operation.extra = loaded.extra;
 
           this.customizeLoadResult(operation);
 
@@ -78,9 +81,10 @@ export class CustomLoader {
             totalCount = store.totalCount(operation.storeLoadOptions);
           }
 
+          // customizeLoadResult may have replaced data, so re-resolve it
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           when<any>(operation.data, totalCount)
-            .done((resolvedData: RawItemData[], resolvedTotalCount: number) => {
+            .done((resolvedData: RawItemData[], resolvedTotalCount?: number) => {
               operation.extra ??= {};
               operation.extra.totalCount = resolvedTotalCount;
               d.resolve({
@@ -88,10 +92,10 @@ export class CustomLoader {
                 extra: operation.extra,
               });
             })
-            // @ts-expect-error badly type Deferred.reject
+            // @ts-expect-error badly typed Deferred.reject
             .fail((e: unknown) => { d.reject(e); });
         })
-        // @ts-expect-error badly type Deferred.reject
+        // @ts-expect-error badly typed Deferred.reject
         .fail((e: unknown) => { d.reject(e); });
     }, this.getLoadingTimeout());
 
@@ -140,7 +144,7 @@ export class CustomLoader {
           extra: operation.extra,
         });
       })
-      // @ts-expect-error badly type Deferred.reject
+      // @ts-expect-error badly typed Deferred.reject
       .fail((...args: unknown[]) => { d.reject(...args); });
 
     return d;
@@ -153,14 +157,16 @@ export class CustomLoader {
       .store()
       .load(loadOptions)
       .done((data: unknown, extra: unknown) => {
-        // A store may resolve with a single `{ data, totalCount }` object
+        // A store may resolve with a single `{ data, ...extra }` object
         // instead of the `(data, extra)` pair the pipeline expects.
-        const result = data as { data?: unknown } | undefined;
+        const result = data as {
+          data?: unknown,
+        } & LoadOperation['extra'] | undefined;
 
         if (result && !Array.isArray(result) && Array.isArray(result.data)) {
           d.resolve({
             data: result.data,
-            extra: result as LoadOperation['extra'],
+            extra: result,
           });
         } else {
           d.resolve({
@@ -169,7 +175,7 @@ export class CustomLoader {
           });
         }
       })
-      // @ts-expect-error badly type Deferred.reject
+      // @ts-expect-error badly typed Deferred.reject
       .fail((...args: unknown[]) => { d.reject(...args); });
 
     return d;
