@@ -39,7 +39,7 @@ export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
   };
   loadOptions?: StoreLoadOptions;
   originalStoreLoadOptions?: StoreLoadOptions;
-  remoteOperations?: RemoteOperations;
+  remoteOperations?: RemoteOperationsOptions;
   isCustomLoading?: boolean;
   pageIndex?: number;
   lastLoadOptions?: StoreLoadOptions & {
@@ -47,7 +47,7 @@ export interface LoadOperation extends Omit<BaseLoadOperation, 'operationId'> {
     pageSize: number;
   };
   operationTypes?: OperationTypes;
-  group?: unknown[] | null;
+  group?: StoreLoadOptions['group'];
   extra?: {
     totalCount?: number;
     summary?: unknown[];
