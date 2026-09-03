@@ -253,6 +253,12 @@
   line-height: $icon-line-height;
 }
 
+/*
+ * NOT converted to translate on purpose. Consumers cancel the horizontal half per widget — the
+ * generic gallery pins its arrows to the edges with `left: 0` / `right: 0` and an explicit
+ * `margin-left: 0` — and a margin can be overridden that way while a transform cannot. Centring
+ * here has to stay something a downstream rule can switch off.
+ */
 @mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {
   $icon-center-offset: null;
 
@@ -304,7 +310,7 @@
 }
 
 @mixin dx-font-icon($glyph) {
-  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes -- dx-icon-glyph-size: the icon font's own size, no icon scale in the package
 
   &::before {
     content: $glyph;
@@ -672,7 +678,7 @@ $icons: (
   }
 
   %icon-font {
-    font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+    font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes -- dx-icon-glyph-size: the icon font's own size, no icon scale in the package
   }
 
   @each $key, $glyph in $icons {

@@ -42,7 +42,7 @@ $checkbox-text-padding-inline-start: 5px !default;
   word-wrap: break-word;
   line-height: normal;
 
-  // fluent-next passes null: its own rule paints this box, the base copy would be dead weight
+  // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
   @if $checkbox-text-padding-inline-start {
     padding-inline-start: $checkbox-text-padding-inline-start;
   }

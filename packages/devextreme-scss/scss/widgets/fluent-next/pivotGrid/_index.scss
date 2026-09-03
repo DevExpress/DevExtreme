@@ -5,6 +5,11 @@
 @use "../treeView/sizes" as treeViewSizes;
 @use "../button/sizes" as buttonSizes;
 @use "../../base/pivotGrid" as basePivotGrid with (
+  $pivotgrid-border-width: var(--dx-pivot-grid-border-width),
+  $pivotgrid-focus-outline-width: var(--dx-focus-rect-outline-width),
+  $pivotgrid-focus-outline-offset: var(--dx-focus-rect-outline-offset-inset),
+  $pivotgrid-icon-size: var(--dx-pivot-grid-icon-size),
+  $pivotgrid-common-field-padding: var(--dx-pivot-grid-field-padding),
   $pivotgrid-common-field-chooser-drag-width: var(--dx-pivot-grid-field-chooser-drag-width),
   $pivotgrid-common-field-chooser-drag-height: var(--dx-pivot-grid-field-chooser-drag-height),
   $pivotgrid-position-indicator-vertical-height: var(--dx-pivot-grid-position-indicator-vertical-height),

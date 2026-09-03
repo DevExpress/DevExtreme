@@ -172,7 +172,9 @@ const OVERRIDES = {
     validation: ['text-editor'],
     filterBuilder: ['text-editor'],
     // the file manager's toolbar is a Toolbar
-    fileManager: ['toolbar'],
+    // …and it splits the dirs panel from the items view with a real Splitter, centring the
+    // wrapper on the bar from that widget's own border and bar widths
+    fileManager: ['toolbar', 'splitter-bar'],
     // the editor's spin buttons are real Buttons
     textEditor: ['button'],
   },
@@ -335,7 +337,15 @@ const OVERRIDES = {
        * metrics came out unpainted. The AI assistant is a Popup whose wrapper carries
        * .dx-ai-chat .dx-aidialog (grid_core/ai_chat: wrapperAttr), likewise outside the grid.
        */
-      '.dx-datagrid-drag-header', '.dx-treelist-drag-header', '.dx-ai-chat'],
+      '.dx-datagrid-drag-header', '.dx-treelist-drag-header', '.dx-ai-chat',
+      /*
+       * The AI assistant's "abort the running request?" dialog is a standalone dx dialog
+       * (grid_core/ai_assistant/ai_assistant_view: createConfirmDialog with elementAttr), so it
+       * renders at body level and not inside the grid. Its button width is a grid size, so the
+       * component tier has to be published on the dialog itself — the reachability gate caught
+       * this the moment the width stopped being a literal.
+       */
+      '.dx-datagrid-ai-assistant-confirm-dialog', '.dx-treelist-ai-assistant-confirm-dialog'],
     /*
      * The dragged clone is created as $('<div>').appendTo(container) — the container defaults to
      * the viewport — and the placeholder is inserted next to it, so both live outside .dx-sortable
@@ -394,6 +404,13 @@ const OVERRIDES = {
     // editor family plus fieldset.
     'invalid-badge',
     'valid-badge',
+    // Markup a widget writes into its own value, which consumers then render anywhere: the
+    // htmlEditor emits .dx-mention into the HTML it saves, and the Mentions demo shows that HTML
+    // in a chat log with no editor around it. The base layer already says so — `.dx-mention` is a
+    // bare selector there, while `.dx-variable` is nested under `.dx-htmleditor-content`. A
+    // component-tier token would only resolve inside the editor and the highlight would vanish
+    // everywhere else, so the value is published on :root.
+    'mention',
     'focus-rect', // ds.$focus-rect-color-*
     'shadow', // ds.$color-shadow-* / ds.$box-shadow-*
     'typography', // ds.$font-* / ds.$line-height-*
@@ -480,6 +497,11 @@ const OVERRIDES = {
       'with-label',
       // .dx-menu-item-has-icon: a menu item that reserves room for an icon
       'with-icon',
+      // .dx-button:not(.dx-button-has-text): a button that shows a glyph and nothing else, which
+      // pads itself differently from one carrying a caption
+      'icon-only',
+      // .dx-button-has-text: the same button when it carries a caption beside the glyph
+      'with-text',
       // .dx-popup-title present: the content box loses the padding the title already provides
       'with-title',
       // Switch.value rendered as .dx-switch-on-value / -off-value, and the two label boxes inside
@@ -495,6 +517,9 @@ const OVERRIDES = {
       'small', 'dragging', 'inverted', 'first-month', 'first-of-month', 'other-month',
       // calendar cell states drawn as classes, and the two htmlEditor overlay variants
       'contoured', 'faded', 'noimage', 'highlighted', 'dragged', 'legacy',
+      // .dx-calendar-today marks the current date's cell; .dx-calendar-multiview sits on the
+      // widget root when it shows more than one month at a time
+      'today', 'multiview',
       // `.dx-calendar-other-view` — a cell belonging to the neighbouring month
       'other',
       // the two step appearances Stepper draws, and the two treeView border variants
@@ -821,7 +846,8 @@ const OVERRIDES = {
      * on. Compounds (`group-header`, `nav-button`, `pull-down`) are one anatomy level, not two.
      */
     'check-box': ['icon', 'mark', 'arrow', 'arrow-icon', 'container'],
-    switch: ['handle', 'container', 'inner'],
+    // wave B7: .dx-switch-on and .dx-switch-off are the two labels the track slides between
+    switch: ['handle', 'container', 'inner', 'label'],
     /*
      * `menu-items-container` sits next to `items-container` on purpose: base/_contextMenu.scss draws
      * `.dx-context-menu .dx-menu-items-container` with its own parameter, and contextMenu/_index.scss
@@ -833,7 +859,9 @@ const OVERRIDES = {
     'drop-down-menu': ['section', 'list', 'popup', 'content'],
     'date-view': ['roller', 'item', 'year', 'month', 'hours-colon'],
     'time-view': ['clock', 'digits', 'field', 'number-box', 'input', 'time-separator', 'spin',
-      'format12'],
+      'format12',
+      // wave B8: the hour and minute hands are boxes the clock positions on the dial
+      'arrow'],
     fieldset: ['field', 'label', 'value', 'header', 'attention-icon', 'radio-group'],
     'radio-group': ['radio-button', 'collection', 'value-container'],
     'progress-bar': ['status', 'range', 'container', 'label'],
@@ -881,8 +909,16 @@ const OVERRIDES = {
       'file', 'file-name', 'file-container', 'files-container', 'suggestions', 'editing-preview',
       'caption', 'delete-button', 'cancel-button', 'context-menu', 'icon', 'box', 'container',
       'alert-list', 'prompt', 'textarea', 'toolbar', 'information', 'author-name', 'timestamp',
-      'typing-indicator', 'circle', 'bubble', 'group'],
-    'color-view': ['palette', 'palette-cell', 'hue-scale', 'hue-scale-cell', 'hue-scale-wrapper', 'alpha', 'controls',
+      'typing-indicator', 'circle', 'bubble', 'group',
+      // wave B3: .dx-chat-messagebubble-image is a real <img> box inside a bubble
+      'image'],
+    /*
+     * `alpha` alone was doing three jobs — the alpha row, the alpha cell and the alpha scale are
+     * three different elements with three different sizes, so each gets its own segment and the
+     * bare `alpha` is gone. `apply-button` names the dialog button the base layer sizes.
+     */
+    'color-view': ['palette', 'palette-cell', 'hue-scale', 'hue-scale-cell', 'hue-scale-wrapper', 'controls',
+      'alpha-row', 'alpha-cell', 'alpha-scale', 'alpha-label', 'apply-button',
       'container', 'label', 'handle', 'color-preview', 'preview', 'textbox', 'hex', 'overlay',
       'content-box', 'bg-box'],
     diagram: [
@@ -917,7 +953,10 @@ const OVERRIDES = {
     'html-editor': ['toolbar', 'table', 'variable', 'mention', 'resize', 'resize-frame', 'cover',
       'uploader', 'file-uploader', 'input-wrapper', 'wrapper', 'ai-dialog', 'content', 'icon', 'item',
       'highlighted-row', 'code-block', 'placeholder', 'size-editor', 'add-image-dialog', 'separator',
-      'tabs', 'selects', 'title'],
+      'tabs', 'selects', 'title',
+      // wave B14: the quoted block, a table cell, and the bar that resizes a column or row together
+      // with the strip that highlights the one being dragged
+      'blockquote', 'cell', 'resizer', 'highlight'],
     'pivot-grid': ['area', 'area-field', 'fields-area-head', 'fields-area-head-cell', 'field-chooser',
       'field', 'fields', 'expand-icon', 'row', 'column', 'cell', 'last-cell', 'header', 'headers',
       'drag-header', 'total', 'grand-total', 'filter', 'sort', 'icon', 'chevron', 'chevron-icon',
@@ -928,7 +967,10 @@ const OVERRIDES = {
     stepper: [
       // wave H: anatomy the folder needed to enter `migrated`
       'content', 'optional-mark','step', 'step-indicator', 'step-label', 'label', 'connector', 'value', 'icon', 'text',
-      'item', 'container'],
+      'item', 'container',
+      // wave B3: the two box-shadow rings around the indicator — `ring` is the selection ring,
+      // `halo` is the gap the indicator punches in the connector behind it
+      'ring', 'halo'],
     'recurrence-editor': ['switch', 'repeat-end', 'item', 'container', 'label', 'until-date-box',
       'count-number-box', 'interval-number-box', 'number-box', 'button-group', 'radio-group'],
     /*
@@ -978,6 +1020,8 @@ const OVERRIDES = {
       'thumbnails', 'thumbnails-item', 'thumbnails-view-port', 'custom-thumbnail', 'spacer',
       'progress-panel', 'progress-box', 'progress-title', 'progress-bar', 'close-button',
       'large-icon', 'view-mode-button', 'tree-view-item', 'drop-zone-placeholder',
+      // wave B5: .dx-splitter-wrapper is a splitter box the file manager positions itself
+      'splitter-wrapper',
       'cancel-button', 'notification', 'container', 'separator', 'content', 'item', 'menu-item',
       'popup', 'overlay', 'editor', 'button', 'icon', 'text', 'title', 'image', 'placeholder',
       'drop-zone',
@@ -1022,6 +1066,19 @@ const OVERRIDES = {
       'adaptive-column', 'tree-view', 'node', 'select-all', 'sort-index', 'error-message', 'popup',
       'overlay', 'revert-button', 'validation', 'input', 'progress-bar', 'prompt-editor', 'after',
       'lines', 'title', 'ai', 'operation', 'list', 'button', 'content', 'text', 'header-row',
+      /*
+       * Opening the last of the base-layer fixed sizes: `expand-column` completes the
+       * select/edit/adaptive column family that was already here, `toolbar` and
+       * `regenerate-button` name the AI chat parts the base layer sizes
+       * (.dx-ai-chat .dx-popup-title .dx-toolbar-item, .dx-ai-chat__message-regenerate-button),
+       * and `confirm-dialog` the AI assistant dialog whose buttons carry a fixed width.
+       */
+      'expand-column', 'toolbar', 'regenerate-button', 'confirm-dialog',
+      // the last of the base-layer sizes: menu bar and caption, the search panel, the bottom
+      // load panel and the rows view, each named after the class the shared layer sizes
+      'menu-bar', 'menu-caption', 'search-panel', 'bottom-load-panel', 'rowsview',
+      // .dx-column-indicators: the sort / header-filter icon strip in a column header
+      'column-indicator',
     ],
     // dataGrid's own deltas on top of the chassis: the group panel and the edit-form buttons.
     // `group-panel-item` and `block-separator` are compounds — one anatomy level each, not two.
@@ -1036,6 +1093,9 @@ const OVERRIDES = {
     'text-editor': [
       'input', 'label', 'line', 'button', 'clear-button', 'spin-button', 'custom-button',
       'icon-container', 'invalid-badge',
+      // wave B13: the strip the floating label sits on (.dx-label::before) and the glyph inside an
+      // editor button (.dx-button-content .dx-icon) are both real boxes with sizes of their own
+      'backdrop', 'icon',
     ],
   },
 };

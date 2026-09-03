@@ -1,8 +1,8 @@
 @use "sass:math";
 @use "../../base/mixins" as *;
 
-$scheduler-appointment-collector-margin: 3px;
-$scheduler-appointment-collector-height: 22px;
+$scheduler-appointment-collector-margin: 3px; // dx-fixed-size: the collector margin, multiplied elsewhere so a var() cannot pass
+$scheduler-appointment-collector-height: 22px !default;
 
 $scheduler-common-collector-margin: null !default;
 $scheduler-common-collector-size: null !default;
@@ -72,7 +72,7 @@ $scheduler-common-collector-size: null !default;
 }
 
 .dx-scheduler-adaptive {
-  @media (max-width: 450px) {
+  @media (max-width: 450px) { // dx-literal-required: a media condition, var() is invalid here
     .dx-scheduler-view-switcher-label {
       display: none;
     }

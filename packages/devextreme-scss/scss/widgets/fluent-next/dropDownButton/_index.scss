@@ -8,6 +8,7 @@
 @include dx-dropdownbutton(
   var(--dx-drop-down-button-toggle-spindown-icon-size),
   var(--dx-drop-down-button-action-padding-inline),
+  $dropdownbutton-icon-right-margin-inline-start: var(--dx-drop-down-button-icon-right-margin-inline-start),
 );
 
 .dx-dropdownbutton-popup-wrapper {

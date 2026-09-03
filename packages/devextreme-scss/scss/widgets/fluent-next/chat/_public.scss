@@ -11,6 +11,7 @@
   --dx-chat-avatar-content: #{$chat-avatar-content};
   --dx-chat-avatar-size: #{$chat-avatar-size};
   --dx-chat-bg: #{$chat-bg};
+  --dx-chat-border-width: #{$chat-border-width};
   --dx-chat-border: #{$chat-border};
   --dx-chat-border-radius: #{$chat-border-radius};
   --dx-chat-bubble-border-radius: #{$chat-bubble-border-radius};
@@ -18,6 +19,10 @@
   --dx-chat-bubble-delete-gap: #{$chat-bubble-delete-gap};
   --dx-chat-bubble-delete-icon-size: #{$chat-bubble-delete-icon-size};
   --dx-chat-bubble-gap: #{$chat-bubble-gap};
+  --dx-chat-bubble-image-border-radius: #{$chat-bubble-image-border-radius};
+  --dx-chat-bubble-image-max-height: #{$chat-bubble-image-max-height};
+  --dx-chat-bubble-image-max-width: #{$chat-bubble-image-max-width};
+  --dx-chat-bubble-image-padding: #{$chat-bubble-image-padding};
   --dx-chat-bubble-padding: #{$chat-bubble-padding};
   --dx-chat-bubble-primary-bg: #{$chat-bubble-primary-bg};
   --dx-chat-bubble-primary-content: #{$chat-bubble-primary-content};
@@ -47,6 +52,7 @@
   --dx-chat-information-gap: #{$chat-information-gap};
   --dx-chat-information-icon-size: #{$chat-information-icon-size};
   --dx-chat-information-timestamp-content: #{$chat-information-timestamp-content};
+  --dx-chat-message-box-border-block-start-width: #{$chat-message-box-border-block-start-width};
   --dx-chat-message-box-border: var(--dx-chat-border);
   --dx-chat-message-box-file-bg: #{$chat-message-box-file-bg};
   --dx-chat-message-box-file-cancel-button-secondary-content: #{$chat-message-box-file-cancel-button-secondary-content};

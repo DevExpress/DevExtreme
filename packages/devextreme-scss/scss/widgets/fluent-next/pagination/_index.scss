@@ -2,8 +2,11 @@
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/pagination" with (
-  $pagination-page-padding-fallback: null,
-  $pagination-navigate-button-width-fallback: null,
+  $pagination-page-padding-fallback: false,
+  $pagination-navigate-button-width-fallback: false,
+  $pagination-padding-block-fallback: false,
+  $pagination-navigate-button-padding-block-fallback: false,
+  $pagination-info-paddings: var(--dx-pagination-info-margin-inline),
   $pagination-page-margin-left: var(--dx-pagination-page-margin-inline-start),
   $pagination-page-margin-right: var(--dx-pagination-page-margin-inline-end),
   $pagination-separator-padding-left: var(--dx-pagination-separator-padding-inline-start),

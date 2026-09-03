@@ -58,5 +58,5 @@ $sortable-placeholder-inside-border-width: 2px !default;
 
 .dx-sortable-dragging > * {
   border-color: if(meta.type-of($base-accent) == color, color.change($base-accent, $alpha: 0.5), rgb(from #{$base-accent} r g b / 0.5));
-  box-shadow: 0 1px 3px $sortable-clone-shadow-color-first, 0 6px 8px $sortable-clone-shadow-color-second;
+  box-shadow: 0 1px 3px $sortable-clone-shadow-color-first, 0 6px 8px $sortable-clone-shadow-color-second; // dx-shadow-geometry: the theme already takes both colours from roles; whether a whole shadow role replaces this two-layer geometry is design's call
 }

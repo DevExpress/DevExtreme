@@ -31,6 +31,7 @@
     "dx-calendar-cell",
     "dx-calendar-cell-in-range",
     "dx-calendar-cell-range-hover",
+    "dx-calendar-multiview",
     "dx-calendar-navigator",
     "dx-calendar-week-number-cell"
   ],
@@ -75,6 +76,7 @@
     "dx-chat-messagebox",
     "dx-chat-messagebox-textarea-container",
     "dx-chat-messagebubble",
+    "dx-chat-messagebubble-image",
     "dx-chat-messagegroup",
     "dx-chat-messagegroup-alignment-end",
     "dx-chat-messagegroup-alignment-start",
@@ -231,14 +233,18 @@
     "dx-gallery-indicator-item-selected"
   ],
   "grid": [
+    "dx-ai-chat__action-list-item",
     "dx-ai-chat__action-list-item--aborted",
     "dx-ai-chat__action-list-item--error",
     "dx-ai-chat__action-list-item--success",
     "dx-ai-chat__content",
+    "dx-ai-chat__message",
     "dx-ai-chat__message--error",
     "dx-ai-chat__message--pending",
     "dx-ai-chat__message--success",
+    "dx-ai-chat__message-content",
     "dx-ai-chat__message-error-text",
+    "dx-ai-chat__message-header-row",
     "dx-ai-chat__message-icon",
     "dx-ai-chat__message-regenerate-button",
     "dx-ai-prompt-editor__progressbar",
@@ -253,6 +259,7 @@
     "dx-datagrid-column-chooser-list",
     "dx-datagrid-columns-separator",
     "dx-datagrid-container",
+    "dx-datagrid-content",
     "dx-datagrid-dragview",
     "dx-datagrid-edit-popup",
     "dx-datagrid-filter-panel",
@@ -265,11 +272,14 @@
     "dx-datagrid-nodata",
     "dx-datagrid-revert-tooltip",
     "dx-datagrid-rowsview",
+    "dx-datagrid-search-panel",
     "dx-datagrid-search-text",
     "dx-datagrid-sticky-columns",
     "dx-datagrid-summary-item",
     "dx-datagrid-total-footer",
     "dx-editor-cell",
+    "dx-header-row",
+    "dx-highlight-outline",
     "dx-row",
     "dx-treelist-adaptive-more",
     "dx-treelist-borders",
@@ -277,6 +287,7 @@
     "dx-treelist-column-chooser-list",
     "dx-treelist-columns-separator",
     "dx-treelist-container",
+    "dx-treelist-content",
     "dx-treelist-dragview",
     "dx-treelist-edit-popup",
     "dx-treelist-filter-panel",
@@ -289,6 +300,7 @@
     "dx-treelist-nodata",
     "dx-treelist-revert-tooltip",
     "dx-treelist-rowsview",
+    "dx-treelist-search-panel",
     "dx-treelist-search-text",
     "dx-treelist-sticky-columns",
     "dx-treelist-summary-item",
@@ -302,7 +314,6 @@
     "dx-htmleditor-toolbar-format",
     "dx-htmleditor-toolbar-menu-separator",
     "dx-htmleditor-toolbar-separator",
-    "dx-mention",
     "dx-resize-frame",
     "dx-table-resize-frame"
   ],
@@ -326,6 +337,7 @@
     "dx-list-items",
     "dx-list-next-button",
     "dx-list-reorder-handle",
+    "dx-list-search",
     "dx-list-select-all",
     "dx-list-select-all-label",
     "dx-list-slide-menu-button",
@@ -336,7 +348,8 @@
   "load-indicator": [
     "dx-loadindicator-content-circle",
     "dx-loadindicator-content-sparkle",
-    "dx-loadindicator-segment-inner"
+    "dx-loadindicator-segment-inner",
+    "dx-loadindicator-wrapper"
   ],
   "lookup": [
     "dx-dropdowneditor-active",
@@ -405,6 +418,8 @@
     "dx-scheduler-appointment-content-date",
     "dx-scheduler-appointment-content-details",
     "dx-scheduler-appointment-recurrence",
+    "dx-scheduler-appointment-recurrence-icon",
+    "dx-scheduler-appointment-reduced",
     "dx-scheduler-appointment-title",
     "dx-scheduler-container",
     "dx-scheduler-date-table-cell",
@@ -416,6 +431,7 @@
     "dx-scheduler-fixed-appointments",
     "dx-scheduler-group-flex-container",
     "dx-scheduler-group-flex-container-hierarchical",
+    "dx-scheduler-group-header",
     "dx-scheduler-group-row",
     "dx-scheduler-group-table",
     "dx-scheduler-header",
@@ -445,6 +461,7 @@
   ],
   "scroll-view": [
     "dx-scrollable-native",
+    "dx-scrollview-pull-down",
     "dx-scrollview-pull-down-image",
     "dx-scrollview-pull-down-indicator",
     "dx-scrollview-pull-down-text",
@@ -541,6 +558,8 @@
     "dx-timeview-clock",
     "dx-timeview-field",
     "dx-timeview-format12",
+    "dx-timeview-hourarrow",
+    "dx-timeview-minutearrow",
     "dx-timeview-time-separator"
   ],
   "toast": [
@@ -582,6 +601,7 @@
     "dx-treeview-with-search"
   ],
   "validation": [
-    "dx-validationsummary-item"
+    "dx-validationsummary-item",
+    "dx-validationsummary-item-content"
   ]
 }

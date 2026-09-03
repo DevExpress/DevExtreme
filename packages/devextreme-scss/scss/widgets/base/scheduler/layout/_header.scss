@@ -6,7 +6,7 @@ $arrow-down: "\f016";
 ) {
   border: $border;
   border-color: $border-color;
-  margin-bottom: -1px;
+  margin-bottom: -1px; // dx-px-nudge: collapses the header border with the row below
   position: relative;
   z-index: 1;
   width: 100%;

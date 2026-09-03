@@ -1,3 +1,11 @@
 @use "../../../sizes" as *;
+@use "../../../../../_design-system/variables/ds" as ds;
 
 $grid-ai-chat-message-icon-size: $global-icon-size;
+
+// Values hoisted from the shared layer's fixed sizes (tokenized)
+$grid-ai-chat-toolbar-item-padding-inline-end: ds.$spacing-40 !default;
+$grid-ai-chat-message-gap: ds.$spacing-80 !default;
+$grid-ai-chat-message-content-gap: ds.$spacing-40 !default;
+$grid-ai-chat-message-min-width: 280px !default; // dx-offscale: 280px, the width the message column is designed around
+$grid-ai-chat-message-regenerate-button-border-radius: ds.$border-radius-40 !default;
