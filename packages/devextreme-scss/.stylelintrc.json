@@ -2,7 +2,8 @@
     "plugins": [
         "stylelint-scss",
         "@stylistic/stylelint-plugin",
-        "./tools/stylelint/no-identical-branch-declarations.mjs"
+        "./tools/stylelint/no-identical-branch-declarations.mjs",
+        "./tools/stylelint/module-variable-default.mjs"
     ],
     "extends": "stylelint-config-standard-scss",
     "ignoreFiles": "!**/*.{css,scss}",
@@ -19,6 +20,7 @@
         "@stylistic/declaration-colon-space-after": "always-single-line",
         "@stylistic/declaration-colon-space-before": "never",
         "declaration-no-important": true,
+        "dx/module-variable-default": true,
         "dx/no-identical-branch-declarations": true,
         "font-family-name-quotes": "always-unless-keyword",
         "@stylistic/function-comma-space-after": "always-single-line",

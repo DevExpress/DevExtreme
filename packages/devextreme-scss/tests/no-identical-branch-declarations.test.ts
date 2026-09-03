@@ -1,44 +1,7 @@
-import { execFileSync } from 'child_process';
-import { mkdtempSync, readFileSync, writeFileSync } from 'fs';
-import { tmpdir } from 'os';
-import { join } from 'path';
+import { createRunner, scss } from './stylelint-rule';
 
-const packageRoot = process.cwd();
 const ruleName = 'dx/no-identical-branch-declarations';
-const stylelintBin = join(packageRoot, 'node_modules', '.bin', 'stylelint');
-
-const fixture = mkdtempSync(join(tmpdir(), 'no-identical-branch-declarations-'));
-const configPath = join(fixture, 'config.json');
-writeFileSync(configPath, JSON.stringify({
-  customSyntax: require.resolve('postcss-scss', { paths: [require.resolve('stylelint-scss')] }),
-  plugins: [join(packageRoot, 'tools', 'stylelint', 'no-identical-branch-declarations.mjs')],
-  rules: { [ruleName]: true },
-}));
-
-type Warning = { line: number; rule: string; text: string };
-type Result = { warnings: Warning[]; output: string };
-
-const lint = (name: string, source: string, fix = false): Result => {
-  const file = join(fixture, name);
-  const reportFile = join(fixture, `${name}.report.json`);
-  writeFileSync(file, source);
-  writeFileSync(reportFile, '');
-  const args = [file, '--config', configPath, '--formatter', 'json', '--output-file', reportFile, ...(fix ? ['--fix'] : [])];
-  try {
-    execFileSync(stylelintBin, args, { stdio: 'ignore' });
-  } catch (error) {
-    if ((error as { status?: number }).status !== 2) throw error;
-  }
-  const [{ warnings }] = JSON.parse(readFileSync(reportFile, 'utf8') || '[{"warnings":[]}]');
-  return {
-    warnings: warnings.map(({ line, rule, text }: Warning) => ({ line, rule, text })),
-    output: readFileSync(file, 'utf8'),
-  };
-};
-
-const fix = (name: string, source: string): Result => lint(name, source, true);
-
-const scss = (...rows: string[]): string => `${rows.join('\n')}\n`;
+const { lint, fix } = createRunner('no-identical-branch-declarations.mjs', ruleName);
 
 test('a variable set to one value in every @else branch is reported once, on the first branch', () => {
   const { warnings } = lint('else-chain.scss', scss(
