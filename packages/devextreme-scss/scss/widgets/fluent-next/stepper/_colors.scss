@@ -59,7 +59,11 @@ $stepper-connector-bg: ds.$color-border-subtle !default;
 $stepper-connector-value-bg: ds.$color-bg-primary !default;
 
 /* The filled part of the connector kept the accent when the widget was disabled, so a greyed
-step sat on a bright blue line. */
-$stepper-connector-value-bg-disabled: ds.$color-bg-disabled !default;
+step sat on a bright blue line.
+
+It takes the same role as the filled step discs it runs between, not bg-disabled: the empty track
+is border-subtle (#e1e1e1) and bg-disabled (#f5f5f5) is lighter than that, which made the walked
+part of the path fainter than the part still ahead. */
+$stepper-connector-value-bg-disabled: ds.$color-content-disabled !default;
 
 $stepper-step-shadow: ds.$color-bg !default;

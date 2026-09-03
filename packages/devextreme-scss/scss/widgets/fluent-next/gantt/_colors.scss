@@ -10,13 +10,16 @@ $gantt-collapsable-row-bg: ds.$color-bg-low !default;
  * marker. See DIVERGENCES.md.
  */
 $gantt-icon: null !default;
+$gantt-icon-disabled: null !default;
 
 @if $mode == "light" {
   $gantt-icon: #161616 !default; // dx-data-uri-static: ds.$color-content
+  $gantt-icon-disabled: #ababab !default; // dx-data-uri-static: ds.$color-content-disabled
 }
 
 @if $mode == "dark" {
   $gantt-icon: #fff !default; // dx-data-uri-static: ds.$color-content
+  $gantt-icon-disabled: #767676 !default; // dx-data-uri-static: ds.$color-content-disabled
 }
 
 /*

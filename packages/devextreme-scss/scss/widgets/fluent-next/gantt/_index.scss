@@ -286,3 +286,11 @@
 }
 
 @include gantt-icons-mixin($gantt-icon);
+
+/* The toolbar icons are SVG data-uri backgrounds with their colour baked in at build time, so the
+greyed `color` on a disabled toolbar item never reaches the glyph - an unavailable command looked
+exactly like an available one once the blanket dim was lifted. Every one of these icons is a
+toolbar command that can be unavailable, so the whole set is emitted again in the disabled colour. */
+.dx-state-disabled {
+  @include gantt-icons-mixin($gantt-icon-disabled);
+}

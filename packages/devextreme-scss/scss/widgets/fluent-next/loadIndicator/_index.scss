@@ -134,13 +134,18 @@
 /* The spinner is painted with the accent, which does not inherit anything, so it kept spinning at
 full strength inside a disabled widget.
 
-The two rules mirror the enabled ones exactly rather than painting every segment at once: segment0
-and segment1 draw the gap in the arc with border-right-color and border-left-color set to
-transparent, and a blanket border-color that outranks them fills the gap in - the ring stops
-reading as a rotating arc and the motion looks wrong. So the base rule stays at two classes, below
-those, and only the track is matched at full depth. */
+The two rules mirror the enabled ones exactly rather than painting every segment at once, because
+the arc is drawn by leaving borders transparent and a blanket border-color fills those gaps in -
+the ring stops reading as a rotating arc and the motion looks wrong.
+
+Two gaps, at two different specificities. segment0 and segment1 clear border-right-color and
+border-left-color at three classes, above the rule below, so those survive. The bottom gap is
+cleared on the bare .dx-loadindicator-segment-inner at one class, so the shorthand here has to
+restate it - otherwise each arc gains a third painted side only while disabled. Only the track is
+matched at full depth, where a complete ring is what the enabled rule draws too. */
 .dx-state-disabled .dx-loadindicator-segment-inner {
   border-color: var(--dx-load-indicator-segment-border-disabled);
+  border-bottom-color: transparent;
 }
 
 .dx-state-disabled .dx-loadindicator-content-circle .dx-loadindicator-segment2 .dx-loadindicator-segment-inner {
