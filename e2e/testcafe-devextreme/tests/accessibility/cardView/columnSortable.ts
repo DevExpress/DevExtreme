@@ -15,11 +15,7 @@ test('headerPanel dragging column when it has sorting and headerFilter', async (
 
   await triggerDragStart(columnElement);
 
-  const a11yCheckConfig = {
-    // False positive: contrast rules do not apply to disabled elements
-    rules: { 'color-contrast': { enabled: false } },
-  };
-  await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   allowColumnReordering: true,
   columnChooser: {

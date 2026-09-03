@@ -451,10 +451,10 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   // Header panel item - disabled
   $cardview-fluent-header-panel__item--disabled-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
   $cardview-fluent-header-panel__item--disabled-border-color: $cardview-fluent-header-panel__item-border-color !default;
-  $cardview-fluent-header-panel__item--disabled-text-color: color.adjust($cardview-fluent-header-panel__item-text-color, $lightness: 60.00%, $space: hsl) !default;
-  $cardview-fluent-header-panel__item--disabled__icon-color: color.adjust($cardview-fluent-header-panel__item__icon-color, $lightness: 60.00%, $space: hsl) !default;
-  $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: color.adjust($cardview-fluent-header-panel__item__header-filter-icon--selected-color, $saturation: -34.10%, $space: hsl, $lightness: 27.06%) !default;
-  $cardview-fluent-header-panel__item--disabled__sort-index-text-color: color.adjust($cardview-fluent-header-panel__item__sort-index-text-color, $lightness: 60.00%, $space: hsl) !default;
+  $cardview-fluent-header-panel__item--disabled-text-color: $cardview-fluent-header-panel__item-text-color !default;
+  $cardview-fluent-header-panel__item--disabled__icon-color: $cardview-fluent-header-panel__item__icon-color !default;
+  $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: $cardview-fluent-header-panel__item__header-filter-icon--selected-color !default;
+  $cardview-fluent-header-panel__item--disabled__sort-index-text-color: $cardview-fluent-header-panel__item__sort-index-text-color !default;
 
   // Header panel item - dragged
   $cardview-fluent-header-panel__item--dragged-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
@@ -539,10 +539,10 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   // Header panel item - disabled
   $cardview-fluent-header-panel__item--disabled-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
   $cardview-fluent-header-panel__item--disabled-border-color: $cardview-fluent-header-panel__item-border-color !default;
-  $cardview-fluent-header-panel__item--disabled-text-color: color.adjust($cardview-fluent-header-panel__item-text-color, $lightness: -56.08%, $space: hsl) !default;
-  $cardview-fluent-header-panel__item--disabled__icon-color: color.adjust($cardview-fluent-header-panel__item__icon-color, $lightness: -56.08%, $space: hsl) !default;
-  $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: color.adjust($cardview-fluent-header-panel__item__header-filter-icon--selected-color, $saturation: -6.72%, $space: hsl, $lightness: -18.04%) !default;
-  $cardview-fluent-header-panel__item--disabled__sort-index-text-color: color.adjust($cardview-fluent-header-panel__item__sort-index-text-color, $lightness: -56.08%, $space: hsl) !default;
+  $cardview-fluent-header-panel__item--disabled-text-color: $cardview-fluent-header-panel__item-text-color !default;
+  $cardview-fluent-header-panel__item--disabled__icon-color: $cardview-fluent-header-panel__item__icon-color !default;
+  $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: $cardview-fluent-header-panel__item__header-filter-icon--selected-color !default;
+  $cardview-fluent-header-panel__item--disabled__sort-index-text-color: $cardview-fluent-header-panel__item__sort-index-text-color !default;
 
   // Header panel item - dragged
   $cardview-fluent-header-panel__item--dragged-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
@@ -617,12 +617,12 @@ $cardview-header-panel__item--hovered__icon-color: $cardview-fluent-header-panel
 $cardview-header-panel__item--hovered__header-filter-icon--selected-color: $cardview-fluent-header-panel__item--hovered__header-filter-icon--selected-color !default;
 $cardview-header-panel__item--hovered__sort-index-text-color: $cardview-fluent-header-panel__item--hovered__sort-index-text-color !default;
 
-$cardview-header-panel__item--disabled-bg-color: $cardview-fluent-header-panel__item--disabled-bg-color !default;
-$cardview-header-panel__item--disabled-border-color: $cardview-fluent-header-panel__item--disabled-border-color !default;
-$cardview-header-panel__item--disabled-text-color: $cardview-fluent-header-panel__item--disabled-text-color !default;
-$cardview-header-panel__item--disabled__icon-color: $cardview-fluent-header-panel__item--disabled__icon-color !default;
-$cardview-header-panel__item--disabled__header-filter-icon--selected-color: $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color !default;
-$cardview-header-panel__item--disabled__sort-index-text-color: $cardview-fluent-header-panel__item--disabled__sort-index-text-color !default;
+$cardview-header-panel__item--drag-source-bg-color: $cardview-fluent-header-panel__item--disabled-bg-color !default;
+$cardview-header-panel__item--drag-source-border-color: $cardview-fluent-header-panel__item--disabled-border-color !default;
+$cardview-header-panel__item--drag-source-text-color: $cardview-fluent-header-panel__item--disabled-text-color !default;
+$cardview-header-panel__item--drag-source__icon-color: $cardview-fluent-header-panel__item--disabled__icon-color !default;
+$cardview-header-panel__item--drag-source__header-filter-icon--selected-color: $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color !default;
+$cardview-header-panel__item--drag-source__sort-index-text-color: $cardview-fluent-header-panel__item--disabled__sort-index-text-color !default;
 
 $cardview-header-panel__item--dragged-bg-color: $cardview-fluent-header-panel__item--dragged-bg-color !default;
 $cardview-header-panel__item--dragged-border-color: $cardview-fluent-header-panel__item--dragged-border-color !default;
