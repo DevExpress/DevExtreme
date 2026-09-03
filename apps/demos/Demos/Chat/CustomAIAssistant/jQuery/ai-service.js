@@ -24,15 +24,15 @@ function createAiIntegration() {
 
   async function getAIResponseRecursive(messages, signal) {
     return getAIResponse(messages, signal).catch(async (error) => {
-      if (!error.message.includes("Connection error")) {
+      if (!error.message.includes('Connection error')) {
         throw error;
       }
 
       DevExpress.ui.notify({
         message:
-          "Our demo AI service reached a temporary request limit. Retrying in 30 seconds.",
-        width: "auto",
-        type: "error",
+          'Our demo AI service reached a temporary request limit. Retrying in 30 seconds.',
+        width: 'auto',
+        type: 'error',
         displayTime: 5000,
       });
 
@@ -49,7 +49,7 @@ function createAiIntegration() {
         return {
           promise: Promise.reject(
             new ChatCommandError(
-              "❌ This message is too long for me to process. Please shorten it and try again.",
+              '❌ This message is too long for me to process. Please shorten it and try again.',
             ),
           ),
           abort: () => {},
@@ -60,8 +60,8 @@ function createAiIntegration() {
 
       const isSmartPasteRequest = Array.isArray(data?.fields);
       const system = isSmartPasteRequest
-        ? `${prompt.system ?? ""} IMPORTANT: reply on a SINGLE line with no line breaks of any kind - use ";;;" as the only separator between fields.`
-        : (prompt.system ?? "");
+        ? `${prompt.system ?? ''} IMPORTANT: reply on a SINGLE line with no line breaks of any kind - use ';;;' as the only separator between fields.`
+        : (prompt.system ?? '');
 
       const aiPrompt = [
         { role: "system", content: system },

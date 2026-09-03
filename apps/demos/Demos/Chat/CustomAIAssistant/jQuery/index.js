@@ -1,22 +1,22 @@
 $(function () {
   DevExpress.config({
-    editorStylingMode: "filled",
+    editorStylingMode: 'filled',
   });
 
   DevExpress.config({
     floatingActionButtonConfig: {
       position: {
-        my: "right bottom",
-        at: "right bottom",
-        of: "#grid-container",
-        offset: "-16 -16",
+        my: 'right bottom',
+        at: 'right bottom',
+        of: '#grid-container',
+        offset: '-16 -16',
       },
     },
   });
 
   DevExpress.localization.loadMessages({
     en: {
-      "dxChat-textareaPlaceholder": "Enter a prompt...",
+      'dxChat-textareaPlaceholder': 'Enter a prompt...',
     },
   });
 
@@ -27,20 +27,20 @@ $(function () {
   let gridInstance;
   let toastInstance;
 
-  toastInstance = $("#toast")
+  toastInstance = $('#toast')
     .dxToast({
       displayTime: 600,
       closeOnClick: true,
-      message: "Form data is saved.",
-      type: "success",
+      message: 'Form data is saved.',
+      type: 'success',
       position: {
-        of: "#form-container",
-        at: "bottom center",
-        my: "bottom center",
-        offset: "0 -20",
+        of: '#form-container',
+        at: 'bottom center',
+        my: 'bottom center',
+        offset: '0 -20',
       },
     })
-    .dxToast("instance");
+    .dxToast('instance');
 
   function pushMessage(message) {
     chatInstance
@@ -48,7 +48,7 @@ $(function () {
       .store()
       .push([
         {
-          type: "insert",
+          type: 'insert',
           data: {
             id: Date.now() + Math.random(),
             timestamp: new Date(),
@@ -59,12 +59,12 @@ $(function () {
   }
 
   function setDisabled(disabled) {
-    chatInstance.option("disabled", disabled);
+    chatInstance.option('disabled', disabled);
   }
 
   function updateClearButtonState() {
     const items = chatInstance.getDataSource().items();
-    clearButtonInstance?.option("disabled", items.length === 0);
+    clearButtonInstance?.option('disabled', items.length === 0);
   }
 
   function clearChat() {
@@ -93,38 +93,38 @@ $(function () {
     routed.finally(finish);
   }
 
-  popupInstance = $("#aiAssistantContainer")
+  popupInstance = $('#aiAssistantContainer')
     .dxPopup({
-      title: "AI Assistant",
+      title: 'AI Assistant',
       width: 400,
-      height: "90%",
+      height: '90%',
       dragEnabled: true,
       resizeEnabled: true,
       showCloseButton: true,
       shading: false,
       visible: false,
       onHiding() {
-        fabBtn.option("visible", true);
+        fabBtn.option('visible', true);
       },
       onShowing() {
-        fabBtn.option("visible", false);
+        fabBtn.option('visible', false);
       },
       position: {
-        my: "right top",
-        at: "right top",
-        of: ".demo-container",
-        offset: "-20 20",
+        my: 'right top',
+        at: 'right top',
+        of: '.demo-container',
+        offset: '-20 20',
       },
       toolbarItems: [
         {
-          widget: "dxButton",
-          toolbar: "top",
-          location: "after",
+          widget: 'dxButton',
+          toolbar: 'top',
+          location: 'after',
           cssClass: CLASSES.clearChatButton,
           options: {
-            icon: "clearhistory",
+            icon: 'clearhistory',
             disabled: true,
-            hint: "Clear chat",
+            hint: 'Clear chat',
             onClick: () => clearChat(),
             onInitialized: (e) => {
               clearButtonInstance = e.component;
@@ -133,27 +133,27 @@ $(function () {
         },
       ],
       contentTemplate($container) {
-        const $chatContainer = $("<div>")
-          .addClass("ai-chat-content")
+        const $chatContainer = $('<div>')
+          .addClass('ai-chat-content')
           .appendTo($container);
 
         $chatContainer.dxChat({
-          height: "100%",
+          height: '100%',
           showAvatar: false,
-          width: "auto",
+          width: 'auto',
           dataSource: {
-            store: new DevExpress.data.ArrayStore({ key: "id" }),
+            store: new DevExpress.data.ArrayStore({ key: 'id' }),
           },
           reloadOnChange: true,
-          user: { id: "user" },
+          user: { id: 'user' },
           showUserName: false,
           speechToTextEnabled: true,
           suggestions: {
             items: [
-              { text: "Show Completed Tasks", prompt: "Show Completed Tasks" },
+              { text: 'Show Completed Tasks', prompt: 'Show Completed Tasks' },
               {
-                text: "Change State to Texas",
-                prompt: "Change State to Texas",
+                text: 'Change State to Texas',
+                prompt: 'Change State to Texas',
               },
             ],
             onItemClick(e) {
@@ -161,7 +161,7 @@ $(function () {
               const message = {
                 id: Date.now() + Math.random(),
                 timestamp: new Date(),
-                author: { id: "user" },
+                author: { id: 'user' },
                 text: prompt,
               };
 
@@ -170,14 +170,14 @@ $(function () {
             },
           },
           emptyViewTemplate(_data, container) {
-            const $icon = $("<div>").addClass(
-              "dx-chat-messagelist-empty-image dx-ai-chat__empty-image",
+            const $icon = $('<div>').addClass(
+              'dx-chat-messagelist-empty-image dx-ai-chat__empty-image',
             );
-            const $message = $("<div>")
-              .addClass("ai-chat-empty-message")
+            const $message = $('<div>')
+              .addClass('ai-chat-empty-message')
               .text(emptyViewMessage);
-            const $prompt = $("<div>")
-              .addClass("ai-chat-empty-prompt")
+            const $prompt = $('<div>')
+              .addClass('ai-chat-empty-prompt')
               .html(emptyViewPrompt);
 
             $(container).append($icon).append($message).append($prompt);
@@ -191,32 +191,32 @@ $(function () {
         });
       },
     })
-    .dxPopup("instance");
+    .dxPopup('instance');
 
   const aiIntegration = createAiIntegration();
 
-  formInstance = $("#form-container")
+  formInstance = $('#form-container')
     .dxForm({
       formData: employee,
       colCount: 3,
-      labelLocation: "top",
+      labelLocation: 'top',
       onOptionChanged: (e) => {
-        if (e.name === "isDirty") {
-          const saveButton = formInstance.getButton("Save");
-          saveButton.option("disabled", !e.value);
+        if (e.name === 'isDirty') {
+          const saveButton = formInstance.getButton('Save');
+          saveButton.option('disabled', !e.value);
         }
       },
       aiIntegration,
       items: [
         {
-          dataField: "Prefix",
-          label: { text: "Title" },
-          editorType: "dxSelectBox",
+          dataField: 'Prefix',
+          label: { text: 'Title' },
+          editorType: 'dxSelectBox',
           editorOptions: { items: titles, searchEnabled: true },
           aiOptions: {
             instruction:
-              "Only fill this field with one of the allowed values (Mr., Mrs., Ms.) if a " +
-              "title is explicitly mentioned in the text. Never use this field for any part " +
+              'Only fill this field with one of the allowed values (Mr., Mrs., Ms.) if a ' +
+              'title is explicitly mentioned in the text. Never use this field for any part ' +
               "of a person's name.",
           },
         },
@@ -288,62 +288,67 @@ $(function () {
         },
       ],
     })
-    .dxForm("instance");
+    .dxForm('instance');
 
-  gridInstance = $("#grid-container")
+  gridInstance = $('#grid-container')
     .dxDataGrid({
       dataSource: tasks,
-      keyExpr: "ID",
+      keyExpr: 'ID',
       showBorders: true,
       filterRow: { visible: true },
       headerFilter: { visible: true },
       filterSyncEnabled: true,
       columns: [
-        { dataField: "Subject", width: 250 },
-        { dataField: "StartDate", dataType: "date" },
-        { dataField: "DueDate", dataType: "date" },
+        { dataField: 'Subject', width: 250 },
+        { dataField: 'StartDate', dataType: 'date' },
+        { dataField: 'DueDate', dataType: 'date' },
         {
-          dataField: "Priority",
-          caption: "Priority",
+          dataField: 'Priority',
+          caption: 'Priority',
           cellTemplate: (container, options) => {
-            $("<div>")
+            $('<div>')
               .css({
                 background: colors[options.value],
-                borderRadius: "24px",
-                padding: "2px 8px",
-                display: "inline-block",
-                textAlign: "center",
+                borderRadius: '24px',
+                padding: '2px 8px',
+                display: 'inline-block',
+                textAlign: 'center',
               })
               .text(options.value)
               .appendTo(container);
           },
         },
         {
-          dataField: "Completion",
-          caption: "Completed",
-          alignment: "center",
-          dataType: "boolean",
+          dataField: 'Completion',
+          caption: 'Completed',
+          alignment: 'center',
+          dataType: 'boolean',
+          editorOptions: {
+            elementAttr: {
+              'aria-label': 'Completed',
+            },
+          },
           calculateCellValue: (rowData) => rowData.Completion === 100,
           calculateFilterExpression(filterValue, selectedFilterOperation) {
             const wantsCompleted =
-              selectedFilterOperation === "<>" ? !filterValue : !!filterValue;
+              selectedFilterOperation === '<>' ? !filterValue : !!filterValue;
             const rawCompletion = (rowData) => rowData.Completion;
             return wantsCompleted
-              ? [rawCompletion, "=", 100]
-              : [rawCompletion, "<", 100];
+              ? [rawCompletion, '=', 100]
+              : [rawCompletion, '<', 100];
           },
         },
       ],
     })
-    .dxDataGrid("instance");
+    .dxDataGrid('instance');
 
-  let fabBtn = $("#ai-fab")
+  let fabBtn = $('#ai-fab')
     .dxSpeedDialAction({
-      icon: "sparkle",
-      label: "AI Assistant",
+      icon: 'sparkle',
+      label: 'AI Assistant',
       onClick: function (e) {
         popupInstance.toggle();
       },
     })
-    .dxSpeedDialAction("instance");
+    .dxSpeedDialAction('instance');
 });

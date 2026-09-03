@@ -316,6 +316,18 @@ export default [
       'no-unused-vars': 0,
     },
   },
+  {
+    files: [
+      'Demos/Chat/CustomAIAssistant/jQuery/ai-service.js',
+      'Demos/Chat/CustomAIAssistant/jQuery/chat-router.js',
+      'Demos/Chat/CustomAIAssistant/jQuery/form-commands.js',
+      'Demos/Chat/CustomAIAssistant/jQuery/grid-commands.js',
+    ],
+    rules: {
+      'no-undef': 0,
+      'no-unused-vars': 0,
+    },
+  },
 
   // React demos
   {
