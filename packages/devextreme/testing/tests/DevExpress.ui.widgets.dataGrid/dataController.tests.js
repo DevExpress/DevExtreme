@@ -13287,7 +13287,7 @@ QUnit.module('Partial update', {
         assert.deepEqual(changedArgs.changeType, 'update');
         assert.deepEqual(changedArgs.rowIndices, [1, 2]);
         assert.deepEqual(changedArgs.changeTypes, ['update', 'remove']);
-        assert.deepEqual(changedArgs.items, [items[1]]);
+        assert.deepEqual(changedArgs.items, [items[1], oldItems[2]]);
     });
 
     // T186415
@@ -13324,7 +13324,7 @@ QUnit.module('Partial update', {
         assert.deepEqual(changedArgs.changeType, 'update');
         assert.deepEqual(changedArgs.rowIndices, [0, 0]);
         assert.deepEqual(changedArgs.changeTypes, ['remove', 'update']);
-        assert.deepEqual(changedArgs.items, [items[0], items[0]]);
+        assert.deepEqual(changedArgs.items, [oldItems[0], items[0]]);
     });
 
     QUnit.test('insert and remove', function(assert) {

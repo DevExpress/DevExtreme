@@ -35,7 +35,10 @@ import type {
   DataChange,
   DataFilter,
   GeneratedItem,
+  GetUpdatedColumnIndices,
   ItemChange,
+  ItemChangeOptions,
+  ItemOperationOptions,
   ItemProcessingOptions,
   PagingChanges,
   PagingDataSource,
@@ -46,23 +49,22 @@ import type {
   RowIndexByKey,
   RowIndexCorrection,
   UpdateChange,
-  UpdateRowChange,
+  UpdateItemChange,
   UserState,
 } from './types';
 import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
+  attachChangedItems,
   canDiffColumns,
   convertToUpdateChange,
   getChangedRowIndices,
   getDataRowIndex,
   getGroupColumnIndices,
+  getItemChange,
   getRowKey,
-  getRowOperation,
   indexRowsByKey,
-  partialUpdateRow,
-  pushChangedRow,
-  resetChangedRows,
+  partialUpdateItem,
   resolveRepaintChangesOnly,
   syncRowsAfterChange,
   updateKeptRows,
@@ -189,7 +191,7 @@ export class DataController extends modules.Controller {
    */
   protected _getPagingOptionValue(optionName: PagingOptionName): number {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this._dataSource![optionName]() as number;
+    return this._dataSource![optionName]();
   }
 
   protected callbackNames(): string[] {
@@ -848,63 +850,84 @@ export class DataController extends modules.Controller {
     this._items = (change.items ?? []).slice();
   }
 
-  private updateRow(
-    newItem: ProcessedItem,
-    rowIndex: number,
-    visibleRowIndex: number,
-    isPartialUpdate: boolean,
-  ): UpdateRowChange {
-    const oldItem = this._items[rowIndex];
+  private applyItemOperations(
+    rowIndices: number[],
+    options: ItemOperationOptions,
+  ): UpdateItemChange[] {
+    const changedRows: UpdateItemChange[] = [];
+    let prevRowIndex = -1;
+    let rowIndexCorrection = 0;
 
-    this._items[rowIndex] = newItem;
+    rowIndices.forEach((changedRowIndex) => {
+      const rowIndex = changedRowIndex + rowIndexCorrection + options.rowIndexDelta;
 
-    if (oldItem.visible !== newItem.visible) {
-      return {
-        changeType: 'update',
-        rowIndex: visibleRowIndex,
-        item: { visible: newItem.visible } as ProcessedItem,
-      };
-    }
+      if (prevRowIndex === rowIndex) {
+        return;
+      }
 
-    const columnIndices = isPartialUpdate
-      ? this.getUpdatedColumnIndices(oldItem, newItem, visibleRowIndex)
-      : undefined;
+      prevRowIndex = rowIndex;
 
-    partialUpdateRow(oldItem, newItem, columnIndices);
+      const itemChange = getItemChange(this._items, options.newItems, rowIndex);
 
-    return {
-      changeType: 'update',
-      rowIndex: visibleRowIndex,
-      item: newItem,
-      columnIndices,
-    };
+      if (!itemChange) {
+        return;
+      }
+
+      const changedItem = this.applyItemChange(itemChange, options);
+
+      if (!changedItem) {
+        return;
+      }
+
+      changedRows.push(changedItem);
+
+      if (changedItem.changeType === 'insert') {
+        rowIndexCorrection += 1;
+      } else if (changedItem.changeType === 'remove') {
+        rowIndexCorrection -= 1;
+        prevRowIndex = -1;
+      }
+    });
+
+    return changedRows;
   }
 
-  private applyRowOperation(
-    newItems: ProcessedItem[],
-    rowIndex: number,
-    rowIndexDelta: number,
-    isPartialUpdate: boolean,
-  ): UpdateRowChange | undefined {
-    const visibleRowIndex = rowIndex - rowIndexDelta;
-    const item = newItems[rowIndex];
+  private applyItemChange(
+    itemChange: ItemChange,
+    options: ItemChangeOptions,
+  ): UpdateItemChange | undefined {
+    const items = this._items;
+    const { index } = itemChange;
+    const rowIndex = index - options.rowIndexDelta;
 
-    if (item) {
-      item.rowIndex = rowIndex;
-    }
-
-    switch (getRowOperation(this._items, newItems, rowIndex)) {
-      case 'update':
-        return this.updateRow(item, rowIndex, visibleRowIndex, isPartialUpdate);
+    switch (itemChange.type) {
       case 'insert':
-        this._items.splice(rowIndex, 0, item);
-        return { changeType: 'insert', rowIndex: visibleRowIndex, item };
+        items.splice(index, 0, itemChange.data);
+        return { changeType: 'insert', rowIndex, item: itemChange.data };
       case 'remove':
-        this._items.splice(rowIndex, 1);
-        return { changeType: 'remove', rowIndex: visibleRowIndex, item };
+        items.splice(index, 1);
+        return { changeType: 'remove', rowIndex, item: itemChange.oldItem };
       case 'replace':
-        this._items[rowIndex] = item;
-        return { changeType: 'update', rowIndex: visibleRowIndex, item };
+        items[index] = itemChange.data;
+        return { changeType: 'update', rowIndex, item: itemChange.data };
+      case 'updateVisibility':
+        items[index] = itemChange.data;
+        return {
+          changeType: 'update',
+          rowIndex,
+          item: { visible: itemChange.data.visible } as ProcessedItem,
+        };
+      case 'update':
+        items[index] = itemChange.data;
+
+        return partialUpdateItem(rowIndex, {
+          oldItem: itemChange.oldItem,
+          newItem: itemChange.data,
+          isLiveUpdate: options.isLiveUpdate,
+          getUpdatedColumnIndices: options.isPartialUpdate
+            ? this.getUpdatedColumnIndices
+            : undefined,
+        });
       default:
         return undefined;
     }
@@ -914,7 +937,6 @@ export class DataController extends modules.Controller {
    * @extended: editing
    */
   protected applyChangeUpdate(change: UpdateChange): void {
-    const newItems = change.items ?? [];
     const rowIndexDelta = this.getRowIndexDelta();
     const isPartialUpdate = Boolean(this.option('repaintChangesOnly')) && !change.isFullUpdate;
     const rowIndices = getChangedRowIndices(
@@ -922,34 +944,14 @@ export class DataController extends modules.Controller {
       rowIndexDelta,
       change.allowInvisibleRowIndices,
     );
-    const changedRows = resetChangedRows(change);
-    let prevRowIndex = -1;
-    let rowIndexCorrection = 0;
 
-    rowIndices.forEach((changedRowIndex: number) => {
-      const rowIndex = changedRowIndex + rowIndexCorrection + rowIndexDelta;
-
-      if (prevRowIndex === rowIndex) {
-        return;
-      }
-
-      prevRowIndex = rowIndex;
-
-      const changedRow = this.applyRowOperation(newItems, rowIndex, rowIndexDelta, isPartialUpdate);
-
-      if (!changedRow) {
-        return;
-      }
-
-      pushChangedRow(changedRows, changedRow);
-
-      if (changedRow.changeType === 'insert') {
-        rowIndexCorrection += 1;
-      } else if (changedRow.changeType === 'remove') {
-        rowIndexCorrection -= 1;
-        prevRowIndex = -1;
-      }
+    const changedRows = this.applyItemOperations(rowIndices, {
+      newItems: change.items ?? [],
+      rowIndexDelta,
+      isPartialUpdate,
     });
+
+    attachChangedItems(change, changedRows);
   }
 
   /**
@@ -1017,12 +1019,12 @@ export class DataController extends modules.Controller {
     return columnIndices;
   }
 
-  private getUpdatedColumnIndices(
+  private readonly getUpdatedColumnIndices: GetUpdatedColumnIndices = (
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
-  ): number[] | undefined {
+  ) => {
     const changedColumnIndices = this.getChangedColumnIndices(
       oldItem,
       newItem,
@@ -1032,7 +1034,7 @@ export class DataController extends modules.Controller {
     const hasDataRowTemplate = !!this.option('dataRowTemplate');
 
     return changedColumnIndices?.length && hasDataRowTemplate ? undefined : changedColumnIndices;
-  }
+  };
 
   /**
    * @extended: editing, grouping (DataGrid), summary (DataGrid), treelist
@@ -1041,45 +1043,14 @@ export class DataController extends modules.Controller {
     return JSON.stringify(item1.values) === JSON.stringify(item2.values);
   }
 
-  private applyItemChange(
-    itemChange: ItemChange,
-    isLiveUpdate: boolean,
-  ): UpdateRowChange | undefined {
-    const { index } = itemChange;
-
-    switch (itemChange.type) {
-      case 'update': {
-        const newItem = itemChange.data;
-        const columnIndices = this.getUpdatedColumnIndices(
-          itemChange.oldItem,
-          newItem,
-          index,
-          isLiveUpdate,
-        );
-
-        partialUpdateRow(itemChange.oldItem, newItem, columnIndices, isLiveUpdate);
-
-        this._items[index] = newItem;
-
-        return {
-          changeType: 'update', rowIndex: index, item: newItem, columnIndices,
-        };
-      }
-      case 'insert':
-        this._items.splice(index, 0, itemChange.data);
-        return { changeType: 'insert', rowIndex: index, item: itemChange.data };
-      case 'remove':
-        this._items.splice(index, 1);
-        return { changeType: 'remove', rowIndex: index, item: itemChange.oldItem };
-      default:
-        return undefined;
-    }
-  }
-
-  private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): UpdateRowChange[] {
+  private applyItemChanges(itemChanges: ItemChange[], isLiveUpdate: boolean): UpdateItemChange[] {
     return itemChanges
-      .map((itemChange) => this.applyItemChange(itemChange, isLiveUpdate))
-      .filter((rowChange): rowChange is UpdateRowChange => rowChange !== undefined);
+      .map((itemChange) => this.applyItemChange(itemChange, {
+        rowIndexDelta: 0,
+        isPartialUpdate: true,
+        isLiveUpdate,
+      }))
+      .filter((changedItem): changedItem is UpdateItemChange => changedItem !== undefined);
   }
 
   private getRowIndexCorrection(
@@ -1181,7 +1152,8 @@ export class DataController extends modules.Controller {
     // change.items at this stage is defined only if virtualScrolling
     // + legacyScrollingMode enabled
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const dataItems = this._beforeProcessItems(change.items ?? this._dataSource!.items());
+    const items = (change.items ?? this._dataSource!.items()) as RawItemData[];
+    const dataItems = this._beforeProcessItems(items);
     const processedItems = this._processItems(dataItems, change);
 
     this._cachedProcessedItems = processedItems;
@@ -1242,7 +1214,7 @@ export class DataController extends modules.Controller {
       return;
     }
 
-    const operationTypes: OperationTypes | undefined = this.dataSource().operationTypes();
+    const operationTypes = this.dataSource()?.operationTypes() ?? undefined;
 
     change.isDataChanged = true;
     change.repaintChangesOnly = resolveRepaintChangesOnly(
@@ -1473,9 +1445,8 @@ export class DataController extends modules.Controller {
     return this._dataSource ? this._dataSource.pageCount() : 1;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public dataSource(): any {
-    return this._dataSource;
+  public dataSource(): DataSourceAdapter | undefined {
+    return this._dataSource ?? undefined;
   }
 
   public store(): Store | undefined {
@@ -1587,7 +1558,7 @@ export class DataController extends modules.Controller {
     }
 
     if (value === undefined) {
-      return dataSource[optionName]() as number;
+      return dataSource[optionName]();
     }
 
     const oldValue = this._getPagingOptionValue(optionName);
@@ -1607,8 +1578,7 @@ export class DataController extends modules.Controller {
       this._skipProcessingPagingChange = false;
     }
 
-    // @ts-expect-error badly typed DataSourceAdapter
-    const pageIndex: number = dataSource.pageIndex();
+    const pageIndex = dataSource.pageIndex();
     this._isPaging = optionName === 'pageIndex';
 
     const loadResult: DeferredObj<unknown> = dataSource[optionName === 'pageIndex' ? 'load' : 'reload']();
@@ -1734,7 +1704,7 @@ export class DataController extends modules.Controller {
   }
 
   public getCachedStoreData(): RawItemData[] | undefined {
-    return this._dataSource?.getCachedStoreData() as RawItemData[] | undefined;
+    return this._dataSource?.getCachedStoreData();
   }
 
   /**
@@ -1758,9 +1728,8 @@ export class DataController extends modules.Controller {
     return this._dataSource?.reload(reload, changesOnly) as DeferredObj<unknown>;
   }
 
-  public push(...args: unknown[]): unknown {
-    // @ts-expect-error badly typed DataSourceAdapter
-    return this._dataSource?.push(...args);
+  public push(changes: StoreChange[], fromStore = false): void {
+    this._dataSource?.push(changes, fromStore);
   }
 
   private itemsCount(): number {
@@ -1779,7 +1748,7 @@ export class DataController extends modules.Controller {
    * @extended: state_storing
    */
   public isLoaded(): boolean {
-    return (this._dataSource ? this._dataSource.isLoaded() : true) as boolean;
+    return (this._dataSource ? this._dataSource.isLoaded() : true);
   }
 
   public totalCount(): number {

@@ -1,10 +1,9 @@
-import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
-
+import type { GroupingDataSourceAdapter } from '../m_grouping';
 import { GroupingHelper } from '../m_grouping_expanded';
 
-export const createDataSourceAdapterStub = (): DataSourceAdapter => ({
+export const createDataSourceAdapterStub = (): GroupingDataSourceAdapter => ({
   option: (): undefined => undefined,
-} as unknown as DataSourceAdapter);
+} as unknown as GroupingDataSourceAdapter);
 
 /** Subclass that exposes the protected handleDataLoading method for testing. */
 export class GroupingHelperMock extends GroupingHelper {

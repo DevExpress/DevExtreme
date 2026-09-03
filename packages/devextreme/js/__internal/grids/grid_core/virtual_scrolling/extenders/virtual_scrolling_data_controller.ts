@@ -34,7 +34,7 @@ import {
   LOAD_TIMEOUT,
   VISIBLE_PAGE_INDEX,
 } from '../const';
-import type { dataSourceAdapterExtender } from '../m_virtual_scrolling';
+import type { VirtualScrollingDataSourceAdapter } from '../m_virtual_scrolling';
 import { VirtualScrollController } from '../m_virtual_scrolling_core';
 import type { ChangedLoadParams } from '../types';
 import type { GroupCountableDataSource } from '../utils/items';
@@ -52,8 +52,6 @@ import {
 export interface VirtualScrollingDataControllerExtension {
   virtualItemsCount: () => VirtualItemsCount | undefined;
 }
-
-type VirtualScrollingDataSourceAdapter = InstanceType<ReturnType<typeof dataSourceAdapterExtender>>;
 
 export const virtualScrollingDataControllerExtender = (
   Base: ModuleType<DataController>,
@@ -112,7 +110,6 @@ export const virtualScrollingDataControllerExtender = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public reload(reload?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
     const rowsScrollController = this._rowsScrollController || this._dataSource;
-    // @ts-expect-error badly typed DataSourceAdapter
     const itemIndex = rowsScrollController?.getItemIndexByPosition();
     const result = super.reload.apply(this, arguments as any);
     return result?.done(() => {
@@ -121,7 +118,7 @@ export const virtualScrollingDataControllerExtender = (
         const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
         const { component } = this;
         const scrollable = component.getScrollable && component.getScrollable();
-        const isSortingOperation = this.dataSource().operationTypes().sorting;
+        const isSortingOperation = this.dataSource()?.operationTypes()?.sorting;
 
         if (scrollable && !isSortingOperation && rowIndex >= 0) {
           const rowElement = component.getRowElement(rowIndex);
@@ -259,7 +256,7 @@ export const virtualScrollingDataControllerExtender = (
         let result = that._items;
 
         if (that.option(LEGACY_SCROLLING_MODE)) {
-          const dataSource = that.dataSource();
+          const dataSource = that._dataSource;
           const virtualItemsCount = dataSource?.virtualItemsCount();
           const begin = virtualItemsCount ? virtualItemsCount.begin : 0;
           const rowPageSize = that.getRowPageSize();
@@ -292,7 +289,7 @@ export const virtualScrollingDataControllerExtender = (
       onChanged() {
       },
       changingDuration() {
-        const dataSource = that.dataSource();
+        const dataSource = that._dataSource;
 
         if (dataSource?.isLoading() && that.option(LEGACY_SCROLLING_MODE) !== false) {
           return LOAD_TIMEOUT;
@@ -489,7 +486,7 @@ export const virtualScrollingDataControllerExtender = (
 
   public getRowIndexOffset(byLoadedRows?, needGroupOffset?) {
     let offset = 0;
-    const dataSource = this.dataSource();
+    const dataSource = this._dataSource;
     const rowsScrollController = this._rowsScrollController;
     const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
     const virtualPaging = isVirtualPaging(this);
@@ -509,8 +506,9 @@ export const virtualScrollingDataControllerExtender = (
     } else if (virtualPaging && newMode && dataSource) {
       const lastLoadOptions = dataSource.lastLoadOptions();
 
-      if (needGroupOffset && lastLoadOptions.skips?.length) {
-        offset = lastLoadOptions.skips.reduce((res: number, skip: number) => res + skip, 0);
+      const { skips } = lastLoadOptions as { skips?: number[] };
+      if (needGroupOffset && skips?.length) {
+        offset = skips.reduce((res: number, skip: number) => res + skip, 0);
       } else {
         offset = lastLoadOptions.skip ?? 0;
       }

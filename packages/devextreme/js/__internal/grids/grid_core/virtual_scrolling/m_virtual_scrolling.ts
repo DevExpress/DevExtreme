@@ -37,6 +37,8 @@ import type { GroupCountableDataSource } from './utils/items';
 import { isItemCountableByDataSource } from './utils/items';
 import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
+export type VirtualScrollingDataSourceAdapter = InstanceType<ReturnType<typeof dataSourceAdapterExtender>>;
+
 export const updateLoading = function (that) {
   const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
 
@@ -87,9 +89,9 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
 
   private _loadPageCount: any;
 
-  private _virtualScrollController!: VirtualScrollController;
+  public _virtualScrollController!: VirtualScrollController;
 
-  private readonly _renderTime: any;
+  public _renderTime = 0;
 
   private _isLoading: any;
 
@@ -346,7 +348,7 @@ export const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) =
     return super._loadPageSize.apply(this, arguments as any) * this.loadPageCount();
   }
 
-  private beginPageIndex(): any {
+  public beginPageIndex(): number {
     return proxyDataSourceAdapterMethod(this, 'beginPageIndex', [...arguments]);
   }
 
@@ -579,7 +581,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
     const deferred = super._renderCore.apply(this, arguments as any);
 
-    const dataSource = this._dataController._dataSource;
+    const dataSource = this._dataController._dataSource as VirtualScrollingDataSourceAdapter | null | undefined;
 
     if (dataSource && e) {
       const itemCount = e.items ? e.items.length : 20;
@@ -588,10 +590,8 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
         .viewportSize() || 20;
 
       if (gridCoreUtils.isVirtualRowRendering(this) && itemCount > 0 && this.option(LEGACY_SCROLLING_MODE) !== false) {
-        // @ts-expect-error badly typed DataSourceAdapter
         dataSource._renderTime = (Date.now() - startRenderTime) * viewportSize / itemCount;
       } else {
-        // @ts-expect-error badly typed DataSourceAdapter
         dataSource._renderTime = Date.now() - startRenderTime;
       }
     }

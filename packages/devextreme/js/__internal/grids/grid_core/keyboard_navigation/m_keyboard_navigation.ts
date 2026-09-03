@@ -315,7 +315,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isFocusedViewCorrect = this._focusedView && this._focusedView.name === this._rowsView.name;
     let needUpdateFocus = false;
     const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
-    // @ts-expect-error
     const root = $(domAdapter.getRootNode($rowsView.get && $rowsView.get(0)));
     const $focusedElement = root.find(':focus');
     const isFocusedElementCorrect = this._isFocusedElementCorrect($focusedElement, $rowsView, e);

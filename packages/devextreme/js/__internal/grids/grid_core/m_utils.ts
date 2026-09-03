@@ -678,7 +678,7 @@ export default {
     return normalizeDataSourceOptions(lookupDataSourceOptions);
   },
 
-  getWrappedLookupDataSource(column, dataSource: DataSourceAdapter, filter) {
+  getWrappedLookupDataSource(column, dataSource: DataSourceAdapter | undefined, filter) {
     if (!dataSource) {
       return [];
     }

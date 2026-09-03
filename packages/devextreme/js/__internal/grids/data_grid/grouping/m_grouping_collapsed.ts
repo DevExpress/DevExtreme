@@ -351,7 +351,6 @@ export class GroupingHelper extends GroupingHelperCore {
     let totalItemsCount = 0;
     const totalCount = options.extra && options.extra.totalCount || 0;
     const groupCount = options.extra && options.extra.groupCount || 0;
-    // @ts-expect-error badly typedDataSourceAdapter.pageSize
     const pageSize = this._dataSource.pageSize();
     const isVirtualPaging = this._isVirtualPaging();
 
@@ -383,7 +382,6 @@ export class GroupingHelper extends GroupingHelperCore {
   private _updatePagingOptions(options, callback?) {
     const that = this;
     const isVirtualPaging = that._isVirtualPaging();
-    // @ts-expect-error badly typedDataSourceAdapter.pageSize
     const pageSize = that._dataSource.pageSize();
     const skips: any[] = [];
     const takes: any[] = [];
