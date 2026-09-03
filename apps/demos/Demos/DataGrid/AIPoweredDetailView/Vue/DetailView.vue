@@ -128,7 +128,7 @@ async function handleSubmit({ event }: SubmitEvent) {
 
   isError.value = false;
   isLoading.value = true;
-  event?.target.blur();
+  (event?.target as HTMLElement)?.blur();
 
   try {
     const messages: AIMessage[] = [
@@ -136,13 +136,13 @@ async function handleSubmit({ event }: SubmitEvent) {
       { role: 'user', content: `User prompt: ${promptValue.value}\nRow data: ${JSON.stringify(rowData)}` }
     ];
     const aiResponse = await getAIResponse(messages);
-    responseValue.value = aiResponse;
+    responseValue.value = aiResponse!;
   } catch {
     responseValue.value = '';
     isError.value = true;
   } finally {
     isLoading.value = false;
-    event?.target.focus();
+    (event?.target as HTMLElement)?.focus();
   }
 }
 </script>
