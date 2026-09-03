@@ -48,6 +48,7 @@
                 "Widget": "DataGrid",
                 "DemoType": "Web",
                 "Badge": "AI",
+                "TopLevel": true,
                 "Equivalents": "AI Row Insights, Contextual AI Rows, Master-Detail Copilot, Smart Row Summary, AI-Powered Detail View, AI Master-Detail Analysis",
                 "Modules": "openai"
               }
