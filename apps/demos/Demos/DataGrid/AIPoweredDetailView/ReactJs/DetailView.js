@@ -1,51 +1,51 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { TextBox } from "devextreme-react/text-box";
-import { ButtonGroup } from "devextreme-react/button-group";
-import { Button } from "devextreme-react/button";
-import { TextArea } from "devextreme-react/text-area";
-import { LoadPanel, Position } from "devextreme-react/load-panel";
-import { getAIResponse, SYSTEM_PROMPT } from "./service.js";
-const promptElementAttr = { class: "prompt-editor" };
-const suggestionsElementAttr = { class: "dx-chat-suggestions" };
-const responseElementAttr = { class: "response-editor" };
+import React, { useCallback, useMemo, useState } from 'react';
+import { TextBox } from 'devextreme-react/text-box';
+import { ButtonGroup } from 'devextreme-react/button-group';
+import { Button } from 'devextreme-react/button';
+import { TextArea } from 'devextreme-react/text-area';
+import { LoadPanel, Position } from 'devextreme-react/load-panel';
+import { getAIResponse, SYSTEM_PROMPT } from './service.js';
+
+const promptElementAttr = { class: 'prompt-editor' };
+const suggestionsElementAttr = { class: 'dx-chat-suggestions' };
+const responseElementAttr = { class: 'response-editor' };
 const suggestions = [
   {
-    type: "default",
-    text: "✨ Summary",
-    prompt: "Display general information about this vehicle and its features.",
+    type: 'default',
+    text: '✨ Summary',
+    prompt: 'Display general information about this vehicle and its features.',
   },
   {
-    type: "default",
-    text: "⚡ Ideal Buyer",
-    prompt: "Describe who this vehicle appeals to the most in a sentence.",
+    type: 'default',
+    text: '⚡ Ideal Buyer',
+    prompt: 'Describe who this vehicle appeals to the most in a sentence.',
   },
   {
-    type: "default",
-    text: "🏎️ Competitors",
-    prompt: "List 2-3 models that directly compete with this vehicle.",
+    type: 'default',
+    text: '🏎️ Competitors',
+    prompt: 'List 2-3 models that directly compete with this vehicle.',
   },
 ];
 const DetailView = ({ data: templateData }) => {
-  const [promptValue, setPromptValue] = useState("");
-  const [responseValue, setResponseValue] = useState("");
+  const [promptValue, setPromptValue] = useState('');
+  const [responseValue, setResponseValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const submitButtonText = useMemo(() => {
     if (!responseValue && !isError) {
-      return "Submit";
-    } else {
-      return "Resubmit";
+      return 'Submit';
     }
+    return 'Resubmit';
   }, [isLoading, responseValue, isError]);
   const outputAreaMinHeight = useMemo(() => {
-    const isMaterial = document.querySelector(".dx-theme-material");
+    const isMaterial = document.querySelector('.dx-theme-material');
     if (isMaterial) return 68;
     return 56;
   }, []);
   const outputAreaMaxHeight = useMemo(() => {
-    const isMaterial = document.querySelector(".dx-theme-material");
+    const isMaterial = document.querySelector('.dx-theme-material');
     if (isMaterial) return 244;
-    const isGeneric = document.querySelector(".dx-theme-generic");
+    const isGeneric = document.querySelector('.dx-theme-generic');
     if (isGeneric) return 178;
     return 196;
   }, []);
@@ -57,30 +57,30 @@ const DetailView = ({ data: templateData }) => {
   }, []);
   const handleSubmit = useCallback(
     async ({ event }) => {
-      if (promptValue === "") return;
+      if (promptValue === '') return;
       setIsError(false);
       setIsLoading(true);
       (event?.target).blur();
       try {
         const rowData = templateData.data;
         const messages = [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: 'system', content: SYSTEM_PROMPT },
           {
-            role: "user",
+            role: 'user',
             content: `User prompt: ${promptValue}\nRow data: ${JSON.stringify(rowData)}`,
           },
         ];
         const aiResponse = await getAIResponse(messages);
         setResponseValue(aiResponse);
       } catch {
-        setResponseValue("");
+        setResponseValue('');
         setIsError(true);
       } finally {
         setIsLoading(false);
         (event?.target).focus();
       }
     },
-    [promptValue, templateData.data]
+    [promptValue, templateData.data],
   );
   return (
     <>

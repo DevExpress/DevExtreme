@@ -1,10 +1,11 @@
-import { AzureOpenAI } from "openai";
+import { AzureOpenAI } from 'openai';
+
 const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
-  deployment: "demo-mini",
-  apiVersion: "2024-02-01",
-  endpoint: "https://public-api.devexpress.com/demo-openai",
-  apiKey: "DEMO",
+  deployment: 'demo-mini',
+  apiVersion: '2024-02-01',
+  endpoint: 'https://public-api.devexpress.com/demo-openai',
+  apiKey: 'DEMO',
 };
 const aiService = new AzureOpenAI(AzureOpenAIConfig);
 export const SYSTEM_PROMPT = `
@@ -22,5 +23,5 @@ export async function getAIResponse(messages) {
   };
   const response = await aiService.chat.completions.create(params);
   const result = response.choices[0].message?.content;
-  return result ?? "";
+  return result ?? '';
 }
