@@ -54,11 +54,9 @@ import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
   attachChangedItems,
-  canDiffColumns,
   convertToUpdateChange,
+  countRowsBefore,
   getChangedRowIndices,
-  getDataRowIndex,
-  getGroupColumnIndices,
   getItemChange,
   getRowKey,
   indexRowsByKey,
@@ -760,6 +758,16 @@ export class DataController extends modules.Controller {
   protected getDataIndex(change: DataChange): number { return 0; }
 
   /**
+   * A store change is indexed by data rows, while an insert index coming from the grid counts
+   * every visible row. Each module that puts its own countable rows into the stream adds their
+   * count on top of this one.
+   * @extended: grouping (DataGrid)
+   */
+  protected adjustInsertRowIndex(visibleRowIndex: number): number {
+    return countRowsBefore(this.getVisibleRows(), visibleRowIndex, 'data');
+  }
+
+  /**
    * @extended: adaptivity, editing, master_detail, virtual_scrolling
    */
   protected _processItems(items: RawItemData[], change: DataChange): ProcessedItem[] {
@@ -978,7 +986,8 @@ export class DataController extends modules.Controller {
   }
 
   /**
-   * @extended: editing_row_based, editing, editing_form_based
+   * @extended: editing_row_based, editing, editing_form_based, grouping (DataGrid),
+   * summary (DataGrid)
    */
   protected getChangedColumnIndices(
     oldItem: ProcessedItem,
@@ -986,18 +995,15 @@ export class DataController extends modules.Controller {
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
   ): number[] | undefined {
-    if (!canDiffColumns(oldItem, newItem)) {
+    if (oldItem.rowType !== newItem.rowType) {
       return undefined;
     }
 
-    switch (newItem.rowType) {
-      case 'group':
-        return getGroupColumnIndices(oldItem, newItem);
-      case 'detail':
-        return [];
-      default:
-        return this.getChangedColumnIndicesCore(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+    if (newItem.rowType === 'detail') {
+      return [];
     }
+
+    return this.getChangedColumnIndicesCore(oldItem, newItem, visibleRowIndex, isLiveUpdate);
   }
 
   private getChangedColumnIndicesCore(
@@ -1160,7 +1166,6 @@ export class DataController extends modules.Controller {
   }
 
   private readonly changingHandler = (e: ChangingEvent): void => {
-    const rows = this.getVisibleRows();
     const dataSource = this.dataSource();
 
     if (!dataSource) {
@@ -1169,7 +1174,7 @@ export class DataController extends modules.Controller {
 
     e.changes.forEach((change) => {
       if (change.type === 'insert' && change.index !== undefined && change.index >= 0) {
-        change.index = getDataRowIndex(rows, change.index);
+        change.index = this.adjustInsertRowIndex(change.index);
       }
     });
   };

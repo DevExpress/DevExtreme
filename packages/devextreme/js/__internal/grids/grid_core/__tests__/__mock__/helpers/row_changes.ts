@@ -1,3 +1,4 @@
+import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import { createDataGrid } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type {
@@ -10,26 +11,37 @@ declare class ExposedDataController extends DataController {
   public applyChangesOnly: (change: DataChange) => void;
 }
 
-const createRefreshChange = (items: ProcessedItem[]): DataChange => ({
+export interface RefreshRowOptions {
+  gridOptions?: DataGridProperties;
+  isLiveUpdate?: boolean;
+}
+
+const createRefreshChange = (
+  items: ProcessedItem[],
+  isLiveUpdate?: boolean,
+): DataChange => ({
   changeType: 'refresh',
   repaintChangesOnly: true,
   items,
+  isLiveUpdate,
 });
 
 export const refreshRow = async (
   oldItem: ProcessedItem,
   newItem: ProcessedItem,
+  { gridOptions, isLiveUpdate }: RefreshRowOptions = {},
 ): Promise<UpdateChange> => {
   const { instance } = await createDataGrid({
     dataSource: [],
     columns: ['name', 'age'],
     repaintChangesOnly: true,
+    ...gridOptions,
   });
   const dataController = instance.getController('data') as unknown as ExposedDataController;
 
   dataController._items = [oldItem];
 
-  const change = createRefreshChange([newItem]);
+  const change = createRefreshChange([newItem], isLiveUpdate);
 
   dataController.applyChangesOnly(change);
 
