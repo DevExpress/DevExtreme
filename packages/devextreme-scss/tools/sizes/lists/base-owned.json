@@ -1026,7 +1026,7 @@
     },
     {
       "file": "scss/widgets/base/filterBuilder/_common.scss",
-      "line": 76,
+      "line": 81,
       "widget": "filterBuilder",
       "literals": [
         "-7px"
@@ -1038,7 +1038,7 @@
     },
     {
       "file": "scss/widgets/base/filterBuilder/_common.scss",
-      "line": 77,
+      "line": 82,
       "widget": "filterBuilder",
       "literals": [
         "-4px"

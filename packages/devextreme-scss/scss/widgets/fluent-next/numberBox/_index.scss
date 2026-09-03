@@ -5,7 +5,9 @@
 @use "../../base/numberBox" with (
   $spin-container-width: var(--dx-number-box-spin-container-width),
   $touch-friendly-spin-container-width: var(--dx-number-box-spin-container-touch-friendly-width),
-  $numberbox-spin-idle-opacity: var(--dx-number-box-spin-opacity),
+  /* base dims the spin buttons when the editor is disabled; the editor already paints its own
+  disabled content, so this only added a second, unmeasurable dim on top of it. */
+  $numberbox-spin-idle-opacity: false,
 );
 @use "../textEditor" as *;
 
@@ -25,10 +27,6 @@
 .dx-numberbox-spin-container {
   overflow: hidden;
   width: var(--dx-number-box-spin-container-width);
-
-  .dx-state-disabled & {
-    opacity: 1;
-  }
 }
 
 .dx-numberbox-spin-up-icon {

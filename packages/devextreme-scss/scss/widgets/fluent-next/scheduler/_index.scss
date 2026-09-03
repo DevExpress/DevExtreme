@@ -78,6 +78,9 @@
   surface is a resource colour nobody controls - the same reason the disabled appointment keeps its
   own dim rather than a role. */
   $scheduler-appointment-resizing-opacity: var(--dx-scheduler-appointment-resizing-opacity),
+  /* Its colour role is applied below; the dim it used to carry has to be switched off explicitly,
+  because base's intermediate module defaults to 0.8 whatever the leaf says. */
+  $scheduler-tooltip-date-opacity: false,
   $scheduler-appointment-date-opacity: false,
   $agenda-appointment-details-opacity: false,
   $scheduler-appointment-disabled-opacity: var(--dx-scheduler-appointment-opacity-disabled),
