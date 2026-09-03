@@ -71,8 +71,8 @@ catalog:
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
-  devexpress-diagram: 2.2.29
-  devexpress-gantt: 4.1.69
+  devexpress-diagram: 2.2.31
+  devexpress-gantt: 4.1.70
   devextreme-exceljs-fork: 4.4.13
   devextreme-quill: 1.8.0
   "@eslint/js": 9.39.4
