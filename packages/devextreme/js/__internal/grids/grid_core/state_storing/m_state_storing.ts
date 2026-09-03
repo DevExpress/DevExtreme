@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { DataController } from '../data_controller/data_controller';
-import type { ModuleType } from '../m_types';
-import type { SelectionController } from '../selection/m_selection';
-import type { RowsView } from '../views/m_rows_view';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
+import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+
 import type { StateStoringDataControllerExtension } from './extenders/state_storing_data_controller';
 
 export const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExtender extends Base {
@@ -22,15 +22,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsVi
         this.component._fireContentReadyAction();
       }
     });
-  }
-};
-
-export const columns = (Base: ModuleType<ColumnsController>) => class StateStoringColumnsExtender extends Base {
-  protected _shouldReturnVisibleColumns() {
-    // @ts-expect-error
-    const result = super._shouldReturnVisibleColumns.apply(this, arguments);
-
-    return result && (!this._stateStoringController.isEnabled() || this._stateStoringController.isLoaded());
   }
 };
 
