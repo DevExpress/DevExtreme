@@ -189,7 +189,7 @@ export class DataController extends modules.Controller {
    */
   protected _getPagingOptionValue(optionName: PagingOptionName): number {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this._dataSource![optionName]() as number;
+    return this._dataSource![optionName]();
   }
 
   protected callbackNames(): string[] {
@@ -1150,7 +1150,8 @@ export class DataController extends modules.Controller {
     // change.items at this stage is defined only if virtualScrolling
     // + legacyScrollingMode enabled
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const dataItems = this._beforeProcessItems(change.items ?? this._dataSource!.items());
+    const items = (change.items ?? this._dataSource!.items()) as RawItemData[];
+    const dataItems = this._beforeProcessItems(items);
     const processedItems = this._processItems(dataItems, change);
 
     this._cachedProcessedItems = processedItems;
@@ -1211,7 +1212,7 @@ export class DataController extends modules.Controller {
       return;
     }
 
-    const operationTypes: OperationTypes | undefined = this.dataSource().operationTypes();
+    const operationTypes = this.dataSource()?.operationTypes() ?? undefined;
 
     change.isDataChanged = true;
     change.repaintChangesOnly = resolveRepaintChangesOnly(
@@ -1442,13 +1443,12 @@ export class DataController extends modules.Controller {
     return this._dataSource ? this._dataSource.pageCount() : 1;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public dataSource(): any {
-    return this._dataSource;
+  public dataSource(): DataSourceAdapter | undefined {
+    return this._dataSource ?? undefined;
   }
 
   public store(): Store | undefined {
-    return this._dataSource?.store() as Store | undefined;
+    return this._dataSource?.store();
   }
 
   public loadAll(data?: RawItemData[], skipFilter = false): DeferredObj<ProcessedItem[]> {
@@ -1557,7 +1557,7 @@ export class DataController extends modules.Controller {
     }
 
     if (value === undefined) {
-      return dataSource[optionName]() as number;
+      return dataSource[optionName]();
     }
 
     const oldValue = this._getPagingOptionValue(optionName);
@@ -1577,8 +1577,7 @@ export class DataController extends modules.Controller {
       this._skipProcessingPagingChange = false;
     }
 
-    // @ts-expect-error badly typed DataSourceAdapter
-    const pageIndex: number = dataSource.pageIndex();
+    const pageIndex = dataSource.pageIndex();
     this._isPaging = optionName === 'pageIndex';
 
     const loadResult: DeferredObj<unknown> = dataSource[optionName === 'pageIndex' ? 'load' : 'reload']();
@@ -1704,7 +1703,7 @@ export class DataController extends modules.Controller {
   }
 
   public getCachedStoreData(): RawItemData[] | undefined {
-    return this._dataSource?.getCachedStoreData() as RawItemData[] | undefined;
+    return this._dataSource?.getCachedStoreData();
   }
 
   /**
@@ -1728,9 +1727,8 @@ export class DataController extends modules.Controller {
     return this._dataSource?.reload(reload, changesOnly) as DeferredObj<unknown>;
   }
 
-  public push(...args: unknown[]): unknown {
-    // @ts-expect-error badly typed DataSourceAdapter
-    return this._dataSource?.push(...args);
+  public push(changes: StoreChange[], fromStore = false): void {
+    this._dataSource?.push(changes, fromStore);
   }
 
   private itemsCount(): number {
@@ -1749,7 +1747,7 @@ export class DataController extends modules.Controller {
    * @extended: state_storing
    */
   public isLoaded(): boolean {
-    return (this._dataSource ? this._dataSource.isLoaded() : true) as boolean;
+    return (this._dataSource ? this._dataSource.isLoaded() : true);
   }
 
   public totalCount(): number {

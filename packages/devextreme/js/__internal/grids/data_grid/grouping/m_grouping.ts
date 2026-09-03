@@ -34,8 +34,10 @@ export interface GroupingDataControllerExtension {
   changeRowExpand(key, isRowClick?): any;
 }
 
+export type GroupingDataSourceAdapter = InstanceType<ReturnType<typeof dataSourceAdapterExtender>>;
+
 const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class GroupingDataSourceAdapterExtender extends Base {
-  private _grouping: any;
+  public _grouping: any;
 
   public init() {
     super.init.apply(this, arguments as any);
@@ -76,16 +78,16 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return this._grouping.isGroupItemCountable(item);
   }
 
-  private isRowExpanded(key) {
+  public isRowExpanded(key) {
     const groupInfo = this._grouping.findGroupInfo(key);
     return groupInfo ? groupInfo.isExpanded : !this._grouping.allowCollapseAll();
   }
 
-  private collapseAll(groupIndex) {
+  public collapseAll(groupIndex) {
     return this._collapseExpandAll(groupIndex, false);
   }
 
-  private expandAll(groupIndex) {
+  public expandAll(groupIndex) {
     return this._collapseExpandAll(groupIndex, true);
   }
 

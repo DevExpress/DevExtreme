@@ -11,6 +11,7 @@ import type {
   RowKey,
 } from '@ts/grids/grid_core/m_types';
 
+import type { GroupingDataSourceAdapter } from '../m_grouping';
 import type {
   ChangeRowExpandArgs, GroupItem, ProcessGroupItemsOptions,
 } from '../types';
@@ -21,6 +22,8 @@ import {
 export const groupingDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class GroupingDataControllerExtender extends Base {
+  public declare _dataSource?: GroupingDataSourceAdapter | null;
+
   public init(): void {
     super.init();
 
@@ -148,7 +151,6 @@ export const groupingDataControllerExtender = (
 
   private collapseAll(groupIndex: number): void {
     const dataSource = this._dataSource;
-    // @ts-expect-error badly typed DataSourceAdapter
     if (dataSource?.collapseAll(groupIndex)) {
       dataSource?.pageIndex(0);
       dataSource?.reload();
@@ -157,7 +159,6 @@ export const groupingDataControllerExtender = (
 
   private expandAll(groupIndex: number): void {
     const dataSource = this._dataSource;
-    // @ts-expect-error badly typed DataSourceAdapter
     if (dataSource?.expandAll(groupIndex)) {
       dataSource?.pageIndex(0);
       dataSource?.reload();
@@ -201,7 +202,6 @@ export const groupingDataControllerExtender = (
   }
 
   private isRowExpanded(key: RowKey): boolean {
-    // @ts-expect-error badly typed DataSourceAdapter
     return !!this._dataSource?.isRowExpanded(key);
   }
 
