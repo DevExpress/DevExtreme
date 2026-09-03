@@ -2,8 +2,11 @@
 @use "sizes" as *;
 
 @mixin publish {
-  --dx-color-view-alpha-margin: #{$color-view-alpha-margin};
-  --dx-color-view-alpha-width: #{$color-view-alpha-width};
+  --dx-color-view-alpha-cell-margin-block: #{$color-view-alpha-cell-margin-block};
+  --dx-color-view-alpha-cell-width: #{$color-view-alpha-cell-width};
+  --dx-color-view-alpha-row-margin-block-start: #{$color-view-alpha-row-margin-block-start};
+  --dx-color-view-alpha-scale-height: #{$color-view-alpha-scale-height};
+  --dx-color-view-apply-button-margin-inline-end: #{$color-view-apply-button-margin-inline-end};
   --dx-color-view-bg-box-palette-cell-bg: var(--dx-surface-overlay);
   --dx-color-view-border: #{$color-view-border};
   --dx-color-view-color-preview-container-margin: #{$color-view-color-preview-container-margin};

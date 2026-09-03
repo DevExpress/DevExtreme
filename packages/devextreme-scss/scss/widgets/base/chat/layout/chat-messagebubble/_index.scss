@@ -1,7 +1,8 @@
-$chat-messagebubble-padding-image: 4px !default;
-$chat-messagebubble-border-radius-image: 8px !default;
-$chat-messagebubble-max-width-image: 400px !default;
-$chat-messagebubble-max-height-image: 400px !default;
+// Sized from base/chat, which owns the defaults and forwards a theme's values down (as chat-fileview does).
+$messagebubble-padding-image: null !default;
+$messagebubble-border-radius-image: null !default;
+$messagebubble-max-width-image: null !default;
+$messagebubble-max-height-image: null !default;
 $chat-messagebubble-content-max-width: 82.5% !default; // dx-relative-%
 
 .dx-chat-messagegroup-content {
@@ -25,7 +26,7 @@ $chat-messagebubble-content-max-width: 82.5% !default; // dx-relative-%
   }
 
   &.dx-has-image {
-    padding: $chat-messagebubble-padding-image;
+    padding: $messagebubble-padding-image;
   }
 
   .dx-chat-messagebubble-content:empty {
@@ -58,9 +59,9 @@ $chat-messagebubble-content-max-width: 82.5% !default; // dx-relative-%
 }
 
 .dx-chat-messagebubble-image {
-  border-radius: $chat-messagebubble-border-radius-image;
-  max-width: $chat-messagebubble-max-width-image;
-  max-height: $chat-messagebubble-max-height-image;
+  border-radius: $messagebubble-border-radius-image;
+  max-width: $messagebubble-max-width-image;
+  max-height: $messagebubble-max-height-image;
   width: 100%;
   display: block;
 }

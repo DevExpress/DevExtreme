@@ -40,3 +40,8 @@ $switch-container-rtl-offset: ds.$spacing-60 !default;
   $switch-container-margin-block: 0 !default;
   $switch-height: ds.$spacing-160 !default;
 }
+
+// Base-layer sizing injected with design tokens (wave B7)
+$switch-container-border-radius: ds.$border-radius-full !default;
+$switch-label-padding: ds.$spacing-40 0 !default;
+$switch-off-padding-block-end: ds.$spacing-100 !default;

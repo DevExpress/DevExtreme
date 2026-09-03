@@ -85,3 +85,8 @@ $pivot-grid-field-chooser-drag-height: ds.$spacing-1000 !default;
 // B2 tail: pivotGrid cell side paddings
 $pivot-grid-header-cell-padding-inline: ds.$spacing-20 !default;
 $pivot-grid-fields-area-head-cell-padding-inline: ds.$spacing-20 !default;
+
+// Base-layer sizing injected with design tokens (wave B16)
+$pivot-grid-border-width: ds.$border-width-10 !default;
+$pivot-grid-icon-size: ds.$spacing-140 !default;
+$pivot-grid-field-padding: ds.$spacing-20 !default;

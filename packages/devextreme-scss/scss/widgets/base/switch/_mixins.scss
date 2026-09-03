@@ -12,6 +12,11 @@
   $switch-handle-margin,
   $switch-handle-border-radius,
   $switch-transition,
+  // A pill: any radius past half the track height draws the same shape, so the default is a number
+  // large enough to be one at every size the themes use.
+  $switch-container-border-radius: 500px,
+  $switch-label-padding: 4px 0,
+  $switch-off-padding-bottom: 10px,
 ) {
   .dx-switch {
     width: $switch-width;
@@ -42,7 +47,7 @@
       content: "";
       width: 100%;
       height: $switch-container-height;
-      border-radius: 500px;
+      border-radius: $switch-container-border-radius;
       margin: $switch-container-vertical-margin 0;
       transition: $switch-transition;
     }
@@ -57,7 +62,7 @@
   .dx-switch-off {
     flex-shrink: 0;
     float: left;
-    padding: 4px 0;
+    padding: $switch-label-padding;
     width: 50%;
     height: $switch-height;
     color: transparent;
@@ -71,7 +76,7 @@
 
   .dx-switch-off {
     display: none;
-    padding-bottom: 10px;
+    padding-bottom: $switch-off-padding-bottom;
     background-color: transparent;
   }
 

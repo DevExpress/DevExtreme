@@ -1,6 +1,7 @@
 @use "../sizes" as *;
 @use "../toolbar/sizes" as toolbarSizes;
 @use "../../../_design-system/variables/ds" as ds;
+@use "../splitterBar/sizes" as splitterBarSizes;
 
 $file-manager-toolbar-separator-height: null !default;
 $file-manager-toolbar-viewmode-width: null !default;
@@ -121,3 +122,10 @@ $file-manager-dialog-name-editor-max-width: 340px !default; // dx-offscale: 340p
 $file-manager-dialog-name-editor-min-height: 180px !default; // dx-offscale: 180px
 $file-manager-dialog-name-editor-max-height: 180px !default; // dx-offscale: 180px
 $file-manager-progress-box-cancel-button-margin-block-start: ds.$spacing-50 !default;
+
+/*
+ * Base centres the splitter wrapper on the bar with half the difference between the border and
+ * the bar. Both are tokens here, so the relationship is derived instead of frozen at 3px: move
+ * either token and this follows.
+ */
+$file-manager-splitter-wrapper-inset-inline-end: calc((#{splitterBarSizes.$splitter-bar-border-width} - #{splitterBarSizes.$splitter-bar-width}) / 2) !default;

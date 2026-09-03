@@ -1,17 +1,20 @@
 @mixin dx-toolbar-focus-outline(
   $accent-color,
   $border-radius,
+  // The focus ring's geometry, on the same role as its colour and radius.
+  $outline-width: 2px,
+  $outline-offset: 1px,
 ) {
   .dx-toolbar.dx-toolbar-focus-mode {
     [tabindex="0"]:focus-visible:not(.dx-toolbar-item) {
-      outline: 2px solid $accent-color;
-      outline-offset: 1px;
+      outline: $outline-width solid $accent-color;
+      outline-offset: $outline-offset;
       border-radius: $border-radius;
     }
 
     .dx-toolbar-item[tabindex="0"]:focus-visible .dx-menu {
-      outline: 2px solid $accent-color;
-      outline-offset: 1px;
+      outline: $outline-width solid $accent-color;
+      outline-offset: $outline-offset;
       border-radius: $border-radius;
     }
   }

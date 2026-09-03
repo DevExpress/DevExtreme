@@ -1,9 +1,11 @@
 $treeview-disabled-opacity: 0.5 !default;
+$treeview-searchbox-margin-bottom: 5px !default;
 
 @use "sass:math";
 @use "sass:meta";
 @use "./common" with (
   $treeview-disabled-opacity: $treeview-disabled-opacity,
+  $treeview-searchbox-margin-bottom: $treeview-searchbox-margin-bottom,
 );
 @use "../../base/icon_fonts" as *;
 

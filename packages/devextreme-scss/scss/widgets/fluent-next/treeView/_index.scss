@@ -6,6 +6,7 @@
   $treeview-select-all-item-border-bottom: var(--dx-tree-view-select-all-item-border-block-end),
   $treeview-border-visible-border: var(--dx-tree-view-border-visible-border),
   $treeview-disabled-opacity: var(--dx-tree-view-opacity-disabled),
+  $treeview-searchbox-margin-bottom: var(--dx-tree-view-search-box-margin-block-end),
 );
 @use "../../base/icon_fonts" as *;
 

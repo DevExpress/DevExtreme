@@ -5,6 +5,7 @@
 @use "../../base/validation" as baseValidation with (
   $validation-summary-margin-top: validationSizes.$validation-summary-margin-block-start,
   $validation-message-content-padding: validationSizes.$validation-message-content-padding,
+  $validation-summary-item-border-bottom-width: var(--dx-validation-summary-item-border-block-end-width),
 );
 @use "../list/sizes" as listSizes;
 

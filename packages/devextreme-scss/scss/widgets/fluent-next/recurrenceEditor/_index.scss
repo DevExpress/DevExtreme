@@ -1,7 +1,11 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/recurrenceEditor" ;
+@use "../../base/recurrenceEditor" with (
+  $recurrence-interval-number-box-margin-top: var(--dx-recurrence-editor-interval-number-box-margin-block-start),
+  $recurrence-radio-group-item-padding: var(--dx-recurrence-editor-radio-group-item-padding-block-end),
+  $recurrence-button-group-item-padding: var(--dx-recurrence-editor-button-group-padding),
+);
 
 .dx-recurrence-numberbox-interval {
   margin-right: var(--dx-recurrence-editor-number-box-margin);
@@ -9,14 +13,9 @@
 
 .dx-recurrence-numberbox-interval-label {
   font-size: $global-font-size;
-  margin-top: var(--dx-recurrence-editor-interval-number-box-margin-block-start);
 }
 
 .dx-recurrence-button-group {
-  .dx-button-content {
-    padding: var(--dx-recurrence-editor-button-group-padding);
-  }
-
   .dx-buttongroup-wrapper > div {
     min-width: 0;
   }

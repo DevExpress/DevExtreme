@@ -3,7 +3,7 @@
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/checkBox" with (
-  $checkbox-text-padding-inline-start: null,
+  $checkbox-text-padding-inline-start: false,
 );
 @use "../../base/checkBox/mixins" as *;
 

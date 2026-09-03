@@ -17,6 +17,9 @@ $recurrence-editor-interval-number-box-margin-block-start: null !default;
   $recurrence-editor-interval-number-box-margin-block-start: ds.$spacing-220 !default;
 }
 
+// Base-layer sizing injected with design tokens (wave B4)
+$recurrence-editor-radio-group-item-padding-block-end: ds.$spacing-100 !default;
+
 // Values hoisted from style-file literals (tokenized)
 $recurrence-editor-number-box-margin: ds.$spacing-110 !default;
 $recurrence-editor-button-group-padding: ds.$spacing-60 !default;

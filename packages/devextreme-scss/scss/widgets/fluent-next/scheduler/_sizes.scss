@@ -330,3 +330,20 @@ $scheduler-virtual-row-height: 50px !default; // dx-offscale: 50px
  * variables (NAMING.md, O7).
  */
 $scheduler-all-day-table-cell-height: calc(#{$scheduler-workspace-date-table-cell-height} * 1.5);
+
+// Base-layer sizing injected with design tokens (wave B15)
+$scheduler-appointment-collector-height: ds.$spacing-220 !default;
+$scheduler-appointment-min-size: ds.$spacing-40 !default;
+$scheduler-appointment-reduced-content-padding: ds.$spacing-400 !default;
+$scheduler-appointment-month-text-font-size: ds.$font-size-120 !default;
+$scheduler-border-width: ds.$border-width-10 !default;
+$scheduler-reduced-icon-inset-inline: ds.$spacing-50 !default;
+$scheduler-recurrence-icon-inset-inline: ds.$spacing-200 !default;
+$scheduler-agenda-appointment-margin: ds.$spacing-50 !default;
+$scheduler-agenda-appointment-last-margin: ds.$spacing-200 !default;
+$scheduler-time-indicator-font-size: ds.$font-size-300 !default;
+$scheduler-time-indicator-size: ds.$spacing-10 !default;
+$scheduler-small-font-size: ds.$font-size-140 !default;
+$scheduler-group-header-cell-height: ds.$spacing-300 !default;
+$scheduler-month-date-text-font-size: ds.$font-size-160 !default;
+$scheduler-month-date-text-padding: ds.$spacing-60 !default;

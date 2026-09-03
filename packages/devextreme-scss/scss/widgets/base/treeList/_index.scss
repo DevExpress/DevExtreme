@@ -165,7 +165,7 @@ $treelist-button-margin-right: 10px !default;
 
   &.dx-filter-menu {
     .dx-menu-item-content .dx-icon {
-      @include dx-icon-sizing(14px);
+      @include dx-icon-sizing(14px); // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots
     }
   }
 
@@ -253,7 +253,7 @@ $treelist-button-margin-right: 10px !default;
 
 .dx-treelist-export-menu {
   .dx-menu-item .dx-icon-exportxlsx {
-    @include dx-icon-sizing(16px);
+    @include dx-icon-sizing(16px); // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots
   }
 }
 
@@ -261,7 +261,7 @@ $treelist-button-margin-right: 10px !default;
   cursor: pointer;
 
   @include dx-icon(more);
-  @include dx-icon-sizing(21px);
+  @include dx-icon-sizing(21px); // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots
 }
 
 .dx-treelist-edit-popup .dx-error-message {

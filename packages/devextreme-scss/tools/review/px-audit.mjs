@@ -10,8 +10,13 @@
  * An unmarked value never reaches SCALES.md, so design never sees it and no decision about it
  * exists. The marker is the only channel to the scales card, not decoration.
  *
- * Deliberately out of scope: scss/widgets/base/** (the shared layer belongs to the base owners),
- * and em/% values — those carry the dx-relative marker but have no gate of their own.
+ * The shared layer scss/widgets/base/** is scanned by tests/base-size-markers.test.ts, which points
+ * --root at it and compares against a baseline: 444 places could not be classified in one commit,
+ * so there the count ratchets down instead of having to be zero. The ratchet has since reached
+ * zero, so in practice both roots now hold the same bar. The default run stays the theme.
+ *
+ * Deliberately out of scope: em/% values — those carry the dx-relative marker but have no gate of
+ * their own.
  */
 
 import { readFileSync, readdirSync } from 'fs';
@@ -44,19 +49,73 @@ const split = (line) => {
   return at === -1 ? { code: line, comment: '' } : { code: line.slice(0, at), comment: line.slice(at) };
 };
 
+const ENDS_STATEMENT = /[;{}]$/;
+/*
+ * Tested against the code half of the line: a declaration that carries a trailing marker still
+ * ends its statement, and without stripping the comment the walk below sails past it and lets a
+ * later declaration inherit a marker that was never written for it.
+ */
+const endsStatement = (line) => ENDS_STATEMENT.test(split(line).code.trim());
+const nonBlankAbove = (lines, index) => {
+  for (let at = index - 1; at >= 0; at -= 1) if (lines[at].trim() !== '') return at;
+  return -1;
+};
+
+/*
+ * A marker is written next to the declaration it explains, but a px literal inside a multi-line
+ * declaration lands on a continuation line, where there is no comment to find — the two-layer
+ * box-shadow of cardView's dragged item and the clip-path of textEditor's label both carry a
+ * reviewed marker that the line-by-line lookup could not see. So for a continuation line the
+ * marker is inherited from the declaration: the trailing comments of its earlier lines plus the
+ * comment attached above its first line, block comments included (those are blanked in `code`,
+ * which is why the raw text is passed in separately).
+ *
+ * A line counts as a continuation only when the statement above it is unfinished, so a plain
+ * `min-height: 1px;` never inherits anything from its neighbours.
+ */
+const inheritedComment = (raw, index) => {
+  const above = nonBlankAbove(raw, index);
+  if (above === -1 || endsStatement(raw[above])) return '';
+
+  let start = index;
+  while (start > 0) {
+    const previous = nonBlankAbove(raw, start);
+    if (previous === -1 || endsStatement(raw[previous])) break;
+    start = previous;
+  }
+
+  // a comment line contributes its whole text (a block comment carries no `//` to split on);
+  // a code line contributes only its trailing comment, so a marker can never be read out of code
+  const isComment = (text) => text.startsWith('//') || text.startsWith('/*')
+    || text.startsWith('*') || text.endsWith('*/');
+  const parts = raw.slice(start, index)
+    .map((line) => (isComment(line.trim()) ? line : split(line).comment));
+  for (let at = start - 1; at >= 0; at -= 1) {
+    const text = raw[at].trim();
+    if (text === '' || !isComment(text)) break;
+    parts.push(text);
+    if (text.startsWith('/*')) break;
+  }
+  return parts.join('\n');
+};
+
 export const scanPxLiterals = (root = themeDir) => {
   const marked = [];
   const unmarked = [];
   scssFiles(root).forEach((file) => {
-    blankBlockComments(readFileSync(file, 'utf8')).split('\n').forEach((line, index) => {
+    const raw = readFileSync(file, 'utf8').split('\n');
+    blankBlockComments(raw.join('\n')).split('\n').forEach((line, index) => {
       const { code, comment } = split(line);
       const literals = code.match(PX_LITERAL);
       if (!literals) return;
-      const marker = MARKERS.find((entry) => comment.includes(entry)) ?? null;
+      const scope = comment || inheritedComment(raw, index);
+      const marker = MARKERS.find((entry) => scope.includes(entry)) ?? null;
       const place = {
         file: relative(packageRoot, file),
         line: index + 1,
         literals: [...new Set(literals)],
+        // distinct values drive the report; the raw count is what an inventory of the layer adds up
+        occurrences: literals.length,
         marker,
         text: line.trim(),
       };

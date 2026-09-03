@@ -8,6 +8,11 @@
   --dx-text-editor-border: #{$text-editor-border};
   --dx-text-editor-border-width: #{$text-editor-border-width};
   --dx-text-editor-button-filled-inset-inline-end: #{$text-editor-button-filled-inset-inline-end};
+  --dx-text-editor-button-icon-with-text-margin-block-start: #{$text-editor-button-icon-with-text-margin-block-start};
+  --dx-text-editor-button-icon-margin-block-start: #{$text-editor-button-icon-margin-block-start};
+  --dx-text-editor-button-icon-only-padding: #{$text-editor-button-icon-only-padding};
+  --dx-text-editor-button-margin-block-end: #{$text-editor-button-margin-block-end};
+  --dx-text-editor-button-margin-block-start: #{$text-editor-button-margin-block-start};
   --dx-text-editor-button-underlined-height: #{$text-editor-button-underlined-height};
   --dx-text-editor-clear-button-icon: #{$text-editor-clear-button-icon};
   --dx-text-editor-clear-button-width: #{$text-editor-clear-button-width};
@@ -36,6 +41,8 @@
   --dx-text-editor-invalid-border-focused: #{$text-editor-invalid-border-focused};
   --dx-text-editor-invalid-border: #{$text-editor-invalid-border};
   --dx-text-editor-invalid-content: #{$text-editor-invalid-content};
+  --dx-text-editor-label-backdrop-height: #{$text-editor-label-backdrop-height};
+  --dx-text-editor-label-border-radius: #{$text-editor-label-border-radius};
   --dx-text-editor-label-content-focused: #{$text-editor-label-content-focused};
   --dx-text-editor-label-content: var(--dx-text-editor-placeholder);
   --dx-text-editor-label-font-size: #{$text-editor-label-font-size};
@@ -45,6 +52,7 @@
   --dx-text-editor-label-offset: #{$text-editor-label-offset};
   --dx-text-editor-label-outside-height: #{$text-editor-label-outside-height};
   --dx-text-editor-label-outside-offset: #{$text-editor-label-outside-offset};
+  --dx-text-editor-label-padding-inline: #{$text-editor-label-padding-inline};
   --dx-text-editor-line-border-block-end-active: #{$text-editor-line-border-block-end-active};
   --dx-text-editor-line-border-block-end-width-active: #{$text-editor-line-border-block-end-width-active};
   --dx-text-editor-line-border-block-end-width-focused: #{$text-editor-line-border-block-end-width-focused};

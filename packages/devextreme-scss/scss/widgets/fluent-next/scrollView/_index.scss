@@ -16,12 +16,15 @@
   $scrollview-scrollbottom-indicator-margin: var(--dx-scroll-view-scroll-bottom-indicator-margin),
   $scrollview-scrollbottom-indicator-margin-rtl: var(--dx-scroll-view-scroll-bottom-indicator-rtl-margin),
   $scrollview-pulldown-icon-font-size: var(--dx-scroll-view-pull-down-icon-font-size),
+  $pulldown-height: var(--dx-scroll-view-pull-down-height),
+  $pulldown-padding: var(--dx-scroll-view-pull-down-padding),
+  $pulldown-top-offset: var(--dx-scroll-view-pull-down-top-offset),
 );
 
 .dx-scrollview-scrollbottom-text,
 .dx-scrollview-pull-down-text {
   margin-left: var(--dx-scroll-view-pull-down-text-margin-inline-start);
-  top: calc((50px - #{$global-font-size}) / 2); // dx-fixed-size: 50px pull-down area height
+  top: calc((var(--dx-scroll-view-pull-down-height) - #{$global-font-size}) / 2);
   display: inline-block;
 
   .dx-rtl & {

@@ -6,7 +6,14 @@
   $timeview-numberbox-width: var(--dx-time-view-field-number-box-width),
   $timeview-numberbox-spin-touch-friendly-width: var(--dx-time-view-field-number-box-spin-touch-friendly-width),
 );
-@include clock-action-icons-mixin($time-view-clock-accent-bg, $time-view-clock-bg, $time-view-clock-digits-content);
+@include clock-action-icons-mixin(
+  $time-view-clock-accent-bg,
+  $time-view-clock-bg,
+  $time-view-clock-digits-content,
+  $clock-size: var(--dx-time-view-clock-size),
+  $arrow-width: var(--dx-time-view-clock-arrow-width),
+  $arrow-offset: var(--dx-time-view-clock-arrow-offset),
+);
 
 .dx-timeview {
   height: auto;

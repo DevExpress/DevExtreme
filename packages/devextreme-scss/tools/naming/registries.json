@@ -190,6 +190,7 @@
     "focus-rect",
     "global",
     "invalid-badge",
+    "mention",
     "motion",
     "palette",
     "separator",
@@ -331,7 +332,9 @@
       ".dx-header-filter-menu",
       ".dx-datagrid-drag-header",
       ".dx-treelist-drag-header",
-      ".dx-ai-chat"
+      ".dx-ai-chat",
+      ".dx-datagrid-ai-assistant-confirm-dialog",
+      ".dx-treelist-ai-assistant-confirm-dialog"
     ],
     "data-grid": [
       ".dx-datagrid"
@@ -640,6 +643,8 @@
       "alternation",
       "with-label",
       "with-icon",
+      "icon-only",
+      "with-text",
       "with-title",
       "on",
       "off",
@@ -659,6 +664,8 @@
       "highlighted",
       "dragged",
       "legacy",
+      "today",
+      "multiview",
       "other",
       "base",
       "accent",
@@ -933,7 +940,8 @@
       "text-editor"
     ],
     "fileManager": [
-      "toolbar"
+      "toolbar",
+      "splitter-bar"
     ],
     "textEditor": [
       "button"
@@ -1152,7 +1160,8 @@
     "switch": [
       "handle",
       "container",
-      "inner"
+      "inner",
+      "label"
     ],
     "context-menu": [
       "item",
@@ -1183,7 +1192,8 @@
       "input",
       "time-separator",
       "spin",
-      "format12"
+      "format12",
+      "arrow"
     ],
     "fieldset": [
       "field",
@@ -1387,7 +1397,8 @@
       "typing-indicator",
       "circle",
       "bubble",
-      "group"
+      "group",
+      "image"
     ],
     "color-view": [
       "palette",
@@ -1395,8 +1406,12 @@
       "hue-scale",
       "hue-scale-cell",
       "hue-scale-wrapper",
-      "alpha",
       "controls",
+      "alpha-row",
+      "alpha-cell",
+      "alpha-scale",
+      "alpha-label",
+      "apply-button",
       "container",
       "label",
       "handle",
@@ -1563,7 +1578,11 @@
       "separator",
       "tabs",
       "selects",
-      "title"
+      "title",
+      "blockquote",
+      "cell",
+      "resizer",
+      "highlight"
     ],
     "pivot-grid": [
       "area",
@@ -1623,7 +1642,9 @@
       "icon",
       "text",
       "item",
-      "container"
+      "container",
+      "ring",
+      "halo"
     ],
     "recurrence-editor": [
       "switch",
@@ -1791,6 +1812,7 @@
       "view-mode-button",
       "tree-view-item",
       "drop-zone-placeholder",
+      "splitter-wrapper",
       "cancel-button",
       "notification",
       "container",
@@ -1975,7 +1997,17 @@
       "button",
       "content",
       "text",
-      "header-row"
+      "header-row",
+      "expand-column",
+      "toolbar",
+      "regenerate-button",
+      "confirm-dialog",
+      "menu-bar",
+      "menu-caption",
+      "search-panel",
+      "bottom-load-panel",
+      "rowsview",
+      "column-indicator"
     ],
     "data-grid": [
       "group-panel",
@@ -2009,7 +2041,9 @@
       "spin-button",
       "custom-button",
       "icon-container",
-      "invalid-badge"
+      "invalid-badge",
+      "backdrop",
+      "icon"
     ]
   },
   "packageElementPaths": [

@@ -134,3 +134,6 @@ $diagram-context-toolbox-target-height: ds.$spacing-10 !default;
  * variables (NAMING.md, O7).
  */
 $diagram-toolbar-icon-size: $global-icon-size;
+
+// Base-layer sizing injected with design tokens (wave B11)
+$diagram-border-width: ds.$border-width-10 !default;

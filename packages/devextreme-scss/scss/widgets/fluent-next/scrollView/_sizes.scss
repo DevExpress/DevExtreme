@@ -22,3 +22,13 @@ $scroll-view-pull-down-image-height: 50px !default; // dx-offscale: 50px
 $scroll-view-scroll-bottom-padding: ds.$spacing-100 0 !default;
 $scroll-view-scroll-bottom-indicator-margin: 0 ds.$spacing-100 0 0 !default;
 $scroll-view-scroll-bottom-indicator-rtl-margin: 0 0 0 ds.$spacing-100 !default;
+
+// Base-layer sizing injected with design tokens (wave B6)
+$scroll-view-pull-down-height: 50px !default; // dx-offscale: 50px, the spacing scale has no 50px step
+$scroll-view-pull-down-padding: ds.$spacing-150 !default;
+
+/*
+ * Derived once and published: base parks the pull-down area above the viewport by its own height
+ * plus both paddings. Deriving keeps the three in step instead of freezing -80px.
+ */
+$scroll-view-pull-down-top-offset: calc(-1 * (#{$scroll-view-pull-down-height} + #{$scroll-view-pull-down-padding} * 2)) !default;

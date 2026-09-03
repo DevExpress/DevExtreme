@@ -61,6 +61,10 @@ $filemanager-progress-bold-font-weight: 600 !default;
 
 $filemanager-error-message-font-size: 0.85em !default; // dx-relative
 $filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
+
+// Half the difference between the splitter border and bar, centring the wrapper on the bar.
+$filemanager-splitter-wrapper-right: 3px !default;
+
 .dx-filemanager {
   height: $filemanager-root-height;
   border: $filemanager-root-border;
@@ -81,7 +85,7 @@ $filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
       min-width: $filemanager-overlay-content-min-width;
       max-width: 93vw;
 
-      @media (min-width: 431px) {
+      @media (min-width: 431px) { // dx-literal-required: a media condition, var() is invalid here
         max-width: $filemanager-overlay-content-max-width;
       }
     }
@@ -210,7 +214,7 @@ $filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
 
   .dx-splitter-wrapper.dx-splitter-initial,
   .dx-splitter-wrapper.dx-splitter-inactive {
-    right: 3px;  // (dx-splitter-border width - dx-splitter-bar width) / 2
+    right: $filemanager-splitter-wrapper-right;
   }
 
   .dx-filemanager-container {
@@ -296,14 +300,14 @@ $filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
 
   .dx-filemanager-notification-container {
     position: absolute;
-    top: -5000px;
-    left: -5000px;
+    top: -5000px; // dx-structural: parks the container off-screen until it is positioned
+    left: -5000px; // dx-structural: parks the container off-screen until it is positioned
   }
 
   .dx-filemanager-editing-container {
     position: absolute;
-    top: -5000px;
-    left: -5000px;
+    top: -5000px; // dx-structural: parks the container off-screen until it is positioned
+    left: -5000px; // dx-structural: parks the container off-screen until it is positioned
   }
 
   .dx-row {

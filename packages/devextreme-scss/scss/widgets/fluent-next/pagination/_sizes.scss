@@ -49,3 +49,6 @@ $pagination-pages-count-padding-inline-start: ds.$spacing-60 !default;
 
 // B2 tail: pagination page horizontal padding
 $pagination-page-padding-inline: ds.$spacing-130 !default;
+
+// Base-layer sizing injected with design tokens (wave B9)
+$pagination-info-margin-inline: ds.$spacing-90 !default;

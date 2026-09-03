@@ -14,6 +14,9 @@
   var(--dx-switch-handle-margin),
   var(--dx-switch-handle-border-radius),
   var(--dx-switch-transition),
+  $switch-container-border-radius: var(--dx-switch-container-border-radius),
+  $switch-label-padding: var(--dx-switch-label-padding),
+  $switch-off-padding-bottom: var(--dx-switch-off-padding-block-end),
 );
 @include dx-switch-states-fluent(
   var(--dx-switch-on-bg-disabled),

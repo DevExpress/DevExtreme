@@ -3,6 +3,7 @@
 @use "../sizes" as *;
 @use "../../base/fileManager" with (
   $filemanager-root-height: var(--dx-file-manager-height),
+  $filemanager-splitter-wrapper-right: var(--dx-file-manager-splitter-wrapper-inset-inline-end),
   $filemanager-root-border: var(--dx-file-manager-border-width) solid,
   $filemanager-overlay-content-min-width: var(--dx-file-manager-overlay-content-min-width),
   $filemanager-overlay-content-max-width: var(--dx-file-manager-overlay-content-max-width),

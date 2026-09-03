@@ -4,6 +4,7 @@
 @mixin publish {
   --dx-calendar-bg: #{$calendar-bg};
   --dx-calendar-bg-hovered: #{$calendar-bg-hovered};
+  --dx-calendar-border-width: #{$calendar-border-width};
   --dx-calendar-cell-bg-active: #{$calendar-cell-bg-active};
   --dx-calendar-cell-bg-selected: #{$calendar-cell-bg-selected};
   --dx-calendar-cell-border-hovered: var(--dx-calendar-bg-hovered);
@@ -11,9 +12,11 @@
   --dx-calendar-cell-content-selected: #{$calendar-cell-content-selected};
   --dx-calendar-cell-contoured-border: var(--dx-calendar-cell-bg-active);
   --dx-calendar-cell-contoured-border-radius: #{$calendar-cell-contoured-border-radius};
+  --dx-calendar-cell-contoured-outline-width: #{$calendar-cell-contoured-outline-width};
   --dx-calendar-cell-font-size: #{$calendar-cell-font-size};
   --dx-calendar-cell-other-content: #{$calendar-cell-other-content};
   --dx-calendar-cell-other-content-hovered: var(--dx-calendar-cell-other-content);
+  --dx-calendar-cell-today-border-width: #{$calendar-cell-today-border-width};
   --dx-calendar-content: #{$calendar-content};
   --dx-calendar-element-padding: #{$calendar-element-padding};
   --dx-calendar-footer-button-height: #{$calendar-footer-button-height};
@@ -22,6 +25,7 @@
   --dx-calendar-invalid-border-focused: #{$calendar-invalid-border-focused};
   --dx-calendar-legacy-height: #{$calendar-legacy-height};
   --dx-calendar-legacy-width: #{$calendar-legacy-width};
+  --dx-calendar-view-multiview-padding-inline: #{$calendar-view-multiview-padding-inline};
   --dx-calendar-navigator-content: #{$calendar-navigator-content};
   --dx-calendar-week-day-header-font-size: #{$calendar-week-day-header-font-size};
   --dx-calendar-week-day-header-font-weight: #{$calendar-week-day-header-font-weight};

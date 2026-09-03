@@ -21,6 +21,58 @@
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";
+
+/*
+ * base/gridBase/variables holds no rules, so configuring it here changes no CSS position — and
+ * this is the first load of that module in the graph: the theme's gridBase is used before
+ * base/dataGrid and base/treeList, which are what pull base/gridBase in.
+ *
+ * Every size the shared layer used to pin is passed from here. Where the theme already won the
+ * cascade the wiring is visually neutral by construction; where it did not, the token carries the
+ * value the layer used to hold, so nothing moves either way. Both were measured in the browser
+ * against the previous build, not assumed — see .claude/measure/.
+ */
+@use "../../base/gridBase/variables" as baseGridVariables with (
+  $grid-texteditor-input-padding: var(--dx-grid-editor-input-padding),
+  $grid-command-select-column-width: var(--dx-grid-command-select-column-width),
+  $grid-command-edit-column-width: var(--dx-grid-command-edit-column-width),
+  $grid-command-edit-column-with-icons-width: var(--dx-grid-command-edit-column-with-icons-width),
+  $grid-command-expand-column-width: var(--dx-grid-command-expand-column-width),
+  $grid-command-adaptive-column-width: var(--dx-grid-command-adaptive-column-width),
+  $grid-ai-assistant-confirm-dialog-button-width: var(--dx-grid-ai-confirm-dialog-button-width),
+  $grid-context-menu-item-padding-block: var(--dx-grid-context-menu-item-padding-block),
+  $grid-context-menu-item-padding-inline-start: var(--dx-grid-context-menu-item-padding-inline-start),
+  $grid-context-menu-item-padding-inline-end: var(--dx-grid-context-menu-item-padding-inline-end),
+  $grid-context-menu-overlay-item-padding: var(--dx-grid-context-menu-overlay-item-padding),
+  $grid-context-menu-overlay-item-padding-inline-end: var(--dx-grid-context-menu-overlay-item-padding-inline-end),
+  $grid-menu-bar-item-padding: var(--dx-grid-menu-bar-item-padding),
+  $grid-menu-caption-padding-inline-start: var(--dx-grid-menu-caption-padding-inline-start),
+  $grid-column-chooser-title-font-size: var(--dx-grid-column-chooser-title-font-size),
+  $grid-column-chooser-content-padding: var(--dx-grid-column-chooser-content-padding),
+  $grid-column-chooser-item-margin-block-end: var(--dx-grid-column-chooser-item-margin-block-end),
+  $grid-column-chooser-tree-view-item-padding-inline-start: var(--dx-grid-column-chooser-tree-view-item-padding-inline-start),
+  $grid-column-separator-width: var(--dx-grid-column-separator-width),
+  $grid-toolbar-button-margin-inline-start: var(--dx-grid-toolbar-button-margin-inline-start),
+  $grid-search-panel-margin-inline-start: var(--dx-grid-search-panel-margin-inline-start),
+  $grid-rowsview-empty-height: var(--dx-grid-rowsview-empty-height),
+  $grid-bottom-load-panel-padding: var(--dx-grid-bottom-load-panel-padding),
+  $grid-filter-panel-padding: var(--dx-grid-filter-panel-padding),
+  $grid-filter-panel-checkbox-padding-inline-end: var(--dx-grid-filter-panel-checkbox-padding-inline-end),
+  $grid-filter-panel-icon-margin-inline-end: var(--dx-grid-filter-panel-icon-margin-inline-end),
+  $grid-cell-padding: var(--dx-grid-cell-content-padding),
+  $grid-total-footer-padding-block: var(--dx-grid-summary-padding-block),
+  $grid-column-header-indicator-width: var(--dx-grid-column-indicator-width),
+  $grid-text-content-margin: var(--dx-grid-header-text-margin-inline),
+  $grid-sort-index-width: var(--dx-grid-sort-index-width),
+  $grid-sort-index-offset: var(--dx-grid-sort-index-offset),
+);
+@use "../../base/gridBase/layout/aiChat/variables" as baseAiChatVariables with (
+  $ai-chat-toolbar-item-spacing: var(--dx-grid-ai-chat-toolbar-item-padding-inline-end),
+  $ai-chat-message-gap: var(--dx-grid-ai-chat-message-gap),
+  $ai-chat-message-content-gap: var(--dx-grid-ai-chat-message-content-gap),
+  $ai-chat-message-width: var(--dx-grid-ai-chat-message-min-width),
+  $ai-chat-message-regenerate-button-border-radius: var(--dx-grid-ai-chat-message-regenerate-button-border-radius),
+);
 @use "variables" as *;
 @forward "variables";
 @use "layout/cell" as *;

@@ -280,7 +280,7 @@ $datagrid-cell-focus-outline: null !default;
 .dx-datagrid .dx-datagrid-headers.dx-state-focused .dx-header-row td:focus {
   outline: $datagrid-cell-focus-outline;
   outline-color: $datagrid-focused-border-color;
-  outline-offset: -2px;
+  outline-offset: -2px; // dx-fixed-size: the gridBase tier already paints this across the family; a widget-scoped name would collide under the other grid roots
 }
 
 // #endregion

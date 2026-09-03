@@ -181,4 +181,9 @@
   }
 }
 
-@include dx-toolbar-focus-outline(var(--dx-focus-rect-outline), var(--dx-focus-rect-border-radius));
+@include dx-toolbar-focus-outline(
+  var(--dx-focus-rect-outline),
+  var(--dx-focus-rect-border-radius),
+  $outline-width: var(--dx-focus-rect-outline-width),
+  $outline-offset: var(--dx-focus-rect-outline-offset),
+);

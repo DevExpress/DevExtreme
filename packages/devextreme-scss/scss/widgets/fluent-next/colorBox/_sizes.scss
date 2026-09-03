@@ -26,3 +26,6 @@ $color-box-input-container-height: ds.$spacing-150 !default;
 $color-box-input-container-inset-inline-start: ds.$spacing-140 !default;
 $color-box-overlay-padding: ds.$spacing-200 !default;
 $color-box-toolbar-item-padding-inline-end: ds.$spacing-100 !default;
+
+// Base-layer sizing injected with design tokens (wave B13)
+$color-box-input-min-width: ds.$spacing-400 !default;
