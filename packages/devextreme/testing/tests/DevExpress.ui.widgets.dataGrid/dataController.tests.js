@@ -383,7 +383,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         dataSource.load();
 
         // act
-        this.dataController.setDataSource(null);
+        this.dataController._disposeDataSource();
 
         // assert
         assert.strictEqual(loadingChangedSpy.callCount, 2, 'loadingChanged call count');
