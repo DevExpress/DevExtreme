@@ -2,6 +2,7 @@ import $ from 'jquery';
 import themeModule from 'viz/themes';
 import { BaseThemeManager } from 'viz/core/base_theme_manager';
 import paletteModule from '__internal/viz/paletteModule';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const currentTheme = themeModule.currentTheme();
 
@@ -34,9 +35,9 @@ const environment = {
         this.themeManager = new BaseThemeManager({ fontFields: [] });
         this.callback = sinon.spy();
         this.themeManager.setCallback(this.callback);
-        this.createPalette = sinon.stub(paletteModule, 'createPalette');
-        this.getDiscretePalette = sinon.stub(paletteModule, 'getDiscretePalette');
-        this.getAccentColor = sinon.stub(paletteModule, 'getAccentColor');
+        this.createPalette = stubSeam(paletteModule, 'createPalette', 'DEBUG_set_createPalette');
+        this.getDiscretePalette = stubSeam(paletteModule, 'getDiscretePalette', 'DEBUG_set_getDiscretePalette');
+        this.getAccentColor = stubSeam(paletteModule, 'getAccentColor', 'DEBUG_set_getAccentColor');
     },
 
     afterEach: function() {

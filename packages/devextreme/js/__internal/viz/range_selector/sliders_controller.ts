@@ -75,7 +75,8 @@ function restoreSetSelectedRange(controller) {
   delete controller.setSelectedRange;
 }
 
-export function SlidersController(params) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let SlidersController = function (params) {
   const that = this;
   const sliderParams = {
     renderer: params.renderer, root: params.root, trackersGroup: params.trackersGroup, translator: params.translator,
@@ -89,7 +90,7 @@ export function SlidersController(params) {
   // It seems that there is no special reasons to suppress first event - it was accidentally suppressed.
   // Let it stay so for now.
   that._processSelectionChanged = dummyProcessSelectionChanged;
-}
+};
 
 SlidersController.prototype = {
   constructor: SlidersController,
@@ -519,3 +520,11 @@ SlidersController.prototype = {
     this._sliders[index].toForeground();
   },
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_SlidersController(value: typeof SlidersController): void {
+  SlidersController = value;
+}
+/// #ENDDEBUG

@@ -222,7 +222,8 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
   return docEvents;
 }
 
-export function Tracker(params) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Tracker = function (params) {
   const state = this._state = {};
   const targets = params.controller.getTrackerTargets();
   if (msPointerEnabled) {
@@ -242,7 +243,7 @@ export function Tracker(params) {
   function getRootOffsetLeft() {
     return params.renderer.getRootOffset().left;
   }
-}
+};
 
 Tracker.prototype = {
   constructor: Tracker,
@@ -260,3 +261,11 @@ Tracker.prototype = {
     state.manualRangeSelectionEnabled = behavior.manualRangeSelectionEnabled;
   },
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_Tracker(value: typeof Tracker): void {
+  Tracker = value;
+}
+/// #ENDDEBUG

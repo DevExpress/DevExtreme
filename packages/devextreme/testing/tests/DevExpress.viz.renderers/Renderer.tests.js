@@ -19,7 +19,7 @@ function getMockElement() {
     };
 }
 
-utils.getNextDefsSvgId = sinon.stub().returns('DevExpressId');
+utils.DEBUG_set_getNextDefsSvgId(sinon.stub().returns('DevExpressId'));
 
 QUnit.testDone(function() {
     renderers.SvgElement.resetHistory && renderers.SvgElement.resetHistory();
@@ -55,7 +55,7 @@ function resetMockElements() {
     });
 }
 
-animationModule.AnimationController = stubClass(animationModule.AnimationController);
+animationModule.DEBUG_set_AnimationController(stubClass(animationModule.AnimationController));
 
 const Renderer = renderers.Renderer;
 

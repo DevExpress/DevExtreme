@@ -1,4 +1,4 @@
-const browser = require('core/utils/browser');
+import browser from 'core/utils/browser';
 
 const userAgents = {
     webkit: 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Custom/43.0.2357.124',

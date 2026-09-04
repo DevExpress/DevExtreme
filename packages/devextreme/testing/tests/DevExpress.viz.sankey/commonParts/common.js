@@ -3,6 +3,7 @@ import {
     Renderer,
 } from '../../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer_default';
+import { stubSeam } from '../../../helpers/moduleSeam.js';
 import '__internal/viz/sankey/sankey';
 import 'viz/themes';
 import { layout as layoutBuilder } from '__internal/viz/sankey/layout';
@@ -40,7 +41,7 @@ const environment = {
         this.nodesGroupIndex = 1;
         this.labelsGroupIndex = 2;
 
-        sinon.stub(rendererModule, 'Renderer').callsFake(function() {
+        stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(function() {
             return that.renderer;
         });
     },

@@ -23,7 +23,8 @@ const _min = Math.min;
 const _max = Math.max;
 const MIN_SCROLL_BAR_SIZE = 10;
 
-export const ScrollBar = function (renderer, group) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let ScrollBar = function (renderer, group) {
   this._translator = new Translator2D({}, {}, {});
   this._scroll = renderer.rect().append(group);
   this._addEvents();
@@ -283,3 +284,9 @@ ScrollBar.prototype = {
     });
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_ScrollBar(value: typeof ScrollBar): void {
+  ScrollBar = value;
+}
+/// #ENDDEBUG

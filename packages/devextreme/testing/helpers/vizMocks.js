@@ -1,16 +1,16 @@
 /* global currentAssert, currentTest, sinon */
 
 import $ from 'jquery';
-import * as tooltipModule from 'viz/core/tooltip';
-import * as titleModule from 'viz/core/title';
+import tooltipModule from 'viz/core/tooltip';
+import titleModule from 'viz/core/title';
 import legendModule from 'viz/components/legend';
 import axisModule from 'viz/axes/base_axis';
-import * as pointModule from 'viz/series/points/base_point';
+import pointModule from 'viz/series/points/base_point';
 import { Series } from 'viz/series/base_series';
-import * as loadingIndicatorModule from 'viz/core/loading_indicator';
-import * as exportMenuModule from 'viz/core/export';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import exportMenuModule from 'viz/core/export';
 import rendererModule from 'viz/core/renderers/renderer_default';
-import * as errors from 'viz/core/errors_warnings';
+import errors from 'viz/core/errors_warnings';
 import * as baseWidgetUtils from '__internal/viz/core/base_widget.utils';
 import * as typeUtils from 'core/utils/type';
 
@@ -377,7 +377,17 @@ const Point = stubClass(pointModule.Point);
 const Legend = stubClass(legendModule.Legend);
 const Title = stubClass(titleModule.Title);
 const Tooltip = stubClass(tooltipModule.Tooltip);
-const Axis = stubClass(axisModule.Axis);
+// ESM npm artifacts strip /// #DEBUG methods (removeDebug: true).
+// Restore the ones gauges/charts call on mocks (kept in legacy CJS transpile).
+const Axis = stubClass(axisModule.Axis, null, {
+    $extraFunctions: [
+        'shift',
+        '_getTickMarkPoints',
+        '_validateOverlappingMode',
+        '_getStep',
+        '_validateDisplayMode',
+    ],
+});
 const SeriesStub = stubClass(Series);
 
 export {

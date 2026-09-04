@@ -1,39 +1,28 @@
-(function(factory) {
-    if(typeof define === 'function' && define.amd) {
-        define(function(require, exports, module) {
-            require('integration/jquery'),
-            require('ui/button');
-            require('ui/check_box');
-            require('ui/drop_down_button');
-            require('ui/form');
-            require('ui/popup');
-            require('ui/select_box');
-            require('ui/text_box');
-            require('ui/toolbar');
-            require('ui/validator');
-            require('ui/validation_summary');
+import 'integration/jquery';
+import 'ui/button';
+import 'ui/check_box';
+import 'ui/drop_down_button';
+import 'ui/form';
+import 'ui/popup';
+import 'ui/select_box';
+import 'ui/text_box';
+import 'ui/toolbar';
+import 'ui/validator';
+import 'ui/validation_summary';
 
-            const aspnet = require('aspnet');
-            window.DevExpress = { aspnet: aspnet }; // for DevExpress.aspnet.createComponent in templates
+import $ from 'jquery';
+import { setTemplateEngine } from 'core/templates/template_engine_registry';
+import aspnetModule from 'aspnet';
+import errorsModule from 'ui/widget/ui.errors';
+import ajaxMock from '../../helpers/ajaxMock.js';
 
-            module.exports = factory(
-                require('jquery'),
-                require('core/templates/template_engine_registry').setTemplateEngine,
-                aspnet,
-                function() { return require('ui/widget/ui.errors'); },
-                function() { return require('../../helpers/ajaxMock.js'); }
-            );
-        });
-    } else {
-        factory(
-            window.jQuery,
-            DevExpress.setTemplateEngine,
-            DevExpress.aspnet,
-            function() { return window.DevExpress_ui_widget_errors; },
-            function() { return window.ajaxMock; }
-        );
-    }
-}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor) {
+// Templates call DevExpress.aspnet.createComponent / renderComponent.
+// MVC-style templates also expect global `$` (runner calls jQuery.noConflict()).
+window.DevExpress = window.DevExpress || {};
+window.DevExpress.aspnet = aspnetModule;
+window.$ = $;
+
+(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor) {
 
     if(QUnit.urlParams['nojquery']) {
         return;
@@ -696,4 +685,4 @@
         });
     });
 
-}));
+})($, setTemplateEngine, aspnetModule, function() { return errorsModule; }, function() { return ajaxMock; });

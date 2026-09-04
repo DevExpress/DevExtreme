@@ -19,7 +19,7 @@ import layoutManagerModule from 'viz/chart_components/layout_manager';
 import trackerModule from 'viz/chart_components/tracker';
 import dxChart from 'viz/chart';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import vizUtils from 'viz/core/utils';
+import vizUtils from 'viz/core/utils_default';
 import {
     MockSeries,
     seriesMockData,
@@ -951,10 +951,10 @@ QUnit.module('isReady', $.extend({}, environment, {
     beforeEach: function() {
         const that = this;
         environment.beforeEach.apply(this, arguments);
-        rendererModule.Renderer = sinon.spy(function(parameters) {
+        rendererModule.DEBUG_set_Renderer(sinon.spy(function(parameters) {
             that.renderer = new Renderer(parameters);
             return that.renderer;
-        });
+        }));
     },
     afterEach: function() {
         environment.afterEach.apply(this, arguments);

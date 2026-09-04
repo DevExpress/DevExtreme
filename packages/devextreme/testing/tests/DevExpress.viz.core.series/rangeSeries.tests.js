@@ -6,6 +6,7 @@ import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
 import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/chartMocks.js';
 import { noop } from 'core/utils/common';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const Series = SeriesModule.Series;
 
@@ -79,7 +80,7 @@ const environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
         let mockPointIndex = 0;
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(params, data) {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function(params, data) {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -181,7 +182,7 @@ const environmentWithSinonStubPoint = {
     QUnit.module('RangeSeries. API', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+            this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
                 const stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);
@@ -339,7 +340,7 @@ const environmentWithSinonStubPoint = {
             this.options = {
                 type: 'rangearea'
             };
-            this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+            this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
                 const stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);

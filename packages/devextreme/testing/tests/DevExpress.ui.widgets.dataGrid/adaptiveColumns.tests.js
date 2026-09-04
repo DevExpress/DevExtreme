@@ -105,19 +105,22 @@ QUnit.module('AdaptiveColumns', {
             if(name === 'width' || name === 'height') {
                 ++cssInvokeCounter;
             }
+            return cssFunc.apply(this, arguments);
         };
 
-        // arrange, act
-        $('.dx-datagrid').width(200);
-        setupDataGrid(this);
-        this.rowsView.render($('#container'));
-        this.resizingController.updateDimensions();
-        this.clock.tick(10);
+        try {
+            // arrange, act
+            $('.dx-datagrid').width(200);
+            setupDataGrid(this);
+            this.rowsView.render($('#container'));
+            this.resizingController.updateDimensions();
+            this.clock.tick(10);
 
-        // assert
-        assert.equal(cssInvokeCounter, 0, 'no $.css() invokes for width/height CSS properties');
-
-        renderer.fn.css = cssFunc;
+            // assert
+            assert.equal(cssInvokeCounter, 0, 'no $.css() invokes for width/height CSS properties');
+        } finally {
+            renderer.fn.css = cssFunc;
+        }
     });
 
     // T516888

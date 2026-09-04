@@ -534,7 +534,7 @@ export class RowsView extends ColumnsView {
       $cell = that._createCell({
         column: columns[i], rowType: 'freeSpace', columnIndex: i, columns,
       });
-      isNumeric(height) && $cell.css('height', height);
+      isNumeric(height) && setHeight($cell, height);
 
       $row.append($cell);
     }
@@ -1033,7 +1033,7 @@ export class RowsView extends ColumnsView {
 
             if (showFreeSpaceRow) {
               deferRender(() => {
-                freeSpaceRowElements.css('height', resultHeight);
+                setHeight(freeSpaceRowElements, resultHeight);
                 isFreeSpaceRowVisible = true;
                 freeSpaceRowElements.show();
               });
@@ -1042,7 +1042,7 @@ export class RowsView extends ColumnsView {
           });
         }
       } else {
-        freeSpaceRowElements.css('height', 0);
+        setHeight(freeSpaceRowElements, 0);
         freeSpaceRowElements.show();
         this._updateLastRowBorder(true);
       }

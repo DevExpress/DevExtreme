@@ -16,6 +16,7 @@ import {
 } from './vizMocks.js';
 import { Range } from 'viz/translators/range';
 
+
 const LoadingIndicatorOrig = loadingIndicatorModule.LoadingIndicator;
 
 const firstCategory = 'First';
@@ -281,16 +282,28 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
     return axis;
 }
 
+// Modules that dropped their generated facade expose a DEBUG_set_* seam; the
+// rest are still plain mutable objects.
+function setItem(itemKey, moduleName, value) {
+    const setter = moduleName['DEBUG_set_' + itemKey];
+
+    if(typeof setter === 'function') {
+        setter(value);
+    } else {
+        moduleName[itemKey] = value;
+    }
+}
+
 function mockItem(itemKey, moduleName, mock) {
     if(sourceItemsToMocking[itemKey]) {
         throw 'Item ' + itemKey + ' already mocked';
     }
     sourceItemsToMocking[itemKey] = moduleName[itemKey];
-    moduleName[itemKey] = mock;
+    setItem(itemKey, moduleName, mock);
 }
 
 function restoreItem(itemKey, moduleName) {
-    moduleName[itemKey] = sourceItemsToMocking[itemKey];
+    setItem(itemKey, moduleName, sourceItemsToMocking[itemKey]);
     sourceItemsToMocking[itemKey] = null;
 }
 
@@ -394,9 +407,9 @@ export const resetMockFactory = function resetMockFactory() {
 };
 
 export const setupSeriesFamily = function() {
-    seriesFamilyModule.SeriesFamily = function(options) {
+    seriesFamilyModule.DEBUG_set_SeriesFamily(function(options) {
         return new MockSeriesFamily(options);
-    };
+    });
 };
 //  Translator
 

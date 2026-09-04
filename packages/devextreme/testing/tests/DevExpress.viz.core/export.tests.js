@@ -2,7 +2,8 @@ import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
 import exportModule from '__internal/viz/core/exportModule';
 import themeModule from 'viz/themes';
-import clientExporter from 'exporter';
+import * as clientExporter from 'exporter';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import localization from 'localization';
 
 const combineMarkupsOrig = exportModule.combineMarkups;
@@ -559,7 +560,7 @@ QUnit.test('Combine widgets markups (combineMarkups) in grid layout with bottom-
 
 QUnit.module('API. Export methods', {
     beforeEach: function() {
-        sinon.stub(clientExporter, 'export');
+        stubSeam(clientExporter, 'export');
         this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, 'toDataURL');
         this.toDataURLStub.returnsArg(0);
     },
@@ -828,7 +829,7 @@ QUnit.module('API', {
         this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
 
-        sinon.stub(clientExporter, 'export');
+        stubSeam(clientExporter, 'export');
         this.options = {
             printingEnabled: true,
             formats: ['JPEG'],
@@ -1055,7 +1056,7 @@ QUnit.module('Events', {
         this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
 
-        sinon.stub(clientExporter, 'export');
+        stubSeam(clientExporter, 'export');
 
         this.options = {
             enabled: true,
@@ -1365,7 +1366,7 @@ QUnit.module('Layout', {
         this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
 
-        sinon.stub(clientExporter, 'export');
+        stubSeam(clientExporter, 'export');
 
         this.options = {
             enabled: true,

@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const BaseStrategy = require('common/core/events/pointer/base');
-const registerEvent = require('common/core/events/core/event_registrator');
-const typeUtils = require('core/utils/type');
-const special = require('../../../helpers/eventHelper.js').special;
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import BaseStrategy from 'common/core/events/pointer/base';
+import registerEvent from 'common/core/events/core/event_registrator';
+import * as typeUtils from 'core/utils/type';
+import { special } from '../../../helpers/eventHelper.js';
 
 
 const BubbledTestEventMap = {

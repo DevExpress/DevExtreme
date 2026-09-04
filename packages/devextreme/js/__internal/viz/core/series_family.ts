@@ -458,7 +458,8 @@ function adjustBubbleSeriesDimensions() {
   });
 }
 
-export function SeriesFamily(options) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let SeriesFamily = function (options) {
   /// #DEBUG
   debug.assert(options.type, 'type was not passed or empty');
   /// #ENDDEBUG
@@ -519,7 +520,7 @@ export function SeriesFamily(options) {
       that.adjustSeriesDimensions = adjustBubbleSeriesDimensions;
       break;
   }
-}
+};
 
 SeriesFamily.prototype = {
   constructor: SeriesFamily,
@@ -543,3 +544,9 @@ SeriesFamily.prototype = {
     this.series = _map(series, (singleSeries) => (singleSeries.type === type ? singleSeries : null));
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_SeriesFamily(value: typeof SeriesFamily): void {
+  SeriesFamily = value;
+}
+/// #ENDDEBUG

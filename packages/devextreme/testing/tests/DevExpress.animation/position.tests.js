@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import positionUtils from 'common/core/animation/position';
 import translator from '__internal/common/core/animation/translatorModule';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import browser from 'core/utils/browser';
 import fixtures from '../../helpers/positionFixtures.js';
 import { implementationsMap } from 'core/utils/size';
@@ -1020,7 +1021,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
 
     // T664522
     QUnit.test('setup should call resetPosition with finishTransition argument', function(assert) {
-        const resetPositionStub = sinon.stub(translator, 'resetPosition').callsFake(($element, finishTransition) => {
+        const resetPositionStub = stubSeam(translator, 'resetPosition', 'DEBUG_set_resetPosition').callsFake(($element, finishTransition) => {
             assert.equal(finishTransition, true, 'finishTransition is true');
         });
 

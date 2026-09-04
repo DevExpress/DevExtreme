@@ -48,21 +48,21 @@ StubThemeManager.prototype.setTheme = function() {
 };
 
 function stubComponentConstructors(test) {
-    rendererModule.Renderer = returnValue(test.renderer);
+    rendererModule.DEBUG_set_Renderer(returnValue(test.renderer));
     titleModule.DEBUG_set_title(returnValue(test.title));
     tooltipModule.DEBUG_set_tooltip(returnValue(test.tooltip));
     exportModule.DEBUG_set_ExportMenu(returnValue(test.exportMenu));
 
-    projectionModule.Projection = returnValue(test.projection);
-    controlBarModule.ControlBar = returnValue(test.controlBar);
-    gestureHandlerModule.GestureHandler = returnValue(test.gestureHandler);
-    trackerModule.Tracker = returnValue(test.tracker);
-    themeManagerModule.BaseThemeManager = returnValue(test.themeManager);
-    dataExchangerModule.DataExchanger = returnValue(test.dataExchanger);
-    legendModule.LegendsControl = returnValue(test.legendsControl);
-    layoutModule.LayoutControl = returnValue(test.layoutControl);
-    mapLayerModule.MapLayerCollection = returnValue(test.layerCollection);
-    tooltipViewerModule.TooltipViewer = returnValue(test.tooltipViewer);
+    projectionModule.DEBUG_set_Projection(returnValue(test.projection));
+    controlBarModule.DEBUG_set_ControlBar(returnValue(test.controlBar));
+    gestureHandlerModule.DEBUG_set_GestureHandler(returnValue(test.gestureHandler));
+    trackerModule.DEBUG_set_Tracker(returnValue(test.tracker));
+    themeManagerModule.DEBUG_set_BaseThemeManager(returnValue(test.themeManager));
+    dataExchangerModule.DEBUG_set_DataExchanger(returnValue(test.dataExchanger));
+    legendModule.DEBUG_set_LegendsControl(returnValue(test.legendsControl));
+    layoutModule.DEBUG_set_LayoutControl(returnValue(test.layoutControl));
+    mapLayerModule.DEBUG_set_MapLayerCollection(returnValue(test.layerCollection));
+    tooltipViewerModule.DEBUG_set_TooltipViewer(returnValue(test.tooltipViewer));
 }
 export { stubComponentConstructors };
 
