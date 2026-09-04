@@ -1,11 +1,8 @@
-import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
-import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
 import { logger } from '@js/core/utils/console';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
@@ -72,8 +69,6 @@ import { generateRowValues } from './utils/row_values';
 
 export class DataController extends modules.Controller {
   public _dataSource?: DataSourceAdapter | null;
-
-  protected isSharedDataSource?: boolean;
 
   protected _items!: ProcessedItem[];
 
@@ -647,22 +642,6 @@ export class DataController extends modules.Controller {
     });
   }
 
-  protected _getSpecificDataSourceOption(): unknown {
-    const dataSource = this.option('dataSource');
-
-    if (Array.isArray(dataSource)) {
-      return {
-        store: {
-          type: 'array',
-          data: dataSource,
-          key: this.option('keyExpr'),
-        },
-      };
-    }
-
-    return dataSource;
-  }
-
   /**
    * @extended: state_storing, virtual_scrolling
    */
@@ -676,7 +655,9 @@ export class DataController extends modules.Controller {
   protected _initDataSource(): void {
     const hadDataSource = !!this._dataSource;
 
-    const dataSource = this.recreateDataSource();
+    this._disposeDataSource();
+
+    const dataSource = this.dataSourceController.createDataSource();
     this._useSortingGroupingFromColumns = true;
     this._cachedProcessedItems = null;
 
@@ -688,27 +669,6 @@ export class DataController extends modules.Controller {
     } else if (hadDataSource) {
       this.updateItems();
     }
-  }
-
-  private recreateDataSource(): DataSource | undefined {
-    const dataSourceOptions = this._getSpecificDataSourceOption();
-
-    this._disposeDataSource();
-
-    if (!dataSourceOptions) {
-      this.isSharedDataSource = false;
-      return undefined;
-    }
-
-    if (dataSourceOptions instanceof DataSourceClass) {
-      this.isSharedDataSource = true;
-      return dataSourceOptions as unknown as DataSource;
-    }
-
-    this.isSharedDataSource = false;
-    return new DataSourceClass(
-      extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, {})),
-    ) as unknown as DataSource;
   }
 
   /**
@@ -1635,7 +1595,7 @@ export class DataController extends modules.Controller {
     if (oldDataSource) {
       oldDataSource.cancelAll();
       this.unsubscribeFromDataSource(oldDataSource);
-      oldDataSource.dispose(this.isSharedDataSource);
+      oldDataSource.dispose(this.dataSourceController.isSharedDataSource());
     }
 
     this._dataSource = null;

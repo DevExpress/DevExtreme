@@ -4,6 +4,7 @@ import {
   it,
   jest,
 } from '@jest/globals';
+import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
 import type Store from '@ts/data/abstract_store';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
@@ -47,6 +48,10 @@ class TestDataSourceController extends DataSourceController {
 
   protected getAdapterProvider(): DataSourceAdapterProvider {
     return this.providerStub;
+  }
+
+  public readSpecificDataSourceOption(): unknown {
+    return this.getSpecificDataSourceOption();
   }
 }
 
@@ -92,6 +97,15 @@ const withProvider = (adapter: AdapterStub): {
   controller.providerStub = asProvider(provider);
 
   return { controller, component, provider };
+};
+
+const withOptions = (options: Record<string, unknown>): TestDataSourceController => {
+  const component = {
+    _controllers: {},
+    option: jest.fn((name?: string) => (name === undefined ? options : options[name])),
+  } as unknown as InternalGrid;
+
+  return new TestDataSourceController(component);
 };
 
 const withAdapter = (marker = 'first'): {
@@ -289,6 +303,147 @@ describe('DataSourceController', () => {
 
     it('throws on the base class, where no component has supplied a provider', () => {
       expect(() => createController().createAdapter(SOURCE)).toThrow('Method not implemented.');
+    });
+  });
+
+  describe('getSpecificDataSourceOption', () => {
+    it('wraps an array option into an array store, keyed by keyExpr', () => {
+      const data = [{ id: 1 }];
+
+      const result = withOptions({ dataSource: data, keyExpr: 'id' })
+        .readSpecificDataSourceOption();
+
+      expect(result).toEqual({ store: { type: 'array', data, key: 'id' } });
+    });
+
+    it('keeps the caller array by reference, leaving the copy to createDataSource', () => {
+      const data = [{ id: 1 }];
+
+      const result = withOptions({ dataSource: data, keyExpr: 'id' })
+        .readSpecificDataSourceOption() as { store: { data: unknown } };
+
+      expect(result.store.data).toBe(data);
+    });
+
+    it('passes a non-array option straight through', () => {
+      const config = { store: { type: 'odata', url: 'x' } };
+
+      const result = withOptions({ dataSource: config }).readSpecificDataSourceOption();
+
+      expect(result).toBe(config);
+    });
+
+    it('returns the unset option as-is, so createDataSource can see it is absent', () => {
+      expect(withOptions({}).readSpecificDataSourceOption()).toBeUndefined();
+    });
+
+    it('does not throw on the base class, unlike getAdapterProvider', () => {
+      expect(() => withOptions({}).readSpecificDataSourceOption()).not.toThrow();
+    });
+  });
+
+  describe('createDataSource', () => {
+    it('returns undefined when the dataSource option is absent', () => {
+      const controller = withOptions({});
+
+      expect(controller.createDataSource()).toBeUndefined();
+    });
+
+    it('reports not-shared when the dataSource option is absent', () => {
+      const controller = withOptions({});
+
+      controller.createDataSource();
+
+      expect(controller.isSharedDataSource()).toBe(false);
+    });
+
+    it('builds a DataSource from a plain array', () => {
+      const controller = withOptions({ dataSource: [{ id: 1 }], keyExpr: 'id' });
+
+      expect(controller.createDataSource()).toBeInstanceOf(DataSourceClass);
+    });
+
+    it('keys the built DataSource by keyExpr', () => {
+      const controller = withOptions({ dataSource: [{ id: 1 }], keyExpr: 'id' });
+
+      expect(controller.createDataSource()?.key()).toBe('id');
+    });
+
+    it('reports not-shared for an array, so disposal may destroy what it built', () => {
+      const controller = withOptions({ dataSource: [{ id: 1 }], keyExpr: 'id' });
+
+      controller.createDataSource();
+
+      expect(controller.isSharedDataSource()).toBe(false);
+    });
+
+    it('builds a DataSource from a store config', () => {
+      const controller = withOptions({ dataSource: { store: { type: 'array', data: [] } } });
+
+      expect(controller.createDataSource()).toBeInstanceOf(DataSourceClass);
+    });
+
+    it('builds a fresh DataSource on every call', () => {
+      const controller = withOptions({ dataSource: [{ id: 1 }], keyExpr: 'id' });
+
+      expect(controller.createDataSource()).not.toBe(controller.createDataSource());
+    });
+
+    it('hands back the very DataSource the caller passed, without rebuilding it', () => {
+      const shared = new DataSourceClass({ store: [{ id: 1 }], key: 'id' });
+      const controller = withOptions({ dataSource: shared });
+
+      expect(controller.createDataSource()).toBe(shared);
+
+      shared.dispose();
+    });
+
+    it('reports shared for a DataSource instance, so disposal spares it', () => {
+      const shared = new DataSourceClass({ store: [{ id: 1 }], key: 'id' });
+      const controller = withOptions({ dataSource: shared });
+
+      controller.createDataSource();
+
+      expect(controller.isSharedDataSource()).toBe(true);
+
+      shared.dispose();
+    });
+
+    it('clears the shared flag when the option moves from a DataSource to an array', () => {
+      const shared = new DataSourceClass({ store: [{ id: 1 }], key: 'id' });
+      const options: Record<string, unknown> = { dataSource: shared, keyExpr: 'id' };
+      const controller = withOptions(options);
+
+      controller.createDataSource();
+      options.dataSource = [{ id: 2 }];
+      controller.createDataSource();
+
+      expect(controller.isSharedDataSource()).toBe(false);
+
+      shared.dispose();
+    });
+
+    it('reports not-shared before anything has been created', () => {
+      expect(withOptions({}).isSharedDataSource()).toBe(false);
+    });
+
+    it('leaves the held adapter alone — creating a source is not creating an adapter', () => {
+      const controller = withOptions({ dataSource: [{ id: 1 }], keyExpr: 'id' });
+
+      controller.createDataSource();
+
+      expect(controller.hasAdapter()).toBe(false);
+    });
+
+    it('reads no other controller', () => {
+      const controller = withOptions({ dataSource: [{ id: 1 }], keyExpr: 'id' });
+      const getController = jest.spyOn(controller, 'getController');
+
+      controller.createDataSource();
+      controller.readSpecificDataSourceOption();
+      controller.isSharedDataSource();
+
+      expect(getController).not.toHaveBeenCalled();
     });
   });
 });
