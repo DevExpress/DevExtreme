@@ -1007,9 +1007,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   }
 
   _renderA11yStatusContainer(): void {
-    const isContainerExistingInDOM = this._$a11yStatusContainer?.parent().is(this.$element());
-
-    if (isContainerExistingInDOM) {
+    if (this._$a11yStatusContainer?.get(0)) {
       return;
     }
 
