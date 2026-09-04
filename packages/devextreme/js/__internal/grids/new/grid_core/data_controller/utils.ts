@@ -6,7 +6,7 @@ import type { Store } from '@js/data';
 import type { DataSourceLike } from '@js/data/data_source';
 import DataSource from '@js/data/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-import { applyBatch } from '@ts/data/m_array_utils';
+import { applyBatch } from '@ts/data/array_utils';
 
 import type {
   DataObject,

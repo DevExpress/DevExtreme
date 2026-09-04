@@ -9,7 +9,7 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { StoreErrorHandler } from '@ts/data/abstract_store';
 
-import { errors, handleError } from '../m_errors';
+import { errors, handleError } from '../errors';
 import { escapeServiceOperationParams, formatFunctionInvocationUrl } from './utils';
 
 export type ServiceOperationParams = Record<string, unknown>;

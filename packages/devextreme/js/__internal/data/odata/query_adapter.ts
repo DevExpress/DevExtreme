@@ -4,12 +4,12 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
 
-import { errors } from '../m_errors';
+import { errors } from '../errors';
 import {
   isConjunctiveOperator,
   isUnaryOperation,
   normalizeBinaryCriterion,
-} from '../m_utils';
+} from '../utils';
 import {
   convertPrimitiveValue,
   generateExpand,
