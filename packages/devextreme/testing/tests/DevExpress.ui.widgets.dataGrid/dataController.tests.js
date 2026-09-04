@@ -383,7 +383,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         dataSource.load();
 
         // act
-        this.dataController.setDataSource(null);
+        this.dataController._disposeDataSource();
 
         // assert
         assert.strictEqual(loadingChangedSpy.callCount, 2, 'loadingChanged call count');
@@ -7746,7 +7746,6 @@ QUnit.module('Filtering', {
             remoteOperations: { filtering: true }
         });
 
-        this.dataController.isSharedDataSource = true;
         this.dataController.setDataSource(this.dataSource);
 
         let loadingCount = 0;
