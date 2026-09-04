@@ -43,6 +43,15 @@ $(() => {
               form.validate();
             }
           });
+
+          form.on('contentReady', (e) => {
+            const untilEditor = e.component.getEditor('recurrenceEndUntilEditor');
+            untilEditor.on('valueChanged', () => {
+              e.component.getEditor('recurrenceRepeatEndEditor').option('value') !== 'until'
+              && untilEditor.option('value', new Date(2026, 8, 3));
+            });
+            untilEditor.option('value', new Date(2026, 8, 3));
+          });
         },
         items: [
           {
