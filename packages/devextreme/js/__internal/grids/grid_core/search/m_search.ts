@@ -106,9 +106,7 @@ const dataController = (
         const filterValue = parseValue(column, text);
 
         if (lookup?.items) {
-          // @ts-expect-error
           dataQuery(lookup.items, { langParams })
-            // @ts-expect-error
             .filter(
               column.createFilterExpression.call(
                 {

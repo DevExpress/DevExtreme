@@ -341,7 +341,6 @@ class PivotGridDataSource {
   createLocalOrRemoteStore(dataSourceOptions, notifyProgress) {
     const StoreConstructor = dataSourceOptions.remoteOperations
       || dataSourceOptions.paginate ? RemoteStore : LocalStore;
-    // @ts-expect-error
     return new StoreConstructor(extend(normalizeDataSourceOptions(dataSourceOptions), {
       onChanged: null,
       onLoadingChanged: null,
