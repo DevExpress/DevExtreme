@@ -956,15 +956,7 @@ export class DataController extends modules.Controller {
     const oldValue = oldRow.values[columnIndex];
     const newValue = newRow.values[columnIndex];
 
-    if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
-      return true;
-    }
-
-    const isCellModified = (
-      row: ProcessedItem,
-    ): boolean => row.modifiedValues?.[columnIndex] !== undefined;
-
-    return isCellModified(oldRow) !== isCellModified(newRow);
+    return JSON.stringify(oldValue) !== JSON.stringify(newValue);
   }
 
   /**
