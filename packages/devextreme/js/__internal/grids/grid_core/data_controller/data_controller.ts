@@ -18,7 +18,7 @@ import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_control
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
-  ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
+  ChangedEvent, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
 import modules from '@ts/grids/grid_core/m_modules';
@@ -1363,18 +1363,6 @@ export class DataController extends modules.Controller {
     this.dataSourceChanged.fire();
   };
 
-  protected _getDataSourceAdapterProvider(): DataSourceAdapterProvider {
-    throw new Error('Method not implemented.');
-  }
-
-  protected _createDataSourceAdapter(dataSource: DataSource): DataSourceAdapter {
-    const dataSourceAdapterProvider = this._getDataSourceAdapterProvider();
-    const dataSourceAdapter = dataSourceAdapterProvider.create(this.component);
-
-    dataSourceAdapter.init(dataSource);
-    return dataSourceAdapter;
-  }
-
   private subscribeToDataSource(dataSourceAdapter: DataSourceAdapter): void {
     dataSourceAdapter.changed.add(this.dataChangedHandlerProxy);
     dataSourceAdapter.loadingChanged.add(this.loadingChangedHandler);
@@ -1394,10 +1382,9 @@ export class DataController extends modules.Controller {
   }
 
   private setDataSource(dataSource: DataSource): void {
-    const dataSourceAdapter = this._createDataSourceAdapter(dataSource);
+    const dataSourceAdapter = this.dataSourceController.createAdapter(dataSource);
 
     this._dataSource = dataSourceAdapter;
-    this.dataSourceController.setAdapter(dataSourceAdapter);
 
     this._isLoading = !dataSourceAdapter.isLoaded();
     this._needApplyFilter = true;

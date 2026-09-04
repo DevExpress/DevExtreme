@@ -1,6 +1,6 @@
 import './module_not_extended/column_headers';
 import './m_columns_controller';
-import './module_not_extended/data_source';
+import './data_source/data_source_module';
 import './m_data_controller';
 import './module_not_extended/sorting';
 import './module_not_extended/rows';
