@@ -175,7 +175,7 @@ $(() => {
       .addClass('output-error-message')
       .append(
         $('<span>').addClass('dx-icon-warning'),
-        'An unexpected error occurred. Please try again.'
+        'An unexpected error occurred. Please try again.',
       )
       .hide();
 

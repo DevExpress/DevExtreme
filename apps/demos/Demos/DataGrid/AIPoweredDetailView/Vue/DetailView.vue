@@ -54,15 +54,21 @@
       message=""
       :visible="isLoading"
     >
-      <DxPosition of=".output-container" />
+      <DxPosition of=".output-container"/>
     </DxLoadPanel>
 
-    <div v-if="!isLoading && !responseValue && !isError" class="output-empty-message">
+    <div
+      v-if="!isLoading && !responseValue && !isError"
+      class="output-empty-message"
+    >
       AI Assistant is ready to answer your questions about this record.
     </div>
 
-    <div v-if="!isLoading && !responseValue && isError" class="output-error-message">
-      <span class="dx-icon-warning"></span>
+    <div
+      v-if="!isLoading && !responseValue && isError"
+      class="output-error-message"
+    >
+      <span class="dx-icon-warning"/>
       An unexpected error occurred. Please try again.
     </div>
   </div>
@@ -114,9 +120,8 @@ const isError = ref(false);
 const submitButtonText = computed(() => {
   if (!responseValue.value && !isError.value) {
     return 'Submit';
-  } else {
-    return 'Resubmit';
   }
+  return 'Resubmit';
 });
 
 function onSuggestionClick({ itemData: suggestion }: DxButtonGroupTypes.ItemClickEvent) {
@@ -133,7 +138,7 @@ async function handleSubmit({ event }: SubmitEvent) {
   try {
     const messages: AIMessage[] = [
       { role: 'system', content: SYSTEM_PROMPT },
-      { role: 'user', content: `User prompt: ${promptValue.value}\nRow data: ${JSON.stringify(rowData)}` }
+      { role: 'user', content: `User prompt: ${promptValue.value}\nRow data: ${JSON.stringify(rowData)}` },
     ];
     const aiResponse = await getAIResponse(messages);
     responseValue.value = aiResponse!;

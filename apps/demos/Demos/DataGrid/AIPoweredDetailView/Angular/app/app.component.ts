@@ -2,7 +2,6 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, type Vehicle } from './app.service';
-import { AiService } from './ai/ai.service';
 import { Category } from './category/category.component';
 import { DetailViewComponent } from './detail-view/detail-view.component';
 
@@ -20,7 +19,7 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
-  providers: [Service, AiService],
+  providers: [Service],
   imports: [
     DxDataGridModule,
     DetailViewComponent,
@@ -30,7 +29,7 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   vehicles: Vehicle[];
 
-  constructor(service: Service, aiService: AiService) {
+  constructor(service: Service) {
     this.vehicles = service.getVehicles();
   }
 

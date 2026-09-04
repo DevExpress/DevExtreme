@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  DataGrid, Column, Paging, MasterDetail,
-} from 'devextreme-react/data-grid';
+import { DataGrid, Column, Paging, MasterDetail } from 'devextreme-react/data-grid';
 import Category from './Category.js';
 import DetailView from './DetailView.js';
 import { vehicles } from './data.js';
@@ -9,9 +7,7 @@ import { vehicles } from './data.js';
 const onRowExpanding = ({ component }) => {
   component.collapseAll(-1);
 };
-const onCellClick = ({
-  column, row, component, key,
-}) => {
+const onCellClick = ({ column, row, component, key }) => {
   if (column.type === 'detailExpand' && row.rowType === 'data') {
     if (row.isExpanded) {
       component.collapseRow(key);
@@ -20,7 +16,7 @@ const onCellClick = ({
     }
   }
 };
-const renderSparkleIcon = () => <div className="dx-icon-sparkle" />;
+const renderSparkleIcon = () => <div className='dx-icon-sparkle' />;
 const calculateModel = (data) => `${data.TrademarkName} ${data.Name}`;
 export default function App() {
   return (

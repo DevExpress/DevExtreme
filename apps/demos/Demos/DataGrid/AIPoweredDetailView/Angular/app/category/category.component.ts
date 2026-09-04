@@ -13,6 +13,7 @@ if (window && window.config?.packageConfigPaths) {
 })
 export class Category {
   @Input() id!: number;
+
   @Input() name!: string;
 
   getBackgroundClass() {

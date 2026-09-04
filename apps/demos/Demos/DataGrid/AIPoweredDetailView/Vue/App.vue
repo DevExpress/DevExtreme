@@ -14,7 +14,7 @@
       cell-template="detail-expand-cell"
     />
     <template #detail-expand-cell>
-      <div class="dx-icon-sparkle"></div>
+      <div class="dx-icon-sparkle"/>
     </template>
     <DxColumn
       data-field="Model"
@@ -31,10 +31,13 @@
       cell-template="category-cell"
     />
     <template #category-cell="{ data: { data: vehicle } }">
-      <Category :id="vehicle.CategoryID" :name="vehicle.CategoryName"/>
+      <Category
+        :id="vehicle.CategoryID"
+        :name="vehicle.CategoryName"
+      />
     </template>
-    <DxColumn data-field="Modification" />
-    <DxColumn data-field="Horsepower" />
+    <DxColumn data-field="Modification"/>
+    <DxColumn data-field="Horsepower"/>
     <DxColumn
       data-field="BodyStyleName"
       caption="Body Style"
@@ -45,7 +48,7 @@
       template="master-detail"
     />
     <template #master-detail="{ data: { data: vehicle } }">
-      <DetailView :row-data="vehicle" />
+      <DetailView :row-data="vehicle"/>
     </template>
   </DxDataGrid>
 </template>

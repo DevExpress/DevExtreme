@@ -36,7 +36,7 @@ const DetailView = ({ data: templateData }) => {
       return 'Submit';
     }
     return 'Resubmit';
-  }, [isLoading, responseValue, isError]);
+  }, [responseValue, isError]);
   const outputAreaMinHeight = useMemo(() => {
     const isMaterial = document.querySelector('.dx-theme-material');
     if (isMaterial) return 68;

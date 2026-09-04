@@ -30,10 +30,9 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
   const submitButtonText = useMemo(() => {
     if (!responseValue && !isError) {
       return 'Submit';
-    } else {
-      return 'Resubmit';
     }
-  }, [isLoading, responseValue, isError]);
+    return 'Resubmit';
+  }, [responseValue, isError]);
 
   const outputAreaMinHeight = useMemo(() => {
     const isMaterial = document.querySelector('.dx-theme-material');
@@ -41,7 +40,7 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
 
     return 56;
   }, []);
-  
+
   const outputAreaMaxHeight = useMemo(() => {
     const isMaterial = document.querySelector('.dx-theme-material');
     if (isMaterial) return 244;
@@ -71,7 +70,7 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
       const rowData = templateData.data;
       const messages: AIMessage[] = [
         { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: `User prompt: ${promptValue}\nRow data: ${JSON.stringify(rowData)}` }
+        { role: 'user', content: `User prompt: ${promptValue}\nRow data: ${JSON.stringify(rowData)}` },
       ];
       const aiResponse = await getAIResponse(messages);
       setResponseValue(aiResponse);

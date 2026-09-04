@@ -14,7 +14,7 @@ import { type Vehicle } from './types.ts';
 
 const onRowExpanding = ({ component }: DataGridTypes.RowExpandingEvent) => {
   component.collapseAll(-1);
-}
+};
 
 const onCellClick = ({ column, row, component, key }: DataGridTypes.CellClickEvent) => {
   if (column.type === 'detailExpand' && row.rowType === 'data') {
@@ -24,18 +24,13 @@ const onCellClick = ({ column, row, component, key }: DataGridTypes.CellClickEve
       component.expandRow(key);
     }
   }
-}
+};
 
-const renderSparkleIcon = () => {
-  return <div className="dx-icon-sparkle" />;
-}
+const renderSparkleIcon = () => <div className="dx-icon-sparkle" />;
 
-const calculateModel = (data: Vehicle) => {
-  return `${data.TrademarkName} ${data.Name}`
-}
+const calculateModel = (data: Vehicle) => `${data.TrademarkName} ${data.Name}`;
 
 export default function App() {
-
   return (
     <>
       <DataGrid

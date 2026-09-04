@@ -43,7 +43,7 @@ export class DetailViewComponent {
   isError: boolean = false;
 
   outputAreaMinHeight: number = 56;
-  
+
   outputAreaMaxHeight: number = 196;
 
   suggestions = [
@@ -90,6 +90,5 @@ export class DetailViewComponent {
       this.changeDetectorRef.detectChanges();
       (event?.target as HTMLElement).focus();
     }
-
   }
 }
