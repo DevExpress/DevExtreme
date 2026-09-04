@@ -35,13 +35,6 @@ export interface ODataLoadOptions extends StoreLoadOptions {
   customQueryParams?: Record<string, unknown>;
 }
 
-// `RequestDispatcher` does not declare its own fields yet, so the members the store reads
-// directly are described here until that class is typed.
-type StoreRequestDispatcher = RequestDispatcher & {
-  _withCredentials?: unknown;
-  _processDatesAsUtc?: unknown;
-};
-
 const expandKeyType = (key: StoreKey, keyType: string): FieldTypes => ({ [String(key)]: keyType });
 
 const getProperty = (source: unknown, name: string): unknown => (
@@ -72,7 +65,7 @@ const mergeFieldTypesWithKeyType = (
 };
 
 class ODataStore extends Store {
-  _requestDispatcher: StoreRequestDispatcher;
+  _requestDispatcher: RequestDispatcher;
 
   _fieldTypes: FieldTypes;
 

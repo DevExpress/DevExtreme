@@ -1,29 +1,73 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import arrayQueryImpl from '@js/common/data/array_query';
 import { errors, handleError } from '@js/common/data/errors';
 import queryAdapters from '@js/common/data/query_adapters';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
+import type { ArrayQuery, LangParams } from '@ts/data/array_query';
 
-const remoteQueryImpl = function (url, queryOptions, tasks) {
-  tasks = tasks || [];
-  queryOptions = queryOptions || {};
+export interface RemoteTask {
+  name: string;
+  args: unknown[];
+}
 
-  const createTask = function (name, args) {
-    return { name, args };
-  };
+export interface QueryAdapter {
+  [taskName: string]: unknown;
+  optimize?: (tasks: RemoteTask[]) => void;
+  exec: (url: string) => DeferredObj<unknown>;
+}
 
-  const exec = function (executorTask) {
-    // @ts-expect-error
-    const d = new Deferred();
-    let _adapterFactory;
-    let _adapter;
-    let _taskQueue;
-    let _currentTask;
-    let _mergedSortArgs;
+export interface RemoteQueryOptions {
+  adapter?: string | ((options: RemoteQueryOptions) => QueryAdapter);
+  errorHandler?: (error: unknown) => void;
+  langParams?: LangParams;
+  version?: number;
+  expand?: string | string[] | Function;
+  fieldTypes?: Record<string, string>;
+  filterToLower?: boolean;
+  requireTotalCount?: boolean;
+  params?: Record<string, unknown>;
+  beforeSend?: Function;
+  jsonp?: boolean;
+  withCredentials?: boolean;
+  processDatesAsUtc?: boolean;
+  deserializeDates?: boolean;
+}
 
-    const rejectWithNotify = function (error) {
+export interface RemoteQuery {
+  sortBy: (...args: unknown[]) => RemoteQuery;
+  thenBy: (...args: unknown[]) => RemoteQuery;
+  filter: (...args: unknown[]) => RemoteQuery;
+  slice: (...args: unknown[]) => RemoteQuery;
+  select: (...args: unknown[]) => RemoteQuery;
+  groupBy: (...args: unknown[]) => RemoteQuery;
+  count: (...args: unknown[]) => DeferredObj<unknown>;
+  min: (...args: unknown[]) => DeferredObj<unknown>;
+  max: (...args: unknown[]) => DeferredObj<unknown>;
+  sum: (...args: unknown[]) => DeferredObj<unknown>;
+  avg: (...args: unknown[]) => DeferredObj<unknown>;
+  aggregate: (...args: unknown[]) => DeferredObj<unknown>;
+  enumerate: (...args: unknown[]) => DeferredObj<unknown>;
+}
+
+const createTask = function (name: string, args: unknown[]): RemoteTask {
+  return { name, args };
+};
+
+const remoteQueryImpl = function (
+  url: string,
+  options?: RemoteQueryOptions,
+  previousTasks?: RemoteTask[],
+): RemoteQuery {
+  const tasks: RemoteTask[] = previousTasks ?? [];
+  const queryOptions: RemoteQueryOptions = options ?? {};
+
+  const exec = function (executorTask: RemoteTask): DeferredObj<unknown> {
+    const d = Deferred<unknown>();
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let mergedSortArgs: unknown[][] | undefined;
+
+    const rejectWithNotify = function (error: unknown): void {
       const handler = queryOptions.errorHandler;
       if (handler) {
         handler(error);
@@ -33,90 +77,109 @@ const remoteQueryImpl = function (url, queryOptions, tasks) {
       d.reject(error);
     };
 
-    function mergeSortTask(task) {
-      // eslint-disable-next-line default-case
+    function mergeSortTask(task: RemoteTask): boolean {
       switch (task.name) {
         case 'sortBy':
-          _mergedSortArgs = [task.args];
+          mergedSortArgs = [task.args];
           return true;
 
         case 'thenBy':
-          if (!_mergedSortArgs) {
+          if (!mergedSortArgs) {
             throw errors.Error('E4004');
           }
 
-          _mergedSortArgs.push(task.args);
+          mergedSortArgs.push(task.args);
           return true;
-      }
 
-      return false;
+        default:
+          return false;
+      }
     }
 
-    function unmergeSortTasks() {
-      const head = _taskQueue[0];
-      const unmergedTasks = [];
+    function unmergeSortTasks(queue: RemoteTask[]): RemoteTask[] {
+      const head = queue[0];
+      const unmergedTasks: RemoteTask[] = [];
 
-      if (head && head.name === 'multiSort') {
-        _taskQueue.shift();
-        each(head.args[0], function () {
-          // @ts-expect-error
-          unmergedTasks.push(createTask(unmergedTasks.length ? 'thenBy' : 'sortBy', this));
-        });
+      if (head?.name === 'multiSort') {
+        queue.shift();
+        const [sortArgsList] = head.args;
+        if (Array.isArray(sortArgsList)) {
+          sortArgsList.forEach((sortArgs: unknown) => {
+            unmergedTasks.push(createTask(
+              unmergedTasks.length ? 'thenBy' : 'sortBy',
+              Array.isArray(sortArgs) ? sortArgs : [sortArgs],
+            ));
+          });
+        }
       }
 
-      _taskQueue = unmergedTasks.concat(_taskQueue);
+      return unmergedTasks.concat(queue);
     }
 
-    try {
-      _adapterFactory = queryOptions.adapter;
-      if (!isFunction(_adapterFactory)) {
-        _adapterFactory = queryAdapters[_adapterFactory];
+    function passTaskToAdapter(adapter: QueryAdapter, task: RemoteTask): boolean {
+      if (String(task.name) === 'enumerate') {
+        return true;
       }
 
-      _adapter = _adapterFactory(queryOptions);
+      const taskHandler = adapter[task.name];
 
-      _taskQueue = [].concat(tasks).concat(executorTask);
+      return isFunction(taskHandler) && taskHandler.apply(adapter, task.args) !== false;
+    }
 
-      const { optimize } = _adapter;
-      if (optimize) optimize(_taskQueue);
+    function collectAdapterTasks(adapter: QueryAdapter, queue: RemoteTask[]): void {
+      while (queue.length) {
+        const currentTask = queue[0];
 
-      while (_taskQueue.length) {
-        /* eslint-disable-next-line prefer-destructuring */
-        _currentTask = _taskQueue[0];
-
-        if (!mergeSortTask(_currentTask)) {
-          if (_mergedSortArgs) {
-            _taskQueue.unshift(createTask('multiSort', [_mergedSortArgs]));
-            _mergedSortArgs = null;
+        if (!mergeSortTask(currentTask)) {
+          if (mergedSortArgs) {
+            queue.unshift(createTask('multiSort', [mergedSortArgs]));
+            mergedSortArgs = undefined;
+            // eslint-disable-next-line no-continue
             continue;
           }
 
-          if (String(_currentTask.name) !== 'enumerate') {
-            if (!_adapter[_currentTask.name] || _adapter[_currentTask.name].apply(_adapter, _currentTask.args) === false) {
-              break;
-            }
+          if (!passTaskToAdapter(adapter, currentTask)) {
+            break;
           }
         }
-        _taskQueue.shift();
+        queue.shift();
       }
+    }
 
-      unmergeSortTasks();
+    try {
+      const adapterFactory = isFunction(queryOptions.adapter)
+        ? queryOptions.adapter
+        : queryAdapters[String(queryOptions.adapter)];
 
-      _adapter.exec(url)
-        .done((result, extra) => {
-          if (!_taskQueue.length) {
+      const adapter: QueryAdapter = adapterFactory(queryOptions);
+
+      let taskQueue: RemoteTask[] = [...tasks, executorTask];
+
+      const { optimize } = adapter;
+      if (optimize) optimize(taskQueue);
+
+      collectAdapterTasks(adapter, taskQueue);
+
+      taskQueue = unmergeSortTasks(taskQueue);
+
+      adapter.exec(url)
+        .done((result: unknown, extra: unknown) => {
+          if (!taskQueue.length) {
             d.resolve(result, extra);
           } else {
-            let clientChain = arrayQueryImpl(result, {
+            // @ts-expect-error the adapter resolves with whatever the service returned
+            let clientChain: ArrayQuery = arrayQueryImpl(result, {
               errorHandler: queryOptions.errorHandler,
             });
-            each(_taskQueue, function () {
-              clientChain = clientChain[this.name].apply(clientChain, this.args);
+            taskQueue.forEach((task) => {
+              const method = clientChain[task.name];
+              if (isFunction(method)) {
+                clientChain = method.apply(clientChain, task.args);
+              }
             });
-            clientChain
-              // @ts-expect-error
-              .done(d.resolve)
-              .fail(d.reject);
+            // @ts-expect-error the queue always ends with `enumerate`, so
+            // the chain ends with a Deferred rather than with a query
+            clientChain.done(d.resolve).fail(d.reject);
           }
         })
         .fail(rejectWithNotify);
@@ -124,32 +187,32 @@ const remoteQueryImpl = function (url, queryOptions, tasks) {
       rejectWithNotify(x);
     }
 
+    // @ts-expect-error DeferredObj typings: promise() is declared as a plain Promise
     return d.promise();
   };
 
-  const query = {};
-
-  each(
-    ['sortBy', 'thenBy', 'filter', 'slice', 'select', 'groupBy'],
-    function () {
-      const name = String(this);
-      query[name] = function () {
-        return remoteQueryImpl(url, queryOptions, tasks.concat(createTask(name, arguments)));
-      };
-    },
+  const chain = (name: string, args: unknown[]): RemoteQuery => remoteQueryImpl(
+    url,
+    queryOptions,
+    tasks.concat(createTask(name, args)),
   );
 
-  each(
-    ['count', 'min', 'max', 'sum', 'avg', 'aggregate', 'enumerate'],
-    function () {
-      const name = String(this);
-      query[name] = function () {
-        return exec.call(this, createTask(name, arguments));
-      };
-    },
-  );
+  return {
+    sortBy: (...args: unknown[]): RemoteQuery => chain('sortBy', args),
+    thenBy: (...args: unknown[]): RemoteQuery => chain('thenBy', args),
+    filter: (...args: unknown[]): RemoteQuery => chain('filter', args),
+    slice: (...args: unknown[]): RemoteQuery => chain('slice', args),
+    select: (...args: unknown[]): RemoteQuery => chain('select', args),
+    groupBy: (...args: unknown[]): RemoteQuery => chain('groupBy', args),
 
-  return query;
+    count: (...args: unknown[]): DeferredObj<unknown> => exec(createTask('count', args)),
+    min: (...args: unknown[]): DeferredObj<unknown> => exec(createTask('min', args)),
+    max: (...args: unknown[]): DeferredObj<unknown> => exec(createTask('max', args)),
+    sum: (...args: unknown[]): DeferredObj<unknown> => exec(createTask('sum', args)),
+    avg: (...args: unknown[]): DeferredObj<unknown> => exec(createTask('avg', args)),
+    aggregate: (...args: unknown[]): DeferredObj<unknown> => exec(createTask('aggregate', args)),
+    enumerate: (...args: unknown[]): DeferredObj<unknown> => exec(createTask('enumerate', args)),
+  };
 };
 
 export default remoteQueryImpl;

@@ -35,7 +35,8 @@ export function normalizeDataSource(
     };
   }
 
-  // TODO: research making second param not required
+  // @ts-expect-error the public DataSource constructor is declared with the public
+  // option types, while `normalizeDataSourceOptions()` returns the internal ones
   return new DataSource(normalizeDataSourceOptions(dataSourceLike, undefined));
 }
 

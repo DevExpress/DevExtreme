@@ -19,6 +19,8 @@ export const normalizeDataSource = <T>(
     ...options,
   };
 
+  // @ts-expect-error the public DataSource constructor is declared with the public
+  // option types, while `normalizeDataSourceOptions()` returns the internal ones
   return new DataSource(result);
 };
 

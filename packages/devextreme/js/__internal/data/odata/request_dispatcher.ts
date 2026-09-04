@@ -1,72 +1,91 @@
 import '@js/common/data/odata/query_adapter';
 
 import { sendRequest } from '@js/common/data/odata/utils';
+import type { DeferredObj } from '@js/core/utils/deferred';
 
 const DEFAULT_PROTOCOL_VERSION = 4;
 
+export interface RequestDispatcherOptions {
+  url?: string;
+  beforeSend?: Function;
+  jsonp?: boolean;
+  version?: number;
+  withCredentials?: boolean;
+  processDatesAsUtc?: boolean;
+  deserializeDates?: boolean;
+  filterToLower?: boolean;
+}
+
 export default class RequestDispatcher {
-  constructor(options) {
-    options = options || {};
-    // @ts-expect-error
-    this._url = String(options.url).replace(/\/+$/, '');
-    // @ts-expect-error
-    this._beforeSend = options.beforeSend;
-    // @ts-expect-error
-    this._jsonp = options.jsonp;
-    // @ts-expect-error
-    this._version = options.version || DEFAULT_PROTOCOL_VERSION;
-    // @ts-expect-error
-    this._withCredentials = options.withCredentials;
-    // @ts-expect-error
-    this._processDatesAsUtc = options.processDatesAsUtc ?? options.deserializeDates ?? false;
-    // @ts-expect-error
-    this._filterToLower = options.filterToLower;
+  _url: string;
+
+  _beforeSend?: Function;
+
+  _jsonp?: boolean;
+
+  _version: number;
+
+  _withCredentials?: boolean;
+
+  _processDatesAsUtc: boolean;
+
+  _filterToLower?: boolean;
+
+  constructor(options?: RequestDispatcherOptions) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const dispatcherOptions: RequestDispatcherOptions = options || {};
+
+    this._url = String(dispatcherOptions.url).replace(/\/+$/, '');
+    this._beforeSend = dispatcherOptions.beforeSend;
+    this._jsonp = dispatcherOptions.jsonp;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    this._version = dispatcherOptions.version || DEFAULT_PROTOCOL_VERSION;
+    this._withCredentials = dispatcherOptions.withCredentials;
+    this._processDatesAsUtc = dispatcherOptions.processDatesAsUtc
+      ?? dispatcherOptions.deserializeDates ?? false;
+    this._filterToLower = dispatcherOptions.filterToLower;
   }
 
-  sendRequest(url, method, params, payload) {
+  sendRequest(
+    url: string,
+    method?: string,
+    params?: Record<string, unknown> | null,
+    payload?: unknown,
+  ): DeferredObj<unknown> {
     return sendRequest(
       this.version,
       {
         url,
         method,
-        params: params || {},
+        params: params ?? {},
         payload,
       },
       {
-        // @ts-expect-error
         beforeSend: this._beforeSend,
-        // @ts-expect-error
         jsonp: this._jsonp,
-        // @ts-expect-error
         withCredentials: this._withCredentials,
-        // @ts-expect-error
         processDatesAsUtc: this._processDatesAsUtc,
       },
     );
   }
 
-  get version() {
-    // @ts-expect-error
+  get version(): number {
     return this._version;
   }
 
-  get beforeSend() {
-    // @ts-expect-error
+  get beforeSend(): Function | undefined {
     return this._beforeSend;
   }
 
-  get url() {
-    // @ts-expect-error
+  get url(): string {
     return this._url;
   }
 
-  get jsonp() {
-    // @ts-expect-error
+  get jsonp(): boolean | undefined {
     return this._jsonp;
   }
 
-  get filterToLower() {
-    // @ts-expect-error
+  get filterToLower(): boolean | undefined {
     return this._filterToLower;
   }
 }

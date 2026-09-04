@@ -2,120 +2,175 @@ import ArrayStore from '@js/common/data/array_store';
 import { CustomStore } from '@js/common/data/custom_store';
 import { normalizeSortingInfo } from '@js/common/data/utils';
 import ajaxUtils from '@js/core/utils/ajax';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
-import { isPlainObject } from '@js/core/utils/type';
-import Store from '@js/data/abstract_store';
+import { isObject, isPlainObject } from '@js/core/utils/type';
+import Store from '@ts/data/abstract_store';
+
+import type { NormalizedDataSourceOptions } from './types';
 
 export const CANCELED_TOKEN = 'canceled';
 
-export const isPending = (deferred) => deferred.state() === 'pending';
+export type Mapper = (item: unknown) => unknown;
 
-export const normalizeStoreLoadOptionAccessorArguments = (originalArguments) => {
-  // eslint-disable-next-line default-case
+interface GroupItem {
+  items?: unknown[];
+}
+
+export interface NormalizationOptions {
+  fromUrlLoadMode?: string;
+}
+
+interface DataSourceOptionsInput {
+  store?: unknown;
+}
+
+export const isPending = (deferred: DeferredObj<unknown>): boolean => deferred.state() === 'pending';
+
+export const normalizeStoreLoadOptionAccessorArguments = (
+  originalArguments: unknown[],
+): unknown => {
   switch (originalArguments.length) {
     case 0:
       return undefined;
     case 1:
       return originalArguments[0];
+    default:
+      return originalArguments.slice();
   }
-  return [].slice.call(originalArguments);
 };
 
-const mapGroup = (group, level, mapper) => map(group, (item) => {
-  const { items, ...restItem } = item;
-  return {
-    ...restItem,
-    items: mapRecursive(item.items, level - 1, mapper),
-  };
-});
-
-const mapRecursive = (items, level, mapper) => {
+const mapRecursive = (items: unknown, level: number, mapper: Mapper): unknown => {
   if (!Array.isArray(items)) return items;
-  return level ? mapGroup(items, level, mapper) : map(items, mapper);
+
+  if (!level) {
+    return items.map(mapper);
+  }
+
+  return items.map((item) => {
+    const groupItem: GroupItem = isObject(item) ? item : {};
+
+    return {
+      ...groupItem,
+      items: mapRecursive(groupItem.items, level - 1, mapper),
+    };
+  });
 };
 
-export const mapDataRespectingGrouping = (items, mapper, groupInfo) => {
+export const mapDataRespectingGrouping = (
+  items: unknown[],
+  mapper: Mapper,
+  groupInfo?: unknown,
+): unknown[] => {
   const level = groupInfo ? normalizeSortingInfo(groupInfo).length : 0;
+  const mapped = mapRecursive(items, level, mapper);
 
-  return mapRecursive(items, level, mapper);
+  return Array.isArray(mapped) ? mapped : [];
 };
 
-export const normalizeLoadResult = (data, extra) => {
-  if (data?.data) {
-    extra = data;
-    data = data.data;
-  }
+export interface NormalizedLoadResult {
+  data: unknown[];
+  extra: unknown;
+}
 
-  if (!Array.isArray(data)) {
-    data = [data];
-  }
+export const normalizeLoadResult = (data: unknown, extra?: unknown): NormalizedLoadResult => {
+  const loadResult: { data?: unknown } = isObject(data) ? data : {};
+
+  const resultData: unknown = loadResult.data ? loadResult.data : data;
+  const resultExtra: unknown = loadResult.data ? data : extra;
 
   return {
-    data,
-    extra,
+    data: Array.isArray(resultData) ? resultData : [resultData],
+    extra: resultExtra,
   };
 };
 
-const createCustomStoreFromLoadFunc = (options) => {
-  const storeConfig = {};
+const CUSTOM_STORE_OPTION_NAMES = [
+  'useDefaultSearch', 'key', 'load', 'loadMode', 'cacheRawData', 'byKey',
+  'lookup', 'totalCount', 'insert', 'update', 'remove',
+];
 
-  each(['useDefaultSearch', 'key', 'load', 'loadMode', 'cacheRawData', 'byKey', 'lookup', 'totalCount', 'insert', 'update', 'remove'], function () {
-    storeConfig[this] = options[this];
+const createCustomStoreFromLoadFunc = (options: DataSourceOptionsInput): CustomStore => {
+  const storeConfig: Record<string, unknown> = {};
+
+  CUSTOM_STORE_OPTION_NAMES.forEach((optionName) => {
+    storeConfig[optionName] = options[optionName];
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete options[this];
+    delete options[optionName];
   });
+
   return new CustomStore(storeConfig);
 };
 
-const createStoreFromConfig = (storeConfig) => {
-  const alias = storeConfig.type;
+const createStoreFromConfig = (storeConfig: Record<string, unknown>): Store => {
+  const alias = String(storeConfig.type);
 
   delete storeConfig.type;
-  // @ts-expect-error
-  return Store.create(alias, storeConfig);
+
+  const store: Store = Store.create(alias, storeConfig);
+
+  return store;
 };
 
-const createCustomStoreFromUrl = (url, normalizationOptions) => new CustomStore({
-  load: () => ajaxUtils.sendRequest({ url, dataType: 'json' }),
+const createCustomStoreFromUrl = (
+  url: string,
+  normalizationOptions?: NormalizationOptions,
+): CustomStore => new CustomStore({
+  load: (): unknown => ajaxUtils.sendRequest({ url, dataType: 'json' }),
   loadMode: normalizationOptions?.fromUrlLoadMode,
 });
 
-export const normalizeDataSourceOptions = (options, normalizationOptions) => {
-  let store;
+const resolveStore = (options: DataSourceOptionsInput): Store => {
+  if ('load' in options) {
+    return createCustomStoreFromLoadFunc(options);
+  }
 
-  if (typeof options === 'string') {
-    options = {
+  const { store } = options;
+
+  if (Array.isArray(store)) {
+    return new ArrayStore(store);
+  }
+  if (isPlainObject(store)) {
+    return createStoreFromConfig(extend({}, store));
+  }
+
+  // Anything else is passed through the way it was before this module was typed:
+  // a value that is not a store fails later, in the data source itself.
+  // @ts-expect-error the `store` option is user-provided and is not necessarily a Store
+  const passedThrough: Store = store;
+
+  return passedThrough;
+};
+
+export const normalizeDataSourceOptions = (
+  options: unknown,
+  normalizationOptions?: NormalizationOptions,
+): NormalizedDataSourceOptions => {
+  let source: unknown = options;
+
+  if (typeof source === 'string') {
+    source = {
       paginate: false,
-      store: createCustomStoreFromUrl(options, normalizationOptions),
+      store: createCustomStoreFromUrl(source, normalizationOptions),
     };
   }
 
-  if (options === undefined) {
-    options = [];
+  if (source === undefined) {
+    source = [];
   }
 
-  if (Array.isArray(options) || options instanceof Store) {
-    options = { store: options };
-  } else {
-    options = extend({}, options);
+  const normalized: DataSourceOptionsInput = Array.isArray(source) || source instanceof Store
+    ? { store: source }
+    : extend({}, source);
+
+  if (normalized.store === undefined) {
+    normalized.store = [];
   }
 
-  if (options.store === undefined) {
-    options.store = [];
-  }
+  const store = resolveStore(normalized);
 
-  store = options.store;
-
-  if ('load' in options) {
-    store = createCustomStoreFromLoadFunc(options);
-  } else if (Array.isArray(store)) {
-    store = new ArrayStore(store);
-  } else if (isPlainObject(store)) {
-    store = createStoreFromConfig(extend({}, store));
-  }
-
-  options.store = store;
-
-  return options;
+  return {
+    ...normalized,
+    store,
+  };
 };

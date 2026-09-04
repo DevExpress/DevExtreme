@@ -3,14 +3,26 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import ArrayStore from '@js/common/data/array_store';
 import { errors } from '@js/common/data/errors';
 import domAdapter from '@js/core/dom_adapter';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { getWindow } from '@js/core/utils/window';
+import type { ArrayStoreOptions } from '@ts/data/array_store';
 
 import Store from './abstract_store';
 
 const window = getWindow();
 
+export interface LocalStoreOptions extends ArrayStoreOptions {
+  name?: string;
+  immediate?: boolean;
+  flushInterval?: number;
+}
+
+interface LocalStoreData {
+  _array: unknown[];
+}
+
 class LocalStoreBackend {
-  _store: any;
+  _store: LocalStoreData;
 
   _dirty: boolean;
 
@@ -18,7 +30,7 @@ class LocalStoreBackend {
 
   _key: string;
 
-  constructor(store, storeOptions) {
+  constructor(store: LocalStoreData, storeOptions: LocalStoreOptions) {
     this._store = store;
     this._dirty = !!storeOptions.data;
 
@@ -31,14 +43,16 @@ class LocalStoreBackend {
 
     this.save();
 
-    const immediate = this._immediate = storeOptions.immediate;
+    const immediate = storeOptions.immediate ?? false;
+    this._immediate = immediate;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const flushInterval = Math.max(100, storeOptions.flushInterval || 10 * 1000);
 
     if (!immediate) {
       const saveProxy = this.save.bind(this);
       setInterval(saveProxy, flushInterval);
       eventsEngine.on(window, 'beforeunload', saveProxy);
-      // @ts-expect-error
+      // @ts-expect-error `cordova` is injected by the Cordova container, `Window` has no such field
       if (window.cordova) {
         domAdapter.listen(domAdapter.getDocument(), 'pause', saveProxy, false);
       }
@@ -66,16 +80,17 @@ class LocalStoreBackend {
     this._dirty = false;
   }
 
-  _loadImpl(): any {
+  _loadImpl(): unknown[] {
     const raw = window.localStorage.getItem(this._key);
 
     if (raw) {
-      return JSON.parse(raw);
+      const stored: unknown = JSON.parse(raw);
+      return Array.isArray(stored) ? stored : [];
     }
     return [];
   }
 
-  _saveImpl(array): void {
+  _saveImpl(array: unknown[]): void {
     if (!array.length) {
       window.localStorage.removeItem(this._key);
     } else {
@@ -83,22 +98,21 @@ class LocalStoreBackend {
     }
   }
 }
+
 class LocalStore extends ArrayStore {
   _backend: LocalStoreBackend;
 
-  _array: any;
+  constructor(options?: LocalStoreOptions | string) {
+    const storeOptions: LocalStoreOptions = typeof options === 'string'
+      ? { name: options }
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      : options || {};
 
-  constructor(options) {
-    if (typeof options === 'string') {
-      options = { name: options };
-    } else {
-      options = options || {};
-    }
+    super(storeOptions);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    this._array = storeOptions.data || [];
 
-    super(options);
-    this._array = options.data || [];
-
-    this._backend = new LocalStoreBackend(this, options);
+    this._backend = new LocalStoreBackend(this, storeOptions);
     this._backend.load();
   }
 
@@ -111,17 +125,17 @@ class LocalStore extends ArrayStore {
     this._backend.notifyChanged();
   }
 
-  _insertImpl(values): any {
+  _insertImpl(values: unknown): DeferredObj<unknown> {
     const b = this._backend;
     return super._insertImpl(values).done(b.notifyChanged.bind(b));
   }
 
-  _updateImpl(key, values): any {
+  _updateImpl(key: unknown, values: unknown): DeferredObj<unknown> {
     const b = this._backend;
     return super._updateImpl(key, values).done(b.notifyChanged.bind(b));
   }
 
-  _removeImpl(key): any {
+  _removeImpl(key: unknown): DeferredObj<unknown> {
     const b = this._backend;
     return super._removeImpl(key).done(b.notifyChanged.bind(b));
   }

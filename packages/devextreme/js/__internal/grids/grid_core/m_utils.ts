@@ -674,7 +674,6 @@ export default {
         lookupDataSourceOptions = lookupDataSourceOptions({});
       }
     }
-    // @ts-expect-error
     return normalizeDataSourceOptions(lookupDataSourceOptions);
   },
 

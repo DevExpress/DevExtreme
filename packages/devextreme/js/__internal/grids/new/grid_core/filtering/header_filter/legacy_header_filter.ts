@@ -158,7 +158,6 @@ export const getDataSourceOptions = (
   const options: any = {};
 
   if (isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
-    // @ts-expect-error
     options.dataSource = oldNormalizeDataSourceOptions(headerFilterDataSource);
   } else {
     const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;

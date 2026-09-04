@@ -180,7 +180,6 @@ function prepareLookupEditor(options): void {
     }
 
     if (isObject(dataSource) || Array.isArray(dataSource)) {
-      // @ts-expect-error ts-
       dataSource = normalizeDataSourceOptions(dataSource);
       if (isFilterRow) {
         postProcess = dataSource.postProcess;

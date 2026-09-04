@@ -79,13 +79,11 @@ function ungroupUTCDates(items, dateParts?, dates?) {
 
 export function convertDataFromUTCToLocal(data, column) {
   const dates = ungroupUTCDates(data);
-  // @ts-expect-error
   const query = dataQuery(dates);
   const group = gridCoreUtils.getHeaderFilterGroupParameters({
     ...column,
     calculateCellValue: (date) => date,
   });
-  // @ts-expect-error
   return storeHelper.queryByOptions(query, { group }).toArray();
 }
 
@@ -245,7 +243,6 @@ export class HeaderFilterController extends Modules.ViewController {
     if (!dataSource) return;
 
     if (isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
-      // @ts-expect-error
       options.dataSource = normalizeDataSourceOptions(headerFilterDataSource);
     } else if (column.lookup) {
       isLookup = true;
@@ -275,6 +272,8 @@ export class HeaderFilterController extends Modules.ViewController {
           dataSource.customLoader.load(options).done(({ data }) => {
             const convertUTCDates = remoteGrouping && isUTCFormat(column.serializationFormat) && cutoffLevel > 3;
             if (convertUTCDates) {
+              // @ts-expect-error data/store_helper types `toArray()` as `unknown[]`;
+              // typing the grid rows is left to a later iteration
               data = convertDataFromUTCToLocal(data, column);
             }
             that._processGroupItems(data, null, null, {
