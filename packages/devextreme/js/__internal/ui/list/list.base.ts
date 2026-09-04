@@ -85,6 +85,7 @@ const LIST_SELECT_CHECKBOX = 'dx-list-select-checkbox';
 const LIST_SELECT_RADIOBUTTON = 'dx-list-select-radiobutton';
 const WRAP_ITEM_TEXT_CLASS = 'dx-wrap-item-text';
 const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
+export const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
@@ -131,6 +132,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   _scrollView!: ScrollViewType;
 
   _$nextButton!: dxElementWrapper | null;
+
+  _$a11yStatusContainer?: dxElementWrapper;
 
   _holdTimer?: ReturnType<typeof setTimeout>;
 
@@ -975,6 +978,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._itemElementsCache = $();
 
     this.$element().addClass(LIST_CLASS);
+    this._renderA11yStatusContainer();
     super._initMarkup();
 
     const { useInkRipple } = this.option();
@@ -997,8 +1001,33 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const isEmpty = super._renderEmptyMessage(rootNodes);
 
     this.setAria({ role: isEmpty ? undefined : 'application' }, this._focusTarget());
+    this._updateA11yStatusText();
 
     return isEmpty;
+  }
+
+  _renderA11yStatusContainer(): void {
+    if (this._$a11yStatusContainer?.get(0)) {
+      return;
+    }
+
+    this._$a11yStatusContainer = $('<div>')
+      .addClass(SCREEN_READER_ONLY_CLASS)
+      .attr('role', 'status')
+      .appendTo(this.$element());
+  }
+
+  _updateA11yStatusText(): void {
+    if (this._dataController.isLoading()) {
+      this._$a11yStatusContainer?.text('');
+      return;
+    }
+
+    const { noDataText } = this.option();
+    const itemsCount = this._editStrategy.itemsGetter().length;
+    const itemsLabel = messageLocalization.format('dxList-listAriaLabel');
+
+    this._$a11yStatusContainer?.text(itemsCount ? `${itemsLabel}: ${itemsCount}` : noDataText ?? '');
   }
 
   _isMultiSelectMode(): boolean {

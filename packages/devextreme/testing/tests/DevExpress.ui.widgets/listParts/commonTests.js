@@ -18,10 +18,11 @@ import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
-import { setScrollView } from '__internal/ui/list/list.base';
+import { SCREEN_READER_ONLY_CLASS, setScrollView } from '__internal/ui/list/list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
+import messageLocalization from 'common/core/localization/message';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
@@ -1004,7 +1005,7 @@ QUnit.module('options', moduleSetup, () => {
             pageLoadMode: 'scrollBottom'
         });
 
-        assert.equal(element.text(), '12345');
+        assert.equal(element.find(`.${LIST_ITEMS_CLASS}`).text(), '12345');
         assert.deepEqual(element.dxList('instance').option('items'), [1, 2, 3, 4, 5]);
     });
 
@@ -1014,7 +1015,7 @@ QUnit.module('options', moduleSetup, () => {
             pageLoadMode: 'scrollBottom'
         });
 
-        assert.equal(element.text(), '12345');
+        assert.equal(element.find(`.${LIST_ITEMS_CLASS}`).text(), '12345');
         assert.deepEqual(element.dxList('instance').option('items'), [1, 2, 3, 4, 5]);
     });
 
@@ -1024,7 +1025,7 @@ QUnit.module('options', moduleSetup, () => {
             pageLoadMode: 'scrollBottom'
         });
 
-        assert.equal(element.text(), '12345');
+        assert.equal(element.find(`.${LIST_ITEMS_CLASS}`).text(), '12345');
         assert.deepEqual(element.dxList('instance').option('items'), [1, 2, 3, 4, 5]);
     });
 
@@ -1068,7 +1069,7 @@ QUnit.module('options changed', moduleSetup, () => {
             pageLoadMode: 'scrollBottom'
         });
 
-        assert.equal(element.text(), '01354');
+        assert.equal(element.find(`.${LIST_ITEMS_CLASS}`).text(), '01354');
         assert.deepEqual(element.dxList('instance').option('items'), [0, 1, 3, 5, 4]);
 
         element.dxList({
@@ -1077,7 +1078,7 @@ QUnit.module('options changed', moduleSetup, () => {
             }
         });
 
-        assert.equal(element.text(), '26897');
+        assert.equal(element.find(`.${LIST_ITEMS_CLASS}`).text(), '26897');
         assert.deepEqual(element.dxList('instance').option('items'), [2, 6, 8, 9, 7]);
     });
 
@@ -1086,13 +1087,13 @@ QUnit.module('options changed', moduleSetup, () => {
             items: [0, 1, 3, 5, 4]
         });
 
-        assert.equal(element.text(), '01354');
+        assert.equal(element.find(`.${LIST_ITEMS_CLASS}`).text(), '01354');
 
         element.dxList({
             items: [2, 6, 8, 9, 7]
         });
 
-        assert.equal(element.text(), '26897');
+        assert.equal(element.find(`.${LIST_ITEMS_CLASS}`).text(), '26897');
     });
 
     QUnit.test('scrollingEnabled', function(assert) {
@@ -2759,14 +2760,14 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
             }
         });
 
-        assert.equal(element.text(), '12', 'correct items generated');
+        assert.equal(element.find(`.${LIST_ITEMS_CLASS}`).text(), '12', 'correct items generated');
         assert.deepEqual(element.dxList('instance').option('items'), [1, 2], 'correct items presented in options');
 
         element.find(`.${LIST_ITEM_CLASS}`).data('rendered', true);
 
         element.dxScrollView('instance').scrollBottom();
 
-        assert.equal(element.text(), '1234', 'correct items generated');
+        assert.equal(element.find(`.${LIST_ITEMS_CLASS}`).text(), '1234', 'correct items generated');
         assert.deepEqual(element.dxList('instance').option('items'), [1, 2, 3, 4], 'correct items presented in options');
 
         assert.strictEqual(element.find(`.${LIST_ITEM_CLASS}`).eq(0).data('rendered'), true, 'first item is not rerendered');
@@ -2875,7 +2876,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
 
         element.dxScrollView('instance').scrollBottom();
 
-        assert.equal(element.text(), '12', 'error occurred');
+        assert.equal(element.find(`.${LIST_ITEMS_CLASS}`).text(), '12', 'error occurred');
 
         assert.equal(element.dxList('instance')._startIndexForAppendedItems, null, 'flag set correctly');
     });
@@ -4952,6 +4953,9 @@ if(devices.real().deviceType === 'desktop') {
 }
 
 QUnit.module('Accessibility', () => {
+    const getA11yStatus = (instance) => instance.$element().children('[role="status"]');
+    const getItemsAnnouncement = (itemsCount) => `${messageLocalization.format('dxList-listAriaLabel')}: ${itemsCount}`;
+
     QUnit.test('SelectAll checkbox should have aria-label="Select All" attribute', function(assert) {
         $('#list').dxList({
             selectionMode: 'all',
@@ -5376,6 +5380,106 @@ QUnit.module('Accessibility', () => {
             instance.option('dataSource', ['Item 1']);
 
             assert.strictEqual(instance.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`).eq(0).attr('role'), 'application');
+        });
+    });
+
+    QUnit.test('list should render a single visually hidden live region (T1334729)', function(assert) {
+        const instance = $('#list').dxList({ items: ['Item 1'] }).dxList('instance');
+
+        const $a11yStatus = getA11yStatus(instance);
+
+        assert.strictEqual($a11yStatus.length, 1, 'the list has a single live region');
+        assert.ok($a11yStatus.hasClass(SCREEN_READER_ONLY_CLASS), 'the live region is visually hidden');
+    });
+
+    QUnit.test('item count should be announced (T1334729)', function(assert) {
+        const instance = $('#list').dxList({ items: ['Item 1', 'Item 2'] }).dxList('instance');
+
+        assert.strictEqual(getA11yStatus(instance).text(), getItemsAnnouncement(2));
+    });
+
+    QUnit.test('item count of a grouped list should not count groups (T1334729)', function(assert) {
+        const instance = $('#list').dxList({
+            grouped: true,
+            items: [
+                { key: 'group 1', items: ['Item 1', 'Item 2'] },
+                { key: 'group 2', items: ['Item 3'] },
+            ],
+        }).dxList('instance');
+
+        assert.strictEqual(getA11yStatus(instance).text(), getItemsAnnouncement(3));
+    });
+
+    QUnit.test('noDataText should be announced when the list is empty (T1334729)', function(assert) {
+        const instance = $('#list').dxList({ items: [] }).dxList('instance');
+
+        assert.strictEqual(getA11yStatus(instance).text(), messageLocalization.format('dxCollectionWidget-noDataText'));
+    });
+
+    QUnit.test('custom noDataText should be announced and follow its runtime change (T1334729)', function(assert) {
+        const instance = $('#list').dxList({ items: [], noDataText: 'custom-no-data' }).dxList('instance');
+
+        assert.strictEqual(getA11yStatus(instance).text(), 'custom-no-data', 'custom noDataText is announced');
+
+        instance.option('noDataText', 'another-no-data');
+
+        assert.strictEqual(getA11yStatus(instance).text(), 'another-no-data', 'announcement is updated after runtime change');
+    });
+
+    QUnit.test('nothing should be announced when the list is empty and noDataText is empty (T1334729)', function(assert) {
+        const instance = $('#list').dxList({ items: [], noDataText: '' }).dxList('instance');
+
+        assert.strictEqual(getA11yStatus(instance).text(), '');
+    });
+
+    QUnit.test('nothing should be announced while the initial data is loading (T1334729)', function(assert) {
+        const loadResult = $.Deferred();
+        const instance = $('#list').dxList({
+            dataSource: new CustomStore({ load: () => loadResult.promise(), loadMode: 'processed' })
+        }).dxList('instance');
+
+        assert.strictEqual(getA11yStatus(instance).text(), '', 'nothing is announced while data is loading');
+
+        loadResult.resolve(['Item 1', 'Item 2']);
+
+        assert.strictEqual(getA11yStatus(instance).text(), getItemsAnnouncement(2), 'item count is announced once data is loaded');
+    });
+
+    QUnit.test('announcement should be cleared while new data is loading (T1334729)', function(assert) {
+        const instance = $('#list').dxList({ items: ['Item 1', 'Item 2', 'Item 3'] }).dxList('instance');
+        const loadResult = $.Deferred();
+
+        instance.option('dataSource', new CustomStore({ load: () => loadResult.promise(), loadMode: 'processed' }));
+
+        assert.strictEqual(getA11yStatus(instance).text(), '',
+            'neither the outdated item count nor noDataText is announced while data is loading');
+
+        loadResult.resolve(['Item 1']);
+
+        assert.strictEqual(getA11yStatus(instance).text(), getItemsAnnouncement(1), 'item count is announced once data is loaded');
+    });
+
+    [true, false].forEach(repaintChangesOnly => {
+        QUnit.test(`noDataText should be announced when dataSource is cleared at runtime and repaintChangesOnly=${repaintChangesOnly} (T1334729)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: ['Item 1'], repaintChangesOnly }).dxList('instance');
+            const a11yStatusElement = getA11yStatus(instance).get(0);
+
+            instance.option('dataSource', []);
+
+            assert.strictEqual(getA11yStatus(instance).get(0), a11yStatusElement,
+                'the live region is not re-created, otherwise screen readers do not announce its text');
+            assert.strictEqual(getA11yStatus(instance).text(), messageLocalization.format('dxCollectionWidget-noDataText'));
+        });
+
+        QUnit.test(`item count should be announced when dataSource is set at runtime and repaintChangesOnly=${repaintChangesOnly} (T1334729)`, function(assert) {
+            const instance = $('#list').dxList({ dataSource: [], repaintChangesOnly }).dxList('instance');
+            const a11yStatusElement = getA11yStatus(instance).get(0);
+
+            instance.option('dataSource', ['Item 1', 'Item 2']);
+
+            assert.strictEqual(getA11yStatus(instance).get(0), a11yStatusElement,
+                'the live region is not re-created, otherwise screen readers do not announce its text');
+            assert.strictEqual(getA11yStatus(instance).text(), getItemsAnnouncement(2));
         });
     });
 });
