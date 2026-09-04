@@ -4,6 +4,7 @@
 @mixin publish {
   --dx-tree-list-cell-outline-focused: #{$tree-list-cell-outline-focused};
   --dx-tree-list-chevron-icon: #{$tree-list-chevron-icon};
+  --dx-tree-list-chevron-icon-disabled: #{$tree-list-chevron-icon-disabled};
   --dx-tree-list-chevron-icon-selected: var(--dx-tree-list-chevron-icon);
   --dx-tree-list-empty-space-height: #{$tree-list-empty-space-height};
   --dx-tree-list-error-message-margin-block-end: #{$tree-list-error-message-margin-block-end};

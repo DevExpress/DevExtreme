@@ -34,12 +34,8 @@
   }
 
   &.dx-state-disabled {
-    opacity: 1;
     background-color: var(--dx-tabs-tab-bg);
-
-    .dx-button-content {
-      opacity: var(--dx-tabs-nav-button-opacity-disabled);
-    }
+    color: var(--dx-tabs-nav-button-content-disabled);
   }
 
   .dx-button-content {

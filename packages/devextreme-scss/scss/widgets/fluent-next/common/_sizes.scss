@@ -4,7 +4,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 // Not a colour: an opacity that used to sit in _colors.scss (NAMING.md, O7)
-$global-disabled-opacity: ds.$opacity-35 !default;
 
 $global-line-height: null !default;
 

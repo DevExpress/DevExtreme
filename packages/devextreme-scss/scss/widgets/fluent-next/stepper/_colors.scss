@@ -28,6 +28,9 @@ $stepper-step-base-label-content: ds.$color-content !default;
 
 $stepper-step-content-selected: ds.$color-content-static-dark !default;
 
+$stepper-step-bg-selected-disabled: ds.$color-content-disabled !default;
+$stepper-step-content-selected-disabled: ds.$color-content-inverted !default;
+
 $stepper-step-label-content-selected: ds.$color-content-primary !default;
 
 $stepper-step-invalid-content: ds.$color-content-danger !default;
@@ -42,10 +45,14 @@ $stepper-step-invalid-bg-selected-hovered: ds.$color-bg-danger-hovered !default;
 
 $stepper-step-bg-disabled: ds.$color-bg-disabled !default;
 
+$stepper-step-border-disabled: ds.$color-border-disabled !default;
+
 $stepper-step-content-disabled: ds.$color-content-disabled !default;
 
 $stepper-connector-bg: ds.$color-border-subtle !default;
 
 $stepper-connector-value-bg: ds.$color-bg-primary !default;
+
+$stepper-connector-value-bg-disabled: ds.$color-content-disabled !default;
 
 $stepper-step-shadow: ds.$color-bg !default;

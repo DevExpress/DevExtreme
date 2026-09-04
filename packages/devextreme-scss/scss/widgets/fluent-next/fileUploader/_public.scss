@@ -2,6 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-file-uploader-content-disabled: #{$file-uploader-content-disabled};
   --dx-file-uploader-border: #{$file-uploader-border};
   --dx-file-uploader-button-height: #{$file-uploader-button-height};
   --dx-file-uploader-button-margin-inline-end: #{$file-uploader-button-margin-inline-end};

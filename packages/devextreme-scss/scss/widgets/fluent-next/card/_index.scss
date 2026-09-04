@@ -9,3 +9,7 @@
   background-color: var(--dx-card-bg);
   margin: var(--dx-card-margin);
 }
+
+.dx-state-disabled .dx-card {
+  background-color: var(--dx-card-bg-disabled);
+}

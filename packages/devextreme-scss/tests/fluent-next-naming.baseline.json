@@ -586,8 +586,6 @@
     "fluent-next/scheduler/_index.scss: $scheduler-appointment-25min-height",
     "fluent-next/scheduler/_index.scss: $scheduler-appointment-25min-height",
     "fluent-next/scheduler/_index.scss: $scheduler-appointment-25min-height",
-    "fluent-next/scheduler/_index.scss: $scheduler-appointment-bg-focused",
-    "fluent-next/scheduler/_index.scss: $scheduler-appointment-shadow-focused",
     "fluent-next/scrollView/_index.scss: $scroll-view-load-indicator-size",
     "fluent-next/textEditor/_index.scss: $text-editor-label-font-size"
   ]

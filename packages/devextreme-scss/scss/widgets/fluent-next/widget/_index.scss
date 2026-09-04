@@ -2,19 +2,21 @@
 @use "sizes" as *;
 @use "../common/mixins" as *;
 @use "../../base/widget";
+@use "../../base/mixins" as *;
 
 .dx-widget {
   @include dx-base-typography();
 }
 
 .dx-state-disabled {
+  color: var(--dx-global-content-disabled);
+
   &.dx-widget,
   .dx-widget {
-    .dx-widget {
-      opacity: 1;
-    }
+    @include user-select(none);
 
-    @include disabled-widget();
+    color: var(--dx-global-content-disabled);
+    cursor: default;
   }
 }
 
