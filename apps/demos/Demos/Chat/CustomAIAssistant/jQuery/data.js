@@ -11,6 +11,13 @@ const emptyViewMessage = 'How can I help with this page?';
 const emptyViewPrompt =
   'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
 
+const SMART_PASTE_TIMEOUT_MS = 30000;
+const MAX_USER_MESSAGE_LENGTH = 2000;
+const FIELD_OR_VALUE_NOT_FOUND_MESSAGE =
+  '❌ No field or column exists with such a name, or the entered value is invalid. Please check the name and value and try again.';
+const ROUTER_TARGETS = new Set(['form', 'grid', 'mixed', 'none']);
+const FORM_ACTION_TYPES = new Set(['clear_field', 'clear_all', 'smart_paste']);
+
 const titles = ['Mr.', 'Mrs.', 'Ms.'];
 const colors = { High: '#F1BBBC', Normal: '#F9E2AE', Low: '#9FD89F' };
 const states = ['California', 'New York', 'Texas'];
