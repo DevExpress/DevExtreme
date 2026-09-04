@@ -11,15 +11,10 @@ import type {
 import modules from '@ts/grids/grid_core/m_modules';
 
 export class DataSourceController extends modules.Controller {
-  // DataController owns the adapter's lifecycle, so it is absent before the first
-  // dataSource assignment and again after a reset.
+  // Absent before the first dataSource assignment and again after a reset.
   private adapter: DataSourceAdapter | null = null;
 
   private isShared = false;
-
-  public setAdapter(adapter: DataSourceAdapter | null): void {
-    this.adapter = adapter;
-  }
 
   /**
    * @extended: DataGrid's data_source_controller
@@ -59,10 +54,8 @@ export class DataSourceController extends modules.Controller {
     ) as unknown as DataSource;
   }
 
-  // Read back by DataController only until disposal moves here too, at which point
-  // the flag stops leaving this class.
-  public isSharedDataSource(): boolean {
-    return this.isShared;
+  public getDataSource(): DataSource | null {
+    return this.adapter?._dataSource ?? null;
   }
 
   /**
@@ -76,7 +69,7 @@ export class DataSourceController extends modules.Controller {
     const adapter = this.getAdapterProvider().create(this.component);
 
     adapter.init(dataSource);
-    this.setAdapter(adapter);
+    this.adapter = adapter;
 
     return adapter;
   }
@@ -85,16 +78,13 @@ export class DataSourceController extends modules.Controller {
     return this.adapter !== null;
   }
 
-  /**
-   * Escape hatch for callers that need the adapter object itself rather than
-   * a delegated read. Temporary — it reopens the boundary this controller draws.
-   */
   public getAdapter(): DataSourceAdapter | null {
     return this.adapter;
   }
 
-  public getDataSource(): DataSource | null {
-    return this.adapter?._dataSource ?? null;
+  public disposeAdapter(): void {
+    this.adapter?.dispose(this.isShared);
+    this.adapter = null;
   }
 
   public store(): Store | undefined {

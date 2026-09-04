@@ -304,29 +304,66 @@ describe('dataSource controller owns the dataSource option reading', () => {
 
     expect(instance.getController('dataSource').key()).toBe('id');
   });
+});
 
-  it('reports a passed DataSource instance as shared', async () => {
+describe('dataSource controller owns adapter disposal', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('spares a DataSource the caller still owns when the grid is disposed', async () => {
     const shared = new DataSourceClass({ store: DATA, key: 'id' });
-    const { instance } = await createDataGrid({ dataSource: shared });
+    const dispose = jest.spyOn(shared, 'dispose');
+    const { $container, instance } = await createDataGrid({ dataSource: shared });
 
-    expect(instance.getController('dataSource').isSharedDataSource()).toBe(true);
+    instance.dispose();
+    // afterTest reads the component off #gridContainer, so a disposed one must not linger.
+    $container.remove();
+
+    expect(dispose).not.toHaveBeenCalled();
+
+    dispose.mockRestore();
+    shared.dispose();
   });
 
-  it('reports an array option as not shared', async () => {
-    const { instance } = await createDataGrid({ dataSource: DATA, keyExpr: 'id' });
+  it('destroys a DataSource it built itself when the grid is disposed', async () => {
+    const { $container, instance } = await createDataGrid({ dataSource: DATA, keyExpr: 'id' });
+    const built = instance.getController('dataSource').getDataSource();
 
-    expect(instance.getController('dataSource').isSharedDataSource()).toBe(false);
+    if (!built) {
+      throw new Error('expected the controller to have built a DataSource');
+    }
+
+    const dispose = jest.spyOn(built, 'dispose');
+
+    instance.dispose();
+    $container.remove();
+
+    expect(dispose).toHaveBeenCalledTimes(1);
+
+    dispose.mockRestore();
   });
 
-  it('clears the shared flag when the option switches from a DataSource to an array', async () => {
+  it('spares a shared DataSource when the dataSource option is replaced', async () => {
     const shared = new DataSourceClass({ store: DATA, key: 'id' });
+    const dispose = jest.spyOn(shared, 'dispose');
     const { instance } = await createDataGrid({ dataSource: shared });
-
-    expect(instance.getController('dataSource').isSharedDataSource()).toBe(true);
 
     instance.option('dataSource', OTHER_DATA);
     await flushAsync();
 
-    expect(instance.getController('dataSource').isSharedDataSource()).toBe(false);
+    expect(dispose).not.toHaveBeenCalled();
+
+    dispose.mockRestore();
+    shared.dispose();
+  });
+
+  it('leaves DataController and the controller agreeing that the adapter is gone', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA, keyExpr: 'id' });
+
+    instance.option('dataSource', undefined);
+    await flushAsync();
+
+    expect(instance.getController('dataSource').hasAdapter()).toBe(false);
+    expect(instance.getController('dataSource').getAdapter()).toBeNull();
   });
 });

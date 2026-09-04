@@ -1592,13 +1592,13 @@ export class DataController extends modules.Controller {
     const oldDataSource = this._dataSource;
 
     if (oldDataSource) {
+      // Before unsubscribing: cancelling in-flight loads still notifies this controller.
       oldDataSource.cancelAll();
       this.unsubscribeFromDataSource(oldDataSource);
-      oldDataSource.dispose(this.dataSourceController.isSharedDataSource());
     }
 
     this._dataSource = null;
-    this.dataSourceController.setAdapter(null);
+    this.dataSourceController.disposeAdapter();
   }
 
   public dispose(): void {
