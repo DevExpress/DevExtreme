@@ -22,6 +22,18 @@
 .dx-menu {
   color: var(--dx-menu-content);
 
+  &.dx-state-disabled,
+  .dx-state-disabled & {
+    .dx-menu-item {
+      color: var(--dx-menu-item-content-disabled);
+    }
+
+    .dx-menu-item.dx-menu-item-selected,
+    .dx-menu-item.dx-state-selected {
+      background-color: var(--dx-menu-item-bg-selected-disabled);
+    }
+  }
+
   .dx-menu-horizontal {
     .dx-menu-item-popout {
       margin-inline-start: var(--dx-menu-item-icon-gap);

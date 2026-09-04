@@ -2,6 +2,8 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-splitter-resize-handle-bg-disabled: #{$splitter-resize-handle-bg-disabled};
+  --dx-splitter-resize-handle-content-disabled: #{$splitter-resize-handle-content-disabled};
   --dx-splitter-resize-handle-bg-focused: #{$splitter-resize-handle-bg-focused};
   --dx-splitter-resize-handle-bg-hovered: #{$splitter-resize-handle-bg-hovered};
   --dx-splitter-resize-handle-bg: #{$splitter-resize-handle-bg};

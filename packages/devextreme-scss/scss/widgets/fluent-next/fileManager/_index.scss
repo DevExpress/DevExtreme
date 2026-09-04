@@ -313,3 +313,49 @@
 }
 
 @include filemanager-icons-mixin($file-manager-icon, $file-manager-icon-success-content, $file-manager-icon-inverted-content, $file-manager-icon-danger-content, $file-manager-icon-inverted-content, $file-manager-large-icon-size);
+
+.dx-filemanager.dx-state-disabled .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text,
+.dx-state-disabled .dx-filemanager .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text {
+  color: var(--dx-file-manager-content-disabled);
+}
+
+.dx-filemanager.dx-state-disabled,
+.dx-state-disabled .dx-filemanager,
+.dx-state-disabled {
+  .dx-filemanager-dirs-tree-item-text,
+  .dx-filemanager-progress-panel-title-text,
+  .dx-filemanager-progress-panel-infos-container {
+    color: var(--dx-file-manager-content-disabled);
+  }
+
+  .dx-filemanager-i,
+  .dx-filemanager-i.dx-icon {
+    &.dx-filemanager-i-refresh,
+    &.dx-filemanager-i-progress {
+      @include filemanager-icon-colored(
+        data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"),
+        $file-manager-icon-disabled,
+        $file-manager-icon-success-content,
+        $file-manager-icon-inverted-content,
+        $file-manager-icon-danger-content,
+        $file-manager-icon-inverted-content,
+        $file-manager-large-icon-size,
+        $file-manager-large-icon-size
+      );
+    }
+  }
+}
+
+.dx-filemanager.dx-state-disabled,
+.dx-state-disabled .dx-filemanager {
+  .dx-icon,
+  .dx-treeview-toggle-item-visibility {
+    color: var(--dx-file-manager-content-disabled);
+  }
+
+  .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item,
+  .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item .dx-icon,
+  .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item .dx-treeview-toggle-item-visibility {
+    color: var(--dx-file-manager-content-disabled);
+  }
+}

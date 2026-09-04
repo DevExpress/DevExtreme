@@ -63,6 +63,7 @@ $scheduler-tooltip-date-margin: 5px 10px !default;
 $scheduler-tooltip-remove-margin-top: 10px !default;
 $scheduler-tooltip-subject-font-size: 16px !default;
 $scheduler-tooltip-date-font-size: 12px !default;
+$scheduler-tooltip-date-opacity: 0.8 !default;
 $scheduler-appointment-content-details-font-size: 11px !default;
 
 @use "./tooltip" with (
@@ -78,7 +79,8 @@ $scheduler-appointment-content-details-font-size: 11px !default;
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
   $scheduler-tooltip-list-focused-bg: $scheduler-tooltip-list-focused-bg,
   $scheduler-tooltip-subject-font-size: $scheduler-tooltip-subject-font-size,
-  $scheduler-tooltip-date-font-size: $scheduler-tooltip-date-font-size
+  $scheduler-tooltip-date-font-size: $scheduler-tooltip-date-font-size,
+  $scheduler-tooltip-date-opacity: $scheduler-tooltip-date-opacity
 );
 
 $scheduler-appointment-min-size: 4px !default;

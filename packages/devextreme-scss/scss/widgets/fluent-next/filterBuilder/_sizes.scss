@@ -2,7 +2,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 // Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
-$filter-builder-range-separator-opacity: ds.$opacity-30 !default;
 
 $filter-builder-icon-padding: null !default;
 $filter-builder-filled-editor-padding: null !default;

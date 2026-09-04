@@ -2,6 +2,9 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-scheduler-content-disabled: #{$scheduler-content-disabled};
+  --dx-scheduler-time-panel-content-disabled: #{$scheduler-time-panel-content-disabled};
+  --dx-scheduler-tooltip-date-content: #{$scheduler-tooltip-date-content};
   --dx-scheduler-accent-border: #{$scheduler-accent-border};
   --dx-scheduler-agenda-appointment-allday-padding-inline-end: #{$scheduler-agenda-appointment-allday-padding-inline-end};
   --dx-scheduler-agenda-appointment-bg-active: #{$scheduler-agenda-appointment-bg-active};
@@ -19,7 +22,7 @@
   --dx-scheduler-agenda-appointment-title-font-size: #{$scheduler-agenda-appointment-title-font-size};
   --dx-scheduler-agenda-date-table-padding-block-start: #{$scheduler-agenda-date-table-padding-block-start};
   --dx-scheduler-agenda-details-font-size: #{$scheduler-agenda-details-font-size};
-  --dx-scheduler-agenda-details-opacity: #{$scheduler-agenda-details-opacity};
+  --dx-scheduler-agenda-details-content: #{$scheduler-agenda-details-content};
   --dx-scheduler-agenda-left-column-width: #{$scheduler-agenda-left-column-width};
   --dx-scheduler-agenda-time-panel-cell-padding: #{$scheduler-agenda-time-panel-cell-padding};
   --dx-scheduler-agenda-title-font-weight: #{$scheduler-agenda-title-font-weight};
@@ -43,7 +46,6 @@
   --dx-scheduler-appointment-20min-recurrence-padding-inline-end: #{$scheduler-appointment-20min-recurrence-padding-inline-end};
   --dx-scheduler-appointment-25min-height: #{$scheduler-appointment-25min-height};
   --dx-scheduler-appointment-base-content: #{$scheduler-appointment-base-content};
-  --dx-scheduler-appointment-bg-focused: #{$scheduler-appointment-bg-focused};
   --dx-scheduler-appointment-border-radius: #{$scheduler-appointment-border-radius};
   --dx-scheduler-appointment-collector-height: #{$scheduler-appointment-collector-height};
   --dx-scheduler-appointment-collector-margin-inline-end: #{$scheduler-appointment-collector-margin-inline-end};
@@ -57,9 +59,8 @@
   --dx-scheduler-appointment-content-focused: var(--dx-scheduler-appointment-content);
   --dx-scheduler-appointment-content-padding-inline-end: #{$scheduler-appointment-content-padding-inline-end};
   --dx-scheduler-appointment-content-rtl-padding: #{$scheduler-appointment-content-rtl-padding};
-  --dx-scheduler-appointment-date-opacity: #{$scheduler-appointment-date-opacity};
+  --dx-scheduler-appointment-date-content: #{$scheduler-appointment-date-content};
   --dx-scheduler-appointment-details-font-size: #{$scheduler-appointment-details-font-size};
-  --dx-scheduler-appointment-drag-source-opacity: #{$scheduler-appointment-drag-source-opacity};
   --dx-scheduler-appointment-dragging-shadow: #{$scheduler-appointment-dragging-shadow};
   --dx-scheduler-appointment-icon-font-size: #{$scheduler-appointment-icon-font-size};
   --dx-scheduler-appointment-marker-border-radius-active: #{$scheduler-appointment-marker-border-radius-active};
@@ -81,7 +82,6 @@
   --dx-scheduler-appointment-reduced-icon-inset-block-start: #{$scheduler-appointment-reduced-icon-inset-block-start};
   --dx-scheduler-appointment-reduced-icon-rtl-inset-inline-start: #{$scheduler-appointment-reduced-icon-rtl-inset-inline-start};
   --dx-scheduler-appointment-resizing-opacity: #{$scheduler-appointment-resizing-opacity};
-  --dx-scheduler-appointment-shadow-focused: #{$scheduler-appointment-shadow-focused};
   --dx-scheduler-appointment-short-content-padding: #{$scheduler-appointment-short-content-padding};
   --dx-scheduler-appointment-start-content: #{$scheduler-appointment-start-content};
   --dx-scheduler-appointment-strip-bg: #{$scheduler-appointment-strip-bg};
@@ -161,7 +161,6 @@
   --dx-scheduler-month-recurrence-appointment-content-rtl-padding: #{$scheduler-month-recurrence-appointment-content-rtl-padding};
   --dx-scheduler-navigator-button-font-size: #{$scheduler-navigator-button-font-size};
   --dx-scheduler-navigator-icon-font-size: #{$scheduler-navigator-icon-font-size};
-  --dx-scheduler-other-month-cell-opacity: #{$scheduler-other-month-cell-opacity};
   --dx-scheduler-panel-content: #{$scheduler-panel-content};
   --dx-scheduler-recurrence-appointment-content-padding: #{$scheduler-recurrence-appointment-content-padding};
   --dx-scheduler-recurrence-icon-inset-inline: #{$scheduler-recurrence-icon-inset-inline};

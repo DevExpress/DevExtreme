@@ -1600,6 +1600,7 @@
       "header",
       "headers",
       "drag-header",
+      "drag-source",
       "total",
       "grand-total",
       "filter",

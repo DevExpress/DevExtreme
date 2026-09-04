@@ -38,9 +38,27 @@
   var(--dx-switch-invalid-border-hovered),
   var(--dx-switch-invalid-border-focused),
   var(--dx-switch-border-disabled),
+
+  $disabled-opacity-reset: null,
 );
 @include dx-switch-rtl(
   calc(var(--dx-switch-handle-height) - var(--dx-switch-handle-margin)),
   var(--dx-switch-handle-on-box-shadow-blur),
   var(--dx-switch-container-rtl-offset),
 );
+
+.dx-state-disabled .dx-switch {
+  .dx-switch-handle::before {
+    background-color: var(--dx-switch-handle-bg-disabled);
+  }
+
+  .dx-switch-container::before {
+    border-color: var(--dx-switch-border-disabled);
+    background-color: transparent;
+  }
+
+  &.dx-switch-on-value .dx-switch-container::before {
+    border-color: var(--dx-switch-on-bg-disabled);
+    background-color: var(--dx-switch-on-bg-disabled);
+  }
+}

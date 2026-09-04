@@ -6,13 +6,6 @@
   $buttongroup-mode-text-column-gap: var(--dx-button-group-text-column-gap),
 );
 @use "../../base/buttonGroup/mixins" as *;
-
-.dx-buttongroup {
-  &.dx-state-disabled {
-    opacity: 1;
-  }
-}
-
 @include dx-buttongroup-sizing(
   buttonSizes.$button-border-radius,
   1px, // dx-line-width: 1px, the button border passed to dx-buttongroup-sizing

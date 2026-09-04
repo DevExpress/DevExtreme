@@ -133,3 +133,11 @@
     font-size: var(--dx-date-view-item-phone-font-size-selected);
   }
 }
+
+.dx-dateview.dx-state-disabled,
+.dx-state-disabled .dx-dateview {
+  .dx-dateview-item,
+  .dx-dateview-item-selected {
+    color: var(--dx-date-view-content-disabled);
+  }
+}
