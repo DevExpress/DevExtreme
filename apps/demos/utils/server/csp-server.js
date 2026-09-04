@@ -140,6 +140,9 @@ const CSP_DEMO_ALLOWLIST = {
   'Chat/AIAndChatbotIntegration': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
+  'Chat/CustomAIAssistant': {
+    'connect-src': DEMO_OPENAI_CONNECT_SRC,
+  },
   'Chat/MessageStreaming': {
     'connect-src': DEMO_OPENAI_CONNECT_SRC,
   },
@@ -208,6 +211,9 @@ const CSP_FRAMEWORK_ALLOWLIST = {
       'script-src': ["'unsafe-inline'"],
     },
     'Chat/AIAndChatbotIntegration': {
+      'script-src': ["'unsafe-inline'"],
+    },
+    'Chat/CustomAIAssistant': {
       'script-src': ["'unsafe-inline'"],
     },
     'Chat/MessageStreaming': {

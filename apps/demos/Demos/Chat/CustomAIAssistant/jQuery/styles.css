@@ -1,0 +1,68 @@
+.dx-chat {
+  max-width: 900px;
+  border-radius: 0;
+  min-height: 20em;
+}
+
+#grid-container {
+  margin-top: 20px;
+  min-height: 360px;
+}
+
+#form-container {
+  border: 1px solid #e0e0e0;
+  padding: 16px;
+}
+
+.dx-color-scheme-blue-light #form-container {
+  background-color: #fff;
+}
+
+.demo-container {
+  margin: 20px;
+  height: 556px;
+}
+
+.ai-chat-empty-icon {
+  font-size: 32px;
+  color: #337ab7;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.ai-chat-empty-message {
+  font-size: 18px;
+  font-weight: 400;
+  text-align: center;
+  color: var(--dx-color-text);
+  margin-bottom: 8px;
+}
+
+.ai-chat-empty-prompt {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  padding: 0 24px;
+  white-space: pre-line;
+}
+
+.ai-chat-clear-button {
+  margin-right: 8px;
+}
+
+.chat-popup .dx-popup-content {
+  padding: 0;
+}
+
+.dx-chat-messagebox {
+  border-top-color: transparent;
+}
+
+.dx-chat-messagelist-empty-view,
+.dx-chat-messagebox {
+  padding-top: 0;
+}
+
+.dx-layout-manager .dx-field-item.save-button {
+  padding-bottom: 0;
+}
