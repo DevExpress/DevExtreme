@@ -928,7 +928,8 @@ const tierExpectation = (): Map<string, { component: string; reason: string | nu
         : wiring.has(variable) ? 'base-wiring'
           : CSS_WIDE_KEYWORDS.has(value) ? 'css-wide-keyword'
             : value.includes('!important') ? 'important'
-              : value === 'null' ? 'null' : null;
+              : value === 'null' ? 'null'
+                : value === 'false' || value === 'true' ? 'sass-flag' : null;
       records.set(variable, { component, value, reason });
     });
   });
@@ -1067,7 +1068,6 @@ test('component tier: references are written as links to a resolvable target', (
   });
   expect(offenders).toEqual([]);
 });
-
 
 test('component tier: an alias is published as a link, not as a copy of the value', () => {
   const offenders = tierAliases

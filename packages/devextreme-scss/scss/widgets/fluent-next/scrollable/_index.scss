@@ -26,3 +26,7 @@
   0,
 );
 @include dx-scrollable-scrollbars-alwaysvisible(var(--dx-scrollable-scrollbar-thin-size));
+
+.dx-state-disabled .dx-scrollable-scroll-content {
+  background-color: var(--dx-scrollable-scroll-bg-disabled);
+}

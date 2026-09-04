@@ -1,3 +1,4 @@
+$chat-disabled-opacity: 0.5 !default;
 $chat-file-name-font-weight: 600 !default;
 $chat-editing-preview-caption-font-weight: 500 !default;
 
@@ -9,7 +10,9 @@ $chat-messagebubble-max-width-image: 400px !default;
 $chat-messagebubble-max-height-image: 400px !default;
 
 @use "../mixins" as *;
-@use "layout/chat" as *;
+@use "layout/chat" as * with (
+  $disabled-opacity: $chat-disabled-opacity,
+);
 @use "layout/chat-avatar" as *;
 @use "layout/chat-fileview" as * with (
   $file-name-font-weight: $chat-file-name-font-weight,

@@ -1,6 +1,7 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/chat" with (
+  $chat-disabled-opacity: false,
   $chat-file-name-font-weight: var(--dx-chat-file-name-font-weight),
   $chat-editing-preview-caption-font-weight: var(--dx-chat-editing-preview-caption-font-weight),
   $chat-messagebox-border-block-start-width: var(--dx-chat-message-box-border-block-start-width),
@@ -153,4 +154,33 @@
 
 .dx-chat-file {
   @include dx-base-typography();
+}
+
+.dx-chat.dx-state-disabled {
+  .dx-chat-messagebox {
+    border-top-color: var(--dx-chat-message-box-border-disabled);
+  }
+}
+
+.dx-chat.dx-state-disabled,
+.dx-state-disabled .dx-chat {
+  .dx-chat-file,
+  .dx-chat-file .dx-icon,
+  .dx-chat-file-size {
+    color: var(--dx-chat-file-content-disabled);
+  }
+
+  .dx-chat-messagebubble {
+    color: var(--dx-chat-content-disabled);
+  }
+
+  .dx-chat-messagelist-day-header,
+  .dx-chat-messagegroup-author-name,
+  .dx-chat-messagegroup-time,
+  .dx-chat-message-edited,
+  .dx-chat-messagelist-empty-message,
+  .dx-chat-messagelist-empty-prompt,
+  .dx-chat-messagelist-empty-image {
+    color: var(--dx-chat-information-content-disabled);
+  }
 }

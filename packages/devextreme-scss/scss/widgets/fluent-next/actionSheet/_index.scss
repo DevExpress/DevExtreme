@@ -16,3 +16,13 @@
   margin: 0;
   margin-top: var(--dx-action-sheet-item-margin-block-end);
 }
+
+.dx-actionsheet-container.dx-state-disabled,
+.dx-actionsheet.dx-state-disabled,
+.dx-state-disabled .dx-actionsheet {
+  .dx-button-text,
+  .dx-actionsheet-item-content,
+  .dx-actionsheet-title {
+    color: var(--dx-action-sheet-content-disabled);
+  }
+}

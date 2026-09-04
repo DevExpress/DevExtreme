@@ -2,6 +2,8 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-pagination-content-disabled: #{$pagination-content-disabled};
+  --dx-pagination-page-bg-selected-disabled: #{$pagination-page-bg-selected-disabled};
   --dx-pagination-first-child-margin-inline-start: #{$pagination-first-child-margin-inline-start};
   --dx-pagination-first-child-padding-block-end: #{$pagination-first-child-padding-block-end};
   --dx-pagination-first-child-padding-block-start: #{$pagination-first-child-padding-block-start};
@@ -9,11 +11,10 @@
   --dx-pagination-first-child-padding-inline-start: #{$pagination-first-child-padding-inline-start};
   --dx-pagination-font-weight-selected: #{$pagination-font-weight-selected};
   --dx-pagination-info-margin-inline: #{$pagination-info-margin-inline};
-  --dx-pagination-info-opacity: #{$pagination-info-opacity};
+  --dx-pagination-info-content: #{$pagination-info-content};
   --dx-pagination-nav-button-height: #{$pagination-nav-button-height};
   --dx-pagination-nav-button-icon-size: #{$pagination-nav-button-icon-size};
   --dx-pagination-nav-button-padding: var(--dx-pagination-page-padding);
-  --dx-pagination-nav-opacity-disabled: #{$pagination-nav-opacity-disabled};
   --dx-pagination-navigate-button-height: #{$pagination-navigate-button-height};
   --dx-pagination-navigate-button-width: #{$pagination-navigate-button-width};
   --dx-pagination-padding: #{$pagination-padding};
