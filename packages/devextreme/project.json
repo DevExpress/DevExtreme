@@ -294,31 +294,6 @@
         "{projectRoot}/artifacts/transpiled-renovation-npm"
       ]
     },
-    "build:cjs:watch": {
-      "executor": "devextreme-nx-infra-plugin:babel-transform",
-      "cache": false,
-      "options": {
-        "babelConfigPath": "./build/transpile-config.js",
-        "configKey": "cjs",
-        "sourcePattern": "./js/**/*.{js,jsx}",
-        "excludePatterns": [
-          "./js/**/*.d.ts",
-          "./js/__internal/**/*"
-        ],
-        "outDir": "./artifacts/transpiled",
-        "watch": true,
-        "copyAssets": [
-          { "from": "./js/localization/messages", "to": "./localization/messages" },
-          { "from": "./js/viz/vector_map.utils/_settings.json", "to": "./viz/vector_map.utils/_settings.json" }
-        ]
-      },
-      "configurations": {
-        "production": {
-          "outDir": "./artifacts/transpiled-renovation-npm",
-          "removeDebug": true
-        }
-      }
-    },
     "build:npm:esm": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
       "options": {
@@ -396,26 +371,6 @@
         "{projectRoot}/artifacts/transpiled/__internal",
         "{projectRoot}/artifacts/transpiled-renovation-npm/__internal"
       ]
-    },
-    "build:cjs:internal:watch": {
-      "executor": "devextreme-nx-infra-plugin:babel-transform",
-      "cache": false,
-      "options": {
-        "babelConfigPath": "./build/transpile-config.js",
-        "configKey": "tsCjs",
-        "sourcePattern": "./artifacts/dist_ts/__internal/**/*.{js,jsx}",
-        "outDir": "./artifacts/transpiled/__internal",
-        "renameExtensions": {
-          ".jsx": ".js"
-        },
-        "watch": true
-      },
-      "configurations": {
-        "production": {
-          "outDir": "./artifacts/transpiled-renovation-npm/__internal",
-          "removeDebug": true
-        }
-      }
     },
     "build:npm:esm:internal": {
       "executor": "devextreme-nx-infra-plugin:babel-transform",
@@ -797,34 +752,6 @@
       "outputs": [
         "{projectRoot}/artifacts/js/dx.{all,web,viz,ai-integration,custom}.debug.js"
       ]
-    },
-    "bundle:watch": {
-      "executor": "devextreme-nx-infra-plugin:bundle",
-      "options": {
-        "watch": true,
-        "entries": [
-          "bundles/dx.all.js",
-          "bundles/dx.web.js",
-          "bundles/dx.viz.js",
-          "bundles/dx.ai-integration.js",
-          "bundles/dx.custom.js"
-        ],
-        "sourceDir": "./artifacts/transpiled-renovation-npm",
-        "outDir": "./artifacts/js",
-        "mode": "debug",
-        "webpackConfigPath": "./webpack.config.js",
-        "applyLicenseHeaders": {
-          "prependAfterLicense": "\"use strict\";\n\n",
-          "separator": "",
-          "includePatterns": ["dx.*.debug.js"]
-        }
-      },
-      "configurations": {
-        "production": {
-          "sourceMap": false
-        }
-      },
-      "cache": false
     },
     "bundle:prod": {
       "executor": "nx:run-commands",

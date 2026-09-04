@@ -428,19 +428,7 @@ function restoreEsmDebugTestHooks(relativeUrlPath: string, source: string): stri
     return source;
   }
 
-  let next = source;
-
-  if (normalized.endsWith('/__internal/events/core/m_events_engine.js')
-    && !next.includes('eventsEngine.detectPassiveEventHandlersSupport')) {
-    next = next.replace(
-      /eventsEngine\.passiveEventHandlersSupported\s*=\s*passiveEventHandlersSupported;/,
-      'eventsEngine.passiveEventHandlersSupported = passiveEventHandlersSupported;\n'
-      + 'eventsEngine.elementDataMap = elementDataMap;\n'
-      + 'eventsEngine.detectPassiveEventHandlersSupport = detectPassiveEventHandlersSupport;',
-    );
-  }
-
-  return rewriteLegacyCjsExportsInEsmArtifact(next);
+  return rewriteLegacyCjsExportsInEsmArtifact(source);
 }
 
 function sendEsmArtifactJs(
