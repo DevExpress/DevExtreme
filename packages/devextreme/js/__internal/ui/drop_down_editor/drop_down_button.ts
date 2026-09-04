@@ -35,9 +35,7 @@ interface EditorWithDropDown {
 export default class DropDownButton<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TComponent extends Editor<any> & EditorWithDropDown = DropDownEditor,
-> extends TextEditorButton<TComponent> {
-  declare instance: Button | null;
-
+> extends TextEditorButton<TComponent, Button> {
   currentTemplate: DropDownEditorProperties['dropDownButtonTemplate'] | null;
 
   constructor(name: string, editor: TComponent, options: ButtonProperties) {

@@ -13,24 +13,36 @@ import browser from '@js/core/utils/browser';
 import {
   // @ts-expect-error ts-error
   applyServerDecimalSeparator,
-  ensureDefined,
 } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { fitIntoRange, inRange } from '@js/core/utils/math';
 import { isDefined } from '@js/core/utils/type';
+import type { DxEvent, InteractionEvent } from '@js/events';
+import type { Format } from '@js/localization';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
 import TextEditor from '@ts/ui/text_box/text_editor';
 
-import type { TextEditorBaseProperties } from '../text_box/text_editor.base';
+import type { TextEditorBaseProperties, TextEditorInputAttributes } from '../text_box/text_editor.base';
 import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';
-import SpinButtons from './m_number_box.spins';
-
-const math = Math;
+import type { SpinChangeEvent } from './number_box.spin';
+import SpinButtons from './number_box.spins';
 
 export const WIDGET_CLASS = 'dx-numberbox';
 const FIREFOX_CONTROL_KEYS = ['tab', 'del', 'backspace', 'leftArrow', 'rightArrow', 'home', 'end', 'enter'];
 
 const FORCE_VALUECHANGE_EVENT_NAMESPACE = 'NumberBoxForceValueChange';
+
+export type NumberBoxValue = number | null;
+
+export type SpinValueChangeEvent = DxEvent<InteractionEvent> | DxMouseWheelEvent;
+
+const getSpinEvent = (
+  e: SpinChangeEvent | DxEvent<InteractionEvent>,
+): SpinValueChangeEvent => ('event' in e ? e.event : e);
 
 export interface NumberBoxBaseProperties extends TextEditorBaseProperties {
   min?: number;
@@ -39,6 +51,9 @@ export interface NumberBoxBaseProperties extends TextEditorBaseProperties {
   showSpinButtons?: boolean;
   useLargeSpinButtons?: boolean;
   invalidValueMessage?: string;
+  format?: Format | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  displayValueFormatter?: ((value: any) => string);
 }
 
 class NumberBoxBase<
@@ -48,24 +63,24 @@ class NumberBoxBase<
 
   _$submitElement!: dxElementWrapper;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+  _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
-      upArrow(e): void {
+      upArrow: (e): void => {
         if (!isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
           this._spinUpChangeHandler(e);
         }
       },
-      downArrow(e): void {
+      downArrow: (e): void => {
         if (!isCommandKeyPressed(e)) {
           e.preventDefault();
           e.stopPropagation();
           this._spinDownChangeHandler(e);
         }
       },
-      enter(): void {},
+      enter: (): void => {},
     };
   }
 
@@ -80,12 +95,10 @@ class NumberBoxBase<
       useLargeSpinButtons: true,
       mode: 'text',
       invalidValueMessage: messageLocalization.format('dxNumberBox-invalidValueMessage'),
-      // eslint-disable-next-line no-void
-      buttons: void 0,
+      buttons: undefined,
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }
@@ -95,32 +108,27 @@ class NumberBoxBase<
     return super._getDefaultButtons().concat([{ name: 'spins', Ctor: SpinButtons }]);
   }
 
-  _isSupportInputMode() {
-    // @ts-expect-error ts-error
-    const version = parseFloat(browser.version);
+  _isSupportInputMode(): boolean {
+    const version = parseFloat(browser.version ?? '');
 
-    return (
-      browser.chrome && version >= 66
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        || browser.safari && version >= 12
-    );
+    const isSupportedChrome = !!browser.chrome && version >= 66;
+    const isSupportedSafari = !!browser.safari && version >= 12;
+
+    return isSupportedChrome || isSupportedSafari;
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     // @ts-expect-error ts-error
     return super._defaultOptionsRules().concat([
       {
-        device() {
-          return devices.real().generic && !devices.isSimulator();
-        },
+        device: (): boolean => !!devices.real().generic && !devices.isSimulator(),
         options: {
           useLargeSpinButtons: false,
         },
       },
       {
-        device: function () {
-          return devices.real().deviceType !== 'desktop' && !this._isSupportInputMode();
-        }.bind(this),
+        device: (): boolean => devices.real().deviceType !== 'desktop'
+          && !this._isSupportInputMode(),
         options: {
           mode: 'number',
         },
@@ -136,7 +144,7 @@ class NumberBoxBase<
     this._toggleTabIndex();
   }
 
-  _getDefaultAttributes() {
+  _getDefaultAttributes(): TextEditorInputAttributes {
     const attributes = super._getDefaultAttributes();
     // eslint-disable-next-line spellcheck/spell-checker
     attributes.inputmode = 'decimal';
@@ -144,18 +152,25 @@ class NumberBoxBase<
   }
 
   _renderContentImpl(): void {
-    this.option('isValid') && this._validateValue(this.option('value'));
+    const { isValid, value } = this.option();
+
+    if (isValid) {
+      this._validateValue(value);
+    }
+
     this.setAria('role', 'spinbutton');
   }
 
   _renderSubmitElement(): void {
+    const { value } = this.option();
+
     this._$submitElement = $('<input>')
       .attr('type', 'hidden')
       .appendTo(this.$element());
-    this._setSubmitValue(this.option('value'));
+    this._setSubmitValue(value);
   }
 
-  _setSubmitValue(value) {
+  _setSubmitValue(value: NumberBoxValue | undefined): void {
     this._getSubmitElement().val(applyServerDecimalSeparator(value));
   }
 
@@ -163,7 +178,7 @@ class NumberBoxBase<
     return this._$submitElement;
   }
 
-  _keyPressHandler(e) {
+  _keyPressHandler(e: DxEvent<KeyboardEvent>): void {
     super._keyPressHandler();
 
     const char = getChar(e);
@@ -173,7 +188,7 @@ class NumberBoxBase<
     if (!isInputCharValid) {
       const keyName = normalizeKeyName(e);
       // NOTE: Additional check for Firefox control keys
-      if (isCommandKeyPressed(e) || keyName && FIREFOX_CONTROL_KEYS.includes(keyName)) {
+      if (isCommandKeyPressed(e) || (keyName && FIREFOX_CONTROL_KEYS.includes(keyName))) {
         return;
       }
 
@@ -188,13 +203,14 @@ class NumberBoxBase<
     return true;
   }
 
-  _onMouseWheel(dxEvent): void {
-    dxEvent.delta > 0 ? this._spinValueChange(1, dxEvent) : this._spinValueChange(-1, dxEvent);
+  _onMouseWheel(e: DxMouseWheelEvent): void {
+    this._spinValueChange(e.delta > 0 ? 1 : -1, e);
   }
 
-  _renderValue() {
+  _renderValue(): DeferredObj<unknown> {
     const inputValue = this._input().val();
-    const value = this.option('value');
+    const { value } = this.option();
+
     if (!inputValue.length || Number(inputValue) !== value) {
       this._forceValueRender();
       this._toggleEmptinessEventHandler();
@@ -203,9 +219,8 @@ class NumberBoxBase<
     const valueText = isDefined(value) ? null : messageLocalization.format('dxNumberBox-noDataText');
 
     this.setAria({
-      // @ts-expect-error ts-error
       // eslint-disable-next-line spellcheck/spell-checker
-      valuenow: ensureDefined(value, ''),
+      valuenow: value ?? '',
       // eslint-disable-next-line spellcheck/spell-checker
       valuetext: valueText,
     });
@@ -217,17 +232,18 @@ class NumberBoxBase<
   }
 
   _forceValueRender(): void {
-    const value = this.option('value');
-    const number = Number(value);
-    const formattedValue = isNaN(number)
+    const { value } = this.option();
+    const formattedValue = isNaN(Number(value))
       ? ''
       : this._applyDisplayValueFormatter(value);
 
     this._renderDisplayText(formattedValue);
   }
 
-  _applyDisplayValueFormatter(value): string | undefined {
-    if (!this.option('format')) {
+  _applyDisplayValueFormatter(value: NumberBoxValue | undefined): string | undefined {
+    const { format, displayValueFormatter } = this.option();
+
+    if (!format) {
       const globalNumberFormat = getGlobalFormatByDataType('number');
 
       if (globalNumberFormat) {
@@ -238,70 +254,66 @@ class NumberBoxBase<
       }
     }
 
-    const { displayValueFormatter } = this.option();
-
     return displayValueFormatter?.(value);
   }
 
   _renderProps(): void {
+    const { min, max, step } = this.option();
+
     // @ts-expect-error ts-error
-    this._input().prop({
-      min: this.option('min'),
-      max: this.option('max'),
-      step: this.option('step'),
-    });
+    this._input().prop({ min, max, step });
 
     this.setAria({
-      // @ts-expect-error ts-error
       // eslint-disable-next-line spellcheck/spell-checker
-      valuemin: ensureDefined(this.option('min'), ''),
-      // @ts-expect-error ts-error
+      valuemin: min ?? '',
       // eslint-disable-next-line spellcheck/spell-checker
-      valuemax: ensureDefined(this.option('max'), ''),
+      valuemax: max ?? '',
     });
   }
 
   _spinButtonsPointerDownHandler(): void {
+    const { useLargeSpinButtons } = this.option();
     const $input = this._input();
-    if (!this.option('useLargeSpinButtons') && domAdapter.getActiveElement() !== $input[0]) {
+
+    if (!useLargeSpinButtons && domAdapter.getActiveElement() !== $input[0]) {
       // @ts-expect-error ts-error
       eventsEngine.trigger($input, 'focus');
     }
   }
 
-  _spinUpChangeHandler(e): void {
-    if (!this.option('readOnly')) {
-      this._spinValueChange(1, e.event || e);
+  _spinUpChangeHandler(e: SpinChangeEvent | DxEvent<InteractionEvent>): void {
+    const { readOnly } = this.option();
+
+    if (!readOnly) {
+      this._spinValueChange(1, getSpinEvent(e));
     }
   }
 
-  _spinDownChangeHandler(e): void {
-    if (!this.option('readOnly')) {
-      this._spinValueChange(-1, e.event || e);
+  _spinDownChangeHandler(e: SpinChangeEvent | DxEvent<InteractionEvent>): void {
+    const { readOnly } = this.option();
+
+    if (!readOnly) {
+      this._spinValueChange(-1, getSpinEvent(e));
     }
   }
 
-  _spinValueChange(sign, dxEvent): void {
-    // @ts-expect-error ts-error
-    const step = parseFloat(this.option('step'));
+  _spinValueChange(sign: number, dxEvent?: SpinValueChangeEvent): void {
+    const { step: stepOption, min, max } = this.option();
+    const step = parseFloat(String(stepOption));
+
     if (step === 0) {
       return;
     }
-    // @ts-expect-error ts-error
-    let value = parseFloat(this._normalizeInputValue()) || 0;
+
+    let value = parseFloat(String(this._normalizeInputValue())) || 0;
 
     value = this._correctRounding(value, step * sign);
 
-    const min = this.option('min');
-    const max = this.option('max');
-
     if (isDefined(min)) {
-      // @ts-expect-error ts-error
       value = Math.max(min, value);
     }
 
     if (isDefined(max)) {
-      // @ts-expect-error ts-error
       value = Math.min(max, value);
     }
 
@@ -309,35 +321,28 @@ class NumberBoxBase<
     this.option('value', value);
   }
 
-  _correctRounding(value, step) {
+  _correctRounding(value: number, step: number): number {
     const regex = /[,.](.*)/;
-    const isFloatValue = regex.test(value);
-    const isFloatStep = regex.test(step);
+    const valueText = String(value);
+    const stepText = String(step);
+    const isFloatValue = regex.test(valueText);
+    const isFloatStep = regex.test(stepText);
 
     if (isFloatValue || isFloatStep) {
-      // @ts-expect-error
-      const valueAccuracy = isFloatValue ? regex.exec(value)[0].length : 0;
-      // @ts-expect-error
-      const stepAccuracy = isFloatStep ? regex.exec(step)[0].length : 0;
-      const accuracy = math.max(valueAccuracy, stepAccuracy);
+      const valueAccuracy = isFloatValue ? regex.exec(valueText)?.[0].length ?? 0 : 0;
+      const stepAccuracy = isFloatStep ? regex.exec(stepText)?.[0].length ?? 0 : 0;
+      const accuracy = Math.max(valueAccuracy, stepAccuracy);
 
-      value = this._round(value + step, accuracy);
-
-      return value;
+      return this._round(value + step, accuracy);
     }
 
     return value + step;
   }
 
-  _round(value, precision) {
-    precision = precision || 0;
-
+  _round(value: number, precision = 0): number {
     const multiplier = 10 ** precision;
 
-    value *= multiplier;
-    value = Math.round(value) / multiplier;
-
-    return value;
+    return Math.round(value * multiplier) / multiplier;
   }
 
   _renderValueChangeEvent(): void {
@@ -348,20 +353,21 @@ class NumberBoxBase<
     eventsEngine.on(this.element(), forceValueChangeEvent, this._forceRefreshInputValue.bind(this));
   }
 
-  _forceRefreshInputValue() {
-    const { mode } = this.option();
+  _forceRefreshInputValue(): void {
+    const { mode, value } = this.option();
+
     if (mode === 'number') {
       return;
     }
 
     const $input = this._input();
-    const formattedValue = this._applyDisplayValueFormatter(this.option('value'));
+    const formattedValue = this._applyDisplayValueFormatter(value);
     // @ts-expect-error ts-error
     $input.val(null);
     $input.val(formattedValue);
   }
 
-  _valueChangeEventHandler(e) {
+  _valueChangeEventHandler(e: DxEvent): void {
     const $input = this._input();
     const inputValue = this._normalizeText();
     const value = this._parseValue(inputValue);
@@ -373,8 +379,7 @@ class NumberBoxBase<
     }
 
     if (valueHasDigits) {
-      // @ts-expect-error ts-error
-      super._valueChangeEventHandler(e, isNaN(value) ? null : value);
+      super._valueChangeEventHandler(e, isNaN(Number(value)) ? null : value);
     }
 
     this._applyValueBoundaries(inputValue, value);
@@ -385,9 +390,9 @@ class NumberBoxBase<
     });
   }
 
-  _applyValueBoundaries(inputValue, parsedValue) {
+  _applyValueBoundaries(inputValue: string, parsedValue: NumberBoxValue | undefined): void {
     const isValueIncomplete = this._isValueIncomplete(inputValue);
-    const isValueCorrect = this._isValueInRange(inputValue);
+    const isValueCorrect = this._isValueInRange(Number(inputValue));
 
     if (!isValueIncomplete && !isValueCorrect && parsedValue !== null) {
       if (Number(inputValue) !== parsedValue) {
@@ -396,20 +401,19 @@ class NumberBoxBase<
     }
   }
 
-  _replaceCommaWithPoint(value): string {
+  _replaceCommaWithPoint(value: string): string {
     return value.replace(',', '.');
   }
 
   _inputIsInvalid(): boolean {
     const { mode } = this.option();
     const isNumberMode = mode === 'number';
-    // @ts-expect-error ts-error
-    const validityState = this._input().get(0).validity;
+    const input = this._input().get(0) as HTMLInputElement | undefined;
 
-    return isNumberMode && validityState?.badInput;
+    return isNumberMode && !!input?.validity.badInput;
   }
 
-  _renderDisplayText(text) {
+  _renderDisplayText(text: string | undefined): void {
     if (this._inputIsInvalid()) {
       return;
     }
@@ -417,20 +421,23 @@ class NumberBoxBase<
     super._renderDisplayText(text);
   }
 
-  _isValueIncomplete(value) {
+  _isValueIncomplete(value: string): boolean {
     const incompleteRegex = /(^-$)|(^-?\d*\.$)|(\d+e-?$)/i;
     return incompleteRegex.test(value);
   }
 
-  _isValueInRange(value) {
-    return inRange(value, this.option('min'), this.option('max'));
+  _isValueInRange(value: number): boolean {
+    const { min, max } = this.option();
+
+    return inRange(value, min, max);
   }
 
-  _isNumber(value) {
+  _isNumber(value: string): boolean {
     return this._parseValue(value) !== null;
   }
 
-  _validateValue(value?) {
+  _validateValue(value?: NumberBoxValue): boolean {
+    const { invalidValueMessage } = this.option();
     const inputValue = this._normalizeText();
     const isValueValid = this._isValueValid();
     let isValid = true;
@@ -450,31 +457,32 @@ class NumberBoxBase<
       isValid,
       validationError: isValid ? null : {
         editorSpecific: true,
-        message: this.option('invalidValueMessage'),
+        message: invalidValueMessage,
       },
     });
 
     return isValid;
   }
 
-  _normalizeInputValue(): number | null {
+  _normalizeInputValue(): NumberBoxValue | undefined {
     return this._parseValue(this._normalizeText());
   }
 
-  _normalizeText() {
+  _normalizeText(): string {
     const value = this._input().val().trim();
 
     return this._replaceCommaWithPoint(value);
   }
 
-  _parseValue(value): number | null {
-    const number = parseFloat(value);
+  _parseValue(value?: string | NumberBoxValue): NumberBoxValue | undefined {
+    const { min, max } = this.option();
+    const parsedValue = parseFloat(String(value ?? ''));
 
-    if (isNaN(number)) {
+    if (isNaN(parsedValue)) {
       return null;
     }
 
-    return fitIntoRange(number, this.option('min'), this.option('max'));
+    return fitIntoRange(parsedValue, min, max);
   }
 
   _clearValue(): void {
@@ -486,7 +494,9 @@ class NumberBoxBase<
   }
 
   clear(): void {
-    if (this.option('value') === null) {
+    const { value } = this.option();
+
+    if (value === null) {
       this.option('text', '');
       if (this._input().length) {
         this._renderValue();
@@ -496,22 +506,28 @@ class NumberBoxBase<
     }
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
-      case 'value':
-        this._validateValue(args.value);
-        this._setSubmitValue(args.value);
+      case 'value': {
+        const value = args.value as NumberBoxValue | undefined;
+
+        this._validateValue(value);
+        this._setSubmitValue(value);
         super._optionChanged(args);
         this._resumeValueChangeAction();
         break;
+      }
       case 'step':
         this._renderProps();
         break;
       case 'min':
-      case 'max':
+      case 'max': {
+        const { value } = this.option();
+
         this._renderProps();
-        this.option('value', this._parseValue(this.option('value')));
+        this.option('value', this._parseValue(value));
         break;
+      }
       case 'showSpinButtons':
       case 'useLargeSpinButtons':
         this._updateButtons(['spins']);
