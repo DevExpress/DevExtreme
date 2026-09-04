@@ -11,8 +11,8 @@ type SubmitEvent = DxButtonTypes.ClickEvent | DxTextBoxTypes.EnterKeyEvent;
 
 @Component({
   selector: 'detail-view',
-  templateUrl: `./detail-view/detail-view.component.html`,
-  styleUrls: [`./detail-view/detail-view.component.css`],
+  templateUrl: './detail-view/detail-view.component.html',
+  styleUrls: ['./detail-view/detail-view.component.css'],
   providers: [AiService],
   imports: [
     CommonModule,
