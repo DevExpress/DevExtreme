@@ -1,3 +1,6 @@
+$pivotgrid-drag-source-opacity: 0.5 !default;
+$pivotgrid-fields-container-drag-opacity: 0.8 !default;
+
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $pivotgrid-position-indicator-vertical-height: 2px !default;
 $pivotgrid-position-indicator-horizontal-width: 2px !default;
@@ -132,7 +135,9 @@ $pivotgrid-expand-icon-text-offset: 0;
   }
 
   &.dx-drag {
-    opacity: 0.8;
+    @if $pivotgrid-fields-container-drag-opacity {
+      opacity: $pivotgrid-fields-container-drag-opacity;
+    }
 
     .dx-area-field.dx-area-box {
       box-shadow: $pivotgrid-drag-header-first-shadow, $pivotgrid-drag-header-second-shadow;
@@ -150,7 +155,9 @@ $pivotgrid-expand-icon-text-offset: 0;
   }
 
   .dx-drag-source {
-    opacity: 0.5;
+    @if $pivotgrid-drag-source-opacity {
+      opacity: $pivotgrid-drag-source-opacity;
+    }
   }
 
   .dx-column-indicators {

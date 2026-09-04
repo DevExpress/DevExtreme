@@ -5,9 +5,12 @@ $calendar-content: ds.$color-content !default;
 $calendar-navigator-content: ds.$color-content !default;
 
 $calendar-cell-other-content: ds.$color-content-subtle !default;
+
+$calendar-cell-content-disabled: ds.$color-content-disabled !default;
 $calendar-bg: transparent !default;
 $calendar-bg-hovered: ds.$color-bg-primary-subtler-selected !default;
 
+$calendar-cell-bg-selected-disabled: ds.$color-bg-disabled !default;
 $calendar-cell-bg-selected: ds.$color-bg-primary !default;
 $calendar-cell-content-selected: ds.$color-content-static-dark !default;
 $calendar-cell-bg-active: ds.$color-bg-primary-subtler-active !default;

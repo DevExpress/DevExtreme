@@ -70,3 +70,22 @@
   ".dx-calendar-cell-range-hover-start",
   ".dx-calendar-cell-range-hover-end",
 );
+
+.dx-calendar.dx-state-disabled,
+.dx-state-disabled .dx-calendar {
+  .dx-calendar-cell,
+  .dx-calendar-week-number-cell,
+  .dx-calendar-body thead th {
+    color: var(--dx-calendar-cell-content-disabled);
+  }
+
+  .dx-calendar-cell.dx-calendar-selected-date span {
+    background-color: var(--dx-calendar-cell-bg-selected-disabled);
+    color: var(--dx-calendar-cell-content-disabled);
+  }
+
+  .dx-calendar-navigator .dx-button .dx-icon,
+  .dx-calendar-caption-button .dx-button-text {
+    color: var(--dx-calendar-cell-content-disabled);
+  }
+}

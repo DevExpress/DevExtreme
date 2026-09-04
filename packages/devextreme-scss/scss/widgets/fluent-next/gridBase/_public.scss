@@ -4,6 +4,7 @@
 @use "layout/aiChat/sizes" as *;
 
 @mixin publish {
+  --dx-grid-draggable-column-opacity: #{$grid-draggable-column-opacity};
   --dx-grid-cell-content-padding: #{$grid-cell-content-padding};
   --dx-grid-summary-padding-block: #{$grid-summary-padding-block};
   --dx-grid-column-indicator-width: #{$grid-column-indicator-width};
@@ -28,6 +29,7 @@
   --dx-grid-bottom-load-panel-padding: #{$grid-bottom-load-panel-padding};
   --dx-grid-filter-panel-checkbox-padding-inline-end: #{$grid-filter-panel-checkbox-padding-inline-end};
   --dx-grid-filter-panel-icon-margin-inline-end: #{$grid-filter-panel-icon-margin-inline-end};
+  --dx-grid-content-disabled: #{$grid-content-disabled};
   --dx-grid-adaptive-column-height: #{$grid-adaptive-column-height};
   --dx-grid-after-inset-inline-end: #{$grid-after-inset-inline-end};
   --dx-grid-ai-chat-message-border: #{$grid-ai-chat-message-border};
@@ -121,7 +123,6 @@
   --dx-grid-header-row-padding-block-start: #{$grid-header-row-padding-block-start};
   --dx-grid-hidden-border: #{$grid-hidden-border};
   --dx-grid-icon-button-border-radius: #{$grid-icon-button-border-radius};
-  --dx-grid-icon-link-opacity-disabled: #{$grid-icon-link-opacity-disabled};
   --dx-grid-icon-margin: #{$grid-icon-margin};
   --dx-grid-icon: #{$grid-icon};
   --dx-grid-link-content: #{$grid-link-content};
@@ -163,7 +164,8 @@
   --dx-grid-sort-index-icon-padding-inline-end: #{$grid-sort-index-icon-padding-inline-end};
   --dx-grid-summary-bg: var(--dx-grid-bg);
   --dx-grid-summary-content: #{$grid-summary-content};
-  --dx-grid-text-link-opacity-disabled: #{$grid-text-link-opacity-disabled};
+  --dx-grid-link-content-disabled: #{$grid-link-content-disabled};
+  --dx-grid-ai-chat-message-regenerate-button-content-disabled: #{$grid-ai-chat-message-regenerate-button-content-disabled};
   --dx-grid-tree-view-node-padding-inline-start: #{$grid-tree-view-node-padding-inline-start};
   --dx-grid-tree-view-search-margin-block-end: #{$grid-tree-view-search-margin-block-end};
   --dx-grid-tree-view-select-all-item-padding-inline-start: #{$grid-tree-view-select-all-item-padding-inline-start};

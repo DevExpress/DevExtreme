@@ -3,7 +3,6 @@
 @use "../../../colors" as *;
 @use "../../../button/colors" as buttonColors;
 @use "./sizes" as *;
-@use "../../../../base/widget" as baseWidget;
 @include ai-chat-messagelist-empty(
   buttonColors.$button-default-contained-bg,
   buttonColors.$button-default-outlined-bg-hovered,
@@ -16,5 +15,8 @@
 @include ai-chat-message-icon(var(--dx-grid-ai-chat-message-icon-size));
 
 .dx-ai-chat--disabled .dx-ai-chat__message-regenerate-button {
-  @include baseWidget.disabled-widget();
+  color: var(--dx-grid-ai-chat-message-regenerate-button-content-disabled);
+  cursor: default;
+  user-select: none;
+  -webkit-touch-callout: none;
 }

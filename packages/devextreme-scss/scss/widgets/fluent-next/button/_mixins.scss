@@ -118,8 +118,8 @@
     $button-selected-color,
   );
 
-  &.dx-state-disabled {
-    opacity: 1;
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     box-shadow: none;
 
     .dx-icon {

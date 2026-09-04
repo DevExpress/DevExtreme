@@ -51,6 +51,8 @@
   }
 
   .dx-state-disabled & {
+    border-color: colorViewColors.$color-view-border-disabled;
+
     .dx-icon-colordismiss {
       color: var(--dx-color-box-content-disabled);
     }

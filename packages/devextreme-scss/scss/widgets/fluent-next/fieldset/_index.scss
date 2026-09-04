@@ -141,3 +141,9 @@
   var(--dx-fieldset-header-margin-block),
   var(--dx-fieldset-field-margin-block)
 );
+
+.dx-state-disabled .dx-field,
+.dx-state-disabled .dx-field-label,
+.dx-state-disabled .dx-field-value-static {
+  color: var(--dx-fieldset-field-label-content-disabled);
+}

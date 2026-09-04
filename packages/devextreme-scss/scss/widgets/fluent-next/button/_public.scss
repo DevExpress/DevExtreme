@@ -87,7 +87,7 @@
   --dx-button-normal-text-bg-hovered: var(--dx-button-normal-contained-bg-hovered);
   --dx-button-normal-text-bg: #{$button-normal-text-bg};
   --dx-button-normal-text-bg-selected: var(--dx-button-normal-contained-bg-selected);
-  --dx-button-outlined-border-disabled: var(--dx-button-contained-bg-disabled);
+  --dx-button-outlined-border-disabled: #{$button-outlined-border-disabled};
   --dx-button-padding-block: #{$button-padding-block};
   --dx-button-padding-inline: #{$button-padding-inline};
   --dx-button-success-contained-bg-active: #{$button-success-contained-bg-active};

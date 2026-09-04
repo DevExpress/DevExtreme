@@ -12,22 +12,6 @@ $diagram-connector-border: ds.$color-bg-primary !default;
 $diagram-connection-border: ds.$color-bg-success !default;
 $diagram-geometry-mark-border: ds.$color-bg-danger !default;
 
-/*
- * Stays in _colors.scss on purpose: the split between the two files is mode-dependent against
- * size-dependent, not colour against number, and this opacity branches on $mode — which only
- * _colors.scss has in scope. `opacity` is therefore a part as well as a size slot, resolved by
- * file like `content` and `text` (NAMING.md, PARTS).
- */
-$diagram-toolbox-shape-text-opacity: null !default;
-
-@if $mode == "light" {
-  $diagram-toolbox-shape-text-opacity: 0.25 !default;
-}
-
-@if $mode == "dark" {
-  $diagram-toolbox-shape-text-opacity: 0.5 !default;
-}
-
 $diagram-border: ds.$color-border !default;
 $diagram-toolbar-border: ds.$color-border !default;
 $diagram-normal-format-bg-active: ds.$color-bg-alpha-active !default;
@@ -35,7 +19,10 @@ $diagram-default-format-bg-active: ds.$color-bg-primary-active !default;
 $diagram-danger-format-bg-active: ds.$color-bg-danger-active !default;
 $diagram-success-format-bg-active: ds.$color-bg-success-active !default;
 $diagram-image-icon-base-content: ds.$color-content-subtle !default;
+
+$diagram-image-icon-muted-content: rgb(from #{ds.$color-content-subtle} r g b / 0.5) !default;
 $diagram-image-icon-accent-border: ds.$color-content-primary !default;
+$diagram-toolbox-shape-text-content: ds.$color-content-subtle !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $diagram-bg: ds.$color-bg !default;

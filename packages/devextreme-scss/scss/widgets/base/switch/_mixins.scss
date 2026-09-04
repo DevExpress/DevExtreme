@@ -197,7 +197,7 @@
   $switch-invalid-color-hover,
   $switch-invalid-color-focused,
   $base-disabled-border-color,
-) {
+  $disabled-opacity-reset: 1,) {
   .dx-switch-container {
     &::before {
       background-color: $switch-bg;
@@ -264,7 +264,7 @@
 
     &.dx-state-disabled,
     &.dx-state-readonly {
-      opacity: 1;
+      opacity: $disabled-opacity-reset;
 
       .dx-switch-container::before {
         border-color: $base-disabled-border-color;

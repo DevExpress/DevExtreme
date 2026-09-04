@@ -2,9 +2,13 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-pivot-grid-drag-source-opacity: #{$pivot-grid-drag-source-opacity};
+  --dx-pivot-grid-content-disabled: #{$pivot-grid-content-disabled};
+  --dx-pivot-grid-drag-header-content: #{$pivot-grid-drag-header-content};
   --dx-pivot-grid-accent-content: #{$pivot-grid-accent-content};
   --dx-pivot-grid-area-bg: #{$pivot-grid-area-bg};
   --dx-pivot-grid-area-box-border: #{$pivot-grid-area-box-border};
+  --dx-pivot-grid-field-area-box-border: #{$pivot-grid-field-area-box-border};
   --dx-pivot-grid-area-box-margin-block-end: #{$pivot-grid-area-box-margin-block-end};
   --dx-pivot-grid-area-content: #{$pivot-grid-area-content};
   --dx-pivot-grid-area-field-bg: #{$pivot-grid-area-field-bg};
@@ -16,7 +20,6 @@
   --dx-pivot-grid-area-padding: #{$pivot-grid-area-padding};
   --dx-pivot-grid-border-width: #{$pivot-grid-border-width};
   --dx-pivot-grid-border: #{$pivot-grid-border};
-  --dx-pivot-grid-border-disabled: #{$pivot-grid-border-disabled};
   --dx-pivot-grid-button-margin: #{$pivot-grid-button-margin};
   --dx-pivot-grid-button-top-padding: #{$pivot-grid-button-top-padding};
   --dx-pivot-grid-cell-padding: #{$pivot-grid-cell-padding};

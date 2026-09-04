@@ -68,3 +68,22 @@
 .dx-colorview-color-preview-container {
   margin-bottom: var(--dx-color-view-preview-container-margin);
 }
+
+.dx-colorview-container.dx-state-disabled,
+.dx-state-disabled .dx-colorview-container {
+  label {
+    color: var(--dx-color-view-label-content-disabled);
+  }
+
+  .dx-colorview-palette-cell,
+  .dx-colorview-alpha-channel-border,
+  .dx-colorview-hue-scale-wrapper,
+  .dx-colorview-color-preview-container {
+    box-shadow: 0 0 0 1px var(--dx-color-view-border-disabled); // dx-line-width: 1px hairline ring drawn as a shadow
+  }
+
+  .dx-colorview-palette-handle,
+  .dx-colorview-hue-scale-handle {
+    border-color: var(--dx-color-view-handle-border-disabled);
+  }
+}

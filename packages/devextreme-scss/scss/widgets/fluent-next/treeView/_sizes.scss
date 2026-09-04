@@ -2,7 +2,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 // Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
-$tree-view-opacity-disabled: ds.$opacity-50 !default;
 
 $tree-view-toggle-item-width: null !default;
 $tree-view-checkbox-container-size: null !default;

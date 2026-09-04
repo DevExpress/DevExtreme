@@ -34,7 +34,6 @@ $pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !
   overflow: hidden;
   width: 100%;
 
-  // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
   @if $pagination-padding-block-fallback {
     padding-top: $pagination-padding-block-fallback;
     padding-bottom: $pagination-padding-block-fallback;
@@ -56,7 +55,6 @@ $pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !
       display: inline-block;
       cursor: pointer;
 
-      // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
       @if $pagination-page-padding-fallback {
         padding: $pagination-page-padding-fallback;
       }
@@ -74,12 +72,13 @@ $pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !
     .dx-info {
       display: inline-block;
       margin-right: $pagination-info-paddings;
-      opacity: $pagination-info-opacity;
+
+      @if $pagination-info-opacity {
+        opacity: $pagination-info-opacity;
+      }
     }
 
     .dx-navigate-button {
-
-      // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
       @if $pagination-navigate-button-width-fallback {
         width: $pagination-navigate-button-width-fallback;
       }
@@ -89,7 +88,6 @@ $pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !
       display: inline-block;
       vertical-align: top;
 
-      // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
       @if $pagination-navigate-button-padding-block-fallback {
         padding: $pagination-navigate-button-padding-block-fallback $pagination-page-horizontal-padding;
       }
@@ -97,7 +95,10 @@ $pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !
       box-sizing: content-box;
 
       &.dx-button-disable {
-        opacity: $pagination-nav-disabled-opacity;
+        @if $pagination-nav-disabled-opacity {
+          opacity: $pagination-nav-disabled-opacity;
+        }
+
         cursor: inherit;
       }
     }

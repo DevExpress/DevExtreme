@@ -20,7 +20,7 @@
   var(--dx-radio-button-invalid-bg),
   var(--dx-radio-button-invalid-bg-hovered),
   var(--dx-radio-button-invalid-bg-focused),
-  1,
+  null,
   true,
 );
 
@@ -36,11 +36,11 @@
 
 .dx-state-readonly {
   .dx-radiobutton-icon-dot {
-    background-color: var(--dx-radio-button-content-disabled);
+    background-color: var(--dx-radio-button-content-read-only);
   }
 
   .dx-radiobutton-icon {
-    border-color: var(--dx-radio-button-content-disabled);
+    border-color: var(--dx-radio-button-content-read-only);
   }
 
   .dx-radiobutton-checked {
@@ -48,7 +48,7 @@
     &.dx-state-focused,
     &.dx-state-active {
       .dx-radiobutton-icon-dot {
-        background-color: var(--dx-radio-button-content-disabled);
+        background-color: var(--dx-radio-button-content-read-only);
       }
     }
   }
@@ -126,18 +126,19 @@
   &.dx-state-readonly {
     .dx-radiobutton {
       .dx-radiobutton-icon-dot {
-        background-color: var(--dx-radio-button-content-disabled);
+        background-color: var(--dx-radio-button-content-read-only);
       }
     }
   }
 }
 
 .dx-state-disabled {
+  &.dx-radiobutton,
   .dx-radiobutton {
     color: var(--dx-radio-button-content-disabled);
 
     .dx-radiobutton-icon {
-      border-color: var(--dx-radio-button-content-disabled);
+      border-color: var(--dx-radio-button-border-disabled);
     }
 
     .dx-radiobutton-icon-dot {

@@ -40,7 +40,7 @@
 
   &.dx-state-readonly {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-border-disabled);
+      border-color: var(--dx-check-box-border-read-only);
     }
   }
 
@@ -79,8 +79,6 @@
 
   &.dx-state-disabled,
   .dx-state-disabled & {
-    opacity: 1;
-
     .dx-checkbox-icon {
       border-color: var(--dx-check-box-border-disabled);
     }

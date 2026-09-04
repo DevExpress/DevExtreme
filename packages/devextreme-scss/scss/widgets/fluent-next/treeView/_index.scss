@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
@@ -5,7 +6,7 @@
 @use "../../base/treeView" as baseTreeView with (
   $treeview-select-all-item-border-bottom: var(--dx-tree-view-select-all-item-border-block-end),
   $treeview-border-visible-border: var(--dx-tree-view-border-visible-border),
-  $treeview-disabled-opacity: var(--dx-tree-view-opacity-disabled),
+  $treeview-disabled-opacity: false,
   $treeview-searchbox-margin-bottom: var(--dx-tree-view-search-box-margin-block-end),
 );
 @use "../../base/icon_fonts" as *;
@@ -144,3 +145,18 @@
   $tree-view-container-padding,
   var(--dx-tree-view-load-indicator-size),
 );
+
+@include when-disabled(".dx-treeview") {
+  .dx-treeview-item {
+    color: var(--dx-tree-view-item-content-disabled);
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    color: var(--dx-tree-view-spin-icon-disabled);
+  }
+
+  .dx-treeview-node.dx-state-selected > .dx-treeview-item,
+  .dx-treeview-item.dx-state-selected {
+    background-color: var(--dx-tree-view-item-bg-selected-disabled);
+  }
+}

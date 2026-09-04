@@ -101,7 +101,9 @@ $treeview-searchbox-margin-bottom: null !default;
   }
 
   &.dx-state-disabled {
-    opacity: $treeview-disabled-opacity;
+    @if $treeview-disabled-opacity {
+      opacity: $treeview-disabled-opacity;
+    }
   }
 }
 

@@ -18,10 +18,6 @@
     );
 }
 
-@mixin disabled-widget($opacity: var(--dx-global-disabled-opacity)) {
-  @include disabled-widget-mixin($opacity);
-}
-
 @mixin badge-settings() {
   pointer-events: none;
   position: absolute;

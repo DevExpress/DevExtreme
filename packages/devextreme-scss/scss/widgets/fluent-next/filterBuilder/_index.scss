@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/filterBuilder" with (
@@ -5,6 +6,7 @@
   $filterbuilder-action-icon-margin-right: var(--dx-filter-builder-action-icon-margin-inline-end),
   $filterbuilder-group-content-padding-right: var(--dx-filter-builder-group-content-padding-inline-end),
   $filterbuilder-range-separator-margin: var(--dx-filter-builder-range-separator-margin),
+  $filterbuilder-range-separator-opacity: false,
   $filterbuilder-item-value-text-min-width: var(--dx-filter-builder-item-value-text-min-width),
   $filterbuilder-item-value-text-padding: var(--dx-filter-builder-item-value-text-padding),
   $filterbuilder-action-icon-padding: var(--dx-filter-builder-action-icon-padding),
@@ -14,7 +16,6 @@
   $filterbuilder-treeview-node-margin-left: var(--dx-filter-builder-tree-view-node-margin-inline-start),
   $filterbuilder-treeview-node-margin-right: var(--dx-filter-builder-tree-view-node-margin-inline-end),
   $filterbuilder-scrollable-max-height: var(--dx-filter-builder-scrollable-max-height),
-  $filterbuilder-range-separator-opacity: var(--dx-filter-builder-range-separator-opacity),
   $filterbuilder-bg: var(--dx-filter-builder-bg),
   $filterbuilder-text-color: var(--dx-filter-builder-content),
   $filterbuilder-text-focus-color: var(--dx-filter-builder-text-content-focused),
@@ -38,7 +39,6 @@
   $filterbuilder-remove-icon-focus-color: var(--dx-filter-builder-remove-icon-content-focused),
   $filterbuilder-menu-icon-color: var(--dx-filter-builder-menu-icon),
 );
-@use "../textEditor/colors" as textEditorColors;
 
 .dx-filterbuilder {
   .dx-filterbuilder-action-icon {
@@ -70,7 +70,7 @@
 }
 
 .dx-filterbuilder-range-separator {
-  color: textEditorColors.$text-editor-content;
+  color: var(--dx-filter-builder-range-separator-content);
 }
 
 .dx-filterbuilder-overlay {
@@ -131,4 +131,40 @@
       right: var(--dx-filter-builder-tree-view-toggle-item-visibility-inset-inline-end);
     }
   }
+}
+
+@include when-disabled(".dx-filterbuilder") {
+  color: var(--dx-filter-builder-content-disabled);
+
+  .dx-filterbuilder-item-field,
+  .dx-filterbuilder-item-operation,
+  .dx-filterbuilder-item-value,
+  .dx-filterbuilder-item-value-text,
+  .dx-filterbuilder-group-operation {
+    color: var(--dx-filter-builder-content-disabled);
+  }
+}
+
+.dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-group-operation,
+.dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-group-operation {
+  background-color: var(--dx-filter-builder-group-operation-content-disabled);
+}
+
+.dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-field,
+.dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-operation,
+.dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text .dx-filterbuilder-item-value-text,
+.dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-field,
+.dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-operation,
+.dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text .dx-filterbuilder-item-value-text {
+  background-color: var(--dx-filter-builder-item-field-content-disabled);
+}
+
+.dx-state-disabled .dx-filterbuilder .dx-icon-plus,
+.dx-filterbuilder.dx-state-disabled .dx-icon-plus {
+  color: var(--dx-filter-builder-plus-icon-content-disabled);
+}
+
+.dx-state-disabled .dx-filterbuilder .dx-icon-remove,
+.dx-filterbuilder.dx-state-disabled .dx-icon-remove {
+  color: var(--dx-filter-builder-remove-icon-content-disabled);
 }

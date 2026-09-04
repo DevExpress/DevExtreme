@@ -17,12 +17,6 @@
   0,
 );
 
-.dx-radiogroup {
-  &.dx-state-disabled {
-    opacity: 1;
-  }
-}
-
 .dx-radiogroup-horizontal {
   .dx-collection {
     column-gap: var(--dx-radio-group-collection-column-gap);

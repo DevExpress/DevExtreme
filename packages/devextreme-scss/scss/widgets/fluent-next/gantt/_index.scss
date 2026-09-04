@@ -286,3 +286,14 @@
 }
 
 @include gantt-icons-mixin($gantt-icon);
+
+.dx-state-disabled {
+  @include gantt-icons-mixin($gantt-icon-disabled);
+}
+
+.dx-gantt.dx-state-disabled,
+.dx-state-disabled .dx-gantt {
+  .dx-gantt-header {
+    color: var(--dx-gantt-content-disabled);
+  }
+}

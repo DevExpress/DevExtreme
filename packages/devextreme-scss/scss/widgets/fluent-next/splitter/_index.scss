@@ -22,3 +22,12 @@
     @include dx-icon-sizing(var(--dx-splitter-resize-handle-icon-size));
   }
 }
+
+.dx-splitter.dx-state-disabled .dx-resize-handle,
+.dx-state-disabled .dx-splitter .dx-resize-handle {
+  background-color: var(--dx-splitter-resize-handle-bg-disabled);
+
+  .dx-resize-handle-icon {
+    color: var(--dx-splitter-resize-handle-content-disabled);
+  }
+}

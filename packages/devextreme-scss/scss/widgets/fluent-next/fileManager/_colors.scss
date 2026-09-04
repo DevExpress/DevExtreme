@@ -8,6 +8,8 @@ $file-manager-dirs-tree-item-content-focused: ds.$color-content !default;
 $file-manager-breadcrumbs-item-bg-focused: ds.$color-bg-active !default;
 $file-manager-breadcrumbs-item-content-focused: ds.$color-content !default;
 $file-manager-custom-thumbnail-content: ds.$color-content-disabled !default;
+
+$file-manager-content-disabled: ds.$color-content-disabled !default;
 $file-manager-file-item-select-content: ds.$color-content-inverted !default;
 $file-manager-file-item-select-bg: rgb(from #{ds.$color-bg-primary} r g b / 0.8) !default;
 $file-manager-file-item-select-content-focused: ds.$color-content-inverted !default;
@@ -26,15 +28,18 @@ $file-manager-dirs-tree-item-bg-focused: ds.$color-bg-active !default;
 $file-manager-icon-success-content: #107c10 !default; // dx-data-uri-static: ds.$color-bg-success (mode-invariant)
 $file-manager-icon-danger-content: #c50f1f !default; // dx-data-uri-static: ds.$color-bg-danger (mode-invariant)
 $file-manager-icon: null !default;
+$file-manager-icon-disabled: null !default;
 $file-manager-icon-inverted-content: null !default;
 
 @if $mode == "light" {
   $file-manager-icon: #161616 !default; // dx-data-uri-static: ds.$color-content
+  $file-manager-icon-disabled: #ababab !default; // dx-data-uri-static: ds.$color-content-disabled
   $file-manager-icon-inverted-content: #fff !default; // dx-data-uri-static: ds.$color-content-inverted
 }
 
 @if $mode == "dark" {
   $file-manager-icon: #fff !default; // dx-data-uri-static: ds.$color-content
+  $file-manager-icon-disabled: #767676 !default; // dx-data-uri-static: ds.$color-content-disabled
   $file-manager-icon-inverted-content: #161616 !default; // dx-data-uri-static: ds.$color-content-inverted
 }
 

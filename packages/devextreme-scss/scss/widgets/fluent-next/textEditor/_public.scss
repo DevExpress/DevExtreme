@@ -3,6 +3,7 @@
 
 @mixin publish {
   --dx-text-editor-border-disabled: #{$text-editor-border-disabled};
+  --dx-text-editor-border-read-only: #{$text-editor-border-read-only};
   --dx-text-editor-border-focused: #{$text-editor-border-focused};
   --dx-text-editor-border-hovered: #{$text-editor-border-hovered};
   --dx-text-editor-border: #{$text-editor-border};
@@ -67,6 +68,7 @@
   --dx-text-editor-outlined-bg-hovered: var(--dx-text-editor-outlined-bg);
   --dx-text-editor-outlined-bg: #{$text-editor-outlined-bg};
   --dx-text-editor-placeholder: #{$text-editor-placeholder};
+  --dx-text-editor-placeholder-disabled: #{$text-editor-placeholder-disabled};
   --dx-text-editor-spin-button-padding-inline: #{$text-editor-spin-button-padding-inline};
   --dx-text-editor-underlined-bg-focused: var(--dx-text-editor-underlined-bg);
   --dx-text-editor-underlined-bg-hovered: var(--dx-text-editor-underlined-bg);

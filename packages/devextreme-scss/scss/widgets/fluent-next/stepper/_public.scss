@@ -7,6 +7,7 @@
   --dx-stepper-connector-size: var(--dx-stepper-step-indicator-size);
   --dx-stepper-connector-thickness: #{$stepper-connector-thickness};
   --dx-stepper-connector-value-bg: #{$stepper-connector-value-bg};
+  --dx-stepper-connector-value-bg-disabled: #{$stepper-connector-value-bg-disabled};
   --dx-stepper-padding: #{$stepper-padding};
   --dx-stepper-step-accent-bg: #{$stepper-step-accent-bg};
   --dx-stepper-step-accent-bg-hovered: #{$stepper-step-accent-bg-hovered};
@@ -17,12 +18,15 @@
   --dx-stepper-step-base-content: #{$stepper-step-base-content};
   --dx-stepper-step-base-label-content: #{$stepper-step-base-label-content};
   --dx-stepper-step-bg-disabled: #{$stepper-step-bg-disabled};
+  --dx-stepper-step-border-disabled: #{$stepper-step-border-disabled};
   --dx-stepper-step-bg-selected: var(--dx-stepper-step-accent-bg);
   --dx-stepper-step-bg-selected-hovered: #{$stepper-step-bg-selected-hovered};
   --dx-stepper-step-content-column-gap: #{$stepper-step-content-column-gap};
   --dx-stepper-step-content-disabled: #{$stepper-step-content-disabled};
   --dx-stepper-step-content-row-gap: #{$stepper-step-content-row-gap};
   --dx-stepper-step-content-selected: #{$stepper-step-content-selected};
+  --dx-stepper-step-bg-selected-disabled: #{$stepper-step-bg-selected-disabled};
+  --dx-stepper-step-content-selected-disabled: #{$stepper-step-content-selected-disabled};
   --dx-stepper-step-font-weight-selected: #{$stepper-step-font-weight-selected};
   --dx-stepper-step-icon-size: #{$stepper-step-icon-size};
   --dx-stepper-step-indicator-halo-size: #{$stepper-step-indicator-halo-size};

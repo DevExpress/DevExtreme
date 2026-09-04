@@ -61,7 +61,9 @@ $dropdowneditor-icon-idle-opacity: 0.35 !default;
 
 .dx-dropdowneditor-active {
   .dx-dropdowneditor-icon {
-    opacity: $dropdowneditor-icon-idle-opacity;
+    @if $dropdowneditor-icon-idle-opacity {
+      opacity: $dropdowneditor-icon-idle-opacity;
+    }
   }
 }
 

@@ -2,6 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-splitter-bar-border-disabled: #{$splitter-bar-border-disabled};
   --dx-splitter-bar-bg-active: #{$splitter-bar-bg-active};
   --dx-splitter-bar-border: #{$splitter-bar-border};
   --dx-splitter-bar-border-width: #{$splitter-bar-border-width};

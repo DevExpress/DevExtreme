@@ -8,7 +8,10 @@ $datagrid-common-form-buttons-border-radius: null !default;
 $datagrid-common-form-buttons-margin-left: null !default;
 $datagrid-common-form-buttons-margin-right: null !default;
 
-@include grid-base(datagrid);
+$datagrid-draggable-column-opacity: 0.5 !default;
+$datagrid-column-chooser-item-opacity: 0.5 !default;
+
+@include grid-base(datagrid, $datagrid-draggable-column-opacity, $datagrid-column-chooser-item-opacity);
 
 .dx-datagrid {
   position: relative;

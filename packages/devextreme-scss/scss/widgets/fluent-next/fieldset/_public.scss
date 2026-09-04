@@ -2,6 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-fieldset-field-label-content-disabled: #{$fieldset-field-label-content-disabled};
   --dx-fieldset-attention-icon-offset: #{$fieldset-attention-icon-offset};
   --dx-fieldset-field-label-content: #{$fieldset-field-label-content};
   --dx-fieldset-field-label-value-spacing: #{$fieldset-field-label-value-spacing};

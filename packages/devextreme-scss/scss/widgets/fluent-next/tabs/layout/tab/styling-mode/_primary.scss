@@ -64,6 +64,10 @@
         @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-disabled));
       }
     }
+
+    &.dx-state-disabled .dx-tab-selected {
+      @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-disabled));
+    }
   }
 
   &.dx-tab-indicator-position-right {
@@ -108,6 +112,10 @@
       &.dx-state-disabled {
         @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-disabled));
       }
+    }
+
+    &.dx-state-disabled .dx-tab-selected {
+      @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-disabled));
     }
   }
 }

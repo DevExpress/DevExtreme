@@ -50,7 +50,8 @@
     }
   }
 
-  &.dx-state-disabled {
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     .dx-icon-search {
       color: var(--dx-text-box-content-disabled);
     }

@@ -143,13 +143,6 @@
 
 .dx-state-disabled {
   &.dx-slider,
-  .dx-slider {
-    opacity: 1;
-
-    .dx-slider-handle {
-      opacity: 1;
-    }
-  }
 
   &.dx-slider-handle {
     border-color: var(--dx-slider-bg-disabled);

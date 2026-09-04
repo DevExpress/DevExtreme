@@ -68,9 +68,13 @@
 }
 
 .dx-state-disabled {
-  &.dx-accordion {
-    opacity: 1;
+  &.dx-accordion,
+  &.dx-accordion-item {
     color: var(--dx-accordion-content-disabled);
+
+    .dx-accordion-item-title-caption {
+      color: var(--dx-accordion-content-disabled);
+    }
   }
 }
 
