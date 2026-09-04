@@ -606,6 +606,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 }
             },
 
+            updateColumnDimensions: function(updates) {
+                updates.forEach((dimensions) => {
+                    if(Object.prototype.hasOwnProperty.call(dimensions, 'visibleWidth')) {
+                        this.columnOption(dimensions.columnIndex, 'visibleWidth', dimensions.visibleWidth);
+                    }
+                    this.columnOption(dimensions.columnIndex, 'width', dimensions.width);
+                });
+            },
+
             addCommandColumn: function(commandColumn) {
                 columns && columns.forEach(function(column, index) {
                     if(column.command === commandColumn.command) {
