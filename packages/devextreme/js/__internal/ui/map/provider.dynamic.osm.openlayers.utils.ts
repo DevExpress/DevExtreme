@@ -23,26 +23,37 @@ export interface CollectionLike<T> {
 
 export interface ViewLike {
   calculateExtent: () => Extent;
-  fit: (extent: Extent) => void;
+  fit: (extent: Extent, options?: Options) => void;
   getCenter: () => Coordinate | undefined;
   getProjection: () => unknown;
   getZoom: () => number | undefined;
+  on: (type: string, listener: () => void) => void;
   setCenter: (center: Coordinate) => void;
   setZoom: (zoom: number) => void;
+  un: (type: string, listener: () => void) => void;
 }
 
 export interface TileLayerLike {
   setSource: (source: unknown) => void;
 }
 
+export interface OverlayLike {
+  getPosition: () => Coordinate | undefined;
+  setPosition: (position: Coordinate) => void;
+}
+
 export interface MapLike {
   addControl: (control: ControlLike) => void;
   addLayer: (layer: unknown) => void;
+  addOverlay: (overlay: unknown) => void;
   getInteractions: () => CollectionLike<InteractionLike>;
+  getOverlayContainer: () => HTMLElement;
+  getOverlayContainerStopEvent: () => HTMLElement;
   getView: () => ViewLike;
   on: (type: string, listener: (event: unknown) => void) => void;
   removeControl: (control: ControlLike) => void;
   removeLayer: (layer: unknown) => void;
+  removeOverlay: (overlay: unknown) => void;
   setTarget: (target?: Element) => void;
   un: (type: string, listener: (event: unknown) => void) => void;
   updateSize: () => void;
@@ -50,6 +61,7 @@ export interface MapLike {
 
 export interface OpenLayersApi {
   Map: new (options: Options) => MapLike;
+  Overlay: new (options: Options) => OverlayLike;
   View: new (options: Options) => ViewLike;
   control: {
     Zoom: new () => ControlLike;
@@ -90,6 +102,7 @@ export const isOpenLayersApi = (api: unknown): api is OpenLayersApi => {
   }
 
   return typeof api.Map === 'function'
+    && typeof api.Overlay === 'function'
     && typeof api.View === 'function'
     && isRecord(api.control)
     && hasFunction(api.control, 'Zoom')

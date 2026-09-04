@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "Ngày bắt đầu phải sau {0}",
         "dxGantt-dialogEndDateValidation": "Ngày kết thúc phải sau {0}",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "Mục thư viện",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

@@ -19,6 +19,10 @@ export interface MapEngineBounds {
   southWest: MapLocation;
 }
 
+export interface MapEngineFitBoundsOptions {
+  includeMarkerPadding?: boolean;
+}
+
 export interface MapEngineViewState extends MapEngineSetViewOptions {
   bounds?: MapEngineBounds;
 }
@@ -28,22 +32,38 @@ export interface MapEngineClickEvent {
   location: MapLocation;
 }
 
+export interface MapEngineMarkerOptions {
+  html?: string;
+  htmlOffset?: { top: number; left: number };
+  iconSrc?: string;
+  location: MapLocation;
+  onClick?: () => void;
+}
+
+export interface MapEngineMarker {
+  readonly originalMarker: unknown;
+  dispose: () => void;
+}
+
 export interface MapEngineEventHandlers {
   click: (event: MapEngineClickEvent) => void;
+  markerSizeChange: () => void;
   viewChange: (view: MapEngineViewState) => void;
 }
 
 export interface MapEngineMap {
   readonly originalMap: unknown;
+  addMarker: (options: MapEngineMarkerOptions) => MapEngineMarker;
   attachHandlers: (handlers: MapEngineEventHandlers) => void;
   dispose: () => void;
-  fitBounds: (bounds: MapEngineBounds) => void;
+  fitBounds: (bounds: MapEngineBounds, options?: MapEngineFitBoundsOptions) => void;
+  getZoom: () => number | undefined;
   replaceTileLayer: (options: MapEngineTileLayerOptions) => void;
   setControls: (visible: boolean) => void;
   setDisabled: (disabled: boolean) => void;
   setFocus: (enabled: boolean, tabIndex: number) => void;
   setView: (options: MapEngineSetViewOptions) => void;
-  updateDimensions: () => void;
+  updateDimensions: () => boolean;
 }
 
 export interface MapEngine {
