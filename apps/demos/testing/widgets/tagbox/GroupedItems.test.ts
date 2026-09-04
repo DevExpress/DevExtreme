@@ -33,9 +33,7 @@ runManualTest('TagBox', 'Grouping', (test) => {
       .pressKey('tab')
       .pressKey('alt+down');
 
-    await testScreenshot(t, takeScreenshot, 'tagbox_groupeditems_third_opened.png', undefined, {
-      looksSameComparisonOptions: { tolerance: 20, antialiasingTolerance: 20 },
-    });
+    await testScreenshot(t, takeScreenshot, 'tagbox_groupeditems_third_opened.png');
 
     await t
       .expect(compareResults.isValid())
