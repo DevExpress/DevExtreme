@@ -7,6 +7,10 @@
       "$schema": {
           "type": "string"
       },
+      "comment": {
+          "type": "string",
+          "description": "What is unstable in this demo's screenshots, and how large the difference is."
+      },
       "ignore": {
           "type": "boolean"
         },
