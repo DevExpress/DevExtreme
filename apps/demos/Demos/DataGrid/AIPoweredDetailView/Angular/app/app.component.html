@@ -20,28 +20,18 @@
     dataField="Model"
     [calculateCellValue]="calculateModel"
   />
-  <dxi-data-grid-column
-    dataField="Price"
-    format="currency"
-    alignment="left"
-  />
+  <dxi-data-grid-column dataField="Price" format="currency" alignment="left" />
   <dxi-data-grid-column
     caption="Category"
     [minWidth]="180"
     cellTemplate="categoryTemplate"
   />
   <div *dxTemplate="let model of 'categoryTemplate'">
-    <category
-      [id]="model.data.CategoryID"
-      [name]="model.data.CategoryName"
-    />
+    <category [id]="model.data.CategoryID" [name]="model.data.CategoryName" />
   </div>
   <dxi-data-grid-column dataField="Modification" />
   <dxi-data-grid-column dataField="Horsepower" />
-  <dxi-data-grid-column
-    dataField="BodyStyleName"
-    caption="Body Style"
-  />
+  <dxi-data-grid-column dataField="BodyStyleName" caption="Body Style" />
 
   <dxo-data-grid-master-detail
     [enabled]="true"
