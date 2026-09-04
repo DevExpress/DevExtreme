@@ -5,7 +5,7 @@
         placeholder="Ask AI Assistant..."
         styling-mode="filled"
         value-change-event="input"
-        :value="promptValue"
+        v-model:value="promptValue"
         @enter-key="handleSubmit"
         :element-attr="promptElementAttr"
         :disabled="isLoading"
@@ -141,7 +141,7 @@ async function handleSubmit({ event }: SubmitEvent) {
       { role: 'user', content: `User prompt: ${promptValue.value}\nRow data: ${JSON.stringify(rowData)}` },
     ];
     const aiResponse = await getAIResponse(messages);
-    responseValue.value = aiResponse!;
+    responseValue.value = aiResponse;
   } catch {
     responseValue.value = '';
     isError.value = true;
