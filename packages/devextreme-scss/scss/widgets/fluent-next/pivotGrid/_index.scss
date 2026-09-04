@@ -301,3 +301,12 @@ these elements now paint themselves, so a disabled rule has to reach them. */
 .dx-state-disabled .dx-pivotgrid-fields-container .dx-drag-source .dx-area-field-content {
   color: var(--dx-pivot-grid-content-disabled);
 }
+
+/* The field chooser's area captions paint themselves, so they stayed at full contrast inside a
+disabled chooser while the fields under them greyed. */
+.dx-pivotgridfieldchooser.dx-state-disabled,
+.dx-state-disabled .dx-pivotgridfieldchooser {
+  .dx-area .dx-area-caption {
+    color: var(--dx-pivot-grid-content-disabled);
+  }
+}

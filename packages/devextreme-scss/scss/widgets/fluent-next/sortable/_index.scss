@@ -5,10 +5,7 @@
   $sortable-placeholder-inside-border-width: var(--dx-sortable-placeholder-inside-border-width),
   $sortable-clone-shadow-color-first: var(--dx-sortable-clone-shadow-ambient),
   $sortable-clone-shadow-color-second: var(--dx-sortable-clone-shadow-key),
-  /* Neither is a dim in this theme. What moves is marked - the clone keeps the two shadows above -
-  and what is left behind is not: Blazor uses opacity for a drag nowhere, and the grid, the treeList
-  and the pivot grid's field source were switched off here for the same reason. */
-  $sortable-clone-opacity: false,
-  $sortable-source-opacity: false,
+  $sortable-clone-opacity: var(--dx-sortable-clone-opacity),
+  $sortable-source-opacity: var(--dx-sortable-source-opacity),
   $base-accent: var(--dx-sortable-placeholder-border),
 );

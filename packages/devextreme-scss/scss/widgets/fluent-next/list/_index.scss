@@ -493,6 +493,14 @@
       box-shadow: none;
       background-color: transparent;
 
+      /* The list draws this button without a surface, so a disabled item has none to grey out -
+      the cross alone takes the disabled colour. Qualified past the contained mode's disabled fill,
+      which the button applies to any button sitting inside something disabled. */
+      .dx-list-static-delete-button-container &.dx-state-disabled,
+      .dx-state-disabled .dx-list-static-delete-button-container & {
+        background-color: transparent;
+      }
+
       .dx-button-content {
         z-index: 1;
       }
@@ -517,8 +525,14 @@
     .dx-list-item {
       background-color: transparent;
       color: var(--dx-list-content-disabled);
-    }
 
+      /* An item icon is painted rather than inherited, so the colour above never reaches it and a
+      disabled item kept its icon at full strength - the blanket dim this replaced took the whole
+      item down at once. Same role the chevron of a disabled item already uses. */
+      .dx-icon {
+        color: var(--dx-list-content-disabled);
+      }
+    }
   }
 }
 

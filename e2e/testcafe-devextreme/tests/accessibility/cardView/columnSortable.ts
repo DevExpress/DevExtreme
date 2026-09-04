@@ -17,11 +17,12 @@ test('headerPanel dragging column when it has sorting and headerFilter', async (
   await triggerDragStart(columnElement);
 
   const a11yCheckConfig = {
+    /* Real failure, not a false positive: axe composites the drag source's dim into the foreground
+    before it measures, and at the 0.5 the other themes use, their source lands at 1.61 generic,
+    1.65 fluent, 2.61 material - so the rule is off for them. fluent-next dims to 0.65 instead and
+    paints the source with the item's own resting colours rather than the disabled ones, which puts
+    it at 5.36, so it runs the check. */
     rules: {
-      /* Legacy paints the drag source with the disabled colour roles and dims it to 0.5 on top -
-      1.61 generic, 1.65 fluent, 2.61 material - so the rule is off for them. fluent-next paints
-      the source with the item's own resting colours and does not dim it, so it runs the check;
-      leaving the rule off there would switch off the only rule that theme runs at all. */
       ...(getThemeName() === 'fluent-next' ? {} : { 'color-contrast': { enabled: false } }),
     },
   };

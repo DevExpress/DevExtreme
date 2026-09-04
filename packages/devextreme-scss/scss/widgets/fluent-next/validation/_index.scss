@@ -31,3 +31,7 @@ it had already gone grey - red letters on a grey ground reads worse than either 
 .dx-state-disabled.dx-invalid-message .dx-overlay-content * {
   color: var(--dx-validation-message-content-disabled);
 }
+
+.dx-state-disabled .dx-validationsummary-item {
+  color: var(--dx-validation-summary-content-disabled);
+}

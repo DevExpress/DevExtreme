@@ -1,6 +1,13 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 // Not colours: two opacities that used to sit in _colors.scss (NAMING.md, O7)
+$sortable-clone-opacity: ds.$opacity-90 !default;
+
+/* One step up from the 0.5 the other themes dim a drag source by, because axe composites opacity
+into the foreground before it measures and 0.5 puts this theme's text under the 4.5 it needs: 3.32
+on a cardView chip, 3.43 on a grid column header. 0.65 clears it on every sortable in the theme with
+room to spare - 5.36 worst, against 4.54 at 0.6 - and still reads as a clearly faded source. */
+$sortable-source-opacity: ds.$opacity-65 !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
 $sortable-placeholder-border-width: ds.$border-width-10 !default;

@@ -133,3 +133,13 @@
     font-size: var(--dx-date-view-item-phone-font-size-selected);
   }
 }
+
+/* Every roller item paints itself, the selected one with the accent, so a disabled date view kept
+its whole month/day/year list at full contrast - the largest single gap the sweep found. */
+.dx-dateview.dx-state-disabled,
+.dx-state-disabled .dx-dateview {
+  .dx-dateview-item,
+  .dx-dateview-item-selected {
+    color: var(--dx-date-view-content-disabled);
+  }
+}

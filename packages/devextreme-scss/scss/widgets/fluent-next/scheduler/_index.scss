@@ -1186,3 +1186,23 @@ scheduler while the grid around them greyed. */
 .dx-state-disabled .dx-scheduler .dx-scheduler-time-panel-cell > div {
   color: var(--dx-scheduler-time-panel-content-disabled);
 }
+
+/* The month view paints its own cells - the day number, the first-of-month and current-date
+emphasis, the adjacent-month grey and the header panel's date - so the work space greyed around a
+table that stayed at full contrast. Appended here rather than merged into the disabled block above
+because these match the painting rules class for class and only source order settles the tie. */
+.dx-scheduler.dx-state-disabled,
+.dx-state-disabled .dx-scheduler {
+  .dx-scheduler-date-table-cell,
+  .dx-scheduler-date-table-cell-text,
+  .dx-scheduler-date-table-first-of-month,
+  .dx-scheduler-date-table-current-date,
+  .dx-scheduler-date-table-other-month,
+  /* The month view qualifies this one with its work-space class and :last-child, which outranks a
+  plain widget-level rule - the weekday header stayed at full contrast on its own. */
+  .dx-scheduler-header-panel-cell-date,
+  .dx-scheduler-header-panel-cell-date:last-child,
+  .dx-scheduler-work-space-month .dx-scheduler-header-panel-cell-date:last-child {
+    color: var(--dx-scheduler-content-disabled);
+  }
+}

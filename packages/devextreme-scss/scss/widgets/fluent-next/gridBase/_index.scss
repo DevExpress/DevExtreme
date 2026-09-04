@@ -289,6 +289,12 @@
     .dx-#{$widget-name}-text-content {
       color: var(--dx-grid-content-disabled);
     }
+
+    /* The command column's links paint themselves with the link colour, so they stayed at full
+    accent in a disabled grid and went on reading as the one thing still clickable in it. */
+    .dx-link {
+      color: var(--dx-grid-content-disabled);
+    }
   }
 
   .dx-#{$widget-name} {

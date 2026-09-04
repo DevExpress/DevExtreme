@@ -350,3 +350,23 @@ them at full contrast next to greyed surroundings. */
     }
   }
 }
+
+/* Font icons, unlike the data-uri set above: the folder glyph in the tree, the overflow menu on a
+row and the tree's expander are painted rather than inherited, so they stayed at full contrast in a
+disabled file manager. Scoped to the widget - the bare `.dx-state-disabled` selector this file also
+uses would reach every icon in the theme. */
+.dx-filemanager.dx-state-disabled,
+.dx-state-disabled .dx-filemanager {
+  .dx-icon,
+  .dx-treeview-toggle-item-visibility {
+    color: var(--dx-file-manager-content-disabled);
+  }
+
+  /* The focused row keeps its class while the widget is disabled and paints at five classes, which
+  outranks the rule above - the folder glyph and the expander on that one row stayed black. */
+  .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item,
+  .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item .dx-icon,
+  .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item .dx-treeview-toggle-item-visibility {
+    color: var(--dx-file-manager-content-disabled);
+  }
+}

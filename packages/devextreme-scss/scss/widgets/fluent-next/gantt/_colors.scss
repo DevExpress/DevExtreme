@@ -10,6 +10,7 @@ $gantt-collapsable-row-bg: ds.$color-bg-low !default;
  * marker. See DIVERGENCES.md.
  */
 $gantt-icon: null !default;
+$gantt-content-disabled: ds.$color-content-disabled !default;
 $gantt-icon-disabled: null !default;
 
 @if $mode == "light" {

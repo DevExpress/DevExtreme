@@ -156,12 +156,15 @@ field - and a disabled builder kept them at full strength. */
   background-color: var(--dx-filter-builder-group-operation-content-disabled);
 }
 
+/* The value chip is nested inside .dx-filterbuilder-text rather than carrying the class itself -
+that is how the rule which paints it at rest is written - so listing it as a compound here matched
+nothing and it kept its resting fill while every chip beside it moved to the disabled surface. */
 .dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-field,
 .dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-operation,
-.dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-value-text,
+.dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text .dx-filterbuilder-item-value-text,
 .dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-field,
 .dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-operation,
-.dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-value-text {
+.dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text .dx-filterbuilder-item-value-text {
   background-color: var(--dx-filter-builder-item-field-content-disabled);
 }
 

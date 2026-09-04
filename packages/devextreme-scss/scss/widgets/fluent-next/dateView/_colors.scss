@@ -4,5 +4,6 @@
 $date-view-roller-top-shadow: 0deg, rgb(from #{ds.$color-bg} r g b / 0) 0%, rgb(from #{ds.$color-bg} r g b / 0.8) 60% !default;
 $date-view-roller-bottom-shadow: 180deg, rgb(from #{ds.$color-bg} r g b / 0) 0%, rgb(from #{ds.$color-bg} r g b / 0.8) 60% !default;
 $date-view-content: ds.$color-content !default;
+$date-view-content-disabled: ds.$color-content-disabled !default;
 
 $date-view-item-content-selected: ds.$color-bg-primary !default;

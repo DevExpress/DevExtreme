@@ -425,10 +425,6 @@
     .dx-icon-clear {
       color: var(--dx-text-editor-content-disabled);
     }
-
-    .dx-placeholder::before {
-      color: var(--dx-text-editor-placeholder-disabled);
-    }
   }
 
   &:not(.dx-texteditor-empty) {
@@ -442,6 +438,15 @@
   color: var(--dx-text-editor-placeholder);
   font-size: var(--dx-text-editor-font-size);
   line-height: normal;
+}
+
+/* The placeholder paints itself, so the disabled content colour never reaches it by inheritance.
+The rule that did paint it sat under .dx-show-clear-button, which left every editor without a clear
+button - a plain text box, a text area, a date box - with a full-strength placeholder while it was
+disabled. */
+.dx-state-disabled .dx-placeholder,
+.dx-state-disabled .dx-placeholder::before {
+  color: var(--dx-text-editor-placeholder-disabled);
 }
 
 .dx-texteditor-input {
