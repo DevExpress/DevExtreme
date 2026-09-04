@@ -57,7 +57,7 @@ $grid-filter-row-bg: ds.$color-bg-canvas !default;
 $grid-header-filter-icon-active: ds.$color-content-primary !default;
 $grid-text-stub-bg: null !default;
 $grid-filter-panel-content: ds.$color-content-primary !default;
-$grid-draggable-column-content: ds.$color-content-subtle !default;
+$grid-draggable-column-content: ds.$color-content !default;
 
 @if $mode == "light" {
   $grid-text-stub-bg: data-uri("images/widgets/fluent-next/color-schemes/light/grid/text-stub.png") !default;

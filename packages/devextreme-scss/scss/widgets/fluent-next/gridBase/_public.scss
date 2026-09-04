@@ -4,6 +4,7 @@
 @use "layout/aiChat/sizes" as *;
 
 @mixin publish {
+  --dx-grid-draggable-column-opacity: #{$grid-draggable-column-opacity};
   --dx-grid-cell-content-padding: #{$grid-cell-content-padding};
   --dx-grid-summary-padding-block: #{$grid-summary-padding-block};
   --dx-grid-column-indicator-width: #{$grid-column-indicator-width};

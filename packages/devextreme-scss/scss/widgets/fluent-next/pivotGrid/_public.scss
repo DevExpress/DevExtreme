@@ -2,6 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-pivot-grid-drag-source-opacity: #{$pivot-grid-drag-source-opacity};
   --dx-pivot-grid-content-disabled: #{$pivot-grid-content-disabled};
   --dx-pivot-grid-drag-header-content: #{$pivot-grid-drag-header-content};
   --dx-pivot-grid-accent-content: #{$pivot-grid-accent-content};
