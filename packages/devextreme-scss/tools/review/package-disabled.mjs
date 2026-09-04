@@ -1,16 +1,5 @@
-/*
- * What the token package says about disabled, against what the theme actually emits.
- *
- * The package ships a component tier the theme deliberately does not consume (see DIVERGENCES),
- * but it is still the vendor's own answer for how a disabled place should be painted. This puts
- * the two side by side so a divergence is a decision rather than an oversight.
- *
- * Absence is detected automatically: a component the package covers and the theme paints nowhere
- * is reported as missing. Role mismatches are printed, not judged - the package names a role for
- * a place, and only a reader can say whether our place is the same place.
- *
- *   node tools/review/package-disabled.mjs [--json]
- */
+/* node tools/review/package-disabled.mjs [--json] - the token package's disabled roles against
+   what this theme emits. */
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
