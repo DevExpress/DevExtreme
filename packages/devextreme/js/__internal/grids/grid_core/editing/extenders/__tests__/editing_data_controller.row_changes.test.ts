@@ -16,6 +16,11 @@ const dataRow = (partial: Partial<ProcessedItem> = {}): ProcessedItem => ({
   ...partial,
 });
 
+const editFormRow = (partial: Partial<ProcessedItem> = {}): ProcessedItem => dataRow({
+  rowType: 'detail',
+  ...partial,
+});
+
 describe('Editing data controller row changes', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
@@ -38,4 +43,15 @@ describe('Editing data controller row changes', () => {
       expect(change.changeTypes).toEqual(['update']);
     },
   );
+
+  it('should repaint the whole edit form row instead of diffing its columns', async () => {
+    const change = await refreshRow(
+      editFormRow({ isEditing: true, values: ['Alex', 15] }),
+      editFormRow({ isEditing: true, values: ['Bob', 15] }),
+      { gridOptions: { editing: { mode: 'form' } }, isLiveUpdate: false },
+    );
+
+    expect(change.rowIndices).toEqual([0]);
+    expect(change.columnIndices).toEqual([undefined]);
+  });
 });
