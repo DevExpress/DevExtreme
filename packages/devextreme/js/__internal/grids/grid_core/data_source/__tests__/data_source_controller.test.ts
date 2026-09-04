@@ -9,7 +9,7 @@ import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
-  RawItemData, RemoteOperationsOptions,
+  DataSourceAdapterProvider, RawItemData, RemoteOperationsOptions,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 
@@ -22,27 +22,76 @@ interface AdapterStub {
   remoteOperations: jest.Mock<() => RemoteOperationsOptions>;
   getDataIndexGetter: jest.Mock<() => (data: RawItemData) => number>;
   dispose: jest.Mock<() => void>;
+  init: jest.Mock<(dataSource: DataSource) => void>;
 }
 
-const createAdapter = (marker: string): AdapterStub => ({
+interface ProviderStub {
+  create: jest.Mock<(component: InternalGrid) => DataSourceAdapter>;
+  extend: jest.Mock<() => void>;
+}
+
+const createAdapterStub = (marker: string): AdapterStub => ({
   _dataSource: { marker } as unknown as DataSource,
   store: jest.fn(() => ({ marker } as unknown as Store)),
   key: jest.fn(() => marker as StoreKey),
   remoteOperations: jest.fn(() => ({ filtering: true } as RemoteOperationsOptions)),
   getDataIndexGetter: jest.fn(() => (): number => 0),
   dispose: jest.fn(),
+  init: jest.fn(),
 });
 
 const asAdapter = (stub: AdapterStub): DataSourceAdapter => stub as unknown as DataSourceAdapter;
 
-const createController = (): DataSourceController => {
+class TestDataSourceController extends DataSourceController {
+  public providerStub!: DataSourceAdapterProvider;
+
+  protected getAdapterProvider(): DataSourceAdapterProvider {
+    return this.providerStub;
+  }
+}
+
+const createControllerWith = (): {
+  controller: DataSourceController;
+  component: InternalGrid;
+} => {
   const component = {
     _optionCache: {},
     _controllers: {},
     option: jest.fn(),
-  };
+  } as unknown as InternalGrid;
 
-  return new DataSourceController(component as unknown as InternalGrid);
+  return { controller: new DataSourceController(component), component };
+};
+
+const createController = (): DataSourceController => createControllerWith().controller;
+
+const createProviderStub = (adapter: AdapterStub): ProviderStub => ({
+  create: jest.fn(() => asAdapter(adapter)),
+  extend: jest.fn(),
+});
+
+const asProvider = (
+  stub: ProviderStub,
+): DataSourceAdapterProvider => stub as unknown as DataSourceAdapterProvider;
+
+const SOURCE = { marker: 'source' } as unknown as DataSource;
+
+const withProvider = (adapter: AdapterStub): {
+  controller: TestDataSourceController;
+  component: InternalGrid;
+  provider: ProviderStub;
+} => {
+  const component = {
+    _optionCache: {},
+    _controllers: {},
+    option: jest.fn(),
+  } as unknown as InternalGrid;
+  const controller = new TestDataSourceController(component);
+  const provider = createProviderStub(adapter);
+
+  controller.providerStub = asProvider(provider);
+
+  return { controller, component, provider };
 };
 
 const withAdapter = (marker = 'first'): {
@@ -50,7 +99,7 @@ const withAdapter = (marker = 'first'): {
   adapter: AdapterStub;
 } => {
   const controller = createController();
-  const adapter = createAdapter(marker);
+  const adapter = createAdapterStub(marker);
 
   controller.setAdapter(asAdapter(adapter));
 
@@ -137,7 +186,7 @@ describe('DataSourceController', () => {
   describe('replacing the adapter', () => {
     it('follows the new adapter after a replacement', () => {
       const { controller, adapter: first } = withAdapter();
-      const second = createAdapter('second');
+      const second = createAdapterStub('second');
 
       controller.setAdapter(asAdapter(second));
 
@@ -186,6 +235,60 @@ describe('DataSourceController', () => {
       controller.setAdapter(null);
 
       expect(getController).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('createAdapter', () => {
+    it('builds the adapter through the provider, passing the component', () => {
+      const { controller, component, provider } = withProvider(createAdapterStub('built'));
+
+      controller.createAdapter(SOURCE);
+
+      expect(provider.create).toHaveBeenCalledTimes(1);
+      expect(provider.create).toHaveBeenCalledWith(component);
+    });
+
+    it('initialises the adapter with the given data source', () => {
+      const adapter = createAdapterStub('built');
+
+      withProvider(adapter).controller.createAdapter(SOURCE);
+
+      expect(adapter.init).toHaveBeenCalledTimes(1);
+      expect(adapter.init).toHaveBeenCalledWith(SOURCE);
+    });
+
+    it('returns the adapter the provider produced', () => {
+      const adapter = createAdapterStub('built');
+
+      const result = withProvider(adapter).controller.createAdapter(SOURCE);
+
+      expect(result).toBe(asAdapter(adapter));
+    });
+
+    it('stores the adapter it built', () => {
+      const adapter = createAdapterStub('built');
+      const { controller } = withProvider(adapter);
+
+      controller.createAdapter(SOURCE);
+
+      expect(controller.hasAdapter()).toBe(true);
+      expect(controller.getAdapter()).toBe(asAdapter(adapter));
+    });
+
+    it('replaces a previously held adapter without disposing it', () => {
+      const second = createAdapterStub('second');
+      const { controller } = withProvider(second);
+      const first = createAdapterStub('first');
+
+      controller.setAdapter(asAdapter(first));
+      controller.createAdapter(SOURCE);
+
+      expect(controller.getAdapter()).toBe(asAdapter(second));
+      expect(first.dispose).not.toHaveBeenCalled();
+    });
+
+    it('throws on the base class, where no component has supplied a provider', () => {
+      expect(() => createController().createAdapter(SOURCE)).toThrow('Method not implemented.');
     });
   });
 });

@@ -227,3 +227,29 @@ describe('dataSource controller reads delegate to the adapter', () => {
     expect(typeof instance.getController('dataSource').getDataIndexGetter()).toBe('function');
   });
 });
+
+describe('dataSource controller resolves its own component adapter provider', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('builds a DataGrid adapter in DataGrid', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+    const adapter = instance.getController('dataSource').getAdapter();
+
+    expect(adapter).toBeTruthy();
+    expect('forEachNode' in (adapter as object)).toBe(false);
+  });
+
+  it('builds a TreeList adapter in TreeList', () => {
+    const { $container, instance } = createTreeList({ dataSource: DATA });
+
+    try {
+      const adapter = instance.getController('dataSource').getAdapter();
+
+      expect(adapter).toBeTruthy();
+      expect('forEachNode' in (adapter as object)).toBe(true);
+    } finally {
+      disposeTreeList($container);
+    }
+  });
+});

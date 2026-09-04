@@ -3,7 +3,7 @@ import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
-  RawItemData, RemoteOperationsOptions,
+  DataSourceAdapterProvider, RawItemData, RemoteOperationsOptions,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 
@@ -14,6 +14,22 @@ export class DataSourceController extends modules.Controller {
 
   public setAdapter(adapter: DataSourceAdapter | null): void {
     this.adapter = adapter;
+  }
+
+  /**
+   * @extended: DataGrid's and TreeList's data_source_controller
+   */
+  protected getAdapterProvider(): DataSourceAdapterProvider {
+    throw new Error('Method not implemented.');
+  }
+
+  public createAdapter(dataSource: DataSource): DataSourceAdapter {
+    const adapter = this.getAdapterProvider().create(this.component);
+
+    adapter.init(dataSource);
+    this.setAdapter(adapter);
+
+    return adapter;
   }
 
   public hasAdapter(): boolean {
