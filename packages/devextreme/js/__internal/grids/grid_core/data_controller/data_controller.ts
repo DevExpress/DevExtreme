@@ -1393,30 +1393,18 @@ export class DataController extends modules.Controller {
     dataSourceAdapter.pushed.remove(this.dataPushedHandlerProxy);
   }
 
-  private setDataSource(dataSource: DataSource | null): void {
-    const oldDataSource = this._dataSource;
-
-    if (!dataSource && oldDataSource) {
-      oldDataSource.cancelAll();
-      this.unsubscribeFromDataSource(oldDataSource);
-      oldDataSource.dispose(this.isSharedDataSource);
-    }
-
-    const dataSourceAdapter = dataSource
-      ? this._createDataSourceAdapter(dataSource)
-      : null;
+  private setDataSource(dataSource: DataSource): void {
+    const dataSourceAdapter = this._createDataSourceAdapter(dataSource);
 
     this._dataSource = dataSourceAdapter;
     this.dataSourceController.setAdapter(dataSourceAdapter);
 
-    if (dataSourceAdapter) {
-      this._isLoading = !dataSourceAdapter.isLoaded();
-      this._needApplyFilter = true;
-      this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
+    this._isLoading = !dataSourceAdapter.isLoaded();
+    this._needApplyFilter = true;
+    this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
 
-      this.changed.add(this.fireDataSourceChanged);
-      this.subscribeToDataSource(dataSourceAdapter);
-    }
+    this.changed.add(this.fireDataSourceChanged);
+    this.subscribeToDataSource(dataSourceAdapter);
   }
 
   /**
@@ -1655,7 +1643,16 @@ export class DataController extends modules.Controller {
   }
 
   protected _disposeDataSource(): void {
-    this.setDataSource(null);
+    const oldDataSource = this._dataSource;
+
+    if (oldDataSource) {
+      oldDataSource.cancelAll();
+      this.unsubscribeFromDataSource(oldDataSource);
+      oldDataSource.dispose(this.isSharedDataSource);
+    }
+
+    this._dataSource = null;
+    this.dataSourceController.setAdapter(null);
   }
 
   public dispose(): void {
