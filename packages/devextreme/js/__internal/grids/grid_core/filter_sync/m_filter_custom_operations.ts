@@ -3,6 +3,7 @@ import { DataSource } from '@js/common/data/data_source/data_source';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
+import type { CustomOperation } from '@js/ui/filter_builder';
 import errors from '@js/ui/widget/ui.errors';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,
@@ -134,7 +135,7 @@ function baseOperation(grid) {
   };
 }
 
-export function anyOf(grid) {
+export function anyOf(grid): CustomOperation {
   return extend(baseOperation(grid), {
     name: 'anyof',
     icon: 'selectall',
@@ -142,7 +143,7 @@ export function anyOf(grid) {
   });
 }
 
-export function noneOf(grid) {
+export function noneOf(grid): CustomOperation {
   const baseOp = baseOperation(grid);
   return extend({}, baseOp, {
     calculateFilterExpression(filterValue, field, fields) {

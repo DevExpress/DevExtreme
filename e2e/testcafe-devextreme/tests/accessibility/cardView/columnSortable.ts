@@ -16,7 +16,9 @@ test('headerPanel dragging column when it has sorting and headerFilter', async (
   await triggerDragStart(columnElement);
 
   const a11yCheckConfig = {
-    // False positive: contrast rules do not apply to disabled elements
+    // Real failure, not a false positive: the drag source keeps dxSortable's 0.5 dim and the
+    // disabled colours - 1.61 generic, 1.65 fluent, 2.61 material. Undimming it is a design
+    // decision, so only this rule is off and the rest still run.
     rules: { 'color-contrast': { enabled: false } },
   };
   await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);

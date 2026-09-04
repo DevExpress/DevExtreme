@@ -1,4 +1,3 @@
-import type { Store } from '@js/common/data';
 import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -12,21 +11,22 @@ import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
-import type { ChangingEvent, DataSource } from '@ts/data/data_source/types';
+import type Store from '@ts/data/abstract_store';
+import type { DataSource } from '@ts/data/data_source/data_source';
+import type { ChangingEvent } from '@ts/data/data_source/types';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
   ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
   Controllers, Module, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
+import type { CustomLoadResult } from '../data_source_adapter/custom_loader';
 import type {
   BinaryDataFilterExpression,
   CallbackFlags,
@@ -126,19 +126,10 @@ export class DataController extends modules.Controller {
 
   public rowIndicesChanged!: Callback<[RowIndexCorrection]>;
 
-  protected _lastRenderingPageIndex?: number;
-
-  protected _isPagingByRendering?: boolean;
-
   // TODO public controller
   public _columnsController!: Controllers['columns'];
 
-  // TODO public controller
-  public _rowsScrollController?: VirtualScrollController | null;
-
   private _filterExcludedColumn: Column | null = null;
-
-  protected _focusController!: FocusController;
 
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
@@ -150,7 +141,6 @@ export class DataController extends modules.Controller {
     this._items = [];
     this._cachedProcessedItems = null;
     this._columnsController = this.getController('columns');
-    this._focusController = this.getController('focus');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -189,7 +179,7 @@ export class DataController extends modules.Controller {
    */
   protected _getPagingOptionValue(optionName: PagingOptionName): number {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this._dataSource![optionName]() as number;
+    return this._dataSource![optionName]();
   }
 
   protected callbackNames(): string[] {
@@ -1150,7 +1140,8 @@ export class DataController extends modules.Controller {
     // change.items at this stage is defined only if virtualScrolling
     // + legacyScrollingMode enabled
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const dataItems = this._beforeProcessItems(change.items ?? this._dataSource!.items());
+    const items = (change.items ?? this._dataSource!.items()) as RawItemData[];
+    const dataItems = this._beforeProcessItems(items);
     const processedItems = this._processItems(dataItems, change);
 
     this._cachedProcessedItems = processedItems;
@@ -1211,7 +1202,7 @@ export class DataController extends modules.Controller {
       return;
     }
 
-    const operationTypes: OperationTypes | undefined = this.dataSource().operationTypes();
+    const operationTypes = this.dataSource()?.operationTypes() ?? undefined;
 
     change.isDataChanged = true;
     change.repaintChangesOnly = resolveRepaintChangesOnly(
@@ -1442,16 +1433,18 @@ export class DataController extends modules.Controller {
     return this._dataSource ? this._dataSource.pageCount() : 1;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public dataSource(): any {
-    return this._dataSource;
+  public dataSource(): DataSourceAdapter | undefined {
+    return this._dataSource ?? undefined;
   }
 
   public store(): Store | undefined {
-    return this._dataSource?.store() as Store | undefined;
+    return this._dataSource?.store();
   }
 
-  public loadAll(data?: RawItemData[], skipFilter = false): DeferredObj<ProcessedItem[]> {
+  public loadAllItems(
+    data?: RawItemData[],
+    skipFilter = false,
+  ): DeferredObj<ProcessedItem[]> {
     const d = Deferred<ProcessedItem[]>();
     const dataSource = this._dataSource;
 
@@ -1460,30 +1453,26 @@ export class DataController extends modules.Controller {
       return d;
     }
 
-    const resolveWithProcessedItems = (
-      loadedData: RawItemData[],
-      extra: LoadOperation['extra'],
-    ): void => {
+    const resolveWithProcessedItems = (loadResult: CustomLoadResult): void => {
       const items = this._processItems(
-        this._beforeProcessItems(loadedData),
+        this._beforeProcessItems(loadResult.data),
         { changeType: 'loadingAll' },
       );
+
       // @ts-expect-error DataGrid-only summary leaks into grid_core
-      d.resolve(items, extra?.summary);
+      d.resolve(items, loadResult.extra?.summary);
     };
 
     if (data) {
-      dataSource.customProcessLoadedData(data, {
+      dataSource.customLoader.processLoadedData(data, {
         filter: skipFilter ? null : this.getCombinedFilter(),
         group: dataSource.group(),
         sort: dataSource.sort(),
       })
-        // @ts-expect-error badly typed CustomLoadResult
         .done(resolveWithProcessedItems)
         .fail(d.reject as (...args: unknown[]) => void);
     } else if (!dataSource.isLoading()) {
-      dataSource.customLoadAll()
-        // @ts-expect-error badly typed CustomLoadResult
+      dataSource.customLoader.loadAll()
         .done(resolveWithProcessedItems)
         .fail(d.reject as (...args: unknown[]) => void);
     } else {
@@ -1494,7 +1483,7 @@ export class DataController extends modules.Controller {
   }
 
   public async getAllDataRowKeys(): Promise<RowKey[]> {
-    const items = await Promise.resolve(this.loadAll(undefined));
+    const items = await Promise.resolve(this.loadAllItems());
 
     return items
       .filter((item) => item.rowType === 'data')
@@ -1557,7 +1546,7 @@ export class DataController extends modules.Controller {
     }
 
     if (value === undefined) {
-      return dataSource[optionName]() as number;
+      return dataSource[optionName]();
     }
 
     const oldValue = this._getPagingOptionValue(optionName);
@@ -1577,8 +1566,7 @@ export class DataController extends modules.Controller {
       this._skipProcessingPagingChange = false;
     }
 
-    // @ts-expect-error badly typed DataSourceAdapter
-    const pageIndex: number = dataSource.pageIndex();
+    const pageIndex = dataSource.pageIndex();
     this._isPaging = optionName === 'pageIndex';
 
     const loadResult: DeferredObj<unknown> = dataSource[optionName === 'pageIndex' ? 'load' : 'reload']();
@@ -1605,7 +1593,7 @@ export class DataController extends modules.Controller {
   }
 
   public isCustomLoading(): boolean {
-    return this._isCustomLoading || !!this._dataSource?.isCustomLoading();
+    return this._isCustomLoading || !!this._dataSource?.customLoader.isLoading();
   }
 
   public beginCustomLoading(messageText?: string): void {
@@ -1704,7 +1692,7 @@ export class DataController extends modules.Controller {
   }
 
   public getCachedStoreData(): RawItemData[] | undefined {
-    return this._dataSource?.getCachedStoreData() as RawItemData[] | undefined;
+    return this._dataSource?.getCachedStoreData();
   }
 
   /**
@@ -1728,9 +1716,8 @@ export class DataController extends modules.Controller {
     return this._dataSource?.reload(reload, changesOnly) as DeferredObj<unknown>;
   }
 
-  public push(...args: unknown[]): unknown {
-    // @ts-expect-error badly typed DataSourceAdapter
-    return this._dataSource?.push(...args);
+  public push(changes: StoreChange[], fromStore = false): void {
+    this._dataSource?.push(changes, fromStore);
   }
 
   private itemsCount(): number {
@@ -1749,7 +1736,7 @@ export class DataController extends modules.Controller {
    * @extended: state_storing
    */
   public isLoaded(): boolean {
-    return (this._dataSource ? this._dataSource.isLoaded() : true) as boolean;
+    return (this._dataSource ? this._dataSource.isLoaded() : true);
   }
 
   public totalCount(): number {

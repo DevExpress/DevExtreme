@@ -10,12 +10,14 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
-import type { ChangingEvent, DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
+import type Store from '@ts/data/abstract_store';
+import type { StoreKey } from '@ts/data/abstract_store';
+import type { DataSource } from '@ts/data/data_source/data_source';
+import type { ChangingEvent, StoreLoadOptions } from '@ts/data/data_source/types';
 import type { BeforePushEvent } from '@ts/data/types';
 
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
-import type { CustomLoadOptions, CustomLoadResult } from './custom_loader';
 import { CustomLoader } from './custom_loader';
 import {
   calculateOperationTypes,
@@ -96,7 +98,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private changingHandlerProxy!: (e: ChangingEvent) => void;
 
-  private customLoader!: CustomLoader;
+  public customLoader!: CustomLoader;
 
   public init(dataSource?: DataSource): void {
     if (!dataSource) {
@@ -203,13 +205,11 @@ export default class DataSourceAdapter extends modules.Controller {
     return (this._dataSource.requireTotalCount as (...a: unknown[]) => unknown)(value);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public store(): any {
+  public store(): Store {
     return this._dataSource.store();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public key(): any {
+  public key(): StoreKey | undefined {
     return this._dataSource.key();
   }
 
@@ -244,7 +244,7 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: virtual_scrolling
    */
-  public refresh(options, operationTypes) {
+  public refresh(options: LoadOperation, operationTypes: OperationTypes): void {
     const dataSource = this._dataSource;
 
     if (operationTypes.reload) {
@@ -254,7 +254,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  public resetCurrentTotalCount() {
+  public resetCurrentTotalCount(): void {
     this._currentTotalCount = 0;
     this._totalCountCorrection = 0;
   }
@@ -314,7 +314,7 @@ export default class DataSourceAdapter extends modules.Controller {
     this.pushed.fire(changes);
   }
 
-  public getDataIndexGetter() {
+  public getDataIndexGetter(): (data: RawItemData) => number {
     if (!this._dataIndexGetter) {
       const store = this.store();
 
@@ -574,7 +574,7 @@ export default class DataSourceAdapter extends modules.Controller {
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  public customizeLoadResultHandler(options) {
+  public customizeLoadResultHandler(options: LoadOperation): void {
     const { loadOptions } = options;
     const localPaging = options.remoteOperations && !options.remoteOperations.paging;
     const { cachedData } = options;
@@ -585,7 +585,7 @@ export default class DataSourceAdapter extends modules.Controller {
     const needStoreCache = needPagingCache && !options.isCustomLoading;
 
     if (!loadOptions) {
-      this._dataSource.cancel(options.operationId);
+      this._dataSource.cancel(options.operationId!);
       return;
     }
 
@@ -604,11 +604,11 @@ export default class DataSourceAdapter extends modules.Controller {
     const groupCount = gridCoreUtils.normalizeSortingInfo(options.group || storeLoadOptions.group || loadOptions.group).length;
 
     if (options.cachedDataPartBegin) {
-      options.data = options.cachedDataPartBegin.concat(options.data);
+      options.data = options.cachedDataPartBegin.concat(options.data as RawItemData[]);
     }
 
     if (options.cachedDataPartEnd) {
-      options.data = options.data.concat(options.cachedDataPartEnd);
+      options.data = (options.data as RawItemData[]).concat(options.cachedDataPartEnd);
     }
 
     if (!needPageCache || !getPageDataFromCache(options)) {
@@ -623,8 +623,8 @@ export default class DataSourceAdapter extends modules.Controller {
             options.data = this._cachedStoreData;
           }
         }
-        new ArrayStore(options.data).load(loadOptions).done((data) => {
-          options.data = data;
+        new ArrayStore(options.data as RawItemData[]).load(loadOptions).done((data) => {
+          options.data = data as RawItemData[];
           if (needStoreCache) {
             this._cachedPagingData = cloneItems(options.data, groupCount);
           }
@@ -636,10 +636,10 @@ export default class DataSourceAdapter extends modules.Controller {
 
       if (loadOptions.requireTotalCount && localPaging) {
         options.extra = isPlainObject(options.extra) ? options.extra : {};
-        options.extra.totalCount = options.data.length;
+        options.extra.totalCount = (options.data as RawItemData[]).length;
       }
 
-      if (options.extra && options.extra.totalCount >= 0 && (storeLoadOptions.requireTotalCount === false || loadOptions.requireTotalCount === false)) {
+      if (options.extra && (options.extra.totalCount ?? -1) >= 0 && (storeLoadOptions.requireTotalCount === false || loadOptions.requireTotalCount === false)) {
         options.extra.totalCount = -1;
       }
 
@@ -661,13 +661,13 @@ export default class DataSourceAdapter extends modules.Controller {
       if (options.lastLoadOptions) {
         this._lastLoadOptions = options.lastLoadOptions;
 
-        Object.keys(options.operationTypes).forEach((operationType) => {
+        Object.keys(options.operationTypes ?? {}).forEach((operationType) => {
           // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-          this._lastOperationTypes[operationType] ||= options.operationTypes[operationType];
+          this._lastOperationTypes[operationType] ||= options.operationTypes?.[operationType];
         });
       }
     });
-    options.storeLoadOptions = options.originalStoreLoadOptions;
+    options.storeLoadOptions = options.originalStoreLoadOptions as typeof options.storeLoadOptions;
   }
 
   /**
@@ -766,7 +766,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  private loadingOperationTypes() {
+  public loadingOperationTypes(): OperationTypes | undefined {
     return this._loadingOperationTypes;
   }
 
@@ -774,7 +774,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._operationTypes ?? null;
   }
 
-  public lastLoadOptions() {
+  public lastLoadOptions(): NonNullable<LoadOperation['lastLoadOptions']> {
     return this._lastLoadOptions || {};
   }
 
@@ -799,14 +799,16 @@ export default class DataSourceAdapter extends modules.Controller {
    * @extended: TreeLists's data_source_adapter
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public changeRowExpand(path?: any): any {}
+  public changeRowExpand(path?: unknown): DeferredObj<unknown> | undefined {
+    return undefined;
+  }
 
-  public totalCount() {
+  public totalCount(): number {
     // eslint-disable-next-line radix
     return parseInt((this._currentTotalCount || this._dataSourceTotalCount()) + this._totalCountCorrection);
   }
 
-  public totalCountCorrection() {
+  public totalCountCorrection(): number {
     return this._totalCountCorrection;
   }
 
@@ -814,25 +816,27 @@ export default class DataSourceAdapter extends modules.Controller {
    * @extended: virtual_scrolling
    * @protected
    */
-  public items(): any {}
+  public items(): RawItemData[] {
+    return (this._items ?? []) as RawItemData[];
+  }
 
   /**
    * @extended: virtual_scrolling
    */
-  public itemsCount() {
+  public itemsCount(): number {
     return this._dataSource.items().length;
   }
 
   /**
    * @extended: TreeLists's data_source_adapter
    */
-  public totalItemsCount() {
+  public totalItemsCount(): number {
     return this.totalCount();
   }
 
-  protected pageSize(): number;
-  protected pageSize(value: number): void;
-  protected pageSize(value?: number): number | void {
+  public pageSize(): number;
+  public pageSize(value: number): void;
+  public pageSize(value?: number): number | void {
     if (value === undefined) {
       return this._dataSource.paginate()
         ? this._dataSource.pageSize()
@@ -841,7 +845,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._dataSource.pageSize(value);
   }
 
-  public pageCount() {
+  public pageCount(): number {
     const count = this.totalItemsCount() - this._totalCountCorrection;
     const pageSize = this.pageSize();
 
@@ -851,42 +855,15 @@ export default class DataSourceAdapter extends modules.Controller {
     return 1;
   }
 
-  public hasKnownLastPage() {
+  public hasKnownLastPage(): boolean {
     return this._hasLastPage || this._dataSource.totalCount() >= 0;
-  }
-
-  protected loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<unknown> {
-    return this.customLoader.loadFromStore(loadOptions);
-  }
-
-  public isCustomLoading(): boolean {
-    return this.customLoader.isLoading();
-  }
-
-  protected isCustomLoadingAll(): boolean {
-    return this.customLoader.isLoadingAll();
   }
 
   /**
    * @extended: virtual_scrolling
    */
-  public load(options?: CustomLoadOptions): DeferredObj<unknown> {
-    if (options) {
-      return this.customLoader.load(options);
-    }
-
+  public load(): DeferredObj<unknown> {
     return this._dataSource.load() as unknown as DeferredObj<unknown>;
-  }
-
-  public customLoadAll(): DeferredObj<CustomLoadResult> {
-    return this.customLoader.loadAll();
-  }
-
-  public customProcessLoadedData(
-    data: RawItemData[],
-    loadOptions: StoreLoadOptions,
-  ): DeferredObj<CustomLoadResult> {
-    return this.customLoader.processLoadedData(data, loadOptions);
   }
 
   /**
@@ -898,18 +875,22 @@ export default class DataSourceAdapter extends modules.Controller {
     return result as unknown as DeferredObj<unknown>;
   }
 
-  public getCachedStoreData() {
+  public getCachedStoreData(): RawItemData[] | undefined {
     return this._cachedStoreData;
   }
 
   /**
    * @exended: virtual_scrolling
    */
-  public isLoaded(): any {}
+  public isLoaded(): boolean {
+    return this._dataSource.isLoaded();
+  }
 
   /**
    * @extended: virtual_scrolling
    */
+  public pageIndex(): number;
+  public pageIndex(pageIndex: number): void;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public pageIndex(pageIndex?) {}
+  public pageIndex(pageIndex?: number): number | void {}
 }

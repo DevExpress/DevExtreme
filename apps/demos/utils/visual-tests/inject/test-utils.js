@@ -48,14 +48,22 @@ function getValues(getter) {
   return Array.isArray(values) ? values : [values];
 }
 
-function importAnd(es6, cjs, callback) {
-  if (window.Promise && window.System) {
-    return Promise.all(getValues(es6)
-      .map((x) => window.System.import(x)))
-      .then((x) => callback(...x));
+function tryGetValues(getter) {
+  try {
+    const values = getValues(getter);
+    return values.every((v) => v !== undefined) ? values : null;
+  } catch {
+    return null;
   }
+}
 
-  return callback(...getValues(cjs));
+// window.DevExpress is assigned asynchronously, so cjs() can throw right after navigation.
+function importAnd(es6, cjs, callback) {
+  let values = null;
+  return postponeUntilInternal(() => {
+    values = tryGetValues(cjs);
+    return values !== null;
+  }, 50, 10000).then(() => callback(...(values || getValues(cjs))));
 }
 
 function mockOptionMethod(instance) {

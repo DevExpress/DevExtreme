@@ -85,8 +85,7 @@
                 "devexpress-gantt",
                 "devexpress-diagram",
                 "rrule",
-                "sass-embedded",
-                "systemjs"
+                "sass-embedded"
             ],
             "enabled": false
         },

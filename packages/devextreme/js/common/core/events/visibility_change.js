@@ -1,4 +1,4 @@
-import VisibilityChangeModule from '../../../__internal/events/m_visibility_change';
+import VisibilityChangeModule from '../../../__internal/events/visibility_change';
 
 export let triggerShownEvent = VisibilityChangeModule.triggerShownEvent;
 export let triggerHidingEvent = VisibilityChangeModule.triggerHidingEvent;

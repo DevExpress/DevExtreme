@@ -1,6 +1,7 @@
 import registerEventCallbacks from '@js/common/core/events/core/event_registrator_callbacks';
 import domAdapter from '@ts/core/m_dom_adapter';
-import eventsEngine from '@ts/events/core/m_events_engine';
+import type { DxEventConstructor } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
 
@@ -49,6 +50,6 @@ if (useJQuery) {
       // eslint-disable-next-line prefer-spread,prefer-rest-params,@stylistic/max-len
       jQuery(element).triggerHandler.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
     },
-    Event: jQuery.Event,
+    Event: jQuery.Event as unknown as DxEventConstructor,
   });
 }

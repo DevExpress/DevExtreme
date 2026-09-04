@@ -1,15 +1,18 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import type { DataSource, StoreLoadOptions } from '@ts/data/data_source/types';
+import type { DataSource } from '@ts/data/data_source/data_source';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
 
 import { executeTask } from './m_data_source_adapter_utils';
 import type { LoadOperation, RawItemData } from './types';
 
-export type CustomLoadOptions = StoreLoadOptions & { isLoadingAll?: boolean };
+export type CustomStoreLoadOptions = StoreLoadOptions & { isLoadingAll?: boolean };
 
-export type CustomLoadResult = RawItemData[] | LoadOperation['extra'];
+export interface CustomLoadResult {
+  data: RawItemData[],
+  extra?: LoadOperation['extra']
+}
 
 /**
  * Loads data through the adapter's `customizeStoreLoadOptions` and
@@ -40,68 +43,68 @@ export class CustomLoader {
     return this._isLoadingAll;
   }
 
-  public load(options: CustomLoadOptions): DeferredObj<CustomLoadResult> {
-    const { dataSource } = this;
-    const d = Deferred();
-    const store = dataSource.store();
-    const dataSourceLoadOptions = dataSource.loadOptions();
-    const operation: LoadOperation = {
-      storeLoadOptions: extend({}, options, { langParams: dataSourceLoadOptions?.langParams }),
-      isCustomLoading: true,
-    };
+  public load(options: CustomStoreLoadOptions): DeferredObj<CustomLoadResult> {
+    const d = Deferred<CustomLoadResult>();
 
-    // @ts-expect-error badly typed Store type
-    const customLoadOptions: string[] = store._customLoadOptions() ?? [];
-
-    each(customLoadOptions, (_: number, optionName: string) => {
-      if (!(optionName in operation.storeLoadOptions)) {
-        operation.storeLoadOptions[optionName] = dataSourceLoadOptions[optionName];
-      }
-    });
-
+    this._isLoading = true;
     this._isLoadingAll = options.isLoadingAll ?? false;
+    this.dataSource._scheduleLoadCallbacks(d);
 
-    this.scheduleLoadingCallbacks(d);
-    dataSource._scheduleLoadCallbacks(d);
+    const operation = this.createLoadOperation(options);
 
     this.customizeStoreLoadOptions(operation);
 
     executeTask(() => {
-      if (!dataSource.store()) {
+      const store = this.dataSource.store();
+
+      if (!store) {
+        // @ts-expect-error badly typed Deferred.reject
         d.reject('canceled');
         return;
       }
 
-      when(operation.data ?? this.loadFromStore(operation.storeLoadOptions))
-        .done((data: unknown, loadedExtra: unknown) => {
-          operation.data = data as RawItemData[];
-          operation.extra = (loadedExtra ?? {}) as LoadOperation['extra'];
+      const loadDeferred = operation.data ?? this.loadFromStore(operation.storeLoadOptions);
+
+      when<CustomLoadResult | RawItemData[]>(loadDeferred)
+        .done((result) => {
+          const loaded: CustomLoadResult = Array.isArray(result) ? { data: result } : result;
+
+          operation.data = loaded.data;
+          operation.extra = loaded.extra;
 
           this.customizeLoadResult(operation);
 
-          // `customizeLoadResult` may have replaced `extra`, so re-read it.
-          const extra = (operation.extra ?? {}) as { totalCount?: unknown };
-          operation.extra = extra as LoadOperation['extra'];
+          // customizeLoadResult may have replaced extra, so re-read it
+          let totalCount: number | DeferredObj<number> | undefined = operation.extra?.totalCount;
 
-          if (options.requireTotalCount && extra.totalCount === undefined) {
-            extra.totalCount = store.totalCount(operation.storeLoadOptions);
+          if (options.requireTotalCount && totalCount === undefined) {
+            totalCount = store.totalCount(operation.storeLoadOptions);
           }
 
-          when(operation.data, extra.totalCount)
-            .done((resolvedData: unknown, totalCount: unknown) => {
-              extra.totalCount = totalCount;
-              d.resolve(resolvedData, extra);
+          // customizeLoadResult may have replaced data, so re-resolve it
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          when<any>(operation.data, totalCount)
+            .done((resolvedData: RawItemData[], resolvedTotalCount?: number) => {
+              operation.extra ??= {};
+              operation.extra.totalCount = resolvedTotalCount;
+              d.resolve({
+                data: resolvedData,
+                extra: operation.extra,
+              });
             })
+            // @ts-expect-error badly typed Deferred.reject
             .fail((e: unknown) => { d.reject(e); });
         })
+        // @ts-expect-error badly typed Deferred.reject
         .fail((e: unknown) => { d.reject(e); });
     }, this.getLoadingTimeout());
 
     return d
       .fail((...args: unknown[]) => {
-        dataSource._eventsStrategy.fireEvent('loadError', args);
+        this.dataSource._eventsStrategy.fireEvent('loadError', args);
       })
       .always(() => {
+        this._isLoading = false;
         this._isLoadingAll = false;
       })
       .promise() as unknown as DeferredObj<CustomLoadResult>;
@@ -122,7 +125,7 @@ export class CustomLoader {
     data: RawItemData[],
     loadOptions: StoreLoadOptions,
   ): DeferredObj<CustomLoadResult> {
-    const d = Deferred();
+    const d = Deferred<CustomLoadResult>();
     const operation: LoadOperation = {
       data,
       isCustomLoading: true,
@@ -133,40 +136,70 @@ export class CustomLoader {
     this.customizeLoadResult(operation);
 
     // customizeLoadResult may have replaced operation.data with deferred
-    when(operation.data)
-      .done((loadedData: unknown) => { d.resolve(loadedData, operation.extra); })
-      .fail((...args: unknown[]) => { d.reject(...args); });
-
-    return d as unknown as DeferredObj<CustomLoadResult>;
-  }
-
-  public loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<unknown> {
-    const d = Deferred();
-
-    (this.dataSource
-      .store()
-      .load(loadOptions) as unknown as DeferredObj<unknown>)
-      .done((data: unknown, extra: unknown) => {
-        // A store may resolve with a single `{ data, totalCount }` object
-        // instead of the `(data, extra)` pair the pipeline expects.
-        const result = data as { data?: unknown } | undefined;
-
-        if (result && !Array.isArray(result) && Array.isArray(result.data)) {
-          d.resolve(result.data, result);
-        } else {
-          d.resolve(data, extra);
-        }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    when<any>(operation.data)
+      .done((loadedData: RawItemData[]) => {
+        d.resolve({
+          data: loadedData,
+          extra: operation.extra,
+        });
       })
+      // @ts-expect-error badly typed Deferred.reject
       .fail((...args: unknown[]) => { d.reject(...args); });
 
     return d;
   }
 
-  private scheduleLoadingCallbacks(deferred: DeferredObj<unknown>): void {
-    this._isLoading = true;
+  public loadFromStore(loadOptions: StoreLoadOptions): DeferredObj<CustomLoadResult> {
+    const d = Deferred<CustomLoadResult>();
 
-    deferred.always(() => {
-      this._isLoading = false;
-    });
+    this.dataSource
+      .store()
+      .load(loadOptions)
+      .done((data: unknown, extra: unknown) => {
+        // A store may resolve with a single `{ data, ...extra }` object
+        // instead of the `(data, extra)` pair the pipeline expects.
+        const result = data as {
+          data?: unknown,
+        } & LoadOperation['extra'] | undefined;
+
+        if (result && !Array.isArray(result) && Array.isArray(result.data)) {
+          d.resolve({
+            data: result.data,
+            extra: result,
+          });
+        } else {
+          d.resolve({
+            data: data as RawItemData[],
+            extra: extra as LoadOperation['extra'],
+          });
+        }
+      })
+      // @ts-expect-error badly typed Deferred.reject
+      .fail((...args: unknown[]) => { d.reject(...args); });
+
+    return d;
+  }
+
+  private createLoadOperation(options: CustomStoreLoadOptions): LoadOperation {
+    const dataSourceLoadOptions = this.dataSource.loadOptions();
+    const storeLoadOptions: CustomStoreLoadOptions = extend(
+      {},
+      options,
+      { langParams: dataSourceLoadOptions.langParams },
+    );
+
+    const customLoadOptions: string[] = this.dataSource.store()._customLoadOptions() ?? [];
+
+    for (const optionName of customLoadOptions) {
+      if (!(optionName in storeLoadOptions)) {
+        storeLoadOptions[optionName] = dataSourceLoadOptions[optionName];
+      }
+    }
+
+    return {
+      storeLoadOptions,
+      isCustomLoading: true,
+    };
   }
 }

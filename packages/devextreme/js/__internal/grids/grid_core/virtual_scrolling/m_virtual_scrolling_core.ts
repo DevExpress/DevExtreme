@@ -232,7 +232,7 @@ class VirtualScrollController {
     return this._position;
   }
 
-  private getItemIndexByPosition(position?, viewportItemIndex?, height?) {
+  public getItemIndexByPosition(position?, viewportItemIndex?, height?) {
     position = position ?? this._position;
     const defaultItemSize = this.getItemSize();
     let offset = 0;
