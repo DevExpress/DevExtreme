@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
@@ -13,7 +14,10 @@
   /* No dim on the field left behind while dragging. The package has no pivot grid, but Blazor
   marks its draggable header with a background, a border and a colour and never with opacity
   (pivot/pivot-table/layout.scss), which is also what cardView and the grid do here. */
-  $pivotgrid-drag-source-opacity: false,
+  /* The field being dragged is a drag source like any other in this theme, so it takes the one
+  value the sortable states rather than a role of its own: base dims it to 0.5, which leaves the
+  field caption at 3.26 once axe composites the opacity into it, and 0.65 reads 5.29. */
+  $pivotgrid-drag-source-opacity: var(--dx-sortable-source-opacity),
   /* The panel is not what moves either - a field being dragged carries its own header, with the
   border and the shadow above. */
   $pivotgrid-fields-container-drag-opacity: false,
@@ -255,7 +259,7 @@
 // A disabled pivot grid was carried entirely by the blanket dim: its areas, headers and field
 
 // chips are its own markup and no child widget paints them.
-.dx-pivotgrid.dx-state-disabled {
+@include when-disabled(".dx-pivotgrid") {
   color: var(--dx-pivot-grid-content-disabled);
 
   .dx-pivotgrid-area,

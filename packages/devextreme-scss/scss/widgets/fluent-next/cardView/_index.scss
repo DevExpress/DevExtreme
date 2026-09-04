@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use 'colors';
 @use 'sizes';
 @use '../../base/cardView/index' as *;
@@ -6,7 +7,7 @@
 // nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 // The existing `…header-panel-item-*-disabled` names are not reused here: base applies those to
 // the sortable drag source, which is active content, not to a disabled state.
-.dx-cardview.dx-state-disabled {
+@include when-disabled(".dx-cardview") {
   color: var(--dx-card-view-content-disabled);
 
   /* the sort index paints an accent of its own and stayed bright next to greyed headers */

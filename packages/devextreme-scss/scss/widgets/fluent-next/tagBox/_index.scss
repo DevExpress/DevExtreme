@@ -70,7 +70,8 @@
     }
   }
 
-  &.dx-state-disabled {
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     .dx-tag-content {
       color: var(--dx-tag-box-tag-content-disabled);
       background-color: var(--dx-tag-box-tag-bg-disabled);

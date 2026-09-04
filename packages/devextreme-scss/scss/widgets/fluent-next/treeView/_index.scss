@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
@@ -151,7 +152,7 @@
 // nothing of its own once that rule was lifted. It now paints the same disabled roles that its
 
 // individually disabled items already use.
-.dx-treeview.dx-state-disabled {
+@include when-disabled(".dx-treeview") {
   .dx-treeview-item {
     color: var(--dx-tree-view-item-content-disabled);
   }

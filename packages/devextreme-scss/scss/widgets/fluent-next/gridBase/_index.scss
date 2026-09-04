@@ -275,10 +275,11 @@
 
   // Two selectors because the widgets differ: treeList carries .dx-treelist on the widget root,
 
-  // dataGrid keeps .dx-datagrid on the container one level below it.
-
+  /* A descendant, not a child: the grid keeps .dx-datagrid one level below the root that carries
+  the state when it disables itself, but an enclosing disabled form or toolbar is further up than
+  that, and the child combinator this used to have matched only the first case. */
   .dx-#{$widget-name}.dx-state-disabled,
-  .dx-state-disabled > .dx-#{$widget-name} {
+  .dx-state-disabled .dx-#{$widget-name} {
     color: var(--dx-grid-content-disabled);
 
     .dx-#{$widget-name}-headers,

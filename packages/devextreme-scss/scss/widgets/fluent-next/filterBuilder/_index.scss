@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/filterBuilder" with (
@@ -138,12 +139,13 @@ package's role for secondary text carries a contrast of its own. */
 // The widget-level disabled state was carried entirely by the blanket dim, so the component showed
 
 // nothing of its own once that rule was lifted. It is painted from the disabled content role now.
-.dx-filterbuilder.dx-state-disabled {
+@include when-disabled(".dx-filterbuilder") {
   color: var(--dx-filter-builder-content-disabled);
 
   .dx-filterbuilder-item-field,
   .dx-filterbuilder-item-operation,
   .dx-filterbuilder-item-value,
+  .dx-filterbuilder-item-value-text,
   .dx-filterbuilder-group-operation {
     color: var(--dx-filter-builder-content-disabled);
   }

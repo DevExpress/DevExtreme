@@ -141,7 +141,8 @@ role for it. */
   color: var(--dx-pagination-info-content);
 }
 
-.dx-pagination.dx-state-disabled {
+.dx-pagination.dx-state-disabled,
+.dx-state-disabled .dx-pagination {
   color: var(--dx-pagination-content-disabled);
 
   .dx-page,

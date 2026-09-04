@@ -57,7 +57,8 @@
     background-color: var(--dx-number-box-spin-bg-active);
   }
 
-  &.dx-state-disabled {
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     .dx-numberbox-spin-up-icon,
     .dx-numberbox-spin-down-icon {
       color: var(--dx-number-box-content-disabled);

@@ -352,6 +352,33 @@ const targetClassOf = (selectorPart: string): string | null => {
     .find((cls) => !/^dx-state-|^dx-button-disable/.test(cls)) ?? null;
 };
 
+/*
+ * A disabled rule conditional on a modifier - `.dx-show-clear-button.dx-state-disabled` - covers
+ * only the elements that carry the modifier, not every element with that class. Banking it as
+ * coverage for the class name is how a placeholder painted in editors with a clear button, and
+ * nowhere else, read as covered: the gate saw the name and the shipped editors kept a
+ * full-strength placeholder. Coverage counts only when the compound carrying the state class holds
+ * nothing but the state and a component root.
+ */
+const rootClasses = new Set(
+  Object.values(rootSelectors).flat().map((selector) => selector.replace(/^\./, '')),
+);
+
+const coversUnconditionally = (selectorPart: string, target: string): boolean => {
+  const compound = selectorPart.trim().split(/\s+|(?=>)|(?<=>)/)
+    .find((segment) => /dx-state-disabled|dx-button-disable/.test(segment));
+
+  if (!compound) {
+    return true;
+  }
+
+  // The target's own compound is the element saying it is disabled itself - `.dx-tile
+  // .dx-state-disabled` - which is a state, not a condition on some other element.
+  return [...compound.matchAll(/\.(dx-[a-z0-9-]+)/g)]
+    .map((match) => match[1])
+    .every((cls) => /^dx-state-|^dx-button-disable/.test(cls) || rootClasses.has(cls) || cls === target);
+};
+
 const elementsPaintingTheirOwnColour = (css: string): string[] => {
   const declaresColour = /(^|;)\s*color\s*:/;
   const own = new Set<string>();
@@ -371,7 +398,11 @@ const elementsPaintingTheirOwnColour = (css: string): string[] => {
           return;
         }
 
-        (isDisabled ? covered : own).add(target);
+        if (!isDisabled) {
+          own.add(target);
+        } else if (coversUnconditionally(part, target)) {
+          covered.add(target);
+        }
       });
     });
 
@@ -396,9 +427,82 @@ test('an element that paints its own colour is reached by a disabled rule', () =
 test('the own-colour ratchet notices an element losing its disabled rule', () => {
   const fixture = `
     .dx-alpha-caption { color: #111; }
-    .dx-alpha.dx-state-disabled .dx-alpha-caption { color: #999; }
+    .dx-list.dx-state-disabled .dx-alpha-caption { color: #999; }
     .dx-beta-caption { color: #111; }
   `;
 
   expect(elementsPaintingTheirOwnColour(fixture)).toEqual(['dx-beta-caption']);
+});
+
+test('coverage conditional on a modifier does not count for the class', () => {
+  const fixture = `
+    .dx-gamma-caption { color: #111; }
+    .dx-some-modifier.dx-state-disabled .dx-gamma-caption { color: #999; }
+  `;
+
+  expect(elementsPaintingTheirOwnColour(fixture)).toEqual(['dx-gamma-caption']);
+});
+
+/*
+ * A widget is disabled two ways: the state class lands on its own root, or on something it sits
+ * inside. A rule written only as `.dx-grid.dx-state-disabled` covers the first and misses the
+ * second entirely, and the miss is invisible in every screenshot of a widget disabled on its own -
+ * it shows up only when the widget sits in a disabled form or toolbar. That shipped in eleven
+ * components at once, so it is a gate rather than a review note.
+ *
+ * The pair is checked inside one rule, which is what `when-disabled()` emits and what a
+ * hand-written pair looks like. Anchored on component roots: an item's own state class
+ * (`.dx-tile.dx-state-disabled`) is a state, not a widget-level rule, and has no ancestor form.
+ *
+ *   UPDATE_BOTH_FORMS_BASELINE=1 pnpm nx test devextreme-scss --skip-nx-cache
+ */
+const bothFormsBaselinePath = join(__dirname, 'disabled-both-forms.baseline.json');
+
+const rootsMissingAncestorForm = (css: string): string[] => {
+  // Collected over the bundle, not within one rule: the two forms are usually written together,
+  // but a component is free to state them apart and the pair is what matters, not where it is.
+  const parts = readRules(css)
+    .filter(({ selector }) => selector.includes('dx-state-disabled'))
+    .flatMap(({ selector }) => selector.split(',').map((part) => part.trim()));
+  const present = new Set(parts);
+  const missing = new Set<string>();
+
+  parts.forEach((part) => {
+    const self = part.match(/^\.(dx-[a-z0-9-]+)\.dx-state-disabled(?=\s|$)/);
+
+    if (!self || !rootClasses.has(self[1])) {
+      return;
+    }
+
+    const tail = part.slice(self[0].length).trim();
+
+    if (!present.has(`.dx-state-disabled .${self[1]}${tail ? ` ${tail}` : ''}`)) {
+      missing.add(`${self[1]}${tail ? ` ${tail}` : ''}`);
+    }
+  });
+
+  return [...missing].sort();
+};
+
+test('a widget-level disabled rule states both the self and the ancestor form', () => {
+  const css = readFileSync(join(artifactsCss, 'dx.fluent-next.blue.light.css'), 'utf8');
+  const found = rootsMissingAncestorForm(css);
+
+  if (process.env.UPDATE_BOTH_FORMS_BASELINE === '1') {
+    writeFileSync(bothFormsBaselinePath, `${JSON.stringify(found, null, 2)}\n`);
+  }
+
+  const baseline: string[] = JSON.parse(readFileSync(bothFormsBaselinePath, 'utf8'));
+
+  expect(found.filter((entry) => !baseline.includes(entry))).toEqual([]);
+  expect(found.length).toBeLessThanOrEqual(baseline.length);
+});
+
+test('the both-forms gate catches a rule written only for the widget itself', () => {
+  const fixture = `
+    .dx-list.dx-state-disabled .dx-caption { color: #999; }
+    .dx-menu.dx-state-disabled, .dx-state-disabled .dx-menu { color: #999; }
+  `;
+
+  expect(rootsMissingAncestorForm(fixture)).toEqual(['dx-list .dx-caption']);
 });

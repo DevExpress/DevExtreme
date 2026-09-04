@@ -22,7 +22,8 @@
 .dx-menu {
   color: var(--dx-menu-content);
 
-  &.dx-state-disabled {
+  &.dx-state-disabled,
+  .dx-state-disabled & {
 
     // The widget-level disabled state was carried entirely by the blanket dim, so the component
 

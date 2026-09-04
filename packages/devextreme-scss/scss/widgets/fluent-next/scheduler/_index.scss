@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
@@ -84,7 +85,6 @@
   $scheduler-appointment-date-opacity: false,
   $agenda-appointment-details-opacity: false,
   $scheduler-appointment-disabled-opacity: var(--dx-scheduler-appointment-opacity-disabled),
-  $scheduler-appointment-drag-source-opacity: false,
   $agenda-appointment-title-font-weight: var(--dx-scheduler-agenda-title-font-weight),
   $agenda-appointment-details-font-size: var(--dx-scheduler-agenda-details-font-size),
   $scheduler-appointment-dragging-shadow: var(--dx-scheduler-appointment-dragging-shadow),
@@ -1119,7 +1119,7 @@
 // A disabled scheduler was carried entirely by the blanket dim: the work space, the panels and the
 
 // header are its own markup and no child widget paints them.
-.dx-scheduler.dx-state-disabled {
+@include when-disabled(".dx-scheduler") {
   color: var(--dx-scheduler-content-disabled);
 
   .dx-scheduler-header,

@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/tabs";
 @use "variables/colors" as *;
@@ -14,7 +15,7 @@
 // nothing of its own once that rule was lifted. It now paints the same disabled roles that its
 
 // individually disabled items already use.
-.dx-tabs.dx-state-disabled {
+@include when-disabled(".dx-tabs") {
   .dx-tab {
     color: var(--dx-tabs-tab-content-disabled);
 
