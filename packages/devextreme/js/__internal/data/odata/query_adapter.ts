@@ -1,8 +1,9 @@
 import queryAdapters from '@js/common/data/query_adapters';
 import config from '@js/core/config';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isFunction } from '@js/core/utils/type';
+import { isFunction, isString } from '@js/core/utils/type';
+import type { QueryAdapter, RemoteQueryOptions, RemoteTask } from '@ts/data/remote_query';
 
 import { errors } from '../errors';
 import {
@@ -12,6 +13,7 @@ import {
 } from '../utils';
 import {
   convertPrimitiveValue,
+  EdmLiteral,
   generateExpand,
   generateSelect,
   sendRequest,
@@ -22,96 +24,112 @@ import {
 const DEFAULT_PROTOCOL_VERSION = 4;
 const STRING_FUNCTIONS = ['contains', 'notcontains', 'startswith', 'endswith'];
 
+type Formatter = (prop: string, val: string) => string;
+
+type FieldTypes = Record<string, string>;
+
+interface ODataRequestParams {
+  [param: string]: unknown;
+  $orderby?: string;
+  $skip?: number;
+  $top?: number;
+  $select?: string;
+  $expand?: string;
+  $filter?: string;
+  // eslint-disable-next-line spellcheck/spell-checker
+  $inlinecount?: string;
+  $count?: string;
+}
+
 const compileCriteria = (() => {
-  let protocolVersion;
-  let forceLowerCase;
-  let fieldTypes;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let protocolVersion: number;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let forceLowerCase: boolean | undefined;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let fieldTypes: FieldTypes | undefined;
 
-  const createBinaryOperationFormatter = (op) => (prop, val) => `${prop} ${op} ${val}`;
+  const createBinaryOperationFormatter = (op: string): Formatter => (prop, val) => `${prop} ${op} ${val}`;
 
-  const createStringFuncFormatter = (op, reverse) => (prop, val) => {
+  const createStringFuncFormatter = (op: string, reverse?: boolean): Formatter => (prop, val) => {
     const bag = [op, '('];
-
-    if (forceLowerCase) {
-      prop = prop.indexOf('tolower(') === -1 ? `tolower(${prop})` : prop;
-      val = val.toLowerCase();
-    }
+    const propName = forceLowerCase && !prop.includes('tolower(') ? `tolower(${prop})` : prop;
+    const value = forceLowerCase ? val.toLowerCase() : val;
 
     if (reverse) {
-      bag.push(val, ',', prop);
+      bag.push(value, ',', propName);
     } else {
-      bag.push(prop, ',', val);
+      bag.push(propName, ',', value);
     }
 
     bag.push(')');
     return bag.join('');
   };
 
-  const isStringFunction = function (name) {
+  const isStringFunction = function (name: string): boolean {
     return STRING_FUNCTIONS.some((funcName) => funcName === name);
   };
 
-  const formatters = {
+  const formatters: Record<string, Formatter> = {
     '=': createBinaryOperationFormatter('eq'),
     '<>': createBinaryOperationFormatter('ne'),
     '>': createBinaryOperationFormatter('gt'),
     '>=': createBinaryOperationFormatter('ge'),
     '<': createBinaryOperationFormatter('lt'),
     '<=': createBinaryOperationFormatter('le'),
-    // @ts-expect-error
     startswith: createStringFuncFormatter('startswith'),
-    // @ts-expect-error
     endswith: createStringFuncFormatter('endswith'),
   };
 
-  const formattersV2 = extend({}, formatters, {
-    /* eslint-disable spellcheck/spell-checker */
+  /* eslint-disable spellcheck/spell-checker */
+  const formattersV2: Record<string, Formatter> = {
+    ...formatters,
     contains: createStringFuncFormatter('substringof', true),
     notcontains: createStringFuncFormatter('not substringof', true),
-  });
+  };
+  /* eslint-enable spellcheck/spell-checker */
 
-  const formattersV4 = extend({}, formatters, {
-    // @ts-expect-error
+  /* eslint-disable spellcheck/spell-checker */
+  const formattersV4: Record<string, Formatter> = {
+    ...formatters,
     contains: createStringFuncFormatter('contains'),
-    // @ts-expect-error
     notcontains: createStringFuncFormatter('not contains'),
-  });
+  };
+  /* eslint-enable spellcheck/spell-checker */
 
-  const compileBinary = (criteria) => {
-    criteria = normalizeBinaryCriterion(criteria);
+  const compileBinary = (criteria: unknown[]): string => {
+    const crit = normalizeBinaryCriterion(criteria);
 
-    const op = criteria[1];
-    const fieldName = criteria[0];
-    const fieldType = fieldTypes && fieldTypes[fieldName];
+    const [rawFieldName, op] = crit;
+    const fieldName = isString(rawFieldName) || rawFieldName instanceof EdmLiteral
+      ? rawFieldName
+      : String(rawFieldName);
+    const fieldType = fieldTypes?.[String(fieldName)];
 
     if (fieldType && isStringFunction(op) && fieldType !== 'String') {
-      // @ts-expect-error
-      throw new errors.Error('E4024', op, fieldName, fieldType);
+      throw errors.Error('E4024', op, fieldName, fieldType);
     }
 
-    const formatters = protocolVersion === 4
+    const criterionFormatters = protocolVersion === 4
       ? formattersV4
       : formattersV2;
-    const formatter = formatters[op.toLowerCase()];
+    const formatter = criterionFormatters[op.toLowerCase()];
 
     if (!formatter) {
       throw errors.Error('E4003', op);
     }
 
-    let value = criteria[2];
-
-    if (fieldTypes?.[fieldName]) {
-      value = convertPrimitiveValue(fieldTypes[fieldName], value);
-    }
+    const value = fieldType ? convertPrimitiveValue(fieldType, crit[2]) : crit[2];
 
     return formatter(
       serializePropName(fieldName),
-      serializeValue(value, protocolVersion, fieldTypes?.[fieldName]),
+      serializeValue(value, protocolVersion, fieldType),
     );
   };
 
-  const compileUnary = (criteria) => {
+  const compileUnary = (criteria: unknown[]): string => {
     const op = criteria[0];
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const crit = compileCore(criteria[1]);
 
     if (op === '!') {
@@ -121,43 +139,51 @@ const compileCriteria = (() => {
     throw errors.Error('E4003', op);
   };
 
-  const compileGroup = (criteria) => {
-    const bag = [];
-    let groupOperator;
-    let nextGroupOperator;
+  const compileGroup = (criteria: unknown[]): string => {
+    const bag: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let groupOperator: string | undefined;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let nextGroupOperator: string | undefined;
 
-    each(criteria, function (index, criterion) {
+    criteria.forEach((criterion) => {
       if (Array.isArray(criterion)) {
         if (bag.length > 1 && groupOperator !== nextGroupOperator) {
-          // @ts-expect-error
-          throw new errors.Error('E4019');
+          throw errors.Error('E4019');
         }
-        // @ts-expect-error
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         bag.push(`(${compileCore(criterion)})`);
 
         groupOperator = nextGroupOperator;
         nextGroupOperator = 'and';
       } else {
-        nextGroupOperator = isConjunctiveOperator(this) ? 'and' : 'or';
+        nextGroupOperator = isConjunctiveOperator(criterion) ? 'and' : 'or';
       }
     });
 
     return bag.join(` ${groupOperator} `);
   };
 
-  const compileCore = (criteria) => {
-    if (Array.isArray(criteria[0])) {
-      return compileGroup(criteria);
+  const compileCore = (criteria: unknown): string => {
+    const criterion: unknown[] = Array.isArray(criteria) ? criteria : [criteria];
+
+    if (Array.isArray(criterion[0])) {
+      return compileGroup(criterion);
     }
 
-    if (isUnaryOperation(criteria)) {
-      return compileUnary(criteria);
+    if (isUnaryOperation(criterion)) {
+      return compileUnary(criterion);
     }
 
-    return compileBinary(criteria);
+    return compileBinary(criterion);
   };
 
-  return (criteria, version, types, filterToLower) => {
+  return (
+    criteria: unknown,
+    version: number,
+    types: FieldTypes | undefined,
+    filterToLower: boolean | undefined,
+  ): string => {
     fieldTypes = types;
     forceLowerCase = filterToLower ?? config().oDataFilterToLower;
     protocolVersion = version;
@@ -166,76 +192,62 @@ const compileCriteria = (() => {
   };
 })();
 
-const createODataQueryAdapter = (queryOptions) => {
-  /* eslint-disable  @typescript-eslint/naming-convention */
-  let _sorting = [];
-  const _criteria = [];
-  const _expand = queryOptions.expand;
-  let _select;
-  let _skip;
-  let _take;
-  let _countQuery;
+const createODataQueryAdapter = (queryOptions: RemoteQueryOptions): QueryAdapter => {
+  let sorting: string[] = [];
+  const criteria: unknown[] = [];
+  const { expand } = queryOptions;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let select: string[] | undefined;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let skip: number | undefined;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let take: number | undefined;
+  let countQuery = false;
 
-  const _oDataVersion = queryOptions.version || DEFAULT_PROTOCOL_VERSION;
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  const oDataVersion = queryOptions.version || DEFAULT_PROTOCOL_VERSION;
 
-  const hasSlice = () => _skip || _take !== undefined;
+  const hasSlice = (): boolean => !!skip || take !== undefined;
 
-  const hasFunction = (criterion) => {
-    for (let i = 0; i < criterion.length; i++) {
-      if (isFunction(criterion[i])) {
-        return true;
+  const hasFunction = (criterion: unknown[]): boolean => criterion.some(
+    (item) => isFunction(item) || (Array.isArray(item) && hasFunction(item)),
+  );
+
+  const requestData = (): ODataRequestParams => {
+    const result: ODataRequestParams = {};
+
+    if (!countQuery) {
+      if (sorting.length) {
+        result.$orderby = sorting.join(',');
       }
-
-      if (Array.isArray(criterion[i]) && hasFunction(criterion[i])) {
-        return true;
+      if (skip) {
+        result.$skip = skip;
       }
-    }
-    return false;
-  };
-
-  const requestData = () => {
-    const result = {};
-
-    if (!_countQuery) {
-      if (_sorting.length) {
-        // @ts-expect-error
-        result.$orderby = _sorting.join(',');
+      if (take !== undefined) {
+        result.$top = take;
       }
-      if (_skip) {
-        // @ts-expect-error
-        result.$skip = _skip;
-      }
-      if (_take !== undefined) {
-        // @ts-expect-error
-        result.$top = _take;
-      }
-      // @ts-expect-error
-      result.$select = generateSelect(_oDataVersion, _select) || undefined;
-      // @ts-expect-error
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      result.$expand = generateExpand(_oDataVersion, _expand, _select) || undefined;
+      result.$select = generateSelect(oDataVersion, select) || undefined;
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      result.$expand = generateExpand(oDataVersion, expand, select) || undefined;
     }
 
-    if (_criteria.length) {
-      const criteria = _criteria.length < 2 ? _criteria[0] : _criteria;
-      const fieldTypes = queryOptions?.fieldTypes;
-      const filterToLower = queryOptions?.filterToLower;
-      // @ts-expect-error
-      result.$filter = compileCriteria(criteria, _oDataVersion, fieldTypes, filterToLower);
+    if (criteria.length) {
+      const filterCriteria: unknown = criteria.length < 2 ? criteria[0] : criteria;
+      const { fieldTypes, filterToLower } = queryOptions;
+      result.$filter = compileCriteria(filterCriteria, oDataVersion, fieldTypes, filterToLower);
     }
 
-    if (_countQuery) {
-      // @ts-expect-error
+    if (countQuery) {
       result.$top = 0;
     }
 
-    if (queryOptions.requireTotalCount || _countQuery) {
+    if (queryOptions.requireTotalCount || countQuery) {
       // todo: tests!!!
-      if (_oDataVersion !== 4) {
-        // @ts-expect-error
+      if (oDataVersion !== 4) {
+        // eslint-disable-next-line spellcheck/spell-checker
         result.$inlinecount = 'allpages';
       } else {
-        // @ts-expect-error
         result.$count = 'true';
       }
     }
@@ -243,19 +255,13 @@ const createODataQueryAdapter = (queryOptions) => {
     return result;
   };
 
-  const tryLiftSelect = (tasks) => {
-    let selectIndex = -1;
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].name === 'select') {
-        selectIndex = i;
-        break;
-      }
-    }
+  const tryLiftSelect = (tasks: RemoteTask[]): void => {
+    const selectIndex = tasks.findIndex((task) => task.name === 'select');
 
     if (selectIndex < 0 || !isFunction(tasks[selectIndex].args[0])) return;
 
     const nextTask = tasks[1 + selectIndex];
-    if (!nextTask || nextTask.name !== 'slice') return;
+    if (nextTask?.name !== 'slice') return;
 
     tasks[1 + selectIndex] = tasks[selectIndex];
     tasks[selectIndex] = nextTask;
@@ -265,96 +271,94 @@ const createODataQueryAdapter = (queryOptions) => {
 
     optimize: tryLiftSelect,
 
-    exec(url) {
+    exec(url: string): DeferredObj<unknown> {
       return sendRequest(
-        _oDataVersion,
+        oDataVersion,
         {
           url,
-          params: extend(requestData(), queryOptions?.params),
+          params: extend(requestData(), queryOptions.params),
         },
         {
           beforeSend: queryOptions.beforeSend,
           jsonp: queryOptions.jsonp,
           withCredentials: queryOptions.withCredentials,
-          countOnly: _countQuery,
+          countOnly: countQuery,
           processDatesAsUtc: queryOptions.processDatesAsUtc,
           fieldTypes: queryOptions.fieldTypes,
-          isPaged: isFinite(_take),
+          isPaged: isFinite(Number(take)),
         },
       );
     },
-    /* eslint-disable @typescript-eslint/no-invalid-void-type */
-    multiSort(args): boolean | void {
-      let rules;
+
+    multiSort(args: unknown[]): boolean | undefined {
+      const rules: string[] = [];
 
       if (hasSlice()) {
         return false;
       }
 
-      for (let i = 0; i < args.length; i++) {
-        const getter = args[i][0];
-        const desc = !!args[i][1];
-        let rule;
+      for (const arg of args) {
+        const [getter, desc] = Array.isArray(arg) ? arg : [];
 
         if (typeof getter !== 'string') {
           return false;
         }
 
-        rule = serializePropName(getter);
-        if (desc) {
-          rule += ' desc';
-        }
-
-        rules = rules || [];
-        rules.push(rule);
+        rules.push(desc ? `${serializePropName(getter)} desc` : serializePropName(getter));
       }
 
-      _sorting = rules;
+      sorting = rules;
+
+      return undefined;
     },
 
-    slice(skipCount, takeCount): boolean | void {
+    slice(skipCount: number, takeCount: number): boolean | undefined {
       if (hasSlice()) {
         return false;
       }
 
-      _skip = skipCount;
-      _take = takeCount;
+      skip = skipCount;
+      take = takeCount;
+
+      return undefined;
     },
 
-    filter(criterion): boolean | void {
+    filter(...args: unknown[]): boolean | undefined {
       if (hasSlice()) {
         return false;
       }
 
-      if (!Array.isArray(criterion)) {
-        criterion = [].slice.call(arguments);
-      }
+      const [first] = args;
+      const criterion: unknown[] = Array.isArray(first) ? first : args.slice();
 
       if (hasFunction(criterion)) {
         return false;
       }
 
-      if (_criteria.length) {
-        // @ts-expect-error
-        _criteria.push('and');
+      if (criteria.length) {
+        criteria.push('and');
       }
-      // @ts-expect-error
-      _criteria.push(criterion);
+      criteria.push(criterion);
+
+      return undefined;
     },
 
-    select(expr): boolean | void {
-      if (_select || isFunction(expr)) {
+    select(...args: unknown[]): boolean | undefined {
+      const [expr] = args;
+
+      if (select || isFunction(expr)) {
         return false;
       }
 
-      if (!Array.isArray(expr)) {
-        expr = [].slice.call(arguments);
-      }
+      select = (Array.isArray(expr) ? expr : args.slice()).map(String);
 
-      _select = expr;
+      return undefined;
     },
-    // eslint-disable-next-line no-return-assign
-    count: () => _countQuery = true,
+
+    count(): boolean {
+      countQuery = true;
+      return countQuery;
+    },
   };
 };
 

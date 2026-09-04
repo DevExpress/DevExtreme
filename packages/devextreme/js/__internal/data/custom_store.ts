@@ -209,7 +209,7 @@ function runRawLoadWithQuery(
     const rawDataQuery = arrayQuery(rawData, { errorHandler: store._errorHandler });
     const waitList: DeferredObj<unknown>[] = [];
 
-    const result: { items?: unknown[]; totalCount?: unknown } = {};
+    const result: { items?: unknown; totalCount?: unknown } = {};
 
     if (!countOnly) {
       const itemsQuery = storeHelper.queryByOptions(rawDataQuery, loadOptions, false);
@@ -217,7 +217,7 @@ function runRawLoadWithQuery(
         result.items = rawData.slice(0);
       } else {
         const itemsPromise: DeferredObj<unknown> = itemsQuery.enumerate()
-          .done((asyncResult: unknown[]) => {
+          .done((asyncResult: unknown) => {
             result.items = asyncResult;
           });
         waitList.push(itemsPromise);
@@ -367,7 +367,6 @@ class CustomStore extends Store {
 
   _pushImpl(changes: StoreChange[]): void {
     if (this.__rawData) {
-      // @ts-expect-error array_utils is untyped: `applyBatch` destructures every option as required
       applyBatch({
         keyInfo: this,
         data: this.__rawData,

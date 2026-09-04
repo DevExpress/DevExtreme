@@ -4,36 +4,44 @@ import { getWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 
-let IS_WINJS_ORIGIN;
-let IS_LOCAL_ORIGIN;
+interface Endpoint {
+  local: string;
+  production?: string;
+}
 
-function isLocalHostName(url) {
+type EndpointConfig = Record<string, Endpoint | undefined>;
+
+let isWinJsOrigin = false;
+let isLocalOrigin = false;
+
+function isLocalHostName(url: string): boolean {
   return /^(localhost$|127\.)/i.test(url); // TODO more precise check for 127.x.x.x IP
 }
 
-const EndpointSelector = function (config) {
-  this.config = config;
-  IS_WINJS_ORIGIN = window.location.protocol === 'ms-appx:';
-  IS_LOCAL_ORIGIN = isLocalHostName(window.location.hostname);
-};
+class EndpointSelector {
+  config: EndpointConfig;
 
-EndpointSelector.prototype = {
-  urlFor(key) {
+  constructor(config: EndpointConfig) {
+    this.config = config;
+    isWinJsOrigin = window.location.protocol === 'ms-appx:';
+    isLocalOrigin = isLocalHostName(window.location.hostname);
+  }
+
+  urlFor(key: string): string {
     const bag = this.config[key];
     if (!bag) {
       throw errors.Error('E0006');
     }
 
     if (bag.production) {
-      // @ts-expect-error
-      if (IS_WINJS_ORIGIN && !Debug.debuggerEnabled || !IS_WINJS_ORIGIN && !IS_LOCAL_ORIGIN) {
+      // @ts-expect-error `Debug` is a WinJS global that has no ambient declaration here
+      if ((isWinJsOrigin && !Debug.debuggerEnabled) || (!isWinJsOrigin && !isLocalOrigin)) {
         return bag.production;
       }
     }
 
     return bag.local;
-  },
-
-};
+  }
+}
 
 export default EndpointSelector;
