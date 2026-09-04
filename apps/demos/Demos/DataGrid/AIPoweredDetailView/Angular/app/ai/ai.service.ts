@@ -39,7 +39,7 @@ export class AiService {
     const response = await this.chatService.chat.completions.create(params);
     const result = response.choices[0].message?.content;
 
-    return result;
+    return result ?? '';
   }
 
   getSystemPrompt() {
