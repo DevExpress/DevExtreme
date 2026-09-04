@@ -1,32 +1,24 @@
 import { CANCELED_TOKEN } from '@js/common/data/data_source/utils';
+import type { DeferredObj } from '@js/core/utils/deferred';
 
 export default class OperationManager {
-  constructor() {
-    // @ts-expect-error
-    this._counter = -1;
-    // @ts-expect-error
-    this._deferreds = {};
-  }
+  _counter = -1;
 
-  add(deferred) {
-    // @ts-expect-error
-    this._counter++;
-    // @ts-expect-error
+  _deferreds: Record<number, DeferredObj<unknown>> = {};
+
+  add(deferred: DeferredObj<unknown>): number {
+    this._counter += 1;
     this._deferreds[this._counter] = deferred;
-    // @ts-expect-error
     return this._counter;
   }
 
-  remove(operationId) {
-    // @ts-expect-error
+  remove(operationId: number): boolean {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     return delete this._deferreds[operationId];
   }
 
-  cancel(operationId) {
-    // @ts-expect-error
+  cancel(operationId: number): boolean {
     if (operationId in this._deferreds) {
-      // @ts-expect-error
       this._deferreds[operationId].reject(CANCELED_TOKEN);
       return true;
     }
@@ -34,13 +26,10 @@ export default class OperationManager {
     return false;
   }
 
-  cancelAll() {
-    // @ts-expect-error
+  cancelAll(): void {
     while (this._counter > -1) {
-      // @ts-expect-error
       this.cancel(this._counter);
-      // @ts-expect-error
-      this._counter--;
+      this._counter -= 1;
     }
   }
 }

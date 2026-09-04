@@ -117,7 +117,6 @@ const sortGroupsBySummaryCore = function (items, groups, sortByGroups) {
   let query;
 
   if (group && sorts && sorts.length) {
-    // @ts-expect-error
     query = dataQuery(items);
     each(sorts, function (index) {
       if (index === 0) {
@@ -307,7 +306,6 @@ export const summaryDataSourceAdapterExtender = (
   }
 
   private sortLastLevelGroupItems(items, groups, paths) {
-    // @ts-expect-error
     const groupedItems = storeHelper.multiLevelGroup(dataQuery(items), groups).toArray();
     let result = [];
 

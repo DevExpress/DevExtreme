@@ -156,6 +156,9 @@ class Store {
       loadOptions._langParams = { ...this._langParams, ...loadOptions._langParams };
     }
 
+    // @ts-expect-error `createQuery()` is declared with the public `Query` type, whose
+    // enumerate() promises a native Promise, while the query implementations resolve a
+    // Deferred (iteration 2: type createQuery() with the internal query interface)
     const result: DeferredObj<unknown[]> = queryByOptions(
       this.createQuery(loadOptions),
       loadOptions,
@@ -193,6 +196,9 @@ class Store {
   }
 
   _totalCountImpl(options?: StoreLoadOptions): DeferredObj<number> {
+    // @ts-expect-error `createQuery()` is declared with the public `Query` type, whose
+    // count() promises a native Promise, while the query implementations resolve a
+    // Deferred (iteration 2: type createQuery() with the internal query interface)
     const result: DeferredObj<number> = queryByOptions(
       this.createQuery(options),
       options,

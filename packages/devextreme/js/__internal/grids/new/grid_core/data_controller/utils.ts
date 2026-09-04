@@ -6,7 +6,7 @@ import type { Store } from '@js/data';
 import type { DataSourceLike } from '@js/data/data_source';
 import DataSource from '@js/data/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-import { applyBatch } from '@ts/data/m_array_utils';
+import { applyBatch } from '@ts/data/array_utils';
 
 import type {
   DataObject,
@@ -35,7 +35,8 @@ export function normalizeDataSource(
     };
   }
 
-  // TODO: research making second param not required
+  // @ts-expect-error the public DataSource constructor is declared with the public
+  // option types, while `normalizeDataSourceOptions()` returns the internal ones
   return new DataSource(normalizeDataSourceOptions(dataSourceLike, undefined));
 }
 

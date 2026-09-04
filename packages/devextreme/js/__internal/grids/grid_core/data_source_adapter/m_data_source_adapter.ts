@@ -297,7 +297,6 @@ export default class DataSourceAdapter extends modules.Controller {
     this.resetPagesCache(true);
 
     if (this._cachedStoreData) {
-      // @ts-expect-error
       applyBatch({
         keyInfo: store,
         data: this._cachedStoreData,
@@ -365,7 +364,6 @@ export default class DataSourceAdapter extends modules.Controller {
     const getItemCount = () => (groupCount ? this.itemsCount() : this.items().length);
     const oldItemCount = getItemCount();
 
-    // @ts-expect-error
     applyBatch({
       keyInfo,
       data: this._items,
@@ -374,7 +372,6 @@ export default class DataSourceAdapter extends modules.Controller {
       useInsertIndex: true,
       skipCopying: !this._needToCopyDataObject(),
     });
-    // @ts-expect-error
     applyBatch({
       keyInfo,
       data: dataSource.items(),

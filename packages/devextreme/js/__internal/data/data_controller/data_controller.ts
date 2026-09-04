@@ -65,7 +65,6 @@ class DataController {
       this._isSharedDataSource = true;
       this._dataSource = dataSourceOptions;
     } else {
-      // @ts-expect-error
       const normalizedDataSourceOptions = normalizeDataSourceOptions(dataSourceOptions);
       this._dataSource = new DataSource(
         extend(true, {}, {}, normalizedDataSourceOptions),

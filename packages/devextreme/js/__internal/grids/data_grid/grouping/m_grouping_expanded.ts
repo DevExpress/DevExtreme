@@ -343,7 +343,6 @@ export class GroupingHelper extends GroupingHelperCore {
 
     if (groupCount) {
       let { data } = options;
-      // @ts-expect-error
       const query = dataQuery(data);
       storeHelper.multiLevelGroup(query, groups).enumerate().done((groupedData) => {
         data = groupedData;

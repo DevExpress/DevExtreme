@@ -1,5 +1,6 @@
 import coreErrors from '@js/core/errors';
 import errorUtils from '@js/core/utils/error';
+import { isObject } from '@js/core/utils/type';
 
 export const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
 
@@ -59,15 +60,20 @@ export const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
 
   W4002: 'Data loading has failed for some cells due to the following error: {0}',
 });
+
+export type DataErrorHandler = (error: unknown) => void;
+
 // eslint-disable-next-line import/no-mutable-exports
-export let errorHandler = null;
-export const handleError = function (error) {
+export let errorHandler: DataErrorHandler | null = null;
+
+export const handleError = function (error: unknown): void {
   /// #DEBUG
-  const id = error && '__id' in error ? error.__id : 'E4000';
+  const id = isObject(error) && '__id' in error ? error.__id : 'E4000';
   errors.log(id, error);
   /// #ENDDEBUG
-  // @ts-expect-error
   errorHandler?.(error);
 };
-// eslint-disable-next-line no-return-assign
-export const setErrorHandler = (handler) => errorHandler = handler;
+
+export const setErrorHandler = (handler: DataErrorHandler | null): void => {
+  errorHandler = handler;
+};
