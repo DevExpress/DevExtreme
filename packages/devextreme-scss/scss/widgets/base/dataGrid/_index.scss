@@ -25,7 +25,12 @@ $datagrid-common-form-buttons-border-radius: 3px !default;
 $datagrid-common-form-buttons-margin-left: 10px !default;
 $datagrid-common-form-buttons-margin-right: 6px !default;
 
+$datagrid-draggable-column-opacity: 0.5 !default;
+$datagrid-column-chooser-item-opacity: 0.5 !default;
+
 @use "./common" with (
+  $datagrid-draggable-column-opacity: $datagrid-draggable-column-opacity,
+  $datagrid-column-chooser-item-opacity: $datagrid-column-chooser-item-opacity,
   $datagrid-common-group-min-width: $datagrid-common-group-min-width,
   $datagrid-common-addrow-margin-right: $datagrid-common-addrow-margin-right,
   $datagrid-common-addrow-margin-left: $datagrid-common-addrow-margin-left,

@@ -1,9 +1,6 @@
 @use "../../sizes" as *;
 @use "../../../../_design-system/variables/ds" as ds;
 
-// Not a colour: an opacity that used to sit in _colors.scss (NAMING.md, O7)
-$tabs-nav-button-opacity-disabled: 0 !default;
-
 // Moved here from the theme root: this component owns it (NAMING.md O1)
 $tabs-text-column-gap: ds.$spacing-80 !default;
 

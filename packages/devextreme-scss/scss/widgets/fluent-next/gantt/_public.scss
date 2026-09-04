@@ -2,6 +2,7 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-gantt-content-disabled: #{$gantt-content-disabled};
   --dx-gantt-accent-border: #{$gantt-accent-border};
   --dx-gantt-arrow-border: #{$gantt-arrow-border};
   --dx-gantt-bg: #{$gantt-bg};

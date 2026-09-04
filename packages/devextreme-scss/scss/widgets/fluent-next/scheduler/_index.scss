@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
@@ -74,13 +75,13 @@
   $scheduler-views-vertical-group-min-height: var(--dx-scheduler-views-vertical-group-min-height),
   $scheduler-tooltip-shadow: var(--dx-scheduler-tooltip-shadow),
   $scheduler-appointment-icon-font-size: var(--dx-scheduler-appointment-icon-font-size),
-  $scheduler-appointment-date-opacity: var(--dx-scheduler-appointment-date-opacity),
   $scheduler-appointment-resizing-opacity: var(--dx-scheduler-appointment-resizing-opacity),
+  $scheduler-tooltip-date-opacity: false,
+  $scheduler-appointment-date-opacity: false,
+  $agenda-appointment-details-opacity: false,
   $scheduler-appointment-disabled-opacity: var(--dx-scheduler-appointment-opacity-disabled),
-  $scheduler-appointment-drag-source-opacity: var(--dx-scheduler-appointment-drag-source-opacity),
   $agenda-appointment-title-font-weight: var(--dx-scheduler-agenda-title-font-weight),
   $agenda-appointment-details-font-size: var(--dx-scheduler-agenda-details-font-size),
-  $agenda-appointment-details-opacity: var(--dx-scheduler-agenda-details-opacity),
   $scheduler-appointment-dragging-shadow: var(--dx-scheduler-appointment-dragging-shadow),
   $scheduler-tooltip-appointment-text-color: var(--dx-scheduler-tooltip-appointment-content),
   $scheduler-appointment-overlay-bg: var(--dx-scheduler-appointment-overlay-bg),
@@ -94,7 +95,6 @@
   $scheduler-time-indicator-color: var(--dx-scheduler-time-indicator-content),
   $scheduler-time-indicator-background-color: var(--dx-scheduler-time-indicator-bg),
   $scheduler-workspace-background-color: var(--dx-scheduler-workspace-bg),
-  $scheduler-other-month-cell-opacity: var(--dx-scheduler-other-month-cell-opacity),
   $scheduler-workspace-month-text-color: var(--dx-scheduler-workspace-month-content),
   $scheduler-workspace-accent-color: var(--dx-scheduler-workspace-accent-content),
   $scheduler-first-month-cell-background-color: var(--dx-scheduler-first-month-cell-bg),
@@ -1082,7 +1082,6 @@
 
             .dx-tooltip-appointment-item-content-date {
               font-size: var(--dx-scheduler-appointment-tooltip-date-font-size);
-              opacity: 1;
               margin-top: var(--dx-scheduler-tooltip-appointment-item-content-date-margin-block-start);
             }
           }
@@ -1110,4 +1109,65 @@
 
 .dx-scheduler-work-space.dx-scheduler-work-space-month .dx-scheduler-date-table-other-month.dx-state-hover {
   color: var(--dx-scheduler-workspace-cell-content-hovered);
+}
+
+@include when-disabled(".dx-scheduler") {
+  color: var(--dx-scheduler-content-disabled);
+
+  .dx-scheduler-header,
+  .dx-scheduler-navigator-caption,
+  .dx-scheduler-header-panel,
+  .dx-scheduler-time-panel,
+  .dx-scheduler-all-day-title,
+  .dx-scheduler-work-space,
+  .dx-scheduler-appointment-content-date,
+  .dx-scheduler-appointment-content-details {
+    color: var(--dx-scheduler-content-disabled);
+  }
+
+  .dx-button-text,
+  .dx-toolbar-item-content {
+    color: var(--dx-scheduler-content-disabled);
+  }
+}
+
+.dx-scheduler.dx-state-disabled .dx-scheduler-appointment,
+.dx-state-disabled .dx-scheduler .dx-scheduler-appointment {
+  opacity: var(--dx-scheduler-appointment-opacity-disabled);
+}
+
+.dx-scheduler-appointment-content-date {
+  color: var(--dx-scheduler-appointment-date-content);
+}
+
+.dx-scheduler-agenda .dx-scheduler-appointment-content-details {
+  color: var(--dx-scheduler-agenda-details-content);
+}
+
+.dx-tooltip-appointment-item-content-date {
+  color: var(--dx-scheduler-tooltip-date-content);
+}
+
+.dx-state-disabled .dx-tooltip-appointment-item-content-date {
+  color: var(--dx-scheduler-content-disabled);
+}
+
+.dx-scheduler.dx-state-disabled .dx-scheduler-time-panel-cell,
+.dx-scheduler.dx-state-disabled .dx-scheduler-time-panel-cell > div,
+.dx-state-disabled .dx-scheduler .dx-scheduler-time-panel-cell > div {
+  color: var(--dx-scheduler-time-panel-content-disabled);
+}
+
+.dx-scheduler.dx-state-disabled,
+.dx-state-disabled .dx-scheduler {
+  .dx-scheduler-date-table-cell,
+  .dx-scheduler-date-table-cell-text,
+  .dx-scheduler-date-table-first-of-month,
+  .dx-scheduler-date-table-current-date,
+  .dx-scheduler-date-table-other-month,
+  .dx-scheduler-header-panel-cell-date,
+  .dx-scheduler-header-panel-cell-date:last-child,
+  .dx-scheduler-work-space-month .dx-scheduler-header-panel-cell-date:last-child {
+    color: var(--dx-scheduler-content-disabled);
+  }
 }
