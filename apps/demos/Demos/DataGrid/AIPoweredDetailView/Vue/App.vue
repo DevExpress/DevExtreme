@@ -78,7 +78,7 @@ function calculateModel(data: Vehicle) {
 }
 </script>
 
-<style scoped>
+<style>
 .demo-container {
   margin: 20px;
 }

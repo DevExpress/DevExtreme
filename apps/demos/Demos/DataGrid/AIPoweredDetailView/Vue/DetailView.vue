@@ -152,7 +152,7 @@ async function handleSubmit({ event }: SubmitEvent) {
 }
 </script>
 
-<style scoped>
+<style>
 .input-container {
   display: flex;
   border: 1px solid var(--dx-color-border);

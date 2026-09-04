@@ -9,16 +9,10 @@ import { AiService, type AIMessage } from '../ai/ai.service';
 
 type SubmitEvent = DxButtonTypes.ClickEvent | DxTextBoxTypes.EnterKeyEvent;
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'detail-view',
-  templateUrl: `.${modulePrefix}/detail-view/detail-view.component.html`,
-  styleUrls: [`.${modulePrefix}/detail-view/detail-view.component.css`],
+  templateUrl: `./detail-view/detail-view.component.html`,
+  styleUrls: [`./detail-view/detail-view.component.css`],
   providers: [AiService],
   imports: [
     CommonModule,
