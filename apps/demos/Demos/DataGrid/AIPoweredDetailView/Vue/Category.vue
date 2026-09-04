@@ -34,6 +34,25 @@ const categoryClass = `category__wrapper category-${id}__bg-color`;
   .category-4__bg-color {
     background-color: #9FD89F;
   }
+
+  &.dx-color-scheme-blue-dark,
+  &.dx-color-scheme-saas-dark {
+    .category-1__bg-color {
+      background-color: #835B00;
+    }
+
+    .category-2__bg-color {
+      background-color: #0C3B5E;
+    }
+
+    .category-3__bg-color {
+      background-color: #751D1F;
+    }
+
+    .category-4__bg-color {
+      background-color: #0B5A08;
+    }
+  }
 }
 
 .dx-theme-material {
