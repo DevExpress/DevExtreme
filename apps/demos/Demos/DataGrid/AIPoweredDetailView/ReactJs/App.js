@@ -20,7 +20,7 @@ const onCellClick = ({
     }
   }
 };
-const renderSparkleIcon = () => <div className='dx-icon-sparkle' />;
+const renderSparkleIcon = () => <div className="dx-icon-sparkle" />;
 const calculateModel = (data) => `${data.TrademarkName} ${data.Name}`;
 export default function App() {
   return (
