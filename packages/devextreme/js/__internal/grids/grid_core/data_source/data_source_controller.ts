@@ -1,3 +1,6 @@
+import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
+import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
+import { extend } from '@js/core/utils/extend';
 import type Store from '@ts/data/abstract_store';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
@@ -12,8 +15,54 @@ export class DataSourceController extends modules.Controller {
   // dataSource assignment and again after a reset.
   private adapter: DataSourceAdapter | null = null;
 
+  private isShared = false;
+
   public setAdapter(adapter: DataSourceAdapter | null): void {
     this.adapter = adapter;
+  }
+
+  /**
+   * @extended: DataGrid's data_source_controller
+   */
+  protected getSpecificDataSourceOption(): unknown {
+    const dataSource = this.option('dataSource');
+
+    if (Array.isArray(dataSource)) {
+      return {
+        store: {
+          type: 'array',
+          data: dataSource,
+          key: this.option('keyExpr'),
+        },
+      };
+    }
+
+    return dataSource;
+  }
+
+  public createDataSource(): DataSource | undefined {
+    const dataSourceOptions = this.getSpecificDataSourceOption();
+
+    if (!dataSourceOptions) {
+      this.isShared = false;
+      return undefined;
+    }
+
+    if (dataSourceOptions instanceof DataSourceClass) {
+      this.isShared = true;
+      return dataSourceOptions as unknown as DataSource;
+    }
+
+    this.isShared = false;
+    return new DataSourceClass(
+      extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, {})),
+    ) as unknown as DataSource;
+  }
+
+  // Read back by DataController only until disposal moves here too, at which point
+  // the flag stops leaving this class.
+  public isSharedDataSource(): boolean {
+    return this.isShared;
   }
 
   /**

@@ -1,7 +1,7 @@
 import './module_not_extended/column_headers';
 import './m_columns_controller';
 import './data_source/data_source_module';
-import './m_data_controller';
+import './module_not_extended/data_controller';
 import './module_not_extended/sorting';
 import './module_not_extended/rows';
 import './module_not_extended/context_menu';

@@ -8,8 +8,10 @@ import {
 } from '@jest/globals';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import DataSourceClass from '@js/data/data_source';
 import type { Properties as TreeListProperties } from '@js/ui/tree_list';
 import TreeList from '@js/ui/tree_list';
+import errors from '@js/ui/widget/ui.errors';
 import {
   afterTest,
   beforeTest,
@@ -251,5 +253,80 @@ describe('dataSource controller resolves its own component adapter provider', ()
     } finally {
       disposeTreeList($container);
     }
+  });
+});
+
+describe('dataSource controller owns the dataSource option reading', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('warns W1011 in DataGrid when keyExpr is combined with a non-array dataSource', async () => {
+    const log = jest.spyOn(errors, 'log').mockImplementation(() => {});
+
+    try {
+      await createDataGrid({ dataSource: { store: { type: 'array', data: DATA } }, keyExpr: 'id' });
+
+      expect(log).toHaveBeenCalledWith('W1011');
+    } finally {
+      log.mockRestore();
+    }
+  });
+
+  it('does not warn W1011 in DataGrid for an array dataSource', async () => {
+    const log = jest.spyOn(errors, 'log').mockImplementation(() => {});
+
+    try {
+      await createDataGrid({ dataSource: DATA, keyExpr: 'id' });
+
+      expect(log).not.toHaveBeenCalledWith('W1011');
+    } finally {
+      log.mockRestore();
+    }
+  });
+
+  it('does not warn W1011 in TreeList, where the override does not apply', () => {
+    const log = jest.spyOn(errors, 'log').mockImplementation(() => {});
+    const { $container } = createTreeList({
+      dataSource: { store: { type: 'array', data: DATA } },
+      keyExpr: 'id',
+    });
+
+    try {
+      expect(log).not.toHaveBeenCalledWith('W1011');
+    } finally {
+      log.mockRestore();
+      disposeTreeList($container);
+    }
+  });
+
+  it('builds a DataSource from the array option and keys it by keyExpr', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA, keyExpr: 'id' });
+
+    expect(instance.getController('dataSource').key()).toBe('id');
+  });
+
+  it('reports a passed DataSource instance as shared', async () => {
+    const shared = new DataSourceClass({ store: DATA, key: 'id' });
+    const { instance } = await createDataGrid({ dataSource: shared });
+
+    expect(instance.getController('dataSource').isSharedDataSource()).toBe(true);
+  });
+
+  it('reports an array option as not shared', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA, keyExpr: 'id' });
+
+    expect(instance.getController('dataSource').isSharedDataSource()).toBe(false);
+  });
+
+  it('clears the shared flag when the option switches from a DataSource to an array', async () => {
+    const shared = new DataSourceClass({ store: DATA, key: 'id' });
+    const { instance } = await createDataGrid({ dataSource: shared });
+
+    expect(instance.getController('dataSource').isSharedDataSource()).toBe(true);
+
+    instance.option('dataSource', OTHER_DATA);
+    await flushAsync();
+
+    expect(instance.getController('dataSource').isSharedDataSource()).toBe(false);
   });
 });
