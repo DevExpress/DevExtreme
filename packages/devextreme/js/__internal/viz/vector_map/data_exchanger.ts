@@ -6,9 +6,10 @@
 
 import Callbacks from '@js/core/utils/callbacks';
 
-export function DataExchanger() {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let DataExchanger = function () {
   this._store = {};
-}
+};
 
 DataExchanger.prototype = {
   constructor: DataExchanger,
@@ -43,3 +44,11 @@ DataExchanger.prototype = {
     return this;
   },
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_DataExchanger(value: typeof DataExchanger): void {
+  DataExchanger = value;
+}
+/// #ENDDEBUG

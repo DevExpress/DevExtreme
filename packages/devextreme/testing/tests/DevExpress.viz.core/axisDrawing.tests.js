@@ -4,6 +4,7 @@ import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import tickGeneratorModule from 'viz/axes/tick_generator';
 import { Axis } from 'viz/axes/base_axis';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import {
     Renderer,
     stubClass,
@@ -46,12 +47,12 @@ const environment = {
         };
 
         const that = this;
-        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
+        stubSeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D').callsFake(function() {
             return that.translator;
         });
         this.renderer = new Renderer();
 
-        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
+        this.tickGenerator = stubSeam(tickGeneratorModule, 'tickGenerator', 'DEBUG_set_tickGenerator').callsFake(function() {
             return function() {
                 return {
                     ticks: that.generatedTicks || [],

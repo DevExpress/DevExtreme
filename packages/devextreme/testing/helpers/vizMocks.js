@@ -1,14 +1,14 @@
 /* global currentAssert, currentTest, sinon */
 
 import $ from 'jquery';
-import * as tooltipModule from 'viz/core/tooltip';
-import * as titleModule from 'viz/core/title';
+import tooltipModule from 'viz/core/tooltip';
+import titleModule from 'viz/core/title';
 import legendModule from 'viz/components/legend';
 import axisModule from 'viz/axes/base_axis';
-import * as pointModule from 'viz/series/points/base_point';
+import pointModule from 'viz/series/points/base_point';
 import { Series } from 'viz/series/base_series';
-import * as loadingIndicatorModule from 'viz/core/loading_indicator';
-import * as exportMenuModule from 'viz/core/export';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import exportMenuModule from 'viz/core/export';
 import rendererModule from 'viz/core/renderers/renderer_default';
 import errors from 'viz/core/errors_warnings';
 import * as baseWidgetUtils from '__internal/viz/core/base_widget.utils';

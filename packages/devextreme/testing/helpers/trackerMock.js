@@ -1,5 +1,4 @@
 import { stubClass } from './vizMocks.js';
-// Mutate the import-map facade (see esm-shims/viz_chart_tracker.js).
 import trackerModule from 'viz/chart_components/tracker';
 
 const ChartTrackerStub = stubClass(trackerModule.ChartTracker);

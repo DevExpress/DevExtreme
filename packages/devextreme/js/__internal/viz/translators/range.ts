@@ -43,7 +43,8 @@ function compareAndReplace(thisValue, otherValue, setValue, compare) {
   }
 }
 
-export const Range = function (range?) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Range = function (range?) {
   range && extend(this, range);
 };
 
@@ -156,3 +157,9 @@ _Range.prototype = {
     }
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_Range(value: typeof Range): void {
+  Range = value;
+}
+/// #ENDDEBUG

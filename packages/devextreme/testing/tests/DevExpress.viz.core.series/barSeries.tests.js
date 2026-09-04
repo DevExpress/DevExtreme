@@ -6,6 +6,7 @@ import Color from 'color';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
 import { MockAxis, MockTranslator } from '../../helpers/chartMocks.js';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const Series = SeriesModule.Series;
 
@@ -67,7 +68,7 @@ const environment = {
         this.renderer = new Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.getMarkerCoords.returns({ x: 1, y: 2, width: 20, height: 10 });

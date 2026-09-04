@@ -1348,12 +1348,13 @@ QUnit.module('Connector', {
         this.label = sinon.createStubInstance(labelModule.Label);
         this.label.getLayoutOptions.returns(this.options.label);
         this.label.getBoundingRect.returns({ height: 10, width: 20 });
-        this.labelFactory = labelModule.Label = sinon.spy(function() {
+        this.labelFactory = sinon.spy(function() {
             return that.label;
         });
+        labelModule.DEBUG_set_Label(this.labelFactory);
     },
     afterEach: function() {
-        labelModule.Label = originalLabel;
+        labelModule.DEBUG_set_Label(originalLabel);
     }
 });
 

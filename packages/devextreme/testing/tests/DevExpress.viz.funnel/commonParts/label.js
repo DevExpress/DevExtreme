@@ -2,10 +2,11 @@ import $ from 'jquery';
 import { environment, stubAlgorithm } from './common.js';
 import labelModule from 'viz/series/points/label';
 import {
-    stubClass
+    stubClass,
 } from '../../../helpers/vizMocks.js';
 import * as labels from '__internal/viz/funnel/label';
 import dxFunnel from '__internal/viz/funnel/funnel';
+import { stubSeam } from '../../../helpers/moduleSeam.js';
 
 const Label = labelModule.Label;
 const stubLabel = stubClass(Label);
@@ -34,7 +35,7 @@ export const labelEnvironment = $.extend({}, environment, {
 
         const that = this;
 
-        sinon.stub(labelModule, 'Label').callsFake(function() {
+        stubSeam(labelModule, 'Label', 'DEBUG_set_Label').callsFake(function() {
             const stub = new stubLabel();
             stub.stub('isVisible').returns(true);
             stub.stub('getBoundingRect').returns(that.labelBoxes[(labelBoxesIndex++) % that.labelBoxes.length]);

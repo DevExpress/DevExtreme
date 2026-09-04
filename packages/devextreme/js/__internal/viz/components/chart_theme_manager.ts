@@ -26,7 +26,8 @@ import {
 import { BaseThemeManager } from '@ts/viz/core/base_theme_manager';
 import { extractColor, normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 
-export const ThemeManager = BaseThemeManager.inherit((function () {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let ThemeManager = BaseThemeManager.inherit((function () {
   const ctor = function (params) {
     const that = this;
 
@@ -245,3 +246,11 @@ export const ThemeManager = BaseThemeManager.inherit((function () {
     },
   };
 })());
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_ThemeManager(value: typeof ThemeManager): void {
+  ThemeManager = value;
+}
+/// #ENDDEBUG

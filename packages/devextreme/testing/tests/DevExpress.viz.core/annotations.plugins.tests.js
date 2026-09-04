@@ -896,7 +896,7 @@ QUnit.test('Get coordinates using argument and location `edge`', function(assert
 QUnit.module('Lifecycle', {
     beforeEach() {
         this.renderer = new Renderer();
-        rendererModule.Renderer = sinon.spy(() => this.renderer);
+        rendererModule.DEBUG_set_Renderer(sinon.spy(() => this.renderer));
 
         this.createAnnotationStub = sinon.stub().returns([{ draw: sinon.spy(), plaque: { clear: sinon.spy() } }]);
         __test_utils.stub_createAnnotations(this.createAnnotationStub);
@@ -1289,16 +1289,16 @@ QUnit.module('Lifecycle', {
 const environment = {
     beforeEach() {
         this.renderer = new Renderer();
-        rendererModule.Renderer = sinon.spy(() => this.renderer);
+        rendererModule.DEBUG_set_Renderer(sinon.spy(() => this.renderer));
 
-        TooltipModule.Tooltip = sinon.spy((options) => {
+        TooltipModule.DEBUG_set_tooltip(sinon.spy((options) => {
             this.tooltip = new Tooltip(options);
             this.tooltip.show = sinon.stub().returns(true);
             this.tooltip.hide = sinon.spy();
             this.tooltip.move = sinon.spy();
             this.tooltip.isCursorOnTooltip = sinon.stub().returns(false);
             return this.tooltip;
-        });
+        }));
     },
     createChart(options) {
         const chart = $('<div>').appendTo('#qunit-fixture').dxChart($.extend(true, {

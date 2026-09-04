@@ -1,4 +1,5 @@
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../../helpers/moduleSeam.js';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import devices from '__internal/core/m_devices';
 import domUtils from '__internal/core/utils/m_dom';
@@ -42,7 +43,7 @@ const moduleConfig = {
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+        this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake((callback) => {
             callback();
         });
     },

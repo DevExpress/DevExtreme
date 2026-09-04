@@ -6,6 +6,7 @@ import {
 } from './vectorMapParts/commons.js';
 import mapLayerModule from 'viz/vector_map/map_layer';
 import projectionModule from 'viz/vector_map/projection.main';
+import { spySeam } from '../../helpers/moduleSeam.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { implementationsMap } from 'core/utils/size';
 import {
@@ -23,7 +24,7 @@ QUnit.module('Map - projection events', $.extend({}, environment, {
 
 QUnit.test('On center', function(assert) {
     const onCenterChanged = sinon.spy();
-    const spy = sinon.spy(projectionModule, 'Projection');
+    const spy = spySeam(projectionModule, 'Projection', 'DEBUG_set_Projection');
     this.createMap({ onCenterChanged: onCenterChanged });
 
     spy.lastCall.args[0].centerChanged('test-center');
@@ -33,7 +34,7 @@ QUnit.test('On center', function(assert) {
 
 QUnit.test('On zoom', function(assert) {
     const onZoomFactorChanged = sinon.spy();
-    const spy = sinon.spy(projectionModule, 'Projection');
+    const spy = spySeam(projectionModule, 'Projection', 'DEBUG_set_Projection');
     this.createMap({ onZoomFactorChanged: onZoomFactorChanged });
 
     spy.lastCall.args[0].zoomChanged('test-zoom');
@@ -43,7 +44,7 @@ QUnit.test('On zoom', function(assert) {
 
 QUnit.module('Map - event trigger interaction', $.extend({}, environment, {
     createMap: function() {
-        const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+        const spy = spySeam(mapLayerModule, 'MapLayerCollection', 'DEBUG_set_MapLayerCollection');
         environment.createMap.apply(this, arguments);
         this.eventTrigger = spy.lastCall.args[0].eventTrigger;
     },

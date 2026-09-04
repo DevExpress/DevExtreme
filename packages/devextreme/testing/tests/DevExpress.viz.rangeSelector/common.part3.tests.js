@@ -8,6 +8,7 @@ import {
     StubRange,
 } from './rangeSelectorParts/commons.js';
 import slidersControllerModule from 'viz/range_selector/sliders_controller';
+import { spySeam } from '../../helpers/moduleSeam.js';
 import seriesDataSourceModule from 'viz/range_selector/series_data_source';
 import { DataSource } from 'common/data/data_source/data_source';
 import dateLocalization from 'common/core/localization/date';
@@ -23,7 +24,7 @@ const formatsAreEqual = function(format1, format2) {
 QUnit.module('Parsing data', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        seriesDataSourceModule.SeriesDataSource = _SeriesDataSource;
+        seriesDataSourceModule.DEBUG_set_SeriesDataSource(_SeriesDataSource);
         this.dataSource = [
             { x: '10', y1: 0, y2: 10 },
             { x: '15', y1: 6, y2: 12 },
@@ -400,7 +401,7 @@ QUnit.test('rangeSelector with scale.valueType and dataSourceField and without c
 QUnit.module('Semidiscrete scale', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        seriesDataSourceModule.SeriesDataSource = _SeriesDataSource;
+        seriesDataSourceModule.DEBUG_set_SeriesDataSource(_SeriesDataSource);
 
         this.$container.width(1000);
     }
@@ -1299,7 +1300,7 @@ QUnit.test('T214998. scale multi-line text label', function(assert) {
 });
 
 QUnit.test('range selectedRangeChanged initialization', function(assert) {
-    const spy = sinon.spy(slidersControllerModule, 'SlidersController');
+    const spy = spySeam(slidersControllerModule, 'SlidersController', 'DEBUG_set_SlidersController');
     this.createWidget();
 
     assert.strictEqual(typeof spy.lastCall.args[0].updateSelectedRange, 'function');

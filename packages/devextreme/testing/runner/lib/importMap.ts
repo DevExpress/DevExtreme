@@ -1,8 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-import { buildMutableModuleImportMapEntries } from './autoMutableFacade';
-
 const ESM_ROOT = '/packages/devextreme/artifacts/transpiled-esm-npm/esm';
 const SHIMS = '/packages/devextreme/testing/helpers/esm-shims';
 const NODE_MODULES = '/packages/devextreme/node_modules';
@@ -74,6 +72,10 @@ export interface BrowserImportMap {
 
 function withCacheBuster(url: string, cacheBuster: string): string {
   if (!cacheBuster) {
+    return url;
+  }
+
+  if (url.startsWith(ESM_ROOT)) {
     return url;
   }
 
@@ -240,18 +242,23 @@ function collectPackageRootEntries(): Record<string, string> {
   fs.readdirSync(ESM_FS_ROOT, { withFileTypes: true }).forEach((entry) => {
     if (entry.isFile() && entry.name.endsWith('.js')) {
       const name = entry.name.slice(0, -3);
-      const url = `${ESM_ROOT}/${entry.name}`;
+      // Extensionless, like the `viz/` `core/` `common/` prefix maps: artifacts import
+      // root modules as `../../exporter`, and a second URL for the same file would give
+      // the browser a second module instance with its own copy of every binding.
+      const url = `${ESM_ROOT}/${name}`;
       entries[name] = url;
       // Suites often `require('aspnet.js')` / `require('color.js')` with the extension.
       entries[entry.name] = url;
       return;
     }
 
-    // Package folders with index.js (e.g. events → events/index.js)
+    // Package folders with index.js (e.g. events → events/index.js), mapped
+    // extensionless for the same reason as the file branch above: artifacts
+    // import them as `../events`, and the server resolves the index itself.
     if (entry.isDirectory()) {
       const indexPath = path.join(ESM_FS_ROOT, entry.name, 'index.js');
       if (fs.existsSync(indexPath)) {
-        entries[entry.name] = `${ESM_ROOT}/${entry.name}/index.js`;
+        entries[entry.name] = `${ESM_ROOT}/${entry.name}`;
       }
     }
   });
@@ -289,8 +296,6 @@ export function buildQunitImportMap({
 
     // Exact package-root entries (exporter, color, localization, events, …)
     ...collectPackageRootEntries(),
-    // Forced mutable facades → ESM artifacts (generated at serve-time).
-    ...buildMutableModuleImportMapEntries(ESM_ROOT),
 
     jquery: jqueryUrl.includes('noJQuery') ? jqueryUrl : `${SHIMS}/jquery.js`,
 
@@ -342,58 +347,7 @@ export function buildQunitImportMap({
     'material_blue_light.css!': `${SHIMS}/material_blue_light.css.js`,
     'gantt.css!': `${SHIMS}/gantt.css.js`,
 
-    // Auto-mutable modules are provided by buildMutableModuleImportMapEntries above.
-    // Hand-written only where composition is custom (themes).
-    'viz/core/base_theme_manager': `${ESM_ROOT}/viz/core/base_theme_manager.js`,
-    'viz/chart_components/layout_manager': `${ESM_ROOT}/viz/chart_components/layout_manager.js`,
-    'viz/chart_components/scroll_bar': `${ESM_ROOT}/viz/chart_components/scroll_bar.js`,
-    'viz/chart_components/crosshair': `${ESM_ROOT}/viz/chart_components/crosshair.js`,
-    'viz/components/chart_theme_manager': `${ESM_ROOT}/viz/components/chart_theme_manager.js`,
-    'viz/components/data_validator': `${ESM_ROOT}/viz/components/data_validator.js`,
-    'viz/series/points/base_point': `${ESM_ROOT}/viz/series/points/base_point.js`,
-    'viz/series/base_series': `${ESM_ROOT}/viz/series/base_series.js`,
-    'viz/core/series_family': `${ESM_ROOT}/viz/core/series_family.js`,
-    'viz/series/points/label': `${ESM_ROOT}/viz/series/points/label.js`,
-    'viz/translators/range': `${ESM_ROOT}/viz/translators/range.js`,
-    'viz/translators/translator1d': `${ESM_ROOT}/viz/translators/translator1d.js`,
-    'viz/core/plaque': `${ESM_ROOT}/viz/core/plaque.js`,
-    'viz/range_selector/tracker': `${ESM_ROOT}/viz/range_selector/tracker.js`,
-    'viz/range_selector/series_data_source': `${ESM_ROOT}/viz/range_selector/series_data_source.js`,
-    'viz/range_selector/sliders_controller': `${ESM_ROOT}/viz/range_selector/sliders_controller.js`,
-    'viz/vector_map/projection.main': `${ESM_ROOT}/viz/vector_map/projection.main.js`,
-    'viz/vector_map/control_bar/control_bar': `${ESM_ROOT}/viz/vector_map/control_bar/control_bar.js`,
-    'viz/vector_map/gesture_handler': `${ESM_ROOT}/viz/vector_map/gesture_handler.js`,
-    'viz/vector_map/tracker': `${ESM_ROOT}/viz/vector_map/tracker.js`,
-    'viz/vector_map/data_exchanger': `${ESM_ROOT}/viz/vector_map/data_exchanger.js`,
-    'viz/vector_map/legend': `${ESM_ROOT}/viz/vector_map/legend.js`,
-    'viz/vector_map/layout': `${ESM_ROOT}/viz/vector_map/layout.js`,
-    'viz/vector_map/map_layer': `${ESM_ROOT}/viz/vector_map/map_layer.js`,
-    'viz/vector_map/tooltip_viewer': `${ESM_ROOT}/viz/vector_map/tooltip_viewer.js`,
-    '__internal/viz/core/base_theme_manager': `${ESM_ROOT}/__internal/viz/core/base_theme_manager.js`,
-    '__internal/viz/chart_components/layout_manager': `${ESM_ROOT}/__internal/viz/chart_components/layout_manager.js`,
-    '__internal/viz/chart_components/scroll_bar': `${ESM_ROOT}/__internal/viz/chart_components/scroll_bar.js`,
-    '__internal/viz/chart_components/crosshair': `${ESM_ROOT}/__internal/viz/chart_components/crosshair.js`,
-    '__internal/viz/components/chart_theme_manager': `${ESM_ROOT}/__internal/viz/components/chart_theme_manager.js`,
-    '__internal/viz/components/data_validator': `${ESM_ROOT}/__internal/viz/components/data_validator.js`,
-    '__internal/viz/series/points/base_point': `${ESM_ROOT}/__internal/viz/series/points/base_point.js`,
-    '__internal/viz/series/base_series': `${ESM_ROOT}/__internal/viz/series/base_series.js`,
-    '__internal/viz/core/series_family': `${ESM_ROOT}/__internal/viz/core/series_family.js`,
-    '__internal/viz/series/points/label': `${ESM_ROOT}/__internal/viz/series/points/label.js`,
-    '__internal/viz/translators/range': `${ESM_ROOT}/__internal/viz/translators/range.js`,
-    '__internal/viz/translators/translator1d': `${ESM_ROOT}/__internal/viz/translators/translator1d.js`,
-    '__internal/viz/core/plaque': `${ESM_ROOT}/__internal/viz/core/plaque.js`,
-    '__internal/viz/range_selector/tracker': `${ESM_ROOT}/__internal/viz/range_selector/tracker.js`,
-    '__internal/viz/range_selector/series_data_source': `${ESM_ROOT}/__internal/viz/range_selector/series_data_source.js`,
-    '__internal/viz/range_selector/sliders_controller': `${ESM_ROOT}/__internal/viz/range_selector/sliders_controller.js`,
-    '__internal/viz/vector_map/projection.main': `${ESM_ROOT}/__internal/viz/vector_map/projection.main.js`,
-    '__internal/viz/vector_map/control_bar/control_bar': `${ESM_ROOT}/__internal/viz/vector_map/control_bar/control_bar.js`,
-    '__internal/viz/vector_map/gesture_handler': `${ESM_ROOT}/__internal/viz/vector_map/gesture_handler.js`,
-    '__internal/viz/vector_map/tracker': `${ESM_ROOT}/__internal/viz/vector_map/tracker.js`,
-    '__internal/viz/vector_map/data_exchanger': `${ESM_ROOT}/__internal/viz/vector_map/data_exchanger.js`,
-    '__internal/viz/vector_map/legend': `${ESM_ROOT}/__internal/viz/vector_map/legend.js`,
-    '__internal/viz/vector_map/layout': `${ESM_ROOT}/__internal/viz/vector_map/layout.js`,
-    '__internal/viz/vector_map/map_layer': `${ESM_ROOT}/__internal/viz/vector_map/map_layer.js`,
-    '__internal/viz/vector_map/tooltip_viewer': `${ESM_ROOT}/__internal/viz/vector_map/tooltip_viewer.js`,
+    // Hand-written shim: theme composition is custom.
     'ui/themes': `${SHIMS}/themes.js`,
     '__internal/ui/themes': `${SHIMS}/themes.js`,
 
