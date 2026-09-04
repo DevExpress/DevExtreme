@@ -160,7 +160,7 @@ function customItemCreating(data: DxSelectBoxTypes.CustomItemCreatingEvent) {
     });
 }
 </script>
-<style scoped>
+<style>
 .widget-container {
   margin-right: 320px;
 }

@@ -176,7 +176,7 @@ function onRequestEditOperation(e: Record<string, any>) {
   }
 }
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 600px;
     }

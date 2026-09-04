@@ -138,7 +138,7 @@ const recursive = ref(true);
 const expandedRowKeys = [1, 5];
 const editorOptions = { placeholder: 'Search column' };
 </script>
-<style scoped>
+<style>
 #employees {
   max-height: 440px;
 }

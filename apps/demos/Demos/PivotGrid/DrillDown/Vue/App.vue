@@ -101,7 +101,7 @@ function onShown() {
   dataGridRef.value?.instance?.updateDimensions();
 }
 </script>
-<style scoped>
+<style>
 #sales {
   margin: 20px 0;
 }

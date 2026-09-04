@@ -112,7 +112,7 @@ function generateNewPhoneOptions(index: number) {
   };
 }
 </script>
-<style scoped>
+<style>
 #form-container {
   margin: 10px 10px 30px;
 }

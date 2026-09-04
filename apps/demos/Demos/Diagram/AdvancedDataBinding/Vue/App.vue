@@ -81,7 +81,7 @@ function itemHeightExpr(obj: any, value: any) {
   return obj.height || (obj.type === 'group' && 1) || 0.75;
 }
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 900px;
     }

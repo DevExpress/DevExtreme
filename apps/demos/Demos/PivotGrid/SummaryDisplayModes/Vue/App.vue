@@ -96,7 +96,7 @@ function onContextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
   }
 }
 </script>
-<style scoped>
+<style>
 .desc-container {
   margin-bottom: 10px;
 }
