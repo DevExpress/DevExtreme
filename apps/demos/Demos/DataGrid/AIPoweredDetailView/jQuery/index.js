@@ -1,0 +1,252 @@
+$(() => {
+  const deployment = 'demo-mini';
+  const apiVersion = '2024-02-01';
+  const endpoint = 'https://public-api.devexpress.com/demo-openai';
+  const apiKey = 'DEMO';
+  let promptEditor;
+  let suggestions;
+  let submitButton;
+  let responseEditor;
+  let loadPanel;
+  let $emptyMessage;
+  let $errorMessage;
+
+  const aiService = new AzureOpenAI({
+    dangerouslyAllowBrowser: true,
+    deployment,
+    endpoint,
+    apiVersion,
+    apiKey,
+  });
+
+  async function getAIResponse(messages) {
+    const params = {
+      messages,
+      model: deployment,
+      max_completion_tokens: 1000,
+      temperature: 0.7,
+    };
+
+    const response = await aiService.chat.completions.create(params);
+    const result = response.choices[0].message?.content;
+
+    return result;
+  }
+
+  const createCategoryTemplate = ({ CategoryName, CategoryID }) => $('<div>')
+    .addClass('category__wrapper')
+    .addClass(`category-${CategoryID}__bg-color`)
+    .text(CategoryName);
+
+  function toggleLoadingState(isLoading, event) {
+    const responseText = responseEditor.option('value');
+    responseEditor.option('disabled', isLoading || !responseText);
+    promptEditor.option('disabled', isLoading);
+    suggestions.option('disabled', isLoading);
+    submitButton.option('disabled', isLoading);
+
+    if (isLoading) {
+      $emptyMessage.hide();
+      $errorMessage.hide();
+      loadPanel.show();
+      event?.target.blur();
+    } else {
+      submitButton.option('text', 'Resubmit');
+      loadPanel.hide();
+      event?.target.focus();
+    }
+  }
+
+  async function submit(event, rowData) {
+    const userPrompt = promptEditor.option('value');
+    if (userPrompt === '') return;
+
+    toggleLoadingState(true, event);
+
+    try {
+      const messages = [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: `User prompt: ${userPrompt}\nRow data: ${JSON.stringify(rowData)}` },
+      ];
+      const aiResponse = await getAIResponse(messages);
+      responseEditor.option('value', aiResponse);
+    } catch {
+      responseEditor.option('value', '');
+      $errorMessage.show();
+    } finally {
+      toggleLoadingState(false, event);
+    }
+  }
+
+  function createInputArea(rowData) {
+    const $promptEditor = $('<div>').dxTextBox({
+      placeholder: 'Ask AI Assistant...',
+      stylingMode: 'filled',
+      valueChangeEvent: 'input',
+      onValueChanged({ value }) {
+        submitButton.option('disabled', !value);
+      },
+      onEnterKey: ({ event }) => submit(event, rowData),
+      elementAttr: { class: 'prompt-editor' },
+    });
+    promptEditor = $promptEditor.dxTextBox('instance');
+
+    const $suggestions = $('<div>').dxButtonGroup({
+      items: [
+        { type: 'default', text: '✨ Summary', prompt: 'Display general information about this vehicle and its features.' },
+        { type: 'default', text: '⚡ Ideal Buyer', prompt: 'Describe who this vehicle appeals to the most in a sentence.' },
+        { type: 'default', text: '🏎️ Competitors', prompt: 'List 2-3 models that directly compete with this vehicle.' },
+      ],
+      stylingMode: 'outlined',
+      selectionMode: 'none',
+      elementAttr: { class: 'dx-chat-suggestions' },
+      onItemClick(e) {
+        const suggestion = e.itemData;
+        const promptEditor = $promptEditor.dxTextBox('instance');
+        promptEditor.option('value', suggestion.prompt);
+      },
+    });
+    suggestions = $suggestions.dxButtonGroup('instance');
+
+    const $submitButton = $('<div>').dxButton({
+      icon: 'sparkle',
+      text: 'Submit',
+      type: 'default',
+      disabled: true,
+      onClick: ({ event }) => submit(event, rowData),
+    });
+    submitButton = $submitButton.dxButton('instance');
+
+    return $('<div>')
+      .addClass('input-container')
+      .append(
+        $('<div>').addClass('prompt-container').append($promptEditor, $suggestions),
+        $('<div>').addClass('submit-container').append($submitButton),
+      );
+  }
+
+  function getOutputAreaMinHeight() {
+    const isMaterial = $('.dx-theme-material').length > 0;
+    if (isMaterial) return 68;
+
+    return 56;
+  }
+
+  function getOutputAreaMaxHeight() {
+    const isMaterial = $('.dx-theme-material').length > 0;
+    if (isMaterial) return 244;
+
+    const isGeneric = $('.dx-theme-generic').length > 0;
+    if (isGeneric) return 178;
+
+    return 196;
+  }
+
+  function createOutputArea() {
+    const $responseEditor = $('<div>').dxTextArea({
+      autoResizeEnabled: true,
+      width: '100%',
+      minHeight: getOutputAreaMinHeight(),
+      maxHeight: getOutputAreaMaxHeight(),
+      readOnly: true,
+      disabled: true,
+      stylingMode: 'outlined',
+      hoverStateEnabled: false,
+      focusStateEnabled: false,
+      elementAttr: { class: 'response-editor' },
+    });
+    responseEditor = $responseEditor.dxTextArea('instance');
+
+    const $loadPanel = $('<div>').dxLoadPanel({
+      container: '.output-container',
+      position: { of: '.output-container' },
+      showPane: false,
+      shading: true,
+      message: '',
+      visible: false,
+    });
+    loadPanel = $loadPanel.dxLoadPanel('instance');
+
+    $emptyMessage = $('<div>')
+      .addClass('output-empty-message')
+      .text('AI Assistant is ready to answer your questions about this record.');
+
+    $errorMessage = $('<div>')
+      .addClass('output-error-message')
+      .append(
+        $('<span>').addClass('dx-icon-warning'),
+        'An unexpected error occurred. Please try again.',
+      )
+      .hide();
+
+    return $('<div>')
+      .addClass('output-container')
+      .append($loadPanel, $responseEditor, $emptyMessage, $errorMessage);
+  }
+
+  $('#gridContainer').dxDataGrid({
+    dataSource: vehicles,
+    showBorders: true,
+    keyExpr: 'ID',
+    paging: {
+      pageSize: 10,
+    },
+    height: 500,
+    columns: [
+      {
+        type: 'detailExpand',
+        cellTemplate() {
+          return $('<div>').addClass('dx-icon-sparkle');
+        },
+      },
+      {
+        caption: 'Model',
+        calculateCellValue: (data) => `${data.TrademarkName} ${data.Name}`,
+      },
+      {
+        dataField: 'Price',
+        alignment: 'left',
+        format: 'currency',
+      },
+      {
+        caption: 'Category',
+        cellTemplate: (container, options) => {
+          const category = options.data;
+          const categoryWrapper = createCategoryTemplate(category);
+          container.append(categoryWrapper);
+        },
+        minWidth: 180,
+      },
+      {
+        dataField: 'Modification',
+      },
+      {
+        dataField: 'Horsepower',
+      },
+      {
+        dataField: 'BodyStyleName',
+        caption: 'Body Style',
+      },
+    ],
+    masterDetail: {
+      enabled: true,
+      template: (container, { data }) => {
+        const inputArea = createInputArea(data);
+        const outputArea = createOutputArea();
+        container.append(inputArea, outputArea);
+      },
+    },
+    onRowExpanding(e) {
+      e.component.collapseAll(-1);
+    },
+    onCellClick(e) {
+      if (e.column.type === 'detailExpand' && e.rowType === 'data') {
+        if (e.row.isExpanded) {
+          e.component.collapseRow(e.key);
+        } else {
+          e.component.expandRow(e.key);
+        }
+      }
+    },
+  });
+});

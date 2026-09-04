@@ -1,0 +1,73 @@
+<div class="input-container">
+  <div class="prompt-container">
+    <dx-text-box
+      placeholder="Ask AI Assistant..."
+      stylingMode="filled"
+      valueChangeEvent="input"
+      [(value)]="promptValue"
+      (onEnterKey)="handleSubmit($event)"
+      [elementAttr]="{ class: 'prompt-editor' }"
+      [disabled]="isLoading"
+    ></dx-text-box>
+
+    <dx-button-group
+      [items]="suggestions"
+      stylingMode="outlined"
+      selectionMode="none"
+      (onItemClick)="onSuggestionClick($event)"
+      [elementAttr]="{ class: 'dx-chat-suggestions' }"
+      [disabled]="isLoading"
+    ></dx-button-group>
+  </div>
+
+  <div class="submit-container">
+    <dx-button
+      icon="sparkle"
+      [text]="!responseValue && !isError ? 'Submit' : 'Resubmit'"
+      type="default"
+      [disabled]="!promptValue || isLoading"
+      (onClick)="handleSubmit($event)"
+    ></dx-button>
+  </div>
+</div>
+
+<div class="output-container">
+  <dx-text-area
+    [value]="responseValue"
+    [autoResizeEnabled]="true"
+    width="100%"
+    [minHeight]="outputAreaMinHeight"
+    [maxHeight]="outputAreaMaxHeight"
+    [readOnly]="true"
+    [disabled]="isLoading || !responseValue"
+    stylingMode="outlined"
+    [hoverStateEnabled]="false"
+    [focusStateEnabled]="false"
+    [elementAttr]="{ class: 'response-editor' }"
+  ></dx-text-area>
+
+  <dx-load-panel
+    container=".output-container"
+    [showPane]="false"
+    [shading]="true"
+    message=""
+    [visible]="isLoading"
+  >
+    <dxo-load-panel-position of=".output-container"></dxo-load-panel-position>
+  </dx-load-panel>
+
+  <div
+    *ngIf="!isLoading && !responseValue && !isError"
+    class="output-empty-message"
+  >
+    AI Assistant is ready to answer your questions about this record.
+  </div>
+
+  <div
+    *ngIf="!isLoading && !responseValue && isError"
+    class="output-error-message"
+  >
+    <span class="dx-icon-warning"></span>
+    An unexpected error occurred. Please try again.
+  </div>
+</div>

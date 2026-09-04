@@ -1,0 +1,14 @@
+::ng-deep .demo-container {
+    margin: 20px;
+}
+
+::ng-deep .dx-command-expand .dx-icon-sparkle {
+    cursor: pointer;
+    text-align: center;
+    font-size: var(--dx-font-size-icon);
+    color: var(--dx-color-primary);
+}
+
+::ng-deep .dx-master-detail-cell {
+    background-color: unset !important;
+}
