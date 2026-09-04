@@ -31,6 +31,22 @@
 })(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax) {
     var templateCompiler = createTemplateCompiler();
     var pendingCreateComponentRoutines = [ ];
+    var cspNonce = null;
+
+    function isCspRestricted() {
+        return cspNonce !== null;
+    }
+
+    function compileViaScript(src, code) {
+        if(!src || src.tagName !== 'SCRIPT') {
+            return null;
+        }
+        var funcName = src.id.replaceAll('-', '');
+        var func =
+            'function ' + funcName + '(obj,encodeHtml){\n' + code + '\n}';
+        $.globalEval(func, src, window.document);
+        return funcName;
+    }
 
     function createTemplateCompiler() {
         var ENCODE_QUALIFIER = '-',
@@ -85,19 +101,18 @@
             bag.push('}', 'return _.join(\'\')');
             var code = bag.join('');
 
+            if(isCspRestricted()) {
+                var compiled = compileViaScript(element[0], code);
+                return compiled !== null ? compiled : text;
+            }
+
+            // fallback to old behavior for legacy mode
             try {
                 // eslint-disable-next-line no-new-func
                 return new Function('obj', 'encodeHtml', code);
             } catch(e) {
-                var src = element[0];
-                if(src.tagName === 'SCRIPT') {
-                    var funcName = src.id.replaceAll('-', '');
-                    var func = 'function ' + funcName + '(obj,encodeHtml){\n' + code + '\n}';
-                    $.globalEval(func, src, window.document);
-                    return funcName;
-                } else {
-                    return text;
-                }
+                var compiled = compileViaScript(element[0], code);
+                return compiled !== null ? compiled : text;
             }
         };
     }
@@ -205,7 +220,9 @@
             }
         },
 
-        setTemplateEngine: function() {
+        setTemplateEngine: function(nonce) {
+            cspNonce = nonce;
+
             if(setTemplateEngine) {
                 setTemplateEngine(createTemplateEngine());
             }
