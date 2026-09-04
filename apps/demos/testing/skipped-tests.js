@@ -10,9 +10,8 @@ export const skippedTests = {
     // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
 
-    // Remote WidgetsGalleryDataService is unstable and not mocked yet.
-    // StandaloneFieldChooser demo is stubbed out (see the TODO in its app.component.ts) pending a devextreme-angular fix
-    PivotGrid: ['WebAPIService', 'StandaloneFieldChooser'],
+    // Remote WidgetsGalleryDataService is unstable and not mocked yet
+    PivotGrid: ['WebAPIService'],
   },
   React: {
     // WebGL initialization error at the provider. There is no point in adding a mask
