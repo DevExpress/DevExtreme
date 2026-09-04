@@ -50,7 +50,7 @@ const customizeTooltip = ({ node, node: { data: { name } }, valueText }: Record<
   }
 );
 </script>
-<style scoped>
+<style>
 .product {
   font-weight: 500;
 }

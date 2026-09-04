@@ -42,7 +42,8 @@ describe('Core ContextMenu', () => {
       controller.show(event as any, 'test view', { data: 'test' });
 
       expect(controller.getItems).toHaveBeenCalledTimes(1);
-      expect(controller.getItems).toHaveBeenCalledWith('test view', target, { data: 'test' });
+      expect(controller.getItems as unknown as jest.Mock)
+        .toHaveBeenCalledWith('test view', target, { data: 'test' });
 
       expect(event.preventDefault).toHaveBeenCalledTimes(1);
       expect(event.stopPropagation).toHaveBeenCalledTimes(1);

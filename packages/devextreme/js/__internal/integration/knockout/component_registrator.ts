@@ -12,7 +12,7 @@ import { isPlainObject } from '@ts/core/utils/m_type';
 import Draggable from '@ts/m_draggable';
 import Editor from '@ts/ui/editor/editor';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
-import VizWidget from '@ts/viz/core/m_base_widget';
+import VizWidget from '@ts/viz/core/base_widget';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';
 

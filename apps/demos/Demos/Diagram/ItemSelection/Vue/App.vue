@@ -63,7 +63,7 @@ function onSelectionChanged({ items }: DxDiagramTypes.SelectionChangedEvent) {
   }
 }
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 600px;
     }

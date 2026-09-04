@@ -17,7 +17,7 @@ import {
   sendRequest,
   serializePropName,
   serializeValue,
-} from './m_utils';
+} from './utils';
 
 const DEFAULT_PROTOCOL_VERSION = 4;
 const STRING_FUNCTIONS = ['contains', 'notcontains', 'startswith', 'endswith'];

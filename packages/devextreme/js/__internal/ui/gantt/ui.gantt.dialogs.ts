@@ -130,10 +130,8 @@ class DialogInfoBase {
     return this._parameters;
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  getFormData() {
-    const formData = this._form?.option('formData');
-    return formData;
+  getFormData(): unknown {
+    return this._form?.option('formData');
   }
 
   isValidated(): boolean {

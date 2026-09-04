@@ -4502,6 +4502,20 @@
                 "DemoType": "Web"
               }
             ]
+          },
+          {
+            "Name": "Tool Call Visualization",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Tool Call Visualization",
+                "Name": "ToolCallVisualization",
+                "Widget": "Chat",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-wg-roadmap-tool-call-visualization.xml"
+              }
+            ]
           }
         ]
       }

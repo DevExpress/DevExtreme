@@ -7343,7 +7343,7 @@ declare module DevExpress.core {
 
     insertBefore(element: Element | dxElementWrapper): this;
 
-    is(selector: string | dxElementWrapper): boolean;
+    is(selector: string | dxElementWrapper | Element): boolean;
 
     last(): this;
 
@@ -36669,6 +36669,10 @@ declare module DevExpress.viz {
      * [descr:BaseWidgetOptions.disabled]
      */
     disabled?: boolean;
+    /**
+     * [descr:BaseWidgetOptions.encodeHtml]
+     */
+    encodeHtml?: boolean;
     /**
      * [descr:BaseWidgetOptions.export]
      */

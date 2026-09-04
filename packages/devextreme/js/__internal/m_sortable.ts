@@ -1,3 +1,4 @@
+import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { resetPosition } from '@js/common/core/animation/translator';
 import type { ChangedOptionInfo } from '@js/common/core/events';
@@ -13,6 +14,8 @@ import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
+import type { Properties } from '@js/ui/sortable';
+import type { DraggableProperties } from '@ts/m_draggable';
 import Draggable from '@ts/m_draggable';
 
 import { isDefined } from '../core/utils/type';
@@ -61,6 +64,39 @@ function getScrollableBoundary($scrollable) {
     bottom: top + height,
   };
 }
+export interface SortableProperties extends Omit<Properties, 'boundary' | 'onDisposing' | 'onInitialized' | 'onOptionChanged'> {
+  boundary?: DraggableProperties['boundary'];
+
+  component?: unknown;
+
+  contentTemplate?: string | null;
+
+  clone?: boolean;
+
+  placeholderClassName?: string;
+
+  animation?: AnimationConfig;
+
+  fromIndex?: number | null;
+
+  toIndex?: number | null;
+
+  dropInsideItem?: boolean;
+
+  itemPoints?: unknown[] | null;
+
+  fromIndexOffset?: number;
+
+  offset?: number;
+
+  autoUpdate?: boolean;
+
+  draggableElementSize?: number;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onPlaceholderPrepared?: ((e: any) => void) | null;
+}
+
 class Sortable extends Draggable {
   _$placeholderElement?: dxElementWrapper | null;
 
@@ -80,9 +116,13 @@ class Sortable extends Draggable {
     this._sourceScrollableInfo = null;
   }
 
-  _getDefaultOptions() {
+  // @ts-expect-error sortable events are not substitutable for draggable events
+  _getDefaultOptions(): SortableProperties {
     return {
       ...super._getDefaultOptions(),
+      onDragStart: undefined,
+      onDragMove: undefined,
+      onDragEnd: undefined,
       clone: true,
       filter: '> *',
       itemOrientation: 'vertical',
@@ -893,7 +933,6 @@ class Sortable extends Draggable {
     const $draggableItem = this._getDraggableElement();
     let size = this.option('draggableElementSize');
     if (!size) {
-      // @ts-expect-error ts-error
       size = isVerticalOrientation
         ? (getOuterHeight($draggableItem) + getOuterHeight($draggableItem, true)) / 2
         : (getOuterWidth($draggableItem) + getOuterWidth($draggableItem, true)) / 2;

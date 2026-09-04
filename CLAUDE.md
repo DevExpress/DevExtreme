@@ -42,14 +42,14 @@ If builds behave unexpectedly, clear the Nx cache: `rm -rf .nx/cache`
 pnpm run test-jest                                          # All JSDOM tests
 
 # Single file/pattern — invoke Jest directly.
-# Note: this repo currently uses Jest 29.x, where the flag is --testPathPattern (singular).
-pnpm exec jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPattern "<pattern>"
+# Note: this repo uses Jest 30.x, where the flag is --testPathPatterns (plural).
+pnpm exec jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPatterns "<pattern>"
 
 # Watch mode for a single file/pattern:
-pnpm exec jest --watch --no-coverage --selectProjects jsdom-tests --testPathPattern "<pattern>"
+pnpm exec jest --watch --no-coverage --selectProjects jsdom-tests --testPathPatterns "<pattern>"
 ```
 
-Example: `pnpm exec jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPattern "js/__internal/grids/data_grid/ai_assistant/commands/__tests__/summary.test.ts"`
+Example: `pnpm exec jest --no-coverage --runInBand --selectProjects jsdom-tests --testPathPatterns "js/__internal/grids/data_grid/ai_assistant/commands/__tests__/summary.test.ts"`
 
 Jest tests for grid components live under `js/__internal/grids/` — typically in `__tests__/` subdirectories alongside the source (in `grid_core/`, `data_grid/`, and `tree_list/`).
 
@@ -114,7 +114,7 @@ packages/
   testcafe-models/      # TestCafe page object models
 
 apps/
-  demos/                # Technical demos (Angular, React, Vue, jQuery)
+  demos/                # Technical demos (Angular, React, Vue, jQuery) — esbuild on demand
 
 e2e/
   testcafe-devextreme/  # E2E tests
@@ -141,6 +141,31 @@ Do not edit directly:
 - `packages/devextreme-vue/src/**/*` (except templates)
 - `packages/devextreme/js/__internal/core/localization/default_messages.ts`
 - `packages/devextreme/js/__internal/core/localization/cldr-data/**/*`
+
+## Demos
+
+Technical demos live in `apps/demos`.
+
+From the repo root:
+
+```bash
+pnpm run demos:prepare   # build DevExtreme, pack wrappers, vendor bundles
+pnpm run demos:start     # http://localhost:8080/
+```
+
+`demos:start` is long-running. Do not start a second copy if the developer already has it running.
+
+Angular, React, and Vue demos bundle on demand with esbuild when a page is opened (`bundle.js` / `bundle.css` next to the demo source — gitignored, do not commit). jQuery demos load `dx.all.js` from `devextreme-dist`.
+
+### Editing demos
+
+From `apps/demos`:
+
+```bash
+pnpm run add-demo                  # scaffold a new demo
+pnpm run convert-to-js split       # after React TypeScript changes
+pnpm run fix-lint
+```
 
 ## Code Style Conventions
 

@@ -1605,6 +1605,76 @@ QUnit.module('aria accessibility', {}, () => {
         assert.equal($element.attr('aria-disabled'), undefined, 'attribute test on option change');
     });
 
+    QUnit.test('aria-disabled is set on the root when the aria target is a descendant', function(assert) {
+        class WidgetWithNestedAriaTarget extends Widget {
+            ctor(element, options) {
+                this.NAME = 'WidgetWithNestedAriaTarget';
+
+                super.ctor(element, options);
+            }
+
+            _initMarkup() {
+                super._initMarkup();
+
+                this.$element().append($('<div>').addClass('aria-target'));
+            }
+
+            _getAriaTarget() {
+                return this.$element().find('.aria-target');
+            }
+        }
+
+        const $element = $('#widget');
+        const instance = new WidgetWithNestedAriaTarget($element);
+        const $target = $element.find('.aria-target');
+
+        instance.option('disabled', true);
+
+        assert.strictEqual($target.attr('aria-disabled'), 'true', 'aria target is marked');
+        assert.strictEqual($element.attr('aria-disabled'), 'true', 'root is marked');
+
+        instance.option('disabled', false);
+
+        assert.strictEqual($target.attr('aria-disabled'), undefined, 'aria target is cleared');
+        assert.strictEqual($element.attr('aria-disabled'), undefined, 'root is cleared');
+
+        instance.dispose();
+    });
+
+    QUnit.test('aria-disabled is kept off the root when a widget opts out', function(assert) {
+        class WidgetWithoutRootState extends Widget {
+            ctor(element, options) {
+                this.NAME = 'WidgetWithoutRootState';
+
+                super.ctor(element, options);
+            }
+
+            _initMarkup() {
+                super._initMarkup();
+
+                this.$element().append($('<div>').addClass('aria-target'));
+            }
+
+            _getAriaTarget() {
+                return this.$element().find('.aria-target');
+            }
+
+            _needsDisabledStateOnRoot() {
+                return false;
+            }
+        }
+
+        const $element = $('#widget');
+        const instance = new WidgetWithoutRootState($element);
+
+        instance.option('disabled', true);
+
+        assert.strictEqual($element.find('.aria-target').attr('aria-disabled'), 'true', 'aria target is marked');
+        assert.strictEqual($element.attr('aria-disabled'), undefined, 'root is not marked');
+
+        instance.dispose();
+    });
+
     QUnit.test('aria-hidden', function(assert) {
         const $element = $('#widget').dxWidget({ visible: false });
 

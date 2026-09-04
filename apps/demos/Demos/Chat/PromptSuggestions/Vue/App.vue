@@ -180,7 +180,7 @@ function onSuggestionItemClick(e: { itemData?: { text: string; prompt: string } 
 }
 </script>
 
-<style scoped>
+<style>
 #app {
   display: flex;
   flex-direction: column;

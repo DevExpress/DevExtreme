@@ -22,6 +22,7 @@ import type { ModuleType } from '../../grid_core/m_types';
 import type { SelectionController } from '../../grid_core/selection/m_selection';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
 import dataGridCore from '../m_core';
+import { isDataColumn } from '../m_utils';
 
 const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';
 const DATAGRID_EXPORT_BUTTON_CLASS = 'dx-datagrid-export-button';
@@ -583,7 +584,7 @@ export class ExportController extends dataGridCore.ViewController {
     let summaryCells;
 
     when(data).done((data) => {
-      this._dataController.loadAll(data, skipFilter).done((sourceItems, totalAggregates) => {
+      this._dataController.loadAllItems(data, skipFilter).done((sourceItems, totalAggregates) => {
         that._updateGroupValuesWithSummaryByColumn(sourceItems);
 
         if (that._hasSummaryGroupFooters()) {
@@ -616,8 +617,7 @@ export class ExportController extends dataGridCore.ViewController {
       aggregates: totalAggregates,
       visibleColumns: this._columnsController.getVisibleColumns(null, true),
       calculateTargetColumnIndex: (summaryItem, column) => (
-        // @ts-expect-error
-        this._dataController._isDataColumn(column) ? column.index : -1
+        isDataColumn(column) ? (column?.index ?? -1) : -1
       ),
     });
   }
@@ -701,7 +701,7 @@ export class ExportController extends dataGridCore.ViewController {
 
   private needLoadItemsOnExportingSelectedItems(): boolean {
     return this.option('loadItemsOnExportingSelectedItems')
-      ?? this._dataController._dataSource.remoteOperations().filtering;
+      ?? (this._dataController._dataSource?.remoteOperations().filtering ?? false);
   }
 }
 

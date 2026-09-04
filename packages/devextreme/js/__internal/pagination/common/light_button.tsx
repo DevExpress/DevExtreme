@@ -15,6 +15,7 @@ export interface LightButtonProps {
   label?: string;
   tabIndex?: number;
   selected?: boolean;
+  disabled?: boolean;
   onClick?: EventCallback;
 }
 
@@ -23,6 +24,7 @@ export const LightButtonDefaultProps: LightButtonProps = {
   label: '',
   tabIndex: 0,
   selected: false,
+  disabled: false,
 };
 
 export class LightButton extends InfernoComponent<LightButtonProps> {
@@ -86,6 +88,7 @@ export class LightButton extends InfernoComponent<LightButtonProps> {
         role="button"
         aria-label={this.props.label}
         aria-current={this.props.selected ? 'page' : undefined}
+        aria-disabled={this.props.disabled ? 'true' : undefined}
       >
       {this.props.children}
     </div>

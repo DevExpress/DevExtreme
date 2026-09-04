@@ -4,6 +4,7 @@ import { when } from '@js/core/utils/deferred';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import gridCore from '../m_core';
+import type { GroupingDataSourceAdapter } from './m_grouping';
 import type { GroupInfoData } from './types';
 
 export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
@@ -35,6 +36,7 @@ export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
     filter.push(gridCore.combineFilters(filterElement));
   }
 
+  // @ts-expect-error
   filter = gridCore.combineFilters(filter, 'or');
 
   return gridCore.combineFilters([filter, storeLoadOptions.filter]);
@@ -101,7 +103,7 @@ const calculateItemsCount = function (that, items, groupsCount) {
 };
 
 export class GroupingHelper {
-  protected readonly _dataSource: any;
+  public readonly _dataSource: GroupingDataSourceAdapter;
 
   private _groupsInfo: any;
 
@@ -109,7 +111,7 @@ export class GroupingHelper {
 
   protected _group: any;
 
-  constructor(dataSourceAdapter) {
+  constructor(dataSourceAdapter: GroupingDataSourceAdapter) {
     this._dataSource = dataSourceAdapter;
     this.reset();
   }

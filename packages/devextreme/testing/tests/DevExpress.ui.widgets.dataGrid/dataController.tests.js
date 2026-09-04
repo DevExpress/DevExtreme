@@ -499,7 +499,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
 
         // assert
@@ -532,7 +532,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'name', isExpanded: false, desc: false }]);
@@ -569,7 +569,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         this.dataController.changed.add(function() {
             changedCallCount++;
@@ -623,7 +623,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         this.dataController.changed.add(function() {
             changedCallCount++;
@@ -667,7 +667,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             columns: ['name', 'age']
         });
 
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         this.dataController.changed.add(function() {
             changedCallCount++;
@@ -722,7 +722,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             ]
         });
 
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         const itemsCount = this.dataController.items().length;
 
@@ -755,7 +755,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             ]
         });
 
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // act
         this.dataController.expandAll(1);
@@ -785,7 +785,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         // assert
         assert.equal(dataSource.items()[0].name, 'Alex', 'Item name is Alex');
         assert.equal(dataSource.items()[1].name, 'Alice', 'Item name is Alice');
@@ -814,7 +814,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.strictEqual(dataSource.sort(), null, 'sort is not defined');
@@ -841,7 +841,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         // assert
         assert.equal(dataSource.items()[0].name, 'Alex', 'Item0');
         assert.equal(dataSource.items()[1].name, 'Dan', 'Item1');
@@ -872,7 +872,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         const dataIndexGetter = this.dataController._dataSource.getDataIndexGetter();
         this.dataController._dataSource.getDataIndexGetter();
         assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ desc: false, selector: dataIndexGetter }], 'Sort parameters');
@@ -902,7 +902,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             focusedRowEnabled: true
         });
 
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // act
         const item0 = items.splice(0, 1)[0];
@@ -934,7 +934,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         const filter = this.dataController._generateOperationFilterByKey('Dan', data[1], false);
 
@@ -984,7 +984,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey('Alice').done(function(pageIndex) {
             ++count;
             assert.equal(pageIndex, 3);
@@ -1009,7 +1009,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey('Alice').done(function(pageIndex) {
             ++count;
             assert.equal(pageIndex, 1);
@@ -1037,7 +1037,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         dataSource.store().on('loading', loadingSpy);
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         assert.equal(loadingSpy.callCount, 1, 'loading count');
 
         this.dataController.getPageIndexByKey(['Alice']).done(function(pageIndex) {
@@ -1066,7 +1066,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey({ name: 'Bob', age: 25 }).done(function(pageIndex) {
             assert.equal(pageIndex, 1);
         });
@@ -1092,7 +1092,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey('Alice').done(function(pageIndex) {
             assert.equal(pageIndex, 2);
         });
@@ -1118,7 +1118,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey({ name: 'Bob', age: 20 }).done(function(pageIndex) {
             assert.equal(pageIndex, 1);
         });
@@ -1152,7 +1152,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey('Den').done(function(pageIndex) {
             assert.equal(pageIndex, 0);
         });
@@ -1186,7 +1186,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.dataController.getPageIndexByKey({ name: 'Alice', age: 19 }).done(function(pageIndex) {
             assert.equal(pageIndex, 1);
         });
@@ -1209,7 +1209,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         assert.equal(this.dataController.pageCount(), 2);
         this.dataController.getPageIndexByKey('Bob').done(function(pageIndex) {
             assert.equal(pageIndex, 1);
@@ -1234,7 +1234,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         assert.equal(this.dataController.pageCount(), 4);
         this.dataController.getPageIndexByKey('Bob').done(function(pageIndex) {
             assert.equal(pageIndex, 3);
@@ -1262,7 +1262,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getPageIndexByKey({ name: 'Bob', age: 24 }).done(function(pageIndex) {
             assert.equal(dataController.pageCount(), 5);
@@ -1293,7 +1293,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Mark').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1349,7 +1349,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
 
         // act
         dataController.getGlobalRowIndexByKey('Bob').done(function(globalRowIndex) {
@@ -1377,7 +1377,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
                 // act
                 const dataController = this.dataController;
-                dataController._refreshDataSource();
+                dataController.resetDataSource();
 
                 // assert
                 dataController.getGlobalRowIndexByKey(1).done(globalRowIndex => {
@@ -1413,7 +1413,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1481,7 +1481,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1549,7 +1549,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Sad').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1616,7 +1616,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1684,7 +1684,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1756,7 +1756,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1824,7 +1824,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1891,7 +1891,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         const dataController = this.dataController;
-        dataController._refreshDataSource();
+        dataController.resetDataSource();
         // assert
         dataController.getGlobalRowIndexByKey('Alex').done(function(globalRowIndex) {
             ++foundRowCount;
@@ -1952,7 +1952,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'team', isExpanded: true, desc: false }]);
@@ -2707,7 +2707,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // actt
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController.dataSource().remoteOperations(), {}, 'remote operations set correct');
@@ -2725,7 +2725,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // actt
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController.dataSource().remoteOperations(), {
@@ -2752,7 +2752,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // actt
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController.dataSource().remoteOperations(), {
@@ -2775,7 +2775,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // actt
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController.dataSource().remoteOperations(), {}, 'remote operations set correct');
@@ -2792,7 +2792,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // actt
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         assert.deepEqual(this.dataController.dataSource().remoteOperations(), { filtering: true, sorting: true, paging: true, grouping: true, summary: true }, 'remote operations set correct');
@@ -2834,7 +2834,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // act
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         // assert
         const items = this.dataController.items();
@@ -3334,7 +3334,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
             pageIndex: 1
         };
 
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
 
         assert.equal(this.dataController.pageIndex(), 1);
         assert.equal(this.dataController.pageCount(), 3);
@@ -3954,7 +3954,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             filtering: true,
             paging: true
         });
-        this.dataController._refreshDataSource();
+        this.dataController.resetDataSource();
         this.clock.tick(300);
 
         const rowsScrollController = this.dataController._rowsScrollController;
@@ -5607,11 +5607,11 @@ QUnit.module('Virtual scrolling preload', {
         assert.deepEqual(this.getSelectedRowKeys().length, 100, 'all items are selected');
     });
 
-    QUnit.test('New mode. loadAll after scrolling should return all items (T1045649)', function(assert) {
+    QUnit.test('New mode. loadAllItems after scrolling should return all items (T1045649)', function(assert) {
         // act
         this.dataController.setViewportPosition(10);
         let loadedItems;
-        this.dataController.loadAll().done(items => {
+        this.dataController.loadAllItems().done(items => {
             loadedItems = items;
         });
 
@@ -7746,7 +7746,7 @@ QUnit.module('Filtering', {
             remoteOperations: { filtering: true }
         });
 
-        this.dataController._isSharedDataSource = true;
+        this.dataController.isSharedDataSource = true;
         this.dataController.setDataSource(this.dataSource);
 
         let loadingCount = 0;
@@ -8010,7 +8010,7 @@ QUnit.module('Filtering', {
             }
         });
 
-        this.dataController._applyFilter = function() {
+        this.dataController.applyFilter = function() {
             isApplyFilterCalled = true;
         };
 
@@ -13287,7 +13287,7 @@ QUnit.module('Partial update', {
         assert.deepEqual(changedArgs.changeType, 'update');
         assert.deepEqual(changedArgs.rowIndices, [1, 2]);
         assert.deepEqual(changedArgs.changeTypes, ['update', 'remove']);
-        assert.deepEqual(changedArgs.items, [items[1]]);
+        assert.deepEqual(changedArgs.items, [items[1], oldItems[2]]);
     });
 
     // T186415
@@ -13324,7 +13324,7 @@ QUnit.module('Partial update', {
         assert.deepEqual(changedArgs.changeType, 'update');
         assert.deepEqual(changedArgs.rowIndices, [0, 0]);
         assert.deepEqual(changedArgs.changeTypes, ['remove', 'update']);
-        assert.deepEqual(changedArgs.items, [items[0], items[0]]);
+        assert.deepEqual(changedArgs.items, [oldItems[0], items[0]]);
     });
 
     QUnit.test('insert and remove', function(assert) {
@@ -14500,14 +14500,14 @@ QUnit.module('Exporting', {
     }
 }, () => {
 
-    QUnit.test('loadAll when no dataSource', function(assert) {
+    QUnit.test('loadAllItems when no dataSource', function(assert) {
         let allItems;
         this.setupDataGridModules({});
 
         this.clock.tick(10);
 
         // act
-        this.dataController.loadAll().done(function(items) {
+        this.dataController.loadAllItems().done(function(items) {
             allItems = items;
         });
 
@@ -14519,7 +14519,7 @@ QUnit.module('Exporting', {
         assert.deepEqual(allItems, [], 'all items is empty array');
     });
 
-    QUnit.test('loadAll when error on loading', function(assert) {
+    QUnit.test('loadAllItems when error on loading', function(assert) {
         const dataErrorOccurredArgs = [];
         let error;
         const changedArgs = [];
@@ -14542,7 +14542,7 @@ QUnit.module('Exporting', {
         });
 
         // act
-        this.dataController.loadAll().fail(function(e) {
+        this.dataController.loadAllItems().fail(function(e) {
             error = e;
         });
 
@@ -14558,7 +14558,7 @@ QUnit.module('Exporting', {
     });
 
 
-    QUnit.test('loadAll skip paging', function(assert) {
+    QUnit.test('loadAllItems skip paging', function(assert) {
         let allItems;
         let changedCallCount = 0;
 
@@ -14576,7 +14576,7 @@ QUnit.module('Exporting', {
         });
 
         // act
-        this.dataController.loadAll().done(function(items) {
+        this.dataController.loadAllItems().done(function(items) {
             allItems = items;
         });
 
@@ -14598,7 +14598,7 @@ QUnit.module('Exporting', {
         assert.deepEqual(allItems[3].values, [2, 3, 6], 'item 3 values');
     });
 
-    QUnit.test('loadAll grouping when remoteOperations disabled', function(assert) {
+    QUnit.test('loadAllItems grouping when remoteOperations disabled', function(assert) {
         let allItems;
         let changedCallCount = 0;
 
@@ -14624,7 +14624,7 @@ QUnit.module('Exporting', {
         });
 
         // act
-        this.dataController.loadAll().done(function(items) {
+        this.dataController.loadAllItems().done(function(items) {
             allItems = items;
         });
 
@@ -14655,7 +14655,7 @@ QUnit.module('Exporting', {
         assert.deepEqual(allItems[3].values, [2], 'item 3 values');
     });
 
-    QUnit.test('loadAll grouping when remote filtering/sorting/paging enabled', function(assert) {
+    QUnit.test('loadAllItems grouping when remote filtering/sorting/paging enabled', function(assert) {
         let allItems;
         let changedCallCount = 0;
 
@@ -14680,7 +14680,7 @@ QUnit.module('Exporting', {
         });
 
         // act
-        this.dataController.loadAll().done(function(items) {
+        this.dataController.loadAllItems().done(function(items) {
             allItems = items;
         });
 
@@ -14712,7 +14712,7 @@ QUnit.module('Exporting', {
         assert.deepEqual(allItems[5].values, [2], 'item 5 values');
     });
 
-    QUnit.test('loadAll when remote summary enabled', function(assert) {
+    QUnit.test('loadAllItems when remote summary enabled', function(assert) {
         let allItems;
         let allSummary;
         let changedCallCount = 0;
@@ -14752,7 +14752,7 @@ QUnit.module('Exporting', {
         });
 
         // act
-        this.dataController.loadAll().done(function(items, summary) {
+        this.dataController.loadAllItems().done(function(items, summary) {
             allItems = items;
             allSummary = summary;
         });
@@ -14768,14 +14768,14 @@ QUnit.module('Exporting', {
         assert.deepEqual(loadArgs[0].take, 3, 'initial load take');
         assert.deepEqual(loadArgs[0].totalSummary, [{ selector: 'field2', summaryType: 'sum' }], 'initial load totalSummary');
         assert.deepEqual(loadArgs[0].groupSummary, undefined, 'initial load groupSummary is not defined');
-        assert.deepEqual(loadArgs[1].skip, undefined, 'loadAll skip');
-        assert.deepEqual(loadArgs[1].take, undefined, 'loadAll load take');
-        assert.deepEqual(loadArgs[1].totalSummary, [{ selector: 'field2', summaryType: 'sum' }], 'loadAll totalSummary');
-        assert.deepEqual(loadArgs[1].groupSummary, undefined, 'loadAll groupSummary is not defined');
+        assert.deepEqual(loadArgs[1].skip, undefined, 'loadAllItems skip');
+        assert.deepEqual(loadArgs[1].take, undefined, 'loadAllItems load take');
+        assert.deepEqual(loadArgs[1].totalSummary, [{ selector: 'field2', summaryType: 'sum' }], 'loadAllItems totalSummary');
+        assert.deepEqual(loadArgs[1].groupSummary, undefined, 'loadAllItems groupSummary is not defined');
     });
 
     // T324247
-    QUnit.test('loadAll when remote grouping and summary enabled', function(assert) {
+    QUnit.test('loadAllItems when remote grouping and summary enabled', function(assert) {
         let allItems;
         let allSummary;
         let changedCallCount = 0;
@@ -14831,7 +14831,7 @@ QUnit.module('Exporting', {
         });
 
         // act
-        this.dataController.loadAll().done(function(items, summary) {
+        this.dataController.loadAllItems().done(function(items, summary) {
             allItems = items;
             allSummary = summary;
         });
@@ -14852,20 +14852,20 @@ QUnit.module('Exporting', {
         assert.deepEqual(loadArgs[0].group, [{ selector: 'field1', isExpanded: false, desc: false }], 'initial load group');
         assert.deepEqual(loadArgs[0].totalSummary, [{ selector: 'field1', summaryType: 'sum' }], 'initial load totalSummary');
         assert.deepEqual(loadArgs[0].groupSummary, [{ selector: 'field2', summaryType: 'sum' }], 'initial load groupSummary');
-        assert.deepEqual(loadArgs[1].skip, undefined, 'loadAll skip');
-        assert.deepEqual(loadArgs[1].take, undefined, 'loadAll load take');
-        assert.deepEqual(loadArgs[1].group, [{ selector: 'field1', isExpanded: false, desc: false }], 'loadAll load group');
-        assert.deepEqual(loadArgs[1].totalSummary, [{ selector: 'field1', summaryType: 'sum' }], 'loadAll totalSummary');
-        assert.deepEqual(loadArgs[1].groupSummary, [{ selector: 'field2', summaryType: 'sum' }], 'loadAll groupSummary');
-        assert.deepEqual(loadArgs[2].skip, undefined, 'loadAll skip');
-        assert.deepEqual(loadArgs[2].take, undefined, 'loadAll load take');
-        assert.deepEqual(loadArgs[2].group, null, 'loadAll load group');
-        assert.deepEqual(loadArgs[2].totalSummary, [{ selector: 'field1', summaryType: 'sum' }], 'loadAll totalSummary');
-        assert.deepEqual(loadArgs[2].groupSummary, [{ selector: 'field2', summaryType: 'sum' }], 'loadAll groupSummary');
+        assert.deepEqual(loadArgs[1].skip, undefined, 'loadAllItems skip');
+        assert.deepEqual(loadArgs[1].take, undefined, 'loadAllItems load take');
+        assert.deepEqual(loadArgs[1].group, [{ selector: 'field1', isExpanded: false, desc: false }], 'loadAllItems load group');
+        assert.deepEqual(loadArgs[1].totalSummary, [{ selector: 'field1', summaryType: 'sum' }], 'loadAllItems totalSummary');
+        assert.deepEqual(loadArgs[1].groupSummary, [{ selector: 'field2', summaryType: 'sum' }], 'loadAllItems groupSummary');
+        assert.deepEqual(loadArgs[2].skip, undefined, 'loadAllItems skip');
+        assert.deepEqual(loadArgs[2].take, undefined, 'loadAllItems load take');
+        assert.deepEqual(loadArgs[2].group, null, 'loadAllItems load group');
+        assert.deepEqual(loadArgs[2].totalSummary, [{ selector: 'field1', summaryType: 'sum' }], 'loadAllItems totalSummary');
+        assert.deepEqual(loadArgs[2].groupSummary, [{ selector: 'field2', summaryType: 'sum' }], 'loadAllItems groupSummary');
     });
 
     // T437259, T433659
-    QUnit.test('loadAll by selected items when remote grouping and summary enabled', function(assert) {
+    QUnit.test('loadAllItems by selected items when remote grouping and summary enabled', function(assert) {
         let allItems;
         let allSummary;
         let changedCallCount = 0;
@@ -14923,7 +14923,7 @@ QUnit.module('Exporting', {
         // act
         loadArgs = [];
 
-        this.dataController.loadAll([{ field1: 1, field2: 2 }]).done(function(items, summary) {
+        this.dataController.loadAllItems([{ field1: 1, field2: 2 }]).done(function(items, summary) {
             allItems = items;
             allSummary = summary;
         });
@@ -14941,7 +14941,7 @@ QUnit.module('Exporting', {
         assert.deepEqual(this.dataController.getTotalSummaryValue('field1'), 4);
     });
 
-    QUnit.test('Skip detail row when loadAll is applied', function(assert) {
+    QUnit.test('Skip detail row when loadAllItems is applied', function(assert) {
         let allItems;
 
         this.setupDataGridModules({
@@ -14960,7 +14960,7 @@ QUnit.module('Exporting', {
         // act
         this.dataController.expandRow(this.array[0]);
 
-        this.dataController.loadAll().done(function(items) {
+        this.dataController.loadAllItems().done(function(items) {
             allItems = items;
         });
 
@@ -15000,7 +15000,7 @@ QUnit.module('Exporting', {
             }
         }, 13);
 
-        this.dataController.loadAll().done(function(items) {
+        this.dataController.loadAllItems().done(function(items) {
             allItems = items;
         });
 
@@ -15026,7 +15026,7 @@ QUnit.module('Exporting', {
         this.clock.tick(10);
 
         // act
-        this.dataController.loadAll().done(function(items) {
+        this.dataController.loadAllItems().done(function(items) {
             allItems = items;
         });
 
@@ -15050,7 +15050,7 @@ QUnit.module('Exporting', {
         this.clock.tick(10);
 
         // act
-        this.dataController.loadAll().done(function(items) {
+        this.dataController.loadAllItems().done(function(items) {
             allItems = items;
         });
 
@@ -15062,7 +15062,7 @@ QUnit.module('Exporting', {
         assert.deepEqual(allItems[0].data, { key: 1, items: array }, 'group row data');
     });
 
-    QUnit.test('loadAll during data loading', function(assert) {
+    QUnit.test('loadAllItems during data loading', function(assert) {
         let isLoadAllFailed;
 
         this.setupDataGridModules({
@@ -15074,20 +15074,20 @@ QUnit.module('Exporting', {
 
 
         // act
-        this.dataController.loadAll().fail(function() {
+        this.dataController.loadAllItems().fail(function() {
             isLoadAllFailed = true;
         });
 
         this.clock.tick(10);
 
         // assert
-        assert.ok(isLoadAllFailed, 'loadAll failed');
+        assert.ok(isLoadAllFailed, 'loadAllItems failed');
         assert.equal(this.dataController.items().length, 3, 'items count');
         assert.ok(!this.dataController.isLoading(), 'no loading');
     });
 
     // T713135
-    QUnit.test('loadAll during custom loading', function(assert) {
+    QUnit.test('loadAllItems during custom loading', function(assert) {
         let allItems;
 
         this.setupDataGridModules({
@@ -15101,7 +15101,7 @@ QUnit.module('Exporting', {
 
         // act
         this.dataController.beginCustomLoading('test');
-        this.dataController.loadAll().done(function(items) {
+        this.dataController.loadAllItems().done(function(items) {
             allItems = items;
         });
         this.dataController.endCustomLoading();
@@ -15113,7 +15113,7 @@ QUnit.module('Exporting', {
         assert.ok(!this.dataController.isLoading(), 'no loading');
     });
 
-    QUnit.test('data loading during loadAll', function(assert) {
+    QUnit.test('data loading during loadAllItems', function(assert) {
         let isLoadAllFailed;
         let allItems;
 
@@ -15129,7 +15129,7 @@ QUnit.module('Exporting', {
 
 
         // act
-        this.dataController.loadAll().fail(function() {
+        this.dataController.loadAllItems().fail(function() {
             isLoadAllFailed = true;
         }).done(function(data) {
             allItems = data;
@@ -15140,7 +15140,7 @@ QUnit.module('Exporting', {
         this.clock.tick(10);
 
         // assert
-        assert.ok(!isLoadAllFailed, 'loadAll is not failed');
+        assert.ok(!isLoadAllFailed, 'loadAllItems is not failed');
         assert.equal(allItems.length, 5, 'items count');
         assert.equal(this.dataController.pageIndex(), 1, 'pageIndex');
         assert.equal(this.dataController.items().length, 2, 'items count');
@@ -15164,7 +15164,7 @@ QUnit.module('Exporting', {
         this.clock.tick(10);
 
         // act
-        this.dataController.loadAll().done(function(items) {
+        this.dataController.loadAllItems().done(function(items) {
             allItems = items;
         });
 
@@ -15194,7 +15194,7 @@ QUnit.module('Exporting', {
         });
 
         // act
-        this.dataController.loadAll([this.array[1], this.array[3]]).done(function(items) {
+        this.dataController.loadAllItems([this.array[1], this.array[3]]).done(function(items) {
             allItems = items;
         });
 
@@ -15217,7 +15217,7 @@ QUnit.module('Exporting', {
         assert.deepEqual(allItems[1].values, [2, 3, 6], 'item 1 values');
     });
 
-    QUnit.test('loadAll with data parameter and grouping', function(assert) {
+    QUnit.test('loadAllItems with data parameter and grouping', function(assert) {
         let allItems;
         let changedCallCount = 0;
 
@@ -15243,7 +15243,7 @@ QUnit.module('Exporting', {
         });
 
         // act
-        this.dataController.loadAll([this.array[0], this.array[3], this.array[4]]).done(function(items) {
+        this.dataController.loadAllItems([this.array[0], this.array[3], this.array[4]]).done(function(items) {
             allItems = items;
         });
 
@@ -15284,7 +15284,7 @@ QUnit.module('Exporting', {
     });
 
     // T595243
-    QUnit.test('loadAll with data parameter and filtering', function(assert) {
+    QUnit.test('loadAllItems with data parameter and filtering', function(assert) {
         let allItems;
 
         this.setupDataGridModules({
@@ -15295,7 +15295,7 @@ QUnit.module('Exporting', {
         this.clock.tick(10);
 
         // act
-        this.dataController.loadAll([this.array[1], this.array[2], this.array[3]]).done(function(items) {
+        this.dataController.loadAllItems([this.array[1], this.array[2], this.array[3]]).done(function(items) {
             allItems = items;
         });
 
@@ -15330,7 +15330,7 @@ QUnit.module('Exporting', {
             }
         }, 13);
 
-        this.dataController.loadAll([this.array[0], this.array[1]]).done(function(items) {
+        this.dataController.loadAllItems([this.array[0], this.array[1]]).done(function(items) {
             allItems = items;
         });
 

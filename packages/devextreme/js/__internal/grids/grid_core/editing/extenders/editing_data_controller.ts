@@ -16,10 +16,16 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import { EDITING_EDITROWKEY_OPTION_NAME } from '../const';
 import type { EditingController } from '../m_editing';
 
+export interface EditingDataControllerExtension {
+  _editingController: EditingController;
+}
+
 export const editingDataControllerExtender = (
   Base: ModuleType<DataController>,
-): ModuleType<DataController> => class EditingDataControllerExtender extends Base {
-  protected _editingController!: EditingController;
+): ModuleType<
+  DataController & EditingDataControllerExtension
+> => class EditingDataControllerExtender extends Base {
+  public _editingController!: EditingController;
 
   public init(): void {
     this._editingController = this.getController('editing');
@@ -99,7 +105,17 @@ export const editingDataControllerExtender = (
     return processedItem;
   }
 
-  protected _getChangedColumnIndices(
+  protected isSameRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
+    const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'] as const;
+
+    if (compareFields.some((field) => item1[field] !== item2[field])) {
+      return false;
+    }
+
+    return super.isSameRowState(item1, item2);
+  }
+
+  protected getChangedColumnIndices(
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
     visibleRowIndex: number,
@@ -109,7 +125,7 @@ export const editingDataControllerExtender = (
       return undefined;
     }
 
-    return super._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+    return super.getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
   }
 
   protected _isCellChanged(

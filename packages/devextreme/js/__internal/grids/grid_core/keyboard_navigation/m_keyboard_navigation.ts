@@ -31,7 +31,7 @@ import type { RowIndexCorrection } from '@ts/grids/grid_core/data_controller/typ
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import type { RowsViewScrollEvent } from '@ts/grids/grid_core/views/types';
-import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
+import type { VirtualScrollingDataControllerExtension } from '@ts/grids/grid_core/virtual_scrolling/index';
 import { memoize } from '@ts/utils/memoize';
 
 import {
@@ -315,7 +315,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isFocusedViewCorrect = this._focusedView && this._focusedView.name === this._rowsView.name;
     let needUpdateFocus = false;
     const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
-    // @ts-expect-error
     const root = $(domAdapter.getRootNode($rowsView.get && $rowsView.get(0)));
     const $focusedElement = root.find(':focus');
     const isFocusedElementCorrect = this._isFocusedElementCorrect($focusedElement, $rowsView, e);

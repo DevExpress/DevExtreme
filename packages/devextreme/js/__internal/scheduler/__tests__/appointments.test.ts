@@ -79,7 +79,7 @@ describe('Appointments', () => {
     const appointment = POM.getAppointment();
     if (appointment.element) {
       jest.useFakeTimers();
-      appointment.element.click();
+      appointment.click();
       jest.advanceTimersByTime(1000);
 
       const tooltipAppointment = POM.tooltip.getAppointmentItem();
