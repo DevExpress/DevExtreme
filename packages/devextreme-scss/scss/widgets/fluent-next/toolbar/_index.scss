@@ -32,6 +32,15 @@
       height: var(--dx-toolbar-height);
     }
   }
+
+  &.dx-state-disabled {
+    color: var(--dx-toolbar-content-disabled);
+
+    .dx-button-text,
+    .dx-button .dx-icon {
+      color: var(--dx-toolbar-content-disabled);
+    }
+  }
 }
 
 .dx-toolbar-after {

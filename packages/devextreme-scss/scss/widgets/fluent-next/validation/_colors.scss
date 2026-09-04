@@ -1,5 +1,10 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 $validation-message-content: ds.$color-content-danger !default;
+
+$validation-message-content-disabled: ds.$color-content-disabled !default;
+$validation-message-bg-disabled: ds.$color-bg-disabled !default;
 $validation-message-bg: ds.$color-bg-danger-subtler !default;
 $validation-summary-content: ds.$color-content-danger !default;
+
+$validation-summary-content-disabled: ds.$color-content-disabled !default;

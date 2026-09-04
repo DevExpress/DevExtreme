@@ -9,7 +9,10 @@ $tree-view-bg-hovered: ds.$color-bg-hovered !default;
 $tree-view-item-content-hovered: ds.$color-content !default;
 $tree-view-border: ds.$color-border !default;
 $tree-view-item-bg-selected: ds.$color-bg-selected !default;
+
+$tree-view-item-bg-selected-disabled: ds.$color-bg-alpha-disabled !default;
 $tree-view-spin-icon: ds.$color-content-subtle !default;
+$tree-view-spin-icon-disabled: ds.$color-content-disabled !default;
 $tree-view-checkbox-checked-border-focused: ds.$color-border-primary-shared-active !default;
 
 $tree-view-checkbox-border-disabled: ds.$color-content-disabled !default;
@@ -21,7 +24,7 @@ $tree-view-item-content-disabled: ds.$color-content-disabled !default;
 /* Was fed by a *-disabled token holding a neutral grey; 262.15.0 dropped it. The neutral border
 role is the exact colour in light and a more visible one in dark, which suits a focus state. */
 $tree-view-checkbox-border-focused: ds.$color-border !default;
-$tree-view-checkbox-bg-focused: ds.$color-bg-disabled !default;
+$tree-view-checkbox-bg-focused: ds.$color-bg-low !default;
 $tree-view-checkbox-accent-content-focused: ds.$color-bg-primary-hovered !default;
 
 // Base-layer values injected with design tokens (wave B1)

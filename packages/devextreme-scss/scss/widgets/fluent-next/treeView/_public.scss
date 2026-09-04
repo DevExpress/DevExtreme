@@ -21,6 +21,7 @@
   --dx-tree-view-content: #{$tree-view-content};
   --dx-tree-view-content-focused: #{$tree-view-content-focused};
   --dx-tree-view-item-bg-selected: #{$tree-view-item-bg-selected};
+  --dx-tree-view-item-bg-selected-disabled: #{$tree-view-item-bg-selected-disabled};
   --dx-tree-view-item-border-radius: #{$tree-view-item-border-radius};
   --dx-tree-view-item-content-disabled: #{$tree-view-item-content-disabled};
   --dx-tree-view-item-content-hovered: #{$tree-view-item-content-hovered};
@@ -30,12 +31,12 @@
   --dx-tree-view-item-padding: #{$tree-view-item-padding};
   --dx-tree-view-item-padding-inline: #{$tree-view-item-padding-inline};
   --dx-tree-view-load-indicator-size: #{$tree-view-load-indicator-size};
-  --dx-tree-view-opacity-disabled: #{$tree-view-opacity-disabled};
   --dx-tree-view-search-box-margin-block-end: #{$tree-view-search-box-margin-block-end};
   --dx-tree-view-search-editor-height: #{$tree-view-search-editor-height};
   --dx-tree-view-select-all-item-border-block-end: #{$tree-view-select-all-item-border-block-end};
   --dx-tree-view-select-all-item-border-visible-padding: #{$tree-view-select-all-item-border-visible-padding};
   --dx-tree-view-select-all-item-padding: #{$tree-view-select-all-item-padding};
   --dx-tree-view-spin-icon: #{$tree-view-spin-icon};
+  --dx-tree-view-spin-icon-disabled: #{$tree-view-spin-icon-disabled};
   --dx-tree-view-toggle-item-width: #{$tree-view-toggle-item-width};
 }

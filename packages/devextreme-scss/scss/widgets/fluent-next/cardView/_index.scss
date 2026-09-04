@@ -1,3 +1,28 @@
+@use "../mixins" as *;
 @use 'colors';
 @use 'sizes';
 @use '../../base/cardView/index' as *;
+
+@include when-disabled(".dx-cardview") {
+  color: var(--dx-card-view-content-disabled);
+
+  .dx-cardview-header-item .dx-cardview-header-item-sorting-order,
+  .dx-cardview-field-caption,
+  .dx-cardview-field-value,
+  .dx-cardview-card-content,
+  .dx-cardview-header-item {
+    color: var(--dx-card-view-content-disabled);
+  }
+}
+
+.dx-cardview-header-item.dx-sortable-source {
+  opacity: var(--dx-sortable-source-opacity);
+}
+
+.dx-cardview.dx-state-disabled,
+.dx-state-disabled .dx-cardview {
+  .dx-cardview-dropzone .dx-icon,
+  .dx-cardview-dropzone span {
+    color: var(--dx-card-view-content-disabled);
+  }
+}

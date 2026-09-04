@@ -51,3 +51,32 @@
   $indicator-ring-size: var(--dx-stepper-step-indicator-ring-size),
   $indicator-halo-size: var(--dx-stepper-step-indicator-halo-size),
 );
+
+.dx-stepper.dx-state-disabled,
+.dx-state-disabled .dx-stepper {
+  .dx-step-indicator {
+    color: var(--dx-stepper-step-content-disabled);
+    border-color: var(--dx-stepper-step-border-disabled);
+    background-color: var(--dx-stepper-step-bg-disabled);
+  }
+
+  .dx-step-caption {
+    color: var(--dx-stepper-step-content-disabled);
+  }
+
+  .dx-step-selected .dx-step-indicator,
+  .dx-step-completed .dx-step-indicator {
+    color: var(--dx-stepper-step-content-selected-disabled);
+    border-color: var(--dx-stepper-step-bg-selected-disabled);
+    background-color: var(--dx-stepper-step-bg-selected-disabled);
+  }
+
+  .dx-stepper-connector-value {
+    background-color: var(--dx-stepper-connector-value-bg-disabled);
+  }
+}
+
+.dx-stepper.dx-state-disabled .dx-step.dx-step-selected .dx-step-indicator,
+.dx-state-disabled .dx-stepper .dx-step.dx-step-selected .dx-step-indicator {
+  box-shadow: 0 0 0 2px var(--dx-stepper-step-shadow), 0 0 0 4px var(--dx-stepper-step-bg-selected-disabled), 0 0 0 8px var(--dx-stepper-step-shadow); // dx-shadow-geometry: 2px/4px/8px, the ring radii of the enabled rule
+}

@@ -3,6 +3,8 @@
 
 @mixin publish {
   --dx-load-indicator-segment-border: #{$load-indicator-segment-border};
+  --dx-load-indicator-segment-border-disabled: #{$load-indicator-segment-border-disabled};
+  --dx-load-indicator-segment-inner-border-disabled: #{$load-indicator-segment-inner-border-disabled};
   --dx-load-indicator-segment-border-width: #{$load-indicator-segment-border-width};
   --dx-load-indicator-segment-inner-border: #{$load-indicator-segment-inner-border};
   --dx-load-indicator-size: #{$load-indicator-size};

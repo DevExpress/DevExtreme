@@ -3,6 +3,7 @@
 
 @mixin publish {
   --dx-date-view-content: #{$date-view-content};
+  --dx-date-view-content-disabled: #{$date-view-content-disabled};
   --dx-date-view-hours-colon-font-size: #{$date-view-hours-colon-font-size};
   --dx-date-view-item-content-selected: #{$date-view-item-content-selected};
   --dx-date-view-item-font-size: #{$date-view-item-font-size};

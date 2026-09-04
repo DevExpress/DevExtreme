@@ -9,6 +9,8 @@ $menu-content: ds.$color-content !default;
 $menu-item-bg-selected: ds.$color-bg-selected !default;
 $menu-popup-border: ds.$color-border !default;
 $menu-separator-bg: ds.$color-border-subtle !default;
+
+$menu-separator-bg-disabled: ds.$color-border-disabled !default;
 $menu-item-content-selected: ds.$color-content !default;
 $menu-item-link-content: ds.$color-content-primary !default;
 $menu-item-bg-selected-focused: ds.$color-bg-selected-hovered !default;
@@ -17,3 +19,5 @@ $menu-shadow-focused: ds.$box-shadow-md !default;
 
 // Moved here from menuBase/: menu/ is the declaration home of the menu component (O2)
 $menu-item-content-disabled: ds.$color-content-disabled;
+
+$menu-item-bg-selected-disabled: ds.$color-bg-disabled !default;

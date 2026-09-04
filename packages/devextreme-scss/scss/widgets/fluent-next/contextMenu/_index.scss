@@ -79,5 +79,18 @@
 
   .dx-menu-separator {
     background-color: menuColors.$menu-separator-bg;
+
+    .dx-state-disabled & {
+      background-color: var(--dx-menu-separator-bg-disabled);
+    }
+  }
+}
+
+.dx-context-menu.dx-state-disabled,
+.dx-state-disabled .dx-context-menu {
+  .dx-menu-item-text,
+  .dx-menu-item-content,
+  .dx-menu-item-popout {
+    color: var(--dx-context-menu-content-disabled);
   }
 }

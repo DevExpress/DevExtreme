@@ -4,6 +4,8 @@ $text-editor-content: ds.$color-content !default;
 
 $text-editor-placeholder: ds.$color-content-subtle !default;
 
+$text-editor-placeholder-disabled: ds.$color-content-disabled !default;
+
 $text-editor-outlined-bg: ds.$color-bg !default;
 
 $text-editor-filled-bg: ds.$color-bg-low !default;
@@ -24,6 +26,8 @@ $text-editor-clear-button-icon: ds.$color-content-subtle !default;
 $text-editor-invalid-border-focused: ds.$color-border-danger !default;
 $text-editor-invalid-border: ds.$color-border-danger-shared !default;
 $text-editor-border-disabled: ds.$color-border-disabled !default;
+
+$text-editor-border-read-only: ds.$color-border-disabled !default;
 $text-editor-content-disabled: ds.$color-content-disabled !default;
 
 $text-editor-label-content-focused: ds.$color-content-primary;

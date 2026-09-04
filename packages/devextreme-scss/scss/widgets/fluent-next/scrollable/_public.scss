@@ -4,6 +4,7 @@
 @mixin publish {
   --dx-scrollable-bg: #{$scrollable-bg};
   --dx-scrollable-scroll-bg: #{$scrollable-scroll-bg};
+  --dx-scrollable-scroll-bg-disabled: #{$scrollable-scroll-bg-disabled};
   --dx-scrollable-scroll-height: #{$scrollable-scroll-height};
   --dx-scrollable-scroll-padding: #{$scrollable-scroll-padding};
   --dx-scrollable-scroll-width: #{$scrollable-scroll-width};

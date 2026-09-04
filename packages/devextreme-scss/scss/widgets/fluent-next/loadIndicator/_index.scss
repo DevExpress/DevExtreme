@@ -130,3 +130,12 @@
   50% { transform: rotate(5deg); }
   to { transform: rotate(-130deg); }
 }
+
+.dx-state-disabled .dx-loadindicator-segment-inner {
+  border-color: var(--dx-load-indicator-segment-border-disabled);
+  border-bottom-color: transparent;
+}
+
+.dx-state-disabled .dx-loadindicator-content-circle .dx-loadindicator-segment2 .dx-loadindicator-segment-inner {
+  border-color: var(--dx-load-indicator-segment-inner-border-disabled);
+}

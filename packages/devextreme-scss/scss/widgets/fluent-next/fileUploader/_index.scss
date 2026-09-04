@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
@@ -209,5 +210,14 @@
 
   .dx-fileuploader-cancel-button {
     margin-top: 0;
+  }
+}
+
+@include when-disabled(".dx-fileuploader") {
+  .dx-button-text,
+  .dx-fileuploader-input-label,
+  .dx-fileuploader-file-name,
+  .dx-fileuploader-file-size {
+    color: var(--dx-file-uploader-content-disabled);
   }
 }

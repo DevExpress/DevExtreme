@@ -5,7 +5,7 @@
 @use "../../base/numberBox" with (
   $spin-container-width: var(--dx-number-box-spin-container-width),
   $touch-friendly-spin-container-width: var(--dx-number-box-spin-container-touch-friendly-width),
-  $numberbox-spin-idle-opacity: var(--dx-number-box-spin-opacity),
+  $numberbox-spin-idle-opacity: false,
 );
 @use "../textEditor" as *;
 
@@ -25,10 +25,6 @@
 .dx-numberbox-spin-container {
   overflow: hidden;
   width: var(--dx-number-box-spin-container-width);
-
-  .dx-state-disabled & {
-    opacity: 1;
-  }
 }
 
 .dx-numberbox-spin-up-icon {
@@ -59,7 +55,8 @@
     background-color: var(--dx-number-box-spin-bg-active);
   }
 
-  &.dx-state-disabled {
+  &.dx-state-disabled,
+  .dx-state-disabled & {
     .dx-numberbox-spin-up-icon,
     .dx-numberbox-spin-down-icon {
       color: var(--dx-number-box-content-disabled);

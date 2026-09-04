@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/tileView" with (
@@ -11,6 +12,10 @@
   border-color: var(--dx-tile-view-border);
   text-align: left;
 
+  &.dx-state-disabled {
+    color: var(--dx-tile-view-content-disabled);
+  }
+
   &.dx-state-focused,
   &.dx-state-hover {
     background-color: var(--dx-tile-view-bg-hovered);
@@ -21,5 +26,11 @@
     background-color: var(--dx-tile-view-bg-active);
     color: var(--dx-tile-view-content-active);
     border-color: transparent;
+  }
+}
+
+@include when-disabled(".dx-tileview") {
+  .dx-tile-content {
+    color: var(--dx-tile-view-content-disabled);
   }
 }

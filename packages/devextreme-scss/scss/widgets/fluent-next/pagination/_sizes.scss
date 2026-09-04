@@ -2,8 +2,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 // Not colours: two opacities that used to sit in _colors.scss (NAMING.md, O7)
-$pagination-info-opacity: ds.$opacity-70 !default;
-$pagination-nav-opacity-disabled: ds.$opacity-30 !default;
 
 $pagination-padding: ds.$spacing-130 !default;
 $pagination-separator-padding: ds.$spacing-80 !default;

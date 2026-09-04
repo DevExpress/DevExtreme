@@ -4,8 +4,6 @@
 
 // Not colours: a font weight and two opacities (NAMING.md O7)
 $grid-column-chooser-font-weight: ds.$font-weight-base-strong !default;
-$grid-text-link-opacity-disabled: ds.$opacity-35;
-$grid-icon-link-opacity-disabled: ds.$opacity-60;
 $grid-group-panel-message-line-height: buttonSizes.$button-text-line-height;
 
 $grid-border-width: 1px !default; // dx-line-width: 1px
@@ -188,3 +186,5 @@ $grid-column-indicator-width: ds.$spacing-140 !default;
 $grid-header-text-margin-inline: ds.$spacing-30 !default;
 $grid-sort-index-width: ds.$spacing-120 !default;
 $grid-sort-index-offset: ds.$spacing-30 !default;
+
+$grid-draggable-column-opacity: ds.$opacity-65 !default;

@@ -20,15 +20,6 @@
 @use "../badge";
 
 .dx-state-disabled {
-  &.dx-list {
-    opacity: 1;
-
-    .dx-list-item {
-      opacity: 1;
-      color: var(--dx-list-content-disabled);
-    }
-  }
-
   .dx-list-select-all-label {
     color: var(--dx-list-content-disabled);
 
@@ -499,6 +490,11 @@
       box-shadow: none;
       background-color: transparent;
 
+      .dx-list-static-delete-button-container &.dx-state-disabled,
+      .dx-state-disabled .dx-list-static-delete-button-container & {
+        background-color: transparent;
+      }
+
       .dx-button-content {
         z-index: 1;
       }
@@ -522,9 +518,19 @@
     &.dx-list-item,
     .dx-list-item {
       background-color: transparent;
-      opacity: var(--dx-list-item-opacity-disabled);
+      color: var(--dx-list-content-disabled);
+
+      .dx-icon {
+        color: var(--dx-list-content-disabled);
+      }
     }
   }
 }
 
 @include dx-list-sizing(var(--dx-list-item-padding-inline));
+
+.dx-state-disabled.dx-list .dx-list-item.dx-list-item-selected,
+.dx-list .dx-list-item.dx-list-item-selected.dx-state-disabled {
+  background-color: var(--dx-list-item-bg-selected-disabled);
+  color: var(--dx-list-content-disabled);
+}

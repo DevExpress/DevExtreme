@@ -2,6 +2,10 @@
 @use "sizes" as *;
 
 @mixin publish {
+  --dx-gallery-content-disabled: #{$gallery-content-disabled};
+  --dx-gallery-nav-button-bg-disabled: #{$gallery-nav-button-bg-disabled};
+  --dx-gallery-indicator-item-bg-selected-disabled: #{$gallery-indicator-item-bg-selected-disabled};
+  --dx-gallery-indicator-item-bg-disabled: #{$gallery-indicator-item-bg-disabled};
   --dx-gallery-border-focused: #{$gallery-border-focused};
   --dx-gallery-border-width: #{$gallery-border-width};
   --dx-gallery-indicator-bg-focused: #{$gallery-indicator-bg-focused};

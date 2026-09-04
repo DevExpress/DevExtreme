@@ -55,6 +55,8 @@ $touch-friendly-spin-container-width: 64px !default;
 
 .dx-state-disabled {
   .dx-numberbox-spin-container {
-    opacity: $numberbox-spin-idle-opacity;
+    @if $numberbox-spin-idle-opacity {
+      opacity: $numberbox-spin-idle-opacity;
+    }
   }
 }

@@ -45,3 +45,15 @@
     }
   }
 }
+
+.dx-fa-button.dx-state-disabled {
+  .dx-overlay-content,
+  .dx-fa-button-icon {
+    background-color: var(--dx-speed-dial-action-bg-disabled);
+  }
+
+  .dx-overlay-content .dx-fa-button-label-wrapper .dx-fa-button-label,
+  .dx-icon {
+    color: var(--dx-speed-dial-action-content-disabled);
+  }
+}

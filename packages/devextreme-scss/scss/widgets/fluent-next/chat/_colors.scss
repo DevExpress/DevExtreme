@@ -44,9 +44,15 @@ $chat-typing-indicator-circle-center-bg: ds.$color-content-subtle !default;
 
 $chat-typing-indicator-circle-bg: ds.$color-content-disabled !default;
 
+$chat-message-box-border-disabled: ds.$color-border-disabled !default;
+
 $chat-file-container-bg: ds.$color-bg !default;
 $chat-file-container-box-shadow: ds.$box-shadow-sm !default;
 $chat-file-secondary-content: ds.$color-content-subtle !default;
+
+$chat-file-content-disabled: ds.$color-content-disabled !default;
+$chat-content-disabled: ds.$color-content-disabled !default;
+$chat-information-content-disabled: ds.$color-content-disabled !default;
 
 $chat-suggestions-box-shadow: ds.$box-shadow-md !default;
 

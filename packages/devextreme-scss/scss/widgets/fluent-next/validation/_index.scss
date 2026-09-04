@@ -17,3 +17,18 @@
   var(--dx-validation-message-padding-block),
   var(--dx-validation-message-padding-inline),
 );
+
+.dx-state-disabled .dx-invalid-message .dx-overlay-content,
+.dx-state-disabled.dx-invalid-message .dx-overlay-content {
+  background-color: var(--dx-validation-message-bg-disabled);
+  color: var(--dx-validation-message-content-disabled);
+}
+
+.dx-state-disabled .dx-invalid-message .dx-overlay-content *,
+.dx-state-disabled.dx-invalid-message .dx-overlay-content * {
+  color: var(--dx-validation-message-content-disabled);
+}
+
+.dx-state-disabled .dx-validationsummary-item {
+  color: var(--dx-validation-summary-content-disabled);
+}

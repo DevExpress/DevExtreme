@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
@@ -10,6 +11,8 @@
   $pivotgrid-focus-outline-offset: var(--dx-focus-rect-outline-offset-inset),
   $pivotgrid-icon-size: var(--dx-pivot-grid-icon-size),
   $pivotgrid-common-field-padding: var(--dx-pivot-grid-field-padding),
+  $pivotgrid-drag-source-opacity: var(--dx-pivot-grid-drag-source-opacity),
+  $pivotgrid-fields-container-drag-opacity: false,
   $pivotgrid-common-field-chooser-drag-width: var(--dx-pivot-grid-field-chooser-drag-width),
   $pivotgrid-common-field-chooser-drag-height: var(--dx-pivot-grid-field-chooser-drag-height),
   $pivotgrid-position-indicator-vertical-height: var(--dx-pivot-grid-position-indicator-vertical-height),
@@ -60,7 +63,7 @@
     .dx-area-field.dx-area-box {
       background-color: var(--dx-pivot-grid-area-field-bg);
       border: var(--dx-pivot-grid-area-box-border);
-      border-color: var(--dx-pivot-grid-border-disabled);
+      border-color: var(--dx-pivot-grid-field-area-box-border);
       box-shadow: var(--dx-pivot-grid-drag-header-shadow);
     }
   }
@@ -70,7 +73,7 @@
     background-color: var(--dx-pivot-grid-field-area-box-bg);
     border-radius: var(--dx-pivot-grid-area-field-border-radius);
     border: var(--dx-pivot-grid-area-box-border);
-    border-color: var(--dx-pivot-grid-border-disabled);
+    border-color: var(--dx-pivot-grid-field-area-box-border);
     font-size: var(--dx-pivot-grid-headers-font-size);
     font-weight: var(--dx-pivot-grid-field-area-box-font-weight);
     line-height: var(--dx-pivot-grid-area-field-line-height);
@@ -242,5 +245,52 @@
 .dx-pivotgrid-fields-container { // stylelint-disable-line no-duplicate-selectors
   .dx-position-indicator {
     background-color: var(--dx-pivot-grid-position-indicator-bg);
+  }
+}
+
+@include when-disabled(".dx-pivotgrid") {
+  color: var(--dx-pivot-grid-content-disabled);
+
+  .dx-pivotgrid-area,
+  .dx-pivotgrid-horizontal-headers,
+  .dx-pivotgrid-vertical-headers,
+  .dx-pivotgrid-fields-area,
+  .dx-area-field,
+
+  .dx-area-description-cell {
+    color: var(--dx-pivot-grid-content-disabled);
+  }
+
+  .dx-pivotgrid-vertical-headers td,
+  .dx-pivotgrid-vertical-headers td span,
+  .dx-pivotgrid-horizontal-headers td,
+  .dx-pivotgrid-horizontal-headers td span {
+    color: var(--dx-pivot-grid-content-disabled);
+  }
+}
+
+.dx-state-disabled .dx-pivotgrid .dx-pivotgrid-area .dx-row-total,
+.dx-state-disabled .dx-pivotgrid .dx-pivotgrid-area .dx-grandtotal,
+.dx-state-disabled .dx-pivotgrid .dx-pivotgrid-area .dx-total,
+.dx-pivotgrid.dx-state-disabled .dx-pivotgrid-area .dx-row-total,
+.dx-pivotgrid.dx-state-disabled .dx-pivotgrid-area .dx-grandtotal,
+.dx-pivotgrid.dx-state-disabled .dx-pivotgrid-area .dx-total {
+  color: var(--dx-pivot-grid-content-disabled);
+}
+
+.dx-pivotgrid-fields-container .dx-drag-source,
+.dx-pivotgrid-fields-container .dx-drag-source .dx-area-field-content {
+  color: var(--dx-pivot-grid-drag-header-content);
+}
+
+.dx-state-disabled .dx-pivotgrid-fields-container .dx-drag-source,
+.dx-state-disabled .dx-pivotgrid-fields-container .dx-drag-source .dx-area-field-content {
+  color: var(--dx-pivot-grid-content-disabled);
+}
+
+.dx-pivotgridfieldchooser.dx-state-disabled,
+.dx-state-disabled .dx-pivotgridfieldchooser {
+  .dx-area .dx-area-caption {
+    color: var(--dx-pivot-grid-content-disabled);
   }
 }

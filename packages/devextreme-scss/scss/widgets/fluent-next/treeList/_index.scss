@@ -7,6 +7,7 @@
 @use "../gridBase/colors" as gridBaseColors;
 @use "../gridBase/sizes" as gridBaseSizes;
 @use "../../base/treeList" as baseTreeList with (
+  $treelist-draggable-column-opacity: var(--dx-grid-draggable-column-opacity),
   $treelist-expandable-node-line-height: var(--dx-tree-list-empty-space-height),
   $treelist-sticky-column-border: var(--dx-tree-list-sticky-column-border),
   $treelist-cell-focus-outline: var(--dx-tree-list-cell-outline-focused),
@@ -62,4 +63,9 @@
       }
     }
   }
+}
+
+.dx-treelist.dx-state-disabled .dx-treelist-rowsview tr .dx-treelist-empty-space,
+.dx-state-disabled .dx-treelist .dx-treelist-rowsview tr .dx-treelist-empty-space {
+  color: var(--dx-tree-list-chevron-icon-disabled);
 }

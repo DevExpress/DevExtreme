@@ -16,3 +16,8 @@
 .dx-splitter-border {
   background-color: transparent;
 }
+
+.dx-state-disabled .dx-splitter-bar,
+.dx-state-disabled .dx-splitter-bar.dx-splitter-inactive {
+  background-color: var(--dx-splitter-bar-border-disabled);
+}
