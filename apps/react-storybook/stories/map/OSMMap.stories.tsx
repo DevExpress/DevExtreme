@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import { useArgs } from 'storybook/preview-api';
+import { fn } from 'storybook/test';
 
 import Attribution from 'ol/control/Attribution.js';
 import type OpenLayersMap from 'ol/Map.js';
@@ -38,12 +39,20 @@ const PROVIDER_CONFIG = {
     ),
     tileServer: () => TILE_SERVER,
 };
-const DEFAULT_MARKER = { location: DEFAULT_MARKER_LOCATION };
+const handleMarkerClick = fn();
+const DEFAULT_MARKER = {
+    location: DEFAULT_MARKER_LOCATION,
+    onClick: handleMarkerClick,
+};
 const CUSTOM_MARKER = {
     location: CUSTOM_MARKER_LOCATION,
     iconSrc: 'images/maps/map-marker.png',
+    onClick: handleMarkerClick,
 };
-const ADDED_MARKER = { location: ADDED_MARKER_LOCATION };
+const ADDED_MARKER = {
+    location: ADDED_MARKER_LOCATION,
+    onClick: handleMarkerClick,
+};
 const STORY_STYLE: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',

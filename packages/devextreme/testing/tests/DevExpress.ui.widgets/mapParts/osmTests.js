@@ -1710,6 +1710,43 @@ QUnit.module('OSM: markers', moduleConfig, () => {
     });
 });
 QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
+    const tileServer = {
+        url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+        attribution: 'Example attribution'
+    };
+
+    QUnit.test('only visible markers participate in sequential keyboard navigation', function(assert) {
+        const done = assert.async();
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            markers: [{
+                location: [40.74, -73.98],
+                onClick: () => {}
+            }, {
+                location: [50, 10],
+                onClick: () => {}
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                const visibleMarker = openLayersMock.addedOverlays[0].options.element;
+                const hiddenMarker = openLayersMock.addedOverlays[1].options.element;
+                assert.strictEqual(visibleMarker.getAttribute('tabindex'), '0', 'visible marker is keyboard-focusable');
+                assert.strictEqual(hiddenMarker.getAttribute('tabindex'), '-1', 'offscreen marker is excluded from the tab order');
+
+                visibleMarker.focus();
+                openLayersMock.viewExtent = [9000, 49900, 10100, 50100];
+                openLayersMock.mapInstance.trigger('moveend');
+
+                assert.strictEqual(visibleMarker.getAttribute('tabindex'), '-1', 'marker leaving the viewport is excluded from the tab order');
+                assert.strictEqual(hiddenMarker.getAttribute('tabindex'), '0', 'marker entering the viewport returns to the tab order');
+                assert.strictEqual(document.activeElement, getOpenLayersMapTarget(), 'focus returns to the map without panning');
+                done();
+            }
+        });
+    });
     QUnit.test('focus options are applied to the OpenLayers keyboard target', function(assert) {
         const done = assert.async();
         const map = $('#map').dxMap({

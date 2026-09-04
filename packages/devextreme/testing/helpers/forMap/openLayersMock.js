@@ -62,6 +62,9 @@
             this.options = options;
             api.overlayOptions.push(options);
         }
+        getPosition() {
+            return this.options.position;
+        }
         setPosition(position) {
             this.options.position = position;
             api.overlayPositionChanges.push(position);

@@ -156,6 +156,7 @@ class OpenLayersMap implements MapEngineMap {
     this._subscribedView = view;
     this._subscribedView.on('change:center', this._viewCenterChangeHandler);
     this._syncMarkerPositions();
+    this._syncMarkerTabIndexes();
   };
 
   attachHandlers(handlers: MapEngineEventHandlers): void {
@@ -329,9 +330,12 @@ class OpenLayersMap implements MapEngineMap {
     });
   }
 
-  private _syncMarkerTabIndex(marker: OpenLayersMarker): void {
+  private _syncMarkerTabIndex(marker: OpenLayersMarker, viewExtent?: Extent): void {
+    const extent = viewExtent ?? this.originalMap.getView().calculateExtent();
+    const isVisible = this._isMarkerVisible(marker, extent);
+
     marker.focusTargets.forEach(({ element, tabIndex }) => {
-      if (!this._focusEnabled || this._disabled) {
+      if (!this._focusEnabled || this._disabled || !isVisible) {
         element.setAttribute('tabindex', '-1');
       } else if (tabIndex === null) {
         element.removeAttribute('tabindex');
@@ -339,6 +343,42 @@ class OpenLayersMap implements MapEngineMap {
         element.setAttribute('tabindex', tabIndex);
       }
     });
+
+    if (this._focusEnabled && !this._disabled && !isVisible) {
+      this._moveMarkerFocusToMap(marker);
+    }
+  }
+
+  private _syncMarkerTabIndexes(): void {
+    const viewExtent = this.originalMap.getView().calculateExtent();
+
+    this._markers.forEach((marker) => this._syncMarkerTabIndex(marker, viewExtent));
+  }
+
+  private _isMarkerVisible(marker: OpenLayersMarker, viewExtent: Extent): boolean {
+    const position = marker.overlay.getPosition();
+    if (!position) {
+      return false;
+    }
+
+    const [minX, minY, maxX, maxY] = viewExtent;
+    const [x, y] = position;
+
+    return x >= minX
+      && x <= maxX
+      && y >= minY
+      && y <= maxY;
+  }
+
+  private _moveMarkerFocusToMap(marker: OpenLayersMarker): void {
+    const markerRoot = marker.element.getRootNode() as Document | ShadowRoot;
+    const { activeElement } = markerRoot;
+    const markerHasFocus = marker.focusTargets.some(({ element }) => element === activeElement);
+    const container = this._container as HTMLElement;
+
+    if (markerHasFocus && typeof container.focus === 'function') {
+      container.focus({ preventScroll: true });
+    }
   }
 
   private _getMarkerFitPadding(): { padding: number[]; needsLayout: boolean } {
@@ -391,6 +431,7 @@ class OpenLayersMap implements MapEngineMap {
       handlers.click(clickEvent);
     };
     const moveEnd = (): void => {
+      this._syncMarkerTabIndexes();
       handlers.viewChange(this._getViewState());
     };
 
@@ -489,6 +530,7 @@ class OpenLayersMap implements MapEngineMap {
       : undefined;
     this._markerFitNeedsLayout = Boolean(markerFit?.needsLayout);
     view.fit(extent, markerFit ? { padding: markerFit.padding } : undefined);
+    this._syncMarkerTabIndexes();
   }
 
   getZoom(): number | undefined {
@@ -605,10 +647,13 @@ class OpenLayersMap implements MapEngineMap {
     if (options.zoom !== undefined && view.getZoom() !== options.zoom) {
       view.setZoom(options.zoom);
     }
+
+    this._syncMarkerTabIndexes();
   }
 
   updateDimensions(): boolean {
     this.originalMap.updateSize();
+    this._syncMarkerTabIndexes();
     const needsViewportAdjustment = this._markerFitNeedsLayout;
     this._markerFitNeedsLayout = false;
 

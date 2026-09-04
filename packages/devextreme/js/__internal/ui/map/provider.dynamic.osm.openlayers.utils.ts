@@ -38,6 +38,7 @@ export interface TileLayerLike {
 }
 
 export interface OverlayLike {
+  getPosition: () => Coordinate | undefined;
   setPosition: (position: Coordinate) => void;
 }
 
