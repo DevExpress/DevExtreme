@@ -167,8 +167,6 @@
         padding: $grid-column-chooser-content-padding;
 
         .dx-column-chooser-item {
-          /* Parametrized so a theme can pass false: a chooser item is faint until it can be
-          dragged, which is a state, and a theme with roles for that paints them instead. */
           @if $column-chooser-item-opacity {
             opacity: $column-chooser-item-opacity;
           }
@@ -262,8 +260,6 @@
   }
 
   .dx-#{$widget-name}-draggable-column {
-    /* false opts out of the dim; a theme that marks the dragged column with colour instead does
-    not want its header text halved */
     @if $draggable-column-opacity {
       opacity: $draggable-column-opacity;
     }

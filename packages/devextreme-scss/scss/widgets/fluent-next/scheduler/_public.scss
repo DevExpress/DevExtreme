@@ -2,12 +2,6 @@
 @use "sizes" as *;
 
 @mixin publish {
-  /* $scheduler-appointment-bg-focused and $scheduler-appointment-shadow-focused are deliberately
-  NOT published. They are build-time flags, not values: base reads them as `@if` conditions
-  (`$fill-focused-appointment`, `$is-shadow-color-for-focused-state`) that decide whether rules
-  exist at all. Published, they emitted `--dx-scheduler-appointment-bg-focused: false` into the
-  shipped CSS - a name that reads as a colour role holding a Sass boolean, which any var() reading
-  it would turn into an invalid declaration with nothing in the console. */
   --dx-scheduler-content-disabled: #{$scheduler-content-disabled};
   --dx-scheduler-time-panel-content-disabled: #{$scheduler-time-panel-content-disabled};
   --dx-scheduler-tooltip-date-content: #{$scheduler-tooltip-date-content};

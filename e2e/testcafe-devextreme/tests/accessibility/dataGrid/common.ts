@@ -13,11 +13,6 @@ const DATA_GRID_SELECTOR = '#container';
 
 const a11yCheckConfig = {};
 
-// The confirm-delete dialog autofocuses "Yes", and the focused filled button reuses the hovered
-// step, which in the fluent-next dark palette is a lighter blue (#2b7ecf) that white content
-// fails on (4.21:1). The pair belongs to the design-token package, so the fix lands at the
-// foundation level, not in the theme. Color-contrast is the only rule fluent-next runs, so the
-// test is skipped for that theme instead of narrowed. See fluent-next/DISABLED_STATES.md.
 const isFluentNextDark = getFullThemeName() === 'fluent-next.blue.dark';
 
 test('Grid without config', async (t) => {

@@ -47,10 +47,6 @@
   var(--dx-switch-container-rtl-offset),
 );
 
-/* base states the switch's disabled look on the widget's own root, and that mixin is shared with
-the legacy theme, so the ancestor form cannot be added there. A switch inside a disabled form or
-toolbar is the case it misses - the track and the handle stayed at full strength - so this theme
-restates the same two paints for it here. */
 .dx-state-disabled .dx-switch {
   .dx-switch-handle::before {
     background-color: var(--dx-switch-handle-bg-disabled);

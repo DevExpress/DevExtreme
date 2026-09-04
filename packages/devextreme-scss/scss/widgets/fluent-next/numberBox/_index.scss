@@ -5,8 +5,6 @@
 @use "../../base/numberBox" with (
   $spin-container-width: var(--dx-number-box-spin-container-width),
   $touch-friendly-spin-container-width: var(--dx-number-box-spin-container-touch-friendly-width),
-  /* base dims the spin buttons when the editor is disabled; the editor already paints its own
-  disabled content, so this only added a second, unmeasurable dim on top of it. */
   $numberbox-spin-idle-opacity: false,
 );
 @use "../textEditor" as *;

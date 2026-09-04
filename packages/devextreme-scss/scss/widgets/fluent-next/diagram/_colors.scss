@@ -20,9 +20,6 @@ $diagram-danger-format-bg-active: ds.$color-bg-danger-active !default;
 $diagram-success-format-bg-active: ds.$color-bg-success-active !default;
 $diagram-image-icon-base-content: ds.$color-content-subtle !default;
 
-/* The placeholder artwork was content-subtle with a separate 50% on top - two declarations for one
-colour. Folding the alpha into the paint is what Blazor does (color-opacity) and it stops the
-element's opacity from taking its children with it. */
 $diagram-image-icon-muted-content: rgb(from #{ds.$color-content-subtle} r g b / 0.5) !default;
 $diagram-image-icon-accent-border: ds.$color-content-primary !default;
 $diagram-toolbox-shape-text-content: ds.$color-content-subtle !default;

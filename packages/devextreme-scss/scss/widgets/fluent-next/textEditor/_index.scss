@@ -49,8 +49,6 @@
     }
   }
 
-  /* Also for an editor nested in a disabled container: DevExtreme puts the state on the
-  container, and the editors inside a ColorView, a Pagination or a Form never carry it. */
   &.dx-state-disabled,
   .dx-state-disabled & {
     background-color: transparent;
@@ -134,8 +132,6 @@
     background-color: var(--dx-text-editor-filled-bg-focused);
   }
 
-  /* Also for an editor nested in a disabled container: DevExtreme puts the state on the
-  container, and the editors inside a ColorView, a Pagination or a Form never carry it. */
   &.dx-state-disabled,
   .dx-state-disabled & {
     background-color: transparent;
@@ -440,10 +436,6 @@
   line-height: normal;
 }
 
-/* The placeholder paints itself, so the disabled content colour never reaches it by inheritance.
-The rule that did paint it sat under .dx-show-clear-button, which left every editor without a clear
-button - a plain text box, a text area, a date box - with a full-strength placeholder while it was
-disabled. */
 .dx-state-disabled .dx-placeholder,
 .dx-state-disabled .dx-placeholder::before {
   color: var(--dx-text-editor-placeholder-disabled);
@@ -608,8 +600,6 @@ disabled. */
   $button-icononly-padding: var(--dx-text-editor-button-icon-only-padding),
 );
 
-/* An invalid editor reddens its label, and it kept doing so after being disabled - a red caption
-over a grey field, an error you are not allowed to correct. The state wins over the validity. */
 .dx-texteditor.dx-invalid.dx-state-disabled,
 .dx-state-disabled .dx-texteditor.dx-invalid {
   .dx-label,

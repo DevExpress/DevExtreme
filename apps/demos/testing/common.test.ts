@@ -64,12 +64,7 @@ const getIgnoredRules = (testName) => {
 
   if ((isMaterial() || isFluent())
     && [
-      // Cause not reproduced: the demo has no disabled element, so the inherited
-      // "disabled tags" reason does not apply. Needs a measurement in CI.
       'TreeList-StatePersistence',
-      // Real failure, and the palette's rather than the demo's: content-danger is #e4554f in the
-      // dark palette - 4.92:1 on an alternating row, 4.22:1 on a normal one - so which rows fail
-      // is decided by the live data. The package assigns that role to error text itself.
       'DataGrid-SignalRService',
       // False positive: contrast rules do not apply to custom orange color
       'CardView-FieldTemplate',

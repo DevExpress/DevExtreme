@@ -75,12 +75,7 @@
   $scheduler-views-vertical-group-min-height: var(--dx-scheduler-views-vertical-group-min-height),
   $scheduler-tooltip-shadow: var(--dx-scheduler-tooltip-shadow),
   $scheduler-appointment-icon-font-size: var(--dx-scheduler-appointment-icon-font-size),
-  /* Kept: a resize has no floating copy, so the appointment being stretched is what moves, and its
-  surface is a resource colour nobody controls - the same reason the disabled appointment keeps its
-  own dim rather than a role. */
   $scheduler-appointment-resizing-opacity: var(--dx-scheduler-appointment-resizing-opacity),
-  /* Its colour role is applied below; the dim it used to carry has to be switched off explicitly,
-  because base's intermediate module defaults to 0.8 whatever the leaf says. */
   $scheduler-tooltip-date-opacity: false,
   $scheduler-appointment-date-opacity: false,
   $agenda-appointment-details-opacity: false,
@@ -1116,9 +1111,6 @@
   color: var(--dx-scheduler-workspace-cell-content-hovered);
 }
 
-// A disabled scheduler was carried entirely by the blanket dim: the work space, the panels and the
-
-// header are its own markup and no child widget paints them.
 @include when-disabled(".dx-scheduler") {
   color: var(--dx-scheduler-content-disabled);
 
@@ -1128,39 +1120,22 @@
   .dx-scheduler-time-panel,
   .dx-scheduler-all-day-title,
   .dx-scheduler-work-space,
-  /* Both now paint their own subtle colour, so they no longer inherit this one */
   .dx-scheduler-appointment-content-date,
   .dx-scheduler-appointment-content-details {
     color: var(--dx-scheduler-content-disabled);
   }
 
-  // The header toolbar and the view switcher are widgets of their own and are not disabled, so
-
-  // their text is painted here rather than through their tiers.
   .dx-button-text,
   .dx-toolbar-item-content {
     color: var(--dx-scheduler-content-disabled);
   }
 }
 
-/* An appointment already carries its own disabled signal: base dims it to
-$appointment-disabled-opacity when the appointment itself is disabled. Greying its text on top of
-that stacked a second dim - the title composited to #cdcdcd against the faded surface, 1.22:1 -
-so the text keeps the appointment's own colour and the dim stays the only signal.
-
-The case that genuinely had nothing is a disabled scheduler, where .dx-state-disabled lands on the
-scheduler root and never reaches the appointment. It takes the same dim the component already
-defines rather than a second colour, which keeps the title readable against its own surface. */
 .dx-scheduler.dx-state-disabled .dx-scheduler-appointment,
 .dx-state-disabled .dx-scheduler .dx-scheduler-appointment {
   opacity: var(--dx-scheduler-appointment-opacity-disabled);
 }
 
-/* The date under an appointment's subject, and the details line in the agenda view, are the same
-kind of secondary text as the tooltip's date below - and were the same 70% of the content colour.
-The appointment paints its own text with a fixed role whatever the resource colour behind it, so
-the subtle role is the consistent answer here too, and it does not drag the recurrence icon with
-it the way the element's opacity did. */
 .dx-scheduler-appointment-content-date {
   color: var(--dx-scheduler-appointment-date-content);
 }
@@ -1169,8 +1144,6 @@ it the way the element's opacity did. */
   color: var(--dx-scheduler-agenda-details-content);
 }
 
-/* The tooltip's date line is secondary text and takes the subtle content role; it used to be the
-appointment colour at 80% opacity, which states no contrast of its own. */
 .dx-tooltip-appointment-item-content-date {
   color: var(--dx-scheduler-tooltip-date-content);
 }
@@ -1179,18 +1152,12 @@ appointment colour at 80% opacity, which states no contrast of its own. */
   color: var(--dx-scheduler-content-disabled);
 }
 
-/* The time panel paints its own text, so the hours stayed at full contrast in a disabled
-scheduler while the grid around them greyed. */
 .dx-scheduler.dx-state-disabled .dx-scheduler-time-panel-cell,
 .dx-scheduler.dx-state-disabled .dx-scheduler-time-panel-cell > div,
 .dx-state-disabled .dx-scheduler .dx-scheduler-time-panel-cell > div {
   color: var(--dx-scheduler-time-panel-content-disabled);
 }
 
-/* The month view paints its own cells - the day number, the first-of-month and current-date
-emphasis, the adjacent-month grey and the header panel's date - so the work space greyed around a
-table that stayed at full contrast. Appended here rather than merged into the disabled block above
-because these match the painting rules class for class and only source order settles the tie. */
 .dx-scheduler.dx-state-disabled,
 .dx-state-disabled .dx-scheduler {
   .dx-scheduler-date-table-cell,
@@ -1198,8 +1165,6 @@ because these match the painting rules class for class and only source order set
   .dx-scheduler-date-table-first-of-month,
   .dx-scheduler-date-table-current-date,
   .dx-scheduler-date-table-other-month,
-  /* The month view qualifies this one with its work-space class and :last-child, which outranks a
-  plain widget-level rule - the weekday header stayed at full contrast on its own. */
   .dx-scheduler-header-panel-cell-date,
   .dx-scheduler-header-panel-cell-date:last-child,
   .dx-scheduler-work-space-month .dx-scheduler-header-panel-cell-date:last-child {

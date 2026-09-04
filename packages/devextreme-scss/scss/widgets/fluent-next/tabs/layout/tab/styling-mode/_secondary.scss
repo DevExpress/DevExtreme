@@ -59,9 +59,6 @@
       }
     }
 
-    /* And the same for a disabled widget, whose state class sits on the root next to the styling
-    mode rather than on the tab. Without this the bar stayed accent-coloured in secondary and in
-    TabPanel, which uses secondary - the asymmetry with primary was visible side by side. */
     &.dx-state-disabled .dx-tab.dx-tab-selected .dx-tab-content {
       @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-disabled));
     }
@@ -113,10 +110,6 @@
       }
     }
 
-    /* A disabled widget carries the state on its root, next to the styling-mode class, not on the
-    tab, so the rule above never matched. And secondary hangs its indicator on .dx-tab-content
-    rather than on the tab, so the selector that works for primary lands on the wrong element
-    here - which is why the bar stayed blue in this mode and in TabPanel, which uses it. */
     &.dx-state-disabled .dx-tab-selected .dx-tab-content {
       @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-disabled));
     }

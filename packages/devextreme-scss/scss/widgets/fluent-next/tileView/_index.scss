@@ -12,8 +12,6 @@
   border-color: var(--dx-tile-view-border);
   text-align: left;
 
-  /* A tile paints its own colour, so a disabled one kept it: the rule the theme has matches a
-  disabled TileView, and item.disabled puts the state on the tile itself. */
   &.dx-state-disabled {
     color: var(--dx-tile-view-content-disabled);
   }
@@ -31,9 +29,6 @@
   }
 }
 
-// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
-
-// nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 @include when-disabled(".dx-tileview") {
   .dx-tile-content {
     color: var(--dx-tile-view-content-disabled);

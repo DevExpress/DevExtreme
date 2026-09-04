@@ -6,14 +6,10 @@ $calendar-navigator-content: ds.$color-content !default;
 
 $calendar-cell-other-content: ds.$color-content-subtle !default;
 
-/* cell.period.color.text.disabled in the package's component tier */
 $calendar-cell-content-disabled: ds.$color-content-disabled !default;
 $calendar-bg: transparent !default;
 $calendar-bg-hovered: ds.$color-bg-primary-subtler-selected !default;
 
-/* A disabled calendar kept its selected day at full accent while every other cell greyed. The
-package has no disabled step for this cell, but it does answer the same question for a menu
-(item.color.selected.bg.disabled = bg-disabled), and the shape still says which day is selected. */
 $calendar-cell-bg-selected-disabled: ds.$color-bg-disabled !default;
 $calendar-cell-bg-selected: ds.$color-bg-primary !default;
 $calendar-cell-content-selected: ds.$color-content-static-dark !default;

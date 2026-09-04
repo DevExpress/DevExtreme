@@ -18,15 +18,12 @@
   var(--dx-validation-message-padding-inline),
 );
 
-/* The message renders into an overlay, so the state is reached through the editor that owns it. */
 .dx-state-disabled .dx-invalid-message .dx-overlay-content,
 .dx-state-disabled.dx-invalid-message .dx-overlay-content {
   background-color: var(--dx-validation-message-bg-disabled);
   color: var(--dx-validation-message-content-disabled);
 }
 
-/* The message text sits in a span of its own, which kept the danger colour while the pill behind
-it had already gone grey - red letters on a grey ground reads worse than either state. */
 .dx-state-disabled .dx-invalid-message .dx-overlay-content *,
 .dx-state-disabled.dx-invalid-message .dx-overlay-content * {
   color: var(--dx-validation-message-content-disabled);

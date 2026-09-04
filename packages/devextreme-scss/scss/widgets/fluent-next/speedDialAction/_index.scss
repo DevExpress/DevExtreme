@@ -46,15 +46,12 @@
   }
 }
 
-/* The floating action button had no disabled state at all: it renders into the viewport, keeps
-its accent disc and white icon, and a disabled one looked exactly like a live one. */
 .dx-fa-button.dx-state-disabled {
   .dx-overlay-content,
   .dx-fa-button-icon {
     background-color: var(--dx-speed-dial-action-bg-disabled);
   }
 
-  /* The label is painted through the overlay chain, so a two-class selector loses to it. */
   .dx-overlay-content .dx-fa-button-label-wrapper .dx-fa-button-label,
   .dx-icon {
     color: var(--dx-speed-dial-action-content-disabled);

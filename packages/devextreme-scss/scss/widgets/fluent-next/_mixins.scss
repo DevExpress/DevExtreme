@@ -1,13 +1,3 @@
-/*
- * A widget is disabled two ways: the state class lands on its own root, or on something the widget
- * sits inside - DevExtreme puts it on the container and lets CSS reach in. Writing only the first
- * is the half-finished form that reads as complete, and it leaves a grid inside a disabled form,
- * or a button inside a disabled toolbar, at full contrast. Emitting both from one place is what
- * stops the pair being written by hand and getting written once.
- *
- * The ancestor form is a descendant, never a child: a widget is rarely the immediate child of the
- * element carrying the state.
- */
 @mixin when-disabled($selector) {
   #{$selector}.dx-state-disabled,
   .dx-state-disabled #{$selector} {

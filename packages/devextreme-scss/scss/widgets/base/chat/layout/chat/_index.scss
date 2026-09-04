@@ -10,8 +10,6 @@ $disabled-opacity: 0.5 !default;
   overflow-y: auto;
 
   &.dx-state-disabled {
-    /* false opts out of the dim; `null` would be overwritten by the `!default` in the parent
-    module and silently restore it */
     @if $disabled-opacity {
       opacity: $disabled-opacity;
     }

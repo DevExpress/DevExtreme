@@ -213,14 +213,7 @@
   }
 }
 
-// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
-
-// nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 @include when-disabled(".dx-fileuploader") {
-
-  // The select-file button is a widget of its own and is not disabled, so its text is painted
-
-  // here rather than through the button tier, which belongs to the button component.
   .dx-button-text,
   .dx-fileuploader-input-label,
   .dx-fileuploader-file-name,

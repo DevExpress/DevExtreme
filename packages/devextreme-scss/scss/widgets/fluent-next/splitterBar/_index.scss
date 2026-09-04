@@ -17,7 +17,6 @@
   background-color: transparent;
 }
 
-/* The bar is the splitter's only chrome, so it is what shows the state. */
 .dx-state-disabled .dx-splitter-bar,
 .dx-state-disabled .dx-splitter-bar.dx-splitter-inactive {
   background-color: var(--dx-splitter-bar-border-disabled);

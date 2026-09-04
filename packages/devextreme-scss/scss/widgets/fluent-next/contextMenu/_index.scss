@@ -86,8 +86,6 @@
   }
 }
 
-/* A disabled context menu had nothing of its own once the blanket dim was gone: its items are
-plain markup, not widgets that mark themselves. */
 .dx-context-menu.dx-state-disabled,
 .dx-state-disabled .dx-context-menu {
   .dx-menu-item-text,

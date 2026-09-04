@@ -97,10 +97,6 @@ $card-view-header-panel-item-sort-index-content-hovered: var(--dx-card-view-head
 
 // #region HEADER PANEL ITEM (DISABLED)
 
-/* The dim the sortable puts on a drag source is what marks it, so the chip keeps its own colours
-underneath and fades as one piece. They are not painted with the disabled roles on top of that dim:
-that pairing measured 2.11 against this background, and axe composites the opacity into the
-foreground before it measures, so the text would have been unreadable as well as failing. */
 $card-view-header-panel-item-dragging-bg: var(--dx-card-view-header-panel-item-bg) !default;
 
 $card-view-header-panel-item-dragging-border: var(--dx-card-view-header-panel-item-border) !default;

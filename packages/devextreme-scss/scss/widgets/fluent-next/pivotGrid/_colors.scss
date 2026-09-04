@@ -21,8 +21,6 @@ $pivot-grid-position-indicator-bg: ds.$color-border-contrast !default;
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $pivot-grid-header-filter-content: ds.$color-content-primary !default;
 
-/* Border of the field boxes in their ordinary state. It reads the disabled border role because
-that is the step the design uses here; nothing on this element is disabled. */
 $pivot-grid-field-area-box-border: ds.$color-border-disabled !default;
 $pivot-grid-content: ds.$color-content !default;
 
@@ -32,6 +30,4 @@ $pivot-grid-area-field-bg: rgb(from #{$pivot-grid-field-area-box-bg} r g b / 0.9
 
 $pivot-grid-content-disabled: ds.$color-content-disabled !default;
 
-/* The field left behind while dragging. Blazor marks its draggable pivot header with colour, and
-so do cardView and the grid here - the field stays readable and says it is the source. */
 $pivot-grid-drag-header-content: ds.$color-content-subtle !default;

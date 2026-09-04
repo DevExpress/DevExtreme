@@ -3,14 +3,9 @@
 @use 'sizes';
 @use '../../base/cardView/index' as *;
 
-// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
-// nothing of its own once that rule was lifted. It is painted from the disabled content role now.
-// The existing `…header-panel-item-*-disabled` names are not reused here: base applies those to
-// the sortable drag source, which is active content, not to a disabled state.
 @include when-disabled(".dx-cardview") {
   color: var(--dx-card-view-content-disabled);
 
-  /* the sort index paints an accent of its own and stayed bright next to greyed headers */
   .dx-cardview-header-item .dx-cardview-header-item-sorting-order,
   .dx-cardview-field-caption,
   .dx-cardview-field-value,
@@ -20,16 +15,10 @@
   }
 }
 
-/* base exempts this widget's drag source from dxSortable's dim and marks it by repainting it with
-the disabled roles instead - which measured 2.11 here. This theme marks every drag source the same
-way, with the dim, so the exemption is lifted and the chip fades as one piece with its own colours
-underneath: 5.36 at the 0.65 the theme dims by. */
 .dx-cardview-header-item.dx-sortable-source {
   opacity: var(--dx-sortable-source-opacity);
 }
 
-/* The empty header's drop zone invites a drop it cannot accept while the widget is disabled, and
-it paints its own accent, so it was the one thing in a greyed cardView still asking to be used. */
 .dx-cardview.dx-state-disabled,
 .dx-state-disabled .dx-cardview {
   .dx-cardview-dropzone .dx-icon,

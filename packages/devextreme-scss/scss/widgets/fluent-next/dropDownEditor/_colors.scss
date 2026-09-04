@@ -2,10 +2,6 @@
 
 $drop-down-editor-icon: ds.$color-content-subtle !default;
 
-/* The icon used to fade to 35% of content-subtle while the drop-down was open - about #bebebe on
-white - and the active role beside it held the same value as rest, so it marked nothing. The
-design system has no neutral content-*-active, so active is said the other way round: the icon
-strengthens to the full content role while the editor is open instead of receding. */
 $drop-down-editor-icon-active: ds.$color-content !default;
 
 // Base-layer values injected with design tokens (wave B1)

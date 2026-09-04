@@ -86,8 +86,6 @@ $appointment-reduced-icon-rtl-left: null !default;
 }
 
 .dx-scheduler-appointment-content-date {
-  /* Guarded so a theme can pass false: the date is secondary text, and a theme with a role for
-  that paints the role instead of dimming the element and its icons with it. */
   @if $appointment-date-opacity {
     opacity: $appointment-date-opacity;
   }
@@ -179,9 +177,6 @@ $appointment-reduced-icon-rtl-left: null !default;
   }
 
   &.dx-scheduler-appointment-drag-source {
-    /* Guarded so a theme can pass false: the appointment left behind needs no mark when the copy
-    under the cursor is the thing being moved. Resizing is the other case and keeps its dim - there
-    is no copy there, the appointment itself is what the user is stretching. */
     @if $appointment-drag-source-opacity {
       opacity: $appointment-drag-source-opacity;
     }

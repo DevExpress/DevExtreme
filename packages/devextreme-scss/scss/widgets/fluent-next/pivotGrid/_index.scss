@@ -11,15 +11,7 @@
   $pivotgrid-focus-outline-offset: var(--dx-focus-rect-outline-offset-inset),
   $pivotgrid-icon-size: var(--dx-pivot-grid-icon-size),
   $pivotgrid-common-field-padding: var(--dx-pivot-grid-field-padding),
-  /* No dim on the field left behind while dragging. The package has no pivot grid, but Blazor
-  marks its draggable header with a background, a border and a colour and never with opacity
-  (pivot/pivot-table/layout.scss), which is also what cardView and the grid do here. */
-  /* The field being dragged is a drag source like any other in this theme, so it takes the one
-  value the sortable states rather than a role of its own: base dims it to 0.5, which leaves the
-  field caption at 3.26 once axe composites the opacity into it, and 0.65 reads 5.29. */
   $pivotgrid-drag-source-opacity: var(--dx-sortable-source-opacity),
-  /* The panel is not what moves either - a field being dragged carries its own header, with the
-  border and the shadow above. */
   $pivotgrid-fields-container-drag-opacity: false,
   $pivotgrid-common-field-chooser-drag-width: var(--dx-pivot-grid-field-chooser-drag-width),
   $pivotgrid-common-field-chooser-drag-height: var(--dx-pivot-grid-field-chooser-drag-height),
@@ -256,9 +248,6 @@
   }
 }
 
-// A disabled pivot grid was carried entirely by the blanket dim: its areas, headers and field
-
-// chips are its own markup and no child widget paints them.
 @include when-disabled(".dx-pivotgrid") {
   color: var(--dx-pivot-grid-content-disabled);
 
@@ -272,8 +261,6 @@
     color: var(--dx-pivot-grid-content-disabled);
   }
 
-  /* The header cells paint their own text, so colouring the container above never reached the
-  row and column captions inside them. */
   .dx-pivotgrid-vertical-headers td,
   .dx-pivotgrid-vertical-headers td span,
   .dx-pivotgrid-horizontal-headers td,
@@ -282,8 +269,6 @@
   }
 }
 
-/* Total cells paint their own colour, and the state sits above the table rather than on the
-pivot grid root, so the rule above never reached them. */
 .dx-state-disabled .dx-pivotgrid .dx-pivotgrid-area .dx-row-total,
 .dx-state-disabled .dx-pivotgrid .dx-pivotgrid-area .dx-grandtotal,
 .dx-state-disabled .dx-pivotgrid .dx-pivotgrid-area .dx-total,
@@ -293,9 +278,6 @@ pivot grid root, so the rule above never reached them. */
   color: var(--dx-pivot-grid-content-disabled);
 }
 
-/* The field a drag started from is marked with colour rather than halved: at 0.5 its text sat at
-about 3.4:1, the same defect cardView had. The disabled pair keeps the own-colour ratchet honest -
-these elements now paint themselves, so a disabled rule has to reach them. */
 .dx-pivotgrid-fields-container .dx-drag-source,
 .dx-pivotgrid-fields-container .dx-drag-source .dx-area-field-content {
   color: var(--dx-pivot-grid-drag-header-content);
@@ -306,8 +288,6 @@ these elements now paint themselves, so a disabled rule has to reach them. */
   color: var(--dx-pivot-grid-content-disabled);
 }
 
-/* The field chooser's area captions paint themselves, so they stayed at full contrast inside a
-disabled chooser while the fields under them greyed. */
 .dx-pivotgridfieldchooser.dx-state-disabled,
 .dx-state-disabled .dx-pivotgridfieldchooser {
   .dx-area .dx-area-caption {

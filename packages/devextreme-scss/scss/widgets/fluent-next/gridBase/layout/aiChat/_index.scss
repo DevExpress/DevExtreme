@@ -14,10 +14,6 @@
 @include ai-chat-message-regenerate-button(buttonColors.$button-normal-contained-bg-active);
 @include ai-chat-message-icon(var(--dx-grid-ai-chat-message-icon-size));
 
-/* This button was the last place still dimming a disabled state, and dimming it took the icon and
-the label down together while stating no contrast of its own. The two behavioural parts of the
-disabled-widget mixin are what it actually needed; the third is a colour, and the theme has a role
-for it. */
 .dx-ai-chat--disabled .dx-ai-chat__message-regenerate-button {
   color: var(--dx-grid-ai-chat-message-regenerate-button-content-disabled);
   cursor: default;

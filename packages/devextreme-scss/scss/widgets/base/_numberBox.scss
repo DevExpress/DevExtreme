@@ -55,8 +55,6 @@ $touch-friendly-spin-container-width: 64px !default;
 
 .dx-state-disabled {
   .dx-numberbox-spin-container {
-    /* Guarded so a theme can pass false: a disabled editor already paints its own disabled
-    content, and a second dim on the spin buttons only stacks on it. */
     @if $numberbox-spin-idle-opacity {
       opacity: $numberbox-spin-idle-opacity;
     }

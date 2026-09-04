@@ -41,7 +41,6 @@ Promise<void> => {
   // so only color-contrast is re-checked for it — regardless of the caller's config.
   const isColorContrastOnly = getThemeName() === 'fluent-next';
 
-  // Swallowing this used to report the test as passed with no assertion at all.
   if (isColorContrastOnly && !isColorContrastChecked(options)) {
     throw new Error(
       'a11yCheck was called on fluent-next with a configuration that excludes color-contrast, '

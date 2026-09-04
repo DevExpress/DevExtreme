@@ -10,8 +10,6 @@
   margin: var(--dx-card-margin);
 }
 
-/* A card is a surface, and a surface in a disabled subtree takes the disabled surface role. It
-used to be greyed by the blanket dim; nothing marked it once that went. */
 .dx-state-disabled .dx-card {
   background-color: var(--dx-card-bg-disabled);
 }

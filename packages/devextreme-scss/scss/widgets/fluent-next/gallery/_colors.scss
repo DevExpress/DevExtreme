@@ -20,11 +20,7 @@ $gallery-border-focused: ds.$color-bg-primary !default;
 
 $gallery-content-disabled: ds.$color-content-disabled !default;
 
-/* The disc takes a content role when enabled ($gallery-nav-button-bg is content-subtle), so its
-disabled step is the content one. bg-disabled made a near-white disc on a white page, and the
-white chevron on it vanished with it. */
 $gallery-nav-button-bg-disabled: ds.$color-content-disabled !default;
 
-/* The indicator dots are a control - they page the gallery - and kept the accent when disabled. */
 $gallery-indicator-item-bg-selected-disabled: ds.$color-content-disabled !default;
 $gallery-indicator-item-bg-disabled: ds.$color-border-disabled !default;

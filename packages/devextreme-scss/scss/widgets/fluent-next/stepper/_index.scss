@@ -52,11 +52,6 @@
   $indicator-halo-size: var(--dx-stepper-step-indicator-halo-size),
 );
 
-// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
-
-// nothing of its own once that rule was lifted. It now paints the same disabled roles that its
-
-// individually disabled items already use.
 .dx-stepper.dx-state-disabled,
 .dx-state-disabled .dx-stepper {
   .dx-step-indicator {
@@ -69,9 +64,6 @@
     color: var(--dx-stepper-step-content-disabled);
   }
 
-  /* A completed step is filled with the accent when enabled, exactly like the selected one, so it
-  greys to the same filled disc rather than falling through to the empty one. The ring is what
-  separates the two and it keeps its own shape in either state. */
   .dx-step-selected .dx-step-indicator,
   .dx-step-completed .dx-step-indicator {
     color: var(--dx-stepper-step-content-selected-disabled);
@@ -79,15 +71,11 @@
     background-color: var(--dx-stepper-step-bg-selected-disabled);
   }
 
-  /* The filled connector kept the accent colour while the steps around it greyed. */
   .dx-stepper-connector-value {
     background-color: var(--dx-stepper-connector-value-bg-disabled);
   }
 }
 
-/* The selected step's ring is a box-shadow, not a border, so setting border-color left the accent
-ring in place. Neither the package nor Blazor has a stepper to copy - there is no stepper in
-either - so the disabled ring simply follows the same shape in the disabled scale. */
 .dx-stepper.dx-state-disabled .dx-step.dx-step-selected .dx-step-indicator,
 .dx-state-disabled .dx-stepper .dx-step.dx-step-selected .dx-step-indicator {
   box-shadow: 0 0 0 2px var(--dx-stepper-step-shadow), 0 0 0 4px var(--dx-stepper-step-bg-selected-disabled), 0 0 0 8px var(--dx-stepper-step-shadow); // dx-shadow-geometry: 2px/4px/8px, the ring radii of the enabled rule

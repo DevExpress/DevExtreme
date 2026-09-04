@@ -13,6 +13,4 @@ $tag-box-select-all-line: ds.$color-border !default;
 $tag-box-tag-content-disabled: ds.$color-content-disabled !default;
 $tag-box-tag-bg-disabled: ds.$color-bg-disabled !default;
 
-/* The ordinary tag border. It reads the disabled border role because that is the step the design
-uses here; the name says what it paints, not where the value happens to come from. */
 $tag-box-tag-border: ds.$color-border-disabled !default;

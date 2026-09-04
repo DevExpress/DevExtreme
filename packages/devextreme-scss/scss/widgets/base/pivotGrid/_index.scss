@@ -135,8 +135,6 @@ $pivotgrid-expand-icon-text-offset: 0;
   }
 
   &.dx-drag {
-    /* Parametrized so a theme can pass false: this fades the whole field panel while a field is
-    being dragged, and the panel is not the thing that moves. */
     @if $pivotgrid-fields-container-drag-opacity {
       opacity: $pivotgrid-fields-container-drag-opacity;
     }
@@ -157,8 +155,6 @@ $pivotgrid-expand-icon-text-offset: 0;
   }
 
   .dx-drag-source {
-    /* false opts out of the dim; a theme that marks the source with colour instead does not want
-    the field text halved */
     @if $pivotgrid-drag-source-opacity {
       opacity: $pivotgrid-drag-source-opacity;
     }

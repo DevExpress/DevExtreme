@@ -61,9 +61,6 @@ $scheduler-tooltip-shadow: ds.$box-shadow-md !default;
 $scheduler-content-disabled: ds.$color-content-disabled !default;
 $scheduler-time-panel-content-disabled: ds.$color-content-disabled !default;
 
-/* The date line under an appointment subject in the tooltip. It is secondary text, so it says so
-with the subtle content role - the same one the chat gives its timestamps - rather than by being
-made translucent. */
 $scheduler-tooltip-date-content: ds.$color-content-subtle !default;
 $scheduler-appointment-date-content: ds.$color-content-subtle !default;
 $scheduler-agenda-details-content: ds.$color-content-subtle !default;

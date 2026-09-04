@@ -3,8 +3,6 @@
 $load-indicator-segment-border: ds.$color-content-primary !default;
 $load-indicator-segment-border-disabled: ds.$color-content-disabled !default;
 
-/* The ring has to stay a ring: at bg-disabled the track vanished into the page and only a faint
-arc was left. The border scale keeps the circle visible without claiming it is active. */
 $load-indicator-segment-inner-border-disabled: ds.$color-border-disabled !default;
 
 // Light track: DS spinner loader==track kills the ring contrast (see DIVERGENCES.md)

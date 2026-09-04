@@ -33,11 +33,6 @@
     border: none;
   }
 
-  /* The contained nav button is already `visibility: hidden` when disabled - a tab strip hides its
-  scroll buttons rather than greying them - so hiding the content inside it said nothing twice. Any
-  other styling mode leaves the button visible, and there the package's answer applies: a disabled
-  icon is content-disabled (tabs.item.color.icon.default.disabled), greyed and still legible.
-  Blazor does the same, swapping colour, background and cursor and never hiding. */
   &.dx-state-disabled {
     background-color: var(--dx-tabs-tab-bg);
     color: var(--dx-tabs-nav-button-content-disabled);

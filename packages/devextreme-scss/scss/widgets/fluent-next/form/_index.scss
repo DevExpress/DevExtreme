@@ -135,8 +135,6 @@
   }
 }
 
-/* The Form widget's captions were left at full contrast when the form was disabled: the fieldset
-rule matches .dx-field-label, and a Form writes .dx-field-item-label-text. */
 .dx-form.dx-state-disabled,
 .dx-state-disabled .dx-form,
 .dx-form .dx-box-item.dx-state-disabled {

@@ -929,13 +929,6 @@ const tierExpectation = (): Map<string, { component: string; reason: string | nu
           : CSS_WIDE_KEYWORDS.has(value) ? 'css-wide-keyword'
             : value.includes('!important') ? 'important'
               : value === 'null' ? 'null'
-                /*
-                 * A Sass boolean is a switch, not a value. base reads these as `@if` conditions
-                 * that decide whether rules exist at all, and custom properties resolve long after
-                 * the rules are emitted - so publishing one hands out a knob that turns nothing.
-                 * `$scheduler-appointment-bg-focused: false` was published before this branch and
-                 * shipped `--dx-scheduler-appointment-bg-focused: false` on every scheduler root.
-                 */
                 : value === 'false' || value === 'true' ? 'sass-flag' : null;
       records.set(variable, { component, value, reason });
     });
@@ -1075,7 +1068,6 @@ test('component tier: references are written as links to a resolvable target', (
   });
   expect(offenders).toEqual([]);
 });
-
 
 test('component tier: an alias is published as a link, not as a copy of the value', () => {
   const offenders = tierAliases

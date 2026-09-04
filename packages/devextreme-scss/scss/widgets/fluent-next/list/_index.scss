@@ -12,9 +12,6 @@
   $list-slide-menu-button-padding: var(--dx-list-slide-menu-button-padding),
   $list-static-delete-button-padding: var(--dx-list-delete-button-static-padding),
   $list-next-button-padding: var(--dx-list-next-button-padding),
-  /* Stays an opacity, deliberately. base pairs it with `transition: opacity 0.2s linear`, so this
-  is a fade while the item waits for a server response - motion, not the paint of a state - and a
-  loading affordance is the one thing the package does express with opacity (skeleton, spinner). */
   $list-response-wait-opacity: var(--dx-list-response-wait-opacity),
   $list-searchbox-margin-bottom: var(--dx-list-search-box-margin-block-end),
 );
@@ -493,9 +490,6 @@
       box-shadow: none;
       background-color: transparent;
 
-      /* The list draws this button without a surface, so a disabled item has none to grey out -
-      the cross alone takes the disabled colour. Qualified past the contained mode's disabled fill,
-      which the button applies to any button sitting inside something disabled. */
       .dx-list-static-delete-button-container &.dx-state-disabled,
       .dx-state-disabled .dx-list-static-delete-button-container & {
         background-color: transparent;
@@ -526,9 +520,6 @@
       background-color: transparent;
       color: var(--dx-list-content-disabled);
 
-      /* An item icon is painted rather than inherited, so the colour above never reaches it and a
-      disabled item kept its icon at full strength - the blanket dim this replaced took the whole
-      item down at once. Same role the chevron of a disabled item already uses. */
       .dx-icon {
         color: var(--dx-list-content-disabled);
       }
@@ -538,10 +529,6 @@
 
 @include dx-list-sizing(var(--dx-list-item-padding-inline));
 
-/* item.color.selected.bg.disabled: a selected item keeps a surface when disabled, but the
-package's alpha one rather than the selection colour. The selector carries .dx-list so it matches
-the specificity of the rule that paints a selected item - one class short and that rule wins. The
-content colour needs the same treatment: it is painted for selection and outranked the state. */
 .dx-state-disabled.dx-list .dx-list-item.dx-list-item-selected,
 .dx-list .dx-list-item.dx-list-item-selected.dx-state-disabled {
   background-color: var(--dx-list-item-bg-selected-disabled);

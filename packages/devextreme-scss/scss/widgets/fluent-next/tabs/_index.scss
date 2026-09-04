@@ -10,11 +10,6 @@
 @use "../scrollable";
 @use "../badge";
 
-// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
-
-// nothing of its own once that rule was lifted. It now paints the same disabled roles that its
-
-// individually disabled items already use.
 @include when-disabled(".dx-tabs") {
   .dx-tab {
     color: var(--dx-tabs-tab-content-disabled);
@@ -23,11 +18,6 @@
       color: var(--dx-tabs-tab-icon-content-disabled);
     }
 
-    /* The label a tab actually shows is .dx-tab-text-span-pseudo, not the span around it: the
-    outer one is visibility: hidden and only reserves the width the bold selected state needs.
-    The pseudo span paints its own colour, so colouring the tab left the visible text black -
-    the rule that covers it matches .dx-tab.dx-state-disabled, which is a disabled tab, not a
-    disabled tab strip. */
     .dx-tab-text .dx-tab-text-span-pseudo {
       color: var(--dx-tabs-tab-content-disabled);
     }

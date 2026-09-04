@@ -17,11 +17,6 @@ const DRAG_MOVE_Y_COEFFICIENT = 1;
 
 const a11yCheckConfig = {
   rules: {
-    /* Real failure, not a false positive: axe composites the drag source's dim into the foreground
-    before it measures, and at the 0.5 the other themes use, their source lands at 1.61 generic,
-    1.65 fluent, 2.61 material - so the rule is off for them. fluent-next dims to 0.65 instead and
-    paints the source with the item's own resting colours rather than the disabled ones, which puts
-    it at 5.36, so it runs the check. */
     ...(getThemeName() === 'fluent-next' ? {} : { 'color-contrast': { enabled: false } }),
     // NOTE: Draggable template is outside the role="main" landmark
     region: { enabled: false },

@@ -21,7 +21,6 @@
   $pagination-page-index-width: var(--dx-pagination-page-index-width),
   $pagination-pages-count-padding-left: var(--dx-pagination-pages-count-padding-inline-start),
   $pagination-info-opacity: false,
-  // no dim: the disabled navigation button is painted from the content role below
   $pagination-nav-disabled-opacity: false,
   $pagination-page-horizontal-padding: var(--dx-pagination-page-padding-inline),
 );
@@ -68,8 +67,6 @@
       height: var(--dx-pagination-nav-button-height);
       padding: var(--dx-pagination-nav-button-padding);
 
-      /* at the first or last page this button used to be dimmed to 30%; it is painted from
-      the same content role as the rest of the disabled pagination instead */
       &.dx-button-disable {
         color: var(--dx-pagination-content-disabled);
       }
@@ -120,9 +117,6 @@
   }
 }
 
-// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
-
-// nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 .dx-pager.dx-state-disabled .dx-pages .dx-selection,
 .dx-pager.dx-state-disabled .dx-page-sizes .dx-selection,
 .dx-pagination.dx-state-disabled .dx-pages .dx-selection,
@@ -133,9 +127,6 @@
   color: var(--dx-pagination-content-disabled);
 }
 
-/* The page-count line is secondary text. It used to be the content colour at 70%, which drags the
-whole element - not just its text - and states no contrast; content-subtle is the package's own
-role for it. */
 .dx-pager .dx-pages .dx-info,
 .dx-pagination .dx-pages .dx-info {
   color: var(--dx-pagination-info-content);

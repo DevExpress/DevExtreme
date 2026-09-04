@@ -2,8 +2,6 @@
 
 $form-field-item-content: ds.$color-content !default;
 
-/* The Form widget writes its captions as .dx-field-item-label-text, which the fieldset rule does
-not reach: the labels stayed at full contrast while their editors greyed. */
 $form-field-item-content-disabled: ds.$color-content-disabled !default;
 $form-item-help-content: ds.$color-content-subtle !default;
 

@@ -9,9 +9,6 @@ $pagination-page-bg-selected: ds.$color-bg-primary !default;
 
 $pagination-content-disabled: ds.$color-content-disabled !default;
 
-/* The selected page and page size are filled discs. A disabled pager kept the accent fill while
-its numeral greyed - grey on saturated blue, worse than either state. The pair follows the answer
-the package gives for a selected menu item: bg-disabled behind content-disabled. */
 $pagination-page-bg-selected-disabled: ds.$color-bg-disabled !default;
 
 $pagination-info-content: ds.$color-content-subtle !default;

@@ -17,11 +17,6 @@
   margin-top: var(--dx-action-sheet-item-margin-block-end);
 }
 
-/* The sheet's items are buttons that are not disabled themselves, so their text is painted here
-rather than through the button tier, which belongs to the button component. */
-
-/* The sheet renders its items into a popup outside the widget, and the element that carries the
-state there is .dx-actionsheet-container - matching .dx-actionsheet never reached them. */
 .dx-actionsheet-container.dx-state-disabled,
 .dx-actionsheet.dx-state-disabled,
 .dx-state-disabled .dx-actionsheet {

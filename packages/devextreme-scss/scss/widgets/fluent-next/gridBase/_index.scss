@@ -269,15 +269,6 @@
     }
   }
 
-  // A disabled grid was carried entirely by the blanket dim: its own cells, headers and captions
-
-  // are not painted by any child widget, so lifting that rule left the content at full contrast.
-
-  // Two selectors because the widgets differ: treeList carries .dx-treelist on the widget root,
-
-  /* A descendant, not a child: the grid keeps .dx-datagrid one level below the root that carries
-  the state when it disables itself, but an enclosing disabled form or toolbar is further up than
-  that, and the child combinator this used to have matched only the first case. */
   .dx-#{$widget-name}.dx-state-disabled,
   .dx-state-disabled .dx-#{$widget-name} {
     color: var(--dx-grid-content-disabled);
@@ -291,8 +282,6 @@
       color: var(--dx-grid-content-disabled);
     }
 
-    /* The command column's links paint themselves with the link colour, so they stayed at full
-    accent in a disabled grid and went on reading as the one thing still clickable in it. */
     .dx-link {
       color: var(--dx-grid-content-disabled);
     }
@@ -1138,8 +1127,6 @@
   }
 }
 
-/* The adaptive "more" button paints its own icon colour, so a disabled grid kept it at full
-contrast next to greyed rows. */
 .dx-state-disabled .dx-datagrid-adaptive-more,
 .dx-state-disabled .dx-treelist-adaptive-more {
   color: var(--dx-grid-content-disabled);

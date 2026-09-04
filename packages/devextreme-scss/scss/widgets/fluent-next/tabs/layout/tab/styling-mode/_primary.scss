@@ -65,8 +65,6 @@
       }
     }
 
-    /* A disabled widget carries the state on its root, next to the styling-mode class, not on the
-    tab - so the rule above never matched and the indicator kept the accent while the labels greyed. */
     &.dx-state-disabled .dx-tab-selected {
       @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-disabled));
     }
@@ -116,8 +114,6 @@
       }
     }
 
-    /* A disabled widget carries the state on its root, next to the styling-mode class, not on the
-    tab - so the rule above never matched and the indicator kept the accent while the labels greyed. */
     &.dx-state-disabled .dx-tab-selected {
       @include dx-tabs-indicator-background(var(--dx-tabs-tab-border-disabled));
     }

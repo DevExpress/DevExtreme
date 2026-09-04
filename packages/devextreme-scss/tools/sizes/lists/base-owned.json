@@ -1026,7 +1026,7 @@
     },
     {
       "file": "scss/widgets/base/filterBuilder/_common.scss",
-      "line": 81,
+      "line": 79,
       "widget": "filterBuilder",
       "literals": [
         "-7px"
@@ -1038,7 +1038,7 @@
     },
     {
       "file": "scss/widgets/base/filterBuilder/_common.scss",
-      "line": 82,
+      "line": 80,
       "widget": "filterBuilder",
       "literals": [
         "-4px"
@@ -1110,7 +1110,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 318,
+      "line": 314,
       "widget": "gridBase",
       "literals": [
         "10px"
@@ -1122,7 +1122,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 435,
+      "line": 431,
       "widget": "gridBase",
       "literals": [
         "2px"
@@ -1134,7 +1134,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 437,
+      "line": 433,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1146,7 +1146,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 485,
+      "line": 481,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1158,7 +1158,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 561,
+      "line": 557,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1170,7 +1170,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 562,
+      "line": 558,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1182,7 +1182,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 563,
+      "line": 559,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1194,7 +1194,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 564,
+      "line": 560,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1206,7 +1206,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 571,
+      "line": 567,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1218,7 +1218,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 665,
+      "line": 661,
       "widget": "gridBase",
       "literals": [
         "9px",
@@ -1232,7 +1232,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 960,
+      "line": 956,
       "widget": "gridBase",
       "literals": [
         "-2px"
@@ -1365,7 +1365,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 344,
+      "line": 340,
       "widget": "pivotGrid",
       "literals": [
         "-1px"
@@ -1377,7 +1377,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 615,
+      "line": 611,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
@@ -1605,7 +1605,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
-      "line": 152,
+      "line": 150,
       "widget": "scheduler",
       "literals": [
         "-1px"

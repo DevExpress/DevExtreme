@@ -8,26 +8,7 @@
   @include dx-base-typography();
 }
 
-/* No blanket dim - but a blanket colour, which is a different thing. Opacity dims the background
-through the element and states no contrast; the disabled content role states one, and it is the
-role the package names for 70 of its 125 disabled tokens.
-
-It is applied at the root because that is where the gap was. A component's disabled rule paints
-the parts it knows about, and everything else inherits from .dx-widget, which kept the resting
-content colour - so a disabled checkbox had a black label, a disabled calendar had black weekday
-headers, a disabled splitter had black panes, and each was found by eye rather than by a rule.
-Anything that needs a different disabled colour still says so: those rules are more specific and
-win. Layout containers now carry the state through to their text, which is what was missing.
-
-What is left here that is not a colour: no text selection, and no pointer cursor on something
-that cannot be used. Nine component-scoped opacity dims still remain, each named with its reason
-in the ratchet in tests/disabled-paint.test.ts. */
 .dx-state-disabled {
-  /* The colour is on the state class itself, not only on .dx-widget: item.disabled is inherited
-  from the base collection item, so every collection widget can disable a single entry - and that
-  entry is an item, not a widget. Scoped to .dx-widget it missed a disabled box pane, gallery
-  slide, splitter pane, tile, form item and scheduler appointment. At one class it is a floor:
-  anything a component says about its own disabled colour is more specific and wins. */
   color: var(--dx-global-content-disabled);
 
   &.dx-widget,

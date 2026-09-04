@@ -69,9 +69,6 @@
   }
 }
 
-/* The separator between a range's two ends is secondary text, and it used to say so with 30% of
-the content colour - 1.9:1 on the theme's own ground, for a word the reader has to read. The
-package's role for secondary text carries a contrast of its own. */
 .dx-filterbuilder-range-separator {
   color: var(--dx-filter-builder-range-separator-content);
 }
@@ -136,9 +133,6 @@ package's role for secondary text carries a contrast of its own. */
   }
 }
 
-// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
-
-// nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 @include when-disabled(".dx-filterbuilder") {
   color: var(--dx-filter-builder-content-disabled);
 
@@ -151,16 +145,11 @@ package's role for secondary text carries a contrast of its own. */
   }
 }
 
-/* The operator and field chips carry semantic tints - danger for the operator, primary for the
-field - and a disabled builder kept them at full strength. */
 .dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-group-operation,
 .dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-group-operation {
   background-color: var(--dx-filter-builder-group-operation-content-disabled);
 }
 
-/* The value chip is nested inside .dx-filterbuilder-text rather than carrying the class itself -
-that is how the rule which paints it at rest is written - so listing it as a compound here matched
-nothing and it kept its resting fill while every chip beside it moved to the disabled surface. */
 .dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-field,
 .dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-operation,
 .dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text .dx-filterbuilder-item-value-text,
@@ -170,8 +159,6 @@ nothing and it kept its resting fill while every chip beside it moved to the dis
   background-color: var(--dx-filter-builder-item-field-content-disabled);
 }
 
-/* The add and remove icons carry semantic colours - success and danger - which say "you can act"
-and so kept saying it inside a disabled builder. */
 .dx-state-disabled .dx-filterbuilder .dx-icon-plus,
 .dx-filterbuilder.dx-state-disabled .dx-icon-plus {
   color: var(--dx-filter-builder-plus-icon-content-disabled);

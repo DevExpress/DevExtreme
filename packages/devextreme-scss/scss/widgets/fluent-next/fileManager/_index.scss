@@ -314,8 +314,6 @@
 
 @include filemanager-icons-mixin($file-manager-icon, $file-manager-icon-success-content, $file-manager-icon-inverted-content, $file-manager-icon-danger-content, $file-manager-icon-inverted-content, $file-manager-large-icon-size);
 
-/* The directory tree and the progress panel paint their own text, so a disabled file manager kept
-them at full contrast next to greyed surroundings. */
 .dx-filemanager.dx-state-disabled .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text,
 .dx-state-disabled .dx-filemanager .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text {
   color: var(--dx-file-manager-content-disabled);
@@ -330,9 +328,6 @@ them at full contrast next to greyed surroundings. */
     color: var(--dx-file-manager-content-disabled);
   }
 
-  /* The status icons are SVG data-uri backgrounds with their colour baked in at build time, so
-  `color` cannot reach them and the toolbar refresh icon stayed at full contrast. The image has to
-  be emitted a second time with the disabled colour substituted. */
   .dx-filemanager-i,
   .dx-filemanager-i.dx-icon {
     &.dx-filemanager-i-refresh,
@@ -351,10 +346,6 @@ them at full contrast next to greyed surroundings. */
   }
 }
 
-/* Font icons, unlike the data-uri set above: the folder glyph in the tree, the overflow menu on a
-row and the tree's expander are painted rather than inherited, so they stayed at full contrast in a
-disabled file manager. Scoped to the widget - the bare `.dx-state-disabled` selector this file also
-uses would reach every icon in the theme. */
 .dx-filemanager.dx-state-disabled,
 .dx-state-disabled .dx-filemanager {
   .dx-icon,
@@ -362,8 +353,6 @@ uses would reach every icon in the theme. */
     color: var(--dx-file-manager-content-disabled);
   }
 
-  /* The focused row keeps its class while the widget is disabled and paints at five classes, which
-  outranks the rule above - the folder glyph and the expander on that one row stayed black. */
   .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item,
   .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item .dx-icon,
   .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item .dx-treeview-toggle-item-visibility {

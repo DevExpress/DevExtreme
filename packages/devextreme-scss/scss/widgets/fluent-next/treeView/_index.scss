@@ -6,7 +6,6 @@
 @use "../../base/treeView" as baseTreeView with (
   $treeview-select-all-item-border-bottom: var(--dx-tree-view-select-all-item-border-block-end),
   $treeview-border-visible-border: var(--dx-tree-view-border-visible-border),
-  // no dim: .dx-treeview-item-content.dx-state-disabled paints the disabled role instead
   $treeview-disabled-opacity: false,
   $treeview-searchbox-margin-bottom: var(--dx-tree-view-search-box-margin-block-end),
 );
@@ -147,25 +146,15 @@
   var(--dx-tree-view-load-indicator-size),
 );
 
-// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
-
-// nothing of its own once that rule was lifted. It now paints the same disabled roles that its
-
-// individually disabled items already use.
 @include when-disabled(".dx-treeview") {
   .dx-treeview-item {
     color: var(--dx-tree-view-item-content-disabled);
   }
 
-  /* The expander sets its own colour, so the rule on the item never reached it and it kept full
-  contrast next to greyed text. It is painted only here, where the whole widget is disabled and
-  the root takes pointer-events: none. The expander of a single disabled item still expands the
-  node, so it keeps its enabled colour - greying it would claim it is inert when it is not. */
   .dx-treeview-toggle-item-visibility {
     color: var(--dx-tree-view-spin-icon-disabled);
   }
 
-  /* item.color.selected.bg.disabled */
   .dx-treeview-node.dx-state-selected > .dx-treeview-item,
   .dx-treeview-item.dx-state-selected {
     background-color: var(--dx-tree-view-item-bg-selected-disabled);

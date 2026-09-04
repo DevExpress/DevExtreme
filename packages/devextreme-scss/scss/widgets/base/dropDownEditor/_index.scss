@@ -61,8 +61,6 @@ $dropdowneditor-icon-idle-opacity: 0.35 !default;
 
 .dx-dropdowneditor-active {
   .dx-dropdowneditor-icon {
-    /* Guarded so a theme can pass false: an active state is a colour, and a theme with a role for
-    it paints the role rather than fading the icon out. */
     @if $dropdowneditor-icon-idle-opacity {
       opacity: $dropdowneditor-icon-idle-opacity;
     }

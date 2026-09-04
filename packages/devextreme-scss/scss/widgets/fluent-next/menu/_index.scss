@@ -24,18 +24,10 @@
 
   &.dx-state-disabled,
   .dx-state-disabled & {
-
-    // The widget-level disabled state was carried entirely by the blanket dim, so the component
-
-    // showed nothing of its own once that rule was lifted. It now paints the same disabled roles
-
-    // that its individually disabled items already use.
     .dx-menu-item {
       color: var(--dx-menu-item-content-disabled);
     }
 
-    /* item.color.selected.bg.disabled: a selected item that is disabled keeps neither the
-    selection colour nor nothing at all - the package gives it the disabled background */
     .dx-menu-item.dx-menu-item-selected,
     .dx-menu-item.dx-state-selected {
       background-color: var(--dx-menu-item-bg-selected-disabled);

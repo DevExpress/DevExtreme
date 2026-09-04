@@ -112,9 +112,6 @@
   }
 }
 
-// The widget-level disabled state was carried entirely by the blanket dim, so the component showed
-
-// nothing of its own once that rule was lifted. It is painted from the disabled content role now.
 .dx-gallery.dx-state-disabled {
   color: var(--dx-gallery-content-disabled);
 
@@ -124,7 +121,6 @@
   }
 }
 
-/* The arrow disc is a surface of its own, so it kept full strength next to greyed slides. */
 .dx-gallery.dx-state-disabled .dx-gallery-nav-button-prev::after,
 .dx-gallery.dx-state-disabled .dx-gallery-nav-button-next::after,
 .dx-state-disabled .dx-gallery-nav-button-prev::after,
@@ -132,8 +128,6 @@
   background-color: var(--dx-gallery-nav-button-bg-disabled);
 }
 
-/* The paging dots keep the accent otherwise, which reads as an active control inside a disabled
-gallery. The selected dot stays distinguishable from the rest, just in the disabled scale. */
 .dx-gallery.dx-state-disabled .dx-gallery-indicator-item,
 .dx-state-disabled .dx-gallery .dx-gallery-indicator-item {
   background-color: var(--dx-gallery-indicator-item-bg-disabled);

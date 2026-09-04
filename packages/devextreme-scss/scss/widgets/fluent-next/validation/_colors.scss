@@ -2,12 +2,9 @@
 
 $validation-message-content: ds.$color-content-danger !default;
 
-/* A disabled field cannot be corrected, so its error message stops shouting: it kept the danger
-colour and the danger surface next to an editor that had gone grey. */
 $validation-message-content-disabled: ds.$color-content-disabled !default;
 $validation-message-bg-disabled: ds.$color-bg-disabled !default;
 $validation-message-bg: ds.$color-bg-danger-subtler !default;
 $validation-summary-content: ds.$color-content-danger !default;
 
-// Same reasoning as the message above: a disabled field cannot be corrected.
 $validation-summary-content-disabled: ds.$color-content-disabled !default;

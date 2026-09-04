@@ -287,17 +287,10 @@
 
 @include gantt-icons-mixin($gantt-icon);
 
-/* The toolbar icons are SVG data-uri backgrounds with their colour baked in at build time, so the
-greyed `color` on a disabled toolbar item never reaches the glyph - an unavailable command looked
-exactly like an available one once the blanket dim was lifted. Every one of these icons is a
-toolbar command that can be unavailable, so the whole set is emitted again in the disabled colour. */
 .dx-state-disabled {
   @include gantt-icons-mixin($gantt-icon-disabled);
 }
 
-/* The timescale header paints its own text, so the dates above the chart stayed black while the
-task tree beside them greyed. The title inside a task bar is left alone on purpose: it is written
-on the bar's own surface, the same reason a scheduler appointment keeps its colour. */
 .dx-gantt.dx-state-disabled,
 .dx-state-disabled .dx-gantt {
   .dx-gantt-header {

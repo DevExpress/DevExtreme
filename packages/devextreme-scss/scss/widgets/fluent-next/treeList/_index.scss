@@ -7,8 +7,6 @@
 @use "../gridBase/colors" as gridBaseColors;
 @use "../gridBase/sizes" as gridBaseSizes;
 @use "../../base/treeList" as baseTreeList with (
-  /* No dim on the dragged column: it halved the header text to 3.41:1. The column is
-  marked with the drag-source colour instead - the sticky-column case already did that. */
   $treelist-draggable-column-opacity: false,
   $treelist-expandable-node-line-height: var(--dx-tree-list-empty-space-height),
   $treelist-sticky-column-border: var(--dx-tree-list-sticky-column-border),
@@ -67,9 +65,6 @@
   }
 }
 
-/* The expander sets its own colour, so the rule that greys a disabled cell never reached it and
-a disabled TreeList showed grey rows with full-contrast chevrons. The widget class is in the
-selector to outrank the resting rule above. */
 .dx-treelist.dx-state-disabled .dx-treelist-rowsview tr .dx-treelist-empty-space,
 .dx-state-disabled .dx-treelist .dx-treelist-rowsview tr .dx-treelist-empty-space {
   color: var(--dx-tree-list-chevron-icon-disabled);
