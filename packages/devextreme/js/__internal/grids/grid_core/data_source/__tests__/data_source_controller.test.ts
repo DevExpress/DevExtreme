@@ -22,11 +22,12 @@ interface AdapterStub {
   key: jest.Mock<() => StoreKey | undefined>;
   remoteOperations: jest.Mock<() => RemoteOperationsOptions>;
   getDataIndexGetter: jest.Mock<() => (data: RawItemData) => number>;
-  dispose: jest.Mock<() => void>;
+  dispose: jest.Mock<(isShared?: boolean) => void>;
   init: jest.Mock<(dataSource: DataSource) => void>;
 }
 
 interface ProviderStub {
+  nextAdapter: AdapterStub;
   create: jest.Mock<(component: InternalGrid) => DataSourceAdapter>;
   extend: jest.Mock<() => void>;
 }
@@ -70,10 +71,15 @@ const createControllerWith = (): {
 
 const createController = (): DataSourceController => createControllerWith().controller;
 
-const createProviderStub = (adapter: AdapterStub): ProviderStub => ({
-  create: jest.fn(() => asAdapter(adapter)),
-  extend: jest.fn(),
-});
+const createProviderStub = (adapter: AdapterStub): ProviderStub => {
+  const stub: ProviderStub = {
+    nextAdapter: adapter,
+    create: jest.fn(() => asAdapter(stub.nextAdapter)),
+    extend: jest.fn(),
+  };
+
+  return stub;
+};
 
 const asProvider = (
   stub: ProviderStub,
@@ -108,16 +114,30 @@ const withOptions = (options: Record<string, unknown>): TestDataSourceController
   return new TestDataSourceController(component);
 };
 
+// isShared is private and read only by disposal, so that is where it becomes observable.
+const flagHandedToAdapter = (
+  controller: TestDataSourceController,
+): boolean | undefined => {
+  const probe = createAdapterStub('probe');
+
+  controller.providerStub = asProvider(createProviderStub(probe));
+  controller.createAdapter(SOURCE);
+  controller.disposeAdapter();
+
+  return probe.dispose.mock.calls[0]?.[0];
+};
+
 const withAdapter = (marker = 'first'): {
-  controller: DataSourceController;
+  controller: TestDataSourceController;
   adapter: AdapterStub;
+  provider: ProviderStub;
 } => {
-  const controller = createController();
   const adapter = createAdapterStub(marker);
+  const { controller, provider } = withProvider(adapter);
 
-  controller.setAdapter(asAdapter(adapter));
+  controller.createAdapter(SOURCE);
 
-  return { controller, adapter };
+  return { controller, adapter, provider };
 };
 
 describe('DataSourceController', () => {
@@ -199,10 +219,11 @@ describe('DataSourceController', () => {
 
   describe('replacing the adapter', () => {
     it('follows the new adapter after a replacement', () => {
-      const { controller, adapter: first } = withAdapter();
+      const { controller, adapter: first, provider } = withAdapter();
       const second = createAdapterStub('second');
 
-      controller.setAdapter(asAdapter(second));
+      provider.nextAdapter = second;
+      controller.createAdapter(SOURCE);
 
       expect(controller.getAdapter()).toBe(asAdapter(second));
       expect(controller.key()).toBe('second');
@@ -210,10 +231,10 @@ describe('DataSourceController', () => {
       expect(first.key).not.toHaveBeenCalled();
     });
 
-    it('returns to the absent state after setAdapter(null)', () => {
+    it('returns to the absent state after disposeAdapter', () => {
       const { controller } = withAdapter();
 
-      controller.setAdapter(null);
+      controller.disposeAdapter();
 
       expect(controller.hasAdapter()).toBe(false);
       expect(controller.getAdapter()).toBeNull();
@@ -223,22 +244,13 @@ describe('DataSourceController', () => {
       expect(controller.getDataIndexGetter()).toBeUndefined();
       expect(controller.remoteOperations()).toEqual({});
     });
-
-    it('does not dispose the adapter it lets go of', () => {
-      const { controller, adapter } = withAdapter();
-
-      controller.setAdapter(null);
-
-      expect(adapter.dispose).not.toHaveBeenCalled();
-    });
   });
 
   describe('layering', () => {
     it('reads no other controller', () => {
-      const { controller, adapter } = withAdapter();
+      const { controller } = withAdapter();
       const getController = jest.spyOn(controller, 'getController');
 
-      controller.setAdapter(asAdapter(adapter));
       controller.hasAdapter();
       controller.getAdapter();
       controller.getDataSource();
@@ -246,7 +258,7 @@ describe('DataSourceController', () => {
       controller.key();
       controller.remoteOperations();
       controller.getDataIndexGetter();
-      controller.setAdapter(null);
+      controller.disposeAdapter();
 
       expect(getController).not.toHaveBeenCalled();
     });
@@ -290,11 +302,12 @@ describe('DataSourceController', () => {
     });
 
     it('replaces a previously held adapter without disposing it', () => {
-      const second = createAdapterStub('second');
-      const { controller } = withProvider(second);
       const first = createAdapterStub('first');
+      const { controller, provider } = withProvider(first);
+      const second = createAdapterStub('second');
 
-      controller.setAdapter(asAdapter(first));
+      controller.createAdapter(SOURCE);
+      provider.nextAdapter = second;
       controller.createAdapter(SOURCE);
 
       expect(controller.getAdapter()).toBe(asAdapter(second));
@@ -349,12 +362,12 @@ describe('DataSourceController', () => {
       expect(controller.createDataSource()).toBeUndefined();
     });
 
-    it('reports not-shared when the dataSource option is absent', () => {
+    it('leaves the source not-shared when the dataSource option is absent', () => {
       const controller = withOptions({});
 
       controller.createDataSource();
 
-      expect(controller.isSharedDataSource()).toBe(false);
+      expect(flagHandedToAdapter(controller)).toBe(false);
     });
 
     it('builds a DataSource from a plain array', () => {
@@ -369,12 +382,12 @@ describe('DataSourceController', () => {
       expect(controller.createDataSource()?.key()).toBe('id');
     });
 
-    it('reports not-shared for an array, so disposal may destroy what it built', () => {
+    it('marks what it built not-shared, so disposal may destroy it', () => {
       const controller = withOptions({ dataSource: [{ id: 1 }], keyExpr: 'id' });
 
       controller.createDataSource();
 
-      expect(controller.isSharedDataSource()).toBe(false);
+      expect(flagHandedToAdapter(controller)).toBe(false);
     });
 
     it('builds a DataSource from a store config', () => {
@@ -398,13 +411,13 @@ describe('DataSourceController', () => {
       shared.dispose();
     });
 
-    it('reports shared for a DataSource instance, so disposal spares it', () => {
+    it('marks a caller-owned DataSource shared, so disposal spares it', () => {
       const shared = new DataSourceClass({ store: [{ id: 1 }], key: 'id' });
       const controller = withOptions({ dataSource: shared });
 
       controller.createDataSource();
 
-      expect(controller.isSharedDataSource()).toBe(true);
+      expect(flagHandedToAdapter(controller)).toBe(true);
 
       shared.dispose();
     });
@@ -418,13 +431,13 @@ describe('DataSourceController', () => {
       options.dataSource = [{ id: 2 }];
       controller.createDataSource();
 
-      expect(controller.isSharedDataSource()).toBe(false);
+      expect(flagHandedToAdapter(controller)).toBe(false);
 
       shared.dispose();
     });
 
-    it('reports not-shared before anything has been created', () => {
-      expect(withOptions({}).isSharedDataSource()).toBe(false);
+    it('starts out not-shared, before anything has been created', () => {
+      expect(flagHandedToAdapter(withOptions({}))).toBe(false);
     });
 
     it('leaves the held adapter alone — creating a source is not creating an adapter', () => {
@@ -441,7 +454,38 @@ describe('DataSourceController', () => {
 
       controller.createDataSource();
       controller.readSpecificDataSourceOption();
-      controller.isSharedDataSource();
+
+      expect(getController).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('disposeAdapter', () => {
+    it('disposes the adapter it holds', () => {
+      const { controller, adapter } = withAdapter();
+
+      controller.disposeAdapter();
+
+      expect(adapter.dispose).toHaveBeenCalledTimes(1);
+    });
+
+    it('does nothing when there is no adapter to dispose', () => {
+      expect(() => createController().disposeAdapter()).not.toThrow();
+    });
+
+    it('disposes only once across repeated calls', () => {
+      const { controller, adapter } = withAdapter();
+
+      controller.disposeAdapter();
+      controller.disposeAdapter();
+
+      expect(adapter.dispose).toHaveBeenCalledTimes(1);
+    });
+
+    it('reads no other controller', () => {
+      const { controller } = withAdapter();
+      const getController = jest.spyOn(controller, 'getController');
+
+      controller.disposeAdapter();
 
       expect(getController).not.toHaveBeenCalled();
     });
