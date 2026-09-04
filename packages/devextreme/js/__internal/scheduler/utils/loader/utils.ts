@@ -19,6 +19,7 @@ export const normalizeDataSource = <T>(
     ...options,
   };
 
+  // @ts-expect-error the public DataSource constructor takes the public option types
   return new DataSource(result);
 };
 

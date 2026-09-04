@@ -35,7 +35,7 @@ export function normalizeDataSource(
     };
   }
 
-  // TODO: research making second param not required
+  // @ts-expect-error the public DataSource constructor takes the public option types
   return new DataSource(normalizeDataSourceOptions(dataSourceLike, undefined));
 }
 
