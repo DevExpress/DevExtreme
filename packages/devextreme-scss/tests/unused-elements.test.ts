@@ -47,7 +47,7 @@ const removeAllCommentsFromContent = (content: string): string => content
   .filter((_, index) => index % 2 === 0)
   .join('');
 
-const variableRegex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'g');
+const variableRegex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'y');
 
 type VariableUsage = { declared: Set<string>; read: Set<string> };
 
@@ -61,7 +61,11 @@ const collectVariableUsage = (filePath: string, usage: VariableUsage): void => {
     if (char === ')') depth -= 1;
     if (char === '$') {
       variableRegex.lastIndex = index;
-      const [variable] = variableRegex.exec(content) ?? [''];
+      const [variable] = variableRegex.exec(content) ?? [];
+      if (!variable) {
+        index += 1;
+        continue;
+      }
       const assigned = /^\s*:/.test(content.slice(index + variable.length));
       if (assigned && depth === 0) usage.declared.add(variable);
       if (!assigned) usage.read.add(variable);
