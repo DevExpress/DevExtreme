@@ -80,6 +80,22 @@ describe('documentSizeCallbacks', () => {
     expect(handler).toHaveBeenCalledTimes(1);
   });
 
+  it('should hold a handler once even when it is added twice', () => {
+    const { documentElement, notifyResize, unobserveSpy } = setup();
+    const handler = addHandler();
+
+    documentSizeCallbacks.add(handler);
+
+    documentElement.clientWidth = 985;
+    notifyResize();
+
+    expect(handler).toHaveBeenCalledTimes(1);
+
+    documentSizeCallbacks.remove(handler);
+
+    expect(unobserveSpy).toHaveBeenCalledTimes(1);
+  });
+
   it('should stop observing once the last handler is removed', () => {
     const { unobserveSpy } = setup();
     const first = addHandler();

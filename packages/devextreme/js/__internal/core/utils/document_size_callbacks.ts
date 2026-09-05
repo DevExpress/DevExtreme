@@ -1,5 +1,6 @@
 import domAdapter from '@js/core/dom_adapter';
 import { resizeObserverSingleton } from '@ts/core/m_resize_observer';
+import { Callbacks } from '@ts/core/utils/m_callbacks';
 import windowUtils from '@ts/core/utils/m_window';
 
 interface DocumentSize {
@@ -11,9 +12,18 @@ type DocumentSizeHandler = () => void;
 
 type DocumentElement = ReturnType<typeof domAdapter.getDocumentElement>;
 
+// Callbacks.has() takes no arguments and answers whether the list is empty,
+// which the shared declaration does not describe yet
+interface HandlerList {
+  add: (handler: DocumentSizeHandler) => void;
+  remove: (handler: DocumentSizeHandler) => void;
+  has: () => boolean;
+  fire: () => void;
+}
+
 // The window resize event is not raised when a scrollbar appears or disappears,
 // even though the visible area changes.
-const handlers = new Set<DocumentSizeHandler>();
+const callbacks = Callbacks({ unique: true }) as HandlerList;
 
 let observedElement: DocumentElement | null = null;
 let previousSize: DocumentSize | null = null;
@@ -36,7 +46,7 @@ function handleDocumentResize(): void {
 
   previousSize = size;
 
-  [...handlers].forEach((handler) => handler());
+  callbacks.fire();
 }
 
 function add(handler: DocumentSizeHandler): void {
@@ -44,7 +54,7 @@ function add(handler: DocumentSizeHandler): void {
     return;
   }
 
-  handlers.add(handler);
+  callbacks.add(handler);
 
   if (!observedElement) {
     previousSize = getDocumentSize();
@@ -54,9 +64,9 @@ function add(handler: DocumentSizeHandler): void {
 }
 
 function remove(handler: DocumentSizeHandler): void {
-  handlers.delete(handler);
+  callbacks.remove(handler);
 
-  if (observedElement && !handlers.size) {
+  if (observedElement && !callbacks.has()) {
     resizeObserverSingleton.unobserve(observedElement);
     observedElement = null;
     previousSize = null;
