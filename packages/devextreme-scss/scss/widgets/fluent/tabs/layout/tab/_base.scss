@@ -57,7 +57,6 @@
       font-weight: $fluent-tab-font-weight-basic;
     }
 
-    // The hidden zero-height pseudo span reserves the accent-weight (selected) width; the visible text span provides the tab's accessible name.
     .dx-tab-text-span-pseudo {
       display: block;
       height: 0;
