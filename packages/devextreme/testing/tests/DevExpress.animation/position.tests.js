@@ -2,6 +2,7 @@ import $ from 'jquery';
 import positionUtils from 'common/core/animation/position';
 import translator from '__internal/common/core/animation/translatorModule';
 import browser from 'core/utils/browser';
+import devices from '__internal/core/m_devices';
 import fixtures from '../../helpers/positionFixtures.js';
 import { implementationsMap } from 'core/utils/size';
 import { getWindow } from 'core/utils/window.js';
@@ -942,23 +943,35 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         assert.deepEqual(positionUtils.offset($event), { left: 100, top: 200 }, 'position.offset() is correct');
     });
 
-    QUnit.test('position should return window.innerHeight if window.outerHeight < window.innerHeight', function(assert) {
+    QUnit.test('position should measure the window by its client height whatever window.outerHeight reports', function(assert) {
+        if(browser.safari) {
+            assert.ok(true, 'actual only for desktop browsers except Safari');
+            return;
+        }
+
         const $what = $('#what').height(300);
         const initialInnerHeight = window.innerHeight;
         const initialOuterHeight = window.outerHeight;
 
+        const heightStub = sinon.stub(implementationsMap, 'getHeight').returns(1000);
+
         try {
             window.innerHeight = 500;
-            window.outerHeight = 200;
 
-            const resultPosition = setupPosition($what, {
-                of: $(window)
+            // 0 is what the browser reports before the first frame, a smaller value comes from a zoomed out page
+            [0, 200].forEach((outerHeight) => {
+                window.outerHeight = outerHeight;
+
+                const resultPosition = setupPosition($what, {
+                    of: $(window)
+                });
+
+                assert.roughEqual(resultPosition.v.location, 350, 50, `vertical location is correct, outerHeight is ${outerHeight}`);
             });
-
-            assert.roughEqual(resultPosition.v.location, 100, 50, 'vertical location is correct');
         } finally {
             window.innerHeight = initialInnerHeight;
             window.outerHeight = initialOuterHeight;
+            heightStub.restore();
         }
     });
 
@@ -1011,6 +1024,83 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
             });
 
             assert.roughEqual(resultPosition.h.location, 350, 50, 'horizontal location is correct');
+        } finally {
+            window.innerWidth = initialInnerWidth;
+            window.outerWidth = initialOuterWidth;
+            widthStub.restore();
+        }
+    });
+
+    QUnit.test('position should measure the window by its client height on desktop Safari', function(assert) {
+        const $what = $('#what').height(300);
+        const initialInnerHeight = window.innerHeight;
+        const initialSafari = browser.safari;
+
+        const heightStub = sinon.stub(implementationsMap, 'getHeight').returns(1000);
+        const devicesStub = sinon.stub(devices, 'real').returns({ deviceType: 'desktop', platform: 'generic' });
+
+        try {
+            window.innerHeight = 500;
+            browser.safari = true;
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.v.location, 350, 50, 'vertical location is correct');
+        } finally {
+            window.innerHeight = initialInnerHeight;
+            browser.safari = initialSafari;
+            heightStub.restore();
+            devicesStub.restore();
+        }
+    });
+
+    QUnit.test('position should measure the window by window.innerHeight on iOS Safari', function(assert) {
+        const $what = $('#what').height(300);
+        const initialInnerHeight = window.innerHeight;
+        const initialSafari = browser.safari;
+
+        const heightStub = sinon.stub(implementationsMap, 'getHeight').returns(1000);
+        const devicesStub = sinon.stub(devices, 'real').returns({ deviceType: 'desktop', platform: 'ios' });
+
+        try {
+            window.innerHeight = 500;
+            browser.safari = true;
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.v.location, 100, 50, 'vertical location is correct');
+        } finally {
+            window.innerHeight = initialInnerHeight;
+            browser.safari = initialSafari;
+            heightStub.restore();
+            devicesStub.restore();
+        }
+    });
+
+    QUnit.test('position should measure the window by its client width whatever window.outerWidth reports', function(assert) {
+        const $what = $('#what').width(300);
+        const initialInnerWidth = window.innerWidth;
+        const initialOuterWidth = window.outerWidth;
+
+        const widthStub = sinon.stub(implementationsMap, 'getWidth').returns(1000);
+
+        try {
+            window.innerWidth = 500;
+
+            // 0 is what the browser reports before the first frame, a smaller value comes from a zoomed out page
+            [0, 200].forEach((outerWidth) => {
+                window.outerWidth = outerWidth;
+
+                const resultPosition = setupPosition($what, {
+                    of: $(window)
+                });
+
+                assert.roughEqual(resultPosition.h.location, 350, 50, `horizontal location is correct, outerWidth is ${outerWidth}`);
+            });
         } finally {
             window.innerWidth = initialInnerWidth;
             window.outerWidth = initialOuterWidth;
