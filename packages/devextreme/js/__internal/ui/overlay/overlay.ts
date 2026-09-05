@@ -565,19 +565,37 @@ class Overlay<
     super._initTemplates();
   }
 
-  _isTopOverlay(): boolean {
+  _isTopFocusableOverlay(): boolean {
     const overlayStack = this._overlayStack();
 
     for (let i = overlayStack.length - 1; i >= 0; i -= 1) {
       const tabbableElements = overlayStack[i]._findTabbableBounds();
 
       if (tabbableElements.$first || tabbableElements.$last) {
-        // @ts-ignore expected: types Overlay<OverlayProperties> and this have no overlap
         return overlayStack[i] === this;
       }
     }
 
     return false;
+  }
+
+  _isLastInOverlayStack(): boolean {
+    const overlayStack = this._overlayStack();
+
+    return overlayStack[overlayStack.length - 1] === this;
+  }
+
+  _handlesDocumentEscapeKey(): boolean {
+    return false;
+  }
+
+  _isEscapeHandledByOverlayAbove(): boolean {
+    const overlayStack = this._overlayStack();
+    const index = overlayStack.indexOf(this);
+
+    return overlayStack
+      .slice(index + 1)
+      .some((overlay) => overlay._handlesDocumentEscapeKey());
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1045,7 +1063,7 @@ class Overlay<
   }
 
   _tabKeyHandler(e: KeyboardEvent): void {
-    if (normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
+    if (normalizeKeyName(e) !== TAB_KEY || !this._isTopFocusableOverlay()) {
       return;
     }
 

@@ -33,6 +33,8 @@ import { BUTTON_CLASS } from '__internal/ui/button/button';
 
 import 'fluent_blue_light.css!';
 import 'ui/popup';
+import 'ui/tooltip';
+import 'ui/load_panel';
 import 'ui/tab_panel';
 import 'ui/scroll_view';
 import 'ui/date_box';
@@ -2724,6 +2726,41 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('esc');
 
         assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible when _ignoreCloseOnChildEscape is true');
+    });
+
+    QUnit.test('should remain visible when child element presses escape and a tooltip is shown above it (T1334708)', function(assert) {
+        this.init({ dragEnabled: false });
+
+        const $input = $('<input>').appendTo(this.popup.$content());
+        const tooltip = $('<div>')
+            .appendTo('#qunit-fixture')
+            .dxTooltip({ target: $input, visible: true, animation: null })
+            .dxTooltip('instance');
+
+        assert.strictEqual(tooltip.option('visible'), true, 'tooltip is shown');
+
+        keyboardMock($input).keyDown('esc');
+
+        assert.strictEqual(tooltip.option('visible'), false, 'tooltip is hidden');
+        assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible');
+
+        tooltip.dispose();
+    });
+
+    QUnit.test('should be closed on child element escape key press when an overlay that ignores escape is shown above it', function(assert) {
+        this.init({ dragEnabled: false });
+
+        const $input = $('<input>').appendTo(this.popup.$content());
+        const loadPanel = $('<div>')
+            .appendTo('#qunit-fixture')
+            .dxLoadPanel({ visible: true, animation: null })
+            .dxLoadPanel('instance');
+
+        keyboardMock($input).keyDown('esc');
+
+        assert.strictEqual(this.popup.option('visible'), false, 'popup is closed');
+
+        loadPanel.dispose();
     });
 });
 
