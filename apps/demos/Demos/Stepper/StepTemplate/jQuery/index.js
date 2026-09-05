@@ -33,7 +33,9 @@ $(() => {
     linear: false,
     elementAttr: { 'aria-labelledby': 'label-iconOnly' },
     itemTemplate(data) {
-      return `<i class="dx-icon dx-icon-${data.icon}" role="img" aria-label="${data.label}"></i>`;
+      return $('<i>')
+        .addClass(`dx-icon dx-icon-${data.icon}`)
+        .attr({ role: 'img', 'aria-label': data.label });
     },
   });
 });
