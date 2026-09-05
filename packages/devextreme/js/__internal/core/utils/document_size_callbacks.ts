@@ -30,7 +30,7 @@ function getDocumentSize(): DocumentSize {
 function handleDocumentResize(): void {
   const size = getDocumentSize();
 
-  if (size.width === previousSize?.width && size.height === previousSize.height) {
+  if (previousSize?.width === size.width && previousSize?.height === size.height) {
     return;
   }
 
