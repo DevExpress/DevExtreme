@@ -352,7 +352,10 @@
       ".dx-gallery"
     ],
     "typography": [
-      ":root"
+      ":root",
+      ".dx-theme-mode-light",
+      ".dx-theme-mode-dark",
+      ".dx-theme-mode-inverted"
     ],
     "toolbar": [
       ".dx-toolbar",
@@ -566,7 +569,10 @@
       ".dx-cardview-column-chooser-plain"
     ],
     "common": [
-      ":root"
+      ":root",
+      ".dx-theme-mode-light",
+      ".dx-theme-mode-dark",
+      ".dx-theme-mode-inverted"
     ]
   },
   "themeIdentity": [

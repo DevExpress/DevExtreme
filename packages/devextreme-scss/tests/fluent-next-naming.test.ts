@@ -33,6 +33,15 @@ const themeRoot = join(widgetsRoot, 'fluent-next');
 // Labels a stylesheet for error messages: `fluent-next/common/_mixins.scss`.
 const sourceLabel = (file: string): string => file.slice(widgetsRoot.length + 1);
 
+/*
+ * `name: value` inside an at-rule prelude is a condition, not a declaration - a style query reads
+ * a custom property (`@container style(--dx-theme-mode: dark)`) and looks exactly like one to a
+ * `--dx-…:` match. Preludes carry no declarations, so dropping them is safe; the reads themselves
+ * are covered by the "every var(--dx-…) read resolves" case below.
+ */
+const declarationBody = (content: string, label: string): string => stripScssComments(content, label)
+  .replace(/@[a-z-]+[^;{]*\{/g, '{');
+
 // The hand-maintained wave-F component tier (see the "wave F" test block and NAMING.md).
 const isPublicTierFile = (file: string): boolean => file.endsWith('_public.scss')
   || file.endsWith('_public-tier.scss');
@@ -635,7 +644,7 @@ const findings = {
    */
   publicTierManualDeclarations: walk(themeRoot, '.scss')
     .filter((file) => !isPublicTierFile(file))
-    .flatMap((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
+    .flatMap((file) => [...declarationBody(readFileSync(file, 'utf8'), sourceLabel(file))
       .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
       .map((match) => `${sourceLabel(file)}: ${match[1]}`))
     .sort(),
@@ -1164,23 +1173,34 @@ test('component tier: the collector matches registries.rootSelectors exactly', (
   }).toEqual({ offenders: [], includedTwice: [], notIncluded: [], unknownNamespace: [] });
 });
 
-test('component tier: every var(--dx-…) read in the theme resolves to a declared name', () => {
+test('component tier: every --dx-… read in the theme resolves to a declared name', () => {
   /*
    * stylelint does not ban the FORM (the tier is consumed through it) — this is the check that
    * took over: a read anywhere in fluent-next must hit the tier, the legacy surface, or the JS
    * runtime contract. A typo'd custom property compiles and dies silently at computed-value time;
    * this fails the build instead.
+   *
+   * `var()` is not the only way to read one: a style query names the property in its condition
+   * (`@container style(--dx-theme-mode: dark)`), and a typo there is even quieter — the block
+   * simply never matches, so the rules inside it go missing rather than losing one value.
    */
   const declared = new Set([
     ...[...tierDeclared.keys()].map((variable) => `--dx-${variable.slice(1)}`),
     ...RUNTIME_CONTRACT,
     ...findings.publicTierManualDeclarations.map((entry) => entry.slice(entry.indexOf(': ') + 2)),
   ]);
-  const offenders = walk(themeRoot, '.scss').flatMap((file) => [
-    ...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).matchAll(/var\(\s*(--dx-[a-z0-9-]+)/g),
-  ].map((match) => match[1])
-    .filter((name) => !declared.has(name))
-    .map((name) => `${sourceLabel(file)}: var(${name}) resolves to no declared --dx name`));
+  const READS = [
+    { pattern: /var\(\s*(--dx-[a-z0-9-]+)/g, form: (name: string): string => `var(${name})` },
+    { pattern: /style\(\s*(--dx-[a-z0-9-]+)/g, form: (name: string): string => `style(${name}: …)` },
+  ];
+  const offenders = walk(themeRoot, '.scss').flatMap((file) => {
+    const content = stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file));
+
+    return READS.flatMap(({ pattern, form }) => [...content.matchAll(pattern)]
+      .map((match) => match[1])
+      .filter((name) => !declared.has(name))
+      .map((name) => `${sourceLabel(file)}: ${form(name)} resolves to no declared --dx name`));
+  });
   expect(offenders).toEqual([]);
 });
 

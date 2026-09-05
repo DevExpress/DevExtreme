@@ -1,8 +1,11 @@
 import path from 'node:path';
 import url from 'node:url';
 import { createRequire } from 'node:module';
-import { readdir, readFile, rm } from 'node:fs/promises';
+import {
+  readdir, readFile, rm, writeFile,
+} from 'node:fs/promises';
 import StyleDictionary from 'style-dictionary';
+import { fileHeader, formattedVariables } from 'style-dictionary/utils';
 import { registerTransforms } from './transforms.mjs';
 import {
   buildAvailableNames,
@@ -175,6 +178,12 @@ const buildPath = `${path.resolve(dirname, '../../scss/_design-system')}/`;
 const THEME_NAME = 'fluent';
 const THEME_FOLDER = 'fluent-next';
 
+// Kept in step with the @includes in widgets/fluent-next/_design-system.scss.
+const MODE_ROLES_MIXIN = 'roles';
+const MODE_ALIASES_MIXIN = 'aliases';
+const MODE_ALIASES_FILE = 'mode-aliases';
+const MODE_SHARED_FILE = 'mode-shared';
+
 const themePath = path.resolve(dirname, `../../scss/widgets/${THEME_FOLDER}`);
 
 const FLUENT_PALETTES = [
@@ -230,6 +239,46 @@ const getModeFiles = (mode) => [
 // alias the semantic roles the theme already reads, so emitting them added unreferenced custom
 // properties. Absent from the bridge, `ds.$button-color-bg-rest` is now a Sass error.
 const getBridgeFiles = () => getModeFiles('light');
+
+/*
+ * Every bundle needs the mode-dependent declarations more than once: under the mode it was built
+ * for, under the opposite one, and under the relative "inverted" scope. A `:root` block cannot be
+ * re-scoped on load — `meta.load-css` emits it verbatim and `@use` paths take no interpolation — so
+ * these layers ship as mixins the theme places under the selectors it wants.
+ *
+ * Two files use it. The roles carry the mode's own values, one file per mode. The aliases carry the
+ * layers whose TEXT is mode-independent but whose values read a role (`box-shadow.md` is geometry
+ * over `color.shadow-key`): a custom property resolves where it is declared, so leaving them on
+ * `:root` would freeze them at the bundle's mode no matter what class sits below. Same text in
+ * every scope, resolved anew in each.
+ *
+ * Otherwise identical to Style Dictionary's own `css/variables` (lib/common/formats.js) minus the
+ * selector nesting; keep the two in step.
+ */
+// `prefix` belongs to the declaration lines, not to the header comment — upstream drops it before
+// building the header (getFormattingCloneWithoutPrefix), and so must we.
+const headerFormatting = ({ prefix, ...formatting } = {}) => formatting;
+
+StyleDictionary.registerFormat({
+  name: 'dx/mode-scoped-mixin',
+  format: async ({ dictionary, file, options }) => {
+    const {
+      outputReferences, outputReferenceFallbacks, usesDtcg, formatting, sort, mixin,
+    } = options;
+    const header = await fileHeader({ file, formatting: headerFormatting(formatting), options });
+    const variables = formattedVariables({
+      format: 'css',
+      dictionary,
+      outputReferences,
+      outputReferenceFallbacks,
+      formatting: { ...formatting, indentation: '  ' },
+      usesDtcg,
+      sort,
+    });
+
+    return `${header}@mixin ${mixin}() {\n${variables}\n}\n`;
+  },
+});
 
 StyleDictionary.registerFormat({
   name: 'scssToCss',
@@ -315,8 +364,6 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
       const filePath = normalizeFilePath(token);
 
       return filePath.includes(`base/colors/utility/${THEME_NAME}.json`)
-        || filePath.includes(`global/${THEME_NAME}.json`)
-        || filePath.includes(`figma-utils/box-shadow/semantic/${THEME_NAME}.json`)
         || filePath.includes(`figma-utils/icon/set/${THEME_NAME}.json`);
     },
     options: FILE_OPTIONS,
@@ -331,21 +378,34 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
     options: FILE_OPTIONS,
   },
   {
-    destination: `${THEME_NAME}/semantic/box-shadow.scss`,
-    format: 'css/variables',
-    filter: (token) => normalizeFilePath(token).includes(`semantic/box-shadow/${THEME_NAME}.json`),
-    options: FILE_OPTIONS,
-  },
-  {
     destination: `${THEME_NAME}/semantic/colors/${mode}.scss`,
-    format: 'css/variables',
+    format: 'dx/mode-scoped-mixin',
     filter: (token) => {
       const filePath = normalizeFilePath(token);
 
       return filePath.includes(`semantic/colors/${THEME_NAME}/${mode}.json`)
         || filePath.includes(`icons/${THEME_NAME}/${mode}.json`);
     },
-    options: FILE_OPTIONS,
+    options: { ...FILE_OPTIONS, mixin: MODE_ROLES_MIXIN },
+  },
+  /*
+   * The three layers that read a colour role without being one: the box-shadow composites and
+   * their Figma layer parts (geometry over `color.shadow-*`) and the global aliases (focus rings
+   * over `color.border-focus*`). Written once, included in every mode scope — see the
+   * dx/mode-scoped-mixin comment for why they cannot stay on `:root`. Both mode configs emit this
+   * file; the sources are mode-independent, so the two writes are byte-identical.
+   */
+  {
+    destination: `${THEME_NAME}/${MODE_ALIASES_FILE}.scss`,
+    format: 'dx/mode-scoped-mixin',
+    filter: (token) => {
+      const filePath = normalizeFilePath(token);
+
+      return filePath.includes(`semantic/box-shadow/${THEME_NAME}.json`)
+        || filePath.includes(`global/${THEME_NAME}.json`)
+        || filePath.includes(`figma-utils/box-shadow/semantic/${THEME_NAME}.json`);
+    },
+    options: { ...FILE_OPTIONS, mixin: MODE_ALIASES_MIXIN },
   },
 ]);
 
@@ -413,6 +473,90 @@ async function collectThemeStyleSheets() {
     .map((entry) => path.join(entry.parentPath, entry.name));
 }
 
+/*
+ * The mode-scoped layers are emitted by source file, and a source file is a coarse answer: of the
+ * 300 colour roles only 209 actually differ between the modes, and of the alias layers only a
+ * fifth read one. A declaration that does not depend on the mode does not need re-resolving, so
+ * repeating it in every scope is pure weight - and there are four of them per bundle.
+ *
+ * Which is which is derived here rather than declared, from the generated text: a name whose two
+ * mode values differ is mode-dependent, and so is anything that reads such a name, through a chain
+ * as well (`box-shadow-md` is geometry over `color-shadow-key`). The remainder is moved to a plain
+ * `:root` block, written once. Deriving it means a token that starts or stops depending on the
+ * mode moves on its own at the next bump; the theme-mode-scope gate is the judge either way.
+ */
+const DECLARATION = /^(\s*)(--[\w-]+)\s*:\s*([^;]+);\s*$/;
+
+const parseDeclarations = (content) => content.split('\n').reduce((declarations, line) => {
+  const match = DECLARATION.exec(line);
+
+  return match ? declarations.set(match[2], match[3].trim()) : declarations;
+}, new Map());
+
+const readsOf = (value) => [...value.matchAll(/var\(\s*(--[\w-]+)/g)].map(([, name]) => name);
+
+const modeDependentNames = (light, dark, aliases) => {
+  const tainted = new Set([...light.keys()].filter((name) => light.get(name) !== dark.get(name)));
+
+  for (let grew = true; grew;) {
+    grew = false;
+
+    for (const source of [light, aliases]) {
+      for (const [name, value] of source) {
+        if (!tainted.has(name) && readsOf(value).some((read) => tainted.has(read))) {
+          tainted.add(name);
+          grew = true;
+        }
+      }
+    }
+  }
+
+  return tainted;
+};
+
+const withBody = (content, keep) => content.replace(
+  /(\{\n)([\s\S]*)(\n\})/,
+  (whole, open, body, close) => {
+    const lines = body.split('\n').filter((line) => {
+      const match = DECLARATION.exec(line);
+
+      return !match || keep(match[2]);
+    });
+
+    return `${open}${lines.join('\n')}${close}`;
+  },
+);
+
+async function splitModeScopedLayers() {
+  const modeFile = (mode) => path.join(buildPath, THEME_NAME, 'semantic', 'colors', `${mode}.scss`);
+  const aliasesFile = path.join(buildPath, THEME_NAME, `${MODE_ALIASES_FILE}.scss`);
+  const sharedFile = path.join(buildPath, THEME_NAME, `${MODE_SHARED_FILE}.scss`);
+
+  const sources = Object.fromEntries(await Promise.all(
+    [['light', modeFile('light')], ['dark', modeFile('dark')], ['aliases', aliasesFile]]
+      .map(async ([key, file]) => [key, { file, content: await readFile(file, 'utf-8') }]),
+  ));
+  const parsed = Object.fromEntries(
+    Object.entries(sources).map(([key, { content }]) => [key, parseDeclarations(content)]),
+  );
+  const dependent = modeDependentNames(parsed.light, parsed.dark, parsed.aliases);
+
+  await Promise.all(Object.values(sources).map(({ file, content }) => writeFile(
+    file,
+    withBody(content, (name) => dependent.has(name)),
+    'utf-8',
+  )));
+
+  // The light file carries the shared roles: for those two, light and dark agree by definition.
+  const shared = [...parsed.light, ...parsed.aliases].filter(([name]) => !dependent.has(name));
+  const header = sources.light.content.slice(0, sources.light.content.indexOf('@mixin'));
+  const body = shared.map(([name, value]) => `  ${name}: ${value};`).join('\n');
+
+  await writeFile(sharedFile, `${header}:root {\n${body}\n}\n`, 'utf-8');
+
+  return { dependent: dependent.size, shared: shared.length };
+}
+
 // Every token a widget reads must still exist in the package. Without this a deleted token surfaces
 // much later as a Sass "Undefined variable", one name per rebuild, with no hint that a bump caused
 // it. Read from the flat index, not the bridge: it carries the version for the message.
@@ -469,10 +613,12 @@ async function build() {
     await sd.buildAllPlatforms();
   }
 
+  const split = await splitModeScopedLayers();
   const fileCount = await validateReferences();
   const consumedCount = await validateConsumedTokens();
 
   console.log(`Design tokens generated: ${fileCount} files in ${buildPath}`);
+  console.log(`Mode-scoped declarations: ${split.dependent} depend on the mode, ${split.shared} moved to :root`);
   console.log(`Design tokens consumed by ${THEME_FOLDER}: ${consumedCount} verified against the package`);
 }
 
