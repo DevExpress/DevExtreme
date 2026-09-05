@@ -123,10 +123,13 @@ const getIgnoredRules = (testName) => {
   ];
 };
 
-// Appointments are painted with resource colors and their date line is dimmed to 70% opacity,
-// so the title and the date do not reach the AA contrast ratio.
+// The appointment title and date do not reach the AA contrast ratio: the date line is dimmed
+// to 70% opacity and the appointments are painted with the resource colors.
 const getAxeContext = (testName) => (testName.startsWith('Scheduler-')
-  ? { include: ['.demo-container'], exclude: ['.dx-scheduler-appointment'] }
+  ? {
+    include: ['.demo-container'],
+    exclude: ['.dx-scheduler-appointment-title', '.dx-scheduler-appointment-content-date'],
+  }
   : '.demo-container');
 
 const getClientScripts = (approach: string) => {
