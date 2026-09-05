@@ -139,6 +139,7 @@
     "dx-texteditor"
   ],
   "date-view": [
+    "dx-dateview",
     "dx-dateview-item",
     "dx-dateview-item-selected",
     "dx-dateview-item-selected-frame",
@@ -169,7 +170,6 @@
     "dx-datebox-datetime",
     "dx-datebox-time",
     "dx-daterangebox",
-    "dx-dropdowneditor-active",
     "dx-dropdowneditor-button",
     "dx-dropdowneditor-icon",
     "dx-invalid",
@@ -187,7 +187,10 @@
     "dx-filemanager-dialog-delete-item-popup",
     "dx-filemanager-dialog-name-editor-popup",
     "dx-filemanager-dirs-tree",
+    "dx-filemanager-dirs-tree-item-text",
     "dx-filemanager-file-actions-button",
+    "dx-filemanager-progress-panel-infos-container",
+    "dx-filemanager-progress-panel-title-text",
     "dx-filemanager-progresspanel",
     "dx-filemanager-view-switcher-popup"
   ],
@@ -208,6 +211,9 @@
     "dx-fileuploader-show-file-list",
     "dx-fileuploader-wrapper",
     "dx-invalid"
+  ],
+  "filter-builder": [
+    "dx-filterbuilder-range-separator"
   ],
   "form": [
     "dx-field-item",
@@ -230,9 +236,12 @@
     "dx-gallery-indicator",
     "dx-gallery-indicator-item",
     "dx-gallery-indicator-item-active",
-    "dx-gallery-indicator-item-selected"
+    "dx-gallery-indicator-item-selected",
+    "dx-gallery-nav-button-next",
+    "dx-gallery-nav-button-prev"
   ],
   "grid": [
+    "dx-ai-chat--disabled",
     "dx-ai-chat__action-list-item",
     "dx-ai-chat__action-list-item--aborted",
     "dx-ai-chat__action-list-item--error",
@@ -260,6 +269,7 @@
     "dx-datagrid-columns-separator",
     "dx-datagrid-container",
     "dx-datagrid-content",
+    "dx-datagrid-draggable-column",
     "dx-datagrid-dragview",
     "dx-datagrid-edit-popup",
     "dx-datagrid-filter-panel",
@@ -274,7 +284,6 @@
     "dx-datagrid-rowsview",
     "dx-datagrid-search-panel",
     "dx-datagrid-search-text",
-    "dx-datagrid-sticky-columns",
     "dx-datagrid-summary-item",
     "dx-datagrid-total-footer",
     "dx-editor-cell",
@@ -288,6 +297,7 @@
     "dx-treelist-columns-separator",
     "dx-treelist-container",
     "dx-treelist-content",
+    "dx-treelist-draggable-column",
     "dx-treelist-dragview",
     "dx-treelist-edit-popup",
     "dx-treelist-filter-panel",
@@ -302,7 +312,6 @@
     "dx-treelist-rowsview",
     "dx-treelist-search-panel",
     "dx-treelist-search-text",
-    "dx-treelist-sticky-columns",
     "dx-treelist-summary-item",
     "dx-treelist-total-footer"
   ],
@@ -359,6 +368,7 @@
     "dx-lookup-search-wrapper"
   ],
   "menu": [
+    "dx-context-menu",
     "dx-menu",
     "dx-menu-horizontal",
     "dx-menu-vertical"
@@ -424,7 +434,6 @@
     "dx-scheduler-container",
     "dx-scheduler-date-table-cell",
     "dx-scheduler-date-table-droppable-cell",
-    "dx-scheduler-date-table-other-month",
     "dx-scheduler-date-time-indicator",
     "dx-scheduler-date-time-shader-all-day",
     "dx-scheduler-dropdown-appointment-date",
@@ -457,7 +466,8 @@
     "dx-scheduler-work-space-month",
     "dx-scheduler-work-space-vertical-grouped",
     "dx-scheduler-work-space-week",
-    "dx-scheduler-work-space-work-week"
+    "dx-scheduler-work-space-work-week",
+    "dx-tooltip-appointment-item-content-date"
   ],
   "scroll-view": [
     "dx-scrollable-native",
