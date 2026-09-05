@@ -959,11 +959,11 @@ const OVERRIDES = {
       'blockquote', 'cell', 'resizer', 'highlight'],
     'pivot-grid': ['area', 'area-field', 'fields-area-head', 'fields-area-head-cell', 'field-chooser',
       'field', 'fields', 'expand-icon', 'row', 'column', 'cell', 'last-cell', 'header', 'headers',
-      'drag-header', 'total', 'grand-total', 'filter', 'sort', 'icon', 'chevron', 'chevron-icon',
-      'container', 'popup', 'content', 'search', 'item', 'text', 'border', 'box', 'toolbar', 'button',
-      'position-indicator', 'tree-view', 'tree-view-item', 'tree-view-node', 'tree-view-search',
-      'drag', 'checkbox', 'field-chooser-field', 'field-area-box', 'header-filter', 'indicators',
-      'data-area'],
+      'drag-header', 'drag-source', 'total', 'grand-total', 'filter', 'sort', 'icon', 'chevron',
+      'chevron-icon', 'container', 'popup', 'content', 'search', 'item', 'text', 'border', 'box',
+      'toolbar', 'button', 'position-indicator', 'tree-view', 'tree-view-item', 'tree-view-node',
+      'tree-view-search', 'drag', 'checkbox', 'field-chooser-field', 'field-area-box',
+      'header-filter', 'indicators', 'data-area'],
     stepper: [
       // wave H: anatomy the folder needed to enter `migrated`
       'content', 'optional-mark','step', 'step-indicator', 'step-label', 'label', 'connector', 'value', 'icon', 'text',

@@ -205,6 +205,19 @@
         "{projectRoot}/**/*"
       ]
     },
+    "naming:check": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "naming:check"
+      },
+      "dependsOn": [
+        "build:themes"
+      ],
+      "inputs": [
+        "{projectRoot}/**/*"
+      ],
+      "cache": true
+    },
     "test": {
       "executor": "nx:run-script",
       "options": {
