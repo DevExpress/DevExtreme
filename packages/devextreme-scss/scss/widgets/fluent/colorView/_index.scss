@@ -4,8 +4,8 @@
 @use "../../base/colorView";
 @include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
 
-$fluent-colorview-alpha-width: $fluent-colorview-palette-width + 4;
-$fluent-colorview-hue-scale-height: $fluent-colorview-palette-height;
+$fluent-colorview-alpha-width: $fluent-colorview-palette-width + 4 !default;
+$fluent-colorview-hue-scale-height: $fluent-colorview-palette-height !default;
 
 .dx-colorview-container {
   width: $fluent-colorview-container-width;

@@ -55,13 +55,13 @@
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
-$fluent-scheduler-all-day-table-cell-height: $fluent-scheduler-workspace-date-table-cell-height * 1.5;
+$fluent-scheduler-all-day-table-cell-height: $fluent-scheduler-workspace-date-table-cell-height * 1.5 !default;
 
-$fluent-scheduler-month-date-text-size: 14px;
+$fluent-scheduler-month-date-text-size: 14px !default;
 
-$scheduler-first-of-month-border: 1px solid;
+$scheduler-first-of-month-border: 1px solid !default;
 
-$fluent-scheduler-agenda-time-panel-cell-padding: 8px;
+$fluent-scheduler-agenda-time-panel-cell-padding: 8px !default;
 
 @include baseScheduler.scheduler-mixin();
 

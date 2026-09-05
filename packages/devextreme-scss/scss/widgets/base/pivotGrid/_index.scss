@@ -23,16 +23,16 @@ $pivotgrid-button-top-padding: null !default;
 @use "../icon_fonts" as *;
 @use "./common";
 
-$pivotgrid-drag-header-border: 1px solid;
-$pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color;
-$pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-shadow-color;
-$pivotgrid-border-width: 1px;
-$pivotgrid-border: $pivotgrid-border-width solid;
-$pivotgrid-icon-size: 14px;
-$pivotgrid-common-field-padding: 2px;
-$pivotgrid-filter-area-border-spacing: $pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding $pivotgrid-header-top-bottom-padding - $pivotgrid-common-field-padding;
-$pivotgrid-expand-icon-offset: -5px;
-$pivotgrid-expand-icon-text-offset: 0;
+$pivotgrid-drag-header-border: 1px solid !default;
+$pivotgrid-drag-header-first-shadow: 0 0 1px $pivotgrid-drag-header-first-shadow-color !default;
+$pivotgrid-drag-header-second-shadow: 0 1px 3px $pivotgrid-drag-header-second-shadow-color !default;
+$pivotgrid-border-width: 1px !default;
+$pivotgrid-border: $pivotgrid-border-width solid !default;
+$pivotgrid-icon-size: 14px !default;
+$pivotgrid-common-field-padding: 2px !default;
+$pivotgrid-filter-area-border-spacing: $pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding $pivotgrid-header-top-bottom-padding - $pivotgrid-common-field-padding !default;
+$pivotgrid-expand-icon-offset: -5px !default;
+$pivotgrid-expand-icon-text-offset: 0 !default;
 
 .dx-pivotgrid-fields-container {
   .dx-position-indicator {

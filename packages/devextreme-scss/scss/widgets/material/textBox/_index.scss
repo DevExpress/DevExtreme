@@ -8,15 +8,15 @@
 @use "../../base/textBox";
 @use "../textEditor" as *;
 
-$textbox-search-icon-right-padding: math.div($material-filled-texteditor-input-horizontal-padding, 2);
+$textbox-search-icon-right-padding: math.div($material-filled-texteditor-input-horizontal-padding, 2) !default;
 $textbox-standard-search-icon-size:
   $material-texteditor-icon-container-size +
   $material-base-standard-texteditor-input-horizontal-padding +
-  $textbox-search-icon-right-padding;
+  $textbox-search-icon-right-padding !default;
 $textbox-filled-search-icon-size:
   $material-texteditor-icon-container-size +
   $material-filled-texteditor-input-horizontal-padding +
-  $textbox-search-icon-right-padding;
+  $textbox-search-icon-right-padding !default;
 
 @mixin dx-texteditor-search-icon($texteditor-icon-size, $texteditor-padding) {
   position: absolute;

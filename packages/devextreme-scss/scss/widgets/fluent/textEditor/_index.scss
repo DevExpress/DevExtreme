@@ -12,10 +12,10 @@
 @use "../../base/textEditor/mixins" as *;
 @use "../colorBox/sizes" as *;
 
-$fluent-base-standard-texteditor-input-horizontal-padding: 0;
-$fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding;
-$fluent-editor-custom-button-margin: 6px;
-$fluent-editor-border-width: 1px;
+$fluent-base-standard-texteditor-input-horizontal-padding: 0 !default;
+$fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding !default;
+$fluent-editor-custom-button-margin: 6px !default;
+$fluent-editor-border-width: 1px !default;
 
 @mixin texteditor-outlined-styling() {
   background-color: $texteditor-outlined-bg;

@@ -8,7 +8,7 @@
 @use "../overlay";
 @use "../menuBase" as *; // need as private
 
-$generic-menu-popup-border: 1px solid;
+$generic-menu-popup-border: 1px solid !default;
 
 .dx-context-menu {
   color: $menu-color;

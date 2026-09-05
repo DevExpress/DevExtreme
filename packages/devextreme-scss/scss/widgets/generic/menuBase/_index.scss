@@ -8,11 +8,11 @@
 @use "../../base/mixins" as *;
 @use "../../base/menuBase";
 
-$generic-menu-item-padding-increased: $generic-menu-item-padding-base + 2px;
-$generic-menu-item-padding-reduced: $generic-menu-item-padding-base - 2px;
-$generic-menu-arrow-image-size: 7px;
+$generic-menu-item-padding-increased: $generic-menu-item-padding-base + 2px !default;
+$generic-menu-item-padding-reduced: $generic-menu-item-padding-base - 2px !default;
+$generic-menu-arrow-image-size: 7px !default;
 
-$generic-menu-popup-border: 1px solid;
+$generic-menu-popup-border: 1px solid !default;
 
 .dx-menu-item {
   color: $menu-color;
