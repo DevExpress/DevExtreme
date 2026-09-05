@@ -1,0 +1,52 @@
+@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$gantt-collapsable-row-bg: ds.$color-bg-low !default;
+
+/*
+ * Toolbar icons are SVG data-uri images: the color is baked into the background-image at
+ * build time (string replace). CSS var() tokens do NOT resolve inside a data-uri (they render
+ * black), so the value below is the static per-mode equivalent of the ds.$ token named in the
+ * marker. See DIVERGENCES.md.
+ */
+$gantt-icon: null !default;
+$gantt-content-disabled: ds.$color-content-disabled !default;
+$gantt-icon-disabled: null !default;
+
+@if $mode == "light" {
+  $gantt-icon: #161616 !default; // dx-data-uri-static: ds.$color-content
+  $gantt-icon-disabled: #ababab !default; // dx-data-uri-static: ds.$color-content-disabled
+}
+
+@if $mode == "dark" {
+  $gantt-icon: #fff !default; // dx-data-uri-static: ds.$color-content
+  $gantt-icon-disabled: #767676 !default; // dx-data-uri-static: ds.$color-content-disabled
+}
+
+/*
+ * Task bars and time-marker borders: primary-90 in light, primary-70 in dark — the only surface
+ * role with that pair, so the design-review decision (lighter blue on dark) holds without freezing
+ * a literal. See DIVERGENCES.md.
+ */
+$gantt-task-bg: ds.$color-bg-primary-shared !default;
+$gantt-parent-task-bg: ds.$color-bg-success !default;
+$gantt-task-res-content: ds.$color-content-inverted !default;
+$gantt-task-res-bg: ds.$color-bg-inverted !default;
+$gantt-task-progress-bg: rgb(from #{ds.$color-bg-inverted} r g b / 0.2) !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$gantt-bg: ds.$color-bg !default;
+$gantt-border: ds.$color-border !default;
+$gantt-content: ds.$color-content !default;
+
+// Color computations hoisted from style files (phase 0.5 layer normalization)
+$gantt-accent-border: ds.$color-border-primary !default;
+$gantt-ti-bg: ds.$color-bg-primary-alpha-hovered !default;
+
+/*
+ * Derived values, moved out of _index.scss: a file that emits rules must not declare
+ * variables (NAMING.md, O7).
+ */
+$gantt-successor-bg: ds.$color-bg-static-light;
+
+$gantt-selection-bg: ds.$color-bg-primary-subtler !default;

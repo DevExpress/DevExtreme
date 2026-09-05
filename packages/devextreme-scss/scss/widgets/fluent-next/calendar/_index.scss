@@ -1,0 +1,91 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../button/mixins" as *;
+@use "../../base/calendar/calendar" with (
+  $calendar-week-day-header-font-size: var(--dx-calendar-week-day-header-font-size),
+  $calendar-week-day-header-font-weight: var(--dx-calendar-week-day-header-font-weight),
+  $calendar-border-width: var(--dx-calendar-border-width),
+  $calendar-multiview-table-padding: 0 var(--dx-calendar-view-multiview-padding-inline),
+);
+@use "../../base/calendar/mixins" as *;
+@include dx-calendar-mixin(
+  var(--dx-calendar-bg),
+  $calendar-legacy-width,
+  var(--dx-calendar-legacy-height),
+  var(--dx-calendar-element-padding),
+  var(--dx-calendar-footer-button-height),
+  var(--dx-calendar-invalid-border),
+  var(--dx-calendar-invalid-border-focused),
+);
+
+.dx-calendar-navigator-previous-view,
+.dx-calendar-navigator-next-view {
+  @include dx-button-onlyicon-sizing($global-icon-size);
+}
+
+@include dx-calendar-navigator-mixin(
+  var(--dx-calendar-navigator-content),
+);
+@include dx-calendar-body-mixin(
+  var(--dx-calendar-week-number-cell-content),
+  var(--dx-calendar-week-number-cell-bg),
+  var(--dx-calendar-week-number-border-radius),
+  var(--dx-calendar-cell-font-size),
+  var(--dx-calendar-header-content),
+);
+@include dx-calendar-cell-mixin(
+  var(--dx-calendar-cell-contoured-border-radius),
+  var(--dx-calendar-content),
+  $global-border-radius,
+  var(--dx-calendar-cell-bg-selected),
+  var(--dx-calendar-bg-hovered),
+  var(--dx-calendar-cell-content-hovered),
+  var(--dx-calendar-cell-bg-active),
+  var(--dx-calendar-cell-bg-selected),
+  var(--dx-calendar-cell-content-selected),
+  var(--dx-calendar-cell-contoured-border),
+  var(--dx-calendar-cell-other-content),
+  var(--dx-calendar-cell-other-content-hovered),
+  var(--dx-calendar-cell-border-hovered),
+  999em,
+  $cell-today-border-width: var(--dx-calendar-cell-today-border-width),
+  $cell-contoured-ring-width: var(--dx-calendar-cell-contoured-outline-width),
+);
+@include dx-calendar-cell-in-range-mixin(
+  "::before",
+  var(--dx-calendar-bg-hovered),
+  var(--dx-calendar-cell-border-hovered),
+  999em,
+  0,
+);
+@include dx-calendar-cell-in-range-mixin(
+  "::after",
+  inherit,
+  var(--dx-calendar-cell-border-hovered),
+  999em,
+  1px, // dx-line-width: 1px, the range cell border passed to dx-calendar-cell-in-range-mixin
+  ".dx-calendar-cell-range-hover",
+  ".dx-calendar-cell-range-hover-start",
+  ".dx-calendar-cell-range-hover-end",
+);
+
+.dx-calendar.dx-state-disabled,
+.dx-state-disabled .dx-calendar {
+  .dx-calendar-cell,
+  .dx-calendar-week-number-cell,
+  .dx-calendar-body thead th {
+    color: var(--dx-calendar-cell-content-disabled);
+  }
+
+  .dx-calendar-cell.dx-calendar-selected-date span {
+    background-color: var(--dx-calendar-cell-bg-selected-disabled);
+    color: var(--dx-calendar-cell-content-disabled);
+  }
+
+  .dx-calendar-navigator .dx-button .dx-icon,
+  .dx-calendar-caption-button .dx-button-text {
+    color: var(--dx-calendar-cell-content-disabled);
+  }
+}

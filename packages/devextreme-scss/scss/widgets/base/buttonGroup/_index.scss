@@ -1,5 +1,8 @@
 @use "../mixins" as *;
 
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$buttongroup-mode-text-column-gap: 1px !default;
+
 .dx-buttongroup {
   display: inline-block;
 }
@@ -11,7 +14,7 @@
   width: 100%;
 
   .dx-buttongroup-mode-text & {
-    column-gap: 1px;
+    column-gap: $buttongroup-mode-text-column-gap;
   }
 }
 

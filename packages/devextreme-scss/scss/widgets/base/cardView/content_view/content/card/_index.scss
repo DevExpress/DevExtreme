@@ -19,9 +19,9 @@
   }
 
   &:focus-visible {
-    outline: 2px solid;
+    outline: 2px solid; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
     outline-color: $cardview-card--focused-outline-color;
-    outline-offset: -2px;
+    outline-offset: -2px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
   }
 }
 

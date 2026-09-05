@@ -1,0 +1,146 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/form" with (
+  $form-first-row-padding-top: var(--dx-form-first-row-padding-block-start),
+  $form-switch-margin-top: var(--dx-form-switch-margin-block-start),
+  $form-switch-margin-bottom: var(--dx-form-switch-margin-block-end),
+  $form-multiview-item-content-padding: var(--dx-form-multiview-item-content-padding),
+  $form-group-content-padding-top: var(--dx-form-group-content-padding-block-start),
+  $form-group-content-padding-bottom: var(--dx-form-group-content-padding-block-end),
+  $form-group-content-margin-top: var(--dx-form-group-content-margin-block-start),
+  $form-field-item-label-location-left-padding-inline-end: var(--dx-form-field-item-label-location-left-padding-inline-end),
+  $form-field-item-label-location-right-padding-inline-start: var(--dx-form-field-item-label-location-right-padding-inline-start),
+);
+@use "../../base/icon_fonts" as *;
+@use "../scrollable";
+
+.dx-form-group-caption {
+  font-size: var(--dx-form-group-caption-font-size);
+}
+
+.dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
+  & > .dx-form-group-content {
+    border-top: var(--dx-form-group-content-border-block-start);
+    border-top-color: var(--dx-form-group-border);
+    padding-bottom: var(--dx-form-group-content-bottom-padding);
+    padding-top: var(--dx-form-group-caption-top-padding);
+    margin-top: var(--dx-form-group-caption-bottom-margin);
+  }
+}
+
+.dx-layout-manager {
+  .dx-field-item {
+    &:not(.dx-last-col) {
+      padding-inline-end: var(--dx-form-layout-manager-padding-inline);
+    }
+
+    &:not(.dx-first-col) {
+      padding-inline-start: var(--dx-form-layout-manager-padding-inline);
+    }
+
+    &:not(.dx-first-row) {
+      padding-top: var(--dx-form-layout-manager-padding-block);
+    }
+
+    padding-bottom: var(--dx-form-layout-manager-padding-block);
+    font-size: var(--dx-form-label-font-size);
+
+    .dx-field-item {
+      &.dx-last-row {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  .dx-tabpanel .dx-multiview-item-content {
+    padding: var(--dx-form-layout-manager-tabpanel-content-padding);
+  }
+}
+
+.dx-form > .dx-layout-manager.dx-layout-manager-one-col {
+  .dx-field-item {
+    .dx-field-item.dx-last-row:not(.dx-last-col) {
+      padding-bottom: var(--dx-form-layout-manager-padding-block);
+    }
+  }
+}
+
+.dx-field-item {
+  &:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
+    padding-top: var(--dx-form-default-top-padding);
+  }
+
+  .dx-switch {
+    vertical-align: middle;
+  }
+}
+
+.dx-field-item-content-wrapper.dx-invalid {
+  .dx-field-item-help-text {
+    color: transparent;
+  }
+}
+
+.dx-field-item-label-location-top {
+  padding: var(--dx-form-top-label-padding);
+  margin-bottom: var(--dx-form-top-label-bottom-margin);
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.dx-field-item-label-text {
+  color: var(--dx-form-field-item-content);
+}
+
+.dx-field-item-help-text {
+  color: var(--dx-form-item-help-content);
+  padding-top: var(--dx-form-field-item-help-text-padding-block-start);
+  font-size: var(--dx-form-help-text-font-size);
+  font-style: normal;
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.dx-field-item-optional .dx-label > span::after,
+.dx-field-item-optional-mark {
+  color: var(--dx-form-field-mark-content);
+}
+
+.dx-field-item-required .dx-label > span::after,
+.dx-field-item-required-mark {
+  color: var(--dx-form-field-required-content);
+}
+
+.dx-field-item-custom-label-content {
+  .dx-icon {
+    @include dx-icon-sizing(var(--dx-form-label-icon-size));
+    @include dx-icon-margin(calc(#{$global-icon-size} / 3));
+  }
+}
+
+.dx-form-group-custom-caption {
+  font-size: var(--dx-form-group-caption-font-size);
+
+  .dx-icon {
+    @include dx-icon-sizing($global-icon-size);
+    @include dx-icon-margin(var(--dx-form-group-custom-caption-icon-margin));
+  }
+}
+
+.dx-form.dx-state-disabled,
+.dx-state-disabled .dx-form,
+.dx-form .dx-box-item.dx-state-disabled {
+  .dx-field-item-label-text,
+  .dx-field-item-label .dx-field-item-optional-mark,
+  .dx-field-item-label .dx-field-item-required-mark {
+    color: var(--dx-form-field-item-content-disabled);
+  }
+}

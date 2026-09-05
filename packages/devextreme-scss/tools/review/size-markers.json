@@ -1,0 +1,134 @@
+{
+  "comment": [
+    "Size-marker vocabulary. One source, three consumers:",
+    "  tools/review/scales.mjs    — builds the SCALES.md / SCALES.html report, a section per entry;",
+    "  tools/review/px-audit.mjs  — the gate: a px literal with no marker does not pass",
+    "                               (tests/fluent-next-size-markers.test.ts runs it).",
+    "  tests/base-size-markers.test.ts  — the same scan over the shared layer scss/widgets/base/**, against a baseline: that layer cannot be marked in one go, so the count only ratchets down.",
+    "The report and the gate cannot drift: this list is the only one.",
+    "",
+    "Fields: id — section anchor; marker — the token in a `// <marker>: note` comment;",
+    "title/question/why — section copy; literals — what counts as a distinct value in the summary",
+    "(px — pixels only, any — any literal with a unit, steps — step names);",
+    "scale — the package scale family the report looks the value up in (null — do not look up);",
+    "source — where places come from (sources — from the code by marker, bundle — from the built",
+    "bundle).",
+    "",
+    "Add a category here rather than in code: the report and the gate pick it up on their own.",
+    "A marker name must not be a substring of a custom property name used in the theme — both",
+    "scanners match the marker as a substring of the comment (`dx-border-width` is unusable: the",
+    "theme declares `--dx-border-width`)."
+  ],
+  "categories": [
+    {
+      "id": "offscale",
+      "marker": "dx-offscale",
+      "source": "sources",
+      "title": "A. Sizes off the scales",
+      "question": "which values deserve a step",
+      "literals": "px",
+      "why": "A named theme size with no matching step in any relevant package scale: the value stayed a px literal.",
+      "scale": "spacing"
+    },
+    {
+      "id": "norole",
+      "marker": "dx-no-semantic-role",
+      "source": "sources",
+      "title": "B. Step exists, role does not",
+      "question": "which steps deserve semantic roles",
+      "literals": "steps",
+      "why": "The value sits on a base scale step, but the package has no semantic role for this case — the theme reads the base scale directly.",
+      "scale": null
+    },
+    {
+      "id": "glyph",
+      "marker": "dx-icon-glyph-size",
+      "source": "sources",
+      "title": "B2. Icon glyph sizes",
+      "question": "does the package need an icon size scale",
+      "literals": "steps",
+      "why": "A glyph is sized by a font-size step or by a fraction of the font size: the package has no icon scale of its own.",
+      "scale": "font-size"
+    },
+    {
+      "id": "relative",
+      "marker": "dx-relative",
+      "source": "sources",
+      "title": "C. Proportional values",
+      "question": "do proportional values need DS roles",
+      "literals": "any",
+      "why": "The value is proportional to the font size or to the container. It cannot become an absolute token without changing behaviour: em is measured from the element's font size, a token from the root.",
+      "scale": null
+    },
+    {
+      "id": "calc",
+      "marker": null,
+      "source": "bundle",
+      "title": "D. Computed sizes",
+      "question": "what to compute at build time and what at runtime",
+      "literals": null,
+      "why": "A token arrives in CSS as var(), so Sass can no longer fold the arithmetic: derived values move to the browser.",
+      "scale": null
+    },
+    {
+      "id": "nudge",
+      "marker": "dx-px-nudge",
+      "source": "sources",
+      "title": "E. Pixel nudges",
+      "question": "should the correction follow the scale or stay absolute",
+      "literals": "px",
+      "why": "An absolute addition or subtraction on top of a token. When the scale moves the derived value follows and the correction does not — on a large step ±1px goes unnoticed, on a small one it is a visible fraction of the size.",
+      "scale": "spacing"
+    },
+    {
+      "id": "shadow",
+      "marker": "dx-shadow-geometry",
+      "source": "sources",
+      "title": "F. Shadow geometry",
+      "question": "a shadow role as a whole, rather than steps for its numbers",
+      "literals": "px",
+      "why": "Offset, blur and spread inside box-shadow. The package ships shadow geometry as px tokens of its own, so the question is not which step but whether a shadow role is wanted — the theme already takes the shadow colour from a role.",
+      "scale": null
+    },
+    {
+      "id": "linewidth",
+      "marker": "dx-line-width",
+      "source": "sources",
+      "title": "G. Border and line thickness",
+      "question": "put them on border-width steps, or must a hairline stay 1px",
+      "literals": "px",
+      "why": "The thickness of a border, of a hairline drawn with box-shadow, or of a strip revealed by clip-path. A matching step exists (border-width-10 = 1px), but a hairline is not meant to thicken along with the scale.",
+      "scale": "border-width"
+    },
+    {
+      "id": "required",
+      "marker": "dx-literal-required",
+      "source": "sources",
+      "title": "H. Must stay a number",
+      "question": "no decision needed — the value is frozen by the technique",
+      "literals": "px",
+      "why": "A @media or @container condition: var() is invalid there, so the value cannot become a token even once a step exists. When the step moves the condition stays where it is — worth knowing in advance.",
+      "scale": "spacing"
+    },
+    {
+      "id": "fixed",
+      "marker": "dx-fixed-size",
+      "source": "sources",
+      "title": "I. Fixed sizes written into rules",
+      "question": "does it deserve a step, or does the size stay fixed",
+      "literals": "px",
+      "why": "The number is written where it applies — in a rule, a mixin argument or a derived variable — with no name of its own. Unlike A, a step with that value usually does exist: the step column shows which one.",
+      "scale": "spacing"
+    },
+    {
+      "id": "structural",
+      "marker": "dx-structural",
+      "source": "sources",
+      "title": "K. Not a designed size",
+      "question": "no decision needed — the number is a technique, not a size",
+      "literals": "px",
+      "why": "An off-screen parking coordinate (top: -9999px), a one-pixel probe, a number chosen to be far outside the viewport rather than to be seen. Nobody designs it and no step can replace it: making it a token would only invite someone to tune it. Unlike H, the value is not frozen by a syntax — it is frozen by having no visual meaning.",
+      "scale": null
+    }
+  ]
+}

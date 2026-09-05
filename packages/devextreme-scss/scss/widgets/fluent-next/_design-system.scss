@@ -1,0 +1,20 @@
+@use "sass:meta";
+@use "colors";
+
+$accent: colors.$color;
+
+/*
+ * Tier order mirrors the design-tokens package: base scales and palettes, then semantic roles.
+ *
+ * The component tier is not emitted at all. Its tokens are aliases onto the semantic roles, the
+ * theme reads those roles directly, and emitting the tier only added unreferenced custom properties
+ * to every stylesheet. Component size tokens are absent for the same reason plus one more:
+ * fluent-next maps sizes onto the base scales (spacing, font-size, border-radius, border-width),
+ * so no widget would read the layout names either.
+ */
+@include meta.load-css("../../_design-system/base");
+@include meta.load-css("../../_design-system/fluent/base");
+@include meta.load-css("../../_design-system/fluent/accents/#{$accent}");
+@include meta.load-css("../../_design-system/fluent/semantic/typography");
+@include meta.load-css("../../_design-system/fluent/semantic/box-shadow");
+@include meta.load-css("../../_design-system/fluent/semantic/colors/#{colors.$mode}");

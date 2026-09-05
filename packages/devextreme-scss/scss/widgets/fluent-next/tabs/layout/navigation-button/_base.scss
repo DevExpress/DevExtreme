@@ -1,0 +1,51 @@
+@use "../../../../base/icon_fonts" as *;
+@use "../../../../base/tabs";
+@use "../../variables/colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../mixins" as *;
+@use "../../../scrollable";
+@use "../../../badge";
+
+.dx-tabs .dx-tabs-nav-button {
+  box-shadow: none;
+}
+
+.dx-tabs-styling-mode-secondary .dx-tabs-nav-button {
+  border-radius: var(--dx-tabs-item-secondary-border-radius);
+}
+
+.dx-tabs-nav-button {
+  border: none;
+  height: var(--dx-tabs-tab-height);
+  background-color: var(--dx-tabs-nav-button-bg);
+
+  &.dx-button.dx-state-disabled.dx-button-mode-contained {
+    visibility: hidden;
+  }
+
+  &.dx-button-has-icon .dx-icon {
+    width: var(--dx-tabs-tab-nav-button-icon-width);
+    height: var(--dx-tabs-tab-nav-button-icon-height);
+    font-size: var(--dx-tabs-tab-nav-button-icon-font-size);
+  }
+
+  &.dx-state-active {
+    border: none;
+  }
+
+  &.dx-state-disabled {
+    background-color: var(--dx-tabs-tab-bg);
+    color: var(--dx-tabs-nav-button-content-disabled);
+  }
+
+  .dx-button-content {
+    flex: unset;
+    padding: var(--dx-tabs-tab-nav-button-content-padding);
+  }
+}
+
+.dx-tabs-vertical {
+  .dx-tabs-nav-button {
+    padding: var(--dx-tabs-tab-vertical-nav-button-content-padding);
+  }
+}

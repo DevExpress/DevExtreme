@@ -1,0 +1,33 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-slider-accent-bg: #{$slider-accent-bg};
+  --dx-slider-accent-bg-hovered: #{$slider-accent-bg-hovered};
+  --dx-slider-accent-content-focused: #{$slider-accent-content-focused};
+  --dx-slider-bar-bg: #{$slider-bar-bg};
+  --dx-slider-bar-bg-disabled: #{$slider-bar-bg-disabled};
+  --dx-slider-bg-disabled: #{$slider-bg-disabled};
+  --dx-slider-border: #{$slider-border};
+  --dx-slider-border-radius: #{$slider-border-radius};
+  --dx-slider-element-bg: #{$slider-element-bg};
+  --dx-slider-handle-border-width: #{$slider-handle-border-width};
+  --dx-slider-handle-inner-border-width: #{$slider-handle-inner-border-width};
+  --dx-slider-handle-invalid-bg: #{$slider-handle-invalid-bg};
+  --dx-slider-handle-size: #{$slider-handle-size};
+  --dx-slider-height: #{$slider-height};
+  --dx-slider-invalid-bg: #{$slider-invalid-bg};
+  --dx-slider-invalid-bg-hovered: #{$slider-invalid-bg-hovered};
+  --dx-slider-invalid-content-focused: #{$slider-invalid-content-focused};
+  --dx-slider-label-bottom-inset-block-end: #{$slider-label-bottom-inset-block-end};
+  --dx-slider-label-bottom-padding-block-end: #{$slider-label-bottom-padding-block-end};
+  --dx-slider-label-top-inset-block-start: #{$slider-label-top-inset-block-start};
+  --dx-slider-label-top-padding-block-start: #{$slider-label-top-padding-block-start};
+  --dx-slider-tooltip-height: #{$slider-tooltip-height};
+  --dx-slider-tooltip-content: #{$slider-tooltip-content};
+  --dx-slider-tooltip-top-padding-block-start: #{$slider-tooltip-top-padding-block-start};
+  --dx-slider-tooltip-width: #{$slider-tooltip-width};
+  --dx-slider-track-border-radius: #{$slider-track-border-radius};
+  --dx-slider-track-height: #{$slider-track-height};
+  --dx-slider-wrapper-height: #{$slider-wrapper-height};
+}

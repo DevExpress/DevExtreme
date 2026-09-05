@@ -1,0 +1,162 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/slider" with (
+  $slider-tooltip-content-height: var(--dx-slider-tooltip-height),
+  $slider-label-position-bottom-padding-bottom: var(--dx-slider-label-bottom-padding-block-end),
+  $slider-label-position-top-padding-top: var(--dx-slider-label-top-padding-block-start),
+);
+@use "../../base/popover/mixins" as *;
+
+.dx-slider-wrapper {
+  height: var(--dx-slider-wrapper-height);
+
+  @include dx-popover-arrow-size(14px, 2px); // dx-fixed-size: 14px arrow width and 2px offset
+}
+
+.dx-slider-bar {
+  margin-top: calc((var(--dx-slider-wrapper-height) - var(--dx-slider-track-height)) / 2);
+  margin-right: calc(var(--dx-slider-handle-size) / 2);
+  margin-left: calc(var(--dx-slider-handle-size) / 2);
+  background: var(--dx-slider-bar-bg);
+  height: var(--dx-slider-track-height);
+  border-radius: var(--dx-slider-track-border-radius);
+}
+
+.dx-slider-range {
+  height: var(--dx-slider-track-height);
+  border-radius: var(--dx-slider-track-border-radius);
+
+  &.dx-slider-range-visible {
+    background: var(--dx-slider-accent-bg);
+  }
+}
+
+.dx-slider-handle {
+  margin-top: calc(var(--dx-slider-track-height) / 2 - var(--dx-slider-handle-size) / 2);
+  margin-inline-end: calc(var(--dx-slider-handle-size) / -2);
+  width: var(--dx-slider-handle-size);
+  height: var(--dx-slider-handle-size);
+  border-radius: var(--dx-slider-border-radius);
+  border-width: var(--dx-slider-handle-border-width);
+  border-style: solid;
+  border-color: var(--dx-slider-border);
+  background-color: var(--dx-slider-element-bg);
+
+  &::after {
+    position: absolute;
+    display: block;
+    inset: 0;
+    background: var(--dx-slider-accent-bg);
+    content: "";
+    border-radius: var(--dx-slider-border-radius);
+    border-width: var(--dx-slider-handle-inner-border-width);
+    border-style: solid;
+    border-color: var(--dx-slider-element-bg);
+  }
+
+  &.dx-state-hover {
+    &::after {
+      background: var(--dx-slider-accent-bg-hovered);
+    }
+  }
+
+  &.dx-state-focused {
+    border-color: var(--dx-slider-accent-content-focused);
+
+    &::after {
+      background: var(--dx-slider-accent-content-focused);
+    }
+  }
+
+  .dx-tooltip-wrapper {
+    .dx-overlay-content {
+      .dx-popup-content {
+        line-height: normal;
+        color: var(--dx-slider-tooltip-content);
+
+        .dx-slider-tooltip-position-top & {
+          padding-top: var(--dx-slider-tooltip-top-padding-block-start);
+        }
+      }
+
+      &.dx-state-disabled {
+        .dx-popup-content {
+          padding-top: calc(var(--dx-slider-tooltip-width) / 2);
+
+          .dx-slider-tooltip-position-top & {
+            padding-top: var(--dx-slider-tooltip-top-padding-block-start);
+            padding-bottom: calc(var(--dx-slider-tooltip-width) / 2);
+          }
+        }
+      }
+    }
+  }
+}
+
+.dx-slider-tooltip-position-top {
+  padding-top: calc(var(--dx-slider-tooltip-width) + 6px); // dx-px-nudge: +6px over the tooltip width
+}
+
+.dx-slider-tooltip-position-bottom {
+  padding-bottom: calc(var(--dx-slider-tooltip-width) + 6px); // dx-px-nudge: +6px over the tooltip width
+}
+
+.dx-slider-label-position-bottom {
+  .dx-slider-label {
+    bottom: var(--dx-slider-label-bottom-inset-block-end);
+  }
+}
+
+.dx-slider-label-position-top {
+  .dx-slider-label {
+    top: var(--dx-slider-label-top-inset-block-start);
+  }
+}
+
+.dx-invalid {
+  .dx-slider-handle {
+    &::after {
+      background-color: var(--dx-slider-handle-invalid-bg);
+    }
+
+    &.dx-state-hover {
+      &::after {
+        background-color: var(--dx-slider-invalid-bg-hovered);
+      }
+    }
+
+    &.dx-state-focused {
+      border-color: var(--dx-slider-invalid-content-focused);
+
+      &::after {
+        background-color: var(--dx-slider-invalid-content-focused);
+      }
+    }
+  }
+
+  .dx-slider-range-visible {
+    background-color: var(--dx-slider-invalid-bg);
+    border-color: var(--dx-slider-invalid-bg);
+  }
+}
+
+.dx-state-disabled {
+  &.dx-slider,
+
+  &.dx-slider-handle {
+    border-color: var(--dx-slider-bg-disabled);
+
+    &::after {
+      background: var(--dx-slider-bg-disabled);
+    }
+  }
+
+  .dx-slider-bar {
+    background: var(--dx-slider-bar-bg-disabled);
+  }
+
+  .dx-slider-range.dx-slider-range-visible {
+    background: var(--dx-slider-bg-disabled);
+  }
+}

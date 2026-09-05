@@ -1,0 +1,50 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$tag-box-tag-content-padding-inline-start: null !default;
+$tag-box-tag-content-padding-inline-end: null !default;
+$tag-box-tag-content-padding-block: null !default;
+$tag-box-tag-content-font-size: null !default;
+$tag-box-tag-container-padding-inline-start: null !default;
+$tag-box-tag-container-padding-block: null !default;
+$tag-box-tag-size: null !default;
+$tag-box-select-all-padding-block-end: ds.$spacing-120 !default;
+$tag-box-select-all-margin-block-end: ds.$spacing-30 !default;
+$tag-box-tag-border-radius: 999em !default;
+$tag-box-filled-with-label-padding-block-start: null !default;
+$tag-box-filled-with-label-padding-block-end: null !default;
+$tag-box-tag-content-line-height: null !default;
+$tag-box-tag-container-gap: null !default;
+
+@if $size == "default" {
+  $tag-box-tag-content-padding-inline-start: ds.$spacing-60 !default;
+  $tag-box-tag-content-padding-inline-end: ds.$spacing-200 !default;
+  $tag-box-tag-content-padding-block: ds.$spacing-20 !default;
+  $tag-box-tag-content-font-size: ds.$font-size-caption-md !default;
+  $tag-box-tag-container-padding-inline-start: ds.$spacing-120 !default;
+  $tag-box-tag-container-padding-block: ds.$spacing-50 !default;
+  $tag-box-tag-container-gap: ds.$spacing-40 !default;
+  $tag-box-tag-size: ds.$spacing-200 !default;
+  $tag-box-tag-content-line-height: 1.1666em !default;
+  $tag-box-filled-with-label-padding-block-start: ds.$spacing-90 !default;
+  $tag-box-filled-with-label-padding-block-end: ds.$spacing-10 !default;
+}
+
+@else if $size == "compact" {
+  $tag-box-tag-content-padding-inline-start: ds.$spacing-40 !default;
+  $tag-box-tag-content-padding-inline-end: ds.$spacing-200 !default;
+  $tag-box-tag-content-padding-block: 0 !default;
+  $tag-box-tag-content-font-size: ds.$font-size-caption-sm !default;
+  $tag-box-tag-container-padding-inline-start: ds.$spacing-80 !default;
+  $tag-box-tag-container-padding-block: ds.$spacing-30 !default;
+  $tag-box-tag-container-gap: ds.$spacing-20 !default;
+  $tag-box-tag-size: ds.$spacing-160 !default;
+  $tag-box-tag-content-line-height: 1.3333em !default;
+  $tag-box-filled-with-label-padding-block-start: ds.$spacing-60 !default;
+  $tag-box-filled-with-label-padding-block-end: 0 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$tag-box-tag-border-width: ds.$border-width-10 !default;
+$tag-box-list-select-all-border-block-end: ds.$border-width-10 solid !default;
+$tag-box-tag-content-min-width: ds.$spacing-400 !default;

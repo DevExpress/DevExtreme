@@ -1,0 +1,43 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+/*
+ * The surface every overlay-based widget draws on, and the backdrop behind it. They came from
+ * overlay/, where five widgets were reading them across the folder boundary; neither describes
+ * one widget's anatomy, and both map to a non-component token family, which is exactly the
+ * admission criterion for the system tier (NAMING.md, common/).
+ */
+$surface-overlay: ds.$color-bg !default;
+$backdrop-bg: ds.$color-bg-backdrop !default;
+
+// Dropdown/overlay shadow layer colors (mode-aware via the shadow roles).
+$global-dropdown-shadow-ambient: ds.$color-shadow-ambient !default;
+$global-dropdown-shadow-key: ds.$color-shadow-key !default;
+
+// Focus ring for the widgets that draw one themselves. One role for every focus ring in the
+
+// theme, including cardView: mode-dependent, so the ring keeps 3:1 contrast in both modes.
+$focus-rect-outline: ds.$color-border-primary-shared !default;
+
+$palette-accent: ds.$color-bg-primary !default;
+$palette-bg: ds.$color-bg !default;
+$palette-border: ds.$color-border !default;
+
+// Non-color theme-level values (opacity/font family) — kept referencing the theme layer.
+$global-font-family: ds.$font-family-sans-serif !default;
+$invalid-badge-bg: ds.$color-content-danger-shared !default;
+$invalid-badge-content: ds.$color-content-static-dark !default;
+$valid-badge-content: ds.$color-bg-success !default;
+$palette-text: ds.$color-content !default;
+$global-bg: ds.$color-bg !default;
+$global-content: ds.$color-content !default;
+
+/*
+ * A mention is markup the editor writes into the value, and consumers render that value back
+ * anywhere — the Mentions demo shows a chat log built from plain spans, with no editor around.
+ * The base layer says the same by styling `.dx-mention` from a bare selector, unlike `.dx-variable`
+ * which it nests under `.dx-htmleditor-content`. So the value is not part of one widget's anatomy
+ * and belongs in the system tier, next to invalid-badge.
+ */
+$mention-bg: ds.$color-bg-selected !default;
+
+$global-content-disabled: ds.$color-content-disabled !default;

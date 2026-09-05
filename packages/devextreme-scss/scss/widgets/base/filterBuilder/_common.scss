@@ -1,15 +1,30 @@
+$filterbuilder-range-separator-opacity: null !default;
+$filterbuilder-action-icon-margin-left: null !default;
+$filterbuilder-action-icon-margin-right: null !default;
+$filterbuilder-group-content-padding-right: null !default;
+$filterbuilder-range-separator-margin: null !default;
+$filterbuilder-item-value-text-min-width: null !default;
+$filterbuilder-item-value-text-padding: null !default;
+$filterbuilder-action-icon-padding: null !default;
+$filterbuilder-group-content-padding-left: null !default;
+$filterbuilder-treeview-item-padding-left: null !default;
+$filterbuilder-treeview-item-padding-right: null !default;
+$filterbuilder-treeview-node-margin-left: null !default;
+$filterbuilder-treeview-node-margin-right: null !default;
+$filterbuilder-scrollable-max-height: null !default;
+
 .dx-filterbuilder {
   &.dx-rtl {
     .dx-filterbuilder-text,
     .dx-filterbuilder-action-icon {
-      margin-left: 5px;
+      margin-left: $filterbuilder-action-icon-margin-left;
       margin-right: 0;
     }
 
     .dx-filterbuilder-group {
       .dx-filterbuilder-group-content .dx-filterbuilder-group-content {
         padding-left: 0;
-        padding-right: 26px;
+        padding-right: $filterbuilder-group-content-padding-right;
       }
     }
   }
@@ -17,7 +32,7 @@
   .dx-filterbuilder-text,
   .dx-filterbuilder-action-icon {
     margin-left: 0;
-    margin-right: 5px;
+    margin-right: $filterbuilder-action-icon-margin-right;
   }
 
   .dx-filterbuilder-text,
@@ -44,22 +59,25 @@
 
         .dx-filterbuilder-text-separator,
         .dx-filterbuilder-range-separator {
-          margin: 0 7px;
-          opacity: 0.3;
+          margin: $filterbuilder-range-separator-margin;
+
+          @if $filterbuilder-range-separator-opacity {
+            opacity: $filterbuilder-range-separator-opacity;
+          }
         }
 
         &.dx-filterbuilder-group-operation,
         &.dx-filterbuilder-item-field,
         &.dx-filterbuilder-item-operation,
         .dx-filterbuilder-item-value-text {
-          min-width: 20px;
-          padding: 2px 7px 3px 7px;
+          min-width: $filterbuilder-item-value-text-min-width;
+          padding: $filterbuilder-item-value-text-padding;
         }
 
         .dx-texteditor {
           vertical-align: middle;
-          margin-top: -7px;
-          margin-bottom: -4px;
+          margin-top: -7px; // dx-fixed-size: pulls the row onto the group line
+          margin-bottom: -4px; // dx-fixed-size: pulls the row onto the group line
           display: inline-block;
         }
       }
@@ -70,13 +88,13 @@
         position: relative;
 
         &.dx-filterbuilder-action-icon {
-          padding: 5px 8px;
+          padding: $filterbuilder-action-icon-padding;
         }
       }
     }
 
     .dx-filterbuilder-group-content .dx-filterbuilder-group-content {
-      padding-left: 26px;
+      padding-left: $filterbuilder-group-content-padding-left;
     }
   }
 
@@ -91,12 +109,12 @@
 
 .dx-filterbuilder-operations {
   .dx-treeview-item {
-    padding-left: 5px;
+    padding-left: $filterbuilder-treeview-item-padding-left;
   }
 
   .dx-rtl {
     .dx-treeview-item {
-      padding-right: 5px;
+      padding-right: $filterbuilder-treeview-item-padding-right;
     }
   }
 }
@@ -109,7 +127,7 @@
       padding-left: 0;
 
       .dx-treeview-node-container-opened {
-        margin-left: 15px;
+        margin-left: $filterbuilder-treeview-node-margin-left;
       }
     }
 
@@ -118,7 +136,7 @@
         padding-right: 0;
 
         .dx-treeview-node-container-opened {
-          margin-right: 15px;
+          margin-right: $filterbuilder-treeview-node-margin-right;
         }
       }
     }
@@ -133,7 +151,7 @@
   }
 
   .dx-scrollable-container {
-    max-height: 360px;
+    max-height: $filterbuilder-scrollable-max-height;
   }
 
   .dx-menu-items-container {

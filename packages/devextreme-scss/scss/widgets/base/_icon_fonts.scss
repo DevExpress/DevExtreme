@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "sass:map";
+@use "sass:meta";
 @use "sass:selector";
 
 .dx-icon-plus,
@@ -213,9 +214,27 @@
 }
 
 @mixin dx-icon-sizing($icon-size, $container-size: $icon-size, $borders-size: 0) {
-  $icon-paddings-dirty: $container-size - $icon-size;
-  $icon-paddings: $icon-paddings-dirty - $borders-size;
-  $icon-padding: math.floor(math.div($icon-paddings, 2));
+  $icon-padding: null;
+  $icon-line-height: null;
+
+  @if meta.type-of($icon-size) == number and meta.type-of($container-size) == number and meta.type-of($borders-size) == number {
+    $icon-paddings-dirty: $container-size - $icon-size;
+    $icon-paddings: $icon-paddings-dirty - $borders-size;
+    $icon-padding: math.floor(math.div($icon-paddings, 2));
+    $icon-line-height: $container-size - $icon-paddings-dirty;
+  } @else {
+
+    // Token-based themes pass var()/calc() values — the derivation moves to CSS. With the defaults ($container-size is $icon-size, no borders) it is identically zero, so print 0 instead of shipping calc((X - X - 0) / 2) to the browser; a zero $borders-size alone drops its term the same way.
+    @if $container-size == $icon-size and $borders-size == 0 {
+      $icon-padding: 0;
+    } @else if $borders-size == 0 {
+      $icon-padding: calc((#{$container-size} - #{$icon-size}) / 2);
+    } @else {
+      $icon-padding: calc((#{$container-size} - #{$icon-size} - #{$borders-size}) / 2);
+    }
+
+    $icon-line-height: $icon-size;
+  }
 
   // Geometry
   width: $container-size;
@@ -231,10 +250,26 @@
   // Icon as font
   font-size: $icon-size;
   text-align: center;
-  line-height: $container-size - $icon-paddings-dirty;
+  line-height: $icon-line-height;
 }
 
+/*
+ * NOT converted to translate on purpose. Consumers cancel the horizontal half per widget — the
+ * generic gallery pins its arrows to the edges with `left: 0` / `right: 0` and an explicit
+ * `margin-left: 0` — and a margin can be overridden that way while a transform cannot. Centring
+ * here has to stay something a downstream rule can switch off.
+ */
 @mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {
+  $icon-center-offset: null;
+
+  @if meta.type-of($icon-size) == number {
+    $icon-center-offset: math.div(-$icon-size, 2);
+  } @else {
+
+    // Token-based themes pass var()/calc() values — the derivation moves to CSS
+    $icon-center-offset: calc(#{$icon-size} / -2);
+  }
+
   font-size: $icon-size;
   text-align: center;
   line-height: $icon-size;
@@ -244,9 +279,9 @@
     display: block;
     width: $icon-size;
     top: 50%;
-    margin-top: math.div(-$icon-size, 2);
+    margin-top: $icon-center-offset;
     left: 50%;
-    margin-left: math.div(-$icon-size, 2);
+    margin-left: $icon-center-offset;
   }
 
   @if $position == relative {
@@ -275,7 +310,7 @@
 }
 
 @mixin dx-font-icon($glyph) {
-  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes -- dx-icon-glyph-size: the icon font's own size, no icon scale in the package
 
   &::before {
     content: $glyph;
@@ -643,7 +678,7 @@ $icons: (
   }
 
   %icon-font {
-    font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+    font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes -- dx-icon-glyph-size: the icon font's own size, no icon scale in the package
   }
 
   @each $key, $glyph in $icons {

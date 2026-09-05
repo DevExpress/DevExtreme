@@ -1,0 +1,25 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// Not a colour: an opacity / a composite box-shadow belongs here (NAMING.md O7)
+$lookup-box-shadow: ds.$box-shadow-sm !default;
+
+$lookup-field-min-height: null !default;
+$lookup-search-padding-block: ds.$spacing-40 !default;
+$lookup-search-padding-block-start: null !default;
+$lookup-search-padding-inline: null !default;
+$lookup-arrow-border-radius: ds.$border-radius-20 !default;
+
+$lookup-popup-content-inset-block-start: 49px !default; // dx-offscale: 49px
+
+@if $size == "default" {
+  $lookup-field-min-height: ds.$spacing-300 !default;
+  $lookup-search-padding-inline: ds.$spacing-120 !default;
+  $lookup-search-padding-block-start: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $lookup-field-min-height: ds.$spacing-220 !default;
+  $lookup-search-padding-inline: ds.$spacing-80 !default;
+  $lookup-search-padding-block-start: ds.$spacing-80 !default;
+}

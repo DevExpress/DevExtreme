@@ -1,0 +1,4 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$action-sheet-item-margin-block-end: ds.$spacing-120;
+$action-sheet-item-margin: 0 0 $action-sheet-item-margin-block-end 0 !default;

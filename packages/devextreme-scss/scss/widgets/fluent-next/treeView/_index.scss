@@ -1,0 +1,162 @@
+@use "../mixins" as *;
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/treeView" as baseTreeView with (
+  $treeview-select-all-item-border-bottom: var(--dx-tree-view-select-all-item-border-block-end),
+  $treeview-border-visible-border: var(--dx-tree-view-border-visible-border),
+  $treeview-disabled-opacity: false,
+  $treeview-searchbox-margin-bottom: var(--dx-tree-view-search-box-margin-block-end),
+);
+@use "../../base/icon_fonts" as *;
+
+.dx-treeview-custom-expand-icon,
+.dx-treeview-custom-collapse-icon {
+  @include dx-icon-sizing($global-icon-size);
+}
+
+.dx-treeview-select-all-item {
+  &.dx-state-focused {
+    .dx-checkbox-icon {
+      border-color: var(--dx-tree-view-checkbox-border-focused);
+      background-color: var(--dx-tree-view-checkbox-bg-focused);
+    }
+  }
+
+  &.dx-state-focused.dx-checkbox-checked {
+    .dx-checkbox-icon {
+      background-color: var(--dx-tree-view-checkbox-accent-content-focused);
+      border-color: var(--dx-tree-view-checkbox-accent-content-focused);
+    }
+  }
+
+  &.dx-state-focused.dx-checkbox-indeterminate {
+    .dx-checkbox-icon {
+      border-color: var(--dx-tree-view-checkbox-accent-content-focused);
+
+      &::before {
+        background-color: var(--dx-tree-view-checkbox-accent-content-focused);
+      }
+    }
+  }
+}
+
+.dx-treeview-item-with-checkbox {
+  .dx-treeview-item {
+    .dx-checkbox.dx-state-disabled {
+      .dx-checkbox-icon {
+        border-color: var(--dx-tree-view-item-content-disabled);
+      }
+
+      &.dx-checkbox-indeterminate {
+        .dx-checkbox-icon::before {
+          background-color: var(--dx-tree-view-item-content-disabled);
+        }
+      }
+    }
+  }
+
+  &.dx-state-focused > .dx-treeview-item {
+    .dx-checkbox {
+      .dx-checkbox-icon {
+        border-color: var(--dx-tree-view-checkbox-border-focused);
+        background-color: var(--dx-tree-view-checkbox-bg-focused);
+      }
+
+      &.dx-checkbox-checked {
+        .dx-checkbox-icon {
+          background-color: var(--dx-tree-view-checkbox-accent-content-focused);
+          border-color: var(--dx-tree-view-checkbox-accent-content-focused);
+        }
+      }
+
+      &.dx-checkbox-indeterminate {
+        .dx-checkbox-icon {
+          border-color: var(--dx-tree-view-checkbox-accent-content-focused);
+
+          &::before {
+            background-color: var(--dx-tree-view-checkbox-accent-content-focused);
+          }
+        }
+      }
+    }
+
+    .dx-checkbox.dx-state-disabled {
+      .dx-checkbox-icon {
+        background-color: var(--dx-tree-view-checkbox-bg-disabled);
+        border-color: var(--dx-tree-view-checkbox-border-disabled);
+      }
+
+      &.dx-checkbox-checked {
+        .dx-checkbox-icon {
+          color: var(--dx-tree-view-checkbox-icon-disabled);
+        }
+      }
+
+      &.dx-checkbox-indeterminate {
+        .dx-checkbox-icon::before {
+          background-color: var(--dx-tree-view-checkbox-indeterminate-bg-disabled);
+        }
+      }
+    }
+  }
+}
+
+.dx-treeview-item-content.dx-state-disabled {
+  color: var(--dx-tree-view-item-content-disabled);
+}
+
+@include baseTreeView.default-expander-icon(
+  "chevrondown",
+  "chevronright",
+  $global-icon-size,
+  var(--dx-tree-view-toggle-item-width),
+  var(--dx-tree-view-spin-icon),
+);
+@include baseTreeView.treeview-item(
+  var(--dx-tree-view-item-element-gap),
+  var(--dx-tree-view-item-padding),
+  $global-icon-size,
+  var(--dx-tree-view-bg-hovered),
+  var(--dx-tree-view-item-content-hovered),
+  var(--dx-tree-view-item-content-selected),
+  calc(var(--dx-tree-view-toggle-item-width) + var(--dx-tree-view-item-element-gap)),
+  var(--dx-tree-view-item-margin),
+  var(--dx-tree-view-item-border-radius),
+);
+@include baseTreeView.treeview-checkbox(
+  var(--dx-tree-view-checkbox-container-size),
+  var(--dx-tree-view-content),
+  $checkbox-border-color-focused: var(--dx-tree-view-checkbox-checked-border-focused),
+  $treeview-item-selected-color: var(--dx-tree-view-item-content-selected),
+  $treeview-item-selected-bg: var(--dx-tree-view-item-bg-selected),
+  $treeview-focused-bg: var(--dx-tree-view-bg-focused),
+  $treeview-focus-color: var(--dx-tree-view-content-focused),
+  $border-radius: var(--dx-tree-view-item-border-radius)
+);
+@include baseTreeView.treeview-aux-items(
+  var(--dx-tree-view-search-box-margin-block-end),
+  var(--dx-tree-view-search-editor-height),
+  var(--dx-tree-view-border),
+  var(--dx-tree-view-select-all-item-padding),
+  var(--dx-tree-view-item-element-gap),
+  var(--dx-tree-view-select-all-item-border-visible-padding),
+  $tree-view-container-padding,
+  var(--dx-tree-view-load-indicator-size),
+);
+
+@include when-disabled(".dx-treeview") {
+  .dx-treeview-item {
+    color: var(--dx-tree-view-item-content-disabled);
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    color: var(--dx-tree-view-spin-icon-disabled);
+  }
+
+  .dx-treeview-node.dx-state-selected > .dx-treeview-item,
+  .dx-treeview-item.dx-state-selected {
+    background-color: var(--dx-tree-view-item-bg-selected-disabled);
+  }
+}

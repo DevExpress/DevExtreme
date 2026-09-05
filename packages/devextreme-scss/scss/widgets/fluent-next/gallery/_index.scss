@@ -1,0 +1,139 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../../base/gallery" with (
+  $gallery-root-border-width: var(--dx-gallery-border-width),
+  $gallery-indicator-bottom: var(--dx-gallery-indicator-inset-block-end),
+  $gallery-indicator-height: var(--dx-gallery-indicator-height),
+  $gallery-indicator-item-margin: var(--dx-gallery-indicator-item-margin),
+);
+
+.dx-gallery {
+  .dx-gallery-nav-button-prev,
+  .dx-gallery-nav-button-next {
+    position: absolute;
+    top: 0;
+    width: 34%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+
+    &.dx-state-hover::after {
+      background-color: var(--dx-gallery-nav-button-bg-hovered);
+    }
+
+    &.dx-state-active::after {
+      background-color: var(--dx-gallery-nav-button-bg-active);
+    }
+
+    @include dx-icon-font-centered-sizing(32px); // dx-icon-glyph-size: 32px, the nav button glyph
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: var(--dx-gallery-nav-button-width);
+      height: var(--dx-gallery-nav-button-height);
+      background: var(--dx-gallery-nav-button-bg);
+      border-radius: 50%;
+      top: 50%;
+      margin-top: var(--dx-gallery-nav-button-margin-block-start);
+    }
+
+    &::before {
+      position: absolute;
+      z-index: 10;
+      clear: both;
+      font-size: var(--dx-gallery-nav-icon-font-size);
+      color: var(--dx-gallery-nav-arrow-content);
+    }
+  }
+
+  .dx-gallery-nav-button-prev {
+    @include dx-icon(chevronleft);
+
+    &::after {
+      left: var(--dx-gallery-nav-button-inset-inline);
+    }
+
+    &::before {
+      left: calc(var(--dx-gallery-nav-button-inset-inline) - 1px); // dx-px-nudge: -1px off the nav button inset
+      right: auto;
+      margin-left: 0;
+    }
+  }
+
+  .dx-gallery-nav-button-next {
+    @include dx-icon(chevronright);
+
+    &::after {
+      right: var(--dx-gallery-nav-button-inset-inline);
+    }
+
+    &::before {
+      right: calc(var(--dx-gallery-nav-button-inset-inline) - 1px); // dx-px-nudge: -1px off the nav button inset
+      left: auto;
+    }
+  }
+}
+
+.dx-gallery-indicator {
+  pointer-events: none;
+  text-align: center;
+}
+
+.dx-gallery-indicator-item {
+  border-radius: 50%;
+  box-sizing: border-box;
+  border: var(--dx-gallery-indicator-item-border-width) solid;
+  border-color: var(--dx-gallery-indicator-item-border);
+  pointer-events: auto;
+  margin: calc(5px - var(--dx-gallery-indicator-size) / 2) 6px; // dx-fixed-size: 5px half-slot and 6px gap of the indicator
+  width: var(--dx-gallery-indicator-size);
+  height: var(--dx-gallery-indicator-size);
+  background: var(--dx-gallery-indicator-bg);
+}
+
+.dx-gallery-indicator-item-active,
+.dx-gallery-indicator-item-selected {
+  width: var(--dx-gallery-indicator-size-selected);
+  height: var(--dx-gallery-indicator-size-selected);
+  background: var(--dx-gallery-indicator-item-bg-selected);
+  border: var(--dx-gallery-indicator-item-border-selected);
+  border-color: var(--dx-gallery-indicator-border-selected);
+  margin: calc(5px - var(--dx-gallery-indicator-size-selected) / 2) 6px; // dx-fixed-size: 5px half-slot and 6px gap of the indicator
+}
+
+.dx-state-focused.dx-gallery {
+  border-color: var(--dx-gallery-border-focused);
+
+  .dx-gallery-indicator-item-selected {
+    background: var(--dx-gallery-indicator-bg-focused);
+  }
+}
+
+.dx-gallery.dx-state-disabled {
+  color: var(--dx-gallery-content-disabled);
+
+  .dx-gallery-nav-button-next,
+  .dx-gallery-nav-button-prev {
+    color: var(--dx-gallery-content-disabled);
+  }
+}
+
+.dx-gallery.dx-state-disabled .dx-gallery-nav-button-prev::after,
+.dx-gallery.dx-state-disabled .dx-gallery-nav-button-next::after,
+.dx-state-disabled .dx-gallery-nav-button-prev::after,
+.dx-state-disabled .dx-gallery-nav-button-next::after {
+  background-color: var(--dx-gallery-nav-button-bg-disabled);
+}
+
+.dx-gallery.dx-state-disabled .dx-gallery-indicator-item,
+.dx-state-disabled .dx-gallery .dx-gallery-indicator-item {
+  background-color: var(--dx-gallery-indicator-item-bg-disabled);
+}
+
+.dx-gallery.dx-state-disabled .dx-gallery-indicator-item-selected,
+.dx-state-disabled .dx-gallery .dx-gallery-indicator-item-selected {
+  background-color: var(--dx-gallery-indicator-item-bg-selected-disabled);
+}

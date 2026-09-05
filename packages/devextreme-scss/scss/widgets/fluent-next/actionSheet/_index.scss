@@ -1,0 +1,26 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/actionSheet";
+
+.dx-actionsheet-container {
+  .dx-actionsheet-item:not(:last-child) {
+    margin: var(--dx-action-sheet-item-margin);
+  }
+
+  .dx-button {
+    margin: 0;
+  }
+}
+
+.dx-button.dx-actionsheet-cancel {
+  margin: 0;
+  margin-top: var(--dx-action-sheet-item-margin-block-end);
+}
+
+.dx-actionsheet-container.dx-state-disabled {
+  .dx-button-text,
+  .dx-actionsheet-item-content,
+  .dx-actionsheet-title {
+    color: var(--dx-action-sheet-content-disabled);
+  }
+}

@@ -1,18 +1,43 @@
 @use "sass:list";
 @use "sass:math";
+@use "sass:meta";
 @use "sass:selector";
+
+$htmleditor-code-block-bg: rgba(191, 191, 191, 0.15) !default;
+$htmleditor-placeholder-color: rgba(0, 0, 0, 0.6) !default;
+$htmleditor-aidialog-title-font-weight: 600 !default;
 
 $list-style: decimal lower-alpha lower-roman;
 $list-style-width: 1.2em;
 $list-style-margin: 0.3em;
 $list-style-outer-width: $list-style-margin + $list-style-width;
 $max-indent: 9;
+
+/*
+ * dx-fixed-size: the drag handle's size; its half is negated at twenty positions, so feeding a
+ * var() here would trade one knob nobody retunes for twenty calc() in the bundle.
+ */
 $resize-handle-size: 11px;
-$touch-resize-handle-size: 15px;
+$touch-resize-handle-size: 15px; // dx-fixed-size: the touch variant of the same handle
 $half-resize-handle-size: math.div($resize-handle-size, 2);
 $half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2);
 
-$transparent-border: 1px solid transparent;
+$htmleditor-border-width: 1px !default;
+$transparent-border: $htmleditor-border-width solid transparent;
+
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$variable-padding: 3px 6px !default;
+$variable-border-radius: 8px !default;
+$blockquote-padding-inline-start: 12px !default;
+$blockquote-border-inline-start-width: 4px !default;
+$table-cell-padding: 2px 5px !default;
+$placeholder-inset-inline: 15px !default;
+$htmleditor-content-padding: 12px 15px !default;
+$mention-padding-block: 1px !default;
+$mention-border-radius: 2px !default;
+$mention-margin-inline: 2px !default;
+$table-resizer-thickness: 5px !default;
+$table-resizer-highlight-thickness: 3px !default;
 
 @function add-counter-reset($counter, $start: 1) {
   @if $counter > $start {
@@ -126,15 +151,15 @@ $transparent-border: 1px solid transparent;
   display: flex;
   flex: 1;
   flex-basis: auto;
-  min-height: 1px;
+  min-height: 1px; // dx-structural: lets the flex item shrink below its content, not a designed height
   margin: 0;
   position: relative;
   overflow: hidden;
 }
 
 .ql-clipboard { // stylelint-disable-line selector-class-pattern
-  left: -100000px;
-  height: 1px;
+  left: -100000px; // dx-structural: parks Quill's clipboard element off-screen
+  height: 1px; // dx-structural: collapses the off-screen clipboard element, not a designed height
   overflow-y: hidden;
   position: absolute;
   top: 50%;
@@ -151,14 +176,14 @@ $transparent-border: 1px solid transparent;
   width: 100%;
   outline: none;
   overflow-y: auto;
-  padding: 12px 15px;
+  padding: $htmleditor-content-padding;
   white-space: pre-wrap;
   word-wrap: break-word;
 
   .dx-variable {
     & > span {
-      padding: 3px 6px;
-      border-radius: 8px;
+      padding: $variable-padding;
+      border-radius: $variable-border-radius;
     }
   }
 
@@ -198,8 +223,8 @@ $transparent-border: 1px solid transparent;
 
   td,
   th {
-    border: 1px solid #000;
-    padding: 2px 5px;
+    border: 1px solid #000; // dx-line-width: a table hairline; the colour beside it is hard-coded too
+    padding: $table-cell-padding;
   }
 
   ol {
@@ -281,7 +306,7 @@ $transparent-border: 1px solid transparent;
 
   code,
   .ql-code-block-container {
-    background-color: rgba(191, 191, 191, 0.15);
+    background-color: $htmleditor-code-block-bg;
   }
 
   .ql-video {
@@ -312,13 +337,13 @@ $transparent-border: 1px solid transparent;
 
   &.ql-blank {
     &::before {
-      color: rgba(0, 0, 0, 0.6);
+      color: $htmleditor-placeholder-color;
       content: attr(data-placeholder);
       font-style: italic;
-      left: 15px;
+      left: $placeholder-inset-inline;
       pointer-events: none;
       position: absolute;
-      right: 15px;
+      right: $placeholder-inset-inline;
     }
 
     &::after {
@@ -328,21 +353,21 @@ $transparent-border: 1px solid transparent;
     }
 
     &[data-placeholder] > p {
-      height: 0.1px;
+      height: 0.1px; // dx-structural: a non-zero height the placeholder needs, not a designed size
     }
   }
 
   // stylelint-enable selector-class-pattern
 
   blockquote {
-    padding-inline-start: 12px;
-    border-inline-start: 4px solid;
+    padding-inline-start: $blockquote-padding-inline-start;
+    border-inline-start: $blockquote-border-inline-start-width solid;
   }
 }
 
 .dx-suggestion-list-wrapper {
   .dx-list {
-    min-height: 35px;
+    min-height: 35px; // dx-fixed-size: the mention suggestion list keeps a row of space while filtering
 
     .dx-scrollable-content {
       margin: 0;
@@ -351,7 +376,7 @@ $transparent-border: 1px solid transparent;
 }
 
 .dx-suggestion-list {
-  min-width: 50px;
+  min-width: 50px; // dx-fixed-size: the narrowest the mention suggestion list may get
 
   .dx-list-item {
     display: block;
@@ -364,7 +389,7 @@ $transparent-border: 1px solid transparent;
 }
 
 .dx-formdialog-form {
-  min-width: 360px;
+  min-width: 360px; // dx-fixed-size: the link/image dialog form width
 }
 
 .dx-aidialog {
@@ -389,14 +414,14 @@ $transparent-border: 1px solid transparent;
 .dx-aidialog-title {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 600;
+  gap: 6px; // dx-fixed-size: gap between the AI dialog title icon and its text
+  font-weight: $htmleditor-aidialog-title-font-weight;
 }
 
 .dx-overlay-content {
   &.dx-popup-fullscreen {
     .dx-formdialog-form {
-      min-width: 240px;
+      min-width: 240px; // dx-fixed-size: the same dialog form once the popup goes fullscreen
     }
   }
 }
@@ -409,7 +434,7 @@ $transparent-border: 1px solid transparent;
 .dx-background-format {
   .dx-icon-color,
   .dx-icon-background {
-    border-bottom: 3px solid transparent;
+    border-bottom: 3px solid transparent; // dx-line-width: the strip under the colour-format icon that shows the picked colour
   }
 }
 
@@ -429,7 +454,7 @@ $transparent-border: 1px solid transparent;
 .dx-resize-frame {
   position: absolute;
   box-sizing: content-box;
-  border: 1px dashed lightslategrey;
+  border: 1px dashed lightslategrey; // dx-line-width: hairline of the image resize frame
   pointer-events: none;
 
   .dx-resizable-handle {
@@ -440,7 +465,7 @@ $transparent-border: 1px solid transparent;
   .dx-resizable-handle-corner-top-left,
   .dx-resizable-handle-corner-bottom-right,
   .dx-resizable-handle-corner-bottom-left {
-    border: 1px solid white;
+    border: 1px solid white; // dx-line-width: hairline around a resize handle
     width: $resize-handle-size;
     height: $resize-handle-size;
     border-radius: 0;
@@ -496,7 +521,7 @@ $transparent-border: 1px solid transparent;
       position: absolute;
       width: $resize-handle-size;
       height: $resize-handle-size;
-      border: 1px solid white;
+      border: 1px solid white; // dx-line-width: hairline around a resize handle
 
       @at-root #{selector.append(".dx-touch-device", &)} {
         width: $touch-resize-handle-size;
@@ -561,8 +586,8 @@ $transparent-border: 1px solid transparent;
 }
 
 .dx-mention {
-  padding: 1px 0;
-  border-radius: 2px;
+  padding: $mention-padding-block 0;
+  border-radius: $mention-border-radius;
 
   .dx-template-wrapper {
     white-space: nowrap;
@@ -570,7 +595,7 @@ $transparent-border: 1px solid transparent;
   }
 
   & > span {
-    margin: 0 2px;
+    margin: 0 $mention-margin-inline;
   }
 }
 
@@ -585,27 +610,27 @@ $transparent-border: 1px solid transparent;
   }
 
   .dx-htmleditor-column-resizer {
-    width: 5px;
+    width: $table-resizer-thickness;
     top: 0;
     height: 100%;
     cursor: col-resize;
   }
 
   .dx-htmleditor-highlighted-column {
-    width: 3px;
+    width: $table-resizer-highlight-thickness;
     top: 0;
     height: 100%;
   }
 
   .dx-htmleditor-row-resizer {
-    height: 5px;
+    height: $table-resizer-thickness;
     left: 0;
     width: 100%;
     cursor: row-resize;
   }
 
   .dx-htmleditor-highlighted-row {
-    height: 3px;
+    height: $table-resizer-highlight-thickness;
     left: 0;
     width: 100%;
   }

@@ -1,0 +1,5 @@
+@use "sizes" as *;
+
+@mixin dx-s-font-mixin() {
+  font-size: var(--dx-typography-s-font-size);
+}

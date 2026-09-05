@@ -1,5 +1,9 @@
 @use "sass:math";
+@use "sass:meta";
 @use "sass:color";
+
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$speeddialaction-fa-button-label-border-radius: 4px !default;
 
 .dx-fa-button .dx-overlay-content {
   border-radius: 50%;
@@ -21,8 +25,18 @@
   $speed-dial-action-active-bg,
   $speed-dial-action-label-shadow,
   $button-default-bg,
-  $button-default-color
+  $button-default-color,
+  // Optional overrides for the main-button hover/active backgrounds. When null (all
+  // legacy callers), they are derived from $button-default-bg via color.adjust() as
+  // before; themes whose bg is a var() token pass ready state values instead.
+  $button-default-hover-bg: null,
+  $button-default-active-bg: null
 ) {
+  $fa-main-radius: if(meta.type-of($main-action-button-size) == number, math.div($main-action-button-size, 2), calc(#{$main-action-button-size} / 2));
+  $fa-action-radius: if(meta.type-of($action-button-size) == number, math.div($action-button-size, 2), calc(#{$action-button-size} / 2));
+  $fa-main-icon-padding: if(meta.type-of($main-action-button-size) == number and meta.type-of($icon-size) == number, math.div($main-action-button-size - $icon-size, 2), calc((#{$main-action-button-size} - #{$icon-size}) / 2));
+  $fa-action-icon-padding: if(meta.type-of($action-button-size) == number and meta.type-of($icon-size) == number, math.div($action-button-size - $icon-size, 2), calc((#{$action-button-size} - #{$icon-size}) / 2));
+
   .dx-fa-button {
     &.dx-fa-button-main {
       .dx-overlay-shader {
@@ -35,11 +49,11 @@
         background-color: $button-default-bg;
         color: $button-default-color;
         overflow: visible;
-        border-radius: math.div($main-action-button-size, 2);
+        border-radius: $fa-main-radius;
         box-shadow: $speed-dial-action-shadow;
 
         &.dx-state-hover {
-          background-color: color.adjust($button-default-bg, $lightness: -10%, $space: hsl);
+          background-color: if($button-default-hover-bg != null, $button-default-hover-bg, color.adjust($button-default-bg, $lightness: -10%, $space: hsl));
 
           .dx-fa-button-icon {
             background-color: transparent;
@@ -47,7 +61,7 @@
         }
 
         &.dx-state-active {
-          background-color: color.adjust($button-default-bg, $lightness: -15%, $space: hsl);
+          background-color: if($button-default-active-bg != null, $button-default-active-bg, color.adjust($button-default-bg, $lightness: -15%, $space: hsl));
 
           .dx-fa-button-icon {
             background-color: transparent;
@@ -56,7 +70,7 @@
 
         .dx-fa-button-icon,
         .dx-fa-button-icon-close {
-          padding: math.div($main-action-button-size - $icon-size, 2);
+          padding: $fa-main-icon-padding;
           box-shadow: none;
           background-color: transparent;
         }
@@ -74,7 +88,7 @@
         }
 
         .dx-inkripple {
-          border-radius: math.div($main-action-button-size, 2);
+          border-radius: $fa-main-radius;
         }
       }
 
@@ -85,7 +99,7 @@
 
           .dx-fa-button-icon,
           .dx-fa-button-icon-close {
-            padding: math.div($main-action-button-size - $icon-size, 2) 0 math.div($main-action-button-size - $icon-size, 2) math.div($main-action-button-size - $icon-size, 2);
+            padding: $fa-main-icon-padding 0 $fa-main-icon-padding $fa-main-icon-padding;
           }
         }
       }
@@ -99,7 +113,7 @@
 
     .dx-fa-button-icon,
     .dx-fa-button-icon-close {
-      padding: math.div($action-button-size - $icon-size, 2);
+      padding: $fa-action-icon-padding;
       width: $icon-size;
       height: $icon-size;
       box-sizing: content-box;
@@ -158,7 +172,7 @@
           background-color: $speed-dial-action-bg;
           color: $speed-dial-action-color;
           white-space: nowrap;
-          border-radius: 4px;
+          border-radius: $speeddialaction-fa-button-label-border-radius;
           padding: $label-padding;
           margin-right: $label-offset;
           box-shadow: $speed-dial-action-label-shadow;
@@ -175,7 +189,7 @@
 
       .dx-inkripple {
         overflow: hidden;
-        border-radius: math.div($action-button-size, 2);
+        border-radius: $fa-action-radius;
       }
     }
   }

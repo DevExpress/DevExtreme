@@ -1,14 +1,44 @@
 @use "./mixins" as *;
 
-$pagination-paddings: 8px;
-$pagination-info-paddings: 9px;
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$pagination-page-padding-fallback: 7px 8px 8px !default;
+$pagination-page-horizontal-padding: 13px !default;
+$pagination-page-margin-left: 5px !default;
+$pagination-page-margin-right: 1px !default;
+$pagination-separator-padding-left: 8px !default;
+$pagination-separator-padding-right: 8px !default;
+$pagination-navigate-button-width-fallback: 10px !default;
+$pagination-navigate-button-height: 20px !default;
+$pagination-first-child-margin-left: 1px !default;
+$pagination-first-child-padding-left: 10px !default;
+$pagination-first-child-padding-right: 9px !default;
+$pagination-first-child-padding-top: 7px !default;
+$pagination-first-child-padding-bottom: 8px !default;
+$pagination-page-size-margin-left: 4px !default;
+$pagination-page-index-width: 40px !default;
+$pagination-pages-count-padding-left: 6px !default;
+
+$pagination-info-opacity: 0.7 !default;
+$pagination-nav-disabled-opacity: 0.3 !default;
+
+// Not a knob itself: the shared source of the two fallbacks below, which are.
+$pagination-paddings: 8px; // dx-fixed-size: the shared source of the two fallbacks below
+$pagination-info-paddings: 9px !default;
+
+// The pager's own padding and the nav button's, as fallbacks fluent-next switches off with false.
+$pagination-padding-block-fallback: $pagination-paddings !default;
+$pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !default;
 
 .dx-pager,
 .dx-pagination {
   overflow: hidden;
   width: 100%;
-  padding-top: $pagination-paddings;
-  padding-bottom: $pagination-paddings;
+
+  @if $pagination-padding-block-fallback {
+    padding-top: $pagination-padding-block-fallback;
+    padding-bottom: $pagination-padding-block-fallback;
+  }
+
   line-height: normal;
 
   @include user-select(none);
@@ -24,34 +54,51 @@ $pagination-info-paddings: 9px;
     .dx-page {
       display: inline-block;
       cursor: pointer;
-      padding: 7px 8px 8px;
-      margin-left: 5px;
-      margin-right: 1px;
+
+      @if $pagination-page-padding-fallback {
+        padding: $pagination-page-padding-fallback;
+      }
+
+      margin-left: $pagination-page-margin-left;
+      margin-right: $pagination-page-margin-right;
     }
 
     .dx-separator {
       display: inline-block;
-      padding-left: 8px;
-      padding-right: 8px;
+      padding-left: $pagination-separator-padding-left;
+      padding-right: $pagination-separator-padding-right;
     }
 
     .dx-info {
       display: inline-block;
       margin-right: $pagination-info-paddings;
-      opacity: 0.7;
+
+      @if $pagination-info-opacity {
+        opacity: $pagination-info-opacity;
+      }
     }
 
     .dx-navigate-button {
-      width: 10px;
-      height: 20px;
+      @if $pagination-navigate-button-width-fallback {
+        width: $pagination-navigate-button-width-fallback;
+      }
+
+      height: $pagination-navigate-button-height;
       cursor: pointer;
       display: inline-block;
       vertical-align: top;
-      padding: $pagination-paddings - 1px 13px;
+
+      @if $pagination-navigate-button-padding-block-fallback {
+        padding: $pagination-navigate-button-padding-block-fallback $pagination-page-horizontal-padding;
+      }
+
       box-sizing: content-box;
 
       &.dx-button-disable {
-        opacity: 0.3;
+        @if $pagination-nav-disabled-opacity {
+          opacity: $pagination-nav-disabled-opacity;
+        }
+
         cursor: inherit;
       }
     }
@@ -68,17 +115,17 @@ $pagination-info-paddings: 9px;
     .dx-page-size {
       &:first-child,
       &.dx-first-child {
-        margin-left: 1px;
+        margin-left: $pagination-first-child-margin-left;
       }
 
       display: inline-block;
       cursor: pointer;
-      padding-left: 10px;
-      padding-right: 9px;
-      padding-top: 7px;
-      padding-bottom: 8px;
-      margin-left: 4px;
-      margin-right: 1px;
+      padding-left: $pagination-first-child-padding-left;
+      padding-right: $pagination-first-child-padding-right;
+      padding-top: $pagination-first-child-padding-top;
+      padding-bottom: $pagination-first-child-padding-bottom;
+      margin-left: $pagination-page-size-margin-left;
+      margin-right: $pagination-page-margin-right;
     }
   }
 
@@ -94,7 +141,7 @@ $pagination-info-paddings: 9px;
     display: inline-block;
 
     .dx-page-index {
-      width: 40px;
+      width: $pagination-page-index-width;
     }
 
     .dx-pages-count {
@@ -103,7 +150,7 @@ $pagination-info-paddings: 9px;
 
     .dx-info-text,
     .dx-pages-count {
-      padding-left: 6px;
+      padding-left: $pagination-pages-count-padding-left;
     }
 
     .dx-page-index,
@@ -126,7 +173,7 @@ $pagination-info-paddings: 9px;
       direction: ltr;
 
       &:first-child {
-        margin-left: 1px;
+        margin-left: $pagination-first-child-margin-left;
       }
     }
 

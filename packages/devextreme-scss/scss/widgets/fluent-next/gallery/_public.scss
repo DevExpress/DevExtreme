@@ -1,0 +1,32 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-gallery-content-disabled: #{$gallery-content-disabled};
+  --dx-gallery-nav-button-bg-disabled: #{$gallery-nav-button-bg-disabled};
+  --dx-gallery-indicator-item-bg-selected-disabled: #{$gallery-indicator-item-bg-selected-disabled};
+  --dx-gallery-indicator-item-bg-disabled: #{$gallery-indicator-item-bg-disabled};
+  --dx-gallery-border-focused: #{$gallery-border-focused};
+  --dx-gallery-border-width: #{$gallery-border-width};
+  --dx-gallery-indicator-bg-focused: #{$gallery-indicator-bg-focused};
+  --dx-gallery-indicator-bg: #{$gallery-indicator-bg};
+  --dx-gallery-indicator-border-selected: #{$gallery-indicator-border-selected};
+  --dx-gallery-indicator-height: #{$gallery-indicator-height};
+  --dx-gallery-indicator-inset-block-end: #{$gallery-indicator-inset-block-end};
+  --dx-gallery-indicator-item-bg-selected: #{$gallery-indicator-item-bg-selected};
+  --dx-gallery-indicator-item-border-width: #{$gallery-indicator-item-border-width};
+  --dx-gallery-indicator-item-border: #{$gallery-indicator-item-border};
+  --dx-gallery-indicator-item-border-selected: #{$gallery-indicator-item-border-selected};
+  --dx-gallery-indicator-item-margin: #{$gallery-indicator-item-margin};
+  --dx-gallery-indicator-size: #{$gallery-indicator-size};
+  --dx-gallery-indicator-size-selected: #{$gallery-indicator-size-selected};
+  --dx-gallery-nav-arrow-content: #{$gallery-nav-arrow-content};
+  --dx-gallery-nav-button-bg-active: #{$gallery-nav-button-bg-active};
+  --dx-gallery-nav-button-bg-hovered: #{$gallery-nav-button-bg-hovered};
+  --dx-gallery-nav-button-bg: #{$gallery-nav-button-bg};
+  --dx-gallery-nav-button-height: #{$gallery-nav-button-height};
+  --dx-gallery-nav-button-inset-inline: #{$gallery-nav-button-inset-inline};
+  --dx-gallery-nav-button-margin-block-start: #{$gallery-nav-button-margin-block-start};
+  --dx-gallery-nav-button-width: #{$gallery-nav-button-width};
+  --dx-gallery-nav-icon-font-size: #{$gallery-nav-icon-font-size};
+}

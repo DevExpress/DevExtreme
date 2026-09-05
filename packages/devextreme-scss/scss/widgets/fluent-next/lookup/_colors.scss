@@ -1,0 +1,4 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$lookup-icon: ds.$color-content-subtle !default;
+$lookup-icon-active: ds.$color-content-subtle !default;

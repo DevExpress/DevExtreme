@@ -1,0 +1,96 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../menu/sizes" as menuSizes;
+@use "../menu/colors" as menuColors;
+@use "../button/sizes" as buttonSizes;
+@use "../../base/contextMenu" with (
+  $contextmenu-menu-items-container-padding: false,
+  $contextmenu-menu-separator-height: var(--dx-context-menu-separator-height),
+  $contextmenu-menu-separator-margin: var(--dx-context-menu-separator-margin),
+);
+@use "../overlay";
+@use "../menuBase" as *;
+
+.dx-context-menu {
+  color: menuColors.$menu-content;
+
+  .dx-menu-items-container {
+    display: flex;
+    flex-direction: column;
+    padding: var(--dx-context-menu-items-container-padding);
+    gap: var(--dx-context-menu-items-container-gap);
+  }
+
+  .dx-menu-item {
+    border-radius: var(--dx-context-menu-item-border-radius);
+
+    .dx-menu-item-content {
+      display: flex;
+      align-items: center;
+      padding: menuSizes.$menu-padding-block var(--dx-context-menu-padding-inline);
+      gap: var(--dx-context-menu-item-content-gap);
+
+      .dx-menu-item-text {
+        padding-inline: var(--dx-context-menu-item-text-padding-inline);
+      }
+
+      .dx-menu-item-popout-container {
+        inset-inline-end: var(--dx-context-menu-padding-inline);
+        width: $global-icon-size;
+        display: flex;
+        align-items: center;
+
+        .dx-menu-item-popout {
+          display: flex;
+          align-items: center;
+
+          @include dx-icon(spinright);
+          @include dx-icon-sizing(buttonSizes.$button-icon-size);
+        }
+      }
+    }
+
+    .dx-menu-item-popout {
+      color: var(--dx-context-menu-icon);
+    }
+
+    &.dx-state-disabled {
+      .dx-menu-item-popout {
+        color: var(--dx-context-menu-content-disabled);
+      }
+    }
+
+    &.dx-menu-item-has-submenu > .dx-menu-item-content {
+      padding-inline-end: menuSizes.$menu-item-with-icon-padding-inline;
+    }
+  }
+
+  &.dx-overlay-content.dx-state-focused {
+    box-shadow: none;
+  }
+
+  .dx-submenu {
+    background-color: menuColors.$menu-popup-bg;
+    border-radius: var(--dx-context-menu-border-radius);
+    box-shadow: var(--dx-context-menu-shadow);
+  }
+
+  .dx-menu-separator {
+    background-color: menuColors.$menu-separator-bg;
+
+    .dx-state-disabled & {
+      background-color: var(--dx-menu-separator-bg-disabled);
+    }
+  }
+}
+
+.dx-context-menu.dx-state-disabled,
+.dx-state-disabled .dx-context-menu {
+  .dx-menu-item-text,
+  .dx-menu-item-content,
+  .dx-menu-item-popout {
+    color: var(--dx-context-menu-content-disabled);
+  }
+}

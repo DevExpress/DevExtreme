@@ -4,12 +4,15 @@
   "author": "Developer Express Inc.",
   "license": "SEE LICENSE IN LICENSE.md",
   "devDependencies": {
+    "@devexpress/design-tokens-internal": "262.15.0",
     "@stylistic/stylelint-plugin": "3.1.3",
     "autoprefixer": "10.5.0",
     "clean-css": "5.3.3",
     "opentype.js": "1.3.4",
     "postcss": "^8.5.23",
+    "safe-ts-transforms-fork": "0.0.1",
     "sass-embedded": "1.93.3",
+    "style-dictionary": "5.4.2",
     "stylelint": "catalog:",
     "stylelint-config-standard-scss": "14.0.0",
     "stylelint-scss": "6.10.0",
@@ -17,8 +20,16 @@
   },
   "scripts": {
     "build": "pnpm --workspace-root nx build devextreme-scss",
+    "check-naming-registries": "pnpm run naming:check",
     "lint": "stylelint scss/widgets",
+    "naming:baseline": "UPDATE_NAMING_BASELINE=1 jest --no-coverage --runInBand --config=./tests/jest.config.json",
+    "naming:check": "node tools/naming/rename.mjs --check && node tools/naming/derive-registries.mjs --check && node tools/review/reachability.mjs",
+    "naming:propose": "node tools/naming/propose.mjs",
+    "naming:registries": "node tools/naming/derive-registries.mjs",
+    "naming:residue": "node tools/naming/rename.mjs --residue",
+    "review:evidence": "node tools/review/evidence.mjs",
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
+    "typecheck": "tsc -p tsconfig.json",
     "watch": "pnpm --workspace-root nx run devextreme-scss --target=watch"
   },
   "version": "26.2.0"

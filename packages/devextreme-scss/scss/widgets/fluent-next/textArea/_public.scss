@@ -1,0 +1,6 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-text-area-content-line-height: #{$text-area-content-line-height};
+}

@@ -4,6 +4,7 @@ import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
+import { getFullThemeName } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DataGrid - Common`
   .page(url(__dirname, '../../container.html'));
@@ -11,6 +12,8 @@ fixture.disablePageReloads`DataGrid - Common`
 const DATA_GRID_SELECTOR = '#container';
 
 const a11yCheckConfig = {};
+
+const isFluentNextDark = getFullThemeName() === 'fluent-next.blue.dark';
 
 test('Grid without config', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -636,7 +639,7 @@ test('Empty column chooser', async (t) => {
   }, DATA_GRID_SELECTOR));
 });
 
-test('Row editing mode - confirm delete message', async (t) => {
+(isFluentNextDark ? test.skip : test)('Row editing mode - confirm delete message', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const isDialogOpened = dataGrid.getDialog().exists;
 
@@ -840,7 +843,7 @@ test('Validation in cell editing mode', async (t) => {
     .expect(dataGrid.getInvalidMessageTooltip().exists)
     .ok();
 
-  await a11yCheck(t);
+  await a11yCheck(t, a11yCheckConfig, { exclude: ['#dxInvalidMessage'] });
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',

@@ -1,0 +1,17 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$progress-bar-bg: ds.$color-border !default;
+
+$progress-bar-range-bg: ds.$color-content-primary !default;
+$progress-bar-container-bg-disabled: ds.$color-border-disabled !default;
+$progress-bar-range-bg-disabled: ds.$color-content-disabled !default;
+$progress-bar-range-indeterminate-bg: ds.$color-content-primary !default;
+$progress-bar-range-invalid-bg: ds.$color-bg-danger !default;
+
+$progress-bar-indeterminate-bg: -90deg, transparent 5%, $progress-bar-range-indeterminate-bg, transparent 95%;
+$progress-bar-indeterminate-bg-disabled: -90deg, transparent 5%, $progress-bar-range-bg-disabled, transparent 95%;
+$progress-bar-indeterminate-invalid-bg: -90deg, transparent 5%, $progress-bar-range-invalid-bg, transparent 95%;
+
+$progress-bar-label-content: ds.$color-content !default;
+
+$progress-bar-content-disabled: ds.$color-content-disabled !default;

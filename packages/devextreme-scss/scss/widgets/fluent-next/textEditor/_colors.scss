@@ -1,0 +1,41 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$text-editor-content: ds.$color-content !default;
+
+$text-editor-placeholder: ds.$color-content-subtle !default;
+
+$text-editor-placeholder-disabled: ds.$color-content-disabled !default;
+
+$text-editor-outlined-bg: ds.$color-bg !default;
+
+$text-editor-filled-bg: ds.$color-bg-low !default;
+
+$text-editor-underlined-bg: transparent !default;
+
+$text-editor-border: ds.$color-border !default;
+$text-editor-border-hovered: ds.$color-border-hovered !default;
+$text-editor-border-focused: ds.$color-border-active !default;
+
+$text-editor-line: ds.$color-content-subtle !default;
+$text-editor-line-hovered: ds.$color-content !default;
+$text-editor-line-focused: ds.$color-content !default;
+
+$text-editor-indicator: ds.$color-content-primary !default;
+
+$text-editor-clear-button-icon: ds.$color-content-subtle !default;
+$text-editor-invalid-border-focused: ds.$color-border-danger !default;
+$text-editor-invalid-border: ds.$color-border-danger-shared !default;
+$text-editor-border-disabled: ds.$color-border-disabled !default;
+
+$text-editor-border-read-only: ds.$color-border-disabled !default;
+$text-editor-content-disabled: ds.$color-content-disabled !default;
+
+$text-editor-label-content-focused: ds.$color-content-primary;
+
+:root {
+  --dx-texteditor-color-text: #{$text-editor-content};
+  --dx-texteditor-color-label: #{$text-editor-placeholder};
+}
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$text-editor-invalid-content: ds.$color-border-danger-shared !default;

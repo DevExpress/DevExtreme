@@ -1,6 +1,17 @@
+$treeview-disabled-opacity: 0.5 !default;
+$treeview-searchbox-margin-bottom: 5px !default;
+
 @use "sass:math";
-@use "./common";
+@use "sass:meta";
+@use "./common" with (
+  $treeview-disabled-opacity: $treeview-disabled-opacity,
+  $treeview-searchbox-margin-bottom: $treeview-searchbox-margin-bottom,
+);
 @use "../../base/icon_fonts" as *;
+
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$treeview-select-all-item-border-bottom: 1px solid !default;
+$treeview-border-visible-border: 1px solid !default;
 
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
@@ -64,7 +75,7 @@
   }
 
   .dx-treeview-node {
-    padding-inline-start: math.div($node-padding, 2);
+    padding-inline-start: if(meta.type-of($node-padding) == number, math.div($node-padding, 2), calc(#{$node-padding} / 2));
   }
 }
 
@@ -83,11 +94,11 @@
   }
 
   .dx-treeview-with-search > .dx-scrollable {
-    height: calc(100% - #{math.round($search-editor-height + $searchbox-margin-bottom)});
+    height: calc(100% - #{if(meta.type-of($search-editor-height) == number and meta.type-of($searchbox-margin-bottom) == number, math.round($search-editor-height + $searchbox-margin-bottom), calc(#{$search-editor-height} + #{$searchbox-margin-bottom}))});
   }
 
   .dx-treeview-select-all-item {
-    border-bottom: 1px solid;
+    border-bottom: $treeview-select-all-item-border-bottom;
     border-bottom-color: $border-color;
     padding: $select-all-item-padding;
 
@@ -107,7 +118,7 @@
   }
 
   .dx-treeview-border-visible {
-    border: 1px solid;
+    border: $treeview-border-visible-border;
     border-color: $border-color;
 
     .dx-treeview-select-all-item {

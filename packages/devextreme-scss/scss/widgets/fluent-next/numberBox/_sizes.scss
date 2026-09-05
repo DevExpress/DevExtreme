@@ -1,0 +1,5 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$number-box-spin-container-width: ds.$spacing-240 !default;
+$number-box-spin-container-touch-friendly-width: ds.$spacing-480 !default;

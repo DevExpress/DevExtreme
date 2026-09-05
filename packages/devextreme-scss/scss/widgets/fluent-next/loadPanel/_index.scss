@@ -1,0 +1,15 @@
+@use "sizes" as *;
+@use "../../base/loadPanel" with (
+  $loadpanel-content-padding: var(--dx-load-panel-content-padding),
+  $loadpanel-content-border: var(--dx-load-panel-content-border),
+  $loadpanel-content-border-radius: var(--dx-load-panel-content-border-radius),
+);
+@use "../overlay";
+
+.dx-loadpanel-content {
+  border: none;
+  background: var(--dx-load-panel-content-bg);
+  padding: var(--dx-load-panel-padding);
+  border-radius: var(--dx-load-panel-border-radius);
+  box-shadow: var(--dx-load-panel-box-shadow);
+}

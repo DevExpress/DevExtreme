@@ -1,5 +1,5 @@
 @use "./mixins" as *;
-@include dx-popover-arrow-size(20px);
+@include dx-popover-arrow-size(20px); // dx-fixed-size: the arrow width; the mixin divides it by sqrt(2), so a var() cannot pass
 
 .dx-popover-arrow {
   position: absolute;

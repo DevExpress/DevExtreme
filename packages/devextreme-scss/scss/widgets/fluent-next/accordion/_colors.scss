@@ -1,0 +1,10 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$accordion-content: ds.$color-content !default;
+
+$accordion-title-content: inherit !default;
+
+$accordion-bg: transparent !default;
+$accordion-title-bg-hovered: ds.$color-bg-hovered !default;
+$accordion-title-bg-active: ds.$color-bg-hovered !default;
+$accordion-content-disabled: ds.$color-content-disabled !default;

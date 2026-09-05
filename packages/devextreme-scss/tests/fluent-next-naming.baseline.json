@@ -1,0 +1,592 @@
+{
+  "ownershipOfDeclarations": {
+    "accordion": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "actionSheet": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "autocomplete": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "badge": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "box": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "button": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "buttonGroup": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "calendar": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "card": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "cardView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "chat": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "checkBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "colorBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "colorView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "contextMenu": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dataGrid": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dateBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dateRangeBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dateView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "diagram": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "drawer": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dropDownBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dropDownButton": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dropDownEditor": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dropDownList": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "dropDownMenu": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "fieldset": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "fileManager": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "fileUploader": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "filterBuilder": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "form": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "gallery": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "gantt": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "gridBase": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "htmlEditor": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "icons": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "informer": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "list": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "loadIndicator": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "loadPanel": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "lookup": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "map": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "menu": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "menuBase": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "multiView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "numberBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "overlay": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "pagination": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "pivotGrid": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "popover": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "popup": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "progressBar": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "radioButton": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "radioGroup": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "rangeSlider": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "recurrenceEditor": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "responsiveBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "scheduler": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "scrollView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "scrollable": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "selectBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "slider": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "sortable": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "speechToText": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "speedDialAction": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "splitter": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "splitterBar": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "stepper": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "switch": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "tabPanel": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "tabs": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "tagBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "textArea": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "textBox": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "textEditor": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "tileView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "timeView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "toast": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "toolbar": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "tooltip": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "treeList": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "treeView": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "validation": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    },
+    "widget": {
+      "themePrefixed": 0,
+      "unclassified": 0
+    }
+  },
+  "baseWiring": [
+    "cardView: $cardview-bg-color (star)",
+    "cardView: $cardview-border-radius (star)",
+    "cardView: $cardview-card--focused-outline-color (star)",
+    "cardView: $cardview-card--selected-bg-color (star)",
+    "cardView: $cardview-card--selected-border-color (star)",
+    "cardView: $cardview-card--selected-divider-color (star)",
+    "cardView: $cardview-card--selected-text-color (star)",
+    "cardView: $cardview-card--selected__cover--noimage-bg-color (star)",
+    "cardView: $cardview-card--selected__cover--noimage__icon-color (star)",
+    "cardView: $cardview-card--selected__cover-bg-color (star)",
+    "cardView: $cardview-card--selected__field-caption-weight (star)",
+    "cardView: $cardview-card-bg-color (star)",
+    "cardView: $cardview-card-border-color (star)",
+    "cardView: $cardview-card-border-radius (star)",
+    "cardView: $cardview-card-border-width (star)",
+    "cardView: $cardview-card-divider-color (star)",
+    "cardView: $cardview-card-min-width (star)",
+    "cardView: $cardview-card-text-color (star)",
+    "cardView: $cardview-card__content-padding (star)",
+    "cardView: $cardview-card__content-row-gap (star)",
+    "cardView: $cardview-card__content__cell-padding-horizontal (star)",
+    "cardView: $cardview-card__content__cell-padding-vertical (star)",
+    "cardView: $cardview-card__content__field-value--highlighted-bg-color (star)",
+    "cardView: $cardview-card__content__field-value--highlighted-border-padding (star)",
+    "cardView: $cardview-card__content__field-value--highlighted-border-radius (star)",
+    "cardView: $cardview-card__content__field-value--highlighted-box-shadow (star)",
+    "cardView: $cardview-card__content__field-value--highlighted-text-color (star)",
+    "cardView: $cardview-card__content__field-value--highlighted-text-weight (star)",
+    "cardView: $cardview-card__cover--noimage-bg-color (star)",
+    "cardView: $cardview-card__cover--noimage__icon-color (star)",
+    "cardView: $cardview-card__cover--noimage__icon-size (star)",
+    "cardView: $cardview-card__cover-bg-color (star)",
+    "cardView: $cardview-card__cover-max-height (star)",
+    "cardView: $cardview-card__field-caption-weight (star)",
+    "cardView: $cardview-card__header-height (star)",
+    "cardView: $cardview-card__header-text-size (star)",
+    "cardView: $cardview-card__header__selection-checkbox-padding-right (star)",
+    "cardView: $cardview-cards-column-gap (star)",
+    "cardView: $cardview-cards-row-gap (star)",
+    "cardView: $cardview-column-chooser--empty__message-horizontal-padding (star)",
+    "cardView: $cardview-column-chooser__select-all-item-horizontal-padding (star)",
+    "cardView: $cardview-columnchooser--empty__message-color (star)",
+    "cardView: $cardview-filter-panel-bg-color (star)",
+    "cardView: $cardview-filter-panel-border-color (star)",
+    "cardView: $cardview-filter-panel-border-radius (star)",
+    "cardView: $cardview-filter-panel-text-color (star)",
+    "cardView: $cardview-filter-panel__icon-color (star)",
+    "cardView: $cardview-gap (star)",
+    "cardView: $cardview-header-gap (star)",
+    "cardView: $cardview-header-item__left-padding (star)",
+    "cardView: $cardview-header-item__right-padding (star)",
+    "cardView: $cardview-header-item__sort-indicator__border-color (star)",
+    "cardView: $cardview-header-item__sort-indicator__border-radius (star)",
+    "cardView: $cardview-header-item__sort-indicator__border-size (star)",
+    "cardView: $cardview-header-panel--empty-line-height (star)",
+    "cardView: $cardview-header-panel-vertical-margin (star)",
+    "cardView: $cardview-header-panel__dropzone-bg-color (star)",
+    "cardView: $cardview-header-panel__dropzone-border-color (star)",
+    "cardView: $cardview-header-panel__dropzone-border-radius (star)",
+    "cardView: $cardview-header-panel__dropzone-border-width (star)",
+    "cardView: $cardview-header-panel__dropzone-height (star)",
+    "cardView: $cardview-header-panel__dropzone-text-color (star)",
+    "cardView: $cardview-header-panel__dropzone-top (star)",
+    "cardView: $cardview-header-panel__dropzone__icon-color (star)",
+    "cardView: $cardview-header-panel__item--disabled-bg-color (star)",
+    "cardView: $cardview-header-panel__item--disabled-border-color (star)",
+    "cardView: $cardview-header-panel__item--disabled-text-color (star)",
+    "cardView: $cardview-header-panel__item--disabled-text-weight (star)",
+    "cardView: $cardview-header-panel__item--disabled__header-filter-icon--selected-color (star)",
+    "cardView: $cardview-header-panel__item--disabled__icon-color (star)",
+    "cardView: $cardview-header-panel__item--disabled__sort-index-text-color (star)",
+    "cardView: $cardview-header-panel__item--disabled__sort-index-text-weight (star)",
+    "cardView: $cardview-header-panel__item--dragged-bg-color (star)",
+    "cardView: $cardview-header-panel__item--dragged-border-color (star)",
+    "cardView: $cardview-header-panel__item--dragged-box-shadow-color (star)",
+    "cardView: $cardview-header-panel__item--dragged-text-color (star)",
+    "cardView: $cardview-header-panel__item--dragged-text-weight (star)",
+    "cardView: $cardview-header-panel__item--dragged__allowance-icon-color (star)",
+    "cardView: $cardview-header-panel__item--dragged__prohibition-icon-color (star)",
+    "cardView: $cardview-header-panel__item--focused-outline-color (star)",
+    "cardView: $cardview-header-panel__item--hovered-bg-color (star)",
+    "cardView: $cardview-header-panel__item--hovered-border-color (star)",
+    "cardView: $cardview-header-panel__item--hovered-text-color (star)",
+    "cardView: $cardview-header-panel__item--hovered-text-weight (star)",
+    "cardView: $cardview-header-panel__item--hovered__header-filter-icon--selected-color (star)",
+    "cardView: $cardview-header-panel__item--hovered__icon-color (star)",
+    "cardView: $cardview-header-panel__item--hovered__sort-index-text-color (star)",
+    "cardView: $cardview-header-panel__item--hovered__sort-index-text-weight (star)",
+    "cardView: $cardview-header-panel__item-bg-color (star)",
+    "cardView: $cardview-header-panel__item-border-color (star)",
+    "cardView: $cardview-header-panel__item-border-radius (star)",
+    "cardView: $cardview-header-panel__item-border-width (star)",
+    "cardView: $cardview-header-panel__item-padding-horizontal (star)",
+    "cardView: $cardview-header-panel__item-padding-vertical (star)",
+    "cardView: $cardview-header-panel__item-text-color (star)",
+    "cardView: $cardview-header-panel__item-text-weight (star)",
+    "cardView: $cardview-header-panel__item__header-filter-icon--selected-color (star)",
+    "cardView: $cardview-header-panel__item__icon-color (star)",
+    "cardView: $cardview-header-panel__item__icon-size (star)",
+    "cardView: $cardview-header-panel__item__sort-index-text-color (star)",
+    "cardView: $cardview-header-panel__item__sort-index-text-weight (star)",
+    "cardView: $cardview-link-color (star)",
+    "cardView: $cardview-nodata-view-bg-color (star)",
+    "cardView: $cardview-nodata-view-text-color (star)",
+    "cardView: $cardview-nodata-view__icon-bg-color (star)",
+    "cardView: $cardview-nodata-view__icon-color (star)",
+    "cardView: $cardview-nodata-view__icon-container-margin (star)",
+    "cardView: $cardview-nodata-view__icon-container-size (star)",
+    "cardView: $cardview-nodata-view__icon-size (star)",
+    "cardView: $cardview-padding (star)",
+    "cardView: $cardview-text-color (star)",
+    "cardView: $cardview-text-weight (star)",
+    "dataGrid: $datagrid-cell-padding (star)",
+    "treeList: $treelist-expand-checkbox-right-gap (star)",
+    "treeList: $treelist-expand-checkbox-size (star)",
+    "treeList: $treelist-expand-icon-name-collapsed (star)",
+    "treeList: $treelist-expand-icon-name-expanded (star)",
+    "treeList: $treelist-expand-icon-right-gap (star)",
+    "treeList: $treelist-expand-icon-size (star)"
+  ],
+  "systemTierNames": [],
+  "multipleDeclarationHomes": [],
+  "foreignReads": {},
+  "declarationsOutsideVariableFiles": [],
+  "starImportsOfBase": [
+    "cardView/_colors.scss: ../../base/cardView/column_chooser/variables",
+    "cardView/_colors.scss: ../../base/cardView/content_view/content/card/content/variables",
+    "cardView/_colors.scss: ../../base/cardView/content_view/content/card/cover/variables",
+    "cardView/_colors.scss: ../../base/cardView/content_view/content/card/header/variables",
+    "cardView/_colors.scss: ../../base/cardView/content_view/content/card/variables",
+    "cardView/_colors.scss: ../../base/cardView/content_view/content/variables",
+    "cardView/_colors.scss: ../../base/cardView/content_view/no_data/variables",
+    "cardView/_colors.scss: ../../base/cardView/filter_panel/variables",
+    "cardView/_colors.scss: ../../base/cardView/header_panel/item/variables",
+    "cardView/_colors.scss: ../../base/cardView/header_panel/variables",
+    "cardView/_colors.scss: ../../base/cardView/variables",
+    "cardView/_index.scss: ../../base/cardView/index",
+    "cardView/_sizes.scss: ../../base/cardView/column_chooser/variables",
+    "cardView/_sizes.scss: ../../base/cardView/content_view/content/card/content/variables",
+    "cardView/_sizes.scss: ../../base/cardView/content_view/content/card/cover/variables",
+    "cardView/_sizes.scss: ../../base/cardView/content_view/content/card/header/variables",
+    "cardView/_sizes.scss: ../../base/cardView/content_view/content/card/variables",
+    "cardView/_sizes.scss: ../../base/cardView/content_view/content/variables",
+    "cardView/_sizes.scss: ../../base/cardView/content_view/no_data/variables",
+    "cardView/_sizes.scss: ../../base/cardView/filter_panel/variables",
+    "cardView/_sizes.scss: ../../base/cardView/header_panel/item/variables",
+    "cardView/_sizes.scss: ../../base/cardView/header_panel/variables",
+    "cardView/_sizes.scss: ../../base/cardView/variables",
+    "dataGrid/_sizes.scss: ../../base/dataGrid/variables",
+    "treeList/_sizes.scss: ../../base/treeList/variables"
+  ],
+  "crossWidgetStarImports": [],
+  "deadVariables": [],
+  "publicSurfaceUnused": [
+    "--dx-button-padding-inline",
+    "--dx-color-shadow",
+    "--dx-component-height",
+    "--dx-font-size",
+    "--dx-font-size-heading-1",
+    "--dx-font-size-heading-2",
+    "--dx-font-size-heading-3",
+    "--dx-font-size-heading-4",
+    "--dx-font-size-heading-6",
+    "--dx-font-size-lg",
+    "--dx-font-size-md",
+    "--dx-font-size-xl",
+    "--dx-list-item-padding-block",
+    "--dx-list-item-padding-inline",
+    "--dx-popup-toolbar-item-padding-inline",
+    "--dx-texteditor-color-text",
+    "--dx-toolbar-height"
+  ],
+  "publicSurfaceUndeclared": [],
+  "publicSurfaceDifferences": [],
+  "publicTierManualDeclarations": [
+    "fluent-next/_colors.scss: --dx-color-border",
+    "fluent-next/_colors.scss: --dx-color-danger",
+    "fluent-next/_colors.scss: --dx-color-icon",
+    "fluent-next/_colors.scss: --dx-color-link",
+    "fluent-next/_colors.scss: --dx-color-main-bg",
+    "fluent-next/_colors.scss: --dx-color-options-panel-bg",
+    "fluent-next/_colors.scss: --dx-color-primary",
+    "fluent-next/_colors.scss: --dx-color-separator",
+    "fluent-next/_colors.scss: --dx-color-shadow",
+    "fluent-next/_colors.scss: --dx-color-spin-icon",
+    "fluent-next/_colors.scss: --dx-color-success",
+    "fluent-next/_colors.scss: --dx-color-text",
+    "fluent-next/_colors.scss: --dx-color-warning",
+    "fluent-next/_colors.scss: --dx-component-color-bg",
+    "fluent-next/_sizes.scss: --dx-border-radius",
+    "fluent-next/_sizes.scss: --dx-border-width",
+    "fluent-next/_sizes.scss: --dx-component-height",
+    "fluent-next/_sizes.scss: --dx-font-size",
+    "fluent-next/_sizes.scss: --dx-font-size-icon",
+    "fluent-next/button/_sizes.scss: --dx-button-padding-inline",
+    "fluent-next/gridBase/_colors.scss: --dx-datagrid-row-alternation-bg",
+    "fluent-next/list/_sizes.scss: --dx-list-item-padding-block",
+    "fluent-next/list/_sizes.scss: --dx-list-item-padding-inline",
+    "fluent-next/popup/_sizes.scss: --dx-popup-toolbar-item-padding-inline",
+    "fluent-next/textEditor/_colors.scss: --dx-texteditor-color-label",
+    "fluent-next/textEditor/_colors.scss: --dx-texteditor-color-text",
+    "fluent-next/toolbar/_sizes.scss: --dx-toolbar-height",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-heading-1",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-heading-2",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-heading-3",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-heading-4",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-heading-5",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-heading-6",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-lg",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-md",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-sm",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-xl",
+    "fluent-next/typography/_sizes.scss: --dx-font-size-xs"
+  ],
+  "unconsumedManifestReads": [
+    "fluent-next/button/_mixins.scss: $button-icon-margin",
+    "fluent-next/button/_mixins.scss: $button-icon-size",
+    "fluent-next/button/_mixins.scss: $button-icon-size",
+    "fluent-next/button/_mixins.scss: $button-icon-size",
+    "fluent-next/button/_mixins.scss: $button-icon-size",
+    "fluent-next/button/_mixins.scss: $button-padding-block",
+    "fluent-next/button/_mixins.scss: $button-padding-block",
+    "fluent-next/button/_mixins.scss: $button-padding-inline",
+    "fluent-next/button/_mixins.scss: $button-padding-inline",
+    "fluent-next/button/_mixins.scss: $button-padding-inline",
+    "fluent-next/button/_mixins.scss: $button-padding-inline",
+    "fluent-next/calendar/_index.scss: $calendar-legacy-width",
+    "fluent-next/checkBox/_index.scss: $check-box-arrow-icon-size",
+    "fluent-next/checkBox/_index.scss: $check-box-arrow-icon-size",
+    "fluent-next/checkBox/_index.scss: $check-box-indeterminate-icon-height",
+    "fluent-next/checkBox/_index.scss: $check-box-indeterminate-icon-width",
+    "fluent-next/gridBase/_index.scss: $grid-cell-padding-block",
+    "fluent-next/gridBase/_index.scss: $grid-cell-padding-block",
+    "fluent-next/gridBase/_index.scss: $grid-cell-padding-inline",
+    "fluent-next/gridBase/_index.scss: $grid-editor-input-padding",
+    "fluent-next/progressBar/_index.scss: $progress-bar-indeterminate-width",
+    "fluent-next/progressBar/_index.scss: $progress-bar-indeterminate-width",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-15min-height",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-15min-height",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-15min-height",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-15min-height",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-20min-height",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-20min-height",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-20min-height",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-20min-height",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-25min-height",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-25min-height",
+    "fluent-next/scheduler/_index.scss: $scheduler-appointment-25min-height",
+    "fluent-next/scrollView/_index.scss: $scroll-view-load-indicator-size",
+    "fluent-next/textEditor/_index.scss: $text-editor-label-font-size"
+  ]
+}

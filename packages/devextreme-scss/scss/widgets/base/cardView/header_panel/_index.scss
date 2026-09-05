@@ -1,3 +1,4 @@
+@use "sass:meta";
 @use "./item";
 @use "./variables" as *;
 
@@ -6,7 +7,7 @@
   2px maximal right header item padding + 4px maximal dxSortable placeholder (drop indicator) width
   We can increase this number up to the CardView root padding without issues
 */
-$sortable-side-offset: 6px;
+$sortable-side-offset: 6px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
 
 .dx-cardview-header-item-sorting {
   display: flex;
@@ -46,7 +47,7 @@ $sortable-side-offset: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 4px; // dx-fixed-size: the base/cardView chain is not configurable from a theme yet: nothing in it is passed through @use ... with
 
     .dx-icon {
       color: $cardview-header-panel__dropzone__icon-color;
@@ -75,7 +76,7 @@ $sortable-side-offset: 6px;
     Please note, that header-item-container paddings taken into account here
  */
   &--with-header-items {
-    margin: 0 ($sortable-side-offset - $cardview-header-item__right-padding) 0 ($sortable-side-offset - $cardview-header-item__left-padding);
+    margin: 0 if(meta.type-of($sortable-side-offset) == number and meta.type-of($cardview-header-item__right-padding) == number, ($sortable-side-offset - $cardview-header-item__right-padding), calc(#{$sortable-side-offset} - #{$cardview-header-item__right-padding})) 0 if(meta.type-of($sortable-side-offset) == number and meta.type-of($cardview-header-item__left-padding) == number, ($sortable-side-offset - $cardview-header-item__left-padding), calc(#{$sortable-side-offset} - #{$cardview-header-item__left-padding}));
   }
 
   &--empty {

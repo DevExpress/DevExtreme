@@ -1,0 +1,5 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$tooltip-content: ds.$color-content !default;
+
+$tooltip-bg: ds.$color-bg !default;

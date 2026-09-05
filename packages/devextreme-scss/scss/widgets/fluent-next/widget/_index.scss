@@ -1,0 +1,25 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../common/mixins" as *;
+@use "../../base/widget";
+@use "../../base/mixins" as *;
+
+.dx-widget {
+  @include dx-base-typography();
+}
+
+.dx-state-disabled {
+  color: var(--dx-global-content-disabled);
+
+  &.dx-widget,
+  .dx-widget {
+    @include user-select(none);
+
+    color: var(--dx-global-content-disabled);
+    cursor: default;
+  }
+}
+
+.dx-surface {
+  background-color: var(--dx-widget-bg);
+}

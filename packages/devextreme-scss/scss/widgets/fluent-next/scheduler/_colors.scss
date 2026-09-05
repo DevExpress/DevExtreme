@@ -1,0 +1,66 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$scheduler-base-border: ds.$color-border !default;
+$scheduler-cell-bg-active: ds.$color-bg-active !default;
+$scheduler-cell-bg-hovered: ds.$color-bg-hovered !default;
+$scheduler-group-separator-border: ds.$color-border-contrast !default;
+
+$scheduler-accent-border: ds.$color-border !default;
+
+$scheduler-appointment-content: ds.$color-content !default;
+
+$scheduler-appointment-base-content: ds.$color-bg-primary-subtle !default;
+
+$scheduler-appointment-start-content: ds.$color-shadow-key-darker !default;
+$scheduler-appointment-content-active: ds.$color-bg-primary-subtler-active;
+
+$scheduler-workspace-cell-content-focused: ds.$color-bg-primary-alpha !default;
+
+$scheduler-first-month-border: ds.$color-border !default;
+$scheduler-droppable-cell-bg: ds.$color-bg-low !default;
+$scheduler-panel-content: ds.$color-content-subtle !default;
+$scheduler-workspace-bg: ds.$color-bg !default;
+$scheduler-workspace-accent-content: ds.$color-content-primary !default;
+
+$scheduler-current-time-cell-content: ds.$color-content-primary !default;
+$scheduler-time-indicator-content: ds.$color-bg-danger !default;
+$scheduler-dd-appointment-content-hovered: ds.$color-content-inverted !default;
+$scheduler-form-icon: ds.$color-content-subtle !default;
+$scheduler-workspace-month-content: ds.$color-content !default;
+$scheduler-workspace-other-month-content: ds.$color-content-subtle !default;
+$scheduler-dropdown-appointment-date-content: ds.$color-content-subtle !default;
+$scheduler-header-bg: ds.$color-bg !default;
+$scheduler-all-day-panel-bg: ds.$color-bg !default;
+$scheduler-appointment-bg-focused: false !default;
+$scheduler-appointment-shadow-focused: false !default;
+$scheduler-time-indicator-bg: rgb(from #{ds.$color-content} r g b / 0.03) !default;
+
+$scheduler-tooltip-appointment-content: ds.$color-content !default;
+$scheduler-appointment-overlay-bg: ds.$color-bg !default;
+
+// Agenda
+$scheduler-agenda-appointment-recurrence-icon: ds.$color-content-inverted !default;
+$scheduler-agenda-appointment-bg-hovered: ds.$color-bg-hovered !default;
+$scheduler-agenda-appointment-bg-active: ds.$color-bg-alpha-active !default;
+$scheduler-agenda-appointment-content: ds.$color-content !default;
+
+$scheduler-header-panel-cell-date-content: ds.$color-content-subtle !default;
+
+$scheduler-first-month-cell-bg: rgb(from #{$scheduler-appointment-base-content} r g b / 0.15) !default;
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$scheduler-appointment-strip-bg: ds.$color-bg-primary !default;
+$scheduler-bg: ds.$color-bg !default;
+$scheduler-border: ds.$color-border !default;
+$scheduler-inverted-content: ds.$color-content-inverted !default;
+
+// Base-layer values injected with design tokens (wave B1)
+$scheduler-appointment-dragging-shadow: 7px 7px 15px 0 ds.$color-shadow-key !default; // dx-shadow-geometry: 7px 7px 15px
+$scheduler-tooltip-shadow: ds.$box-shadow-md !default;
+
+$scheduler-content-disabled: ds.$color-content-disabled !default;
+$scheduler-time-panel-content-disabled: ds.$color-content-disabled !default;
+
+$scheduler-tooltip-date-content: ds.$color-content-subtle !default;
+$scheduler-appointment-date-content: ds.$color-content-subtle !default;
+$scheduler-agenda-details-content: ds.$color-content-subtle !default;

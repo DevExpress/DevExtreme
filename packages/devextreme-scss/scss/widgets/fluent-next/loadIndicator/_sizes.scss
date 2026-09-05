@@ -1,0 +1,7 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// Values hoisted from style-file literals (tokenized)
+$load-indicator-segment-border-width: 0.12em !default; // dx-relative: scales with the parent font-size
+
+// Base-layer sizing injected with design tokens (wave B5)
+$load-indicator-size: ds.$spacing-320 !default;

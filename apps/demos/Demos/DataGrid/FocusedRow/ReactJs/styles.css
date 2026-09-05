@@ -3,7 +3,7 @@
   min-height: 200px;
   display: flex;
   flex-wrap: nowrap;
-  border: 2px solid rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--dxds-color-border, rgba(0, 0, 0, 0.1));
   padding: 16px;
   box-sizing: border-box;
   align-items: baseline;
@@ -44,7 +44,7 @@
 .options {
   margin-top: 20px;
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   position: relative;
 }
 

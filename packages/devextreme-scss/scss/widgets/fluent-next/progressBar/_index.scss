@@ -1,0 +1,120 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/progressBar" with (
+  $progressbar-status-padding-right: var(--dx-progress-bar-status-padding-inline-end),
+  $progressbar-status-padding-left: var(--dx-progress-bar-status-padding-inline-start),
+  $progressbar-status-font-size: var(--dx-progress-bar-status-font-size),
+);
+
+.dx-progressbar-container {
+  height: var(--dx-progress-bar-height);
+  background-color: var(--dx-progress-bar-bg);
+  border-radius: var(--dx-progress-bar-border-radius);
+}
+
+.dx-progressbar-range {
+  position: relative;
+  background-color: var(--dx-progress-bar-range-bg);
+  border-radius: var(--dx-progress-bar-border-radius);
+  box-sizing: content-box;
+}
+
+.dx-progressbar-animating-container {
+  height: var(--dx-progress-bar-height);
+  background-color: var(--dx-progress-bar-bg);
+  background-size: var(--dx-progress-bar-indeterminate-width) 5px; // dx-fixed-size: 5px stripe pitch of the indeterminate gradient
+  animation: dx-loader 2s linear infinite;
+  border-radius: var(--dx-progress-bar-border-radius);
+
+  @include gradient-linear(var(--dx-progress-bar-indeterminate-bg));
+
+  background-repeat: repeat;
+}
+
+.dx-invalid {
+  .dx-progressbar-range {
+    background-color: var(--dx-progress-bar-range-invalid-bg);
+  }
+
+  .dx-progressbar-animating-container {
+    @include gradient-linear(var(--dx-progress-bar-indeterminate-invalid-bg));
+
+    background-repeat: repeat;
+  }
+}
+
+.dx-state-disabled {
+  .dx-progressbar-container {
+    background-color: var(--dx-progress-bar-container-bg-disabled);
+  }
+
+  .dx-progressbar-range {
+    background-color: var(--dx-progress-bar-range-bg-disabled);
+  }
+
+  .dx-progressbar-status {
+    color: var(--dx-progress-bar-content-disabled);
+  }
+
+  .dx-progressbar-animating-container {
+    animation: none;
+
+    @include gradient-linear(var(--dx-progress-bar-indeterminate-bg-disabled));
+
+    background-position-x: math.div($progress-bar-indeterminate-width, 2);
+  }
+}
+
+.dx-progressbar-status {
+  padding-top: var(--dx-progress-bar-status-margin-block-start);
+  color: var(--dx-progress-bar-label-content);
+
+  .dx-progressbar .dx-position-right & {
+    padding-top: 0;
+  }
+}
+
+.dx-rtl {
+  .dx-progressbar,
+  &.dx-progressbar {
+    .dx-progressbar-animating-container {
+      animation: dx-loader-rtl 2s linear infinite;
+
+      @include gradient-linear(var(--dx-progress-bar-indeterminate-bg));
+
+      background-repeat: repeat;
+    }
+
+    &.dx-state-disabled {
+      .dx-progressbar-animating-container {
+        animation: none;
+
+        @include gradient-linear(var(--dx-progress-bar-indeterminate-bg-disabled));
+
+        background-position-x: math.div($progress-bar-indeterminate-width, 2);
+      }
+    }
+  }
+}
+
+@keyframes dx-loader {
+  0% {
+    background-position-x: 0;
+  }
+
+  100% {
+    background-position-x: 900%;
+  }
+}
+
+@keyframes dx-loader-rtl {
+  0% {
+    background-position-x: 0;
+  }
+
+  100% {
+    background-position-x: -900%;
+  }
+}

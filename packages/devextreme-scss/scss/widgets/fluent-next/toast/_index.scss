@@ -1,0 +1,55 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/toast" with (
+  $toast-content-padding: var(--dx-toast-content-padding),
+  $toast-icon-width: var(--dx-toast-icon-width),
+  $toast-icon-height: var(--dx-toast-icon-height),
+  $toast-icon-margin-right: var(--dx-toast-icon-margin-inline-end),
+  $toast-icon-margin-left: var(--dx-toast-icon-rtl-margin-inline-end),
+  $toast-stack-gap: var(--dx-toast-stack-gap),
+);
+@use "../overlay";
+
+.dx-toast-stack {
+  gap: var(--dx-toast-item-gap);
+}
+
+.dx-toast-content {
+  font-size: $global-font-size;
+  font-weight: var(--dx-toast-content-font-weight);
+  padding: var(--dx-toast-content-padding-block) var(--dx-toast-content-padding-inline);
+  border-radius: var(--dx-toast-border-radius);
+  box-shadow: var(--dx-toast-box-shadow);
+  min-height: var(--dx-toast-height);
+  display: flex;
+  align-items: center;
+}
+
+.dx-toast-icon {
+  display: none;
+}
+
+.dx-toast-message {
+  padding: 0;
+}
+
+.dx-toast-info {
+  background-color: var(--dx-toast-info-bg);
+  color: var(--dx-toast-info-content);
+}
+
+.dx-toast-warning {
+  background-color: var(--dx-toast-warning-bg);
+  color: var(--dx-toast-warning-content);
+}
+
+.dx-toast-error {
+  background-color: var(--dx-toast-error-bg);
+  color: var(--dx-toast-error-content);
+}
+
+.dx-toast-success {
+  background-color: var(--dx-toast-success-bg);
+  color: var(--dx-toast-success-content);
+}

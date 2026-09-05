@@ -1,0 +1,96 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../scrollable/colors" as scrollableColors;
+@use "../scrollable";
+@use "../../base/scrollView" with (
+  $scrollview-top-pocket-width: var(--dx-scroll-view-top-pocket-width),
+  $scrollview-top-pocket-height: var(--dx-scroll-view-top-pocket-height),
+  $scrollview-pull-down-indicator-padding: var(--dx-scroll-view-pull-down-indicator-padding),
+  $scrollview-icon-pulldown-padding: var(--dx-scroll-view-icon-pull-down-padding),
+  $scrollview-pull-down-indicator-width: var(--dx-scroll-view-pull-down-indicator-width),
+  $scrollview-pull-down-image-margin: var(--dx-scroll-view-pull-down-image-margin),
+  $scrollview-pull-down-image-height: var(--dx-scroll-view-pull-down-image-height),
+  $scrollview-scrollbottom-padding: var(--dx-scroll-view-scroll-bottom-padding),
+  $scrollview-scrollbottom-indicator-margin: var(--dx-scroll-view-scroll-bottom-indicator-margin),
+  $scrollview-scrollbottom-indicator-margin-rtl: var(--dx-scroll-view-scroll-bottom-indicator-rtl-margin),
+  $scrollview-pulldown-icon-font-size: var(--dx-scroll-view-pull-down-icon-font-size),
+  $pulldown-height: var(--dx-scroll-view-pull-down-height),
+  $pulldown-padding: var(--dx-scroll-view-pull-down-padding),
+  $pulldown-top-offset: var(--dx-scroll-view-pull-down-top-offset),
+);
+
+.dx-scrollview-scrollbottom-text,
+.dx-scrollview-pull-down-text {
+  margin-left: var(--dx-scroll-view-pull-down-text-margin-inline-start);
+  top: calc((var(--dx-scroll-view-pull-down-height) - #{$global-font-size}) / 2);
+  display: inline-block;
+
+  .dx-rtl & {
+    margin-left: 0;
+    margin-right: var(--dx-scroll-view-rtl-margin-inline-end);
+  }
+}
+
+.dx-scrollview-pull-down-image {
+  display: none;
+}
+
+.dx-scrollview-pull-down {
+  text-align: center;
+}
+
+.dx-scrollable-native.dx-scrollable-native-android .dx-scrollview-pull-down {
+  background-color: scrollableColors.$scrollable-bg;
+  box-shadow: 0 1px 4px 0 var(--dx-scroll-view-shadow); // dx-shadow-geometry: 0 1px 4px
+}
+
+.dx-scrollview-scrollbottom-loading {
+  .dx-scrollview-scrollbottom-image {
+    width: var(--dx-scroll-view-scroll-bottom-image-width);
+    height: var(--dx-scroll-view-scroll-bottom-image-height);
+  }
+}
+
+.dx-scrollview-scrollbottom-indicator,
+.dx-scrollview-pull-down-indicator {
+  margin-right: 0;
+  height: var(--dx-scroll-view-load-indicator-size);
+  width: var(--dx-scroll-view-load-indicator-size);
+  border-radius: math.div($scroll-view-load-indicator-size, 2);
+  display: inline-flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 1px 3px 1px var(--dx-scroll-view-shadow); // dx-shadow-geometry: 0 1px 3px 1px
+
+  > .dx-loadindicator {
+    height: var(--dx-scroll-view-scroll-bottom-image-height);
+    width: var(--dx-scroll-view-scroll-bottom-image-width);
+
+    > .dx-loadindicator-wrapper {
+      font-size: var(--dx-scroll-view-load-indicator-font-size);
+    }
+  }
+}
+
+.dx-scrollview-pull-down-indicator {
+  position: relative;
+  margin-left: 0;
+  margin-top: math.div(-$scroll-view-load-indicator-size, 2);
+}
+
+.dx-scrollview-pull-down-text {
+  div {
+    position: relative;
+  }
+
+  > div {
+    display: none;
+
+    &.dx-scrollview-pull-down-text-visible {
+      display: block;
+    }
+  }
+}

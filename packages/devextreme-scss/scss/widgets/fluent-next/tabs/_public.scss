@@ -1,0 +1,48 @@
+@use "variables/colors" as *;
+@use "variables/sizes" as *;
+
+@mixin publish {
+  --dx-tabs-badge-min-size: #{$tabs-badge-min-size};
+  --dx-tabs-icon-size: #{$tabs-icon-size};
+  --dx-tabs-indicator-primary-length: #{$tabs-indicator-primary-length};
+  --dx-tabs-indicator-primary-thickness: #{$tabs-indicator-primary-thickness};
+  --dx-tabs-indicator-secondary-border-radius: #{$tabs-indicator-secondary-border-radius};
+  --dx-tabs-indicator-secondary-length: #{$tabs-indicator-secondary-length};
+  --dx-tabs-indicator-secondary-thickness: #{$tabs-indicator-secondary-thickness};
+  --dx-tabs-item-gap: #{$tabs-item-gap};
+  --dx-tabs-item-padding: #{$tabs-item-padding};
+  --dx-tabs-item-padding-block: #{$tabs-item-padding-block};
+  --dx-tabs-item-padding-inline: #{$tabs-item-padding-inline};
+  --dx-tabs-item-secondary-border-radius: #{$tabs-item-secondary-border-radius};
+  --dx-tabs-nav-button-bg: #{$tabs-nav-button-bg};
+  --dx-tabs-nav-button-content-disabled: #{$tabs-nav-button-content-disabled};
+  --dx-tabs-tab-accent-font-weight: #{$tabs-tab-accent-font-weight};
+  --dx-tabs-tab-basic-border-selected: #{$tabs-tab-basic-border-selected};
+  --dx-tabs-tab-basic-font-weight: #{$tabs-tab-basic-font-weight};
+  --dx-tabs-tab-bg: #{$tabs-tab-bg};
+  --dx-tabs-tab-bg-active: #{$tabs-tab-bg-active};
+  --dx-tabs-tab-bg-focused: #{$tabs-tab-bg-focused};
+  --dx-tabs-tab-bg-hovered: #{$tabs-tab-bg-hovered};
+  --dx-tabs-tab-border-active: #{$tabs-tab-border-active};
+  --dx-tabs-tab-border-disabled: #{$tabs-tab-border-disabled};
+  --dx-tabs-tab-border-hovered: #{$tabs-tab-border-hovered};
+  --dx-tabs-tab-border-selected-active: #{$tabs-tab-border-selected-active};
+  --dx-tabs-tab-border-selected-focused: #{$tabs-tab-border-selected-focused};
+  --dx-tabs-tab-border-selected-hovered: #{$tabs-tab-border-selected-hovered};
+  --dx-tabs-tab-content: #{$tabs-tab-content};
+  --dx-tabs-tab-content-disabled: #{$tabs-tab-content-disabled};
+  --dx-tabs-tab-content-selected: #{$tabs-tab-content-selected};
+  --dx-tabs-tab-height: #{$tabs-tab-height};
+  --dx-tabs-tab-icon: var(--dx-tabs-tab-content);
+  --dx-tabs-tab-icon-content-disabled: #{$tabs-tab-icon-content-disabled};
+  --dx-tabs-tab-icon-content-selected: #{$tabs-tab-icon-content-selected};
+  --dx-tabs-tab-nav-button-content-padding: #{$tabs-tab-nav-button-content-padding};
+  --dx-tabs-tab-nav-button-icon-font-size: #{$tabs-tab-nav-button-icon-font-size};
+  --dx-tabs-tab-nav-button-icon-height: #{$tabs-tab-nav-button-icon-height};
+  --dx-tabs-tab-nav-button-icon-width: #{$tabs-tab-nav-button-icon-width};
+  --dx-tabs-tab-primary-bg-active: #{$tabs-tab-primary-bg-active};
+  --dx-tabs-tab-primary-bg-focused: #{$tabs-tab-primary-bg-focused};
+  --dx-tabs-tab-primary-bg-hovered: #{$tabs-tab-primary-bg-hovered};
+  --dx-tabs-tab-vertical-nav-button-content-padding: #{$tabs-tab-vertical-nav-button-content-padding};
+  --dx-tabs-text-column-gap: #{$tabs-text-column-gap};
+}

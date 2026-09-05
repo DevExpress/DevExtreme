@@ -1,13 +1,17 @@
 @use "./mixins" as *;
 
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$radiogroup-radio-value-container-padding-inline-end: 10px !default;
+$radiogroup-collection-column-gap: 17px !default;
+
 .dx-radio-value-container {
-  padding-inline-end: 10px;
+  padding-inline-end: $radiogroup-radio-value-container-padding-inline-end;
 }
 
 .dx-radiogroup-horizontal {
   .dx-collection {
     display: flex;
     flex-wrap: wrap;
-    column-gap: 17px;
+    column-gap: $radiogroup-collection-column-gap;
   }
 }

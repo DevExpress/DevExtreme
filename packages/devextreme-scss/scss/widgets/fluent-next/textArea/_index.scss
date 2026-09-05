@@ -1,0 +1,29 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/textArea";
+@use "../../base/textArea/mixins" as *;
+@use "../textEditor/sizes" as textEditorSizes;
+@include dx-textarea(
+  2px, // dx-fixed-size: 2px input container margin
+  var(--dx-text-area-content-line-height),
+  textEditorSizes.$text-editor-input-filled-padding-block-start,
+  textEditorSizes.$text-editor-input-filled-with-label-padding-block-start,
+  textEditorSizes.$text-editor-input-underlined-with-label-padding-block-start,
+);
+
+.dx-textarea {
+  &.dx-editor-underlined {
+    .dx-texteditor-input {
+      padding-top: calc(#{textEditorSizes.$text-editor-input-underlined-padding-block-start} + 1px); // dx-px-nudge: +1px over the underlined input padding
+      padding-bottom: calc(#{textEditorSizes.$text-editor-input-underlined-padding-block-end} + 1px); // dx-px-nudge: +1px over the underlined input padding
+    }
+
+    &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
+    &.dx-texteditor-with-floating-label {
+      .dx-texteditor-input {
+        padding-bottom: textEditorSizes.$text-editor-input-underlined-with-label-padding-block-end;
+      }
+    }
+  }
+}

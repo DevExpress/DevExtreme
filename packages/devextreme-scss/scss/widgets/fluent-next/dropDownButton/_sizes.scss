@@ -1,0 +1,21 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$drop-down-button-action-padding-inline: null !default;
+$drop-down-button-toggle-spindown-icon-size: null !default;
+$drop-down-button-action-spindown-icon-size: null !default;
+
+@if $size == "default" {
+  $drop-down-button-action-padding-inline: ds.$spacing-120 !default;
+  $drop-down-button-toggle-spindown-icon-size: ds.$spacing-240;
+  $drop-down-button-action-spindown-icon-size: ds.$spacing-160 !default;
+}
+
+@else if $size == "compact" {
+  $drop-down-button-action-padding-inline: ds.$spacing-80 !default;
+  $drop-down-button-toggle-spindown-icon-size: ds.$spacing-180;
+  $drop-down-button-action-spindown-icon-size: ds.$spacing-120 !default;
+}
+
+// Base-layer sizing injected with design tokens (wave B12)
+$drop-down-button-icon-right-margin-inline-start: ds.$spacing-40 !default;

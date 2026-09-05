@@ -1,0 +1,214 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "mixins" as *;
+@use "../../base/button";
+
+.dx-button-content {
+  line-height: var(--dx-button-content-line-height);
+}
+
+.dx-button-text {
+  line-height: var(--dx-button-text-line-height);
+  text-transform: var(--dx-button-text-transform);
+  font-weight: var(--dx-button-text-font-weight);
+  letter-spacing: var(--dx-button-text-letter-spacing);
+}
+
+.dx-button {
+  @include dx-button-onlyicon-sizing();
+}
+
+.dx-button-has-icon {
+  @include dx-button-onlyicon-sizing();
+}
+
+.dx-button-has-text {
+  @include dx-button-withtext-sizing();
+}
+
+.dx-button-has-icon.dx-button-has-text {
+  @include dx-button-text-and-icon-sizing();
+}
+
+// NOTE: Button styles
+
+.dx-button-mode-contained {
+  &.dx-button-normal {
+    box-shadow: var(--dx-button-box-shadow) var(--dx-button-normal-shadow);
+  }
+}
+
+.dx-button { // stylelint-disable-line no-duplicate-selectors
+  height: var(--dx-button-height);
+  position: relative;
+
+  .dx-button-content {
+    position: relative;
+  }
+
+  @include dx-button-styling(
+    var(--dx-button-normal-contained-bg),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-bg-hovered),
+    var(--dx-button-normal-contained-bg-focused),
+    var(--dx-button-normal-contained-bg-active),
+    var(--dx-button-normal-contained-icon),
+    var(--dx-button-normal-contained-bg-selected),
+    var(--dx-button-normal-contained-content-selected),
+  );
+
+  &.dx-button-default {
+    @include dx-button-styling(
+      var(--dx-button-default-contained-bg),
+      var(--dx-button-default-contained-content),
+      var(--dx-button-default-contained-bg-hovered),
+      var(--dx-button-default-contained-bg-focused),
+      var(--dx-button-default-contained-bg-active),
+      var(--dx-button-default-contained-icon),
+      var(--dx-button-default-contained-bg-selected),
+      var(--dx-button-default-contained-content-selected),
+    );
+  }
+
+  &.dx-button-danger {
+    @include dx-button-styling(
+      var(--dx-button-danger-contained-bg),
+      var(--dx-button-danger-contained-content),
+      var(--dx-button-danger-contained-bg-hovered),
+      var(--dx-button-danger-contained-bg-focused),
+      var(--dx-button-danger-contained-bg-active),
+      var(--dx-button-danger-contained-icon),
+      var(--dx-button-danger-contained-bg-selected),
+      var(--dx-button-danger-contained-content-selected),
+    );
+  }
+
+  &.dx-button-success {
+    @include dx-button-styling(
+      var(--dx-button-success-contained-bg),
+      var(--dx-button-success-contained-content),
+      var(--dx-button-success-contained-bg-hovered),
+      var(--dx-button-success-contained-bg-focused),
+      var(--dx-button-success-contained-bg-active),
+      var(--dx-button-success-contained-icon),
+      var(--dx-button-success-contained-bg-selected),
+      var(--dx-button-success-contained-content-selected),
+    );
+  }
+}
+
+.dx-button-mode-text {
+  @include dx-button-flat-color-styling(
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-text-bg),
+    var(--dx-button-normal-text-bg-hovered),
+    var(--dx-button-normal-text-bg-focused),
+    var(--dx-button-normal-text-bg-active),
+    var(--dx-button-normal-text-bg-selected),
+    var(--dx-button-normal-contained-content-selected),
+  );
+
+  &.dx-button-default {
+    @include dx-button-flat-color-styling(
+      var(--dx-button-default-text-content),
+      var(--dx-button-default-text-content-hovered),
+      var(--dx-button-default-text-content-active),
+      var(--dx-button-default-text-bg),
+      var(--dx-button-default-text-bg-hovered),
+      var(--dx-button-default-text-bg-focused),
+      var(--dx-button-default-text-bg-active),
+      var(--dx-button-default-text-bg-selected),
+      var(--dx-button-default-text-content-selected),
+    );
+  }
+
+  &.dx-button-danger {
+    @include dx-button-flat-color-styling(
+      var(--dx-button-danger-text-content),
+      var(--dx-button-danger-text-content-hovered),
+      var(--dx-button-danger-text-content-active),
+      var(--dx-button-danger-text-bg),
+      var(--dx-button-danger-text-bg-hovered),
+      var(--dx-button-danger-text-bg-focused),
+      var(--dx-button-danger-text-bg-active),
+      var(--dx-button-danger-text-bg-selected),
+      var(--dx-button-danger-text-content-selected),
+    );
+  }
+
+  &.dx-button-success {
+    @include dx-button-flat-color-styling(
+      var(--dx-button-success-text-content),
+      var(--dx-button-success-text-content-hovered),
+      var(--dx-button-success-text-content-active),
+      var(--dx-button-success-text-bg),
+      var(--dx-button-success-text-bg-hovered),
+      var(--dx-button-success-text-bg-focused),
+      var(--dx-button-success-text-bg-active),
+      var(--dx-button-success-text-bg-selected),
+      var(--dx-button-success-text-content-selected),
+    );
+  }
+}
+
+.dx-button-mode-outlined {
+  @include dx-button-outlined-color-styling(
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-contained-content),
+    var(--dx-button-normal-outlined-border),
+    var(--dx-button-normal-outlined-bg),
+    var(--dx-button-normal-outlined-bg-hovered),
+    var(--dx-button-normal-outlined-bg-focused),
+    var(--dx-button-normal-outlined-bg-active),
+    var(--dx-button-normal-outlined-bg-selected),
+    var(--dx-button-normal-contained-content-selected),
+  );
+
+  &.dx-button-default {
+    @include dx-button-outlined-color-styling(
+      var(--dx-button-default-outlined-content),
+      var(--dx-button-default-outlined-content-hovered),
+      var(--dx-button-default-outlined-content-active),
+      var(--dx-button-default-outlined-border),
+      var(--dx-button-default-outlined-bg),
+      var(--dx-button-default-outlined-bg-hovered),
+      var(--dx-button-default-outlined-bg-focused),
+      var(--dx-button-default-outlined-bg-active),
+      var(--dx-button-default-outlined-bg-selected),
+      var(--dx-button-default-outlined-content-selected),
+    );
+  }
+
+  &.dx-button-danger {
+    @include dx-button-outlined-color-styling(
+      var(--dx-button-danger-outlined-content),
+      var(--dx-button-danger-outlined-content-hovered),
+      var(--dx-button-danger-outlined-content-active),
+      var(--dx-button-danger-outlined-border),
+      var(--dx-button-danger-outlined-bg),
+      var(--dx-button-danger-outlined-bg-hovered),
+      var(--dx-button-danger-outlined-bg-focused),
+      var(--dx-button-danger-outlined-bg-active),
+      var(--dx-button-danger-outlined-bg-selected),
+      var(--dx-button-danger-outlined-content-selected),
+    );
+  }
+
+  &.dx-button-success {
+    @include dx-button-outlined-color-styling(
+      var(--dx-button-success-outlined-content),
+      var(--dx-button-success-outlined-content-hovered),
+      var(--dx-button-success-outlined-content-active),
+      var(--dx-button-success-outlined-border),
+      var(--dx-button-success-outlined-bg),
+      var(--dx-button-success-outlined-bg-hovered),
+      var(--dx-button-success-outlined-bg-focused),
+      var(--dx-button-success-outlined-bg-active),
+      var(--dx-button-success-outlined-bg-selected),
+      var(--dx-button-success-outlined-content-selected),
+    );
+  }
+}

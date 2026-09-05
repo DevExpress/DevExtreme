@@ -72,7 +72,7 @@ function onButtonClick() {
 }
 
 .fileuploader-container {
-  border: 1px solid #d3d3d3;
+  border: 1px solid var(--dxds-color-border, #d3d3d3);
   margin: 20px 20px 0;
 }
 

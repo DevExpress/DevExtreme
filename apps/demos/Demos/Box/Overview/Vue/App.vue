@@ -150,24 +150,24 @@ import { DxBox, DxItem } from 'devextreme-vue/box';
 }
 
 .demo-light {
-  background: rgba(245, 229, 166, 0.5);
+  background: var(--dxds-color-bg-yellow-subtle, rgba(245, 229, 166, 0.5));
 }
 
 .demo-dark {
-  background: rgba(148, 215, 199, 0.5);
+  background: var(--dxds-color-bg-green-subtle, rgba(148, 215, 199, 0.5));
 }
 
 .demo-dark.header {
-  background: rgba(243, 158, 108, 0.5);
+  background: var(--dxds-color-bg-red-subtle, rgba(243, 158, 108, 0.5));
 }
 
 .demo-dark.footer {
-  background: rgba(123, 155, 207, 0.5);
+  background: var(--dxds-color-bg-blue-subtle, rgba(123, 155, 207, 0.5));
 }
 
 .small {
   height: 50px;
-  border: 1px solid lightgray;
+  border: 1px solid var(--dxds-color-border, lightgray);
 }
 
 </style>

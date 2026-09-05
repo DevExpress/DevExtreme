@@ -1,0 +1,26 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-scroll-view-icon-pull-down-padding: #{$scroll-view-icon-pull-down-padding};
+  --dx-scroll-view-load-indicator-font-size: #{$scroll-view-load-indicator-font-size};
+  --dx-scroll-view-load-indicator-size: #{$scroll-view-load-indicator-size};
+  --dx-scroll-view-pull-down-height: #{$scroll-view-pull-down-height};
+  --dx-scroll-view-pull-down-icon-font-size: #{$scroll-view-pull-down-icon-font-size};
+  --dx-scroll-view-pull-down-image-height: #{$scroll-view-pull-down-image-height};
+  --dx-scroll-view-pull-down-image-margin: #{$scroll-view-pull-down-image-margin};
+  --dx-scroll-view-pull-down-indicator-padding: #{$scroll-view-pull-down-indicator-padding};
+  --dx-scroll-view-pull-down-indicator-width: #{$scroll-view-pull-down-indicator-width};
+  --dx-scroll-view-pull-down-padding: #{$scroll-view-pull-down-padding};
+  --dx-scroll-view-pull-down-text-margin-inline-start: #{$scroll-view-pull-down-text-margin-inline-start};
+  --dx-scroll-view-pull-down-top-offset: #{$scroll-view-pull-down-top-offset};
+  --dx-scroll-view-rtl-margin-inline-end: #{$scroll-view-rtl-margin-inline-end};
+  --dx-scroll-view-scroll-bottom-image-height: #{$scroll-view-scroll-bottom-image-height};
+  --dx-scroll-view-scroll-bottom-image-width: #{$scroll-view-scroll-bottom-image-width};
+  --dx-scroll-view-scroll-bottom-indicator-margin: #{$scroll-view-scroll-bottom-indicator-margin};
+  --dx-scroll-view-scroll-bottom-indicator-rtl-margin: #{$scroll-view-scroll-bottom-indicator-rtl-margin};
+  --dx-scroll-view-scroll-bottom-padding: #{$scroll-view-scroll-bottom-padding};
+  --dx-scroll-view-shadow: #{$scroll-view-shadow};
+  --dx-scroll-view-top-pocket-height: #{$scroll-view-top-pocket-height};
+  --dx-scroll-view-top-pocket-width: #{$scroll-view-top-pocket-width};
+}

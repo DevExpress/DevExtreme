@@ -1,0 +1,148 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/radioButton/mixins" as *;
+@use "../../base/radioButton";
+@include dx-radiobutton-icon-mixin(
+  $radio-button-size,
+  $radio-button-border-width,
+  $radio-button-dot-size,
+  true,
+);
+@include dx-radiobutton-states-mixin(
+  var(--dx-radio-button-icon-bg),
+  var(--dx-radio-button-icon-border),
+  var(--dx-radio-button-icon-border-read-only),
+  null,
+  null,
+  var(--dx-radio-button-icon-bg-focused),
+  var(--dx-radio-button-checked-bg),
+  var(--dx-radio-button-invalid-bg),
+  var(--dx-radio-button-invalid-bg-hovered),
+  var(--dx-radio-button-invalid-bg-focused),
+  null,
+  true,
+);
+
+.dx-radiobutton-icon {
+  &::after {
+    content: none;
+  }
+}
+
+.dx-radio-value-container {
+  padding-inline-end: var(--dx-radio-button-value-container-padding-inline-end);
+}
+
+.dx-state-readonly {
+  .dx-radiobutton-icon-dot {
+    background-color: var(--dx-radio-button-content-read-only);
+  }
+
+  .dx-radiobutton-icon {
+    border-color: var(--dx-radio-button-content-read-only);
+  }
+
+  .dx-radiobutton-checked {
+    &.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-active {
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-content-read-only);
+      }
+    }
+  }
+}
+
+.dx-radiobutton {
+  &.dx-state-hover {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-icon-border-hovered);
+    }
+  }
+
+  &.dx-state-active {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-icon-border-active);
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-checked-bg-active);
+    }
+  }
+}
+
+.dx-radiobutton-checked {
+  &.dx-state-hover {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-checked-bg-hovered);
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: var(--dx-radio-button-checked-bg-hovered);
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-focused {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-checked-bg-active);
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: var(--dx-radio-button-checked-bg-active);
+    }
+  }
+}
+
+.dx-invalid {
+  .dx-state-hover {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: var(--dx-radio-button-invalid-bg-hovered);
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-invalid-bg-hovered);
+      }
+    }
+  }
+
+  .dx-state-active,
+  .dx-state-focused {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: var(--dx-radio-button-invalid-bg-focused);
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-invalid-bg-focused);
+      }
+    }
+  }
+
+  &.dx-state-readonly {
+    .dx-radiobutton {
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-content-read-only);
+      }
+    }
+  }
+}
+
+.dx-state-disabled {
+  &.dx-radiobutton,
+  .dx-radiobutton {
+    color: var(--dx-radio-button-content-disabled);
+
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-border-disabled);
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: var(--dx-radio-button-content-disabled);
+    }
+  }
+}
