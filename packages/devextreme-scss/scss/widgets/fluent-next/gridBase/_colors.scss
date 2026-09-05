@@ -58,10 +58,15 @@ $grid-header-filter-icon-active: ds.$color-content-primary !default;
 
 /*
  * The virtual-row placeholder is a raster: black at 12% alpha, frozen inside the file rather
- * than in a variable, so no ds token reaches it. The light and dark files were byte-identical,
- * so one asset serves both modes. See DIVERGENCES.md.
+ * than in a variable. The design system does name this role - `skeleton` in the token package
+ * is `color.bg-inverted` at 10% opacity - but build-tokens consumes only semantic/ and global/,
+ * so it never reaches `ds.$` and would have to be composed from `ds.$color-bg-inverted` and
+ * `ds.$opacity-10`. That is worth doing rather than keeping the raster: one file serves both
+ * modes, so on a dark grid the placeholder lands 1.26 dE2000 from the row background - under
+ * the 2.3 just-noticeable threshold, i.e. invisible - where the role would put it at 7.0.
+ * See DIVERGENCES.md.
  */
-$grid-text-stub-bg: data-uri("images/widgets/fluent-next/grid/text-stub.png") !default; // dx-data-uri-static: raster, no ds equivalent
+$grid-text-stub-bg: data-uri("images/widgets/fluent-next/grid/text-stub.png") !default; // dx-data-uri-static: raster, role exists (skeleton)
 $grid-filter-panel-content: ds.$color-content-primary !default;
 $grid-draggable-column-content: ds.$color-content !default;
 
