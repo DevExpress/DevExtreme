@@ -2,6 +2,7 @@ import $ from 'jquery';
 import positionUtils from 'common/core/animation/position';
 import translator from '__internal/common/core/animation/translatorModule';
 import browser from 'core/utils/browser';
+import devices from '__internal/core/m_devices';
 import fixtures from '../../helpers/positionFixtures.js';
 import { implementationsMap } from 'core/utils/size';
 import { getWindow } from 'core/utils/window.js';
@@ -1027,6 +1028,56 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
             window.innerWidth = initialInnerWidth;
             window.outerWidth = initialOuterWidth;
             widthStub.restore();
+        }
+    });
+
+    QUnit.test('position should measure the window by its client height on desktop Safari', function(assert) {
+        const $what = $('#what').height(300);
+        const initialInnerHeight = window.innerHeight;
+        const initialSafari = browser.safari;
+
+        const heightStub = sinon.stub(implementationsMap, 'getHeight').returns(1000);
+        const devicesStub = sinon.stub(devices, 'real').returns({ deviceType: 'desktop', platform: 'generic' });
+
+        try {
+            window.innerHeight = 500;
+            browser.safari = true;
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.v.location, 350, 50, 'vertical location is correct');
+        } finally {
+            window.innerHeight = initialInnerHeight;
+            browser.safari = initialSafari;
+            heightStub.restore();
+            devicesStub.restore();
+        }
+    });
+
+    QUnit.test('position should measure the window by window.innerHeight on iOS Safari', function(assert) {
+        const $what = $('#what').height(300);
+        const initialInnerHeight = window.innerHeight;
+        const initialSafari = browser.safari;
+
+        const heightStub = sinon.stub(implementationsMap, 'getHeight').returns(1000);
+        const devicesStub = sinon.stub(devices, 'real').returns({ deviceType: 'desktop', platform: 'ios' });
+
+        try {
+            window.innerHeight = 500;
+            browser.safari = true;
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.v.location, 100, 50, 'vertical location is correct');
+        } finally {
+            window.innerHeight = initialInnerHeight;
+            browser.safari = initialSafari;
+            heightStub.restore();
+            devicesStub.restore();
         }
     });
 
