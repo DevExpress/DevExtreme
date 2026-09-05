@@ -21,7 +21,6 @@ const horzRe = /left|right/;
 const vertRe = /top|bottom/;
 const collisionRe = /fit|flip|none/;
 const scaleRe = /scale\(.+?\)/;
-const IS_SAFARI = browser.safari;
 
 const normalizeAlign = function (raw) {
   const result = {
@@ -264,8 +263,12 @@ const calculatePosition = function (what, options) {
         h.atSize = of[0].visualViewport.width;
         v.atSize = of[0].visualViewport.height;
       } else {
+        // iOS reports a client height that does not match the visible area
+        // while the address bar is sliding
+        const isIosSafari = browser.safari && devices.real().platform === 'ios';
+
         h.atSize = getWidth(of);
-        v.atSize = IS_SAFARI ? of[0].innerHeight : getHeight(of);
+        v.atSize = isIosSafari ? of[0].innerHeight : getHeight(of);
       }
     } else if (of[0].nodeType === 9) {
       h.atLocation = 0;
