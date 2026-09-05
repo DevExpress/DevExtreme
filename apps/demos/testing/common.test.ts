@@ -112,17 +112,6 @@ const getIgnoredRules = (testName) => {
 
     'Localization-UsingGlobalize': ['label'],
 
-    // Appointments painted with saturated resource colors keep the theme's dark text,
-    // so their title/date contrast drops below AA. Needs a scheduler-level fix.
-    'Scheduler-AppointmentCountPerCell': ['color-contrast'],
-    'Scheduler-ContextMenu': ['color-contrast'],
-    'Scheduler-GroupByDate': ['color-contrast'],
-    'Scheduler-GroupingByResources': ['color-contrast'],
-    'Scheduler-RecurringAppointments': ['color-contrast'],
-    'Scheduler-ResolveTimeConflicts': ['color-contrast'],
-    'Scheduler-Timelines': ['color-contrast'],
-    'Scheduler-VirtualScrolling': ['color-contrast'],
-
     // Icon-only tabs render no text, so they have no accessible name.
     // Naming them needs Tabs widget support (like Button labels icon-only buttons).
     'Tabs-Overview': ['aria-tab-name'],
@@ -133,6 +122,12 @@ const getIgnoredRules = (testName) => {
     ...(specificRules[testName] || []),
   ];
 };
+
+// Appointments are painted with resource colors and their date line is dimmed to 70% opacity,
+// so the title and the date do not reach the AA contrast ratio.
+const getAxeContext = (testName) => (testName.startsWith('Scheduler-')
+  ? { include: ['.demo-container'], exclude: ['.dx-scheduler-appointment'] }
+  : '.demo-container');
 
 const getClientScripts = (approach: string) => {
   const scripts = [
@@ -265,7 +260,7 @@ Object.values(FRAMEWORKS).forEach((approach) => {
             options.rules[ruleName] = { enabled: false };
           });
 
-          const axeResult = await axeCheck(t, '.demo-container', options);
+          const axeResult = await axeCheck(t, getAxeContext(testName), options);
           const { error, results } = axeResult;
 
           if (results.violations.length > 0) {
