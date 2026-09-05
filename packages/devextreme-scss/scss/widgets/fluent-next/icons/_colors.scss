@@ -1,12 +1,11 @@
 @use "../colors" as *;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
-$icon-pulldown-bg: null !default;
 
-@if $mode == "light" {
-  $icon-pulldown-bg: data-uri("images/widgets/fluent-next/color-schemes/light/pulldown.png") !default;
-}
-
-@if $mode == "dark" {
-  $icon-pulldown-bg: data-uri("images/widgets/fluent-next/color-schemes/dark/pulldown.png") !default;
-}
+/*
+ * The pull-down arrow is a raster, so its colour is frozen inside the file rather than in a
+ * variable - no ds token reaches it, and #adadad matches no ds role, so there is nothing to
+ * mirror it against. The light and dark files were byte-identical, so one asset serves both
+ * modes. See DIVERGENCES.md.
+ */
+$icon-pulldown-bg: data-uri("images/widgets/fluent-next/pulldown.png") !default; // dx-data-uri-static: raster, no ds equivalent

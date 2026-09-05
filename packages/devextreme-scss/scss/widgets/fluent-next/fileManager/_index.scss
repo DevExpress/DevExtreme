@@ -312,7 +312,7 @@
   margin-left: var(--dx-file-manager-context-menu-text-item-left-margin);
 }
 
-@include filemanager-icons-mixin($file-manager-icon, $file-manager-icon-success-content, $file-manager-icon-inverted-content, $file-manager-icon-danger-content, $file-manager-icon-inverted-content, $file-manager-large-icon-size);
+@include filemanager-icons-mixin($file-manager-icon, $file-manager-icon-success-content, $file-manager-icon-inverted-content, $file-manager-icon-danger-content, $file-manager-icon-inverted-content, $file-manager-large-icon-size, $masked: true);
 
 .dx-filemanager.dx-state-disabled .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text,
 .dx-state-disabled .dx-filemanager .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text {
@@ -326,23 +326,6 @@
   .dx-filemanager-progress-panel-title-text,
   .dx-filemanager-progress-panel-infos-container {
     color: var(--dx-file-manager-content-disabled);
-  }
-
-  .dx-filemanager-i,
-  .dx-filemanager-i.dx-icon {
-    &.dx-filemanager-i-refresh,
-    &.dx-filemanager-i-progress {
-      @include filemanager-icon-colored(
-        data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"),
-        $file-manager-icon-disabled,
-        $file-manager-icon-success-content,
-        $file-manager-icon-inverted-content,
-        $file-manager-icon-danger-content,
-        $file-manager-icon-inverted-content,
-        $file-manager-large-icon-size,
-        $file-manager-large-icon-size
-      );
-    }
   }
 }
 

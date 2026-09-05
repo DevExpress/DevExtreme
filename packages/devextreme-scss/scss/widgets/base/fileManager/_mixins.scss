@@ -13,12 +13,38 @@
   height: $height;
 }
 
-@mixin filemanager-icons-mixin($text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size) {
+/*
+ * Only `refresh` (which `progress` reuses) and `cancel` are drawn in one colour, so only those two
+ * can become a mask painted by `currentColor`. `done` and `danger` put an inverted glyph on a
+ * success/danger disc beside the neutral arrows - three colours at once, which a mask cannot carry,
+ * so they keep the baked image.
+ */
+@mixin filemanager-icon-masked($data-uri, $width, $height) {
+  $uri: replace("#{$data-uri}", "currentTextColor", "%23000");
+
+  mask-image: string.unquote($uri);
+  mask-position: 50% 50%;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: currentColor;
+  width: $width;
+  height: $height;
+}
+
+@mixin filemanager-icon-single($data-uri, $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $width, $height, $masked) {
+  @if $masked {
+    @include filemanager-icon-masked($data-uri, $width, $height);
+  } @else {
+    @include filemanager-icon-colored($data-uri, $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $width, $height);
+  }
+}
+
+@mixin filemanager-icons-mixin($text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $masked: false) {
   .dx-filemanager-i,
   .dx-filemanager-i.dx-icon {
     &.dx-filemanager-i-refresh,
     &.dx-filemanager-i-progress {
-      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @include filemanager-icon-single(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size, $masked);
     }
 
     &.dx-filemanager-i-done {
@@ -30,7 +56,7 @@
     }
 
     &.dx-filemanager-i-cancel {
-      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/cancel.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @include filemanager-icon-single(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/cancel.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size, $masked);
     }
   }
 }
