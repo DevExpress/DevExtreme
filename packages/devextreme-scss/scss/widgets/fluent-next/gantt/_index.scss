@@ -285,11 +285,7 @@
   }
 }
 
-@include gantt-icons-mixin($gantt-icon);
-
-.dx-state-disabled {
-  @include gantt-icons-mixin($gantt-icon-disabled);
-}
+@include gantt-icons-mixin($masked: true);
 
 .dx-gantt.dx-state-disabled,
 .dx-state-disabled .dx-gantt {
