@@ -36,61 +36,60 @@ function setup(): {
 }
 
 describe('documentSizeCallbacks', () => {
+  const addedHandlers: (() => void)[] = [];
+
+  function addHandler(): jest.Mock {
+    const handler = jest.fn();
+
+    addedHandlers.push(handler);
+    documentSizeCallbacks.add(handler);
+
+    return handler;
+  }
+
   afterEach(() => {
+    addedHandlers.splice(0).forEach((handler) => documentSizeCallbacks.remove(handler));
     jest.restoreAllMocks();
   });
 
   it('should observe the document element once, no matter how many handlers are added', () => {
     const { observeSpy } = setup();
-    const first = jest.fn();
-    const second = jest.fn();
 
-    documentSizeCallbacks.add(first);
-    documentSizeCallbacks.add(second);
+    addHandler();
+    addHandler();
 
     expect(observeSpy).toHaveBeenCalledTimes(1);
-
-    documentSizeCallbacks.remove(first);
-    documentSizeCallbacks.remove(second);
   });
 
   it('should not call handlers when the document size has not changed', () => {
     const { notifyResize } = setup();
-    const handler = jest.fn();
+    const handler = addHandler();
 
-    documentSizeCallbacks.add(handler);
     notifyResize();
 
     expect(handler).not.toHaveBeenCalled();
-
-    documentSizeCallbacks.remove(handler);
   });
 
   it('should call handlers when a scrollbar changes the client width', () => {
     const { documentElement, notifyResize } = setup();
-    const handler = jest.fn();
+    const handler = addHandler();
 
-    documentSizeCallbacks.add(handler);
     documentElement.clientWidth = 985;
     notifyResize();
 
     expect(handler).toHaveBeenCalledTimes(1);
-
-    documentSizeCallbacks.remove(handler);
   });
 
   it('should stop observing once the last handler is removed', () => {
     const { unobserveSpy } = setup();
-    const first = jest.fn();
-    const second = jest.fn();
+    const first = addHandler();
 
-    documentSizeCallbacks.add(first);
-    documentSizeCallbacks.add(second);
+    addHandler();
     documentSizeCallbacks.remove(first);
 
     expect(unobserveSpy).not.toHaveBeenCalled();
 
-    documentSizeCallbacks.remove(second);
+    documentSizeCallbacks.remove(addedHandlers[1]);
 
     expect(unobserveSpy).toHaveBeenCalledTimes(1);
   });
