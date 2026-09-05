@@ -12,8 +12,6 @@ type DocumentSizeHandler = () => void;
 
 type DocumentElement = ReturnType<typeof domAdapter.getDocumentElement>;
 
-// Callbacks.has() takes no arguments and answers whether the list is empty,
-// which the shared declaration does not describe yet
 interface HandlerList {
   add: (handler: DocumentSizeHandler) => void;
   remove: (handler: DocumentSizeHandler) => void;
@@ -21,8 +19,6 @@ interface HandlerList {
   fire: () => void;
 }
 
-// The window resize event is not raised when a scrollbar appears or disappears,
-// even though the visible area changes.
 const callbacks = Callbacks({ unique: true }) as HandlerList;
 
 let observedElement: DocumentElement | null = null;
