@@ -1,0 +1,4 @@
+@mixin publish {
+  --dx-popup-bottom-bg: var(--dx-popup-title-bg);
+  --dx-popup-toolbar-label-font-size: var(--dx-typography-m-font-size);
+}

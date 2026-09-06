@@ -1,0 +1,6 @@
+@mixin publish {
+  --dx-scheduler-appointment-content-focused: var(--dx-scheduler-appointment-content);
+  --dx-scheduler-current-time-cell-date-bg: var(--dx-scheduler-current-time-cell-content);
+  --dx-scheduler-workspace-cell-content-active: var(--dx-scheduler-accent-border);
+  --dx-scheduler-workspace-cell-content-hovered: var(--dx-scheduler-workspace-month-content);
+}

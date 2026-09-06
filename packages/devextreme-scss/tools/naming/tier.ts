@@ -401,7 +401,7 @@ export const renderPublicFile = (publicPath: string, projections: Projection[], 
   const body = [...projections]
     .sort((a, b) => byCodepoint(a.property, b.property))
     .map(({ property, variable }) => `  ${property}: #{${variable}};`);
-  if (hasLinks) body.push('  @include links.publish();');
+  if (hasLinks) body.push(...(body.length ? [''] : []), '  @include links.publish();');
   return `${header.join('\n')}\n\n@mixin publish {\n${body.join('\n')}\n}\n`;
 };
 

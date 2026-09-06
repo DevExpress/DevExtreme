@@ -28,7 +28,7 @@ import {
 import {
   type Parsed, type SourceFile, baseIndex, findSignatureRanges, parseSourceFile,
   starredBaseParameters as starredParametersOf, baseWiringKind as wiringKindOf,
-  tierRecords as computeTierRecords,
+  tierRecords as computeTierRecords, planPublication, stalePaths,
 } from '../tools/naming/tier';
 
 const packageRoot = process.cwd();
@@ -990,6 +990,22 @@ test('component tier: every publishing component appears in the runtime-audit ga
     .map((folder) => `${folder} publishes the tier but the gallery never builds it — add `
       + `widget('dx${folder}') or markup carrying one of its classes to buildGallery/addPortals`);
   expect([...new Set(missing)].sort()).toEqual([]);
+});
+
+/*
+ * The mirror of `node tools/naming/publish.mjs --check`, the way "the rename mapping stays
+ * collision-free and fully applied" mirrors `rename.mjs --check`: the committed projections and the
+ * collector are exactly what the emitter would write from today's declarations, and the hand-written
+ * links break none of its rules.
+ */
+test('component tier: the committed files are what tools/naming/publish.mjs writes', () => {
+  const existing = new Map(themeSources
+    .filter(({ path }) => isPublicTierFile(path))
+    .map(({ path, raw }) => [path, raw]));
+  const baseSources = walk(join(widgetsRoot, 'base'), '.scss').map(sourceFileOf);
+  const plan = planPublication(themeSources, baseSources, registries, existing);
+  expect(plan.problems).toEqual([]);
+  expect(stalePaths(plan, existing).map((path) => `${path} is stale — run pnpm naming:publish`)).toEqual([]);
 });
 
 test('component tier: every declaring component has bundle-gated root selectors', () => {

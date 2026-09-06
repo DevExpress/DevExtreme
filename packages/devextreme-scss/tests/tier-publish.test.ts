@@ -4,6 +4,8 @@
  * is covered by tests/fluent-next-naming.test.ts, which reads the same module.
  */
 
+import { execFileSync } from 'child_process';
+
 import { stripScssComments } from '../build/tokens/consumed-tokens';
 import {
   type Registries, type SourceFile,
@@ -129,7 +131,8 @@ describe('_public.scss', () => {
     const links = { 'fluent-next/badge/_public-links.scss': '@mixin publish {\n  --dx-badge-bg-hovered: var(--dx-badge-bg);\n}\n' };
     const withLinks = plan(badge(), links).files.get('fluent-next/badge/_public.scss')!;
     expect(withLinks).toContain('@use "public-links" as links;');
-    expect(withLinks.split('\n').slice(-3)).toEqual(['  @include links.publish();', '}', '']);
+    // stylelint wants the empty line between the declarations and the at-rule
+    expect(withLinks.split('\n').slice(-5)).toEqual(['  --dx-badge-size: #{$badge-size};', '', '  @include links.publish();', '}', '']);
   });
 
   test('a component whose values are all excluded still publishes its links', () => {
@@ -465,4 +468,14 @@ describe('parseLinksFile', () => {
       'x/_public-links.scss:5: a links file may only hold `--dx-a: var(--dx-b);` lines',
     ]);
   });
+});
+
+// the shell around the module: a .ts import from .mjs, registries.json, the walk — on the real tree
+test('publish.mjs --check passes on the committed tree', () => {
+  const output = execFileSync(process.execPath, ['tools/naming/publish.mjs', '--check'], {
+    cwd: process.cwd(),
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  expect(output).toMatch(/^component tier is up to date \(\d+ files\)\n$/);
 });
