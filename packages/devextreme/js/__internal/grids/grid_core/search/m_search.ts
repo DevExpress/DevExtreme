@@ -12,7 +12,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import type { DataController } from '../data_controller/data_controller';
-import type { DataFilter } from '../data_controller/types';
+import type { DataFilter, UserState } from '../data_controller/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType, OptionChanged } from '../m_types';
@@ -60,6 +60,13 @@ const dataController = (
 
   public publicMethods(): string[] {
     return super.publicMethods().concat(['searchByText']);
+  }
+
+  public getUserState(): UserState {
+    return {
+      ...super.getUserState(),
+      searchText: this.option('searchPanel.text'),
+    };
   }
 
   protected calculateAdditionalFilter(): DataFilter {

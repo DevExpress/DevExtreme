@@ -1680,11 +1680,10 @@ export class DataController extends modules.Controller {
   }
 
   /**
-   * @extended: TreeList's state_storing
+   * @extended: search, TreeList's state_storing
    */
   public getUserState(): UserState {
     return {
-      searchText: this.option('searchPanel.text'),
       pageIndex: this.pageIndex(),
       pageSize: this.pageSize(),
     };
