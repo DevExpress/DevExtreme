@@ -1106,11 +1106,7 @@ class Overlay<
 
   _toggleDocumentSizeSubscription(subscribe: boolean): void {
     this._documentSizeChangedHandler ??= (): void => {
-      const isVisualContainerWindow = isWindow(this._positionController.$visualContainer?.get(0));
-
-      if (isVisualContainerWindow) {
-        this._renderGeometry();
-      }
+      this._dimensionChanged();
     };
 
     if (subscribe) {

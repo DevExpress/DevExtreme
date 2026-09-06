@@ -4478,15 +4478,23 @@ QUnit.module('document size subscription', {
         this.addSpy = sinon.spy(documentSizeCallbacks, 'add');
         this.removeSpy = sinon.spy(documentSizeCallbacks, 'remove');
         this.subscribedHandler = () => this.addSpy.lastCall.args[0];
+        this.createOverlay = (options) => {
+            this.overlay = new Overlay(this.$element, options);
+
+            return this.overlay;
+        };
     },
     afterEach: function() {
+        if(this.overlay) {
+            this.overlay.dispose();
+        }
         this.addSpy.restore();
         this.removeSpy.restore();
         fx.off = false;
     }
 }, () => {
     QUnit.test('overlay should subscribe when shown and unsubscribe when hidden', function(assert) {
-        const overlay = new Overlay(this.$element, { visible: true });
+        const overlay = this.createOverlay({ visible: true });
 
         assert.ok(this.addSpy.calledOnce, 'subscribed while visible');
 
@@ -4498,16 +4506,17 @@ QUnit.module('document size subscription', {
     });
 
     QUnit.test('overlay should unsubscribe on dispose', function(assert) {
-        const overlay = new Overlay(this.$element, { visible: true });
+        const overlay = this.createOverlay({ visible: true });
         const handler = this.subscribedHandler();
 
         overlay.dispose();
+        this.overlay = null;
 
         assert.ok(this.removeSpy.calledWith(handler), 'unsubscribed on dispose');
     });
 
     QUnit.test('geometry should be re-rendered when the visible area changes', function(assert) {
-        const overlay = new Overlay(this.$element, { visible: true });
+        const overlay = this.createOverlay({ visible: true });
         const handler = this.subscribedHandler();
         const renderGeometrySpy = sinon.spy(overlay, '_renderGeometry');
 
@@ -4516,28 +4525,12 @@ QUnit.module('document size subscription', {
         assert.strictEqual(renderGeometrySpy.callCount, 1, 'geometry is re-rendered');
     });
 
-    QUnit.test('geometry should not be re-rendered for an overlay placed against an element', function(assert) {
-        const overlay = new Overlay(this.$element, {
+    QUnit.test('geometry should be re-rendered for an overlay placed against an element as well', function(assert) {
+        const overlay = this.createOverlay({
             visible: true,
             visualContainer: $('#container')
         });
         const handler = this.subscribedHandler();
-        const renderGeometrySpy = sinon.spy(overlay, '_renderGeometry');
-
-        handler();
-
-        assert.strictEqual(renderGeometrySpy.callCount, 0, 'geometry is left alone');
-    });
-
-    QUnit.test('geometry should be re-rendered after visualContainer becomes the window at runtime', function(assert) {
-        const overlay = new Overlay(this.$element, {
-            visible: true,
-            visualContainer: $('#container')
-        });
-        const handler = this.subscribedHandler();
-
-        overlay.option('visualContainer', window);
-
         const renderGeometrySpy = sinon.spy(overlay, '_renderGeometry');
 
         handler();
@@ -4545,16 +4538,13 @@ QUnit.module('document size subscription', {
         assert.strictEqual(renderGeometrySpy.callCount, 1, 'geometry is re-rendered');
     });
 
-    QUnit.test('geometry should not be re-rendered after visualContainer stops being the window at runtime', function(assert) {
-        const overlay = new Overlay(this.$element, { visible: true });
+    QUnit.test('a visible area change should be handled the same way as a window resize', function(assert) {
+        const overlay = this.createOverlay({ visible: true });
         const handler = this.subscribedHandler();
-
-        overlay.option('visualContainer', $('#container'));
-
-        const renderGeometrySpy = sinon.spy(overlay, '_renderGeometry');
+        const dimensionChangedSpy = sinon.spy(overlay, '_dimensionChanged');
 
         handler();
 
-        assert.strictEqual(renderGeometrySpy.callCount, 0, 'geometry is left alone');
+        assert.strictEqual(dimensionChangedSpy.callCount, 1, '_dimensionChanged is called');
     });
 });
