@@ -1,16 +1,13 @@
 import domAdapter from '@js/core/dom_adapter';
-import { resizeObserverSingleton } from '@ts/core/m_resize_observer';
 import { Callbacks } from '@ts/core/utils/m_callbacks';
 import windowUtils from '@ts/core/utils/m_window';
 
-interface DocumentSize {
+interface Size {
   width: number;
   height: number;
 }
 
 type DocumentSizeHandler = () => void;
-
-type DocumentElement = ReturnType<typeof domAdapter.getDocumentElement>;
 
 interface HandlerList {
   add: (handler: DocumentSizeHandler) => void;
@@ -21,10 +18,11 @@ interface HandlerList {
 
 const callbacks = Callbacks({ unique: true }) as HandlerList;
 
-let observedElement: DocumentElement | null = null;
-let previousSize: DocumentSize | null = null;
+let removeListener: (() => void) | null = null;
+let previousDocumentSize: Size | null = null;
+let previousWindowSize: Size | null = null;
 
-function getDocumentSize(): DocumentSize {
+function getDocumentSize(): Size {
   const documentElement = domAdapter.getDocumentElement();
 
   return {
@@ -33,39 +31,67 @@ function getDocumentSize(): DocumentSize {
   };
 }
 
-function handleDocumentResize(): void {
-  const size = getDocumentSize();
+function getWindowSize(): Size {
+  const window: Window = windowUtils.getWindow();
 
-  if (previousSize?.width === size.width && previousSize?.height === size.height) {
-    return;
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+}
+
+function isSameSize(previous: Size | null, current: Size): boolean {
+  return previous?.width === current.width && previous?.height === current.height;
+}
+
+function handleVisualViewportResize(): void {
+  const documentSize = getDocumentSize();
+  const windowSize = getWindowSize();
+  const isDocumentSizeChanged = !isSameSize(previousDocumentSize, documentSize);
+  const isWindowSizeChanged = !isSameSize(previousWindowSize, windowSize);
+
+  previousDocumentSize = documentSize;
+  previousWindowSize = windowSize;
+
+  if (isDocumentSizeChanged && !isWindowSizeChanged) {
+    callbacks.fire();
+  }
+}
+
+function getVisualViewport(): VisualViewport | null {
+  if (!windowUtils.hasWindow()) {
+    return null;
   }
 
-  previousSize = size;
+  const window: Window = windowUtils.getWindow();
 
-  callbacks.fire();
+  return window.visualViewport;
 }
 
 function add(handler: DocumentSizeHandler): void {
-  if (!windowUtils.hasWindow()) {
+  const visualViewport = getVisualViewport();
+
+  if (!visualViewport) {
     return;
   }
 
   callbacks.add(handler);
 
-  if (!observedElement) {
-    previousSize = getDocumentSize();
-    observedElement = domAdapter.getDocumentElement();
-    resizeObserverSingleton.observe(observedElement, handleDocumentResize);
+  if (!removeListener) {
+    previousDocumentSize = getDocumentSize();
+    previousWindowSize = getWindowSize();
+    removeListener = domAdapter.listen(visualViewport, 'resize', handleVisualViewportResize);
   }
 }
 
 function remove(handler: DocumentSizeHandler): void {
   callbacks.remove(handler);
 
-  if (observedElement && !callbacks.has()) {
-    resizeObserverSingleton.unobserve(observedElement);
-    observedElement = null;
-    previousSize = null;
+  if (removeListener && !callbacks.has()) {
+    removeListener();
+    removeListener = null;
+    previousDocumentSize = null;
+    previousWindowSize = null;
   }
 }
 
