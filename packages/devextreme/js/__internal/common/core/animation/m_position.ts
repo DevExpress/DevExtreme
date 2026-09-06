@@ -2,7 +2,6 @@ import { move, resetPosition } from '@js/common/core/animation/translator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -263,10 +262,10 @@ const calculatePosition = function (what, options) {
         h.atSize = of[0].visualViewport.width;
         v.atSize = of[0].visualViewport.height;
       } else {
-        const isIosSafari = browser.safari && devices.real().platform === 'ios';
+        const isIos = devices.real().platform === 'ios';
 
         h.atSize = getWidth(of);
-        v.atSize = isIosSafari ? of[0].innerHeight : getHeight(of);
+        v.atSize = isIos ? of[0].innerHeight : getHeight(of);
       }
     } else if (of[0].nodeType === 9) {
       h.atLocation = 0;
