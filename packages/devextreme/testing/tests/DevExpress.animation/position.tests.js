@@ -944,11 +944,6 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     });
 
     QUnit.test('position should measure the window by its client height whatever window.outerHeight reports', function(assert) {
-        if(browser.safari) {
-            assert.ok(true, 'actual only for desktop browsers except Safari');
-            return;
-        }
-
         const $what = $('#what').height(300);
         const initialInnerHeight = window.innerHeight;
         const initialOuterHeight = window.outerHeight;
@@ -1056,7 +1051,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
-    QUnit.test('position should measure the window by window.innerHeight on iOS Safari', function(assert) {
+    QUnit.test('position should measure the window by window.innerHeight on iOS whatever the browser is', function(assert) {
         const $what = $('#what').height(300);
         const initialInnerHeight = window.innerHeight;
         const initialSafari = browser.safari;
@@ -1066,13 +1061,16 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
 
         try {
             window.innerHeight = 500;
-            browser.safari = true;
 
-            const resultPosition = setupPosition($what, {
-                of: $(window)
+            [true, false].forEach((isSafari) => {
+                browser.safari = isSafari;
+
+                const resultPosition = setupPosition($what, {
+                    of: $(window)
+                });
+
+                assert.roughEqual(resultPosition.v.location, 100, 50, `vertical location is correct, browser.safari is ${isSafari}`);
             });
-
-            assert.roughEqual(resultPosition.v.location, 100, 50, 'vertical location is correct');
         } finally {
             window.innerHeight = initialInnerHeight;
             browser.safari = initialSafari;
