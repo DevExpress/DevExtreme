@@ -55,6 +55,7 @@ describe('Summary data controller row changes', () => {
 
     expect(change.rowIndices).toEqual([0]);
     expect(change.changeTypes).toEqual(['update']);
+    expect(change.columnIndices).toEqual([undefined]);
   });
 
   it('should report a group footer when isContinuation changed', async () => {
