@@ -473,8 +473,8 @@ const findings = {
   })(),
 
   /*
-   * Wave F guard: hand-written `--dx-…:` declarations. The component tier is emitted ONLY from the
-   * generated _public.scss files; everything else declaring a --dx name is the frozen legacy
+   * Wave F guard: `--dx-…:` declarations outside the tier files. The component tier is emitted ONLY
+   * from _public.scss / _public-links.scss; everything else declaring a --dx name is the frozen legacy
    * surface (the pre-standard public tier, typography's scale publication, gridBase's runtime
    * bits). Exact list by design: a new manual emission is a conscious baseline edit.
    */
@@ -493,8 +493,8 @@ const findings = {
    * the irreducible remainder — Sass math (math.div, `2 *`), unguarded-math mixin arguments and
    * Sass-local derivations — plus the declaration files and with() keys, which are excluded by
    * construction. A new entry means a new bypass: consume it or justify it here. The tier name
-   * set comes from the hand-maintained _public.scss files (their own sync gate lives in the
-   * "wave F" block below).
+   * set comes from the committed _public.scss / _public-links.scss files (their own gate lives in
+   * the "wave F" block below).
    */
   unconsumedManifestReads: (() => {
     const manifestNames = new Set(walk(themeRoot, '.scss')
