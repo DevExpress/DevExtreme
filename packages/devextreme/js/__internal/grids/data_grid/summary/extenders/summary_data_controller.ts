@@ -288,6 +288,19 @@ export const summaryDataControllerExtender = (
     return super.isSameRowState(item1, item2);
   }
 
+  protected getChangedColumnIndices(
+    oldItem: ProcessedItem,
+    newItem: ProcessedItem,
+    visibleRowIndex: number,
+    isLiveUpdate?: boolean,
+  ): number[] | undefined {
+    if (newItem.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
+      return undefined;
+    }
+
+    return super.getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+  }
+
   protected _updateItemsCore(change: DataChange): void {
     const dataSource = this._dataSource;
     const summaryTotalItems = this.option('summary.totalItems');
