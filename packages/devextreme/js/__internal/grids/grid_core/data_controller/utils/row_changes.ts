@@ -26,30 +26,6 @@ export function isSameItem(
   return isSameRowType && (!isDetailRow || isSameEditingState);
 }
 
-// TODO remove after related checks moved to extenders (duplicated in grouping)
-export function isSameGroupRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
-  return item1.isExpanded === item2.isExpanded
-    && item1.data?.isContinuation === item2.data?.isContinuation
-    && item1.data?.isContinuationOnNextPage === item2.data?.isContinuationOnNextPage;
-}
-
-export function canDiffColumns(oldItem: ProcessedItem, newItem: ProcessedItem): boolean {
-  return oldItem.rowType === newItem.rowType && newItem.rowType !== 'groupFooter';
-}
-
-export function getGroupColumnIndices(
-  oldItem: ProcessedItem,
-  newItem: ProcessedItem,
-): number[] | undefined {
-  if (!oldItem.cells || !isSameGroupRowState(oldItem, newItem)) {
-    return undefined;
-  }
-
-  return oldItem.cells
-    .map((cell, index) => (cell.column?.type !== 'groupExpand' ? index : -1))
-    .filter((index) => index >= 0);
-}
-
 /**
  * Rows of different types may share a key, so the row type is a part of the key
  * the diff is built on.
@@ -122,14 +98,14 @@ export function updateKeptRows(
   });
 }
 
-/**
- * A store change is indexed by data rows, while an insert index coming from the
- * grid counts every visible row — group rows included.
- */
-export function getDataRowIndex(rows: ProcessedItem[], visibleRowIndex: number): number {
+export function countRowsBefore(
+  rows: ProcessedItem[],
+  visibleRowIndex: number,
+  rowType: ProcessedItem['rowType'],
+): number {
   const previousRows = rows.slice(0, visibleRowIndex);
 
-  return previousRows.filter((row) => row?.rowType === 'data' || row?.rowType === 'group').length;
+  return previousRows.filter((row) => row?.rowType === rowType).length;
 }
 
 export function getChangedRowIndices(

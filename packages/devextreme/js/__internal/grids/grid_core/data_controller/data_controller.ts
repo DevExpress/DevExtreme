@@ -1,11 +1,8 @@
-import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
-import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender } from '@js/core/utils/common';
 import { logger } from '@js/core/utils/console';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
@@ -16,18 +13,17 @@ import type Store from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent } from '@ts/data/data_source/types';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type {
-  ChangedEvent, DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData,
+  ChangedEvent, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
   Controllers, Module, OptionChanged, RowKey,
 } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import type { VirtualScrollController } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
 import type { CustomLoadResult } from '../data_source_adapter/custom_loader';
 import type {
@@ -57,11 +53,9 @@ import { resolvePaginate, syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
   attachChangedItems,
-  canDiffColumns,
   convertToUpdateChange,
+  countRowsBefore,
   getChangedRowIndices,
-  getDataRowIndex,
-  getGroupColumnIndices,
   getItemChange,
   getRowKey,
   indexRowsByKey,
@@ -74,8 +68,6 @@ import { generateRowValues } from './utils/row_values';
 
 export class DataController extends modules.Controller {
   public _dataSource?: DataSourceAdapter | null;
-
-  protected isSharedDataSource?: boolean;
 
   protected _items!: ProcessedItem[];
 
@@ -129,19 +121,12 @@ export class DataController extends modules.Controller {
 
   public rowIndicesChanged!: Callback<[RowIndexCorrection]>;
 
-  protected _lastRenderingPageIndex?: number;
-
-  protected _isPagingByRendering?: boolean;
+  protected dataSourceController!: DataSourceController;
 
   // TODO public controller
   public _columnsController!: Controllers['columns'];
 
-  // TODO public controller
-  public _rowsScrollController?: VirtualScrollController | null;
-
   private _filterExcludedColumn: Column | null = null;
-
-  protected _focusController!: FocusController;
 
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
@@ -152,8 +137,8 @@ export class DataController extends modules.Controller {
   public init(): void {
     this._items = [];
     this._cachedProcessedItems = null;
+    this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
-    this._focusController = this.getController('focus');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -657,22 +642,6 @@ export class DataController extends modules.Controller {
     });
   }
 
-  protected _getSpecificDataSourceOption(): unknown {
-    const dataSource = this.option('dataSource');
-
-    if (Array.isArray(dataSource)) {
-      return {
-        store: {
-          type: 'array',
-          data: dataSource,
-          key: this.option('keyExpr'),
-        },
-      };
-    }
-
-    return dataSource;
-  }
-
   /**
    * @extended: state_storing, virtual_scrolling
    */
@@ -686,7 +655,9 @@ export class DataController extends modules.Controller {
   protected _initDataSource(): void {
     const hadDataSource = !!this._dataSource;
 
-    const dataSource = this.recreateDataSource();
+    this._disposeDataSource();
+
+    const dataSource = this.dataSourceController.createDataSource();
     this._useSortingGroupingFromColumns = true;
     this._cachedProcessedItems = null;
 
@@ -698,27 +669,6 @@ export class DataController extends modules.Controller {
     } else if (hadDataSource) {
       this.updateItems();
     }
-  }
-
-  private recreateDataSource(): DataSource | undefined {
-    const dataSourceOptions = this._getSpecificDataSourceOption();
-
-    this._disposeDataSource();
-
-    if (!dataSourceOptions) {
-      this.isSharedDataSource = false;
-      return undefined;
-    }
-
-    if (dataSourceOptions instanceof DataSourceClass) {
-      this.isSharedDataSource = true;
-      return dataSourceOptions as unknown as DataSource;
-    }
-
-    this.isSharedDataSource = false;
-    return new DataSourceClass(
-      extend(true, {}, normalizeDataSourceOptions(dataSourceOptions, {})),
-    ) as unknown as DataSource;
   }
 
   /**
@@ -762,6 +712,16 @@ export class DataController extends modules.Controller {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getDataIndex(change: DataChange): number { return 0; }
+
+  /**
+   * A store change is indexed by data rows, while an insert index coming from the grid counts
+   * every visible row. Each module that puts its own countable rows into the stream adds their
+   * count on top of this one.
+   * @extended: grouping (DataGrid)
+   */
+  protected adjustInsertRowIndex(visibleRowIndex: number): number {
+    return countRowsBefore(this.getVisibleRows(), visibleRowIndex, 'data');
+  }
 
   /**
    * @extended: adaptivity, editing, master_detail, virtual_scrolling
@@ -982,7 +942,8 @@ export class DataController extends modules.Controller {
   }
 
   /**
-   * @extended: editing_row_based, editing, editing_form_based
+   * @extended: editing_row_based, editing, editing_form_based, grouping (DataGrid),
+   * summary (DataGrid)
    */
   protected getChangedColumnIndices(
     oldItem: ProcessedItem,
@@ -990,18 +951,17 @@ export class DataController extends modules.Controller {
     visibleRowIndex: number,
     isLiveUpdate?: boolean,
   ): number[] | undefined {
-    if (!canDiffColumns(oldItem, newItem)) {
+    if (oldItem.rowType !== newItem.rowType) {
       return undefined;
     }
-
-    switch (newItem.rowType) {
-      case 'group':
-        return getGroupColumnIndices(oldItem, newItem);
-      case 'detail':
-        return [];
-      default:
-        return this.getChangedColumnIndicesCore(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+    // The detail type is not owned by a single module: Master-Detail creates these rows,
+    // while form-based editing reuses the same type for its edit row. Therefore, the check
+    // remains in the base module for now.
+    if (newItem.rowType === 'detail') {
+      return [];
     }
+
+    return this.getChangedColumnIndicesCore(oldItem, newItem, visibleRowIndex, isLiveUpdate);
   }
 
   private getChangedColumnIndicesCore(
@@ -1165,7 +1125,6 @@ export class DataController extends modules.Controller {
   }
 
   private readonly changingHandler = (e: ChangingEvent): void => {
-    const rows = this.getVisibleRows();
     const dataSource = this.dataSource();
 
     if (!dataSource) {
@@ -1174,7 +1133,7 @@ export class DataController extends modules.Controller {
 
     e.changes.forEach((change) => {
       if (change.type === 'insert' && change.index !== undefined && change.index >= 0) {
-        change.index = getDataRowIndex(rows, change.index);
+        change.index = this.adjustInsertRowIndex(change.index);
       }
     });
   };
@@ -1374,18 +1333,6 @@ export class DataController extends modules.Controller {
     this.dataSourceChanged.fire();
   };
 
-  protected _getDataSourceAdapterProvider(): DataSourceAdapterProvider {
-    throw new Error('Method not implemented.');
-  }
-
-  protected _createDataSourceAdapter(dataSource: DataSource): DataSourceAdapter {
-    const dataSourceAdapterProvider = this._getDataSourceAdapterProvider();
-    const dataSourceAdapter = dataSourceAdapterProvider.create(this.component);
-
-    dataSourceAdapter.init(dataSource);
-    return dataSourceAdapter;
-  }
-
   private subscribeToDataSource(dataSourceAdapter: DataSourceAdapter): void {
     dataSourceAdapter.changed.add(this.dataChangedHandlerProxy);
     dataSourceAdapter.loadingChanged.add(this.loadingChangedHandler);
@@ -1404,29 +1351,17 @@ export class DataController extends modules.Controller {
     dataSourceAdapter.pushed.remove(this.dataPushedHandlerProxy);
   }
 
-  private setDataSource(dataSource: DataSource | null): void {
-    const oldDataSource = this._dataSource;
-
-    if (!dataSource && oldDataSource) {
-      oldDataSource.cancelAll();
-      this.unsubscribeFromDataSource(oldDataSource);
-      oldDataSource.dispose(this.isSharedDataSource);
-    }
-
-    const dataSourceAdapter = dataSource
-      ? this._createDataSourceAdapter(dataSource)
-      : null;
+  private setDataSource(dataSource: DataSource): void {
+    const dataSourceAdapter = this.dataSourceController.createAdapter(dataSource);
 
     this._dataSource = dataSourceAdapter;
 
-    if (dataSourceAdapter) {
-      this._isLoading = !dataSourceAdapter.isLoaded();
-      this._needApplyFilter = true;
-      this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
+    this._isLoading = !dataSourceAdapter.isLoaded();
+    this._needApplyFilter = true;
+    this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
 
-      this.changed.add(this.fireDataSourceChanged);
-      this.subscribeToDataSource(dataSourceAdapter);
-    }
+    this.changed.add(this.fireDataSourceChanged);
+    this.subscribeToDataSource(dataSourceAdapter);
   }
 
   /**
@@ -1683,7 +1618,16 @@ export class DataController extends modules.Controller {
   }
 
   protected _disposeDataSource(): void {
-    this.setDataSource(null);
+    const oldDataSource = this._dataSource;
+
+    if (oldDataSource) {
+      // Before unsubscribing: cancelling in-flight loads still notifies this controller.
+      oldDataSource.cancelAll();
+      this.unsubscribeFromDataSource(oldDataSource);
+    }
+
+    this._dataSource = null;
+    this.dataSourceController.disposeAdapter();
   }
 
   public dispose(): void {
