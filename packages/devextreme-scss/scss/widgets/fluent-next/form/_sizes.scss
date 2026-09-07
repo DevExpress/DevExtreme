@@ -1,7 +1,7 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-$form-group-caption-bottom-margin: null !default;
+$form-group-caption-bottom-margin: ds.$spacing-40 !default;
 $form-group-caption-top-padding: null !default;
 $form-group-content-bottom-padding: null !default;
 $form-group-caption-font-size: null !default;
@@ -18,7 +18,6 @@ $form-label-icon-size: $global-icon-size !default;
 $form-group-custom-caption-icon-margin: null !default;
 
 @if $size == "default" {
-  $form-group-caption-bottom-margin: ds.$spacing-40 !default;
   $form-group-caption-top-padding: ds.$spacing-160 !default;
   $form-group-content-bottom-padding: ds.$spacing-160 !default;
   $form-group-caption-font-size: ds.$font-size-title-md !default;
@@ -31,7 +30,6 @@ $form-group-custom-caption-icon-margin: null !default;
 }
 
 @else if $size == "compact" {
-  $form-group-caption-bottom-margin: ds.$spacing-40 !default;
   $form-group-caption-top-padding: ds.$spacing-120 !default;
   $form-group-content-bottom-padding: ds.$spacing-120 !default;
   $form-group-caption-font-size: ds.$font-size-title-sm !default;

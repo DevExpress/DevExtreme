@@ -6,7 +6,7 @@ $scheduler-appointment-resizing-opacity: ds.$opacity-70 !default;
 $scheduler-appointment-opacity-disabled: ds.$opacity-60 !default;
 
 $scheduler-workspace-date-table-cell-height: null !default;
-$scheduler-toolbar-item-offset: null !default;
+$scheduler-toolbar-item-offset: ds.$spacing-40 !default;
 $scheduler-header-panel-day-font-size: null !default;
 $scheduler-appointment-tooltip-title-font-size: null !default;
 $scheduler-appointment-tooltip-date-font-size: null !default;
@@ -19,8 +19,8 @@ $scheduler-dropdown-button-height: null !default;
 $scheduler-dropdown-button-padding: null !default;
 $scheduler-dropdown-button-margin: null !default;
 $scheduler-dropdown-button-margin-block: null !default;
-$scheduler-dropdown-button-adaptive-margin: null !default;
-$scheduler-dropdown-button-adaptive-margin-block: null !default;
+$scheduler-dropdown-button-adaptive-margin: 0 ds.$spacing-20 !default;
+$scheduler-dropdown-button-adaptive-margin-block: 0 ds.$spacing-20 0 ds.$spacing-10 !default;
 $scheduler-appointment-tooltip-content-margin-inline-start: null !default;
 $scheduler-tooltip-marker-size: null !default;
 $scheduler-appointment-tooltip-title-margin-block-start: null !default;
@@ -35,19 +35,19 @@ $scheduler-appointment-popup-all-day-item-height: null !default;
 $scheduler-appointment-popup-days-of-week-buttons-gap: null !default;
 $scheduler-appointment-popup-repeat-end-item-height: null !default;
 
-$scheduler-appointment-short-content-padding: null !default;
-$scheduler-appointment-15min-height: null !default;
-$scheduler-appointment-20min-height: null !default;
-$scheduler-appointment-25min-height: null !default;
-$scheduler-appointment-10min-recurrence-padding-inline-end: null !default;
-$scheduler-appointment-10min-title-font-size: null !default;
-$scheduler-appointment-10min-title-line-height: null !default;
-$scheduler-appointment-10min-icon-font-size: null !default;
-$scheduler-appointment-10min-icon-inset-inline-end: null !default;
+$scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
+$scheduler-appointment-15min-height: 17px !default; // dx-literal-required: used in @container conditions, var() is invalid there
+$scheduler-appointment-20min-height: 24px !default; // dx-literal-required: used in @container conditions, var() is invalid there
+$scheduler-appointment-25min-height: 32px !default; // dx-literal-required: used in @container conditions, var() is invalid there
+$scheduler-appointment-10min-recurrence-padding-inline-end: ds.$spacing-140 !default;
+$scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
+$scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
+$scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+$scheduler-appointment-10min-icon-inset-inline-end: ds.$spacing-20 !default;
 $scheduler-appointment-15min-recurrence-padding-inline-end: null !default;
-$scheduler-appointment-15min-title-font-size: null !default;
+$scheduler-appointment-15min-title-font-size: ds.$font-size-base-sm !default;
 $scheduler-appointment-15min-title-line-height: null !default;
-$scheduler-appointment-15min-icon-font-size: null !default;
+$scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
 $scheduler-appointment-15min-icon-inset-inline-end: null !default;
 $scheduler-appointment-20min-recurrence-padding-inline-end: null !default;
 $scheduler-appointment-20min-icon-inset-inline-end: null !default;
@@ -93,7 +93,6 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-header-panel-day-font-size: ds.$font-size-title-sm !default;
   $scheduler-header-height: 46px !default; // dx-offscale: 46px
   $scheduler-header-offset: 0 ds.$spacing-120 !default;
-  $scheduler-toolbar-item-offset: ds.$spacing-40 !default;
 
   $scheduler-appointment-tooltip-title-font-size: ds.$font-size-title-sm !default;
   $scheduler-appointment-tooltip-date-font-size: ds.$font-size-140 !default; // dx-no-semantic-role: compact branch (110) is off the role scale
@@ -107,8 +106,6 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-dropdown-button-padding: ds.$spacing-40 !default;
   $scheduler-dropdown-button-margin: ds.$spacing-50 ds.$spacing-10 ds.$spacing-30 ds.$spacing-30 !default;
   $scheduler-dropdown-button-margin-block: ds.$spacing-50 ds.$spacing-30 ds.$spacing-30 ds.$spacing-30 !default;
-  $scheduler-dropdown-button-adaptive-margin: 0 ds.$spacing-20 !default;
-  $scheduler-dropdown-button-adaptive-margin-block: 0 ds.$spacing-20 0 ds.$spacing-10 !default;
 
   $scheduler-appointment-tooltip-content-margin-inline-start: ds.$spacing-60 !default;
   $scheduler-tooltip-marker-size: ds.$spacing-120 !default;
@@ -126,21 +123,8 @@ $scheduler-header-panel-time-cell-padding: null !default;
 
   $scheduler-agenda-appointment-title-font-size: ds.$font-size-base-md !default;
 
-  $scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
-  $scheduler-appointment-15min-height: 17px !default; // dx-literal-required: used in @container conditions, var() is invalid there
-  $scheduler-appointment-20min-height: 24px !default; // dx-literal-required: used in @container conditions, var() is invalid there
-  $scheduler-appointment-25min-height: 32px !default; // dx-literal-required: used in @container conditions, var() is invalid there
-
-  $scheduler-appointment-10min-recurrence-padding-inline-end: ds.$spacing-140 !default;
-  $scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
-  $scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
-  $scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
-  $scheduler-appointment-10min-icon-inset-inline-end: ds.$spacing-20 !default;
-
   $scheduler-appointment-15min-recurrence-padding-inline-end: ds.$spacing-140 !default;
-  $scheduler-appointment-15min-title-font-size: ds.$font-size-base-sm !default;
   $scheduler-appointment-15min-title-line-height: ds.$line-height-180 !default; // dx-no-semantic-role: 180 is off the line-height-role scale
-  $scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
   $scheduler-appointment-15min-icon-inset-inline-end: ds.$spacing-20 !default;
 
   $scheduler-appointment-20min-icon-inset-inline-end: ds.$spacing-20 !default;
@@ -157,7 +141,6 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-header-panel-day-font-size: ds.$font-size-title-xs !default;
   $scheduler-header-height: ds.$spacing-340 !default;
   $scheduler-header-offset: ds.$spacing-20 ds.$spacing-80 !default;
-  $scheduler-toolbar-item-offset: ds.$spacing-40 !default;
 
   $scheduler-appointment-tooltip-title-font-size: ds.$font-size-title-xs !default;
   $scheduler-appointment-tooltip-date-font-size: ds.$font-size-110 !default; // dx-no-semantic-role: 110 is off the font-size-role scale
@@ -171,8 +154,6 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-dropdown-button-padding: ds.$spacing-20 !default;
   $scheduler-dropdown-button-margin: ds.$spacing-20 ds.$spacing-10 ds.$spacing-20 ds.$spacing-30 !default;
   $scheduler-dropdown-button-margin-block: ds.$spacing-20 ds.$spacing-10 ds.$spacing-20 ds.$spacing-10 !default;
-  $scheduler-dropdown-button-adaptive-margin: 0 ds.$spacing-20 !default;
-  $scheduler-dropdown-button-adaptive-margin-block: 0 ds.$spacing-20 0 ds.$spacing-10 !default;
 
   $scheduler-appointment-tooltip-content-margin-inline-start: ds.$spacing-80 !default;
   $scheduler-tooltip-marker-size: ds.$spacing-180 !default;
@@ -190,21 +171,8 @@ $scheduler-header-panel-time-cell-padding: null !default;
 
   $scheduler-agenda-appointment-title-font-size: ds.$spacing-130 !default;
 
-  $scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
-  $scheduler-appointment-15min-height: 17px !default; // dx-literal-required: used in @container conditions, var() is invalid there
-  $scheduler-appointment-20min-height: 24px !default; // dx-literal-required: used in @container conditions, var() is invalid there
-  $scheduler-appointment-25min-height: 32px !default; // dx-literal-required: used in @container conditions, var() is invalid there
-
-  $scheduler-appointment-10min-recurrence-padding-inline-end: ds.$spacing-140 !default;
-  $scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
-  $scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
-  $scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
-  $scheduler-appointment-10min-icon-inset-inline-end: ds.$spacing-20 !default;
-
   $scheduler-appointment-15min-recurrence-padding-inline-end: ds.$spacing-160 !default;
-  $scheduler-appointment-15min-title-font-size: ds.$font-size-base-sm !default;
   $scheduler-appointment-15min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
-  $scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
   $scheduler-appointment-15min-icon-inset-inline-end: ds.$spacing-50 !default;
 
   $scheduler-appointment-20min-recurrence-padding-inline-end: ds.$spacing-200 !default;

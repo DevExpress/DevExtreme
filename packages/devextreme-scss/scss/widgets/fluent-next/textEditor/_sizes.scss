@@ -28,13 +28,13 @@ $text-editor-input-underlined-padding-inline: 0 !default;
 $text-editor-line-height: null !default;
 $text-editor-font-size: null !default;
 $text-editor-input-min-height: null !default;
-$text-editor-label-offset: null !default;
+$text-editor-label-offset: ds.$spacing-minus-10 !default;
 $text-editor-label-outside-offset: null !default;
 $text-editor-input-filled-padding-inline: null !default;
 $text-editor-input-filled-padding-block-start: null !default;
 $text-editor-input-filled-padding-block-end: null !default;
 $text-editor-input-underlined-padding-block-start: null !default;
-$text-editor-button-underlined-height: null !default;
+$text-editor-button-underlined-height: ds.$spacing-220 !default;
 $text-editor-label-font-size: null !default;
 $text-editor-label-outside-height: null !default;
 $text-editor-input-underlined-padding-block-end: null !default;
@@ -51,7 +51,6 @@ $text-editor-icon-container-size: $global-icon-size !default;
   $text-editor-label-outside-height: ds.$spacing-200 !default;
   $text-editor-label-outside-offset: ds.$spacing-240 !default;
   $text-editor-label-font-size: ds.$font-size-caption-md !default;
-  $text-editor-label-offset: ds.$spacing-minus-10 !default;
   $text-editor-input-filled-padding-inline: ds.$spacing-120 !default;
   $text-editor-input-filled-padding-block-start: ds.$spacing-50 !default;
   $text-editor-input-filled-with-label-padding-block-start: ds.$spacing-80 !default;
@@ -61,7 +60,6 @@ $text-editor-icon-container-size: $global-icon-size !default;
   $text-editor-input-underlined-padding-block-end: ds.$spacing-50 !default;
   $text-editor-input-underlined-with-label-padding-block-start: ds.$spacing-90 !default;
   $text-editor-input-underlined-with-label-padding-block-end: ds.$spacing-30 !default;
-  $text-editor-button-underlined-height: ds.$spacing-220 !default;
 }
 
 @else if $size == "compact" {
@@ -71,7 +69,6 @@ $text-editor-icon-container-size: $global-icon-size !default;
   $text-editor-label-outside-height: ds.$spacing-160 !default;
   $text-editor-label-outside-offset: ds.$spacing-180 !default;
   $text-editor-label-font-size: ds.$font-size-caption-sm !default;
-  $text-editor-label-offset: ds.$spacing-minus-10 !default;
   $text-editor-input-filled-padding-inline: ds.$spacing-80 !default;
   $text-editor-input-filled-padding-block-start: ds.$spacing-30 !default;
   $text-editor-input-filled-with-label-padding-block-start: ds.$spacing-60 !default;
@@ -81,7 +78,6 @@ $text-editor-icon-container-size: $global-icon-size !default;
   $text-editor-input-underlined-padding-block-end: ds.$spacing-30 !default;
   $text-editor-input-underlined-with-label-padding-block-start: ds.$spacing-60 !default;
   $text-editor-input-underlined-with-label-padding-block-end: ds.$spacing-20 !default;
-  $text-editor-button-underlined-height: ds.$spacing-220 !default;
 }
 
 $text-editor-input-filled-padding:
