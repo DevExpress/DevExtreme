@@ -19,7 +19,7 @@ $file-manager-thumbnails-item-thumbnail-size: null !default;
 $file-manager-progress-panel-title-padding-block: null !default;
 $file-manager-progress-box-button-close-margin-block-start: null !default;
 
-$file-manager-toolbar-height: toolbarSizes.$toolbar-height;
+$file-manager-toolbar-height: toolbarSizes.$toolbar-height !default;
 
 @if $size == "default" {
   $file-manager-toolbar-separator-height: ds.$spacing-360 !default;

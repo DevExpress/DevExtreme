@@ -9,15 +9,15 @@ $speed-dial-action-fa-button-size: null !default;
 @if $size == "default" {
   $speed-dial-action-main-fa-button-size: ds.$spacing-440 !default;
   $speed-dial-action-fa-button-size: ds.$spacing-440 !default;
-  $speed-dial-action-main-fa-button-padding-inline: ds.$spacing-160;
-  $speed-dial-action-main-fa-button-label-padding: 0 $speed-dial-action-main-fa-button-padding-inline 0 ds.$spacing-80;
+  $speed-dial-action-main-fa-button-padding-inline: ds.$spacing-160 !default;
+  $speed-dial-action-main-fa-button-label-padding: 0 $speed-dial-action-main-fa-button-padding-inline 0 ds.$spacing-80 !default;
 }
 
 @else if $size == "compact" {
   $speed-dial-action-main-fa-button-size: ds.$spacing-320 !default;
   $speed-dial-action-fa-button-size: ds.$spacing-320 !default;
-  $speed-dial-action-main-fa-button-padding-inline: ds.$spacing-120;
-  $speed-dial-action-main-fa-button-label-padding: 0 $speed-dial-action-main-fa-button-padding-inline 0 ds.$spacing-40;
+  $speed-dial-action-main-fa-button-padding-inline: ds.$spacing-120 !default;
+  $speed-dial-action-main-fa-button-label-padding: 0 $speed-dial-action-main-fa-button-padding-inline 0 ds.$spacing-40 !default;
 }
 
 // Values hoisted from style-file literals (tokenized)

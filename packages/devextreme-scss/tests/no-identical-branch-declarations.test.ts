@@ -390,3 +390,56 @@ test('--fix takes the doc comment along when the declaration has to move', () =>
     '$divider: $border !default;',
   ));
 });
+
+test("a hoisted declaration takes its trailing comment with it", () => {
+  const { output, warnings } = fix('trailing-comment.scss', scss(
+    '$height: null !default;',
+    '$other: 4px !default;',
+    '',
+    '@if $size == "default" {',
+    '  $height: 17px !default; // dx-literal-required: read in a @container condition',
+    '  $other: 8px !default;',
+    '}',
+    '',
+    '@else {',
+    '  $height: 17px !default; // dx-literal-required: read in a @container condition',
+    '  $other: 6px !default;',
+    '}',
+  ));
+
+  expect(warnings).toEqual([]);
+  expect(output).toBe(scss(
+    '$height: 17px !default; // dx-literal-required: read in a @container condition',
+    '$other: 4px !default;',
+    '',
+    '@if $size == "default" {',
+    '  $other: 8px !default;',
+    '}',
+    '',
+    '@else {',
+    '  $other: 6px !default;',
+    '}',
+  ));
+});
+
+test('a chain whose branches disagree about the trailing comment is reported but not fixed', () => {
+  const source = scss(
+    '$height: null !default;',
+    '',
+    '@if $size == "default" {',
+    '  $height: 17px !default; // dx-literal-required: read in a @container condition',
+    '}',
+    '',
+    '@else {',
+    '  $height: 17px !default; // dx-fixed-size: drawn into the rule',
+    '}',
+  );
+  const { output, warnings } = fix('disagreeing-comment.scss', source);
+
+  expect(warnings).toEqual([{
+    line: 4,
+    rule: ruleName,
+    text: `"$height" has the same value in all 2 branches of the @if chain; declare it once outside the chain (${ruleName})`,
+  }]);
+  expect(output).toBe(source);
+});

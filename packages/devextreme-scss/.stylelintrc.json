@@ -24,7 +24,7 @@
             { "/.*/": ["/var\\(\\s*--dxds-/"] },
             { "message": "Read a design token through the ds bridge (ds.$name), not var(--dxds-…): the bridge fails the build on an unknown name, a raw custom property compiles and degrades silently." }
         ],
-        "dx/module-variable-default": true,
+        "dx/module-variable-default": [true, { "exemptMarkersFrom": "tools/review/size-markers.json" }],
         "dx/no-identical-branch-declarations": true,
         "font-family-name-quotes": "always-unless-keyword",
         "@stylistic/function-comma-space-after": "always-single-line",

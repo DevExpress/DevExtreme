@@ -18,4 +18,4 @@ $date-view-item-phone-font-size-selected: 1.4em !default; // dx-relative: scales
  * Derived values, moved out of _index.scss: a file that emits rules must not declare
  * variables (NAMING.md, O7).
  */
-$date-view-roller-padding: calc((#{$date-view-roller-height} - #{$date-view-roller-item-height}) / 2);
+$date-view-roller-padding: calc((#{$date-view-roller-height} - #{$date-view-roller-item-height}) / 2) !default;

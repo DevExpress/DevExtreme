@@ -1,7 +1,7 @@
 @use "sass:meta";
 @use "colors";
 
-$accent: colors.$color;
+$accent: colors.$color !default;
 
 /*
  * Tier order mirrors the design-tokens package: base scales and palettes, then semantic roles.
