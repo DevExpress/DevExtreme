@@ -320,7 +320,7 @@
   .dx-list-item {
     border-radius: $global-border-radius;
 
-    @include toggle-delete-icon($list-toggle-delete-icon);
+    @include toggle-delete-icon($masked: true);
 
     &.dx-state-hover,
     &.dx-state-active {
@@ -348,6 +348,7 @@
 
     .dx-icon-toggle-delete {
       background-size: 100%;
+      mask-size: 100%;
     }
 
     &.dx-list-item-ghost-reordering {

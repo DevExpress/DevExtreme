@@ -1,4 +1,3 @@
-@use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
@@ -17,12 +16,6 @@
     background-size: 100% 100%;
     background-position: 50% 50%;
   }
-}
-
-.dx-scrollview-pulldown {
-  background-image: $icon-pulldown-bg;
-  background-position: 0 0;
-  background-repeat: no-repeat;
 }
 
 .dx-loadindicator-image {

@@ -29,22 +29,6 @@ $list-item-ghost-content: ds.$color-content-subtle !default;
 $list-item-ghost-border: ds.$color-border-primary !default;
 $list-icon: ds.$color-content-subtle !default;
 
-/*
- * toggle-delete is an SVG data-uri image: the color is baked into the background-image at
- * build time. CSS var() tokens do NOT resolve inside a data-uri (they render black), so the
- * value below is the static per-mode equivalent of the ds.$ token named in the marker.
- * See DIVERGENCES.md.
- */
-$list-toggle-delete-icon: null !default;
-
-@if $mode == "light" {
-  $list-toggle-delete-icon: #444 !default; // dx-data-uri-static: ds.$color-content-subtle
-}
-
-@if $mode == "dark" {
-  $list-toggle-delete-icon: #cbcbcb !default; // dx-data-uri-static: ds.$color-content-subtle
-}
-
 $list-base-select-all-separator-bg: ds.$color-border-subtle !default;
 
 $list-group-content: ds.$color-content !default;
