@@ -5,7 +5,7 @@
 $menu-item-line-height: null !default;
 $menu-item-with-icon-padding-inline: null !default;
 $menu-padding-inline: null !default;
-$menu-item-icon-gap: ds.$spacing-40;
+$menu-item-icon-gap: ds.$spacing-40 !default;
 
 @if $size == "default" {
   $menu-item-line-height: ds.$line-height-base-md !default;

@@ -4,7 +4,7 @@
 
 // Not colours: a font weight and two opacities (NAMING.md O7)
 $grid-column-chooser-font-weight: ds.$font-weight-base-strong !default;
-$grid-group-panel-message-line-height: buttonSizes.$button-text-line-height;
+$grid-group-panel-message-line-height: buttonSizes.$button-text-line-height !default;
 
 $grid-border-width: 1px !default; // dx-line-width: 1px
 $grid-border-radius: 0 !default;

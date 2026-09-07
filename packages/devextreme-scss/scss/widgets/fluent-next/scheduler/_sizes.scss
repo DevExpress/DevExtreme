@@ -57,7 +57,7 @@ $scheduler-timeline-date-table-cell-height: 50px !default; // dx-offscale: 50px
 
 $scheduler-border-radius: 0 !default;
 
-$scheduler-navigator-icon-font-size: $global-icon-size;
+$scheduler-navigator-icon-font-size: $global-icon-size !default;
 $scheduler-appointment-month-font-size: ds.$spacing-120 !default;
 $scheduler-workspace-info-font-size: ds.$spacing-160 !default;
 $scheduler-all-day-title-font-size: ds.$font-size-caption-md !default;
@@ -87,7 +87,7 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-collapsed-all-day-table-cell-height: ds.$spacing-320 !default;
   $scheduler-header-panel-time-cell-padding: ds.$spacing-120 !default;
 
-  $scheduler-header-day-element-height: ds.$spacing-260;
+  $scheduler-header-day-element-height: ds.$spacing-260 !default;
   $scheduler-workspace-date-table-cell-height: 38px !default; // dx-offscale: 38px
 
   $scheduler-header-panel-day-font-size: ds.$font-size-title-sm !default;
@@ -124,7 +124,7 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-appointment-popup-days-of-week-buttons-gap: ds.$spacing-120 !default;
   $scheduler-appointment-popup-repeat-end-item-height: ds.$spacing-320 !default;
 
-  $scheduler-agenda-appointment-title-font-size: ds.$font-size-base-md;
+  $scheduler-agenda-appointment-title-font-size: ds.$font-size-base-md !default;
 
   $scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
   $scheduler-appointment-15min-height: 17px !default; // dx-literal-required: used in @container conditions, var() is invalid there
@@ -151,7 +151,7 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-collapsed-all-day-table-cell-height: ds.$spacing-240 !default;
   $scheduler-header-panel-time-cell-padding: ds.$spacing-80 !default;
 
-  $scheduler-header-day-element-height: ds.$spacing-240;
+  $scheduler-header-day-element-height: ds.$spacing-240 !default;
   $scheduler-workspace-date-table-cell-height: ds.$spacing-280 !default;
 
   $scheduler-header-panel-day-font-size: ds.$font-size-title-xs !default;
@@ -188,7 +188,7 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-appointment-popup-days-of-week-buttons-gap: ds.$spacing-80 !default;
   $scheduler-appointment-popup-repeat-end-item-height: ds.$spacing-240 !default;
 
-  $scheduler-agenda-appointment-title-font-size: ds.$spacing-130;
+  $scheduler-agenda-appointment-title-font-size: ds.$spacing-130 !default;
 
   $scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
   $scheduler-appointment-15min-height: 17px !default; // dx-literal-required: used in @container conditions, var() is invalid there
@@ -325,7 +325,7 @@ $scheduler-virtual-row-height: 50px !default; // dx-offscale: 50px
  * Derived values, moved out of _index.scss: a file that emits rules must not declare
  * variables (NAMING.md, O7).
  */
-$scheduler-all-day-table-cell-height: calc(#{$scheduler-workspace-date-table-cell-height} * 1.5);
+$scheduler-all-day-table-cell-height: calc(#{$scheduler-workspace-date-table-cell-height} * 1.5) !default;
 
 // Base-layer sizing injected with design tokens (wave B15)
 $scheduler-appointment-collector-height: ds.$spacing-220 !default;
