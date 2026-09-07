@@ -34,7 +34,7 @@ $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !def
 $datagrid-drag-header-shadow-color: null !default;
 $datagrid-drag-header-second-shadow-color: null !default;
 $datagrid-header-drag-bg: $datagrid-base-background-color !default;
-$header-filter-color: null !default;
+$header-filter-color: $datagrid-columnchooser-item-color !default;
 
 /**
 * $name 51. Selected row background color
@@ -75,7 +75,7 @@ $datagrid-row-hovered-color: $base-hover-color !default;
 $datagrid-cell-modified-border-color: $button-success-text-hover-bg !default;
 $datagrid-cell-removed-border-color: $datagrid-border-color !default;
 $datagrid-row-removed-bg: $datagrid-hover-bg !default;
-$datagrid-cell-removed-text-color: null !default;
+$datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 
 /**
 * $name 45. Invalid data faded color
@@ -88,7 +88,7 @@ $datagrid-nodata-color: $base-label-color !default;
 * $name 90. Group row text color
 * $type color
 */
-$datagrid-group-row-color: null !default;
+$datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
 
 /**
 * $name 95. Group row background color
@@ -159,8 +159,8 @@ $datagrid-text-stub-background-image-path: null !default;
 $datagrid-filter-panel-color: $base-accent !default;
 $datagrid-draggable-column-text-color: null !default;
 
-$datagrid-text-link-disabled-opacity: $base-disabled-opacity;
-$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
+$datagrid-text-link-disabled-opacity: $base-disabled-opacity !default;
+$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity !default;
 
 @if $mode == "light" {
   @if $color == "blue" {
@@ -172,31 +172,24 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
     $datagrid-row-focused-bg: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: -1deg, $saturation: 0%, $lightness: 26.47%) !default;
     $datagrid-filter-row-background-color: $base-typography-bg !default;
   }
-
-  $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: -12%, $space: hsl) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  $header-filter-color: $datagrid-columnchooser-item-color !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
   $datagrid-row-alternation-bg: color.adjust($datagrid-base-background-color, $lightness: -4%, $space: hsl) !default;
   $datagrid-text-stub-background-image-path: data-uri("images/widgets/fluent/color-schemes/light/grid/text-stub.png") !default;
-  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
   $datagrid-draggable-column-text-color: color.adjust($base-text-color, $lightness: 60%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
   $datagrid-row-focused-bg: #0c3b5e !default;
   $datagrid-filter-row-background-color: color.adjust($datagrid-base-background-color, $lightness: 2%, $space: hsl) !default;
-  $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: 12%, $space: hsl) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
-  $header-filter-color: $datagrid-columnchooser-item-color !default;
   $datagrid-columnchooser-item-bg: color.adjust($datagrid-columnchooser-bg, $lightness: 3%, $space: hsl) !default;
   $datagrid-row-alternation-bg: color.adjust($datagrid-base-background-color, $lightness: 4%, $space: hsl) !default;
   $datagrid-text-stub-background-image-path: data-uri("images/widgets/fluent/color-schemes/dark/grid/text-stub.png") !default;
-  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
   $datagrid-draggable-column-text-color: color.adjust($base-text-color, $lightness: -63.9%, $space: hsl) !default;
 }
 

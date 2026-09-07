@@ -35,7 +35,7 @@ $scheduler-appointment-base-color: $base-accent !default;
 * $type color
 */
 $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
-$scheduler-appointment-active-color: $scheduler-appointment-start-color;
+$scheduler-appointment-active-color: $scheduler-appointment-start-color !default;
 
 /**
 * $name 60. Focused cell color
@@ -74,8 +74,8 @@ $scheduler-fill-focused-appointment: false !default;
 $scheduler-is-shadow-color-for-focused-state: true !default;
 $scheduler-time-indicator-background-color: rgba(0, 0, 0, 0.03) !default;
 $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
-$material-scheduler-toolbar-color: $base-accent;
-$material-scheduler-toolbar-active-color: color.change($base-accent, $alpha: 0.08);
+$material-scheduler-toolbar-color: $base-accent !default;
+$material-scheduler-toolbar-active-color: color.change($base-accent, $alpha: 0.08) !default;
 
 $scheduler-tooltip-appointment-text-color: $base-text-color !default;
 $scheduler-appointment-overlay-bg: $base-bg !default;

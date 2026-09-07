@@ -35,7 +35,6 @@ $switch-active-border-color: null !default;
 $switch-off-color: null !default;
 $switch-handle-off-bg: null !default;
 $switch-readonly-border-color: null !default;
-$switch-container-readonly-bg: null !default;
 $switch-border-radius: null !default;
 
 @if $color == "carmine" {
@@ -51,7 +50,6 @@ $switch-border-radius: null !default;
   $switch-off-color: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
   $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: 15%, $space: hsl) !default;
   $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: 9%, $space: hsl) !default;
-  $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
 
@@ -67,7 +65,6 @@ $switch-border-radius: null !default;
   $switch-off-color: $base-text-color !default;
   $switch-handle-off-bg: $base-inverted-bg !default;
   $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: -50%, $space: hsl) !default;
-  $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius - 2px !default;
 }
 
@@ -83,7 +80,6 @@ $switch-border-radius: null !default;
   $switch-off-color: color.adjust($base-text-color, $lightness: -40%, $space: hsl) !default;
   $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: -15%, $space: hsl) !default;
   $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: -9%, $space: hsl) !default;
-  $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
 
@@ -99,7 +95,6 @@ $switch-border-radius: null !default;
   $switch-off-color: color.adjust($base-text-color, $lightness: -40%, $space: hsl) !default;
   $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: -15%, $space: hsl) !default;
   $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: -9%, $space: hsl) !default;
-  $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
 
@@ -115,7 +110,6 @@ $switch-border-radius: null !default;
   $switch-off-color: color.adjust($base-text-color, $lightness: -40%, $space: hsl) !default;
   $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: -15%, $space: hsl) !default;
   $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: -9%, $space: hsl) !default;
-  $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
 
@@ -131,7 +125,6 @@ $switch-border-radius: null !default;
   $switch-off-color: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
   $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: 15%, $space: hsl) !default;
   $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: 9%, $space: hsl) !default;
-  $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
 
@@ -147,7 +140,6 @@ $switch-border-radius: null !default;
   $switch-off-color: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
   $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: 15%, $space: hsl) !default;
   $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: 9%, $space: hsl) !default;
-  $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
 
@@ -163,6 +155,7 @@ $switch-border-radius: null !default;
   $switch-off-color: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
   $switch-handle-off-bg: color.adjust($switch-handle-bg, $lightness: 15%, $space: hsl) !default;
   $switch-readonly-border-color: color.adjust($switch-border-color, $lightness: 9%, $space: hsl) !default;
-  $switch-container-readonly-bg: $switch-bg !default;
   $switch-border-radius: $base-border-radius-exsmall !default;
 }
+
+$switch-container-readonly-bg: $switch-bg !default;
