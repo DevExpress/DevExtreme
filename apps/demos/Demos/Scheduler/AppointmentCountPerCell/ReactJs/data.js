@@ -175,11 +175,11 @@ export const resourcesData = [
   {
     text: 'Room 407',
     id: 4,
-    color: '#DD2C00',
+    color: '#CD2900',
   },
   {
     text: 'Room 409',
     id: 5,
-    color: '#2E7D32',
+    color: '#2D7C31',
   },
 ];

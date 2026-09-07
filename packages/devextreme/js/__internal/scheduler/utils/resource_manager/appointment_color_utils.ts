@@ -1,4 +1,7 @@
+import { Color } from '@ts/color';
 import type { SafeAppointment } from '@ts/scheduler/types';
+// eslint-disable-next-line spellcheck/spell-checker
+import { getRelativeLuminance } from '@ts/utils/color.helpers';
 
 import type { ResourceLoader } from '../loader/resource_loader';
 import type { ResourceId } from '../loader/types';
@@ -77,4 +80,23 @@ export const getAppointmentColor = async (
   const resourceId = leafGroupValue[paintedResource.resourceIndex] ?? resourceValues[0];
 
   return getResourceColor(paintedResource, resourceId);
+};
+
+const LIGHT_TEXT_COLOR = '#fff';
+const DARK_TEXT_COLOR = '#000';
+// The luminance at which white and black text have the same contrast ratio (4.58:1),
+// so picking the text color by this threshold always clears the WCAG AA 4.5:1 ratio.
+const TEXT_COLOR_LUMINANCE_THRESHOLD = Math.sqrt(1.05 * 0.05) - 0.05;
+
+export const getContrastTextColor = (backgroundColor: string): string | undefined => {
+  const color = new Color(backgroundColor);
+
+  if (color.colorIsInvalid) {
+    return undefined;
+  }
+
+  // eslint-disable-next-line spellcheck/spell-checker
+  return getRelativeLuminance(color.r, color.g, color.b) > TEXT_COLOR_LUMINANCE_THRESHOLD
+    ? DARK_TEXT_COLOR
+    : LIGHT_TEXT_COLOR;
 };

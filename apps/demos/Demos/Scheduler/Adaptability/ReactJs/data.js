@@ -66,6 +66,6 @@ export const priorities = [
   {
     text: 'Low priority',
     id: 2,
-    color: '#DD2C00',
+    color: '#CD2900',
   },
 ];
