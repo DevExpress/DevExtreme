@@ -7,7 +7,7 @@ const THEMES = { tag: ['@generic.light', '@material.blue.light', '@material.blue
 
 const sales = [
   { region: 'Africa', city: 'Cairo', amount: 1000 },
-  { region: 'Africa', city: 'Tunis', amount: 2000 },
+  { region: 'Africa', city: 'Timbuktu', amount: 2000 },
   { region: 'Europe', city: 'Berlin', amount: 3000 },
 ];
 
