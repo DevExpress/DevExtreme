@@ -1,4 +1,4 @@
-$handle-offset: 0;
+$handle-offset: 0 !default;
 $one-side-handle-size: 3px + $handle-offset; // dx-fixed-size: handle thickness ($handle-offset is 0)
 $two-side-handle-size: 6px + $handle-offset; // dx-fixed-size: handle thickness ($handle-offset is 0)
 
