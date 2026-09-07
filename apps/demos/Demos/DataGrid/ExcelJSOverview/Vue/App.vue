@@ -70,7 +70,7 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
 };
 </script>
 
-<style scoped>
+<style>
 #gridContainer {
   height: 423px;
 }

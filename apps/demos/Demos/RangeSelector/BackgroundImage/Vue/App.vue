@@ -52,7 +52,7 @@ const startValue = ref(new Date(2012, 8, 29, 0, 0, 0));
 const endValue = ref(new Date(2012, 8, 29, 24, 0, 0));
 const range = ref([new Date(2012, 8, 29, 11, 0, 0), new Date(2012, 8, 29, 17, 0, 0)]);
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 300px;
 }

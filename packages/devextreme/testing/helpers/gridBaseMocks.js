@@ -38,6 +38,22 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             changedArgs: [],
 
             dataSource: function() {
+                const store = function() {
+                    return new ArrayStore(options.items);
+                };
+
+                const loadCustomResult = (loadOptions) => {
+                    const d = $.Deferred();
+
+                    store().load(loadOptions)
+                        .done((data, extra) => {
+                            d.resolve({ data: data, extra: extra });
+                        })
+                        .fail(d.reject);
+
+                    return d;
+                };
+
                 return {
                     beginLoading: function() {
                     },
@@ -49,11 +65,19 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     loadOptions: function() {
                         return {};
                     },
-                    store: function() {
-                        return new ArrayStore(options.items);
+                    store: store,
+                    load: function(loadOptions) {
+                        return store().load(loadOptions);
                     },
-                    load: function(options) {
-                        return this.store().load(options);
+                    customLoader: {
+                        load: loadCustomResult,
+                        loadFromStore: loadCustomResult,
+                        isLoading: function() {
+                            return false;
+                        },
+                        isLoadingAll: function() {
+                            return false;
+                        }
                     }
                 };
             },

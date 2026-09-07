@@ -80,7 +80,7 @@ const onSelectLanguage = (e: DxSelectBoxTypes.ValueChangedEvent) => {
   placeholder.value = rtlEnabled.value ? 'بحث' : 'Search...';
 };
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
 }

@@ -173,6 +173,15 @@ const App = () => {
         formRef.current?.validate();
       }
     });
+
+    e.component.on('contentReady', (contentReadyEvent: FormTypes.ContentReadyEvent) => {
+      const untilEditor = contentReadyEvent.component.getEditor('recurrenceEndUntilEditor');
+      untilEditor?.on('valueChanged', () => {
+        contentReadyEvent.component.getEditor('recurrenceRepeatEndEditor')?.option('value') !== 'until'
+        && untilEditor?.option('value', new Date(2026, 8, 3));
+      });
+      untilEditor?.option('value', new Date(2026, 8, 3));
+    });
   }, [setConflictError]);
 
   const customizeItem = useCallback((item: FormTypes.SimpleItem) => {

@@ -232,7 +232,7 @@ function cancelEditEmployee() {
   popupVisible.value = false;
 }
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 725px;
     }

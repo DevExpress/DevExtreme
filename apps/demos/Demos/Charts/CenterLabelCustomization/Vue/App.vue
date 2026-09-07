@@ -45,7 +45,7 @@ const countries = Array.from(new Set(data.map(({ country }) => country)));
 const customizeLabel = ({ argumentText, valueText }: { argumentText: string; valueText: string }) => `${argumentText}\n${valueText}`;
 const getData = (country: string) => data.filter((i) => i.country === country);
 </script>
-<style scoped>
+<style>
 .pies-container {
   margin: auto;
   width: 800px;

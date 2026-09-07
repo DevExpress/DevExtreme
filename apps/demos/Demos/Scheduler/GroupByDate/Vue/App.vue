@@ -51,7 +51,7 @@ const currentDate = new Date(2021, 3, 21);
 const dataSource = data;
 </script>
 
-<style scoped>
+<style>
 #scheduler {
   display: flex;
   flex-direction: column;

@@ -46,7 +46,7 @@ export class FilterPanelView extends modules.View {
   }
 
   public isVisible() {
-    return this.option('filterPanel.visible') && this._dataController.dataSource();
+    return !!(this.option('filterPanel.visible') && this._dataController.dataSource());
   }
 
   protected _renderCore() {

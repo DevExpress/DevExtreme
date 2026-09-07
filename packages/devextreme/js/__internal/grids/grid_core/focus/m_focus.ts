@@ -17,6 +17,7 @@ import core from '../m_modules';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
+import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
 import { UiGridCoreFocusUtils } from './m_focus_utils';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
@@ -33,7 +34,8 @@ export class FocusController extends core.ViewController {
     return this.getController('keyboardNavigation');
   }
 
-  private getDataController(): DataController {
+  private getDataController(): DataController
+  & Partial<VirtualScrollingDataControllerExtension> {
     return this.getController('data');
   }
 
@@ -530,16 +532,23 @@ const focusEditorFactoryViewControllerExtender = (
 };
 
 const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExtender extends Base {
+  protected focusController!: FocusController;
+
+  public init(isApplyingUserState?: boolean): void {
+    this.focusController = this.getController('focus');
+
+    super.init(isApplyingUserState);
+  }
+
   public getSortDataSourceParameters(_, sortByKey?) {
     // @ts-expect-error
     let result = super.getSortDataSourceParameters.apply(this, arguments);
     const dataSource = this._dataController._dataSource;
-    const store = this._dataController.store();
-    let key = store && store.key();
+    let key = dataSource?.store()?.key();
     const remoteOperations = dataSource && dataSource.remoteOperations() || {};
     const isLocalOperations = Object.keys(remoteOperations).every((operationName) => !remoteOperations[operationName]);
 
-    if (key && (this.option('focusedRowEnabled') && this._focusController.isAutoNavigateToFocusedRow() !== false || sortByKey)) {
+    if (key && (this.option('focusedRowEnabled') && this.focusController.isAutoNavigateToFocusedRow() !== false || sortByKey)) {
       key = Array.isArray(key) ? key : [key];
       const notSortedKeys = key.filter((key) => !this.columnOption(key, 'sortOrder'));
 
@@ -558,13 +567,20 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
 };
 
 const focusDataControllerExtender = (
-  Base: ModuleType<DataController>,
+  Base: ModuleType<DataController & Partial<VirtualScrollingDataControllerExtension>>,
 ) => class FocusDataControllerExtender extends Base {
   private _isDataPushed = false;
+
+  private _lastRenderingPageIndex?: number;
+
+  private _isPagingByRendering?: boolean;
+
+  protected _focusController!: FocusController;
 
   protected keyboardNavigationController!: KeyboardNavigationController;
 
   public init(): void {
+    this._focusController = this.getController('focus');
     this.keyboardNavigationController = this.getController('keyboardNavigation');
     super.init();
   }
@@ -727,28 +743,29 @@ const focusDataControllerExtender = (
 
     let filter = this._generateFilterByKey(key);
 
-    dataSource.load({
+    dataSource.customLoader.load({
       filter: this._concatWithCombinedFilter(filter),
       skip: 0,
       take: 1,
-    }).done((data) => {
+    }).done(({ data }) => {
       if (this._dataSource !== dataSource) {
         deferred.resolve(-1);
         return;
       }
-      if ((data as unknown[]).length > 0) {
-        filter = this._generateOperationFilterByKey(key, (data as unknown[])[0], useGroup);
-        dataSource.load({
+      if (data.length > 0) {
+        filter = this._generateOperationFilterByKey(key, data[0], useGroup);
+
+        dataSource.customLoader.load({
           filter: this._concatWithCombinedFilter(filter, groupFilter),
           skip: 0,
           take: 1,
           requireTotalCount: true,
-        }).done((_, extra) => {
+        }).done(({ extra }) => {
           if (this._dataSource !== dataSource) {
             deferred.resolve(-1);
             return;
           }
-          deferred.resolve((extra as { totalCount: number }).totalCount);
+          deferred.resolve(extra!.totalCount);
         });
       } else {
         deferred.resolve(-1);

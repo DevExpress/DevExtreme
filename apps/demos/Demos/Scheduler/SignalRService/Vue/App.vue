@@ -85,7 +85,7 @@ connection
     });
   });
 </script>
-<style scoped>
+<style>
 .schedulers {
   display: flex;
 }

@@ -1,7 +1,6 @@
 import type { SearchOperation } from '@js/common/data.types';
 import type { ScalarFilterValue } from '@js/common/grids';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import type { DataSource } from '@ts/data/data_source/types';
 
 import type { Column } from '../columns_controller/types';
 import type { ChangedEvent, OperationTypes, RawItemData } from '../data_source_adapter/types';
@@ -156,12 +155,6 @@ export type ItemChange = | { type: 'insert'; index: number; data: ProcessedItem 
   | { type: 'remove'; index: number; oldItem: ProcessedItem }
   | { type: 'replace'; index: number; data: ProcessedItem }
   | { type: 'updateVisibility'; index: number; data: ProcessedItem };
-
-/** data source */
-
-export interface DataSourceAdapterLike {
-  _dataSource: DataSource;
-}
 
 /** callbacks */
 

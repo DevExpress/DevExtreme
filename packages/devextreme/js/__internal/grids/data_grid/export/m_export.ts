@@ -584,7 +584,7 @@ export class ExportController extends dataGridCore.ViewController {
     let summaryCells;
 
     when(data).done((data) => {
-      this._dataController.loadAll(data, skipFilter).done((sourceItems, totalAggregates) => {
+      this._dataController.loadAllItems(data, skipFilter).done((sourceItems, totalAggregates) => {
         that._updateGroupValuesWithSummaryByColumn(sourceItems);
 
         if (that._hasSummaryGroupFooters()) {

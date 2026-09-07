@@ -12,6 +12,10 @@ import treeListCore from '../m_core';
 export class TreeListDataController extends DataController {
   public declare _dataSource?: DataSourceAdapterTreeList | null;
 
+  public dataSource(): DataSourceAdapterTreeList | undefined {
+    return this._dataSource ?? undefined;
+  }
+
   protected _getDataSourceAdapterProvider(): DataSourceAdapterProvider {
     return dataSourceAdapterProvider;
   }
@@ -88,11 +92,7 @@ export class TreeListDataController extends DataController {
   }
 
   public key() {
-    const dataSource = this._dataSource;
-
-    if (dataSource) {
-      return dataSource.getKeyExpr();
-    }
+    return this._dataSource?.getKeyExpr();
   }
 
   public publicMethods() {
@@ -166,7 +166,6 @@ export class TreeListDataController extends DataController {
         break;
       case 'expandedRowKeys':
       case 'onNodesInitialized':
-        // @ts-expect-error badly typed DataSourceAdapter
         if (this._dataSource && !this._dataSource._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
           this._loadOnOptionChange();
         }

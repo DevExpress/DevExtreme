@@ -80,7 +80,7 @@ const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent) => {
   e.component.refresh(true);
 };
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
   margin-bottom: 10px;

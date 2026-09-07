@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import type { GroupConfig } from './m_grouping_expanded.helpers';
 import { GroupingTestHelper } from './m_grouping_expanded.helpers';
-import { GroupingHelperMock } from './m_grouping_expanded.mock';
+import { createDataSourceAdapterStub, GroupingHelperMock } from './m_grouping_expanded.mock';
 
 // ---------------------------------------------------------------------------
 // Test data
@@ -247,7 +247,7 @@ describe('isPending logic', () => {
 
   describe('handleDataLoading: expandCorrection', () => {
     it('should widen the load window for collapsed groups after the expanding one', () => {
-      const grouping = new GroupingHelperMock({ option: (): undefined => undefined });
+      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
 
       // Group A was just expanded — isPending + isExpanded, count=100
       grouping.addGroupInfo({
@@ -275,7 +275,7 @@ describe('isPending logic', () => {
     });
 
     it('should NOT widen the load window for previously expanded groups (not pending)', () => {
-      const grouping = new GroupingHelperMock({ option: (): undefined => undefined });
+      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
 
       // Group A is expanded but NOT pending (normal steady state)
       grouping.addGroupInfo({
@@ -301,7 +301,7 @@ describe('isPending logic', () => {
 
   describe('handleDataLoading: isPending cleanup', () => {
     it('should delete isPending from an expanded group after processing', () => {
-      const grouping = new GroupingHelperMock({ option: (): undefined => undefined });
+      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
 
       grouping.addGroupInfo({
         offset: 0, count: 100, isExpanded: true, isPending: true, path: ['A'],
@@ -317,7 +317,7 @@ describe('isPending logic', () => {
     });
 
     it('should delete isPending from a collapsed group after processing', () => {
-      const grouping = new GroupingHelperMock({ option: (): undefined => undefined });
+      const grouping = new GroupingHelperMock(createDataSourceAdapterStub());
 
       grouping.addGroupInfo({
         offset: 0, count: 10, isExpanded: false, isPending: true, path: ['A'],

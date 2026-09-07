@@ -12,17 +12,11 @@ if (!/localhost/.test(document.location.host)) {
 
 type FirstArgument<T> = T extends (...args: any) => any ? Parameters<T>[0] : never;
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   imports: [
     DxDataGridModule,
