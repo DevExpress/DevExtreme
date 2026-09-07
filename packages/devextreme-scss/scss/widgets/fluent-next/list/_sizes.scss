@@ -58,4 +58,4 @@ $list-next-button-padding: ds.$spacing-50 !default;
  * Derived values, moved out of _index.scss: a file that emits rules must not declare
  * variables (NAMING.md, O7).
  */
-$list-item-border: $list-item-border-width solid;
+$list-item-border: $list-item-border-width solid !default;

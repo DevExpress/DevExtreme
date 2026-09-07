@@ -1,18 +1,16 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-$badge-padding: null !default;
+$badge-padding: 0 ds.$spacing-60 !default;
 $badge-font-size: null !default;
 $badge-line-height: null !default;
 
 @if $size == "default" {
-  $badge-padding: 0 ds.$spacing-60 !default;
   $badge-font-size: ds.$font-size-caption-md !default;
   $badge-line-height: ds.$line-height-caption-lg !default;
 }
 
 @else if $size == "compact" {
-  $badge-padding: 0 ds.$spacing-60 !default;
   $badge-font-size: ds.$font-size-caption-sm !default;
   $badge-line-height: ds.$line-height-caption-md !default;
 }

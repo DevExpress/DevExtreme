@@ -30,7 +30,7 @@ $text-editor-border-disabled: ds.$color-border-disabled !default;
 $text-editor-border-read-only: ds.$color-border-disabled !default;
 $text-editor-content-disabled: ds.$color-content-disabled !default;
 
-$text-editor-label-content-focused: ds.$color-content-primary;
+$text-editor-label-content-focused: ds.$color-content-primary !default;
 
 :root {
   --dx-texteditor-color-text: #{$text-editor-content};

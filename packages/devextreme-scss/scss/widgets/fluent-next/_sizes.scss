@@ -6,7 +6,7 @@ $theme-marker-size-postfix: null !default;
 $global-font-size: null !default;
 $global-inline-widget-height: null !default;
 $global-icon-size: null !default;
-$global-border-radius: null !default;
+$global-border-radius: ds.$border-radius-40 !default;
 
 @if $size == "default" {
   $theme-marker-size-postfix: "" !default;
@@ -17,7 +17,6 @@ $global-border-radius: null !default;
   // Base sizes
   $global-inline-widget-height: ds.$spacing-320 !default;
   $global-icon-size: ds.$spacing-200 !default;
-  $global-border-radius: ds.$border-radius-40 !default;
 }
 
 @if $size == "compact" {
@@ -29,7 +28,6 @@ $global-border-radius: null !default;
   // Base sizes
   $global-inline-widget-height: ds.$spacing-240 !default;
   $global-icon-size: ds.$spacing-160 !default;
-  $global-border-radius: ds.$border-radius-40 !default;
 }
 
 // Base bordered inline widgets sizes

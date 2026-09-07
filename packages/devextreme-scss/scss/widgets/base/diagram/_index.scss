@@ -18,7 +18,7 @@ $diagram-context-toolbox-target-height: 1px !default;
 $diagram-popup-title-toolbar-bg: rgba(0, 0, 0, 0.05) !default;
 
 $diagram-border-width: 1px !default;
-$transparent-border: $diagram-border-width solid transparent;
+$transparent-border: $diagram-border-width solid transparent !default;
 
 $diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
 .dx-diagram {

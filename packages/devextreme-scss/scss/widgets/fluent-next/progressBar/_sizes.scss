@@ -4,7 +4,7 @@
 $progress-bar-height: null !default;
 $progress-bar-border-radius: $global-border-radius !default;
 $progress-bar-status-margin-block-start: null !default;
-$progress-bar-indeterminate-width: 90%;
+$progress-bar-indeterminate-width: 90% !default;
 
 @if $size == "default" {
   $progress-bar-height: ds.$spacing-40 !default;

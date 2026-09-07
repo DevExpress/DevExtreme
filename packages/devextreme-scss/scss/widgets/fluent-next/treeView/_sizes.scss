@@ -5,16 +5,16 @@
 
 $tree-view-toggle-item-width: null !default;
 $tree-view-checkbox-container-size: null !default;
-$tree-view-container-with-border-offset: ds.$spacing-80;
+$tree-view-container-with-border-offset: ds.$spacing-80 !default;
 $tree-view-item-element-gap: ds.$spacing-80 !default;
-$tree-view-item-margin: ds.$spacing-10 0;
-$tree-view-item-border-radius: ds.$border-radius-40;
-$tree-view-border-padding: ds.$spacing-10;
+$tree-view-item-margin: ds.$spacing-10 0 !default;
+$tree-view-item-border-radius: ds.$border-radius-40 !default;
+$tree-view-border-padding: ds.$spacing-10 !default;
 $tree-view-container-padding:
   $tree-view-border-padding
   $tree-view-border-padding
   $tree-view-border-padding
-  $tree-view-container-with-border-offset;
+  $tree-view-container-with-border-offset !default;
 
 $tree-view-checkbox-offset: null !default;
 $tree-view-select-all-item-padding: null !default;
@@ -33,7 +33,7 @@ $tree-view-select-all-item-border-visible-padding: ds.$spacing-260 !default;
   $tree-view-item-padding: ds.$spacing-120 $tree-view-item-padding-inline !default;
   $tree-view-load-indicator-size: ds.$spacing-200 !default;
   $tree-view-search-box-margin-block-end: ds.$spacing-80 !default;
-  $tree-view-search-editor-height: ds.$spacing-480;
+  $tree-view-search-editor-height: ds.$spacing-480 !default;
 }
 
 @else if $size == "compact" {
@@ -44,7 +44,7 @@ $tree-view-select-all-item-border-visible-padding: ds.$spacing-260 !default;
   $tree-view-item-padding: ds.$spacing-100 $tree-view-item-padding-inline !default;
   $tree-view-load-indicator-size: ds.$spacing-160 !default;
   $tree-view-search-box-margin-block-end: ds.$spacing-40 !default;
-  $tree-view-search-editor-height: ds.$spacing-320;
+  $tree-view-search-editor-height: ds.$spacing-320 !default;
 }
 
 // Base-layer sizing injected with design tokens (wave B2)
