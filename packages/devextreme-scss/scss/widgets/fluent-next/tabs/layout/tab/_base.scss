@@ -27,20 +27,12 @@
     }
 
     .dx-tab-text .dx-tab-text-span {
-      visibility: visible;
-
-      .dx-tab-text-span-pseudo {
-        visibility: hidden;
-      }
+      font-weight: var(--dx-tabs-tab-accent-font-weight);
     }
   }
 
   &.dx-state-disabled {
     color: var(--dx-tabs-tab-content-disabled);
-
-    .dx-tab-text .dx-tab-text-span-pseudo {
-      color: var(--dx-tabs-tab-content-disabled);
-    }
 
     .dx-icon {
       color: var(--dx-tabs-tab-icon-content-disabled);
@@ -57,22 +49,16 @@
     line-height: var(--dx-global-line-height);
 
     .dx-tab-text-span {
-      position: relative;
       display: block;
-      font-weight: var(--dx-tabs-tab-accent-font-weight);
-      visibility: hidden;
+      font-weight: var(--dx-tabs-tab-basic-font-weight);
     }
 
     .dx-tab-text-span-pseudo {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      display: block;
+      height: 0;
       pointer-events: none;
-      color: var(--dx-tabs-tab-content);
-      font-weight: var(--dx-tabs-tab-basic-font-weight);
-      visibility: visible;
+      font-weight: var(--dx-tabs-tab-accent-font-weight);
+      visibility: hidden;
     }
   }
 
