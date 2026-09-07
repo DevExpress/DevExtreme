@@ -4,14 +4,14 @@
 @use "../common/sizes" as *;
 
 // Moved out of _index.scss: variables belong in _sizes/_colors (NAMING.md O7)
-$text-editor-invalid-badge-size: calc(#{$invalid-badge-size} + 2 * #{$invalid-badge-padding-inline});
+$text-editor-invalid-badge-size: calc(#{$invalid-badge-size} + 2 * #{$invalid-badge-padding-inline}) !default;
 
 // Geometry and motion, so they live here rather than in _colors.scss (NAMING.md O7)
 $text-editor-input-border-radius: $global-border-radius !default;
 $text-editor-label-transition:
   font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
   transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
-  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms !default;
 
 // Moved here from the theme root: this component owns it (NAMING.md O1)
 $text-editor-label-height: null !default;
