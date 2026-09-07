@@ -6,18 +6,16 @@
 $tooltip-border-radius: $global-border-radius !default;
 
 $tooltip-padding: null !default;
-$tooltip-font-size: null !default;
+$tooltip-font-size: ds.$font-size-caption-md !default;
 $tooltip-arrow-border-radius: ds.$border-radius-20 !default;
 $tooltip-box-shadow: 0 0 ds.$spacing-20 0 $global-dropdown-shadow-ambient !default;
 
 @if $size == "default" {
   $tooltip-padding: ds.$spacing-70 ds.$spacing-110 !default;
-  $tooltip-font-size: ds.$font-size-caption-md !default;
 }
 
 @else if $size == "compact" {
   $tooltip-padding: ds.$spacing-30 ds.$spacing-50 !default;
-  $tooltip-font-size: ds.$font-size-caption-md !default;
 }
 
 // Values hoisted from style-file literals (tokenized)
