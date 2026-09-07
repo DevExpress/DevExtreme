@@ -18,7 +18,7 @@ export const SELECTORS = {
 
 export const TREELIST_CONTAINER_ID = 'treeListContainer';
 
-export const createTreeList = async (
+export const createTreeList = (
   options: TreeListProperties = {},
 ): Promise<{
   $container: dxElementWrapper;
@@ -56,8 +56,7 @@ export const beforeTest = (): void => {
 
 export const afterTest = (): void => {
   const $container = $(SELECTORS.treeListContainer);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const treeList = ($container as any).dxTreeList('instance') as TreeList;
+  const treeList = TreeList.getInstance($container.get(0));
 
   treeList?.dispose();
   $container.remove();
