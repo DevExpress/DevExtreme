@@ -3,25 +3,7 @@
 
 $gantt-collapsable-row-bg: ds.$color-bg-low !default;
 
-/*
- * Toolbar icons are SVG data-uri images: the color is baked into the background-image at
- * build time (string replace). CSS var() tokens do NOT resolve inside a data-uri (they render
- * black), so the value below is the static per-mode equivalent of the ds.$ token named in the
- * marker. See DIVERGENCES.md.
- */
-$gantt-icon: null !default;
 $gantt-content-disabled: ds.$color-content-disabled !default;
-$gantt-icon-disabled: null !default;
-
-@if $mode == "light" {
-  $gantt-icon: #161616 !default; // dx-data-uri-static: ds.$color-content
-  $gantt-icon-disabled: #ababab !default; // dx-data-uri-static: ds.$color-content-disabled
-}
-
-@if $mode == "dark" {
-  $gantt-icon: #fff !default; // dx-data-uri-static: ds.$color-content
-  $gantt-icon-disabled: #767676 !default; // dx-data-uri-static: ds.$color-content-disabled
-}
 
 /*
  * Task bars and time-marker borders: primary-90 in light, primary-70 in dark — the only surface
