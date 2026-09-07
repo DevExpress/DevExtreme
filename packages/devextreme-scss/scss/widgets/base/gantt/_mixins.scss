@@ -7,70 +7,100 @@
   background-image: string.unquote($uri);
 }
 
-@mixin gantt-icons-mixin($color) {
+/*
+ * A background image cannot read the element's `color`, so `gantt-icon-colored` bakes the rest
+ * colour into the svg and every extra state needs the whole set emitted again. The same artwork
+ * used as a mask carries only its alpha, so one copy is painted by `currentColor` and follows
+ * whatever the cascade already puts on `.dx-icon` - including the disabled colour.
+ */
+@mixin gantt-icon-masked($data-uri) {
+  $uri: replace("#{$data-uri}", "currentColor", "%23000");
+
+  mask-image: string.unquote($uri);
+}
+
+@mixin gantt-icon($data-uri, $color, $masked) {
+  @if $masked {
+    @include gantt-icon-masked($data-uri);
+  } @else {
+    @include gantt-icon-colored($data-uri, $color);
+  }
+}
+
+@mixin gantt-icons-mixin($color: null, $masked: false) {
   .dx-gantt-i {
+    @if $masked {
+      /* `background-size` for a `.dx-icon` is set by whatever hosts it - `contain` in a button,
+      an explicit icon size in the toolbar's overflow menu. Both resolve to the 20px content box
+      these square 18px glyphs already fill, so one `contain` mirrors the image the mask replaces. */
+      mask-position: 50% 50%;
+      mask-repeat: no-repeat;
+      mask-size: contain;
+      background-color: currentColor;
+    }
+
     &.dx-gantt-i-add {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-add-sub-task {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add-sub-task.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add-sub-task.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-add-task {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add-task.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/add-task.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-collapse {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/collapse.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/collapse.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-delete {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/delete.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/delete.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-delete-dependency {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/delete-dependency.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/delete-dependency.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-expand {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/expand.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/expand.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-full-screen {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/full-screen.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/full-screen.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-redo {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/redo.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/redo.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-task-details {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/task-details.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/task-details.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-undo {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/undo.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/undo.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-zoom-in {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/zoom-in.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/zoom-in.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-zoom-out {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/zoom-out.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/zoom-out.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-resource-manager {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/resource-manager.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/resource-manager.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-toggle-resources {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/toggle-resources.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/toggle-resources.svg"), $color, $masked);
     }
 
     &.dx-gantt-i-toggle-dependencies {
-      @include gantt-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/toggle-dependencies.svg"), $color);
+      @include gantt-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/gantt/toggle-dependencies.svg"), $color, $masked);
     }
   }
 }
