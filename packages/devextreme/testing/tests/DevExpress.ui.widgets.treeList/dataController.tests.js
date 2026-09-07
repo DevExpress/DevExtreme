@@ -707,7 +707,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('There are no exceptions on getting node when hasn\'t datasource', function(assert) {
     // arrange
-        this.dataController.setDataSource(undefined);
+        this.dataController._disposeDataSource();
 
         // act, assert
         assert.equal(this.getNodeByKey(1), undefined, 'no exceptions');

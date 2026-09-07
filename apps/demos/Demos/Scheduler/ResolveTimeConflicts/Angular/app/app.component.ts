@@ -86,6 +86,15 @@ export class AppComponent {
         this.form?.validate();
       }
     });
+
+    this.form?.on('contentReady', (contentReadyEvent: DxFormTypes.ContentReadyEvent) => {
+      const untilEditor = contentReadyEvent.component.getEditor('recurrenceEndUntilEditor');
+      untilEditor?.on('valueChanged', () => {
+        contentReadyEvent.component.getEditor('recurrenceRepeatEndEditor')?.option('value') !== 'until'
+        && untilEditor?.option('value', new Date(2026, 8, 3));
+      });
+      untilEditor?.option('value', new Date(2026, 8, 3));
+    });
   };
 
   customizeItem = (item: DxFormTypes.SimpleItem): void => {
