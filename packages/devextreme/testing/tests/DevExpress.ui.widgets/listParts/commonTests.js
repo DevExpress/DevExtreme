@@ -19,7 +19,7 @@ import { CustomStore } from 'common/data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
 import { setScrollView } from '__internal/ui/list/list.base';
-import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
+import { SCREEN_READER_ONLY_CLASS } from '__internal/core/widget/widget';
 
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
