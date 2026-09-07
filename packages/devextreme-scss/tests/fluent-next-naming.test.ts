@@ -25,6 +25,11 @@ import {
   collectTokenReferences,
   stripScssComments,
 } from '../build/tokens/consumed-tokens';
+import {
+  type Parsed, type SourceFile, baseIndex, findSignatureRanges, parseSourceFile,
+  starredBaseParameters as starredParametersOf, baseWiringKind as wiringKindOf,
+  tierRecords as computeTierRecords, planPublication, stalePaths,
+} from '../tools/naming/tier';
 
 const packageRoot = process.cwd();
 const widgetsRoot = join(packageRoot, 'scss', 'widgets');
@@ -33,8 +38,11 @@ const themeRoot = join(widgetsRoot, 'fluent-next');
 // Labels a stylesheet for error messages: `fluent-next/common/_mixins.scss`.
 const sourceLabel = (file: string): string => file.slice(widgetsRoot.length + 1);
 
-// The hand-maintained wave-F component tier (see the "wave F" test block and NAMING.md).
-const isPublicTierFile = (file: string): boolean => file.endsWith('_public.scss')
+// The --dx-* component tier (see the "wave F" test block and NAMING.md): generated projections in
+// _public.scss, hand-written links in _public-links.scss, and the collector that mounts them.
+const isPublicManifestFile = (file: string): boolean => file.endsWith('_public.scss')
+  || file.endsWith('_public-links.scss');
+const isPublicTierFile = (file: string): boolean => isPublicManifestFile(file)
   || file.endsWith('_public-tier.scss');
 const registries = JSON.parse(
   readFileSync(join(packageRoot, 'tools', 'naming', 'registries.json'), 'utf8'),
@@ -44,24 +52,11 @@ const updatingBaseline = process.env.UPDATE_NAMING_BASELINE === '1';
 
 const THEMES = ['generic', 'material', 'fluent', 'fluent-next'];
 const DECLARATION_FILES = ['_colors.scss', '_sizes.scss', '_variables.scss'];
-const CONTROL_DIRECTIVES = /@(if|else|each|for|while)\b[^{]*$/;
-
-type Use = { spec: string; star: boolean; alias: string | null };
-type NamespacedReference = { namespace: string; name: string };
-type Parsed = {
-  file: string;
-  folder: string;
-  declarations: string[];
-  references: string[];
-  /*
-   * `references` intentionally contains both `$name` and the `name` half of `alias.$name`, because
-   * the dead-variable check must see either form. Ownership checks must not: counting a namespaced
-   * read as a bare one reports the same read twice the moment the variable's name becomes canonical.
-   */
-  bareReferences: string[];
-  namespacedReferences: NamespacedReference[];
-  uses: Use[];
-};
+/*
+ * The parser is shared with the emitter (tools/naming/tier.ts). `file` is the path relative to the
+ * theme root (`button/_colors.scss`) — the spelling the baseline uses.
+ */
+type ParsedFile = Parsed & { file: string };
 
 const walk = (dir: string, extension: string): string[] => {
   const result: string[] = [];
@@ -76,170 +71,30 @@ const walk = (dir: string, extension: string): string[] => {
   return result;
 };
 
-/**
- * Ranges of `@use … with ( … )` argument lists. Their left-hand sides are the *base module's*
- * parameter names, not declarations of this file, and must never be treated as either a declaration
- * or a foreign read (443 of them exist on purpose — NAMING.md, "Исключения").
- */
-const findWithRanges = (content: string): [number, number][] => {
-  const ranges: [number, number][] = [];
-  const opener = /\bwith\s*\(/g;
-  let match = opener.exec(content);
-
-  while (match !== null) {
-    let depth = 1;
-    let index = match.index + match[0].length;
-    while (index < content.length && depth > 0) {
-      if (content[index] === '(') depth += 1;
-      if (content[index] === ')') depth -= 1;
-      index += 1;
-    }
-    ranges.push([match.index, index]);
-    match = opener.exec(content);
-  }
-
-  return ranges;
-};
-
-const inRanges = (position: number, ranges: [number, number][]): boolean => ranges
-  .some(([from, to]) => position >= from && position < to);
-
-/**
- * Parameter lists of `@mixin` / `@function`. A parameter with a default (`$button-selected-bg: $x`)
- * looks exactly like a declaration and is not inside a `{}` block, so brace tracking alone counts it
- * as one — same trap as `with()` keys.
- */
-const findSignatureRanges = (content: string): [number, number][] => {
-  const ranges: [number, number][] = [];
-  const opener = /@(?:mixin|function)\s+[\w-]+\s*\(/g;
-  let match = opener.exec(content);
-
-  while (match !== null) {
-    let depth = 1;
-    let index = match.index + match[0].length;
-    while (index < content.length && depth > 0) {
-      if (content[index] === '(') depth += 1;
-      if (content[index] === ')') depth -= 1;
-      index += 1;
-    }
-    ranges.push([match.index, index]);
-    match = opener.exec(content);
-  }
-
-  return ranges;
-};
-
-/**
- * Argument lists of `@include`. A named argument (`$checkbox-border-color-focused: $x`) binds the
- * base mixin's parameter by its own name: the key is base's spelling, exactly like a `with()` key,
- * and must not read as a declaration of this file (NAMING.md, "Исключения").
- */
-const findIncludeRanges = (content: string): [number, number][] => {
-  const ranges: [number, number][] = [];
-  const opener = /@include\s+[\w.-]+\s*\(/g;
-  let match = opener.exec(content);
-
-  while (match !== null) {
-    let depth = 1;
-    let index = match.index + match[0].length;
-    while (index < content.length && depth > 0) {
-      if (content[index] === '(') depth += 1;
-      if (content[index] === ')') depth -= 1;
-      index += 1;
-    }
-    ranges.push([match.index, index]);
-    match = opener.exec(content);
-  }
-
-  return ranges;
-};
-
-/**
- * A declaration is module-level when every enclosing block is a control directive: Sass `@if`/`@each`
- * do not create scope, but a mixin, a function or a style rule do. That is what separates the theme's
- * variables from the 14 function locals in color.scss and button/_mixins.scss.
- */
-const parseFile = (file: string): Parsed => {
-  const content = stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file));
-  const withRanges = [
-    ...findWithRanges(content),
-    ...findSignatureRanges(content),
-    ...findIncludeRanges(content),
-  ];
-  const declarations: string[] = [];
-  const references: string[] = [];
-  const bareReferences: string[] = [];
-  const namespacedReferences: NamespacedReference[] = [];
-  const uses: Use[] = [];
-
-  const blockStack: boolean[] = [];
-  let index = 0;
-  while (index < content.length) {
-    const char = content[index];
-
-    if (char === '{') {
-      blockStack.push(CONTROL_DIRECTIVES.test(content.slice(Math.max(0, index - 200), index)));
-      index += 1;
-    } else if (char === '}') {
-      blockStack.pop();
-      index += 1;
-    } else if (char === '$') {
-      const name = /^\$[a-z0-9_-]+/i.exec(content.slice(index))?.[0];
-      if (!name) { index += 1; continue; }
-      const namespaced = index > 0 && content[index - 1] === '.';
-      const after = content.slice(index + name.length);
-      const isAssignment = /^\s*:/.test(after);
-      const moduleLevel = blockStack.every((isControl) => isControl);
-
-      if (isAssignment && !namespaced && moduleLevel && !inRanges(index, withRanges)) {
-        declarations.push(name);
-      } else if (!isAssignment && !namespaced) {
-        references.push(name);
-        bareReferences.push(name);
-      } else if (!isAssignment && namespaced) {
-        // `alias.$name` — an explicit foreign read. After wave A these are the readable form of what
-        // used to hide behind `as *`, and they still count as references for the dead-variable check.
-        const namespace = /([a-zA-Z][a-zA-Z0-9_-]*)\.$/.exec(content.slice(0, index))?.[1];
-        if (namespace) namespacedReferences.push({ namespace, name });
-        references.push(name);
-      }
-      index += name.length;
-    } else if (char === '@' && content.startsWith('@use', index)) {
-      const statement = /^@use\s+["']([^"']+)["']/.exec(content.slice(index));
-      if (statement) {
-        // Only the module spec is consumed here. Scanning must continue into the `with (…)` block:
-        // its right-hand sides are ordinary references, and skipping them would make every variable
-        // that is used solely as a `with()` value look dead.
-        const tail = content.slice(index + statement[0].length, index + statement[0].length + 200);
-        const beforeArguments = tail.split(/;|\bwith\s*\(/)[0];
-        uses.push({
-          spec: statement[1],
-          star: /\bas\s+\*/.test(beforeArguments),
-          alias: /\bas\s+([a-zA-Z][a-zA-Z0-9_-]*)/.exec(beforeArguments)?.[1] ?? null,
-        });
-        index += statement[0].length;
-      } else {
-        index += 4;
-      }
-    } else {
-      index += 1;
-    }
-  }
-
-  const relativePath = resolve(file).slice(resolve(themeRoot).length + 1);
-  const segments = relativePath.split(sep);
+const sourceFileOf = (file: string): SourceFile => {
+  const path = sourceLabel(file).split(sep).join('/');
+  const segments = path.split('/');
+  const raw = readFileSync(file, 'utf8');
   return {
-    file: relativePath,
-    folder: segments.length > 1 ? segments[0] : '',
-    declarations,
-    references,
-    bareReferences,
-    namespacedReferences,
-    uses,
+    path,
+    folder: segments.length > 2 ? segments[1] : '',
+    raw,
+    stripped: stripScssComments(raw, path),
   };
 };
 
-const parsedFiles: Parsed[] = walk(themeRoot, '.scss').map(parseFile);
+const themeFiles = walk(themeRoot, '.scss');
+const themeSources: SourceFile[] = themeFiles.map(sourceFileOf);
+
+const parseFile = (file: string): ParsedFile => ({
+  ...parseSourceFile(sourceFileOf(file)),
+  file: resolve(file).slice(resolve(themeRoot).length + 1),
+});
+
+const parsedFiles: ParsedFile[] = themeFiles.map((file, index) => ({
+  ...parseSourceFile(themeSources[index]),
+  file: resolve(file).slice(resolve(themeRoot).length + 1),
+}));
 
 /*
  * `base/**` parameter names, and the precise question of whether a given theme declaration is one of
@@ -248,24 +103,16 @@ const parsedFiles: Parsed[] = walk(themeRoot, '.scss').map(parseFile);
  * spelling and neither the grammar nor the ownership rule applies to it (NAMING.md, O8). The wide
  * form of the question ("does base declare this name anywhere") would wave through any legacy name.
  */
-const baseNames = new Set(
-  walk(join(packageRoot, 'scss', 'widgets', 'base'), '.scss')
-    .flatMap((file) => parseFile(file).declarations),
-);
+const base = baseIndex(walk(join(widgetsRoot, 'base'), '.scss').map(sourceFileOf));
+const baseNames = base.names;
 
-const starredBaseParameters = (file: string): Set<string> => {
-  const names = new Set<string>();
+const parsedByFile = (file: string): ParsedFile => {
   const parsed = parsedFiles.find((candidate) => candidate.file === file);
-  parsed?.uses.forEach(({ spec, star }) => {
-    if (!star || !spec.includes('base/')) return;
-    const directory = resolve(join(themeRoot, file), '..', spec, '..');
-    const stem = spec.split('/').pop() as string;
-    [join(directory, `_${stem}.scss`), join(directory, stem, '_index.scss')]
-      .filter((candidate) => existsSync(candidate))
-      .forEach((candidate) => parseFile(candidate).declarations.forEach((name) => names.add(name)));
-  });
-  return names;
+  if (!parsed) throw new Error(`${file} is not a theme file`);
+  return parsed;
 };
+
+const starredBaseParameters = (file: string): Set<string> => starredParametersOf(parsedByFile(file), base);
 
 // ---------------------------------------------------------------------------------------------
 // component resolution
@@ -345,7 +192,7 @@ const publicNameConsumers = (): Set<string> | null => {
 // findings
 // ---------------------------------------------------------------------------------------------
 
-const perFolder = <T>(compute: (files: Parsed[], folder: string) => T): Record<string, T> => {
+const perFolder = <T>(compute: (files: ParsedFile[], folder: string) => T): Record<string, T> => {
   const result: Record<string, T> = {};
   relevantFolders.forEach((folder) => {
     const files = parsedFiles.filter((parsed) => parsed.folder === folder);
@@ -368,13 +215,11 @@ const perFolder = <T>(compute: (files: Parsed[], folder: string) => T): Record<s
  * Every wiring declaration is listed exactly in the `baseWiring` finding: a new one is a conscious
  * baseline edit, not a silent pass.
  */
-const baseWiringKind = (variable: string, file: string): 'star' | 'feeder' | null => {
-  if (starredBaseParameters(file).has(variable)) return 'star';
-  if (variable.startsWith('$fluent-') && baseNames.has(`$${variable.slice('$fluent-'.length)}`)) {
-    return 'feeder';
-  }
-  return null;
-};
+const baseWiringKind = (variable: string, file: string): 'star' | 'feeder' | null => wiringKindOf(
+  variable,
+  parsedByFile(file),
+  base,
+);
 
 const findings = {
   // O1: a folder may only declare its own component's variables.
@@ -628,8 +473,8 @@ const findings = {
   })(),
 
   /*
-   * Wave F guard: hand-written `--dx-…:` declarations. The component tier is emitted ONLY from the
-   * generated _public.scss files; everything else declaring a --dx name is the frozen legacy
+   * Wave F guard: `--dx-…:` declarations outside the tier files. The component tier is emitted ONLY
+   * from _public.scss / _public-links.scss; everything else declaring a --dx name is the frozen legacy
    * surface (the pre-standard public tier, typography's scale publication, gridBase's runtime
    * bits). Exact list by design: a new manual emission is a conscious baseline edit.
    */
@@ -648,12 +493,12 @@ const findings = {
    * the irreducible remainder — Sass math (math.div, `2 *`), unguarded-math mixin arguments and
    * Sass-local derivations — plus the declaration files and with() keys, which are excluded by
    * construction. A new entry means a new bypass: consume it or justify it here. The tier name
-   * set comes from the hand-maintained _public.scss files (their own sync gate lives in the
-   * "wave F" block below).
+   * set comes from the committed _public.scss / _public-links.scss files (their own gate lives in
+   * the "wave F" block below).
    */
   unconsumedManifestReads: (() => {
     const manifestNames = new Set(walk(themeRoot, '.scss')
-      .filter((file) => file.endsWith('_public.scss'))
+      .filter(isPublicManifestFile)
       .flatMap((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
         .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
         .map((match) => `$${match[1].slice('--dx-'.length)}`)));
@@ -853,106 +698,38 @@ test('the rename mapping stays collision-free and fully applied', () => {
 });
 
 // ---------------------------------------------------------------------------------------------
-// wave F: the hand-maintained --dx-* component tier
+// wave F: the --dx-* component tier
 // ---------------------------------------------------------------------------------------------
 
 /*
  * The tier contract (NAMING.md, 06.08): --dxds-* roles/scales are the stable public API; --dx-* is
  * the product's own component tier, declared in <folder>/_public.scss onto
- * registries.rootSelectors and free to evolve between releases. Since 14.08.2026 the tier files
- * are ORDINARY HAND-MAINTAINED SCSS (the generator was dismantled by decision — a projection this
- * mechanical did not deserve a writer, only a guard). Everything the generator used to guarantee
- * is enforced here instead:
+ * registries.rootSelectors and free to evolve between releases. The projections are GENERATED by
+ * tools/naming/publish.mjs and committed; the relations are hand-written in <folder>/_public-links.scss.
+ * Both the emitter and these checks read the same rules from tools/naming/tier.ts, so the checks
+ * hold whatever wrote the files:
  *   - composition: every eligible variable of a migrated component has its --dx twin, and nothing
- *     else is declared (eligibility knowledge lives in tierExpectation below: data-uri exclusion
- *     is transitive through references, CSS-wide keywords cannot ride a custom property, base
- *     wiring is base's spelling, null has nothing to publish);
+ *     else is declared (eligibility knowledge lives in tierRecords: data-uri exclusion is
+ *     transitive through references, CSS-wide keywords cannot ride a custom property, base wiring
+ *     is base's spelling, null has nothing to publish);
  *   - the LINK form for a reference the referrer can resolve — same component, or a target
  *     published on `:root`: `--dx-a: var(--dx-b);` with no SCSS twin, so the relation is stated
  *     once, in one place, and stays live when the target moves (GOTCHAS §18.3);
  *   - collector ↔ registries.rootSelectors consistency.
  */
-const CSS_WIDE_KEYWORDS = new Set(['inherit', 'initial', 'unset', 'revert', 'revert-layer']);
 
 // A system-tier entry (registries.systemTier) is its own folder; grammar for its names stays the
 // systemConcerns path, so it must not appear in `components` or `migrated`.
 const systemTier: string[] = registries.systemTier ?? [];
 
-const tierFoldersOf = (component: string): string[] => {
-  if (systemTier.includes(component)) return [component];
-  const folders = Object.entries(components)
-    .filter(([, owner]) => owner === component)
-    .map(([folder]) => folder);
-  const home = registries.declarationHome[component];
-  if (home && !folders.includes(home)) folders.push(home);
-  return folders.filter((folder) => !exemptFolders.includes(folder));
-};
-
-/** Which variables the tier MUST declare, and why the rest are excluded. */
-const tierExpectation = (): Map<string, { component: string; reason: string | null }> => {
-  const wiring = new Set(findings.baseWiring.map((entry) => /(\$[a-z0-9-]+)/.exec(entry)![1]));
-  const records = new Map<string, { component: string; value: string; reason: string | null }>();
-
-  [...(registries.migrated as string[]), ...systemTier].forEach((component) => {
-    const declared = new Map<string, { value: string; marker: boolean }>();
-    const feeders = new Set<string>();
-    tierFoldersOf(component).forEach((folder) => {
-      const dir = join(themeRoot, folder);
-      if (!existsSync(dir)) return;
-      walk(dir, '.scss').forEach((file) => {
-        if (/(^|\/)_(colors|sizes|variables)\.scss$/.test(file)) {
-          stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n')
-            .forEach((line) => {
-              const match = /^\s*(\$[a-z0-9-]+)\s*:\s*([^;]*);(.*)$/.exec(line);
-              if (!match) return;
-              const previous = declared.get(match[1]);
-              declared.set(match[1], {
-                value: match[2].trim().replace(/\s*!default$/, ''),
-                marker: (previous?.marker ?? false) || /dx-data-uri-static/.test(match[3] + match[2]),
-              });
-            });
-        }
-        /*
-         * `toggle-delete-icon` joins the three direct forms because it is a wrapper: its body hands
-         * the colour to `list-icon-colored`, which bakes it INTO the svg string. A baked colour is
-         * frozen at build time, so publishing the variable would hand out a knob that turns nothing.
-         */
-        [...readFileSync(file, 'utf8').matchAll(/(?:icons?-mixin|icon-colored|data-uri|toggle-delete-icon)\s*\(((?:[^()]|\([^()]*\))*)\)/g)]
-          .forEach((call) => [...call[1].matchAll(/\$[a-z0-9-]+/g)]
-            .forEach(([variable]) => feeders.add(variable)));
-      });
-    });
-    declared.forEach(({ value, marker }, variable) => {
-      const reason = marker || feeders.has(variable) || /(^|[^\w-])data-uri\(/.test(value)
-        ? 'data-uri'
-        : wiring.has(variable) ? 'base-wiring'
-          : CSS_WIDE_KEYWORDS.has(value) ? 'css-wide-keyword'
-            : value.includes('!important') ? 'important'
-              : value === 'null' ? 'null'
-                : value === 'false' || value === 'true' ? 'sass-flag' : null;
-      records.set(variable, { component, value, reason });
-    });
-  });
-
-  // a reference (namespaced or not — grammar names are globally unique) to a data-uri-excluded
-  // name carries the same baked image, so the referrer is excluded too
-  for (let changed = true; changed;) {
-    changed = false;
-    records.forEach((record) => {
-      if (record.reason) return;
-      if ([...record.value.matchAll(/\$[a-z0-9-]+/g)]
-        .some(([token]) => records.get(token)?.reason === 'data-uri')) {
-        record.reason = 'data-uri';
-        changed = true;
-      }
-    });
-  }
-  return new Map([...records].map(([variable, { component, reason }]) => [variable, { component, reason }]));
-};
-
-const tierRecords = tierExpectation();
-const publicTierFiles = walk(themeRoot, '.scss').filter((file) => file.endsWith('_public.scss'));
-const tierDeclared = new Map<string, string>(); // $variable -> declaring _public file
+const tierRecords = computeTierRecords(
+  themeSources,
+  registries,
+  new Set(findings.baseWiring.map((entry) => /(\$[a-z0-9-]+)/.exec(entry)![1])),
+);
+const publicTierFiles = themeFiles.filter(isPublicManifestFile);
+const folderOf = (file: string): string => sourceLabel(file).split('/')[1];
+const tierDeclared = new Map<string, string>(); // $variable -> declaring _public / _public-links file
 publicTierFiles.forEach((file) => {
   [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
     .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
@@ -968,13 +745,13 @@ publicTierFiles.forEach((file) => {
  * nothing, taking the whole declaration with it (GOTCHAS §18.3, §21).
  */
 const publishesOnRoot = (file: string): boolean => {
-  const folder = sourceLabel(file).split('/')[1];
+  const folder = folderOf(file);
   const component = systemTier.includes(folder) ? folder : components[folder];
   return (registries.rootSelectors[component] ?? []).includes(':root');
 };
 const linkableFrom = (target: string, referrer: string): boolean => {
   const home = tierDeclared.get(`$${target.slice('--dx-'.length)}`);
-  return !!home && (home === referrer || publishesOnRoot(home));
+  return !!home && (folderOf(home) === folderOf(referrer) || publishesOnRoot(home));
 };
 
 /*
@@ -1023,15 +800,15 @@ walk(themeRoot, '.scss')
 test('component tier: _public.scss declarations equal the eligible variables exactly', () => {
   const eligible = new Map([...tierRecords].filter(([, { reason }]) => !reason));
   const missing = [...eligible.keys()].filter((variable) => !tierDeclared.has(variable)).sort()
-    .map((variable) => `${variable} (${eligible.get(variable)!.component}): add `
-      + `\`--dx-${variable.slice(1)}: #{${variable}};\` to the component's _public.scss`);
+    .map((variable) => `${variable} (${eligible.get(variable)!.component}): not published — `
+      + 'run pnpm naming:publish');
   const extra = [...tierDeclared.keys()]
     .filter((variable) => !eligible.has(variable) && !tierLinks.has(`--dx-${variable.slice(1)}`)).sort()
     .map((variable) => {
       const reason = tierRecords.get(variable)?.reason;
       return `--dx-${variable.slice(1)} (${sourceLabel(tierDeclared.get(variable)!)}): ${reason
-        ? `the variable is excluded from the tier (${reason}) — remove the declaration`
-        : 'no such variable in the component\'s declaration files — remove or fix the declaration'}`;
+        ? `the variable is excluded from the tier (${reason})`
+        : 'no such variable in the component\'s declaration files'} — run pnpm naming:publish`;
     });
   expect({ missing, extra }).toEqual({ missing: [], extra: [] });
 });
@@ -1154,7 +931,7 @@ test('component tier: the collector matches registries.rootSelectors exactly', (
     });
   });
 
-  const publicFolders = publicTierFiles.map((file) => sourceLabel(file).split('/')[1]);
+  const publicFolders = [...new Set(publicTierFiles.map(folderOf))];
   const sortedIncludes = [...includedFolders].sort();
   expect({
     offenders,
@@ -1213,6 +990,22 @@ test('component tier: every publishing component appears in the runtime-audit ga
     .map((folder) => `${folder} publishes the tier but the gallery never builds it — add `
       + `widget('dx${folder}') or markup carrying one of its classes to buildGallery/addPortals`);
   expect([...new Set(missing)].sort()).toEqual([]);
+});
+
+/*
+ * The mirror of `node tools/naming/publish.mjs --check`, the way "the rename mapping stays
+ * collision-free and fully applied" mirrors `rename.mjs --check`: the committed projections and the
+ * collector are exactly what the emitter would write from today's declarations, and the hand-written
+ * links break none of its rules.
+ */
+test('component tier: the committed files are what tools/naming/publish.mjs writes', () => {
+  const existing = new Map(themeSources
+    .filter(({ path }) => isPublicTierFile(path))
+    .map(({ path, raw }) => [path, raw]));
+  const baseSources = walk(join(widgetsRoot, 'base'), '.scss').map(sourceFileOf);
+  const plan = planPublication(themeSources, baseSources, registries, existing);
+  expect(plan.problems).toEqual([]);
+  expect(stalePaths(plan, existing).map((path) => `${path} is stale — run pnpm naming:publish`)).toEqual([]);
 });
 
 test('component tier: every declaring component has bundle-gated root selectors', () => {

@@ -1,0 +1,4 @@
+@mixin publish {
+  --dx-form-field-mark-content: var(--dx-form-field-item-content);
+  --dx-form-field-required-content: var(--dx-form-field-item-content);
+}
