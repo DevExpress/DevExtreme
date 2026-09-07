@@ -45,6 +45,7 @@ import { render } from '@ts/core/utils/ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import type {
   CollectionItemInfo,
@@ -85,7 +86,6 @@ const LIST_SELECT_CHECKBOX = 'dx-list-select-checkbox';
 const LIST_SELECT_RADIOBUTTON = 'dx-list-select-radiobutton';
 const WRAP_ITEM_TEXT_CLASS = 'dx-wrap-item-text';
 const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
-export const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
