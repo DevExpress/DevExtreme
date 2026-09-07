@@ -4,7 +4,7 @@
 @use "../../base/checkBox";
 @use "../../base/checkBox/mixins" as *;
 
-$generic-checkbox-disable-opacity: 0.4;
+$generic-checkbox-disable-opacity: 0.4 !default;
 
 .dx-checkbox {
   line-height: 0;

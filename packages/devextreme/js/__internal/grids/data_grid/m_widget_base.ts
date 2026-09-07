@@ -1,6 +1,7 @@
 import './module_not_extended/column_headers';
 import './m_columns_controller';
-import './m_data_controller';
+import './data_source/data_source_module';
+import './module_not_extended/data_controller';
 import './module_not_extended/sorting';
 import './module_not_extended/rows';
 import './module_not_extended/context_menu';
@@ -24,6 +25,7 @@ import gridCore from './m_core';
 const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
 
 gridCore.registerModulesOrder([
+  'dataSource',
   'stateStoring',
   'columns',
   'selection',

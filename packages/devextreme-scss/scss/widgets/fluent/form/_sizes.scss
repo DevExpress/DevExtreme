@@ -1,6 +1,6 @@
 @use "../sizes" as *;
 
-$fluent-form-group-caption-bottom-margin: null !default;
+$fluent-form-group-caption-bottom-margin: 4px !default;
 $fluent-form-group-caption-top-padding: null !default;
 $fluent-form-group-content-bottom-padding: null !default;
 $fluent-form-group-caption-font-size: null !default;
@@ -17,7 +17,6 @@ $fluent-form-label-icon-size: $fluent-base-icon-size !default;
 $fluent-form-group-custom-caption-icon-margin: null !default;
 
 @if $size == "default" {
-  $fluent-form-group-caption-bottom-margin: 4px !default;
   $fluent-form-group-caption-top-padding: 16px !default;
   $fluent-form-group-content-bottom-padding: 16px !default;
   $fluent-form-group-caption-font-size: 20px !default;
@@ -30,7 +29,6 @@ $fluent-form-group-custom-caption-icon-margin: null !default;
 }
 
 @else if $size == "compact" {
-  $fluent-form-group-caption-bottom-margin: 4px !default;
   $fluent-form-group-caption-top-padding: 12px !default;
   $fluent-form-group-content-bottom-padding: 12px !default;
   $fluent-form-group-caption-font-size: 16px !default;
