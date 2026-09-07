@@ -22,8 +22,10 @@ docker build --platform linux/amd64 \
     -t devextreme-playwright-e2e "$REPO_ROOT/e2e/playwright/docker"
 
 # THEME and TIMEZONE are what the matrix varies, so they are handed to the container as they are.
+# DX_CONTAINER says the render matches the agent, which is what the strict screenshot budget keys
+# on — it rides here rather than in the Dockerfile so the image stays shareable with other packages.
 RUN=(docker run --rm --platform linux/amd64 --shm-size=2gb --security-opt seccomp=unconfined
-    -e "THEME=${THEME:-}" -e "TIMEZONE=${TIMEZONE:-}"
+    -e "THEME=${THEME:-}" -e "TIMEZONE=${TIMEZONE:-}" -e DX_CONTAINER=1
     -v "$REPO_ROOT:/repo" -w /repo/e2e/playwright)
 
 if [ "$UI" = true ]; then

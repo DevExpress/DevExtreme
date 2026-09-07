@@ -7,9 +7,13 @@ import {
 const baseURL = `http://localhost:${SERVER_PORT}`;
 const [width, height] = DEFAULT_BROWSER_SIZE;
 
-// The pixel budget is asymmetric on purpose: CI is the source of truth and the etalons are
-// generated there, a local run only says whether the change is in the right ballpark.
-const screenshotBudget = process.env.CI
+// The budget follows the renderer, not the job: the agent and the local container draw the same
+// pixels, so both are judged strictly — including the UI mode, where an etalon gets rewritten by
+// hand and a lenient budget would let CI-breaking drift through. A host run stays lenient because
+// its comparison is not trustworthy in the first place: another OS rasterises text differently.
+const rendersLikeCI = !!process.env.CI || !!process.env.DX_CONTAINER;
+
+const screenshotBudget = rendersLikeCI
   ? { maxDiffPixelRatio: 0.001, threshold: 0.1 }
   : { maxDiffPixelRatio: 0.05, threshold: 0.2 };
 
