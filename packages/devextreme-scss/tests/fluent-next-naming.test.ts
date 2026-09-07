@@ -155,20 +155,17 @@ const readsAllowedFor = (folder: string): Set<string> => {
 };
 
 /*
- * Six `--dx-*` names are NOT part of the public tier: the runtime sets them with `style.setProperty`
- * (card_view/content_view/content/content.tsx, scheduler/appointment_popup/form.ts) and `base/**`
- * reads them. Four of the six deliberately have no fallback — if JS gave no value (a card cover has no
- * `ratio`, say), the declaration must disappear rather than invent one. They are a JS -> CSS contract
- * and are excluded from the public-surface checks, not from the codebase.
+ * The `--dx-*` names that are NOT part of the public tier: the runtime sets them with
+ * `style.setProperty` and `base/**` reads them. The list, the setter, the read form and what
+ * happens when the runtime gives no value live in tools/naming/runtime-contract.json; the form of
+ * every read is held to it by tests/fallback-policy.test.ts. Here they are only excluded from the
+ * public-surface checks.
  */
-const RUNTIME_CONTRACT = new Set([
-  '--dx-cardview-cardsperrow',
-  '--dx-cardview-card-min-width',
-  '--dx-cardview-card-max-width',
-  '--dx-cardview-card-cover-ratio',
-  '--dx-cardview-card-cover-max-height',
-  '--dx-scheduler-animation-top',
-]);
+const RUNTIME_CONTRACT = new Set<string>(
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  (require('../tools/naming/runtime-contract.json') as { variables: { name: string }[] }).variables
+    .map(({ name }) => name),
+);
 
 /** Every `--dx-*` read anywhere outside the theme sources, or null when the monorepo is unavailable. */
 const publicNameConsumers = (): Set<string> | null => {
