@@ -2,10 +2,10 @@
 @use "colors" as *;
 @use "sizes" as *;
 
-$grid-cell-padding-block: calc((#{$grid-cell-height} - #{$grid-cell-line-height}) / 2);
-$grid-cell-padding: $grid-cell-padding-block $grid-cell-padding-inline;
-$grid-header-cell-padding-block: calc((#{$grid-header-height} - #{$grid-header-line-height}) / 2);
-$grid-command-select-column-width: calc(#{$grid-checkbox-size} + 2 * #{$grid-cell-padding-inline});
+$grid-cell-padding-block: calc((#{$grid-cell-height} - #{$grid-cell-line-height}) / 2) !default;
+$grid-cell-padding: $grid-cell-padding-block $grid-cell-padding-inline !default;
+$grid-header-cell-padding-block: calc((#{$grid-header-height} - #{$grid-header-line-height}) / 2) !default;
+$grid-command-select-column-width: calc(#{$grid-checkbox-size} + 2 * #{$grid-cell-padding-inline}) !default;
 $grid-context-menu-icon-size: calc(#{$grid-menu-item-icon-size} - 4px); // dx-px-nudge: -4px off the menu item icon size
 $grid-master-detail-padding: 16px; // dx-fixed-size: 16px master detail padding
 

@@ -16,8 +16,8 @@ $popup-toolbar-height: null !default;
 $popup-button-margin: 0 ds.$spacing-80 !default;
 $popup-toolbar-item-spacing: ds.$spacing-80 !default;
 
-$popup-content-box-shadow: null !default;
-$popup-content-box-shadow-focused: null !default;
+$popup-content-box-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-ambient, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-key !default;
+$popup-content-box-shadow-focused: 0 0 ds.$spacing-120 0 $popup-content-shadow-focused, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-focused !default;
 
 @if $size == "default" {
   $popup-content-padding: ds.$spacing-240 !default;
@@ -28,9 +28,6 @@ $popup-content-box-shadow-focused: null !default;
   $popup-toolbar-padding-inline: ds.$spacing-240 !default;
   $popup-bottom-toolbar-height: ds.$spacing-480 !default;
   $popup-toolbar-height: ds.$spacing-480 !default;
-
-  $popup-content-box-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-ambient, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-key !default;
-  $popup-content-box-shadow-focused: 0 0 ds.$spacing-120 0 $popup-content-shadow-focused, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-focused !default;
 }
 
 @else if $size == "compact" {
@@ -42,9 +39,6 @@ $popup-content-box-shadow-focused: null !default;
   $popup-toolbar-padding-inline: ds.$spacing-160 !default;
   $popup-bottom-toolbar-height: ds.$spacing-360 !default;
   $popup-toolbar-height: ds.$spacing-360 !default;
-
-  $popup-content-box-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-ambient, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-key !default;
-  $popup-content-box-shadow-focused: 0 0 ds.$spacing-120 0 $popup-content-shadow-focused, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-focused !default;
 }
 
 :root {

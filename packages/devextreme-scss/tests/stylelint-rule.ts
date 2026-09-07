@@ -15,13 +15,13 @@ const stylelintBin = join(packageRoot, 'node_modules', '.bin', 'stylelint');
 
 export const scss = (...rows: string[]): string => `${rows.join('\n')}\n`;
 
-export const createRunner = (pluginFile: string, ruleName: string): Runner => {
+export const createRunner = (pluginFile: string, ruleName: string, ruleOptions: unknown = true): Runner => {
   const fixture = mkdtempSync(join(tmpdir(), `${basename(pluginFile, '.mjs')}-`));
   const configPath = join(fixture, 'config.json');
   writeFileSync(configPath, JSON.stringify({
     customSyntax: require.resolve('postcss-scss', { paths: [require.resolve('stylelint-scss')] }),
     plugins: [join(packageRoot, 'tools', 'stylelint', pluginFile)],
-    rules: { [ruleName]: true },
+    rules: { [ruleName]: ruleOptions },
   }));
 
   const run = (name: string, source: string, fix: boolean): Result => {

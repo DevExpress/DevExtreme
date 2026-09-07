@@ -5,7 +5,7 @@ $typography-xl-font-size: null !default;
 $typography-l-font-size: null !default;
 $typography-m-font-size: null !default;
 $typography-s-font-size: null !default;
-$typography-xs-font-size: null !default;
+$typography-xs-font-size: ds.$font-size-120 !default;
 $typography-heading-1-font-size: null !default;
 $typography-heading-2-font-size: null !default;
 $typography-heading-3-font-size: null !default;
@@ -23,7 +23,6 @@ $typography-heading-6-font-size: null !default;
   $typography-l-font-size: ds.$font-size-280 !default;
   $typography-m-font-size: ds.$font-size-200 !default;
   $typography-s-font-size: ds.$font-size-180 !default;
-  $typography-xs-font-size: ds.$font-size-120 !default;
 
   $typography-heading-1-font-size: ds.$font-size-headline-xl !default;
   $typography-heading-2-font-size: ds.$font-size-360 !default; // dx-no-semantic-role: 360 is off the font-size-role scale
@@ -38,7 +37,6 @@ $typography-heading-6-font-size: null !default;
   $typography-l-font-size: ds.$font-size-200 !default;
   $typography-m-font-size: ds.$font-size-160 !default;
   $typography-s-font-size: ds.$font-size-140 !default;
-  $typography-xs-font-size: ds.$font-size-120 !default;
 
   $typography-heading-1-font-size: ds.$font-size-headline-lg !default;
   $typography-heading-2-font-size: ds.$font-size-280 !default; // dx-no-semantic-role: default branch (360) is off the role scale

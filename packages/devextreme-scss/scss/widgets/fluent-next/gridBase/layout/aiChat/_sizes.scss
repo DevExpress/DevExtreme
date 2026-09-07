@@ -1,7 +1,7 @@
 @use "../../../sizes" as *;
 @use "../../../../../_design-system/variables/ds" as ds;
 
-$grid-ai-chat-message-icon-size: $global-icon-size;
+$grid-ai-chat-message-icon-size: $global-icon-size !default;
 
 // Values hoisted from the shared layer's fixed sizes (tokenized)
 $grid-ai-chat-toolbar-item-padding-inline-end: ds.$spacing-40 !default;
