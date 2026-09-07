@@ -259,14 +259,24 @@ function stubClass(target, members, settings) {
     settings = settings || {};
     proto.prototype = typeof target === 'function' ? target.prototype : target;
     const stubPrototype = stub.prototype = new proto();
-    $.each(stubPrototype, function(name, member) {
-        if(typeof member === 'function' && name !== 'constructor') {
-            stubPrototype[name] = function() {
-                createStub(this, name);
-                return this[name].apply(this, arguments);
-            };
-        }
-    });
+    // Walk the prototype chain so non-enumerable methods (ES6 class methods) are
+    // stubbed too; a plain `for...in`/`$.each` only sees enumerable members.
+    const stubbedNames = {};
+    for(let currentProto = stubPrototype; currentProto && currentProto !== Object.prototype; currentProto = Object.getPrototypeOf(currentProto)) {
+        Object.getOwnPropertyNames(currentProto).forEach(function(name) {
+            if(name === 'constructor' || stubbedNames[name]) {
+                return;
+            }
+            const descriptor = Object.getOwnPropertyDescriptor(currentProto, name);
+            if(descriptor && typeof descriptor.value === 'function') {
+                stubbedNames[name] = true;
+                stubPrototype[name] = function() {
+                    createStub(this, name);
+                    return this[name].apply(this, arguments);
+                };
+            }
+        });
+    }
     settings.$extraFunctions && $.each(settings.$extraFunctions, function(_, name) {
         _members[name] = 'name' in _members ? _members[name] : function() { };
     });

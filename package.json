@@ -42,7 +42,7 @@
     "devextreme-internal-tools": "catalog:tools",
     "devextreme-metadata": "workspace:*",
     "husky": "8.0.3",
-    "jest": "29.7.0",
+    "jest": "30.4.2",
     "lint-staged": "14.0.1",
     "nx": "23.0.2",
     "shelljs": "0.8.5",

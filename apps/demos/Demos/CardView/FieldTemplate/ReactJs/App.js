@@ -6,6 +6,10 @@ import HeaderTemplate from './HeaderTemplate.js';
 import PriorityComponent from './Priority.js';
 import Progress from './Progress.js';
 
+const headerRender = (model) => <HeaderTemplate text={model.card.data.Task_Subject} />;
+const priorityFieldValueRender = (model) => <PriorityComponent priorityID={model.field.value} />;
+const employeeFieldValueRender = (model) => <EmployeeComponent employeeID={model.field.value} />;
+const completionFieldRender = (model) => <Progress value={model.field.value} />;
 const App = () => (
   <CardView
     dataSource={tasks}
@@ -14,14 +18,14 @@ const App = () => (
   >
     <CardHeader
       visible={true}
-      render={(model) => <HeaderTemplate text={model.card.data.Task_Subject} />}
+      render={headerRender}
     />
     <Paging pageSize={12} />
 
     <Column
       dataField="Task_Priority"
       caption="Priority"
-      fieldValueRender={(model) => <PriorityComponent priorityID={model.field.value} />}
+      fieldValueRender={priorityFieldValueRender}
     />
     <Column
       dataField="Task_Start_Date"
@@ -36,7 +40,7 @@ const App = () => (
     <Column
       dataField="Task_Assigned_Employee_ID"
       caption="Assigned to"
-      fieldValueRender={(model) => <EmployeeComponent employeeID={model.field.value} />}
+      fieldValueRender={employeeFieldValueRender}
     />
     <Column
       dataField="Task_Status"
@@ -45,7 +49,7 @@ const App = () => (
     <Column
       dataField="Task_Completion"
       caption="Completed"
-      fieldRender={(model) => <Progress value={model.field.value} />}
+      fieldRender={completionFieldRender}
     />
   </CardView>
 );

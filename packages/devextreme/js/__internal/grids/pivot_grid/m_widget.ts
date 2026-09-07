@@ -20,6 +20,8 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { ButtonStyle, Properties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import ContextMenu from '@js/ui/context_menu';
+import type { Properties as PivotGridProperties } from '@js/ui/pivot_grid';
+import type { ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import { current, isGeneric } from '@js/ui/themes';
@@ -40,6 +42,9 @@ import { RovingTabIndex } from './keyboard_navigation/roving_tab_index';
 import type { CellNavigationDirection } from './keyboard_navigation/table_cell_navigation';
 import { buildCellMatrix, getAdjacentCell } from './keyboard_navigation/table_cell_navigation';
 import { findField, mergeArraysByMaxValue, setFieldProperty } from './m_widget_utils';
+
+type FieldChooserOptions = NonNullable<PivotGridProperties['fieldChooser']>;
+type FieldPanelOptions = NonNullable<PivotGridProperties['fieldPanel']>;
 
 const window = getWindow();
 
@@ -564,7 +569,6 @@ class PivotGrid extends Widget {
 
         that._updateScrollPosition(columnsArea, rowsArea, dataArea);
 
-        // @ts-expect-error ts-error
         if (that.option('scrolling.mode') === 'virtual') {
           that._dataController.setViewportPosition(that._scrollLeft, that._scrollTop);
         }
@@ -591,9 +595,8 @@ class PivotGrid extends Widget {
     const that = this;
 
     const container = that._pivotGridContainer;
-    const fieldChooserOptions = that.option('fieldChooser') || {};
-    // @ts-expect-error ts-error
-    const toolbarItems = fieldChooserOptions.applyChangesMode === 'onDemand' ? [
+    const fieldChooserOptions = (that.option('fieldChooser') || {}) as FieldChooserOptions;
+    const toolbarItems: ToolbarItem[] = fieldChooserOptions.applyChangesMode === 'onDemand' ? [
       {
         toolbar: 'bottom',
         location: 'after',
@@ -619,20 +622,15 @@ class PivotGrid extends Widget {
       },
     ] : [];
     const fieldChooserComponentOptions = {
-      // @ts-expect-error ts-error
       layout: fieldChooserOptions.layout,
-      // @ts-expect-error ts-error
       texts: fieldChooserOptions.texts || {},
       dataSource: that.getDataSource(),
-      // @ts-expect-error ts-error
       allowSearch: fieldChooserOptions.allowSearch,
-      // @ts-expect-error ts-error
       searchTimeout: fieldChooserOptions.searchTimeout,
       width: undefined,
       height: undefined,
       headerFilter: that.option('headerFilter'),
       encodeHtml: that.option('fieldChooser.encodeHtml') ?? that.option('encodeHtml'),
-      // @ts-expect-error ts-error
       applyChangesMode: fieldChooserOptions.applyChangesMode,
       rtlEnabled: that.option('rtlEnabled'),
       onContextMenuPreparing(e) {
@@ -641,7 +639,6 @@ class PivotGrid extends Widget {
     };
     const popupOptions = {
       shading: false,
-      // @ts-expect-error ts-error
       title: fieldChooserOptions.title,
       width: fieldChooserOptions.width,
       height: fieldChooserOptions.height,
@@ -682,7 +679,6 @@ class PivotGrid extends Widget {
           .addClass(FIELD_CHOOSER_POPUP_CLASS)
           .appendTo(container),
         Popup,
-        // @ts-expect-error ts-error
         popupOptions,
       );
     }
@@ -1174,7 +1170,7 @@ class PivotGrid extends Widget {
     const $element = this.$element();
     const $descriptionCell = $element.find(`.${DESCRIPTION_AREA_CELL_CLASS}`);
     const $toolbarContainer = $(DIV).addClass('dx-pivotgrid-toolbar');
-    const fieldPanel = this.option('fieldPanel');
+    const fieldPanel = this.option('fieldPanel') as FieldPanelOptions;
     const $filterHeader = $element.find('.dx-filter-header');
     const $columnHeader = $element.find('.dx-column-header');
 
@@ -1182,10 +1178,8 @@ class PivotGrid extends Widget {
 
     let buttonStylingMode: ButtonStyle = isGeneric(current()) ? 'contained' : 'text';
 
-    // @ts-expect-error ts-error
     if (fieldPanel.visible && fieldPanel.showFilterFields) {
       $targetContainer = $filterHeader;
-      // @ts-expect-error ts-error
     } else if (fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields)) {
       $targetContainer = $columnHeader;
     } else {
@@ -1195,19 +1189,16 @@ class PivotGrid extends Widget {
 
     $columnHeader.toggleClass(
       BOTTOM_BORDER_CLASS,
-      // @ts-expect-error ts-error
       !!(fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields)),
     );
     $filterHeader.toggleClass(
       BOTTOM_BORDER_CLASS,
-      // @ts-expect-error ts-error
       !!(fieldPanel.visible && fieldPanel.showFilterFields),
     );
 
     $descriptionCell.toggleClass(
       'dx-pivotgrid-background',
       fieldPanel.visible
-      // @ts-expect-error ts-error
       && (fieldPanel.showDataFields || fieldPanel.showColumnFields || fieldPanel.showRowFields),
     );
 
@@ -1447,7 +1438,6 @@ class PivotGrid extends Widget {
       that._pivotGridContainer.append(tableElement);
       that.$element().append(that._pivotGridContainer);
 
-      // @ts-expect-error ts-error
       if (that.option('rowHeaderLayout') === 'tree') {
         rowsAreaElement.addClass('dx-area-tree-view');
       }
@@ -1461,7 +1451,6 @@ class PivotGrid extends Widget {
       allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
       headerFilter: that.option('headerFilter'),
       visible: that.option('visible'),
-      // @ts-expect-error ts-error
       remoteSort: that.option('scrolling.mode') === 'virtual',
       onFieldContextMenuKeyDown: that._handleFieldContextMenuKeyDown.bind(that),
     };
@@ -1668,7 +1657,6 @@ class PivotGrid extends Widget {
       return undefined;
     }
 
-    // @ts-expect-error ts-error
     const needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option('rowHeaderLayout') !== 'tree';
 
     that._detectHasContainerHeight();

@@ -91,7 +91,7 @@ function onAppointmentDblClick(e: DxSchedulerTypes.AppointmentDblClickEvent) {
 }
 </script>
 
-<style scoped>
+<style>
 .dx-scheduler-timeline .dx-scheduler-cell-sizes-horizontal {
   width: 100px;
 }

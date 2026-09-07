@@ -21,11 +21,12 @@ import {
 import { isObject, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent, PointerInteractionEvent } from '@js/events';
-import type { Properties } from '@js/ui/popover';
+import type { dxPopoverAnimation, Properties } from '@js/ui/popover';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import { addAriaDescriptionId, removeAriaDescriptionId } from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { InternalPositionConfig, OverlayInternalProperties } from '@ts/ui/overlay/overlay';
 import type {
   DisplaySide,
   PopoverControllerElements,
@@ -84,14 +85,31 @@ interface PositionCalculationResult {
 
 export interface PopoverProperties extends Omit<Properties,
 'onTitleRendered' | 'onHidden' | 'onHiding' | 'onShowing' | 'onShown'
-| 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+| 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'
+| 'animation' | 'container' | 'target' | 'position'>, OverlayInternalProperties {
+  animation?: dxPopoverAnimation | null;
+
+  container?: Properties['container'] | dxElementWrapper;
+
+  target?: Properties['target'] | dxElementWrapper;
+
+  position?: Properties['position'] | InternalPositionConfig;
+
+  hideTopOverlayHandler?: (() => void) | null;
+
+  templatesRenderAsynchronously?: boolean;
+
+  _fixWrapperPosition?: boolean;
+
+  useResizeObserver?: boolean;
+
   useDefaultToolbarButtons?: boolean;
 
   useFlatToolbarButtons?: boolean;
 
   arrowOffset?: number;
 
-  arrowPosition?: string;
+  arrowPosition?: string | null;
 
   preventScrollEvents?: boolean;
 

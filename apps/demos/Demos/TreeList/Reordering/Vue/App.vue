@@ -50,7 +50,7 @@ function calculateCellValue(data: Employee) {
   return [data.Title, data.FirstName, data.LastName].join(' ');
 }
 </script>
-<style scoped>
+<style>
 #employees {
   max-height: 440px;
 }

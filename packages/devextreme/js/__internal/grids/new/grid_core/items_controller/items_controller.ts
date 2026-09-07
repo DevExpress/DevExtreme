@@ -1,6 +1,6 @@
 import { equalByValue } from '@js/core/utils/common';
 import formatHelper from '@js/format_helper';
-import { computed, signal } from '@ts/core/state_manager/index';
+import { computed, signal, track } from '@ts/core/state_manager/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 import { SearchController } from '@ts/grids/new/grid_core/search/index';
@@ -29,19 +29,24 @@ export class ItemsController {
     ),
   );
 
+  // Re-emits only when visibleColumnsLayout changes, which excludes sort/filter properties,
+  // so `items` still does not recompute on those (T1306983, T1309423).
+  private readonly layoutColumns = computed(
+    () => {
+      track(this.visibleColumnsLayout.value);
+
+      return this.columnsController.visibleColumns.peek();
+    },
+  );
+
   public readonly items = computed(
     () => {
-      // NOTE: We should trigger computed by search options change,
-      // But all work with these options encapsulated in SearchHighlightTextProcessor
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      this.searchController.highlightTextOptions.value;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      this.visibleColumnsLayout.value;
+      const columns = this.layoutColumns.value;
 
       return this.dataController.items.value.map(
         (item, itemIndex) => this.createCardInfo(
           item,
-          this.columnsController.visibleColumns.peek(),
+          columns,
           itemIndex,
           this.selectedCardKeys.value,
         ),

@@ -11,6 +11,7 @@ import {
   afterTest,
   beforeTest,
   createDataGrid,
+  spyOnOption,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import type { CommandResult } from '@ts/grids/grid_core/ai_assistant/types';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
@@ -245,7 +246,7 @@ describe('summaryCommand', () => {
   describe('execute', () => {
     it('returns failure when both arrays are empty', async () => {
       const instance = await createGrid();
-      const optionSpy = jest.spyOn(instance, 'option');
+      const optionSpy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await summaryCommand.execute(instance, callbacks)({
@@ -259,7 +260,7 @@ describe('summaryCommand', () => {
 
     it('returns failure when any totalItems column does not resolve', async () => {
       const instance = await createGrid();
-      const optionSpy = jest.spyOn(instance, 'option');
+      const optionSpy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await summaryCommand.execute(instance, callbacks)({
@@ -276,7 +277,7 @@ describe('summaryCommand', () => {
 
     it('returns failure when any groupItems column does not resolve', async () => {
       const instance = await createGrid();
-      const optionSpy = jest.spyOn(instance, 'option');
+      const optionSpy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await summaryCommand.execute(instance, callbacks)({
@@ -290,7 +291,7 @@ describe('summaryCommand', () => {
 
     it('returns failure when showInColumn does not resolve to an existing column', async () => {
       const instance = await createGrid();
-      const optionSpy = jest.spyOn(instance, 'option');
+      const optionSpy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await summaryCommand.execute(instance, callbacks)({
@@ -308,7 +309,7 @@ describe('summaryCommand', () => {
 
     it('calls component.option("summary", { totalItems, groupItems }) on success', async () => {
       const instance = await createGrid();
-      const optionSpy = jest.spyOn(instance, 'option');
+      const optionSpy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await summaryCommand.execute(instance, callbacks)({
@@ -484,7 +485,7 @@ describe('clearSummaryCommand', () => {
   describe('execute', () => {
     it('calls component.option("summary", { groupItems: [], totalItems: [] }) on success', async () => {
       const instance = await createGrid();
-      const optionSpy = jest.spyOn(instance, 'option');
+      const optionSpy = spyOnOption(instance);
       const callbacks = createCallbacks();
 
       const result = await clearSummaryCommand.execute(instance, callbacks)();

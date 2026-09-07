@@ -1,15 +1,27 @@
 import type {
-  SummaryGroupItem,
-  SummaryTotalItem, SummaryType,
+  SummaryGroupItem as SummaryGroupItemOption,
+  SummaryTotalItem as SummaryTotalItemOption, SummaryType,
 } from '@js/ui/data_grid';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column } from '@ts/grids/data_grid/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
-export interface SummaryItem extends SummaryGroupItem, SummaryTotalItem { }
+import type { GroupItem } from '../grouping/types';
+
+export interface SummaryItem extends SummaryGroupItemOption, SummaryTotalItemOption { }
 
 export interface SummaryCellItem extends SummaryItem {
   value?: unknown;
   columnCaption?: string;
+}
+
+export interface SummaryGroupItem extends Omit<GroupItem, 'rowType'> {
+  rowType: GroupItem['rowType'] | 'groupFooter';
+  summaryCells?: SummaryCellItem[][];
+}
+
+export interface FooterItem {
+  rowType: 'totalFooter';
+  summaryCells: SummaryCellItem[][];
 }
 
 export type ColumnMap = Map<string | number, Column>;
@@ -18,7 +30,7 @@ export interface CalculateSummaryCellsArgs {
   summaryItems: SummaryItem[];
   aggregates: unknown[];
   visibleColumns: Column[];
-  calculateTargetColumnIndex: (summaryItem: SummaryItem, column) => number;
+  calculateTargetColumnIndex: (summaryItem: SummaryItem, column?: Column) => number;
   isGroupRow?: boolean;
   columnMap?: ColumnMap;
 }

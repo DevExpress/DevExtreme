@@ -61,3 +61,5 @@ export function untracked<T>(fn: UntrackedFunction<T>): T {
   // eslint-disable-next-line spellcheck/spell-checker
   return Reactive.untracked(fn);
 }
+
+export { track } from '../../prod/reactive_primitives/index';

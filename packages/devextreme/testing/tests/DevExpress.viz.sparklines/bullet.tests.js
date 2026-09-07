@@ -9,7 +9,7 @@ import {
 import rendererModule from 'viz/core/renderers/renderer_default';
 import translator2DModule from 'viz/translators/translator2d';
 import tooltipModule from 'viz/core/tooltip';
-import BaseWidget from '__internal/viz/core/m_base_widget';
+import BaseWidget from '__internal/viz/core/base_widget';
 import 'viz/bullet';
 
 let StubTranslator;

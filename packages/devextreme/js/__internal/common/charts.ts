@@ -1,0 +1,22 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
+import { getNextDefsSvgId } from '@ts/viz/core/utils';
+
+const graphicObjects = {};
+
+export const registerPattern = (options) => {
+  const id = getNextDefsSvgId();
+  graphicObjects[id] = { type: 'pattern', ...options };
+  return id;
+};
+
+export const registerGradient = (type, options) => {
+  const id = getNextDefsSvgId();
+  graphicObjects[id] = { type, ...options };
+  return id;
+};
+
+const getGraphicObjects = () => graphicObjects;
+
+export default { getGraphicObjects };

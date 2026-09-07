@@ -62,6 +62,26 @@ describe('Accessibility attributes', () => {
     });
   });
 
+  describe('Status container', () => {
+    it('should announce the description after it changes', () => {
+      const cardView = setup({
+        dataSource: [
+          { A: 'A_0', B: 'B_0' },
+          { A: 'A_1', B: 'B_1' },
+        ],
+        columns: ['A', 'B'],
+      });
+
+      const statusContainer = rootQuerySelector(SELECTORS.statusContainer);
+      expect(statusContainer?.textContent).toBe('Card view with 2 cards. Each card has 2 fields');
+
+      cardView.columnOption('B', 'visible', false);
+      rerender();
+
+      expect(statusContainer?.textContent).toBe('Card view with 2 cards. Each card has 1 fields');
+    });
+  });
+
   describe('Header panel', () => {
     it('should be represented as menubar', () => {
       setup({

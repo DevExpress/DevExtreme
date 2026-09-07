@@ -11,14 +11,13 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { value as getViewport } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
-import type { EventInfo } from '@js/events';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import type {
   alert as alertFunc,
   confirm as confirmFunc,
   CustomDialogOptions,
 } from '@js/ui/dialog';
-import type { ToolbarItem } from '@js/ui/popup';
+import type { dxPopupAnimation, ToolbarItem } from '@js/ui/popup';
 import { current, isFluent } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
@@ -153,7 +152,7 @@ export const custom = (params: DialogParams): BaseDialog => {
     eventsEngine.trigger($firstButton, 'focus');
   };
 
-  const animation = {
+  const animation: dxPopupAnimation = {
     show: {
       type: 'pop',
       duration: 400,
@@ -227,9 +226,7 @@ export const custom = (params: DialogParams): BaseDialog => {
   };
 
   const configuration: PopupProperties = {
-    // @ts-expect-error animation should be typed correctly in popup.d.ts
     animation,
-    // @ts-expect-error container should be typed correctly in popup.d.ts
     container: $element,
     // @ts-expect-error dragAndResizeArea should be typed correctly in popup.d.ts
     dragAndResizeArea: window,
@@ -254,7 +251,7 @@ export const custom = (params: DialogParams): BaseDialog => {
   const options = {
     ...configuration,
     ...popupOptions,
-    onHidden: (e: EventInfo<Popup>): void => {
+    onHidden: (e): void => {
       $(e.element).remove();
       popupOptions?.onHidden?.(e);
     },

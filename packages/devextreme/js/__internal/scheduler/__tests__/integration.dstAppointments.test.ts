@@ -298,7 +298,7 @@ describe('Appointments with DST/STD cases', () => {
 
     jest.useFakeTimers();
     const appointment = POM.getAppointment('Recruiting students');
-    appointment.element?.click();
+    appointment.click();
     jest.runAllTimers();
     jest.useRealTimers();
 

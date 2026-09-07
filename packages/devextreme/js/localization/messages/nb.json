@@ -367,7 +367,7 @@
         "dxScheduler-confirmRecurrenceDeleteTitle": "Slett gjentakende avtale",
 
         "dxScheduler-confirmRecurrenceEditMessage": "Vil du kun endre denne avtalen eller hele serien?",
-        "dxScheduler-confirmRecurrenceDeleteMessage": "Vil du kun slette denne avtalen eller hele serien? ",
+        "dxScheduler-confirmRecurrenceDeleteMessage": "Vil du kun slette denne avtalen eller hele serien?",
 
         "dxScheduler-confirmRecurrenceEditSeries": "Endre serie",
         "dxScheduler-confirmRecurrenceDeleteSeries": "Slette serie",
@@ -645,11 +645,11 @@
         "dxFileManager-errorNoAccess": "Ingen tilgang. Operasjonen kunne ikke fullføres.",
         "dxFileManager-errorDirectoryExistsFormat": "Katalog '{0}' eksisterer allerede.",
         "dxFileManager-errorFileExistsFormat": "Fil '{0}' eksisterer allerede.",
-        "dxFileManager-errorFileNotFoundFormat": "Fil '{0}' ble ikke funnet. ",
+        "dxFileManager-errorFileNotFoundFormat": "Fil '{0}' ble ikke funnet.",
         "dxFileManager-errorDirectoryNotFoundFormat": "Katalogen '{0}' ble ikke funnet.",
         "dxFileManager-errorWrongFileExtension": "Filtypen er ikke tillatt.",
         "dxFileManager-errorMaxFileSizeExceeded": "Filstørrelsen overgår maksimal tillatt størrelse.",
-        "dxFileManager-errorInvalidSymbols": "Dette navnet inneholder ugyldige tegn. ",
+        "dxFileManager-errorInvalidSymbols": "Dette navnet inneholder ugyldige tegn.",
         "dxFileManager-errorDefault": "Uspesifisert feil.",
         "dxFileManager-errorDirectoryOpenFailed": "Katalogen kan ikke åpnes",
 

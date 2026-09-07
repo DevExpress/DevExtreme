@@ -1,5 +1,7 @@
 import messageLocalization from '@js/localization/message';
-import { computed, effect, signal } from '@ts/core/state_manager/index';
+import {
+  computed, effect, signal, track,
+} from '@ts/core/state_manager/index';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller/index';
@@ -38,8 +40,7 @@ export class AccessibilityController {
 
     effect(() => {
       // TODO: First Render refactor
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      this.componentDescription.value;
+      track(this.componentDescription.value);
 
       if (!firstRender) {
         this.firstRender.value = false;

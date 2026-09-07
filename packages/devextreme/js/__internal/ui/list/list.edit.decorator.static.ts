@@ -23,7 +23,6 @@ class EditDecoratorStatic extends EditDecorator {
         event?.stopPropagation();
         this._deleteItem($itemElement);
       },
-      // @ts-expect-error
       integrationOptions: {},
       elementAttr: {
         role: null,

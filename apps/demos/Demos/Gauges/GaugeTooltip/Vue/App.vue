@@ -41,7 +41,7 @@ const customizeTooltip = ({ valueText }: Record<string, any>) => ({
   text: `${valueText} ohm`,
 });
 </script>
-<style scoped>
+<style>
 #gauge {
   height: 440px;
   width: 100%;

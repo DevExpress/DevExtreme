@@ -21,10 +21,14 @@ import type { ComponentProperties, DefaultActionArgs, DefaultActionConfig } from
 import { Component } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
-export interface DOMComponentProperties<TComponent> extends DOMComponentOptions<TComponent>, Omit<
+export interface DOMComponentProperties<TComponent> extends Omit<DOMComponentOptions<TComponent>, 'width' | 'height'>, Omit<
   ComponentProperties<TComponent>,
   keyof DOMComponentOptions<TComponent>
 > {
+  width?: DOMComponentOptions<TComponent>['width'] | (() => number | string);
+
+  height?: DOMComponentOptions<TComponent>['height'] | (() => number | string);
+
   _ignoreFunctionValueDeprecation?: boolean;
 
   integrationOptions?: Record<string, unknown>;
@@ -336,9 +340,10 @@ class DOMComponent<
   _createComponent<TTComponent, IProperties = Record<string, unknown>>(
     element: string | HTMLElement | dxElementWrapper | Element,
     component: string | (new (...args) => TTComponent),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    componentConfiguration: TTComponent extends Component<any, infer TTProperties>
-      ? TTProperties
+    componentConfiguration: TTComponent extends { _getDefaultOptions: () => infer TTProperties }
+      ? string extends keyof TTProperties
+        ? object
+        : Partial<TTProperties> & { integrationOptions?: Record<string, unknown> }
       : IProperties,
   ): TTComponent {
     const configuration = componentConfiguration ?? {};

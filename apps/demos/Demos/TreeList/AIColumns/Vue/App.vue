@@ -90,7 +90,7 @@ const onAIColumnRequestCreating = (e: { data: Partial<IEmployee>[] }) => {
 };
 </script>
 
-<style scoped>
+<style>
 #app .ai__cell {
   background-color: var(--dx-datagrid-row-alternation-bg);
 }

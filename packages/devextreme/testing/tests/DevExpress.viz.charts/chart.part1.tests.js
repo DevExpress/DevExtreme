@@ -14,7 +14,7 @@ import {
     getTitleStub
 } from './chartParts/commons.js';
 import { DataSource } from 'common/data/data_source/data_source';
-import { BaseChart } from '__internal/viz/chart_components/m_base_chart';
+import { BaseChart } from '__internal/viz/chart_components/base_chart';
 import layoutManagerModule from 'viz/chart_components/layout_manager';
 import trackerModule from 'viz/chart_components/tracker';
 import dxChart from 'viz/chart';

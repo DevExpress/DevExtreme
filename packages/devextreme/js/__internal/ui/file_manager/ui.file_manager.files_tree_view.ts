@@ -316,7 +316,6 @@ class FileManagerFilesTreeView extends Widget<FileManagerFilesTreeViewOptions> {
 
     switch (name) {
       case 'storeExpandedState':
-        // @ts-expect-error ts-error
         this._storeExpandedState = this.option(name);
         break;
       case 'getItems':

@@ -39,7 +39,7 @@ import type {
   PullRefreshEvent,
 } from '@js/ui/list';
 import type dxList from '@js/ui/list';
-import type { ScrollEvent } from '@js/ui/scroll_view';
+import type { ReachBottomEvent, ScrollEvent } from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@ts/core/utils/ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
@@ -594,7 +594,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
         this._scrollHandler(e);
       },
       onPullDown: isPullRefreshEnabled ? this._pullDownHandler.bind(this) : undefined,
-      // @ts-expect-error ts-error
       onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : undefined,
       showScrollbar,
       useNative: useNativeScrolling,
@@ -810,8 +809,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     }
   }
 
-  _scrollBottomHandler(e: PageLoadingEvent): void {
-    this._pageLoadingAction?.(e);
+  _scrollBottomHandler(e: ReachBottomEvent | PageLoadingEvent): void {
+    this._pageLoadingAction?.(e as PageLoadingEvent);
     const dataController = this._dataController;
     // @ts-expect-error ts-error mixin method
     if (!dataController.isLoading() && !this._isLastPage()) {

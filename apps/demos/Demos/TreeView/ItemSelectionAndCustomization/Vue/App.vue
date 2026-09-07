@@ -147,7 +147,7 @@ function selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
   isRecursiveDisabled.value = e.value === 'single';
 }
 </script>
-<style scoped>
+<style>
 .form > h4 {
   margin-bottom: 20px;
 }

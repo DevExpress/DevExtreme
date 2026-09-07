@@ -10,7 +10,6 @@ function multiLevelGroup(query, groupInfo) {
 
   if (groupInfo.length > 1) {
     query = query.select((g) => extend({}, g, {
-      // @ts-expect-error
       items: multiLevelGroup(arrayQuery(g.items), groupInfo.slice(1)).toArray(),
     }));
   }

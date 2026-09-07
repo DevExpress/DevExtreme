@@ -2,7 +2,7 @@ import CustomStore, {
     isLoadResultObject,
     isGroupItemsArray,
     isItemsArray,
-} from '../../__internal/data/m_custom_store';
+} from '../../__internal/data/custom_store';
 
 export {
     CustomStore,

@@ -18,9 +18,9 @@ import '@ts/viz/vector_map/projection';
 import componentRegistrator from '@js/core/component_registrator';
 // PLUGINS_SECTION
 import { plugins as annotationsPlugins } from '@ts/viz/core/annotations';
+import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin as ExportPlugin } from '@ts/viz/core/export';
 import { plugin as LoadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
-import BaseWidget from '@ts/viz/core/m_base_widget';
 import { plugin as TitlePlugin } from '@ts/viz/core/title';
 import { plugin as TooltipPlugin } from '@ts/viz/core/tooltip';
 import { parseScalar as _parseScalar } from '@ts/viz/core/utils';

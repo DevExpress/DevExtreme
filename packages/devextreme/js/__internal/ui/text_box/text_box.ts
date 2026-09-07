@@ -31,12 +31,10 @@ class TextBox<
 
   _showClearButton?: boolean;
 
-  ctor(element: Element, options: TProperties): void {
-    if (options) {
-      this._showClearButton = options.showClearButton;
-    }
+  _initOptions(options: TProperties): void {
+    super._initOptions(options);
 
-    super.ctor(element, options);
+    this._showClearButton = options.showClearButton;
   }
 
   _getDefaultOptions(): TProperties {

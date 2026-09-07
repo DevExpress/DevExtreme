@@ -1,5 +1,5 @@
 import $ from '@js/core/renderer';
-import type { ItemClickEvent, ItemRenderedEvent } from '@js/ui/menu';
+import type { EventInfo, ItemInfo, NativeEventInfo } from '@js/events';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
@@ -53,9 +53,7 @@ class FileManagerBreadcrumbs extends Widget<FileManagerBreadcrumbsOptions> {
     const $menu = $('<div>').appendTo(this.$element());
     this._menu = this._createComponent($menu, Menu, {
       dataSource: this._getMenuItems(),
-      // @ts-expect-error ts-error
       onItemClick: this._onItemClick.bind(this),
-      // @ts-expect-error ts-error
       onItemRendered: this._onItemRendered.bind(this),
     });
   }
@@ -98,7 +96,9 @@ class FileManagerBreadcrumbs extends Widget<FileManagerBreadcrumbsOptions> {
     return result;
   }
 
-  _onItemClick(e: ItemClickEvent): void {
+  _onItemClick(
+    e: NativeEventInfo<unknown, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo,
+  ): void {
     if (!e.itemData.isPathItem) {
       return;
     }
@@ -109,7 +109,7 @@ class FileManagerBreadcrumbs extends Widget<FileManagerBreadcrumbsOptions> {
     }
   }
 
-  _onItemRendered(e: ItemRenderedEvent): void {
+  _onItemRendered(e: EventInfo<unknown> & ItemInfo): void {
     if (e.itemData.cssClass) {
       $(e.itemElement).addClass(e.itemData.cssClass);
     }

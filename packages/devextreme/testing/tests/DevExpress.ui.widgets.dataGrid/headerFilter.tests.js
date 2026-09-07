@@ -2678,7 +2678,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             applyFilterCallCount++;
         };
 
@@ -3272,7 +3272,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             applyFilterCallCount++;
         };
 
@@ -3317,7 +3317,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             applyFilterCallCount++;
         };
 
@@ -3400,7 +3400,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             applyFilterCallCount++;
         };
 
@@ -3589,7 +3589,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             applyFilterCallCount++;
         };
 
@@ -3642,7 +3642,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             applyFilterCallCount++;
         };
 
@@ -4135,7 +4135,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.setupDataGrid();
         that.columnHeadersView.render($testElement);
         that.headerFilterView.render($testElement);
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             callApplyFilter = true;
         };
 

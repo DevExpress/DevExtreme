@@ -442,7 +442,7 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
       const id = keyboard.on(
         this.widgetElementRef?.current,
         this.widgetElementRef?.current,
-        (e: Event): void => onKeyDown(e) as undefined,
+        (e): void => onKeyDown(e) as undefined,
       );
 
       return (): void => keyboard.off(id);

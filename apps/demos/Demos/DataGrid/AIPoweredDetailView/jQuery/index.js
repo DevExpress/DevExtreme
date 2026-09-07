@@ -3,8 +3,13 @@ $(() => {
   const apiVersion = '2024-02-01';
   const endpoint = 'https://public-api.devexpress.com/demo-openai';
   const apiKey = 'DEMO';
-  let promptEditor, suggestions, submitButton;
-  let responseEditor, loadPanel, $emptyMessage, $errorMessage;
+  let promptEditor;
+  let suggestions;
+  let submitButton;
+  let responseEditor;
+  let loadPanel;
+  let $emptyMessage;
+  let $errorMessage;
 
   const aiService = new AzureOpenAI({
     dangerouslyAllowBrowser: true,
@@ -170,7 +175,7 @@ $(() => {
       .addClass('output-error-message')
       .append(
         $('<span>').addClass('dx-icon-warning'),
-        'An unexpected error occured. Please try again.'
+        'An unexpected error occurred. Please try again.',
       )
       .hide();
 

@@ -3106,7 +3106,6 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
             remoteOperations: { filtering: true, sorting: true, paging: true }
         });
 
-        // mytodo
         const dataSource = createDataSource(this, {
             group: 'Column1',
             load: function(options) {

@@ -36,7 +36,7 @@ const startValue = new Date(2011, 1, 1);
 const endValue = new Date(2011, 6, 1);
 const range = ref([new Date(2011, 1, 5), new Date(2011, 2, 5)]);
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 250px;
 }

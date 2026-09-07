@@ -6,6 +6,7 @@ import {
   isDefined, isFunction, isObject, isPlainObject,
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
+import { Guid } from '@ts/core/guid';
 
 const unwrapVariable = variableWrapper.unwrap;
 const { isWrapped } = variableWrapper;
@@ -240,7 +241,7 @@ export const toComparable = function (value, caseSensitive?, options: any = {}) 
 
   const collatorSensitivity = options?.collatorOptions?.sensitivity;
 
-  if (value && value instanceof Class && value.valueOf) {
+  if (value && (value instanceof Class || value instanceof Guid) && value.valueOf) {
     value = value.valueOf();
   } else if (typeof value === 'string' && (collatorSensitivity === 'base' || collatorSensitivity === 'case')) {
     const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;

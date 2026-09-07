@@ -188,7 +188,7 @@ function onColorClick(clickedColor: string) {
   }
 }
 </script>
-<style scoped>
+<style>
   .demo-container .dx-fieldset:first-child {
     width: 500px;
   }

@@ -119,7 +119,7 @@ function backClick() {
   notify('The button was clicked');
 }
 </script>
-<style scoped>
+<style>
 #back,
 #back-disabled {
   margin-left: 4px;

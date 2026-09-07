@@ -1,4 +1,4 @@
-import RangeSlider from '../__internal/ui/m_range_slider';
+import RangeSlider from '../__internal/ui/range_slider';
 export default RangeSlider;
 
 // STYLE rangeSlider

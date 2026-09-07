@@ -272,7 +272,7 @@ export class HeaderFilterController extends Modules.ViewController {
           // TODO remove in 16.1
           options.dataField = column.dataField || column.name;
 
-          dataSource.load(options).done((data) => {
+          dataSource.customLoader.load(options).done(({ data }) => {
             const convertUTCDates = remoteGrouping && isUTCFormat(column.serializationFormat) && cutoffLevel > 3;
             if (convertUTCDates) {
               data = convertDataFromUTCToLocal(data, column);
@@ -498,13 +498,13 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
     return false;
   }
 
-  protected _calculateAdditionalFilter() {
+  protected calculateAdditionalFilter() {
     if (this.skipCalculateColumnFilters()) {
-      return super._calculateAdditionalFilter();
+      return super.calculateAdditionalFilter();
     }
 
     const that = this;
-    const filters = [super._calculateAdditionalFilter()];
+    const filters = [super.calculateAdditionalFilter()];
     const columns = that._columnsController.getVisibleColumns(null, true);
     const excludedColumn = this.getFilterExcludedColumn();
 

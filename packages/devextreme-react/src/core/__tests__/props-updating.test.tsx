@@ -1021,23 +1021,23 @@ describe('cfg-component option control', () => {
     // simulate option changing in jQuery control
     optionsManager.onOptionChanged({ name: 'value', value: 2, fullName: 'value' });
     // add guards for restore value
-    expect((optionsManager as any).addGuard).toBeCalled();
+    expect((optionsManager as any).addGuard).toHaveBeenCalled();
     // but no call it
-    expect((optionsManager as any).setValue).not.toBeCalled();
+    expect((optionsManager as any).setValue).not.toHaveBeenCalled();
     // re-render container. Unschedule guards and wait template render for schedule it back
     rerender(<TestContainer value={2} />);
-    expect(OptionsManagerModule.scheduleGuards).not.toBeCalled();
-    expect(OptionsManagerModule.unscheduleGuards).toBeCalled();
-    expect((optionsManager as any).setValue).not.toBeCalled();
+    expect(OptionsManagerModule.scheduleGuards).not.toHaveBeenCalled();
+    expect(OptionsManagerModule.unscheduleGuards).toHaveBeenCalled();
+    expect((optionsManager as any).setValue).not.toHaveBeenCalled();
     jest.runAllTimers();
     // simulate Request Animation Frame for template re-render
     act(() => renderTemplate());
     // guards are scheduled
-    expect(OptionsManagerModule.scheduleGuards).toBeCalled();
+    expect(OptionsManagerModule.scheduleGuards).toHaveBeenCalled();
     const updatedConfig = { ...config, options: { value: 2 } };
     // value changed and options manager set value and remove scheduled guard
     optionsManager.update(updatedConfig, {});
-    expect((optionsManager as any).setValue).toBeCalled();
+    expect((optionsManager as any).setValue).toHaveBeenCalled();
     jest.runAllTimers();
     expect((optionsManager as any).setValue).toHaveBeenCalledTimes(1);
   });
@@ -1380,7 +1380,7 @@ describe('onXXXChange', () => {
           onTextChange={onPropChange}
         />,
       );
-      expect(onPropChange).not.toBeCalled();
+      expect(onPropChange).not.toHaveBeenCalled();
 
       const sampleProps = { text: '1' };
       rerender(
@@ -1389,15 +1389,15 @@ describe('onXXXChange', () => {
           onTextChange={onPropChange}
         />,
       );
-      expect(onPropChange).not.toBeCalled();
+      expect(onPropChange).not.toHaveBeenCalled();
 
       fireOptionChange('text', '2');
       expect(onPropChange).toHaveBeenCalledTimes(1);
-      expect(onPropChange).toBeCalledWith('2');
+      expect(onPropChange).toHaveBeenCalledWith('2');
 
       fireOptionChange('text', '3');
       expect(onPropChange).toHaveBeenCalledTimes(2);
-      expect(onPropChange).toBeCalledWith('3');
+      expect(onPropChange).toHaveBeenCalledWith('3');
     });
 
     it('is not called if received value is being modified', () => {
@@ -1454,11 +1454,11 @@ describe('onXXXChange', () => {
           complexOption={{ text: '0', onTextChange: onPropChange }}
         />,
       );
-      expect(onPropChange).not.toBeCalled();
+      expect(onPropChange).not.toHaveBeenCalled();
 
       fireOptionChange('complexOption.text', '1');
       expect(onPropChange).toHaveBeenCalledTimes(1);
-      expect(onPropChange).toBeCalledWith('1');
+      expect(onPropChange).toHaveBeenCalledWith('1');
     });
 
     it('is called on component changes array option', () => {
@@ -1472,12 +1472,12 @@ describe('onXXXChange', () => {
           ]}
         />,
       );
-      expect(onFirstPropChange).not.toBeCalled();
-      expect(onSecondPropChange).not.toBeCalled();
+      expect(onFirstPropChange).not.toHaveBeenCalled();
+      expect(onSecondPropChange).not.toHaveBeenCalled();
 
       fireOptionChange('arrayOption[0].text', '1');
       expect(onFirstPropChange).toHaveBeenCalledTimes(1);
-      expect(onSecondPropChange).not.toBeCalled();
+      expect(onSecondPropChange).not.toHaveBeenCalled();
       expect(onFirstPropChange).toHaveBeenCalledWith('1');
 
       fireOptionChange('arrayOption[1].text', '2');
@@ -1518,19 +1518,19 @@ describe('onXXXChange', () => {
 
       fireOptionChange('items[1].a', 1);
       expect(onCollectionPropChange).toHaveBeenCalledTimes(1);
-      expect(onCollectionPropChange).toBeCalledWith(1);
+      expect(onCollectionPropChange).toHaveBeenCalledWith(1);
 
       fireOptionChange('items[1].subItems[0].a', 2);
       expect(onSubCollectionPropChange).toHaveBeenCalledTimes(1);
-      expect(onSubCollectionPropChange).toBeCalledWith(2);
+      expect(onSubCollectionPropChange).toHaveBeenCalledWith(2);
 
       fireOptionChange('nestedOption.value', '3');
       expect(onNestedPropChange).toHaveBeenCalledTimes(1);
-      expect(onNestedPropChange).toBeCalledWith('3');
+      expect(onNestedPropChange).toHaveBeenCalledWith('3');
 
       fireOptionChange('items[1].nestedOption.value', '4');
       expect(onSubNestedPropChange).toHaveBeenCalledTimes(1);
-      expect(onSubNestedPropChange).toBeCalledWith('4');
+      expect(onSubNestedPropChange).toHaveBeenCalledWith('4');
     });
 
     it('is called on nested option changed (options in custom configuration components)', () => {
@@ -1574,19 +1574,19 @@ describe('onXXXChange', () => {
 
       fireOptionChange('items[1].a', 1);
       expect(onCollectionPropChange).toHaveBeenCalledTimes(1);
-      expect(onCollectionPropChange).toBeCalledWith(1);
+      expect(onCollectionPropChange).toHaveBeenCalledWith(1);
 
       fireOptionChange('items[1].subItems[0].a', 2);
       expect(onSubCollectionPropChange).toHaveBeenCalledTimes(1);
-      expect(onSubCollectionPropChange).toBeCalledWith(2);
+      expect(onSubCollectionPropChange).toHaveBeenCalledWith(2);
 
       fireOptionChange('nestedOption.value', '3');
       expect(onNestedPropChange).toHaveBeenCalledTimes(1);
-      expect(onNestedPropChange).toBeCalledWith('3');
+      expect(onNestedPropChange).toHaveBeenCalledWith('3');
 
       fireOptionChange('items[1].nestedOption.value', '4');
       expect(onSubNestedPropChange).toHaveBeenCalledTimes(1);
-      expect(onSubNestedPropChange).toBeCalledWith('4');
+      expect(onSubNestedPropChange).toHaveBeenCalledWith('4');
     });
 
     it('is called on nested array option changed', () => {
@@ -1709,7 +1709,7 @@ describe('onXXXChange', () => {
           <div ref={ref} />
         </TestComponent>,
       );
-      expect(onPropChange).not.toBeCalled();
+      expect(onPropChange).not.toHaveBeenCalled();
       Widget.option.mockImplementation(
         (name: string) => {
           if (name === 'text') {
@@ -1751,7 +1751,7 @@ describe('onXXXChange', () => {
           onTextChange={onPropChange}
         />,
       );
-      expect(onPropChange).not.toBeCalled();
+      expect(onPropChange).not.toHaveBeenCalled();
       Widget.option.mockImplementation(
         (name: string) => {
           if (name === 'text') {

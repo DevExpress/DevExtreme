@@ -19,7 +19,7 @@ import CollectionWidgetItem from '@ts/ui/collection/item';
 
 // STYLE box
 
-type BoxOptionKey = keyof BoxProperties;
+type BoxLayoutOptionKey = 'align' | 'crossAlign' | 'direction';
 
 export interface BoxItemData extends Item {
   maxSize?: string | number;
@@ -127,11 +127,11 @@ class BoxItem extends CollectionWidgetItem<BoxItemData> {
 class LayoutStrategy {
   private readonly _$element: dxElementWrapper;
 
-  private readonly _option: <K extends keyof BoxProperties>(name: K) => BoxProperties[K];
+  private readonly _option: <K extends BoxLayoutOptionKey>(name: K) => BoxProperties[K];
 
   constructor(
     $element: dxElementWrapper,
-    option: <K extends keyof BoxProperties>(name: K) => BoxProperties[K],
+    option: <K extends BoxLayoutOptionKey>(name: K) => BoxProperties[K],
   ) {
     this._$element = $element;
     this._option = option;
@@ -247,7 +247,9 @@ class Box extends CollectionWidget<BoxProperties> {
   _initLayout(): void {
     this._layout = new LayoutStrategy(
       this.$element(),
-      <K extends BoxOptionKey>(name: K) => this.option(name),
+      <K extends BoxLayoutOptionKey>(
+        name: K,
+      ): BoxProperties[K] => this.option(name) as BoxProperties[K],
     );
   }
 

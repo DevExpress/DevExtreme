@@ -44,7 +44,7 @@ const customizeTooltip = (arg: Record<string, any>) => ({
 });
 const customizeText = (arg: Record<string, any>) => getText(arg.item, arg.text);
 </script>
-<style scoped>
+<style>
 #gauge {
   height: 440px;
   width: 100%;

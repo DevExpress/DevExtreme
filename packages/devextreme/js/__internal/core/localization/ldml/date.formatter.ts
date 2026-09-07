@@ -77,7 +77,7 @@ const LDML_FORMATTERS = {
     return leftPad(date[useUtc ? 'getUTCSeconds' : 'getSeconds']().toString(), Math.min(count, 2));
   },
   S(date: Date, count: number, useUtc: boolean): string {
-    return leftPad(date[useUtc ? 'getUTCMilliseconds' : 'getMilliseconds']().toString(), 3).substr(0, count);
+    return leftPad(date[useUtc ? 'getUTCMilliseconds' : 'getMilliseconds']().toString(), 3).slice(0, count);
   },
   x(date: Date, count: number, useUtc: boolean): string {
     const timezoneOffset = useUtc ? 0 : date.getTimezoneOffset();
@@ -101,54 +101,58 @@ const LDML_FORMATTERS = {
   },
 };
 
-export const getFormatter = (
+type LdlmFormatter = typeof LDML_FORMATTERS[keyof typeof LDML_FORMATTERS];
+
+export function getFormatter(
+  format: string,
+  dateParts: LdlmDateLocalization,
+): (date: Date) => string;
+export function getFormatter(
   format: string | undefined,
   dateParts: LdlmDateLocalization,
-) => (date: Date | null): Date | string | null => {
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let charIndex: number;
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let formatter: typeof LDML_FORMATTERS[keyof typeof LDML_FORMATTERS];
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let char: string;
-  let charCount = 0;
-  const separator = '\'';
-  let isEscaping = false;
-  // eslint-disable-next-line @typescript-eslint/init-declarations
-  let isCurrentCharEqualsNext: boolean;
-  let result = '';
+): (date: Date | null) => Date | string | null;
+export function getFormatter(
+  format: string | undefined,
+  dateParts: LdlmDateLocalization,
+): ((date: Date) => string) | ((date: Date | null) => Date | string | null) {
+  return (date: Date | null): Date | string | null => {
+    if (!date) {
+      return null;
+    }
 
-  if (!date) {
-    return null;
-  }
+    if (!format) {
+      return date;
+    }
 
-  if (!format) {
-    return date;
-  }
+    const separator = '\'';
+    const useUtc = format.endsWith('Z') || format.endsWith('\'Z\'');
+    let charCount = 0;
+    let isEscaping = false;
+    let result = '';
 
-  const useUtc = format.endsWith('Z') || format.endsWith('\'Z\'');
+    for (let charIndex = 0; charIndex < format.length; charIndex += 1) {
+      const char = format[charIndex];
+      const formatter: LdlmFormatter | undefined = LDML_FORMATTERS[char];
+      const isCurrentCharEqualsNext = char === format[charIndex + 1];
 
-  for (charIndex = 0; charIndex < format.length; charIndex += 1) {
-    char = format[charIndex];
-    formatter = LDML_FORMATTERS[char];
-    isCurrentCharEqualsNext = char === format[charIndex + 1];
-    charCount += 1;
+      charCount += 1;
 
-    if (!isCurrentCharEqualsNext) {
-      if (formatter && !isEscaping) {
-        result += formatter(date, charCount, useUtc, dateParts);
+      if (!isCurrentCharEqualsNext) {
+        if (formatter && !isEscaping) {
+          result += formatter(date, charCount, useUtc, dateParts);
+        }
+        charCount = 0;
       }
-      charCount = 0;
-    }
 
-    if (char === separator && !isCurrentCharEqualsNext) {
-      isEscaping = !isEscaping;
-    } else if (isEscaping || !formatter) {
-      result += char;
+      if (char === separator && !isCurrentCharEqualsNext) {
+        isEscaping = !isEscaping;
+      } else if (isEscaping || !formatter) {
+        result += char;
+      }
+      if (char === separator && isCurrentCharEqualsNext) {
+        charIndex += 1;
+      }
     }
-    if (char === separator && isCurrentCharEqualsNext) {
-      charIndex += 1;
-    }
-  }
-  return result;
-};
+    return result;
+  };
+}

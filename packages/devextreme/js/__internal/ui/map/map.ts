@@ -120,13 +120,11 @@ class Map extends Widget<MapProperties> {
     ]);
   }
 
-  ctor(element: Element, options: MapProperties): void {
-    super.ctor(element, options);
+  _initOptions(options: MapProperties): void {
+    super._initOptions(options);
 
-    if (options) {
-      if ('provider' in options && options.provider === 'bing') {
-        this._logDeprecatedBingProvider();
-      }
+    if ('provider' in options && options.provider === 'bing') {
+      this._logDeprecatedBingProvider();
     }
   }
 

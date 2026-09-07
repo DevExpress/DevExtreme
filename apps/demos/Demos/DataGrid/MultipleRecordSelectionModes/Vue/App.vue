@@ -80,7 +80,7 @@ const showCheckBoxesModes: DxDataGridTypes.SelectionColumnDisplayMode[] = ['none
 const allMode = ref(selectAllModes[0]);
 const checkBoxesMode = ref<DxDataGridTypes.SelectionColumnDisplayMode>(isGeneric(themes.current()) ? 'onClick' : 'always');
 </script>
-<style scoped>
+<style>
 .options {
   margin-top: 20px;
   padding: 20px;

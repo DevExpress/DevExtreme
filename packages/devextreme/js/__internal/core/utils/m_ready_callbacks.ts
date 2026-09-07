@@ -1,7 +1,7 @@
 import domAdapter from '@js/core/dom_adapter';
 import callOnce from '@js/core/utils/call_once';
-import injector from '@js/core/utils/dependency_injector';
 import { hasWindow } from '@js/core/utils/window';
+import { injector } from '@ts/core/utils/dependency_injector';
 
 let callbacks: any[] = [];
 

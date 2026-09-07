@@ -97,7 +97,6 @@ export class ColumnChooserController extends modules.ViewController {
             that.getView('columnChooserView').showColumnChooser();
           },
           hint: that.option('columnChooser.title'),
-          // @ts-expect-error
           integrationOptions: {},
         });
       } else {

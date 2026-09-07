@@ -1,16 +1,10 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Priority, Service } from '../app.service';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'priority',
-  templateUrl: `.${modulePrefix}/priority/priority.component.html`,
-  styleUrls: [`.${modulePrefix}/priority/priority.component.css`],
+  templateUrl: './priority.component.html',
+  styleUrls: ['./priority.component.css'],
 })
 export class PriorityComponent implements OnChanges {
   priorities: Priority[];

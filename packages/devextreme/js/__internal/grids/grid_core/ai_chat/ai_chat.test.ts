@@ -12,8 +12,8 @@ import $ from '@js/core/renderer';
 import Chat from '@js/ui/chat';
 import { AIChatModel } from '@ts/grids/grid_core/__tests__/__mock__/model/ai_chat';
 import { AI_ASSISTANT_AUTHOR_ID } from '@ts/grids/grid_core/ai_assistant/const';
-import ProgressBar from '@ts/ui/m_progress_bar';
 import Popup from '@ts/ui/popup/popup';
+import ProgressBar from '@ts/ui/progress_bar';
 
 import { AIChat } from './ai_chat';
 import {
@@ -37,7 +37,8 @@ jest.mock('../m_utils', () => ({
 const mockPopupInstance = {
   toggle: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
   hide: jest.fn<() => Promise<boolean>>().mockResolvedValue(true),
-  option: jest.fn<(name: string) => unknown>().mockReturnValue(false),
+  option: jest.fn<(name: string | Record<string, unknown>, value?: unknown) => unknown>()
+    .mockReturnValue(false),
   dispose: jest.fn(),
 };
 

@@ -25,16 +25,10 @@ if (!/localhost/.test(document.location.host)) {
 type ExportMode = Parameters<typeof exportGanttToPdf>[0]['exportMode'];
 type DateRange = Parameters<typeof exportGanttToPdf>[0]['dateRange'];
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
   imports: [

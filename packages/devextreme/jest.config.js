@@ -25,7 +25,6 @@ module.exports = {
                     // eslint-disable-next-line spellcheck/spell-checker
                     tsconfig: '<rootDir>/js/__internal/tsconfig.json',
                     diagnostics: false, // set to true to enable type checking
-                    isolatedModules: true, // performance optimization https://kulshekhar.github.io/ts-jest/user/config/isolatedModules
                     babelConfig: {
                         presets: ['@babel/preset-env'],
                         plugins: [
@@ -49,12 +48,17 @@ module.exports = {
             ],
             preset: 'ts-jest',
             transform: {
-                // eslint-disable-next-line spellcheck/spell-checker
+
                 '\\.ts$': ['ts-jest', {
                     // eslint-disable-next-line spellcheck/spell-checker
-                    tsconfig: { module: 'commonjs', target: 'es2020', esModuleInterop: true },
+                    tsconfig: {
+                        module: 'commonjs',
+                        target: 'es2020',
+                        // eslint-disable-next-line spellcheck/spell-checker
+                        esModuleInterop: true,
+                        isolatedModules: true,
+                    },
                     diagnostics: false,
-                    isolatedModules: true,
                 }],
             },
         }

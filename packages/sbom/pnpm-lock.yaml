@@ -17,8 +17,8 @@ importers:
   .:
     devDependencies:
       '@devexpress/sbom-toolkit':
-        specifier: 0.11.2
-        version: 0.11.2
+        specifier: 0.13.0
+        version: 0.13.0
 
 packages:
 
@@ -151,8 +151,8 @@ packages:
     engines: {node: ^20 || ^22 || ^24 || ^25, pnpm: '>=10'}
     hasBin: true
 
-  '@devexpress/sbom-toolkit@0.11.2':
-    resolution: {integrity: sha512-uIRA+rVgi5R2WRkXrr//wRSvcrlesMogrfLoONVuA743CY4xy5ACJ3sBxa1614PlJHFAHxu1CLzhKKGD81e8BA==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.11.2/b79d441cc3c4171ec76b7aba2520bf2ae90baebf}
+  '@devexpress/sbom-toolkit@0.13.0':
+    resolution: {integrity: sha512-YrcdWbNq4/deBTFEsxIPBdbqI1kyrjGWz88SwC+PYUf0J8Sq3lAxvDnVkgiGfJOzF8rJeyDqJNordOJKjWsTag==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.13.0/f4a86cdecc2905cf15ad0934b86ffcfa832eed36}
     hasBin: true
 
   '@gar/promise-retry@1.0.3':
@@ -901,7 +901,7 @@ snapshots:
   '@appthreat/atom-parsetools@1.2.2':
     dependencies:
       '@appthreat/atom-common': 1.1.0
-      '@babel/parser': 7.29.3
+      '@babel/parser': 7.29.7
       hermes-parser: 0.36.1
       typescript: 6.0.3
     optional: true
@@ -955,7 +955,7 @@ snapshots:
       '@babel/code-frame': 7.29.7
       '@babel/generator': 7.29.7
       '@babel/helper-globals': 7.29.7
-      '@babel/parser': 7.29.3
+      '@babel/parser': 7.29.7
       '@babel/template': 7.29.7
       '@babel/types': 7.29.7
       debug: 4.4.3
@@ -1067,7 +1067,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@devexpress/sbom-toolkit@0.11.2':
+  '@devexpress/sbom-toolkit@0.13.0':
     dependencies:
       '@cyclonedx/cdxgen': 12.5.1
       spdx-license-ids: 3.0.23

@@ -159,6 +159,12 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
     return !!this.props.pagesNavigatorVisible && this.props.pageCount > 0;
   }
 
+  // NOTE: inferno passes every style key to setProperty, so an undefined value would
+  // be written out as `visibility: undefined`. Omit the whole style object instead.
+  getPagesContainerStyle(): { visibility: 'hidden' } | undefined {
+    return this.getPagesContainerVisibility() === 'hidden' ? { visibility: 'hidden' } : undefined;
+  }
+
   getPagesContainerVisibility(): 'hidden' | undefined {
     const {
       pagesNavigatorVisible,
@@ -286,7 +292,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
         {this.getPagesContainerVisible() && (
           <div
             className={PAGINATION_PAGES_CLASS}
-            style={{ visibility: this.getPagesContainerVisibility() }}
+            style={this.getPagesContainerStyle()}
           >
             {this.getInfoVisible() && (
               <InfoText

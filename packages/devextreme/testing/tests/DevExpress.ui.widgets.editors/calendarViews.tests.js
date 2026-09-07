@@ -38,22 +38,33 @@ function triggerKeydown(key, $element) {
 }
 
 
-const FakeView = BaseView.inherit({
-    _isTodayCell: noop,
-    _isDateOutOfRange: function() {
+class FakeView extends BaseView {
+    _isTodayCell() { }
+
+    _isDateOutOfRange() {
         return false;
-    },
-    _isOtherView: noop,
-    _getCellText: noop,
-    _getFirstCellData: noop,
-    _getNextCellData: noop,
-    _getCellByDate: noop,
-    _renderWeekNumberCell: noop,
-    isBoundary: noop,
-    _renderValue: noop,
-    _isStartDayOfMonth: noop,
-    _isEndDayOfMonth: noop,
-});
+    }
+
+    _isOtherView() { }
+
+    _getCellText() { }
+
+    _getFirstCellData() { }
+
+    _getNextCellData() { }
+
+    _getCellByDate() { }
+
+    _renderWeekNumberCell() { }
+
+    isBoundary() { }
+
+    _renderValue() { }
+
+    _isStartDayOfMonth() { }
+
+    _isEndDayOfMonth() { }
+}
 
 
 QUnit.module('Basics', () => {

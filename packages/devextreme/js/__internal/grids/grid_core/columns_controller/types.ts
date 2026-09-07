@@ -1,6 +1,8 @@
 import type { ColumnAIOptions, ColumnBase } from '@js/common/grids';
 
-import type { COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION } from './const';
+import type {
+  COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
+} from './const';
 
 export type DropLocationNames = typeof GROUP_LOCATION
   | typeof COLUMN_CHOOSER_LOCATION
@@ -13,14 +15,19 @@ export type ColumnIndex = number | {
 
 export type FilterField = Omit<Column, 'filterOperations'> & { filterOperations?: string[] | null };
 
+export type ColumnUserState = Pick<Column, typeof USER_STATE_FIELD_NAMES[number]>;
+
 export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
 
-export interface Column extends ColumnBase {
+export interface InternalColumnOptions {
   parseValue?: (text: string) => unknown;
+  deserializeValue?: (value: unknown) => unknown;
+  serializeValue?: (value: unknown) => unknown;
   index?: number;
   groupIndex?: number;
   type?: string;
   defaultFilterOperations?: string[];
+  defaultFilterOperation?: string;
   visibleWidth?: string | number;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
@@ -32,6 +39,8 @@ export interface Column extends ColumnBase {
   bufferedSelectedFilterOperation?: ColumnBase['selectedFilterOperation'];
   added?: AddedColumn;
 }
+
+export type Column = ColumnBase & InternalColumnOptions;
 
 export interface ColumnsChanges {
   changeTypes: {

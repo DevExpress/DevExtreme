@@ -1,8 +1,8 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import { DataSource } from '@ts/data/data_source/m_data_source';
-import CustomStore from '@ts/data/m_custom_store';
+import CustomStore from '@js/data/custom_store';
+import DataSource from '@js/data/data_source';
 
 import { loadResource, normalizeDataSource } from './utils';
 
@@ -13,7 +13,7 @@ describe('utils', () => {
       const dataSource = normalizeDataSource({
         filter: filterValue,
         store: new CustomStore({
-          load: () => {},
+          load: () => [],
         }),
       });
 
@@ -34,7 +34,7 @@ describe('utils', () => {
     it('DataSource object shouldn\'t wrapped', () => {
       const originalDataSource = new DataSource({
         store: new CustomStore({
-          load: () => {},
+          load: () => [],
         }),
       });
       const dataSource = normalizeDataSource(originalDataSource);

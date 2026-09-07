@@ -12,8 +12,8 @@
 // PLUGINS_SECTION
 import componentRegistrator from '@js/core/component_registrator';
 import { noop } from '@js/core/utils/common';
+import baseWidget from '@ts/viz/core/base_widget';
 import { plugin } from '@ts/viz/core/data_source';
-import baseWidget from '@ts/viz/core/m_base_widget';
 
 import Item from './item';
 import { addAlgorithm, getAlgorithm } from './tiling';

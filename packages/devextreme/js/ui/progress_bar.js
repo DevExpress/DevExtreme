@@ -1,4 +1,4 @@
-import ProgressBar from '../__internal/ui/m_progress_bar';
+import ProgressBar from '../__internal/ui/progress_bar';
 
 export default ProgressBar;
 

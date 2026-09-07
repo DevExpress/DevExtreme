@@ -36,7 +36,7 @@ export type FloatingActionButtonPosition = NonNullable<
 
 export interface SpeedDialItemProperties extends
   Omit<OverlayProperties, 'onInitialized' | 'onDisposing' | 'onContentReady' | 'position' | 'elementAttr'>,
-  Omit<Properties, 'onInitialized' | 'onDisposing' | 'onOptionChanged' | 'onContentReady'> {
+  Omit<Properties, 'onInitialized' | 'onDisposing' | 'onOptionChanged' | 'onContentReady' | 'width' | 'height'> {
   position?: FloatingActionButtonPosition;
 
   parentPosition?: FloatingActionButtonPosition;

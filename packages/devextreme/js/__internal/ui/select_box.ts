@@ -23,6 +23,7 @@ import type dxList from '@js/ui/list';
 import { type Item, type ItemClickEvent, type SelectionChangedEvent } from '@js/ui/list';
 import type { Properties } from '@js/ui/select_box';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { DropDownEditorInternalProperties } from '@ts/ui/drop_down_editor/drop_down_editor';
 import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
 import DropDownList from '@ts/ui/drop_down_editor/drop_down_list';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
@@ -43,7 +44,10 @@ interface SelectBoxProperties extends Omit<Properties,
 'onItemClick' | 'onSelectionChanged'
 | 'onOpened' | 'onClosed'
 | 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
-| 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+| 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'
+| 'dropDownOptions' | 'fieldTemplate'>, DropDownEditorInternalProperties {
+  onValueChanged?: (e: ValueChangedEvent) => void;
+
   selectionMode?: SingleOrMultiple;
 
   tooltipEnabled?: boolean;

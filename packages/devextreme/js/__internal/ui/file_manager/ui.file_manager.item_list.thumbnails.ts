@@ -68,7 +68,6 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         onItemEnterKeyPressed: this._tryOpen.bind(this),
         itemThumbnailTemplate: this._getItemThumbnailContainer.bind(this),
         getTooltipText: this._getTooltipText.bind(this),
-        // @ts-expect-error ts-error
         onSelectionChanged: this._onItemListSelectionChanged.bind(this),
         onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this),
         onContentReady: this._onContentReady.bind(this),
@@ -163,7 +162,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     };
   }
 
-  _onItemListSelectionChanged({ addedItemKeys, removedItemKeys }): void {
+  _onItemListSelectionChanged({ addedItemKeys, removedItemKeys }: {
+    addedItemKeys?: unknown[];
+    removedItemKeys?: unknown[];
+  }): void {
     const selectedItemInfos = this.getSelectedItems();
     const selectedItems = selectedItemInfos?.map(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return

@@ -3,7 +3,7 @@ import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import registerEvent from 'common/core/events/core/event_registrator';
 import { compare as compareVersion } from 'core/utils/version';
-import { EVENT_PROPERTIES } from '__internal/events/core/m_consts';
+import { EVENT_PROPERTIES } from '__internal/events/core/consts';
 import config from 'core/config';
 
 QUnit.module('base');

@@ -14,8 +14,8 @@
 import componentRegistrator from '@js/core/component_registrator';
 import { noop } from '@js/core/utils/common';
 import { isNumeric as _isNumber, isString as _isString } from '@js/core/utils/type';
+import baseWidget from '@ts/viz/core/base_widget';
 import { plugin as pluginDataSource } from '@ts/viz/core/data_source';
-import baseWidget from '@ts/viz/core/m_base_widget';
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from '@ts/viz/sankey/constants';
 import { layout as defaultLayoutBuilder } from '@ts/viz/sankey/layout';
 import Link from '@ts/viz/sankey/link_item';

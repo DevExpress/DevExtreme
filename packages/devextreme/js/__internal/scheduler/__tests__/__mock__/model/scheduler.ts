@@ -188,8 +188,8 @@ export class SchedulerModel {
       throw new Error(`Appointment "${text}" not found`);
     }
 
-    appointment.element.click();
-    appointment.element.click();
+    appointment.click();
+    appointment.click();
 
     return appointment;
   }

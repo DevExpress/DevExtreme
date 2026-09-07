@@ -358,7 +358,6 @@ class MessageList extends Widget<Properties> {
       hideOnParentScroll: false,
       overlayContainer: this._scrollView.container(),
       visualContainer: this._scrollView.container(),
-      // @ts-expect-error ts-error
       boundaryOffset: { h: 16 },
     });
 

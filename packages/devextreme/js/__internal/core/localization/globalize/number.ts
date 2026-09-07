@@ -99,7 +99,7 @@ if (Globalize?.formatNumber) {
 
     format(
       value: string | number,
-      format: LocalizationFormat,
+      format?: LocalizationFormat,
     ): string {
       if (typeof value !== 'number') {
         return value;
@@ -120,7 +120,7 @@ if (Globalize?.formatNumber) {
 
     parse(
       text: string,
-      format: FormatConfig | string,
+      format?: FormatConfig | string,
     ): number | null | undefined {
       if (!text) {
         return undefined;

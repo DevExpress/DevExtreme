@@ -5,15 +5,15 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Color, type ColorInstance } from '@ts/color';
 import { locate, move } from '@ts/common/core/animation/translator';
+import { Guid } from '@ts/core/guid';
 import messageLocalization from '@ts/core/localization/message';
 import devices from '@ts/core/m_devices';
-import { Guid } from '@ts/core/m_guid';
 import { extend } from '@ts/core/utils/m_extend';
 import { getHeight, getOuterHeight, getWidth } from '@ts/core/utils/m_size';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler, SupportedKeys } from '@ts/core/widget/widget';
-import eventsEngine from '@ts/events/core/m_events_engine';
-import { name as clickEventName } from '@ts/events/m_click';
+import { name as clickEventName } from '@ts/events/click';
+import eventsEngine from '@ts/events/core/events_engine';
 import { isCommandKeyPressed } from '@ts/events/utils/index';
 import Draggable from '@ts/m_draggable';
 import type { EditorProperties, ValueChangedEvent } from '@ts/ui/editor/editor';
@@ -507,7 +507,6 @@ class ColorView extends Editor<ColorViewProperties> {
 
     this._createComponent(this._$paletteHandle, Draggable, {
       contentTemplate: null,
-      // @ts-expect-error need to fix type for Draggable boundary option
       boundary: this._$palette,
       allowMoveByClick: true,
       boundOffset: () => -this._paletteHandleHeight / 2,
@@ -588,7 +587,6 @@ class ColorView extends Editor<ColorViewProperties> {
         .appendTo(this._$hueScaleWrapper);
       this._createComponent(this._$hueScaleHandle, Draggable, {
         contentTemplate: null,
-        // @ts-expect-error need to fix type for Draggable boundary option
         boundary: this._$hueScaleWrapper,
         allowMoveByClick: true,
         dragDirection: 'vertical',
@@ -860,7 +858,6 @@ class ColorView extends Editor<ColorViewProperties> {
       .appendTo($parent);
     this._createComponent(this._$alphaChannelHandle, Draggable, {
       contentTemplate: null,
-      // @ts-expect-error need to fix type for Draggable
       boundary: $parent,
       allowMoveByClick: true,
       dragDirection: 'horizontal',

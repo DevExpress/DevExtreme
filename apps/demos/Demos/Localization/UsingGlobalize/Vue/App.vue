@@ -67,11 +67,11 @@ import 'devextreme/common/core/localization/globalize/number';
 import 'devextreme/common/core/localization/globalize/date';
 import 'devextreme/common/core/localization/globalize/currency';
 import 'devextreme/common/core/localization/globalize/message';
-import deMessages from 'npm:devextreme/localization/messages/de.json!json';
-import ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
-import deCldrData from 'npm:devextreme-cldr-data/de.json!json';
-import ruCldrData from 'npm:devextreme-cldr-data/ru.json!json';
-import supplementalCldrData from 'npm:devextreme-cldr-data/supplemental.json!json';
+import deMessages from 'devextreme/localization/messages/de.json';
+import ruMessages from 'devextreme/localization/messages/ru.json';
+import deCldrData from 'devextreme-cldr-data/de.json';
+import ruCldrData from 'devextreme-cldr-data/ru.json';
+import supplementalCldrData from 'devextreme-cldr-data/supplemental.json';
 import Globalize from 'globalize';
 import service from './data.ts';
 
@@ -114,7 +114,7 @@ function changeLocale({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   document.location.reload();
 }
 </script>
-<style scoped>
+<style>
 
 .options {
   padding: 20px;

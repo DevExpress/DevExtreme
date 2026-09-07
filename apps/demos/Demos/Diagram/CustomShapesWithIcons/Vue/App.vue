@@ -402,7 +402,7 @@ watch(
   },
 );
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 900px;
     }

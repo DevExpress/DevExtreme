@@ -141,7 +141,7 @@ function onGridSelectionChanged() {
   isGridBoxOpened.value = false;
 }
 </script>
-<style scoped>
+<style>
 .dx-fieldset {
   height: 500px;
 }

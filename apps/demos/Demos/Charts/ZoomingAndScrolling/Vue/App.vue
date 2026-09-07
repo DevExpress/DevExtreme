@@ -25,7 +25,7 @@ import { zoomingData } from './data.ts';
 
 const initialRange = [300, 500];
 </script>
-<style scoped>
+<style>
 #chart {
   height: 440px;
   width: 100%;
