@@ -1,7 +1,7 @@
 @use "./mixins" as *;
 
-$pagination-paddings: 8px;
-$pagination-info-paddings: 9px;
+$pagination-paddings: 8px !default;
+$pagination-info-paddings: 9px !default;
 
 .dx-pager,
 .dx-pagination {
