@@ -175,6 +175,10 @@ const RUNTIME_CONTRACT = new Set<string>(
     .map(({ name }) => name),
 );
 
+const DECLARED_BY_APPLICATION = new Set([
+  '--dx-accent-color',
+]);
+
 /** Every `--dx-*` read anywhere outside the theme sources, or null when the monorepo is unavailable. */
 const publicNameConsumers = (): Set<string> | null => {
   const roots = [
@@ -962,6 +966,7 @@ test('component tier: every --dx-… read in the theme resolves to a declared na
   const declared = new Set([
     ...[...tierDeclared.keys()].map((variable) => `--dx-${variable.slice(1)}`),
     ...RUNTIME_CONTRACT,
+    ...DECLARED_BY_APPLICATION,
     ...findings.publicTierManualDeclarations.map((entry) => entry.slice(entry.indexOf(': ') + 2)),
   ]);
   const READS = [

@@ -280,6 +280,31 @@ StyleDictionary.registerFormat({
     .join('\n'),
 });
 
+const ACCENT_PROPERTY = '--dx-accent-color';
+const PRIMARY_STEP_DECLARATION = /^(\s*)--dxds-primary-(\d+):\s*([^;]+);$/gm;
+
+StyleDictionary.registerFormat({
+  name: 'dx/accent-palette',
+  format: async (args) => {
+    const palette = await StyleDictionary.hooks.formats['css/variables'](args);
+    let wrapped = 0;
+    const withAccentFallback = palette.replace(
+      PRIMARY_STEP_DECLARATION,
+      (line, indent, step, value) => {
+        wrapped += 1;
+
+        return `${indent}--dxds-primary-${step}: var(${ACCENT_PROPERTY}-${step}, ${value});`;
+      },
+    );
+
+    if (wrapped === 0) {
+      throw new Error('An accent palette without a single --dxds-primary-* step');
+    }
+
+    return withAccentFallback;
+  },
+});
+
 const FILE_OPTIONS = {
   outputReferences: true,
   themeable: true,
@@ -330,7 +355,7 @@ const createConfig = (name, files, platformFiles) => ({
 const createPaletteConfig = (palette) => createConfig(palette, [`base/colors/palettes/${THEME_NAME}/${palette}`], [
   {
     destination: `${THEME_NAME}/accents/${palette}.scss`,
-    format: 'css/variables',
+    format: 'dx/accent-palette',
     filter: (token) => normalizeFilePath(token).includes(`${THEME_NAME}/${palette}.json`),
     options: FILE_OPTIONS,
   },
