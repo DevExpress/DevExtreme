@@ -77,7 +77,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
   private _isReload: any;
 
-  private _rootNode: any;
+  private _rootNode?: TreeNode;
 
   public _isNodesInitializing = false;
 
@@ -612,7 +612,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
 
     const resultData = getVisibleNodes(
-      this._rootNode.children,
+      this._rootNode!.children,
       (key) => this.isRowExpanded(key, options),
     );
 
@@ -829,7 +829,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   public forEachNode(nodeCallback?: (node: any) => void) {
-    let nodes = [];
+    let nodes: TreeNode[] = [];
     let callback;
 
     if (arguments.length === 1) {
@@ -837,7 +837,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
       callback = arguments[0];
 
       const rootNode = this.getRootNode();
-      nodes = rootNode && rootNode.children || [];
+      nodes = rootNode?.children ?? [];
     } else if (arguments.length === 2) {
       // eslint-disable-next-line prefer-destructuring
       callback = arguments[1];
