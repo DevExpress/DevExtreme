@@ -55,9 +55,9 @@ export const useApi = () => {
     }]);
   }, []);
 
-  const alertLimitReached = useCallback((): void => {
+  const alertError = useCallback((message: string): void => {
     setAlerts([{
-      message: 'Request limit reached, try again in a minute.',
+      message,
     }]);
 
     setTimeout(() => {
@@ -77,10 +77,14 @@ export const useApi = () => {
         author: assistant,
         text: aiResponse,
       });
-    } catch {
-      alertLimitReached();
+    } catch(err: any) {
+      const errorMessage =
+        err.error?.message ??
+        err.message ??
+        "Unknown error";
+      alertError(errorMessage);
     }
-  }, [alertLimitReached, insertMessage]);
+  }, [alertError, insertMessage]);
 
   const regenerateLastAIResponse = useCallback(async (): Promise<void> => {
     const messageHistory = getMessageHistory();
@@ -92,11 +96,15 @@ export const useApi = () => {
       if (typeof aiResponse === 'string') {
         updateLastMessageContent(aiResponse);
       }
-    } catch {
+    } catch(err: any) {
       updateLastMessageContent(messageHistory.at(-1)?.content as string);
-      alertLimitReached();
+      const errorMessage =
+        err.error?.message ??
+        err.message ??
+        "Unknown error";
+      alertError(errorMessage);
     }
-  }, [alertLimitReached, updateLastMessageContent]);
+  }, [alertError, updateLastMessageContent]);
 
   return {
     alerts,

@@ -26,16 +26,16 @@ $(() => {
       temperature: 0.7,
     };
 
-    const response = await chatService.chat.completions.create(params);
+    const response = await chatService.chat.completions.create(params, { maxRetries: 0 });
     const data = { choices: response.choices };
 
     return data.choices[0].message?.content;
   }
 
-  function alertLimitReached() {
+  function alertError(message) {
     instance.option({
       alerts: [{
-        message: 'Request limit reached, try again in a minute.',
+        message,
       }],
     });
 
@@ -70,10 +70,14 @@ $(() => {
 
         renderAssistantMessage(aiResponse);
       }, 200);
-    } catch {
+    } catch(err) {
       instance.option({ typingUsers: [] });
       messages.pop();
-      alertLimitReached();
+      const errorMessage =
+        err.error?.message ??
+        err.message ??
+        "Unknown error";
+      alertError(errorMessage);
     } finally {
       toggleDisabledState(false, event);
     }
@@ -87,9 +91,13 @@ $(() => {
 
       updateLastMessage(aiResponse);
       messages.at(-1).content = aiResponse;
-    } catch {
+    } catch(err) {
       updateLastMessage(messages.at(-1).content);
-      alertLimitReached();
+      const errorMessage =
+        err.error?.message ??
+        err.message ??
+        "Unknown error";
+      alertError(errorMessage);
     } finally {
       toggleDisabledState(false);
     }
