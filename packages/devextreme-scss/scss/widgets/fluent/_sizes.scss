@@ -1,6 +1,6 @@
 $size: null !default;
 
-// return from removing in PR#34804 to make fluent themes compileable
+// Restore the import removed in PR #34804 to make Fluent themes compilable.
 @use "colors" as *;
 
 $fluent-size-postfix: null !default;
