@@ -18,7 +18,9 @@ import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
-import { SCREEN_READER_ONLY_CLASS, setScrollView } from '__internal/ui/list/list.base';
+import { setScrollView } from '__internal/ui/list/list.base';
+import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
+
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
