@@ -203,6 +203,7 @@ export interface Controllers {
   columnsResizer: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsResizerViewController;
   contextMenu: import('./context_menu/m_context_menu').ContextMenuController;
   data: import('./data_controller/data_controller').DataController;
+  dataSource: import('./data_source/data_source_controller').DataSourceController;
   draggingHeader: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderViewController;
   // todo: export is dataGrid-only controller
   editing: import('./editing/m_editing').EditingController;

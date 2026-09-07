@@ -17,6 +17,7 @@ import { getCurrentTheme } from './helpers/themeUtils';
 const LAUNCH_RETRY_ATTEMPTS = 3;
 const LAUNCH_RETRY_TIMEOUT = 10000;
 const FAILED_TESTS_RETRY_ATTEMPTS = 0;
+const TEST_EXECUTION_TIMEOUT = 3 * 60 * 1000;
 
 const wait = async (
   timeout: number,
@@ -345,6 +346,7 @@ async function main() {
 
     const runOptions: RunOptions = {
       quarantineMode: false,
+      testExecutionTimeout: TEST_EXECUTION_TIMEOUT,
       // @ts-expect-error ts-error
       hooks: {
         test: {

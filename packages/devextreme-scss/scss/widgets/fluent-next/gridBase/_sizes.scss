@@ -4,7 +4,7 @@
 
 // Not colours: a font weight and two opacities (NAMING.md O7)
 $grid-column-chooser-font-weight: ds.$font-weight-base-strong !default;
-$grid-group-panel-message-line-height: buttonSizes.$button-text-line-height;
+$grid-group-panel-message-line-height: buttonSizes.$button-text-line-height !default;
 
 $grid-border-width: 1px !default; // dx-line-width: 1px
 $grid-border-radius: 0 !default;
@@ -20,11 +20,11 @@ $grid-menu-item-padding: null !default;
 $grid-column-chooser-padding-inline: null !default;
 $grid-column-chooser-padding: null !default;
 $grid-header-panel-padding: null !default;
-$grid-group-panel-item-margin-inline: null !default;
+$grid-group-panel-item-margin-inline: ds.$spacing-60 !default;
 $grid-command-edit-column-width: null !default;
 $grid-command-edit-column-with-icons-width: null !default;
 $grid-adaptive-column-height: null !default;
-$grid-tree-view-search-margin-block-end: null !default;
+$grid-tree-view-search-margin-block-end: ds.$spacing-100 !default;
 $grid-no-data-font-size: null !default;
 $grid-filter-row-editor-padding-inline: null !default;
 $grid-tree-view-select-all-item-padding-inline-start: null !default;
@@ -61,12 +61,10 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-column-chooser-padding-inline: ds.$spacing-240 !default;
   $grid-column-chooser-padding: ds.$spacing-160 $grid-column-chooser-padding-inline ds.$spacing-90 !default;
   $grid-header-panel-padding: ds.$spacing-80 0 !default;
-  $grid-group-panel-item-margin-inline: ds.$spacing-60 !default;
 
   $grid-command-edit-column-width: 115px !default; // dx-offscale: 115px
   $grid-command-edit-column-with-icons-width: 93px !default; // dx-offscale: 93px
   $grid-adaptive-column-height: ds.$spacing-400 !default;
-  $grid-tree-view-search-margin-block-end: ds.$spacing-100 !default;
   $grid-no-data-font-size: ds.$spacing-170 !default;
 
   $grid-filter-row-editor-padding-inline: ds.$spacing-120 !default;
@@ -95,12 +93,10 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-column-chooser-padding-inline: ds.$spacing-80 !default;
   $grid-column-chooser-padding: ds.$spacing-80 $grid-column-chooser-padding-inline ds.$spacing-80 !default;
   $grid-header-panel-padding: ds.$spacing-60 0 !default;
-  $grid-group-panel-item-margin-inline: ds.$spacing-60 !default;
 
   $grid-command-edit-column-width: 105px !default; // dx-offscale: 105px
   $grid-command-edit-column-with-icons-width: ds.$spacing-800 !default;
   $grid-adaptive-column-height: ds.$spacing-260 !default;
-  $grid-tree-view-search-margin-block-end: ds.$spacing-100 !default;
   $grid-no-data-font-size: ds.$font-size-base-md !default;
 
   $grid-filter-row-editor-padding-inline: ds.$spacing-80 !default;

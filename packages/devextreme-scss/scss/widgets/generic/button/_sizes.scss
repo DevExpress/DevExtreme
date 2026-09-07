@@ -4,7 +4,6 @@ $generic-button-text-line-height: null !default;
 $generic-button-vertical-padding: null !default;
 $generic-button-horizontal-padding: null !default;
 $generic-button-icon-horizontal-padding: null !default;
-$generic-button-box-shadow-size: null !default;
 $generic-button-border-weight: $generic-base-border-width !default;
 
 $generic-button-content-line-height: $generic-base-line-height !default;
@@ -14,7 +13,6 @@ $generic-button-content-line-height: $generic-base-line-height !default;
   $generic-button-vertical-padding: 8px !default;
   $generic-button-horizontal-padding: 12px !default;
   $generic-button-icon-horizontal-padding: 8px !default;
-  $generic-button-box-shadow-size: 0 1px 3px !default;
 }
 
 @else if $size == "compact" {
@@ -22,7 +20,6 @@ $generic-button-content-line-height: $generic-base-line-height !default;
   $generic-button-vertical-padding: 4px !default;
   $generic-button-horizontal-padding: 10px !default;
   $generic-button-icon-horizontal-padding: 5px !default;
-  $generic-button-box-shadow-size: 0 1px 2px !default;
 }
 
 :root {

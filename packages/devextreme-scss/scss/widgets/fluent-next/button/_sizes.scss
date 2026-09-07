@@ -36,7 +36,7 @@ $button-box-shadow: 0 ds.$spacing-10 ds.$spacing-30 !default;
 }
 
 // Derived: the content padding of an icon-only button at the default icon size
-$button-content-padding: calc((#{$button-height} - #{$button-icon-size} - #{$global-border-width} * 2) / 2);
+$button-content-padding: calc((#{$button-height} - #{$button-icon-size} - #{$global-border-width} * 2) / 2) !default;
 
 :root {
   --dx-button-padding-inline: #{$button-padding-inline};

@@ -100,7 +100,7 @@ $scheduler-appointment-dragging-shadow: 7px 7px 15px 0 rgba(50, 50, 50, 0.2) !de
 $scheduler-horizontal-appointment-resizable-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color, inset -2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry
 $scheduler-horizontal-appointment-resizable-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color, inset 2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry
 $scheduler-horizontal-appointment-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color;
-$scheduler-horizontal-appointment-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color;
+$scheduler-horizontal-appointment-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color !default;
 $scheduler-horizontal-appointment-shadow: inset 2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry
 $scheduler-horizontal-appointment-shadow-rtl: inset -2px 0 0 0 $scheduler-appointment-start-color; // dx-shadow-geometry
 $scheduler-horizontal-appointment-resizing-shadow: inset -2px 0 0 0 $scheduler-appointment-start-color, $scheduler-horizontal-appointment-shadow; // dx-shadow-geometry
@@ -113,9 +113,9 @@ $scheduler-small-font-size: 14px !default;
 $scheduler-group-header-table-cell-height: 30px !default;
 $scheduler-month-date-text-size: 16px !default;
 $scheduler-month-date-text-padding: 6px !default;
-$scheduler-base-border: $scheduler-border-width solid;
-$scheduler-transparent-top-border: $scheduler-border-width solid transparent;
-$scheduler-accent-border: $scheduler-border-width solid;
+$scheduler-base-border: $scheduler-border-width solid !default;
+$scheduler-transparent-top-border: $scheduler-border-width solid transparent !default;
+$scheduler-accent-border: $scheduler-border-width solid !default;
 
 $scheduler-reduced-icon-offset: 5px !default;
 $scheduler-recurrence-icon-offset: 20px !default;
@@ -123,9 +123,9 @@ $scheduler-recurrence-icon-offset: 20px !default;
 $scheduler-agenda-appointment-margin: 5px !default;
 $scheduler-agenda-last-in-date-appointment-margin: 20px !default;
 
-$scheduler-small-size-factor: 0.5;
+$scheduler-small-size-factor: 0.5 !default;
 
-$scheduler-small-size-element-offset: $scheduler-left-column-width * $scheduler-small-size-factor;
+$scheduler-small-size-element-offset: $scheduler-left-column-width * $scheduler-small-size-factor !default;
 
 $scheduler-time-indicator-font-size: 30px !default;
 $scheduler-time-indicator-size: 1px !default;

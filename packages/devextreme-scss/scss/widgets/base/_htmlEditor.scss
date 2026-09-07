@@ -7,11 +7,11 @@ $htmleditor-code-block-bg: rgba(191, 191, 191, 0.15) !default;
 $htmleditor-placeholder-color: rgba(0, 0, 0, 0.6) !default;
 $htmleditor-aidialog-title-font-weight: 600 !default;
 
-$list-style: decimal lower-alpha lower-roman;
-$list-style-width: 1.2em;
-$list-style-margin: 0.3em;
-$list-style-outer-width: $list-style-margin + $list-style-width;
-$max-indent: 9;
+$list-style: decimal lower-alpha lower-roman !default;
+$list-style-width: 1.2em !default;
+$list-style-margin: 0.3em !default;
+$list-style-outer-width: $list-style-margin + $list-style-width !default;
+$max-indent: 9 !default;
 
 /*
  * dx-fixed-size: the drag handle's size; its half is negated at twenty positions, so feeding a
@@ -20,10 +20,10 @@ $max-indent: 9;
 $resize-handle-size: 11px;
 $touch-resize-handle-size: 15px; // dx-fixed-size: the touch variant of the same handle
 $half-resize-handle-size: math.div($resize-handle-size, 2);
-$half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2);
+$half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2) !default;
 
 $htmleditor-border-width: 1px !default;
-$transparent-border: $htmleditor-border-width solid transparent;
+$transparent-border: $htmleditor-border-width solid transparent !default;
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
 $variable-padding: 3px 6px !default;

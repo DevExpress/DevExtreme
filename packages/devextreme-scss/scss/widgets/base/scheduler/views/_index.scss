@@ -49,8 +49,8 @@ $scheduler-current-time-cell-border-size: 2px; // dx-fixed-size: multiplied else
 
 $scheduler-workspace-date-table-cell-height: 50px; // dx-fixed-size: four derived heights multiply it, so a var() cannot pass
 $scheduler-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 1.5;
-$scheduler-collapsed-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 0.5;
-$scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height;
+$scheduler-collapsed-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 0.5 !default;
+$scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height !default;
 $scheduler-header-panel-table-cell-height: if(meta.type-of($scheduler-workspace-date-table-cell-height) == number, $scheduler-workspace-date-table-cell-height - 10px, calc(#{$scheduler-workspace-date-table-cell-height} - 10px)); // dx-px-nudge: -10px under the workspace cell height
 $scheduler-group-header-table-cell-height: 30px !default;
 
