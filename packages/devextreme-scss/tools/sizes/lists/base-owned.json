@@ -894,7 +894,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 151,
+      "line": 153,
       "widget": "dataGrid",
       "literals": [
         "-2px"
@@ -906,7 +906,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 187,
+      "line": 189,
       "widget": "dataGrid",
       "literals": [
         "14px"
@@ -918,7 +918,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 306,
+      "line": 320,
       "widget": "dataGrid",
       "literals": [
         "21px"
@@ -930,7 +930,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 370,
+      "line": 384,
       "widget": "dataGrid",
       "literals": [
         "-1px"
@@ -1934,7 +1934,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 174,
+      "line": 176,
       "widget": "treeList",
       "literals": [
         "14px"
@@ -1946,7 +1946,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 262,
+      "line": 276,
       "widget": "treeList",
       "literals": [
         "16px"
@@ -1958,7 +1958,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 270,
+      "line": 284,
       "widget": "treeList",
       "literals": [
         "21px"

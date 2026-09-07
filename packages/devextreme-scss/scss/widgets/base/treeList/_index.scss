@@ -6,6 +6,8 @@ $datagrid-base-background-color: null !default;
 $datagrid-border-color: null !default;
 $datagrid-focused-border-color: null !default;
 $datagrid-text-stub-background-image-path: null !default;
+$datagrid-text-stub-mask-image: null !default;
+$datagrid-text-stub-bg: null !default;
 $datagrid-row-error-color: null !default;
 $header-filter-color: null !default;
 $header-filter-color-empty: null !default;
@@ -206,8 +208,20 @@ $treelist-button-margin-right: 10px !default;
         display: block;
         height: 100%;
         content: "";
-        background-image: $treelist-text-stub-background-image-path;
-        background-repeat: no-repeat repeat;
+
+        /*
+         * A background image cannot read a colour role, so the placeholder's tint is frozen in
+         * the raster. `$…-mask-image` swaps the same artwork in as a mask, which carries only
+         * its alpha, so the colour and its opacity come from the theme instead.
+         */
+        @if $datagrid-text-stub-mask-image {
+          mask-image: $datagrid-text-stub-mask-image;
+          mask-repeat: no-repeat repeat;
+          background-color: $datagrid-text-stub-bg;
+        } @else {
+          background-image: $treelist-text-stub-background-image-path;
+          background-repeat: no-repeat repeat;
+        }
       }
 
       &[style*="text-align: right"]::before {
