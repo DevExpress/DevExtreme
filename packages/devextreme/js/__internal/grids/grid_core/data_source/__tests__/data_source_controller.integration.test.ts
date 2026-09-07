@@ -100,23 +100,27 @@ describe('dataSource controller holds the adapter', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
-  it('holds an adapter once a dataSource is set', async () => {
+  it('holds the same adapter object as DataController', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
+    const adapter = instance.getController('data').dataSource();
 
+    expect(adapter).toBeTruthy();
     expect(dataSourceController.hasAdapter()).toBe(true);
-    expect(dataSourceController.getAdapter()).toBeTruthy();
+    expect(dataSourceController.getAdapter()).toBe(adapter);
   });
 
   it('follows the rebuilt adapter when the dataSource option changes', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
+    const dataController = instance.getController('data');
     const firstAdapter = dataSourceController.getAdapter();
 
     instance.option('dataSource', OTHER_DATA);
     await flushAsync();
 
     expect(dataSourceController.getAdapter()).not.toBe(firstAdapter);
+    expect(dataSourceController.getAdapter()).toBe(dataController.dataSource());
   });
 
   it('releases the adapter when the dataSource option is cleared', async () => {
@@ -128,6 +132,7 @@ describe('dataSource controller holds the adapter', () => {
 
     expect(dataSourceController.hasAdapter()).toBe(false);
     expect(dataSourceController.getAdapter()).toBeNull();
+    expect(instance.getController('data').dataSource()).toBeUndefined();
     expect(dataSourceController.getDataSource()).toBeNull();
     expect(dataSourceController.store()).toBeUndefined();
   });
@@ -142,9 +147,10 @@ describe('dataSource controller holds the adapter', () => {
     await flushAsync();
 
     expect(dataSourceController.hasAdapter()).toBe(true);
+    expect(dataSourceController.getAdapter()).toBe(instance.getController('data').dataSource());
   });
 
-  it('still holds an adapter after a refresh', async () => {
+  it('still holds the same adapter after a refresh', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
 
@@ -153,15 +159,18 @@ describe('dataSource controller holds the adapter', () => {
     await refreshed;
 
     expect(dataSourceController.hasAdapter()).toBe(true);
+    expect(dataSourceController.getAdapter()).toBe(instance.getController('data').dataSource());
   });
 
   it('releases the adapter on dispose', async () => {
     const { $container, instance } = await createDataGrid({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
+    const dataController = instance.getController('data');
 
     instance.dispose();
     $container.remove();
 
+    expect(dataController.dataSource()).toBeUndefined();
     expect(dataSourceController.hasAdapter()).toBe(false);
   });
 
@@ -172,6 +181,7 @@ describe('dataSource controller holds the adapter', () => {
       const dataSourceController = instance.getController('dataSource');
 
       expect(dataSourceController.hasAdapter()).toBe(true);
+      expect(dataSourceController.getAdapter()).toBe(instance.getController('data').dataSource());
     } finally {
       disposeTreeList($container);
     }

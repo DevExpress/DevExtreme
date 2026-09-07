@@ -41,7 +41,7 @@ describe('Focus columns extender', () => {
       const result = columnsController.getSortDataSourceParameters();
 
       expect(result).toHaveLength(1);
-      expect(result[0].selector).toBe(dataSourceController.getAdapter()?.getDataIndexGetter());
+      expect(result[0].selector).toBe(dataSourceController.getDataIndexGetter());
       expect(result[0].desc).toBe(false);
     });
 
