@@ -140,6 +140,23 @@ const declaredBetween = (parent, after, before, name) => parent.nodes
   .slice(parent.index(after) + 1, parent.index(before))
   .some((node) => isVariable(node) && node.prop === name);
 
+/*
+ * A marker comment sits at the end of the declaration line, and postcss keeps it as a separate
+ * node: removing the declaration alone leaves the comment behind, where it collapses onto the next
+ * surviving declaration and claims something that was never written about it. So a trailing comment
+ * travels with its declaration, and a chain whose branches disagree about it is left to a human.
+ */
+const trailingComment = (decl) => {
+  const next = decl.next();
+  const sameLine = next?.type === 'comment' && next.source?.start?.line === decl.source?.end?.line;
+  return sameLine ? next : undefined;
+};
+
+const trailersAgree = (declarations) => {
+  const texts = declarations.map((decl) => trailingComment(decl)?.text);
+  return texts.every((text) => text === texts[0]);
+};
+
 const attachedComment = (decl) => {
   const previous = decl.prev();
   const attached = previous?.type === 'comment' && !/\n[ \t]*\n/.test(decl.raws.before ?? '');
@@ -171,7 +188,8 @@ const ruleFunction = (primary) => (root, result) => {
       const [first] = declarations;
       const earlier = earlierDeclaration(parent, ifRule, name);
       const overridden = earlier !== undefined && !isNull(earlier.value);
-      const fixable = overridden ? declarations.every((decl) => hasDefaultFlag(decl.value)) : movable.has(name);
+      const fixable = trailersAgree(declarations)
+        && (overridden ? declarations.every((decl) => hasDefaultFlag(decl.value)) : movable.has(name));
 
       const fix = () => {
         const live = branches.filter((branch) => branch.parent);
@@ -184,16 +202,25 @@ const ruleFunction = (primary) => (root, result) => {
           if (parent.type === 'root' && parent.first) parent.first.raws.before = '';
         };
 
+        const dropDeclarations = () => declarations.forEach((decl) => {
+          trailingComment(decl)?.remove();
+          decl.remove();
+        });
+
         if (overridden) {
-          declarations.forEach((decl) => decl.remove());
+          dropDeclarations();
           tidy();
           return;
         }
 
         const hoisted = first.clone();
+        const trailerSource = trailingComment(first);
+        // keep the comment's own raws (`inline` is what makes it print as `//`), move it one space
+        // behind the declaration it explains
+        const trailer = trailerSource?.clone({ raws: { ...trailerSource.raws, before: ' ' } });
         const references = localReferences(first.value);
         const comment = earlier && attachedComment(earlier);
-        declarations.forEach((decl) => decl.remove());
+        dropDeclarations();
 
         const relocate = (insert, gap) => {
           const indent = indentOf(ifRule);
@@ -201,6 +228,7 @@ const ruleFunction = (primary) => (root, result) => {
           hoisted.raws.before = moved ? `\n${indent}` : `${gap}${indent}`;
           if (moved) insert(moved);
           insert(hoisted, moved);
+          if (trailer) parent.insertAfter(hoisted, trailer);
           comment?.remove();
           earlier?.remove();
         };
@@ -212,6 +240,7 @@ const ruleFunction = (primary) => (root, result) => {
         } else if (earlier && !references.some((ref) => declaredBetween(parent, earlier, ifRule, ref))) {
           hoisted.raws.before = earlier.raws.before;
           earlier.replaceWith(hoisted);
+          if (trailer) parent.insertAfter(hoisted, trailer);
         } else {
           relocate((node, previous) => (previous ? parent.insertAfter(previous, node) : parent.insertBefore(ifRule, node)), '\n');
         }
