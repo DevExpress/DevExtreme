@@ -994,11 +994,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         _subscribeToEvents(rootElement) { }
     };
 
+    // The dataSource controller is a leaf that the data controller resolves in init(),
+    // so it is always included rather than listed by every caller.
+    const ALWAYS_INCLUDED_MODULES = ['dataSource'];
+
     exports['setup' + nameWidget + 'Modules'] = function(that, moduleNames, options) {
         const modules = [];
 
         $.each(gridCore.modules, function() {
-            if($.inArray(this.name, moduleNames) !== -1) {
+            if($.inArray(this.name, moduleNames) !== -1 || $.inArray(this.name, ALWAYS_INCLUDED_MODULES) !== -1) {
                 modules.push(this);
             }
         });
