@@ -11,6 +11,7 @@ import { getWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
 import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { ErrorHandlingViewController } from '@ts/grids/grid_core/error_handling/error_handling_view_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -38,6 +39,10 @@ import { isItemCountableByDataSource } from './utils/items';
 import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
 export type VirtualScrollingDataSourceAdapter = InstanceType<ReturnType<typeof dataSourceAdapterExtender>>;
+
+interface VirtualScrollingDataSourceController extends DataSourceController {
+  getAdapter: () => VirtualScrollingDataSourceAdapter | null;
+}
 
 export const updateLoading = function (that) {
   const beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
@@ -488,6 +493,8 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
 export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRowsViewExtender extends Base {
   protected _dataController!: DataController & Partial<StateStoringDataControllerExtension>;
 
+  protected dataSourceController!: VirtualScrollingDataSourceController;
+
   protected _errorHandlingController!: ErrorHandlingViewController;
 
   private _isFixedTableRendering: any;
@@ -502,6 +509,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     super.init();
 
     this._errorHandlingController = this.getController('errorHandling');
+    this.dataSourceController = this.getController('dataSource') as VirtualScrollingDataSourceController;
 
     this._dataController.pageChanged.add((pageIndex) => {
       const scrollTop = this._scrollTop;
@@ -581,18 +589,18 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
     const deferred = super._renderCore.apply(this, arguments as any);
 
-    const dataSource = this._dataController._dataSource as VirtualScrollingDataSourceAdapter | null | undefined;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-    if (dataSource && e) {
+    if (dataSourceAdapter && e) {
       const itemCount = e.items ? e.items.length : 20;
       const viewportSize = this._dataController
         // @ts-expect-error
         .viewportSize() || 20;
 
       if (gridCoreUtils.isVirtualRowRendering(this) && itemCount > 0 && this.option(LEGACY_SCROLLING_MODE) !== false) {
-        dataSource._renderTime = (Date.now() - startRenderTime) * viewportSize / itemCount;
+        dataSourceAdapter._renderTime = (Date.now() - startRenderTime) * viewportSize / itemCount;
       } else {
-        dataSource._renderTime = Date.now() - startRenderTime;
+        dataSourceAdapter._renderTime = Date.now() - startRenderTime;
       }
     }
     return deferred;
@@ -707,7 +715,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
   private _correctRowHeights(rowHeights) {
     const dataController = this._dataController;
-    const dataSource = dataController._dataSource;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     const correctedRowHeights: any = [];
     const visibleRows = dataController.getVisibleRows();
     let itemSize = 0;
@@ -726,7 +734,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
           itemSize = 0;
         }
         lastLoadIndex = currentItem.loadIndex;
-      } else if (isItemCountableByDataSource(currentItem, dataSource as unknown as GroupCountableDataSource)) {
+      } else if (dataSourceAdapter && isItemCountableByDataSource(currentItem, dataSourceAdapter as unknown as GroupCountableDataSource)) {
         if (firstCountableItem) {
           firstCountableItem = false;
         } else {
