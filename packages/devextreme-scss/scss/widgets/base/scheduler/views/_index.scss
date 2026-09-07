@@ -28,24 +28,24 @@ $scheduler-first-month-cell-background-color: null !default;
 
 $scheduler-panel-text-color: null !default;
 
-$scheduler-timepanel-cell-offset: 20px;
-$scheduler-workspace-info-font-size: 20px;
-$scheduler-small-font-size: 14px;
+$scheduler-timepanel-cell-offset: 20px !default;
+$scheduler-workspace-info-font-size: 20px !default;
+$scheduler-small-font-size: 14px !default;
 
-$scheduler-current-time-cell-border-size: 2px;
+$scheduler-current-time-cell-border-size: 2px !default;
 
-$scheduler-workspace-date-table-cell-height: 50px;
-$scheduler-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 1.5;
-$scheduler-collapsed-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 0.5;
-$scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height;
-$scheduler-header-panel-table-cell-height: $scheduler-workspace-date-table-cell-height - 10px;
-$scheduler-group-header-table-cell-height: 30px;
+$scheduler-workspace-date-table-cell-height: 50px !default;
+$scheduler-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 1.5 !default;
+$scheduler-collapsed-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 0.5 !default;
+$scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height !default;
+$scheduler-header-panel-table-cell-height: $scheduler-workspace-date-table-cell-height - 10px !default;
+$scheduler-group-header-table-cell-height: 30px !default;
 
-$scheduler-group-header-table-cell-width: 80px;
+$scheduler-group-header-table-cell-width: 80px !default;
 
-$scheduler-month-date-text-size: 16px;
+$scheduler-month-date-text-size: 16px !default;
 
-$scheduler-month-date-text-padding: 6px;
+$scheduler-month-date-text-padding: 6px !default;
 
 @use "./day" with (
   $scheduler-base-border: $scheduler-base-border,
