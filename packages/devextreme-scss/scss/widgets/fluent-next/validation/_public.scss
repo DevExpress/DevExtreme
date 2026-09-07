@@ -1,0 +1,20 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-validation-message-bg: #{$validation-message-bg};
+  --dx-validation-message-content-padding: #{$validation-message-content-padding};
+  --dx-validation-message-content: #{$validation-message-content};
+  --dx-validation-message-content-disabled: #{$validation-message-content-disabled};
+  --dx-validation-message-bg-disabled: #{$validation-message-bg-disabled};
+  --dx-validation-message-font-size: #{$validation-message-font-size};
+  --dx-validation-message-line-height: #{$validation-message-line-height};
+  --dx-validation-message-padding-block: #{$validation-message-padding-block};
+  --dx-validation-message-padding-inline: #{$validation-message-padding-inline};
+  --dx-validation-overlay-border-radius: #{$validation-overlay-border-radius};
+  --dx-validation-summary-content: #{$validation-summary-content};
+  --dx-validation-summary-content-disabled: #{$validation-summary-content-disabled};
+  --dx-validation-summary-item-border-block-end-width: #{$validation-summary-item-border-block-end-width};
+  --dx-validation-summary-item-margin: #{$validation-summary-item-margin};
+  --dx-validation-summary-margin-block-start: #{$validation-summary-margin-block-start};
+}

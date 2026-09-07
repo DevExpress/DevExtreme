@@ -1,4 +1,6 @@
-import { join, resolve, dirname } from 'path';
+import {
+  join, resolve, dirname, relative,
+} from 'path';
 import { promises } from 'fs';
 
 import MetadataCollector from '../../src/metadata/collector';
@@ -7,7 +9,7 @@ const rootDir = join(__dirname, '..', '..');
 const scssDir = join(rootDir, 'tests', 'data', 'scss');
 
 describe('MetadataCollector', () => {
-  const expectedFileList: string[] = [
+  const exposedFileList: string[] = [
     join('bundles', 'dx.light.scss'),
     join('bundles', 'dx.material.blue.light.scss'),
     join('widgets', 'generic', 'accordion', '_colors.scss'),
@@ -21,8 +23,16 @@ describe('MetadataCollector', () => {
     join('widgets', 'material', '_index.scss'),
   ];
 
+  const internalFileList: string[] = [
+    join('_design-system', 'fluent', 'accents', 'blue.scss'),
+    join('_design-system', 'variables', '_ds.scss'),
+    join('widgets', 'fluent-next', '_colors.scss'),
+    join('bundles', 'dx.fluent-next.blue.light.scss'),
+  ];
+
   promises.mkdir = jest.fn();
   promises.writeFile = jest.fn();
+  promises.rm = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -31,22 +41,26 @@ describe('MetadataCollector', () => {
   test('getFileList', async () => {
     const collector = new MetadataCollector();
     const fileList = await collector.getFileList(join(rootDir, 'tests', 'data', 'scss'));
-    const expectedFullPaths = expectedFileList.map((file) => join(scssDir, file));
+    const expectedFullPaths = [...exposedFileList, ...internalFileList]
+      .map((file) => join(scssDir, file));
 
     expect(fileList.length).toBe(expectedFullPaths.length);
 
     fileList.forEach((file) => expect(expectedFullPaths).toContain(file));
   });
 
-  test('readFiles', async () => {
+  test('readFiles keeps out the paths the scss package marks as internal', async () => {
     const collector = new MetadataCollector();
     const handler = (content: string): string => content;
-    const filesInfo = await collector.readFiles(join(rootDir, 'tests', 'data', 'scss'), handler);
+    const onDisk = (await collector.getFileList(scssDir)).map((file) => relative(scssDir, file));
+    const filesInfo = await collector.readFiles(scssDir, handler);
+    const returnedPaths = filesInfo.map((file) => file.path);
 
-    expect(filesInfo.length).toBe(expectedFileList.length);
+    expect(onDisk.filter((file) => !returnedPaths.includes(file)).sort())
+      .toEqual([...internalFileList].sort());
+    expect(returnedPaths.sort()).toEqual([...exposedFileList].sort());
 
     filesInfo.forEach((file) => {
-      expect(expectedFileList).toContain(file.path);
       expect(typeof file.content).toBe('string');
       expect(file.content.length).toBeGreaterThan(0);
     });
@@ -77,6 +91,17 @@ describe('MetadataCollector', () => {
     expect(promises.mkdir).toHaveBeenCalledWith(expectedDestinationDir, { recursive: true });
     expect(promises.writeFile).toHaveBeenCalledTimes(1);
     expect(promises.writeFile).toHaveBeenCalledWith(expectedDestinationPath, fileContent);
+  });
+
+  test('saveScssFiles wipes the destination so sources deleted upstream stop shipping', async () => {
+    const destinationPath = './scss';
+
+    await MetadataCollector.saveScssFiles(Promise.resolve([]), destinationPath);
+
+    expect(promises.rm).toHaveBeenCalledWith(
+      resolve(destinationPath),
+      { recursive: true, force: true },
+    );
   });
 
   test('saveMetadata', async () => {

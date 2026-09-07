@@ -1,0 +1,58 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$stepper-step-accent-bg: ds.$color-bg-primary !default;
+
+$stepper-step-accent-bg-hovered: ds.$color-bg-primary-hovered !default;
+
+/*
+ * Reads the role directly rather than the accent variable: a tier link may not cross states
+ * (selected-hovered -> hovered), and an alias would have to be published as one.
+ */
+$stepper-step-bg-selected-hovered: ds.$color-bg-primary-hovered !default;
+
+// $stepper-step-danger-bg: ds.$color-bg-danger !default; // unused variable
+
+// $stepper-step-danger-hover-bg: ds.$color-bg-danger-hovered !default; // unused variable
+
+$stepper-step-base-bg: ds.$color-bg !default;
+
+$stepper-step-base-bg-hovered: ds.$color-bg-hovered !default;
+
+$stepper-step-base-border: ds.$color-border !default;
+
+$stepper-step-base-border-hovered: ds.$color-border-hovered !default;
+
+$stepper-step-base-content: ds.$color-content !default;
+
+$stepper-step-base-label-content: ds.$color-content !default;
+
+$stepper-step-content-selected: ds.$color-content-static-dark !default;
+
+$stepper-step-bg-selected-disabled: ds.$color-content-disabled !default;
+$stepper-step-content-selected-disabled: ds.$color-content-inverted !default;
+
+$stepper-step-label-content-selected: ds.$color-content-primary !default;
+
+$stepper-step-invalid-content: ds.$color-content-danger !default;
+
+$stepper-step-invalid-content-hovered: ds.$color-content-danger-hovered !default;
+
+$stepper-step-invalid-label-content: ds.$color-content-danger !default;
+
+$stepper-step-invalid-bg-selected: ds.$color-content-danger !default;
+
+$stepper-step-invalid-bg-selected-hovered: ds.$color-bg-danger-hovered !default;
+
+$stepper-step-bg-disabled: ds.$color-bg-disabled !default;
+
+$stepper-step-border-disabled: ds.$color-border-disabled !default;
+
+$stepper-step-content-disabled: ds.$color-content-disabled !default;
+
+$stepper-connector-bg: ds.$color-border-subtle !default;
+
+$stepper-connector-value-bg: ds.$color-bg-primary !default;
+
+$stepper-connector-value-bg-disabled: ds.$color-content-disabled !default;
+
+$stepper-step-shadow: ds.$color-bg !default;

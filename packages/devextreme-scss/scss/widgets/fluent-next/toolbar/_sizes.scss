@@ -1,0 +1,32 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$toolbar-height: null !default;
+
+$toolbar-padding: 0 !default;
+$toolbar-item-spacing: ds.$spacing-40 !default;
+$toolbar-section-padding: null !default;
+
+@if $size == "default" {
+  $toolbar-height: ds.$spacing-480 !default;
+  $toolbar-section-padding: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $toolbar-height: ds.$spacing-360 !default;
+  $toolbar-section-padding: ds.$spacing-80 !default;
+}
+
+:root {
+  --dx-toolbar-height: #{$toolbar-height};
+}
+
+// Values hoisted from style-file literals (tokenized)
+$toolbar-button-text-font-weight: ds.$font-weight-base-default !default;
+$toolbar-label-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$toolbar-menu-section-border-block-end: ds.$border-width-10 solid !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$toolbar-item-padding: 0 ds.$spacing-50 !default;
+$toolbar-group-margin: 0 ds.$spacing-100 !default;
+$toolbar-text-editor-width: 150px !default; // dx-offscale: 150px

@@ -1,0 +1,27 @@
+@use "../sizes" as *;
+@use "colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$check-box-icon-font-size: ds.$font-size-160 !default; // dx-icon-glyph-size: text roles not applicable
+
+$check-box-border-width: ds.$border-width-10 !default;
+$check-box-icon-border-radius: ds.$border-radius-20 !default;
+
+$check-box-arrow-icon-size: 1em !default; // dx-icon-glyph-size: relative to checkbox font-size, no em scale in package
+$check-box-arrow-font-size: 0.75em !default; // dx-icon-glyph-size
+$check-box-indeterminate-icon-height: 0.5em !default; // dx-icon-glyph-size
+$check-box-indeterminate-icon-width: 0.5em !default; // dx-icon-glyph-size
+$check-box-indeterminate-icon-border-radius: ds.$border-radius-20 !default;
+
+$check-box-text-padding-inline-start: null !default;
+$check-box-text-padding-inline-end: null !default;
+
+@if $size == "default" {
+  $check-box-text-padding-inline-start: ds.$spacing-120 !default;
+  $check-box-text-padding-inline-end: ds.$spacing-80 !default;
+}
+
+@else if $size == "compact" {
+  $check-box-text-padding-inline-start: ds.$spacing-80 !default;
+  $check-box-text-padding-inline-end: ds.$spacing-60 !default;
+}

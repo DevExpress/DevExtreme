@@ -1,0 +1,118 @@
+@use "sass:math";
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+@use "../common/sizes" as *;
+
+// Moved out of _index.scss: variables belong in _sizes/_colors (NAMING.md O7)
+$text-editor-invalid-badge-size: calc(#{$invalid-badge-size} + 2 * #{$invalid-badge-padding-inline});
+
+// Geometry and motion, so they live here rather than in _colors.scss (NAMING.md O7)
+$text-editor-input-border-radius: $global-border-radius !default;
+$text-editor-label-transition:
+  font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+
+// Moved here from the theme root: this component owns it (NAMING.md O1)
+$text-editor-label-height: null !default;
+
+@if $size == "default" {
+  $text-editor-label-height: ds.$spacing-200 !default;
+}
+
+@else if $size == "compact" {
+  $text-editor-label-height: ds.$spacing-160 !default;
+}
+$text-editor-input-underlined-padding-inline: 0 !default;
+
+$text-editor-line-height: null !default;
+$text-editor-font-size: null !default;
+$text-editor-input-min-height: null !default;
+$text-editor-label-offset: null !default;
+$text-editor-label-outside-offset: null !default;
+$text-editor-input-filled-padding-inline: null !default;
+$text-editor-input-filled-padding-block-start: null !default;
+$text-editor-input-filled-padding-block-end: null !default;
+$text-editor-input-underlined-padding-block-start: null !default;
+$text-editor-button-underlined-height: null !default;
+$text-editor-label-font-size: null !default;
+$text-editor-label-outside-height: null !default;
+$text-editor-input-underlined-padding-block-end: null !default;
+$text-editor-input-underlined-with-label-padding-block-start: null !default;
+$text-editor-input-underlined-with-label-padding-block-end: null !default;
+$text-editor-input-filled-with-label-padding-block-start: null !default;
+$text-editor-input-filled-with-label-padding-block-end: null !default;
+$text-editor-icon-container-size: $global-icon-size !default;
+
+@if $size == "default" {
+  $text-editor-line-height: 1.428571 !default; // dx-relative: unitless ratio, no line-height-ratio scale in package
+  $text-editor-font-size: ds.$font-size-base-md !default;
+  $text-editor-input-min-height: ds.$spacing-320 !default;
+  $text-editor-label-outside-height: ds.$spacing-200 !default;
+  $text-editor-label-outside-offset: ds.$spacing-240 !default;
+  $text-editor-label-font-size: ds.$font-size-caption-md !default;
+  $text-editor-label-offset: ds.$spacing-minus-10 !default;
+  $text-editor-input-filled-padding-inline: ds.$spacing-120 !default;
+  $text-editor-input-filled-padding-block-start: ds.$spacing-50 !default;
+  $text-editor-input-filled-with-label-padding-block-start: ds.$spacing-80 !default;
+  $text-editor-input-filled-padding-block-end: ds.$spacing-50 !default;
+  $text-editor-input-filled-with-label-padding-block-end: ds.$spacing-20 !default;
+  $text-editor-input-underlined-padding-block-start: ds.$spacing-50 !default;
+  $text-editor-input-underlined-padding-block-end: ds.$spacing-50 !default;
+  $text-editor-input-underlined-with-label-padding-block-start: ds.$spacing-90 !default;
+  $text-editor-input-underlined-with-label-padding-block-end: ds.$spacing-30 !default;
+  $text-editor-button-underlined-height: ds.$spacing-220 !default;
+}
+
+@else if $size == "compact" {
+  $text-editor-line-height: 1.3333 !default; // dx-relative
+  $text-editor-font-size: ds.$font-size-base-sm !default;
+  $text-editor-input-min-height: ds.$spacing-240 !default;
+  $text-editor-label-outside-height: ds.$spacing-160 !default;
+  $text-editor-label-outside-offset: ds.$spacing-180 !default;
+  $text-editor-label-font-size: ds.$font-size-caption-sm !default;
+  $text-editor-label-offset: ds.$spacing-minus-10 !default;
+  $text-editor-input-filled-padding-inline: ds.$spacing-80 !default;
+  $text-editor-input-filled-padding-block-start: ds.$spacing-30 !default;
+  $text-editor-input-filled-with-label-padding-block-start: ds.$spacing-60 !default;
+  $text-editor-input-filled-padding-block-end: ds.$spacing-30 !default;
+  $text-editor-input-filled-with-label-padding-block-end: 0 !default;
+  $text-editor-input-underlined-padding-block-start: ds.$spacing-30 !default;
+  $text-editor-input-underlined-padding-block-end: ds.$spacing-30 !default;
+  $text-editor-input-underlined-with-label-padding-block-start: ds.$spacing-60 !default;
+  $text-editor-input-underlined-with-label-padding-block-end: ds.$spacing-20 !default;
+  $text-editor-button-underlined-height: ds.$spacing-220 !default;
+}
+
+$text-editor-input-filled-padding:
+  $text-editor-input-filled-padding-block-start
+  $text-editor-input-filled-padding-inline
+  $text-editor-input-filled-padding-block-end !default;
+
+$text-editor-button-filled-inset-inline-end: calc(#{$text-editor-input-filled-padding-inline} - #{ds.$spacing-40}) !default;
+$text-editor-spin-button-padding-inline: calc(#{$text-editor-input-filled-padding-inline} / 2) !default;
+
+// Values hoisted from style-file literals (tokenized)
+$text-editor-border-width: ds.$border-width-10 !default;
+$text-editor-line-inset-inline-start: -1px !default; // dx-offscale: -1px
+$text-editor-line-inset-block-end: -1px !default; // dx-offscale: -1px
+$text-editor-line-inset-inline-end: -1px !default; // dx-offscale: -1px
+$text-editor-label-inset: -1px !default; // dx-offscale: -1px
+$text-editor-label-margin-block-end: -1px !default; // dx-offscale: -1px
+$text-editor-line-border-block-end-active: ds.$border-width-20 solid !default;
+$text-editor-custom-button-margin: ds.$spacing-60 !default;
+$text-editor-line-border-block-end-width-focused: ds.$border-width-10 !default;
+$text-editor-line-border-block-end-width-active: ds.$border-width-20 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$text-editor-clear-button-width: ds.$spacing-340 !default;
+
+// Base-layer sizing injected with design tokens (wave B13)
+$text-editor-label-padding-inline: ds.$spacing-20 !default;
+$text-editor-label-border-radius: ds.$border-radius-10 !default;
+$text-editor-label-backdrop-height: ds.$spacing-30 !default;
+$text-editor-button-margin-block-start: ds.$spacing-10 !default;
+$text-editor-button-margin-block-end: ds.$spacing-30 !default;
+$text-editor-button-icon-margin-block-start: ds.$spacing-10 !default;
+$text-editor-button-icon-with-text-margin-block-start: ds.$spacing-30 !default;
+$text-editor-button-icon-only-padding: ds.$spacing-20 !default;

@@ -1,0 +1,21 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$time-view-field-min-height: 35px !default; // dx-offscale: 35px
+$time-view-time-separator-margin: ds.$spacing-50 !default;
+$time-view-format12-width: ds.$spacing-640 !default;
+
+// Values hoisted from style-file literals (tokenized)
+$time-view-input-padding-inline-start: ds.$spacing-120 !default;
+$time-view-clock-margin-block-end: ds.$spacing-100 !default;
+$time-view-number-box-spin-touch-friendly-width: 110px !default; // dx-offscale: 110px
+
+// Base-layer sizing injected with design tokens (wave B2)
+$time-view-field-number-box-width: 70px !default; // dx-offscale: 70px
+$time-view-field-number-box-spin-touch-friendly-width: 110px !default; // dx-offscale: 110px
+
+// Base-layer sizing injected with design tokens (wave B8)
+$time-view-clock-size: 182px !default; // dx-offscale: 182px, the size of the dial SVG behind it
+$time-view-clock-arrow-width: ds.$spacing-100 !default;
+
+// Derived once and published: the arrows are centred on the dial with half their own width.
+$time-view-clock-arrow-offset: calc(#{$time-view-clock-arrow-width} / -2) !default;

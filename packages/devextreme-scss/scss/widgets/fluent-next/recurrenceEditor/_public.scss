@@ -1,0 +1,11 @@
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-recurrence-editor-button-group-padding: #{$recurrence-editor-button-group-padding};
+  --dx-recurrence-editor-count-number-box-margin-block-start: #{$recurrence-editor-count-number-box-margin-block-start};
+  --dx-recurrence-editor-interval-number-box-margin-block-start: #{$recurrence-editor-interval-number-box-margin-block-start};
+  --dx-recurrence-editor-number-box-margin: #{$recurrence-editor-number-box-margin};
+  --dx-recurrence-editor-radio-group-item-padding-block-end: #{$recurrence-editor-radio-group-item-padding-block-end};
+  --dx-recurrence-editor-radio-group-margin: #{$recurrence-editor-radio-group-margin};
+  --dx-recurrence-editor-until-date-box-margin-block-start: #{$recurrence-editor-until-date-box-margin-block-start};
+}

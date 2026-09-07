@@ -1,0 +1,18 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$date-box-overlay-item-margin: ds.$spacing-160 !default;
+$date-box-overlay-item-adaptive-margin: ds.$spacing-180 !default;
+$date-box-popup-content-margin: 0 ds.$spacing-340 !default;
+
+// Values hoisted from style-file literals (tokenized)
+$date-box-content-padding: ds.$spacing-100 !default;
+$date-box-container-cell-margin-block-start: -1px !default; // dx-offscale: -1px
+$date-box-button-margin-inline-end: ds.$spacing-50 !default;
+$date-box-popup-title-min-height: ds.$spacing-100 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$date-box-input-height: ds.$spacing-200 !default;
+$date-box-popup-content-padding-block-start: ds.$spacing-200 !default;
+$date-box-popup-content-padding-block-end: ds.$spacing-200 !default;
+$date-box-button-min-width: 90px !default; // dx-offscale: 90px
+$date-box-apply-button-margin-inline-end: ds.$spacing-100 !default;

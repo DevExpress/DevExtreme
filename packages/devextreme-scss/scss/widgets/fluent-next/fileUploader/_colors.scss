@@ -1,0 +1,16 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$file-uploader-file-name-content: ds.$color-content !default;
+$file-uploader-file-icon: ds.$color-content-subtle !default;
+$file-uploader-progress-bar-status-content: ds.$color-content !default;
+$file-uploader-files-container-bg: ds.$color-bg !default;
+
+$file-uploader-file-name-status-content: ds.$color-content-subtle !default;
+
+$file-uploader-border: ds.$color-border !default;
+
+$file-uploader-file-status-message-invalid-content: ds.$color-bg-danger !default;
+$file-uploader-label-content: ds.$color-content-subtle !default;
+$file-uploader-file-container-shadow: ds.$box-shadow-sm !default;
+
+$file-uploader-content-disabled: ds.$color-content-disabled !default;

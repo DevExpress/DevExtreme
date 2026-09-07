@@ -95,6 +95,9 @@ jobs:
     - name: Run tests
       run: pnpm exec nx test devextreme-scss
 
+    - name: Check naming registries
+      run: pnpm exec nx naming:check devextreme-scss
+
   notify:
     runs-on: ubuntu-latest
     name: Send notifications

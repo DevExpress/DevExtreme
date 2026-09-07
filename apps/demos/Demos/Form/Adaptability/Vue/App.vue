@@ -44,7 +44,7 @@ const screenByWidth = ((width: number) => (width < 720 ? 'sm' : 'md')) as unknow
 
 .options {
   padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   left: 0;
   position: absolute;
   bottom: 0;

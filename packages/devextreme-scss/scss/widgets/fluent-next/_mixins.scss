@@ -1,0 +1,6 @@
+@mixin when-disabled($selector) {
+  #{$selector}.dx-state-disabled,
+  .dx-state-disabled #{$selector} {
+    @content;
+  }
+}

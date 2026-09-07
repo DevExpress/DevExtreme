@@ -1,0 +1,36 @@
+@use "../mixins" as *;
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/tileView" with (
+  $tileview-wrapper-height: var(--dx-tile-view-wrapper-height),
+);
+
+.dx-tile {
+  color: var(--dx-tile-view-content);
+  background-color: var(--dx-tile-view-bg);
+  border: var(--dx-tile-view-tile-border);
+  border-color: var(--dx-tile-view-border);
+  text-align: left;
+
+  &.dx-state-disabled {
+    color: var(--dx-tile-view-content-disabled);
+  }
+
+  &.dx-state-focused,
+  &.dx-state-hover {
+    background-color: var(--dx-tile-view-bg-hovered);
+    border-color: var(--dx-tile-view-border-hovered);
+  }
+
+  &.dx-state-active {
+    background-color: var(--dx-tile-view-bg-active);
+    color: var(--dx-tile-view-content-active);
+    border-color: transparent;
+  }
+}
+
+@include when-disabled(".dx-tileview") {
+  .dx-tile-content {
+    color: var(--dx-tile-view-content-disabled);
+  }
+}

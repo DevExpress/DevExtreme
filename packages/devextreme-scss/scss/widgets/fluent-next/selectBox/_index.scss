@@ -1,0 +1,18 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/selectBox";
+@use "../dropDownList";
+
+.dx-selectbox-popup-wrapper {
+  .dx-overlay-content {
+    box-shadow: var(--dx-global-dropdown-box-shadow);
+  }
+
+  .dx-popup-content {
+    padding: 0;
+  }
+
+  .dx-list {
+    background-color: var(--dx-select-box-list-bg);
+  }
+}

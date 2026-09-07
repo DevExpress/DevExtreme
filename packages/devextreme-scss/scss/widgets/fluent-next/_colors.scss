@@ -1,0 +1,42 @@
+@forward "./variables";
+@use "./variables" as *;
+@use "../../_design-system/variables/ds" as ds;
+
+$color: null !default;
+$mode: null !default;
+
+$theme-marker-color: $color !default;
+$theme-marker-mode: null !default;
+
+@if $mode == "light" {
+  $theme-marker-mode: "light" !default;
+}
+
+@if $mode == "dark" {
+  $theme-marker-mode: "dark" !default;
+}
+
+/*
+ * Public --dx-* custom properties, chained onto the design-token roles (a custom property may
+ * reference another custom property). Mode/accent branching lives in the token definitions.
+ * --dx-color-shadow carries alpha (the DS ships no solid-black token; the shadow roles are
+ * rgba over black) — unlike the legacy solid #000 of the other themes.
+ */
+:root {
+  --dx-component-color-bg: #{ds.$color-bg};
+  --dx-color-main-bg: #{ds.$color-bg-canvas};
+  --dx-color-primary: #{ds.$color-content-primary};
+
+  // Content-role, not surface: consumers use these as text/icon colors (fluent's semantic $base-*), and the two roles diverge in dark mode
+  --dx-color-danger: #{ds.$color-content-danger};
+  --dx-color-success: #{ds.$color-content-success};
+  --dx-color-warning: #{ds.$color-content-warning};
+  --dx-color-border: #{ds.$color-border};
+  --dx-color-text: #{ds.$color-content};
+  --dx-color-icon: #{ds.$color-content-subtle};
+  --dx-color-spin-icon: #{ds.$color-content-subtle};
+  --dx-color-link: #{ds.$color-content-primary};
+  --dx-color-shadow: #{ds.$color-shadow-key};
+  --dx-color-separator: #{ds.$color-border-subtle};
+  --dx-color-options-panel-bg: color-mix(in srgb, #{ds.$color-bg-inverted} calc(#{ds.$opacity-5} * 100%), transparent);
+}

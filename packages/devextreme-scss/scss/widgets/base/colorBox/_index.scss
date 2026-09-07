@@ -2,7 +2,15 @@
 @use "./mixins" as *;
 @use "sass:string" as string;
 
-$colorbox-input-left-padding: 40px;
+$colorbox-input-left-padding: 40px !default;
+
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$colorbox-texteditor-input-container-width: 15px !default;
+$colorbox-texteditor-input-container-height: 15px !default;
+$colorbox-texteditor-input-container-inset-inline-start: 14px !default;
+
+$colorbox-overlay-padding: 20px !default;
+$colorbox-toolbar-item-padding-right: 10px !default;
 
 .dx-colorbox-input-container {
   &.dx-colorbox-color-is-not-defined {
@@ -12,22 +20,26 @@ $colorbox-input-left-padding: 40px;
   }
 
   .dx-placeholder {
-    max-width: calc(100% - 25px);
+    max-width: calc(100% - 25px); // dx-fixed-size: room the colour preview and its gap take from the placeholder
   }
 }
 
 .dx-colorbox {
   .dx-texteditor-input-container {
+    /*
+     * The preview is centred on the input with translateY, the same way dx-pending-indicator does
+     * it: no arithmetic on the height, so the size can be a token without a build-time/runtime fork.
+     */
     &::before {
       content: "";
       display: block;
       position: absolute;
       top: 50%;
       z-index: 1;
-      width: 15px;
-      height: 15px;
-      margin-top: -7.5px;
-      inset-inline-start: 14px;
+      width: $colorbox-texteditor-input-container-width;
+      height: $colorbox-texteditor-input-container-height;
+      transform: translateY(-50%);
+      inset-inline-start: $colorbox-texteditor-input-container-inset-inline-start;
     }
   }
 
@@ -47,7 +59,7 @@ $colorbox-input-left-padding: 40px;
 }
 
 .dx-colorbox-overlay {
-  padding: 20px;
+  padding: $colorbox-overlay-padding;
 
   .dx-popup-content {
     overflow: hidden;
@@ -56,7 +68,7 @@ $colorbox-input-left-padding: 40px;
 
   .dx-popup-bottom {
     .dx-toolbar-item:first-child {
-      padding-right: 10px;
+      padding-right: $colorbox-toolbar-item-padding-right;
     }
   }
 

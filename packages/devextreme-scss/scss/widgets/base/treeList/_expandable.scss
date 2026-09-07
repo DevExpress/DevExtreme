@@ -1,5 +1,8 @@
 @use "./variables" as *;
 @use "../icon_fonts" as *;
+@use "sass:meta";
+
+$node-line-height: null !default;
 
 .dx-treelist-headers {
   .dx-header-row {
@@ -10,7 +13,7 @@
           float: left;
           width: $treelist-expand-checkbox-size;
           height: 1lh;
-          margin: 0 $treelist-expand-checkbox-right-gap 0 ($treelist-expand-icon-size + $treelist-expand-icon-right-gap);
+          margin: 0 $treelist-expand-checkbox-right-gap 0 if(meta.type-of($treelist-expand-icon-size) == number and meta.type-of($treelist-expand-icon-right-gap) == number, ($treelist-expand-icon-size + $treelist-expand-icon-right-gap), calc(#{$treelist-expand-icon-size} + #{$treelist-expand-icon-right-gap}));
 
           .dx-select-checkbox {
             display: block;
@@ -40,7 +43,7 @@
 
         .dx-treelist-empty-space {
           width: $treelist-expand-icon-size;
-          height: 1px;
+          height: $node-line-height;
           user-select: none;
 
           &--last {
@@ -81,7 +84,7 @@
         .dx-treelist-select-checkbox-container {
           position: relative;
           width: $treelist-expand-checkbox-size;
-          height: 1px;
+          height: $node-line-height;
           margin: 0 $treelist-expand-checkbox-right-gap 0 0;
 
           .dx-select-checkbox {
@@ -113,7 +116,7 @@
         &.dx-treelist-select-all {
           .dx-treelist-select-checkbox-container {
             float: right;
-            margin: 0 ($treelist-expand-icon-size + $treelist-expand-icon-right-gap) 0 $treelist-expand-checkbox-right-gap;
+            margin: 0 if(meta.type-of($treelist-expand-icon-size) == number and meta.type-of($treelist-expand-icon-right-gap) == number, ($treelist-expand-icon-size + $treelist-expand-icon-right-gap), calc(#{$treelist-expand-icon-size} + #{$treelist-expand-icon-right-gap})) 0 $treelist-expand-checkbox-right-gap;
           }
         }
       }

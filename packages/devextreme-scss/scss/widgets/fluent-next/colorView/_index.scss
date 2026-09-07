@@ -1,0 +1,89 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/colorView/mixins" as *;
+@use "../../base/colorView" with (
+  $color-view-container-width: var(--dx-color-view-container-width),
+  $color-view-palette-width: var(--dx-color-view-palette-width),
+  $color-view-palette-height: var(--dx-color-view-palette-height),
+  $color-view-alpha-cell-width: var(--dx-color-view-alpha-cell-width),
+  $color-view-hue-scale-width: var(--dx-color-view-hue-scale-width),
+  $color-view-hue-scale-height: var(--dx-color-view-hue-scale-height),
+  $color-view-hue-scale-wrapper-height: var(--dx-color-view-hue-scale-wrapper-height),
+  $color-view-label-hex-margin: var(--dx-color-view-container-hex-margin),
+  $color-view-alpha-label-margin-inline-start: var(--dx-color-view-container-alpha-label-margin),
+  $color-view-alpha-label-margin-inline-start-rtl: var(--dx-color-view-container-alpha-label-margin),
+  $color-view-alpha-label-width: var(--dx-color-view-container-alpha-label-width),
+  $color-view-textbox-width: var(--dx-color-view-container-textbox-width),
+  $color-view-textbox-margin: var(--dx-color-view-container-textbox-margin),
+  $color-view-alpha-row-margin-block-start: var(--dx-color-view-alpha-row-margin-block-start),
+  $color-view-hue-scale-cell-margin-inline-start: var(--dx-color-view-hue-scale-margin),
+  $color-view-controls-width: var(--dx-color-view-controls-container-width),
+  $color-view-controls-margin-inline-start: var(--dx-color-view-controls-container-margin),
+  $color-view-controls-margin-inline-start-rtl: var(--dx-color-view-controls-container-margin),
+  $color-view-color-preview-width: 100%,
+  $color-view-color-preview-height: var(--dx-color-view-color-preview-height),
+  $color-view-alpha-scale-height: var(--dx-color-view-alpha-scale-height),
+  $color-view-alpha-cell-margin-block: var(--dx-color-view-alpha-cell-margin-block),
+  $color-view-apply-button-margin-inline-end: var(--dx-color-view-apply-button-margin-inline-end),
+);
+@include dx-base-colorview-styles(var(--dx-color-view-handle-content), var(--dx-color-view-handle-border));
+
+.dx-colorview-container {
+  label {
+    line-height: var(--dx-color-view-container-line-height);
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--dx-color-view-container-margin-block-end);
+
+    /*
+     * Kept as a whole declaration on purpose: it also resets the margin-bottom above, which the
+     * base rule — it sets margin-inline-start alone — would leave in place.
+     */
+    &.dx-colorview-alpha-channel-label {
+      margin: 0 0 0 var(--dx-color-view-container-alpha-label-margin);
+    }
+  }
+}
+
+.dx-colorview-container-row.dx-colorview-alpha-channel-row {
+  display: flex;
+  align-items: center;
+}
+
+.dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
+  color: var(--dx-color-view-label-content);
+}
+
+.dx-colorview-palette-cell,
+.dx-colorview-alpha-channel-border,
+.dx-colorview-hue-scale-wrapper,
+.dx-colorview-color-preview-container {
+  padding: var(--dx-color-view-color-preview-container-padding);
+  margin: var(--dx-color-view-color-preview-container-margin);
+  margin-top: 0;
+  background-color: var(--dx-color-view-bg-box-palette-cell-bg);
+  box-shadow: 0 0 0 1px var(--dx-color-view-border); // dx-line-width: 1px hairline ring drawn as a shadow
+}
+
+.dx-colorview-color-preview-container {
+  margin-bottom: var(--dx-color-view-preview-container-margin);
+}
+
+.dx-colorview-container.dx-state-disabled,
+.dx-state-disabled .dx-colorview-container {
+  label {
+    color: var(--dx-color-view-label-content-disabled);
+  }
+
+  .dx-colorview-palette-cell,
+  .dx-colorview-alpha-channel-border,
+  .dx-colorview-hue-scale-wrapper,
+  .dx-colorview-color-preview-container {
+    box-shadow: 0 0 0 1px var(--dx-color-view-border-disabled); // dx-line-width: 1px hairline ring drawn as a shadow
+  }
+
+  .dx-colorview-palette-handle,
+  .dx-colorview-hue-scale-handle {
+    border-color: var(--dx-color-view-handle-border-disabled);
+  }
+}

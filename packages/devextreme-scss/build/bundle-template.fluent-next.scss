@@ -1,0 +1,13 @@
+@use "../widgets/fluent-next/colors" with ($color: "$COLOR", $mode: "$MODE");
+@use "../widgets/fluent-next/sizes" with ($size: "$SIZE");
+@use "../widgets/fluent-next/design-system";
+@use "../widgets/fluent-next/typography";
+@use "../widgets/fluent-next/icons";
+@use "../widgets/fluent-next/widget";
+@use "../widgets/fluent-next/card";
+@use "../widgets/fluent-next/fieldset";
+@use "../widgets/fluent-next/common";
+@use "../widgets/base/resizable";
+@use "../widgets/base/draggable";
+@use "../widgets/base/ui";
+@use "../widgets/fluent-next";

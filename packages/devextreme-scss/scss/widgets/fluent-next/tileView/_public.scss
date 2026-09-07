@@ -1,0 +1,15 @@
+@use "colors" as *;
+@use "sizes" as *;
+
+@mixin publish {
+  --dx-tile-view-content-disabled: #{$tile-view-content-disabled};
+  --dx-tile-view-bg-active: #{$tile-view-bg-active};
+  --dx-tile-view-bg-hovered: #{$tile-view-bg-hovered};
+  --dx-tile-view-bg: #{$tile-view-bg};
+  --dx-tile-view-border-hovered: #{$tile-view-border-hovered};
+  --dx-tile-view-border: #{$tile-view-border};
+  --dx-tile-view-content-active: var(--dx-tile-view-content);
+  --dx-tile-view-content: #{$tile-view-content};
+  --dx-tile-view-tile-border: #{$tile-view-tile-border};
+  --dx-tile-view-wrapper-height: #{$tile-view-wrapper-height};
+}

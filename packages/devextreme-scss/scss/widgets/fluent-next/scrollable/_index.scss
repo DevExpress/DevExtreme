@@ -1,0 +1,32 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/scrollable" with (
+  $scrollable-scroll-width: var(--dx-scrollable-scroll-width),
+  $scrollable-scroll-height: var(--dx-scrollable-scroll-height),
+  $scrollable-scroll-padding: var(--dx-scrollable-scroll-padding),
+);
+@use "../../base/scrollable/mixins" as *;
+@include dx-scrollable-scroll-content(
+  var(--dx-scrollable-scroll-bg),
+);
+@include dx-scrollable-scrollbar-hoverable(
+  var(--dx-scrollable-scrollbar-bg),
+  transparent,
+  var(--dx-scrollable-scroll-bg),
+);
+@include dx-scrollable-scrollbar-vertical(
+  var(--dx-scrollable-scrollbar-thin-size),
+  var(--dx-scrollable-scrollbar-size),
+  0,
+);
+@include dx-scrollable-scrollbar-horizontal(
+  var(--dx-scrollable-scrollbar-thin-size),
+  var(--dx-scrollable-scrollbar-size),
+  0,
+);
+@include dx-scrollable-scrollbars-alwaysvisible(var(--dx-scrollable-scrollbar-thin-size));
+
+.dx-state-disabled .dx-scrollable-scroll-content {
+  background-color: var(--dx-scrollable-scroll-bg-disabled);
+}

@@ -1,0 +1,81 @@
+@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$grid-content: ds.$color-content !default;
+$grid-content-disabled: ds.$color-content-disabled !default;
+
+$grid-bg: ds.$color-bg !default;
+$grid-border: ds.$color-border !default;
+
+$grid-drag-header-border: rgb(from #{ds.$color-border-primary} r g b / 0.5) !default;
+$grid-drag-header-shadow-ambient: ds.$color-shadow-ambient !default;
+$grid-drag-header-shadow-key: ds.$color-shadow-key !default;
+
+$grid-selection-bg: ds.$color-bg-primary-subtler !default;
+
+$grid-row-content-focused: ds.$color-content !default;
+
+$grid-row-bg-focused: ds.$color-bg-primary-subtle !default;
+$grid-row-bg-hovered: ds.$color-bg-hovered !default;
+$grid-row-content-hovered: ds.$color-content !default;
+
+$grid-cell-modified-bg: ds.$color-bg-success-subtler !default;
+
+$grid-row-invalid-bg: ds.$color-bg-danger-subtler !default;
+$grid-no-data-content: ds.$color-content-subtle !default;
+
+$grid-group-row-bg: ds.$color-bg !default;
+$grid-master-detail-cell-bg: ds.$color-bg-canvas !default;
+
+$grid-search-content: ds.$color-content-on-highlight !default;
+$grid-chevron-icon: ds.$color-content-subtle !default;
+
+$grid-search-bg: ds.$color-bg-highlight !default;
+
+$grid-row-error-content: ds.$color-content-static-dark !default;
+
+$grid-row-error-bg: ds.$color-bg-danger !default;
+$grid-link-content: ds.$color-content-primary !default;
+
+$grid-link-content-disabled: ds.$color-content-disabled !default;
+
+$grid-ai-chat-message-regenerate-button-content-disabled: ds.$color-content-disabled !default;
+
+$grid-border-focused: ds.$color-border-primary !default;
+
+$grid-editor-bg: transparent !default;
+$grid-drop-highlight-bg: ds.$color-bg-primary !default;
+$grid-drop-highlight-content: ds.$color-content-static-dark !default;
+$grid-column-chooser-bg: ds.$color-bg !default;
+
+$grid-row-alternation-bg: ds.$color-bg-low !default;
+
+$grid-summary-content: ds.$color-content-subtle !default;
+$grid-column-chooser-message-content: ds.$color-content-subtle !default;
+$grid-column-separator-bg: ds.$color-bg-primary !default;
+$grid-filter-row-bg: ds.$color-bg-canvas !default;
+$grid-header-filter-icon-active: ds.$color-content-primary !default;
+$grid-text-stub-bg: null !default;
+$grid-filter-panel-content: ds.$color-content-primary !default;
+$grid-draggable-column-content: ds.$color-content !default;
+
+@if $mode == "light" {
+  $grid-text-stub-bg: data-uri("images/widgets/fluent-next/color-schemes/light/grid/text-stub.png") !default;
+}
+
+@if $mode == "dark" {
+  $grid-text-stub-bg: data-uri("images/widgets/fluent-next/color-schemes/dark/grid/text-stub.png") !default;
+}
+
+:root {
+  --dx-datagrid-row-alternation-bg: #{$grid-row-alternation-bg};
+}
+
+// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$grid-ai-chat-message-pending-content: ds.$color-content-primary !default;
+$grid-ai-chat-message-border: ds.$color-border !default;
+$grid-ai-chat-message-error-content: ds.$color-content-danger !default;
+$grid-icon: ds.$color-content-subtle !default;
+$grid-ai-chat-message-success-content: ds.$color-content-success !default;
+
+$grid-content-focused: ds.$color-content-inverted !default;

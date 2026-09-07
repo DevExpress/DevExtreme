@@ -1,3 +1,6 @@
+$pivotgrid-common-field-chooser-drag-width: null !default;
+$pivotgrid-common-field-chooser-drag-height: null !default;
+
 .dx-pivotgrid-fields-container {
   .dx-sort,
   .dx-header-filter {
@@ -232,8 +235,8 @@
 
 .dx-pivotgrid-scrollbar-measure-element {
   position: absolute;
-  top: -9999px;
-  width: 100px;
-  height: 100px;
+  top: -9999px; // dx-structural: parks the scrollbar probe off-screen
+  width: $pivotgrid-common-field-chooser-drag-width;
+  height: $pivotgrid-common-field-chooser-drag-height;
   overflow: scroll;
 }

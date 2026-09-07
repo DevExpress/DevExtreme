@@ -1,0 +1,170 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../textEditor/sizes" as textEditorSizes;
+@use "../textEditor/colors" as textEditorColors;
+@use "../dropDownEditor" as *;
+@use "../common/mixins" as *;
+@use "../../base/lookup";
+@use "../../base/lookup/mixins" as *;
+@use "../dropDownList";
+
+.dx-lookup {
+  .dx-lookup-arrow {
+    inset-inline-end: textEditorSizes.$text-editor-spin-button-padding-inline;
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
+    .dx-lookup-field {
+      padding-inline-start: textEditorSizes.$text-editor-input-filled-padding-inline;
+      padding-inline-end: calc(#{textEditorSizes.$text-editor-input-filled-padding-inline} + #{$global-icon-size});
+    }
+
+    &.dx-invalid {
+      .dx-lookup-field {
+        padding-inline-end: calc(#{textEditorSizes.$text-editor-input-filled-padding-inline} + #{$global-icon-size} * 2);
+      }
+    }
+  }
+
+  &.dx-editor-underlined {
+    .dx-lookup-field {
+      padding-inline-start: textEditorSizes.$text-editor-input-underlined-padding-inline;
+      padding-inline-end: calc(#{textEditorSizes.$text-editor-input-underlined-padding-inline} + #{$global-icon-size} + #{textEditorSizes.$text-editor-spin-button-padding-inline});
+    }
+
+    &.dx-invalid {
+      .dx-lookup-field {
+        padding-inline-end: calc(#{textEditorSizes.$text-editor-input-underlined-padding-inline} + #{$global-icon-size} * 2 + #{textEditorSizes.$text-editor-spin-button-padding-inline});
+      }
+    }
+  }
+
+  &.dx-invalid {
+    .dx-lookup-arrow::after {
+      @include dx-invalid-fluent-badge();
+
+      inset-inline-end: $global-icon-size;
+    }
+  }
+
+  &.dx-valid {
+    .dx-lookup-arrow::after {
+      @include dx-valid-fluent-badge();
+
+      inset-inline-end: $global-icon-size;
+    }
+  }
+
+  &.dx-validation-pending {
+    .dx-lookup-field-wrapper {
+      .dx-pending-indicator {
+        @include dx-pending-indicator-fluent();
+
+        inset-inline-end: $global-icon-size;
+      }
+    }
+  }
+}
+
+.dx-lookup-field {
+  min-height: var(--dx-lookup-field-min-height);
+  line-height: textEditorSizes.$text-editor-line-height;
+  padding-top: textEditorSizes.$text-editor-input-filled-padding-block-start;
+  padding-bottom: textEditorSizes.$text-editor-input-filled-padding-block-end;
+
+  &::before {
+    line-height: normal;
+  }
+
+  .dx-texteditor {
+    border: none;
+
+    &::before,
+    &::after {
+      content: none;
+    }
+
+    &.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-active,
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover,
+    & {
+      background-color: transparent;
+    }
+  }
+}
+
+@include dx-lookup-arrow(
+  spindown,
+  "\f001",
+  $global-icon-size,
+  var(--dx-lookup-icon),
+  var(--dx-lookup-icon-active),
+  $global-icon-size,
+);
+
+.dx-lookup-popup-wrapper {
+  @include dx-dropdownlist-list-appearance();
+
+  .dx-list-item {
+    border-top: none;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  .dx-popup-content {
+    top: 0;
+    padding: 0;
+  }
+
+  .dx-popup-title + .dx-popup-content {
+    top: var(--dx-lookup-popup-content-inset-block-start);
+  }
+
+  &.dx-popup-wrapper {
+    .dx-overlay-content {
+      overflow: visible;
+    }
+  }
+
+  .dx-popover-arrow {
+    display: block;
+
+    &::after {
+      box-shadow: var(--dx-lookup-box-shadow);
+      background: var(--dx-surface-overlay);
+      border-top-right-radius: var(--dx-lookup-arrow-border-radius);
+    }
+  }
+
+  &.dx-position-top {
+    .dx-popover-arrow {
+      &::after {
+        border-bottom-left-radius: var(--dx-lookup-arrow-border-radius);
+      }
+    }
+  }
+}
+
+.dx-lookup-empty {
+  .dx-lookup-field {
+    color: textEditorColors.$text-editor-placeholder;
+  }
+}
+
+.dx-lookup-popup-search .dx-list {
+  height: calc(100% - (#{textEditorSizes.$text-editor-input-min-height} + var(--dx-lookup-search-padding-block) + var(--dx-lookup-search-padding-block-start)));
+}
+
+.dx-lookup-search-wrapper {
+  padding: var(--dx-lookup-search-padding-block) var(--dx-lookup-search-padding-inline);
+  padding-top: var(--dx-lookup-search-padding-block-start);
+}

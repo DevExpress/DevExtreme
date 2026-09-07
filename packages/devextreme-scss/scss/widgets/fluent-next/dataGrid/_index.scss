@@ -1,0 +1,136 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../gridBase" as *;
+@use "../gridBase/colors" as gridBaseColors;
+@use "../gridBase/sizes" as gridBaseSizes;
+@use "../../base/dataGrid" as baseGrid with (
+  $datagrid-draggable-column-opacity: var(--dx-grid-draggable-column-opacity),
+  $datagrid-common-group-min-width: var(--dx-data-grid-group-panel-item-min-width),
+  $datagrid-common-addrow-margin-right: var(--dx-data-grid-group-panel-item-margin-inline-end),
+  $datagrid-common-addrow-margin-left: var(--dx-data-grid-group-panel-item-sort-margin-inline-start),
+  $datagrid-common-form-buttons-border-radius: var(--dx-data-grid-block-separator-border-radius),
+  $datagrid-common-form-buttons-margin-left: var(--dx-data-grid-group-panel-item-rtl-margin-inline-end),
+  $datagrid-common-form-buttons-margin-right: var(--dx-data-grid-group-panel-item-sort-rtl-margin-inline-start),
+  $datagrid-header-filter-outline: var(--dx-grid-outline-focused),
+  $datagrid-header-filter-outline-offset: var(--dx-data-grid-outline-offset-focused),
+  $datagrid-filter-panel-clear-filter-outline-offset: var(--dx-data-grid-filter-panel-outline-offset-focused),
+  $datagrid-button-margin-left: var(--dx-data-grid-form-buttons-margin-inline-start),
+  $datagrid-button-margin-top: var(--dx-data-grid-form-buttons-margin-block-start),
+  $datagrid-error-message-margin-bottom: var(--dx-data-grid-error-message-margin-block-end),
+  $datagrid-button-margin-right: var(--dx-data-grid-form-buttons-rtl-margin-inline-start),
+  $datagrid-border: gridBaseSizes.$grid-border-width solid,
+  $datagrid-border-color: gridBaseColors.$grid-border,
+  $datagrid-drag-header-border-color: gridBaseColors.$grid-drag-header-border,
+  $datagrid-row-error-bg: gridBaseColors.$grid-row-error-bg,
+  $datagrid-row-error-color: gridBaseColors.$grid-row-error-content,
+  $datagrid-base-color: gridBaseColors.$grid-content,
+  $datagrid-base-background-color: gridBaseColors.$grid-bg,
+  $datagrid-focused-border-color: gridBaseColors.$grid-border-focused,
+  $header-filter-color: gridBaseColors.$grid-content,
+  $header-filter-color-empty: gridBaseColors.$grid-content,
+  $base-focus-color: gridBaseColors.$grid-content-focused,
+  $datagrid-text-stub-background-image-path: gridBaseColors.$grid-text-stub-bg,
+  $datagrid-group-row-border: var(--dx-data-grid-group-row-border),
+  $datagrid-sticky-column-border: var(--dx-data-grid-sticky-column-border),
+  $datagrid-cell-focus-outline: var(--dx-data-grid-cell-outline-focused),
+);
+@use "layout/cell";
+@include grid-base(datagrid);
+
+.dx-datagrid-group-panel {
+  font-size: $global-font-size;
+  touch-action: pinch-zoom;
+
+  .dx-group-panel-message {
+    color: gridBaseColors.$grid-content;
+    font-weight: gridBaseSizes.$grid-column-chooser-font-weight;
+    padding: var(--dx-data-grid-cell-padding) 0;
+    border-top: gridBaseSizes.$grid-hidden-border;
+    border-bottom: gridBaseSizes.$grid-hidden-border;
+    line-height: gridBaseSizes.$grid-group-panel-message-line-height;
+  }
+
+  .dx-group-panel-item {
+    margin-right: gridBaseSizes.$grid-group-panel-item-margin-inline;
+    color: gridBaseColors.$grid-content;
+    font-weight: var(--dx-data-grid-group-panel-item-font-weight);
+    font-size: gridBaseSizes.$grid-cell-font-size;
+    line-height: gridBaseSizes.$grid-header-line-height;
+    background: var(--dx-data-grid-group-panel-item-bg);
+    border-radius: var(--dx-data-grid-group-panel-item-border-radius);
+    padding: var(--dx-data-grid-group-panel-item-padding);
+    border-width: var(--dx-data-grid-group-panel-item-border-width);
+    border-style: solid;
+    border-color: var(--dx-data-grid-group-panel-item-border);
+  }
+
+  .dx-block-separator {
+    margin-right: gridBaseSizes.$grid-group-panel-item-margin-inline;
+    color: gridBaseColors.$grid-content;
+    font-weight: gridBaseSizes.$grid-column-chooser-font-weight;
+    background-color: var(--dx-data-grid-block-separator-bg);
+  }
+
+  .dx-sort {
+    color: gridBaseColors.$grid-content;
+  }
+}
+
+.dx-datagrid-rowsview {
+  .dx-datagrid-group-row-container {
+    padding-left: gridBaseSizes.$grid-cell-padding-inline;
+    padding-right: gridBaseSizes.$grid-cell-padding-inline;
+    text-overflow: ellipsis;
+    display: inline-block;
+    position: sticky;
+    background-color: inherit; // T1303478
+    max-width: 100%;
+    overflow: clip;
+  }
+
+  .dx-row.dx-group-row:first-child {
+    border-top: none;
+  }
+
+  .dx-row.dx-group-row {
+    &:not(.dx-row-focused) {
+      color: gridBaseColors.$grid-content;
+      background-color: gridBaseColors.$grid-group-row-bg;
+    }
+
+    font-size: gridBaseSizes.$grid-cell-font-size;
+    font-weight: var(--dx-data-grid-group-row-font-weight);
+  }
+}
+
+.dx-datagrid-group-opened {
+  @include dx-icon(chevrondown);
+  @include dx-icon-sizing($global-icon-size);
+
+  color: gridBaseColors.$grid-chevron-icon;
+}
+
+.dx-datagrid-group-closed {
+  @include dx-icon(chevronright);
+  @include dx-icon-sizing($global-icon-size);
+
+  color: gridBaseColors.$grid-chevron-icon;
+}
+
+.dx-row.dx-datagrid-group-footer {
+  &.dx-column-lines {
+    border-bottom: gridBaseSizes.$grid-border-width solid;
+    border-bottom-color: gridBaseColors.$grid-border;
+  }
+}
+
+.dx-rtl {
+  .dx-datagrid-group-panel {
+    .dx-group-panel-item,
+    .dx-block-separator {
+      margin-left: gridBaseSizes.$grid-group-panel-item-margin-inline;
+    }
+  }
+}

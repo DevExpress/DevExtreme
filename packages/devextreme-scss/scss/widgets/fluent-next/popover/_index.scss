@@ -1,0 +1,11 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/popover";
+
+.dx-popover-wrapper {
+  .dx-popup-title {
+    margin: 0;
+    border-top-left-radius: var(--dx-popover-popup-title-border-start-start-radius);
+    border-top-right-radius: var(--dx-popover-popup-title-border-start-end-radius);
+  }
+}

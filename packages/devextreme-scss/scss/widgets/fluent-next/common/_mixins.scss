@@ -1,0 +1,103 @@
+@use "sass:math";
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../validation/sizes" as validationSizes;
+@use "../../base/validation" as baseValidation with (
+  $validation-summary-margin-top: validationSizes.$validation-summary-margin-block-start,
+  $validation-message-content-padding: validationSizes.$validation-message-content-padding,
+  $validation-summary-item-border-bottom-width: var(--dx-validation-summary-item-border-block-end-width),
+);
+@use "../list/sizes" as listSizes;
+
+@mixin dx-base-typography() {
+  @include dx-base-typography-mixin(
+      var(--dx-global-content),
+      $global-font-size,
+      var(--dx-global-font-family),
+      var(--dx-global-line-height)
+    );
+}
+
+@mixin badge-settings() {
+  pointer-events: none;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  margin-top: calc(var(--dx-invalid-badge-size) / -2);
+  width: var(--dx-invalid-badge-size);
+  height: var(--dx-invalid-badge-size);
+  line-height: calc(var(--dx-invalid-badge-size) + 1px); // dx-px-nudge: +1px over the badge size
+  font-size: $global-font-size;
+}
+
+@mixin dx-invalid-fluent-badge() {
+  @include badge-settings();
+
+  font-size: $global-font-size;
+  font-weight: var(--dx-invalid-badge-font-weight);
+  background-color: var(--dx-invalid-badge-bg);
+  color: var(--dx-invalid-badge-content);
+  content: "!";
+  border-radius: 50%;
+}
+
+@mixin dx-valid-fluent-badge() {
+  @include badge-settings();
+
+  font-size: var(--dx-valid-badge-font-size);
+  font-weight: bold;
+  font-family: "DXIcons", sans-serif;
+  color: var(--dx-valid-badge-content);
+  content: "\f005";
+
+  @include baseValidation.validation-badge-animation();
+}
+
+@mixin dx-pending-indicator-fluent() {
+  @include dx-pending-indicator(var(--dx-invalid-badge-size));
+}
+
+@mixin dx-dropdownlist-list-appearance() {
+  height: 100%;
+
+  &.dx-popup-wrapper .dx-overlay-content {
+    box-shadow: var(--dx-global-dropdown-box-shadow);
+    border-top-width: 0;
+    border-bottom-width: var(--dx-global-dropdown-border-block-end-width);
+
+    &.dx-dropdowneditor-overlay-flipped {
+      border-top-width: var(--dx-global-dropdown-flipped-border-block-start-width);
+      border-bottom-width: 0;
+    }
+  }
+
+  .dx-popup-content {
+    height: 100%;
+    padding: var(--dx-global-dropdown-content-padding);
+  }
+
+  .dx-list {
+    height: 100%;
+    min-height: listSizes.$list-item-height;
+  }
+
+  .dx-list-select-all {
+    margin-inline: listSizes.$list-item-margin-inline;
+    padding: calc(#{listSizes.$list-item-padding-block} + 2px) 0 calc(#{listSizes.$list-item-padding-block} - 2px); // dx-px-nudge: +2px / -2px around the list item padding
+  }
+
+  .dx-list-items {
+    margin-inline: listSizes.$list-item-margin-inline;
+  }
+
+  .dx-list-item,
+  .dx-empty-message {
+    border-top: 0;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+}

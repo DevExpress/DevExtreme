@@ -1,0 +1,65 @@
+@use "../sizes" as *;
+@use "colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+// Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
+$popup-border-radius: ds.$border-radius-80 !default;
+
+$popup-content-padding: null !default;
+$popup-content-padding-block: null !default;
+$popup-content-with-title-top-padding: null !default;
+$popup-content-with-title-bottom-padding: null !default;
+$popup-toolbar-padding-inline: null !default;
+$popup-bottom-toolbar-height: null !default;
+$popup-toolbar-height: null !default;
+
+$popup-button-margin: 0 ds.$spacing-80 !default;
+$popup-toolbar-item-spacing: ds.$spacing-80 !default;
+
+$popup-content-box-shadow: null !default;
+$popup-content-box-shadow-focused: null !default;
+
+@if $size == "default" {
+  $popup-content-padding: ds.$spacing-240 !default;
+  $popup-content-padding-block: ds.$spacing-160 !default;
+  $popup-content-with-title-top-padding: ds.$spacing-240 !default;
+  $popup-content-with-title-bottom-padding: ds.$spacing-160 !default;
+
+  $popup-toolbar-padding-inline: ds.$spacing-240 !default;
+  $popup-bottom-toolbar-height: ds.$spacing-480 !default;
+  $popup-toolbar-height: ds.$spacing-480 !default;
+
+  $popup-content-box-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-ambient, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-key !default;
+  $popup-content-box-shadow-focused: 0 0 ds.$spacing-120 0 $popup-content-shadow-focused, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-focused !default;
+}
+
+@else if $size == "compact" {
+  $popup-content-padding: ds.$spacing-160 !default;
+  $popup-content-padding-block: ds.$spacing-120 !default;
+  $popup-content-with-title-top-padding: ds.$spacing-160 !default;
+  $popup-content-with-title-bottom-padding: ds.$spacing-120 !default;
+
+  $popup-toolbar-padding-inline: ds.$spacing-160 !default;
+  $popup-bottom-toolbar-height: ds.$spacing-360 !default;
+  $popup-toolbar-height: ds.$spacing-360 !default;
+
+  $popup-content-box-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-ambient, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-key !default;
+  $popup-content-box-shadow-focused: 0 0 ds.$spacing-120 0 $popup-content-shadow-focused, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-focused !default;
+}
+
+:root {
+  --dx-popup-toolbar-item-padding-inline: #{$popup-toolbar-item-spacing};
+}
+
+// Values hoisted from style-file literals (tokenized)
+$popup-title-border-block-end: ds.$border-width-10 solid !default;
+$popup-title-min-height: ds.$spacing-280 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$popup-title-padding: ds.$spacing-100 !default;
+$popup-dialog-message-padding: ds.$spacing-100 ds.$spacing-100 ds.$spacing-50 ds.$spacing-100 !default;
+
+/*
+ * Derived values, moved out of _index.scss: a file that emits rules must not declare
+ * variables (NAMING.md, O7).
+ */

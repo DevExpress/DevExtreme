@@ -1,0 +1,361 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/fileManager" with (
+  $filemanager-root-height: var(--dx-file-manager-height),
+  $filemanager-splitter-wrapper-right: var(--dx-file-manager-splitter-wrapper-inset-inline-end),
+  $filemanager-root-border: var(--dx-file-manager-border-width) solid,
+  $filemanager-overlay-content-min-width: var(--dx-file-manager-overlay-content-min-width),
+  $filemanager-overlay-content-max-width: var(--dx-file-manager-overlay-content-max-width),
+  $filemanager-popup-content-padding: var(--dx-file-manager-popup-content-padding),
+  $filemanager-progress-box-padding: var(--dx-file-manager-progress-box-padding),
+  $filemanager-notification-common-padding-bottom: var(--dx-file-manager-notification-padding-block-end),
+  $filemanager-notification-common-border-bottom-width: var(--dx-file-manager-notification-border-block-end-width),
+  $filemanager-progress-panel-border-left-width: var(--dx-file-manager-progress-panel-border-inline-start-width),
+  $filemanager-progress-panel-width: var(--dx-file-manager-progress-panel-width),
+  $filemanager-progress-panel-container-padding: var(--dx-file-manager-progress-panel-container-padding),
+  $filemanager-progress-panel-title-padding: var(--dx-file-manager-progress-panel-title-padding),
+  $filemanager-progress-panel-separator-height: var(--dx-file-manager-progress-panel-separator-height),
+  $filemanager-i-cancel-width: var(--dx-file-manager-i-cancel-width),
+  $filemanager-i-cancel-height: var(--dx-file-manager-i-cancel-height),
+  $filemanager-progress-box-margin-bottom: var(--dx-file-manager-progress-box-margin-block-end),
+  $filemanager-progress-box-border-radius: var(--dx-file-manager-progress-box-border-radius),
+  $filemanager-progress-panel-box-padding: var(--dx-file-manager-progress-panel-box-padding),
+  $filemanager-progress-box-without-close-button-padding-right: var(--dx-file-manager-progress-box-without-close-button-padding-inline-end),
+  $filemanager-progress-box-image-margin-right: var(--dx-file-manager-progress-box-image-margin-inline-end),
+  $filemanager-progress-box-common-padding: var(--dx-file-manager-progress-box-content-padding),
+  $filemanager-progress-box-close-button-margin-top: var(--dx-file-manager-progress-box-close-button-margin-block-start),
+  $filemanager-progress-box-close-button-margin-left: var(--dx-file-manager-progress-box-close-button-margin-inline-start),
+  $filemanager-progress-box-error-padding: var(--dx-file-manager-progress-box-error-padding),
+  $filemanager-progress-box-error-max-height: var(--dx-file-manager-progress-box-error-max-height),
+  $filemanager-toolbar-separator-item-width: var(--dx-file-manager-toolbar-separator-item-width),
+  $filemanager-toolbar-separator-item-margin-right: var(--dx-file-manager-toolbar-separator-item-margin-inline-end),
+  $filemanager-container-border-top: var(--dx-file-manager-container-border-block-start),
+  $filemanager-dirs-panel-padding: var(--dx-file-manager-dirs-panel-padding),
+  $filemanager-drawer-panel-content-initial-min-width: var(--dx-file-manager-drawer-panel-content-initial-min-width),
+  $filemanager-drawer-panel-content-initial-max-width: var(--dx-file-manager-drawer-panel-content-initial-max-width),
+  $filemanager-breadcrumbs-padding: var(--dx-file-manager-breadcrumbs-padding),
+  $filemanager-breadcrumbs-border-bottom: var(--dx-file-manager-breadcrumbs-border-block-end),
+  $filemanager-menu-item-content-padding-left: var(--dx-file-manager-menu-item-content-padding-inline-start),
+  $filemanager-menu-item-content-padding-right: var(--dx-file-manager-menu-item-content-padding-inline-end),
+  $filemanager-menu-item-content-margin: var(--dx-file-manager-menu-item-content-margin),
+  $filemanager-breadcrumbs-path-separator-padding-left: var(--dx-file-manager-breadcrumbs-path-separator-padding-inline-start),
+  $filemanager-breadcrumbs-path-separator-padding-right: var(--dx-file-manager-breadcrumbs-path-separator-padding-inline-end),
+  $filemanager-thumbnails-view-port-padding: var(--dx-file-manager-thumbnails-view-port-padding),
+  $filemanager-thumbnails-item-width: var(--dx-file-manager-thumbnails-item-width),
+  $filemanager-thumbnails-item-height: var(--dx-file-manager-thumbnails-item-height),
+  $filemanager-thumbnails-item-border: var(--dx-file-manager-thumbnails-item-border),
+  $filemanager-thumbnails-item-margin: var(--dx-file-manager-thumbnails-item-margin),
+  $filemanager-thumbnails-item-content-padding: var(--dx-file-manager-thumbnails-item-content-padding),
+  $filemanager-thumbnails-item-spacer-height: var(--dx-file-manager-thumbnails-item-spacer-height),
+  $filemanager-button-content-padding: var(--dx-file-manager-view-mode-button-content-padding),
+  $filemanager-dialog-min-width: var(--dx-file-manager-dialog-min-width),
+  $filemanager-overlay-content-min-height: var(--dx-file-manager-overlay-content-min-height),
+  $filemanager-overlay-content-max-height: var(--dx-file-manager-overlay-content-max-height),
+  $filemanager-dialog-name-editor-max-width: var(--dx-file-manager-dialog-name-editor-max-width),
+  $filemanager-dialog-name-editor-min-height: var(--dx-file-manager-dialog-name-editor-min-height),
+  $filemanager-dialog-name-editor-max-height: var(--dx-file-manager-dialog-name-editor-max-height),
+  $filemanager-progressbox-cancel-button-margin-top: var(--dx-file-manager-progress-box-cancel-button-margin-block-start),
+  $filemanager-progress-title-font-size: var(--dx-file-manager-progress-title-font-size),
+  $filemanager-progress-title-font-weight: var(--dx-file-manager-progress-title-font-weight),
+  $filemanager-progress-bold-font-weight: var(--dx-file-manager-progress-bold-font-weight),
+);
+@use "../../base/fileManager/mixins" as *;
+@use "../splitterBar";
+
+.dx-filemanager {
+  border-color: var(--dx-file-manager-border);
+
+  .dx-filemanager-notification-common {
+    border-color: var(--dx-file-manager-border);
+    color: var(--dx-file-manager-danger-bg);
+  }
+
+  .dx-drawer-shrink .dx-filemanager-progress-panel {
+    border-left-color: var(--dx-file-manager-border);
+  }
+
+  .dx-filemanager-progress-panel {
+    background-color: var(--dx-file-manager-bg);
+
+    .dx-filemanager-progress-panel-title {
+      padding-top: var(--dx-file-manager-progress-panel-title-padding-block);
+      padding-bottom: var(--dx-file-manager-progress-panel-title-padding-block);
+    }
+  }
+
+  .dx-filemanager-progress-box-image {
+    width: var(--dx-file-manager-progress-box-image-size);
+    height: var(--dx-file-manager-progress-box-image-size);
+    font-size: var(--dx-file-manager-progress-box-image-size);
+  }
+
+  .dx-filemanager-progress-box-error {
+    color: var(--dx-file-manager-inverted-content);
+    background: var(--dx-file-manager-danger-bg);
+  }
+
+  .dx-filemanager-progress-box .dx-filemanager-progress-box-close-button {
+    margin-top: var(--dx-file-manager-progress-box-button-close-margin-block-start);
+  }
+
+  .dx-filemanager-toolbar {
+    padding: var(--dx-file-manager-toolbar-padding);
+    background: var(--dx-file-manager-bg);
+    min-height: var(--dx-file-manager-toolbar-height);
+
+    &.dx-filemanager-file-toolbar,
+    &.dx-filemanager-file-toolbar .dx-toolbar {
+      background: var(--dx-file-manager-file-toolbar-bg);
+    }
+
+    .dx-filemanager-toolbar-separator-item {
+      height: var(--dx-file-manager-toolbar-separator-height);
+      background: var(--dx-file-manager-border);
+    }
+
+    .dx-filemanager-toolbar-viewmode-item .dx-texteditor {
+      width: var(--dx-file-manager-toolbar-viewmode-width);
+    }
+
+    .dx-texteditor.dx-editor-filled {
+      background: transparent;
+
+      &.dx-state-hover,
+      &.dx-state-active,
+      &.dx-state-focused {
+        background: var(--dx-file-manager-editor-bg-active);
+      }
+
+      &.dx-dropdowneditor {
+        border-color: transparent;
+
+        .dx-dropdowneditor-icon {
+          background: transparent;
+        }
+
+        &.dx-state-hover .dx-dropdowneditor-icon,
+        &.dx-state-active .dx-dropdowneditor-icon {
+          background: transparent;
+          border-color: transparent;
+        }
+      }
+    }
+
+    .dx-toolbar .dx-filemanager-toolbar-viewmode-item .dx-button-content {
+      padding-left: var(--dx-file-manager-toolbar-viewmode-padding);
+      padding-right: var(--dx-file-manager-toolbar-viewmode-padding);
+    }
+  }
+
+  .dx-filemanager-fileuploader-dropzone-placeholder {
+    border: var(--dx-file-manager-file-uploader-drop-zone-placeholder-border);
+    border-color: var(--dx-file-manager-drop-zone-placeholder-border);
+  }
+
+  .dx-filemanager-container {
+    border-top-color: var(--dx-file-manager-border);
+  }
+
+  .dx-filemanager-dirs-panel {
+    border-right-color: var(--dx-file-manager-border);
+  }
+
+  .dx-filemanager-breadcrumbs {
+    border-bottom-color: var(--dx-file-manager-border);
+
+    .dx-menu-item {
+      &.dx-state-focused {
+        background: var(--dx-file-manager-breadcrumbs-item-bg-focused);
+        color: var(--dx-file-manager-breadcrumbs-item-content-focused);
+      }
+    }
+
+    .dx-menu-item-content {
+      padding-top: var(--dx-file-manager-breadcrumbs-item-padding-block-start);
+      padding-bottom: var(--dx-file-manager-breadcrumbs-item-padding-block-end);
+    }
+
+    .dx-filemanager-breadcrumbs-separator-item .dx-menu-item-content {
+      background: var(--dx-file-manager-border);
+    }
+
+    .dx-filemanager-breadcrumbs-separator-item,
+    .dx-filemanager-breadcrumbs-path-separator-item {
+      &.dx-state-hover {
+        background: transparent;
+      }
+    }
+  }
+
+  .dx-filemanager-thumbnails .dx-filemanager-thumbnails-item {
+    &.dx-item-selected {
+      color: var(--dx-file-manager-file-item-select-content);
+      background: var(--dx-file-manager-file-item-select-bg);
+    }
+
+    &.dx-state-hover:not(.dx-state-focused):not(.dx-item-selected) {
+      background: var(--dx-file-manager-file-item-bg-hovered);
+    }
+
+    &.dx-state-focused {
+      border: var(--dx-file-manager-border-focused);
+      border-color: var(--dx-file-manager-file-item-border-focused);
+    }
+
+    &.dx-item-selected.dx-state-focused {
+      color: var(--dx-file-manager-file-item-select-content-focused);
+      background: var(--dx-file-manager-file-item-select-bg-focused);
+    }
+
+    .dx-filemanager-thumbnails-item-thumbnail {
+      width: var(--dx-file-manager-thumbnails-item-thumbnail-size);
+      height: var(--dx-file-manager-thumbnails-item-thumbnail-size);
+      font-size: var(--dx-file-manager-thumbnails-item-thumbnail-size);
+    }
+
+    .dx-filemanager-item-custom-thumbnail {
+      color: var(--dx-file-manager-custom-thumbnail-content);
+    }
+  }
+
+  .dx-filemanager-files-view {
+    background: var(--dx-file-manager-bg);
+
+    &.dx-filemanager-details {
+      .dx-filemanager-details-item-thumbnail {
+        font-size: $global-icon-size;
+        width: $global-icon-size;
+        height: $global-icon-size;
+      }
+
+      .dx-datagrid .dx-datagrid-content .dx-datagrid-table {
+        .dx-command-select {
+          padding: 0;
+          width: var(--dx-file-manager-details-view-checkbox-column-width);
+          min-width: var(--dx-file-manager-details-view-checkbox-column-width);
+          max-width: var(--dx-file-manager-details-view-checkbox-column-width);
+        }
+
+        .dx-filemanager-details-item-is-directory {
+          padding-right: 0 !important; // stylelint-disable-line declaration-no-important
+          padding-left: 0 !important; // stylelint-disable-line declaration-no-important
+        }
+      }
+
+      .dx-row-focused .dx-filemanager-file-actions-button .dx-button .dx-icon {
+        color: var(--dx-file-manager-item-content-focused);
+      }
+    }
+  }
+
+  .dx-filemanager-details {
+    .dx-filemanager-details-item-name-wrapper {
+      align-items: center;
+    }
+  }
+}
+
+.dx-filemanager-dirs-tree.dx-treeview {
+  .dx-treeview-item {
+    padding-top: var(--dx-file-manager-tree-view-item-top-bottom-padding);
+    padding-bottom: var(--dx-file-manager-tree-view-item-top-bottom-padding);
+  }
+
+  .dx-state-focused > .dx-treeview-item {
+    background: transparent;
+
+    &.dx-state-hover {
+      background: var(--dx-file-manager-dirs-tree-item-bg-focused);
+    }
+
+    & * {
+      color: var(--dx-file-manager-dirs-tree-item-content-focused);
+    }
+  }
+
+  .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item {
+    background: var(--dx-file-manager-dirs-tree-item-bg-focused);
+
+    & * {
+      color: var(--dx-file-manager-dirs-tree-item-content-focused);
+    }
+  }
+}
+
+.dx-filemanager-view-switcher-popup {
+  width: calc(2 * var(--dx-file-manager-toolbar-viewmode-padding) + #{$global-icon-size});
+
+  .dx-dropdownbutton-popup-wrapper.dx-dropdownbutton-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+    padding-left: calc(var(--dx-file-manager-toolbar-viewmode-padding) - 1px); // dx-px-nudge: -1px off the viewmode padding
+    padding-right: var(--dx-file-manager-toolbar-viewmode-padding);
+    text-overflow: clip;
+  }
+}
+
+.dx-filemanager-dirs-tree.dx-treeview .dx-filemanager-file-actions-button .dx-button .dx-button-content {
+  padding: 0;
+}
+
+.dx-filemanager-file-actions-button {
+  .dx-button {
+    min-width: var(--dx-file-manager-file-actions-button-size);
+    height: var(--dx-file-manager-file-actions-button-size);
+
+    .dx-button-content {
+      padding: var(--dx-file-manager-button-content-padding);
+    }
+  }
+}
+
+.dx-filemanager-context-menu .dx-menu-item-has-text:not(.dx-menu-item-has-icon) .dx-menu-item-text {
+  margin-left: var(--dx-file-manager-context-menu-text-item-left-margin);
+}
+
+@include filemanager-icons-mixin($file-manager-icon, $file-manager-icon-success-content, $file-manager-icon-inverted-content, $file-manager-icon-danger-content, $file-manager-icon-inverted-content, $file-manager-large-icon-size);
+
+.dx-filemanager.dx-state-disabled .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text,
+.dx-state-disabled .dx-filemanager .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text {
+  color: var(--dx-file-manager-content-disabled);
+}
+
+.dx-filemanager.dx-state-disabled,
+.dx-state-disabled .dx-filemanager,
+.dx-state-disabled {
+  .dx-filemanager-dirs-tree-item-text,
+  .dx-filemanager-progress-panel-title-text,
+  .dx-filemanager-progress-panel-infos-container {
+    color: var(--dx-file-manager-content-disabled);
+  }
+
+  .dx-filemanager-i,
+  .dx-filemanager-i.dx-icon {
+    &.dx-filemanager-i-refresh,
+    &.dx-filemanager-i-progress {
+      @include filemanager-icon-colored(
+        data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/refresh.svg"),
+        $file-manager-icon-disabled,
+        $file-manager-icon-success-content,
+        $file-manager-icon-inverted-content,
+        $file-manager-icon-danger-content,
+        $file-manager-icon-inverted-content,
+        $file-manager-large-icon-size,
+        $file-manager-large-icon-size
+      );
+    }
+  }
+}
+
+.dx-filemanager.dx-state-disabled,
+.dx-state-disabled .dx-filemanager {
+  .dx-icon,
+  .dx-treeview-toggle-item-visibility {
+    color: var(--dx-file-manager-content-disabled);
+  }
+
+  .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item,
+  .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item .dx-icon,
+  .dx-filemanager-dirs-tree.dx-treeview .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item .dx-treeview-toggle-item-visibility {
+    color: var(--dx-file-manager-content-disabled);
+  }
+}

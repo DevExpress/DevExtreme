@@ -9,7 +9,7 @@ declare module 'opentype.js' {
         length: number;
 
         get(index: Number): Glyph;
-        push(index: Number, loader: (font: Font, index: Number) => Glyph);
+        push(index: Number, loader: (font: Font, index: Number) => Glyph): void;
     }
 
     interface Font {

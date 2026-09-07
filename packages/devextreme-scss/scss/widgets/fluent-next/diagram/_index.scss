@@ -1,0 +1,472 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/diagram" with (
+  $diagram-root-height: var(--dx-diagram-height),
+  $diagram-root-min-height: var(--dx-diagram-min-height),
+  $diagram-toolbar-wrapper-padding: var(--dx-diagram-toolbar-wrapper-padding),
+  $diagram-button-min-height: var(--dx-diagram-toolbox-input-button-min-height),
+  $diagram-popup-content-padding: var(--dx-diagram-popup-content-padding),
+  $diagram-colorview-palette-min-width: var(--dx-diagram-color-view-palette-min-width),
+  $diagram-colorview-hue-scale-cell-margin-left: var(--dx-diagram-color-view-hue-scale-cell-margin-inline-start),
+  $diagram-border-width: var(--dx-diagram-border-width),
+  $diagram-loading-indicator-width: var(--dx-diagram-loading-indicator-width),
+  $diagram-loading-indicator-height: var(--dx-diagram-loading-indicator-height),
+  $diagram-context-toolbox-target-width: var(--dx-diagram-context-toolbox-target-width),
+  $diagram-context-toolbox-target-height: var(--dx-diagram-context-toolbox-target-height),
+  $diagram-popup-title-toolbar-bg: var(--dx-diagram-popup-title-toolbar-bg),
+);
+@use "../../base/diagram/mixins" as *;
+
+.dx-diagram {
+  border-color: var(--dx-diagram-border);
+
+  // stylelint-disable selector-class-pattern
+  .dxdi-control .dxdi-canvas {
+    background-color: var(--dx-diagram-canvas-bg);
+
+    .selection-mark,
+    .item-selection-rect,
+    .item-multi-selection-rect,
+    .items-selection-rect,
+    .connector-side-mark,
+    .connector-point-mark,
+    .connector-selection,
+    .connector-multi-selection,
+    .extension-line path {
+      stroke: var(--dx-diagram-connector-border);
+    }
+
+    .connector-side-mark,
+    .extension-line text {
+      fill: var(--dx-diagram-connector-border);
+    }
+
+    .container-target,
+    .connection-target,
+    .connection-mark:not(.selector),
+    .connection-point:not(.selector) {
+      stroke: var(--dx-diagram-connection-border);
+    }
+
+    .connection-mark:not(.selector),
+    .connection-point:not(.selector) {
+      &.active {
+        fill: var(--dx-diagram-connection-border);
+      }
+    }
+
+    .geometry-mark {
+      stroke: var(--dx-diagram-geometry-mark-border);
+    }
+
+    .dxdi-main .dxdi-image {
+      .dxdi-spinner {
+        path {
+          stroke: var(--dx-diagram-image-icon-accent-border);
+          stroke-opacity: 1;
+        }
+
+        ellipse {
+          stroke: var(--dx-diagram-image-icon-muted-content);
+        }
+      }
+
+      .dxdi-user .dxdi-background {
+        fill: var(--dx-diagram-image-icon-muted-content);
+      }
+
+      .dxdi-warning {
+        ellipse {
+          fill: var(--dx-diagram-danger-icon);
+        }
+      }
+    }
+  }
+
+  .dxdi-control:not(.focused) .dxdi-canvas {
+    .selection-mark,
+    .geometry-mark {
+      stroke: var(--dx-diagram-selection-mark-content);
+    }
+
+    .item-selection-rect,
+    .items-selection-rect {
+      fill: transparent;
+      stroke: var(--dx-diagram-selection-mark-content);
+    }
+
+    .items-selection-rect {
+      fill: var(--dx-diagram-selection-bg);
+    }
+
+    .item-multi-selection-rect {
+      fill: var(--dx-diagram-selection-bg);
+      stroke: var(--dx-diagram-selection-mark-content);
+    }
+
+    .connector-selection,
+    .connector-multi-selection {
+      stroke: var(--dx-diagram-selection-mark-content);
+    }
+
+    .connector-point-mark,
+    .connector-side-mark {
+      stroke: var(--dx-diagram-selection-mark-content);
+    }
+
+    .connector-side-mark {
+      fill: var(--dx-diagram-selection-mark-content);
+    }
+  }
+
+  .dxdi-text-input-container.connector-text .dxdi-text-input {
+    border-color: var(--dx-diagram-connector-border);
+  }
+
+  // stylelint-enable selector-class-pattern
+
+  .dx-diagram-toolbar-wrapper {
+    border-bottom: var(--dx-diagram-toolbar-wrapper-border-block-end);
+    border-bottom-color: var(--dx-diagram-toolbar-border);
+  }
+
+  &.dx-diagram-fullscreen {
+    background-color: var(--dx-diagram-bg);
+  }
+}
+
+.dx-diagram-toolbox-panel,
+.dx-diagram-properties-panel {
+  background: var(--dx-surface-overlay);
+}
+
+.dx-diagram-floating-toolbar-container {
+  background: var(--dx-surface-overlay);
+  box-shadow: var(--dx-diagram-shadow);
+  border-radius: var(--dx-diagram-floating-toolbar-container-border-radius);
+  padding: var(--dx-diagram-floating-toolbar-container-padding);
+
+  .dx-toolbar .dx-toolbar-items-container {
+    height: var(--dx-diagram-floating-toolbar-items-height);
+
+    .dx-texteditor {
+      .dx-texteditor-input,
+      .dx-placeholder::before {
+        color: inherit;
+        padding: var(--dx-diagram-floating-toolbar-editor-padding);
+      }
+
+      .dx-button {
+        width: auto;
+        height: auto;
+        min-width: var(--dx-diagram-button-min-width);
+        min-height: var(--dx-diagram-button-min-height);
+        margin: var(--dx-diagram-button-margin);
+
+        .dx-button-content {
+          padding: var(--dx-diagram-floating-toolbar-editor-button-padding);
+        }
+      }
+    }
+  }
+
+  &.dx-diagram-properties-panel-toolbar-container {
+    &,
+    .dx-toolbar,
+    .dx-toolbar-items-container,
+    .dx-toolbar-item,
+    .dx-button {
+      width: var(--dx-diagram-floating-toolbar-button-size);
+      height: var(--dx-diagram-floating-toolbar-button-size);
+
+      .dx-button-content {
+        padding-top: 0;
+        padding-bottom: 0;
+        line-height: var(--dx-diagram-floating-toolbar-button-size);
+      }
+    }
+  }
+
+  .dx-toolbar-item {
+    padding: var(--dx-diagram-item-padding);
+  }
+}
+
+.dx-diagram-toolbox-popup {
+  & > .dx-overlay-content {
+    box-shadow: var(--dx-diagram-shadow);
+  }
+
+  .dx-popup-title {
+    margin-bottom: 0;
+
+    &.dx-toolbar {
+      font-size: var(--dx-diagram-popup-title-toolbar-font-size);
+      min-height: $diagram-toolbox-title-size;
+
+      .dx-toolbar-items-container {
+        height: $diagram-toolbox-title-size;
+      }
+    }
+
+    .dx-button.dx-button-has-icon:not(.dx-button-has-text),
+    .dx-button-content {
+      width: $diagram-toolbox-title-size;
+      height: $diagram-toolbox-title-size;
+    }
+  }
+
+  .dx-popup-content {
+    .dx-diagram-toolbox-input-container,
+    .dx-diagram-toolbox-panel,
+    .dx-diagram-toolbox-panel .dx-accordion {
+      width: var(--dx-diagram-toolbox-width);
+    }
+  }
+
+  .dx-diagram-toolbox-input-container {
+    border-bottom: var(--dx-diagram-toolbox-input-container-border-block-end);
+  }
+
+  .dx-diagram-toolbox-input {
+    margin: var(--dx-diagram-toolbox-input-margin);
+
+    &.dx-editor-outlined {
+      &:not(.dx-state-focused) {
+        box-shadow: none;
+      }
+
+      .dx-texteditor-buttons-container:last-child > .dx-button:last-child {
+        margin-right: 0;
+      }
+    }
+
+    .dx-button {
+      .dx-button-content {
+        padding: var(--dx-diagram-toolbox-input-image-padding);
+      }
+
+      .dx-icon {
+        font-size: var(--dx-diagram-toolbox-input-image-size);
+      }
+    }
+  }
+
+  .dx-popup-title .dx-closebutton {
+    width: $diagram-toolbox-title-size;
+    height: $diagram-toolbox-title-size;
+    margin: var(--dx-diagram-closebutton-margin);
+  }
+
+  .dx-popup-title .dx-closebutton .dx-icon {
+    width: var(--dx-diagram-icon-width);
+    height: var(--dx-diagram-icon-height);
+    padding: var(--dx-diagram-icon-padding);
+    font-size: var(--dx-diagram-popup-close-icon-font-size);
+    line-height: var(--dx-diagram-popup-close-icon-line-height);
+    background-position: 2px 2px; // dx-fixed-size: 2px sprite offset, tied to the data-uri artwork
+    background-size: 12px 12px; // dx-fixed-size: 12px sprite size, tied to the data-uri artwork
+  }
+
+  &.dx-diagram-mobile-popup {
+    .dx-popup-content {
+      padding-top: var(--dx-diagram-toolbox-mobile-padding);
+
+      .dx-diagram-toolbox-input-container {
+        border-top: var(--dx-diagram-toolbox-input-container-border-block-start);
+      }
+    }
+  }
+}
+
+.dx-diagram-toolbox-panel {
+  .dx-accordion {
+    margin: 0;
+
+    .dx-accordion-item {
+      border-left: none;
+      border-right: none;
+      border-bottom: var(--dx-diagram-accordion-item-border-block-end);
+      border-top: none;
+      box-shadow: none;
+    }
+
+    .dx-accordion-item-opened {
+      margin: 0;
+    }
+
+    .dx-item-content.dx-accordion-item-title {
+      min-height: var(--dx-diagram-accordion-item-title-min-height);
+    }
+
+    .dx-item-content.dx-accordion-item-body {
+      padding: var(--dx-diagram-toolbox-accordion-v-padding) var(--dx-diagram-toolbox-h-padding);
+    }
+  }
+
+  .dxdi-toolbox .dxdi-canvas .dxdi-shape-text { // stylelint-disable-line selector-class-pattern
+    color: var(--dx-diagram-toolbox-shape-text-content);
+  }
+}
+
+.dx-diagram-properties-popup {
+  .dx-multiview-item,
+  &.dx-diagram-properties-popup-notabs .dx-popup-content {
+    padding: var(--dx-diagram-properties-panel-padding);
+  }
+
+  .dx-diagram-properties-panel-group-title {
+    text-transform: uppercase;
+    padding: var(--dx-diagram-properties-panel-spacing);
+  }
+
+  .dx-diagram-properties-panel-group-toolbar {
+    padding: 0 var(--dx-diagram-properties-panel-spacing) var(--dx-diagram-properties-panel-spacing);
+
+    .dx-toolbar-item {
+      margin-bottom: calc(var(--dx-diagram-properties-panel-spacing) / 2);
+
+      .dx-button {
+        height: auto;
+      }
+
+      &.dx-diagram-lg-icon-item .dx-diagram-i {
+        background-size: var(--dx-diagram-properties-layout-icon-size) var(--dx-diagram-properties-layout-icon-size);
+        width: var(--dx-diagram-properties-layout-icon-size);
+        height: var(--dx-diagram-properties-layout-icon-size);
+      }
+    }
+  }
+
+  .dx-diagram-properties-panel-group-toolbar:first-child {
+    padding-top: var(--dx-diagram-properties-panel-spacing);
+  }
+
+  &.dx-diagram-mobile-popup {
+    .dx-popup-title {
+      padding: var(--dx-diagram-title-padding);
+    }
+
+    .dx-tabpanel {
+      .dx-tab-selected::before {
+        top: 0;
+        bottom: initial;
+      }
+    }
+  }
+}
+
+.dx-diagram-toolbar {
+  .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
+    background-color: var(--dx-diagram-normal-format-bg-active);
+
+    &.dx-button-success {
+      background-color: var(--dx-diagram-success-format-bg-active);
+    }
+
+    &.dx-button-default {
+      background-color: var(--dx-diagram-default-format-bg-active);
+    }
+
+    &.dx-button-danger {
+      background-color: var(--dx-diagram-danger-format-bg-active);
+    }
+  }
+
+  .dx-texteditor.dx-editor-filled,
+  .dx-dropdowneditor.dx-editor-filled {
+    background-color: transparent;
+
+    &::after {
+      border-bottom-color: transparent;
+    }
+  }
+
+  .dx-diagram-toolbar-separator {
+    height: 50%;
+    border-left-color: var(--dx-diagram-toolbar-border);
+  }
+
+  .dx-diagram-toolbar-menu-separator {
+    border-top-color: var(--dx-diagram-toolbar-border);
+  }
+
+  .dx-diagram-toolbar-text {
+    padding: var(--dx-diagram-toolbar-text-padding-block-start) 0 var(--dx-diagram-toolbar-text-padding-block-end) var(--dx-diagram-toolbar-text-padding-inline-start);
+  }
+
+  .dx-diagram-lg-edit-item .dx-texteditor {
+    width: var(--dx-diagram-large-editor-width);
+  }
+
+  .dx-diagram-md-edit-item .dx-texteditor {
+    width: var(--dx-diagram-medium-editor-width);
+  }
+
+  .dx-diagram-sm-edit-item .dx-texteditor {
+    width: var(--dx-diagram-small-editor-width);
+  }
+
+  .dx-diagram-color-edit-item .dx-dropdowneditor-field-before-template-wrapper {
+    .dx-diagram-i,
+    .dx-icon {
+      border-bottom-width: $diagram-toolbar-colorbutton-border-width;
+      border-bottom-style: solid;
+    }
+  }
+}
+
+.dx-diagram-toolbar,
+.dx-dropdownmenu-popup {
+  .dx-diagram-image-dropdown-item,
+  .dx-diagram-color-edit-item {
+    .dx-dropdowneditor-field-before-template-wrapper {
+      .dx-diagram-i,
+      .dx-icon {
+        margin-left: var(--dx-diagram-icon-margin-inline-start);
+        margin-right: var(--dx-diagram-icon-margin-inline-end);
+      }
+
+      .dx-icon {
+        font-size: $diagram-toolbar-icon-size;
+        color: $diagram-content;
+      }
+    }
+  }
+}
+
+.dx-diagram-contextmenu.dx-context-menu {
+  .dx-menu-item .dx-menu-item-content .dx-menu-item-popout-container {
+    right: 0;
+  }
+
+  .dx-menu-no-icons > .dx-menu-item-wrapper > .dx-menu-item > .dx-menu-item-content .dx-menu-item-text {
+    padding-left: var(--dx-diagram-item-text-padding-inline-start);
+  }
+}
+
+.dx-diagram-touchbar {
+  .dx-menu-item .dx-menu-item-content {
+    padding: var(--dx-diagram-touchbar-item-padding);
+  }
+
+  .dx-menu-separator {
+    width: var(--dx-diagram-separator-width);
+    height: calc(#{$diagram-toolbar-icon-size} + var(--dx-diagram-touchbar-item-padding) + var(--dx-diagram-touchbar-item-padding) + 2px); // dx-px-nudge: +2px over the icon and the two paddings
+    margin: 0;
+  }
+}
+
+@include diagram-action-icons-mixin($diagram-content, $diagram-content, $diagram-toolbar-icon-size, $diagram-toolbar-colorbutton-border-width);
+
+.dx-diagram-toolbox-popup .dx-button-has-icon .dx-icon.dx-icon-diagram-toolbox-drag {
+  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-drag.svg"), $diagram-content, $diagram-toolbox-title-size, $diagram-toolbox-title-size);
+
+  line-height: $diagram-toolbox-title-size;
+  background-size: $diagram-toolbox-title-size $diagram-toolbox-title-size;
+}
+
+.dx-diagram-i-button-properties-panel-open {
+  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/properties-panel-open.svg"), $diagram-properties-panel-icon, $diagram-toolbar-icon-size, $diagram-toolbar-icon-size);
+}

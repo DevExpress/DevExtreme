@@ -3,6 +3,8 @@
 @use "./mixins" as *;
 @use "../textEditor/mixins" as *;
 
+$dropdowneditor-icon-idle-opacity: 0.35 !default;
+
 .dx-dropdowneditor {
   position: relative;
 
@@ -59,7 +61,9 @@
 
 .dx-dropdowneditor-active {
   .dx-dropdowneditor-icon {
-    opacity: 0.35;
+    @if $dropdowneditor-icon-idle-opacity {
+      opacity: $dropdowneditor-icon-idle-opacity;
+    }
   }
 }
 

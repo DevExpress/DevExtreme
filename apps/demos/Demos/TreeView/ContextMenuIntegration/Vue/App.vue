@@ -104,7 +104,7 @@ function contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
 .log-container {
   padding: 20px;
   margin-left: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+  background-color: var(--dx-color-options-panel-bg);
   font-weight: 600;
   position: relative;
 }

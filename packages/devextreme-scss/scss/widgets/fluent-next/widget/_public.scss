@@ -1,0 +1,5 @@
+@use "colors" as *;
+
+@mixin publish {
+  --dx-widget-bg: #{$widget-bg};
+}

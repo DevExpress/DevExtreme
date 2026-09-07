@@ -1,0 +1,337 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../button/sizes" as buttonSizes;
+@use "../textEditor/colors" as textEditorColors;
+@use "../textEditor/index" as *;
+@use "../toolbar/sizes" as toolbarSizes;
+@use "../common/mixins" as *;
+@use "../fileUploader/sizes" as fileUploaderSizes;
+@use "../popup/sizes" as popupSizes;
+@use "../../base/mixins" as *;
+@use "../../base/htmlEditor" with (
+  $htmleditor-border-width: var(--dx-html-editor-border-width),
+  $variable-padding: var(--dx-html-editor-variable-padding),
+  $variable-border-radius: var(--dx-html-editor-variable-border-radius),
+  $blockquote-padding-inline-start: var(--dx-html-editor-blockquote-padding-inline-start),
+  $blockquote-border-inline-start-width: var(--dx-html-editor-blockquote-border-inline-start-width),
+  $table-cell-padding: var(--dx-html-editor-table-cell-padding),
+  $placeholder-inset-inline: var(--dx-html-editor-placeholder-inset-inline),
+  $htmleditor-content-padding: var(--dx-html-editor-padding-block) var(--dx-html-editor-padding-inline),
+  $mention-padding-block: var(--dx-mention-padding-block),
+  $mention-border-radius: var(--dx-mention-border-radius),
+  $mention-margin-inline: var(--dx-mention-margin-inline),
+  $table-resizer-thickness: var(--dx-html-editor-table-resizer-thickness),
+  $table-resizer-highlight-thickness: var(--dx-html-editor-table-resizer-highlight-thickness),
+  $htmleditor-code-block-bg: var(--dx-html-editor-code-block-bg),
+  $htmleditor-placeholder-color: var(--dx-html-editor-placeholder-content),
+  $htmleditor-aidialog-title-font-weight: var(--dx-html-editor-ai-dialog-title-font-weight),
+);
+
+.dx-htmleditor {
+  border-color: transparent;
+  position: relative;
+
+  .dx-htmleditor-toolbar-wrapper {
+    padding: 0 var(--dx-html-editor-toolbar-padding);
+    position: relative;
+  }
+
+  &::before {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    content: "";
+    position: absolute;
+    z-index: 2;
+    transform: scale(0);
+  }
+
+  &.dx-state-readonly,
+  &.dx-state-disabled {
+    .dx-htmleditor-toolbar-wrapper::before {
+      position: absolute;
+      top: var(--dx-html-editor-toolbar-wrapper-inset-block-start);
+      bottom: var(--dx-html-editor-toolbar-wrapper-inset-block-end);
+      left: var(--dx-html-editor-toolbar-wrapper-inset-inline-start);
+      right: var(--dx-html-editor-toolbar-wrapper-inset-inline-end);
+      z-index: 2;
+      background-color: var(--dx-html-editor-cover-bg);
+      content: "";
+      pointer-events: none;
+    }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    &::before {
+      border-bottom: var(--dx-html-editor-border-block-end-active);
+      border-bottom-color: textEditorColors.$text-editor-indicator;
+      transform: scale(1);
+      transition-property: transform;
+      transition-duration: 0.2s;
+      transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
+    }
+  }
+
+  &.dx-htmleditor-outlined {
+    @include texteditor-outlined-styling();
+
+    .dx-htmleditor-content {
+      margin: var(--dx-html-editor-content-margin);
+      margin-inline-start: 0;
+    }
+
+    .dx-htmleditor-toolbar-wrapper + .dx-quill-container .dx-htmleditor-content {
+      margin-top: 0;
+    }
+  }
+
+  &.dx-htmleditor-filled {
+    @include texteditor-filled-styling();
+  }
+
+  &.dx-htmleditor-underlined {
+    &::after {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 0;
+      width: 100%;
+      content: "";
+      position: absolute;
+    }
+
+    @include texteditor-underlined-styling();
+
+    .dx-htmleditor-content {
+      padding-inline-start: 0;
+    }
+  }
+
+}
+
+.dx-invalid.dx-htmleditor {
+  &.dx-state-hover {
+    &::after {
+      border-bottom-color: textEditorColors.$text-editor-invalid-border;
+    }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    &::before {
+      border-bottom: var(--dx-html-editor-border-block-end-active);
+      border-bottom-color: textEditorColors.$text-editor-invalid-border-focused;
+    }
+  }
+}
+
+.dx-htmleditor-content {
+  line-height: var(--dx-global-line-height);
+
+  &.ql-blank::before { // stylelint-disable-line selector-class-pattern
+    color: textEditorColors.$text-editor-placeholder;
+  }
+
+  code,
+  .ql-code-block-container { // stylelint-disable-line selector-class-pattern
+    color: var(--dx-html-editor-faded-content);
+  }
+
+  blockquote {
+    color: var(--dx-html-editor-faded-content);
+    border-inline-start-color: var(--dx-html-editor-toolbar-border);
+  }
+
+  .dx-variable {
+    & > span {
+      background: var(--dx-html-editor-variable-bg);
+    }
+  }
+
+  td,
+  th {
+    border-color: var(--dx-html-editor-table-border);
+  }
+}
+
+@mixin dx-htmleditor-button-states($default-color, $hover-color, $focused-color) {
+  background-color: $default-color;
+
+  &.dx-state-hover {
+    background-color: $hover-color;
+  }
+
+  &.dx-state-focused {
+    background-color: $focused-color;
+  }
+}
+
+.dx-htmleditor-toolbar {
+  background-color: transparent;
+}
+
+.dx-htmleditor-toolbar-format {
+  &.dx-dropdowneditor.dx-editor-filled {
+    background-color: transparent;
+
+    &::after {
+      border-bottom-color: transparent;
+    }
+  }
+
+  &.dx-color-format,
+  &.dx-background-format {
+    .dx-button-content {
+      padding-bottom: calc(#{buttonSizes.$button-padding-block} - 3px); // dx-px-nudge: -3px off the button padding
+    }
+  }
+
+  &.dx-size-format {
+    width: var(--dx-html-editor-toolbar-size-editor-width);
+  }
+}
+
+.dx-htmleditor-toolbar-separator {
+  height: calc(#{toolbarSizes.$toolbar-height} / 2);
+  border-inline-start-color: var(--dx-html-editor-toolbar-border);
+}
+
+.dx-htmleditor-toolbar-menu-separator {
+  border-top-color: var(--dx-html-editor-toolbar-border);
+  margin-top: var(--dx-html-editor-toolbar-menu-separator-margin);
+  margin-bottom: var(--dx-html-editor-toolbar-menu-separator-margin);
+}
+
+.dx-resize-frame {
+  border-color: var(--dx-html-editor-resize-frame-border);
+
+  .dx-resizable-handle-corner-top-right,
+  .dx-resizable-handle-corner-top-left,
+  .dx-resizable-handle-corner-bottom-right,
+  .dx-resizable-handle-corner-bottom-left {
+    background-color: var(--dx-html-editor-resize-trigger);
+  }
+
+  .dx-resizable-handle-top,
+  .dx-resizable-handle-left,
+  .dx-resizable-handle-right,
+  .dx-resizable-handle-bottom {
+    &::after {
+      background-color: var(--dx-html-editor-resize-trigger);
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
+  .dx-collection .dx-field-item:not(.dx-last-col) {
+    padding-inline-end: var(--dx-html-editor-add-image-dialog-padding-inline-end);
+  }
+
+  .dx-fix-ratio-container {
+    .dx-textbox {
+      width: calc(100% - #{buttonSizes.$button-height} - var(--dx-html-editor-add-image-dialog-padding-inline-end));
+    }
+
+    .dx-buttongroup {
+      margin-inline-start: var(--dx-html-editor-add-image-dialog-padding-inline-end);
+      width: buttonSizes.$button-height;
+      margin-top: calc((#{$global-inline-widget-height} - #{buttonSizes.$button-height}) / 2);
+    }
+  }
+
+  .dx-collection .dx-field-item:not(.dx-first-col) {
+    padding-inline-start: 0;
+  }
+
+  .dx-tabs {
+    padding: 0 var(--dx-html-editor-add-image-dialog-tabs-padding);
+  }
+
+  .dx-fileuploader-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--dx-html-editor-input-wrapper-gap);
+    padding: var(--dx-html-editor-add-image-dialog-file-uploader-padding);
+    border-width: var(--dx-html-editor-file-uploader-input-wrapper-border-width);
+    border-style: dashed;
+    border-color: var(--dx-html-editor-file-uploader-input-wrapper-border);
+    border-radius: var(--dx-html-editor-file-uploader-input-wrapper-border-radius);
+    background-color: var(--dx-html-editor-file-uploader-input-wrapper-bg);
+
+    &::after,
+    &::before {
+      content: none;
+    }
+
+    .dx-fileuploader-input-label {
+      text-align: center;
+      border-width: 0;
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup {
+  .dx-fileuploader-dragover {
+    .dx-fileuploader-input {
+      padding-top: fileUploaderSizes.$file-uploader-padding-block;
+      padding-bottom: calc(#{fileUploaderSizes.$file-uploader-padding-block} + 1px); // dx-px-nudge: +1px over the file uploader padding
+    }
+
+    .dx-fileuploader-content {
+      background-color: var(--dx-html-editor-uploader-cover-bg);
+    }
+  }
+}
+
+.dx-formdialog-field-target .dx-field-item-content {
+  text-align: start;
+}
+
+// a mention renders wherever the editor's value is rendered, so it reads the system tier
+.dx-mention {
+  background-color: var(--dx-mention-bg);
+}
+
+.dx-suggestion-list-wrapper {
+  @include dx-dropdownlist-list-appearance();
+}
+
+.dx-table-resize-frame {
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
+    background-color: var(--dx-html-editor-highlighted-row-bg);
+  }
+}
+
+.dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper .dx-overlay-content {
+  box-shadow: popupSizes.$popup-content-box-shadow;
+}
+
+.dx-aidialog-controls {
+  gap: var(--dx-html-editor-ai-dialog-selects-gap);
+
+  .dx-selectbox {
+    max-width: calc(50% - var(--dx-html-editor-ai-dialog-selects-gap) * 0.5);
+  }
+}
+
+.dx-aidialog-content {
+  padding: var(--dx-html-editor-ai-dialog-content-padding);
+  gap: var(--dx-html-editor-ai-dialog-content-gap);
+}
+
+.dx-aidialog {
+  .dx-pending-indicator {
+    @include dx-pending-indicator-centered();
+  }
+
+  &.dx-popup-wrapper > .dx-overlay-content {
+    border-radius: var(--dx-html-editor-ai-dialog-border-radius);
+  }
+}

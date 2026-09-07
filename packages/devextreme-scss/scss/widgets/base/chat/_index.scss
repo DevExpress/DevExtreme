@@ -1,11 +1,35 @@
+$chat-disabled-opacity: 0.5 !default;
+$chat-file-name-font-weight: 600 !default;
+$chat-editing-preview-caption-font-weight: 500 !default;
+
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$chat-messagebox-border-block-start-width: 1px !default;
+$chat-messagebubble-padding-image: 4px !default;
+$chat-messagebubble-border-radius-image: 8px !default;
+$chat-messagebubble-max-width-image: 400px !default;
+$chat-messagebubble-max-height-image: 400px !default;
+
 @use "../mixins" as *;
-@use "layout/chat" as *;
+@use "layout/chat" as * with (
+  $disabled-opacity: $chat-disabled-opacity,
+);
 @use "layout/chat-avatar" as *;
-@use "layout/chat-fileview" as *;
+@use "layout/chat-fileview" as * with (
+  $file-name-font-weight: $chat-file-name-font-weight,
+);
 @use "layout/chat-alertlist" as *;
-@use "layout/chat-messagebox" as *;
-@use "layout/chat-messagebox-editing-preview" as *;
-@use "layout/chat-messagebubble" as *;
+@use "layout/chat-messagebox" as * with (
+  $messagebox-border-block-start-width: $chat-messagebox-border-block-start-width,
+);
+@use "layout/chat-messagebox-editing-preview" as * with (
+  $editing-preview-caption-font-weight: $chat-editing-preview-caption-font-weight,
+);
+@use "layout/chat-messagebubble" as * with (
+  $messagebubble-padding-image: $chat-messagebubble-padding-image,
+  $messagebubble-border-radius-image: $chat-messagebubble-border-radius-image,
+  $messagebubble-max-width-image: $chat-messagebubble-max-width-image,
+  $messagebubble-max-height-image: $chat-messagebubble-max-height-image,
+);
 @use "layout/chat-confirmationpopup" as *;
 @use "layout/chat-messagegroup" as *;
 @use "layout/chat-messagelist" as *;

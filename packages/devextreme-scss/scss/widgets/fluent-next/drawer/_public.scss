@@ -1,0 +1,5 @@
+@use "colors" as *;
+
+@mixin publish {
+  --dx-drawer-backdrop: #{$drawer-backdrop};
+}

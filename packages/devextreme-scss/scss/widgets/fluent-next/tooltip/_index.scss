@@ -1,0 +1,38 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/tooltip" with (
+  $tooltip-overlay-content-min-width: var(--dx-tooltip-overlay-content-min-width),
+  $tooltip-overlay-content-min-height: var(--dx-tooltip-overlay-content-min-height),
+  $tooltip-popup-content-padding: var(--dx-tooltip-popup-content-padding),
+);
+
+.dx-tooltip-wrapper {
+  .dx-overlay-content {
+    background-color: var(--dx-tooltip-bg);
+    color: var(--dx-tooltip-content);
+    border: var(--dx-tooltip-overlay-content-border);
+    border-radius: var(--dx-tooltip-border-radius);
+    min-height: auto;
+
+    .dx-popup-content {
+      padding: var(--dx-tooltip-padding);
+      font-size: var(--dx-tooltip-font-size);
+    }
+  }
+
+  &.dx-popover-wrapper .dx-popover-arrow {
+    &::after {
+      box-shadow: var(--dx-tooltip-box-shadow);
+      background: var(--dx-tooltip-bg);
+      border-top-right-radius: var(--dx-tooltip-arrow-border-radius);
+    }
+  }
+
+  &.dx-popover-wrapper.dx-position-top {
+    .dx-popover-arrow {
+      &::after {
+        border-bottom-left-radius: var(--dx-tooltip-arrow-border-radius);
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$slider-handle-size: null !default;
+$slider-wrapper-height: null !default;
+$slider-tooltip-width: null !default;
+
+$slider-height: ds.$spacing-280 !default; // for fieldset height
+$slider-border-radius: 50% !default;
+$slider-track-height: null !default;
+$slider-track-border-radius: ds.$border-radius-20 !default;
+
+@if $size == "default" {
+  $slider-track-height: ds.$spacing-40 !default;
+  $slider-handle-size: ds.$spacing-200 !default;
+  $slider-wrapper-height: ds.$spacing-320 !default;
+  $slider-tooltip-width: ds.$spacing-340 !default;
+}
+
+@else if $size == "compact" {
+  $slider-track-height: ds.$spacing-20 !default;
+  $slider-handle-size: ds.$spacing-160 !default;
+  $slider-wrapper-height: ds.$spacing-260 !default;
+  $slider-tooltip-width: ds.$spacing-280 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$slider-handle-border-width: ds.$border-width-10 !default;
+$slider-handle-inner-border-width: ds.$border-width-30 !default;
+$slider-tooltip-top-padding-block-start: ds.$spacing-60 !default;
+$slider-label-bottom-inset-block-end: -18px !default; // dx-offscale: -18px
+$slider-label-top-inset-block-start: -15px !default; // dx-offscale: -15px
+
+// Base-layer sizing injected with design tokens (wave B2)
+$slider-label-bottom-padding-block-end: ds.$spacing-140 !default;
+$slider-label-top-padding-block-start: ds.$spacing-140 !default;
+
+// Base-layer sizing injected with design tokens (wave B12)
+$slider-tooltip-height: ds.$spacing-280 !default;
