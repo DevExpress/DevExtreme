@@ -65,7 +65,12 @@ dependencies and the DevExtreme build come from the host.
 ```bash
 docker/run.sh                       # the whole suite, as CI runs it
 docker/run.sh --ui                  # then open http://localhost:9323
+docker/run.sh --workers=3           # the concurrency of a particular job
 ```
+
+The screenshot budget is the strict one, but the run takes half the cores rather than the eight a
+CI agent gets: that many browsers starve each other on a developer machine, and a timing-sensitive
+test then fails for a reason that does not exist on CI.
 
 Open the UI on `localhost` — the address Playwright prints, `0.0.0.0`, is not a secure origin and
 its trace viewer will not load there.
