@@ -239,6 +239,7 @@
       },
       "inputs": [
         "{projectRoot}/build/tokens/**/*.ts",
+        "{projectRoot}/tools/naming/**/*.ts",
         "{projectRoot}/tests/**/*.ts",
         "{projectRoot}/tsconfig.json"
       ],
