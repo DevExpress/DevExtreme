@@ -256,13 +256,15 @@ const calculatePosition = function (what, options) {
     if (isWindow(of[0])) {
       h.atLocation = of.scrollLeft();
       v.atLocation = of.scrollTop();
-      if (devices.real().deviceType === 'phone' && of[0].visualViewport) {
+      const device = devices.real();
+
+      if (device.deviceType === 'phone' && of[0].visualViewport) {
         h.atLocation = Math.max(h.atLocation, of[0].visualViewport.offsetLeft);
         v.atLocation = Math.max(v.atLocation, of[0].visualViewport.offsetTop);
         h.atSize = of[0].visualViewport.width;
         v.atSize = of[0].visualViewport.height;
       } else {
-        const isIos = devices.real().platform === 'ios';
+        const isIos = device.platform === 'ios';
 
         h.atSize = getWidth(of);
         v.atSize = isIos ? of[0].innerHeight : getHeight(of);
