@@ -734,7 +734,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
           itemSize = 0;
         }
         lastLoadIndex = currentItem.loadIndex;
-      } else if (dataSourceAdapter && isItemCountableByDataSource(currentItem, dataSourceAdapter as unknown as GroupCountableDataSource)) {
+      } else if (isItemCountableByDataSource(currentItem, dataSourceAdapter as unknown as GroupCountableDataSource)) {
         if (firstCountableItem) {
           firstCountableItem = false;
         } else {
