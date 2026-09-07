@@ -1,0 +1,15 @@
+@mixin publish {
+  --dx-grid-cell-removed-border: var(--dx-grid-border);
+  --dx-grid-cell-removed-content: var(--dx-grid-column-chooser-item-content);
+  --dx-grid-column-chooser-item-bg: var(--dx-grid-column-chooser-bg);
+  --dx-grid-column-chooser-item-content: var(--dx-grid-content);
+  --dx-grid-drag-header-bg: var(--dx-grid-bg);
+  --dx-grid-group-row-content: var(--dx-grid-column-chooser-item-content);
+  --dx-grid-header-cell-font-size: var(--dx-grid-cell-font-size);
+  --dx-grid-header-filter-empty-icon: var(--dx-grid-header-filter-icon);
+  --dx-grid-header-filter-icon: var(--dx-grid-column-chooser-item-content);
+  --dx-grid-row-border-selected: var(--dx-grid-border);
+  --dx-grid-row-content-selected: var(--dx-grid-content);
+  --dx-grid-row-removed-bg: var(--dx-grid-row-bg-hovered);
+  --dx-grid-summary-bg: var(--dx-grid-bg);
+}

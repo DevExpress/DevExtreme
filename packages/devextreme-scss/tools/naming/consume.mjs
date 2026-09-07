@@ -110,7 +110,7 @@ const packageRoot = join(here, '..', '..');
 const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const registries = JSON.parse(readFileSync(join(here, 'registries.json'), 'utf8'));
 
-/* The tier's contents are read from the handwritten _public.scss (wave F13 removed the json manifest). */
+/* The tier's contents are read from the committed _public.scss (written by publish.mjs) and _public-links.scss (hand-written). */
 const walkScss = (dir, out = []) => {
   readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
     const abs = join(dir, entry.name);
@@ -121,7 +121,7 @@ const walkScss = (dir, out = []) => {
 };
 const surface = {
   names: walkScss(themeRoot)
-    .filter((file) => file.endsWith('_public.scss'))
+    .filter((file) => file.endsWith('_public.scss') || file.endsWith('_public-links.scss'))
     .flatMap((file) => {
       const folder = file.slice(themeRoot.length + 1).split('/')[0];
       return [...readFileSync(file, 'utf8').matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]

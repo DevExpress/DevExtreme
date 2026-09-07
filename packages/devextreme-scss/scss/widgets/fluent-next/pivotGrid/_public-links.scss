@@ -1,0 +1,4 @@
+@mixin publish {
+  --dx-pivot-grid-chevron-icon: var(--dx-pivot-grid-area-content);
+  --dx-pivot-grid-field-area-box-content: var(--dx-pivot-grid-area-content);
+}

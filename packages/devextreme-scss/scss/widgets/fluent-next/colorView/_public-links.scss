@@ -1,0 +1,4 @@
+@mixin publish {
+  --dx-color-view-bg-box-palette-cell-bg: var(--dx-surface-overlay);
+  --dx-color-view-hue-scale-height: var(--dx-color-view-palette-height);
+}
