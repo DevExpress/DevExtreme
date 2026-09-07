@@ -358,6 +358,17 @@
 }
 
 .dx-diagram-toolbar {
+  .dx-diagram-image-dropdown-item,
+  .dx-diagram-color-edit-item {
+    .dx-dropdowneditor-field-before-template-wrapper {
+      .dx-diagram-i,
+      .dx-icon {
+        margin-left: var(--dx-diagram-icon-margin-inline-start);
+        margin-right: var(--dx-diagram-icon-margin-inline-end);
+      }
+    }
+  }
+
   .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
     background-color: var(--dx-diagram-normal-format-bg-active);
 
@@ -422,15 +433,26 @@
   .dx-diagram-image-dropdown-item,
   .dx-diagram-color-edit-item {
     .dx-dropdowneditor-field-before-template-wrapper {
-      .dx-diagram-i,
-      .dx-icon {
-        margin-left: var(--dx-diagram-icon-margin-inline-start);
-        margin-right: var(--dx-diagram-icon-margin-inline-end);
-      }
-
       .dx-icon {
         font-size: $diagram-toolbar-icon-size;
         color: $diagram-content;
+      }
+    }
+  }
+}
+
+/*
+ * The toolbar's overflow menu is a portal: its popup is mounted in the overlay container, under no
+ * diagram root, so the diagram tier does not reach it and a var() read would leave the margin at 0.
+ */
+.dx-dropdownmenu-popup {
+  .dx-diagram-image-dropdown-item,
+  .dx-diagram-color-edit-item {
+    .dx-dropdowneditor-field-before-template-wrapper {
+      .dx-diagram-i,
+      .dx-icon {
+        margin-left: $diagram-icon-margin-inline-start;
+        margin-right: $diagram-icon-margin-inline-end;
       }
     }
   }

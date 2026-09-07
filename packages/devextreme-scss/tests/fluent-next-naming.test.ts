@@ -487,9 +487,11 @@ const findings = {
    * --dx-* tier is bypassed — the pixel is right, but a per-instance override silently does
    * nothing there. Everything convertible was converted by waves F3–F9 (declarations,
    * calc-interpolations, allowlisted mixin arguments, with() wiring values); this exact list is
-   * the irreducible remainder — Sass math (math.div, `2 *`), unguarded-math mixin arguments and
-   * Sass-local derivations — plus the declaration files and with() keys, which are excluded by
-   * construction. A new entry means a new bypass: consume it or justify it here. The tier name
+   * the irreducible remainder — Sass math (math.div, `2 *`), unguarded-math mixin arguments,
+   * Sass-local derivations and portal branches (a rule that paints the component inside another
+   * widget's overlay, where the tier does not reach: diagram's toolbar overflow menu) — plus the
+   * declaration files and with() keys, which are excluded by construction. A new entry means a new
+   * bypass: consume it or justify it here. The tier name
    * set comes from the committed _public.scss / _public-links.scss files (their own gate lives in
    * the "wave F" block below).
    */
