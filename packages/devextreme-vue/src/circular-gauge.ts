@@ -49,6 +49,7 @@ type AccessibleOptions = Pick<Properties,
   "containerBackgroundColor" |
   "disabled" |
   "elementAttr" |
+  "encodeHtml" |
   "export" |
   "geometry" |
   "loadingIndicator" |
@@ -89,6 +90,7 @@ const componentConfig = {
     containerBackgroundColor: String,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
+    encodeHtml: Boolean,
     export: Object as PropType<Record<string, any>>,
     geometry: Object as PropType<Record<string, any>>,
     loadingIndicator: Object as PropType<Record<string, any>>,
@@ -125,6 +127,7 @@ const componentConfig = {
     "update:containerBackgroundColor": null,
     "update:disabled": null,
     "update:elementAttr": null,
+    "update:encodeHtml": null,
     "update:export": null,
     "update:geometry": null,
     "update:loadingIndicator": null,

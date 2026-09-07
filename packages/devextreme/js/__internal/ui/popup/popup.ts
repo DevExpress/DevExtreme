@@ -45,7 +45,7 @@ import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type {
   GeometryOptions, InternalPositionConfig, OverlayActions, OverlayInternalProperties,
 } from '@ts/ui/overlay/overlay';
@@ -245,10 +245,14 @@ class Popup<
     const e = options.originalEvent;
     const $target = $(e.target);
 
-    if (this._$content && !$target.is(this._$content)
-        && options.keyName === ESC_KEY_NAME
-        && !e.isDefaultPrevented()
-        && !_ignoreCloseOnChildEscape) {
+    const shouldCloseOnChildEscape = !!this._$content
+      && !$target.is(this._$content)
+      && options.keyName === ESC_KEY_NAME
+      && !e.isDefaultPrevented()
+      && !_ignoreCloseOnChildEscape
+      && !this._isEscapeHandledByOverlayAbove();
+
+    if (shouldCloseOnChildEscape) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.hide();
     }

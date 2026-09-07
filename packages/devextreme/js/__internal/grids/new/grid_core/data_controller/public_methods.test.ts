@@ -1,8 +1,8 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
-import { DataSource } from '@ts/data/data_source/m_data_source';
-import ArrayStore from '@ts/data/m_array_store';
+import ArrayStore from '@js/data/array_store';
+import DataSource from '@js/data/data_source';
 
 import { getContext } from '../di.test_utils';
 import type { Options } from '../options';

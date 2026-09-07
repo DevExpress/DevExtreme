@@ -6,7 +6,6 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
-import type { Store } from '@js/common/data';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
 import type { DataChange as EditingDataChange, GridsEditMode } from '@js/common/grids';
 import devices from '@js/core/devices';
@@ -28,6 +27,7 @@ import {
 import { confirm } from '@js/ui/dialog';
 import { current, isFluent } from '@js/ui/themes';
 import domUtils from '@ts/core/utils/m_dom';
+import type Store from '@ts/data/abstract_store';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
@@ -692,7 +692,7 @@ class EditingControllerImpl extends modules.ViewController {
   protected getPopupContent(): any {}
 
   /**
-   * @extended: TreeList's editing
+   * @extended: TreeList's editing, DataGrid's grouping
    */
   protected _isProcessedItem(item) {
     return false;
@@ -2356,6 +2356,7 @@ class EditingControllerImpl extends modules.ViewController {
 
       if (this._isButtonDisabled(button, options)) {
         $button.addClass('dx-state-disabled');
+        this.setAria('disabled', 'true', $button);
       } else if (!button.template || button.onClick) {
         eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction((e) => {
           button.onClick?.call(button, extend({}, e, { row: options.row, column: options.column }));

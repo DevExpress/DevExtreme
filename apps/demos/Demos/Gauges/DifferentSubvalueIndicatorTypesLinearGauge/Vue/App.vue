@@ -99,7 +99,7 @@ import {
 
 const customizeText = ({ valueText }: Record<string, any>) => `$${valueText}`;
 </script>
-<style scoped>
+<style>
 #gauge-demo {
   text-align: center;
   width: 100%;

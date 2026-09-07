@@ -49,8 +49,8 @@ QUnit.module('events unsubscribing', {
 
         registerEmitter({
             emitter: class extends Emitter {
-                ctor(...args) {
-                    super.ctor(...args);
+                constructor(...args) {
+                    super(...args);
 
                     that.emitterCreated++;
                 }

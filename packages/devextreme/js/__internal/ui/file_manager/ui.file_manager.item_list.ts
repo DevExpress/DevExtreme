@@ -3,13 +3,13 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dblClickName } from '@js/common/core/events/double_click';
 import { addNamespace } from '@js/common/core/events/utils/index';
-import { CustomStore } from '@js/common/data/custom_store';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { when } from '@js/core/utils/deferred';
 import { getImageContainer } from '@js/core/utils/icon';
 import { hasWindow } from '@js/core/utils/window';
+import CustomStore from '@js/data/custom_store';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 

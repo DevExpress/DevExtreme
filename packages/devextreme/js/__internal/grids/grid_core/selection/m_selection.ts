@@ -240,7 +240,7 @@ export class SelectionController extends modules.Controller {
       },
       load(options) {
         // @ts-expect-error
-        return dataController.dataSource()?.load(options) || new Deferred().resolve([]);
+        return dataController.dataSource()?.customLoader.load(options) || new Deferred().resolve([]);
       },
       // eslint-disable-next-line
       plainItems(cached?) {

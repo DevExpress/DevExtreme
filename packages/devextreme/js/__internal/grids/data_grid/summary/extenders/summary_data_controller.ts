@@ -11,20 +11,24 @@ import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types'
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 
 import type { ProcessGroupItemsOptions } from '../../grouping/types';
+import { isSameContinuationState } from '../../grouping/utils';
 import gridCore from '../../m_core';
 import { isDataColumn } from '../../m_utils';
 import { DATAGRID_GROUP_FOOTER_ROW_TYPE, DATAGRID_TOTAL_FOOTER_ROW_TYPE } from '../const';
+import type { SummaryDataSourceAdapter } from '../m_summary';
 import type {
   CalculateSummaryCellsArgs, ColumnMap, FooterItem, SummaryCellItem,
   SummaryGroupItem,
 } from '../types';
-import { getColumnFromMap, getSummaryCellIndex } from '../utils';
+import { getColumnFromMap, getSummaryCellIndex, isSummaryGroupItem } from '../utils';
 import { getGroupAggregates } from '../utils/get_group_aggregates';
 import { getSummaryItemIndex } from '../utils/get_summary_item_index';
 
 export const summaryDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class SummaryDataControllerExtender extends Base {
+  public declare _dataSource?: SummaryDataSourceAdapter | null;
+
   private _footerItems!: FooterItem[];
 
   public init(): void {
@@ -42,7 +46,7 @@ export const summaryDataControllerExtender = (
 
   public getTotalSummaryValue(summaryItemName?: string | number | null): unknown {
     const summaryItemIndex = getSummaryItemIndex(this.option('summary.totalItems'), summaryItemName);
-    const aggregates = this._dataSource.totalAggregates();
+    const aggregates = this._dataSource?.totalAggregates() ?? [];
 
     if (aggregates.length && summaryItemIndex > -1) {
       return aggregates[summaryItemIndex];
@@ -66,14 +70,14 @@ export const summaryDataControllerExtender = (
     return false;
   }
 
-  protected _processGroupItems(
-    items: RawItemData[],
+  protected processGroupItems(
+    items: RawItemData[] | null | undefined,
     groupsCount: number,
     options?: ProcessGroupItemsOptions & { isGroupFooterVisible?: boolean },
   ): RawItemData[] {
     const data = options?.data;
     // @ts-expect-error
-    const result = super._processGroupItems(items, groupsCount, options) as RawItemData[];
+    const result = super.processGroupItems(items, groupsCount, options) as RawItemData[];
 
     if (options) {
       options.isGroupFooterVisible ??= this._isGroupFooterVisible();
@@ -96,7 +100,7 @@ export const summaryDataControllerExtender = (
     return result;
   }
 
-  protected _processGroupItem(
+  protected processGroupItem(
     groupItem: SummaryGroupItem,
     options: ItemProcessingOptions<Column> & {
       summaryGroupItems?: SummaryGroupItemOption[];
@@ -268,6 +272,33 @@ export const summaryDataControllerExtender = (
         isDataColumn(column) ? (column?.index ?? -1) : -1
       ),
     });
+  }
+
+  protected isSameRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
+    if (isSummaryGroupItem(item1)
+      && JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
+      return false;
+    }
+
+    if (item1.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE
+      && !isSameContinuationState(item1, item2)) {
+      return false;
+    }
+
+    return super.isSameRowState(item1, item2);
+  }
+
+  protected getChangedColumnIndices(
+    oldItem: ProcessedItem,
+    newItem: ProcessedItem,
+    visibleRowIndex: number,
+    isLiveUpdate?: boolean,
+  ): number[] | undefined {
+    if (newItem.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
+      return undefined;
+    }
+
+    return super.getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
   }
 
   protected _updateItemsCore(change: DataChange): void {

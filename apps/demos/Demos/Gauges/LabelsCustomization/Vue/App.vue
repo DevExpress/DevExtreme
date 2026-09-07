@@ -37,7 +37,7 @@ const format = {
 
 const customizeText = ({ valueText }: Record<string, any>) => `${valueText} %`;
 </script>
-<style scoped>
+<style>
 #gauge {
   height: 440px;
   width: 100%;

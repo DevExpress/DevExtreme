@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const dblclickEvent = require('common/core/events/dblclick');
-const { dblClick } = require('__internal/events/m_dblclick');
+const { dblClick } = require('__internal/events/dblclick');
 const pointerMock = require('../../helpers/pointerMock.js');
 
 QUnit.testStart(function() {

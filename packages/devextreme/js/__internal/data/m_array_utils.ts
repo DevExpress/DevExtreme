@@ -8,6 +8,7 @@ import { deepExtendArraySafe } from '@js/core/utils/object';
 import {
   isDefined, isEmptyObject, isObject, isPlainObject,
 } from '@js/core/utils/type';
+import { isCollectionLike } from '@ts/core/utils/m_object';
 
 function hasKey(target, keyOrKeys) {
   let key;
@@ -84,6 +85,10 @@ function setDataByKeyMapValue(array, key, data) {
 }
 
 function cloneInstanceWithChangedPaths(instance, changes, clonedInstances) {
+  if (isCollectionLike(instance)) {
+    return instance;
+  }
+
   clonedInstances = clonedInstances || new WeakMap();
 
   const result = instance ? Object.create(Object.getPrototypeOf(instance)) : {};

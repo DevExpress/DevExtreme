@@ -26,7 +26,7 @@ import { focusable as focusableSelector } from '@ts/core/utils/m_selectors';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 
 export const WIDGET_CLASS = 'dx-widget';
 export const DISABLED_STATE_CLASS = 'dx-state-disabled';
@@ -561,10 +561,24 @@ class Widget<
     }
   }
 
+  _needsDisabledStateOnRoot(): boolean {
+    return true;
+  }
+
   _toggleDisabledState(value: boolean | undefined): void {
-    this.$element().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+    const $element = this.$element();
+
+    $element.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+
+    const $ariaTarget = this._getAriaTarget();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this.setAria('disabled', value || undefined);
+    const state = value || undefined;
+
+    this.setAria('disabled', state, $ariaTarget);
+
+    if (this._needsDisabledStateOnRoot() && $ariaTarget.get(0) !== $element.get(0)) {
+      this.setAria('disabled', state, $element);
+    }
   }
 
   _toggleIndependentState(): void {

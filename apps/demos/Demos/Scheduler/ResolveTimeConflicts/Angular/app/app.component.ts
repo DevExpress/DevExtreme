@@ -17,16 +17,10 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
   imports: [
@@ -91,6 +85,15 @@ export class AppComponent {
         this.setConflictError(false);
         this.form?.validate();
       }
+    });
+
+    this.form?.on('contentReady', (contentReadyEvent: DxFormTypes.ContentReadyEvent) => {
+      const untilEditor = contentReadyEvent.component.getEditor('recurrenceEndUntilEditor');
+      untilEditor?.on('valueChanged', () => {
+        contentReadyEvent.component.getEditor('recurrenceRepeatEndEditor')?.option('value') !== 'until'
+        && untilEditor?.option('value', new Date(2026, 8, 3));
+      });
+      untilEditor?.option('value', new Date(2026, 8, 3));
     });
   };
 

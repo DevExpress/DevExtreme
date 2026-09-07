@@ -10,6 +10,22 @@ import HeaderTemplate from './HeaderTemplate.tsx';
 import PriorityComponent from './Priority.tsx';
 import Progress from './Progress.tsx';
 
+const headerRender = (model: CardViewTypes.CardTemplateData) => (
+  <HeaderTemplate text={((model.card.data) as Task).Task_Subject} />
+);
+
+const priorityFieldValueRender = (model: CardViewTypes.FieldTemplateData) => (
+  <PriorityComponent priorityID={model.field.value} />
+);
+
+const employeeFieldValueRender = (model: CardViewTypes.FieldTemplateData) => (
+  <EmployeeComponent employeeID={model.field.value} />
+);
+
+const completionFieldRender = (model: CardViewTypes.FieldTemplateData) => (
+  <Progress value={model.field.value} />
+);
+
 const App = () => (
   <CardView
     dataSource={tasks}
@@ -18,18 +34,14 @@ const App = () => (
   >
     <CardHeader
       visible={true}
-      render={
-        (model: CardViewTypes.CardTemplateData) => <HeaderTemplate text={((model.card.data) as Task).Task_Subject} />
-      }
+      render={headerRender}
     />
     <Paging pageSize={12} />
 
     <Column
       dataField="Task_Priority"
       caption="Priority"
-      fieldValueRender={
-        (model: CardViewTypes.FieldTemplateData) => <PriorityComponent priorityID={model.field.value} />
-      }
+      fieldValueRender={priorityFieldValueRender}
     />
     <Column
       dataField="Task_Start_Date"
@@ -44,9 +56,7 @@ const App = () => (
     <Column
       dataField="Task_Assigned_Employee_ID"
       caption="Assigned to"
-      fieldValueRender={
-        (model: CardViewTypes.FieldTemplateData) => <EmployeeComponent employeeID={model.field.value} />
-      }
+      fieldValueRender={employeeFieldValueRender}
     />
     <Column
       dataField="Task_Status"
@@ -55,9 +65,7 @@ const App = () => (
     <Column
       dataField="Task_Completion"
       caption="Completed"
-      fieldRender={
-        (model: CardViewTypes.FieldTemplateData) => <Progress value={model.field.value} />
-      }
+      fieldRender={completionFieldRender}
     />
   </CardView>
 );

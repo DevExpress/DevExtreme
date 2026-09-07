@@ -10,7 +10,7 @@ import type { Properties } from '@js/ui/range_slider';
 import { applyServerDecimalSeparator } from '@ts/core/utils/m_common';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { SwipeUpdateEvent } from '@ts/events/m_swipe';
+import type { SwipeUpdateEvent } from '@ts/events/swipe';
 import type { SliderPointerEvent } from '@ts/ui/slider/slider';
 import Slider from '@ts/ui/slider/slider';
 

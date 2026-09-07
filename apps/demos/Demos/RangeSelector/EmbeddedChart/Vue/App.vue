@@ -39,7 +39,7 @@ import { dataSource } from './data.ts';
 
 const range = reactive([new Date(2024, 11, 25), new Date(2025, 0, 1)]);
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 310px;
 }

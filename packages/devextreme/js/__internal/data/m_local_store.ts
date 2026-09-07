@@ -5,7 +5,7 @@ import { errors } from '@js/common/data/errors';
 import domAdapter from '@js/core/dom_adapter';
 import { getWindow } from '@js/core/utils/window';
 
-import Store from './m_abstract_store';
+import Store from './abstract_store';
 
 const window = getWindow();
 
@@ -128,7 +128,6 @@ class LocalStore extends ArrayStore {
 }
 
 // Preserve alias registration used by Store.create('local', ...)
-// @ts-expect-error register ES6 class with alias
 Store.registerClass(LocalStore, 'local');
 
 export default LocalStore;

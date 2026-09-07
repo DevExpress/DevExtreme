@@ -8,7 +8,7 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCore from './m_core';
 
 const data = (Base: ModuleType<DataController>) => class DataGridEditingDataControllerExtender extends editingDataControllerExtender(Base) {
-  protected _changeRowExpandCore(key) {
+  protected changeRowExpandCore(key) {
     const editingController = this._editingController;
 
     if (Array.isArray(key)) {
@@ -16,7 +16,7 @@ const data = (Base: ModuleType<DataController>) => class DataGridEditingDataCont
     }
 
     // @ts-expect-error
-    return super._changeRowExpandCore.apply(this, arguments);
+    return super.changeRowExpandCore.apply(this, arguments);
   }
 };
 

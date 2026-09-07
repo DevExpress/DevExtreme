@@ -31,13 +31,29 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         }
 
         return {
-            _applyFilter: function() {
+            applyFilter: function() {
                 this._isFilterApplied = true;
             },
 
             changedArgs: [],
 
             dataSource: function() {
+                const store = function() {
+                    return new ArrayStore(options.items);
+                };
+
+                const loadCustomResult = (loadOptions) => {
+                    const d = $.Deferred();
+
+                    store().load(loadOptions)
+                        .done((data, extra) => {
+                            d.resolve({ data: data, extra: extra });
+                        })
+                        .fail(d.reject);
+
+                    return d;
+                };
+
                 return {
                     beginLoading: function() {
                     },
@@ -49,11 +65,19 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     loadOptions: function() {
                         return {};
                     },
-                    store: function() {
-                        return new ArrayStore(options.items);
+                    store: store,
+                    load: function(loadOptions) {
+                        return store().load(loadOptions);
                     },
-                    load: function(options) {
-                        return this.store().load(options);
+                    customLoader: {
+                        load: loadCustomResult,
+                        loadFromStore: loadCustomResult,
+                        isLoading: function() {
+                            return false;
+                        },
+                        isLoadingAll: function() {
+                            return false;
+                        }
                     }
                 };
             },
@@ -808,6 +832,21 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             cancelAll: commonUtils.noop,
 
+            loadOptions: function() {
+                return {};
+            },
+            beginLoading: commonUtils.noop,
+            endLoading: commonUtils.noop,
+            key: function() {
+                return options.key;
+            },
+            select: function() {
+                return options.select;
+            },
+            cancel: function() {
+                return false;
+            },
+
             on(eventName, eventHandler) {
                 this[eventName].add(eventHandler);
             },
@@ -955,11 +994,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         _subscribeToEvents(rootElement) { }
     };
 
+    // The dataSource controller is a leaf that the data controller resolves in init(),
+    // so it is always included rather than listed by every caller.
+    const ALWAYS_INCLUDED_MODULES = ['dataSource'];
+
     exports['setup' + nameWidget + 'Modules'] = function(that, moduleNames, options) {
         const modules = [];
 
         $.each(gridCore.modules, function() {
-            if($.inArray(this.name, moduleNames) !== -1) {
+            if($.inArray(this.name, moduleNames) !== -1 || $.inArray(this.name, ALWAYS_INCLUDED_MODULES) !== -1) {
                 modules.push(this);
             }
         });

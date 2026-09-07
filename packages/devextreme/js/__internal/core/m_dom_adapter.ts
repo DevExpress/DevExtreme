@@ -10,7 +10,7 @@ const DOCUMENT_FRAGMENT_NODE = 11;
 
 export interface DomAdapter {
   querySelectorAll: (element, selector) => any;
-  elementMatches: (element, selector) => any;
+  elementMatches: (element, selector) => boolean;
   getActiveElement: (element?: HTMLElement | null) => HTMLElement;
   getDocument: () => Document;
   getDocumentElement: () => HTMLDocument & {
@@ -24,7 +24,7 @@ export interface DomAdapter {
   getHead: () => any;
   listen: (element, event, callback, options?) => any;
   getReadyState: () => DocumentReadyState;
-  isNode: (node: unknown) => boolean;
+  isNode: (node: unknown) => node is Node;
   isDocument: (element: any) => boolean;
   isDocumentFragment: (element: any) => boolean;
   getBody: () => HTMLBodyElement;
@@ -96,7 +96,7 @@ const nativeDOMAdapterStrategy: DomAdapter = {
     return context.createAttribute(text);
   },
 
-  isNode(element) {
+  isNode(element: unknown): element is Node {
     return !!element && typeof element === 'object' && 'nodeType' in element && 'nodeName' in element;
   },
 
