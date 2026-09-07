@@ -110,6 +110,19 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
 
     /**
+     * [descr:BaseWidgetOptions.encodeHtml]
+    
+     */
+    @Input()
+    get encodeHtml(): boolean {
+        return this._getOption('encodeHtml');
+    }
+    set encodeHtml(value: boolean) {
+        this._setOption('encodeHtml', value);
+    }
+
+
+    /**
      * [descr:dxBulletOptions.endScaleValue]
     
      */
@@ -396,6 +409,13 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() encodeHtmlChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() endScaleValueChange: EventEmitter<number | undefined>;
 
     /**
@@ -514,6 +534,7 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
             { emit: 'colorChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'encodeHtmlChange' },
             { emit: 'endScaleValueChange' },
             { emit: 'marginChange' },
             { emit: 'pathModifiedChange' },

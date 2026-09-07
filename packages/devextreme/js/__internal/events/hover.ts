@@ -1,11 +1,12 @@
 /* eslint-disable max-classes-per-file */
 import registerEvent from '@js/common/core/events/core/event_registrator';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, fireEvent, isTouchEvent } from '@js/common/core/events/utils/index';
 import { data as elementData, removeData } from '@js/core/element_data';
 import devices from '@ts/core/m_devices';
 import type { EmitterEvent } from '@ts/events/core/emitter';
+import type { HandleObject } from '@ts/events/core/events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const HOVERSTART_NAMESPACE = 'dxHoverStart';
 const HOVERSTART = 'dxhoverstart';
@@ -14,11 +15,6 @@ const POINTERENTER_NAMESPACED_EVENT_NAME = addNamespace(pointerEvents.enter, HOV
 const HOVEREND_NAMESPACE = 'dxHoverEnd';
 const HOVEREND = 'dxhoverend';
 const POINTERLEAVE_NAMESPACED_EVENT_NAME = addNamespace(pointerEvents.leave, HOVEREND_NAMESPACE);
-
-interface HoverHandleObj {
-  selector?: string;
-  guid: string;
-}
 
 type HoverHandlersStore = Record<string, (e: EmitterEvent) => void>;
 
@@ -45,7 +41,7 @@ class Hover {
     elementData(element, this._handlerArrayKeyPath, {});
   }
 
-  add(element: Element, handleObj: HoverHandleObj): void {
+  add(element: Element, handleObj: HandleObject): void {
     const handler = (e: EmitterEvent): void => {
       this._handler(e);
     };
@@ -67,10 +63,9 @@ class Hover {
     });
   }
 
-  remove(element: Element, handleObj: HoverHandleObj): void {
+  remove(element: Element, handleObj: HandleObject): void {
     const handlers: HoverHandlersStore = elementData(element, this._handlerArrayKeyPath);
     const handler = handlers[handleObj.guid];
-    // @ts-expect-error off with a selector is not declared in the public events engine type
     eventsEngine.off(element, this._originalEventName, handleObj.selector, handler);
   }
 

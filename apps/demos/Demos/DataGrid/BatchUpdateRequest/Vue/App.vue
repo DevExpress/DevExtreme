@@ -106,7 +106,7 @@ async function sendBatchRequest(url: string, changes: DxDataGridTypes.DataChange
   }
 }
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 440px;
 }

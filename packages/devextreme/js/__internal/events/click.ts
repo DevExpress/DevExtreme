@@ -1,6 +1,6 @@
 import { cancelAnimationFrame, requestAnimationFrame } from '@js/animation/frame';
-import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
+import type { NodesDisposingSubscription } from '@js/common/core/events/utils/event_nodes_disposing';
 import { subscribeNodesDisposing, unsubscribeNodesDisposing } from '@js/common/core/events/utils/event_nodes_disposing';
 import { getEventTarget } from '@js/common/core/events/utils/event_target';
 import { addNamespace, fireEvent } from '@js/common/core/events/utils/index';
@@ -12,6 +12,7 @@ import domUtils from '@ts/core/utils/m_dom';
 import type { EmitterEvent } from '@ts/events/core/emitter';
 import Emitter from '@ts/events/core/emitter';
 import registerEmitter from '@ts/events/core/emitter_registrator';
+import eventsEngine from '@ts/events/core/events_engine';
 
 const CLICK_EVENT_NAME = 'dxclick';
 
@@ -20,11 +21,6 @@ const misc = { requestAnimationFrame, cancelAnimationFrame };
 type NativeClickEvent = Event & {
   DXCLICK_FIRED?: boolean;
 };
-
-interface NodesDisposingSubscription {
-  onceCallback: (...args: unknown[]) => unknown;
-  nodes: Node[];
-}
 
 let prevented: boolean | null = null;
 let lastFiredEvent: NativeClickEvent | null = null;
@@ -122,13 +118,11 @@ class ClickEmitter extends Emitter {
 
     const NATIVE_CLICK_FIXER_NAMESPACE = 'NATIVE_CLICK_FIXER';
     const document = domAdapter.getDocument();
-    // @ts-expect-error subscribeGlobal is not declared in the public events engine type
     eventsEngine.subscribeGlobal(
       document,
       addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE),
       pointerDownHandler,
     );
-    // @ts-expect-error subscribeGlobal is not declared in the public events engine type
     eventsEngine.subscribeGlobal(document, addNamespace('click', NATIVE_CLICK_FIXER_NAMESPACE), nativeClickHandler);
   }
 }());

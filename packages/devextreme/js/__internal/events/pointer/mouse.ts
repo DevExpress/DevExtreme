@@ -1,10 +1,10 @@
 import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
 import type { EmitterEvent } from '@ts/events/core/emitter';
-import type { PointerEventInit } from '@ts/events/pointer/base';
+import type { PointerStrategyEventArgs } from '@ts/events/pointer/base';
 import BaseStrategy from '@ts/events/pointer/base';
-import type { PointerEventMap } from '@ts/events/pointer/m_observer';
-import Observer from '@ts/events/pointer/m_observer';
+import type { PointerEventMap } from '@ts/events/pointer/observer';
+import Observer from '@ts/events/pointer/observer';
 
 /* eslint-disable spellcheck/spell-checker */
 const eventMap: PointerEventMap = {
@@ -71,7 +71,7 @@ class MouseStrategy extends BaseStrategy {
     observer.reset();
   };
 
-  _fireEvent(args: PointerEventInit): EmitterEvent {
+  _fireEvent(args: PointerStrategyEventArgs): EmitterEvent {
     return super._fireEvent(extend(normalizeMouseEvent(args.originalEvent), args));
   }
 }

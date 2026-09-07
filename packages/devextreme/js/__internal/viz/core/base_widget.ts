@@ -136,6 +136,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   _getDefaultOptions() {
     return extend(this.callBase(), {
       onIncidentOccurred: defaultOnIncidentOccurred,
+      encodeHtml: false,
     });
   },
 

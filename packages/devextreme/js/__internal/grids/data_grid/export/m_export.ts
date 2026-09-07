@@ -584,7 +584,7 @@ export class ExportController extends dataGridCore.ViewController {
     let summaryCells;
 
     when(data).done((data) => {
-      this._dataController.loadAll(data, skipFilter).done((sourceItems, totalAggregates) => {
+      this._dataController.loadAllItems(data, skipFilter).done((sourceItems, totalAggregates) => {
         that._updateGroupValuesWithSummaryByColumn(sourceItems);
 
         if (that._hasSummaryGroupFooters()) {
@@ -701,7 +701,7 @@ export class ExportController extends dataGridCore.ViewController {
 
   private needLoadItemsOnExportingSelectedItems(): boolean {
     return this.option('loadItemsOnExportingSelectedItems')
-      ?? this._dataController._dataSource.remoteOperations().filtering;
+      ?? (this._dataController._dataSource?.remoteOperations().filtering ?? false);
   }
 }
 

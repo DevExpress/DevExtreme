@@ -28,7 +28,7 @@ export type EmitterEvent = DxEvent<PointerInteractionEvent> & {
   pageY: number;
   pointerType?: string;
   pointers?: (EmitterEventPointer | null)[];
-  originalEvent: PointerInteractionEvent & { touches?: ArrayLike<unknown> };
+  originalEvent: PointerInteractionEvent & { touches?: ArrayLike<Touch> };
   _needSkipEvent?: boolean;
 };
 

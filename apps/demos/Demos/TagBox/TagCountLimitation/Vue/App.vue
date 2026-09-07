@@ -71,7 +71,7 @@ function onMultiTagPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
   }
 }
 </script>
-<style scoped>
+<style>
 .dx-field {
   margin-bottom: 50px;
 }

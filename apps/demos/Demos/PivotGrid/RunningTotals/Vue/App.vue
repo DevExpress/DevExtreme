@@ -71,7 +71,7 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 </script>
-<style scoped>
+<style>
 #sales {
   margin: 20px 0;
 }

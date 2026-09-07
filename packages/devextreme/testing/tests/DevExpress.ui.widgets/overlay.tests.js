@@ -20,6 +20,7 @@ import * as zIndex from '__internal/ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
 import selectors from '__internal/core/utils/m_selectors';
 import swatch from '__internal/core/utils/swatch_container';
+import documentSizeCallbacks from '__internal/core/utils/document_size_callbacks';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
@@ -4467,5 +4468,83 @@ QUnit.module('Memory Leaks', {
         assert.strictEqual(positionController._$root, undefined, 'PositionController._$root is undefined after dispose');
         assert.strictEqual(positionController._$markupContainer, undefined, 'PositionController._$markupContainer is undefined after dispose');
         assert.strictEqual(positionController._$visualContainer, undefined, 'PositionController._$visualContainer is undefined after dispose');
+    });
+});
+
+QUnit.module('document size subscription', {
+    beforeEach: function() {
+        fx.off = true;
+        this.$element = $('#overlay');
+        this.addSpy = sinon.spy(documentSizeCallbacks, 'add');
+        this.removeSpy = sinon.spy(documentSizeCallbacks, 'remove');
+        this.subscribedHandler = () => this.addSpy.lastCall.args[0];
+        this.createOverlay = (options) => {
+            this.overlay = new Overlay(this.$element, options);
+
+            return this.overlay;
+        };
+    },
+    afterEach: function() {
+        if(this.overlay) {
+            this.overlay.dispose();
+        }
+        this.addSpy.restore();
+        this.removeSpy.restore();
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('overlay should subscribe when shown and unsubscribe when hidden', function(assert) {
+        const overlay = this.createOverlay({ visible: true });
+
+        assert.ok(this.addSpy.calledOnce, 'subscribed while visible');
+
+        const handler = this.subscribedHandler();
+
+        overlay.hide();
+
+        assert.ok(this.removeSpy.calledWith(handler), 'unsubscribed when hidden');
+    });
+
+    QUnit.test('overlay should unsubscribe on dispose', function(assert) {
+        const overlay = this.createOverlay({ visible: true });
+        const handler = this.subscribedHandler();
+
+        overlay.dispose();
+        this.overlay = null;
+
+        assert.ok(this.removeSpy.calledWith(handler), 'unsubscribed on dispose');
+    });
+
+    QUnit.test('geometry should be re-rendered when the visible area changes', function(assert) {
+        const overlay = this.createOverlay({ visible: true });
+        const handler = this.subscribedHandler();
+        const renderGeometrySpy = sinon.spy(overlay, '_renderGeometry');
+
+        handler();
+
+        assert.strictEqual(renderGeometrySpy.callCount, 1, 'geometry is re-rendered');
+    });
+
+    QUnit.test('geometry should be re-rendered for an overlay placed against an element as well', function(assert) {
+        const overlay = this.createOverlay({
+            visible: true,
+            visualContainer: $('#container')
+        });
+        const handler = this.subscribedHandler();
+        const renderGeometrySpy = sinon.spy(overlay, '_renderGeometry');
+
+        handler();
+
+        assert.strictEqual(renderGeometrySpy.callCount, 1, 'geometry is re-rendered');
+    });
+
+    QUnit.test('a visible area change should be handled the same way as a window resize', function(assert) {
+        const overlay = this.createOverlay({ visible: true });
+        const handler = this.subscribedHandler();
+        const dimensionChangedSpy = sinon.spy(overlay, '_dimensionChanged');
+
+        handler();
+
+        assert.strictEqual(dimensionChangedSpy.callCount, 1, '_dimensionChanged is called');
     });
 });

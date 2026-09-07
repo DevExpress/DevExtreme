@@ -12,19 +12,30 @@ interface GroupRowState {
   isExpanded?: boolean;
   isContinuation?: boolean;
   isContinuationOnNextPage?: boolean;
+  values?: unknown[];
+  cells?: ProcessedItem['cells'];
 }
 
 const groupRow = ({
   isExpanded = true,
   isContinuation = false,
   isContinuationOnNextPage = false,
+  values = [],
+  cells,
 }: GroupRowState = {}): ProcessedItem => ({
   rowType: 'group',
   key: [1],
   data: { isContinuation, isContinuationOnNextPage },
-  values: [],
+  values,
   isExpanded,
+  cells,
 });
+
+const renderedCells: ProcessedItem['cells'] = [
+  { column: { type: 'groupExpand' } },
+  {},
+  { column: { dataField: 'name' } },
+];
 
 const dataRow = (partial: Partial<ProcessedItem> = {}): ProcessedItem => ({
   rowType: 'data',
@@ -46,12 +57,13 @@ describe('Grouping data controller row changes', () => {
 
   it('should report a group row when isExpanded changed', async () => {
     const change = await refreshRow(
-      groupRow({ isExpanded: true }),
+      groupRow({ isExpanded: true, cells: renderedCells }),
       groupRow({ isExpanded: false }),
     );
 
     expect(change.rowIndices).toEqual([0]);
     expect(change.changeTypes).toEqual(['update']);
+    expect(change.columnIndices).toEqual([undefined]);
   });
 
   it('should report a group row when isContinuation changed', async () => {
@@ -66,6 +78,26 @@ describe('Grouping data controller row changes', () => {
 
     expect(change.rowIndices).toEqual([0]);
     expect(change.changeTypes).toEqual(['update']);
+  });
+
+  it('should diff every group cell but the expand one when values changed', async () => {
+    const change = await refreshRow(
+      groupRow({ values: ['Alex'], cells: renderedCells }),
+      groupRow({ values: ['Bob'] }),
+    );
+
+    expect(change.rowIndices).toEqual([0]);
+    expect(change.columnIndices).toEqual([[1, 2]]);
+  });
+
+  it('should repaint the whole group row when it was never rendered', async () => {
+    const change = await refreshRow(
+      groupRow({ values: ['Alex'] }),
+      groupRow({ values: ['Bob'] }),
+    );
+
+    expect(change.rowIndices).toEqual([0]);
+    expect(change.columnIndices).toEqual([undefined]);
   });
 
   it('should not report a data row when isExpanded changed (master detail row)', async () => {

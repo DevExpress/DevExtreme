@@ -44,7 +44,7 @@ watch(diagram,
       });
   });
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 725px;
     }

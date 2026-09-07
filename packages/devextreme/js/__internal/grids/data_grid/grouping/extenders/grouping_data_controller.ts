@@ -3,6 +3,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import type { Properties } from '@js/ui/data_grid';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ItemProcessingOptions, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import { countRowsBefore } from '@ts/grids/grid_core/data_controller/utils/row_changes';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type {
   ModuleType,
@@ -11,16 +12,19 @@ import type {
   RowKey,
 } from '@ts/grids/grid_core/m_types';
 
+import type { GroupingDataSourceAdapter } from '../m_grouping';
 import type {
   ChangeRowExpandArgs, GroupItem, ProcessGroupItemsOptions,
 } from '../types';
 import {
-  isGroupNode, isGroupRow, isSameContinuationState, isSameExpandedState,
+  getGroupColumnIndices, isGroupNode, isGroupRow, isSameContinuationState, isSameExpandedState,
 } from '../utils';
 
 export const groupingDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class GroupingDataControllerExtender extends Base {
+  public declare _dataSource?: GroupingDataSourceAdapter | null;
+
   public init(): void {
     super.init();
 
@@ -131,6 +135,25 @@ export const groupingDataControllerExtender = (
     return resultItems;
   }
 
+  protected adjustInsertRowIndex(visibleRowIndex: number): number {
+    const groupRowCount = countRowsBefore(this.getVisibleRows(), visibleRowIndex, 'group');
+
+    return super.adjustInsertRowIndex(visibleRowIndex) + groupRowCount;
+  }
+
+  protected getChangedColumnIndices(
+    oldItem: ProcessedItem,
+    newItem: ProcessedItem,
+    visibleRowIndex: number,
+    isLiveUpdate?: boolean,
+  ): number[] | undefined {
+    if (oldItem.rowType === 'group' && newItem.rowType === 'group') {
+      return getGroupColumnIndices(oldItem, newItem);
+    }
+
+    return super.getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+  }
+
   protected isSameRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {
     if (item1.rowType === 'group'
       && (!isSameExpandedState(item1, item2) || !isSameContinuationState(item1, item2))) {
@@ -149,16 +172,16 @@ export const groupingDataControllerExtender = (
   private collapseAll(groupIndex: number): void {
     const dataSource = this._dataSource;
     if (dataSource?.collapseAll(groupIndex)) {
-      dataSource.pageIndex(0);
-      dataSource.reload();
+      dataSource?.pageIndex(0);
+      dataSource?.reload();
     }
   }
 
   private expandAll(groupIndex: number): void {
     const dataSource = this._dataSource;
     if (dataSource?.expandAll(groupIndex)) {
-      dataSource.pageIndex(0);
-      dataSource.reload();
+      dataSource?.pageIndex(0);
+      dataSource?.reload();
     }
   }
 

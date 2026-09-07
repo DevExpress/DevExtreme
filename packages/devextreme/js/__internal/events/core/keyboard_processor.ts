@@ -9,6 +9,10 @@ const COMPOSITION_END_EVENT = 'compositionend';
 const KEYDOWN_EVENT = 'keydown';
 const NAMESPACE = 'KeyboardProcessor';
 
+const KEYDOWN_NAMESPACED_EVENT = addNamespace(KEYDOWN_EVENT, NAMESPACE);
+const COMPOSITION_START_NAMESPACED_EVENT = addNamespace(COMPOSITION_START_EVENT, NAMESPACE);
+const COMPOSITION_END_NAMESPACED_EVENT = addNamespace(COMPOSITION_END_EVENT, NAMESPACE);
+
 export interface KeyboardKeyDownEvent {
   keyName: string;
   key: string;
@@ -23,7 +27,7 @@ export interface KeyboardKeyDownEvent {
 }
 
 export interface KeyboardProcessorOptions {
-  element?: Element | dxElementWrapper;
+  element?: Element | dxElementWrapper | null;
   focusTarget?: Element | Element[] | dxElementWrapper | null;
   handler?: (event: KeyboardKeyDownEvent) => void;
 }
@@ -42,12 +46,6 @@ const createKeyDownOptions = (e: DxEvent<KeyboardEvent>): KeyboardKeyDownEvent =
 });
 
 class KeyboardProcessor {
-  _keydown = addNamespace(KEYDOWN_EVENT, NAMESPACE);
-
-  _compositionStart = addNamespace(COMPOSITION_START_EVENT, NAMESPACE);
-
-  _compositionEnd = addNamespace(COMPOSITION_END_EVENT, NAMESPACE);
-
   _element?: dxElementWrapper;
 
   _focusTarget?: Element | Element[] | dxElementWrapper | null;
@@ -64,14 +62,16 @@ class KeyboardProcessor {
 
   static createKeyDownOptions = createKeyDownOptions;
 
-  constructor(options: KeyboardProcessorOptions = {}) {
-    if (options.element) {
-      this._element = $(options.element);
+  constructor(options?: KeyboardProcessorOptions | null) {
+    const config = options ?? {};
+
+    if (config.element) {
+      this._element = $(config.element);
     }
-    if (options.focusTarget) {
-      this._focusTarget = options.focusTarget;
+    if (config.focusTarget) {
+      this._focusTarget = config.focusTarget;
     }
-    this._handler = options.handler;
+    this._handler = config.handler;
 
     if (this._element) {
       this._processFunction = (e: DxEvent<KeyboardEvent>): void => {
@@ -90,17 +90,33 @@ class KeyboardProcessor {
       };
       this._toggleProcessingWithContext = this.toggleProcessing.bind(this);
 
-      eventsEngine.on(this._element, this._keydown, this._processFunction);
-      eventsEngine.on(this._element, this._compositionStart, this._toggleProcessingWithContext);
-      eventsEngine.on(this._element, this._compositionEnd, this._toggleProcessingWithContext);
+      eventsEngine.on(this._element, KEYDOWN_NAMESPACED_EVENT, this._processFunction);
+      eventsEngine.on(
+        this._element,
+        COMPOSITION_START_NAMESPACED_EVENT,
+        this._toggleProcessingWithContext,
+      );
+      eventsEngine.on(
+        this._element,
+        COMPOSITION_END_NAMESPACED_EVENT,
+        this._toggleProcessingWithContext,
+      );
     }
   }
 
   dispose(): void {
     if (this._element) {
-      eventsEngine.off(this._element, this._keydown, this._processFunction);
-      eventsEngine.off(this._element, this._compositionStart, this._toggleProcessingWithContext);
-      eventsEngine.off(this._element, this._compositionEnd, this._toggleProcessingWithContext);
+      eventsEngine.off(this._element, KEYDOWN_NAMESPACED_EVENT, this._processFunction);
+      eventsEngine.off(
+        this._element,
+        COMPOSITION_START_NAMESPACED_EVENT,
+        this._toggleProcessingWithContext,
+      );
+      eventsEngine.off(
+        this._element,
+        COMPOSITION_END_NAMESPACED_EVENT,
+        this._toggleProcessingWithContext,
+      );
     }
     this._element = undefined;
     this._handler = undefined;

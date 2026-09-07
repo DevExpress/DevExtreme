@@ -4,7 +4,7 @@ import { noop } from '@js/core/utils/common';
 import type { DxEvent } from '@js/events/events.types';
 import { getPublicElement } from '@ts/core/m_element';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import eventsEngine from '@ts/events/core/m_events_engine';
+import eventsEngine from '@ts/events/core/events_engine';
 
 import { isFocusLost } from '../utils/is_focus_lost';
 import { getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';

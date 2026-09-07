@@ -112,7 +112,7 @@ const saleAmountHeaderFilters = [
 
 const getOrderDay = (rowData: Order) => (new Date(rowData.OrderDate)).getDay();
 </script>
-<style scoped>
+<style>
 .demo-container {
   height: 570px;
 }

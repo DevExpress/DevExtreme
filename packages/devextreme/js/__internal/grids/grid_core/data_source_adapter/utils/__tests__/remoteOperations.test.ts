@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
-import type { Store } from '@js/data';
-import ArrayStore from '@js/data/array_store';
-import CustomStore from '@js/data/custom_store';
+import type Store from '@ts/data/abstract_store';
+import ArrayStore from '@ts/data/array_store';
+import CustomStore from '@ts/data/custom_store';
 
 import { normalizeRemoteOperations } from '../remoteOperations';
 

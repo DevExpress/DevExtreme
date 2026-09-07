@@ -14,6 +14,7 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import type { RowsView } from '../../grid_core/views/m_rows_view';
+import type { TreeListDataController } from '../data_controller/m_data_controller';
 import treeListCore from '../m_core';
 
 const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
@@ -22,6 +23,8 @@ const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
 
 class EditingController extends editingModule.controllers.editing {
+  protected declare _dataController: TreeListDataController;
+
   protected _generateNewItem(key) {
     const item: any = super._generateNewItem(key);
 
@@ -133,9 +136,9 @@ class EditingController extends editingModule.controllers.editing {
   protected _addRowCore(data, parentKey, oldEditRowIndex) {
     const rootValue = this.option('rootValue');
     const dataSourceAdapter = this._dataController.dataSource();
-    const parentKeyGetter = dataSourceAdapter.createParentIdGetter();
+    const parentKeyGetter = dataSourceAdapter?.createParentIdGetter();
 
-    parentKey = parentKeyGetter(data);
+    parentKey = parentKeyGetter ? parentKeyGetter(data) : parentKey;
 
     // @ts-expect-error
     if (parentKey !== undefined && parentKey !== rootValue && !this._dataController.isRowExpanded(parentKey)) {
@@ -157,9 +160,9 @@ class EditingController extends editingModule.controllers.editing {
 
   protected _initNewRow(options, parentKey?) {
     const dataSourceAdapter = this._dataController.dataSource();
-    const parentIdSetter = dataSourceAdapter.createParentIdSetter();
+    const parentIdSetter = dataSourceAdapter?.createParentIdSetter();
 
-    parentIdSetter(options.data, parentKey);
+    parentIdSetter?.(options.data, parentKey);
 
     // @ts-expect-error
     return super._initNewRow.apply(this, arguments);
