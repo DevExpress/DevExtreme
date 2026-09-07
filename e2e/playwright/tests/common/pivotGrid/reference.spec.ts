@@ -27,7 +27,7 @@ test('PivotGrid renders its areas and answers its options', THEMES, async ({ pag
 
   const pivotGrid = new PivotGrid(page, '#container');
 
-  await expect(pivotGrid.dataArea).toBeVisible();
+  await expect(pivotGrid.getRowsArea().getCell(0)).toBeVisible();
   expect(await pivotGrid.option('rowHeaderLayout')).toBe('standard');
 
   await pivotGrid.option('rowHeaderLayout', 'tree');

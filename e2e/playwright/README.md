@@ -91,12 +91,12 @@ import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/screenshots';
 import PivotGrid from '../../../models/pivotGrid';
 
-test('PivotGrid renders its data area', async ({ page }) => {
+test('PivotGrid renders', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', { dataSource: { store: [] } });
 
     const pivotGrid = new PivotGrid(page, '#container');
 
-    await expect(pivotGrid.dataArea).toBeVisible();
+    await expect(pivotGrid.element).toBeVisible();
     await testScreenshot(page, 'PivotGrid markup.png', { element: '#container' });
 });
 ```

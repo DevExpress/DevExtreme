@@ -21,16 +21,85 @@ const getScreenshotName = (baseName: string, theme?: string): string => {
     : `${baseName}${themePostfix}.png`;
 };
 
-// No element means the whole viewport, the way the TestCafe comparer read a missing element.
-const resolveTarget = (
+const resolveLocator = (
   page: Page,
   element: Locator | string | null | undefined,
-): Locator | Page => {
+): Locator | null => {
   if (typeof element === 'string') {
     return page.locator(element);
   }
 
-  return element ?? page;
+  return element ?? null;
+};
+
+// The page screenshot is clipped to the layout viewport: Playwright would otherwise include the
+// scrollbar, which TestCafe left out, and every full-page etalon would have to be re-recorded.
+const viewportClip = async (page: Page): Promise<{
+  x: number; y: number; width: number; height: number;
+}> => page.evaluate(() => ({
+  x: 0,
+  y: 0,
+  width: document.documentElement.clientWidth,
+  height: document.documentElement.clientHeight,
+}));
+
+// TestCafe shot an element that outgrows the viewport by scrolling its start into view and taking
+// the part of it that was on screen; the Playwright element screenshot would instead stitch the
+// whole element, which no existing etalon matches. Only such an element takes this path — one that
+// fits is shot as it always was.
+const clippedToViewport = async (
+  page: Page,
+  locator: Locator,
+): Promise<{ x: number; y: number; width: number; height: number } | null> => {
+  const box = await locator.boundingBox();
+
+  if (!box) {
+    return null;
+  }
+
+  const viewport = await viewportClip(page);
+
+  if (box.width <= viewport.width && box.height <= viewport.height) {
+    return null;
+  }
+
+  // The clip has to stay inside the viewport: a full-page capture widens the viewport to the whole
+  // document, the scrollbar goes away, and a widget that fills its container re-lays out to the
+  // wider space — the shot would show a layout the page never had.
+  await locator.evaluate((element) => {
+    element.scrollIntoView({ block: 'start', inline: 'start' });
+  });
+
+  const scrolled = await locator.boundingBox() ?? box;
+  const x = Math.max(scrolled.x, 0);
+  const y = Math.max(scrolled.y, 0);
+
+  return {
+    x,
+    y,
+    width: Math.min(scrolled.width, viewport.width - x),
+    height: Math.min(scrolled.height, viewport.height - y),
+  };
+};
+
+const expectScreenshot = async (
+  page: Page,
+  locator: Locator | null,
+  name: string,
+): Promise<void> => {
+  if (!locator) {
+    await expect(page).toHaveScreenshot([name], { clip: await viewportClip(page) });
+    return;
+  }
+
+  const clip = await clippedToViewport(page, locator);
+
+  if (clip) {
+    await expect(page).toHaveScreenshot([name], { clip });
+    return;
+  }
+
+  await expect(locator).toHaveScreenshot([name]);
 };
 
 export async function testScreenshot(
@@ -51,9 +120,10 @@ export async function testScreenshot(
     await themeChanged?.();
   }
 
-  const target = resolveTarget(page, element);
+  // No element means the whole viewport, the way the TestCafe comparer read a missing element.
+  const target = resolveLocator(page, element);
 
-  await expect(target).toHaveScreenshot([getScreenshotName(screenshotName, theme)]);
+  await expectScreenshot(page, target, getScreenshotName(screenshotName, theme));
 
   if (shouldTestInCompact) {
     // The theme of a "- compact" job already ends with the suffix; appending it twice would ask
@@ -63,7 +133,7 @@ export async function testScreenshot(
     await changeTheme(page, compactTheme);
     await compactCallBack?.();
 
-    await expect(target).toHaveScreenshot([getScreenshotName(screenshotName, compactTheme)]);
+    await expectScreenshot(page, target, getScreenshotName(screenshotName, compactTheme));
   }
 
   if (theme || shouldTestInCompact) {
