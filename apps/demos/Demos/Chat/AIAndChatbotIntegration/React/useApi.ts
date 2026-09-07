@@ -38,6 +38,16 @@ const dataItemToMessage = (item: ChatTypes.Message): AIMessage => ({
 
 const getMessageHistory = (): AIMessage[] => [...dataSource.items()].map(dataItemToMessage);
 
+const getErrorMessage = (err: unknown): string => {
+  if (typeof err === 'object' && err !== null) {
+    const e = err as { error?: { message?: unknown }; message?: unknown };
+    if (typeof e.error?.message === 'string') return e.error.message;
+    if (typeof e.message === 'string') return e.message;
+  }
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+};
+
 export const useApi = () => {
   const [alerts, setAlerts] = useState<ChatTypes.Alert[]>([]);
 
@@ -77,12 +87,8 @@ export const useApi = () => {
         author: assistant,
         text: aiResponse,
       });
-    } catch(err: any) {
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        "Unknown error";
-      alertError(errorMessage);
+    } catch (err: unknown) {
+      alertError(getErrorMessage(err));
     }
   }, [alertError, insertMessage]);
 
@@ -96,13 +102,9 @@ export const useApi = () => {
       if (typeof aiResponse === 'string') {
         updateLastMessageContent(aiResponse);
       }
-    } catch(err: any) {
+    } catch (err: unknown) {
       updateLastMessageContent(messageHistory.at(-1)?.content as string);
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        "Unknown error";
-      alertError(errorMessage);
+      alertError(getErrorMessage(err));
     }
   }, [alertError, updateLastMessageContent]);
 

@@ -76,7 +76,7 @@ $(() => {
       const errorMessage =
         err.error?.message ??
         err.message ??
-        "Unknown error";
+        'Unknown error';
       alertError(errorMessage);
     } finally {
       toggleDisabledState(false, event);
@@ -96,7 +96,7 @@ $(() => {
       const errorMessage =
         err.error?.message ??
         err.message ??
-        "Unknown error";
+        'Unknown error';
       alertError(errorMessage);
     } finally {
       toggleDisabledState(false);

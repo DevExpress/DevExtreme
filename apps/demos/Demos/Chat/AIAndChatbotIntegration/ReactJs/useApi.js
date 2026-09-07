@@ -29,6 +29,15 @@ const dataItemToMessage = (item) => ({
   content: item.text,
 });
 const getMessageHistory = () => [...dataSource.items()].map(dataItemToMessage);
+const getErrorMessage = (err) => {
+  if (typeof err === 'object' && err !== null) {
+    const e = err;
+    if (typeof e.error?.message === 'string') return e.error.message;
+    if (typeof e.message === 'string') return e.message;
+  }
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+};
 export const useApi = () => {
   const [alerts, setAlerts] = useState([]);
   const insertMessage = useCallback((data) => {
@@ -66,8 +75,7 @@ export const useApi = () => {
           text: aiResponse,
         });
       } catch (err) {
-        const errorMessage = err.error?.message ?? err.message ?? 'Unknown error';
-        alertError(errorMessage);
+        alertError(getErrorMessage(err));
       }
     },
     [alertError, insertMessage],
@@ -82,8 +90,7 @@ export const useApi = () => {
       }
     } catch (err) {
       updateLastMessageContent(messageHistory.at(-1)?.content);
-      const errorMessage = err.error?.message ?? err.message ?? 'Unknown error';
-      alertError(errorMessage);
+      alertError(getErrorMessage(err));
     }
   }, [alertError, updateLastMessageContent]);
   return {

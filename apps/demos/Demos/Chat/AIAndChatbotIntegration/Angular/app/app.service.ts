@@ -106,15 +106,21 @@ export class AppService {
         this.messages.push({ role: 'assistant', content: aiResponse });
         this.renderAssistantMessage(aiResponse);
       }, 200);
-    } catch(err: any) {
+    } catch (err: unknown) {
       this.typingUsersSubject.next([]);
       this.messages.pop();
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        "Unknown error";
-      this.alertError(errorMessage);
+      this.alertError(this.getErrorMessage(err));
     }
+  }
+
+  private getErrorMessage(err: unknown): string {
+    if (typeof err === 'object' && err !== null) {
+      const e = err as { error?: { message?: unknown }; message?: unknown };
+      if (typeof e.error?.message === 'string') return e.error.message;
+      if (typeof e.message === 'string') return e.message;
+    }
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
   }
 
   updateLastMessage(text = this.REGENERATION_TEXT) {
@@ -160,13 +166,9 @@ export class AppService {
 
       this.updateLastMessage(aiResponse);
       this.messages.at(-1).content = aiResponse;
-    } catch(err: any) {
+    } catch (err: unknown) {
       this.updateLastMessage(this.messages.at(-1).content);
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        "Unknown error";
-      this.alertError(errorMessage);
+      this.alertError(this.getErrorMessage(err));
     }
   }
 

@@ -108,6 +108,16 @@ function renderAssistantMessage(text: string): void {
   dataSource.store().push([{ type: 'insert', data: message }]);
 }
 
+function getErrorMessage(err: unknown): string {
+  if (typeof err === 'object' && err !== null) {
+    const e = err as { error?: { message?: unknown }; message?: unknown };
+    if (typeof e.error?.message === 'string') return e.error.message;
+    if (typeof e.message === 'string') return e.message;
+  }
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+}
+
 async function processMessageSending(
   message: DxChatTypes.TextMessage,
   event: Events.EventObject | undefined,
@@ -125,14 +135,10 @@ async function processMessageSending(
       messages.push({ role: 'assistant', content: aiResponse });
       renderAssistantMessage(aiResponse);
     }, 200);
-  } catch(err: any) {
+  } catch (err: unknown) {
     typingUsers.value = [];
     messages.pop();
-    const errorMessage =
-      err.error?.message ??
-      err.message ??
-      "Unknown error";
-    alertError(errorMessage);
+    alertError(getErrorMessage(err));
   } finally {
     toggleDisabledState(false, event);
   }
@@ -160,15 +166,11 @@ async function regenerate(): Promise<void> {
     if (lastMessage?.content) {
       lastMessage.content = aiResponse;
     }
-  } catch(err: any) {
+  } catch (err: unknown) {
     if (lastMessage?.content) {
       updateLastMessage(lastMessage.content);
     }
-     const errorMessage =
-      err.error?.message ??
-      err.message ??
-      "Unknown error";
-    alertError(errorMessage);
+    alertError(getErrorMessage(err));
   } finally {
     toggleDisabledState(false);
   }
