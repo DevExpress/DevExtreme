@@ -45,6 +45,7 @@ import { render } from '@ts/core/utils/ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import type {
   CollectionItemInfo,
@@ -131,6 +132,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   _scrollView!: ScrollViewType;
 
   _$nextButton!: dxElementWrapper | null;
+
+  _$a11yStatusContainer?: dxElementWrapper;
 
   _holdTimer?: ReturnType<typeof setTimeout>;
 
@@ -975,6 +978,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._itemElementsCache = $();
 
     this.$element().addClass(LIST_CLASS);
+    this._renderA11yStatusContainer();
     super._initMarkup();
 
     const { useInkRipple } = this.option();
@@ -997,8 +1001,35 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const isEmpty = super._renderEmptyMessage(rootNodes);
 
     this.setAria({ role: isEmpty ? undefined : 'application' }, this._focusTarget());
+    this._updateA11yStatusText();
 
     return isEmpty;
+  }
+
+  _renderA11yStatusContainer(): void {
+    const isContainerRendered = this._$a11yStatusContainer?.parent().is(this.$element());
+
+    if (isContainerRendered) {
+      return;
+    }
+
+    this._$a11yStatusContainer = $('<div>')
+      .addClass(SCREEN_READER_ONLY_CLASS)
+      .attr('role', 'status')
+      .appendTo(this.$element());
+  }
+
+  _updateA11yStatusText(): void {
+    if (this._dataController.isLoading()) {
+      this._$a11yStatusContainer?.text('');
+      return;
+    }
+
+    const { noDataText } = this.option();
+    const itemsCount = this._editStrategy.itemsGetter().length;
+    const itemsLabel = messageLocalization.format('dxList-listAriaLabel');
+
+    this._$a11yStatusContainer?.text(itemsCount ? `${itemsLabel}: ${itemsCount}` : noDataText ?? '');
   }
 
   _isMultiSelectMode(): boolean {
