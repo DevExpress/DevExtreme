@@ -8,16 +8,13 @@ import type {
 } from '../../types';
 import {
   attachChangedItems,
-  canDiffColumns,
   convertToUpdateChange,
+  countRowsBefore,
   getChangedRowIndices,
-  getDataRowIndex,
-  getGroupColumnIndices,
   getItemChange,
   getRowKey,
   getRowOperation,
   indexRowsByKey,
-  isSameGroupRowState,
   isSameItem,
   partialUpdateItem,
   resolveRepaintChangesOnly,
@@ -93,84 +90,6 @@ describe('isSameItem', () => {
       row({ key: 1, rowType: 'data', isEditing: true }),
       true,
     )).toBe(true);
-  });
-});
-
-describe('isSameGroupRowState', () => {
-  const groupRow = (partial: Partial<ProcessedItem>): ProcessedItem => row({
-    rowType: 'group',
-    isExpanded: true,
-    data: { isContinuation: false, isContinuationOnNextPage: false },
-    ...partial,
-  });
-
-  it('should return true for the same state', () => {
-    expect(isSameGroupRowState(groupRow({}), groupRow({}))).toBe(true);
-  });
-
-  it('should compare the expanded state', () => {
-    expect(isSameGroupRowState(groupRow({}), groupRow({ isExpanded: false }))).toBe(false);
-  });
-
-  it('should compare the continuation flags', () => {
-    expect(isSameGroupRowState(
-      groupRow({}),
-      groupRow({ data: { isContinuation: true, isContinuationOnNextPage: false } }),
-    )).toBe(false);
-
-    expect(isSameGroupRowState(
-      groupRow({}),
-      groupRow({ data: { isContinuation: false, isContinuationOnNextPage: true } }),
-    )).toBe(false);
-  });
-
-  it('should not compare the data beyond the continuation flags', () => {
-    expect(isSameGroupRowState(
-      groupRow({ data: { key: 1, isContinuation: false, isContinuationOnNextPage: false } }),
-      groupRow({ data: { key: 2, isContinuation: false, isContinuationOnNextPage: false } }),
-    )).toBe(true);
-  });
-});
-
-describe('canDiffColumns', () => {
-  it('should allow the diff for the rows of the same type', () => {
-    expect(canDiffColumns(row({ rowType: 'data' }), row({ rowType: 'data' }))).toBe(true);
-  });
-
-  it('should forbid the diff for the rows of different types', () => {
-    expect(canDiffColumns(row({ rowType: 'data' }), row({ rowType: 'detail' }))).toBe(false);
-  });
-
-  it('should forbid the diff for group footers', () => {
-    expect(canDiffColumns(row({ rowType: 'groupFooter' }), row({ rowType: 'groupFooter' })))
-      .toBe(false);
-  });
-});
-
-describe('getGroupColumnIndices', () => {
-  const groupRow = (partial: Partial<ProcessedItem>): ProcessedItem => row({
-    rowType: 'group',
-    isExpanded: true,
-    data: { isContinuation: false, isContinuationOnNextPage: false },
-    ...partial,
-  });
-
-  it('should skip the group expand cell', () => {
-    const oldItem = groupRow({
-      cells: [{ column: { type: 'groupExpand' } }, {}, { column: { dataField: 'name' } }],
-    });
-
-    expect(getGroupColumnIndices(oldItem, groupRow({}))).toEqual([1, 2]);
-  });
-
-  it('should return undefined when the old row has no cells', () => {
-    expect(getGroupColumnIndices(groupRow({}), groupRow({}))).toBeUndefined();
-  });
-
-  it('should return undefined when the group state has changed', () => {
-    const oldItem = groupRow({ cells: [{}] });
-
-    expect(getGroupColumnIndices(oldItem, groupRow({ isExpanded: false }))).toBeUndefined();
   });
 });
 
@@ -307,7 +226,7 @@ describe('updateKeptRows', () => {
   });
 });
 
-describe('getDataRowIndex', () => {
+describe('countRowsBefore', () => {
   const rows = [
     row({ rowType: 'data' }),
     row({ rowType: 'group' }),
@@ -315,14 +234,24 @@ describe('getDataRowIndex', () => {
     row({ rowType: 'data' }),
   ];
 
-  it('should count the data and group rows before the visible index', () => {
-    expect(getDataRowIndex(rows, 0)).toBe(0);
-    expect(getDataRowIndex(rows, 3)).toBe(2);
-    expect(getDataRowIndex(rows, rows.length)).toBe(3);
+  it('should count the rows of the requested type before the visible index', () => {
+    expect(countRowsBefore(rows, 0, 'data')).toBe(0);
+    expect(countRowsBefore(rows, 3, 'data')).toBe(1);
+    expect(countRowsBefore(rows, rows.length, 'data')).toBe(2);
+  });
+
+  it('should not count the rows of any other type', () => {
+    expect(countRowsBefore(rows, rows.length, 'group')).toBe(1);
+    expect(countRowsBefore(rows, rows.length, 'detail')).toBe(1);
+    expect(countRowsBefore(rows, rows.length, 'groupFooter')).toBe(0);
   });
 
   it('should count the rows that are there when the index is out of range', () => {
-    expect(getDataRowIndex(rows, 10)).toBe(3);
+    expect(countRowsBefore(rows, 10, 'data')).toBe(2);
+  });
+
+  it('should return zero for an empty row set', () => {
+    expect(countRowsBefore([], 3, 'data')).toBe(0);
   });
 });
 

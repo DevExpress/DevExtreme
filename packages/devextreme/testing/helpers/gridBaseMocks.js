@@ -1,6 +1,71 @@
 module.exports = function($, gridCore, columnResizingReordering, domUtils, commonUtils, typeUtils, ArrayStore, nameWidget) {
     const exports = {};
 
+    exports.MockDataSourceAdapter = function(options) {
+        const store = function() {
+            return new ArrayStore(options.items);
+        };
+
+        const loadCustomResult = (loadOptions) => {
+            const d = $.Deferred();
+
+            store().load(loadOptions)
+                .done((data, extra) => {
+                    d.resolve({ data: data, extra: extra });
+                })
+                .fail(d.reject);
+
+            return d;
+        };
+
+        return {
+            beginLoading: function() {
+            },
+            endLoading: function() {
+            },
+            remoteOperations: function() {
+                return {};
+            },
+            loadOptions: function() {
+                return {};
+            },
+            key: function() {
+                return options.key;
+            },
+            isLoading: function() {
+                return false;
+            },
+            lastLoadOptions: function() {
+                return {};
+            },
+            operationTypes: function() {
+                return undefined;
+            },
+            select: function() {
+                return undefined;
+            },
+            getDataIndexGetter: function() {
+                return undefined;
+            },
+            dispose: function() {
+            },
+            store: store,
+            load: function(loadOptions) {
+                return store().load(loadOptions);
+            },
+            customLoader: {
+                load: loadCustomResult,
+                loadFromStore: loadCustomResult,
+                isLoading: function() {
+                    return false;
+                },
+                isLoadingAll: function() {
+                    return false;
+                }
+            }
+        };
+    };
+
     exports.MockDataController = function(options) {
 
         if(!typeUtils.isDefined(options.itemsCount)) {
@@ -37,50 +102,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             changedArgs: [],
 
-            dataSource: function() {
-                const store = function() {
-                    return new ArrayStore(options.items);
-                };
-
-                const loadCustomResult = (loadOptions) => {
-                    const d = $.Deferred();
-
-                    store().load(loadOptions)
-                        .done((data, extra) => {
-                            d.resolve({ data: data, extra: extra });
-                        })
-                        .fail(d.reject);
-
-                    return d;
-                };
-
-                return {
-                    beginLoading: function() {
-                    },
-                    endLoading: function() {
-                    },
-                    remoteOperations: function() {
-                        return {};
-                    },
-                    loadOptions: function() {
-                        return {};
-                    },
-                    store: store,
-                    load: function(loadOptions) {
-                        return store().load(loadOptions);
-                    },
-                    customLoader: {
-                        load: loadCustomResult,
-                        loadFromStore: loadCustomResult,
-                        isLoading: function() {
-                            return false;
-                        },
-                        isLoadingAll: function() {
-                            return false;
-                        }
-                    }
-                };
-            },
+            mockOptions: options,
 
             pageSize: function(value) {
                 if(value === undefined) {
@@ -994,11 +1016,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         _subscribeToEvents(rootElement) { }
     };
 
+    // The dataSource controller is a leaf that the data controller resolves in init(),
+    // so it is always included rather than listed by every caller.
+    const ALWAYS_INCLUDED_MODULES = ['dataSource'];
+
     exports['setup' + nameWidget + 'Modules'] = function(that, moduleNames, options) {
         const modules = [];
 
         $.each(gridCore.modules, function() {
-            if($.inArray(this.name, moduleNames) !== -1) {
+            if($.inArray(this.name, moduleNames) !== -1 || $.inArray(this.name, ALWAYS_INCLUDED_MODULES) !== -1) {
                 modules.push(this);
             }
         });
@@ -1209,6 +1235,13 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         options && options.controllers && $.extend(that._controllers, options.controllers);
         options && options.views && $.extend(that._views, options.views);
+
+        const mockedDataController = options && options.controllers && options.controllers.data;
+        if(mockedDataController && mockedDataController.mockOptions && that._controllers.dataSource) {
+            that._controllers.dataSource.adapter = new exports.MockDataSourceAdapter(
+                mockedDataController.mockOptions
+            );
+        }
 
         $.each(that._controllers, function(name) {
             that[name + 'Controller'] = this;

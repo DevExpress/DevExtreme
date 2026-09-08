@@ -245,10 +245,14 @@ class Popup<
     const e = options.originalEvent;
     const $target = $(e.target);
 
-    if (this._$content && !$target.is(this._$content)
-        && options.keyName === ESC_KEY_NAME
-        && !e.isDefaultPrevented()
-        && !_ignoreCloseOnChildEscape) {
+    const shouldCloseOnChildEscape = !!this._$content
+      && !$target.is(this._$content)
+      && options.keyName === ESC_KEY_NAME
+      && !e.isDefaultPrevented()
+      && !_ignoreCloseOnChildEscape
+      && !this._isEscapeHandledByOverlayAbove();
+
+    if (shouldCloseOnChildEscape) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.hide();
     }

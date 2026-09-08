@@ -72,7 +72,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // assert
-        assert.notOk(this.dataController.dataSource().paginate(), 'paginate is disabled');
+        assert.notOk(this.dataSourceController.getAdapter().paginate(), 'paginate is disabled');
     });
 
     QUnit.test('Paginate should be enabled when virtual scrolling is enabled', function(assert) {
@@ -85,7 +85,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // assert
-        assert.ok(this.dataController.dataSource().paginate(), 'paginate is enabled');
+        assert.ok(this.dataSourceController.getAdapter().paginate(), 'paginate is enabled');
     });
 
     QUnit.test('Initialize from dataSource with plain structure', function(assert) {
@@ -707,7 +707,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('There are no exceptions on getting node when hasn\'t datasource', function(assert) {
     // arrange
-        this.dataController.setDataSource(undefined);
+        this.dataController._disposeDataSource();
 
         // act, assert
         assert.equal(this.getNodeByKey(1), undefined, 'no exceptions');

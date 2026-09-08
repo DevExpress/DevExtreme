@@ -52,52 +52,52 @@ $agenda-appointment-recurrence-icon-color: null !default;
   $scheduler-tooltip-list-focused-bg: $scheduler-tooltip-list-focused-bg
 );
 
-$scheduler-appointment-min-size: 4px;
-$scheduler-appointment-content-padding: 5px 7px;
-$scheduler-appointment-reduced-content-padding: 40px;
+$scheduler-appointment-min-size: 4px !default;
+$scheduler-appointment-content-padding: 5px 7px !default;
+$scheduler-appointment-reduced-content-padding: 40px !default;
 
-$scheduler-hovered-appointment-top-shadow-size: 5px;
-$scheduler-focused-cell-shadow: inset 0 0 0 1px $scheduler-appointment-base-color;
+$scheduler-hovered-appointment-top-shadow-size: 5px !default;
+$scheduler-focused-cell-shadow: inset 0 0 0 1px $scheduler-appointment-base-color !default;
 
-$scheduler-vertical-appointment-resizable-hovering-shadow: inset 0 $scheduler-hovered-appointment-top-shadow-size 0 0 $scheduler-appointment-start-color, inset 0 -2px 0 0 $scheduler-appointment-start-color;
-$scheduler-vertical-appointment-hovering-shadow: inset 0 $scheduler-hovered-appointment-top-shadow-size 0 0 $scheduler-appointment-start-color;
-$scheduler-vertical-appointment-shadow: inset 0 2px 0 0 $scheduler-appointment-start-color;
-$scheduler-vertical-appointment-resizing-shadow: inset 0 -2px 0 0 $scheduler-appointment-start-color, $scheduler-vertical-appointment-shadow;
+$scheduler-vertical-appointment-resizable-hovering-shadow: inset 0 $scheduler-hovered-appointment-top-shadow-size 0 0 $scheduler-appointment-start-color, inset 0 -2px 0 0 $scheduler-appointment-start-color !default;
+$scheduler-vertical-appointment-hovering-shadow: inset 0 $scheduler-hovered-appointment-top-shadow-size 0 0 $scheduler-appointment-start-color !default;
+$scheduler-vertical-appointment-shadow: inset 0 2px 0 0 $scheduler-appointment-start-color !default;
+$scheduler-vertical-appointment-resizing-shadow: inset 0 -2px 0 0 $scheduler-appointment-start-color, $scheduler-vertical-appointment-shadow !default;
 
-$scheduler-appointment-dragging-shadow: 7px 7px 15px 0 rgba(50, 50, 50, 0.2);
+$scheduler-appointment-dragging-shadow: 7px 7px 15px 0 rgba(50, 50, 50, 0.2) !default;
 
-$scheduler-horizontal-appointment-resizable-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color, inset -2px 0 0 0 $scheduler-appointment-start-color;
-$scheduler-horizontal-appointment-resizable-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color, inset 2px 0 0 0 $scheduler-appointment-start-color;
-$scheduler-horizontal-appointment-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color;
-$scheduler-horizontal-appointment-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color;
-$scheduler-horizontal-appointment-shadow: inset 2px 0 0 0 $scheduler-appointment-start-color;
-$scheduler-horizontal-appointment-shadow-rtl: inset -2px 0 0 0 $scheduler-appointment-start-color;
-$scheduler-horizontal-appointment-resizing-shadow: inset -2px 0 0 0 $scheduler-appointment-start-color, $scheduler-horizontal-appointment-shadow;
+$scheduler-horizontal-appointment-resizable-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color, inset -2px 0 0 0 $scheduler-appointment-start-color !default;
+$scheduler-horizontal-appointment-resizable-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color, inset 2px 0 0 0 $scheduler-appointment-start-color !default;
+$scheduler-horizontal-appointment-hovering-shadow: inset $scheduler-hovered-appointment-top-shadow-size 0 0 0 $scheduler-appointment-start-color !default;
+$scheduler-horizontal-appointment-hovering-shadow-rtl: inset (-$scheduler-hovered-appointment-top-shadow-size) 0 0 0 $scheduler-appointment-start-color !default;
+$scheduler-horizontal-appointment-shadow: inset 2px 0 0 0 $scheduler-appointment-start-color !default;
+$scheduler-horizontal-appointment-shadow-rtl: inset -2px 0 0 0 $scheduler-appointment-start-color !default;
+$scheduler-horizontal-appointment-resizing-shadow: inset -2px 0 0 0 $scheduler-appointment-start-color, $scheduler-horizontal-appointment-shadow !default;
 
-$scheduler-grouped-appointment-month-text-size: 12px;
+$scheduler-grouped-appointment-month-text-size: 12px !default;
 
-$scheduler-base-border: 1px solid;
-$scheduler-transparent-top-border: 1px solid transparent;
-$scheduler-accent-border: 1px solid;
+$scheduler-base-border: 1px solid !default;
+$scheduler-transparent-top-border: 1px solid transparent !default;
+$scheduler-accent-border: 1px solid !default;
 
-$scheduler-reduced-icon-offset: 5px;
-$scheduler-recurrence-icon-offset: 20px;
+$scheduler-reduced-icon-offset: 5px !default;
+$scheduler-recurrence-icon-offset: 20px !default;
 
-$scheduler-agenda-appointment-margin: 5px;
-$scheduler-agenda-last-in-date-appointment-margin: 20px;
+$scheduler-agenda-appointment-margin: 5px !default;
+$scheduler-agenda-last-in-date-appointment-margin: 20px !default;
 
-$scheduler-small-size-factor: 0.5;
+$scheduler-small-size-factor: 0.5 !default;
 
-$scheduler-small-size-element-offset: $scheduler-left-column-width * $scheduler-small-size-factor;
+$scheduler-small-size-element-offset: $scheduler-left-column-width * $scheduler-small-size-factor !default;
 
-$scheduler-time-indicator-font-size: 30px;
-$scheduler-time-indicator-size: 1px;
-$scheduler-time-indicator-top: 14px;
-$scheduler-time-indicator-left: 12px;
+$scheduler-time-indicator-font-size: 30px !default;
+$scheduler-time-indicator-size: 1px !default;
+$scheduler-time-indicator-top: 14px !default;
+$scheduler-time-indicator-left: 12px !default;
 
-$scheduler-time-indicator-shadow-color: rgba(255, 255, 255, 0.1);
-$scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color;
-$scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0;
+$scheduler-time-indicator-shadow-color: rgba(255, 255, 255, 0.1) !default;
+$scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color !default;
+$scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0 !default;
 
 @use "./appointment" with (
   $scheduler-transparent-top-border: $scheduler-transparent-top-border,

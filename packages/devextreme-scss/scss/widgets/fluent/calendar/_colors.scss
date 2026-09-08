@@ -24,7 +24,6 @@ $calendar-header-color: $calendar-color !default;
 $calendar-cell-other-color: null !default;
 $calendar-bg: transparent !default;
 $calendar-hover-bg: null !default;
-$calendar-cell-hover-border-color: null !default;
 $calendar-cell-hover-color: $calendar-color !default;
 
 /**
@@ -44,7 +43,6 @@ $calendar-week-number-border-radius: 0 !default;
 
 @if $mode == "light" {
   $calendar-hover-bg: $button-default-outlined-selected-bg !default;
-  $calendar-cell-hover-border-color: $calendar-hover-bg !default;
   $calendar-cell-active-bg: $button-default-outlined-active-bg !default;
   $calendar-cell-other-color: color.adjust($calendar-color, $lightness: 23.92%, $space: hsl) !default;
   $calendar-week-number-cell-color: color.adjust($calendar-color, $lightness: 23.92%, $space: hsl) !default;
@@ -54,12 +52,13 @@ $calendar-week-number-border-radius: 0 !default;
 
 @if $mode == "dark" {
   $calendar-hover-bg: extcolor.adjust-if-not-achromatic($color: $base-accent, $hue: 358.4deg, $saturation: -8.6%, $lightness: -26.7%) !default;
-  $calendar-cell-hover-border-color: $calendar-hover-bg !default;
   $calendar-cell-active-bg: $base-accent-selected !default;
   $calendar-cell-other-color: color.adjust($calendar-color, $lightness: -32.16%, $space: hsl) !default;
   $calendar-week-number-cell-color: color.adjust($calendar-color, $lightness: -32.16%, $space: hsl) !default;
   $calendar-cell-contoured-border-color: $base-accent-active !default;
   $calendar-week-number-cell-bg: $base-hover-bg !default;
 }
+
+$calendar-cell-hover-border-color: $calendar-hover-bg !default;
 
 $calendar-cell-other-hover-color: $calendar-cell-other-color !default;

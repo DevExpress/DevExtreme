@@ -5,8 +5,8 @@
 @use "../button/colors" as *;
 @use "../overlay";
 
-$fluent-fa-button-label-offset: 16px;
-$fluent-fa-button-label-padding: 4px 8px;
+$fluent-fa-button-label-offset: 16px !default;
+$fluent-fa-button-label-padding: 4px 8px !default;
 
 @include dx-fa-button-mixin(
   $fluent-main-fa-button-size,

@@ -16,6 +16,7 @@ import * as ColumnChooserModule from './column_chooser/index';
 import { CompatibilityColumnsController } from './columns_controller/compatibility';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
+import { CompatibilityDataSourceController } from './data_source/compatibility';
 import * as di from './di';
 import * as EditingModule from './editing/index';
 import { EditPopupView } from './editing/popup/view';
@@ -100,6 +101,7 @@ export class GridCoreNewBase<
     this.diContext.registerInstance(WidgetMock, new WidgetMock(
       this,
       this.diContext.get(DataControllerModule.CompatibilityDataController),
+      this.diContext.get(CompatibilityDataSourceController),
       this.diContext.get(CompatibilityColumnsController),
       this.diContext.get(CompatibilityHeaderFilterController),
       this.diContext.get(CompatibilityFilterSyncController),

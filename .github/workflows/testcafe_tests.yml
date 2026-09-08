@@ -470,8 +470,12 @@ jobs:
         quarantined_failed=0
         result=./artifacts/quarantine-run-result.json
         new_flakes_summary=./artifacts/new-flakes-summary.txt
+        new_flakes=./artifacts/flaky-candidates.jsonl
+        report_json=./artifacts/flaky-candidates.json
         mkdir -p ./artifacts
         : > "$new_flakes_summary"
+        : > "$new_flakes"
+        rm -f "$report_json"
 
         # Every test gets up to 3 attempts (initial run + 2 retries) and passes
         # if at least one attempt succeeds. A reported failure means all attempts failed.
@@ -549,11 +553,22 @@ jobs:
           while IFS= read -r name; do
             if jq -e --arg n "$name" '.tests | index($n)' "$result" > /dev/null; then
               echo "FAILED | $name | $job_name" >> "$new_flakes_summary"
+              verdict=failed
             else
               echo "passed | $name | $job_name" >> "$new_flakes_summary"
+              verdict=passed
             fi
+            jq -cn --arg test "$name" --arg sourceJob "$job_name" --arg theme "$theme" \
+              --arg componentFolder "$componentFolder" --arg timezone "$timezone" \
+              --arg platform "$platform" --arg verdict "$verdict" \
+              '{ test: $test, sourceJob: $sourceJob, theme: $theme, componentFolder: $componentFolder, timezone: $timezone, platform: $platform, verdict: $verdict }' \
+              >> "$new_flakes"
           done < <(jq -r '.tests[]' "$report")
         done
+
+        if [ -s "$new_flakes" ]; then
+          jq -s '{ schemaVersion: 1, candidates: . }' "$new_flakes" > "$report_json"
+        fi
 
         sudo ln -sf /usr/share/zoneinfo/GMT /etc/localtime
 
@@ -629,6 +644,15 @@ jobs:
       with:
         name: failed-tests-quarantine
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
+        if-no-files-found: ignore
+
+    - name: Upload flaky candidates report
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: flaky-candidates
+        path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/flaky-candidates.json
+        retention-days: 7
         if-no-files-found: ignore
 
   merge-artifacts:

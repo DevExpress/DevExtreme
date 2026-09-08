@@ -2120,7 +2120,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 allowSelectAll: true
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         this.selectionController.selectRows([2]);
 
@@ -2146,7 +2146,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 allowSelectAll: true
             },
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         // act
         this.selectionController.selectRows([1]);
@@ -2177,7 +2177,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 allowSelectAll: true
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         // act
         this.selectionController.selectAll();
@@ -2206,7 +2206,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 mode: 'multiple',
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         sinon.spy(this.selectionController, '_updateSelectedOnPush');
         sinon.spy(this.selectionController, 'getSelectedRowsData');
@@ -2227,7 +2227,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 deferred: true
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         sinon.spy(this.selectionController, '_updateSelectedOnPush');
         sinon.spy(this.selectionController, 'getSelectedRowsData');
@@ -3192,7 +3192,7 @@ QUnit.module('Selection when grouping', {
         this.dataController.pageIndex(1);
         this.selectionController.changeItemSelection(1);
 
-        assert.ok(this.dataController._dataSource.items()[0].isContinuation);
+        assert.ok(this.dataSourceController.getAdapter().items()[0].isContinuation);
         assert.ok(!this.dataController.items()[0].isSelected);
         assert.ok(this.dataController.items()[1].isSelected);
         assert.ok(!this.dataController.items()[2].isSelected);

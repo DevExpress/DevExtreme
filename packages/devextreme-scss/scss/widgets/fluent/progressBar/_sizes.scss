@@ -3,7 +3,7 @@
 $progressbar-height: null !default;
 $progressbar-border-radius: $base-border-radius !default;
 $progressbar-status-margin-top: null !default;
-$progressbar-indeterminate-background-width: 90%;
+$progressbar-indeterminate-background-width: 90% !default;
 
 @if $size == "default" {
   $progressbar-height: 4px !default;
