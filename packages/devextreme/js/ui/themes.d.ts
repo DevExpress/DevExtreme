@@ -52,7 +52,7 @@ export function mode(element: Element): 'light' | 'dark';
 
 /**
  * Re-reads the colour mode for widgets that render outside the element they belong to, such as an
- * open popup. Switching the theme through `current()` does this for you; call it after moving a
- * `dx-theme-mode-*` class by hand.
+ * open popup. Call it after changing what an element resolves to: moving a `dx-theme-mode-*` class,
+ * or switching the whole theme.
  */
 export function refreshMode(): void;

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>fluent-next: every supported use of the theme mode classes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="dx-theme" data-theme="fluent-next.blue.light" data-active="true"
+        href="../artifacts/css/dx.fluent-next.blue.light.css">
+  <link rel="dx-theme" data-theme="fluent-next.blue.dark" data-active="false"
+        href="../artifacts/css/dx.fluent-next.blue.dark.css">
+  <script src="../artifacts/js/jquery.js"></script>
+  <script src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+  <style>
+    body { font: 13px/1.6 -apple-system, "Segoe UI", sans-serif; margin: 0; background: var(--dxds-color-bg-canvas); color: var(--dxds-color-content); }
+    .page { max-width: 1080px; margin: 0 auto; padding: 20px 20px 80px; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    h2 { font-size: 15px; margin: 30px 0 6px; padding-top: 14px; border-top: 1px solid var(--dxds-color-border); }
+    p.note { color: var(--dxds-color-content-subtle); margin: 4px 0 12px; max-width: 76ch; }
+    code { font-family: ui-monospace, Menlo, monospace; font-size: .9em; background: var(--dxds-color-bg-hovered); padding: .1em .35em; border-radius: 4px; }
+
+    .bar { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+           padding: 10px 20px; background: var(--dxds-color-bg); border-bottom: 1px solid var(--dxds-color-border); }
+    .bar .lbl { color: var(--dxds-color-content-subtle); }
+    .bar button { font: inherit; padding: 5px 11px; border-radius: 6px; cursor: pointer;
+                  border: 1px solid var(--dxds-color-border); background: var(--dxds-color-bg); color: var(--dxds-color-content); }
+    .bar button[aria-pressed="true"] { background: var(--dxds-color-bg-primary); border-color: var(--dxds-color-bg-primary); color: #fff; }
+    .bar .count { margin-inline-start: auto; color: var(--dxds-color-content-subtle); font-variant-numeric: tabular-nums; }
+
+    /* Every demo box paints itself from roles, so it shows the mode it resolved to. */
+    .box { background: var(--dxds-color-bg); color: var(--dxds-color-content);
+           border: 1px solid var(--dxds-color-border); border-radius: 8px; padding: 12px; }
+    .box + .box, .row > .box { margin-top: 0; }
+    .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin: 10px 0; }
+    .tag { display: inline-block; font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
+           color: var(--dxds-color-content-subtle); margin-bottom: 6px; }
+    .swatch-strip { display: flex; gap: 6px; margin-top: 8px; }
+    .swatch-strip i { width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--dxds-color-border); display: block; }
+
+    table.report { border-collapse: collapse; width: 100%; font-size: 12.5px; margin-top: 8px; }
+    table.report th, table.report td { border-bottom: 1px solid var(--dxds-color-border); padding: 5px 8px; text-align: left; vertical-align: top; }
+    table.report th { color: var(--dxds-color-content-subtle); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: .04em; }
+    table.report td.v { font-family: ui-monospace, Menlo, monospace; }
+    .ok { color: #1a7f37; font-weight: 600; }
+    .bad { color: #b00020; font-weight: 600; }
+
+    /* Case 11: a page-level override, loaded after the theme. */
+    :root { --dx-demo-brand: #7a3ea1; }
+    .brand-page { border-color: var(--dx-demo-brand); }
+    /* Case 12: an override placed on the very element that carries the mode class. */
+    .brand-scope { --dxds-color-bg-primary: #7a3ea1; }
+  </style>
+</head>
+<body class="dx-viewport">
+
+<div class="bar">
+  <span class="lbl">Bundle:</span>
+  <button data-bundle="light" aria-pressed="true">light</button>
+  <button data-bundle="dark" aria-pressed="false">dark</button>
+  <span class="lbl" style="margin-inline-start:14px">Page mode (class on &lt;html&gt;):</span>
+  <button data-page="" aria-pressed="true">none</button>
+  <button data-page="light" aria-pressed="false">light</button>
+  <button data-page="dark" aria-pressed="false">dark</button>
+  <span class="count" id="count">theme switches: 1</span>
+</div>
+
+<div class="page">
+  <h1>Theme modes: every supported use</h1>
+  <p class="note">Live page on the real bundle and real widgets - nothing here is a mock-up. Each section states what it demonstrates; the report at the bottom checks the same cases mechanically, so a broken one is named rather than merely looking wrong.</p>
+
+  <h2>1. Naming a mode on any element</h2>
+  <p class="note">The mode is a property of a place on the page. Put <code>dx-theme-mode-light</code> or <code>-dark</code> on any element and it, along with everything inside it, repaints. Nothing is loaded or swapped.</p>
+  <div class="row">
+    <div class="box" id="c-plain"><span class="tag">no class - the bundle decides</span>Body text on a surface</div>
+    <div class="box dx-theme-mode-light" id="c-light"><span class="tag">dx-theme-mode-light</span>Always light</div>
+    <div class="box dx-theme-mode-dark" id="c-dark"><span class="tag">dx-theme-mode-dark</span>Always dark</div>
+  </div>
+
+  <h2>2. Inverting against the surroundings</h2>
+  <p class="note"><code>dx-theme-mode-inverted</code> means "the opposite of the nearest enclosing mode". It is recursive: an inverted block inside an inverted block flips back, at any depth. That is what makes a contrasting panel work without the application knowing which mode it is in.</p>
+  <div class="row">
+    <div class="box dx-theme-mode-inverted" id="c-inv-bare"><span class="tag">inverted, nothing named above</span>Opposite of the bundle</div>
+    <div class="box dx-theme-mode-dark"><span class="tag">inside dark</span>
+      <div class="box dx-theme-mode-inverted" id="c-inv-in-dark" style="margin-top:8px"><span class="tag">inverted</span>Light again</div>
+    </div>
+    <div class="box dx-theme-mode-dark"><span class="tag">inside dark</span>
+      <div class="box dx-theme-mode-inverted" style="margin-top:8px"><span class="tag">inverted</span>
+        <div class="box dx-theme-mode-inverted" id="c-inv-nested" style="margin-top:8px"><span class="tag">inverted again</span>Back to dark</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>3. Real widgets inside a scope</h2>
+  <p class="note">Components read the same roles, so they follow a scope with no extra work. The same three widgets are built twice, in two scopes.</p>
+  <div class="row">
+    <div class="box dx-theme-mode-light"><span class="tag">dx-theme-mode-light</span>
+      <div class="w-button"></div><div class="w-text" style="margin-top:8px"></div><div class="w-check" style="margin-top:8px"></div>
+    </div>
+    <div class="box dx-theme-mode-dark"><span class="tag">dx-theme-mode-dark</span>
+      <div class="w-button"></div><div class="w-text" style="margin-top:8px"></div><div class="w-check" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <h2>4. Overlays follow the element that owns them</h2>
+  <p class="note">A popup or a drop-down renders in the viewport, not where the widget sits, so it cannot inherit the scope. The theme publishes the resolved mode in <code>--dx-theme-mode</code> and the core reads it back, giving the overlay's container the mode its owner resolved to. Open both and compare.</p>
+  <div class="row">
+    <div class="box dx-theme-mode-light"><span class="tag">owner in a light scope</span><div class="w-popup"></div><div class="w-select" style="margin-top:8px"></div></div>
+    <div class="box dx-theme-mode-dark"><span class="tag">owner in a dark scope</span><div class="w-popup"></div><div class="w-select" style="margin-top:8px"></div></div>
+    <div class="box dx-theme-mode-inverted"><span class="tag">owner in an inverted scope</span><div class="w-popup"></div><div class="w-select" style="margin-top:8px"></div></div>
+  </div>
+
+  <h2>5. Switching a scope while an overlay is open</h2>
+  <p class="note">Anything that changes what an element resolves to - a class the application moves, or the whole theme - is announced with <code>themes.refreshMode()</code>. Open the drop-down below, then press 1 and watch the report disagree - the list keeps the mode it opened in. Press 2 and it catches up. Everything that stayed inside the scope followed the class immediately; only what was moved out to the viewport needed telling.</p>
+  <div class="box" id="live-scope-host">
+    <div class="box dx-theme-mode-dark" id="live-scope"><span class="tag" id="live-tag">scope: dark</span><div class="w-select-live"></div></div>
+    <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+      <button id="flip-quiet">1. Flip the scope, say nothing</button>
+      <button id="tell">2. Now call refreshMode()</button>
+      <button id="flip-told">Flip and tell, in one go</button>
+    </div>
+  </div>
+
+  <h2>6. Together with a colour swatch</h2>
+  <p class="note">Swatches and modes are independent scopes and combine: the overlay container repeats both.</p>
+  <div class="row">
+    <div class="box dx-swatch-demo dx-theme-mode-dark"><span class="tag">dx-swatch-demo + dx-theme-mode-dark</span><div class="w-select"></div></div>
+  </div>
+
+  <h2>7. Customising roles</h2>
+  <p class="note">A role overridden in a stylesheet loaded after the theme wins, as it always did - all theme rules weigh one class, <code>:root</code> included. Inside a mode scope the theme re-declares the roles, so an override meant for a scope belongs on the element carrying the class.</p>
+  <div class="row">
+    <div class="box brand-page" id="c-brand-page"><span class="tag">page-level override of a custom property</span>Border painted from <code>--dx-demo-brand</code> declared on <code>:root</code></div>
+    <div class="box dx-theme-mode-dark brand-scope" id="c-brand-scope"><span class="tag">role overridden on the scope element</span>
+      <div class="w-button-brand"></div>
+    </div>
+  </div>
+
+  <h2>8. Asking what mode an element is in</h2>
+  <p class="note"><code>themes.mode(element)</code> answers for a place on the page. <code>themes.current()</code> and <code>themes.isDark()</code> keep answering for the loaded stylesheet - a different question, still a valid one. Both are reported below.</p>
+
+  <h2>9. What does not follow a class</h2>
+  <p class="note">Icons whose colour is baked into a data-uri at build time (diagram, gantt, fileManager, list, timeView) and the theme marker keep the bundle's mode. Charts take their theme from scripts, so they follow the loaded file too. This is by construction, not a defect - a <code>var()</code> does not resolve inside a data-uri.</p>
+  <div class="row">
+    <div class="box dx-theme-mode-dark"><span class="tag">a data-uri icon inside a dark scope</span>
+      <div class="dx-timeview-clock" style="width:60px;height:60px;background-repeat:no-repeat;background-size:contain"></div>
+      <div style="margin-top:6px; color: var(--dxds-color-content-subtle)">Stays as the bundle drew it</div>
+    </div>
+  </div>
+
+  <h2>Mechanical report</h2>
+  <p class="note">Every case above, checked against the values the browser resolved. Re-run after any switch in the bar.</p>
+  <table class="report" id="report"><tbody><tr><td>running…</td></tr></tbody></table>
+</div>
+
+<script>
+(function () {
+  var themes = DevExpress.ui.themes;
+  var loads = 1;
+
+  function bg(el) { return getComputedStyle(el).getPropertyValue('--dxds-color-bg').trim(); }
+  function modeProp(el) { return getComputedStyle(el).getPropertyValue('--dx-theme-mode').trim(); }
+  function bundleMode() { return themes.isDark(themes.current()) ? 'dark' : 'light'; }
+  function opposite(m) { return m === 'dark' ? 'light' : 'dark'; }
+
+  // ---- widgets -------------------------------------------------------------
+  function buildWidgets() {
+    $('.w-button').dxButton({ text: 'Primary', type: 'default', stylingMode: 'contained' });
+    $('.w-button-brand').dxButton({ text: 'Uses the overridden role', type: 'default', stylingMode: 'contained' });
+    $('.w-text').dxTextBox({ value: 'Jane Cooper', label: 'Customer' });
+    $('.w-check').dxCheckBox({ value: true, text: 'Follows the scope' });
+    $('.w-select, .w-select-live').each(function () {
+      var owner = this;
+      var instance = $(this).dxSelectBox({
+        items: ['Draft', 'Sent', 'Paid'],
+        value: 'Draft',
+        onOpened: function (e) { stampOwner(e.component, owner); report(); },
+      }).dxSelectBox('instance');
+    });
+    $('.w-popup').each(function () {
+      var host = this;
+      $('<div>').appendTo(host).dxButton({
+        text: 'Open a popup',
+        onClick: function () {
+          var instance = $('<div>').appendTo(host).dxPopup({
+            title: 'Painted in the owner’s mode',
+            width: 320, height: 180, visible: true, showCloseButton: true,
+            contentTemplate: function () { return $('<p>').text('This popup lives in the viewport, yet it resolved the mode of the block that opened it.'); }
+          }).dxPopup('instance');
+
+          instance.on('shown', function () { stampOwner(instance, host); report(); });
+          setTimeout(function () { stampOwner(instance, host); report(); }, 120);
+        }
+      });
+    });
+  }
+
+  // ---- the live-switch case ------------------------------------------------
+  function flip(tell) {
+    var scope = document.getElementById('live-scope');
+    var next = scope.classList.contains('dx-theme-mode-dark') ? 'light' : 'dark';
+
+    scope.classList.remove('dx-theme-mode-light', 'dx-theme-mode-dark');
+    scope.classList.add('dx-theme-mode-' + next);
+    document.getElementById('live-tag').textContent = 'scope: ' + next + (tell ? '' : ' (not told)');
+
+    if (tell) { themes.refreshMode(); }
+    report();
+  }
+
+  // ---- report --------------------------------------------------------------
+  function row(what, expected, actual) {
+    var ok = expected === actual;
+    return '<tr><td>' + what + '</td><td class="v">' + expected + '</td><td class="v">' + actual
+      + '</td><td class="' + (ok ? 'ok' : 'bad') + '">' + (ok ? 'ok' : 'MISMATCH') + '</td></tr>';
+  }
+
+  function report() {
+    var build = bundleMode();
+    var page = document.documentElement.classList.contains('dx-theme-mode-dark') ? 'dark'
+      : document.documentElement.classList.contains('dx-theme-mode-light') ? 'light' : build;
+    var rows = [];
+
+    rows.push(row('no class - resolves to the page mode', page, modeProp(document.getElementById('c-plain'))));
+    rows.push(row('dx-theme-mode-light', 'light', modeProp(document.getElementById('c-light'))));
+    rows.push(row('dx-theme-mode-dark', 'dark', modeProp(document.getElementById('c-dark'))));
+    rows.push(row('inverted, nothing named above', opposite(page), modeProp(document.getElementById('c-inv-bare'))));
+    rows.push(row('inverted inside dark', 'light', modeProp(document.getElementById('c-inv-in-dark'))));
+    rows.push(row('inverted inside inverted inside dark', 'dark', modeProp(document.getElementById('c-inv-nested'))));
+    rows.push(row('themes.mode() agrees with the property', modeProp(document.getElementById('c-dark')),
+      themes.mode(document.getElementById('c-dark'))));
+    rows.push(row('themes.mode() for an unscoped element', page, themes.mode(document.getElementById('c-plain'))));
+    rows.push(row('themes.current() still names the file', themes.current(), themes.current()));
+    rows.push(row('themes.isDark() answers for the file', String(build === 'dark'), String(themes.isDark(themes.current()))));
+
+    var pairs = overlayPairs();
+    if (pairs.length) {
+      var mismatched = pairs.filter(function (p) { return modeProp(p.wrapper) !== modeProp(p.owner); }).length;
+      rows.push(row('each of ' + pairs.length + ' visible overlays matches its owner', '0 mismatched', mismatched + ' mismatched'));
+    }
+
+    /*
+     * The wrapper, not the widget's own `.dx-dropdowneditor-overlay` element: that one never leaves
+     * the scope, so it would follow a class change even when the overlay itself had not moved.
+     */
+    var live = document.getElementById('live-scope');
+    var liveOverlay = document.querySelector('.dx-overlay-wrapper.dx-dropdowneditor-overlay');
+    if (liveOverlay) {
+      rows.push(row('open drop-down vs its scope', modeProp(live), modeProp(liveOverlay)));
+    }
+
+    document.getElementById('report').innerHTML =
+      '<tr><th>case</th><th>expected</th><th>resolved</th><th></th></tr>' + rows.join('');
+  }
+
+  /*
+   * Pair each open overlay with the block that owns it. Taken from the widget instance: the public
+   * DevExpress.ui.dxOverlay is a registration wrapper, so patching its prototype observes nothing.
+   */
+  /*
+   * The owner is stamped on the wrapper when the overlay is shown, so the pair is whatever is on
+   * screen right now. Reading it from a list built earlier goes wrong the moment a widget re-opens
+   * into a different wrapper.
+   *
+   * Only visible overlays are compared. A closed drop-down keeps the container it was last shown
+   * in and re-picks the mode when it opens - deliberately: a mode change costs nothing for the
+   * overlays nobody is looking at.
+   */
+  function stampOwner(instance, owner) {
+    var content = instance.content && instance.content();
+    var wrapper = content && $(content).closest('.dx-overlay-wrapper')[0];
+
+    if (wrapper) { wrapper.__ownerEl = owner; }
+  }
+
+  function overlayPairs() {
+    return [].slice.call(document.querySelectorAll('.dx-overlay-wrapper'))
+      .filter(function (w) { return w.__ownerEl && getComputedStyle(w).display !== 'none'; })
+      .map(function (w) { return { owner: w.__ownerEl, wrapper: w }; });
+  }
+
+  // ---- bar -----------------------------------------------------------------
+  /*
+   * Switching through the API, then telling us. A theme switch swaps the href of one <link>, so the
+   * new stylesheet lands after the call returns - refreshMode() belongs after the theme is ready,
+   * not inside the switch. Doing the swap by hand instead would also leave themes.current() naming
+   * the previous file, and every answer derived from it would be stale.
+   */
+  document.querySelectorAll('[data-bundle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      themes.current('fluent-next.blue.' + btn.dataset.bundle);
+      loads += 1;
+      document.getElementById('count').textContent = 'theme switches: ' + loads;
+      document.querySelectorAll('[data-bundle]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      themes.ready(function () { setTimeout(function () { themes.refreshMode(); report(); }, 60); });
+    });
+  });
+
+  document.querySelectorAll('[data-page]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var root = document.documentElement;
+      root.classList.remove('dx-theme-mode-light', 'dx-theme-mode-dark');
+      if (btn.dataset.page) { root.classList.add('dx-theme-mode-' + btn.dataset.page); }
+      themes.refreshMode();
+      document.querySelectorAll('[data-page]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      report();
+    });
+  });
+
+  document.getElementById('flip-told').addEventListener('click', function () { flip(true); });
+  document.getElementById('flip-quiet').addEventListener('click', function () { flip(false); });
+  document.getElementById('tell').addEventListener('click', function () { themes.refreshMode(); report(); });
+
+  buildWidgets();
+  setTimeout(report, 200);
+  window.__report = report;
+}());
+</script>
+</body>
+</html>

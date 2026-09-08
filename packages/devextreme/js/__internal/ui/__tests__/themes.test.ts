@@ -16,7 +16,7 @@ const style = (css: string): void => { document.head.innerHTML = `<style>${css}<
 const withThemeMarker = (themeName: string): string => `.dx-theme-marker { font-family: "dx.${themeName}"; }`;
 
 describe('themes.mode', () => {
-  let element: HTMLElement;
+  let element = document.createElement('div');
 
   beforeEach(() => {
     element = document.createElement('div');

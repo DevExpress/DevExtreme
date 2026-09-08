@@ -108,9 +108,6 @@ export function waitForThemeLoad(themeName: string): void {
     themeReadyCallback.fire();
     themeReadyCallback.empty();
 
-    // a different stylesheet can mean a different mode
-    themeModeChangedCallback.fire();
-
     initDeferred.resolve();
   }
 
@@ -334,9 +331,6 @@ export function current(options) {
 
     themeReadyCallback.fire();
     themeReadyCallback.empty();
-
-    // a different stylesheet can mean a different mode
-    themeModeChangedCallback.fire();
   } else {
     throw errors.Error('E0021', currentThemeName);
   }
@@ -402,8 +396,13 @@ const THEME_MODE_PROPERTY = '--dx-theme-mode';
 /**
  * Re-reads the colour mode for widgets that render outside the element they belong to - today that
  * is open overlays, whose markup lives in the viewport and therefore outside the scope that decides
- * their mode. Switching the theme through `current()` calls this; call it yourself after moving a
- * `dx-theme-mode-*` class by hand, since that change is invisible to us.
+ * their mode. Call it after changing what an element resolves to: moving a `dx-theme-mode-*` class,
+ * or switching the whole theme.
+ *
+ * Not called from `current()` on purpose. A theme switch reuses one `<link>` and swaps its `href`,
+ * so the new stylesheet lands some time after the call returns; every point inside the switch that
+ * was tried fired while the old values were still live in at least one direction, which would make
+ * this work by luck. Doing it from the outside, once, is predictable.
  */
 export function refreshMode(): void {
   themeModeChangedCallback.fire();
