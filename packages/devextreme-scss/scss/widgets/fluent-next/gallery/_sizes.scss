@@ -8,7 +8,7 @@ $gallery-nav-button-inset-inline: ds.$spacing-80 !default;
 $gallery-nav-icon-font-size: ds.$font-size-320 !default; // dx-icon-glyph-size: text roles not applicable
 $gallery-nav-button-width: ds.$spacing-320 !default;
 $gallery-nav-button-height: ds.$spacing-320 !default;
-$gallery-nav-button-margin-block-start: -16px !default; // dx-offscale: -16px
+$gallery-nav-button-margin-block-start: calc(#{$gallery-nav-button-height} / -2) !default;
 $gallery-indicator-item-border-width: ds.$border-width-10 !default;
 $gallery-indicator-item-border-selected: ds.$border-width-20 solid !default;
 
