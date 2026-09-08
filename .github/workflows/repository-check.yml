@@ -87,7 +87,6 @@ jobs:
         name: flaky-tests-report
         path: |
           ${{ github.workspace }}/artifacts/flaky-tests-report.json
-          ${{ github.workspace }}/artifacts/flaky-tests-report.md
           ${{ github.workspace }}/artifacts/collect.log
         retention-days: 7
         if-no-files-found: ignore
