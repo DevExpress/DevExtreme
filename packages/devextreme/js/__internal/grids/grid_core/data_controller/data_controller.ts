@@ -67,7 +67,7 @@ import {
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends modules.Controller {
-  public _dataSource?: DataSourceAdapter | null;
+  protected _dataSource?: DataSourceAdapter | null;
 
   protected _items!: ProcessedItem[];
 
