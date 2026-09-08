@@ -15,7 +15,16 @@ function buildStatus(report: FlakyTestsReport): string {
   if (report.tests.length === 0) {
     return `✅ no flaky candidates in ${report.windowHours}h`;
   }
-  return `⚠️ ${countConfirmed(report)} flaky in ${report.windowHours}h (${report.totalCandidates} occurrence(s))`;
+  const confirmed = countConfirmed(report);
+  const regressions = report.tests.length - confirmed;
+  // Saying "0 flaky" while candidates failed every attempt reads like a clean window, when
+  // in fact those are the likely regressions.
+  const parts = [`${confirmed} flaky`];
+  if (regressions > 0) {
+    parts.push(`${regressions} failed every attempt`);
+  }
+
+  return `⚠️ ${parts.join(', ')} in ${report.windowHours}h (${report.totalCandidates} occurrence(s))`;
 }
 
 function formatList(values: string[]): string {

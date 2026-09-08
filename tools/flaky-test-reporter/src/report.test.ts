@@ -69,6 +69,15 @@ describe('parseCandidatesFile', () => {
     expect(parseCandidatesFile(content).map((c) => c.test)).toEqual(['kept', 'kept too']);
   });
 
+  it('drops an entry that is missing its matrix context, which the type claims is present', () => {
+    const content = JSON.stringify({
+      schemaVersion: 1,
+      candidates: [candidate('kept'), { test: 'no context', verdict: 'passed' }],
+    });
+
+    expect(parseCandidatesFile(content).map((c) => c.test)).toEqual(['kept']);
+  });
+
   it('throws when the file has no candidates array', () => {
     expect(() => parseCandidatesFile('{"tests":[]}')).toThrow(/candidates/);
   });

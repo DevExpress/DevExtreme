@@ -36,6 +36,14 @@ describe('extractFileFromZip', () => {
     expect(extractFileFromZip(zip, 'flaky-candidates.json')).toBeNull();
   });
 
+  it('throws when the central directory runs past the buffer, not "file absent"', () => {
+    const good = makeZip({ 'flaky-candidates.json': '{}' });
+    // Keep the EOCD, drop the middle: the recorded offsets now point outside the buffer.
+    const truncated = Buffer.concat([good.subarray(0, 10), good.subarray(good.length - 22)]);
+
+    expect(() => extractFileFromZip(truncated, 'flaky-candidates.json')).toThrow(/ZIP/);
+  });
+
   it('throws on a buffer that is not a ZIP, so a bad download is not read as an absent file', () => {
     expect(() => extractFileFromZip(Buffer.from('not a zip at all'), 'x.json')).toThrow(/ZIP/);
   });

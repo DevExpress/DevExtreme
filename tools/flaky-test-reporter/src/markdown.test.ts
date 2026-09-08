@@ -64,7 +64,7 @@ describe('status line', () => {
       }),
     );
 
-    expect(description).toContain('1 flaky in 48h');
+    expect(description).toContain('1 flaky, 1 failed every attempt in 48h');
   });
 });
 
@@ -166,6 +166,22 @@ describe('renderMarkdown', () => {
     );
 
     expect(description).not.toContain('Suggested `quarantine.json`');
+  });
+
+  it('does not read as a clean window when every candidate failed all attempts', () => {
+    const description = renderMarkdown(
+      makeReport({
+        totalCandidates: 2,
+        tests: [test_({ flakyConfirmed: 0, failedAllAttempts: 2, occurrences: 2 })],
+      }),
+    );
+
+    // "0 flaky" alone would look clean; the regression count has to be visible too.
+    expect(description).toContain('0 flaky, 1 failed every attempt in 48h (2 occurrence(s))');
+  });
+
+  it('omits the regression clause when every candidate recovered', () => {
+    expect(renderMarkdown(makeReport())).toContain('1 flaky in 48h');
   });
 
   it('says so when the list was capped', () => {

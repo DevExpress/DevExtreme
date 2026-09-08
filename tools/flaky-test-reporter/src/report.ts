@@ -37,6 +37,9 @@ export interface AggregateInput {
  * A candidate file written by an older workflow revision must not abort the sweep, so
  * anything unrecognised is dropped rather than trusted.
  */
+/** Matrix context every candidate carries; empty strings are normal, missing ones are not. */
+const CONTEXT_FIELDS = ['sourceJob', 'theme', 'componentFolder', 'timezone', 'platform'] as const;
+
 export function parseCandidatesFile(content: string): FlakyCandidate[] {
   const parsed: unknown = JSON.parse(content);
   const candidates = (parsed as FlakyCandidatesFile | null)?.candidates;
@@ -51,7 +54,9 @@ export function parseCandidatesFile(content: string): FlakyCandidate[] {
       && candidate.test.length > 0
       // aggregate() reads anything that is not 'failed' as a confirmed flake, so an entry
       // with a missing or unknown verdict would be recommended for quarantine.
-      && (candidate.verdict === 'passed' || candidate.verdict === 'failed'),
+      && (candidate.verdict === 'passed' || candidate.verdict === 'failed')
+      // The predicate claims a whole FlakyCandidate, so every field has to hold.
+      && CONTEXT_FIELDS.every((field) => typeof candidate[field] === 'string'),
   );
 }
 

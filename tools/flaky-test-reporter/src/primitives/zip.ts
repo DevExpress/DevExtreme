@@ -34,6 +34,12 @@ export function extractFileFromZip(zip: Buffer, filename: string): Buffer | null
   const centralDirOffset = zip.readUInt32LE(eocdOffset + 16);
   const centralDirEnd = centralDirOffset + centralDirSize;
 
+  // Without this the walk below simply finds nothing and the caller reads a truncated
+  // download as "the archive does not hold the file".
+  if (centralDirEnd > zip.length) {
+    throw new Error('invalid ZIP: central directory runs past the end of the buffer');
+  }
+
   let offset = centralDirOffset;
   while (offset < centralDirEnd && offset + 46 <= zip.length) {
     if (zip.readUInt32LE(offset) !== CENTRAL_FILE_HEADER_SIGNATURE) {
