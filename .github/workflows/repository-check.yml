@@ -42,6 +42,7 @@ jobs:
       id: collect
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WINDOW_HOURS: 72
       run: |
         # tee opens the log before the tool runs, so the directory must already exist.
         mkdir -p "$GITHUB_WORKSPACE/artifacts"
@@ -56,7 +57,7 @@ jobs:
           --repo "${{ github.repository }}" \
           --workflow testcafe_tests.yml \
           --artifact flaky-candidates \
-          --window-hours 48 \
+          --window-hours "$WINDOW_HOURS" \
           --out-json "$report" \
           --out-markdown "$markdown" 2>&1 \
           | tee "$log" \
