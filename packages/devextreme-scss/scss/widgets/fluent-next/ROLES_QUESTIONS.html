@@ -137,6 +137,45 @@ cross-family 24 → 15, кнопочных лестниц 8 → 0. Каждое 
 коммите, но направление у них одно: скорее недосчитал, чем перебрал.</p>
 
 
+<h2>З. Согласны ли соседи между собой</h2>
+
+<p>Весь аудит сравнивает наши роли с чужими, поэтому он стоит ровно столько, сколько стоит
+согласованность самих соседей. Замер 2026-09-09 по четырём наборам пакета: сравнивались
+только слоты, у которых <b>полностью совпадает путь анатомии</b> — компонент плюс всё после
+<code>color.</code>.</p>
+<p><b>Там, где они говорят об одном и том же одними словами, они согласны.</b>
+583 сравнимых слотов, роль совпадает у 541
+(93%).</p>
+<table><tr><th>Пара</th><th>Общих слотов</th><th>Совпадает</th></tr>
+<tr><td>core ↔ vnext</td><td>579</td><td>100%</td></tr><tr><td>blazor ↔ core</td><td>115</td><td>77%</td></tr><tr><td>blazor ↔ vnext</td><td>116</td><td>76%</td></tr><tr><td>core ↔ wpf</td><td>33</td><td>70%</td></tr><tr><td>blazor ↔ wpf</td><td>3</td><td>0%</td></tr>
+</table>
+<p class="meta">core и vnext — практически один набор (vnext = core плюс <code>field</code>), поэтому их
+100% ничего не доказывают. Значимы пары с blazor и wpf. У пары blazor ↔ wpf всего три общих слота —
+это не выборка.</p>
+
+<p><b>Но одними словами они почти ничего не описывают.</b> Пересечение анатомии, а не ролей, —
+вот что расходится:</p>
+<table><tr><th>Компонент</th><th>Наборы</th><th>Путей всего</th><th>Общих для всех</th></tr>
+<tr><td>button</td><td class="meta">core+vnext+blazor+wpf</td><td>401</td><td><span class="warn">0</span></td></tr><tr><td>checkbox</td><td class="meta">core+vnext+blazor</td><td>126</td><td><span class="warn">0</span></td></tr><tr><td>toast</td><td class="meta">core+vnext+blazor</td><td>92</td><td><span class="warn">0</span></td></tr><tr><td>grid</td><td class="meta">core+vnext+wpf</td><td>66</td><td>8</td></tr><tr><td>switch</td><td class="meta">core+vnext+blazor+wpf</td><td>57</td><td><span class="warn">0</span></td></tr><tr><td>ribbon</td><td class="meta">core+vnext+wpf</td><td>46</td><td>8</td></tr><tr><td>radio-button</td><td class="meta">core+vnext+blazor</td><td>36</td><td><span class="warn">0</span></td></tr><tr><td>text-input</td><td class="meta">core+vnext+blazor+wpf</td><td>35</td><td><span class="warn">0</span></td></tr>
+</table>
+<p>У <code>button</code> четыреста один путь анатомии на четыре продукта и <b>ноль</b> общих для всех
+четырёх. Каждый моделирует свои варианты, суб-элементы и состояния.</p>
+
+<p><b>Расхождений всего 42, и 9 из них — не расхождения.</b>
+Blazor запинен на 262.9.1 и всё ещё пишет <code>bg-none</code> / <code>border-none</code> /
+<code>content-none</code> там, где в действующем слое одна роль <code>none</code>. Настоящих
+остаётся <b>33</b>:</p>
+<p><b>button, вариант outline.</b> blazor кладёт фон на bg-none / bg-hovered / bg-active, core и vnext — на альфа-лестницу bg-alpha*. На button приходится 19 расхождений из 33.</p><p><b>ribbon.</b> у wpf он акцентный: content-inverted вместо content, bg-primary-hovered вместо bg-hovered. У веба нейтральный. Похоже на осознанное десктопное решение, а не на разнобой.</p><p><b>grid.</b> wpf сидит на bg-low и border, веб — на bg и border-subtle.</p><p><b>tabs.</b> иконка при наведении: blazor content-primary-hovered, wpf content.</p>
+
+<h3>Что из этого следует для самой проверки</h3>
+<p>Там, где соседи описывают одно и то же одними словами, они согласны на 93%. Но одними словами они описывают почти ничего: у button 401 путь анатомии на четыре продукта и ноль общих для всех четырёх. Расходится не назначение ролей, а анатомия — каждый продукт моделирует свои варианты, суб-элементы и состояния.</p>
+<p>Отсюда и устройство сравнения: оно <b>на уровне слота, а не пути</b>. Сравнение по полному пути
+нашло бы почти ничего — наша анатомия не совпадает с чужой ровно так же, как их анатомии не
+совпадают между собой. Цена этого выбора честная: инструмент отвечает на вопрос «использует ли пакет
+эту роль для слота такого рода в этом компоненте», а не «использует ли он её именно здесь». Поэтому
+<code>cross-family</code> сформулирован как вопрос, а не как вердикт.</p>
+
+
 <footer>Сгенерировано <code>node tools/review/roles-pages.mjs</code> ·
 пакет <code>@devexpress/design-tokens-internal@262.16.0</code> ·
 данные: <code>tools/review/roles.mjs</code> + <code>tests/roles.baseline.json</code> ·

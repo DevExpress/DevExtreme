@@ -1920,5 +1920,115 @@
       ],
       "why": "Виджеты, которых нет ни в одной дизайн-системе. Единственный путь — дизайн-ревью по скриншотам."
     }
+  },
+  "neighbourAgreement": {
+    "comment": [
+      "Do the neighbours agree with each other? Measured 09.09.2026 over the four component sets,",
+      "comparing only where the anatomy path matches exactly (component + everything after `color.`).",
+      "Banked because it qualifies the whole method: this audit compares our roles against theirs, and",
+      "that is worth what their own consistency is worth."
+    ],
+    "measuredOn": "2026-09-09",
+    "comparableSlots": 583,
+    "agreeing": 541,
+    "disagreeing": 42,
+    "staleNoneSpelling": 9,
+    "realDisagreements": 33,
+    "pairs": [
+      {
+        "pair": "core ↔ vnext",
+        "shared": 579,
+        "agree": 100
+      },
+      {
+        "pair": "blazor ↔ core",
+        "shared": 115,
+        "agree": 77
+      },
+      {
+        "pair": "blazor ↔ vnext",
+        "shared": 116,
+        "agree": 76
+      },
+      {
+        "pair": "core ↔ wpf",
+        "shared": 33,
+        "agree": 70
+      },
+      {
+        "pair": "blazor ↔ wpf",
+        "shared": 3,
+        "agree": 0
+      }
+    ],
+    "anatomyOverlap": [
+      {
+        "component": "button",
+        "paths": 401,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor+wpf"
+      },
+      {
+        "component": "checkbox",
+        "paths": 126,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor"
+      },
+      {
+        "component": "toast",
+        "paths": 92,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor"
+      },
+      {
+        "component": "grid",
+        "paths": 66,
+        "sharedByAll": 8,
+        "sets": "core+vnext+wpf"
+      },
+      {
+        "component": "switch",
+        "paths": 57,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor+wpf"
+      },
+      {
+        "component": "ribbon",
+        "paths": 46,
+        "sharedByAll": 8,
+        "sets": "core+vnext+wpf"
+      },
+      {
+        "component": "radio-button",
+        "paths": 36,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor"
+      },
+      {
+        "component": "text-input",
+        "paths": 35,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor+wpf"
+      }
+    ],
+    "realExamples": [
+      {
+        "what": "button, вариант outline",
+        "detail": "blazor кладёт фон на bg-none / bg-hovered / bg-active, core и vnext — на альфа-лестницу bg-alpha*. На button приходится 19 расхождений из 33."
+      },
+      {
+        "what": "ribbon",
+        "detail": "у wpf он акцентный: content-inverted вместо content, bg-primary-hovered вместо bg-hovered. У веба нейтральный. Похоже на осознанное десктопное решение, а не на разнобой."
+      },
+      {
+        "what": "grid",
+        "detail": "wpf сидит на bg-low и border, веб — на bg и border-subtle."
+      },
+      {
+        "what": "tabs",
+        "detail": "иконка при наведении: blazor content-primary-hovered, wpf content."
+      }
+    ],
+    "conclusion": "Там, где соседи описывают одно и то же одними словами, они согласны на 93%. Но одними словами они описывают почти ничего: у button 401 путь анатомии на четыре продукта и ноль общих для всех четырёх. Расходится не назначение ролей, а анатомия — каждый продукт моделирует свои варианты, суб-элементы и состояния."
   }
 }
