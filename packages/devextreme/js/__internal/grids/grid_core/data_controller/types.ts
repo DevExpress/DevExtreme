@@ -18,9 +18,9 @@ export interface RefreshOptions {
 }
 
 export interface UserState {
-  searchText: string | undefined;
   pageIndex: number;
   pageSize: number;
+  searchText?: string;
   expandedRowKeys?: unknown[];
 }
 
