@@ -36,6 +36,9 @@ type Open = {
 
 const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'design'];
 const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design'];
+const LADDER_DECISIONS = ['no-rung', 'design'];
+
+type Ladder = { stem: string; states: string[]; role: string[]; decision?: string; why?: string };
 
 type SlotLie = {
   name: string; slot: string | null; slotSays: string; paints: string[];
@@ -48,6 +51,7 @@ const run = (theme?: string): {
   summary: Record<string, unknown>;
   findings: (Finding & { slot?: string | null; slotLies?: { slotSays: string }; paints?: { properties: string[] } })[];
   typography: Typography[];
+  ladders: (Ladder & { unusedRungs: unknown[] })[];
 } => JSON.parse(
   execFileSync('node', [tool, '--json', ...(theme ? [`--theme=${theme}`] : [])], {
     encoding: 'utf8',
@@ -175,5 +179,24 @@ test('every banked slot mismatch carries a decision and a reason', () => {
   const undecided = baseline.slotLies
     .filter((o: SlotLie) => !o.decision || !SLOT_DECISIONS.includes(o.decision) || !o.why?.trim())
     .map((o: SlotLie) => o.name);
+  expect(undecided).toEqual([]);
+});
+
+/*
+ * A state in the name that the eye cannot find. Read from the theme alone, so it answers for the
+ * 22 folders the package has never heard of as well: the question is whether the design system
+ * ships a role for the second state, not whether some other product models the widget.
+ */
+test('slots whose states resolve to one role are the reviewed ones', () => {
+  const seen = actual.ladders
+    .map((l) => ({ stem: l.stem, states: l.states, role: l.role }))
+    .sort((a, b) => a.stem.localeCompare(b.stem));
+  expect(seen).toEqual(baseline.ladders.map(({ decision, why, ...rest }: Ladder) => rest));
+});
+
+test('every banked ladder carries a decision and a reason', () => {
+  const undecided = baseline.ladders
+    .filter((l: Ladder) => !l.decision || !LADDER_DECISIONS.includes(l.decision) || !l.why?.trim())
+    .map((l: Ladder) => l.stem);
   expect(undecided).toEqual([]);
 });
