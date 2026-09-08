@@ -463,7 +463,7 @@ class OpenLayersMap implements MapEngineMap {
     };
     const userKeyDown = (event: Event): void => {
       const { key } = event as KeyboardEvent;
-      if (['+', '-', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(key)) {
+      if (['+', '-', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'Enter', ' '].includes(key)) {
         userViewChange();
       }
     };
@@ -477,7 +477,7 @@ class OpenLayersMap implements MapEngineMap {
     };
     this.originalMap.on('click', click);
     this.originalMap.on('moveend', moveEnd);
-    this.originalMap.on('pointerdrag', userViewChange);
+    this._container.addEventListener('pointerdown', userViewChange);
     this._container.addEventListener('keydown', userKeyDown);
     this._container.addEventListener('wheel', userViewChange);
   }
@@ -500,7 +500,7 @@ class OpenLayersMap implements MapEngineMap {
 
     this.originalMap.un('click', this._eventHandlers.click);
     this.originalMap.un('moveend', this._eventHandlers.moveEnd);
-    this.originalMap.un('pointerdrag', this._eventHandlers.userViewChange);
+    this._container.removeEventListener('pointerdown', this._eventHandlers.userViewChange);
     this._container.removeEventListener('keydown', this._eventHandlers.userKeyDown);
     this._container.removeEventListener('wheel', this._eventHandlers.userViewChange);
     this._eventHandlers = undefined;

@@ -1602,63 +1602,79 @@ QUnit.module('OSM: markers', moduleConfig, () => {
             });
         });
     });
-    QUnit.test('marker size changes do not refit after a user move until bounds are fitted again', function(assert) {
-        let markerSizeChanged = 0;
-        let markerWidth = 20;
-        const engine = createOpenLayersEngine(openLayersMock);
-        const engineMap = engine.createMap(document.createElement('div'));
-        const bounds = {
-            northEast: {
-                lat: 40.7,
-                lng: -74
-            },
-            southWest: {
-                lat: 40.7,
-                lng: -74
+    [
+        { type: 'pointerdown' },
+        { type: 'pointerdown', onControl: true },
+        { type: 'wheel' },
+        ...['+', '-', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'].map(key => ({ type: 'keydown', key })),
+        { type: 'keydown', key: 'Enter', onControl: true },
+        { type: 'keydown', key: ' ', onControl: true }
+    ].forEach(({ type, key, onControl }) => {
+        QUnit.test(`marker size refit stops after ${type} ${key || ''} on ${onControl ? 'a control' : 'the map'}`, function(assert) {
+            let markerSizeChanged = 0;
+            let markerWidth = 20;
+            const engine = createOpenLayersEngine(openLayersMock);
+            const container = document.createElement('div');
+            const engineMap = engine.createMap(container);
+            const eventTarget = onControl ? document.createElement('button') : container;
+            if(onControl) {
+                container.appendChild(eventTarget);
             }
-        };
-        openLayersMock.getOverlayRect = () => ({
-            height: markerWidth,
-            width: markerWidth
+            const bounds = {
+                northEast: {
+                    lat: 40.7,
+                    lng: -74
+                },
+                southWest: {
+                    lat: 40.7,
+                    lng: -74
+                }
+            };
+            openLayersMock.getOverlayRect = () => ({
+                height: markerWidth,
+                width: markerWidth
+            });
+            engineMap.attachHandlers({
+                click: () => {},
+                markerSizeChange: () => {
+                    markerSizeChanged += 1;
+                    engineMap.fitBounds(bounds, { includeMarkerPadding: true });
+                },
+                viewChange: () => {}
+            });
+            engineMap.addMarker({
+                iconSrc: 'custom-marker.png',
+                location: {
+                    lat: 40.7,
+                    lng: -74
+                }
+            });
+            const markerElement = openLayersMock.addedOverlays[0].options.element;
+            engineMap.fitBounds(bounds, { includeMarkerPadding: true });
+
+            markerWidth = 25;
+            triggerResize(markerElement);
+            assert.strictEqual(markerSizeChanged, 1, 'marker size refits before user movement');
+
+            eventTarget.dispatchEvent(key
+                ? new KeyboardEvent(type, { bubbles: true, key })
+                : new Event(type, { bubbles: true }));
+            const fitCallCountAfterUserMove = openLayersMock.fitCallCount;
+            markerWidth = 30;
+            triggerResize(markerElement);
+            assert.strictEqual(markerSizeChanged, 1, 'user movement prevents an automatic marker-size refit');
+            assert.strictEqual(openLayersMock.fitCallCount, fitCallCountAfterUserMove, 'view is not fitted after user movement');
+
+            engineMap.fitBounds(bounds, { includeMarkerPadding: true });
+            const fitCallCountBeforeResize = openLayersMock.fitCallCount;
+            markerWidth = 44;
+            triggerResize(markerElement);
+            assert.strictEqual(markerSizeChanged, 2, 'autoAdjust fitting enables marker-size refit again');
+            assert.strictEqual(openLayersMock.fitCallCount, fitCallCountBeforeResize + 1, 'view is fitted after marker layout changes');
+            assert.deepEqual(openLayersMock.fitOptions.padding, [44, 22, 0, 22], 'resumed refit uses the latest marker size');
+
+            engineMap.dispose();
         });
-        engineMap.attachHandlers({
-            click: () => {},
-            markerSizeChange: () => {
-                markerSizeChanged += 1;
-                engineMap.fitBounds(bounds, { includeMarkerPadding: true });
-            },
-            viewChange: () => {}
-        });
-        engineMap.addMarker({
-            iconSrc: 'custom-marker.png',
-            location: {
-                lat: 40.7,
-                lng: -74
-            }
-        });
-        const markerElement = openLayersMock.addedOverlays[0].options.element;
-        engineMap.fitBounds(bounds, { includeMarkerPadding: true });
-
-        markerWidth = 25;
-        triggerResize(markerElement);
-        assert.strictEqual(markerSizeChanged, 1, 'marker size refits before user movement');
-
-        openLayersMock.mapInstance.trigger('pointerdrag');
-        const fitCallCountAfterUserMove = openLayersMock.fitCallCount;
-        markerWidth = 30;
-        triggerResize(markerElement);
-        assert.strictEqual(markerSizeChanged, 1, 'user movement prevents an automatic marker-size refit');
-        assert.strictEqual(openLayersMock.fitCallCount, fitCallCountAfterUserMove, 'view is not fitted after user movement');
-
-        engineMap.fitBounds(bounds, { includeMarkerPadding: true });
-        const fitCallCountBeforeResize = openLayersMock.fitCallCount;
-        markerWidth = 44;
-        triggerResize(markerElement);
-        assert.strictEqual(markerSizeChanged, 2, 'explicit fitting enables marker-size refit again');
-        assert.strictEqual(openLayersMock.fitCallCount, fitCallCountBeforeResize + 1, 'view is fitted after marker layout changes');
-        assert.deepEqual(openLayersMock.fitOptions.padding, [44, 22, 0, 22], 'resumed refit uses the latest marker size');
-
-        engineMap.dispose();
     });
     QUnit.test('newer marker overlays are rendered above older markers', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
