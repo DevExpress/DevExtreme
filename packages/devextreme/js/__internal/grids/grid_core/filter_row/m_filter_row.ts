@@ -20,7 +20,6 @@ import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
-import type { FilterSourceContext } from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -824,15 +823,13 @@ const filterController = (
     return false;
   }
 
-  public getAdditionalFilter(context: FilterSourceContext): DataFilter {
+  public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
     if (this.skipCalculateColumnFilters()) {
-      return super.getAdditionalFilter(context);
+      return super.getAdditionalFilter(excludedColumn);
     }
 
-    const filters = [super.getAdditionalFilter(context)];
+    const filters = [super.getAdditionalFilter(excludedColumn)];
     const columns = this.columnsController.getVisibleColumns(null, true);
-
-    const { excludedColumn } = context;
 
     each(columns, function () {
       const shouldSkip = excludedColumn?.index === this.index;

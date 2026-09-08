@@ -3,9 +3,9 @@ import {
   getFilterExpression,
   removeFieldConditionsFromFilter,
 } from '@ts/filter_builder/m_utils';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
-import type { FilterSourceContext } from '@ts/grids/grid_core/filter/types';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
 import { getColumnIdentifier, isFilterSyncActive } from '@ts/grids/grid_core/filter_sync/utils';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -29,26 +29,22 @@ export const filterSyncFilterControllerExtender = (
     return hasFilterValueOrSyncing && isFilterSyncActive(this);
   }
 
-  public getAdditionalFilter(context: FilterSourceContext): DataFilter {
+  public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
     const columns = this.columnsController.getFilteringColumns();
     const isFilterValueDisabled = this.option('filterPanel.filterEnabled') === false;
 
     if (!columns?.length || isFilterValueDisabled) {
-      return super.getAdditionalFilter(context);
+      return super.getAdditionalFilter(excludedColumn);
     }
 
-    const filters = [super.getAdditionalFilter(context)];
+    const filters = [super.getAdditionalFilter(excludedColumn)];
     let filterValue = this.option('filterValue');
 
-    if (isFilterSyncActive(this)) {
-      const { excludedColumn } = context;
-
-      if (isDefined(excludedColumn) && filterValue) {
-        filterValue = removeFieldConditionsFromFilter(
-          filterValue,
-          getColumnIdentifier(excludedColumn),
-        );
-      }
+    if (isFilterSyncActive(this) && isDefined(excludedColumn) && filterValue) {
+      filterValue = removeFieldConditionsFromFilter(
+        filterValue,
+        getColumnIdentifier(excludedColumn),
+      );
     }
 
     const customOperations = this.filterSyncController.getCustomFilterOperations();

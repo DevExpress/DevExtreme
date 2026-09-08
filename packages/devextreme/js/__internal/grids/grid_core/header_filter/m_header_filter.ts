@@ -15,11 +15,11 @@ import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import filterUtils from '@js/ui/shared/filtering';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
-import type { FilterSourceContext } from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -504,14 +504,13 @@ const filterController = (
     return false;
   }
 
-  public getAdditionalFilter(context: FilterSourceContext): DataFilter {
+  public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
     if (this.skipCalculateColumnFilters()) {
-      return super.getAdditionalFilter(context);
+      return super.getAdditionalFilter(excludedColumn);
     }
 
-    const filters = [super.getAdditionalFilter(context)];
+    const filters = [super.getAdditionalFilter(excludedColumn)];
     const columns = this.columnsController.getVisibleColumns(null, true);
-    const { excludedColumn } = context;
 
     each(columns, (_, column) => {
       let filter;

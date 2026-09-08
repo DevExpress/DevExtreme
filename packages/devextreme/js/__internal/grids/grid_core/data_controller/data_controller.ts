@@ -18,7 +18,6 @@ import type {
   ChangedEvent, LoadOperation, OperationTypes, RawItemData,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import { isLocalStore } from '@ts/grids/grid_core/data_source_adapter/utils/store';
-import type { FilterSourceContext } from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 import type {
   Controllers, Module, OptionChanged, RowKey,
@@ -337,10 +336,6 @@ export class DataController extends modules.Controller {
     return this.combinedFilter(undefined, returnDataField, excludedColumn);
   }
 
-  private buildFilterContext(excludedColumn: Column | null = null): FilterSourceContext {
-    return { excludedColumn };
-  }
-
   private combinedFilter(
     filter: DataFilter,
     returnDataField?: boolean,
@@ -356,8 +351,7 @@ export class DataController extends modules.Controller {
       || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
-      const additionalFilter = this.filterController
-        .getAdditionalFilter(this.buildFilterContext(excludedColumn));
+      const additionalFilter = this.filterController.getAdditionalFilter(excludedColumn);
 
       combined = additionalFilter
         ? gridCoreUtils.combineFilters([additionalFilter, combined])
@@ -571,8 +565,7 @@ export class DataController extends modules.Controller {
         this._isDataSourceApplying = false;
 
         const hasAdditionalFilter = (): boolean => {
-          const additionalFilter = this.filterController
-            .getAdditionalFilter(this.buildFilterContext());
+          const additionalFilter = this.filterController.getAdditionalFilter();
           return Boolean(additionalFilter?.length);
         };
 

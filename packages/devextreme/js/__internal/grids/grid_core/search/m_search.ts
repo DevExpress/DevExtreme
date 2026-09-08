@@ -14,7 +14,6 @@ import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataFilter, UserState } from '../data_controller/types';
 import type { FilterController } from '../filter/filter_controller';
-import type { FilterSourceContext } from '../filter/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType, OptionChanged } from '../m_types';
@@ -79,8 +78,8 @@ const dataController = (
 const filterController = (
   base: ModuleType<FilterController>,
 ) => class FilterControllerSearchExtender extends base {
-  public getAdditionalFilter(context: FilterSourceContext): DataFilter {
-    const filter = super.getAdditionalFilter(context);
+  public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
+    const filter = super.getAdditionalFilter(excludedColumn);
     const searchFilter = this.calculateSearchFilter(
       this.option('searchPanel.text'),
       this.getLangParams(),
