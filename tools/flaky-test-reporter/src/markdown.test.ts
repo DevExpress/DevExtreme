@@ -107,16 +107,20 @@ describe('renderMarkdown', () => {
     for (const t of tests) expect(description).toContain(`#### \`${t.test}\``);
   });
 
-  it('collapses each entry behind a details block, leaving the counts visible', () => {
+  it('collapses every entry detail behind a details block, leaving only the heading', () => {
     const description = renderMarkdown(makeReport());
     const lines = description.split('\n');
+    const heading = lines.findIndex((l) => l.startsWith('#### '));
+    const open = lines.findIndex((l, i) => l === '<details>' && i > heading);
     const table = lines.findIndex((l) => l.startsWith('| Occurrences'));
-    const open = lines.findIndex((l, i) => l === '<details>' && i > table);
 
     expect(description).toContain('<summary>\u2022\u2022\u2022</summary>');
-    // The numbers stay outside the block; the context goes inside it.
-    expect(table).toBeLessThan(open);
-    expect(description.split('<details>').at(-1)).toContain('**First seen:**');
+    // Only the heading is visible; counts and context are both inside the block.
+    expect(heading).toBeLessThan(open);
+    expect(open).toBeLessThan(table);
+    const block = description.split('<details>').at(-1) ?? '';
+    expect(block).toContain('| Occurrences');
+    expect(block).toContain('**First seen:**');
   });
 
   it('includes first and last seen in each entry', () => {

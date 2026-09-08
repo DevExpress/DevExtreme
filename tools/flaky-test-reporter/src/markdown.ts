@@ -35,13 +35,13 @@ function renderTest(test: AggregatedTest): string[] {
     ``,
     `#### \`${test.test}\``,
     ``,
+    // Collapsed so a long candidate list stays scannable - the headings alone are the summary.
+    `<details>`,
+    `<summary>${DETAILS_SUMMARY}</summary>`,
+    ``,
     `| Occurrences | Flaky | Failed all attempts | Distinct commits |`,
     `|---|---|---|---|`,
     `| ${test.occurrences} | ${test.flakyConfirmed} | ${test.failedAllAttempts} | ${test.distinctShas} |`,
-    ``,
-    // Collapsed so a long candidate list stays scannable; the counts above are the summary.
-    `<details>`,
-    `<summary>${DETAILS_SUMMARY}</summary>`,
     ``,
     `**First seen:** ${test.firstSeen} · **Last seen:** ${test.lastSeen}`,
     `**Jobs:** ${formatList(test.jobs)}`,
