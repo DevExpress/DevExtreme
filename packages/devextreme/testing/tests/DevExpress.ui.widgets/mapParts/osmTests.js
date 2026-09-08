@@ -1652,11 +1652,11 @@ QUnit.module('OSM: markers', moduleConfig, () => {
 
         engineMap.fitBounds(bounds, { includeMarkerPadding: true });
         const fitCallCountBeforeResize = openLayersMock.fitCallCount;
-        markerWidth = 40;
+        markerWidth = 44;
         triggerResize(markerElement);
         assert.strictEqual(markerSizeChanged, 2, 'explicit fitting enables marker-size refit again');
         assert.strictEqual(openLayersMock.fitCallCount, fitCallCountBeforeResize + 1, 'view is fitted after marker layout changes');
-        assert.deepEqual(openLayersMock.fitOptions.padding, [40, 20, 0, 20], 'resumed refit uses the latest marker size');
+        assert.deepEqual(openLayersMock.fitOptions.padding, [44, 22, 0, 22], 'resumed refit uses the latest marker size');
 
         engineMap.dispose();
     });
