@@ -21,7 +21,11 @@
     "",
     "slotLies - the slot word contradicts the CSS property the bundle shows it painting. Same rules as",
     "above: banked with a decision, exact equality. hairline and rule-5 are deliberate and stay; naming",
-    "is a rename wave waiting for a changelog, not a role defect."
+    "is a rename wave waiting for a changelog, not a role defect.",
+    "",
+    "ladders - a slot whose states resolve to one role. `focused` reusing `hovered` is accepted",
+    "convention and never listed. decision no-rung means the system has no role for the second state",
+    "either; design means it does and we skip it."
   ],
   "open": [
     {
@@ -692,6 +696,297 @@
       ],
       "decision": "rule-5",
       "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    }
+  ],
+  "ladders": [
+    {
+      "stem": "accordion-title-bg",
+      "states": [
+        "active",
+        "hovered"
+      ],
+      "role": [
+        "color-bg-hovered"
+      ],
+      "decision": "design",
+      "why": "pressing the header looks exactly like hovering it: both read color-bg-hovered while the system ships color-bg-active (#e1e1e1 light / #1d1d1d dark), which the theme already uses elsewhere"
+    },
+    {
+      "stem": "button-danger-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content-static-dark"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-danger-outlined-content",
+      "states": [
+        "hovered",
+        "selected"
+      ],
+      "role": [
+        "color-content-danger-hovered"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-default-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content-static-dark"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-default-outlined-content",
+      "states": [
+        "hovered",
+        "selected"
+      ],
+      "role": [
+        "color-content-primary-hovered"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-default-text-content",
+      "states": [
+        "hovered",
+        "selected"
+      ],
+      "role": [
+        "color-content-primary-hovered"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-normal-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-success-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content-static-dark"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-success-outlined-content",
+      "states": [
+        "hovered",
+        "selected"
+      ],
+      "role": [
+        "color-content-success-hovered"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "calendar-invalid-border",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-border-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "chat-message-list-context-menu-delete-button-content",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-content-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "check-box-border",
+      "states": [
+        "disabled",
+        "read-only"
+      ],
+      "role": [
+        "color-border-disabled"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "file-manager-file-item-select-bg",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-bg-primary"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "file-manager-file-item-select-content",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-content-inverted"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "list-item-bg",
+      "states": [
+        "active",
+        "selected-focused"
+      ],
+      "role": [
+        "color-bg-active"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "lookup-icon",
+      "states": [
+        "active",
+        "rest"
+      ],
+      "role": [
+        "color-content-subtle"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "radio-button-content",
+      "states": [
+        "disabled",
+        "read-only"
+      ],
+      "role": [
+        "color-content-disabled"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "slider-invalid-bg",
+      "states": [
+        "hovered",
+        "rest"
+      ],
+      "role": [
+        "color-border-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "switch-invalid-border",
+      "states": [
+        "focused",
+        "hovered",
+        "rest"
+      ],
+      "role": [
+        "color-border-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "tabs-tab-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "tag-box-tag-content",
+      "states": [
+        "active",
+        "rest"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "text-editor-border",
+      "states": [
+        "disabled",
+        "read-only"
+      ],
+      "role": [
+        "color-border-disabled"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "tile-view-bg",
+      "states": [
+        "hovered",
+        "rest"
+      ],
+      "role": [
+        "color-bg"
+      ],
+      "decision": "design",
+      "why": "rest and hovered are one value while active is not - the slot clearly means to ladder and the hovered rung is flat. color-bg-hovered exists"
+    },
+    {
+      "stem": "tree-view-content",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
     }
   ]
 }

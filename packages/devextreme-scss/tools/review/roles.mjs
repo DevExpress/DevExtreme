@@ -297,6 +297,7 @@ for (const set of SETS) {
   packageTier[set] = {};
   for (const [component, tree] of Object.entries(components)) {
     const bySlot = new Map();
+    const byState = new Map();   // slot -> state -> Set(role)
     const byRole = new Map();
     const unknownSlots = new Set();
     for (const [path, raw] of leaves(tree)) {
@@ -308,10 +309,14 @@ for (const set of SETS) {
       if (!anatomy.slot) { unknownSlots.add(path); continue; }
       if (!bySlot.has(anatomy.slot)) bySlot.set(anatomy.slot, new Set());
       bySlot.get(anatomy.slot).add(role);
+      if (!byState.has(anatomy.slot)) byState.set(anatomy.slot, new Map());
+      const states = byState.get(anatomy.slot);
+      if (!states.has(anatomy.state)) states.set(anatomy.state, new Set());
+      states.get(anatomy.state).add(role);
       if (!byRole.has(role)) byRole.set(role, new Set());
       byRole.get(role).add(anatomy.slot);
     }
-    packageTier[set][component] = { bySlot, byRole, unknownSlots };
+    packageTier[set][component] = { bySlot, byState, byRole, unknownSlots };
   }
 }
 
@@ -541,6 +546,67 @@ for (const declaration of declarations) {
   findings.push(record);
 }
 
+/*
+ * State ladders: does a state actually change the paint?
+ *
+ * Needs neither the package nor a bundle - it reads the theme against itself. A slot whose hovered
+ * and active resolve to one role has a state in the name that the eye cannot find, and the ladder
+ * the design system ships for that role is going unused. Two collapses are accepted convention and
+ * are named here rather than discovered every run: `focused` reuses `hovered` because the
+ * foundation has no focused state (DIVERGENCES), and a state that deliberately resets to the rest
+ * value is a reset, not a gap.
+ */
+const ACCEPTED_COLLAPSE = [['focused', 'hovered'], ['focused', 'active'], ['selected-focused', 'selected-hovered']];
+const acceptedPair = (a, b) => ACCEPTED_COLLAPSE.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
+
+const ladders = [];
+{
+  const groups = new Map();
+  for (const declaration of declarations) {
+    if (!declaration.slot) continue;
+    const stem = declaration.state === 'rest'
+      ? declaration.name
+      : declaration.name.slice(0, -declaration.state.length - 1);
+    if (!groups.has(stem)) groups.set(stem, []);
+    groups.get(stem).push(declaration);
+  }
+  for (const [stem, members] of groups) {
+    if (members.length < 2) continue;
+    const byRole = new Map();
+    for (const member of members) {
+      const key = member.roles.join('+');
+      if (!byRole.has(key)) byRole.set(key, []);
+      byRole.get(key).push(member.state);
+    }
+    for (const [role, states] of byRole) {
+      if (states.length < 2) continue;
+      const pairs = states.flatMap((a, i) => states.slice(i + 1).map((b) => [a, b]));
+      if (pairs.every(([a, b]) => acceptedPair(a, b))) continue;
+      /* The precise question is about OUR role, not the package's anatomy: we paint two states
+       * from role R, so does the design system ship R for the second state? `bg-alpha-hovered`
+       * shared by hovered and active is a gap exactly when `bg-alpha-active` exists. This needs no
+       * component mapping, so it answers for all 86 folders, including the 22 the package has
+       * never heard of. */
+      const unusedRungs = states
+        .filter((state) => state !== 'rest')
+        .flatMap((state) => role.split('+').map((r) => {
+          const rung = `${r.replace(/-(hovered|active|selected|focused|disabled|read-only)$/, '')}-${state}`;
+          return resolveRole(rung, 'light') !== null && rung !== r ? { state, rung } : null;
+        }))
+        .filter(Boolean);
+      ladders.push({
+        stem,
+        folder: members[0].folder,
+        where: members.find((m) => states.includes(m.state)).where,
+        role: role.split('+'),
+        states: states.sort(),
+        unusedRungs,
+      });
+    }
+  }
+  ladders.sort((a, b) => a.stem.localeCompare(b.stem));
+}
+
 // --- output ---------------------------------------------------------------------------------------
 
 const count = (predicate) => findings.filter(predicate).length;
@@ -551,6 +617,7 @@ const summary = {
   typographyStepReads: typography.length,
   typographyOffGrid: typography.filter((t) => !t.roles.length).length,
   typographyUnmarked: typography.filter((t) => !t.marker).length,
+  collapsedLadders: ladders.length,
   familyMismatch: count((f) => f.family),
   slotLies: count((f) => f.slotLies),
   familyMismatchExplainedByProperty: count((f) => f.family && f.slotLies
@@ -585,6 +652,7 @@ const md = () => {
   out.push('|---|---|');
   out.push(`| family mismatch (slot wants another \`--dxds-\` family) | **${summary.familyMismatch}** |`);
   out.push(`| slot contradicts the painted property | **${summary.slotLies}** |`);
+  out.push(`| states that resolve to one role | **${summary.collapsedLadders}** |`);
   for (const verdict of verdicts) out.push(`| package: ${verdict} | ${summary.byVerdict[verdict]} |`);
   out.push('');
 
@@ -622,6 +690,20 @@ const md = () => {
     (f) => `- \`${f.name}\` = ${roleList(f.roles)}  (${f.where})\n`
       + `    - slot \`${f.family.slot}\` wants \`color-${f.family.want}-*\`, reads a \`${f.family.got.join('/')}\` role`
       + (f.package ? `; package verdict: ${f.package.verdict}` : ''));
+
+  out.push(`## States that resolve to one role - ${ladders.length}\n`);
+  out.push('A state in the name that the eye cannot find. `focused` reusing `hovered` is accepted -');
+  out.push('the foundation has no focused state - and is not listed; everything below is a ladder the');
+  out.push('design system ships and the theme does not climb.\n');
+  out.push('| Where | Slot | Role | States sharing it | Rung the system ships and we skip |');
+  out.push('|---|---|---|---|---|');
+  for (const l of ladders) {
+    const rungs = l.unusedRungs.length
+      ? l.unusedRungs.map((r) => `\`${r.rung}\` (${r.state})`).join(', ')
+      : 'none - the system has no role for the second state either';
+    out.push(`| ${l.where} | \`${l.stem}\` | ${roleList(l.role)} | ${l.states.map((x) => `\`${x}\``).join(', ')} | ${rungs} |`);
+  }
+  out.push('');
 
   const lies = findings.filter((f) => f.slotLies);
   out.push(`## The slot does not match the property it paints - ${lies.length}\n`);
@@ -671,7 +753,7 @@ const md = () => {
 };
 
 if (process.argv.includes('--json')) {
-  console.log(JSON.stringify({ summary, findings, typography }, null, 2));
+  console.log(JSON.stringify({ summary, findings, typography, ladders }, null, 2));
 } else if (process.argv.includes('--md')) {
   console.log(md());
 } else if (themeArg) {
