@@ -10,15 +10,15 @@ $gantt-milestone-size: null !default;
 $gantt-task-wrapper-padding-block-start: 0 !default;
 
 @if $size == "default" {
-  $gantt-header-item-height: 57px !default; // dx-offscale: 57px
+  $gantt-header-item-height: ds.$spacing-560 !default;
   $gantt-task-title-padding-inline-start: ds.$spacing-110 !default;
-  $gantt-task-height: 27px !default; // dx-offscale: 27px
+  $gantt-task-height: ds.$spacing-280 !default;
   $gantt-dependency-successor-size: ds.$spacing-120 !default;
   $gantt-milestone-size: ds.$spacing-170 !default;
 }
 
 @else if $size == "compact" {
-  $gantt-header-item-height: 51px !default; // dx-offscale: 51px
+  $gantt-header-item-height: ds.$spacing-520 !default;
   $gantt-task-title-padding-inline-start: ds.$spacing-90 !default;
   $gantt-task-height: ds.$spacing-200 !default;
   $gantt-dependency-successor-size: ds.$spacing-100 !default;
@@ -50,7 +50,7 @@ $gantt-task-edit-successor-dependency-l-border: ds.$border-width-10 solid !defau
 $gantt-arrow-border: 5px solid !default; // dx-offscale
 $gantt-tm-border-inline-start: ds.$border-width-10 dashed !default;
 $gantt-ti-border-inline-end: ds.$border-width-10 dashed !default;
-$gantt-toolbar-items-container-min-height: 42px !default; // dx-offscale: 42px
+$gantt-toolbar-items-container-min-height: ds.$spacing-440 !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
 $gantt-toolbar-separator-border-inline-start: ds.$border-width-10 solid transparent !default;
