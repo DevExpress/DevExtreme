@@ -70,7 +70,7 @@ $(() => {
 
         renderAssistantMessage(aiResponse);
       }, 200);
-    } catch(err) {
+    } catch (err) {
       instance.option({ typingUsers: [] });
       messages.pop();
       const errorMessage =
@@ -91,7 +91,7 @@ $(() => {
 
       updateLastMessage(aiResponse);
       messages.at(-1).content = aiResponse;
-    } catch(err) {
+    } catch (err) {
       updateLastMessage(messages.at(-1).content);
       const errorMessage =
         err.error?.message ??
