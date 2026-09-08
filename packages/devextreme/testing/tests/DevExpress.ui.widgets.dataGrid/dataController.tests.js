@@ -319,7 +319,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         this.option('dataSource', []);
 
-        const dataSource = this.dataSourceController.getAdapter()._dataSource;
+        const dataSource = this.dataSourceController.getDataSource();
 
         this.dataController.changed.add(function(args) {
             changedCount++;
@@ -873,7 +873,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         this.dataController.resetDataSource();
-        const dataIndexGetter = this.dataSourceController.getAdapter().getDataIndexGetter();
+        const dataIndexGetter = this.dataSourceController.getDataIndexGetter();
         assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ desc: false, selector: dataIndexGetter }], 'Sort parameters');
         // assert
         assert.equal(dataSource.items()[0].name, 'Alex', 'Item0');
@@ -3578,7 +3578,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     // B233350
     QUnit.test('virtual items on end when visibleRowsCount < pageSize and last page size greater than half page size', function(assert) {
         const dataController = this.dataController;
-        this.dataSourceController.getAdapter().store().remove(999);
+        this.dataSourceController.store().remove(999);
         dataController.refresh();
         dataController.setViewportItemIndex(998);
         assert.strictEqual(this.dataController.pageIndex(), 49);
