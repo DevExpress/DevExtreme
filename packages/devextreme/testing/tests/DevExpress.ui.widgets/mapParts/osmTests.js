@@ -1685,64 +1685,39 @@ QUnit.module('OSM: markers', moduleConfig, () => {
     });
     QUnit.test('HTML marker padding is measured after a hidden map becomes visible', function(assert) {
         const done = assert.async();
-        const container = document.createElement('div');
-        container.style.display = 'none';
-        $('#qunit-fixture').append(container);
-        const engine = createOpenLayersEngine(openLayersMock);
-        const engineMap = engine.createMap(container);
-        openLayersMock.getOverlayRect = () => container.style.display === 'none' ? {
-            height: 0,
-            width: 0
-        } : {
-            height: 60,
-            width: 80
-        };
-        engineMap.addMarker({
-            html: '<span>A</span>',
-            htmlOffset: {
-                left: 5,
-                top: 7
+        const $map = $('#map').css({
+            display: 'none',
+            height: '300px',
+            width: '500px'
+        });
+        const map = $map.dxMap({
+            provider: 'osm',
+            autoAdjust: true,
+            markers: [{
+                html: '<span>A</span>',
+                htmlOffset: {
+                    left: 5,
+                    top: 7
+                },
+                location: [40.7, -74]
+            }],
+            providerConfig: {
+                tileServer
             },
-            location: {
-                lat: 40.7,
-                lng: -74
+            onReady: () => {
+                const markerElement = openLayersMock.addedOverlays[0].options.element;
+                markerElement.style.height = '60px';
+                markerElement.style.width = '80px';
+                assert.deepEqual(openLayersMock.fitOptions.padding, [0, 30, 48, 0], 'fallback padding is used without layout');
+
+                $map.css('display', 'block');
+                map.option('onUpdated', () => {
+                    assert.deepEqual(openLayersMock.fitOptions.padding, [0, 85, 67, 0], 'visible marker dimensions are measured without a layout stub');
+                    done();
+                });
+                map._visibilityChanged(true);
             }
-        });
-        engineMap.fitBounds({
-            northEast: {
-                lat: 40.7,
-                lng: -74
-            },
-            southWest: {
-                lat: 40.7,
-                lng: -74
-            }
-        }, {
-            includeMarkerPadding: true
-        });
-        assert.deepEqual(openLayersMock.fitOptions.padding, [0, 30, 48, 0], 'fallback padding is used without layout');
-        container.style.display = 'block';
-        const provider = new OsmProvider({
-            option: () => ({
-                autoAdjust: true,
-                zoom: 1
-            }),
-            setOptionSilent: () => {}
-        }, null);
-        provider._engineMap = engineMap;
-        provider._markers = [{
-            location: {
-                lat: 40.7,
-                lng: -74
-            },
-            options: {}
-        }];
-        provider._routes = [];
-        provider.updateDimensions().then(() => {
-            assert.deepEqual(openLayersMock.fitOptions.padding, [0, 85, 67, 0], 'provider refits after layout becomes available');
-            engineMap.dispose();
-            done();
-        });
+        }).dxMap('instance');
     });
     QUnit.test('autoAdjust keeps the current zoom when fitting would zoom in', function(assert) {
         const done = assert.async();
@@ -2327,7 +2302,8 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                 location: {
                     lat: 40.74,
                     lng: -73.98
-                }
+                },
+                html: '<span class="rtl-marker-text">Marker text</span>'
             }],
             rtlEnabled: true,
             providerConfig: {
@@ -2340,7 +2316,9 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                 assert.ok($('#map').hasClass('dx-rtl'), 'RTL mode is applied to the widget');
                 assert.deepEqual(openLayersMock.viewCenter, [-73980, 40740], 'center coordinates are not mirrored');
                 assert.strictEqual(openLayersMock.addedOverlays.length, 1, 'marker overlay remains available');
-                assert.strictEqual(openLayersMock.addedOverlays[0].options.element.getAttribute('dir'), 'rtl', 'marker content uses the widget text direction');
+                const markerElement = openLayersMock.addedOverlays[0].options.element;
+                assert.strictEqual(markerElement.getAttribute('dir'), 'rtl', 'HTML marker uses the widget text direction');
+                assert.strictEqual(getComputedStyle(markerElement.querySelector('.rtl-marker-text')).direction, 'rtl', 'HTML marker text inherits RTL direction');
                 assert.strictEqual(openLayersMock.overlayContainer.getAttribute('dir'), 'ltr', 'regular overlays use LTR coordinates');
                 assert.strictEqual(openLayersMock.overlayContainerStopEvent.getAttribute('dir'), 'ltr', 'interactive overlays use LTR coordinates');
                 assert.strictEqual(openLayersMock.addedControls.length, 1, 'zoom control remains available');
