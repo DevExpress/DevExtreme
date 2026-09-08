@@ -34,7 +34,6 @@ const DEFAULT_SUBDOMAINS = 'abc';
 const LOCATION_EPSILON = 1e-10;
 const FULL_CIRCLE_DEGREES = 360;
 const HALF_CIRCLE_DEGREES = 180;
-const STALE_OPERATION = Symbol('stale operation');
 
 const getDefaultLocation = (): MapLocation => ({ lat: 0, lng: 0 });
 
@@ -405,7 +404,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
 
     return this._resolveLocation(options.location).then((location) => {
       if (engineMap !== this._engineMap) {
-        return Promise.reject(STALE_OPERATION);
+        return Promise.reject(new Error('The map was disposed or replaced during marker creation.'));
       }
 
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing

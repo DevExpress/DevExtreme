@@ -1177,8 +1177,10 @@ QUnit.module('OSM: location calculation', moduleConfig, () => {
         add.then(() => {
             assert.ok(false, 'the stale marker operation should reject');
             done();
-        }, () => {
+        }, error => {
             assert.ok(addMarker.notCalled, 'no marker is added to the disposed engine map');
+            assert.ok(error instanceof Error, 'the stale operation rejects with an Error');
+            assert.strictEqual(error.message, 'The map was disposed or replaced during marker creation.', 'the rejection explains why marker creation was cancelled');
             done();
         });
     });
