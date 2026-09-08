@@ -971,7 +971,7 @@ QUnit.module('OSM: location calculation', moduleConfig, () => {
                 lng: -73.98
             }, 'callback is retried');
             assert.ok(calculateLocation.calledTwice, 'invalid result is not cached');
-            assert.ok(log.calledOnceWithExactly('W1006', 'The calculateLocation callback returned an invalid location.'), 'invalid result is reported');
+            assert.ok(log.calledOnceWithExactly('W1006', 'calculateLocation returned an invalid result.'), 'invalid result is reported');
             log.restore();
             done();
         });
