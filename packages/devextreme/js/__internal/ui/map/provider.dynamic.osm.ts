@@ -294,7 +294,8 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
   }
 
   updateDimensions(): Promise<void> {
-    if (this._engineMap?.updateDimensions()) {
+    const result = this._engineMap?.updateDimensions();
+    if (result?.needsViewportRefit) {
       return this._fitBounds();
     }
 
@@ -420,6 +421,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
         onClick: markerClickAction
           ? (): void => markerClickAction({ location })
           : undefined,
+        rtlEnabled: Boolean(this._option('rtlEnabled')),
       });
 
       return {

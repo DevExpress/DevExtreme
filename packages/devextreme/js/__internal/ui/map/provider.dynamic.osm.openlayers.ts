@@ -1,4 +1,5 @@
 import messageLocalization from '@js/common/core/localization/message';
+import resizeObserverSingleton from '@js/core/resize_observer';
 import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/core/utils/m_selectors';
 
 import type {
@@ -12,15 +13,16 @@ import type {
   MapEngineMarkerOptions,
   MapEngineSetViewOptions,
   MapEngineTileLayerOptions,
+  MapEngineUpdateDimensionsResult,
   MapEngineViewState,
 } from './provider.dynamic.osm.engine';
 import { SUBDOMAIN_PLACEHOLDER } from './provider.dynamic.osm.engine';
 import {
   createMarkerElement,
-  DEFAULT_MARKER_CLASS,
   DEFAULT_MARKER_SIZE,
   MARKER_FALLBACK_HEIGHT,
   MARKER_FALLBACK_WIDTH,
+  type MarkerKind,
 } from './provider.dynamic.osm.openlayers.marker';
 import type {
   ControlLike,
@@ -65,6 +67,7 @@ interface MarkerElementBinding {
 interface OpenLayersMarker extends MapEngineMarker {
   element: HTMLElement;
   focusTargets: MarkerFocusTarget[];
+  kind: MarkerKind;
   location: MapEngineMarkerOptions['location'];
   offset: number[];
   overlay: OverlayLike;
@@ -96,6 +99,8 @@ class OpenLayersMap implements MapEngineMap {
     click: (event: unknown) => void;
     markerSizeChange: () => void;
     moveEnd: (event: unknown) => void;
+    userKeyDown: (event: Event) => void;
+    userViewChange: () => void;
   };
 
   private _tileLayer?: TileLayerLike;
@@ -103,6 +108,8 @@ class OpenLayersMap implements MapEngineMap {
   private _disposed = false;
 
   private _markerFitNeedsLayout = false;
+
+  private _markerSizeRefitEnabled = true;
 
   private _subscribedView: ViewLike;
 
@@ -214,17 +221,30 @@ class OpenLayersMap implements MapEngineMap {
         element.click();
       }
       : undefined;
-    const hasImage = element.tagName === 'IMG' || element.querySelector('img') !== null;
-    const imageLoadHandler: EventListener | undefined = hasImage
-      ? (): void => this._eventHandlers?.markerSizeChange()
-      : undefined;
+    let { height, width } = element.getBoundingClientRect();
+    let resizeHandled = false;
+    const resizeHandler = (): void => {
+      const rect = element.getBoundingClientRect();
+      if (rect.height === height && rect.width === width) {
+        return;
+      }
+
+      height = rect.height;
+      width = rect.width;
+      if (!resizeHandled && this._markerSizeRefitEnabled) {
+        resizeHandled = true;
+        this._eventHandlers?.markerSizeChange();
+      }
+    };
 
     if (clickHandler) {
       element.addEventListener('click', clickHandler);
     }
     if (keyboardInteractive) {
       element.setAttribute('role', 'button');
-      if (!element.textContent?.trim() && !element.getAttribute('alt')) {
+      if (element.tagName !== 'IMG'
+        && !element.textContent?.trim()
+        && !element.getAttribute('alt')) {
         element.setAttribute(
           'aria-label',
           messageLocalization.format('dxMap-markerAriaLabel'),
@@ -237,9 +257,7 @@ class OpenLayersMap implements MapEngineMap {
     if (keyReleaseHandler) {
       element.addEventListener(KEY_RELEASE_EVENT, keyReleaseHandler);
     }
-    if (imageLoadHandler) {
-      element.addEventListener('load', imageLoadHandler, true);
-    }
+    resizeObserverSingleton.observe(element, resizeHandler);
 
     return {
       focusTargets,
@@ -253,33 +271,36 @@ class OpenLayersMap implements MapEngineMap {
         if (keyReleaseHandler) {
           element.removeEventListener(KEY_RELEASE_EVENT, keyReleaseHandler);
         }
-        if (imageLoadHandler) {
-          element.removeEventListener('load', imageLoadHandler, true);
-        }
+        resizeObserverSingleton.unobserve(element);
       },
     };
   }
 
   addMarker(options: MapEngineMarkerOptions): MapEngineMarker {
-    const { element, offset, positioning } = createMarkerElement(
+    const {
+      element, kind, offset, positioning,
+    } = createMarkerElement(
       this._container.ownerDocument,
       options,
     );
+    element.setAttribute('dir', options.rtlEnabled ? 'rtl' : 'ltr');
     const marker = new this._api.Overlay({
       element,
-      insertFirst: true,
+      insertFirst: false,
       offset,
       position: this._getMarkerPosition(options.location),
       positioning,
       stopEvent: false,
     });
-    const markerElementBinding = this._attachMarkerElementHandlers(element, options.onClick);
     this.originalMap.addOverlay(marker);
+    const markerElementBinding = this._attachMarkerElementHandlers(element, options.onClick);
+    this._markerSizeRefitEnabled = true;
 
     let disposed = false;
     const handle: OpenLayersMarker = {
       element,
       focusTargets: markerElementBinding.focusTargets,
+      kind,
       location: { ...options.location },
       offset,
       overlay: marker,
@@ -326,7 +347,10 @@ class OpenLayersMap implements MapEngineMap {
 
   private _syncMarkerPositions(): void {
     this._markers.forEach((marker) => {
-      marker.overlay.setPosition(this._getMarkerPosition(marker.location));
+      const position = this._getMarkerPosition(marker.location);
+      if (!areCoordinatesEqual(marker.overlay.getPosition(), position)) {
+        marker.overlay.setPosition(position);
+      }
     });
   }
 
@@ -385,8 +409,10 @@ class OpenLayersMap implements MapEngineMap {
     const padding = [0, 0, 0, 0];
     let needsLayout = false;
 
-    this._markers.forEach(({ element, offset, positioning }) => {
-      const isDefault = element.classList.contains(DEFAULT_MARKER_CLASS);
+    this._markers.forEach(({
+      element, kind, offset, positioning,
+    }) => {
+      const isDefault = kind === 'default';
       const rect = isDefault ? undefined : element.getBoundingClientRect();
       needsLayout ||= !isDefault && (!rect?.width || !rect.height);
       const defaultSize = isDefault
@@ -434,14 +460,28 @@ class OpenLayersMap implements MapEngineMap {
       this._syncMarkerTabIndexes();
       handlers.viewChange(this._getViewState());
     };
+    const userViewChange = (): void => {
+      this._markerSizeRefitEnabled = false;
+    };
+    const userKeyDown = (event: Event): void => {
+      const { key } = event as KeyboardEvent;
+      if (['+', '-', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(key)) {
+        userViewChange();
+      }
+    };
 
     this._eventHandlers = {
       click,
       markerSizeChange: handlers.markerSizeChange,
       moveEnd,
+      userKeyDown,
+      userViewChange,
     };
     this.originalMap.on('click', click);
     this.originalMap.on('moveend', moveEnd);
+    this.originalMap.on('pointerdrag', userViewChange);
+    this._container.addEventListener('keydown', userKeyDown);
+    this._container.addEventListener('wheel', userViewChange);
   }
 
   private _isMarkerEvent(event?: Event): boolean {
@@ -462,6 +502,9 @@ class OpenLayersMap implements MapEngineMap {
 
     this.originalMap.un('click', this._eventHandlers.click);
     this.originalMap.un('moveend', this._eventHandlers.moveEnd);
+    this.originalMap.un('pointerdrag', this._eventHandlers.userViewChange);
+    this._container.removeEventListener('keydown', this._eventHandlers.userKeyDown);
+    this._container.removeEventListener('wheel', this._eventHandlers.userViewChange);
     this._eventHandlers = undefined;
   }
 
@@ -509,6 +552,7 @@ class OpenLayersMap implements MapEngineMap {
   }
 
   fitBounds(bounds: MapEngineBounds, options?: MapEngineFitBoundsOptions): void {
+    this._markerSizeRefitEnabled = true;
     const west = bounds.southWest.lng;
     const east = bounds.northEast.lng < west
       ? bounds.northEast.lng + 360
@@ -651,13 +695,13 @@ class OpenLayersMap implements MapEngineMap {
     this._syncMarkerTabIndexes();
   }
 
-  updateDimensions(): boolean {
+  updateDimensions(): MapEngineUpdateDimensionsResult {
     this.originalMap.updateSize();
     this._syncMarkerTabIndexes();
     const needsViewportAdjustment = this._markerFitNeedsLayout;
     this._markerFitNeedsLayout = false;
 
-    return needsViewportAdjustment;
+    return { needsViewportRefit: needsViewportAdjustment };
   }
 }
 

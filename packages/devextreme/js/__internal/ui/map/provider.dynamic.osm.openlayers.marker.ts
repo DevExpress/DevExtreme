@@ -1,7 +1,10 @@
+import messageLocalization from '@js/common/core/localization/message';
+
 import type { MapEngineMarkerOptions } from './provider.dynamic.osm.engine';
 
 export const MARKER_FALLBACK_WIDTH = 25;
 export const MARKER_FALLBACK_HEIGHT = 41;
+// NOTE: Keep this value in sync with .dx-map-marker-default in widgets/base/_map.scss.
 export const DEFAULT_MARKER_SIZE = 44;
 
 const MARKER_CLASS = 'dx-map-marker';
@@ -27,6 +30,15 @@ const DEFAULT_MARKER_CENTER_PATH = [
   'c0-1.294-1.05-2.353-2.333-2.353z',
 ].join('');
 
+export type MarkerKind = 'default' | 'html' | 'image';
+
+export interface MarkerElementInfo {
+  element: HTMLElement;
+  kind: MarkerKind;
+  offset: number[];
+  positioning: string;
+}
+
 const createDefaultMarkerElement = (
   ownerDocument: Document,
 ): HTMLElement => {
@@ -36,23 +48,12 @@ const createDefaultMarkerElement = (
   const center = ownerDocument.createElementNS(SVG_NAMESPACE, 'path');
 
   element.className = `${MARKER_CLASS} ${DEFAULT_MARKER_CLASS}`;
-  element.style.alignItems = 'flex-end';
-  element.style.display = 'flex';
-  element.style.height = `${DEFAULT_MARKER_SIZE}px`;
-  element.style.justifyContent = 'center';
-  element.style.width = `${DEFAULT_MARKER_SIZE}px`;
   svg.setAttribute('class', DEFAULT_MARKER_ICON_CLASS);
   svg.setAttribute('viewBox', DEFAULT_MARKER_VIEW_BOX);
   svg.setAttribute('width', `${DEFAULT_MARKER_WIDTH}`);
   svg.setAttribute('height', `${DEFAULT_MARKER_HEIGHT}`);
   svg.setAttribute('aria-hidden', 'true');
   svg.setAttribute('focusable', 'false');
-  svg.style.display = 'block';
-  svg.style.filter = [
-    'drop-shadow(0 0 0.5px rgba(255, 255, 255, 0.85))',
-    'drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35))',
-  ].join(' ');
-  svg.style.overflow = 'visible';
   body.setAttribute('class', DEFAULT_MARKER_BODY_CLASS);
   body.setAttribute('d', DEFAULT_MARKER_BODY_PATH);
   body.setAttribute('stroke-width', '0.5');
@@ -68,13 +69,14 @@ const createDefaultMarkerElement = (
 export const createMarkerElement = (
   ownerDocument: Document,
   options: MapEngineMarkerOptions,
-): { element: HTMLElement; offset: number[]; positioning: string } => {
+): MarkerElementInfo => {
   if (options.html) {
     const element = ownerDocument.createElement('div');
     element.innerHTML = options.html;
 
     return {
       element,
+      kind: 'html',
       offset: [options.htmlOffset?.left ?? 0, options.htmlOffset?.top ?? 0],
       positioning: 'top-left',
     };
@@ -84,14 +86,20 @@ export const createMarkerElement = (
     const element = ownerDocument.createElement('img');
     element.className = `${MARKER_CLASS} ${IMAGE_MARKER_CLASS}`;
     element.src = options.iconSrc;
-    element.alt = '';
+    element.alt = messageLocalization.format('dxMap-markerAriaLabel');
     element.draggable = false;
 
-    return { element, offset: [0, 0], positioning: 'bottom-center' };
+    return {
+      element,
+      kind: 'image',
+      offset: [0, 0],
+      positioning: 'bottom-center',
+    };
   }
 
   return {
     element: createDefaultMarkerElement(ownerDocument),
+    kind: 'default',
     offset: [0, 0],
     positioning: 'bottom-center',
   };

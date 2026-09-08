@@ -86,6 +86,7 @@
         }
 
         fit(extent, options) {
+            api.fitCallCount += 1;
             api.fittedExtent = extent;
             api.fitOptions = options;
             this.center = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
@@ -156,7 +157,11 @@
             if(api.getOverlayRect) {
                 overlay.options.element.getBoundingClientRect = api.getOverlayRect;
             }
-            this.options.target.appendChild(overlay.options.element);
+            if(overlay.options.insertFirst) {
+                this.options.target.prepend(overlay.options.element);
+            } else {
+                this.options.target.appendChild(overlay.options.element);
+            }
         }
         getInteractions() {
             return this.options.interactions;

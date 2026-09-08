@@ -38,6 +38,11 @@ export interface MapEngineMarkerOptions {
   iconSrc?: string;
   location: MapLocation;
   onClick?: () => void;
+  rtlEnabled?: boolean;
+}
+
+export interface MapEngineUpdateDimensionsResult {
+  needsViewportRefit: boolean;
 }
 
 export interface MapEngineMarker {
@@ -63,7 +68,7 @@ export interface MapEngineMap {
   setDisabled: (disabled: boolean) => void;
   setFocus: (enabled: boolean, tabIndex: number) => void;
   setView: (options: MapEngineSetViewOptions) => void;
-  updateDimensions: () => boolean;
+  updateDimensions: () => MapEngineUpdateDimensionsResult;
 }
 
 export interface MapEngine {
