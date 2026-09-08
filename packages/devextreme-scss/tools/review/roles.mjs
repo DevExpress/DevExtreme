@@ -37,7 +37,10 @@ import { createRequire } from 'module';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = join(here, '..', '..');
-const themeDir = join(packageRoot, 'scss', 'widgets', 'fluent-next');
+// --theme= lets the gate run the same code over a synthetic tree, so a green gate means "nothing
+// to find" rather than "the scan matched nothing".
+const themeArg = process.argv.find((a) => a.startsWith('--theme='));
+const themeDir = themeArg ? themeArg.slice('--theme='.length) : join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const registries = JSON.parse(readFileSync(join(packageRoot, 'tools', 'naming', 'registries.json'), 'utf8'));
 
 const require = createRequire(import.meta.url);
@@ -484,6 +487,9 @@ if (process.argv.includes('--json')) {
   console.log(JSON.stringify({ summary, findings }, null, 2));
 } else if (process.argv.includes('--md')) {
   console.log(md());
+} else if (themeArg) {
+  console.error('--theme= is for the gate; pass --json with it');
+  process.exit(2);
 } else {
   writeFileSync(join(themeDir, 'ROLES.md'), `${md()}\n`);
   console.log(`declarations ${summary.declarations} | family mismatch ${summary.familyMismatch}`);

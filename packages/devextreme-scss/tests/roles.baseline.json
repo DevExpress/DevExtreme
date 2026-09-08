@@ -1,0 +1,211 @@
+{
+  "comment": [
+    "Declarations whose role the package disagrees with, as reviewed today.",
+    "Exact equality, not a ratchet down: a new disagreement and a resolved one both fail, because",
+    "both are a decision somebody has to record. Re-bank deliberately with UPDATE_ROLES_BASELINE=1 pnpm test.",
+    "cross-family  - the package uses this role, but only for a slot of another kind.",
+    "family-conflict - the package paints this slot from another family entirely."
+  ],
+  "open": [
+    {
+      "name": "chat-message-editing-preview-accent-content",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-bg-primary"
+      ],
+      "slot": "content"
+    },
+    {
+      "name": "color-view-handle-content",
+      "verdict": "cross-family",
+      "roles": [
+        "color-bg"
+      ],
+      "slot": "content"
+    },
+    {
+      "name": "fieldset-field-value-invalid-content",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-border-danger"
+      ],
+      "slot": "content"
+    },
+    {
+      "name": "gallery-nav-button-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-subtle"
+      ],
+      "slot": "bg"
+    },
+    {
+      "name": "gallery-nav-button-bg-disabled",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "slot": "bg"
+    },
+    {
+      "name": "grid-content-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-inverted"
+      ],
+      "slot": "content"
+    },
+    {
+      "name": "popup-content-shadow-ambient",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-shadow-ambient"
+      ],
+      "slot": "shadow-ambient"
+    },
+    {
+      "name": "popup-content-shadow-focused",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-shadow-key"
+      ],
+      "slot": "shadow"
+    },
+    {
+      "name": "popup-content-shadow-key",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-shadow-key"
+      ],
+      "slot": "shadow-key"
+    },
+    {
+      "name": "radio-button-invalid-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-border-danger-shared"
+      ],
+      "slot": "bg"
+    },
+    {
+      "name": "radio-button-invalid-bg-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-border-danger-shared-active"
+      ],
+      "slot": "bg"
+    },
+    {
+      "name": "radio-button-invalid-bg-hovered",
+      "verdict": "cross-family",
+      "roles": [
+        "color-border-danger-shared-hovered"
+      ],
+      "slot": "bg"
+    },
+    {
+      "name": "scroll-view-shadow",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-shadow-key"
+      ],
+      "slot": "shadow"
+    },
+    {
+      "name": "switch-handle-bg-disabled",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "slot": "bg"
+    },
+    {
+      "name": "switch-handle-off-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-subtle"
+      ],
+      "slot": "bg"
+    },
+    {
+      "name": "switch-handle-on-shadow",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-inverted"
+      ],
+      "slot": "shadow"
+    },
+    {
+      "name": "switch-on-border-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-bg-primary-active"
+      ],
+      "slot": "border"
+    },
+    {
+      "name": "toolbar-separator-border",
+      "verdict": "cross-family",
+      "roles": [
+        "color-border-subtle"
+      ],
+      "slot": "border"
+    },
+    {
+      "name": "tree-view-border",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-border"
+      ],
+      "slot": "border"
+    },
+    {
+      "name": "tree-view-checkbox-accent-content-focused",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-bg-primary-hovered"
+      ],
+      "slot": "content"
+    },
+    {
+      "name": "tree-view-checkbox-border-disabled",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "slot": "border"
+    },
+    {
+      "name": "tree-view-checkbox-border-focused",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-border"
+      ],
+      "slot": "border"
+    },
+    {
+      "name": "tree-view-checkbox-checked-border-focused",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-border-primary-shared-active"
+      ],
+      "slot": "border"
+    },
+    {
+      "name": "tree-view-checkbox-indeterminate-bg-disabled",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "slot": "bg"
+    },
+    {
+      "name": "valid-badge-content",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-bg-success"
+      ],
+      "slot": "content"
+    }
+  ]
+}
