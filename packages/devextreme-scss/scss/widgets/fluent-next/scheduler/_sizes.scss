@@ -58,8 +58,8 @@ $scheduler-timeline-date-table-cell-height: 50px !default; // dx-offscale: 50px
 $scheduler-border-radius: 0 !default;
 
 $scheduler-navigator-icon-font-size: $global-icon-size !default;
-$scheduler-appointment-month-font-size: ds.$spacing-120 !default;
-$scheduler-workspace-info-font-size: ds.$spacing-160 !default;
+$scheduler-appointment-month-font-size: ds.$font-size-120 !default;
+$scheduler-workspace-info-font-size: ds.$font-size-160 !default;
 $scheduler-all-day-title-font-size: ds.$font-size-caption-md !default;
 $scheduler-time-panel-font-size: ds.$font-size-caption-md !default;
 $scheduler-header-panel-margin: ds.$spacing-140 !default;
