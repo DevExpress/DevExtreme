@@ -607,6 +607,70 @@ const ladders = [];
   ladders.sort((a, b) => a.stem.localeCompare(b.stem));
 }
 
+/*
+ * Contrast, measured only where the bundle itself puts a foreground and a background in ONE rule.
+ *
+ * This is the blind spot the whole report circles: every screenshot etalon is .light, and axe's
+ * colour-contrast rule looks at text only, so a role that is fine in light and wrong in dark has
+ * nothing watching it. Guessing which surface a text sits on would produce noise; a rule that sets
+ * both is ground truth and needs no assumption. It covers a subset - most backgrounds live on an
+ * ancestor - but every pair it reports is real.
+ */
+const hexOf = (value) => {
+  const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(value).trim());
+  if (!hex) return null;
+  const body = hex[1].length === 3 ? [...hex[1]].map((c) => c + c).join('') : hex[1];
+  return [0, 2, 4].map((i) => parseInt(body.slice(i, i + 2), 16));
+};
+const luminance = (rgb) => {
+  const [r, g, b] = rgb.map((channel) => {
+    const c = channel / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+const contrast = (a, b) => {
+  const [x, y] = [luminance(a), luminance(b)].sort((m, n) => n - m);
+  return (x + 0.05) / (y + 0.05);
+};
+
+/* A value built through the alpha bridge renders as a tint over whatever is behind it, not as the
+ * role's opaque hex - measuring it against the role would invent a contrast nobody sees. The
+ * html editor's code block, `rgb(from color-content-subtle r g b / .15)`, is why this is here. */
+const roleOfTierName = new Map(declarations
+  .filter((d) => !d.bridged && d.roles.length === 1)
+  .map((d) => [`--dx-${d.name}`, d.roles[0]]));
+const pairs = [];
+if (existsSync(bundlePath)) {
+  const css = readFileSync(bundlePath, 'utf8');
+  for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    if (selector.trim().startsWith('@')) continue;
+    // WCAG 1.4.3 exempts inactive controls, and the theme's disabled policy is gated separately
+    // (tests/disabled-paint.test.ts). Measuring them here would bury the live pairs under them.
+    if (/dx-state-disabled|dx-state-readonly|dx-button-disable/.test(selector)) continue;
+    const grab = (property) => new RegExp(`(?:^|;)\\s*${property}\\s*:\\s*var\\(\\s*(--dx-[a-z0-9-]+)`).exec(body)?.[1];
+    const fg = grab('color');
+    const bg = grab('background-color') ?? grab('background');
+    if (!fg || !bg) continue;
+    const fgRole = roleOfTierName.get(fg);
+    const bgRole = roleOfTierName.get(bg);
+    if (!fgRole || !bgRole) continue;
+    const measured = {};
+    for (const mode of MODES) {
+      const a = hexOf(resolveRole(fgRole, mode));
+      const b = hexOf(resolveRole(bgRole, mode));
+      if (a && b) measured[mode] = Math.round(contrast(a, b) * 100) / 100;
+    }
+    if (!Object.keys(measured).length) continue;
+    pairs.push({ selector: selector.trim().replace(/\s+/g, ' ').slice(0, 90), fg, bg, fgRole, bgRole, contrast: measured });
+  }
+}
+const AA = 4.5;
+const lowContrast = pairs
+  .filter((pair) => MODES.some((mode) => pair.contrast[mode] !== undefined && pair.contrast[mode] < AA))
+  .filter((pair, index, all) => all.findIndex((other) => other.fg === pair.fg && other.bg === pair.bg) === index)
+  .sort((a, b) => Math.min(...Object.values(a.contrast)) - Math.min(...Object.values(b.contrast)));
+
 // --- output ---------------------------------------------------------------------------------------
 
 const count = (predicate) => findings.filter(predicate).length;
@@ -618,6 +682,9 @@ const summary = {
   typographyOffGrid: typography.filter((t) => !t.roles.length).length,
   typographyUnmarked: typography.filter((t) => !t.marker).length,
   collapsedLadders: ladders.length,
+  contrastPairsMeasured: pairs.length,
+  contrastBelowAA: lowContrast.length,
+  contrastDarkOnly: lowContrast.filter((p) => p.contrast.light >= AA && p.contrast.dark < AA).length,
   familyMismatch: count((f) => f.family),
   slotLies: count((f) => f.slotLies),
   familyMismatchExplainedByProperty: count((f) => f.family && f.slotLies
@@ -653,6 +720,7 @@ const md = () => {
   out.push(`| family mismatch (slot wants another \`--dxds-\` family) | **${summary.familyMismatch}** |`);
   out.push(`| slot contradicts the painted property | **${summary.slotLies}** |`);
   out.push(`| states that resolve to one role | **${summary.collapsedLadders}** |`);
+  out.push(`| text/background pairs below AA | **${summary.contrastBelowAA}** of ${summary.contrastPairsMeasured} measured (${summary.contrastDarkOnly} dark only) |`);
   for (const verdict of verdicts) out.push(`| package: ${verdict} | ${summary.byVerdict[verdict]} |`);
   out.push('');
 
@@ -690,6 +758,22 @@ const md = () => {
     (f) => `- \`${f.name}\` = ${roleList(f.roles)}  (${f.where})\n`
       + `    - slot \`${f.family.slot}\` wants \`color-${f.family.want}-*\`, reads a \`${f.family.got.join('/')}\` role`
       + (f.package ? `; package verdict: ${f.package.verdict}` : ''));
+
+  out.push(`## Text on its own background, below AA - ${lowContrast.length} of ${pairs.length} measured pairs\n`);
+  out.push('Only pairs the bundle puts in one rule, so no assumption about which surface a text sits');
+  out.push('on. A row that passes in light and fails in dark is the case nothing else can see: the');
+  out.push('etalons are all .light and the axe rule reads text only.\n');
+  out.push('Both thresholds matter and the report does not pick for you: 4.5:1 for text, 3:1 for a');
+  out.push('glyph or a control boundary. A checkmark at 3.36 passes as a graphic; the same number under');
+  out.push('a menu label does not.\n');
+  out.push('| Selector | Text | On | Light | Dark |');
+  out.push('|---|---|---|---|---|');
+  for (const pair of lowContrast) {
+    const mark = (value) => (value === undefined ? '-' : `${value}${value < AA ? ' ⚠' : ''}`);
+    out.push(`| \`${pair.selector}\` | \`${pair.fgRole}\` | \`${pair.bgRole}\` `
+      + `| ${mark(pair.contrast.light)} | ${mark(pair.contrast.dark)} |`);
+  }
+  out.push('');
 
   out.push(`## States that resolve to one role - ${ladders.length}\n`);
   out.push('A state in the name that the eye cannot find. `focused` reusing `hovered` is accepted -');
@@ -753,7 +837,7 @@ const md = () => {
 };
 
 if (process.argv.includes('--json')) {
-  console.log(JSON.stringify({ summary, findings, typography, ladders }, null, 2));
+  console.log(JSON.stringify({ summary, findings, typography, ladders, lowContrast }, null, 2));
 } else if (process.argv.includes('--md')) {
   console.log(md());
 } else if (themeArg) {
