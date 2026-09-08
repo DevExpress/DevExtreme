@@ -37,6 +37,12 @@ type Open = {
 const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'design'];
 const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design'];
 const LADDER_DECISIONS = ['no-rung', 'design'];
+const CONTRAST_DECISIONS = ['graphic-ok', 'design'];
+
+type ContrastPair = {
+  selector: string; fgRole: string; bgRole: string; contrast: Record<string, number>;
+  decision?: string; why?: string;
+};
 
 type Ladder = { stem: string; states: string[]; role: string[]; decision?: string; why?: string };
 
@@ -52,6 +58,7 @@ const run = (theme?: string): {
   findings: (Finding & { slot?: string | null; slotLies?: { slotSays: string }; paints?: { properties: string[] } })[];
   typography: Typography[];
   ladders: (Ladder & { unusedRungs: unknown[] })[];
+  lowContrast: ContrastPair[];
 } => JSON.parse(
   execFileSync('node', [tool, '--json', ...(theme ? [`--theme=${theme}`] : [])], {
     encoding: 'utf8',
@@ -198,5 +205,25 @@ test('every banked ladder carries a decision and a reason', () => {
   const undecided = baseline.ladders
     .filter((l: Ladder) => !l.decision || !LADDER_DECISIONS.includes(l.decision) || !l.why?.trim())
     .map((l: Ladder) => l.stem);
+  expect(undecided).toEqual([]);
+});
+
+/*
+ * Dark mode has no screenshot etalon and axe reads text only, so a role that is fine in light and
+ * wrong in dark has nothing watching it. This measures only pairs the bundle puts in one rule -
+ * no guess about which surface a text sits on - and skips alpha bridges and disabled selectors,
+ * which would each invent a number nobody sees.
+ */
+test('text on its own background below AA is the reviewed set', () => {
+  const measured = actual.lowContrast
+    .map(({ selector, fgRole, bgRole, contrast }) => ({ selector, fgRole, bgRole, contrast }))
+    .sort((a, b) => a.selector.localeCompare(b.selector));
+  expect(measured).toEqual(baseline.contrast.map(({ decision, why, ...rest }: ContrastPair) => rest));
+});
+
+test('every banked contrast pair carries a decision and a reason', () => {
+  const undecided = baseline.contrast
+    .filter((c: ContrastPair) => !c.decision || !CONTRAST_DECISIONS.includes(c.decision) || !c.why?.trim())
+    .map((c: ContrastPair) => c.selector);
   expect(undecided).toEqual([]);
 });

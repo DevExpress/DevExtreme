@@ -25,7 +25,12 @@
     "",
     "ladders - a slot whose states resolve to one role. `focused` reusing `hovered` is accepted",
     "convention and never listed. decision no-rung means the system has no role for the second state",
-    "either; design means it does and we skip it."
+    "either; design means it does and we skip it.",
+    "",
+    "contrast - foreground and background the bundle puts in ONE rule, resolved per mode. Alpha-bridge",
+    "values and disabled selectors are excluded: the first renders as a tint over an unknown surface,",
+    "the second is exempt from WCAG 1.4.3 and gated by disabled-paint.test.ts. decision graphic-ok means",
+    "the pair is a glyph and clears 3:1; design means it misses the threshold that applies to it."
   ],
   "open": [
     {
@@ -987,6 +992,52 @@
       ],
       "decision": "no-rung",
       "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    }
+  ],
+  "contrast": [
+    {
+      "selector": ".dx-checkbox-checked .dx-checkbox-icon",
+      "fgRole": "color-content-inverted",
+      "bgRole": "color-bg-primary",
+      "contrast": {
+        "light": 5.38,
+        "dark": 3.36
+      },
+      "decision": "graphic-ok",
+      "why": "the checkmark is a glyph: 3.36 clears the 3:1 threshold. Recorded so it is not rediscovered, and so a drop below 3 is caught"
+    },
+    {
+      "selector": ".dx-field-value.dx-attention::before",
+      "fgRole": "color-content-static-dark",
+      "bgRole": "color-content-danger-shared",
+      "contrast": {
+        "light": 6.07,
+        "dark": 3.68
+      },
+      "decision": "graphic-ok",
+      "why": "the attention mark is a glyph on the invalid disc: 3.68 clears 3:1. Same reason to keep it listed"
+    },
+    {
+      "selector": ".dx-messagelist-context-menu-content .dx-menu-item:has(.dx-icon-trash).dx-state-focused",
+      "fgRole": "color-content-danger",
+      "bgRole": "color-bg-hovered",
+      "contrast": {
+        "light": 5.56,
+        "dark": 3.05
+      },
+      "decision": "design",
+      "why": "a menu label, so 4.5:1 applies and 3.05 misses it clearly. Delete-item danger text on the hovered surface, dark only"
+    },
+    {
+      "selector": ".dx-splitter .dx-resize-handle",
+      "fgRole": "color-content-subtle",
+      "bgRole": "color-border",
+      "contrast": {
+        "light": 6,
+        "dark": 2.8
+      },
+      "decision": "design",
+      "why": "the grip is a glyph, so 3:1 applies and 2.8 misses it. content-subtle on a border role, dark only"
     }
   ]
 }
