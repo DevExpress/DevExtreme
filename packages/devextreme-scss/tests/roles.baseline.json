@@ -60,16 +60,6 @@
       "why": "goes to base as $handle-color and is a FILL - radial-gradient stops and inset box-shadows. color-bg is the right role; the slot word `content` is what disagrees"
     },
     {
-      "name": "fieldset-field-value-invalid-content",
-      "verdict": "family-conflict",
-      "roles": [
-        "color-border-danger"
-      ],
-      "slot": "content",
-      "decision": "design",
-      "why": "reads color: in fieldset/_index.scss:33 from a border role. Dark matches content-danger, light does not: ours #ee726a against content-danger #c50f1f. A light-only defect"
-    },
-    {
       "name": "gallery-nav-button-bg",
       "verdict": "cross-family",
       "roles": [
@@ -198,16 +188,6 @@
       "slot": "bg",
       "decision": "confirmed",
       "why": "the package assigns content-disabled to indeterminate.icon.disabled - the dash is content. Our role is right; the slot word says bg because the property is background-color"
-    },
-    {
-      "name": "valid-badge-content",
-      "verdict": "family-conflict",
-      "roles": [
-        "color-bg-success"
-      ],
-      "slot": "content",
-      "decision": "design",
-      "why": "reads color: in common/_mixins.scss:52 from a bg role. Light matches content-success exactly, dark does not: ours #107c10 against a #242424 surface where the content role gives #509f4b. A dark-only defect, invisible to every etalon"
     }
   ],
   "typographyUnmarked": [
@@ -1031,8 +1011,8 @@
         "light": 5.56,
         "dark": 3.05
       },
-      "decision": "design",
-      "why": "a menu label, so 4.5:1 applies and 3.05 misses it clearly. Delete-item danger text on the hovered surface, dark only"
+      "decision": "package-gap",
+      "why": "3.05 in dark against 4.5 for a label - and no role in the family clears it: content-danger-hovered, the strongest, reaches 3.87 on the same surface. The design system ships no danger content role that meets AA on its own hovered surface in dark. A request, not a swap"
     },
     {
       "selector": ".dx-splitter .dx-resize-handle",
@@ -1043,7 +1023,7 @@
         "dark": 2.8
       },
       "decision": "design",
-      "why": "the grip is a glyph, so 3:1 applies and 2.8 misses it. content-subtle on a border role, dark only"
+      "why": "2.8 in dark against 3:1 for a grip. A passing role exists - color-content reaches 4.54 - so the floor is set by the standard, but choosing which role also changes the grip in light (6 -> 11.15), and that part is a design call"
     }
   ],
   "concepts": [
@@ -1480,13 +1460,11 @@
       "concept": "invalid content rest",
       "roles": [
         "color-content-static-dark",
-        "color-border-danger",
-        "color-bg-danger",
-        "color-content-danger"
+        "color-content-danger",
+        "color-bg-danger"
       ],
       "families": [
         "content",
-        "border",
         "bg"
       ],
       "members": [
@@ -1496,7 +1474,7 @@
         },
         {
           "folder": "fieldset",
-          "role": "color-border-danger"
+          "role": "color-content-danger"
         },
         {
           "folder": "fileUploader",
