@@ -246,7 +246,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
           return { lat: location.lat, lng: location.lng };
         }
 
-        errors.log('W1006', 'The calculateLocation callback returned an invalid location.');
+        errors.log('W1006', 'calculateLocation returned an invalid result.');
 
         return undefined;
       }, (error) => {
