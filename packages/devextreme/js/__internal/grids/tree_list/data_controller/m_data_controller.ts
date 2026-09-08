@@ -10,10 +10,6 @@ import treeListCore from '../m_core';
 export class TreeListDataController extends DataController {
   public declare _dataSource?: DataSourceAdapterTreeList | null;
 
-  public dataSource(): DataSourceAdapterTreeList | undefined {
-    return this._dataSource ?? undefined;
-  }
-
   private _getNodeLevel(node) {
     let level = -1;
     while (node.parent) {

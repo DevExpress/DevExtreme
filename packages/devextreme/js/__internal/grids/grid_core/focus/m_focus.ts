@@ -5,6 +5,7 @@ import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
 import type { StoreChange } from '@js/data/store';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -37,6 +38,10 @@ export class FocusController extends core.ViewController {
   private getDataController(): DataController
   & Partial<VirtualScrollingDataControllerExtension> {
     return this.getController('data');
+  }
+
+  private getDataSourceController(): DataSourceController {
+    return this.getController('dataSource');
   }
 
   public init() {
@@ -213,7 +218,7 @@ export class FocusController extends core.ViewController {
     const d = new Deferred();
     const rowsView = this.getView('rowsView');
 
-    if (key === undefined || !this.getDataController().dataSource()) {
+    if (key === undefined || !this.getDataSourceController().hasAdapter()) {
       return d.reject().promise();
     }
 
@@ -534,8 +539,11 @@ const focusEditorFactoryViewControllerExtender = (
 const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExtender extends Base {
   protected focusController!: FocusController;
 
+  protected dataSourceController!: DataSourceController;
+
   public init(isApplyingUserState?: boolean): void {
     this.focusController = this.getController('focus');
+    this.dataSourceController = this.getController('dataSource');
 
     super.init(isApplyingUserState);
   }
@@ -543,9 +551,8 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
   public getSortDataSourceParameters(_, sortByKey?) {
     // @ts-expect-error
     let result = super.getSortDataSourceParameters.apply(this, arguments);
-    const dataSource = this._dataController._dataSource;
-    let key = dataSource?.store()?.key();
-    const remoteOperations = dataSource && dataSource.remoteOperations() || {};
+    let key = this.dataSourceController.key();
+    const remoteOperations = this.dataSourceController.remoteOperations();
     const isLocalOperations = Object.keys(remoteOperations).every((operationName) => !remoteOperations[operationName]);
 
     if (key && (this.option('focusedRowEnabled') && this.focusController.isAutoNavigateToFocusedRow() !== false || sortByKey)) {
@@ -555,7 +562,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
       if (notSortedKeys.length) {
         result = result || [];
         if (isLocalOperations) {
-          result.push({ selector: dataSource?.getDataIndexGetter(), desc: false });
+          result.push({ selector: this.dataSourceController.getDataIndexGetter(), desc: false });
         } else {
           notSortedKeys.forEach((notSortedKey) => result.push({ selector: notSortedKey, desc: false }));
         }
@@ -912,6 +919,14 @@ const editing = (Base: ModuleType<EditingController>) => class FocusEditingContr
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController extends Base {
   private _scrollToFocusOnResize: any;
 
+  private dataSourceController!: DataSourceController;
+
+  public init(): void {
+    this.dataSourceController = this.getController('dataSource');
+
+    super.init();
+  }
+
   protected _createRow(row) {
     // @ts-expect-error
     const $row = super._createRow.apply(this, arguments);
@@ -965,8 +980,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     let columnIndex = this.option('focusedColumnIndex')!;
     const $row = this._findRowElementForTabIndex();
 
-    const dataSource = this._dataController.dataSource();
-    const operationTypes = dataSource?.operationTypes();
+    const operationTypes = this.dataSourceController.operationTypes();
     const isPaging = !operationTypes || operationTypes.paging;
 
     if (!isDefined(this._scrollToFocusOnResize)) {

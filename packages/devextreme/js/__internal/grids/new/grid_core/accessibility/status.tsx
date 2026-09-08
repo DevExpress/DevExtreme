@@ -1,10 +1,11 @@
+import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 import { Component } from 'inferno';
 
 import { CLASSES as BASE_CLASSES } from '../const';
 
 const CLASSES = {
   ...BASE_CLASSES,
-  container: 'dx-gridbase-a11y-status-container',
+  container: SCREEN_READER_ONLY_CLASS,
 };
 
 export interface A11yStatusContainerComponentProps {

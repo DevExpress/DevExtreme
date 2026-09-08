@@ -66,7 +66,7 @@ import {
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends modules.Controller {
-  public _dataSource?: DataSourceAdapter | null;
+  protected _dataSource?: DataSourceAdapter | null;
 
   protected _items!: ProcessedItem[];
 
@@ -281,16 +281,16 @@ export class DataController extends modules.Controller {
         this.reset();
         break;
       case 'paging': {
-        const dataSource = this.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-        if (dataSource) {
-          const changedPagingOptions = this.applyPagingOptions(dataSource);
+        if (dataSourceAdapter) {
+          const changedPagingOptions = this.applyPagingOptions(dataSourceAdapter);
           if (changedPagingOptions.hasChanges) {
-            const pageIndex = dataSource.pageIndex();
+            const pageIndex = dataSourceAdapter.pageIndex();
 
             this._isPaging = changedPagingOptions.isPageIndexChanged;
 
-            dataSource.load().done(() => {
+            dataSourceAdapter.load().done(() => {
               this._isPaging = false;
               this.pageChanged.fire(pageIndex);
             });
@@ -303,11 +303,11 @@ export class DataController extends modules.Controller {
         this.reset();
         break;
       case 'columns': {
-        const dataSource = this.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-        if (dataSource?.isLoading() && args.name === args.fullName) {
+        if (dataSourceAdapter?.isLoading() && args.name === args.fullName) {
           this._useSortingGroupingFromColumns = true;
-          dataSource.load();
+          dataSourceAdapter.load();
         }
         break;
       }
@@ -1114,9 +1114,7 @@ export class DataController extends modules.Controller {
   }
 
   private readonly changingHandler = (e: ChangingEvent): void => {
-    const dataSource = this.dataSource();
-
-    if (!dataSource) {
+    if (!this.dataSourceController.hasAdapter()) {
       return;
     }
 
@@ -1165,7 +1163,7 @@ export class DataController extends modules.Controller {
       return;
     }
 
-    const operationTypes = this.dataSource()?.operationTypes() ?? undefined;
+    const operationTypes = this.dataSourceController.operationTypes() ?? undefined;
 
     change.isDataChanged = true;
     change.repaintChangesOnly = resolveRepaintChangesOnly(
@@ -1188,8 +1186,8 @@ export class DataController extends modules.Controller {
   }
 
   public loadingOperationTypes(): OperationTypes {
-    const dataSource = this.dataSource();
-    const operationTypes: OperationTypes | undefined = dataSource?.loadingOperationTypes();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+    const operationTypes: OperationTypes | undefined = dataSourceAdapter?.loadingOperationTypes();
 
     return operationTypes ?? {};
   }
@@ -1370,10 +1368,6 @@ export class DataController extends modules.Controller {
 
   public pageCount(): number {
     return this._dataSource ? this._dataSource.pageCount() : 1;
-  }
-
-  public dataSource(): DataSourceAdapter | undefined {
-    return this._dataSource ?? undefined;
   }
 
   public store(): Store | undefined {
@@ -1629,11 +1623,10 @@ export class DataController extends modules.Controller {
   }
 
   /**
-   * @extended: TreeList's state_storing
+   * @extended: search, TreeList's state_storing
    */
   public getUserState(): UserState {
     return {
-      searchText: this.option('searchPanel.text'),
       pageIndex: this.pageIndex(),
       pageSize: this.pageSize(),
     };
