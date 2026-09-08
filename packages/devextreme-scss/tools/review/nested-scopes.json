@@ -153,8 +153,7 @@
     "dx-diagram-mobile-toolbar-color-box-opened",
     "dx-diagram-toolbar",
     "dx-diagram-toolbox-panel",
-    "dx-diagram-touchbar",
-    "dx-dropdownmenu-popup"
+    "dx-diagram-touchbar"
   ],
   "drawer": [
     "dx-drawer-shader"
