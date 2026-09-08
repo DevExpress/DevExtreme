@@ -1676,6 +1676,37 @@ QUnit.module('OSM: markers', moduleConfig, () => {
             engineMap.dispose();
         });
     });
+    [false, true].forEach(afterUserInteraction => {
+        QUnit.test(`explicit bounds are not refitted after a marker resize (after user interaction: ${afterUserInteraction})`, function(assert) {
+            let markerWidth = 20;
+            const container = document.createElement('div');
+            const engineMap = createOpenLayersEngine(openLayersMock).createMap(container);
+            const markerSizeChange = sinon.spy();
+            const location = { lat: 40.7, lng: -74 };
+            openLayersMock.getOverlayRect = () => ({ height: markerWidth, width: markerWidth });
+            engineMap.attachHandlers({ click: () => {}, markerSizeChange, viewChange: () => {} });
+            engineMap.addMarker({ iconSrc: 'custom-marker.png', location });
+            engineMap.fitBounds({ northEast: location, southWest: location }, { includeMarkerPadding: true });
+
+            if(afterUserInteraction) {
+                container.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+            }
+            engineMap.fitBounds({
+                northEast: { lat: 41, lng: -73 },
+                southWest: { lat: 40, lng: -75 }
+            });
+            const fitCallCount = openLayersMock.fitCallCount;
+
+            markerWidth = 44;
+            triggerResize(openLayersMock.addedOverlays[0].options.element);
+
+            assert.ok(markerSizeChange.notCalled, 'marker resize does not request an automatic refit');
+            assert.strictEqual(openLayersMock.fitCallCount, fitCallCount, 'view is not fitted again');
+            assert.deepEqual(openLayersMock.fittedExtent, [-75000, 40000, -73000, 41000], 'explicit bounds remain applied');
+
+            engineMap.dispose();
+        });
+    });
     QUnit.test('newer marker overlays are rendered above older markers', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
         const container = document.createElement('div');

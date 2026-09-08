@@ -550,7 +550,7 @@ class OpenLayersMap implements MapEngineMap {
   }
 
   fitBounds(bounds: MapEngineBounds, options?: MapEngineFitBoundsOptions): void {
-    this._markerSizeRefitEnabled = true;
+    this._markerSizeRefitEnabled = Boolean(options?.includeMarkerPadding);
     const west = bounds.southWest.lng;
     const east = bounds.northEast.lng < west
       ? bounds.northEast.lng + 360
