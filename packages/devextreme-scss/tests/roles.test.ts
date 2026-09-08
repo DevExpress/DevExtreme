@@ -38,6 +38,12 @@ const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'de
 const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design'];
 const LADDER_DECISIONS = ['no-rung', 'design'];
 const CONTRAST_DECISIONS = ['graphic-ok', 'design'];
+const CONCEPT_DECISIONS = ['spelling', 'shade', 'design'];
+
+type Concept = {
+  concept: string; roles: string[]; families: string[];
+  members: { folder: string; role: string }[]; decision?: string; why?: string;
+};
 
 type ContrastPair = {
   selector: string; fgRole: string; bgRole: string; contrast: Record<string, number>;
@@ -59,6 +65,7 @@ const run = (theme?: string): {
   typography: Typography[];
   ladders: (Ladder & { unusedRungs: unknown[] })[];
   lowContrast: ContrastPair[];
+  concepts: (Concept & { clusters: unknown[]; oneColour: boolean })[];
 } => JSON.parse(
   execFileSync('node', [tool, '--json', ...(theme ? [`--theme=${theme}`] : [])], {
     encoding: 'utf8',
@@ -225,5 +232,30 @@ test('every banked contrast pair carries a decision and a reason', () => {
   const undecided = baseline.contrast
     .filter((c: ContrastPair) => !c.decision || !CONTRAST_DECISIONS.includes(c.decision) || !c.why?.trim())
     .map((c: ContrastPair) => c.selector);
+  expect(undecided).toEqual([]);
+});
+
+/*
+ * The only check that asks about the theme as a whole rather than one declaration: does the same
+ * concept get the same role everywhere? Six components paint an invalid background six ways, three
+ * of them the identical colour spelled from three different families - nothing that reads one
+ * declaration at a time can see that.
+ */
+test('concepts painted with several roles are the reviewed ones', () => {
+  const seen = actual.concepts
+    .map(({ concept, roles, families, members }) => ({
+      concept,
+      roles,
+      families,
+      members: members.map(({ folder, role }) => ({ folder, role })),
+    }))
+    .sort((a, b) => a.concept.localeCompare(b.concept));
+  expect(seen).toEqual(baseline.concepts.map(({ decision, why, ...rest }: Concept) => rest));
+});
+
+test('every banked concept split carries a decision and a reason', () => {
+  const undecided = baseline.concepts
+    .filter((c: Concept) => !c.decision || !CONCEPT_DECISIONS.includes(c.decision) || !c.why?.trim())
+    .map((c: Concept) => c.concept);
   expect(undecided).toEqual([]);
 });
