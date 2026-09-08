@@ -2030,5 +2030,30 @@
       }
     ],
     "conclusion": "Там, где соседи описывают одно и то же одними словами, они согласны на 93%. Но одними словами они описывают почти ничего: у button 401 путь анатомии на четыре продукта и ноль общих для всех четырёх. Расходится не назначение ролей, а анатомия — каждый продукт моделирует свои варианты, суб-элементы и состояния."
+  },
+  "whyContrastDoesNotFailCi": {
+    "comment": [
+      "Why a contrast pair below AA does not turn the dark a11y job red. Asked 09.09.2026 and grounded",
+      "in axe-core 4.12.1 source rather than assumed - the answer is structural, so it applies to every",
+      "future finding of the same shape."
+    ],
+    "reasons": [
+      {
+        "reason": "axe reads DOM text nodes, and an icon glyph is not one",
+        "detail": "visibleTextNodes() in axe-core collects children with nodeType === 3. DevExtreme icon fonts render through ::before { content: \"\\fXXX\" }, which is generated content, not a child node - so an element whose only text is a glyph never enters the color-contrast rule. The splitter grip is exactly that: dx-icon-sizing sets a font-size on .dx-resize-handle-icon and the glyph arrives from the icon font.",
+        "covers": "every chevron, checkmark, arrow, grip and spinner in the theme"
+      },
+      {
+        "reason": "WCAG 1.4.11 has no axe rule at all",
+        "detail": "Non-text contrast - 3:1 for control boundaries and graphics - is not implemented in axe. Borders, focus rings, indicators and switch tracks are outside the gate by construction, not by suppression.",
+        "covers": "the whole non-text half of the contrast requirement"
+      },
+      {
+        "reason": "the state has to be reached",
+        "detail": "The delete item in the message-list context menu measures 3.05 in dark, and it is real text - but only while the menu is open and that item focused. A pair that needs a state the a11y suite never enters is invisible even when the rule applies to it.",
+        "covers": "findings in transient states: focused, opened, invalid"
+      }
+    ],
+    "consequence": "Тёмный a11y-прогон идёт и color-contrast в нём включён - но он видит только настоящий текст в достижимых состояниях. Контраст глифов и нетекстовых элементов не проверяет никто, и таблица контраста в этом отчёте - единственное место, где он измерен."
   }
 }
