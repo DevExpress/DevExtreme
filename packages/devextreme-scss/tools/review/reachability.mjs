@@ -143,11 +143,32 @@ const seenScopes = new Map();
   if (!seenScopes.has(key)) seenScopes.set(key, `${name}  @  ${selector}`);
 });
 
+/*
+ * A scope that names another widget's overlay (the toolbar's dx-dropdownmenu-popup, a popover or
+ * tooltip wrapper) is a portal by construction: JS mounts it in the overlay container, under no root
+ * of THIS component, so the tier never reaches it and "reviewed" cannot be true. The branch has to
+ * read the Sass twin (or a :root role) instead - that is how the diagram's overflow menu lost its
+ * icon margins for a month while the whitelist kept the gate quiet.
+ */
+const SHARED_OVERLAY = /-(popup|popup-wrapper|overlay|overlay-wrapper|overlay-content|popover|popover-wrapper|tooltip|tooltip-wrapper)$/;
+const ownClassOf = (component, scope) => {
+  const own = [
+    `dx-${component.replace(/-/g, '')}`,
+    ...(registries.rootSelectors[component] ?? []).flatMap((sel) => [...classesOf(sel)]),
+  ];
+  return own.some((cls) => scope === cls || scope.startsWith(`${cls}-`));
+};
+const isForeignPortal = (component, scope) => SHARED_OVERLAY.test(scope) && !ownClassOf(component, scope);
+
 const reviewed = JSON.parse(readFileSync(scopesPath, 'utf8'));
+const listedPortals = Object.entries(reviewed)
+  .flatMap(([component, scopes]) => scopes.filter((scope) => isForeignPortal(component, scope))
+    .map((scope) => `${component} :: ${scope}`));
 if (process.argv.includes('--update-scopes')) {
   const next = {};
   [...seenScopes.keys()].sort().forEach((key) => {
     const [component, scope] = key.split(' :: ');
+    if (isForeignPortal(component, scope)) return;
     next[component] = [...(next[component] ?? []), scope];
   });
   writeFileSync(scopesPath, `${JSON.stringify(next, null, 2)}\n`);
@@ -157,8 +178,19 @@ if (process.argv.includes('--update-scopes')) {
 const unreviewed = [...seenScopes.entries()]
   .filter(([key]) => {
     const [component, scope] = key.split(' :: ');
-    return !(reviewed[component] ?? []).includes(scope);
+    return !(reviewed[component] ?? []).includes(scope) || isForeignPortal(component, scope);
   });
+
+const portals = [...new Set([
+  ...listedPortals,
+  ...[...seenScopes.keys()].filter((key) => isForeignPortal(...key.split(' :: '))),
+])];
+portals.forEach((key) => {
+  const [component, scope] = key.split(' :: ');
+  process.stdout.write(`✘ portal: .${scope} is another widget's overlay and cannot be a nested scope of ${component}\n`);
+  process.stdout.write('     cure: read the Sass twin (or a :root role) in that branch, or mount the overlay inside the root;\n');
+  process.stdout.write(`     "${scope}" must not be listed in nested-scopes.json["${component}"]\n`);
+});
 
 unreviewed.forEach(([key, example]) => {
   const [component, scope] = key.split(' :: ');
@@ -179,4 +211,4 @@ crossScope.forEach(([key, list]) => {
 
 process.stdout.write(`${orphans.size} read(s) outside the root text in ${seenScopes.size} scope(s) `
   + `(${unreviewed.length} unreviewed), ${crossScope.length} cross-scope duplicate(s)\n`);
-process.exit(crossScope.length || unreviewed.length ? 1 : 0);
+process.exit(crossScope.length || unreviewed.length || portals.length ? 1 : 0);
