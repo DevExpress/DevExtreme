@@ -15,14 +15,14 @@ $pagination-page-index-compact-min-width: null !default;
 
 @if $size == "default" {
   $pagination-nav-button-icon-size: ds.$spacing-210 !default;
-  $pagination-page-sizes-compact-min-width: 62px !default; // dx-offscale: 62px
+  $pagination-page-sizes-compact-min-width: ds.$spacing-640 !default;
   $pagination-page-index-compact-min-width: ds.$spacing-320 !default;
 }
 
 @else if $size == "compact" {
   $pagination-nav-button-icon-size: ds.$spacing-160 !default;
-  $pagination-page-sizes-compact-min-width: 42px !default; // dx-offscale: 42px
-  $pagination-page-index-compact-min-width: 27px !default; // dx-offscale: 27px
+  $pagination-page-sizes-compact-min-width: ds.$spacing-440 !default;
+  $pagination-page-index-compact-min-width: ds.$spacing-280 !default;
 }
 
 // Values hoisted from style-file literals (tokenized)
