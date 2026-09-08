@@ -2,6 +2,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
     const exports = {};
 
     exports.MockDataSourceAdapter = function(options) {
+        // Loads read options.items: the stores tests pass in options.store are write-only spies.
         const itemsStore = function() {
             return new ArrayStore(options.items);
         };
@@ -19,6 +20,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         };
 
         return {
+            _dataSource: options.dataSource,
             beginLoading: function() {
             },
             endLoading: function() {

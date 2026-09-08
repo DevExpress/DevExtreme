@@ -200,7 +200,6 @@ export class DataController extends modules.Controller {
       'endCustomLoading',
       'filter',
       'getCombinedFilter',
-      'getDataSource',
       'getKeyByRowIndex',
       'getRowIndexByKey',
       'getVisibleRows',
@@ -318,10 +317,6 @@ export class DataController extends modules.Controller {
 
   public isReady(): boolean {
     return !this._isLoading;
-  }
-
-  public getDataSource(): DataSource | null {
-    return this._dataSource?._dataSource ?? null;
   }
 
   public getCombinedFilter(returnDataField?: boolean): DataFilter {
@@ -1531,7 +1526,7 @@ export class DataController extends modules.Controller {
   public refresh(options?: boolean | RefreshOptions): DeferredObj<unknown> {
     const refreshOptions = getRefreshOptions(options);
 
-    const dataSource = this.getDataSource();
+    const dataSource = this.dataSourceController.getDataSource();
     const { changesOnly } = refreshOptions;
     const d = Deferred();
 

@@ -940,14 +940,18 @@ QUnit.module('Rows view', {
             { data: { name: 'aaaüaaa' }, values: ['aaaüaaa'] },
             { data: { name: 'aaaaaaü' }, values: ['aaaaaaü'] },
             { data: { name: 'üaaaaaa' }, values: ['üaaaaaa'] }];
-        const dataController = new MockDataController({ items: rows });
-        dataController.getDataSource = () => ({ loadOptions: () => ({
-            langParams: {
-                collatorOptions: {
-                    sensitivity: 'base'
-                },
+        const dataController = new MockDataController({
+            items: rows,
+            dataSource: {
+                loadOptions: () => ({
+                    langParams: {
+                        collatorOptions: {
+                            sensitivity: 'base'
+                        },
+                    }
+                })
             }
-        }) });
+        });
 
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');

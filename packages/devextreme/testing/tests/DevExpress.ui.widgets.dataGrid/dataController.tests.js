@@ -8095,7 +8095,7 @@ QUnit.module('Filtering', {
         this.dataSource = undefined;
 
         // assert
-        assert.notOk(this.dataController.getDataSource(), 'no dataSource');
+        assert.notOk(this.dataSourceController.getDataSource(), 'no dataSource');
 
         // act
         this.dataController.clearFilter();

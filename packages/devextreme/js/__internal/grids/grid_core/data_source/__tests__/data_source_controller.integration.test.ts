@@ -89,10 +89,12 @@ describe('dataSource module registration', () => {
     }
   });
 
-  it('leaves the getDataSource public method on DataController', async () => {
+  it('owns the getDataSource widget method', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
 
-    expect(instance.getDataSource()).toBe(instance.getController('data').getDataSource());
+    expect(instance.getDataSource()).toBeInstanceOf(DataSourceClass);
+    expect(instance.getDataSource())
+      .toBe(instance.getController('dataSource').getDataSource());
   });
 
   it('sits at the bottom of the controller order', async () => {
@@ -206,8 +208,7 @@ describe('dataSource controller reads delegate to the adapter', () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
 
-    expect(dataSourceController.getDataSource())
-      .toBe(instance.getController('data').getDataSource());
+    expect(dataSourceController.getDataSource()).toBeInstanceOf(DataSourceClass);
     expect(dataSourceController.getDataSource())
       .not.toBe(dataSourceController.getAdapter());
   });

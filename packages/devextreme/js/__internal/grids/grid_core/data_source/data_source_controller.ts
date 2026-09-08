@@ -17,6 +17,10 @@ export class DataSourceController extends modules.Controller {
 
   private isShared = false;
 
+  public publicMethods(): string[] {
+    return ['getDataSource'];
+  }
+
   /**
    * @extended: DataGrid's data_source_controller
    */

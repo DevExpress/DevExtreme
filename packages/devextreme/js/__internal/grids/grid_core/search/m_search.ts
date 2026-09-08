@@ -279,7 +279,7 @@ const rowsView = (
 
   private _getStringNormalizer() {
     const isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
-    const dataSource = this._dataController?.getDataSource?.();
+    const dataSource = this.dataSourceController.getDataSource();
     const langParams = dataSource?.loadOptions?.()?.langParams;
 
     return (str: string): string => toComparable(str, isCaseSensitive, langParams);
