@@ -88,7 +88,7 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-header-panel-time-cell-padding: ds.$spacing-120 !default;
 
   $scheduler-header-day-element-height: ds.$spacing-260 !default;
-  $scheduler-workspace-date-table-cell-height: 38px !default; // dx-offscale: 38px
+  $scheduler-workspace-date-table-cell-height: ds.$spacing-380 !default;
 
   $scheduler-header-panel-day-font-size: ds.$font-size-title-sm !default;
   $scheduler-header-height: 46px !default; // dx-offscale: 46px
@@ -187,7 +187,7 @@ $scheduler-appointment-details-font-size: ds.$font-size-caption-sm !default;
 $scheduler-header-panel-cell-date-font-size: ds.$font-size-title-xs !default;
 $scheduler-navigator-button-font-size: ds.$font-size-base-sm !default;
 $scheduler-appointment-border-radius: ds.$border-radius-40 !default;
-$scheduler-time-panel-cell-margin-block-start: -6px !default; // dx-offscale: -6px
+$scheduler-time-panel-cell-margin-block-start: ds.$spacing-minus-60 !default;
 $scheduler-small-padding-inline-end: ds.$spacing-20 !default;
 $scheduler-small-padding-inline-start: ds.$spacing-20 !default;
 $scheduler-date-time-indicator-height: ds.$spacing-20 !default;

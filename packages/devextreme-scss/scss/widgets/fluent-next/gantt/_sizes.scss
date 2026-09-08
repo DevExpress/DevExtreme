@@ -31,7 +31,7 @@ $gantt-toolbar-wrapper-padding: ds.$spacing-50 !default;
 $gantt-si-padding-inline-start: ds.$spacing-160 !default;
 $gantt-si-padding-inline-end: ds.$spacing-160 !default;
 $gantt-title-padding: 0 ds.$spacing-20 !default;
-$gantt-task-progress-inset-block-end: -8px !default; // dx-offscale: -8px
+$gantt-task-progress-inset-block-end: ds.$spacing-minus-80 !default;
 $gantt-task-margin-inline-start: ds.$spacing-210 !default;
 $gantt-task-padding-inline-start: ds.$spacing-40 !default;
 $gantt-task-padding-inline-end: ds.$spacing-40 !default;

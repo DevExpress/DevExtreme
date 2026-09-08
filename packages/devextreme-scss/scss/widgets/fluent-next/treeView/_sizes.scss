@@ -29,7 +29,7 @@ $tree-view-select-all-item-border-visible-padding: ds.$spacing-260 !default;
   $tree-view-toggle-item-width: ds.$spacing-200 !default;
   $tree-view-checkbox-container-size: ds.$spacing-200 !default;
   $tree-view-checkbox-offset: 42px !default; // dx-offscale: 42px
-  $tree-view-select-all-item-padding: ds.$spacing-150 42px !default; // dx-offscale: 42px
+  $tree-view-select-all-item-padding: ds.$spacing-150 $tree-view-checkbox-offset !default;
   $tree-view-item-padding: ds.$spacing-120 $tree-view-item-padding-inline !default;
   $tree-view-load-indicator-size: ds.$spacing-200 !default;
   $tree-view-search-box-margin-block-end: ds.$spacing-80 !default;
