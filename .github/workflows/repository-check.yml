@@ -8,14 +8,15 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
-  actions: read
+permissions: {}
 
 jobs:
   collect-flaky-reports:
     name: Collect flaky reports
     runs-on: ubuntu-slim
+    permissions:
+      contents: read # checkout
+      actions: read # list workflow runs and download their artifacts
     # Flaky collection must never break the repository check it feeds.
     continue-on-error: true
     outputs:
@@ -92,6 +93,8 @@ jobs:
   invoke:
     name: Invoke
     needs: [collect-flaky-reports]
+    permissions:
+      contents: read # the reusable workflow checks this repository out
     if: ${{ !cancelled() }}
     uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repository-check
     with:
