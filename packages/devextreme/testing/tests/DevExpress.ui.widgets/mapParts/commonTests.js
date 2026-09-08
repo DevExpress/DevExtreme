@@ -833,6 +833,58 @@ QUnit.test('change provider and async options', function(assert) {
     });
 });
 
+['resolve', 'reject'].forEach((completion) => {
+    QUnit.test(`async ${completion} from a replaced provider is ignored`, function(assert) {
+        let completeAction;
+        const actionResult = new Promise((resolve, reject) => {
+            completeAction = completion === 'resolve' ? resolve : reject;
+        });
+        const replacedProvider = {
+            updateZoom: sinon.stub().returns(actionResult)
+        };
+        const map = {
+            _provider: replacedProvider,
+            _lastAsyncAction: Promise.resolve(),
+            _triggerReadyAction: sinon.spy(),
+            _triggerUpdateAction: sinon.spy(),
+        };
+        const action = Map.prototype._queueAsyncAction.call(map, 'updateZoom');
+
+        return Promise.resolve().then(() => {
+            assert.ok(replacedProvider.updateZoom.calledOnce, 'action starts on the captured provider');
+            map._provider = {};
+            completeAction(completion === 'resolve' ? true : new Error('stale provider'));
+
+            return action;
+        }).then(() => {
+            assert.ok(map._triggerReadyAction.notCalled, 'stale action does not raise onReady');
+            assert.ok(map._triggerUpdateAction.notCalled, 'stale action does not raise onUpdated');
+        });
+    });
+});
+
+QUnit.test('queued action is not started after its provider is replaced', function(assert) {
+    let continueQueue;
+    const replacedProvider = {
+        updateZoom: sinon.spy()
+    };
+    const map = {
+        _provider: replacedProvider,
+        _lastAsyncAction: new Promise(resolve => {
+            continueQueue = resolve;
+        }),
+        _triggerReadyAction: sinon.spy(),
+        _triggerUpdateAction: sinon.spy(),
+    };
+    const action = Map.prototype._queueAsyncAction.call(map, 'updateZoom');
+    map._provider = {};
+    continueQueue();
+
+    return action.then(() => {
+        assert.ok(replacedProvider.updateZoom.notCalled, 'action captured for the old provider is skipped');
+    });
+});
+
 QUnit.module('disposed widget', {
     beforeEach: function() {
         const fakeURL = '/fakeGoogleUrl?';

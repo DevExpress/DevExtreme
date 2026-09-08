@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "A kezdő dátumnak {0} után kell lennie",
         "dxGantt-dialogEndDateValidation": "A befejezési dátumnak {0} után kell lennie",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "Galéria elem",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

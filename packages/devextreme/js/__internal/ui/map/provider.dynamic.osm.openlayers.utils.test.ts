@@ -13,6 +13,7 @@ import {
 
 const createApi = (): unknown => ({
   Map: jest.fn(),
+  Overlay: jest.fn(),
   View: jest.fn(),
   control: {
     Zoom: jest.fn(),
@@ -40,7 +41,7 @@ describe('OpenLayers utils', () => {
     it('returns false when a required API member is missing', () => {
       const api = createApi() as Record<string, unknown>;
 
-      delete api.View;
+      delete api.Overlay;
 
       expect(isOpenLayersApi(api)).toBe(false);
     });

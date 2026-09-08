@@ -920,6 +920,8 @@
         "dxGantt-dialogStartDateValidation": "Datum začetka mora biti po {0}",
         "dxGantt-dialogEndDateValidation": "Datum konca mora biti po {0}",
 
+        "dxMap-markerAriaLabel": "Map marker",
+
         "dxGallery-itemName": "Element galerije",
 
         "dxMultiView-elementAriaRoleDescription": "MultiView",

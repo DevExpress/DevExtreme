@@ -3,18 +3,32 @@ import $ from 'jquery';
 import OsmProvider from '__internal/ui/map/provider.dynamic.osm';
 import { setRegisteredMapEngine } from '__internal/ui/map/provider.dynamic.osm.engine';
 import { createOpenLayersEngine } from '__internal/ui/map/provider.dynamic.osm.openlayers';
+import resizeObserverSingleton from 'core/resize_observer';
+import localization from 'localization';
 import errors from 'ui/widget/ui.errors';
 
 import 'ui/map';
 
 let openLayersMock;
+let resizeObserverCallbacks;
+const triggerResize = (element) => {
+    const callback = resizeObserverCallbacks.get(element);
+
+    if(callback) {
+        callback();
+    }
+};
 const resetOpenLayersMock = () => {
     Object.assign(openLayersMock, {
         addedControls: [],
+        addedOverlays: [],
         addedTileLayers: [],
         controlOptions: null,
+        fitCallCount: 0,
+        fitZoom: undefined,
         fitOptions: null,
         fittedExtent: null,
+        getOverlayRect: null,
         interactionOptions: null,
         interactions: [],
         interactionStateChanges: [],
@@ -24,9 +38,14 @@ const resetOpenLayersMock = () => {
         mapResized: false,
         mapTarget: null,
         onInteractionStateChanged: null,
+        overlayOptions: [],
+        overlayContainer: null,
+        overlayContainerStopEvent: null,
+        overlayPositionChanges: [],
         projectedCoordinates: [],
         removedControls: [],
         removedLayers: [],
+        removedOverlays: [],
         throwOnTileSource: false,
         tileLayer: null,
         tileLayerOptions: null,
@@ -47,9 +66,7 @@ const resetOpenLayersMock = () => {
 const onInteractionStates = (expectedStates, callback) => {
     openLayersMock.onInteractionStateChanged = () => {
         const actualStates = openLayersMock.interactions.map(interaction => interaction.getActive());
-        const stateMatches = actualStates.length === expectedStates.length
-            && actualStates.every((state, index) => state === expectedStates[index]);
-
+        const stateMatches = actualStates.length === expectedStates.length && actualStates.every((state, index) => state === expectedStates[index]);
         if(stateMatches) {
             openLayersMock.onInteractionStateChanged = null;
             callback();
@@ -58,6 +75,13 @@ const onInteractionStates = (expectedStates, callback) => {
 };
 const moduleConfig = {
     beforeEach(assert) {
+        resizeObserverCallbacks = new Map();
+        sinon.stub(resizeObserverSingleton, 'observe').callsFake((element, callback) => {
+            resizeObserverCallbacks.set(element, callback);
+        });
+        sinon.stub(resizeObserverSingleton, 'unobserve').callsFake(element => {
+            resizeObserverCallbacks.delete(element);
+        });
         const setup = () => {
             setRegisteredMapEngine(undefined);
             window.ol = openLayersMock;
@@ -83,6 +107,8 @@ const moduleConfig = {
         });
     },
     afterEach() {
+        resizeObserverSingleton.observe.restore();
+        resizeObserverSingleton.unobserve.restore();
         setRegisteredMapEngine(undefined);
         window.ol = openLayersMock;
     }
@@ -215,7 +241,9 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
     QUnit.test('disabled map does not make its Shadow DOM host inert', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
         const host = document.createElement('div');
-        const shadowRoot = host.attachShadow({ mode: 'open' });
+        const shadowRoot = host.attachShadow({
+            mode: 'open'
+        });
         const container = document.createElement('div');
         const sibling = document.createElement('button');
         shadowRoot.append(container, sibling);
@@ -246,8 +274,11 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
     QUnit.test('updateDimensions updates the OpenLayers map size', function(assert) {
         const engine = createOpenLayersEngine(openLayersMock);
         const engineMap = engine.createMap(document.createElement('div'));
-        engineMap.updateDimensions();
+        const result = engineMap.updateDimensions();
         assert.ok(openLayersMock.mapResized, 'OpenLayers map size is updated');
+        assert.deepEqual(result, {
+            needsViewportRefit: false
+        }, 'viewport refit requirement is named');
         engineMap.dispose();
     });
     QUnit.test('load rejects with E1069 when OpenLayers is missing', function(assert) {
@@ -296,7 +327,22 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
     QUnit.test('load rejects with E1069 when the OpenLayers ImageTile API is missing', function(assert) {
         const done = assert.async();
         const provider = createProvider();
-        window.ol = Object.assign({}, openLayersMock, { source: {} });
+        window.ol = Object.assign({}, openLayersMock, {
+            source: {}
+        });
+        provider._loadImpl().then(() => {
+            assert.ok(false, 'load should reject');
+            done();
+        }, error => {
+            assert.strictEqual(error.message, errors.Error('E1069').message, 'E1069 is returned');
+            done();
+        });
+    });
+    QUnit.test('load rejects with E1069 when the OpenLayers Overlay API is missing', function(assert) {
+        const done = assert.async();
+        const provider = createProvider();
+        window.ol = Object.assign({}, openLayersMock);
+        delete window.ol.Overlay;
         provider._loadImpl().then(() => {
             assert.ok(false, 'load should reject');
             done();
@@ -311,7 +357,9 @@ QUnit.module('OSM: map loading', moduleConfig, () => {
             const provider = createProvider();
             const projectionApi = Object.assign({}, openLayersMock.proj);
             delete projectionApi[apiName];
-            window.ol = Object.assign({}, openLayersMock, { proj: projectionApi });
+            window.ol = Object.assign({}, openLayersMock, {
+                proj: projectionApi
+            });
             provider._loadImpl().then(() => {
                 assert.ok(false, 'load should reject');
                 done();
@@ -776,13 +824,1138 @@ QUnit.module('OSM: initial view', moduleConfig, () => {
         });
     });
 });
+QUnit.module('OSM: location calculation', moduleConfig, () => {
+    const tileServer = {
+        url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+        attribution: 'Example attribution'
+    };
+    QUnit.test('calculateLocation resolves a string center', function(assert) {
+        const done = assert.async();
+        const calculateLocation = sinon.spy(query => Promise.resolve({
+            lat: 40.74,
+            lng: -73.98
+        }));
+        $('#map').dxMap({
+            provider: 'osm',
+            center: 'New York',
+            providerConfig: {
+                tileServer,
+                calculateLocation
+            },
+            onReady: () => {
+                assert.ok(calculateLocation.calledOnceWithExactly('New York'), 'raw query is passed to the callback');
+                assert.deepEqual(openLayersMock.viewCenter, [-73980, 40740], 'calculated center is applied');
+                done();
+            }
+        });
+    });
+    QUnit.test('numeric string center does not call calculateLocation', function(assert) {
+        const done = assert.async();
+        const calculateLocation = sinon.spy(() => Promise.resolve({
+            lat: 0,
+            lng: 0
+        }));
+        $('#map').dxMap({
+            provider: 'osm',
+            center: '40.74, -73.98',
+            providerConfig: {
+                tileServer,
+                calculateLocation
+            },
+            onReady: () => {
+                assert.ok(calculateLocation.notCalled, 'coordinate string is resolved locally');
+                assert.deepEqual(openLayersMock.viewCenter, [-73980, 40740], 'coordinate string is applied');
+                done();
+            }
+        });
+    });
+    QUnit.test('missing calculateLocation logs W1031 once and uses the default location', function(assert) {
+        const done = assert.async();
+        const log = sinon.stub(errors, 'log');
+        const provider = createProvider();
+        provider._resolveLocation('Unknown place').then(location => {
+            assert.deepEqual(location, {
+                lat: 0,
+                lng: 0
+            }, 'default location is returned');
+            return provider._resolveLocation('Another place');
+        }).then(location => {
+            assert.deepEqual(location, {
+                lat: 0,
+                lng: 0
+            }, 'default location is returned for subsequent queries');
+            assert.ok(log.calledOnceWithExactly('W1031'), 'W1031 is logged');
+            log.restore();
+            done();
+        });
+    });
+    QUnit.test('successful calculated locations are cached', function(assert) {
+        const done = assert.async();
+        const calculateLocation = sinon.spy(() => Promise.resolve({
+            lat: 40.74,
+            lng: -73.98
+        }));
+        const provider = new OsmProvider({
+            option: () => ({
+                providerConfig: {
+                    calculateLocation
+                }
+            })
+        }, null);
+        provider._resolveLocation('New York').then(() => provider._resolveLocation('New York')).then(location => {
+            assert.deepEqual(location, {
+                lat: 40.74,
+                lng: -73.98
+            }, 'cached location is returned');
+            assert.ok(calculateLocation.calledOnce, 'callback is called once');
+            done();
+        });
+    });
+    QUnit.test('concurrent calculations for the same location share one request', function(assert) {
+        const done = assert.async();
+        let resolveLocation;
+        const locationPromise = new Promise(resolve => {
+            resolveLocation = resolve;
+        });
+        const calculateLocation = sinon.spy(() => locationPromise);
+        const provider = new OsmProvider({
+            option: () => ({
+                providerConfig: {
+                    calculateLocation
+                }
+            })
+        }, null);
+        const first = provider._resolveLocation('New York');
+        const second = provider._resolveLocation('New York');
+        resolveLocation({
+            lat: 40.74,
+            lng: -73.98
+        });
+        Promise.all([first, second]).then(locations => {
+            assert.deepEqual(locations, [{
+                lat: 40.74,
+                lng: -73.98
+            }, {
+                lat: 40.74,
+                lng: -73.98
+            }], 'both callers receive the calculated location');
+            assert.ok(calculateLocation.calledOnce, 'callback is called once');
+            done();
+        });
+    });
+    QUnit.test('an invalid callback result is not cached', function(assert) {
+        const done = assert.async();
+        const log = sinon.stub(errors, 'log');
+        const calculateLocation = sinon.stub();
+        calculateLocation.onFirstCall().returns(Promise.resolve(undefined));
+        calculateLocation.onSecondCall().returns(Promise.resolve({
+            lat: 40.74,
+            lng: -73.98
+        }));
+        const provider = new OsmProvider({
+            option: () => ({
+                providerConfig: {
+                    calculateLocation
+                }
+            })
+        }, null);
+        provider._resolveLocation('New York').then(firstLocation => {
+            assert.deepEqual(firstLocation, {
+                lat: 0,
+                lng: 0
+            }, 'invalid result uses the default location');
+            return provider._resolveLocation('New York');
+        }).then(secondLocation => {
+            assert.deepEqual(secondLocation, {
+                lat: 40.74,
+                lng: -73.98
+            }, 'callback is retried');
+            assert.ok(calculateLocation.calledTwice, 'invalid result is not cached');
+            assert.ok(log.calledOnceWithExactly('W1006', 'calculateLocation returned an invalid result.'), 'invalid result is reported');
+            log.restore();
+            done();
+        });
+    });
+    QUnit.test('a rejected callback result is not cached', function(assert) {
+        const done = assert.async();
+        const log = sinon.stub(errors, 'log');
+        const rejection = new Error('service unavailable');
+        const calculateLocation = sinon.stub();
+        calculateLocation.onFirstCall().returns(Promise.reject(rejection));
+        calculateLocation.onSecondCall().returns(Promise.resolve({
+            lat: 40.74,
+            lng: -73.98
+        }));
+        const provider = new OsmProvider({
+            option: () => ({
+                providerConfig: {
+                    calculateLocation
+                }
+            })
+        }, null);
+        provider._resolveLocation('New York').then(firstLocation => {
+            assert.deepEqual(firstLocation, {
+                lat: 0,
+                lng: 0
+            }, 'rejection uses the default location');
+            return provider._resolveLocation('New York');
+        }).then(secondLocation => {
+            assert.deepEqual(secondLocation, {
+                lat: 40.74,
+                lng: -73.98
+            }, 'callback is retried');
+            assert.ok(calculateLocation.calledTwice, 'rejected result is not cached');
+            assert.ok(log.calledOnceWithExactly('W1006', rejection), 'service rejection is reported');
+            log.restore();
+            done();
+        });
+    });
+    QUnit.test('a pending center calculation does not update a cleaned provider', function(assert) {
+        const done = assert.async();
+        let resolveLocation;
+        const locationPromise = new Promise(resolve => {
+            resolveLocation = resolve;
+        });
+        const setOptionSilent = sinon.spy();
+        const setView = sinon.spy();
+        const provider = new OsmProvider({
+            option: () => ({
+                center: 'New York',
+                providerConfig: {
+                    calculateLocation: () => locationPromise
+                }
+            }),
+            setOptionSilent
+        }, null);
+        provider._engineMap = {
+            dispose: sinon.spy(),
+            setView
+        };
+        provider._markers = [];
+        const update = provider.updateCenter();
+        provider.clean();
+        resolveLocation({
+            lat: 40.74,
+            lng: -73.98
+        });
+        update.then(() => {
+            assert.ok(setView.notCalled, 'the disposed engine map is not updated');
+            assert.ok(setOptionSilent.notCalled, 'the stale center is not written to the component');
+            done();
+        });
+    });
+    QUnit.test('an older center calculation does not overwrite a newer center', function(assert) {
+        const done = assert.async();
+        let resolveFirst;
+        let resolveSecond;
+        const firstLocation = new Promise(resolve => {
+            resolveFirst = resolve;
+        });
+        const secondLocation = new Promise(resolve => {
+            resolveSecond = resolve;
+        });
+        const options = {
+            center: 'First',
+            providerConfig: {
+                calculateLocation: query => query === 'First' ? firstLocation : secondLocation
+            }
+        };
+        const setView = sinon.spy();
+        const setOptionSilent = sinon.spy((name, value) => {
+            options[name] = value;
+        });
+        const provider = new OsmProvider({
+            option: () => options,
+            setOptionSilent
+        }, null);
+        provider._engineMap = {
+            setView
+        };
+        const firstUpdate = provider.updateCenter();
+        options.center = 'Second';
+        resolveFirst({
+            lat: 1,
+            lng: 2
+        });
+        firstUpdate.then(() => {
+            assert.ok(setView.notCalled, 'superseded center is not applied');
+            assert.ok(setOptionSilent.notCalled, 'superseded center is not written to the component');
+            const secondUpdate = provider.updateCenter();
+            resolveSecond({
+                lat: 3,
+                lng: 4
+            });
+            return secondUpdate;
+        }).then(() => {
+            assert.ok(setView.calledOnceWithExactly({
+                center: {
+                    lat: 3,
+                    lng: 4
+                }
+            }), 'latest center is applied');
+            assert.ok(setOptionSilent.calledOnceWithExactly('center', {
+                lat: 3,
+                lng: 4
+            }), 'latest center is written to the component');
+            done();
+        });
+    });
+    QUnit.test('older calculated bounds are not applied after the option changes', function(assert) {
+        const done = assert.async();
+        let resolveFirst;
+        const firstLocation = new Promise(resolve => {
+            resolveFirst = resolve;
+        });
+        const firstBounds = {
+            northEast: 'First',
+            southWest: [40, -74]
+        };
+        const options = {
+            bounds: firstBounds,
+            providerConfig: {
+                calculateLocation: () => firstLocation
+            }
+        };
+        const fitBounds = sinon.spy();
+        const provider = new OsmProvider({
+            option: () => options
+        }, null);
+        provider._engineMap = {
+            fitBounds
+        };
+        const firstUpdate = provider.updateBounds();
+        firstBounds.northEast = [41, -73];
+        resolveFirst({
+            lat: 42,
+            lng: -72
+        });
+        firstUpdate.then(() => {
+            assert.ok(fitBounds.notCalled, 'superseded bounds are not applied');
+            return provider.updateBounds();
+        }).then(() => {
+            assert.ok(fitBounds.calledOnceWithExactly({
+                northEast: {
+                    lat: 41,
+                    lng: -73
+                },
+                southWest: {
+                    lat: 40,
+                    lng: -74
+                }
+            }), 'latest bounds are applied');
+            done();
+        });
+    });
+    QUnit.test('a pending marker calculation does not add a marker after cleanup', function(assert) {
+        const done = assert.async();
+        let resolveLocation;
+        const locationPromise = new Promise(resolve => {
+            resolveLocation = resolve;
+        });
+        const addMarker = sinon.spy();
+        const provider = new OsmProvider({
+            option: () => ({
+                autoAdjust: false,
+                providerConfig: {
+                    calculateLocation: () => locationPromise
+                }
+            })
+        }, null);
+        provider._engineMap = {
+            addMarker,
+            dispose: sinon.spy()
+        };
+        provider._markers = [];
+        const add = provider.addMarkers([{
+            location: 'New York'
+        }]);
+        provider.clean();
+        resolveLocation({
+            lat: 40.74,
+            lng: -73.98
+        });
+        add.then(() => {
+            assert.ok(false, 'the stale marker operation should reject');
+            done();
+        }, error => {
+            assert.ok(addMarker.notCalled, 'no marker is added to the disposed engine map');
+            assert.ok(error instanceof Error, 'the stale operation rejects with an Error');
+            assert.strictEqual(error.message, 'The map was disposed or replaced during marker creation.', 'the rejection explains why marker creation was cancelled');
+            done();
+        });
+    });
+});
+QUnit.module('OSM: markers', moduleConfig, () => {
+    const tileServer = {
+        url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+        attribution: 'Example attribution'
+    };
+    QUnit.test('initial marker uses an OpenLayers overlay', function(assert) {
+        const done = assert.async();
+        const marker = {
+            location: {
+                lat: 40.74,
+                lng: -73.98
+            }
+        };
+        let markerAddedEvent;
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            markers: [marker],
+            providerConfig: {
+                tileServer
+            },
+            onMarkerAdded: e => {
+                markerAddedEvent = e;
+            },
+            onReady: () => {
+                const overlay = openLayersMock.addedOverlays[0];
+                const element = overlay.options.element;
+                assert.strictEqual(openLayersMock.addedOverlays.length, 1, 'one overlay is added');
+                assert.deepEqual(overlay.options.position, [-73980, 40740], 'marker location is projected');
+                assert.strictEqual(overlay.options.positioning, 'bottom-center', 'marker tip is anchored to its location');
+                assert.strictEqual(overlay.options.stopEvent, false, 'map interactions remain available over the marker');
+                assert.ok(element.classList.contains('dx-map-marker-default'), 'default marker is rendered');
+                assert.strictEqual(getComputedStyle(element).width, '44px', 'default marker keeps a sufficiently large hit area');
+                assert.strictEqual(getComputedStyle(element).height, '44px', 'default marker keeps a sufficiently large hit area');
+                const markerSvg = element.querySelector('.dx-map-marker-default-icon');
+                assert.ok(markerSvg, 'default marker SVG is rendered');
+                assert.strictEqual(markerSvg.getAttribute('viewBox'), '5 2 14 20', 'existing pinmap geometry is fitted to the marker');
+                assert.strictEqual(markerSvg.getAttribute('width'), '24.5', 'default marker width matches the standard marker size');
+                assert.strictEqual(markerSvg.getAttribute('height'), '36.5', 'default marker height matches the standard marker size');
+                const markerBody = element.querySelector('.dx-map-marker-default-body');
+                const markerCenter = element.querySelector('.dx-map-marker-default-center');
+                assert.ok(markerBody, 'marker body is rendered');
+                assert.notOk(markerBody.hasAttribute('fill'), 'marker body color is defined by the theme stylesheet');
+                assert.notOk(markerBody.hasAttribute('stroke'), 'marker outline color is defined by the theme stylesheet');
+                assert.strictEqual(markerBody.getAttribute('stroke-width'), '0.5', 'marker outline does not obscure its body');
+                assert.ok(markerCenter, 'marker center is rendered');
+                assert.notOk(markerCenter.hasAttribute('fill'), 'marker center color is defined by the theme stylesheet');
+                assert.strictEqual(markerAddedEvent.options, marker, 'marker options are passed to onMarkerAdded');
+                assert.strictEqual(markerAddedEvent.originalMarker, overlay, 'OpenLayers overlay is exposed as originalMarker');
+                done();
+            }
+        });
+    });
+    QUnit.test('marker position synchronization follows a replaced OpenLayers view', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const engineMap = engine.createMap(document.createElement('div'));
+        const map = openLayersMock.mapInstance;
+        const initialView = map.getView();
+        engineMap.addMarker({
+            location: {
+                lat: 10,
+                lng: -179
+            }
+        });
+        const replacementView = new openLayersMock.View({
+            center: [179000, 0],
+            projection: 'EPSG:3857',
+            zoom: 1
+        });
+
+        map.setView(replacementView);
+
+        assert.deepEqual(openLayersMock.addedOverlays[0].options.position, [181000, 10000], 'marker moves into the replacement view world');
+        assert.strictEqual(initialView.eventHandlers['change:center'].length, 0, 'old view listener is removed');
+        assert.strictEqual(replacementView.eventHandlers['change:center'].length, 1, 'replacement view listener is added');
+
+        const synchronizedPositionCount = openLayersMock.overlayPositionChanges.length;
+        replacementView.setCenter([179000, 0]);
+        assert.strictEqual(openLayersMock.overlayPositionChanges.length, synchronizedPositionCount, 'unchanged marker position is not written again');
+
+        const positionChangeCount = openLayersMock.overlayPositionChanges.length;
+        initialView.setCenter([-179000, 0]);
+        assert.strictEqual(openLayersMock.overlayPositionChanges.length, positionChangeCount, 'old view no longer updates marker positions');
+
+        replacementView.setCenter([-179000, 0]);
+        assert.deepEqual(openLayersMock.addedOverlays[0].options.position, [-179000, 10000], 'replacement view updates marker positions');
+
+        engineMap.dispose();
+
+        assert.strictEqual(map.eventHandlers['change:view'].length, 0, 'view replacement listener is removed on dispose');
+        assert.strictEqual(replacementView.eventHandlers['change:center'].length, 0, 'replacement view listener is removed on dispose');
+    });
+    QUnit.test('marker iconSrc takes priority over markerIconSrc', function(assert) {
+        const done = assert.async();
+        const defaultLocale = localization.locale();
+        const markerAriaLabel = 'Localized map marker';
+        localization.loadMessages({
+            'test': {
+                'dxMap-markerAriaLabel': markerAriaLabel
+            }
+        });
+        localization.locale('test');
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            markerIconSrc: 'global-marker.png',
+            markers: [{
+                location: [40.74, -73.98]
+            }, {
+                location: [40.75, -73.97],
+                iconSrc: 'local-marker.png',
+                onClick: () => {}
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                try {
+                    const globalIcon = openLayersMock.addedOverlays[0].options.element;
+                    const localIcon = openLayersMock.addedOverlays[1].options.element;
+                    assert.strictEqual(globalIcon.getAttribute('src'), 'global-marker.png', 'global marker icon is applied');
+                    assert.strictEqual(globalIcon.getAttribute('alt'), markerAriaLabel, 'non-interactive custom marker has a localized alternative');
+                    assert.strictEqual(localIcon.getAttribute('src'), 'local-marker.png', 'marker icon overrides the global icon');
+                    assert.notOk(localIcon.hasAttribute('width'), 'custom marker keeps its natural width');
+                    assert.notOk(localIcon.hasAttribute('height'), 'custom marker keeps its natural height');
+                    assert.strictEqual(localIcon.getAttribute('alt'), markerAriaLabel, 'interactive custom marker has a localized alternative');
+                    assert.notOk(localIcon.hasAttribute('aria-label'), 'image marker does not duplicate its accessible name');
+                    assert.strictEqual(localIcon.draggable, false, 'custom marker does not start native image dragging');
+                } finally {
+                    localization.locale(defaultLocale);
+                    done();
+                }
+            }
+        });
+    });
+    QUnit.test('HTML marker and offset are passed to OpenLayers', function(assert) {
+        const done = assert.async();
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            markers: [{
+                location: [40.74, -73.98],
+                html: '<span class="custom-marker">A</span>',
+                htmlOffset: {
+                    left: 5,
+                    top: 7
+                }
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                const options = openLayersMock.addedOverlays[0].options;
+                assert.strictEqual(options.element.firstElementChild.className, 'custom-marker', 'custom HTML is rendered');
+                assert.deepEqual(options.offset, [5, 7], 'HTML offset is applied');
+                assert.strictEqual(options.positioning, 'top-left', 'HTML offset starts at the marker location');
+                done();
+            }
+        });
+    });
+    QUnit.test('marker click calls onClick with the resolved location', function(assert) {
+        const done = assert.async();
+        const onClick = sinon.spy();
+        const onMapClick = sinon.spy();
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            markers: [{
+                location: [40.74, -73.98],
+                onClick
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onClick: onMapClick,
+            onReady: () => {
+                const overlayOptions = openLayersMock.addedOverlays[0].options;
+                const element = overlayOptions.element;
+                const parentClick = sinon.spy();
+                element.parentElement.addEventListener('click', parentClick);
+                assert.strictEqual(element.getAttribute('role'), 'button', 'clickable marker has button semantics');
+                assert.strictEqual(element.getAttribute('aria-label'), 'Map marker', 'clickable marker has an accessible name');
+                assert.strictEqual(element.getAttribute('tabindex'), '0', 'clickable marker is keyboard-focusable');
+                assert.strictEqual(overlayOptions.stopEvent, false, 'map wheel and drag interactions remain available over a clickable marker');
+                element.click();
+                assert.ok(onClick.calledOnce, 'marker click action is fired');
+                assert.ok(parentClick.notCalled, 'marker click does not bubble to the map container');
+                assert.deepEqual(onClick.firstCall.args[0].location, {
+                    lat: 40.74,
+                    lng: -73.98
+                }, 'resolved location is passed');
+                const markerPointerEvent = new PointerEvent('pointerup', {
+                    bubbles: true
+                });
+                element.dispatchEvent(markerPointerEvent);
+                openLayersMock.mapInstance.trigger('click', {
+                    coordinate: [-73980, 40740],
+                    originalEvent: markerPointerEvent
+                });
+                assert.ok(onMapClick.notCalled, 'marker pointer event does not fire the map click action');
+                element.dispatchEvent(new KeyboardEvent('keydown', {
+                    key: 'Enter',
+                    bubbles: true
+                }));
+                assert.ok(onClick.calledTwice, 'marker can be activated from the keyboard');
+                done();
+            }
+        });
+    });
+    QUnit.test('clickable plain HTML marker is keyboard-accessible', function(assert) {
+        const done = assert.async();
+        const onClick = sinon.spy();
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            markers: [{
+                location: [40.74, -73.98],
+                html: '<span>Custom marker</span>',
+                onClick
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                const element = openLayersMock.addedOverlays[0].options.element;
+                assert.strictEqual(element.getAttribute('role'), 'button', 'wrapper has button semantics');
+                assert.strictEqual(element.getAttribute('tabindex'), '0', 'wrapper is keyboard-focusable');
+                element.dispatchEvent(new KeyboardEvent('keydown', {
+                    key: ' ',
+                    bubbles: true,
+                    repeat: true
+                }));
+                assert.ok(onClick.notCalled, 'repeated Space keydown does not activate the marker');
+                element.dispatchEvent(new KeyboardEvent('keyup', {
+                    key: ' ',
+                    bubbles: true
+                }));
+                assert.ok(onClick.calledOnce, 'HTML marker can be activated from the keyboard');
+                done();
+            }
+        });
+    });
+    QUnit.test('interactive HTML marker content does not forward keyboard commands to the map', function(assert) {
+        const done = assert.async();
+        const onClick = sinon.spy();
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            markers: [{
+                location: [40.74, -73.98],
+                html: '<button type="button">Custom marker</button>',
+                onClick
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                const keyboardTarget = getOpenLayersKeyboardTarget();
+                const mapKeydown = sinon.spy();
+                const button = openLayersMock.addedOverlays[0].options.element.querySelector('button');
+                keyboardTarget.addEventListener('keydown', mapKeydown);
+                button.dispatchEvent(new KeyboardEvent('keydown', {
+                    key: 'ArrowRight',
+                    bubbles: true
+                }));
+                assert.ok(mapKeydown.notCalled, 'the map does not receive the marker control keydown');
+                button.click();
+                assert.ok(onClick.calledOnce, 'the marker control keeps its click behavior');
+                keyboardTarget.removeEventListener('keydown', mapKeydown);
+                done();
+            }
+        });
+    });
+    QUnit.test('addMarker and removeMarker manage the OpenLayers overlay and events', function(assert) {
+        const done = assert.async();
+        const marker = {
+            location: [40.74, -73.98]
+        };
+        const onMarkerAdded = sinon.spy();
+        const onMarkerRemoved = sinon.spy();
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            providerConfig: {
+                tileServer
+            },
+            onMarkerAdded,
+            onMarkerRemoved,
+            onReady: () => {
+                map.addMarker(marker).done(originalMarker => {
+                    const markerElement = openLayersMock.addedOverlays[0].options.element;
+                    assert.strictEqual(originalMarker, openLayersMock.addedOverlays[0], 'addMarker returns the overlay');
+                    assert.ok(onMarkerAdded.calledOnce, 'onMarkerAdded is fired');
+                    assert.ok(resizeObserverCallbacks.has(markerElement), 'marker size is observed');
+                    map.removeMarker(marker).done(() => {
+                        assert.strictEqual(openLayersMock.removedOverlays[0], originalMarker, 'overlay is removed');
+                        assert.ok(onMarkerRemoved.calledOnce, 'onMarkerRemoved is fired');
+                        assert.notOk(resizeObserverCallbacks.has(markerElement), 'marker size observation is removed');
+                        done();
+                    });
+                });
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('autoAdjust fits the view to markers', function(assert) {
+        const done = assert.async();
+        $('#map').dxMap({
+            provider: 'osm',
+            markers: [{
+                location: [40.7, -74]
+            }, {
+                location: [40.8, -73.9]
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                assert.deepEqual(openLayersMock.fittedExtent, [-74000, 40700, -73900, 40800], 'marker bounds are fitted');
+                assert.deepEqual(openLayersMock.fitOptions.padding, [44, 22, 0, 22], 'marker size is included in fit padding');
+                done();
+            }
+        });
+    });
+    QUnit.test('autoAdjust measures HTML marker padding', function(assert) {
+        const done = assert.async();
+        openLayersMock.getOverlayRect = () => ({
+            height: 60,
+            width: 80
+        });
+        $('#map').dxMap({
+            provider: 'osm',
+            markers: [{
+                location: [40.7, -74],
+                html: '<span>A</span>',
+                htmlOffset: {
+                    left: 5,
+                    top: 7
+                }
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                assert.deepEqual(openLayersMock.fitOptions.padding, [0, 85, 67, 0], 'HTML size and offset are included in fit padding');
+                done();
+            }
+        });
+    });
+    QUnit.test('autoAdjust refits the view after a custom marker image loads', function(assert) {
+        const done = assert.async();
+        let imageLoaded = false;
+        openLayersMock.getOverlayRect = () => imageLoaded ? {
+            height: 60,
+            width: 80
+        } : {
+            height: 0,
+            width: 0
+        };
+        $('#map').dxMap({
+            provider: 'osm',
+            markers: [{
+                location: [40.7, -74],
+                iconSrc: 'custom-marker.png'
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                assert.deepEqual(openLayersMock.fitOptions.padding, [41, 13, 0, 13], 'fallback size is used while the image loads');
+                imageLoaded = true;
+                triggerResize(openLayersMock.addedOverlays[0].options.element);
+                assert.deepEqual(openLayersMock.fitOptions.padding, [60, 40, 0, 40], 'loaded image size is included in fit padding');
+                done();
+            }
+        });
+    });
+    [true, false].forEach(isHtml => {
+        const markerType = isHtml ? 'HTML' : 'image';
+        QUnit.test(`autoAdjust refits after successive ${markerType} marker size changes`, function(assert) {
+            const done = assert.async();
+            let markerSize = { height: 0, width: 0 };
+            openLayersMock.getOverlayRect = () => markerSize;
+            $('#map').dxMap({
+                provider: 'osm',
+                markers: [{
+                    location: [40.7, -74],
+                    ...(isHtml ? { html: '<img alt="">' } : { iconSrc: 'custom-marker.png' })
+                }],
+                providerConfig: {
+                    tileServer
+                },
+                onReady: () => {
+                    const markerElement = openLayersMock.addedOverlays[0].options.element;
+                    const initialFitCallCount = openLayersMock.fitCallCount;
+                    assert.deepEqual(openLayersMock.fitOptions.padding,
+                        isHtml ? [0, 25, 41, 0] : [41, 13, 0, 13], 'fallback size is used before layout');
+
+                    markerSize = { height: 60, width: 80 };
+                    triggerResize(markerElement);
+                    assert.strictEqual(openLayersMock.fitCallCount, initialFitCallCount + 1, 'first size change refits the view');
+                    assert.deepEqual(openLayersMock.fitOptions.padding,
+                        isHtml ? [0, 80, 60, 0] : [60, 40, 0, 40], 'first measured size is included in padding');
+
+                    triggerResize(markerElement);
+                    assert.strictEqual(openLayersMock.fitCallCount, initialFitCallCount + 1, 'unchanged size does not refit');
+
+                    markerSize = { height: 90, width: 120 };
+                    triggerResize(markerElement);
+                    assert.strictEqual(openLayersMock.fitCallCount, initialFitCallCount + 2, 'second size change refits the view');
+                    assert.deepEqual(openLayersMock.fitOptions.padding,
+                        isHtml ? [0, 120, 90, 0] : [90, 60, 0, 60], 'padding follows the second size change');
+
+                    triggerResize(markerElement);
+                    assert.strictEqual(openLayersMock.fitCallCount, initialFitCallCount + 2, 'repeated notification still does not refit');
+                    done();
+                }
+            });
+        });
+    });
+    [
+        { type: 'pointerdown' },
+        { type: 'pointerdown', onControl: true },
+        { type: 'wheel' },
+        ...['+', '-', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowUp'].map(key => ({ type: 'keydown', key })),
+        { type: 'keydown', key: 'Enter', onControl: true },
+        { type: 'keydown', key: ' ', onControl: true }
+    ].forEach(({ type, key, onControl }) => {
+        QUnit.test(`marker size refit stops after ${type} ${key || ''} on ${onControl ? 'a control' : 'the map'}`, function(assert) {
+            let markerSizeChanged = 0;
+            let markerWidth = 20;
+            const engine = createOpenLayersEngine(openLayersMock);
+            const container = document.createElement('div');
+            const engineMap = engine.createMap(container);
+            const eventTarget = onControl ? document.createElement('button') : container;
+            if(onControl) {
+                container.appendChild(eventTarget);
+            }
+            const bounds = {
+                northEast: {
+                    lat: 40.7,
+                    lng: -74
+                },
+                southWest: {
+                    lat: 40.7,
+                    lng: -74
+                }
+            };
+            openLayersMock.getOverlayRect = () => ({
+                height: markerWidth,
+                width: markerWidth
+            });
+            engineMap.attachHandlers({
+                click: () => {},
+                markerSizeChange: () => {
+                    markerSizeChanged += 1;
+                    engineMap.fitBounds(bounds, { includeMarkerPadding: true });
+                },
+                viewChange: () => {}
+            });
+            engineMap.addMarker({
+                iconSrc: 'custom-marker.png',
+                location: {
+                    lat: 40.7,
+                    lng: -74
+                }
+            });
+            const markerElement = openLayersMock.addedOverlays[0].options.element;
+            engineMap.fitBounds(bounds, { includeMarkerPadding: true });
+
+            markerWidth = 25;
+            triggerResize(markerElement);
+            assert.strictEqual(markerSizeChanged, 1, 'marker size refits before user movement');
+
+            eventTarget.dispatchEvent(key
+                ? new KeyboardEvent(type, { bubbles: true, key })
+                : new Event(type, { bubbles: true }));
+            const fitCallCountAfterUserMove = openLayersMock.fitCallCount;
+            markerWidth = 30;
+            triggerResize(markerElement);
+            assert.strictEqual(markerSizeChanged, 1, 'user movement prevents an automatic marker-size refit');
+            assert.strictEqual(openLayersMock.fitCallCount, fitCallCountAfterUserMove, 'view is not fitted after user movement');
+
+            engineMap.fitBounds(bounds, { includeMarkerPadding: true });
+            const fitCallCountBeforeResize = openLayersMock.fitCallCount;
+            markerWidth = 44;
+            triggerResize(markerElement);
+            assert.strictEqual(markerSizeChanged, 2, 'autoAdjust fitting enables marker-size refit again');
+            assert.strictEqual(openLayersMock.fitCallCount, fitCallCountBeforeResize + 1, 'view is fitted after marker layout changes');
+            assert.deepEqual(openLayersMock.fitOptions.padding, [44, 22, 0, 22], 'resumed refit uses the latest marker size');
+
+            engineMap.dispose();
+        });
+    });
+    [false, true].forEach(afterUserInteraction => {
+        QUnit.test(`explicit bounds are not refitted after a marker resize (after user interaction: ${afterUserInteraction})`, function(assert) {
+            let markerWidth = 20;
+            const container = document.createElement('div');
+            const engineMap = createOpenLayersEngine(openLayersMock).createMap(container);
+            const markerSizeChange = sinon.spy();
+            const location = { lat: 40.7, lng: -74 };
+            openLayersMock.getOverlayRect = () => ({ height: markerWidth, width: markerWidth });
+            engineMap.attachHandlers({ click: () => {}, markerSizeChange, viewChange: () => {} });
+            engineMap.addMarker({ iconSrc: 'custom-marker.png', location });
+            engineMap.fitBounds({ northEast: location, southWest: location }, { includeMarkerPadding: true });
+
+            if(afterUserInteraction) {
+                container.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+            }
+            engineMap.fitBounds({
+                northEast: { lat: 41, lng: -73 },
+                southWest: { lat: 40, lng: -75 }
+            });
+            const fitCallCount = openLayersMock.fitCallCount;
+
+            markerWidth = 44;
+            triggerResize(openLayersMock.addedOverlays[0].options.element);
+
+            assert.ok(markerSizeChange.notCalled, 'marker resize does not request an automatic refit');
+            assert.strictEqual(openLayersMock.fitCallCount, fitCallCount, 'view is not fitted again');
+            assert.deepEqual(openLayersMock.fittedExtent, [-75000, 40000, -73000, 41000], 'explicit bounds remain applied');
+
+            engineMap.dispose();
+        });
+    });
+    QUnit.test('newer marker overlays are rendered above older markers', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const container = document.createElement('div');
+        const engineMap = engine.createMap(container);
+        engineMap.addMarker({
+            location: {
+                lat: 40.7,
+                lng: -74
+            }
+        });
+        engineMap.addMarker({
+            location: {
+                lat: 40.8,
+                lng: -73.9
+            }
+        });
+
+        assert.strictEqual(openLayersMock.overlayOptions[0].insertFirst, false, 'first marker uses append order');
+        assert.strictEqual(openLayersMock.overlayOptions[1].insertFirst, false, 'second marker uses append order');
+        assert.strictEqual(container.lastElementChild, openLayersMock.addedOverlays[1].options.element, 'newer marker is the last overlay element');
+
+        engineMap.dispose();
+    });
+    QUnit.test('HTML marker padding is measured after a hidden map becomes visible', function(assert) {
+        const done = assert.async();
+        const $map = $('#map').css({
+            display: 'none',
+            height: '300px',
+            width: '500px'
+        });
+        const map = $map.dxMap({
+            provider: 'osm',
+            autoAdjust: true,
+            markers: [{
+                html: '<span>A</span>',
+                htmlOffset: {
+                    left: 5,
+                    top: 7
+                },
+                location: [40.7, -74]
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                const markerElement = openLayersMock.addedOverlays[0].options.element;
+                markerElement.style.height = '60px';
+                markerElement.style.width = '80px';
+                assert.deepEqual(openLayersMock.fitOptions.padding, [0, 30, 48, 0], 'fallback padding is used without layout');
+
+                $map.css('display', 'block');
+                map.option('onUpdated', () => {
+                    assert.deepEqual(openLayersMock.fitOptions.padding, [0, 85, 67, 0], 'visible marker dimensions are measured without a layout stub');
+                    done();
+                });
+                map._visibilityChanged(true);
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('autoAdjust keeps the current zoom when fitting would zoom in', function(assert) {
+        const done = assert.async();
+        openLayersMock.fitZoom = 15;
+        $('#map').dxMap({
+            provider: 'osm',
+            zoom: 12,
+            markers: [{
+                location: [40.7, -74]
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                assert.strictEqual(openLayersMock.viewZoom, 12, 'zoom is restored after fitting');
+                assert.strictEqual(openLayersMock.viewZoomSetCount, 1, 'zoom is restored through the view API');
+                done();
+            }
+        });
+    });
+    QUnit.test('autoAdjust updates the option when fitting zooms out', function(assert) {
+        const done = assert.async();
+        openLayersMock.fitZoom = 8;
+        const map = $('#map').dxMap({
+            provider: 'osm',
+            zoom: 12,
+            markers: [{
+                location: [40.7, -74]
+            }, {
+                location: [41.7, -73]
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                assert.strictEqual(map.option('zoom'), 8, 'fitted zoom is synchronized with the component');
+                done();
+            }
+        }).dxMap('instance');
+    });
+    QUnit.test('autoAdjust uses the shortest extent across the antimeridian', function(assert) {
+        const done = assert.async();
+        $('#map').dxMap({
+            provider: 'osm',
+            markers: [{
+                location: [10, 179]
+            }, {
+                location: [20, -179]
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                assert.deepEqual(openLayersMock.fittedExtent, [179000, 10000, 181000, 20000], 'wrapped marker bounds are fitted');
+                assert.deepEqual(openLayersMock.addedOverlays[1].options.position, [181000, 20000], 'wrapped marker is moved into the fitted world');
+                openLayersMock.mapInstance.getView().setCenter([-179000, 15000]);
+                assert.deepEqual(openLayersMock.addedOverlays.map(({
+                    options
+                }) => options.position), [[-181000, 10000], [-179000, 20000]], 'markers follow the view into an adjacent world');
+                done();
+            }
+        });
+    });
+    QUnit.test('autoAdjust selects the shortest extent for three markers', function(assert) {
+        const done = assert.async();
+        $('#map').dxMap({
+            provider: 'osm',
+            markers: [{
+                location: [10, 0]
+            }, {
+                location: [20, -160]
+            }, {
+                location: [30, 100]
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                assert.deepEqual(openLayersMock.fittedExtent, [0, 10000, 200000, 30000], 'largest circular gap is excluded from the fitted extent');
+                assert.deepEqual(openLayersMock.addedOverlays.map(({
+                    options
+                }) => options.position), [[0, 10000], [200000, 20000], [100000, 30000]], 'all markers use the fitted world');
+                done();
+            }
+        });
+    });
+    QUnit.test('autoAdjust false preserves the current view', function(assert) {
+        const done = assert.async();
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            markers: [{
+                location: [40.7, -74]
+            }, {
+                location: [40.8, -73.9]
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                assert.strictEqual(openLayersMock.fittedExtent, null, 'marker bounds are not fitted');
+                done();
+            }
+        });
+    });
+});
 QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
+    const tileServer = {
+        url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+        attribution: 'Example attribution'
+    };
+
+    QUnit.test('only visible markers participate in sequential keyboard navigation', function(assert) {
+        const done = assert.async();
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            markers: [{
+                location: [40.74, -73.98],
+                onClick: () => {}
+            }, {
+                location: [50, 10],
+                onClick: () => {}
+            }],
+            providerConfig: {
+                tileServer
+            },
+            onReady: () => {
+                const visibleMarker = openLayersMock.addedOverlays[0].options.element;
+                const hiddenMarker = openLayersMock.addedOverlays[1].options.element;
+                assert.strictEqual(visibleMarker.getAttribute('tabindex'), '0', 'visible marker is keyboard-focusable');
+                assert.strictEqual(hiddenMarker.getAttribute('tabindex'), '-1', 'offscreen marker is excluded from the tab order');
+
+                visibleMarker.focus();
+                openLayersMock.viewExtent = [9000, 49900, 10100, 50100];
+                openLayersMock.mapInstance.trigger('moveend');
+
+                assert.strictEqual(visibleMarker.getAttribute('tabindex'), '-1', 'marker leaving the viewport is excluded from the tab order');
+                assert.strictEqual(hiddenMarker.getAttribute('tabindex'), '0', 'marker entering the viewport returns to the tab order');
+                assert.strictEqual(document.activeElement, getOpenLayersMapTarget(), 'focus returns to the map without panning');
+                done();
+            }
+        });
+    });
+    QUnit.test('marker focus is managed inside Shadow DOM', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const host = document.createElement('div');
+        const shadowRoot = host.attachShadow({ mode: 'open' });
+        const container = document.createElement('div');
+        shadowRoot.appendChild(container);
+        $('#qunit-fixture').append(host);
+        const engineMap = engine.createMap(container);
+        engineMap.attachHandlers({
+            click: () => {},
+            markerSizeChange: () => {},
+            viewChange: () => {}
+        });
+        engineMap.addMarker({
+            location: {
+                lat: 40.74,
+                lng: -73.98
+            },
+            onClick: () => {}
+        });
+        const markerElement = openLayersMock.addedOverlays[0].options.element;
+        markerElement.focus();
+        assert.strictEqual(shadowRoot.activeElement, markerElement, 'visible marker receives focus inside Shadow DOM');
+
+        openLayersMock.viewExtent = [0, 0, 100, 100];
+        openLayersMock.mapInstance.trigger('moveend');
+        assert.strictEqual(markerElement.getAttribute('tabindex'), '-1', 'offscreen marker leaves the tab order');
+        assert.strictEqual(shadowRoot.activeElement, container, 'focus returns to the Shadow DOM map target');
+
+        engineMap.dispose();
+    });
     QUnit.test('focus options are applied to the OpenLayers keyboard target', function(assert) {
         const done = assert.async();
         const map = $('#map').dxMap({
             provider: 'osm',
             focusStateEnabled: false,
             tabIndex: 5,
+            markers: [{
+                location: [40.74, -73.98],
+                onClick: () => {}
+            }, {
+                location: [40.75, -73.97],
+                html: '<button type="button">Custom marker</button>',
+                onClick: () => {}
+            }],
             providerConfig: {
                 tileServer: {
                     url: 'https://tiles.example.com/{z}/{x}/{y}.png',
@@ -791,13 +1964,21 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
             },
             onReady: () => {
                 const target = getOpenLayersKeyboardTarget();
+                const markerElement = openLayersMock.addedOverlays[0].options.element;
+                const customButton = openLayersMock.addedOverlays[1].options.element.querySelector('button');
                 assert.strictEqual(target.getAttribute('tabindex'), null, 'focus is disabled on initialization');
+                assert.strictEqual(markerElement.getAttribute('tabindex'), '-1', 'marker is removed from the tab order on initialization');
+                assert.strictEqual(customButton.getAttribute('tabindex'), '-1', 'custom interactive content is removed from the tab order');
                 map.option('onUpdated', () => {
                     assert.strictEqual(target.getAttribute('tabindex'), '5', 'configured tabIndex is applied');
+                    assert.strictEqual(markerElement.getAttribute('tabindex'), '0', 'marker focus is enabled');
+                    assert.strictEqual(customButton.getAttribute('tabindex'), null, 'custom interactive content returns to the tab order');
                     map.option('onUpdated', () => {
                         assert.strictEqual(target.getAttribute('tabindex'), '-1', 'runtime tabIndex is applied');
                         map.option('onUpdated', () => {
                             assert.strictEqual(target.getAttribute('tabindex'), null, 'runtime focus disabling is applied');
+                            assert.strictEqual(markerElement.getAttribute('tabindex'), '-1', 'marker is removed from the tab order at runtime');
+                            assert.strictEqual(customButton.getAttribute('tabindex'), '-1', 'custom interactive content leaves the tab order');
                             done();
                         });
                         map.option('focusStateEnabled', false);
@@ -879,7 +2060,10 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
         const engine = createOpenLayersEngine(openLayersMock);
         const engineMap = engine.createMap(document.createElement('div'));
         const click = sinon.spy();
-        engineMap.attachHandlers({ click, viewChange: sinon.spy() });
+        engineMap.attachHandlers({
+            click,
+            viewChange: sinon.spy()
+        });
         openLayersMock.mapInstance.trigger('click', {
             originalEvent: new PointerEvent('click')
         });
@@ -1075,6 +2259,26 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
             }
         }).dxMap('instance');
     });
+    QUnit.test('disabled state removes clickable markers from keyboard navigation', function(assert) {
+        const engine = createOpenLayersEngine(openLayersMock);
+        const engineMap = engine.createMap(document.createElement('div'));
+        engineMap.addMarker({
+            location: {
+                lat: 40.74,
+                lng: -73.98
+            },
+            onClick: () => {}
+        });
+        const markerElement = openLayersMock.addedOverlays[0].options.element;
+
+        assert.strictEqual(markerElement.getAttribute('tabindex'), '0', 'clickable marker starts in the tab order');
+        engineMap.setDisabled(true);
+        assert.strictEqual(markerElement.getAttribute('tabindex'), '-1', 'disabled marker leaves the tab order');
+        engineMap.setDisabled(false);
+        assert.strictEqual(markerElement.getAttribute('tabindex'), '0', 'marker returns to the tab order');
+
+        engineMap.dispose();
+    });
     QUnit.test('bounds option fits the OpenLayers view on initialization and at runtime', function(assert) {
         const done = assert.async();
         const map = $('#map').dxMap({
@@ -1134,7 +2338,7 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
             }
         }).dxMap('instance');
     });
-    QUnit.test('RTL mode preserves viewport and keyboard behavior', function(assert) {
+    QUnit.test('RTL mode preserves viewport, overlay positioning, and keyboard behavior', function(assert) {
         const done = assert.async();
         $('#map').dxMap({
             provider: 'osm',
@@ -1143,6 +2347,13 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
                 lng: -73.98
             },
             controls: true,
+            markers: [{
+                location: {
+                    lat: 40.74,
+                    lng: -73.98
+                },
+                html: '<span class="rtl-marker-text">Marker text</span>'
+            }],
             rtlEnabled: true,
             providerConfig: {
                 tileServer: {
@@ -1153,6 +2364,12 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
             onReady: () => {
                 assert.ok($('#map').hasClass('dx-rtl'), 'RTL mode is applied to the widget');
                 assert.deepEqual(openLayersMock.viewCenter, [-73980, 40740], 'center coordinates are not mirrored');
+                assert.strictEqual(openLayersMock.addedOverlays.length, 1, 'marker overlay remains available');
+                const markerElement = openLayersMock.addedOverlays[0].options.element;
+                assert.strictEqual(markerElement.getAttribute('dir'), 'rtl', 'HTML marker uses the widget text direction');
+                assert.strictEqual(getComputedStyle(markerElement.querySelector('.rtl-marker-text')).direction, 'rtl', 'HTML marker text inherits RTL direction');
+                assert.strictEqual(openLayersMock.overlayContainer.getAttribute('dir'), 'ltr', 'regular overlays use LTR coordinates');
+                assert.strictEqual(openLayersMock.overlayContainerStopEvent.getAttribute('dir'), 'ltr', 'interactive overlays use LTR coordinates');
                 assert.strictEqual(openLayersMock.addedControls.length, 1, 'zoom control remains available');
                 assert.strictEqual(getOpenLayersKeyboardTarget().getAttribute('tabindex'), '0', 'map remains keyboard focusable');
                 done();
@@ -1164,9 +2381,14 @@ QUnit.module('OSM: viewport and interactions', moduleConfig, () => {
         const engineMap = engine.createMap(document.createElement('div'));
         const click = sinon.spy();
         const viewChange = sinon.spy();
-        engineMap.attachHandlers({ click, viewChange });
+        engineMap.attachHandlers({
+            click,
+            viewChange
+        });
         engineMap.dispose();
-        openLayersMock.mapInstance.trigger('click', { coordinate: [-73980, 40740] });
+        openLayersMock.mapInstance.trigger('click', {
+            coordinate: [-73980, 40740]
+        });
         openLayersMock.mapInstance.trigger('moveend');
         assert.ok(click.notCalled, 'click handler is detached');
         assert.ok(viewChange.notCalled, 'view change handler is detached');
