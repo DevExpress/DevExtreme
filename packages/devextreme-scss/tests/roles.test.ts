@@ -37,7 +37,7 @@ type Open = {
 const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'design'];
 const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design'];
 const LADDER_DECISIONS = ['no-rung', 'design'];
-const CONTRAST_DECISIONS = ['graphic-ok', 'design'];
+const CONTRAST_DECISIONS = ['graphic-ok', 'package-gap', 'design'];
 const CONCEPT_DECISIONS = ['spelling', 'shade', 'design'];
 
 type Concept = {
