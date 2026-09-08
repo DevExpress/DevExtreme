@@ -3538,7 +3538,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
 
     QUnit.test('virtual items on end when last page size less than half page size', function(assert) {
         const dataController = this.dataController;
-        dataController.store().insert({ id: 1001, value: 'value1001' });
+        this.dataSourceController.store().insert({ id: 1001, value: 'value1001' });
         dataController.refresh();
 
         dataController.setViewportItemIndex(999);
@@ -3559,10 +3559,10 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     // T866890
     QUnit.test('virtual items on end when last page size less than viewport size', function(assert) {
         const dataController = this.dataController;
-        dataController.store().insert({ id: 1001 });
-        dataController.store().insert({ id: 1002 });
-        dataController.store().insert({ id: 1003 });
-        dataController.store().insert({ id: 1004 });
+        this.dataSourceController.store().insert({ id: 1001 });
+        this.dataSourceController.store().insert({ id: 1002 });
+        this.dataSourceController.store().insert({ id: 1003 });
+        this.dataSourceController.store().insert({ id: 1004 });
         dataController.refresh();
 
         dataController.viewportSize(3);

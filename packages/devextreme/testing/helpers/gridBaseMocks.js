@@ -2,14 +2,14 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
     const exports = {};
 
     exports.MockDataSourceAdapter = function(options) {
-        const store = function() {
+        const itemsStore = function() {
             return new ArrayStore(options.items);
         };
 
         const loadCustomResult = (loadOptions) => {
             const d = $.Deferred();
 
-            store().load(loadOptions)
+            itemsStore().load(loadOptions)
                 .done((data, extra) => {
                     d.resolve({ data: data, extra: extra });
                 })
@@ -49,9 +49,11 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
             dispose: function() {
             },
-            store: store,
+            store: function() {
+                return options.store;
+            },
             load: function(loadOptions) {
-                return store().load(loadOptions);
+                return itemsStore().load(loadOptions);
             },
             customLoader: {
                 load: loadCustomResult,
@@ -169,10 +171,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     changeType: 'refresh',
                     items: options.items
                 });
-            },
-
-            store: function() {
-                return options.store;
             },
 
             insertItems: function(insertingItems) {

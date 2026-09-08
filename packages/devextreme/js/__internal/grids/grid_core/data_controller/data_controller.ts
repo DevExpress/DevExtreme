@@ -8,7 +8,6 @@ import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
-import type Store from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent } from '@ts/data/data_source/types';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
@@ -235,7 +234,7 @@ export class DataController extends modules.Controller {
     )) {
       const isValueChanged = args.value !== args.previousValue;
       if (isValueChanged) {
-        const store = this.store();
+        const store = this.dataSourceController.store();
         if (isLocalStore(store)) {
           store._array = args.value;
         }
@@ -1359,10 +1358,6 @@ export class DataController extends modules.Controller {
     return this._dataSource ? this._dataSource.pageCount() : 1;
   }
 
-  public store(): Store | undefined {
-    return this._dataSource?.store();
-  }
-
   public loadAllItems(
     data?: RawItemData[],
     skipFilter = false,
@@ -1427,11 +1422,11 @@ export class DataController extends modules.Controller {
   }
 
   public keyOf(data: RawItemData): RowKey | undefined {
-    return this.store()?.keyOf(data);
+    return this.dataSourceController.store()?.keyOf(data);
   }
 
   private byKey(key: RowKey): DeferredObj<RawItemData> {
-    const store = this.store();
+    const store = this.dataSourceController.store();
 
     if (!store) {
       return Deferred<RawItemData>().reject();
@@ -1447,7 +1442,7 @@ export class DataController extends modules.Controller {
   }
 
   public key(): string | string[] | undefined {
-    return this.store()?.key();
+    return this.dataSourceController.key();
   }
 
   /**

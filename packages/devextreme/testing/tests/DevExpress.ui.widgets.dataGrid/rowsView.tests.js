@@ -19,7 +19,6 @@ import { setupDataGridModules, MockDataController, MockColumnsController, MockSe
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import numberLocalization from 'common/core/localization/number';
 import virtualScrollingCore from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
-import ODataStore from 'common/data/odata/store';
 import ArrayStore from 'common/data/array_store';
 
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
@@ -980,11 +979,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
-        const store = new ODataStore({ url: 'test.org' });
-
-        dataController.store = function() {
-            return store;
-        };
 
         // act
         this.options.searchPanel = {
@@ -1014,11 +1008,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
-        const store = new ODataStore({ url: 'test.org' });
-
-        dataController.store = function() {
-            return store;
-        };
 
         // act
         this.options.searchPanel = {

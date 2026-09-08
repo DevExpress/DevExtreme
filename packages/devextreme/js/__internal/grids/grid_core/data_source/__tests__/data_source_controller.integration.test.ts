@@ -196,13 +196,6 @@ describe('dataSource controller reads delegate to the adapter', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
-  it('delegates store', async () => {
-    const { instance } = await createDataGrid({ dataSource: DATA });
-
-    expect(instance.getController('dataSource').store())
-      .toBe(instance.getController('data').store());
-  });
-
   it('delegates key', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
 
