@@ -52,6 +52,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             getCachedStoreData: function() {
                 return undefined;
             },
+            loadingOperationTypes: function() {
+                return undefined;
+            },
             dispose: function() {
             },
             store: function() {
@@ -289,10 +292,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getRowIndexByKey: function(key) {
                 return gridCore.getIndexByKey(key, options.items);
-            },
-
-            loadingOperationTypes: function() {
-                return {};
             },
 
             skipProcessingPagingChange: commonUtils.noop,

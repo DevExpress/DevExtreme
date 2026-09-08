@@ -112,6 +112,10 @@ export class DataSourceController extends modules.Controller {
     return this.adapter?.operationTypes();
   }
 
+  public loadingOperationTypes(): OperationTypes {
+    return this.adapter?.loadingOperationTypes() ?? {};
+  }
+
   public isLoading(): boolean {
     return this.adapter?.isLoading() ?? false;
   }

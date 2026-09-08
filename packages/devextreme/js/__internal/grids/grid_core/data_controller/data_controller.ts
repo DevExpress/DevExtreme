@@ -1175,13 +1175,6 @@ export class DataController extends modules.Controller {
     );
   }
 
-  public loadingOperationTypes(): OperationTypes {
-    const dataSourceAdapter = this.dataSourceController.getAdapter();
-    const operationTypes: OperationTypes | undefined = dataSourceAdapter?.loadingOperationTypes();
-
-    return operationTypes ?? {};
-  }
-
   /**
    * @extended: virtual_scrolling, focus
    */
