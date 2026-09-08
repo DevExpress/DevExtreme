@@ -200,7 +200,7 @@ $slideout-background: #000 !default;
 * $type color
 */
 $slideout-background: #000 !default;
-$never-used: collector((
+$_never-used: collector((
 "$slideout-background": $slideout-background,
 ));
 `;
