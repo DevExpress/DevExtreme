@@ -10,6 +10,7 @@ export interface CliArgs {
   repo: string;
   workflow: string;
   artifact: string;
+  branch: string;
   windowHours: number;
   outJson: string;
   outMarkdown: string;
@@ -35,6 +36,7 @@ export function parseArgs(argv: string[]): CliArgs {
       .option('repo', { type: 'string', demandOption: true, nargs: 1 })
       .option('workflow', { type: 'string', demandOption: true, nargs: 1 })
       .option('artifact', { type: 'string', demandOption: true, nargs: 1 })
+      .option('branch', { type: 'string', demandOption: true, nargs: 1 })
       .option('window-hours', { type: 'number', demandOption: true, nargs: 1 })
       .option('out-json', { type: 'string', demandOption: true, nargs: 1 })
       .option('out-markdown', { type: 'string', demandOption: true, nargs: 1 })
@@ -64,6 +66,7 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<Fl
     repo: args.repo,
     workflow: args.workflow,
     artifact: args.artifact,
+    branch: args.branch,
     windowHours: args.windowHours,
     token,
   };

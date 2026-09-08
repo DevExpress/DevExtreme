@@ -26,6 +26,7 @@ export interface AggregateInput {
   workflow: string;
   artifact: string;
   windowHours: number;
+  branch: string;
   from: Date;
   to: Date;
   runsScanned: number;
@@ -148,6 +149,7 @@ export function aggregate(input: AggregateInput): FlakyTestsReport {
     succeeded: true,
     generatedAt: new Date().toISOString(),
     windowHours: input.windowHours,
+    branch: input.branch,
     from: input.from.toISOString(),
     to: input.to.toISOString(),
     repo: input.repo,
@@ -166,8 +168,26 @@ export interface CollectOptions {
   repo: string;
   workflow: string;
   artifact: string;
+  branch: string;
   windowHours: number;
   token: string;
+}
+
+/**
+ * One window holds candidates from every active release line, so they have to be scoped.
+ * Artifacts predating `baseBranch` are kept - dropping them would empty every report until
+ * each in-window run has been re-run.
+ */
+function forBranch(candidates: FlakyCandidate[], branch: string, runId: number): FlakyCandidate[] {
+  const kept = candidates.filter((c) => c.baseBranch === undefined || c.baseBranch === branch);
+
+  if (kept.length < candidates.length) {
+    warn(
+      `run ${runId}: skipped ${candidates.length - kept.length} candidate(s) from another branch`,
+    );
+  }
+
+  return kept;
 }
 
 export async function collect(options: CollectOptions): Promise<FlakyTestsReport> {
@@ -198,7 +218,10 @@ export async function collect(options: CollectOptions): Promise<FlakyTestsReport
           return { run, candidates: [] };
         }
 
-        return { run, candidates: parseCandidatesFile(content) };
+        return {
+          run,
+          candidates: forBranch(parseCandidatesFile(content), options.branch, run.id),
+        };
       } catch (error) {
         runsUnreadable += 1;
         warn(`run ${run.id}: ${error instanceof Error ? error.message : String(error)}`);
@@ -212,6 +235,7 @@ export async function collect(options: CollectOptions): Promise<FlakyTestsReport
     workflow: options.workflow,
     artifact: options.artifact,
     windowHours: options.windowHours,
+    branch: options.branch,
     from,
     to,
     runsScanned: runs.length,
@@ -234,6 +258,7 @@ export function buildFailedReport(options: CollectOptions, error: unknown): Flak
     error: error instanceof Error ? error.message : String(error),
     generatedAt: to.toISOString(),
     windowHours: options.windowHours,
+    branch: options.branch,
     from: from.toISOString(),
     to: to.toISOString(),
     repo: options.repo,

@@ -23,6 +23,7 @@ function makeReport(overrides: Partial<FlakyTestsReport> = {}): FlakyTestsReport
     succeeded: true,
     generatedAt: '2026-09-03T00:00:00Z',
     windowHours: 48,
+    branch: 'main',
     from: '2026-09-01T00:00:00Z',
     to: '2026-09-03T00:00:00Z',
     repo: 'DevExpress/devextreme',

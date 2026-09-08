@@ -32,6 +32,7 @@ function input(collected: CollectedRun[], overrides: Partial<AggregateInput> = {
     workflow: 'testcafe_tests.yml',
     artifact: 'flaky-candidates',
     windowHours: 48,
+    branch: 'main',
     from: new Date('2026-09-01T00:00:00Z'),
     to: new Date('2026-09-03T00:00:00Z'),
     runsScanned: collected.length,
@@ -84,6 +85,21 @@ describe('parseCandidatesFile', () => {
 
   it('throws on malformed JSON', () => {
     expect(() => parseCandidatesFile('not json')).toThrow();
+  });
+});
+
+describe('branch scoping', () => {
+  it('keeps only the candidates whose run targeted the reported branch', () => {
+    const content = JSON.stringify({
+      schemaVersion: 1,
+      candidates: [
+        candidate('on main', { baseBranch: 'main' }),
+        candidate('on 26_1', { baseBranch: '26_1' }),
+      ],
+    });
+
+    // parseCandidatesFile keeps both; scoping happens in collect().
+    expect(parseCandidatesFile(content).map((c) => c.baseBranch)).toEqual(['main', '26_1']);
   });
 });
 

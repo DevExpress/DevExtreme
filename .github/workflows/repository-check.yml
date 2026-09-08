@@ -57,6 +57,7 @@ jobs:
           --repo "${{ github.repository }}" \
           --workflow testcafe_tests.yml \
           --artifact flaky-candidates \
+          --branch "${{ github.ref_name }}" \
           --window-hours "$WINDOW_HOURS" \
           --out-json "$report" \
           --out-markdown "$markdown" 2>&1 \

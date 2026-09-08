@@ -15,6 +15,7 @@ export interface FlakyCandidate {
   timezone: string;
   platform: string;
   verdict: FlakyVerdict;
+  baseBranch?: string;
 }
 
 export interface FlakyCandidatesFile {
@@ -55,6 +56,7 @@ export interface FlakyTestsReport {
   error?: string;
   generatedAt: string;
   windowHours: number;
+  branch: string;
   from: string;
   to: string;
   repo: string;
