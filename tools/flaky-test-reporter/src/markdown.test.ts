@@ -82,7 +82,7 @@ describe('renderMarkdown', () => {
       makeReport({ tests: [test_({ test: 'DataGrid | column fixing' })] }),
     );
 
-    expect(description).toContain('### `DataGrid | column fixing`');
+    expect(description).toContain('#### `DataGrid | column fixing`');
   });
 
   it('gives every test a numbers-only descriptor table', () => {
@@ -104,7 +104,19 @@ describe('renderMarkdown', () => {
     const tests = Array.from({ length: 20 }, (_, i) => test_({ test: `test ${i}` }));
     const description = renderMarkdown(makeReport({ tests }));
 
-    for (const t of tests) expect(description).toContain(`### \`${t.test}\``);
+    for (const t of tests) expect(description).toContain(`#### \`${t.test}\``);
+  });
+
+  it('collapses each entry behind a details block, leaving the counts visible', () => {
+    const description = renderMarkdown(makeReport());
+    const lines = description.split('\n');
+    const table = lines.findIndex((l) => l.startsWith('| Occurrences'));
+    const open = lines.findIndex((l, i) => l === '<details>' && i > table);
+
+    expect(description).toContain('<summary>\u2022\u2022\u2022</summary>');
+    // The numbers stay outside the block; the context goes inside it.
+    expect(table).toBeLessThan(open);
+    expect(description.split('<details>').at(-1)).toContain('**First seen:**');
   });
 
   it('includes first and last seen in each entry', () => {

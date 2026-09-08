@@ -22,6 +22,8 @@ function formatList(values: string[]): string {
   return values.length > 0 ? values.join(', ') : '—';
 }
 
+const DETAILS_SUMMARY = '\u2022\u2022\u2022';
+
 /** Run pages are addressed by id, which is the last segment of the run URL. */
 function runLink(url: string): string {
   const id = url.split('/').pop() ?? url;
@@ -31,11 +33,15 @@ function runLink(url: string): string {
 function renderTest(test: AggregatedTest): string[] {
   return [
     ``,
-    `### \`${test.test}\``,
+    `#### \`${test.test}\``,
     ``,
     `| Occurrences | Flaky | Failed all attempts | Distinct commits |`,
     `|---|---|---|---|`,
     `| ${test.occurrences} | ${test.flakyConfirmed} | ${test.failedAllAttempts} | ${test.distinctShas} |`,
+    ``,
+    // Collapsed so a long candidate list stays scannable; the counts above are the summary.
+    `<details>`,
+    `<summary>${DETAILS_SUMMARY}</summary>`,
     ``,
     `**First seen:** ${test.firstSeen} · **Last seen:** ${test.lastSeen}`,
     `**Jobs:** ${formatList(test.jobs)}`,
@@ -46,6 +52,8 @@ function renderTest(test: AggregatedTest): string[] {
     `**Runs:**`,
     ``,
     ...test.runUrls.map((url) => `- ${runLink(url)}`),
+    ``,
+    `</details>`,
   ];
 }
 
