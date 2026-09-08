@@ -1056,7 +1056,7 @@
         "dark": 2.8
       },
       "decision": "design",
-      "why": "2.8 in dark against 3:1 for a grip. A passing role exists - color-content reaches 4.54 - so the floor is set by the standard, but choosing which role also changes the grip in light (6 -> 11.15), and that part is a design call"
+      "why": "Measured further 09.09 and the question moved. WCAG 1.4.11 asks about what identifies the component, and that is the bar against the panes, not the dots inside it - so the grip at 2.8 may not be in scope at all. The bar is: color-border on color-bg is 1.62 in LIGHT against the same 3:1, and its hovered state 1.82. The splitter is not identifiable by contrast in light at all, which is worse than what this row originally reported and in the mode that has screenshots. The focused state fails the other way: bg-primary on color-bg is 2.88 in dark."
     }
   ],
   "concepts": [
@@ -2055,5 +2055,45 @@
       }
     ],
     "consequence": "Тёмный a11y-прогон идёт и color-contrast в нём включён - но он видит только настоящий текст в достижимых состояниях. Контраст глифов и нетекстовых элементов не проверяет никто, и таблица контраста в этом отчёте - единственное место, где он измерен."
+  },
+  "nonTextContrast": {
+    "comment": [
+      "WCAG 1.4.11, the 3:1 floor for control boundaries and graphics. No axe rule implements it and no",
+      "screenshot can see it, so nothing in CI measures it. Recorded 09.09.2026 after asking whether the",
+      "splitter grip row was worth acting on - it turned out to be the wrong element to measure.",
+      "This is a first sample, not a sweep: only the splitter was measured this way."
+    ],
+    "measuredOn": "2026-09-09",
+    "findings": [
+      {
+        "what": "полоса сплиттера на фоне панели",
+        "pair": "color-border на color-bg",
+        "light": 1.62,
+        "dark": 3.42,
+        "verdict": "провал в светлом, порог 3:1. Элемент управления не опознаётся контрастом."
+      },
+      {
+        "what": "полоса сплиттера при наведении",
+        "pair": "color-border-hovered на color-bg",
+        "light": 1.82,
+        "dark": 6.76,
+        "verdict": "провал в светлом: наведение не делает полосу различимой."
+      },
+      {
+        "what": "полоса сплиттера в фокусе",
+        "pair": "color-bg-primary на color-bg",
+        "light": 5.38,
+        "dark": 2.88,
+        "verdict": "провал в тёмном: индикация фокуса ниже 3:1."
+      },
+      {
+        "what": "грип внутри полосы (исходная строка Д7)",
+        "pair": "color-content-subtle на color-border",
+        "light": 6,
+        "dark": 2.8,
+        "verdict": "ниже 3:1 в тёмном, но применимость 1.4.11 спорна: это аффорданс внутри уже опознанного элемента, а не то, что его опознаёт."
+      }
+    ],
+    "consequence": "Вопрос Д7 переформулирован: не «какую роль дать точкам грипа», а «различима ли полоса сплиттера вообще». В светлом — нет, 1.62 при пороге 3:1, и это не видит ни axe (нет правила под 1.4.11), ни скриншоты (эталон совпадает сам с собой). Померен только сплиттер: сплошной проверки нетекстового контраста в теме нет."
   }
 }
