@@ -298,3 +298,20 @@ test('every coverage lever is measured and costed', () => {
   expect(bad).toEqual([]);
   expect(baseline.coverage.floor.declarations).toBeGreaterThan(0);
 });
+
+/*
+ * The pages are the deliverable, and a generated file regenerated only when somebody remembers will
+ * eventually disagree with the data it claims to show - which already happened, with a hardcoded
+ * "39%" next to a computed 226 of 714. So staleness is a red test rather than a habit.
+ */
+test('the decision pages match the data they are generated from', () => {
+  const pages = join(packageRoot, 'tools', 'review', 'roles-pages.mjs');
+  let output = '';
+  try {
+    output = execFileSync('node', [pages, '--check'], { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  } catch (error) {
+    const details = `${(error as { stderr?: string }).stderr ?? ''}`.trim();
+    throw new Error(details || 'roles-pages.mjs --check failed');
+  }
+  expect(output).toContain('совпадают');
+});
