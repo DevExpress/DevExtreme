@@ -49,8 +49,10 @@ export function fixSwatchCss(css: string | Buffer, swatchClass: string, colorSch
   const swatchOrderRegex = new RegExp(`([ \\t]*)([\\w\\.#:\\*][\\w\\.#:\\*\\->()\\s]*)(${escapedSelector}\\s)([^,{+~]*)`, 'gm');
   const changeTypographyRulesOrderRegex = /(\.dx-swatch-.*?)\s(\.dx-theme-.*?-typography)(.*?)(\s{|,)/g;
   const themeMarkerRegex = /(\.dx-theme-marker\s*{\s*font-family:\s*['"]dx\..*?\.)(.*)(['"])/g;
+  const rootSelectorRegex = new RegExp(`${escapedSelector}\\s+:root\\b`, 'g');
 
   result = result
+    .replace(rootSelectorRegex, swatchClass)
     .replace(swatchOrderRegex, '$1$3$2$4')
     .replace(changeTypographyRulesOrderRegex, '$2 $1$3,$2$1$3$4')
     .replace(themeMarkerRegex, `$1${colorScheme}$3`);
