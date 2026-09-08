@@ -62,9 +62,20 @@ const leavesOf = (node, trail = []) => Object.entries(node ?? {}).flatMap(([key,
  * `ai-chat`, all three grids are its single `grid`, and our chassis folders (textEditor, gridBase)
  * map to the component the package models, not to a widget name. A folder that is absent here has
  * no counterpart worth comparing - the report says so instead of guessing.
+ *
+ * Six were added 09.09 after asking whether the gap was real or just my spelling: cardView is the
+ * package's `grid`, the way tools/review/package-disabled.mjs has always mapped it; a speed-dial
+ * action is a button; a lookup is a listbox; an action sheet is a popup. Name similarity was doing
+ * the matching before, and it does not survive contact with another product's vocabulary.
  */
 const COMPONENT = {
   accordion: ['accordion'],
+  actionSheet: ['popup', 'menu-list'],
+  buttonGroup: ['button-group', 'button'],
+  cardView: ['grid', 'container-card'],
+  lookup: ['listbox', 'text-input'],
+  speedDialAction: ['button'],
+  validation: ['field', 'message-bar'],
   badge: ['badge'],
   button: ['button', 'custom-button'],
   calendar: ['calendar'],
