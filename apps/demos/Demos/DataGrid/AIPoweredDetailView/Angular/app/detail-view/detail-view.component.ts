@@ -67,7 +67,7 @@ export class DetailViewComponent {
 
     this.isError = false;
     this.isLoading = true;
-    (event?.target as HTMLElement).blur();
+    (event?.target as HTMLElement)?.blur();
 
     try {
       const messages: AIMessage[] = [
@@ -82,7 +82,7 @@ export class DetailViewComponent {
     } finally {
       this.isLoading = false;
       this.changeDetectorRef.detectChanges();
-      (event?.target as HTMLElement).focus();
+      (event?.target as HTMLElement)?.focus();
     }
   }
 }

@@ -49,11 +49,11 @@ $(() => {
       $emptyMessage.hide();
       $errorMessage.hide();
       loadPanel.show();
-      event?.target.blur();
+      event?.target?.blur();
     } else {
       submitButton.option('text', 'Resubmit');
       loadPanel.hide();
-      event?.target.focus();
+      event?.target?.focus();
     }
   }
 

@@ -64,7 +64,7 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
 
     setIsError(false);
     setIsLoading(true);
-    (event?.target as HTMLElement).blur();
+    (event?.target as HTMLElement)?.blur();
 
     try {
       const rowData = templateData.data;
@@ -79,7 +79,7 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
       setIsError(true);
     } finally {
       setIsLoading(false);
-      (event?.target as HTMLElement).focus();
+      (event?.target as HTMLElement)?.focus();
     }
   }, [promptValue, templateData.data]);
 

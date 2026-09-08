@@ -60,7 +60,7 @@ const DetailView = ({ data: templateData }) => {
       if (promptValue === '') return;
       setIsError(false);
       setIsLoading(true);
-      (event?.target).blur();
+      event?.target?.blur();
       try {
         const rowData = templateData.data;
         const messages = [
@@ -77,7 +77,7 @@ const DetailView = ({ data: templateData }) => {
         setIsError(true);
       } finally {
         setIsLoading(false);
-        (event?.target).focus();
+        event?.target?.focus();
       }
     },
     [promptValue, templateData.data],
