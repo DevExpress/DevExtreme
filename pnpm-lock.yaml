@@ -2192,6 +2192,34 @@ importers:
         specifier: 'catalog:'
         version: 3.7.5(supports-color@7.2.0)
 
+  tools/flaky-test-reporter:
+    dependencies:
+      yargs:
+        specifier: 17.7.2
+        version: 17.7.2
+    devDependencies:
+      '@types/jest':
+        specifier: 30.0.0
+        version: 30.0.0
+      '@types/node':
+        specifier: catalog:tools
+        version: 20.19.37
+      '@types/yargs':
+        specifier: 17.0.35
+        version: 17.0.35
+      prettier:
+        specifier: catalog:tools
+        version: 3.5.3
+      ts-jest:
+        specifier: 29.4.12
+        version: 29.4.12(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7))(jest-util@30.4.1)(jest@30.4.2(@types/node@20.19.37)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.19.37)(typescript@5.9.3)))(typescript@5.9.3)
+      ts-node:
+        specifier: catalog:tools
+        version: 10.9.2(@swc/core@1.15.30(@swc/helpers@0.5.21))(@types/node@20.19.37)(typescript@5.9.3)
+      typescript:
+        specifier: catalog:tools
+        version: 5.9.3
+
 packages:
 
   '@adobe/css-tools@4.4.4':

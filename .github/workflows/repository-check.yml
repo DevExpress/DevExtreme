@@ -8,9 +8,91 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  actions: read
+
 jobs:
+  collect-flaky-reports:
+    name: Collect flaky reports
+    runs-on: ubuntu-slim
+    # Flaky collection must never break the repository check it feeds.
+    continue-on-error: true
+    outputs:
+      details: ${{ steps.collect.outputs.details }}
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+
+    - name: Use Node.js
+      uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+      with:
+        node-version-file: '.node-version'
+
+    - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      with:
+        run_install: false
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile --filter flaky-test-reporter...
+
+    - name: Collect flaky test candidates
+      id: collect
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # tee opens the log before the tool runs, so the directory must already exist.
+        mkdir -p "$GITHUB_WORKSPACE/artifacts"
+        report="$GITHUB_WORKSPACE/artifacts/flaky-tests-report.json"
+        markdown="$GITHUB_WORKSPACE/artifacts/flaky-tests-report.md"
+        log="$GITHUB_WORKSPACE/artifacts/collect.log"
+
+        # --silent keeps pnpm's own banner out of the summary; 2>&1 keeps the tool's warnings in.
+        # tee stores the plain text for the summary, then sed turns the tool's warnings into
+        # GitHub annotations so they surface on the run page.
+        pnpm --silent --filter flaky-test-reporter run collect -- \
+          --repo "${{ github.repository }}" \
+          --workflow testcafe_tests.yml \
+          --artifact flaky-candidates \
+          --window-hours 48 \
+          --out-json "$report" \
+          --out-markdown "$markdown" 2>&1 \
+          | tee "$log" \
+          | sed -e 's/^warning: /::warning::/' -e 's/^Collection failed: /::error::/'
+
+        {
+          echo "## Flaky test candidates"
+          echo ""
+          echo '```'
+          cat "$log"
+          echo '```'
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        # Multiline output form, so the markdown crosses the job boundary as-is. The delimiter
+        # must not occur in the content, which markdown headings and tables never produce.
+        {
+          echo 'details<<FLAKY_DETAILS_EOF'
+          cat "$markdown"
+          echo 'FLAKY_DETAILS_EOF'
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Upload flaky test report
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: flaky-tests-report
+        path: |
+          ${{ github.workspace }}/artifacts/flaky-tests-report.json
+          ${{ github.workspace }}/artifacts/flaky-tests-report.md
+          ${{ github.workspace }}/artifacts/collect.log
+        retention-days: 7
+        if-no-files-found: ignore
+
   invoke:
     name: Invoke
+    needs: [collect-flaky-reports]
+    if: ${{ !cancelled() }}
     uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repository-check
     with:
       config: |
@@ -20,3 +102,6 @@ jobs:
             'GHSA-848j-6mx2-7j84', // elliptic
           ]
         }
+      # Markdown appended to this repo's monitor issue body. Empty when the collect job
+      # produced nothing, which makes the shared workflow skip publishing it.
+      extraDetails: ${{ needs.collect-flaky-reports.outputs.details }}

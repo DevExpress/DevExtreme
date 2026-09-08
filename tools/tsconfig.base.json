@@ -1,0 +1,20 @@
+{
+  // Shared by every tools/* package. Node-oriented and deliberately DOM-free: these are CLIs,
+  // so `document`/`window` resolving would be a bug, not a convenience.
+  // `types` is left to each package so sources do not see test globals.
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["es2022"],
+    "module": "commonjs",
+    "strict": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noEmitOnError": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
