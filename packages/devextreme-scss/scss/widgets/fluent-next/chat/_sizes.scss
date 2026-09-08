@@ -156,7 +156,7 @@ $chat-bubble-image-max-height: 400px !default; // dx-offscale: 400px, the spacin
 
 // Base-layer values injected with design tokens (wave B1)
 $chat-file-name-font-weight: ds.$font-weight-base-strong !default;
-$chat-editing-preview-caption-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$chat-editing-preview-caption-font-weight: ds.$font-weight-caption-strong !default;
 
 // Base-layer sizing injected with design tokens (wave B12)
 $chat-border-width: ds.$border-width-10 !default;

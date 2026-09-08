@@ -180,7 +180,7 @@ $scheduler-header-panel-time-cell-padding: null !default;
 }
 
 // Values hoisted from style-file literals (tokenized)
-$scheduler-group-header-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$scheduler-group-header-font-weight: ds.$font-weight-title-default !default;
 $scheduler-tooltip-subject-font-weight: ds.$font-weight-base-strong !default;
 $scheduler-appointment-title-font-size: ds.$font-size-base-sm !default;
 $scheduler-appointment-details-font-size: ds.$font-size-caption-sm !default;

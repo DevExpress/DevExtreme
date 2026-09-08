@@ -32,7 +32,7 @@ $file-uploader-files-container-border-radius: ds.$spacing-40 !default;
 }
 
 // Values hoisted from style-file literals (tokenized)
-$file-uploader-file-name-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$file-uploader-file-name-font-weight: ds.$font-weight-base-strong !default;
 $file-uploader-file-line-height: 13px !default; // dx-offscale: 13px
 $file-uploader-upload-button-margin-inline-start: ds.$spacing-30 !default;
 $file-uploader-upload-button-margin-inline-end: ds.$spacing-30 !default;
