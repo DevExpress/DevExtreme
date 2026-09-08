@@ -1,8 +1,5 @@
 $size: null !default;
 
-// return from removing in PR#34804 to make fluent themes compileable
-@use "colors" as *;
-
 $fluent-size-postfix: null !default;
 $fluent-base-font-size: null !default;
 $fluent-base-inline-widget-height: null !default;
