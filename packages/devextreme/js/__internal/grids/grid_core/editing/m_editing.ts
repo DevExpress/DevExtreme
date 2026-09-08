@@ -117,6 +117,8 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _dataController!: Controllers['data'];
 
+  protected dataSourceController!: Controllers['dataSource'];
+
   protected adaptiveColumnsController!: Controllers['adaptiveColumns'];
 
   protected _validatingController!: Controllers['validating'];
@@ -170,6 +172,7 @@ class EditingControllerImpl extends modules.ViewController {
   public init() {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this.adaptiveColumnsController = this.getController('adaptiveColumns');
     this._validatingController = this.getController('validating');
     this._editorFactoryController = this.getController('editorFactory');
@@ -1812,7 +1815,7 @@ class EditingControllerImpl extends modules.ViewController {
     const results = [];
     const deferreds = [];
     const dataChanges = [];
-    const dataSource = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     when(this._fireOnSaving())
       .done(({ cancel, changes }) => {
@@ -1824,17 +1827,17 @@ class EditingControllerImpl extends modules.ViewController {
 
         if (deferreds.length) {
           this._refocusEditCell = true;
-          dataSource?.beginLoading();
+          dataSourceAdapter?.beginLoading();
 
           when(...deferreds).done(() => {
             if (this._processSaveEditDataResult(results)) {
               this._endSaving(dataChanges, changes, result);
             } else {
-              dataSource?.endLoading();
+              dataSourceAdapter?.endLoading();
               result.resolve();
             }
           }).fail((error) => {
-            dataSource?.endLoading();
+            dataSourceAdapter?.endLoading();
             result.resolve(error);
           });
 
@@ -1855,11 +1858,11 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _endSaving(dataChanges, changes, deferred) {
-    const dataSource = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     this._beforeEndSaving(changes);
 
-    dataSource?.endLoading();
+    dataSourceAdapter?.endLoading();
 
     this._refreshDataAfterSave(dataChanges, changes, deferred);
   }

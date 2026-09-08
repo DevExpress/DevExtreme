@@ -241,7 +241,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         this.dataController.dataPushedHandlerProxy = dataPushedHandlerSpy;
         this.dataController.setDataSource(dataSource);
-        dataSource = this.dataController.dataSource();
+        dataSource = this.dataSourceController.getAdapter();
         dataSource.load();
 
         // assert
@@ -319,7 +319,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         this.option('dataSource', []);
 
-        const dataSource = this.dataController.dataSource()._dataSource;
+        const dataSource = this.dataSourceController.getDataSource();
 
         this.dataController.changed.add(function(args) {
             changedCount++;
@@ -873,7 +873,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         this.dataController.resetDataSource();
-        const dataIndexGetter = this.dataSourceController.getAdapter().getDataIndexGetter();
+        const dataIndexGetter = this.dataSourceController.getDataIndexGetter();
         assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ desc: false, selector: dataIndexGetter }], 'Sort parameters');
         // assert
         assert.equal(dataSource.items()[0].name, 'Alex', 'Item0');
@@ -1997,13 +1997,13 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         this.dataController.setDataSource(dataSource);
         dataSource.load();
-        assert.ok(this.dataController.dataSource().sort(), 'sort parameters');
+        assert.ok(this.dataSourceController.getAdapter().sort(), 'sort parameters');
 
         // act
         this.columnsController.changeSortOrder(0, 'none');
 
         // assert
-        assert.ok(!this.dataController.dataSource().sort(), 'no sort parameters');
+        assert.ok(!this.dataSourceController.getAdapter().sort(), 'no sort parameters');
 
         assert.deepEqual(this.dataController.items()[0].values, ['Alex', 30]);
         assert.deepEqual(this.dataController.items()[1].values, ['Dan', 25]);
@@ -2098,12 +2098,12 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         this.dataController.setDataSource(dataSource);
         dataSource.load();
-        assert.ok(this.dataController.dataSource().group());
+        assert.ok(this.dataSourceController.getAdapter().group());
         // act
         this.columnsController.moveColumn(0, 0, 'group', 'header');
 
         // assert
-        assert.ok(!this.dataController.dataSource().group());
+        assert.ok(!this.dataSourceController.getAdapter().group());
         assert.equal(this.dataController.items()[0].rowType, 'data');
     });
 
@@ -2761,7 +2761,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.resetDataSource();
 
         // assert
-        assert.deepEqual(this.dataController.dataSource().remoteOperations(), {}, 'remote operations set correct');
+        assert.deepEqual(this.dataSourceController.getAdapter().remoteOperations(), {}, 'remote operations set correct');
     });
 
     QUnit.test('Enable all remote operations if groupPaging is true', function(assert) {
@@ -2779,7 +2779,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.resetDataSource();
 
         // assert
-        assert.deepEqual(this.dataController.dataSource().remoteOperations(), {
+        assert.deepEqual(this.dataSourceController.getAdapter().remoteOperations(), {
             filtering: true,
             sorting: true,
             paging: true,
@@ -2806,7 +2806,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.resetDataSource();
 
         // assert
-        assert.deepEqual(this.dataController.dataSource().remoteOperations(), {
+        assert.deepEqual(this.dataSourceController.getAdapter().remoteOperations(), {
             filtering: true,
             sorting: false,
             paging: true,
@@ -2829,7 +2829,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.resetDataSource();
 
         // assert
-        assert.deepEqual(this.dataController.dataSource().remoteOperations(), {}, 'remote operations set correct');
+        assert.deepEqual(this.dataSourceController.getAdapter().remoteOperations(), {}, 'remote operations set correct');
     });
 
     QUnit.test('Set remoteOperations option to true', function(assert) {
@@ -2846,7 +2846,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.resetDataSource();
 
         // assert
-        assert.deepEqual(this.dataController.dataSource().remoteOperations(), { filtering: true, sorting: true, paging: true, grouping: true, summary: true }, 'remote operations set correct');
+        assert.deepEqual(this.dataSourceController.getAdapter().remoteOperations(), { filtering: true, sorting: true, paging: true, grouping: true, summary: true }, 'remote operations set correct');
     });
 
     // T541798
@@ -3630,7 +3630,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     // B233350
     QUnit.test('virtual items on end when visibleRowsCount < pageSize and last page size greater than half page size', function(assert) {
         const dataController = this.dataController;
-        this.dataSourceController.getAdapter().store().remove(999);
+        this.dataSourceController.store().remove(999);
         dataController.refresh();
         dataController.setViewportItemIndex(998);
         assert.strictEqual(this.dataController.pageIndex(), 49);
@@ -3667,7 +3667,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         const that = this;
         let countCallChanged = 0;
         let countCallDataSourceChanged = 0;
-        const dataSource = that.dataController.dataSource();
+        const dataSource = that.dataSourceController.getAdapter();
 
         that.dataController.changed.add(function() {
             that.columnOption('id', 'sortOrder', 'desc');
@@ -3693,7 +3693,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         const firstRow = rows[0];
 
         // act
-        this.dataController.dataSource().changed.fire({ changeType: 'pageIndex' });
+        this.dataSourceController.getAdapter().changed.fire({ changeType: 'pageIndex' });
 
         // assert
         assert.strictEqual(this.getVisibleRows(), rows, 'rows are not changed');
@@ -5016,19 +5016,19 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.dataController.viewportSize(15);
 
         // assert
-        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 1, 'initial load page count');
+        assert.strictEqual(this.dataSourceController.getAdapter().loadPageCount(), 1, 'initial load page count');
         assert.strictEqual(this.dataController.items().length, 10, 'initial visible items count');
 
         // act
         this.dataController.setViewportPosition(500);
         this.clock.tick(10);
         const visibleItems = this.dataController.items();
-        const loadedItems = this.dataController.dataSource().items();
+        const loadedItems = this.dataSourceController.getAdapter().items();
 
         // assert
         assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 4, skipForCurrentPage: 5 }, 'load page params after scrolling');
         assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
-        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 4, 'load page count after scrolling');
+        assert.strictEqual(this.dataSourceController.getAdapter().loadPageCount(), 4, 'load page count after scrolling');
         assert.equal(loadedItems.length, 40, 'loaded items count');
         assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
         assert.deepEqual(loadedItems[39], { id: 60, name: 'Name 60' }, 'last loaded item');
@@ -5201,7 +5201,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             pageSize: 10
         });
 
-        const viewportSizeSpy = sinon.spy(this.dataController.dataSource(), 'viewportSize');
+        const viewportSizeSpy = sinon.spy(this.dataSourceController.getAdapter(), 'viewportSize');
 
         try {
             this.dataController.viewportSize();
@@ -5228,7 +5228,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             pageSize: 10
         });
 
-        const viewportItemSizeSpy = sinon.spy(this.dataController.dataSource(), 'viewportItemSize');
+        const viewportItemSizeSpy = sinon.spy(this.dataSourceController.getAdapter(), 'viewportItemSize');
 
         try {
             this.dataController.viewportItemSize();
@@ -5255,7 +5255,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             pageSize: 10
         });
 
-        const setContentItemSizesSpy = sinon.spy(this.dataController.dataSource(), 'setContentItemSizes');
+        const setContentItemSizesSpy = sinon.spy(this.dataSourceController.getAdapter(), 'setContentItemSizes');
 
         try {
             this.dataController.setContentItemSizes([30]);
@@ -5503,7 +5503,7 @@ QUnit.module('Virtual scrolling preload', {
 }, () => {
     QUnit.test('New mode. One page should be loaded on start', function(assert) {
         // arrange
-        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 1, 'initial load page count');
+        assert.strictEqual(this.dataSourceController.getAdapter().loadPageCount(), 1, 'initial load page count');
         assert.strictEqual(this.getVisibleRows().length, 20, 'initial visible items count');
     });
 
@@ -5511,7 +5511,7 @@ QUnit.module('Virtual scrolling preload', {
         // act
         this.dataController.setViewportPosition(1);
         const visibleRows = this.getVisibleRows();
-        const dataSourceAdapter = this.dataController.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
         const loadedItems = dataSourceAdapter.items();
 
         // assert
@@ -5528,7 +5528,7 @@ QUnit.module('Virtual scrolling preload', {
         // act
         this.dataController.setViewportPosition(1);
         const visibleRows = this.getVisibleRows();
-        const dataSourceAdapter = this.dataController.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
         const loadedItems = dataSourceAdapter.items();
 
         // assert
@@ -5545,7 +5545,7 @@ QUnit.module('Virtual scrolling preload', {
         // act
         this.dataController.setViewportPosition(1);
         const visibleRows = this.getVisibleRows();
-        const dataSourceAdapter = this.dataController.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
         const loadedItems = dataSourceAdapter.items();
 
         // assert
@@ -5562,7 +5562,7 @@ QUnit.module('Virtual scrolling preload', {
         // act
         this.dataController.setViewportPosition(1);
         const visibleRows = this.getVisibleRows();
-        const dataSourceAdapter = this.dataController.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
         const loadedItems = dataSourceAdapter.items();
 
         // assert
@@ -5578,7 +5578,7 @@ QUnit.module('Virtual scrolling preload', {
         // act
         this.dataController.setViewportPosition(1000);
         const visibleRows = this.getVisibleRows();
-        const dataSourceAdapter = this.dataController.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
         const loadedItems = dataSourceAdapter.items();
 
         // assert
@@ -5595,7 +5595,7 @@ QUnit.module('Virtual scrolling preload', {
         this.dataController.setViewportPosition(1000);
         this.dataController.setViewportPosition(999);
         const visibleRows = this.getVisibleRows();
-        const dataSourceAdapter = this.dataController.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
         const loadedItems = dataSourceAdapter.items();
 
         // assert
@@ -5613,7 +5613,7 @@ QUnit.module('Virtual scrolling preload', {
         this.dataController.setViewportPosition(1000);
         this.dataController.setViewportPosition(999);
         const visibleRows = this.getVisibleRows();
-        const dataSourceAdapter = this.dataController.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
         const loadedItems = dataSourceAdapter.items();
 
         // assert
@@ -6119,19 +6119,19 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         this.dataController.viewportSize(15);
 
         // assert
-        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 1, 'initial load page count');
+        assert.strictEqual(this.dataSourceController.getAdapter().loadPageCount(), 1, 'initial load page count');
         assert.strictEqual(this.dataController.items().length, 10, 'initial visible items count');
 
         // act
         this.dataController.setViewportPosition(500);
         this.clock.tick(10);
         const visibleItems = this.dataController.items();
-        const loadedItems = this.dataController.dataSource().items();
+        const loadedItems = this.dataSourceController.getAdapter().items();
 
         // assert
         assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 4, skipForCurrentPage: 5 }, 'load page params after scrolling');
         assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
-        assert.strictEqual(this.dataController.dataSource().loadPageCount(), 4, 'load page count after scrolling');
+        assert.strictEqual(this.dataSourceController.getAdapter().loadPageCount(), 4, 'load page count after scrolling');
         assert.equal(loadedItems.length, 40, 'loaded items count');
         assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
         assert.deepEqual(loadedItems[39], { id: 60, name: 'Name 60' }, 'last loaded item');
@@ -13031,7 +13031,7 @@ QUnit.module('Partial update', {
 
     QUnit.test('update one row', function(assert) {
         this.setupModules();
-        const dataSourceItems = this.dataController.dataSource().items();
+        const dataSourceItems = this.dataSourceController.getAdapter().items();
 
         const oldItems = this.dataController.items().slice(0);
         let changedArgs;
@@ -13063,7 +13063,7 @@ QUnit.module('Partial update', {
 
     QUnit.test('update several rows', function(assert) {
         this.setupModules();
-        const dataSourceItems = this.dataController.dataSource().items();
+        const dataSourceItems = this.dataSourceController.getAdapter().items();
 
         const oldItems = this.dataController.items().slice(0);
         let changedArgs;
@@ -13100,7 +13100,7 @@ QUnit.module('Partial update', {
 
     QUnit.test('update with incorrect rowIndices', function(assert) {
         this.setupModules();
-        const dataSourceItems = this.dataController.dataSource().items();
+        const dataSourceItems = this.dataSourceController.getAdapter().items();
 
         const oldItems = this.dataController.items().slice(0);
         let changedArgs;
@@ -13135,7 +13135,7 @@ QUnit.module('Partial update', {
     // T266696
     QUnit.test('insert item with editing of the first item', function(assert) {
         this.setupModules();
-        const dataSourceItems = this.dataController.dataSource().items();
+        const dataSourceItems = this.dataSourceController.getAdapter().items();
         let changedArgs;
 
         this.dataController.changed.add(function(args) {
@@ -13163,7 +13163,7 @@ QUnit.module('Partial update', {
 
     QUnit.test('insert one item', function(assert) {
         this.setupModules();
-        const dataSourceItems = this.dataController.dataSource().items();
+        const dataSourceItems = this.dataSourceController.getAdapter().items();
 
         const oldItems = this.dataController.items().slice(0);
         let changedArgs;
@@ -13200,7 +13200,7 @@ QUnit.module('Partial update', {
 
     QUnit.test('update and insert', function(assert) {
         this.setupModules();
-        const dataSourceItems = this.dataController.dataSource().items();
+        const dataSourceItems = this.dataSourceController.getAdapter().items();
 
         const oldItems = this.dataController.items().slice(0);
         let changedArgs;
@@ -13270,7 +13270,7 @@ QUnit.module('Partial update', {
 
     QUnit.test('remove one item', function(assert) {
         this.setupModules();
-        const dataSourceItems = this.dataController.dataSource().items();
+        const dataSourceItems = this.dataSourceController.getAdapter().items();
 
         const oldItems = this.dataController.items().slice(0);
         let changedArgs;
@@ -13306,7 +13306,7 @@ QUnit.module('Partial update', {
 
     QUnit.test('update and remove', function(assert) {
         this.setupModules();
-        const dataSourceItems = this.dataController.dataSource().items();
+        const dataSourceItems = this.dataSourceController.getAdapter().items();
 
         const oldItems = this.dataController.items().slice(0);
         let changedArgs;
@@ -13343,7 +13343,7 @@ QUnit.module('Partial update', {
     // T186415
     QUnit.test('remove and update next row', function(assert) {
         this.setupModules();
-        const dataSourceItems = this.dataController.dataSource().items();
+        const dataSourceItems = this.dataSourceController.getAdapter().items();
 
         const oldItems = this.dataController.items().slice(0);
         let changedArgs;
@@ -13379,7 +13379,7 @@ QUnit.module('Partial update', {
 
     QUnit.test('insert and remove', function(assert) {
         this.setupModules();
-        const dataSourceItems = this.dataController.dataSource().items();
+        const dataSourceItems = this.dataSourceController.getAdapter().items();
 
         const oldItems = this.dataController.items().slice(0);
         let changedArgs;
@@ -14509,7 +14509,7 @@ QUnit.module('Using DataSource instance', {
         try {
         // act
             this.dataSource.dispose();
-            this.dataController.dataSource().dispose(true);
+            this.dataSourceController.getAdapter().dispose(true);
 
             // assert
             assert.ok(true, 'No exception');
@@ -15489,7 +15489,7 @@ QUnit.module('onOptionChanged', {
         that.option.restore();
         sinon.stub(that, 'option').callsFake(function(optionName, value) {
             if(optionName === 'paging.pageSize' && value === 3) {
-                pageSize = that.dataController.dataSource().pageSize();
+                pageSize = that.dataSourceController.getAdapter().pageSize();
             }
             if(optionName === 'editing.changes') {
                 return that.options.editing.changes;
