@@ -14,6 +14,8 @@ export const {
     isMaterial,
     isFluent,
     isMaterialBased,
+    mode,
+    refreshMode,
     detachCssClasses,
     attachCssClasses,
     current,

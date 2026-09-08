@@ -20,6 +20,7 @@ import * as zIndex from '__internal/ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
 import selectors from '__internal/core/utils/m_selectors';
 import swatch from '__internal/core/utils/swatch_container';
+import themes from 'ui/themes';
 import documentSizeCallbacks from '__internal/core/utils/document_size_callbacks';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -323,6 +324,77 @@ testModule('render', moduleConfig, () => {
 
         assert.ok(overlayContainer.hasClass('dx-swatch-my-color_scheme1'), 'overlay\'s container has right class');
         assert.ok(overlayContainer.parent().hasClass(VIEWPORT_CLASS), 'overlay\'s container is the viewport\'s child');
+    });
+
+    /*
+     * The mode a theme scope resolves to is published in --dx-theme-mode and read back through the
+     * cascade, so these declare it with a stylesheet rather than with the theme: the generic bundle
+     * this suite loads does not scope modes at all.
+     */
+    const withModeStyles = (callback) => {
+        const style = $('<style>')
+            .text('.mode-light { --dx-theme-mode: light; } .mode-dark { --dx-theme-mode: dark; }')
+            .appendTo('head');
+
+        try {
+            callback();
+        } finally {
+            style.remove();
+        }
+    };
+
+    test('Theme mode - an open overlay moves to the mode its owner resolves to after refreshMode', function(assert) {
+        withModeStyles(() => {
+            const $scope = $('<div>').addClass('mode-light').appendTo('#container');
+            const overlay = $('<div>').appendTo($scope).dxOverlay({ visible: true }).dxOverlay('instance');
+
+            assert.ok(overlay.$wrapper().parent().hasClass('dx-theme-mode-light'), 'starts in the mode of its owner');
+
+            $scope.removeClass('mode-light').addClass('mode-dark');
+            themes.refreshMode();
+
+            const container = overlay.$wrapper().parent();
+
+            assert.ok(container.hasClass('dx-theme-mode-dark'), 'moved to the new mode');
+            assert.ok(container.parent().hasClass(VIEWPORT_CLASS), 'still a child of the viewport');
+
+            overlay.dispose();
+            $scope.remove();
+        });
+    });
+
+    test('Theme mode - refreshMode leaves a hidden overlay alone until it is shown', function(assert) {
+        withModeStyles(() => {
+            const $scope = $('<div>').addClass('mode-light').appendTo('#container');
+            const overlay = $('<div>').appendTo($scope).dxOverlay({ visible: false }).dxOverlay('instance');
+
+            $scope.removeClass('mode-light').addClass('mode-dark');
+            themes.refreshMode();
+
+            assert.strictEqual(overlay.$wrapper().parent().length, 0, 'a hidden overlay is not attached anywhere');
+
+            overlay.show();
+
+            assert.ok(overlay.$wrapper().parent().hasClass('dx-theme-mode-dark'), 'and picks the current mode when shown');
+
+            overlay.dispose();
+            $scope.remove();
+        });
+    });
+
+    test('Theme mode - a disposed overlay stops listening', function(assert) {
+        withModeStyles(() => {
+            const $scope = $('<div>').addClass('mode-light').appendTo('#container');
+            const overlay = $('<div>').appendTo($scope).dxOverlay({ visible: true }).dxOverlay('instance');
+
+            overlay.dispose();
+            $scope.removeClass('mode-light').addClass('mode-dark');
+
+            themes.refreshMode();
+
+            assert.expect(0);
+            $scope.remove();
+        });
     });
 
     test('Overlay does not fail if swatch is undefined (render before documentReady, T713615, T1143527)', function(assert) {

@@ -46,6 +46,7 @@ import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import { themeModeChangedCallback } from '@ts/ui/m_themes_callback';
 import type {
   BaseControllerProperties,
   ControllerOverlayElements,
@@ -273,6 +274,8 @@ class Overlay<
 
   _viewPortChangeHandle?: () => void;
 
+  _themeModeChangeHandle?: () => void;
+
   _proxiedDocumentDownHandler?: EventHandler;
 
   _supportedKeys(): SupportedKeys {
@@ -414,6 +417,7 @@ class Overlay<
 
     this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
     this._toggleViewPortSubscription(true);
+    this._toggleThemeModeSubscription(true);
 
     const { hideTopOverlayHandler } = this.option();
 
@@ -629,6 +633,37 @@ class Overlay<
 
     this._positionController.updateContainer(container);
     this._refresh();
+  }
+
+  _toggleThemeModeSubscription(toggle: boolean): void {
+    if (this._themeModeChangeHandle) {
+      themeModeChangedCallback.remove(this._themeModeChangeHandle);
+    }
+
+    if (toggle) {
+      this._themeModeChangeHandle = (): void => {
+        this._themeModeChangeHandler();
+      };
+
+      themeModeChangedCallback.add(this._themeModeChangeHandle);
+    }
+  }
+
+  /*
+   * The wrapper lives in the viewport, inside a container that carries the mode its owner resolved
+   * to when the overlay was shown. Nothing re-picks that container afterwards: `_moveToContainer`
+   * runs on becoming visible and on a content re-render, and a class moving somewhere up the tree
+   * is neither. An overlay that is already open would keep painting in the previous mode.
+   */
+  _themeModeChangeHandler(): void {
+    if (!this._isVisible()) {
+      return;
+    }
+
+    const { container } = this.option();
+
+    this._positionController.updateContainer(container);
+    this._moveToContainer();
   }
 
   _renderWrapperAttributes(): void {
@@ -1583,6 +1618,7 @@ class Overlay<
     }
 
     this._toggleViewPortSubscription(false);
+    this._toggleThemeModeSubscription(false);
     this._toggleSubscriptions(false);
     this._updateZIndexStackPosition(false);
 

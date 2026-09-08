@@ -11,7 +11,7 @@ import { changeCallback, originalViewPort, value as viewPortValue } from '@js/co
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
 import { uiLayerInitialized } from '@ts/core/utils/m_common';
-import { themeReadyCallback } from '@ts/ui/m_themes_callback';
+import { themeModeChangedCallback, themeReadyCallback } from '@ts/ui/m_themes_callback';
 
 const window = getWindow();
 const ready = readyCallbacks.add;
@@ -107,6 +107,9 @@ export function waitForThemeLoad(themeName: string): void {
 
     themeReadyCallback.fire();
     themeReadyCallback.empty();
+
+    // a different stylesheet can mean a different mode
+    themeModeChangedCallback.fire();
 
     initDeferred.resolve();
   }
@@ -331,6 +334,9 @@ export function current(options) {
 
     themeReadyCallback.fire();
     themeReadyCallback.empty();
+
+    // a different stylesheet can mean a different mode
+    themeModeChangedCallback.fire();
   } else {
     throw errors.Error('E0021', currentThemeName);
   }
@@ -350,13 +356,11 @@ export function init(options): void {
   current(options);
 }
 
-function isTheme(themeRegExp: string, themeName: string): boolean {
-  if (!themeName) {
-    // eslint-disable-next-line no-param-reassign
-    themeName = currentThemeName || readThemeMarker();
-  }
+function isTheme(themeRegExp: string, themeName?: string): boolean {
+  // Omitted on purpose by callers that ask about the loaded theme rather than about a given name.
+  const name: string | null = themeName || currentThemeName || readThemeMarker();
 
-  return new RegExp(themeRegExp).test(themeName);
+  return !!name && new RegExp(themeRegExp).test(name);
 }
 
 export function isMaterial(themeName: string): boolean {
@@ -375,12 +379,47 @@ export function isGeneric(themeName: string): boolean {
   return isTheme('generic', themeName);
 }
 
-export function isDark(themeName: string): boolean {
+export function isDark(themeName?: string): boolean {
   return isTheme('dark', themeName);
 }
 
 export function isCompact(themeName: string): boolean {
   return isTheme('compact', themeName);
+}
+
+const THEME_MODE_PROPERTY = '--dx-theme-mode';
+
+/**
+ * The colour mode an element is rendered in.
+ *
+ * `current()` and `isDark()` answer for the stylesheet that is loaded, and that stays the right
+ * answer to the question they ask. It is no longer the whole story: a theme can ship both modes in
+ * one bundle and let a class pick between them per element, so "which mode" has an answer per place
+ * rather than per page. Such a theme publishes the outcome in `--dx-theme-mode` on every scope it
+ * declares, and the element is the only thing that knows - the cascade decides it, not the classes
+ * on the way up. A theme that does not scope modes declares nothing, and the loaded theme answers.
+ */
+/**
+ * Re-reads the colour mode for widgets that render outside the element they belong to - today that
+ * is open overlays, whose markup lives in the viewport and therefore outside the scope that decides
+ * their mode. Switching the theme through `current()` calls this; call it yourself after moving a
+ * `dx-theme-mode-*` class by hand, since that change is invisible to us.
+ */
+export function refreshMode(): void {
+  themeModeChangedCallback.fire();
+}
+
+export function mode(element: Element | dxElementWrapper): 'light' | 'dark' {
+  const node = $(element).get(0);
+  const declared = node && hasWindow()
+    ? window.getComputedStyle(node).getPropertyValue(THEME_MODE_PROPERTY).trim()
+    : '';
+
+  if (declared === 'light' || declared === 'dark') {
+    return declared;
+  }
+
+  return isDark() ? 'dark' : 'light';
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -511,6 +550,8 @@ export default {
   isMaterial,
   isFluent,
   isMaterialBased,
+  mode,
+  refreshMode,
   detachCssClasses,
   attachCssClasses,
   current,

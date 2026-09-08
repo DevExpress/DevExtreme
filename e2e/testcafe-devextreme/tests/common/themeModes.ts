@@ -36,6 +36,20 @@ if (getThemeName() === 'fluent-next') {
     await getComputedPropertyValue(selector, property)
   ).trim();
 
+  const reportedMode = ClientFunction((selector: string) => (window as any).DevExpress.ui.themes
+    .mode(document.querySelector(selector)));
+
+  const setScopeMode = ClientFunction((selector: string, mode: string, tell: boolean) => {
+    const scope = document.querySelector(selector) as HTMLElement;
+
+    scope.classList.remove('dx-theme-mode-light', 'dx-theme-mode-dark');
+    scope.classList.add(`dx-theme-mode-${mode}`);
+
+    if (tell) {
+      (window as any).DevExpress.ui.themes.refreshMode();
+    }
+  });
+
   test('a named mode class re-resolves the roles under it', async (t) => {
     await render(`
       <div id="plain"></div>
@@ -103,6 +117,28 @@ if (getThemeName() === 'fluent-next') {
     }
   });
 
+  test('themes.mode answers for the element, not for the loaded file', async (t) => {
+    await render(`
+      <div id="plain"></div>
+      <div class="dx-theme-mode-${oppositeMode}"><div id="scoped"></div></div>
+      <div class="dx-theme-mode-${oppositeMode}"><div class="dx-theme-mode-inverted"><div id="back"></div></div></div>
+    `);
+
+    /*
+     * The reason the API exists: the element inherits the property from a scope above it, so only
+     * the cascade knows the answer. jsdom cannot inherit a custom property, which is why the unit
+     * tests next to themes.ts name the mode at the element and this case lives here.
+     */
+    await t.expect(await reportedMode('#plain')).eql(buildMode, 'no scope above it - the loaded theme answers');
+    await t.expect(await reportedMode('#scoped')).eql(oppositeMode, 'the mode is inherited from the scope, not declared here');
+    await t.expect(await reportedMode('#back')).eql(buildMode, 'and inverted inside it flips back');
+
+    // The public answer and the property the theme publishes must not drift apart.
+    for (const id of ['#plain', '#scoped', '#back']) {
+      await t.expect(await reportedMode(id)).eql(await valueAt(id, '--dx-theme-mode'));
+    }
+  });
+
   test('an overlay is painted in the mode of the element that owns it', async (t) => {
     await render(`<div class="dx-theme-mode-${oppositeMode}"><div id="owner"></div></div>`);
 
@@ -116,5 +152,49 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(await valueAt('.dx-popup-wrapper', '--dx-theme-mode')).eql(oppositeMode);
     await t.expect(await valueAt('.dx-popup-wrapper', '--dxds-color-bg'))
       .eql(await valueAt('#owner', '--dxds-color-bg'), 'the overlay resolves the same roles as its owner');
+  });
+
+  test('an open overlay follows its scope once the application says the mode changed', async (t) => {
+    /*
+     * A page-level switch needs none of this: the container hangs off the viewport, the viewport is
+     * inside <html>, so the cascade carries it. What goes stale is a LOCAL scope - the container
+     * was given a copy of the mode its owner resolved to when the overlay was shown, and nothing
+     * re-picks it. Verified by removing the subscription: this case fails, the page-level one does
+     * not, which is why it is written this way.
+     */
+    await render(`<div id="scope" class="dx-theme-mode-${oppositeMode}"><div id="owner"></div></div>`);
+
+    await createWidget('dxPopup', {
+      visible: true, width: 100, height: 100, animation: null,
+    }, '#owner');
+
+    const painted = async (): Promise<string> => valueAt('.dx-popup-wrapper', '--dxds-color-bg');
+    const asOpened = await painted();
+
+    await t.expect(asOpened).eql(await valueAt('#owner', '--dxds-color-bg'), 'opens in the mode of its scope');
+
+    await setScopeMode('#scope', buildMode, true);
+
+    await t.expect(await valueAt('#owner', '--dx-theme-mode')).eql(buildMode, 'the scope did switch');
+    await t.expect(await painted()).notEql(asOpened, 'the open overlay repainted');
+    await t.expect(await painted())
+      .eql(await valueAt('#owner', '--dxds-color-bg'), 'and matches its owner again');
+  });
+
+  test('an open overlay keeps its mode until the application says so', async (t) => {
+    await render(`<div id="scope" class="dx-theme-mode-${oppositeMode}"><div id="owner"></div></div>`);
+
+    await createWidget('dxPopup', {
+      visible: true, width: 100, height: 100, animation: null,
+    }, '#owner');
+
+    const asOpened = await valueAt('.dx-popup-wrapper', '--dxds-color-bg');
+
+    // A class moved by the application is invisible to us; this pins that we do not pretend
+    // otherwise - the overlay waits to be told.
+    await setScopeMode('#scope', buildMode, false);
+
+    await t.expect(await valueAt('.dx-popup-wrapper', '--dxds-color-bg'))
+      .eql(asOpened, 'still painted in the mode it was opened in');
   });
 }

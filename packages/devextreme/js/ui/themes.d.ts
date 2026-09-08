@@ -41,3 +41,18 @@ export function isFluent(theme: string): boolean;
 export function isMaterial(theme: string): boolean;
 export function isGeneric(theme: string): boolean;
 export function isCompact(theme: string): boolean;
+
+/**
+ * The colour mode an element is rendered in: 'light' or 'dark'.
+ *
+ * Unlike `current()` and `isDark()`, which answer for the loaded stylesheet, this answers for a
+ * place on the page - a theme may ship both modes in one bundle and let a class pick between them.
+ */
+export function mode(element: Element): 'light' | 'dark';
+
+/**
+ * Re-reads the colour mode for widgets that render outside the element they belong to, such as an
+ * open popup. Switching the theme through `current()` does this for you; call it after moving a
+ * `dx-theme-mode-*` class by hand.
+ */
+export function refreshMode(): void;
