@@ -523,7 +523,7 @@
         "color"
       ],
       "decision": "design",
-      "why": "a border role painting text: disabled list text sits at #d7d7d7 light / #4c4c4c dark where the content role gives #ababab / #767676. A contrast call, not hygiene"
+      "why": "Re-read 09.09 and this is not a contrast question. The variable colours .dx-list-select-all-label::after, and exactly one rule in the bundle targets that pseudo-element - with no `content`, so it is never generated and the declaration paints nothing. The label's own disabled text is correct one line above, on --dx-list-content-disabled. Dead declaration, not a colour to pick."
     },
     {
       "name": "pivot-grid-accent-content",
@@ -668,7 +668,7 @@
         "background-color"
       ],
       "decision": "design",
-      "why": "content-disabled painting the disabled tab indicator background; no bg role carries this value"
+      "why": "The only member of its own ladder off a border role: selected-active, selected-hovered, selected-focused, active and hovered all read border-*, and disabled alone reads content-disabled. border-disabled (#d7d7d7 / #4c4c4c against the current #ababab / #767676) makes the tab ladder internally consistent and follows the hairline idiom the theme already uses for this bar."
     },
     {
       "name": "tabs-tab-border-hovered",
