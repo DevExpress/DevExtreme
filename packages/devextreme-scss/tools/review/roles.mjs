@@ -123,6 +123,12 @@ const COMPONENT = {
  * widget. Every component is compared against these too, after its own, so `$menu-separator-bg`
  * finds `separator.color` instead of reading as a menu background that borrowed a border role.
  */
+/* A package component whose name IS the slot but is not spelled the way our grammar spells it.
+ * Until 09.09 the package's whole `focus-rect` component - four roles for the focus indicator -
+ * never entered the comparison, because neither `focus-rect.color.default` nor the name
+ * `focus-rect` matches any of our parts, so it was dropped as an unknown slot. */
+const COMPONENT_AS_SLOT = { 'focus-rect': 'outline', skeleton: 'bg', 'empty-item': 'content' };
+
 const SHARED = ['separator', 'focus-rect', 'backdrop', 'skeleton', 'empty-item', 'text-content', 'link'];
 
 const FAMILY = {
@@ -285,7 +291,7 @@ const dissect = (path) => {
    * the package models them the way our system tier publishes them, as a thing rather than a part
    * of a thing. Without this they fall out of the comparison entirely, and every `-separator-border`
    * in the theme reads as a border nobody named. */
-  const asSlot = trailing(segments[0], PARTS);
+  const asSlot = COMPONENT_AS_SLOT[segments[0]] ?? trailing(segments[0], PARTS);
   if (asSlot) return { slot: asSlot, state, variant: tail.join('.') };
   return { slot: null, state, variant: tail.join('.') };
 };
@@ -736,6 +742,39 @@ const concepts = [];
     || b.roles.length - a.roles.length || a.concept.localeCompare(b.concept));
 }
 
+/*
+ * What the package offers and the theme never takes.
+ *
+ * Every other check starts from a declaration we wrote and asks whether its role is right. This one
+ * starts from the package and asks what we never reached for at all - a whole family can be missing
+ * without a single declaration looking wrong, which is how the four focus roles stayed invisible
+ * until the component holding them was finally parsed.
+ *
+ * Split in two, because the two halves mean opposite things: a role that exists in the semantic
+ * layer and goes unread is capability we are not using, while a role the neighbours reference that
+ * does not exist at all is a stale name in their set.
+ */
+const declaredRoles = new Set();
+for (const [name] of valueIndex.light) declaredRoles.add(name.replace(/^(color|global\.color)\./, 'color-'));
+
+const offeredRoles = new Map();
+for (const set of SETS) {
+  const file = join(tokensRoot, 'tokens', 'components', set, 'theme', 'fluent.json');
+  for (const [, raw] of leavesOf(JSON.parse(readFileSync(file, 'utf8')))) {
+    if (typeof raw !== 'string' || !raw.startsWith('{')) continue;
+    const role = raw.replace(/[{}]/g, '').replace(/^(color|global\.color)\./, 'color-');
+    if (!role.startsWith('color-') || role === 'color-none') continue;
+    if (!offeredRoles.has(role)) offeredRoles.set(role, new Set());
+    offeredRoles.get(role).add(set);
+  }
+}
+const readRoles = new Set(declarations.flatMap((d) => d.roles));
+const unusedRoles = { capability: [], stale: [] };
+for (const [role, sets] of [...offeredRoles].sort()) {
+  if (readRoles.has(role)) continue;
+  unusedRoles[declaredRoles.has(role) ? 'capability' : 'stale'].push({ role, sets: [...sets].sort() });
+}
+
 // --- output ---------------------------------------------------------------------------------------
 
 const count = (predicate) => findings.filter(predicate).length;
@@ -751,6 +790,10 @@ const summary = {
   conceptsSplitAcrossFamilies: concepts.filter((c) => c.families.length > 1).length,
   conceptsSameColour: concepts.filter((c) => c.oneColour).length,
   conceptsWithSpellingClusters: concepts.filter((c) => c.clusters.length).length,
+  rolesOffered: offeredRoles.size,
+  rolesRead: offeredRoles.size - unusedRoles.capability.length - unusedRoles.stale.length,
+  rolesUnusedCapability: unusedRoles.capability.length,
+  rolesStaleInNeighbours: unusedRoles.stale.length,
   contrastPairsMeasured: pairs.length,
   contrastBelowAA: lowContrast.length,
   contrastDarkOnly: lowContrast.filter((p) => p.contrast.light >= AA && p.contrast.dark < AA).length,
@@ -828,6 +871,16 @@ const md = () => {
     (f) => `- \`${f.name}\` = ${roleList(f.roles)}  (${f.where})\n`
       + `    - slot \`${f.family.slot}\` wants \`color-${f.family.want}-*\`, reads a \`${f.family.got.join('/')}\` role`
       + (f.package ? `; package verdict: ${f.package.verdict}` : ''));
+
+  out.push(`## Roles the package assigns and the theme never reads - ${unusedRoles.capability.length}\n`);
+  out.push('Counted from the package inward rather than from our declarations outward, because a whole');
+  out.push('family can be missing without any single declaration looking wrong.\n');
+  out.push(`Of the ${offeredRoles.size} roles the four sets assign, the theme reads ${offeredRoles.size - unusedRoles.capability.length - unusedRoles.stale.length}.`);
+  out.push(`${unusedRoles.capability.length} exist in the semantic layer and go unread; ${unusedRoles.stale.length} are names no layer declares -`);
+  out.push('stale references inside the neighbours\' own sets.\n');
+  out.push('| Role | Assigned by |', '|---|---|');
+  for (const u of unusedRoles.capability) out.push(`| \`${u.role}\` | ${u.sets.join(', ')} |`);
+  out.push('');
 
   out.push(`## One concept, several roles - ${concepts.length} (${summary.conceptsSplitAcrossFamilies} across families)\n`);
   out.push('Grouped by what the name says the thing is - modifiers, slot, state - with sub-elements');
@@ -924,7 +977,9 @@ const md = () => {
 };
 
 if (process.argv.includes('--json')) {
-  console.log(JSON.stringify({ summary, findings, typography, ladders, lowContrast, concepts }, null, 2));
+  console.log(JSON.stringify({
+    summary, findings, typography, ladders, lowContrast, concepts, unusedRoles,
+  }, null, 2));
 } else if (process.argv.includes('--md')) {
   console.log(md());
 } else if (themeArg) {
