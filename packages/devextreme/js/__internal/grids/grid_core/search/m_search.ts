@@ -83,7 +83,7 @@ const filterController = (
     const filter = super.getAdditionalFilter(context);
     const searchFilter = this.calculateSearchFilter(
       this.option('searchPanel.text'),
-      context.langParams,
+      this.getLangParams(),
     );
 
     return gridCoreUtils.combineFilters([filter, searchFilter]);

@@ -338,10 +338,7 @@ export class DataController extends modules.Controller {
   }
 
   private buildFilterContext(excludedColumn: Column | null = null): FilterSourceContext {
-    return {
-      langParams: this.getDataSource()?.loadOptions?.()?.langParams,
-      excludedColumn,
-    };
+    return { excludedColumn };
   }
 
   private combinedFilter(
