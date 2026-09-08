@@ -298,6 +298,18 @@ ${na.realExamples.map((x) => `<p><b>${esc(x.what)}.</b> ${esc(x.detail)}</p>`).j
 <code>cross-family</code> сформулирован как вопрос, а не как вердикт.</p>
 `;
 
+
+// --- почему контраст не роняет CI
+const wc = base.whyContrastDoesNotFailCi;
+const whyContrast = `
+<div class="q"><span class="id">почему это не ловит CI</span>
+<p>Тёмный a11y-прогон существует, и <code>color-contrast</code> в нём включён — но ни одна из
+строк выше его не роняет. Причины проверены по исходнику axe-core 4.12.1, а не предположены:</p>
+${wc.reasons.map((r) => `<p><b>${esc(r.reason)}.</b> ${esc(r.detail)}<br>`
+    + `<span class="meta">Касается: ${esc(r.covers)}</span></p>`).join('')}
+<p>${esc(wc.consequence)}</p></div>
+`;
+
 const questionsPage = page('Fluent-next: открытые вопросы по ролям', `
 <h1>Fluent-next: открытые вопросы по ролям</h1>
 <p class="lede">Всё, что аудит нашёл и не стал решать сам. Ответы можно давать номерами: «Д3 — второй вариант».<br>
@@ -308,7 +320,7 @@ const questionsPage = page('Fluent-next: открытые вопросы по р
 <h2>А. Дизайн — ${roleQs.length + ladderQs.length + contrastQs.length + slotQs.length + conceptRows.length} вопросов</h2>
 <h3>Роль выбрана спорно</h3>${roleQs.join('')}
 <h3>Состояние неотличимо от соседнего</h3>${ladderQs.join('')}
-<h3>Контраст ниже порога</h3>${contrastQs.join('')}
+<h3>Контраст ниже порога</h3>${contrastQs.join('')}${whyContrast}
 <h3>Имя обещает одно, красит другое</h3>${slotQs.join('')}
 <h3>Одно понятие покрашено по-разному в разных компонентах</h3>${conceptRows.join('')}
 
