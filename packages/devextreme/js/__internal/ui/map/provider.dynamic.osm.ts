@@ -51,7 +51,7 @@ const getLocationOptionKey = (location?: LocationOption | null): string => {
   return String(location);
 };
 
-const normalizeLongitude = (longitude: number): number => {
+export const normalizeLongitude = (longitude: number): number => {
   if (longitude >= -HALF_CIRCLE_DEGREES && longitude <= HALF_CIRCLE_DEGREES) {
     return longitude;
   }
@@ -62,7 +62,7 @@ const normalizeLongitude = (longitude: number): number => {
   return (positive % FULL_CIRCLE_DEGREES) - HALF_CIRCLE_DEGREES;
 };
 
-const createBounds = (locations: MapLocation[]): MapEngineBounds | undefined => {
+export const createBounds = (locations: MapLocation[]): MapEngineBounds | undefined => {
   if (!locations.length) {
     return undefined;
   }
