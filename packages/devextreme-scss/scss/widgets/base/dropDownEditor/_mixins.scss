@@ -13,6 +13,20 @@
   @return calc(#{$invalid-badge-size} + #{$input-horizontal-padding});
 }
 
+/*
+ * The underlined editor has no inline padding, so interpolating it would leave a dead `0 +`
+ * in the calc. The icons term is returned unwrapped - it goes inside the outer calc() as is.
+ */
+@function lookup-field-padding($input-horizontal-padding, $icon-size, $icon-count, $spin-padding) {
+  $icons: if($icon-count == 1, "#{$icon-size}", "#{$icon-size} * #{$icon-count}");
+
+  @if meta.type-of($input-horizontal-padding) == number and $input-horizontal-padding == 0 {
+    @return calc(#{$icons} + #{$spin-padding});
+  }
+
+  @return calc(#{$input-horizontal-padding} + #{$icons} + #{$spin-padding});
+}
+
 @mixin invalid-dropdowneditor-input-padding(
   $invalid-badge-size,
   $texteditor-underlined-input-horizontal-padding,
