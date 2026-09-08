@@ -208,6 +208,54 @@ const noAction = [
   ['stale в наборах соседей', data.unusedRoles.stale.length, 'blazor и wpf ссылаются на имена, которых семантический слой не объявляет — их дрейф, не наш'],
 ];
 
+
+// --- Ж. покрытие и как его поднять
+const ncCount = data.summary.byVerdict['no-counterpart'];
+const ncPct = (ncCount / data.summary.declarations * 100).toFixed(1);
+const ncByFolder = {};
+for (const f of data.findings) {
+  if (f.package?.verdict !== 'no-counterpart') continue;
+  ncByFolder[f.folder] = (ncByFolder[f.folder] ?? 0) + 1;
+}
+const cov = base.coverage;
+let running = ncCount;
+const ladder = cov.levers.filter((l) => l.status !== 'сделано').map((l) => {
+  running -= l.covers;
+  return `<tr><td>${esc(l.id)}</td><td>${esc(l.lever)}</td><td>−${l.covers}</td>`
+    + `<td>${running} (${(running / data.summary.declarations * 100).toFixed(1)}%)</td></tr>`;
+}).join('');
+
+const coverageSection = `
+<p><b>${ncCount} цветовых объявлений из ${data.summary.declarations} — ${ncPct}% темы — сравнивать не с чем.</b>
+Это компоненты, которых нет ни у core, ни у vnext, ни у blazor, ни у wpf в пакете токенов. По ним
+работали только проверки темы против себя самой: семейство, слот против свойства, лестницы состояний,
+контраст и согласованность понятий между компонентами.</p>
+<table><tr><th>Папка</th><th>Объявлений</th></tr>
+${Object.entries(ncByFolder).sort((a, b2) => b2[1] - a[1])
+    .map(([f, c]) => `<tr><td>${esc(f)}</td><td>${c}</td></tr>`).join('')}
+</table>
+
+<h3>Чем это сокращается — измерено ${esc(cov.measuredOn)}</h3>
+<p>Числа сняты по репозиториям за пределами этого, поэтому инструмент их не пересчитывает: они
+забанкованы вместе с источником и протухнут заметно, если прочитать их рядом со свежим счётчиком выше.</p>
+${cov.levers.map((l) => q(l.id, `${esc(l.lever)} — ${l.status === 'сделано' ? '<b>сделано</b>' : `покрывает ${l.covers}`}`,
+    `<p>${esc(l.detail)}</p>`
+    + (l.status === 'сделано' ? '' : `<p class="meta"><b>Что нужно:</b> ${esc(l.needs)}</p>`))).join('')}
+
+<h3>Куда это приводит</h3>
+<table><tr><th></th><th>Рычаг</th><th>Покрывает</th><th>Останется</th></tr>
+<tr><td>—</td><td>сейчас</td><td></td><td>${ncCount} (${ncPct}%)</td></tr>
+${ladder}</table>
+<p>Ниже этого не опускается: <b>${cov.floor.declarations} объявлений</b> в папках
+${cov.floor.folders.map((f) => `<code>${esc(f)}</code>`).join(', ')}. ${esc(cov.floor.why)}</p>
+${cov.rejected.map((r) => `<p class="meta"><b>Померено и отброшено.</b> ${esc(r.lever)}: ${esc(r.why)}</p>`).join('')}
+
+<h3>Оговорка о самой проверке</h3>
+<p>Правки инструмента шли в одну сторону — к меньшему числу находок: конфликтов семейств 11 → 3,
+cross-family 24 → 15, кнопочных лестниц 8 → 0. Каждое сокращение проверено вручную и описано в
+коммите, но направление у них одно: скорее недосчитал, чем перебрал.</p>
+`;
+
 const questionsPage = page('Fluent-next: открытые вопросы по ролям', `
 <h1>Fluent-next: открытые вопросы по ролям</h1>
 <p class="lede">Всё, что аудит нашёл и не стал решать сам. Ответы можно давать номерами: «Д3 — второй вариант».<br>
@@ -253,14 +301,8 @@ ${data.unusedRoles.capability.map((u) => `<tr><td>${code(u.role.replace(/^color-
 ${noAction.map(([k, c, why]) => `<tr><td>${code(k)}</td><td>${c}</td><td>${esc(why)}</td></tr>`).join('')}
 </table>
 
-<h2>Ж. Чего эта проверка не видела</h2>
-<p><b>39% темы сравнить не с чем.</b> ${data.summary.byVerdict['no-counterpart']} цветовых объявлений
-из ${data.summary.declarations} — в компонентах, которых нет ни у core, ни у vnext, ни у blazor, ни у
-wpf: filterBuilder, gantt, scheduler, diagram, pivotGrid и других. По ним работали только проверки
-темы против себя самой; внешнего авторитета нет ни у пакета, ни у Fluent 2.</p>
-<p><b>Правки инструмента шли в одну сторону.</b> Конфликтов семейств 11 → 3, cross-family 24 → 15,
-кнопочных лестниц 8 → 0. Каждое сокращение проверено вручную и описано в коммите, но направление у
-них одно: скорее недосчитал, чем перебрал.</p>
+<h2>Ж. Чего эта проверка не видела, и как это сократить</h2>
+${coverageSection}
 `);
 
 writeFileSync(join(themeDir, 'ROLES_QUESTIONS.html'), questionsPage);

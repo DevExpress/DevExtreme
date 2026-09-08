@@ -104,14 +104,38 @@ footer { margin-top:4rem; padding-top:1rem; border-top:1px solid var(--line);
 <tr><td><code>confirmed</code></td><td>6</td><td>пакет назначает ровно эту роль — расходится только слово слота</td></tr><tr><td><code>rule-5</code></td><td>12</td><td>одно значение в двух свойствах, названо по доминирующей роли; принято ревью-раундом 2</td></tr><tr><td><code>hairline</code></td><td>11</td><td>волосяная линия фоном сохраняет border-роль; подтверждено core (у tabs это слот selector)</td></tr><tr><td><code>no-rung</code></td><td>22</td><td>состояния схлопнуты там же, где их схлопывает сама система</td></tr><tr><td><code>shade</code></td><td>15</td><td>то же семейство, другой оттенок — расхождение, которое компоненты вправе иметь</td></tr><tr><td><code>graphic-ok</code></td><td>2</td><td>глиф, порог 3:1 взят</td></tr><tr><td><code>bridge / known</code></td><td>2</td><td>уже инвентаризовано в BRIDGES.md и DIVERGENCES.md</td></tr><tr><td><code>stale в наборах соседей</code></td><td>10</td><td>blazor и wpf ссылаются на имена, которых семантический слой не объявляет — их дрейф, не наш</td></tr>
 </table>
 
-<h2>Ж. Чего эта проверка не видела</h2>
-<p><b>39% темы сравнить не с чем.</b> 226 цветовых объявлений
-из 714 — в компонентах, которых нет ни у core, ни у vnext, ни у blazor, ни у
-wpf: filterBuilder, gantt, scheduler, diagram, pivotGrid и других. По ним работали только проверки
-темы против себя самой; внешнего авторитета нет ни у пакета, ни у Fluent 2.</p>
-<p><b>Правки инструмента шли в одну сторону.</b> Конфликтов семейств 11 → 3, cross-family 24 → 15,
-кнопочных лестниц 8 → 0. Каждое сокращение проверено вручную и описано в коммите, но направление у
-них одно: скорее недосчитал, чем перебрал.</p>
+<h2>Ж. Чего эта проверка не видела, и как это сократить</h2>
+
+<p><b>226 цветовых объявлений из 714 — 31.7% темы — сравнивать не с чем.</b>
+Это компоненты, которых нет ни у core, ни у vnext, ни у blazor, ни у wpf в пакете токенов. По ним
+работали только проверки темы против себя самой: семейство, слот против свойства, лестницы состояний,
+контраст и согласованность понятий между компонентами.</p>
+<table><tr><th>Папка</th><th>Объявлений</th></tr>
+<tr><td>scheduler</td><td>43</td></tr><tr><td>filterBuilder</td><td>28</td></tr><tr><td>stepper</td><td>25</td></tr><tr><td>diagram</td><td>20</td></tr><tr><td>fileManager</td><td>20</td></tr><tr><td>pivotGrid</td><td>19</td></tr><tr><td>gantt</td><td>14</td></tr><tr><td>htmlEditor</td><td>13</td></tr><tr><td>slider</td><td>13</td></tr><tr><td>fileUploader</td><td>10</td></tr><tr><td>tileView</td><td>7</td></tr><tr><td>dateView</td><td>5</td></tr><tr><td>sortable</td><td>3</td></tr><tr><td>splitterBar</td><td>3</td></tr><tr><td>dropDownEditor</td><td>2</td></tr><tr><td>widget</td><td>1</td></tr>
+</table>
+
+<h3>Чем это сокращается — измерено 2026-09-09</h3>
+<p>Числа сняты по репозиториям за пределами этого, поэтому инструмент их не пересчитывает: они
+забанкованы вместе с источником и протухнут заметно, если прочитать их рядом со свежим счётчиком выше.</p>
+<div class="q"><span class="id">Р1</span>
+<div class="t">Карта «наша папка → компонент пакета» — <b>сделано</b></div><p>Карта сопоставляла по похожести имён. cardView — это пакетный grid (так его и мапит package-disabled.mjs), speedDialAction — button, lookup — listbox, actionSheet — popup, validation — field. Шесть строк, 277 → 226, и ни одного нового расхождения: все 51 попали в agrees.</p></div><div class="q"><span class="id">Р2</span>
+<div class="t">Реализация Blazor как пятый источник — покрывает 110</div><p>В пакете у Blazor 20 компонентов, в реализации (dxvcs/.../ds-themes/components) — 57, и роли он читает через тот же мост ds.$, что и мы: карта имён ролей не нужна. Имена папок опять другие: rollers — это dateView, edit-dropdown — dropDownEditor. Покрывает scheduler 43 (у них 38 ролей), filterBuilder 28 (59), pivotGrid 19, fileUploader 10, dateView 5, splitterBar 3, dropDownEditor 2.</p><p class="meta"><b>Что нужно:</b> парсер ds.$ по папкам + карта из семи строк</p></div><div class="q"><span class="id">Р3</span>
+<div class="t">Fluent UI React — покрывает 13</div><p>У Fluent есть Slider, и его стили называют девять цветовых токенов по частям. Но ни имена (colorCompoundBrandBackground против color-bg-primary-shared), ни значения (бренд #0078d4 против #0f6cbd) не совпадают — нужна разовая карта.</p><p class="meta"><b>Что нужно:</b> карта имён Fluent 2 → dxds, ~40-60 пар</p></div><div class="q"><span class="id">Р4</span>
+<div class="t">WPF — только на уровне семейства — покрывает 47</div><p>Компоненты у WPF есть (Gantt 12 xaml, Diagram 14, RichEdit 8), но их темы НЕ затокенизированы: семантические ключи вида AccordionHeaderBackgroundRest получают только компоненты из components/wpf, а Gantt и Diagram красятся легаси-палитрой Lightweight, где Color.Foreground.Primary — это литерал #FF1A1A1A. Зато Lightweight/Common/PaletteSemantics.md описывает смысл 142 ключей словами («Color.Border — primary border brush for controls»). Это сигнал уровня семейства (border / bg / content), а не роли, и он покрывает ровно то, чего нет больше нигде: gantt 14, diagram 20, htmlEditor 13.</p><p class="meta"><b>Что нужно:</b> разбор PaletteSemantics.md, 142 ключа</p></div>
+
+<h3>Куда это приводит</h3>
+<table><tr><th></th><th>Рычаг</th><th>Покрывает</th><th>Останется</th></tr>
+<tr><td>—</td><td>сейчас</td><td></td><td>226 (31.7%)</td></tr>
+<tr><td>Р2</td><td>Реализация Blazor как пятый источник</td><td>−110</td><td>116 (16.2%)</td></tr><tr><td>Р3</td><td>Fluent UI React</td><td>−13</td><td>103 (14.4%)</td></tr><tr><td>Р4</td><td>WPF — только на уровне семейства</td><td>−47</td><td>56 (7.8%)</td></tr></table>
+<p>Ниже этого не опускается: <b>56 объявлений</b> в папках
+<code>stepper</code>, <code>fileManager</code>, <code>tileView</code>, <code>sortable</code>, <code>widget</code>. Виджеты, которых нет ни в одной дизайн-системе. Единственный путь — дизайн-ревью по скриншотам.</p>
+<p class="meta"><b>Померено и отброшено.</b> Реализация vnext: 18 компонентов, все до одного уже описаны пакетом. Не добавляет ничего.</p>
+
+<h3>Оговорка о самой проверке</h3>
+<p>Правки инструмента шли в одну сторону — к меньшему числу находок: конфликтов семейств 11 → 3,
+cross-family 24 → 15, кнопочных лестниц 8 → 0. Каждое сокращение проверено вручную и описано в
+коммите, но направление у них одно: скорее недосчитал, чем перебрал.</p>
+
 
 <footer>Сгенерировано <code>node tools/review/roles-pages.mjs</code> ·
 пакет <code>@devexpress/design-tokens-internal@262.16.0</code> ·
