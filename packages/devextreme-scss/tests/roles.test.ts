@@ -66,6 +66,7 @@ const run = (theme?: string): {
   ladders: (Ladder & { unusedRungs: unknown[] })[];
   lowContrast: ContrastPair[];
   concepts: (Concept & { clusters: unknown[]; oneColour: boolean })[];
+  unusedRoles: { capability: { role: string }[]; stale: { role: string }[] };
 } => JSON.parse(
   execFileSync('node', [tool, '--json', ...(theme ? [`--theme=${theme}`] : [])], {
     encoding: 'utf8',
@@ -272,4 +273,15 @@ test('judgment calls stay recorded with what they went against', () => {
     .filter((c: Record<string, string>) => !c.what?.trim() || !c.basis?.trim() || !c.against?.trim())
     .map((c: Record<string, string>) => c.what);
   expect(incomplete).toEqual([]);
+});
+
+/*
+ * The one check that starts from the package rather than from our declarations. A whole family can
+ * be missing without any single declaration looking wrong - that is how the four focus roles stayed
+ * invisible until the component holding them was parsed at all. Exact equality both ways: a role
+ * leaving the list means the theme started using it, and that is a decision worth a diff.
+ */
+test('roles the package assigns and the theme never reads are the known ones', () => {
+  expect(actual.unusedRoles.capability.map((r) => r.role)).toEqual(baseline.unusedRoles.capability);
+  expect(actual.unusedRoles.stale.map((r) => r.role)).toEqual(baseline.unusedRoles.stale);
 });
