@@ -32,12 +32,12 @@
   $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
 );
 
-$fluent-pivotgrid-headers-font-size: 14px;
-$fluent-pivotgrid-area-font-size: 13px;
-$fluent-pivotgrid-chevron-icon-size: 20px;
+$fluent-pivotgrid-headers-font-size: 14px !default;
+$fluent-pivotgrid-area-font-size: 13px !default;
+$fluent-pivotgrid-chevron-icon-size: 20px !default;
 
-$fluent-pivotgrid-drag-header-shadow: 0 3px 4px color.change($base-shadow-color, $alpha: 0.15);
-$fluent-pivotgridfieldchooser-field-min-height: 36px;
+$fluent-pivotgrid-drag-header-shadow: 0 3px 4px color.change($base-shadow-color, $alpha: 0.15) !default;
+$fluent-pivotgridfieldchooser-field-min-height: 36px !default;
 
 .dx-pivotgrid-fields-container {
   &.dx-drag {

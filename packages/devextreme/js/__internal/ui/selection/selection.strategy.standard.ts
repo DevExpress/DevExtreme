@@ -139,11 +139,11 @@ export default class StandardStrategy<
       forceCombinedFilter,
     );
 
-    let deselectedItems = [];
+    let deselectedItems: TItem[] = [];
     if (isDeselect) {
       const { selectedItems } = this.options;
+      // @ts-expect-error dataQuery().toArray() is typed as unknown[]
       deselectedItems = combinedFilter && keys.length !== selectedItems.length
-        // @ts-expect-error dataQuery
         ? dataQuery(selectedItems).filter(combinedFilter).toArray()
         : selectedItems.slice(0);
     }
