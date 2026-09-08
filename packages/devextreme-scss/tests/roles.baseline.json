@@ -516,16 +516,6 @@
       "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
     },
     {
-      "name": "list-border-disabled",
-      "slot": "border",
-      "slotSays": "border",
-      "paints": [
-        "color"
-      ],
-      "decision": "design",
-      "why": "Re-read 09.09 and this is not a contrast question. The variable colours .dx-list-select-all-label::after, and exactly one rule in the bundle targets that pseudo-element - with no `content`, so it is never generated and the declaration paints nothing. The label's own disabled text is correct one line above, on --dx-list-content-disabled. Dead declaration, not a colour to pick."
-    },
-    {
       "name": "pivot-grid-accent-content",
       "slot": "content",
       "slotSays": "content",
