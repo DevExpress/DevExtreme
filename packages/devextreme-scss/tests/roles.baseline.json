@@ -1,13 +1,27 @@
 {
   "comment": [
-    "Declarations whose role the package disagrees with, as reviewed today.",
-    "Exact equality, not a ratchet down: a new disagreement and a resolved one both fail, because",
-    "both are a decision somebody has to record. Re-bank deliberately with UPDATE_ROLES_BASELINE=1 pnpm test.",
-    "cross-family  - the package uses this role, but only for a slot of another kind.",
-    "family-conflict - the package paints this slot from another family entirely.",
+    "Every role the package disagrees with, and what was decided about it.",
+    "",
+    "Exact equality, not a ratchet down: a new disagreement and a resolved one both fail, because both",
+    "are a decision somebody has to record. Re-bank deliberately with UPDATE_ROLES_BASELINE=1 pnpm test,",
+    "and fill in the decision - a banked entry without one fails too.",
+    "",
+    "verdict   cross-family   - the package uses this role, but only for a slot of another kind",
+    "          family-conflict - the package paints this slot from another family entirely",
+    "decision  confirmed   - the package assigns this very role here; only our slot word differs",
+    "          naming      - the role is right for what the property paints; the slot word is not",
+    "          rule-5      - one value in two roles, named after the dominant one (DIVERGENCES)",
+    "          bridge      - built with rgb(from role / a); the foundation names no role for it",
+    "          package-gap - no role of the right family exists; a request, not a swap",
+    "          design      - a correction would move a pixel, so it is not ours to make",
+    "",
     "typographyUnmarked - typography step reads that carry no marker at all. The px gate only looks at",
     "literals, so a step read slipped past it; these are banked until each one is routed to a role or",
-    "marked with a reason."
+    "marked with a reason.",
+    "",
+    "slotLies - the slot word contradicts the CSS property the bundle shows it painting. Same rules as",
+    "above: banked with a decision, exact equality. hairline and rule-5 are deliberate and stay; naming",
+    "is a rename wave waiting for a changelog, not a role defect."
   ],
   "open": [
     {
@@ -16,7 +30,9 @@
       "roles": [
         "color-bg-primary"
       ],
-      "slot": "content"
+      "slot": "content",
+      "decision": "rule-5",
+      "why": "one value paints the accent bar (background-color) and the caption (color) in base/chat/.../_mixins.scss:14,25 - dominant role recorded per rule 5. The text half wants content-primary in dark (#4b90d9 vs our #0f6cbd); same shape as the danger/success/warning fix of review round 1"
     },
     {
       "name": "color-view-handle-content",
@@ -24,7 +40,9 @@
       "roles": [
         "color-bg"
       ],
-      "slot": "content"
+      "slot": "content",
+      "decision": "naming",
+      "why": "goes to base as $handle-color and is a FILL - radial-gradient stops and inset box-shadows. color-bg is the right role; the slot word `content` is what disagrees"
     },
     {
       "name": "fieldset-field-value-invalid-content",
@@ -32,7 +50,9 @@
       "roles": [
         "color-border-danger"
       ],
-      "slot": "content"
+      "slot": "content",
+      "decision": "design",
+      "why": "reads color: in fieldset/_index.scss:33 from a border role. Dark matches content-danger, light does not: ours #ee726a against content-danger #c50f1f. A light-only defect"
     },
     {
       "name": "gallery-nav-button-bg",
@@ -40,7 +60,9 @@
       "roles": [
         "color-content-subtle"
       ],
-      "slot": "bg"
+      "slot": "bg",
+      "decision": "design",
+      "why": "a content role used as the scrim behind nav buttons over images. No bg role carries this value; the package paints its nav glyph with it, not the disc. Needs a scrim decision, not a swap"
     },
     {
       "name": "gallery-nav-button-bg-disabled",
@@ -48,39 +70,19 @@
       "roles": [
         "color-content-disabled"
       ],
-      "slot": "bg"
+      "slot": "bg",
+      "decision": "design",
+      "why": "same scrim question as gallery-nav-button-bg, disabled state"
     },
     {
-      "name": "grid-content-focused",
-      "verdict": "cross-family",
-      "roles": [
-        "color-content-inverted"
-      ],
-      "slot": "content"
-    },
-    {
-      "name": "popup-content-shadow-ambient",
+      "name": "load-indicator-segment-inner-border",
       "verdict": "family-conflict",
       "roles": [
-        "color-shadow-ambient"
+        "color-bg-primary-subtle"
       ],
-      "slot": "shadow-ambient"
-    },
-    {
-      "name": "popup-content-shadow-focused",
-      "verdict": "family-conflict",
-      "roles": [
-        "color-shadow-key"
-      ],
-      "slot": "shadow"
-    },
-    {
-      "name": "popup-content-shadow-key",
-      "verdict": "family-conflict",
-      "roles": [
-        "color-shadow-key"
-      ],
-      "slot": "shadow-key"
+      "slot": "border",
+      "decision": "package-gap",
+      "why": "border-color: from color-bg-primary-subtle because color-border-primary-subtle does not exist. Nothing to swap to - a role request"
     },
     {
       "name": "radio-button-invalid-bg",
@@ -88,7 +90,9 @@
       "roles": [
         "color-border-danger-shared"
       ],
-      "slot": "bg"
+      "slot": "bg",
+      "decision": "rule-5",
+      "why": "the ring's border-color and the dot's background-color travel as one value - recorded in DIVERGENCES as a rule-5 pair, accepted by review round 2"
     },
     {
       "name": "radio-button-invalid-bg-focused",
@@ -96,7 +100,9 @@
       "roles": [
         "color-border-danger-shared-active"
       ],
-      "slot": "bg"
+      "slot": "bg",
+      "decision": "rule-5",
+      "why": "see radio-button-invalid-bg"
     },
     {
       "name": "radio-button-invalid-bg-hovered",
@@ -104,15 +110,9 @@
       "roles": [
         "color-border-danger-shared-hovered"
       ],
-      "slot": "bg"
-    },
-    {
-      "name": "scroll-view-shadow",
-      "verdict": "family-conflict",
-      "roles": [
-        "color-shadow-key"
-      ],
-      "slot": "shadow"
+      "slot": "bg",
+      "decision": "rule-5",
+      "why": "see radio-button-invalid-bg"
     },
     {
       "name": "switch-handle-bg-disabled",
@@ -120,7 +120,9 @@
       "roles": [
         "color-content-disabled"
       ],
-      "slot": "bg"
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "see switch-handle-off-bg"
     },
     {
       "name": "switch-handle-off-bg",
@@ -128,7 +130,9 @@
       "roles": [
         "color-content-subtle"
       ],
-      "slot": "bg"
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the package paints the switch knob (its `trigger` slot) from exactly this role. Our role is right; only the slot word differs, because the property is background-color"
     },
     {
       "name": "switch-handle-on-shadow",
@@ -136,7 +140,9 @@
       "roles": [
         "color-content-inverted"
       ],
-      "slot": "shadow"
+      "slot": "shadow",
+      "decision": "bridge",
+      "why": "rgb(from color-content-inverted / .1) - the foundation names no switch shadow role, recorded in DIVERGENCES and inventoried in BRIDGES.md"
     },
     {
       "name": "switch-on-border-focused",
@@ -144,23 +150,9 @@
       "roles": [
         "color-bg-primary-active"
       ],
-      "slot": "border"
-    },
-    {
-      "name": "toolbar-separator-border",
-      "verdict": "cross-family",
-      "roles": [
-        "color-border-subtle"
-      ],
-      "slot": "border"
-    },
-    {
-      "name": "tree-view-border",
-      "verdict": "family-conflict",
-      "roles": [
-        "color-border"
-      ],
-      "slot": "border"
+      "slot": "border",
+      "decision": "design",
+      "why": "the only member of the on-border trio still on a bg role; its siblings were corrected. color-border-primary-shared-active matches in light and moves dark #003c70 -> #005397, so it is a pixel, not hygiene"
     },
     {
       "name": "tree-view-checkbox-accent-content-focused",
@@ -168,7 +160,9 @@
       "roles": [
         "color-bg-primary-hovered"
       ],
-      "slot": "content"
+      "slot": "content",
+      "decision": "rule-5",
+      "why": "paints background-color and border-color of the checkbox, never color: - a dual-role value whose name claims the content slot it does not use"
     },
     {
       "name": "tree-view-checkbox-border-disabled",
@@ -176,23 +170,9 @@
       "roles": [
         "color-content-disabled"
       ],
-      "slot": "border"
-    },
-    {
-      "name": "tree-view-checkbox-border-focused",
-      "verdict": "family-conflict",
-      "roles": [
-        "color-border"
-      ],
-      "slot": "border"
-    },
-    {
-      "name": "tree-view-checkbox-checked-border-focused",
-      "verdict": "family-conflict",
-      "roles": [
-        "color-border-primary-shared-active"
-      ],
-      "slot": "border"
+      "slot": "border",
+      "decision": "design",
+      "why": "border-color: from color-content-disabled. The package's checkbox separates them - border-disabled #d7d7d7/#4c4c4c against our #ababab/#767676. This is the answer to the journal's open question about the three roles split 06.08 out of one value"
     },
     {
       "name": "tree-view-checkbox-indeterminate-bg-disabled",
@@ -200,7 +180,9 @@
       "roles": [
         "color-content-disabled"
       ],
-      "slot": "bg"
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the package assigns content-disabled to indeterminate.icon.disabled - the dash is content. Our role is right; the slot word says bg because the property is background-color"
     },
     {
       "name": "valid-badge-content",
@@ -208,7 +190,9 @@
       "roles": [
         "color-bg-success"
       ],
-      "slot": "content"
+      "slot": "content",
+      "decision": "design",
+      "why": "reads color: in common/_mixins.scss:52 from a bg role. Light matches content-success exactly, dark does not: ours #107c10 against a #242424 surface where the content role gives #509f4b. A dark-only defect, invisible to every etalon"
     }
   ],
   "typographyUnmarked": [
@@ -276,6 +260,438 @@
       "variable": "typography-xs-font-size",
       "reads": "font-size-120",
       "roleExists": true
+    }
+  ],
+  "slotLies": [
+    {
+      "name": "color-view-border",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "box-shadow"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "color-view-border-disabled",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "box-shadow"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "color-view-handle-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background",
+        "box-shadow"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "date-view-roller-bottom-shadow",
+      "slot": "shadow",
+      "slotSays": "shadow",
+      "paints": [
+        "background-image"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "date-view-roller-top-shadow",
+      "slot": "shadow",
+      "slotSays": "shadow",
+      "paints": [
+        "background-image"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "diagram-selection-bg",
+      "slot": "bg",
+      "slotSays": "bg",
+      "paints": [
+        "fill"
+      ],
+      "decision": "known",
+      "why": "already inventoried as a divergence - the foundation names no role for it"
+    },
+    {
+      "name": "filter-builder-group-operation-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-group-operation-content-disabled",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-group-operation-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-group-operation-content-hovered",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-field-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-field-content-disabled",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-field-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-field-content-hovered",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-operator-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-operator-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-operator-content-hovered",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-value-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-value-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-value-content-hovered",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "gantt-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "border-color",
+        "border-left-color",
+        "border-top-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "grid-border-focused",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "list-border-disabled",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "color"
+      ],
+      "decision": "design",
+      "why": "a border role painting text: disabled list text sits at #d7d7d7 light / #4c4c4c dark where the content role gives #ababab / #767676. A contrast call, not hygiene"
+    },
+    {
+      "name": "pivot-grid-accent-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "border-color",
+        "outline-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "pivot-grid-grand-total-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "pivot-grid-total-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "radio-button-content-read-only",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "border-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "scheduler-appointment-content-active",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "scheduler-appointment-start-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "box-shadow"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "scheduler-workspace-cell-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "slider-accent-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background",
+        "border-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "slider-invalid-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "border-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "splitter-bar-border",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "splitter-bar-border-disabled",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "tabs-tab-basic-border-selected",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "tabs-tab-border-active",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "tabs-tab-border-disabled",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "design",
+      "why": "content-disabled painting the disabled tab indicator background; no bg role carries this value"
+    },
+    {
+      "name": "tabs-tab-border-hovered",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "tabs-tab-border-selected-active",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "tabs-tab-border-selected-focused",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "tabs-tab-border-selected-hovered",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "tree-view-checkbox-accent-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "border-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
     }
   ]
 }

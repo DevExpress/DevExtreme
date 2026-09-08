@@ -30,7 +30,7 @@
  * names the slots the package does use it for, which is usually the answer.
  */
 
-import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'fs';
 import { join, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
@@ -252,6 +252,7 @@ for (const file of colourFiles(themeDir)) {
       subElementSlots,
       state: state ?? 'rest',
       roles,
+      bridged: /rgb\(\s*from/.test(value),
       value: value.trim(),
     });
   });
@@ -280,6 +281,12 @@ const dissect = (path) => {
     const slot = trailing(tail[i], PARTS);
     if (slot) return { slot, state, variant: tail.slice(0, i).join('.') };
   }
+  /* `separator.color` and `backdrop.color` carry no slot segment because the component IS the slot:
+   * the package models them the way our system tier publishes them, as a thing rather than a part
+   * of a thing. Without this they fall out of the comparison entirely, and every `-separator-border`
+   * in the theme reads as a border nobody named. */
+  const asSlot = trailing(segments[0], PARTS);
+  if (asSlot) return { slot: asSlot, state, variant: tail.join('.') };
   return { slot: null, state, variant: tail.join('.') };
 };
 
@@ -369,6 +376,37 @@ for (const file of sizeFiles(themeDir)) {
   });
 }
 
+/*
+ * What each tier name actually paints, read out of the built bundle.
+ *
+ * The slot is supposed to encode the CSS property (NAMING.md: assigned in `color:` -> content, in
+ * `background-color` -> bg, in `border-color` -> border), and that is the one claim in the whole
+ * name that can be checked against ground truth instead of read. filterBuilder is why it is worth
+ * checking: fourteen `-content` variables reach base as `button-color($color, ...)`, which sets
+ * `background-color` - the roles were right all along and the names were not.
+ *
+ * Needs a built bundle; without one this half of the report is simply absent, the way the calc
+ * inventory in SCALES.md is.
+ */
+const PROPERTY_FAMILY = [
+  [/^(background|background-color|background-image)$/, 'bg'],
+  [/^(color|fill|caret-color|-webkit-text-fill-color)$/, 'content'],
+  [/(^|-)border(-|$)|^outline(-|$)|^stroke$|^border-color$/, 'border'],
+  [/shadow$/, 'shadow'],
+];
+const bundlePath = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');
+const paints = new Map();   // --dx-name -> Set(css property)
+if (existsSync(bundlePath)) {
+  const css = readFileSync(bundlePath, 'utf8');
+  for (const [, property, value] of css.matchAll(/([a-z-]+)\s*:\s*([^;{}]*var\(--dx-[^;{}]*)/g)) {
+    for (const [, name] of value.matchAll(/var\(\s*(--dx-[a-z0-9-]+)/g)) {
+      if (!paints.has(name)) paints.set(name, new Set());
+      paints.get(name).add(property);
+    }
+  }
+}
+const familyOfProperty = (property) => PROPERTY_FAMILY.find(([re]) => re.test(property))?.[1] ?? null;
+
 // --- the comparison -------------------------------------------------------------------------------
 
 const findings = [];
@@ -395,18 +433,31 @@ for (const declaration of declarations) {
       for (const candidate of [...candidates, ...SHARED]) {
         const tier = packageTier[set][candidate];
         if (!tier) continue;
-        seen.push({ set, component: candidate, tier });
+        seen.push({ set, component: candidate, tier, own: candidates.includes(candidate) });
       }
     }
     if (!seen.length) record.package = { verdict: 'no-counterpart' };
     else {
       const exact = [];
       const kin = [];
+      /* Whether the package uses our role for another part OF THE SAME widget or only somewhere
+       * else entirely. The first is a word disagreement - the package calls the switch knob a
+       * `trigger` and paints it from a content role, exactly as we do, and only our slot says `bg`.
+       * The second is the one worth a second look. */
+      const sameComponent = new Set();
       const crossFamily = new Map();
       const slotRoles = new Set();   // roles the package uses for our slot, or a kin slot
-      for (const { set, component, tier } of seen) {
+      for (const { set, component, tier, own } of seen) {
+        /*
+         * What the package offers HERE is gathered strictly: same family as our own slot, no
+         * sub-elements and no wildcard. `$popup-content-shadow-ambient` is a shadow that happens to
+         * live on the content area, and a scroll bar's thumb is ambiguous by design - letting
+         * either widen the candidate set turns a correct role into a conflict with roles that were
+         * never on offer. The lenient reading stays where it belongs: deciding whether our role
+         * already agrees with the package somewhere.
+         */
         for (const [pkgSlot, pkgRoles] of tier.bySlot) {
-          if (!ourSlots.some((ours) => kindred(pkgSlot, ours))) continue;
+          if (kinOf(pkgSlot) !== kinOf(slot) || kinOf(slot) === 'ambiguous') continue;
           for (const role of pkgRoles) slotRoles.add(role);
         }
         for (const role of roles) {
@@ -418,26 +469,52 @@ for (const declaration of declarations) {
             const key = usedIn.sort().join('|');
             if (!crossFamily.has(key)) crossFamily.set(key, []);
             crossFamily.get(key).push(`${set}/${component}`);
+            if (own) sameComponent.add(`${set}/${component}:${usedIn.join(',')}`);
           }
         }
       }
       const here = [...slotRoles].sort();
+      /* A role of the slot's own family used elsewhere for a different part is not a crossing - the
+       * package simply has not needed it here. Reserve `cross-family` for the case the name
+       * promises: the role belongs to another family than the slot paints with. */
+      const crosses = FAMILY[slot] && roles.some((role) => {
+        const family = familyOf(role);
+        return family !== 'none' && family !== FAMILY[slot];
+      });
       if (exact.length) record.package = { verdict: 'agrees', where: [...new Set(exact)] };
       else if (kin.length) record.package = { verdict: 'agrees-kin', where: [...new Set(kin)] };
-      else if (crossFamily.size) {
+      else if (crossFamily.size && crosses) {
         record.package = {
           verdict: 'cross-family',
           usedFor: [...crossFamily].map(([slots, where]) => ({ slots: slots.split('|'), where: [...new Set(where)] })),
+          sameComponent: [...sameComponent],
           packageUsesHere: here,
         };
+      } else if (crossFamily.size) {
+        record.package = { verdict: 'role-new', packageUsesHere: here };
       } else if (here.length) {
         const ourFamilies = new Set(roles.map(familyOf).filter((f) => f !== 'none'));
         const theirFamilies = new Set(here.map(familyOf).filter((f) => f !== 'none'));
-        const shared = [...ourFamilies].some((f) => theirFamilies.has(f));
-        record.package = { verdict: shared ? 'role-new' : 'family-conflict', packageUsesHere: here };
+        // Only `color-none` on offer is not a family to conflict with - the package simply paints
+        // nothing here, which says nothing about our role.
+        if (!theirFamilies.size) record.package = { verdict: 'slot-absent' };
+        else {
+          const shared = [...ourFamilies].some((f) => theirFamilies.has(f));
+          record.package = { verdict: shared ? 'role-new' : 'family-conflict', packageUsesHere: here };
+        }
       } else record.package = { verdict: 'slot-absent' };
     }
   }
+  const painted = [...(paints.get(`--dx-${declaration.name}`) ?? [])].sort();
+  if (painted.length) {
+    const families = [...new Set(painted.map(familyOfProperty).filter(Boolean))];
+    record.paints = { properties: painted, families };
+    // The slot claims a family; the bundle says which one the property actually belongs to.
+    if (FAMILY[slot] && families.length && !families.includes(FAMILY[slot])) {
+      record.slotLies = { slotSays: FAMILY[slot], propertySays: families };
+    }
+  }
+
   const here = record.package?.packageUsesHere ?? [];
   if (here.length && roles.length === 1) {
     const free = here.filter((candidate) => candidate !== roles[0] && sameValue(candidate, roles[0]));
@@ -475,6 +552,9 @@ const summary = {
   typographyOffGrid: typography.filter((t) => !t.roles.length).length,
   typographyUnmarked: typography.filter((t) => !t.marker).length,
   familyMismatch: count((f) => f.family),
+  slotLies: count((f) => f.slotLies),
+  familyMismatchExplainedByProperty: count((f) => f.family && f.slotLies
+    && f.slotLies.propertySays.some((fam) => f.family.got.includes(fam))),
   byVerdict: Object.fromEntries(verdicts.map((v) => [v, count((f) => f.package?.verdict === v)])),
 };
 
@@ -504,6 +584,7 @@ const md = () => {
   out.push('| Signal | Count |');
   out.push('|---|---|');
   out.push(`| family mismatch (slot wants another \`--dxds-\` family) | **${summary.familyMismatch}** |`);
+  out.push(`| slot contradicts the painted property | **${summary.slotLies}** |`);
   for (const verdict of verdicts) out.push(`| package: ${verdict} | ${summary.byVerdict[verdict]} |`);
   out.push('');
 
@@ -517,8 +598,11 @@ const md = () => {
   section('Cross-family - the package uses this role, but only for a slot of another kind',
     findings.filter((f) => f.package?.verdict === 'cross-family'),
     (f) => [
-      `- \`${f.name}\` = ${roleList(f.roles)}  (${f.where})`,
+      `- \`${f.name}\` = ${roleList(f.roles)}${f.bridged ? ' *(alpha bridge - see BRIDGES.md)*' : ''}  (${f.where})`,
       ...f.package.usedFor.map((u) => `    - package paints it as **${u.slots.join(', ')}** in ${u.where.join(', ')}`),
+      f.package.sameComponent?.length
+        ? '    - **same widget, different word**: the package uses this very role on another part of it'
+        : null,
       f.package.packageUsesHere.length
         ? `    - for our slot \`${f.slot}\` the package uses: ${f.package.packageUsesHere.map((r) => `\`${r}\``).join(', ')}`
         : `    - the package names no role for slot \`${f.slot}\` here`,
@@ -538,6 +622,21 @@ const md = () => {
     (f) => `- \`${f.name}\` = ${roleList(f.roles)}  (${f.where})\n`
       + `    - slot \`${f.family.slot}\` wants \`color-${f.family.want}-*\`, reads a \`${f.family.got.join('/')}\` role`
       + (f.package ? `; package verdict: ${f.package.verdict}` : ''));
+
+  const lies = findings.filter((f) => f.slotLies);
+  out.push(`## The slot does not match the property it paints - ${lies.length}\n`);
+  out.push('Read out of the built bundle, so this is what the browser gets, not what the name claims.');
+  out.push('Most are the name and not the role: fourteen filterBuilder `-content` variables reach base as');
+  out.push('`button-color()`, which sets `background-color`, and the bg roles they carry were right all');
+  out.push('along. Two idioms are deliberate and stay - a hairline drawn with `background-color` keeps its');
+  out.push('border role, and a value that paints two properties is named after the dominant one (rule 5).\n');
+  out.push('| Where | Variable | Reads | Slot says | Actually paints |');
+  out.push('|---|---|---|---|---|');
+  for (const f of lies) {
+    out.push(`| ${f.where} | \`${f.name}\` | ${roleList(f.roles)} | \`${f.slot}\` (${f.slotLies.slotSays}) `
+      + `| ${f.paints.properties.map((x) => `\`${x}\``).join(', ')} |`);
+  }
+  out.push('');
 
   const offGrid = typography.filter((t) => !t.roles.length);
   const onGridUnrouted = typography.filter((t) => t.roles.length);

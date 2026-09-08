@@ -29,12 +29,25 @@ type Finding = {
   roles: string[];
   package?: { verdict: string };
 };
-type Open = { name: string; verdict: string; roles: string[]; slot: string | null };
+type Open = {
+  name: string; verdict: string; roles: string[]; slot: string | null;
+  decision?: string; why?: string;
+};
+
+const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'design'];
+const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design'];
+
+type SlotLie = {
+  name: string; slot: string | null; slotSays: string; paints: string[];
+  decision?: string; why?: string;
+};
 
 type Typography = { variable: string; family: string; step: number; marker: string | null; roles: string[] };
 
 const run = (theme?: string): {
-  summary: Record<string, unknown>; findings: Finding[]; typography: Typography[];
+  summary: Record<string, unknown>;
+  findings: (Finding & { slot?: string | null; slotLies?: { slotSays: string }; paints?: { properties: string[] } })[];
+  typography: Typography[];
 } => JSON.parse(
   execFileSync('node', [tool, '--json', ...(theme ? [`--theme=${theme}`] : [])], {
     encoding: 'utf8',
@@ -60,7 +73,10 @@ const unmarked = (typography: Typography[]) => typography
 if (process.env.UPDATE_ROLES_BASELINE) {
   writeFileSync(baselinePath, `${JSON.stringify({
     ...baseline,
-    open: disagreements(actual.findings),
+    open: disagreements(actual.findings).map((entry) => {
+      const previous = baseline.open.find((o: Open) => o.name === entry.name);
+      return { ...entry, decision: previous?.decision, why: previous?.why };
+    }),
     typographyUnmarked: unmarked(actual.typography),
   }, null, 2)}\n`);
 }
@@ -75,7 +91,20 @@ test('every colour declaration reaches a verdict', () => {
  * one is a decision that belongs in the commit that made it. Both have to be banked on purpose.
  */
 test('the roles the package disagrees with are the reviewed ones', () => {
-  expect(disagreements(actual.findings)).toEqual(baseline.open);
+  const banked = baseline.open.map(({ decision, why, ...rest }: Open) => rest);
+  expect(disagreements(actual.findings)).toEqual(banked);
+});
+
+/*
+ * A banked disagreement with no decision is the failure mode this whole report exists to prevent:
+ * a role nobody chose, sitting in a list nobody reads. The list is the record, so it carries the
+ * reasoning, not just the names.
+ */
+test('every banked disagreement carries a decision and a reason', () => {
+  const undecided = baseline.open
+    .filter((o: Open) => !o.decision || !DECISIONS.includes(o.decision) || !o.why?.trim())
+    .map((o: Open) => o.name);
+  expect(undecided).toEqual([]);
 });
 
 // A green gate has to mean "nothing to find", not "the scan matched nothing".
@@ -115,4 +144,36 @@ test('a role the package names for the slot passes', () => {
  */
 test('typography step reads with no marker are the known ones', () => {
   expect(unmarked(actual.typography)).toEqual(baseline.typographyUnmarked);
+});
+
+/*
+ * The slot is the one claim in a name that can be checked against ground truth: NAMING.md says the
+ * CSS property decides it, and the built bundle says which property the value reaches. Where the two
+ * disagree the name misdescribes the code - sometimes deliberately (a hairline drawn with
+ * background-color is still a border), sometimes not (fourteen filterBuilder `-content` variables
+ * that have never painted text). Banked with the reason either way.
+ *
+ * Needs the built bundle; with none there is nothing to read and the case would pass vacuously, so
+ * it asserts the scan found something first.
+ */
+test('names whose slot contradicts the painted property are the reviewed ones', () => {
+  const lies = actual.findings
+    .filter((f) => f.slotLies)
+    .map((f) => ({
+      name: f.name,
+      slot: f.slot ?? null,
+      slotSays: f.slotLies!.slotSays,
+      paints: f.paints!.properties,
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  expect(lies.length).toBeGreaterThan(0);
+  expect(lies).toEqual(baseline.slotLies.map(({ decision, why, ...rest }: SlotLie) => rest));
+});
+
+test('every banked slot mismatch carries a decision and a reason', () => {
+  const undecided = baseline.slotLies
+    .filter((o: SlotLie) => !o.decision || !SLOT_DECISIONS.includes(o.decision) || !o.why?.trim())
+    .map((o: SlotLie) => o.name);
+  expect(undecided).toEqual([]);
 });
