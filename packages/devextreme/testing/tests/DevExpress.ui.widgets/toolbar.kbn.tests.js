@@ -29,7 +29,7 @@ import { DROP_DOWN_BUTTON_CLASS } from '__internal/ui/drop_down_button';
 
 import { TEXTEDITOR_CLASS, TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/text_editor.base';
 import { TEXTBOX_CLASS } from '__internal/ui/text_box/text_box';
-import { WIDGET_CLASS as NUMBERBOX_CLASS } from '__internal/ui/number_box/m_number_box.base';
+import { WIDGET_CLASS as NUMBERBOX_CLASS } from '__internal/ui/number_box/number_box.base';
 import { SELECTBOX_CLASS } from '__internal/ui/select_box';
 
 import { SWITCH_CLASS } from '__internal/ui/switch';

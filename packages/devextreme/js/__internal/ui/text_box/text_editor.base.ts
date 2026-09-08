@@ -34,6 +34,15 @@ import { TextEditorLabel } from './text_editor.label';
 import type { TextEditorButtonInfo } from './texteditor_button_collection/index';
 import TextEditorButtonCollection from './texteditor_button_collection/index';
 
+export interface TextEditorInputAttributes {
+  autocomplete: string;
+
+  placeholder: string | null;
+
+  // eslint-disable-next-line spellcheck/spell-checker
+  inputmode?: string;
+}
+
 export interface TextEditorInternalProperties extends EditorInternalProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   displayValueFormatter?: ((value: string | any[]) => string);
@@ -446,12 +455,7 @@ class TextEditorBase<
     return value;
   }
 
-  _getDefaultAttributes(): {
-    autocomplete: string;
-    placeholder: string | null;
-    // eslint-disable-next-line spellcheck/spell-checker
-    inputmode?: string;
-  } {
+  _getDefaultAttributes(): TextEditorInputAttributes {
     const defaultAttributes = {
       autocomplete: 'off',
       placeholder: this._getPlaceholderAttr(),
@@ -773,7 +777,7 @@ class TextEditorBase<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _keyPressHandler(e?: { originalEvent: InputEvent & KeyboardEvent }): void {
+  _keyPressHandler(e?: DxEvent): void {
     this.option('text', this._input().val());
   }
 
