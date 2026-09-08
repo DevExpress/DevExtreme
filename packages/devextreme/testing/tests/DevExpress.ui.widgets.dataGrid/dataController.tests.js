@@ -344,7 +344,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // assert
         assert.ok(dataSource._disposed, 'dataSource is disposed');
-        assert.strictEqual(this.dataController._dataSource, null, 'dataSourceAdapter is removed');
+        assert.strictEqual(this.dataSourceController.getAdapter(), null, 'dataSourceAdapter is removed');
     });
 
     // T697860
@@ -503,7 +503,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
 
         // assert
-        assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'name', isExpanded: true, desc: false }, { selector: 'age', isExpanded: true, desc: false }]);
+        assert.deepEqual(this.dataSourceController.getAdapter().group(), [{ selector: 'name', isExpanded: true, desc: false }, { selector: 'age', isExpanded: true, desc: false }]);
         assert.equal(this.dataController.items()[0].data.key, 'Alex');
         assert.equal(this.dataController.items()[1].data.key, 30);
         assert.equal(changedCallCount, 1, 'changed called one time'); // T122785
@@ -535,7 +535,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.resetDataSource();
 
         // assert
-        assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'name', isExpanded: false, desc: false }]);
+        assert.deepEqual(this.dataSourceController.getAdapter().group(), [{ selector: 'name', isExpanded: false, desc: false }]);
         assert.equal(this.dataController.items()[0].data.key, 'Alex');
         assert.deepEqual(this.dataController.items()[0].data.collapsedItems, [{ name: 'Alex', age: 30 }]);
         assert.equal(this.dataController.items()[0].data.items, null);
@@ -577,7 +577,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(loadingCount, 1, 'loading called one time');
 
         // assert
-        assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'name', isExpanded: true, desc: false }]);
+        assert.deepEqual(this.dataSourceController.getAdapter().group(), [{ selector: 'name', isExpanded: true, desc: false }]);
         assert.equal(this.dataController.items()[0].data.key, 'Alex');
         assert.equal(this.dataController.items()[0].data.items.length, 1);
 
@@ -590,7 +590,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(changedCallCount, 1, 'changed called one time');
         // T372049
         assert.equal(loadingCount, 1, 'loading is not called on collapseAll');
-        assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'name', isExpanded: false, desc: false }]);
+        assert.deepEqual(this.dataSourceController.getAdapter().group(), [{ selector: 'name', isExpanded: false, desc: false }]);
         assert.equal(this.dataController.items()[0].data.key, 'Alex');
         assert.strictEqual(this.dataController.items()[0].data.items, null);
     });
@@ -632,7 +632,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.deepEqual(loadingArgs[0].group, [{ selector: 'name', isExpanded: true, desc: false }], 'loading group arg');
 
         // assert
-        assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'name', isExpanded: true, desc: false }]);
+        assert.deepEqual(this.dataSourceController.getAdapter().group(), [{ selector: 'name', isExpanded: true, desc: false }]);
         assert.equal(this.dataController.items()[0].data.key, 'Alex');
         assert.equal(this.dataController.items()[0].data.items.length, 1);
 
@@ -645,7 +645,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(changedCallCount, 1, 'changed called one time after collapseAll');
         // T372049
         assert.equal(loadingArgs.length, 1, 'loading is not called after collapseAll');
-        assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'name', isExpanded: false, desc: false }]);
+        assert.deepEqual(this.dataSourceController.getAdapter().group(), [{ selector: 'name', isExpanded: false, desc: false }]);
         assert.equal(this.dataController.items()[0].data.key, 'Alex');
         assert.strictEqual(this.dataController.items()[0].data.items, null);
     });
@@ -873,8 +873,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act
         this.dataController.resetDataSource();
-        const dataIndexGetter = this.dataController._dataSource.getDataIndexGetter();
-        this.dataController._dataSource.getDataIndexGetter();
+        const dataIndexGetter = this.dataSourceController.getAdapter().getDataIndexGetter();
         assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ desc: false, selector: dataIndexGetter }], 'Sort parameters');
         // assert
         assert.equal(dataSource.items()[0].name, 'Alex', 'Item0');
@@ -1955,7 +1954,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.resetDataSource();
 
         // assert
-        assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'team', isExpanded: true, desc: false }]);
+        assert.deepEqual(this.dataSourceController.getAdapter().group(), [{ selector: 'team', isExpanded: true, desc: false }]);
         assert.equal(this.dataController.items()[0].data.key, 'internal');
         assert.equal(this.dataController.items()[1].data.name, 'Bob');
     });
@@ -2028,7 +2027,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.setDataSource(dataSource);
         dataSource.load();
 
-        assert.ok(this.dataController._dataSource.group());
+        assert.ok(this.dataSourceController.getAdapter().group());
         assert.equal(this.dataController.items()[0].rowType, 'group');
     });
 
@@ -2080,8 +2079,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // assert
-        assert.deepEqual(this.dataController._dataSource.sort(), [{ selector: 'age', desc: false }], 'sort from user state is applied by dataField');
-        assert.deepEqual(this.dataController._dataSource.group(), null, 'group from user state not applied because dataSource not has name column');
+        assert.deepEqual(this.dataSourceController.getAdapter().sort(), [{ selector: 'age', desc: false }], 'sort from user state is applied by dataField');
+        assert.deepEqual(this.dataSourceController.getAdapter().group(), null, 'group from user state not applied because dataSource not has name column');
         assert.deepEqual(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].values, [20]);
         assert.deepEqual(this.dataController.items()[1].values, [25]);
@@ -3579,7 +3578,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     // B233350
     QUnit.test('virtual items on end when visibleRowsCount < pageSize and last page size greater than half page size', function(assert) {
         const dataController = this.dataController;
-        dataController._dataSource.store().remove(999);
+        this.dataSourceController.getAdapter().store().remove(999);
         dataController.refresh();
         dataController.setViewportItemIndex(998);
         assert.strictEqual(this.dataController.pageIndex(), 49);
@@ -3683,7 +3682,7 @@ const setupVirtualRenderingModule = function() {
 
     this.dataController.viewportItemSize(10);
     this.dataController.viewportSize(10);
-    this.dataController._dataSource._renderTime = 50;
+    this.dataSourceController.getAdapter()._renderTime = 50;
 
     this.clock.tick(10);
 
@@ -5700,7 +5699,7 @@ QUnit.module('Infinite scrolling', {
     // T193217
     QUnit.test('setViewportItemIndex to end current page several times load next page one time', function(assert) {
         let loadingCount = 0;
-        this.dataController._dataSource.customizeStoreLoadOptions.add(function() {
+        this.dataSourceController.getAdapter().customizeStoreLoadOptions.add(function() {
             loadingCount++;
         });
         // act
@@ -7845,7 +7844,7 @@ QUnit.module('Filtering', {
             columns: [{ dataField: 'name', selectedFilterOperation: 'contains', filterValue: 'Al' }, 'age']
         });
 
-        this.dataController._dataSource.changed.add(function() {
+        this.dataSourceController.getAdapter().changed.add(function() {
             dataSourceChanged = true;
         });
 
@@ -7867,7 +7866,7 @@ QUnit.module('Filtering', {
             columns: [{ dataField: 'name', selectedFilterOperation: 'contains', filterValue: 'Al' }, 'age']
         });
 
-        this.dataController._dataSource.changed.add(function() {
+        this.dataSourceController.getAdapter().changed.add(function() {
             dataSourceChanged = true;
         });
 
@@ -7889,7 +7888,7 @@ QUnit.module('Filtering', {
             columns: [{ dataField: 'name', selectedFilterOperation: 'contains' }, 'age']
         });
 
-        this.dataController._dataSource.changed.add(function() {
+        this.dataSourceController.getAdapter().changed.add(function() {
             dataSourceChanged = true;
         });
 
@@ -14411,7 +14410,7 @@ QUnit.module('Using DataSource instance', {
         this.clock.tick(10);
 
         assert.equal(this.columnsController.getGroupColumns().length, 1, 'grouped columns count');
-        assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'field1', desc: false, isExpanded: true }], 'dataSource group when autoExpandAll true');
+        assert.deepEqual(this.dataSourceController.getAdapter().group(), [{ selector: 'field1', desc: false, isExpanded: true }], 'dataSource group when autoExpandAll true');
 
         // act
         this.option('grouping.autoExpandAll', false);
@@ -14420,7 +14419,7 @@ QUnit.module('Using DataSource instance', {
 
         // assert
         assert.equal(this.columnsController.getGroupColumns().length, 1, 'grouped columns count');
-        assert.deepEqual(this.dataController._dataSource.group(), [{ selector: 'field1', desc: false, isExpanded: false }], 'dataSource group when autoExpandAll false');
+        assert.deepEqual(this.dataSourceController.getAdapter().group(), [{ selector: 'field1', desc: false, isExpanded: false }], 'dataSource group when autoExpandAll false');
         assert.equal(this.dataController.totalItemsCount(), 2);
         assert.equal(this.dataController.items().length, 2);
     });

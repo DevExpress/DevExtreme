@@ -9,6 +9,7 @@ import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/data_controller';
+import type { DataSourceController } from '../data_source/data_source_controller';
 import type { EditingController } from '../editing/m_editing';
 import { isNewRowTempKey } from '../editing/m_editing_utils';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
@@ -534,8 +535,11 @@ const focusEditorFactoryViewControllerExtender = (
 const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExtender extends Base {
   protected focusController!: FocusController;
 
+  protected dataSourceController!: DataSourceController;
+
   public init(isApplyingUserState?: boolean): void {
     this.focusController = this.getController('focus');
+    this.dataSourceController = this.getController('dataSource');
 
     super.init(isApplyingUserState);
   }
@@ -543,9 +547,8 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
   public getSortDataSourceParameters(_, sortByKey?) {
     // @ts-expect-error
     let result = super.getSortDataSourceParameters.apply(this, arguments);
-    const dataSource = this._dataController._dataSource;
-    let key = dataSource?.store()?.key();
-    const remoteOperations = dataSource && dataSource.remoteOperations() || {};
+    let key = this.dataSourceController.key();
+    const remoteOperations = this.dataSourceController.remoteOperations();
     const isLocalOperations = Object.keys(remoteOperations).every((operationName) => !remoteOperations[operationName]);
 
     if (key && (this.option('focusedRowEnabled') && this.focusController.isAutoNavigateToFocusedRow() !== false || sortByKey)) {
@@ -555,7 +558,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
       if (notSortedKeys.length) {
         result = result || [];
         if (isLocalOperations) {
-          result.push({ selector: dataSource?.getDataIndexGetter(), desc: false });
+          result.push({ selector: this.dataSourceController.getDataIndexGetter(), desc: false });
         } else {
           notSortedKeys.forEach((notSortedKey) => result.push({ selector: notSortedKey, desc: false }));
         }
