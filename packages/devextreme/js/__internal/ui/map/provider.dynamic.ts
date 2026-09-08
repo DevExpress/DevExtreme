@@ -1,11 +1,9 @@
 import Class from '@js/core/class';
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import type { DxEvent } from '@js/events';
 import type { RouteMode } from '@js/ui/map';
 
-import type Map from './map';
 import Provider from './provider';
 import type { AzureLocation } from './provider.dynamic.azure';
 import type { BingLocation } from './provider.dynamic.bing';
@@ -56,7 +54,7 @@ export interface RouteObject {
   southWest?: [number, number];
 }
 
-class DynamicProvider extends Provider {
+class DynamicProvider<TLocation = GoogleLocation | BingLocation | AzureLocation> extends Provider {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _bounds?: any;
 
@@ -64,33 +62,47 @@ class DynamicProvider extends Provider {
 
   _routes!: (RouteObject & { options: RouteOptions })[];
 
-  _geocodedLocations: Record<string, GoogleLocation | BingLocation | AzureLocation>;
+  _geocodedLocations = new Map<string, TLocation>();
+
+  _pendingGeocodedLocations = new Map<string, Promise<TLocation>>();
 
   _mapsLoader?: Promise<void>;
 
-  constructor(map: Map, $container: dxElementWrapper) {
-    super(map, $container);
-
-    this._geocodedLocations = {};
-  }
-
   _geocodeLocation(
     location: string,
-  ): Promise<GoogleLocation | BingLocation | AzureLocation> {
-    return new Promise((resolve) => {
-      const cache = this._geocodedLocations;
-      const cachedLocation = cache[location];
-      if (cachedLocation) {
-        resolve(cachedLocation);
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this._geocodeLocationImpl(location)
-          .then((geocodedLocation) => {
-            cache[location] = geocodedLocation;
-            resolve(geocodedLocation);
-          });
-      }
-    });
+  ): Promise<TLocation> {
+    if (this._geocodedLocations.has(location)) {
+      return Promise.resolve(this._geocodedLocations.get(location) as TLocation);
+    }
+
+    const pendingLocation = this._pendingGeocodedLocations.get(location);
+    if (pendingLocation) {
+      return pendingLocation;
+    }
+
+    const geocoding = this._geocodeLocationImpl(location).then(
+      (geocodedLocation) => {
+        this._pendingGeocodedLocations.delete(location);
+        if (this._isGeocodedLocationValid(geocodedLocation)) {
+          this._geocodedLocations.set(location, geocodedLocation);
+        }
+
+        return geocodedLocation;
+      },
+      (error) => {
+        this._pendingGeocodedLocations.delete(location);
+
+        return Promise.reject(error);
+      },
+    );
+
+    this._pendingGeocodedLocations.set(location, geocoding);
+
+    return geocoding;
+  }
+
+  _isGeocodedLocationValid(location: TLocation): boolean {
+    return location !== undefined && location !== null;
   }
 
   _renderImpl(): Promise<void> {
@@ -282,8 +294,8 @@ class DynamicProvider extends Provider {
   _geocodeLocationImpl(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     location: string,
-  ): Promise<GoogleLocation | BingLocation | AzureLocation> {
-    return Promise.resolve([0, 0]);
+  ): Promise<TLocation> {
+    return Promise.resolve([0, 0] as TLocation);
   }
 
   _clearRoutes(): void {

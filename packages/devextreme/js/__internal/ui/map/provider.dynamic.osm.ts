@@ -117,35 +117,16 @@ const areLocationsEqual = (
   && Math.abs(first.lat - second.lat) < LOCATION_EPSILON
   && Math.abs(first.lng - second.lng) < LOCATION_EPSILON;
 
-class OsmProvider extends DynamicProvider {
+class OsmProvider extends DynamicProvider<MapLocation | undefined> {
   _engine?: MapEngine;
 
   _engineMap?: MapEngineMap;
 
   _currentTileType?: MapType;
 
-  _calculatedLocations = new Map<string, MapLocation>();
-
-  _pendingLocationCalculations = new Map<string, Promise<MapLocation>>();
-
   _boundLocations: MapLocation[] = [];
 
-  _generation = 0;
-
-  render(markers: MarkerOptions[], routes: RouteOptions[]): Promise<unknown> {
-    const generation = this._generation;
-
-    return super.render(markers, routes).then(
-      (result) => (generation === this._generation ? result : false),
-      (error) => {
-        if (generation !== this._generation) {
-          return false;
-        }
-
-        throw error;
-      },
-    );
-  }
+  _calculateLocationWarningLogged = false;
 
   _loadImpl(): Promise<void> {
     const window = getWindow() as Window & { ol?: unknown };
@@ -242,50 +223,37 @@ class OsmProvider extends DynamicProvider {
   }
 
   _calculateLocation(query: string): Promise<MapLocation> {
-    const cachedLocation = this._calculatedLocations.get(query);
-    if (cachedLocation) {
-      return Promise.resolve(cachedLocation);
-    }
-    const pendingCalculation = this._pendingLocationCalculations.get(query);
-    if (pendingCalculation) {
-      return pendingCalculation;
-    }
+    return this._geocodeLocation(query).then((location) => location ?? getDefaultLocation());
+  }
 
+  _geocodeLocationImpl(query: string): Promise<MapLocation | undefined> {
     const calculateLocation = this._option('providerConfig')?.calculateLocation;
     if (!calculateLocation) {
-      errors.log('W1031');
+      if (!this._calculateLocationWarningLogged) {
+        errors.log('W1031');
+        this._calculateLocationWarningLogged = true;
+      }
 
-      return Promise.resolve(getDefaultLocation());
+      return Promise.resolve(undefined);
     }
 
-    const generation = this._generation;
-
-    const calculation = Promise.resolve()
+    return Promise.resolve()
       .then(() => calculateLocation(query))
       .then((location) => {
         if (location
           && Number.isFinite(location.lat)
           && Number.isFinite(location.lng)) {
-          const result = { lat: location.lat, lng: location.lng };
-          if (generation === this._generation) {
-            this._calculatedLocations.set(query, result);
-          }
-
-          return result;
+          return { lat: location.lat, lng: location.lng };
         }
 
-        return getDefaultLocation();
-      }, () => getDefaultLocation());
+        errors.log('W1006', 'The calculateLocation callback returned an invalid location.');
 
-    this._pendingLocationCalculations.set(query, calculation);
+        return undefined;
+      }, (error) => {
+        errors.log('W1006', error);
 
-    return calculation.then((location) => {
-      if (this._pendingLocationCalculations.get(query) === calculation) {
-        this._pendingLocationCalculations.delete(query);
-      }
-
-      return location;
-    });
+        return undefined;
+      });
   }
 
   _attachHandlers(): void {
@@ -462,16 +430,6 @@ class OsmProvider extends DynamicProvider {
     });
   }
 
-  addMarkers(markers: MarkerOptions[]): Promise<[boolean, unknown[]]> {
-    return super.addMarkers(markers).catch((error) => {
-      if (error === STALE_OPERATION) {
-        return [false, []];
-      }
-
-      throw error;
-    });
-  }
-
   _destroyMarker(marker: EngineMarkerObject): void {
     marker.engineMarker.dispose();
   }
@@ -521,9 +479,6 @@ class OsmProvider extends DynamicProvider {
   }
 
   clean(): Promise<void> {
-    this._generation += 1;
-    this._calculatedLocations.clear();
-    this._pendingLocationCalculations.clear();
     if (this._engineMap) {
       this._clearMarkers();
     }

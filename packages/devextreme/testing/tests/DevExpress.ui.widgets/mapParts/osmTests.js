@@ -847,7 +847,7 @@ QUnit.module('OSM: location calculation', moduleConfig, () => {
             }
         });
     });
-    QUnit.test('missing calculateLocation logs W1031 and uses the default location', function(assert) {
+    QUnit.test('missing calculateLocation logs W1031 once and uses the default location', function(assert) {
         const done = assert.async();
         const log = sinon.stub(errors, 'log');
         const provider = createProvider();
@@ -856,6 +856,12 @@ QUnit.module('OSM: location calculation', moduleConfig, () => {
                 lat: 0,
                 lng: 0
             }, 'default location is returned');
+            return provider._resolveLocation('Another place');
+        }).then(location => {
+            assert.deepEqual(location, {
+                lat: 0,
+                lng: 0
+            }, 'default location is returned for subsequent queries');
             assert.ok(log.calledOnceWithExactly('W1031'), 'W1031 is logged');
             log.restore();
             done();
@@ -917,6 +923,7 @@ QUnit.module('OSM: location calculation', moduleConfig, () => {
     });
     QUnit.test('an invalid callback result is not cached', function(assert) {
         const done = assert.async();
+        const log = sinon.stub(errors, 'log');
         const calculateLocation = sinon.stub();
         calculateLocation.onFirstCall().returns(Promise.resolve(undefined));
         calculateLocation.onSecondCall().returns(Promise.resolve({
@@ -942,13 +949,17 @@ QUnit.module('OSM: location calculation', moduleConfig, () => {
                 lng: -73.98
             }, 'callback is retried');
             assert.ok(calculateLocation.calledTwice, 'invalid result is not cached');
+            assert.ok(log.calledOnceWithExactly('W1006', 'The calculateLocation callback returned an invalid location.'), 'invalid result is reported');
+            log.restore();
             done();
         });
     });
     QUnit.test('a rejected callback result is not cached', function(assert) {
         const done = assert.async();
+        const log = sinon.stub(errors, 'log');
+        const rejection = new Error('service unavailable');
         const calculateLocation = sinon.stub();
-        calculateLocation.onFirstCall().returns(Promise.reject(new Error('service unavailable')));
+        calculateLocation.onFirstCall().returns(Promise.reject(rejection));
         calculateLocation.onSecondCall().returns(Promise.resolve({
             lat: 40.74,
             lng: -73.98
@@ -972,6 +983,8 @@ QUnit.module('OSM: location calculation', moduleConfig, () => {
                 lng: -73.98
             }, 'callback is retried');
             assert.ok(calculateLocation.calledTwice, 'rejected result is not cached');
+            assert.ok(log.calledOnceWithExactly('W1006', rejection), 'service rejection is reported');
+            log.restore();
             done();
         });
     });
@@ -1139,8 +1152,10 @@ QUnit.module('OSM: location calculation', moduleConfig, () => {
             lat: 40.74,
             lng: -73.98
         });
-        add.then(result => {
-            assert.deepEqual(result, [false, []], 'the stale marker operation is canceled');
+        add.then(() => {
+            assert.ok(false, 'the stale marker operation should reject');
+            done();
+        }, () => {
             assert.ok(addMarker.notCalled, 'no marker is added to the disposed engine map');
             done();
         });

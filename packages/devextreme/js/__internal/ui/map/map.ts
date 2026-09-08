@@ -369,9 +369,10 @@ class Map extends Widget<MapProperties> {
   ): Promise<void> {
     const markerAndRoutes = [markers, routes].filter(Boolean);
     const isActionSuppressed = this._suppressAsyncAction;
+    const provider = this._provider;
 
     this._lastAsyncAction = this._lastAsyncAction.then(() => {
-      if (!this._provider || isActionSuppressed) {
+      if (!provider || provider !== this._provider || isActionSuppressed) {
         /// #DEBUG
         this._asyncActionSuppressed = true;
         /// #ENDDEBUG
@@ -379,7 +380,11 @@ class Map extends Widget<MapProperties> {
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return this._provider[name](...markerAndRoutes).then((result) => {
+      return provider[name](...markerAndRoutes).then((result) => {
+        if (provider !== this._provider || this._disposed) {
+          return undefined;
+        }
+
         const arrayResult = wrapToArray(result);
 
         const mapRefreshed = arrayResult[0];
@@ -394,6 +399,12 @@ class Map extends Widget<MapProperties> {
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return arrayResult[1];
+      }, (error) => {
+        if (provider !== this._provider || this._disposed) {
+          return undefined;
+        }
+
+        return Promise.reject(error);
       });
     });
 
