@@ -285,3 +285,16 @@ test('roles the package assigns and the theme never reads are the known ones', (
   expect(actual.unusedRoles.capability.map((r) => r.role)).toEqual(baseline.unusedRoles.capability);
   expect(actual.unusedRoles.stale.map((r) => r.role)).toEqual(baseline.unusedRoles.stale);
 });
+
+/*
+ * The coverage numbers come from repositories outside this one, so the tool cannot recompute them.
+ * They are banked with their measurement date instead, and this only holds their shape - the point
+ * is that a lever without a measured size or a stated cost is a suggestion, not a plan.
+ */
+test('every coverage lever is measured and costed', () => {
+  const bad = baseline.coverage.levers
+    .filter((l: Record<string, unknown>) => !l.id || !l.lever || typeof l.covers !== 'number' || !l.detail || !l.needs)
+    .map((l: Record<string, unknown>) => l.id ?? '(без id)');
+  expect(bad).toEqual([]);
+  expect(baseline.coverage.floor.declarations).toBeGreaterThan(0);
+});

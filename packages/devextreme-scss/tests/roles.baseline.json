@@ -1860,5 +1860,65 @@
       "color-content-subtle-selected",
       "color-content-subtler-disabled"
     ]
+  },
+  "coverage": {
+    "comment": [
+      "How much of the theme has an external counterpart to compare against, and what it would cost to",
+      "raise that. Measured 09.09.2026 against repositories outside this one, so the tool cannot",
+      "recompute it - the numbers are banked with their source and go stale on purpose, loudly, when",
+      "someone reads them next to a fresh no-counterpart count."
+    ],
+    "measuredOn": "2026-09-09",
+    "levers": [
+      {
+        "id": "Р1",
+        "lever": "Карта «наша папка → компонент пакета»",
+        "status": "сделано",
+        "covers": 51,
+        "needs": "ничего — источник тот же",
+        "detail": "Карта сопоставляла по похожести имён. cardView — это пакетный grid (так его и мапит package-disabled.mjs), speedDialAction — button, lookup — listbox, actionSheet — popup, validation — field. Шесть строк, 277 → 226, и ни одного нового расхождения: все 51 попали в agrees."
+      },
+      {
+        "id": "Р2",
+        "lever": "Реализация Blazor как пятый источник",
+        "status": "предложение",
+        "covers": 110,
+        "needs": "парсер ds.$ по папкам + карта из семи строк",
+        "detail": "В пакете у Blazor 20 компонентов, в реализации (dxvcs/.../ds-themes/components) — 57, и роли он читает через тот же мост ds.$, что и мы: карта имён ролей не нужна. Имена папок опять другие: rollers — это dateView, edit-dropdown — dropDownEditor. Покрывает scheduler 43 (у них 38 ролей), filterBuilder 28 (59), pivotGrid 19, fileUploader 10, dateView 5, splitterBar 3, dropDownEditor 2."
+      },
+      {
+        "id": "Р3",
+        "lever": "Fluent UI React",
+        "status": "предложение",
+        "covers": 13,
+        "needs": "карта имён Fluent 2 → dxds, ~40-60 пар",
+        "detail": "У Fluent есть Slider, и его стили называют девять цветовых токенов по частям. Но ни имена (colorCompoundBrandBackground против color-bg-primary-shared), ни значения (бренд #0078d4 против #0f6cbd) не совпадают — нужна разовая карта."
+      },
+      {
+        "id": "Р4",
+        "lever": "WPF — только на уровне семейства",
+        "status": "предложение",
+        "covers": 47,
+        "needs": "разбор PaletteSemantics.md, 142 ключа",
+        "detail": "Компоненты у WPF есть (Gantt 12 xaml, Diagram 14, RichEdit 8), но их темы НЕ затокенизированы: семантические ключи вида AccordionHeaderBackgroundRest получают только компоненты из components/wpf, а Gantt и Diagram красятся легаси-палитрой Lightweight, где Color.Foreground.Primary — это литерал #FF1A1A1A. Зато Lightweight/Common/PaletteSemantics.md описывает смысл 142 ключей словами («Color.Border — primary border brush for controls»). Это сигнал уровня семейства (border / bg / content), а не роли, и он покрывает ровно то, чего нет больше нигде: gantt 14, diagram 20, htmlEditor 13."
+      }
+    ],
+    "rejected": [
+      {
+        "lever": "Реализация vnext",
+        "why": "18 компонентов, все до одного уже описаны пакетом. Не добавляет ничего."
+      }
+    ],
+    "floor": {
+      "declarations": 56,
+      "folders": [
+        "stepper",
+        "fileManager",
+        "tileView",
+        "sortable",
+        "widget"
+      ],
+      "why": "Виджеты, которых нет ни в одной дизайн-системе. Единственный путь — дизайн-ревью по скриншотам."
+    }
   }
 }
