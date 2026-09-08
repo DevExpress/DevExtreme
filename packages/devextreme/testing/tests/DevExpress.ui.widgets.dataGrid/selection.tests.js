@@ -3192,7 +3192,7 @@ QUnit.module('Selection when grouping', {
         this.dataController.pageIndex(1);
         this.selectionController.changeItemSelection(1);
 
-        assert.ok(this.dataController._dataSource.items()[0].isContinuation);
+        assert.ok(this.dataSourceController.getAdapter().items()[0].isContinuation);
         assert.ok(!this.dataController.items()[0].isSelected);
         assert.ok(this.dataController.items()[1].isSelected);
         assert.ok(!this.dataController.items()[2].isSelected);

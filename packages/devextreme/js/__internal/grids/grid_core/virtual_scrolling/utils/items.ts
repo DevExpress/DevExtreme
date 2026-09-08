@@ -30,9 +30,9 @@ export const correctCount = (
 
 export const isItemCountableByDataSource = (
   item: ProcessedItem,
-  dataSource: GroupCountableDataSource,
+  dataSourceAdapter: GroupCountableDataSource | null | undefined,
 ): boolean => (item.rowType === 'data' && !item.isNewRow)
-  || (item.rowType === 'group' && dataSource.isGroupItemCountable(item.data));
+  || (item.rowType === 'group' && (dataSourceAdapter?.isGroupItemCountable(item.data) ?? false));
 
 export const updateItemIndices = (items: ProcessedItem[]): ProcessedItem[] => {
   items.forEach((item, index) => {
