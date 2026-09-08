@@ -259,3 +259,17 @@ test('every banked concept split carries a decision and a reason', () => {
     .map((c: Concept) => c.concept);
   expect(undecided).toEqual([]);
 });
+
+/*
+ * Provenance. Most decisions above are read off the package or off a threshold; a few are not, and
+ * a fixed item leaves its list taking the reasoning with it. This keeps those visible - notably the
+ * checkBox mark, where the repo rule (the property decides the slot) and the package's modelling
+ * (the mark is an icon) point opposite ways and the colour is identical either way.
+ */
+test('judgment calls stay recorded with what they went against', () => {
+  expect(baseline.judgmentCalls.length).toBeGreaterThan(0);
+  const incomplete = baseline.judgmentCalls
+    .filter((c: Record<string, string>) => !c.what?.trim() || !c.basis?.trim() || !c.against?.trim())
+    .map((c: Record<string, string>) => c.what);
+  expect(incomplete).toEqual([]);
+});

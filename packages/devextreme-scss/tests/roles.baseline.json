@@ -36,7 +36,10 @@
     "several roles across components. This is the only check that asks the question the task is named",
     "after; every other one reads a single declaration. decision spelling means the roles resolve to one",
     "colour and differ only in family, shade means same family different value, design means the",
-    "components disagree about the colour itself."
+    "components disagree about the colour itself.",
+    "",
+    "judgmentCalls - where the decision was not read off the package or a standard. Kept because a",
+    "fixed item leaves the lists above and its reasoning would leave with it."
   ],
   "open": [
     {
@@ -1654,6 +1657,36 @@
       ],
       "decision": "shade",
       "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    }
+  ],
+  "judgmentCalls": [
+    {
+      "what": "checkBox invalid mark: content-danger-shared* -> bg-danger-shared* (3 declarations)",
+      "against": "the package models this element as an icon and paints it from content roles (core/checkbox.color.checked.default.icon.rest = content-inverted; blazor paints the invalid mark as icon)",
+      "basis": "the repo's own rule, NAMING.md: the CSS property decides the slot, and the bundle shows background-color",
+      "cost": "none rendered - the two spellings resolve to the same colour in both modes. What differs is which name a future palette change moves",
+      "open": true
+    },
+    {
+      "what": "the hairline idiom: a border role drawn with background-color keeps the border role (11 declarations left as they are)",
+      "against": "nothing - but no guideline states it either",
+      "basis": "three places in the theme agree (tabs, splitterBar, gridBase), and core/tabs confirms it independently: its selected-tab bar is a `selector` slot painted from border-primary-shared",
+      "cost": "none - nothing was changed on this basis, it only kept 11 names off the defect list",
+      "open": false
+    },
+    {
+      "what": "the classifiers themselves: the slot->family table, the kinship table, the folder->component map, the shared cross-cutting list",
+      "against": "nothing - they encode NAMING.md, but the specific 30-slot mapping and which slots count as ambiguous are mine",
+      "basis": "seeded from registries.json and the ROOTS map in package-disabled.mjs; every finding they produce carries its own evidence, so a wrong classifier shows up as a wrong finding rather than a hidden bias",
+      "cost": "three revisions during the audit already removed seven false conflicts and eight false ladders",
+      "open": false
+    },
+    {
+      "what": "no Microsoft Fluent 2 documentation was consulted at any point",
+      "against": "nothing claimed otherwise, but it bounds the whole report",
+      "basis": "everything Fluent here arrives through @devexpress/design-tokens-internal - a Figma export of DevExpress's own Fluent-derived system - and the three sibling products' component tiers",
+      "cost": "where all four sets are silent (277 declarations, 22 folders) there is no external authority in this report at all, only the theme against itself",
+      "open": true
     }
   ]
 }
