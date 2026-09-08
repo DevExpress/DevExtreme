@@ -569,6 +569,8 @@
     "fluent-next/checkBox/_index.scss: $check-box-arrow-icon-size",
     "fluent-next/checkBox/_index.scss: $check-box-indeterminate-icon-height",
     "fluent-next/checkBox/_index.scss: $check-box-indeterminate-icon-width",
+    "fluent-next/diagram/_index.scss: $diagram-icon-margin-inline-end",
+    "fluent-next/diagram/_index.scss: $diagram-icon-margin-inline-start",
     "fluent-next/gridBase/_index.scss: $grid-cell-padding-block",
     "fluent-next/gridBase/_index.scss: $grid-cell-padding-block",
     "fluent-next/gridBase/_index.scss: $grid-cell-padding-inline",
