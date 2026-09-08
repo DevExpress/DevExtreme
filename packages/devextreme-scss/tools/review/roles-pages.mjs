@@ -10,7 +10,7 @@
  * is closed rather than curated.
  */
 
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { dirname, join, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
@@ -22,6 +22,21 @@ const base = JSON.parse(readFileSync(join(packageRoot, 'tests', 'roles.baseline.
 const data = JSON.parse(execSync('node tools/review/roles.mjs --json', {
   cwd: packageRoot, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
 }));
+
+/*
+ * --check makes a stale page a red test instead of something to remember. The pages are the
+ * deliverable, and a generated file that is only regenerated when somebody thinks of it will
+ * eventually disagree with the data it claims to show - which already happened once, when a
+ * hardcoded "39%" sat next to a computed 226 of 714.
+ */
+const checkOnly = process.argv.includes('--check');
+const stale = [];
+const emit = (name, html) => {
+  const path = join(themeDir, name);
+  if (!checkOnly) { writeFileSync(path, html); console.log(name); return; }
+  const current = existsSync(path) ? readFileSync(path, 'utf8') : null;
+  if (current !== html) stale.push(name);
+};
 
 const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 const code = (s) => `<code>${esc(s)}</code>`;
@@ -362,8 +377,7 @@ ${coverageSection}
 ${agreementSection}
 `);
 
-writeFileSync(join(themeDir, 'ROLES_QUESTIONS.html'), questionsPage);
-console.log('ROLES_QUESTIONS.html');
+emit('ROLES_QUESTIONS.html', questionsPage);
 
 // ---------------------------------------------------------------------------------------------
 // страница 2 — типографика
@@ -486,5 +500,13 @@ ${weightQ}${headingQ}${sizeQ}${lhQ}${onGridQ}
 а не «заодно».</p>
 `);
 
-writeFileSync(join(themeDir, 'ROLES_TYPOGRAPHY.html'), typoPage);
-console.log('ROLES_TYPOGRAPHY.html');
+emit('ROLES_TYPOGRAPHY.html', typoPage);
+
+if (checkOnly) {
+  if (!stale.length) console.log('страницы совпадают с данными');
+  else {
+    console.error(`страницы устарели: ${stale.join(', ')}`);
+    console.error('перегенерируйте: node tools/review/roles-pages.mjs');
+    process.exit(1);
+  }
+}
