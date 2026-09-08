@@ -123,7 +123,7 @@ export const virtualScrollingDataControllerExtender = (
         const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
         const { component } = this;
         const scrollable = component.getScrollable && component.getScrollable();
-        const isSortingOperation = this.dataSource()?.operationTypes()?.sorting;
+        const isSortingOperation = this.dataSourceController.operationTypes()?.sorting;
 
         if (scrollable && !isSortingOperation && rowIndex >= 0) {
           const rowElement = component.getRowElement(rowIndex);

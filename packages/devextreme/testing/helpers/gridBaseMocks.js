@@ -1214,6 +1214,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         options && options.controllers && $.extend(that._controllers, options.controllers);
         options && options.views && $.extend(that._views, options.views);
 
+        const mockedDataController = options && options.controllers && options.controllers.data;
+        if(mockedDataController && mockedDataController.dataSource && that._controllers.dataSource) {
+            const mockedAdapter = mockedDataController.dataSource() || null;
+            that._controllers.dataSource.getAdapter = function() { return mockedAdapter; };
+        }
+
         $.each(that._controllers, function(name) {
             that[name + 'Controller'] = this;
             this.init && this.init();

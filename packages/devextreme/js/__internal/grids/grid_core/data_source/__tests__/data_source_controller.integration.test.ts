@@ -33,6 +33,12 @@ const OTHER_DATA = [
   { id: 3, parentId: 0, value: 'c' },
 ];
 
+// These assertions pin the _dataSource mirror, so they have to read the protected field rather
+// than a delegating method.
+const getMirroredAdapter = (
+  instance: { getController: (name: 'data') => unknown },
+): unknown => (instance.getController('data') as { _dataSource?: unknown })._dataSource;
+
 interface TreeListInstance extends TreeList {
   getController: <T extends keyof Controllers>(name: T) => Controllers[T];
 }
@@ -103,7 +109,7 @@ describe('dataSource controller holds the adapter', () => {
   it('holds the same adapter object as DataController', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
-    const adapter = instance.getController('data').dataSource();
+    const adapter = getMirroredAdapter(instance);
 
     expect(adapter).toBeTruthy();
     expect(dataSourceController.hasAdapter()).toBe(true);
@@ -113,14 +119,13 @@ describe('dataSource controller holds the adapter', () => {
   it('follows the rebuilt adapter when the dataSource option changes', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
-    const dataController = instance.getController('data');
     const firstAdapter = dataSourceController.getAdapter();
 
     instance.option('dataSource', OTHER_DATA);
     await flushAsync();
 
     expect(dataSourceController.getAdapter()).not.toBe(firstAdapter);
-    expect(dataSourceController.getAdapter()).toBe(dataController.dataSource());
+    expect(dataSourceController.getAdapter()).toBe(getMirroredAdapter(instance));
   });
 
   it('releases the adapter when the dataSource option is cleared', async () => {
@@ -132,7 +137,7 @@ describe('dataSource controller holds the adapter', () => {
 
     expect(dataSourceController.hasAdapter()).toBe(false);
     expect(dataSourceController.getAdapter()).toBeNull();
-    expect(instance.getController('data').dataSource()).toBeUndefined();
+    expect(getMirroredAdapter(instance)).toBeNull();
     expect(dataSourceController.getDataSource()).toBeNull();
     expect(dataSourceController.store()).toBeUndefined();
   });
@@ -147,7 +152,7 @@ describe('dataSource controller holds the adapter', () => {
     await flushAsync();
 
     expect(dataSourceController.hasAdapter()).toBe(true);
-    expect(dataSourceController.getAdapter()).toBe(instance.getController('data').dataSource());
+    expect(dataSourceController.getAdapter()).toBe(getMirroredAdapter(instance));
   });
 
   it('still holds the same adapter after a refresh', async () => {
@@ -159,18 +164,17 @@ describe('dataSource controller holds the adapter', () => {
     await refreshed;
 
     expect(dataSourceController.hasAdapter()).toBe(true);
-    expect(dataSourceController.getAdapter()).toBe(instance.getController('data').dataSource());
+    expect(dataSourceController.getAdapter()).toBe(getMirroredAdapter(instance));
   });
 
   it('releases the adapter on dispose', async () => {
     const { $container, instance } = await createDataGrid({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
-    const dataController = instance.getController('data');
 
     instance.dispose();
     $container.remove();
 
-    expect(dataController.dataSource()).toBeUndefined();
+    expect(getMirroredAdapter(instance)).toBeNull();
     expect(dataSourceController.hasAdapter()).toBe(false);
   });
 
@@ -181,7 +185,7 @@ describe('dataSource controller holds the adapter', () => {
       const dataSourceController = instance.getController('dataSource');
 
       expect(dataSourceController.hasAdapter()).toBe(true);
-      expect(dataSourceController.getAdapter()).toBe(instance.getController('data').dataSource());
+      expect(dataSourceController.getAdapter()).toBe(getMirroredAdapter(instance));
     } finally {
       disposeTreeList($container);
     }

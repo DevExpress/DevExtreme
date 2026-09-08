@@ -538,8 +538,7 @@ QUnit.module('Header Filter', {
 
         that.setupDataGrid();
 
-        that.dataController.dataSource = noop;
-
+        that.dataSourceController.getAdapter = noop;
 
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
