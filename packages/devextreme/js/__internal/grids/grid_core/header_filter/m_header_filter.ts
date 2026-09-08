@@ -16,7 +16,10 @@ import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibilit
 import filterUtils from '@js/ui/shared/filtering';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
+import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type { FilterSourceContext } from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -494,20 +497,21 @@ export function invertFilterExpression(filter) {
   return ['!', filter];
 }
 
-const data = (Base: ModuleType<DataController>) => class DataControllerFilterRowExtender extends Base {
+const filterController = (
+  Base: ModuleType<FilterController>,
+) => class FilterControllerHeaderFilterExtender extends Base {
   private skipCalculateColumnFilters() {
     return false;
   }
 
-  protected calculateAdditionalFilter() {
+  public getAdditionalFilter(context: FilterSourceContext): DataFilter {
     if (this.skipCalculateColumnFilters()) {
-      return super.calculateAdditionalFilter();
+      return super.getAdditionalFilter(context);
     }
 
-    const that = this;
-    const filters = [super.calculateAdditionalFilter()];
-    const columns = that._columnsController.getVisibleColumns(null, true);
-    const excludedColumn = this.getFilterExcludedColumn();
+    const filters = [super.getAdditionalFilter(context)];
+    const columns = this.columnsController.getVisibleColumns(null, true);
+    const { excludedColumn } = context;
 
     each(columns, (_, column) => {
       let filter;
@@ -577,7 +581,7 @@ export const headerFilterModule = {
   },
   extenders: {
     controllers: {
-      data,
+      filter: filterController,
     },
     views: {
       columnHeadersView,

@@ -16,9 +16,11 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type { FilterSourceContext } from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -815,20 +817,22 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-const data = (Base: ModuleType<DataController>) => class DataControllerFilterRowExtender extends Base {
+const filterController = (
+  Base: ModuleType<FilterController>,
+) => class FilterControllerFilterRowExtender extends Base {
   private skipCalculateColumnFilters() {
     return false;
   }
 
-  protected calculateAdditionalFilter() {
+  public getAdditionalFilter(context: FilterSourceContext): DataFilter {
     if (this.skipCalculateColumnFilters()) {
-      return super.calculateAdditionalFilter();
+      return super.getAdditionalFilter(context);
     }
 
-    const filters = [super.calculateAdditionalFilter()];
-    const columns = this._columnsController.getVisibleColumns(null, true);
+    const filters = [super.getAdditionalFilter(context)];
+    const columns = this.columnsController.getVisibleColumns(null, true);
 
-    const excludedColumn = this.getFilterExcludedColumn();
+    const { excludedColumn } = context;
 
     each(columns, function () {
       const shouldSkip = excludedColumn?.index === this.index;
@@ -1050,7 +1054,7 @@ export const filterRowModule = {
   },
   extenders: {
     controllers: {
-      data,
+      filter: filterController,
       columnsResizer,
       editing,
     },

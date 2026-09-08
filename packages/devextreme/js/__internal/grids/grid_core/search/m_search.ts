@@ -13,6 +13,8 @@ import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import type { DataController } from '../data_controller/data_controller';
 import type { DataFilter, UserState } from '../data_controller/types';
+import type { FilterController } from '../filter/filter_controller';
+import type { FilterSourceContext } from '../filter/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType, OptionChanged } from '../m_types';
@@ -69,23 +71,27 @@ const dataController = (
     };
   }
 
-  protected calculateAdditionalFilter(): DataFilter {
-    const dataSource = this.getDataSource();
-    const langParams = dataSource?.loadOptions?.()?.langParams;
+  public searchByText(text: string | undefined): void {
+    this.option('searchPanel.text', text);
+  }
+};
 
-    const filter = super.calculateAdditionalFilter();
-    const searchFilter = this.calculateSearchFilter(this.option('searchPanel.text'), langParams);
+const filterController = (
+  base: ModuleType<FilterController>,
+) => class FilterControllerSearchExtender extends base {
+  public getAdditionalFilter(context: FilterSourceContext): DataFilter {
+    const filter = super.getAdditionalFilter(context);
+    const searchFilter = this.calculateSearchFilter(
+      this.option('searchPanel.text'),
+      context.langParams,
+    );
 
     return gridCoreUtils.combineFilters([filter, searchFilter]);
   }
 
-  public searchByText(text: string | undefined): void {
-    this.option('searchPanel.text', text);
-  }
-
   private calculateSearchFilter(text: string | undefined, langParams?: LangParams): DataFilter {
     let column;
-    const columns = this._columnsController.getColumns();
+    const columns = this.columnsController.getColumns();
     const searchVisibleColumnsOnly = this.option('searchPanel.searchVisibleColumnsOnly');
     let lookup;
     const filters: any[] = [];
@@ -426,6 +432,7 @@ export const searchModule = {
   extenders: {
     controllers: {
       data: dataController,
+      filter: filterController,
     },
     views: {
       rowsView,
