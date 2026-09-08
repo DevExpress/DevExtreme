@@ -221,6 +221,11 @@ const sameValue = (a, b) => MODES.every((mode) => {
 
 // --- the theme side -----------------------------------------------------------------------------
 
+/*
+ * Block comments are blanked, not removed: dropping them shifts every line number after the first
+ * one in a file, and this whole report is line references. typography/_sizes.scss:69 was printed
+ * as :65 because of a four-line comment above it.
+ */
 const colourFiles = (dir) => readdirSync(dir).flatMap((entry) => {
   const absolute = join(dir, entry);
   if (statSync(absolute).isDirectory()) return colourFiles(absolute);
@@ -230,7 +235,7 @@ const colourFiles = (dir) => readdirSync(dir).flatMap((entry) => {
 const declarations = [];
 for (const file of colourFiles(themeDir)) {
   const folder = relative(themeDir, file).split('/')[0];
-  const source = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  const source = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ''));
   source.split('\n').forEach((line, index) => {
     if (/^\s*\/\//.test(line)) return;
     const match = /^\s*\$([a-z0-9-]+)\s*:\s*(.+?)(?:\s*!default)?\s*;/.exec(line);
@@ -364,7 +369,7 @@ const sizeFiles = (dir) => readdirSync(dir).flatMap((entry) => {
 });
 for (const file of sizeFiles(themeDir)) {
   const folder = relative(themeDir, file).split('/')[0];
-  readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').split('\n').forEach((line, index) => {
+  readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, '')).split('\n').forEach((line, index) => {
     if (/^\s*\/\//.test(line)) return;
     const read = /ds\.\$(font-size|font-weight|line-height)-(\d+)/.exec(line);
     if (!read) return;
