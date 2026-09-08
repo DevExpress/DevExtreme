@@ -4,7 +4,7 @@ import {
     getCaretInBoundaries,
     isCaretInBoundaries,
     getCaretAfterFormat,
-} from '__internal/ui/number_box/m_number_box.caret';
+} from '__internal/ui/number_box/number_box.caret';
 
 QUnit.module('format caret', () => {
     const customFormat = {
