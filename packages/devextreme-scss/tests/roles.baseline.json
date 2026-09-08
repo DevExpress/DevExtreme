@@ -53,6 +53,36 @@
       "why": "one value paints the accent bar (background-color) and the caption (color) in base/chat/.../_mixins.scss:14,25 - dominant role recorded per rule 5. The text half wants content-primary in dark (#4b90d9 vs our #0f6cbd); same shape as the danger/success/warning fix of review round 1"
     },
     {
+      "name": "check-box-invalid-mark-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
+      "name": "check-box-invalid-mark-bg-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-active"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
+      "name": "check-box-invalid-mark-bg-hovered",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
       "name": "color-view-handle-content",
       "verdict": "cross-family",
       "roles": [
@@ -703,7 +733,7 @@
         "color-bg-hovered"
       ],
       "decision": "design",
-      "why": "pressing the header looks exactly like hovering it: both read color-bg-hovered while the system ships color-bg-active (#e1e1e1 light / #1d1d1d dark), which the theme already uses elsewhere"
+      "why": "pressing the header looks exactly like hovering it: both read color-bg-hovered while the system ships color-bg-active (#e1e1e1 light / #1d1d1d dark), which the theme already uses elsewhere. Fluent 2 settles the principle: colorSubtleBackgroundHover #f5f5f5 and colorSubtleBackgroundPressed #e0e0e0 are separate tokens there, and the package mirrors those values as color-bg-hovered / color-bg-active. Still not applied here - conforming would move a pixel away from legacy fluent, and NFR-1 is the product's call, not the audit's"
     },
     {
       "stem": "button-danger-contained-content",
@@ -968,7 +998,7 @@
         "color-bg"
       ],
       "decision": "design",
-      "why": "rest and hovered are one value while active is not - the slot clearly means to ladder and the hovered rung is flat. color-bg-hovered exists"
+      "why": "rest and hovered are one value while active is not - the slot clearly means to ladder and the hovered rung is flat. color-bg-hovered exists. Fluent 2 ladders a subtle surface from transparent through colorSubtleBackgroundHover, though a tile is not obviously that control - weaker evidence than the accordion"
     },
     {
       "stem": "tree-view-content",
@@ -1294,16 +1324,22 @@
       "concept": "invalid bg focused",
       "roles": [
         "color-bg-danger-shared-active",
+        "color-content-danger-shared-active",
         "color-border-danger-shared-active"
       ],
       "families": [
         "bg",
+        "content",
         "border"
       ],
       "members": [
         {
           "folder": "checkBox",
           "role": "color-bg-danger-shared-active"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared-active"
         },
         {
           "folder": "radioButton",
@@ -1317,17 +1353,23 @@
       "concept": "invalid bg hovered",
       "roles": [
         "color-bg-danger-shared-hovered",
+        "color-content-danger-shared-hovered",
         "color-border-danger-shared-hovered",
         "color-border-danger"
       ],
       "families": [
         "bg",
+        "content",
         "border"
       ],
       "members": [
         {
           "folder": "checkBox",
           "role": "color-bg-danger-shared-hovered"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared-hovered"
         },
         {
           "folder": "radioButton",
@@ -1360,6 +1402,10 @@
         {
           "folder": "checkBox",
           "role": "color-bg-danger-shared"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared"
         },
         {
           "folder": "common",
@@ -1661,13 +1707,6 @@
   ],
   "judgmentCalls": [
     {
-      "what": "checkBox invalid mark: content-danger-shared* -> bg-danger-shared* (3 declarations)",
-      "against": "the package models this element as an icon and paints it from content roles (core/checkbox.color.checked.default.icon.rest = content-inverted; blazor paints the invalid mark as icon)",
-      "basis": "the repo's own rule, NAMING.md: the CSS property decides the slot, and the bundle shows background-color",
-      "cost": "none rendered - the two spellings resolve to the same colour in both modes. What differs is which name a future palette change moves",
-      "open": true
-    },
-    {
       "what": "the hairline idiom: a border role drawn with background-color keeps the border role (11 declarations left as they are)",
       "against": "nothing - but no guideline states it either",
       "basis": "three places in the theme agree (tabs, splitterBar, gridBase), and core/tabs confirms it independently: its selected-tab bar is a `selector` slot painted from border-primary-shared",
@@ -1682,11 +1721,39 @@
       "open": false
     },
     {
-      "what": "no Microsoft Fluent 2 documentation was consulted at any point",
-      "against": "nothing claimed otherwise, but it bounds the whole report",
-      "basis": "everything Fluent here arrives through @devexpress/design-tokens-internal - a Figma export of DevExpress's own Fluent-derived system - and the three sibling products' component tiers",
-      "cost": "where all four sets are silent (277 declarations, 22 folders) there is no external authority in this report at all, only the theme against itself",
+      "what": "Fluent 2 was consulted only for four questions (typography ramp, focus stroke, checkbox anatomy, subtle hover vs pressed)",
+      "against": "nothing - but it is a spot check, not a sweep",
+      "basis": "those were the places where an external answer could change a decision; the rest of the report still rests on the package and the three sibling products",
+      "cost": "the 277 declarations no product describes remain without external authority",
       "open": true
     }
-  ]
+  ],
+  "fluent2": {
+    "comment": [
+      "Checked against fluent2.microsoft.design and microsoft/fluentui packages/tokens on 08.09.2026.",
+      "Only the places where an external answer changes something are recorded."
+    ],
+    "findings": [
+      {
+        "about": "typography off the role grid (37 step reads, 17 of them font-weight 500)",
+        "fluent2": "the web type ramp has three weights - Regular, Semibold, Bold - and no Medium at all. Its sizes are 10/12/14/16/20/24/28/32/40/68px, which the package grid mirrors exactly bar Display",
+        "answer": "font-weight 500 and sizes 11/18/22/26/36px are legacy fluent values with no home in Fluent 2. The package grid is faithful, not short of steps, so design#1555 asked the wrong way round: the question is whether to keep the legacy values, not which steps deserve roles"
+      },
+      {
+        "about": "the focus ring reading color-border-primary-shared while the package ships four focus roles unread",
+        "fluent2": "focus is a two-tone stroke - colorStrokeFocus1 #ffffff inner, colorStrokeFocus2 #000000 outer - specifically so it survives any background. It is not an accent-coloured single stroke",
+        "answer": "the four unread roles (focus, -inverted, -static, -static-inverted) are the package mirroring Fluent 2. The theme paints focus in a way Fluent 2 does not"
+      },
+      {
+        "about": "the checkBox invalid mark, swapped to a bg role earlier in this audit",
+        "fluent2": "the checkbox box is colorCompoundBrandBackground and the checkmark is colorNeutralForegroundInverted - the mark is foreground",
+        "answer": "reverted. Two external sources against one reading of an internal rule"
+      },
+      {
+        "about": "accordion hover and pressed resolving to one role",
+        "fluent2": "colorSubtleBackgroundHover #f5f5f5 and colorSubtleBackgroundPressed #e0e0e0 are distinct tokens",
+        "answer": "the collapse deviates from Fluent 2, and the package already carries both values. Left for the product because conforming moves away from legacy fluent"
+      }
+    ]
+  }
 }
