@@ -9,7 +9,7 @@
 @use "../../base/icon_fonts" as *;
 @use "../textEditor" as *;
 
-$material-editor-custom-button-margin: 5px;
+$material-editor-custom-button-margin: 5px !default;
 
 .dx-daterangebox {
   @include dx-dropdowneditor-button-icon-styling(daterangepicker);

@@ -31,7 +31,7 @@ const createDataSource = function(options) {
 
     setupDataGridModules(dataGridStub, ['data', 'columns']);
 
-    const dataSourceAdapter = dataGridStub.dataController._createDataSourceAdapter(dataSource);
+    const dataSourceAdapter = dataGridStub.dataSourceController.createAdapter(dataSource);
 
     const origItems = dataSourceAdapter.items;
     const processItems = function(items) {
