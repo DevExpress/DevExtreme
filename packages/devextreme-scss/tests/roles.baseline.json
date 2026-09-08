@@ -4,7 +4,10 @@
     "Exact equality, not a ratchet down: a new disagreement and a resolved one both fail, because",
     "both are a decision somebody has to record. Re-bank deliberately with UPDATE_ROLES_BASELINE=1 pnpm test.",
     "cross-family  - the package uses this role, but only for a slot of another kind.",
-    "family-conflict - the package paints this slot from another family entirely."
+    "family-conflict - the package paints this slot from another family entirely.",
+    "typographyUnmarked - typography step reads that carry no marker at all. The px gate only looks at",
+    "literals, so a step read slipped past it; these are banked until each one is routed to a role or",
+    "marked with a reason."
   ],
   "open": [
     {
@@ -206,6 +209,73 @@
         "color-bg-success"
       ],
       "slot": "content"
+    }
+  ],
+  "typographyUnmarked": [
+    {
+      "variable": "grid-column-chooser-title-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-appointment-month-text-font-size",
+      "reads": "font-size-120",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-month-date-text-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-small-font-size",
+      "reads": "font-size-140",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-time-indicator-font-size",
+      "reads": "font-size-300",
+      "roleExists": false
+    },
+    {
+      "variable": "typography-l-font-size",
+      "reads": "font-size-200",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-l-font-size",
+      "reads": "font-size-280",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-m-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-m-font-size",
+      "reads": "font-size-200",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-s-font-size",
+      "reads": "font-size-140",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-s-font-size",
+      "reads": "font-size-180",
+      "roleExists": false
+    },
+    {
+      "variable": "typography-xl-font-size",
+      "reads": "font-size-240",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-xs-font-size",
+      "reads": "font-size-120",
+      "roleExists": true
     }
   ]
 }

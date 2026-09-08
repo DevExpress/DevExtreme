@@ -308,6 +308,67 @@ for (const set of SETS) {
   }
 }
 
+/*
+ * Typography: the same question, asked of the size files.
+ *
+ * The colour layer reads roles everywhere (0 direct palette reads). Typography does not: most of
+ * its step reads go straight to a base scale, because the value came from legacy fluent and the
+ * role grid has no step with that value - font-weight 500, font-size 110/180/220/260/360,
+ * line-height 120/180. Most carry `dx-no-semantic-role`; the rest carry no marker at all, because
+ * the px gate only looks at literals and a step read is not a literal.
+ *
+ * None of the four neighbours has this: their component sets reference the typography ROLES and a
+ * bare step three times in total. So a place here is not "the package is missing a role" by
+ * default - it is a choice between the legacy value and the design system's grid, and the report
+ * has to put both in front of whoever decides.
+ */
+const TYPOGRAPHY = ['font-size', 'font-weight', 'line-height'];
+
+const typographyGrid = {};   // family -> [{ role, step }], the steps the role grid actually names
+for (const family of TYPOGRAPHY) {
+  const roles = [];
+  for (const [name, raw] of valueIndex.light) {
+    if (!name.startsWith(`${family}.`)) continue;
+    const step = /^\{?([a-z-]+)\.(\d+)\}?$/.exec(String(raw));
+    if (!step) continue;               // a role points at a step; a step points at a number
+    roles.push({ role: name.split('.')[1], step: Number(step[2]) });
+  }
+  typographyGrid[family] = roles.sort((a, b) => a.step - b.step);
+}
+
+const MARKERS = /dx-(no-semantic-role|icon-glyph-size|offscale|relative|px-nudge|literal-required|fixed-size|line-width|shadow-geometry)/;
+
+const typography = [];
+const sizeFiles = (dir) => readdirSync(dir).flatMap((entry) => {
+  const absolute = join(dir, entry);
+  if (statSync(absolute).isDirectory()) return sizeFiles(absolute);
+  return entry === '_sizes.scss' ? [absolute] : [];
+});
+for (const file of sizeFiles(themeDir)) {
+  const folder = relative(themeDir, file).split('/')[0];
+  readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').split('\n').forEach((line, index) => {
+    if (/^\s*\/\//.test(line)) return;
+    const read = /ds\.\$(font-size|font-weight|line-height)-(\d+)/.exec(line);
+    if (!read) return;
+    const [, family, step] = read;
+    const grid = typographyGrid[family] ?? [];
+    const onGrid = grid.filter((r) => r.step === Number(step));
+    const nearest = [...grid]
+      .sort((a, b) => Math.abs(a.step - Number(step)) - Math.abs(b.step - Number(step)))
+      .slice(0, 3);
+    typography.push({
+      folder,
+      where: `${relative(packageRoot, file)}:${index + 1}`,
+      variable: /\$([a-z0-9-]+)\s*:/.exec(line)?.[1] ?? '(inline)',
+      family,
+      step: Number(step),
+      marker: MARKERS.exec(line)?.[1] ?? null,
+      roles: onGrid.map((r) => r.role),
+      nearest: onGrid.length ? [] : nearest.map((r) => ({ role: r.role, step: r.step })),
+    });
+  });
+}
+
 // --- the comparison -------------------------------------------------------------------------------
 
 const findings = [];
@@ -410,6 +471,9 @@ const verdicts = ['agrees', 'agrees-kin', 'cross-family', 'family-conflict', 'ro
 const summary = {
   tokensVersion,
   declarations: findings.length,
+  typographyStepReads: typography.length,
+  typographyOffGrid: typography.filter((t) => !t.roles.length).length,
+  typographyUnmarked: typography.filter((t) => !t.marker).length,
   familyMismatch: count((f) => f.family),
   byVerdict: Object.fromEntries(verdicts.map((v) => [v, count((f) => f.package?.verdict === v)])),
 };
@@ -475,6 +539,30 @@ const md = () => {
       + `    - slot \`${f.family.slot}\` wants \`color-${f.family.want}-*\`, reads a \`${f.family.got.join('/')}\` role`
       + (f.package ? `; package verdict: ${f.package.verdict}` : ''));
 
+  const offGrid = typography.filter((t) => !t.roles.length);
+  const onGridUnrouted = typography.filter((t) => t.roles.length);
+  out.push(`## Typography off the role grid - ${offGrid.length} of ${typography.length} step reads\n`);
+  out.push('The role grid names no step with this value, so the theme reads the base scale directly.');
+  out.push('Each line is a choice: move onto the nearest role (the value changes, etalons follow), ask');
+  out.push('the package for a role at this step, or record the value as a deliberate divergence.\n');
+  out.push('| Where | Variable | Reads | Marker | Nearest roles |');
+  out.push('|---|---|---|---|---|');
+  for (const t of offGrid) {
+    out.push(`| ${t.where} | \`${t.variable}\` | \`${t.family}-${t.step}\` | ${t.marker ? `\`${t.marker}\`` : '**none**'}`
+      + ` | ${t.nearest.map((n) => `\`${n.role}\` (${n.step})`).join(', ')} |`);
+  }
+  out.push('');
+  if (onGridUnrouted.length) {
+    out.push(`### A role names this step and the theme reads the step anyway - ${onGridUnrouted.length}\n`);
+    out.push('| Where | Variable | Reads | Marker | Role with this step |');
+    out.push('|---|---|---|---|---|');
+    for (const t of onGridUnrouted) {
+      out.push(`| ${t.where} | \`${t.variable}\` | \`${t.family}-${t.step}\` | ${t.marker ? `\`${t.marker}\`` : '**none**'}`
+        + ` | ${t.roles.map((r) => `\`${r}\``).join(', ')} |`);
+    }
+    out.push('');
+  }
+
   const orphans = [...new Set(findings.filter((f) => f.package?.verdict === 'no-counterpart').map((f) => f.folder))].sort();
   out.push(`## No package counterpart - ${orphans.length} folders\n`);
   out.push(`${orphans.join(', ')}\n`);
@@ -484,7 +572,7 @@ const md = () => {
 };
 
 if (process.argv.includes('--json')) {
-  console.log(JSON.stringify({ summary, findings }, null, 2));
+  console.log(JSON.stringify({ summary, findings, typography }, null, 2));
 } else if (process.argv.includes('--md')) {
   console.log(md());
 } else if (themeArg) {

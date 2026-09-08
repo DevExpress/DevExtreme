@@ -31,7 +31,11 @@ type Finding = {
 };
 type Open = { name: string; verdict: string; roles: string[]; slot: string | null };
 
-const run = (theme?: string): { summary: Record<string, unknown>; findings: Finding[] } => JSON.parse(
+type Typography = { variable: string; family: string; step: number; marker: string | null; roles: string[] };
+
+const run = (theme?: string): {
+  summary: Record<string, unknown>; findings: Finding[]; typography: Typography[];
+} => JSON.parse(
   execFileSync('node', [tool, '--json', ...(theme ? [`--theme=${theme}`] : [])], {
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,
@@ -48,8 +52,17 @@ const disagreements = (findings: Finding[]): Open[] => findings
 const actual = run();
 const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
 
+const unmarked = (typography: Typography[]) => typography
+  .filter((t) => !t.marker)
+  .map((t) => ({ variable: t.variable, reads: `${t.family}-${t.step}`, roleExists: t.roles.length > 0 }))
+  .sort((a, b) => (a.variable + a.reads).localeCompare(b.variable + b.reads));
+
 if (process.env.UPDATE_ROLES_BASELINE) {
-  writeFileSync(baselinePath, `${JSON.stringify({ ...baseline, open: disagreements(actual.findings) }, null, 2)}\n`);
+  writeFileSync(baselinePath, `${JSON.stringify({
+    ...baseline,
+    open: disagreements(actual.findings),
+    typographyUnmarked: unmarked(actual.typography),
+  }, null, 2)}\n`);
 }
 
 test('every colour declaration reaches a verdict', () => {
@@ -92,4 +105,14 @@ test('a role the package names for the slot passes', () => {
 
   const planted = run(theme).findings.find((f) => f.name === 'switch-off-border');
   expect(planted?.package?.verdict).toBe('agrees');
+});
+
+/*
+ * A typography step read is not a literal, so tools/review/px-audit.mjs never saw it: these slipped
+ * past the marker discipline entirely. Banked rather than ratcheted, for the same reason as above -
+ * routing one onto a role is a decision (caption or base or title, at the same step), and it should
+ * arrive with the commit that made it.
+ */
+test('typography step reads with no marker are the known ones', () => {
+  expect(unmarked(actual.typography)).toEqual(baseline.typographyUnmarked);
 });
