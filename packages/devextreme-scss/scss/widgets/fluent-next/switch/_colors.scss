@@ -1,7 +1,7 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$switch-on-border: ds.$color-bg-primary-shared !default;
-$switch-on-border-hovered: ds.$color-bg-primary-shared-hovered !default;
+$switch-on-border: ds.$color-border-primary-shared !default;
+$switch-on-border-hovered: ds.$color-border-primary-shared-hovered !default;
 $switch-on-border-focused: ds.$color-bg-primary-active !default;
 
 $switch-bg: ds.$color-none !default;
