@@ -222,7 +222,6 @@ class OpenLayersMap implements MapEngineMap {
       }
       : undefined;
     let { height, width } = element.getBoundingClientRect();
-    let resizeHandled = false;
     const resizeHandler = (): void => {
       const rect = element.getBoundingClientRect();
       if (rect.height === height && rect.width === width) {
@@ -231,8 +230,7 @@ class OpenLayersMap implements MapEngineMap {
 
       height = rect.height;
       width = rect.width;
-      if (!resizeHandled && this._markerSizeRefitEnabled) {
-        resizeHandled = true;
+      if (this._markerSizeRefitEnabled) {
         this._eventHandlers?.markerSizeChange();
       }
     };

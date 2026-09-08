@@ -1559,32 +1559,47 @@ QUnit.module('OSM: markers', moduleConfig, () => {
             }
         });
     });
-    QUnit.test('autoAdjust refits the view after HTML marker layout changes', function(assert) {
-        const done = assert.async();
-        let imageLoaded = false;
-        openLayersMock.getOverlayRect = () => imageLoaded ? {
-            height: 60,
-            width: 80
-        } : {
-            height: 0,
-            width: 0
-        };
-        $('#map').dxMap({
-            provider: 'osm',
-            markers: [{
-                location: [40.7, -74],
-                html: '<img alt="">'
-            }],
-            providerConfig: {
-                tileServer
-            },
-            onReady: () => {
-                assert.deepEqual(openLayersMock.fitOptions.padding, [0, 25, 41, 0], 'fallback size is used while the HTML image loads');
-                imageLoaded = true;
-                triggerResize(openLayersMock.addedOverlays[0].options.element);
-                assert.deepEqual(openLayersMock.fitOptions.padding, [0, 80, 60, 0], 'loaded HTML image size is included in fit padding');
-                done();
-            }
+    [true, false].forEach(isHtml => {
+        const markerType = isHtml ? 'HTML' : 'image';
+        QUnit.test(`autoAdjust refits after successive ${markerType} marker size changes`, function(assert) {
+            const done = assert.async();
+            let markerSize = { height: 0, width: 0 };
+            openLayersMock.getOverlayRect = () => markerSize;
+            $('#map').dxMap({
+                provider: 'osm',
+                markers: [{
+                    location: [40.7, -74],
+                    ...(isHtml ? { html: '<img alt="">' } : { iconSrc: 'custom-marker.png' })
+                }],
+                providerConfig: {
+                    tileServer
+                },
+                onReady: () => {
+                    const markerElement = openLayersMock.addedOverlays[0].options.element;
+                    const initialFitCallCount = openLayersMock.fitCallCount;
+                    assert.deepEqual(openLayersMock.fitOptions.padding,
+                        isHtml ? [0, 25, 41, 0] : [41, 13, 0, 13], 'fallback size is used before layout');
+
+                    markerSize = { height: 60, width: 80 };
+                    triggerResize(markerElement);
+                    assert.strictEqual(openLayersMock.fitCallCount, initialFitCallCount + 1, 'first size change refits the view');
+                    assert.deepEqual(openLayersMock.fitOptions.padding,
+                        isHtml ? [0, 80, 60, 0] : [60, 40, 0, 40], 'first measured size is included in padding');
+
+                    triggerResize(markerElement);
+                    assert.strictEqual(openLayersMock.fitCallCount, initialFitCallCount + 1, 'unchanged size does not refit');
+
+                    markerSize = { height: 90, width: 120 };
+                    triggerResize(markerElement);
+                    assert.strictEqual(openLayersMock.fitCallCount, initialFitCallCount + 2, 'second size change refits the view');
+                    assert.deepEqual(openLayersMock.fitOptions.padding,
+                        isHtml ? [0, 120, 90, 0] : [90, 60, 0, 60], 'padding follows the second size change');
+
+                    triggerResize(markerElement);
+                    assert.strictEqual(openLayersMock.fitCallCount, initialFitCallCount + 2, 'repeated notification still does not refit');
+                    done();
+                }
+            });
         });
     });
     QUnit.test('marker size changes do not refit after a user move until bounds are fitted again', function(assert) {
@@ -1624,19 +1639,24 @@ QUnit.module('OSM: markers', moduleConfig, () => {
         const markerElement = openLayersMock.addedOverlays[0].options.element;
         engineMap.fitBounds(bounds, { includeMarkerPadding: true });
 
+        markerWidth = 25;
+        triggerResize(markerElement);
+        assert.strictEqual(markerSizeChanged, 1, 'marker size refits before user movement');
+
         openLayersMock.mapInstance.trigger('pointerdrag');
         const fitCallCountAfterUserMove = openLayersMock.fitCallCount;
         markerWidth = 30;
         triggerResize(markerElement);
-        assert.strictEqual(markerSizeChanged, 0, 'user movement prevents an automatic marker-size refit');
+        assert.strictEqual(markerSizeChanged, 1, 'user movement prevents an automatic marker-size refit');
         assert.strictEqual(openLayersMock.fitCallCount, fitCallCountAfterUserMove, 'view is not fitted after user movement');
 
         engineMap.fitBounds(bounds, { includeMarkerPadding: true });
         const fitCallCountBeforeResize = openLayersMock.fitCallCount;
         markerWidth = 40;
         triggerResize(markerElement);
-        assert.strictEqual(markerSizeChanged, 1, 'explicit fitting enables marker-size refit again');
+        assert.strictEqual(markerSizeChanged, 2, 'explicit fitting enables marker-size refit again');
         assert.strictEqual(openLayersMock.fitCallCount, fitCallCountBeforeResize + 1, 'view is fitted after marker layout changes');
+        assert.deepEqual(openLayersMock.fitOptions.padding, [40, 20, 0, 20], 'resumed refit uses the latest marker size');
 
         engineMap.dispose();
     });
