@@ -1,4 +1,5 @@
 import { downloadArtifactFile, findArtifactId, listRuns } from './github';
+import { makeZip } from './zip.test.utils';
 
 const github = { repo: 'o/r', token: 'secret-token' };
 
@@ -36,8 +37,12 @@ function rawRun(id: number) {
   };
 }
 
+const realFetch = global.fetch;
+
 afterEach(() => {
   jest.restoreAllMocks();
+  // jest.restoreAllMocks() only undoes spies, not the direct assignment in mockFetch().
+  global.fetch = realFetch;
 });
 
 describe('listRuns', () => {
@@ -104,40 +109,7 @@ describe('findArtifactId', () => {
 });
 
 describe('downloadArtifactFile', () => {
-  /** Smallest valid ZIP holding one stored entry, built by hand so the test needs no fixture. */
-  function storedZip(name: string, content: string): Buffer {
-    const nameBuf = Buffer.from(name, 'utf-8');
-    const dataBuf = Buffer.from(content, 'utf-8');
-
-    const local = Buffer.alloc(30);
-    local.writeUInt32LE(0x04034b50, 0);
-    local.writeUInt16LE(0, 8); // stored
-    local.writeUInt32LE(dataBuf.length, 18);
-    local.writeUInt32LE(dataBuf.length, 22);
-    local.writeUInt16LE(nameBuf.length, 26);
-
-    const central = Buffer.alloc(46);
-    central.writeUInt32LE(0x02014b50, 0);
-    central.writeUInt16LE(0, 10); // stored
-    central.writeUInt32LE(dataBuf.length, 20);
-    central.writeUInt32LE(dataBuf.length, 24);
-    central.writeUInt16LE(nameBuf.length, 28);
-    central.writeUInt32LE(0, 42); // local header offset
-
-    const centralStart = local.length + nameBuf.length + dataBuf.length;
-    const centralSize = central.length + nameBuf.length;
-
-    const eocd = Buffer.alloc(22);
-    eocd.writeUInt32LE(0x06054b50, 0);
-    eocd.writeUInt16LE(1, 8);
-    eocd.writeUInt16LE(1, 10);
-    eocd.writeUInt32LE(centralSize, 12);
-    eocd.writeUInt32LE(centralStart, 16);
-
-    return Buffer.concat([local, nameBuf, dataBuf, central, nameBuf, eocd]);
-  }
-
-  const zip = storedZip('flaky-candidates.json', '{"schemaVersion":1,"candidates":[]}');
+  const zip = makeZip({ 'flaky-candidates.json': '{"schemaVersion":1,"candidates":[]}' });
 
   it('follows the redirect to blob storage WITHOUT forwarding the credential', async () => {
     mockFetch((url) => {

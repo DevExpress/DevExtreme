@@ -1,23 +1,5 @@
-import { execFileSync } from 'node:child_process';
-import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
-
 import { extractFileFromZip } from './zip';
-
-function makeZip(files: Record<string, string>, zipArgs: string[] = []): Buffer {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'flaky-zip-'));
-  try {
-    for (const [name, content] of Object.entries(files)) {
-      fs.writeFileSync(path.join(dir, name), content);
-    }
-    const zipPath = path.join(dir, 'out.zip');
-    execFileSync('zip', ['-q', ...zipArgs, zipPath, ...Object.keys(files)], { cwd: dir });
-    return fs.readFileSync(zipPath);
-  } finally {
-    fs.rmSync(dir, { recursive: true, force: true });
-  }
-}
+import { makeZip } from './zip.test.utils';
 
 describe('extractFileFromZip', () => {
   it('reads a deflated entry', () => {
@@ -30,7 +12,7 @@ describe('extractFileFromZip', () => {
 
   it('reads a stored (uncompressed) entry', () => {
     const content = '{"schemaVersion":1,"candidates":[]}';
-    const zip = makeZip({ 'flaky-candidates.json': content }, ['-0']);
+    const zip = makeZip({ 'flaky-candidates.json': content }, { deflate: false });
 
     expect(extractFileFromZip(zip, 'flaky-candidates.json')?.toString('utf-8')).toBe(content);
   });

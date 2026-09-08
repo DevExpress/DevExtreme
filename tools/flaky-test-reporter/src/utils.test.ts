@@ -29,6 +29,15 @@ describe('mapWithConcurrency', () => {
     expect(peak).toBeLessThanOrEqual(4);
   });
 
+  it.each([0, -1, 1.5, Number.NaN])(
+    'rejects a limit of %p instead of returning holes',
+    async (limit) => {
+      await expect(mapWithConcurrency([1, 2, 3], limit, async (n) => n)).rejects.toThrow(
+        /positive integer/,
+      );
+    },
+  );
+
   it('handles an empty list', async () => {
     await expect(mapWithConcurrency([], 4, async () => 1)).resolves.toEqual([]);
   });

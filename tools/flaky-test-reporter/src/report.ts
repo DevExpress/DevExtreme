@@ -47,7 +47,11 @@ export function parseCandidatesFile(content: string): FlakyCandidate[] {
 
   return candidates.filter(
     (candidate): candidate is FlakyCandidate =>
-      typeof candidate?.test === 'string' && candidate.test.length > 0,
+      typeof candidate?.test === 'string'
+      && candidate.test.length > 0
+      // aggregate() reads anything that is not 'failed' as a confirmed flake, so an entry
+      // with a missing or unknown verdict would be recommended for quarantine.
+      && (candidate.verdict === 'passed' || candidate.verdict === 'failed'),
   );
 }
 

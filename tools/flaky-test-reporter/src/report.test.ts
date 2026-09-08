@@ -55,6 +55,20 @@ describe('parseCandidatesFile', () => {
     expect(parseCandidatesFile(content).map((c) => c.test)).toEqual(['a']);
   });
 
+  it('drops an entry whose verdict is missing or unknown, rather than calling it flaky', () => {
+    const content = JSON.stringify({
+      schemaVersion: 1,
+      candidates: [
+        candidate('kept', { verdict: 'passed' }),
+        candidate('kept too', { verdict: 'failed' }),
+        { test: 'no verdict' },
+        { test: 'bad verdict', verdict: 'maybe' },
+      ],
+    });
+
+    expect(parseCandidatesFile(content).map((c) => c.test)).toEqual(['kept', 'kept too']);
+  });
+
   it('throws when the file has no candidates array', () => {
     expect(() => parseCandidatesFile('{"tests":[]}')).toThrow(/candidates/);
   });
