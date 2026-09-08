@@ -115,6 +115,12 @@ jobs:
         DEBUG: eslint:cli-engine
       run: pnpm exec nx lint
 
+    - name: Lint Playwright tests
+      working-directory: ./e2e/playwright
+      env:
+        DEBUG: eslint:cli-engine
+      run: pnpm exec nx lint
+
   JS:
     runs-on: devextreme-shr2
     timeout-minutes: 60
