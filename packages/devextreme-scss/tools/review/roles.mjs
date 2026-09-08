@@ -671,6 +671,71 @@ const lowContrast = pairs
   .filter((pair, index, all) => all.findIndex((other) => other.fg === pair.fg && other.bg === pair.bg) === index)
   .sort((a, b) => Math.min(...Object.values(a.contrast)) - Math.min(...Object.values(b.contrast)));
 
+/*
+ * The same concept across components.
+ *
+ * Every check above asks about one declaration. This one asks the question the task is actually
+ * named after: does the theme paint the same thing the same way everywhere? Group by what the name
+ * says the thing IS - its modifiers plus slot plus state, with the sub-elements dropped - and a
+ * concept that resolves to several roles is either a considered difference or nobody comparing.
+ *
+ * Ranked by how many FAMILIES disagree, not how many roles: `border-danger` against
+ * `border-danger-shared` is a shade, and two components can honestly differ on it. bg against
+ * border against content for one concept cannot be explained by the element being different.
+ */
+const MODIFIER_WORDS = new Set(Object.values(registries.modifiers).flat());
+const concepts = [];
+{
+  const groups = new Map();
+  for (const declaration of declarations) {
+    if (!declaration.slot || declaration.roles.length !== 1) continue;
+    const bare = declaration.state === 'rest'
+      ? declaration.name
+      : declaration.name.slice(0, -declaration.state.length - 1);
+    const middle = bare.slice(0, -declaration.slot.length).replace(/-$/, '').split('-');
+    const modifiers = [...new Set(middle.filter((word) => MODIFIER_WORDS.has(word)))].sort();
+    if (!modifiers.length) continue;   // without a modifier the concept is too generic to compare
+    const key = `${modifiers.join('+')} ${declaration.slot} ${declaration.state}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(declaration);
+  }
+  for (const [concept, members] of groups) {
+    const folders = [...new Set(members.map((m) => m.folder))];
+    const roles = [...new Set(members.map((m) => m.roles[0]))];
+    if (folders.length < 2 || roles.length < 2) continue;
+    const families = [...new Set(roles.map(familyOf).filter((f) => f !== 'none'))];
+    /* Roles that resolve to one colour in both modes are the same paint under different names, and
+     * unifying them costs nothing. That is a different problem from components that genuinely
+     * disagree about the colour, and mixing the two would hide both. */
+    const valueOf = (role) => MODES.map((mode) => resolveRole(role, mode)).join(' / ');
+    const values = new Set(roles.map(valueOf));
+    const oneColour = values.size === 1;
+    /* Inside a split concept, the interesting part is the cluster: components that paint the same
+     * colour while spelling it from different families. Those cost nothing to unify, and until they
+     * are unified the next palette change moves some of them and not the others. */
+    const clusters = [...values].map((value) => ({
+      value,
+      roles: roles.filter((role) => valueOf(role) === value),
+    })).filter((cluster) => cluster.roles.length > 1);
+    const seen = new Set();
+    concepts.push({
+      concept,
+      families,
+      roles,
+      oneColour,
+      clusters,
+      members: members.filter((m) => {
+        const key = `${m.folder}|${m.roles[0]}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      }).map((m) => ({ folder: m.folder, name: m.name, role: m.roles[0], where: m.where })),
+    });
+  }
+  concepts.sort((a, b) => b.families.length - a.families.length
+    || b.roles.length - a.roles.length || a.concept.localeCompare(b.concept));
+}
+
 // --- output ---------------------------------------------------------------------------------------
 
 const count = (predicate) => findings.filter(predicate).length;
@@ -682,6 +747,10 @@ const summary = {
   typographyOffGrid: typography.filter((t) => !t.roles.length).length,
   typographyUnmarked: typography.filter((t) => !t.marker).length,
   collapsedLadders: ladders.length,
+  conceptsSplit: concepts.length,
+  conceptsSplitAcrossFamilies: concepts.filter((c) => c.families.length > 1).length,
+  conceptsSameColour: concepts.filter((c) => c.oneColour).length,
+  conceptsWithSpellingClusters: concepts.filter((c) => c.clusters.length).length,
   contrastPairsMeasured: pairs.length,
   contrastBelowAA: lowContrast.length,
   contrastDarkOnly: lowContrast.filter((p) => p.contrast.light >= AA && p.contrast.dark < AA).length,
@@ -720,6 +789,7 @@ const md = () => {
   out.push(`| family mismatch (slot wants another \`--dxds-\` family) | **${summary.familyMismatch}** |`);
   out.push(`| slot contradicts the painted property | **${summary.slotLies}** |`);
   out.push(`| states that resolve to one role | **${summary.collapsedLadders}** |`);
+  out.push(`| one concept painted with several roles | **${summary.conceptsSplit}** (${summary.conceptsSplitAcrossFamilies} across families) |`);
   out.push(`| text/background pairs below AA | **${summary.contrastBelowAA}** of ${summary.contrastPairsMeasured} measured (${summary.contrastDarkOnly} dark only) |`);
   for (const verdict of verdicts) out.push(`| package: ${verdict} | ${summary.byVerdict[verdict]} |`);
   out.push('');
@@ -758,6 +828,23 @@ const md = () => {
     (f) => `- \`${f.name}\` = ${roleList(f.roles)}  (${f.where})\n`
       + `    - slot \`${f.family.slot}\` wants \`color-${f.family.want}-*\`, reads a \`${f.family.got.join('/')}\` role`
       + (f.package ? `; package verdict: ${f.package.verdict}` : ''));
+
+  out.push(`## One concept, several roles - ${concepts.length} (${summary.conceptsSplitAcrossFamilies} across families)\n`);
+  out.push('Grouped by what the name says the thing is - modifiers, slot, state - with sub-elements');
+  out.push('dropped. A shade apart is a difference two components can honestly have; a family apart is');
+  out.push('one concept painted as a fill in one widget and as a border in the next. Listed first are');
+  out.push('the ones where every role resolves to the SAME colour in both modes - the same paint under');
+  out.push('several names, free to unify and, until then, repainted differently by the next redesign.\n');
+  for (const c of concepts) {
+    out.push(`- **${c.concept}** - ${c.roles.length} roles, ${c.families.length} famil${c.families.length > 1 ? 'ies' : 'y'}`
+      + (c.oneColour ? ', **one colour under several names**' : ''));
+    for (const cluster of c.clusters) {
+      out.push(`    - **one colour, ${cluster.roles.length} names** (${cluster.value}): `
+        + cluster.roles.map((r) => `\`${r}\``).join(', '));
+    }
+    for (const m of c.members) out.push(`    - ${m.folder}: \`${m.role}\`  (${m.where})`);
+  }
+  out.push('');
 
   out.push(`## Text on its own background, below AA - ${lowContrast.length} of ${pairs.length} measured pairs\n`);
   out.push('Only pairs the bundle puts in one rule, so no assumption about which surface a text sits');
@@ -837,7 +924,7 @@ const md = () => {
 };
 
 if (process.argv.includes('--json')) {
-  console.log(JSON.stringify({ summary, findings, typography, ladders, lowContrast }, null, 2));
+  console.log(JSON.stringify({ summary, findings, typography, ladders, lowContrast, concepts }, null, 2));
 } else if (process.argv.includes('--md')) {
   console.log(md());
 } else if (themeArg) {

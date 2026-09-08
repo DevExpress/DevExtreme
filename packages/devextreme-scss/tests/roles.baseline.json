@@ -30,7 +30,13 @@
     "contrast - foreground and background the bundle puts in ONE rule, resolved per mode. Alpha-bridge",
     "values and disabled selectors are excluded: the first renders as a tint over an unknown surface,",
     "the second is exempt from WCAG 1.4.3 and gated by disabled-paint.test.ts. decision graphic-ok means",
-    "the pair is a glyph and clears 3:1; design means it misses the threshold that applies to it."
+    "the pair is a glyph and clears 3:1; design means it misses the threshold that applies to it.",
+    "",
+    "concepts - one anatomical concept (modifiers + slot + state, sub-elements dropped) painted with",
+    "several roles across components. This is the only check that asks the question the task is named",
+    "after; every other one reads a single declaration. decision spelling means the roles resolve to one",
+    "colour and differ only in family, shade means same family different value, design means the",
+    "components disagree about the colour itself."
   ],
   "open": [
     {
@@ -1038,6 +1044,638 @@
       },
       "decision": "design",
       "why": "the grip is a glyph, so 3:1 applies and 2.8 misses it. content-subtle on a border role, dark only"
+    }
+  ],
+  "concepts": [
+    {
+      "concept": "accent border rest",
+      "roles": [
+        "color-content-primary",
+        "color-border-primary",
+        "color-border"
+      ],
+      "families": [
+        "content",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "diagram",
+          "role": "color-content-primary"
+        },
+        {
+          "folder": "gantt",
+          "role": "color-border-primary"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-border"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "accent content focused",
+      "roles": [
+        "color-bg-primary-active",
+        "color-bg-primary-hovered"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "slider",
+          "role": "color-bg-primary-active"
+        },
+        {
+          "folder": "treeView",
+          "role": "color-bg-primary-hovered"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "accent content rest",
+      "roles": [
+        "color-bg-primary",
+        "color-border-primary",
+        "color-content-primary"
+      ],
+      "families": [
+        "bg",
+        "border",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "chat",
+          "role": "color-bg-primary"
+        },
+        {
+          "folder": "pivotGrid",
+          "role": "color-border-primary"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-content-primary"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "base bg rest",
+      "roles": [
+        "color-border-subtle",
+        "color-bg"
+      ],
+      "families": [
+        "border",
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "list",
+          "role": "color-border-subtle"
+        },
+        {
+          "folder": "stepper",
+          "role": "color-bg"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "base content rest",
+      "roles": [
+        "color-content-subtle",
+        "color-bg-primary-subtle",
+        "color-content"
+      ],
+      "families": [
+        "content",
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "diagram",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-bg-primary-subtle"
+        },
+        {
+          "folder": "stepper",
+          "role": "color-content"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "empty content rest",
+      "roles": [
+        "color-content-subtle",
+        "color-content"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "cardView",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "chat",
+          "role": "color-content"
+        },
+        {
+          "folder": "chat",
+          "role": "color-content-subtle"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "error bg rest",
+      "roles": [
+        "color-bg-danger",
+        "color-bg-danger-subtler"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "gridBase",
+          "role": "color-bg-danger"
+        },
+        {
+          "folder": "informer",
+          "role": "color-bg-danger-subtler"
+        },
+        {
+          "folder": "toast",
+          "role": "color-bg-danger"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "error content rest",
+      "roles": [
+        "color-content-static-dark",
+        "color-content-danger"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "gridBase",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "gridBase",
+          "role": "color-content-danger"
+        },
+        {
+          "folder": "informer",
+          "role": "color-content-danger"
+        },
+        {
+          "folder": "toast",
+          "role": "color-content-static-dark"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "highlighted bg rest",
+      "roles": [
+        "color-bg-highlight",
+        "color-bg-primary-alpha-active"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "cardView",
+          "role": "color-bg-highlight"
+        },
+        {
+          "folder": "htmlEditor",
+          "role": "color-bg-primary-alpha-active"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "info content rest",
+      "roles": [
+        "color-content",
+        "color-content-subtle"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "informer",
+          "role": "color-content"
+        },
+        {
+          "folder": "pagination",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "toast",
+          "role": "color-content"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid bg focused",
+      "roles": [
+        "color-bg-danger-shared-active",
+        "color-border-danger-shared-active"
+      ],
+      "families": [
+        "bg",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared-active"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-border-danger-shared-active"
+        }
+      ],
+      "decision": "spelling",
+      "why": "the components paint the identical colour and spell it from different families - free to unify, and until then the next palette change moves some of them and not the others"
+    },
+    {
+      "concept": "invalid bg hovered",
+      "roles": [
+        "color-bg-danger-shared-hovered",
+        "color-border-danger-shared-hovered",
+        "color-border-danger"
+      ],
+      "families": [
+        "bg",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-border-danger-shared-hovered"
+        },
+        {
+          "folder": "slider",
+          "role": "color-border-danger"
+        }
+      ],
+      "decision": "spelling",
+      "why": "the components paint the identical colour and spell it from different families - free to unify, and until then the next palette change moves some of them and not the others"
+    },
+    {
+      "concept": "invalid bg rest",
+      "roles": [
+        "color-bg-danger-shared",
+        "color-content-danger-shared",
+        "color-bg-danger-subtler",
+        "color-bg-danger",
+        "color-border-danger-shared",
+        "color-border-danger"
+      ],
+      "families": [
+        "bg",
+        "content",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared"
+        },
+        {
+          "folder": "common",
+          "role": "color-content-danger-shared"
+        },
+        {
+          "folder": "gridBase",
+          "role": "color-bg-danger-subtler"
+        },
+        {
+          "folder": "progressBar",
+          "role": "color-bg-danger"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-border-danger-shared"
+        },
+        {
+          "folder": "slider",
+          "role": "color-border-danger"
+        }
+      ],
+      "decision": "spelling",
+      "why": "the components paint the identical colour and spell it from different families - free to unify, and until then the next palette change moves some of them and not the others"
+    },
+    {
+      "concept": "invalid border focused",
+      "roles": [
+        "color-border-danger",
+        "color-border-danger-shared-active"
+      ],
+      "families": [
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "calendar",
+          "role": "color-border-danger"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-border-danger-shared-active"
+        },
+        {
+          "folder": "switch",
+          "role": "color-border-danger"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid border hovered",
+      "roles": [
+        "color-border-danger-shared-hovered",
+        "color-border-danger"
+      ],
+      "families": [
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-border-danger-shared-hovered"
+        },
+        {
+          "folder": "switch",
+          "role": "color-border-danger"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid border rest",
+      "roles": [
+        "color-border-danger",
+        "color-border-danger-shared"
+      ],
+      "families": [
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "calendar",
+          "role": "color-border-danger"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-border-danger-shared"
+        },
+        {
+          "folder": "switch",
+          "role": "color-border-danger"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid content rest",
+      "roles": [
+        "color-content-static-dark",
+        "color-border-danger",
+        "color-bg-danger",
+        "color-content-danger"
+      ],
+      "families": [
+        "content",
+        "border",
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "common",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "fieldset",
+          "role": "color-border-danger"
+        },
+        {
+          "folder": "fileUploader",
+          "role": "color-bg-danger"
+        },
+        {
+          "folder": "stepper",
+          "role": "color-content-danger"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "inverted content rest",
+      "roles": [
+        "color-content-static-dark",
+        "color-content-inverted"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "fileManager",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "list",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-content-inverted"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "menu bg rest",
+      "roles": [
+        "color-bg",
+        "color-border-subtle"
+      ],
+      "families": [
+        "bg",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "list",
+          "role": "color-bg"
+        },
+        {
+          "folder": "menu",
+          "role": "color-bg"
+        },
+        {
+          "folder": "menu",
+          "role": "color-border-subtle"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "menu icon rest",
+      "roles": [
+        "color-content-subtle",
+        "color-content"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "contextMenu",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "filterBuilder",
+          "role": "color-content"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "menu shadow rest",
+      "roles": [
+        "box-shadow-md",
+        "color-shadow-ambient"
+      ],
+      "families": [
+        "shadow"
+      ],
+      "members": [
+        {
+          "folder": "contextMenu",
+          "role": "box-shadow-md"
+        },
+        {
+          "folder": "list",
+          "role": "color-shadow-ambient"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "success content rest",
+      "roles": [
+        "color-content-success",
+        "color-content-static-dark"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "gridBase",
+          "role": "color-content-success"
+        },
+        {
+          "folder": "toast",
+          "role": "color-content-static-dark"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "text content focused",
+      "roles": [
+        "color-content-static-dark",
+        "color-content-primary"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "filterBuilder",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "textEditor",
+          "role": "color-content-primary"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "text content rest",
+      "roles": [
+        "color-content",
+        "color-content-subtle"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "cardView",
+          "role": "color-content"
+        },
+        {
+          "folder": "diagram",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "textEditor",
+          "role": "color-content"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
     }
   ]
 }
