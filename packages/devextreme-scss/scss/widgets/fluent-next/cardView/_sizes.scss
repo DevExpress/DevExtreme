@@ -246,7 +246,7 @@ $card-view-column-chooser-select-all-item-horizontal-padding: null !default;
   // Search highlight
   $card-view-card-content-field-value-highlighted-border-radius: ds.$border-radius-50 !default;
   $card-view-card-content-field-value-highlighted-padding: .125em 0.2em !default; // dx-relative: proportional to card font-size, no em scale in package
-  $card-view-card-content-field-value-highlighted-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 off the weight-role scale
+  $card-view-card-content-field-value-highlighted-font-weight: ds.$font-weight-base-strong !default;
 
   // Column chooser
   $card-view-column-chooser-empty-message-horizontal-padding: ds.$spacing-240 !default;
@@ -328,7 +328,7 @@ $card-view-column-chooser-select-all-item-horizontal-padding: null !default;
   // Search highlight
   $card-view-card-content-field-value-highlighted-border-radius: ds.$border-radius-50 !default;
   $card-view-card-content-field-value-highlighted-padding: .125em 0.2em !default; // dx-relative: proportional to card font-size, no em scale in package
-  $card-view-card-content-field-value-highlighted-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 off the weight-role scale
+  $card-view-card-content-field-value-highlighted-font-weight: ds.$font-weight-base-strong !default;
 
   // Column chooser
   $card-view-column-chooser-empty-message-horizontal-padding: ds.$spacing-160 !default;
