@@ -1611,10 +1611,6 @@ export class DataController extends modules.Controller {
     };
   }
 
-  public getCachedStoreData(): RawItemData[] | undefined {
-    return this._dataSource?.getCachedStoreData();
-  }
-
   /**
    * @extended: virtual_scrolling
    */

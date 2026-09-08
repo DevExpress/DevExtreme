@@ -617,7 +617,8 @@ class EditingControllerImpl extends modules.ViewController {
       if (change.type === 'insert') {
         this._addInsertInfo(change);
       } else {
-        const items = dataController.getCachedStoreData() || dataController.items()?.map((item) => item.data);
+        const items = this.dataSourceController.getCachedStoreData()
+          || dataController.items()?.map((item) => item.data);
         const rowIndex = gridCoreUtils.getIndexByKey(change.key, items, dataController.key());
         this._addInternalData({ key: change.key, oldData: items[rowIndex] });
       }

@@ -123,4 +123,8 @@ export class DataSourceController extends modules.Controller {
   public lastLoadOptions(): Partial<NonNullable<LoadOperation['lastLoadOptions']>> {
     return this.adapter?.lastLoadOptions() ?? {};
   }
+
+  public getCachedStoreData(): RawItemData[] | undefined {
+    return this.adapter?.getCachedStoreData();
+  }
 }

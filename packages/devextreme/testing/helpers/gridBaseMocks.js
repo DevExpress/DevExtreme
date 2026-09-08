@@ -49,6 +49,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             getDataIndexGetter: function() {
                 return undefined;
             },
+            getCachedStoreData: function() {
+                return undefined;
+            },
             dispose: function() {
             },
             store: function() {
