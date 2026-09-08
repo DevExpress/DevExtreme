@@ -325,6 +325,25 @@ ${wc.reasons.map((r) => `<p><b>${esc(r.reason)}.</b> ${esc(r.detail)}<br>`
 <p>${esc(wc.consequence)}</p></div>
 `;
 
+
+// --- нетекстовый контраст (WCAG 1.4.11)
+const nt = base.nonTextContrast;
+const nonTextSection = `
+<div class="q"><span class="id">нетекстовый контраст · WCAG 1.4.11</span>
+<div class="t">Порог 3:1 для границ элементов управления и графики</div>
+<p>Его не реализует ни одно правило axe и не видит ни один скриншот — в CI его не меряет никто.
+Замер ${esc(nt.measuredOn)}, и он появился как проверка того, стоит ли действовать по строке грипа выше.</p>
+<table><tr><th>Что</th><th>Пара</th><th>Светлый</th><th>Тёмный</th></tr>
+${nt.findings.map((f) => {
+    const bad = (v) => (v < 3 ? `<b class="warn">${v}</b>` : v);
+    return `<tr><td>${esc(f.what)}</td><td>${code(f.pair)}</td><td>${bad(f.light)}</td><td>${bad(f.dark)}</td></tr>`;
+  }).join('')}
+</table>
+${nt.findings.map((f) => `<p class="meta"><b>${esc(f.what)}:</b> ${esc(f.verdict)}</p>`).join('')}
+<p>${esc(nt.consequence)}</p>
+<p class="meta"><b>Оговорка:</b> ${esc(nt.comment[3])}</p></div>
+`;
+
 const questionsPage = page('Fluent-next: открытые вопросы по ролям', `
 <h1>Fluent-next: открытые вопросы по ролям</h1>
 <p class="lede">Всё, что аудит нашёл и не стал решать сам. Ответы можно давать номерами: «Д3 — второй вариант».<br>
@@ -335,7 +354,7 @@ const questionsPage = page('Fluent-next: открытые вопросы по р
 <h2>А. Дизайн — ${roleQs.length + ladderQs.length + contrastQs.length + slotQs.length + conceptRows.length} вопросов</h2>
 <h3>Роль выбрана спорно</h3>${roleQs.join('')}
 <h3>Состояние неотличимо от соседнего</h3>${ladderQs.join('')}
-<h3>Контраст ниже порога</h3>${contrastQs.join('')}${whyContrast}
+<h3>Контраст ниже порога</h3>${contrastQs.join('')}${nonTextSection}${whyContrast}
 <h3>Имя обещает одно, красит другое</h3>${slotQs.join('')}
 <h3>Одно понятие покрашено по-разному в разных компонентах</h3>${conceptRows.join('')}
 
