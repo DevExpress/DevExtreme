@@ -1,6 +1,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$time-view-field-min-height: 35px !default; // dx-offscale: 35px
+$time-view-field-min-height: ds.$spacing-360 !default;
 $time-view-time-separator-margin: ds.$spacing-50 !default;
 $time-view-format12-width: ds.$spacing-640 !default;
 
@@ -10,7 +10,7 @@ $time-view-clock-margin-block-end: ds.$spacing-100 !default;
 $time-view-number-box-spin-touch-friendly-width: 110px !default; // dx-offscale: 110px
 
 // Base-layer sizing injected with design tokens (wave B2)
-$time-view-field-number-box-width: 70px !default; // dx-offscale: 70px
+$time-view-field-number-box-width: ds.$spacing-720 !default;
 $time-view-field-number-box-spin-touch-friendly-width: 110px !default; // dx-offscale: 110px
 
 // Base-layer sizing injected with design tokens (wave B8)
