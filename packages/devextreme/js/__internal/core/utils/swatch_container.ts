@@ -20,14 +20,8 @@ const closestClassesByPrefix = (
   return $scope.length ? classesByPrefix($scope.get(0), prefix) : [];
 };
 
-/*
- * The mode an element ended up in is what the cascade decided, not what its ancestor classes
- * spell: `dx-theme-mode-inverted` asks for the opposite of its surroundings, and the container is
- * reparented to the viewport, whose surroundings are different ones. `resolvedThemeMode` reads the
- * outcome the theme published, the same value `themes.mode()` reports, so the container and the
- * public answer cannot drift apart. Themes that ship one mode per bundle declare nothing and get
- * no class, as before.
- */
+// The container is reparented to the viewport, where the surroundings are different ones, so the
+// class has to name the mode the cascade resolved rather than the one the element wears.
 const themeModeClasses = ($element: dxElementWrapper): string[] => {
   const mode = resolvedThemeMode($element);
 

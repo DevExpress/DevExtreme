@@ -6,13 +6,9 @@ import { clearTestPage } from '../../helpers/testPageUtils';
 import { getFullThemeName, getThemeName } from '../../helpers/themeUtils';
 
 /*
- * The mode classes are a fluent-next contract, and this is the only place that exercises them in a
- * real browser. The unit tests around `core/utils/swatch_container.ts` cannot: jsdom resolves a
- * custom property declared ON an element but does not inherit it, while the whole mechanism is a
- * scope declaring `--dx-theme-mode` and descendants reading it back through the cascade.
- *
- * Every assertion is relative - "this scope differs from that one", never a hex literal - so a
- * token bump moves the values without touching the test.
+ * The only place the mode classes are exercised in a real browser: jsdom does not inherit a custom
+ * property, and inheritance is the whole mechanism. Every assertion is relative - "this scope
+ * differs from that one", never a hex literal - so a token bump does not touch the test.
  */
 if (getThemeName() === 'fluent-next') {
   fixture`Theme modes`
@@ -94,12 +90,8 @@ if (getThemeName() === 'fluent-next') {
       .eql(oppositeMode, 'with no named scope above it, inverted opposes the bundle');
     await t.expect(await valueAt('#in-dark', '--dx-theme-mode')).eql('light');
     await t.expect(await valueAt('#in-light', '--dx-theme-mode')).eql('dark');
-    /*
-     * Recursive by construction: the style query asks the NEAREST enclosing scope, and the outcome
-     * of an inverted block is itself a named mode, so the inner one flips back. The depth-3 case
-     * pins that it is the nearest scope being read and not the bundle - inside a dark block the
-     * pair resolves dark -> light -> dark, not light -> dark.
-     */
+    // The depth-3 case pins that the NEAREST scope is what is read, not the bundle: inside a dark
+    // block the pair resolves dark -> light -> dark, not light -> dark.
     await t.expect(await valueAt('#nested', '--dx-theme-mode'))
       .eql(buildMode, 'inverted inside inverted flips back');
     await t.expect(await valueAt('#nested-in-dark', '--dx-theme-mode'))
@@ -124,11 +116,8 @@ if (getThemeName() === 'fluent-next') {
       <div class="dx-theme-mode-${oppositeMode}"><div class="dx-theme-mode-inverted"><div id="back"></div></div></div>
     `);
 
-    /*
-     * The reason the API exists: the element inherits the property from a scope above it, so only
-     * the cascade knows the answer. jsdom cannot inherit a custom property, which is why the unit
-     * tests next to themes.ts name the mode at the element and this case lives here.
-     */
+    // The element inherits the property from a scope above it, so only the cascade knows - which
+    // is why this case lives here and not next to themes.ts.
     await t.expect(await reportedMode('#plain')).eql(buildMode, 'no scope above it - the loaded theme answers');
     await t.expect(await reportedMode('#scoped')).eql(oppositeMode, 'the mode is inherited from the scope, not declared here');
     await t.expect(await reportedMode('#back')).eql(buildMode, 'and inverted inside it flips back');
@@ -156,11 +145,8 @@ if (getThemeName() === 'fluent-next') {
 
   test('an open overlay follows its scope once the application says the mode changed', async (t) => {
     /*
-     * A page-level switch needs none of this: the container hangs off the viewport, the viewport is
-     * inside <html>, so the cascade carries it. What goes stale is a LOCAL scope - the container
-     * was given a copy of the mode its owner resolved to when the overlay was shown, and nothing
-     * re-picks it. Verified by removing the subscription: this case fails, the page-level one does
-     * not, which is why it is written this way.
+     * The scope has to be LOCAL: a page-level switch reaches the container through the cascade on
+     * its own, so that version of this case passes with the subscription removed.
      */
     await render(`<div id="scope" class="dx-theme-mode-${oppositeMode}"><div id="owner"></div></div>`);
 

@@ -383,29 +383,22 @@ export function isCompact(themeName: string): boolean {
 }
 
 /**
- * The colour mode an element is rendered in.
- *
- * `current()` and `isDark()` answer for the stylesheet that is loaded, and that stays the right
- * answer to the question they ask. It is no longer the whole story: a theme can ship both modes in
- * one bundle and let a class pick between them per element, so "which mode" has an answer per place
- * rather than per page. Such a theme publishes the outcome in `--dx-theme-mode` on every scope it
- * declares, and the element is the only thing that knows - the cascade decides it, not the classes
- * on the way up. A theme that does not scope modes declares nothing, and the loaded theme answers.
+ * The colour mode an element is rendered in. `current()` and `isDark()` answer for the loaded
+ * stylesheet; a theme that ships both modes in one bundle has an answer per place instead, and
+ * publishes it in `--dx-theme-mode`. A theme that scopes no modes declares nothing, and the
+ * loaded theme answers.
  */
 export function mode(element: Element | dxElementWrapper): 'light' | 'dark' {
   return resolvedThemeMode(element) ?? (isDark() ? 'dark' : 'light');
 }
 
 /**
- * Re-reads the colour mode for widgets that render outside the element they belong to - today that
- * is open overlays, whose markup lives in the viewport and therefore outside the scope that decides
- * their mode. Call it after changing what an element resolves to: moving a `dx-theme-mode-*` class,
- * or switching the whole theme.
+ * Re-reads the colour mode for widgets rendered outside the element they belong to - today that is
+ * open overlays, which live in the viewport. Call it after moving a `dx-theme-mode-*` class or
+ * switching the theme.
  *
- * Not called from `current()` on purpose. A theme switch reuses one `<link>` and swaps its `href`,
- * so the new stylesheet lands some time after the call returns; every point inside the switch that
- * was tried fired while the old values were still live in at least one direction, which would make
- * this work by luck. Doing it from the outside, once, is predictable.
+ * Deliberately not called from `current()`: a theme switch swaps one `<link>`'s href, so the new
+ * stylesheet lands after the call returns and any firing from inside would read stale values.
  */
 export function refreshMode(): void {
   themeModeChangedCallback.fire();

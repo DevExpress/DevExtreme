@@ -2,27 +2,14 @@
  * Gate for the fluent-next theme-mode invariant: an element carrying `dx-theme-mode-light`,
  * `-dark` or `-inverted` repaints itself and its subtree.
  *
- * The invariant is easy to break silently, because a custom property is substituted where it is
- * DECLARED, not where it is read. `:root { --dx-color-text: var(--dxds-color-content) }` computes
- * on <html>, freezes at the bundle's mode, and every element below inherits that frozen value no
- * matter which mode class sits between - the declaration is still valid, the colour is simply the
- * wrong one, so nothing fails and only a screenshot would notice. That is what happened to 39
- * properties (the legacy `--dx-color-*` surface, the box-shadow composites and their Figma layer
- * colours, the global focus aliases) before this gate existed.
+ * It breaks silently, because a custom property is substituted where it is DECLARED, not where it
+ * is read: `:root { --dx-color-text: var(--dxds-color-content) }` computes on <html> and freezes
+ * at the bundle's mode, whatever class sits below. The declaration stays valid and only the colour
+ * is wrong, so nothing fails - 39 properties were in that state before this gate existed.
  *
- * Two things are checked, both derived from the built bundle rather than from a list here:
- *
- *   1. the three mode scopes declare exactly the same names, so none of them can go missing;
- *   2. nothing whose value reads a mode-scoped name is declared where a mode class cannot reach
- *      it - i.e. on the document element.
- *
- * A declaration on a component root (`.dx-button { --dx-button-bg: var(--dxds-color-bg) }`) is
- * fine and deliberately not flagged: that element may sit inside a mode scope, and then the read
- * resolves there.
- *
- * The bundles come from packages/devextreme/artifacts/css - the `test` target depends on
- * `build:themes`, so they are fresh here; a missing bundle fails the suite loudly instead of
- * passing silently.
+ * Checked against the built bundle, not a list here: the three scopes declare the same names, and
+ * nothing reading one of those names is declared where a mode class cannot reach it. A declaration
+ * on a component root is fine and not flagged - that element may itself sit inside a scope.
  */
 
 import { existsSync, readdirSync, readFileSync } from 'fs';
@@ -55,12 +42,9 @@ const modeScopesOf = (selector: string): string[] => MODE_SCOPES
 // A rule lands on the document element - the one place a mode class below it cannot reach.
 const isDocumentRoot = (selector: string): boolean => [':root', 'html'].includes(subjectOf(selector));
 
-/*
- * Reaching the document element is what freezes a value, and a rule can do that while also
- * matching something else: `:root, .dx-button { … }` still declares on <html> for every button
- * that is not inside one. So the question is not whether EVERY selector is the root - it is
- * whether ANY is, with no mode scope in the same list to re-resolve it.
- */
+// A rule can reach the root while also matching something else: `:root, .dx-button { … }` still
+// declares on <html>. So the question is whether ANY selector is the root, with no mode scope in
+// the same list to re-resolve it.
 const freezesOnDocumentRoot = (selectors: string[]): boolean => selectors.some(isDocumentRoot)
   && !selectors.some((selector) => modeScopesOf(selector).length);
 
@@ -106,12 +90,8 @@ const readBundle = (name: string): BundleFacts => {
   return { scopeNames, rootDeclarations, modeScopedNames };
 };
 
-/*
- * Frozen = declared on the document element and reading, directly or through another such
- * declaration, something a mode class redefines. `--dxds-box-shadow-md` reads
- * `--dxds-color-shadow-key` (mode-scoped) and is itself read by every popup, so the chain has to
- * be followed rather than only the first hop.
- */
+// Frozen = declared on the document element and reading something a mode class redefines, whether
+// directly or through another such declaration - `box-shadow-md` over `color-shadow-key`.
 const frozenProperties = ({ rootDeclarations, modeScopedNames }: BundleFacts): string[] => {
   const frozen = new Map<string, string>();
   const tainted = new Set(modeScopedNames);

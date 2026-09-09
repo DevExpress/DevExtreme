@@ -203,11 +203,9 @@ const OVERRIDES = {
   rootSelectors: {
     /*
      * System tier: theme-wide values live on the document root — plus every element that names a
-     * theme mode. A custom property is resolved where it is DECLARED, so a `:root`-only alias onto
-     * a role (`--dx-global-content: var(--dxds-color-content)`) freezes at the bundle's mode and
-     * ignores a mode class further down. Re-declaring the same text on the mode classes makes it
-     * resolve again against the roles that class carries. The component tier needs no such entry:
-     * its roots sit inside the mode scope, so they already re-resolve.
+     * theme mode, because a `:root`-only alias onto a role resolves once, on <html>, and would
+     * freeze at the bundle's mode. The component tier needs no entry: its roots sit inside the
+     * mode scope already.
      */
     common: [':root', ...THEME_MODE_SELECTORS],
     /*

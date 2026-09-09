@@ -650,19 +650,17 @@ class Overlay<
   }
 
   /*
-   * The wrapper lives in the viewport, inside a container that carries the mode its owner resolved
-   * to when the overlay was shown. Nothing re-picks that container afterwards: `_moveToContainer`
-   * runs on becoming visible and on a content re-render, and a class moving somewhere up the tree
-   * is neither. An overlay that is already open would keep painting in the previous mode.
+   * The container carries the mode its owner resolved to when the overlay was shown, and nothing
+   * re-picks it afterwards: `_moveToContainer` runs on becoming visible and on a content
+   * re-render, and a class moving up the tree is neither.
    */
   _themeModeChangeHandler(): void {
     if (!this._isVisible()) {
       return;
     }
 
-    // Reading `$container` re-resolves the scope. Move only when it named a different node:
-    // appending is not a no-op for a child already in place, and detaching the wrapper takes the
-    // focus out of the overlay, restarts its animations and reloads any iframe inside it.
+    // Move only if the scope named a different node: appending is not a no-op for a child already
+    // in place, and the detach takes the focus out, restarts animations and reloads any iframe.
     const { $container } = this._positionController;
 
     if ($container && $container.get(0) !== this._$wrapper?.parent().get(0)) {

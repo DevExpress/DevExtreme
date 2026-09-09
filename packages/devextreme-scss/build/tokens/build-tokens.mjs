@@ -241,16 +241,9 @@ const getModeFiles = (mode) => [
 const getBridgeFiles = () => getModeFiles('light');
 
 /*
- * Every bundle needs the mode-dependent declarations more than once: under the mode it was built
- * for, under the opposite one, and under the relative "inverted" scope. A `:root` block cannot be
- * re-scoped on load — `meta.load-css` emits it verbatim and `@use` paths take no interpolation — so
- * these layers ship as mixins the theme places under the selectors it wants.
- *
- * Two files use it. The roles carry the mode's own values, one file per mode. The aliases carry the
- * layers whose TEXT is mode-independent but whose values read a role (`box-shadow.md` is geometry
- * over `color.shadow-key`): a custom property resolves where it is declared, so leaving them on
- * `:root` would freeze them at the bundle's mode no matter what class sits below. Same text in
- * every scope, resolved anew in each.
+ * A bundle needs the mode-dependent declarations under three selectors, and a `:root` block cannot
+ * be re-scoped on load — `meta.load-css` emits it verbatim and `@use` paths take no interpolation —
+ * so these layers ship as mixins the theme places where it wants.
  *
  * Otherwise identical to Style Dictionary's own `css/variables` (lib/common/formats.js) minus the
  * selector nesting; keep the two in step.
@@ -389,11 +382,10 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
     options: { ...FILE_OPTIONS, mixin: MODE_ROLES_MIXIN },
   },
   /*
-   * The three layers that read a colour role without being one: the box-shadow composites and
-   * their Figma layer parts (geometry over `color.shadow-*`) and the global aliases (focus rings
-   * over `color.border-focus*`). Written once, included in every mode scope — see the
-   * dx/mode-scoped-mixin comment for why they cannot stay on `:root`. Both mode configs emit this
-   * file; the sources are mode-independent, so the two writes are byte-identical.
+   * The layers that read a colour role without being one: box-shadow composites and the global
+   * focus aliases. Their text is mode-independent, but a custom property resolves where it is
+   * declared, so on `:root` they would freeze at the bundle's mode. Both mode configs emit this
+   * file; the sources are the same, so the two writes are byte-identical.
    */
   {
     destination: `${THEME_NAME}/${MODE_ALIASES_FILE}.scss`,
@@ -474,16 +466,12 @@ async function collectThemeStyleSheets() {
 }
 
 /*
- * The mode-scoped layers are emitted by source file, and a source file is a coarse answer: of the
- * 300 colour roles only 209 actually differ between the modes, and of the alias layers only a
- * fifth read one. A declaration that does not depend on the mode does not need re-resolving, so
- * repeating it in every scope is pure weight - and there are four of them per bundle.
- *
- * Which is which is derived here rather than declared, from the generated text: a name whose two
- * mode values differ is mode-dependent, and so is anything that reads such a name, through a chain
- * as well (`box-shadow-md` is geometry over `color-shadow-key`). The remainder is moved to a plain
- * `:root` block, written once. Deriving it means a token that starts or stops depending on the
- * mode moves on its own at the next bump; the theme-mode-scope gate is the judge either way.
+ * Emitting by source file is a coarse answer: many declarations in those files do not depend on
+ * the mode, and repeating them in four scopes per bundle is pure weight. Which is which is derived
+ * from the generated text - a name whose two mode values differ, plus anything reading such a name
+ * through a chain - so a token that starts or stops depending on the mode moves on its own at the
+ * next bump. The remainder goes to a plain `:root` block; the theme-mode-scope gate is the judge.
+ * The counts are printed at the end of the build.
  */
 const DECLARATION = /^(\s*)(--[\w-]+)\s*:\s*([^;]+);\s*$/;
 

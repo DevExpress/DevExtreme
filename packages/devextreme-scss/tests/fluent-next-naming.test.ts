@@ -39,10 +39,9 @@ const themeRoot = join(widgetsRoot, 'fluent-next');
 const sourceLabel = (file: string): string => file.slice(widgetsRoot.length + 1);
 
 /*
- * `name: value` inside an at-rule prelude is a condition, not a declaration - a style query reads
- * a custom property (`@container style(--dx-theme-mode: dark)`) and looks exactly like one to a
- * `--dx-…:` match. Preludes carry no declarations, so dropping them is safe; the reads themselves
- * are covered by the "every var(--dx-…) read resolves" case below.
+ * A style query names a custom property in its condition (`@container style(--dx-theme-mode: dark)`)
+ * and looks exactly like a declaration to a `--dx-…:` match. Preludes hold none, so dropping them
+ * is safe; the reads themselves are covered by the resolve case below.
  */
 const declarationBody = (content: string, label: string): string => stripScssComments(content, label)
   .replace(/@[a-z-]+[^;{]*\{/g, '{');
