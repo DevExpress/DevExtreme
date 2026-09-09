@@ -10,7 +10,7 @@ $lookup-search-padding-block-start: null !default;
 $lookup-search-padding-inline: null !default;
 $lookup-arrow-border-radius: ds.$border-radius-20 !default;
 
-$lookup-popup-content-inset-block-start: 49px !default; // dx-offscale: 49px
+$lookup-popup-content-inset-block-start: ds.$spacing-480 !default;
 
 @if $size == "default" {
   $lookup-field-min-height: ds.$spacing-300 !default;

@@ -72,7 +72,7 @@ $diagram-toolbox-input-margin: ds.$spacing-20 !default;
   $diagram-toolbox-accordion-v-padding: ds.$spacing-60 !default;
   $diagram-toolbox-input-image-size: ds.$spacing-140 !default;
   $diagram-toolbox-input-image-padding: ds.$spacing-30 ds.$spacing-40 !default;
-  $diagram-toolbox-mobile-padding: 58px !default; // dx-offscale: 58px
+  $diagram-toolbox-mobile-padding: ds.$spacing-600 !default;
 
   $diagram-properties-panel-padding: ds.$spacing-60 !default;
   $diagram-properties-panel-spacing: ds.$spacing-80 !default;

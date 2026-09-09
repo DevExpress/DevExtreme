@@ -1,18 +1,18 @@
 {
   "dx.fluent-next.blue.dark.compact.css": {
-    "calcOccurrences": 360,
+    "calcOccurrences": 362,
     "declarationsWithDeepCalc": 5
   },
   "dx.fluent-next.blue.dark.css": {
-    "calcOccurrences": 360,
+    "calcOccurrences": 362,
     "declarationsWithDeepCalc": 5
   },
   "dx.fluent-next.blue.light.compact.css": {
-    "calcOccurrences": 360,
+    "calcOccurrences": 362,
     "declarationsWithDeepCalc": 5
   },
   "dx.fluent-next.blue.light.css": {
-    "calcOccurrences": 360,
+    "calcOccurrences": 362,
     "declarationsWithDeepCalc": 5
   }
 }
