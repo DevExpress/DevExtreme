@@ -499,6 +499,19 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
     this._boundLocations = [];
   }
 
+  _resolveRouteLocation(location: LocationOption): Promise<MapLocation | undefined> {
+    if (typeof location !== 'string') {
+      return this._resolveLocation(location);
+    }
+
+    const coordinates = this._getLatLng(location);
+    if (coordinates && Number.isFinite(coordinates.lat) && Number.isFinite(coordinates.lng)) {
+      return Promise.resolve(coordinates);
+    }
+
+    return this._geocodeLocation(location);
+  }
+
   _calculateRoute(options: RouteOptions): Promise<MapLocation[] | undefined> {
     const calculateRoute = this._option('providerConfig')?.calculateRoute;
     if (!calculateRoute) {
@@ -508,10 +521,15 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
     }
 
     const engineMap = this._engineMap;
-    return Promise.all((options.locations ?? []).map((location) => this._resolveLocation(location)))
+    return Promise.all(
+      (options.locations ?? []).map((location) => this._resolveRouteLocation(location)),
+    )
       .then((locations) => {
         if (engineMap !== this._engineMap) {
           throw new Error('The map was disposed or replaced during route creation.');
+        }
+        if (!locations.every((location): location is MapLocation => location !== undefined)) {
+          return undefined;
         }
 
         return Promise.resolve()

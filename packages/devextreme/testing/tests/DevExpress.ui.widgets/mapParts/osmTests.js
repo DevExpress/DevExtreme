@@ -2017,6 +2017,60 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         });
     });
 
+    ['missing', 'undefined', 'throw', 'reject'].forEach(failure => {
+        QUnit.test(`unresolved route address skips routing without a zero-coordinate fallback (${failure})`, async function(assert) {
+            const reason = new Error('Location service unavailable');
+            const calculateLocation = sinon.stub().callsFake(() => {
+                if(failure === 'throw') {
+                    throw reason;
+                }
+                return failure === 'reject' ? Promise.reject(reason) : Promise.resolve(undefined);
+            });
+            const calculateRoute = sinon.stub().returns(Promise.resolve(path));
+            const onRouteAdded = sinon.spy();
+            const onRouteRemoved = sinon.spy();
+            const providerConfig = { tileServer, calculateRoute };
+            if(failure !== 'missing') {
+                providerConfig.calculateLocation = calculateLocation;
+            }
+            const log = sinon.stub(errors, 'log');
+            try {
+                const map = await createMap({ providerConfig, onRouteAdded, onRouteRemoved });
+                const failedRoute = { locations: ['Unknown address', [40.8, -73.9]] };
+                assert.strictEqual(await map.addRoute(failedRoute), undefined, 'the operation completes without an instance');
+                assert.ok(calculateRoute.notCalled, 'unresolved waypoints are not passed to the route service');
+                assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'no route is drawn');
+                assert.ok(onRouteAdded.notCalled, 'no added event is fired');
+                assert.ok(log.calledOnceWithExactly(...(failure === 'missing'
+                    ? ['W1031']
+                    : ['W1006', failure === 'undefined' ? 'calculateLocation returned an invalid result.' : reason])), 'existing location diagnostics report the failure');
+                await map.removeRoute(failedRoute);
+                assert.ok(onRouteRemoved.notCalled, 'no removed event is fired');
+                if(failure !== 'missing') {
+                    calculateLocation.callsFake(() => Promise.resolve({ lat: 40.7, lng: -74 }));
+                    const result = await map.addRoute(failedRoute);
+                    assert.ok(result, 'an explicit later attempt can succeed');
+                    assert.ok(calculateLocation.calledTwice, 'failed geocoding was not cached');
+                    assert.ok(calculateRoute.calledOnce, 'only the successful attempt requests a route');
+                }
+            } finally {
+                log.restore();
+            }
+        });
+    });
+
+    QUnit.test('explicit zero coordinates and a successfully calculated zero location are valid route waypoints', async function(assert) {
+        const calculateLocation = sinon.stub().returns(Promise.resolve({ lat: 0, lng: 0 }));
+        const calculateRoute = sinon.stub().returns(Promise.resolve(path));
+        await createMap({
+            routes: [{ locations: [[0, 0], { lat: 0, lng: 0 }, '0, 0', 'Known location'] }],
+            providerConfig: { tileServer, calculateLocation, calculateRoute }
+        });
+        assert.ok(calculateLocation.calledOnceWithExactly('Known location'), 'coordinate strings bypass geocoding');
+        assert.deepEqual(calculateRoute.firstCall.args[0].locations, Array(4).fill({ lat: 0, lng: 0 }), 'valid zero coordinates are passed unchanged');
+        assert.strictEqual(getRouteSource().getFeatures().length, 1, 'the route is rendered');
+    });
+
     QUnit.test('missing callback warns without drawing a straight line', async function(assert) {
         const log = sinon.stub(errors, 'log');
         const onRouteAdded = sinon.spy();
