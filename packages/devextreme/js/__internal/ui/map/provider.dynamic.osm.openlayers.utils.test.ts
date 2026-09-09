@@ -12,9 +12,11 @@ import {
 } from './provider.dynamic.osm.openlayers.utils';
 
 const createApi = (): unknown => ({
+  Feature: jest.fn(),
   Map: jest.fn(),
   Overlay: jest.fn(),
   View: jest.fn(),
+  geom: { LineString: jest.fn() },
   control: {
     Zoom: jest.fn(),
     defaults: { defaults: () => [] },
@@ -22,14 +24,15 @@ const createApi = (): unknown => ({
   interaction: {
     defaults: { defaults: () => [] },
   },
-  layer: { Tile: jest.fn() },
+  layer: { Tile: jest.fn(), Vector: jest.fn() },
   proj: {
     getUserProjection: () => null,
     toLonLat: () => [0, 0],
     transform: () => [0, 0],
     transformExtent: () => [0, 0, 0, 0],
   },
-  source: { ImageTile: jest.fn() },
+  source: { ImageTile: jest.fn(), Vector: jest.fn() },
+  style: { Stroke: jest.fn(), Style: jest.fn() },
 });
 
 describe('OpenLayers utils', () => {

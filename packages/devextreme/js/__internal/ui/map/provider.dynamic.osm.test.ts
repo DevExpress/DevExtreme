@@ -102,5 +102,29 @@ describe('OSM bounds', () => {
         { northEast: { lat: 0, lng: 120 }, southWest: { lat: 0, lng: -120 } },
       ]).toContainEqual(bounds);
     });
+
+    it.each([
+      [[[-120, 0, 120]], [], -120, 120],
+      [[[120, 0, -120]], [], -120, 120],
+      [[[179, -179]], [178], 178, -179],
+      [[[-179, 179]], [-178], 179, -178],
+      [[[170, -175], [-170, 175]], [], 170, -170],
+      [[[-120, 0, 120], [120, -120]], [], -180, 180],
+      [[[0, 120, -120, 0]], [], -180, 180],
+      [[[10, 10]], [], 10, 10],
+      [[[]], [15], 15, 15],
+    ] as [number[][], number[], number, number][])(
+      'does not cut route segments in %j with markers %j',
+      (routeLongitudes, markerLongitudes, west, east) => {
+        const routes = routeLongitudes.map((longitudes) => (
+          longitudes.map((lng) => ({ lat: 10, lng }))
+        ));
+        const markers = markerLongitudes.map((lng) => ({ lat: 10, lng }));
+        expect(createBounds([...routes.flat(), ...markers], routes)).toEqual({
+          northEast: { lat: 10, lng: east },
+          southWest: { lat: 10, lng: west },
+        });
+      },
+    );
   });
 });
