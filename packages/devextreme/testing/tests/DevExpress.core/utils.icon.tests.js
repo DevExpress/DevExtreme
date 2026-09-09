@@ -1,4 +1,7 @@
 import { getImageSourceType, getImageContainer } from 'core/utils/icon';
+import { getImageAriaLabel } from '__internal/core/utils/m_icon';
+import localization from 'localization';
+import ja from 'localization/messages/ja.json!';
 
 const { module: testModule, test } = QUnit;
 
@@ -142,5 +145,37 @@ testModule('icon utils', {
                     break;
             }
         });
+    });
+});
+
+testModule('getImageAriaLabel', () => {
+    [
+        { source: 'close', expected: 'Close', description: 'a dxIcon with a localized message' },
+        { source: 'iconName', expected: 'iconName', description: 'a dxIcon without a localized message' },
+        { source: 'fa fa-home', expected: 'fa fa-home', description: 'a font icon' },
+        { source: '/path/file.png', expected: 'file', description: 'a path to an image' },
+        { source: 'https://example.com/path/file.png', expected: '', description: 'an image URL' },
+        { source: 'www.example.com/file.png', expected: '', description: 'an image URL without a protocol' },
+        { source: 'data:image/png;base64,qwerty', expected: '', description: 'a base64 image' },
+        { source: '<svg><title>Svg title</title><path d="M0 0h1v1H0z"/></svg>', expected: 'Svg title', description: 'an svg with a title' },
+        { source: '<svg><path d="M0 0h1v1H0z"/></svg>', expected: '', description: 'an svg without a title' },
+        { source: '', expected: '', description: 'an empty string' },
+    ].forEach(({ source, expected, description }) => {
+        test(`should return "${expected}" for ${description}`, function(assert) {
+            assert.strictEqual(getImageAriaLabel(source), expected);
+        });
+    });
+
+    test('should localize the dxIcon name with the current locale', function(assert) {
+        const defaultLocale = localization.locale();
+
+        try {
+            localization.loadMessages(ja);
+            localization.locale('ja');
+
+            assert.strictEqual(getImageAriaLabel('close'), '閉じる');
+        } finally {
+            localization.locale(defaultLocale);
+        }
     });
 });
