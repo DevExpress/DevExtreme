@@ -183,16 +183,6 @@
       "why": "rgb(from color-content-inverted / .1) - the foundation names no switch shadow role, recorded in DIVERGENCES and inventoried in BRIDGES.md"
     },
     {
-      "name": "switch-on-border-focused",
-      "verdict": "cross-family",
-      "roles": [
-        "color-bg-primary-active"
-      ],
-      "slot": "border",
-      "decision": "design",
-      "why": "the only member of the on-border trio still on a bg role; its siblings were corrected. color-border-primary-shared-active matches in light and moves dark #003c70 -> #005397, so it is a pixel, not hygiene"
-    },
-    {
       "name": "tree-view-checkbox-accent-content-focused",
       "verdict": "family-conflict",
       "roles": [
