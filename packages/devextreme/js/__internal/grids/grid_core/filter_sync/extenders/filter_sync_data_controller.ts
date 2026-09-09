@@ -4,18 +4,11 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import { FILTER_TYPES_EXCLUDE } from '@ts/grids/grid_core/filter_sync/const';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
-import { isFilterSyncActive } from '@ts/grids/grid_core/filter_sync/utils';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
-
-export interface FilterSyncDataControllerExtension {
-  isFilterSyncActive: () => boolean | undefined;
-}
 
 export const filterSyncDataControllerExtender = (
   Base: ModuleType<DataController>,
-): ModuleType<
-  DataController & FilterSyncDataControllerExtension
-> => class FilterSyncDataControllerExtender extends Base {
+): ModuleType<DataController> => class FilterSyncDataControllerExtender extends Base {
   private filterSyncController!: FilterSyncController;
 
   public init(): void {
@@ -29,7 +22,7 @@ export const filterSyncDataControllerExtender = (
       case 'filterValue':
         this.applyFilter();
 
-        if (this.isFilterSyncActive()) {
+        if (this.filterController.isFilterSyncActive()) {
           this.filterSyncController.syncFilterValue();
         }
         args.handled = true;
@@ -38,7 +31,7 @@ export const filterSyncDataControllerExtender = (
         args.handled = true;
         break;
       case 'columns':
-        if (this.isFilterSyncActive()) {
+        if (this.filterController.isFilterSyncActive()) {
           const column: Column = this._columnsController.getColumnByPath(args.fullName);
 
           if (column && !this.filterSyncController.isSyncingColumnOptions()) {
@@ -57,10 +50,6 @@ export const filterSyncDataControllerExtender = (
       default:
         super.optionChanged(args);
     }
-  }
-
-  public isFilterSyncActive(): boolean | undefined {
-    return isFilterSyncActive(this);
   }
 
   private parseColumnPropertyName(fullName: string): string | null {

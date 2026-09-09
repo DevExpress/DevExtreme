@@ -14,6 +14,12 @@ export class FilterController extends modules.Controller {
     this.dataSourceController = this.getController('dataSource');
   }
 
+  public isFilterSyncActive(): boolean | undefined {
+    const filterSyncEnabled = this.option('filterSyncEnabled');
+
+    return filterSyncEnabled === 'auto' ? this.option('filterPanel.visible') : filterSyncEnabled;
+  }
+
   protected getLangParams(): LangParams | undefined {
     return this.dataSourceController.getDataSource()?.loadOptions?.()?.langParams;
   }
