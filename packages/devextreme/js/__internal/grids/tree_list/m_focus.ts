@@ -114,7 +114,7 @@ const data = (
           return;
         }
 
-        const offset = findIndex(nodes, (node) => this.keyOf(node.data) === key);
+        const offset = findIndex(nodes, (node) => this.dataSourceController.keyOf(node.data) === key);
 
         let pageIndex = -1;
 

@@ -767,7 +767,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       const { key } = change;
 
       each(items, (i, item) => {
-        if (equalByValue(key, isInsert ? item.key : this._dataController.keyOf(item))) {
+        if (equalByValue(key, isInsert ? item.key : this.dataSourceController.keyOf(item))) {
           index = i;
           return false;
         }

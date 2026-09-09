@@ -81,7 +81,9 @@ export type DataSourceAdapterExtender = (
   Base: ModuleType<DataSourceAdapter>,
 ) => ModuleType<DataSourceAdapter>;
 
-export interface DataSourceAdapterProvider {
+export interface DataSourceAdapterProvider<
+  TAdapter extends DataSourceAdapter = DataSourceAdapter,
+> {
   extend: (extender: DataSourceAdapterExtender) => void;
-  create: (component: InternalGrid) => DataSourceAdapter;
+  create: (component: InternalGrid) => TAdapter;
 }

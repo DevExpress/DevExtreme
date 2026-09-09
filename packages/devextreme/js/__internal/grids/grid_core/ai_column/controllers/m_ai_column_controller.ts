@@ -59,12 +59,12 @@ export class AIColumnController extends Controller {
 
   private addAICommandColumn(): void {
     const that = this;
-    const { dataController, aiColumnIntegrationController } = this;
+    const { dataSourceController, aiColumnIntegrationController } = this;
 
     this.columnsController.addCommandColumn({
       ...getAICommandColumnDefaultOptions(),
       calculateCellValue(data: RawItemData) {
-        const key = dataController.keyOf(data);
+        const key = dataSourceController.keyOf(data);
         const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
         const defaultValue = that.getDefaultCellValue(this, cellValue);
 
