@@ -1386,14 +1386,8 @@ export class DataController extends modules.Controller {
       return d;
     }
 
-    const resolveWithProcessedItems = (loadResult: CustomLoadResult): void => {
-      const items = this._processItems(
-        this._beforeProcessItems(loadResult.data),
-        { changeType: 'loadingAll' },
-      );
-
-      // @ts-expect-error DataGrid-only summary leaks into grid_core
-      d.resolve(items, loadResult.extra?.summary);
+    const resolveLoaded = (loadResult: CustomLoadResult): void => {
+      this.resolveLoadAllItems(d, loadResult);
     };
 
     if (data) {
@@ -1402,17 +1396,34 @@ export class DataController extends modules.Controller {
         group: dataSource.group(),
         sort: dataSource.sort(),
       })
-        .done(resolveWithProcessedItems)
+        .done(resolveLoaded)
         .fail(d.reject as (...args: unknown[]) => void);
     } else if (!dataSource.isLoading()) {
       dataSource.customLoader.loadAll()
-        .done(resolveWithProcessedItems)
+        .done(resolveLoaded)
         .fail(d.reject as (...args: unknown[]) => void);
     } else {
       d.reject();
     }
 
     return d;
+  }
+
+  protected processLoadAllItems(loadResult: CustomLoadResult): ProcessedItem[] {
+    return this._processItems(
+      this._beforeProcessItems(loadResult.data),
+      { changeType: 'loadingAll' },
+    );
+  }
+
+  /**
+   * @extended: summary (DataGrid)
+   */
+  protected resolveLoadAllItems(
+    d: DeferredObj<ProcessedItem[]>,
+    loadResult: CustomLoadResult,
+  ): void {
+    d.resolve(this.processLoadAllItems(loadResult));
   }
 
   public async getAllDataRowKeys(): Promise<RowKey[]> {
