@@ -25,6 +25,19 @@ export default function App() {
   const hideInfo = useCallback(() => {
     setCurrentVehicle(null);
   }, []);
+  const renderTrademark = useCallback(
+    (cellData) => (
+      <Trademark
+        vehicle={cellData.data}
+        onShowInfo={showInfo}
+      />
+    ),
+    [showInfo],
+  );
+  const renderLicenseInfo = useCallback(
+    () => <LicenseInfo vehicle={currentVehicle} />,
+    [currentVehicle],
+  );
   return (
     <>
       <DataGrid
@@ -44,12 +57,7 @@ export default function App() {
           caption="Trademark"
           width={200}
           dataField="TrademarkName"
-          cellRender={(cellData) => (
-            <Trademark
-              vehicle={cellData.data}
-              onShowInfo={showInfo}
-            />
-          )}
+          cellRender={renderTrademark}
         />
         <Column
           dataField="Price"
@@ -99,7 +107,7 @@ export default function App() {
         hideOnOutsideClick={true}
         title="Image Info"
         onHiding={hideInfo}
-        contentRender={() => <LicenseInfo vehicle={currentVehicle} />}
+        contentRender={renderLicenseInfo}
       >
         <Position
           at="center"

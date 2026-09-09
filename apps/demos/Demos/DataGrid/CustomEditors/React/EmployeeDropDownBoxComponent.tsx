@@ -11,6 +11,9 @@ import DropDownBox, { type DropDownBoxTypes } from 'devextreme-react/drop-down-b
 
 const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
+const clearContextMenu = (event: DataGridTypes.ContextMenuPreparingEvent) => {
+  event.items = [];
+};
 
 const EmployeeDropDownBoxComponent = (props: DataGridTypes.ColumnCellTemplateData) => {
   const { data: { value: dataValue } } = props;
@@ -24,41 +27,36 @@ const EmployeeDropDownBoxComponent = (props: DataGridTypes.ColumnCellTemplateDat
     }
   }, []);
 
-  const contentRender = useCallback(() => {
-    const onContextMenuPreparing = (event: DataGridTypes.ContextMenuPreparingEvent) => {
-      event.items = [];
-    };
-    const onSelectionChanged = (args: DataGridTypes.SelectionChangedEvent) => {
-      setSelectedRowKeys(args.selectedRowKeys);
-      setDropDownOpened(false);
+  const onSelectionChanged = useCallback((args: DataGridTypes.SelectionChangedEvent) => {
+    setSelectedRowKeys(args.selectedRowKeys);
+    setDropDownOpened(false);
 
-      props.data.setValue(args.selectedRowKeys[0]);
-    };
+    props.data.setValue(args.selectedRowKeys[0]);
+  }, [props.data]);
 
-    return (
-      <DataGrid
-        dataSource={props.data.column.lookup.dataSource}
-        remoteOperations={true}
-        height={250}
-        selectedRowKeys={selectedRowKeys}
-        hoverStateEnabled={true}
-        onContextMenuPreparing={onContextMenuPreparing}
-        onSelectionChanged={onSelectionChanged}
-        focusedRowEnabled={true}
-        defaultFocusedRowKey={selectedRowKeys[0]}
-      >
-        <Column dataField="FullName" />
-        <Column dataField="Title" />
-        <Column dataField="Department" />
-        <Paging
-          enabled={true}
-          defaultPageSize={10}
-        />
-        <Scrolling mode="virtual" />
-        <Selection mode="single" />
-      </DataGrid>
-    );
-  }, [props.data, selectedRowKeys]);
+  const contentRender = useCallback(() => (
+    <DataGrid
+      dataSource={props.data.column.lookup.dataSource}
+      remoteOperations={true}
+      height={250}
+      selectedRowKeys={selectedRowKeys}
+      hoverStateEnabled={true}
+      onContextMenuPreparing={clearContextMenu}
+      onSelectionChanged={onSelectionChanged}
+      focusedRowEnabled={true}
+      defaultFocusedRowKey={selectedRowKeys[0]}
+    >
+      <Column dataField="FullName" />
+      <Column dataField="Title" />
+      <Column dataField="Department" />
+      <Paging
+        enabled={true}
+        defaultPageSize={10}
+      />
+      <Scrolling mode="virtual" />
+      <Selection mode="single" />
+    </DataGrid>
+  ), [props.data, onSelectionChanged, selectedRowKeys]);
 
   return (
     <DropDownBox

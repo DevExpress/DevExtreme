@@ -6,6 +6,9 @@ import DropDownBox from 'devextreme-react/drop-down-box';
 
 const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
+const clearContextMenu = (event) => {
+  event.items = [];
+};
 const EmployeeDropDownBoxComponent = (props) => {
   const {
     data: { value: dataValue },
@@ -18,23 +21,23 @@ const EmployeeDropDownBoxComponent = (props) => {
       setDropDownOpened(e.value);
     }
   }, []);
-  const contentRender = useCallback(() => {
-    const onContextMenuPreparing = (event) => {
-      event.items = [];
-    };
-    const onSelectionChanged = (args) => {
+  const onSelectionChanged = useCallback(
+    (args) => {
       setSelectedRowKeys(args.selectedRowKeys);
       setDropDownOpened(false);
       props.data.setValue(args.selectedRowKeys[0]);
-    };
-    return (
+    },
+    [props.data],
+  );
+  const contentRender = useCallback(
+    () => (
       <DataGrid
         dataSource={props.data.column.lookup.dataSource}
         remoteOperations={true}
         height={250}
         selectedRowKeys={selectedRowKeys}
         hoverStateEnabled={true}
-        onContextMenuPreparing={onContextMenuPreparing}
+        onContextMenuPreparing={clearContextMenu}
         onSelectionChanged={onSelectionChanged}
         focusedRowEnabled={true}
         defaultFocusedRowKey={selectedRowKeys[0]}
@@ -49,8 +52,9 @@ const EmployeeDropDownBoxComponent = (props) => {
         <Scrolling mode="virtual" />
         <Selection mode="single" />
       </DataGrid>
-    );
-  }, [props.data, selectedRowKeys]);
+    ),
+    [props.data, onSelectionChanged, selectedRowKeys],
+  );
   return (
     <DropDownBox
       onOptionChanged={boxOptionChanged}
