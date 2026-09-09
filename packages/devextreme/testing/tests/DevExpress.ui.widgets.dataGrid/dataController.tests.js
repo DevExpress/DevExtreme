@@ -3979,7 +3979,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.deepEqual(this.dataController.items()[itemCount - 2].key, ['value99']);
         assert.strictEqual(this.dataController.items()[itemCount - 1].key, 99);
         assert.strictEqual(this.dataController.pageIndex(), 0);
-        assert.strictEqual(this.dataController.itemsCount(), 100);
+        assert.strictEqual(this.dataSourceController.getAdapter().itemsCount(), 100);
     });
 
     QUnit.test('scroll to previous render page', function(assert) {
@@ -4687,7 +4687,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // assert
         assert.deepEqual(this.getDataItems(), items);
-        assert.equal(dataController.itemsCount(), 5);
+        assert.equal(this.dataSourceController.getAdapter().itemsCount(), 5);
         assert.ok(dataController.isLoaded());
         assert.ok(!dataController.isLoading(), 'loading completed');
         assert.ok(!isLoadingByEvent, 'loading completed');
@@ -4716,7 +4716,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // assert
         assert.deepEqual(this.getDataItems(), TEN_NUMBERS);
-        assert.equal(dataController.itemsCount(), 10);
+        assert.equal(this.dataSourceController.getAdapter().itemsCount(), 10);
         assert.ok(dataController.isLoaded());
         assert.ok(!dataController.isLoading(), 'loading completed');
         assert.ok(!isLoadingByEvent, 'loading completed');
@@ -14256,7 +14256,7 @@ QUnit.module('Using DataSource instance', {
 
         // assert
         assert.ok(!this.dataSource.filter(), 'no filter');
-        assert.equal(this.dataController.itemsCount(), 3);
+        assert.equal(this.dataSourceController.getAdapter().itemsCount(), 3);
         assert.equal(this.dataSourceController.totalCount(), 3);
 
         // act
@@ -14268,7 +14268,7 @@ QUnit.module('Using DataSource instance', {
         const filter = this.dataSource.filter();
         assert.deepEqual(this.dataSource.filter(), [filter[0], '=', 2], 'changed filter');
         assert.equal(this.dataController.items()[0].data.field3, 6);
-        assert.equal(this.dataController.itemsCount(), 2);
+        assert.equal(this.dataSourceController.getAdapter().itemsCount(), 2);
         assert.equal(this.dataSourceController.totalCount(), 2);
     });
 
@@ -14304,7 +14304,7 @@ QUnit.module('Using DataSource instance', {
         assert.strictEqual(this.columnOption(2, 'groupIndex'), undefined);
 
         assert.deepEqual(changes, ['columns', 'data']);
-        assert.equal(this.dataController.itemsCount(), 5);
+        assert.equal(this.dataSourceController.getAdapter().itemsCount(), 5);
         assert.equal(this.dataSourceController.totalItemsCount(), 8);
         assert.equal(this.dataController.items()[0].rowType, 'group');
         assert.equal(this.dataController.items()[1].rowType, 'data');
@@ -14346,7 +14346,7 @@ QUnit.module('Using DataSource instance', {
         assert.strictEqual(this.columnOption(2, 'sortOrder'), 'desc');
 
         assert.deepEqual(changes, ['columns', 'data']);
-        assert.equal(this.dataController.itemsCount(), 5);
+        assert.equal(this.dataSourceController.getAdapter().itemsCount(), 5);
         assert.equal(this.dataSourceController.totalItemsCount(), 5);
         assert.equal(this.dataController.items()[0].data.field3, 7);
         assert.equal(this.dataController.items()[4].data.field3, 3);
