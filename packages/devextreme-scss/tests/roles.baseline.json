@@ -73,16 +73,6 @@
       "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
     },
     {
-      "name": "color-view-handle-content",
-      "verdict": "cross-family",
-      "roles": [
-        "color-bg"
-      ],
-      "slot": "content",
-      "decision": "naming",
-      "why": "goes to base as $handle-color and is a FILL - radial-gradient stops and inset box-shadows. color-bg is the right role; the slot word `content` is what disagrees"
-    },
-    {
       "name": "load-indicator-segment-inner-border",
       "verdict": "family-conflict",
       "roles": [
@@ -239,7 +229,7 @@
         "box-shadow"
       ],
       "decision": "hairline",
-      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+      "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
     },
     {
       "name": "color-view-border-disabled",
@@ -249,38 +239,7 @@
         "box-shadow"
       ],
       "decision": "hairline",
-      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
-    },
-    {
-      "name": "color-view-handle-content",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background",
-        "box-shadow"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "date-view-roller-bottom-shadow",
-      "slot": "shadow",
-      "slotSays": "shadow",
-      "paints": [
-        "background-image"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "date-view-roller-top-shadow",
-      "slot": "shadow",
-      "slotSays": "shadow",
-      "paints": [
-        "background-image"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+      "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
     },
     {
       "name": "diagram-selection-bg",
@@ -290,147 +249,7 @@
         "fill"
       ],
       "decision": "known",
-      "why": "already inventoried as a divergence - the foundation names no role for it"
-    },
-    {
-      "name": "filter-builder-group-operation-content",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-group-operation-content-disabled",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-group-operation-content-focused",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-group-operation-content-hovered",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-item-field-content",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-item-field-content-disabled",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-item-field-content-focused",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-item-field-content-hovered",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-item-operator-content",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-item-operator-content-focused",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-item-operator-content-hovered",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-item-value-content",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-item-value-content-focused",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "filter-builder-item-value-content-hovered",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+      "why": "The name is right - fill on an SVG rect IS a background - and the role divergence is already recorded in DIVERGENCES.md. Re-checked 09.09."
     },
     {
       "name": "gantt-content",
@@ -442,8 +261,8 @@
         "border-left-color",
         "border-top-color"
       ],
-      "decision": "rule-5",
-      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+      "decision": "drawn-mark",
+      "why": "Re-classified 09.09, and this one turned out to be correct. Every use is a drawn foreground mark, not a container: the milestone diamond as a box background, the dependency lines as 1px hairlines, the arrowhead as a border triangle. content is the right role for a mark and the right word for the name; the four CSS properties are just how CSS draws marks. This was sitting under rule-5, which claimed the name picked the dominant of two painted families - it does not, and it does not need to."
     },
     {
       "name": "grid-border-focused",
@@ -453,38 +272,7 @@
         "background-color"
       ],
       "decision": "hairline",
-      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
-    },
-    {
-      "name": "pivot-grid-accent-content",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "border-color",
-        "outline-color"
-      ],
-      "decision": "rule-5",
-      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
-    },
-    {
-      "name": "pivot-grid-grand-total-content",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "pivot-grid-total-content",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+      "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
     },
     {
       "name": "radio-button-content-read-only",
@@ -494,39 +282,8 @@
         "background-color",
         "border-color"
       ],
-      "decision": "rule-5",
-      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
-    },
-    {
-      "name": "scheduler-appointment-content-active",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
-    },
-    {
-      "name": "scheduler-appointment-start-content",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color",
-        "box-shadow"
-      ],
-      "decision": "rule-5",
-      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
-    },
-    {
-      "name": "scheduler-workspace-cell-content-focused",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color"
-      ],
-      "decision": "naming",
-      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+      "decision": "ring-and-fill",
+      "why": "Moved out of rule-5 on 09.09. The rule excuses a name that picks the dominant of two painted families; these names pick a family that is painted by NEITHER property. All four paint a ring (border-color) and a fill (background-color) of the same small control from one variable, and none of them paints text. See the widened radio-invalid-vs-checkbox-invalid question: the same anatomy is resolved four different ways across four controls."
     },
     {
       "name": "slider-accent-content-focused",
@@ -536,8 +293,8 @@
         "background",
         "border-color"
       ],
-      "decision": "rule-5",
-      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+      "decision": "ring-and-fill",
+      "why": "Moved out of rule-5 on 09.09. The rule excuses a name that picks the dominant of two painted families; these names pick a family that is painted by NEITHER property. All four paint a ring (border-color) and a fill (background-color) of the same small control from one variable, and none of them paints text. See the widened radio-invalid-vs-checkbox-invalid question: the same anatomy is resolved four different ways across four controls."
     },
     {
       "name": "slider-invalid-content-focused",
@@ -547,8 +304,8 @@
         "background-color",
         "border-color"
       ],
-      "decision": "rule-5",
-      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+      "decision": "ring-and-fill",
+      "why": "Moved out of rule-5 on 09.09. The rule excuses a name that picks the dominant of two painted families; these names pick a family that is painted by NEITHER property. All four paint a ring (border-color) and a fill (background-color) of the same small control from one variable, and none of them paints text. See the widened radio-invalid-vs-checkbox-invalid question: the same anatomy is resolved four different ways across four controls."
     },
     {
       "name": "splitter-bar-border",
@@ -558,7 +315,7 @@
         "background-color"
       ],
       "decision": "hairline",
-      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+      "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
     },
     {
       "name": "splitter-bar-border-disabled",
@@ -568,7 +325,7 @@
         "background-color"
       ],
       "decision": "hairline",
-      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+      "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
     },
     {
       "name": "tree-view-checkbox-accent-content-focused",
@@ -578,8 +335,8 @@
         "background-color",
         "border-color"
       ],
-      "decision": "rule-5",
-      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+      "decision": "ring-and-fill",
+      "why": "Moved out of rule-5 on 09.09. The rule excuses a name that picks the dominant of two painted families; these names pick a family that is painted by NEITHER property. All four paint a ring (border-color) and a fill (background-color) of the same small control from one variable, and none of them paints text. See the widened radio-invalid-vs-checkbox-invalid question: the same anatomy is resolved four different ways across four controls."
     }
   ],
   "ladders": [
@@ -969,33 +726,6 @@
       ],
       "decision": "shade",
       "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
-    },
-    {
-      "concept": "accent content rest",
-      "roles": [
-        "color-content-primary",
-        "color-border-primary"
-      ],
-      "families": [
-        "content",
-        "border"
-      ],
-      "members": [
-        {
-          "folder": "chat",
-          "role": "color-content-primary"
-        },
-        {
-          "folder": "pivotGrid",
-          "role": "color-border-primary"
-        },
-        {
-          "folder": "scheduler",
-          "role": "color-content-primary"
-        }
-      ],
-      "decision": "design",
-      "why": "Shrank 09.09 when the chat member moved to content-primary, and the rest of the group turns out not to be a group at all. Three members, three different elements: chat paints the 2px accent bar of the editing preview and its caption; pivotGrid paints outline-color on focused cells and one border-color (base/pivotGrid/_index.scss:133-194, :603), so border-primary is right for the property and only the word content is wrong; scheduler paints actual text. What is left is a naming collision on the word accent, not a disagreement about how to paint one thing."
     },
     {
       "concept": "base bg rest",
@@ -1966,14 +1696,14 @@
       "Д9": "tabs-tab-border-disabled — значение верно, семь имён переименованы border → selector",
       "Д15": "menu bg rest - расхождения нет: Blazor красит menu-bg тем же color-bg, а третий участник группы это сепаратор, у которого своя роль border-subtle. Снято 09.09",
       "Д1": "gallery-nav-button-bg - принято, диск переведён на bg-static-dark: пакет держит статическое семейство парой, и content-половину мы уже читали",
-      "Д2": "gallery-nav-button-bg-disabled - принято вместе с Д1, bg-static-dark-disabled, и стрелка получила content-static-dark-disabled"
+      "Д2": "gallery-nav-button-bg-disabled - принято вместе с Д1, bg-static-dark-disabled, и стрелка получила content-static-dark-disabled",
+      "Д11": "accent content rest - расхождение исчезло: pivotGrid переименован в accent-outline (роль border-primary, красит outline-color), а chat переехал на content-primary вместе с правкой контраста. Осталось двое на одной роли - группы больше нет"
     },
     "map": {
       "ladder:accordion-title-bg": "Д5",
       "ladder:tile-view-bg": "Д6",
       "contrast:.dx-splitter .dx-resize-handle": "Д7",
       "concept:accent border rest": "Д10",
-      "concept:accent content rest": "Д11",
       "concept:base bg rest": "Д12",
       "concept:base content rest": "Д13",
       "concept:invalid content rest": "Д14",
@@ -2282,8 +2012,8 @@
       {
         "key": "radio-invalid-vs-checkbox-invalid",
         "decision": "design",
-        "title": "radioButton и checkBox решили одну анатомию по-разному",
-        "why": "Both controls paint an invalid ring and an invalid fill. The checkbox splits them: check-box-invalid-border* on border-danger-shared* for the ring, check-box-invalid-mark-bg* on content-danger-shared* for the mark. The radio uses ONE trio for both: radio-button-invalid-bg* reads border-danger-shared* and paints border-color on the ring AND background-color on the dot (radioButton/_index.scss:104, :108, :117, :121). So the radio's name says bg while its role and dominant property say border, which is why it sits in the rule-5 list. The split would be free in pixels - the whole *-danger-shared family resolves to one value across bg, border and content in BOTH modes, which is what shared means here - but it is not free in code: the rest-state variable is a parameter of dx-radiobutton-states-mixin, so splitting it changes a base mixin signature and therefore generic and material too. Options: (1) split to match the checkbox, correct anatomy, costs a base parameter and touches three themes; (2) rename the trio to -border, honest about the dominant property, theme-local and value-neutral, but then the dot reads its background from a variable called border; (3) leave it and record the divergence. Recommendation: (1) if the base is being touched anyway, (3) otherwise - (2) trades one lie for another."
+        "title": "Кольцо и заливка мелкого контрола: одна анатомия, четыре решения",
+        "why": "Widened 09.09 when category Г was taken to the end. It started as radio versus checkbox and it is bigger: four controls paint the same anatomy - the ring of a small control plus its fill - and each resolves it differently. The checkbox splits it in two, border role on the ring and content role on the mark. The radio paints both from one variable on a border role but calls the variable bg. The read-only radio paints both from one variable on a CONTENT role, though no property is text. The slider does it twice with roles from different families - accent focused on a bg role, invalid focused on a border role - for the identical pair of properties. The treeView checkbox does it on a bg role and follows its own question. Nothing here is about pixels: the whole *-danger-shared family resolves to one value across bg, border and content in both modes. It is about which anatomy the family agrees on. Splitting is not free in code either - the radio rest-state variable is a parameter of dx-radiobutton-states-mixin in base, so splitting it changes a base signature and touches generic and material. Options: (1) adopt the checkbox shape everywhere, correct anatomy, costs a base parameter; (2) keep one variable per control but name and role it by the ring, which is the part always drawn, so the fill borrows a border role openly; (3) leave the four as they are and record the divergence. Recommendation: (2) now, since it is theme-local and value-neutral, and (1) whenever the base is opened for other reasons."
       },
       {
         "key": "tree-view-checkbox-focus-still-unique",
@@ -2403,6 +2133,21 @@
         "what": "gallery-nav-button-bg-disabled (Д2), and a disabled colour for the arrow",
         "change": "content-disabled -> bg-static-dark-disabled; new gallery-nav-arrow-content-disabled on content-static-dark-disabled",
         "effect": "disc #ababab / #767676 -> #161616 in both modes. Nothing here is protected by NFR-1: legacy fluent has no disabled rules for the gallery at all, the block came from the disabled-paint wave, and this slot was already recorded once as a role-family error. The arrow needed the second half: only the button carried the disabled colour, while the ::before rule kept painting it content-static-dark, so a disabled arrow rendered full white - 2.30 on the old light disc, and it would have read as enabled on the new near-black one. Now #767676 on #161616, 3.98, dimmed as a disabled control should be. Cascade checked in four scenarios including a disabled ancestor"
+      },
+      {
+        "what": "category Г: 23 names",
+        "change": "21 -content/-shadow slots that paint a background -> -bg; pivot-grid-accent-content -> -outline; scheduler-appointment-start-content -> -shadow",
+        "effect": "zero values moved, proved by comparing the MULTISET of resolved values rather than the names: 2263 values before and after, in both modes, no difference. 14 filterBuilder chip backgrounds, both pivot totals, the colorView handle fill, the two dateView roller fades, the scheduler appointment fill and focused cell, the pivot focus frame and the appointment start bar. tools/naming/mapping.json updated on the value side only - the legacy keys are untouched - and the registries and the tier regenerated"
+      },
+      {
+        "what": "text-editor readonly label border",
+        "change": "the readonly parameter of the label mixin was fed --dx-text-editor-border-disabled; it now gets --dx-text-editor-border-read-only, which already existed and was unused for this",
+        "effect": "value-identical - both read color-border-disabled - and it clears three findings from the disabled-paint gate, which forbids a -disabled name outside a disabled state. Found only because the artifact the gate reads was rebuilt: the gate had been passing against a bundle older than the source"
+      },
+      {
+        "what": "gallery disabled rules: both forms",
+        "change": "the ancestor form was .dx-state-disabled .dx-gallery-nav-button-*, missing .dx-gallery in the middle; now matches the idiom the indicator rules in the same file already use",
+        "effect": "same elements matched - a nav button exists only inside a gallery - so no pixel moves, verified by re-running the cascade harness on four scenarios. Five entries leave tests/disabled-both-forms.baseline.json and none is added"
       }
     ]
   },
@@ -2428,10 +2173,6 @@
       "package-gap": {
         "section": "Б",
         "ru": "нужной роли в пакете нет"
-      },
-      "naming": {
-        "section": "Г",
-        "ru": "роль верна, врёт слово в имени"
       },
       "confirmed": {
         "section": "Е",
@@ -2468,6 +2209,14 @@
       "known": {
         "section": "Е",
         "ru": "расхождение уже записано в DIVERGENCES.md"
+      },
+      "drawn-mark": {
+        "section": "Е",
+        "ru": "передний план, нарисованный не текстом - маркер, волосок, треугольник из границ; роль content верна"
+      },
+      "ring-and-fill": {
+        "section": "А",
+        "ru": "кольцо и заливка мелкого контрола из одной переменной - разобрано одним вопросом"
       }
     }
   },
@@ -2531,5 +2280,82 @@
       "diagram-danger-icon",
       "filter-builder-remove-icon"
     ]
+  },
+  "ringAndFill": {
+    "comment": [
+      "Одна анатомия - кольцо контрола плюс его заливка - и четыре разных решения в четырёх виджетах.",
+      "Выяснилось 09.09, когда категорию Г довели до конца: семь имён сидели под вердиктом rule-5,",
+      "который оправдывает выбор доминирующего из ДВУХ покрашенных семейств. Здесь же имя называло",
+      "семейство, которого нет ни в одном из двух свойств: все они красят border-color и",
+      "background-color и не красят текст."
+    ],
+    "members": [
+      {
+        "what": "checkBox, невалидное состояние",
+        "how": "две переменные: check-box-invalid-border* (border-роль) на кольцо, check-box-invalid-mark-bg* (content-роль) на метку",
+        "verdict": "разведено, анатомия названа честно"
+      },
+      {
+        "what": "radioButton, невалидное состояние",
+        "how": "одна переменная radio-button-invalid-bg* на border-роли красит и кольцо, и точку",
+        "verdict": "имя говорит bg, роль и главное свойство говорят border"
+      },
+      {
+        "what": "radioButton, только для чтения",
+        "how": "одна переменная radio-button-content-read-only на content-роли красит и кольцо, и точку",
+        "verdict": "имя и роль говорят content, текста нет"
+      },
+      {
+        "what": "slider, ручка в фокусе",
+        "how": "одна переменная slider-accent-content-focused на bg-роли красит и кольцо, и внутреннюю точку",
+        "verdict": "имя говорит content, роль говорит bg"
+      },
+      {
+        "what": "slider, невалидная ручка в фокусе",
+        "how": "одна переменная slider-invalid-content-focused на border-роли красит и кольцо, и точку",
+        "verdict": "та же анатомия, что у соседней строки, но роль из другого семейства"
+      },
+      {
+        "what": "treeView, чекбокс при фокусе элемента",
+        "how": "одна переменная tree-view-checkbox-accent-content-focused на bg-роли красит и кольцо, и заливку",
+        "verdict": "следует за судьбой блока фокуса treeView, отдельный вопрос"
+      }
+    ]
+  },
+  "renamed": {
+    "color-view-handle-content": "color-view-handle-bg",
+    "date-view-roller-top-shadow": "date-view-roller-top-bg",
+    "date-view-roller-bottom-shadow": "date-view-roller-bottom-bg",
+    "filter-builder-group-operation-content": "filter-builder-group-operation-bg",
+    "filter-builder-group-operation-content-hovered": "filter-builder-group-operation-bg-hovered",
+    "filter-builder-group-operation-content-focused": "filter-builder-group-operation-bg-focused",
+    "filter-builder-group-operation-content-disabled": "filter-builder-group-operation-bg-disabled",
+    "filter-builder-item-field-content": "filter-builder-item-field-bg",
+    "filter-builder-item-field-content-hovered": "filter-builder-item-field-bg-hovered",
+    "filter-builder-item-field-content-focused": "filter-builder-item-field-bg-focused",
+    "filter-builder-item-field-content-disabled": "filter-builder-item-field-bg-disabled",
+    "filter-builder-item-operator-content": "filter-builder-item-operator-bg",
+    "filter-builder-item-operator-content-hovered": "filter-builder-item-operator-bg-hovered",
+    "filter-builder-item-operator-content-focused": "filter-builder-item-operator-bg-focused",
+    "filter-builder-item-value-content": "filter-builder-item-value-bg",
+    "filter-builder-item-value-content-hovered": "filter-builder-item-value-bg-hovered",
+    "filter-builder-item-value-content-focused": "filter-builder-item-value-bg-focused",
+    "pivot-grid-total-content": "pivot-grid-total-bg",
+    "pivot-grid-grand-total-content": "pivot-grid-grand-total-bg",
+    "scheduler-appointment-content-active": "scheduler-appointment-bg-active",
+    "scheduler-workspace-cell-content-focused": "scheduler-workspace-cell-bg-focused",
+    "pivot-grid-accent-content": "pivot-grid-accent-outline",
+    "scheduler-appointment-start-content": "scheduler-appointment-start-shadow"
+  },
+  "bundleFreshness": {
+    "comment": [
+      "Сколько объявлений тира не найдено в собранном бандле. Должно быть 0.",
+      "Не метрика, а страж: каждая проверка, которая смотрит на красящее свойство, ЗАМОЛКАЕТ, если",
+      "бандл старше исходников - переименованная переменная просто не находится, свойства у неё нет,",
+      "и противоречить своему слоту она уже не может. На переименовании 23 имён 09.09 так спряталось",
+      "24 объявления, и проверка слотов выглядела пройденной. Теперь устаревший бандл двигает число,",
+      "а не убирает находки."
+    ],
+    "declarationsMissingFromBundle": 0
   }
 }

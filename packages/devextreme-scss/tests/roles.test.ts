@@ -35,7 +35,7 @@ type Open = {
 };
 
 const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'design'];
-const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design'];
+const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design', 'drawn-mark', 'ring-and-fill'];
 const LADDER_DECISIONS = ['no-rung', 'design'];
 const CONTRAST_DECISIONS = ['graphic-ok', 'graphic-ok-rest-only', 'package-gap', 'design'];
 const STATE_PAIR_DECISIONS = ['graphic-ok', 'design'];
@@ -448,6 +448,17 @@ test('the danger surface measurement stays complete and consistent', () => {
   const readers = [...d.textReaders, ...d.glyphReaders];
   expect(readers.filter((name: string) => !name.trim())).toEqual([]);
   expect(new Set(readers).size).toBe(readers.length);
+});
+
+/*
+ * Guards every other check in this file. The passes that read a painted property go silent when the
+ * bundle predates the source - a renamed variable is not found, so it reports no property, so it
+ * cannot contradict its slot. That is not hypothetical: renaming twenty-three names on 09.09 hid
+ * twenty-four declarations exactly this way, and the slot check looked like it had passed.
+ */
+test('every tier declaration is present in the bundle the checks read', () => {
+  expect(actual.summary.declarationsMissingFromBundle)
+    .toBe(baseline.bundleFreshness.declarationsMissingFromBundle);
 });
 
 test('the decision pages match the data they are generated from', () => {

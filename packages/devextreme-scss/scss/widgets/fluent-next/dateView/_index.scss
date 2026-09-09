@@ -105,13 +105,13 @@
   &::before {
     top: calc(-1 * var(--dx-date-view-roller-padding));
 
-    @include gradient-linear(var(--dx-date-view-roller-top-shadow));
+    @include gradient-linear(var(--dx-date-view-roller-top-bg));
   }
 
   &::after {
     top: var(--dx-date-view-roller-item-height);
 
-    @include gradient-linear(var(--dx-date-view-roller-bottom-shadow));
+    @include gradient-linear(var(--dx-date-view-roller-bottom-bg));
   }
 }
 

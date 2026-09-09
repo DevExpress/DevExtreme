@@ -423,8 +423,19 @@ const PROPERTY_FAMILY = [
 ];
 const bundlePath = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');
 const paints = new Map();   // --dx-name -> Set(css property)
+/*
+ * Names the bundle declares at all - not what they paint, just that they exist there.
+ *
+ * Every check that reads a painted property goes quiet when the bundle predates the source: a
+ * renamed variable simply is not found, so it reports no property, so it cannot contradict its
+ * slot. Renaming twenty-three names on 09.09 against a bundle built that morning hid twenty-four
+ * declarations this way, and the slot check looked like it had passed. The count below is banked
+ * with exact equality, so a stale bundle moves a number instead of removing findings.
+ */
+const declaredInBundle = new Set();
 if (existsSync(bundlePath)) {
   const css = readFileSync(bundlePath, 'utf8');
+  for (const [, name] of css.matchAll(/(--dx-[a-z0-9-]+)\s*:/g)) declaredInBundle.add(name);
   for (const [, property, value] of css.matchAll(/([a-z-]+)\s*:\s*([^;{}]*var\(--dx-[^;{}]*)/g)) {
     for (const [, name] of value.matchAll(/var\(\s*(--dx-[a-z0-9-]+)/g)) {
       if (!paints.has(name)) paints.set(name, new Set());
@@ -888,6 +899,7 @@ const summary = {
   contrastPairsMeasured: pairs.length,
   contrastBelowAA: lowContrast.length,
   contrastDarkOnly: lowContrast.filter((p) => p.contrast.light >= AA && p.contrast.dark < AA).length,
+  declarationsMissingFromBundle: findings.filter((f) => !declaredInBundle.has(`--dx-${f.name}`)).length,
   statePairsMeasured: statePairs.length,
   statePairsBelowGraphic: lowStatePairs.length,
   familyMismatch: count((f) => f.family),
