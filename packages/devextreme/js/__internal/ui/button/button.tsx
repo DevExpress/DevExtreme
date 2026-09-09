@@ -227,7 +227,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
 
   get aria(): Record<string, string> {
     const { icon, text } = this.props;
-    const label = !text && icon ? getImageAriaLabel(icon) : (text ?? '');
+    const label = !text && icon ? getImageAriaLabel(icon) : text;
 
     return {
       role: 'button',

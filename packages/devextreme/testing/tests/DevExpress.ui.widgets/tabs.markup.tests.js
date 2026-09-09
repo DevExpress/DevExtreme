@@ -304,6 +304,16 @@ QUnit.module('Aria label', {
         });
     });
 
+    QUnit.test('aria-label should be recalculated when the _itemAriaLabelExpr option changes', function(assert) {
+        this.createTabs({ items: [{ icon: 'user', badge: 'New' }] });
+
+        this.instance.option('_itemAriaLabelExpr', (data) => data.badge);
+        assert.strictEqual(this.getTab(0).attr('aria-label'), 'New', 'label follows the new rule');
+
+        this.instance.option('_itemAriaLabelExpr', () => undefined);
+        assert.strictEqual(this.getTab(0).attr('aria-label'), undefined, 'label is removed when the rule returns nothing');
+    });
+
     QUnit.test('items inserted and updated through the data source push should get aria-label', function(assert) {
         const data = [{ id: 0, text: 'User', icon: 'user' }];
         const dataSource = new DataSource({
