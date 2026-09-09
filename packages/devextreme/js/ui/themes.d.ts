@@ -1,3 +1,5 @@
+import { UserDefinedElement } from '../core/element';
+
 /**
  * @docid ui.themes
  * @namespace DevExpress.ui
@@ -48,7 +50,7 @@ export function isCompact(theme: string): boolean;
  * Unlike `current()` and `isDark()`, which answer for the loaded stylesheet, this answers for a
  * place on the page - a theme may ship both modes in one bundle and let a class pick between them.
  */
-export function mode(element: Element): 'light' | 'dark';
+export function mode(element: UserDefinedElement): 'light' | 'dark';
 
 /**
  * Re-reads the colour mode for widgets that render outside the element they belong to, such as an

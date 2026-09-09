@@ -1,11 +1,10 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { value } from '@js/core/utils/view_port';
-import { getWindow, hasWindow } from '@js/core/utils/window';
+import { resolvedThemeMode } from '@ts/core/utils/theme_mode';
 
 const SWATCH_CONTAINER_CLASS_PREFIX = 'dx-swatch-';
 const THEME_MODE_CLASS_PREFIX = 'dx-theme-mode-';
-const THEME_MODE_PROPERTY = '--dx-theme-mode';
 
 const classesByPrefix = (
   element: Element,
@@ -24,19 +23,13 @@ const closestClassesByPrefix = (
 /*
  * The mode an element ended up in is what the cascade decided, not what its ancestor classes
  * spell: `dx-theme-mode-inverted` asks for the opposite of its surroundings, and the container is
- * reparented to the viewport, whose surroundings are different ones. The theme names the outcome
- * in `--dx-theme-mode` (widgets/fluent-next/_design-system.scss), so ask the browser for it.
- * Themes that ship one mode per bundle declare nothing and get no class, as before.
+ * reparented to the viewport, whose surroundings are different ones. `resolvedThemeMode` reads the
+ * outcome the theme published, the same value `themes.mode()` reports, so the container and the
+ * public answer cannot drift apart. Themes that ship one mode per bundle declare nothing and get
+ * no class, as before.
  */
 const themeModeClasses = ($element: dxElementWrapper): string[] => {
-  const element = $element.get(0);
-  const window = hasWindow() ? getWindow() : undefined;
-
-  if (!element || !window?.getComputedStyle) {
-    return [];
-  }
-
-  const mode = window.getComputedStyle(element).getPropertyValue(THEME_MODE_PROPERTY).trim();
+  const mode = resolvedThemeMode($element);
 
   return mode ? [`${THEME_MODE_CLASS_PREFIX}${mode}`] : [];
 };

@@ -11,6 +11,7 @@ import { changeCallback, originalViewPort, value as viewPortValue } from '@js/co
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
 import { uiLayerInitialized } from '@ts/core/utils/m_common';
+import { resolvedThemeMode } from '@ts/core/utils/theme_mode';
 import { themeModeChangedCallback, themeReadyCallback } from '@ts/ui/m_themes_callback';
 
 const window = getWindow();
@@ -381,8 +382,6 @@ export function isCompact(themeName: string): boolean {
   return isTheme('compact', themeName);
 }
 
-const THEME_MODE_PROPERTY = '--dx-theme-mode';
-
 /**
  * The colour mode an element is rendered in.
  *
@@ -393,6 +392,10 @@ const THEME_MODE_PROPERTY = '--dx-theme-mode';
  * declares, and the element is the only thing that knows - the cascade decides it, not the classes
  * on the way up. A theme that does not scope modes declares nothing, and the loaded theme answers.
  */
+export function mode(element: Element | dxElementWrapper): 'light' | 'dark' {
+  return resolvedThemeMode(element) ?? (isDark() ? 'dark' : 'light');
+}
+
 /**
  * Re-reads the colour mode for widgets that render outside the element they belong to - today that
  * is open overlays, whose markup lives in the viewport and therefore outside the scope that decides
@@ -406,19 +409,6 @@ const THEME_MODE_PROPERTY = '--dx-theme-mode';
  */
 export function refreshMode(): void {
   themeModeChangedCallback.fire();
-}
-
-export function mode(element: Element | dxElementWrapper): 'light' | 'dark' {
-  const node = $(element).get(0);
-  const declared = node && hasWindow()
-    ? window.getComputedStyle(node).getPropertyValue(THEME_MODE_PROPERTY).trim()
-    : '';
-
-  if (declared === 'light' || declared === 'dark') {
-    return declared;
-  }
-
-  return isDark() ? 'dark' : 'light';
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

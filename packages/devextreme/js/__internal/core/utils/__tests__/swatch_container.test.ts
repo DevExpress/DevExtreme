@@ -21,6 +21,7 @@ const { getSwatchContainer } = swatchContainer;
 const MODE_STYLES = `
   .mode-light { --dx-theme-mode: light; }
   .mode-dark { --dx-theme-mode: dark; }
+  .mode-sepia { --dx-theme-mode: sepia; }
 `;
 
 const classesOf = (element: Element): string[] => [...element.classList].sort();
@@ -108,6 +109,12 @@ describe('getSwatchContainer', () => {
 
     it('carries no mode when the theme declares none', () => {
       expect(containerFor('<div class="target dx-theme-mode-inverted"></div>')).toBe($viewport);
+    });
+
+    // The contract is light or dark; anything else names no scope the theme can paint, and a
+    // container carrying it would be a wrapper no rule matches.
+    it('carries no mode when the value names none', () => {
+      expect(containerFor('<div class="target mode-sepia"></div>')).toBe($viewport);
     });
 
     it('carries a swatch and a mode together', () => {
