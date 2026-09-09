@@ -10,15 +10,25 @@ import type {
   DataSourceAdapterProvider, LoadOperation, OperationTypes, RawItemData, RemoteOperationsOptions,
 } from '@ts/grids/grid_core/data_source_adapter/types';
 import modules from '@ts/grids/grid_core/m_modules';
+import type { RowKey } from '@ts/grids/grid_core/m_types';
 
-export class DataSourceController extends modules.Controller {
+export class DataSourceController<
+  TAdapter extends DataSourceAdapter = DataSourceAdapter,
+> extends modules.Controller {
   // Absent before the first dataSource assignment and again after a reset.
-  private adapter: DataSourceAdapter | null = null;
+  protected adapter: TAdapter | null = null;
 
   private isShared = false;
 
+  /**
+   * @extended: DataGrid's and TreeList's data_source_controller
+   */
+  protected getAdapterProvider(): DataSourceAdapterProvider<TAdapter> {
+    throw new Error('Method not implemented.');
+  }
+
   public publicMethods(): string[] {
-    return ['getDataSource'];
+    return ['getDataSource', 'keyOf'];
   }
 
   /**
@@ -63,14 +73,7 @@ export class DataSourceController extends modules.Controller {
     return this.adapter?._dataSource ?? null;
   }
 
-  /**
-   * @extended: DataGrid's and TreeList's data_source_controller
-   */
-  protected getAdapterProvider(): DataSourceAdapterProvider {
-    throw new Error('Method not implemented.');
-  }
-
-  public createAdapter(dataSource: DataSource): DataSourceAdapter {
+  public createAdapter(dataSource: DataSource): TAdapter {
     const adapter = this.getAdapterProvider().create(this.component);
 
     adapter.init(dataSource);
@@ -83,7 +86,7 @@ export class DataSourceController extends modules.Controller {
     return this.adapter !== null;
   }
 
-  public getAdapter(): DataSourceAdapter | null {
+  public getAdapter(): TAdapter | null {
     return this.adapter;
   }
 
@@ -96,8 +99,21 @@ export class DataSourceController extends modules.Controller {
     return this.adapter?.store();
   }
 
+  /**
+   * The key the component identifies rows by. Not interchangeable with `store()?.key()` (TreeList)
+   * Callers that need what the store itself can identify a row by have to ask the store.
+   *
+   * @extended: TreeList's data_source_controller
+   */
   public key(): StoreKey | undefined {
     return this.adapter?.key();
+  }
+
+  /**
+   * @extended: TreeList's data_source_controller
+   */
+  public keyOf(data: RawItemData): RowKey | undefined {
+    return this.adapter?.store()?.keyOf(data);
   }
 
   public remoteOperations(): RemoteOperationsOptions {
