@@ -43,16 +43,6 @@
   ],
   "open": [
     {
-      "name": "chat-message-editing-preview-accent-content",
-      "verdict": "family-conflict",
-      "roles": [
-        "color-bg-primary"
-      ],
-      "slot": "content",
-      "decision": "rule-5",
-      "why": "one value paints the accent bar (background-color) and the caption (color) in base/chat/.../_mixins.scss:14,25 - dominant role recorded per rule 5. The text half wants content-primary in dark (#4b90d9 vs our #0f6cbd); same shape as the danger/success/warning fix of review round 1"
-    },
-    {
       "name": "check-box-invalid-mark-bg",
       "verdict": "cross-family",
       "roles": [
@@ -100,7 +90,7 @@
       ],
       "slot": "bg",
       "decision": "design",
-      "why": "a content role used as the scrim behind nav buttons over images. No bg role carries this value; the package paints its nav glyph with it, not the disc. Needs a scrim decision, not a swap"
+      "why": "Re-checked 09.09 against an implementation rather than a token set, and the answer changed. Blazor's carousel draws no disc at all - carousel-button-border-width is border-width-0 and the arrow is color-content - and where something must sit over an image it uses color-bg at opacity-85 (carousel-pages-background-color, carousel-overlay-color). So a scrim IS solved in the family: as a bg role at reduced opacity, not as a content role used opaque. The earlier reading, that the family offers nothing, was wrong. Three options now, in order of how much they change: (1) keep the disc and give it color-bg at an opacity, which is the family pattern and needs no new role; (2) drop the disc, as Blazor does, and rely on the arrow alone; (3) ask the package for a scrim role. wpf/gallery agrees with Blazor that content-subtle names the arrow, not the disc."
     },
     {
       "name": "gallery-nav-button-bg-disabled",
@@ -110,7 +100,7 @@
       ],
       "slot": "bg",
       "decision": "design",
-      "why": "same scrim question as gallery-nav-button-bg, disabled state"
+      "why": "Same question as gallery-nav-button-bg, disabled state. Whatever shape the scrim takes, this follows it."
     },
     {
       "name": "load-indicator-segment-inner-border",
@@ -623,7 +613,7 @@
         "color-bg-hovered"
       ],
       "decision": "design",
-      "why": "pressing the header looks exactly like hovering it: both read color-bg-hovered while the system ships color-bg-active (#e1e1e1 light / #1d1d1d dark), which the theme already uses elsewhere. Fluent 2 settles the principle: colorSubtleBackgroundHover #f5f5f5 and colorSubtleBackgroundPressed #e0e0e0 are separate tokens there, and the package mirrors those values as color-bg-hovered / color-bg-active. Still not applied here - conforming would move a pixel away from legacy fluent, and NFR-1 is the product's call, not the audit's"
+      "why": "Confirmed from three directions now, and the recommendation firms up. Fluent 2 separates colorSubtleBackgroundHover #f5f5f5 from colorSubtleBackgroundPressed #e0e0e0; the package carries both as bg-hovered / bg-active; and Blazor has a distinct pressed rung on BOTH sides of its accordion - header-hover-bg bg-alpha-hovered against header-active-bg bg-alpha-active, and header-hover-color content-hovered against header-active-color content-active. Two coherent ladders exist: opaque (bg-hovered -> bg-active, what Fluent 2 states and what our hover rung already is) and translucent (Blazor's bg-alpha pair, black 4% then 13%). Ours is opaque on hover, so a translucent active would mix idioms - the rung is bg-active, #e1e1e1. Not applied: it moves the pixel away from legacy fluent, which is the product call (NFR-1)."
     },
     {
       "stem": "button-danger-contained-content",
@@ -912,13 +902,13 @@
         "light": 5.38,
         "dark": 3.36
       },
-      "decision": "graphic-ok",
-      "why": "the checkmark is a glyph: 3.36 clears the 3:1 threshold. Recorded so it is not rediscovered, and so a drop below 3 is caught"
+      "decision": "graphic-ok-rest-only",
+      "why": "WRONG, corrected 09.09. The 3.36 is the rest state and nothing else, because the pass that produced it can only measure a foreground and a background written in one rule. One keystroke away the same element reads 1.62: the focused and active rules repaint the fill and leave the checkmark to the rest rule, so the pair is split across rules and was invisible. See statePairs and the group checkbox-focused-fill. Kept listed so the rest state is still watched, but the graphic-ok verdict now belongs to the rest state only."
     },
     {
       "selector": ".dx-field-value.dx-attention::before",
       "fgRole": "color-content-static-dark",
-      "bgRole": "color-content-danger-shared",
+      "bgRole": "color-bg-danger-shared",
       "contrast": {
         "light": 6.07,
         "dark": 3.68
@@ -946,7 +936,7 @@
         "dark": 2.8
       },
       "decision": "design",
-      "why": "Measured further 09.09 and the question moved. WCAG 1.4.11 asks about what identifies the component, and that is the bar against the panes, not the dots inside it - so the grip at 2.8 may not be in scope at all. The bar is: color-border on color-bg is 1.62 in LIGHT against the same 3:1, and its hovered state 1.82. The splitter is not identifiable by contrast in light at all, which is worse than what this row originally reported and in the mode that has screenshots. The focused state fails the other way: bg-primary on color-bg is 2.88 in dark."
+      "why": "Revised 09.09. Blazor sets splitter-resize-handle-color to content-subtle - our role exactly - so the grip is not an anomaly and there is nothing to swap it for on consistency grounds. The 2.8 in dark stands as an observation against the 3:1 floor. The wider claim this row grew into needs a qualifier: the bar is invisible in light at 1.62, but Blazor paints the same bar with bg-canvas, which is 1.04 against a pane - worse than ours. Every product in the family has an unidentifiable splitter in light, so this is a design-system question, not a defect of this theme."
     }
   ],
   "concepts": [
@@ -1003,19 +993,17 @@
     {
       "concept": "accent content rest",
       "roles": [
-        "color-bg-primary",
-        "color-border-primary",
-        "color-content-primary"
+        "color-content-primary",
+        "color-border-primary"
       ],
       "families": [
-        "bg",
-        "border",
-        "content"
+        "content",
+        "border"
       ],
       "members": [
         {
           "folder": "chat",
-          "role": "color-bg-primary"
+          "role": "color-content-primary"
         },
         {
           "folder": "pivotGrid",
@@ -1027,7 +1015,7 @@
         }
       ],
       "decision": "design",
-      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+      "why": "Shrank 09.09 when the chat member moved to content-primary, and the rest of the group turns out not to be a group at all. Three members, three different elements: chat paints the 2px accent bar of the editing preview and its caption; pivotGrid paints outline-color on focused cells and one border-color (base/pivotGrid/_index.scss:133-194, :603), so border-primary is right for the property and only the word content is wrong; scheduler paints actual text. What is left is a naming collision on the word accent, not a disagreement about how to paint one thing."
     },
     {
       "concept": "base bg rest",
@@ -1299,7 +1287,7 @@
         },
         {
           "folder": "common",
-          "role": "color-content-danger-shared"
+          "role": "color-bg-danger-shared"
         },
         {
           "folder": "gridBase",
@@ -1477,8 +1465,8 @@
           "role": "color-border-subtle"
         }
       ],
-      "decision": "design",
-      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+      "decision": "shade",
+      "why": "Dissolved 09.09. Blazor sets menu-bg and context-menu-bg to color-bg, which is what our menu and list already read. The third member is $menu-separator-bg, and the package names separator.color = border-subtle for exactly that element. Three members, two elements, no disagreement."
     },
     {
       "concept": "menu icon rest",
@@ -1993,12 +1981,13 @@
       "В closed перечислено, что было под освободившимися номерами - чтобы ссылка из переписки или",
       "из старой копии страницы находила ответ, а не чужой вопрос."
     ],
-    "next": 16,
+    "next": 23,
     "closed": {
       "Д3": "switch-on-border-focused — принято, переведён на border-primary-shared-active",
       "Д4": "tree-view-checkbox-border-disabled — снято: treeView больше не стилизует чекбокс",
       "Д8": "list-border-disabled — удалено вместе с правилом, красило несуществующий псевдоэлемент",
-      "Д9": "tabs-tab-border-disabled — значение верно, семь имён переименованы border → selector"
+      "Д9": "tabs-tab-border-disabled — значение верно, семь имён переименованы border → selector",
+      "Д15": "menu bg rest - расхождения нет: Blazor красит menu-bg тем же color-bg, а третий участник группы это сепаратор, у которого своя роль border-subtle. Снято 09.09"
     },
     "map": {
       "open:gallery-nav-button-bg": "Д1",
@@ -2011,7 +2000,376 @@
       "concept:base bg rest": "Д12",
       "concept:base content rest": "Д13",
       "concept:invalid content rest": "Д14",
-      "concept:menu bg rest": "Д15"
+      "statePairGroup:checkbox-focused-fill": "Д16",
+      "statePairGroup:outlined-button-label": "Д17",
+      "statePairGroup:contained-button-label": "Д18",
+      "sweep:scheduler-grid-line-strength": "Д19",
+      "sweep:scheduler-form-icon-on-bg-role": "Д20",
+      "sweep:radio-invalid-vs-checkbox-invalid": "Д21",
+      "sweep:tree-view-checkbox-focus-still-unique": "Д22"
     }
+  },
+  "statePairs": {
+    "comment": [
+      "Contrast measured across a state change - added 09.09.2026, and it is what the rest of this file",
+      "could not see. The rule-local pass needs a foreground and a background in one rule; a state",
+      "ladder never writes them together, so the states where a value actually moves were exactly the",
+      "blind spot. Exact equality: a row leaving or entering this list is a decision, not a ratchet.",
+      "threshold: 4.5 where the foreground is a label, 3 where it is a glyph or a boundary (WCAG 1.4.11)."
+    ],
+    "rows": [
+      {
+        "bg": "--dx-check-box-icon-checked-bg-focused",
+        "fg": "--dx-check-box-icon-bg",
+        "fgRole": "color-content-inverted",
+        "bgRole": "color-bg-primary-active",
+        "contrast": {
+          "light": 11.17,
+          "dark": 1.62
+        },
+        "selector": ".dx-checkbox-checked.dx-state-active .dx-checkbox-icon",
+        "group": "checkbox-focused-fill",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-active",
+        "fg": "--dx-button-default-outlined-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-active",
+        "contrast": {
+          "light": 2.94,
+          "dark": 4.79
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-active",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-success-outlined-bg-active",
+        "fg": "--dx-button-success-outlined-content",
+        "fgRole": "color-content-success",
+        "bgRole": "color-bg-success-subtler-active",
+        "contrast": {
+          "light": 3.02,
+          "dark": 4.75
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-active",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-danger-outlined-bg-active",
+        "fg": "--dx-button-danger-outlined-content",
+        "fgRole": "color-content-danger",
+        "bgRole": "color-bg-danger-subtler-active",
+        "contrast": {
+          "light": 3.18,
+          "dark": 5.01
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-active",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-danger-outlined-bg-selected",
+        "fg": "--dx-button-danger-outlined-content",
+        "fgRole": "color-content-danger",
+        "bgRole": "color-bg-danger-subtler-selected",
+        "contrast": {
+          "light": 3.78,
+          "dark": 3.22
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-selected",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-success-outlined-bg-selected",
+        "fg": "--dx-button-success-outlined-content",
+        "fgRole": "color-content-success",
+        "bgRole": "color-bg-success-subtler-selected",
+        "contrast": {
+          "light": 3.51,
+          "dark": 3.23
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-selected",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-selected",
+        "fg": "--dx-button-default-outlined-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-selected",
+        "contrast": {
+          "light": 3.45,
+          "dark": 3.35
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-selected",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-danger-outlined-bg-hovered",
+        "fg": "--dx-button-danger-outlined-content",
+        "fgRole": "color-content-danger",
+        "bgRole": "color-bg-danger-subtler-hovered",
+        "contrast": {
+          "light": 4.43,
+          "dark": 3.92
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-hover",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-danger-outlined-bg-focused",
+        "fg": "--dx-button-danger-outlined-content",
+        "fgRole": "color-content-danger",
+        "bgRole": "color-bg-danger-subtler-hovered",
+        "contrast": {
+          "light": 4.43,
+          "dark": 3.92
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-focused",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-hovered",
+        "fg": "--dx-button-default-outlined-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-hovered",
+        "contrast": {
+          "light": 4.02,
+          "dark": 4.11
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-hover",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-focused",
+        "fg": "--dx-button-default-outlined-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-hovered",
+        "contrast": {
+          "light": 4.02,
+          "dark": 4.11
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-focused",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-success-outlined-bg-hovered",
+        "fg": "--dx-button-success-outlined-content",
+        "fgRole": "color-content-success",
+        "bgRole": "color-bg-success-subtler-hovered",
+        "contrast": {
+          "light": 4.04,
+          "dark": 4.03
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-hover",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-success-outlined-bg-focused",
+        "fg": "--dx-button-success-outlined-content",
+        "fgRole": "color-content-success",
+        "bgRole": "color-bg-success-subtler-hovered",
+        "contrast": {
+          "light": 4.04,
+          "dark": 4.03
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-focused",
+        "group": "outlined-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-success-contained-bg-hovered",
+        "fg": "--dx-button-success-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-success-hovered",
+        "contrast": {
+          "light": 7.53,
+          "dark": 4.18
+        },
+        "selector": ".dx-button.dx-button-success.dx-state-hover",
+        "group": "contained-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-success-contained-bg-focused",
+        "fg": "--dx-button-success-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-success-hovered",
+        "contrast": {
+          "light": 7.53,
+          "dark": 4.18
+        },
+        "selector": ".dx-button.dx-button-success.dx-state-focused",
+        "group": "contained-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-default-contained-bg-hovered",
+        "fg": "--dx-button-default-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-primary-hovered",
+        "contrast": {
+          "light": 7.82,
+          "dark": 4.21
+        },
+        "selector": ".dx-button.dx-button-default.dx-state-hover",
+        "group": "contained-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-button-default-contained-bg-focused",
+        "fg": "--dx-button-default-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-primary-hovered",
+        "contrast": {
+          "light": 7.82,
+          "dark": 4.21
+        },
+        "selector": ".dx-button.dx-button-default.dx-state-focused",
+        "group": "contained-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-stepper-step-bg-selected-hovered",
+        "fg": "--dx-stepper-step-content-selected",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-primary-hovered",
+        "contrast": {
+          "light": 7.82,
+          "dark": 4.21
+        },
+        "selector": ".dx-step.dx-state-hover.dx-step-completed .dx-step-indicator",
+        "group": "contained-button-label",
+        "decision": "design"
+      },
+      {
+        "bg": "--dx-check-box-icon-checked-bg-hovered",
+        "fg": "--dx-check-box-icon-bg",
+        "fgRole": "color-content-inverted",
+        "bgRole": "color-bg-primary-hovered",
+        "contrast": {
+          "light": 7.82,
+          "dark": 4.3
+        },
+        "selector": ".dx-checkbox-checked.dx-state-hover .dx-checkbox-icon",
+        "decision": "graphic-ok"
+      }
+    ],
+    "groups": {
+      "checkbox-focused-fill": {
+        "decision": "design",
+        "why": "The checked checkbox, focused or pressed, fills with bg-primary-active and keeps its checkmark on content-inverted. Those two roles behave differently across modes: content-inverted flips (#ffffff light, #161616 dark), bg-primary-active does not (#003c70 in both). Light gets 11.17, dark gets 1.62 - the mark is gone, and the box itself is 1.39 against the page. The rest state is 3.36 and the hovered state 4.30, so only this rung fails. Measured alternatives for the fill in dark, mark first, box second: bg-primary-hovered #2b7ecf 4.30 / 3.69 (passes, and it is the rung the contained button already uses for focus - see button/_colors.scss, bg-focused reads bg-primary-hovered); bg-primary-shared-active #005397 2.31 / 1.98 (still fails, so the Д3 move does not transfer here); leaving it 1.62 / 1.39. Recommendation: bg-primary-hovered, which makes the checkbox agree with the button. Light moves 11.17 -> 7.82 and the fill goes #003c70 -> #005397, so etalons need re-shooting - that is why it is a question and not applied."
+      },
+      "outlined-button-label": {
+        "decision": "design",
+        "why": "The outlined buttons - default, success, danger - hold their label on content-<hue> while the fill climbs bg-<hue>-subtler through hovered, focused, selected and active. The label is text, so the floor is 4.5, and no state after rest reaches it: hover and focus 4.02-4.43, selected 3.22-3.78, active 2.94-3.18 in light. Blazor climbs both sides - outline-primary-hover-color is content-primary-hovered and -active-color is content-primary-active - and measuring its pairing answers the question unevenly: content-primary-hovered on bg-primary-subtler-hovered gives 5.85 light / 5.11 dark, which clears AA in both and is a straight improvement on our 4.02 / 4.11; but content-primary-active on bg-primary-subtler-active gives 6.10 light / 2.05 dark, trading one mode for the other, and content-primary-selected does not exist at all. So: (1) adopt Blazor's hovered and focused rungs - provable, both modes, three roles; (2) for selected and active there is no shipped pair that passes, so either hold the fill still in those states or ask the package; (3) content-on-subtle-primary, which the package ships for exactly this surface and we never read, clears everything by a mile (10.82 / 16) but is neutral, not blue - it would stop the label being an accent. Recommendation: (1) now, (3) only if design wants a neutral label."
+      },
+      "contained-button-label": {
+        "decision": "design",
+        "why": "The filled default and success buttons, and the completed stepper indicator, put a white label on bg-<hue>-hovered and land at 4.18-4.21 in dark against the 4.5 a label needs. Light is 7.5-7.8, so this is dark-only. The foreground is content-static-dark, which is #ffffff in both modes by design, so the whole movement is in the fill: bg-primary in dark is #0f6cbd giving 5.38, and its hovered rung lightens to #2b7ecf giving 4.21. A hover that lightens is correct for dark; it is the amount that overshoots. Nothing in the theme can fix this - the pair is two package roles used exactly as intended - so this is a report to the design system, alongside the danger-content row already filed. Listed as a question only to confirm we file it rather than swap a role."
+      }
+    },
+    "measuredOn": "2026-09-09"
+  },
+  "sweep": {
+    "comment": [
+      "Ручной проход 09.09.2026 по реализациям соседей, а не по наборам токенов пакета. Повод: три",
+      "вывода, снятых с наборов, оказались неверными, когда их сверили с кодом Blazor. Здесь то, что",
+      "этот проход нашёл нового - каждая запись со своими вариантами и ценой каждого.",
+      "Индекс реализации Blazor: dxvcs/Blazor/DevExpress.Blazor.Themes.Fluent/scss/ds-themes, 57 папок",
+      "компонентов против 20 в наборе blazor - поэтому набор молчит там, где реализация отвечает."
+    ],
+    "items": [
+      {
+        "key": "scheduler-grid-line-strength",
+        "decision": "design",
+        "title": "scheduler: две силы линии сетки читают одну роль",
+        "why": "The base markup draws two strengths of grid line: $scheduler-base-border-color on every cell, and $scheduler-accent-border-color on the week or work-week boundary and on the odd-row rule (base/scheduler/views/_index.scss:178, :187, :528, :544). Our theme gives both ds.$color-border, so the emphasis the markup encodes is not painted. This is not a regression - legacy fluent collapses them too, and material as well - but generic does not: it hand-rolls the pair as base-border at 60% alpha against accent-border darkened 10%. So the distinction is part of the product design language and only the fluent line loses it. The design system ships exactly the ladder generic hand-rolls: border-subtle / border / border-contrast, and this same widget already reads border-contrast for its group separator, so a three-rung scheduler would be internally consistent. Options: (1) keep the collapse, legacy parity, and record it as deliberate; (2) drop the ordinary cell line to border-subtle and leave the boundary on border - the boundary keeps its pixel and only the weaker line changes; (3) raise the boundary to border-contrast, which is what the group separator already uses and would make the two emphases share one role. Recommendation: (2), the smaller move, if design wants the boundary back at all."
+      },
+      {
+        "key": "scheduler-form-icon-on-bg-role",
+        "decision": "design",
+        "title": "scheduler: иконки формы встречи красятся bg-ролью, 1.56 в светлом",
+        "why": "The appointment form paints .dx-scheduler-form-subject-group .dx-scheduler-form-icon with --dx-scheduler-appointment-base-content, which reads bg-primary-subtle. In light that is primary-40 #b4d2f4 on the popup background #ffffff: 1.56 against the 3:1 a glyph needs. The role itself is right for what the variable mostly does - Blazor names the same role default-appointment-background-color, so bg-primary-subtle IS the appointment fill - but this variable is read by four different things: the appointment fill, the appointment marker, the focused-cell inset ring, and this icon. Legacy fluent does the same (the form icon takes $scheduler-appointment-base-color, accent lightened 48%), so NFR-1 protects the pixel and this is a report, not a fix. Options: (1) leave it, legacy parity; (2) split the icon off onto content-primary, which is 5.38 light / 4.65 dark, and accept a visible change in the appointment form; (3) split it off and keep the pale tint, which fixes the name but not the contrast. Recommendation: (2) if the form is meant to be usable, (1) if legacy parity outranks it - this one is genuinely a product call."
+      },
+      {
+        "key": "radio-invalid-vs-checkbox-invalid",
+        "decision": "design",
+        "title": "radioButton и checkBox решили одну анатомию по-разному",
+        "why": "Both controls paint an invalid ring and an invalid fill. The checkbox splits them: check-box-invalid-border* on border-danger-shared* for the ring, check-box-invalid-mark-bg* on content-danger-shared* for the mark. The radio uses ONE trio for both: radio-button-invalid-bg* reads border-danger-shared* and paints border-color on the ring AND background-color on the dot (radioButton/_index.scss:104, :108, :117, :121). So the radio's name says bg while its role and dominant property say border, which is why it sits in the rule-5 list. The split would be free in pixels - the whole *-danger-shared family resolves to one value across bg, border and content in BOTH modes, which is what shared means here - but it is not free in code: the rest-state variable is a parameter of dx-radiobutton-states-mixin, so splitting it changes a base mixin signature and therefore generic and material too. Options: (1) split to match the checkbox, correct anatomy, costs a base parameter and touches three themes; (2) rename the trio to -border, honest about the dominant property, theme-local and value-neutral, but then the dot reads its background from a variable called border; (3) leave it and record the divergence. Recommendation: (1) if the base is being touched anyway, (3) otherwise - (2) trades one lie for another."
+      },
+      {
+        "key": "tree-view-checkbox-focus-still-unique",
+        "decision": "design",
+        "title": "treeView всё ещё красит чекбокс по-своему в фокусе элемента",
+        "why": "The disabled overrides are gone. The focus block is not: when the treeView ITEM has focus, the checkbox inside it is repainted with three values of its own (treeView/_index.scss:18-72). They are not the checkbox own focus values: unchecked border goes to color-border where the checkbox uses bg-primary-active, unchecked fill goes to bg-low where the checkbox sets none, and the checked fill goes to bg-primary-hovered where the checkbox uses bg-primary-active. So three distinct divergences remain, and the rule stated for this widget - no unique checkbox styling in treeView - is not yet met. Removing the block is NOT value-neutral, which is why it was not done with the disabled one: legacy fluent carries the same block, so the pixel is inherited, not invented. There is a real argument for removing it beyond tidiness: the checkbox itself is not focused here, the item is, so painting the checkbox as focused states something untrue to a keyboard user. Options: (1) remove the block - the checkbox stops reacting to item focus, three variables and one public name go, etalons re-shoot; (2) keep the block but point its three values at the checkbox own focus roles, so treeView adds no roles of its own - still a pixel change, smaller; (3) keep as is for legacy parity. Note that (1) and (2) both collide with the checkbox-focused-fill question: whatever the checkbox focus fill becomes, this follows it. Recommendation: settle checkbox-focused-fill first, then (1)."
+      }
+    ],
+    "confirmed": {
+      "comment": [
+        "Роли, которые проход подтвердил дословно по чужой реализации. Здесь нечего решать - записано,",
+        "чтобы аудит их не переоткрывал и чтобы было видно, что сверка шла в обе стороны."
+      ],
+      "rows": [
+        {
+          "ours": "check-box-border = color-border-contrast",
+          "theirs": "Blazor variables/_radio.scss:9 $primary-unchecked-check-element-border = color-border-contrast",
+          "verdict": "exact match, both the rest rung and its hovered sibling"
+        },
+        {
+          "ours": "load-indicator-segment-border = color-content-primary",
+          "theirs": "Blazor loading-panel/variables.scss:11 indicator-no-area-indicator-color = color-content-primary",
+          "verdict": "exact match; and Blazor ships no track variable at all, so the inner-ring gap this audit filed as package-gap is confirmed as a gap, not as our invention"
+        },
+        {
+          "ours": "scheduler-appointment-base-content = color-bg-primary-subtle",
+          "theirs": "Blazor scheduler/variables.scss:141 default-appointment-background-color = color-bg-primary-subtle",
+          "verdict": "role right, name wrong - Blazor calls it a background, we call it content"
+        },
+        {
+          "ours": "pivot-grid-accent-content = color-border-primary",
+          "theirs": "painted as outline-color and border-color in base/pivotGrid/_index.scss:133-194, :603",
+          "verdict": "role right for the property, name wrong - the concept accent content rest is a false grouping of three different elements"
+        },
+        {
+          "ours": "check-box-invalid-* trio on the danger-shared stem",
+          "theirs": "the whole *-danger-shared family resolves to one value across bg, border and content in both modes",
+          "verdict": "the earlier swap to bg-danger-shared and the revert back were both value-neutral by construction; the choice was always about the stem, never about pixels, and the stem argument is what settled it"
+        },
+        {
+          "ours": "button-default-contained-bg-focused = color-bg-primary-hovered",
+          "theirs": "the same theme, one file over: check-box-icon-checked-bg-focused = color-bg-primary-active",
+          "verdict": "the button uses the hovered rung for focus and reserves active for a real press; the checkbox does not. This is the internal precedent the checkbox-focused-fill question rests on"
+        }
+      ]
+    }
+  },
+  "applied": {
+    "comment": [
+      "Что этот проход изменил в исходниках. Резолв-дифф по всем 2262 переменным тира:",
+      "светлый 0 сдвигов, тёмный 1."
+    ],
+    "rows": [
+      {
+        "what": "invalid-badge-bg",
+        "change": "color-content-danger-shared -> color-bg-danger-shared",
+        "effect": "value-neutral in both modes by construction - the danger-shared family is one value across bg, border and content. A fill named bg now reads a bg role"
+      },
+      {
+        "what": "chat-message-editing-preview-accent-content",
+        "change": "color-bg-primary -> color-content-primary",
+        "effect": "light identical (#0f6cbd both roles), dark #0f6cbd -> #4b90d9. The variable is read twice: the 2px accent bar of the editing preview, and the preview caption text. As text on the chat background the caption measured 2.88 in dark against the 4.5 AA asks, and the bar 2.88 against the 3:1 a graphic asks; both are now 4.65. Nothing in CI could see it - the preview only exists while a message is being edited, so no static demo state reaches it"
+      }
+    ]
   }
 }

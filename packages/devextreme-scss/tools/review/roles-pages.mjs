@@ -122,6 +122,13 @@ const RU = {
   '.dx-splitter .dx-resize-handle': 'Грип ресайза даёт <b>2.8 в тёмном</b> при пороге 3:1 для нетекстового элемента управления. Проходящая роль есть — <code>content</code> даёт 4.54, — но она же делает грип заметно темнее в светлом (6 → 11.15). Пол задаёт стандарт, выбор роли — нет.',
   'tabs-tab-border-disabled': 'Единственный член собственной лестницы не на border-роли: <code>selected-active</code>, <code>selected-hovered</code>, <code>selected-focused</code>, <code>active</code> и <code>hovered</code> читают <code>border-*</code>, и только <code>disabled</code> — <code>content-disabled</code>.<br><b>Варианты:</b> ① <code>border-disabled</code> — лестница становится согласованной, индикатор бледнеет с #ababab / #767676 до #d7d7d7 / #4c4c4c, что для неактивного состояния и ожидается; ② оставить и записать как осознанное исключение. Рекомендация — ①: это следование собственной лестнице, а не смена вкуса.',
   'load-indicator-segment-inner-border': 'Внутренняя рамка лоад-индикатора красится <code>bg-primary-subtle</code>, потому что border-роли с этой насыщенностью в пакете <b>не существует</b>. Менять не на что — нужна роль <code>border-primary-subtle</code>.',
+  'checkbox-focused-fill': 'Отмеченный чекбокс в фокусе или под нажатием заливается <code>bg-primary-active</code>, а галка остаётся на <code>content-inverted</code>. Эти две роли по-разному ведут себя между режимами: content-inverted <b>переворачивается</b> (#ffffff в светлом, #161616 в тёмном), bg-primary-active <b>нет</b> (#003c70 в обоих). Светлый даёт 11.17, тёмный — <b class="warn">1.62</b>: галки не видно, и сам бокс против страницы 1.39. Покой (3.36) и наведение (4.30) в порядке, проваливается только эта ступень.<br><b>Варианты заливки в тёмном</b> (галка / бокс): ① <code>bg-primary-hovered</code> #2b7ecf — 4.30 / 3.69, проходит, и это <b>ровно та ступень, которую на фокус уже берёт кнопка</b> (<code>button-default-contained-bg-focused</code> читает <code>bg-primary-hovered</code>); ② <code>bg-primary-shared-active</code> #005397 — 2.31 / 1.98, всё ещё провал, то есть приём из Д3 сюда не переносится; ③ оставить 1.62 / 1.39. Рекомендация — ①, тогда чекбокс согласуется с кнопкой. Светлый при этом идёт 11.17 → 7.82, заливка #003c70 → #005397: эталоны пересъёмка, поэтому вопрос, а не правка.',
+  'outlined-button-label': 'Обведённые кнопки — <code>default</code>, <code>success</code>, <code>danger</code> — держат подпись на <code>content-&lt;оттенок&gt;</code>, пока заливка идёт по лестнице <code>bg-&lt;оттенок&gt;-subtler</code> через hovered, focused, selected и active. Подпись это текст, порог 4.5, и <b>ни одно состояние после покоя его не берёт</b>: наведение и фокус 4.02–4.43, selected 3.22–3.78, нажатие 2.94–3.18 в светлом.<br>Blazor поднимает <b>обе</b> стороны: <code>outline-primary-hover-color</code> = <code>content-primary-hovered</code>, <code>-active-color</code> = <code>content-primary-active</code>. Померено — ответ неоднородный: <code>content-primary-hovered</code> на <code>bg-primary-subtler-hovered</code> даёт <b>5.85 / 5.11</b>, проходит в обоих режимах против наших 4.02 / 4.11; а <code>content-primary-active</code> на <code>bg-primary-subtler-active</code> даёт 6.10 / <b class="warn">2.05</b> — меняет светлый на тёмный; <code>content-primary-selected</code> не существует вовсе.<br><b>Варианты:</b> ① взять ступени hovered и focused как у Blazor — доказуемо, оба режима, три роли; ② для selected и active проходящей пары в пакете нет: либо не двигать заливку в этих состояниях, либо заявка в пакет; ③ <code>content-on-subtle-primary</code> — роль, которую пакет держит ровно под эту поверхность и которую мы не читаем нигде, — берёт всё с запасом (10.82 / 16), но она <b>нейтральная, не синяя</b>: подпись перестанет быть акцентной. Рекомендация: ① сейчас, ③ только если дизайн хочет нейтральную подпись.',
+  'contained-button-label': 'Залитые <code>default</code> и <code>success</code>, а также индикатор пройденного шага степпера, кладут белую подпись на <code>bg-&lt;оттенок&gt;-hovered</code> и дают <b class="warn">4.18–4.21</b> в тёмном при пороге 4.5. В светлом 7.5–7.8, то есть проблема только тёмная. Передний план — <code>content-static-dark</code>, он #ffffff в обоих режимах по замыслу, так что всё движение в заливке: <code>bg-primary</code> в тёмном #0f6cbd даёт 5.38, а его ступень наведения светлеет до #2b7ecf и даёт 4.21. Светлеть на наведении в тёмном режиме правильно — перебор в величине шага. Темой это не чинится: пара — две роли пакета, использованные ровно по назначению. Вопрос вынесен, чтобы подтвердить, что мы это <b>заявляем в пакет</b>, а не подменяем роль.',
+  'scheduler-grid-line-strength': 'Базовая разметка рисует <b>две силы линии</b> сетки: <code>$scheduler-base-border-color</code> на каждой ячейке и <code>$scheduler-accent-border-color</code> на границе недели или рабочей недели и на правиле нечётной строки. Наша тема даёт обеим <code>ds.$color-border</code> — акцент, заложенный в разметке, не покрашен.<br>Это не регресс: легаси-fluent схлопывает их так же, и material тоже. Но <b>generic не схлопывает</b> — он вручную разводит пару как базовую границу с альфой 0.6 против акцентной, затемнённой на 10%. То есть различие есть в языке продукта и теряет его только линейка fluent. Пакет несёт ровно ту лестницу, которую generic собирает руками: <code>border-subtle</code> / <code>border</code> / <code>border-contrast</code>, и этот же виджет уже читает <code>border-contrast</code> для разделителя групп.<br><b>Варианты:</b> ① оставить схлопнутым, паритет с легаси, записать как осознанное; ② опустить обычную линию ячейки до <code>border-subtle</code>, оставив границу недели на <code>border</code> — граница сохраняет пиксель, меняется только слабая линия; ③ поднять границу недели до <code>border-contrast</code>, к разделителю групп. Рекомендация — ②, меньший ход, если акцент вообще нужен.',
+  'scheduler-form-icon-on-bg-role': 'Форма встречи красит <code>.dx-scheduler-form-subject-group .dx-scheduler-form-icon</code> переменной <code>--dx-scheduler-appointment-base-content</code>, а та читает <code>bg-primary-subtle</code>. В светлом это primary-40 #b4d2f4 на белом фоне попапа: <b class="warn">1.56</b> при пороге 3:1 для глифа.<br>Сама роль верна для основного назначения переменной — Blazor называет ту же роль <code>default-appointment-background-color</code>, то есть <code>bg-primary-subtle</code> действительно заливка встречи. Но эту переменную читают <b>четыре</b> разных элемента: заливка встречи, маркер встречи, внутреннее кольцо ячейки в фокусе и вот эта иконка. Легаси-fluent делает то же самое, так что пиксель защищён NFR-1 и это отчёт, а не правка.<br><b>Варианты:</b> ① оставить, паритет с легаси; ② отделить иконку на <code>content-primary</code> — 5.38 в светлом, 4.65 в тёмном, но форма встречи заметно меняется; ③ отделить имя, оставив бледный тон — чинит имя, не чинит контраст. Рекомендация — ②, если форма должна быть читаемой; ① если паритет важнее.',
+  'radio-invalid-vs-checkbox-invalid': 'Оба контрола рисуют невалидное кольцо и невалидную заливку. <b>Чекбокс их разводит</b>: <code>check-box-invalid-border*</code> на <code>border-danger-shared*</code> — кольцо, <code>check-box-invalid-mark-bg*</code> на <code>content-danger-shared*</code> — метка. <b>Радио — нет</b>: одно трио <code>radio-button-invalid-bg*</code> читает <code>border-danger-shared*</code> и красит и <code>border-color</code> кольца, и <code>background-color</code> точки. Отсюда и имя со словом bg при border-роли.<br>В пикселях разделение <b>бесплатно</b>: всё семейство <code>*-danger-shared</code> разрешается в одно значение через bg, border и content в обоих режимах — это и значит shared. В коде не бесплатно: переменная состояния покоя — параметр миксина <code>dx-radiobutton-states-mixin</code> в базе, поэтому разделение меняет сигнатуру базы и задевает generic и material.<br><b>Варианты:</b> ① разделить как у чекбокса — верная анатомия, ценой параметра базы и трёх тем; ② переименовать трио в <code>-border</code> — честно по доминирующему свойству, только в теме и без сдвига значений, но тогда точка берёт фон из переменной со словом border; ③ оставить и записать расхождение. Рекомендация: ① если база и так трогается, иначе ③ — ② меняет одну неправду на другую.',
+  'tree-view-checkbox-focus-still-unique': 'Disabled-оверрайды сняты. Блок фокуса — нет: когда фокус у <b>элемента</b> дерева, чекбокс внутри перекрашивается тремя собственными значениями. И это <b>не</b> собственные значения чекбокса: рамка неотмеченного идёт в <code>color-border</code>, где чекбокс берёт <code>bg-primary-active</code>; заливка неотмеченного идёт в <code>bg-low</code>, где чекбокс не задаёт ничего; заливка отмеченного идёт в <code>bg-primary-hovered</code>, где чекбокс берёт <code>bg-primary-active</code>. Три расхождения, и правило «никакой уникальной стилизации чекбокса в treeView» пока не выполнено.<br>Снятие блока <b>не равнозначно по значению</b> — поэтому его и не сняли вместе с disabled: легаси-fluent несёт тот же блок, пиксель унаследован. Довод за снятие есть и помимо чистоты: фокус здесь у элемента, а не у чекбокса, так что рисовать чекбокс сфокусированным — сообщать клавиатурному пользователю неправду.<br><b>Варианты:</b> ① снять блок — чекбокс перестаёт реагировать на фокус элемента, уходят три переменные и одно публичное имя, эталоны пересъёмка; ② оставить блок, но направить три значения на собственные фокус-роли чекбокса, чтобы treeView не заводил своих — сдвиг пикселя меньше; ③ оставить как есть ради паритета. ① и ② оба упираются в Д16: чем станет фокусная заливка чекбокса, тем станет и эта. Рекомендация: сначала Д16, потом ①.',
   '.dx-messagelist-context-menu-content .dx-menu-item:has(.dx-icon-trash).dx-state-focused': 'Пункт удаления в контекстном меню списка сообщений даёт <b>3.05</b> при пороге 4.5 для подписи. Проверены все роли семейства: самая сильная, <code>content-danger-hovered</code>, даёт на той же поверхности 3.87 — тоже провал. Нет danger-content роли, проходящей AA на своей же наведённой поверхности в тёмном.',
 };
 const ruText = (key) => {
@@ -172,6 +179,22 @@ const contrastQs = base.contrast.filter((x) => x.decision === 'design').map((x) 
 const slotQs = base.slotLies.filter((x) => x.decision === 'design').map((x) => q(idOf(`slot:${x.name}`),
   `${code(x.name)} — слот обещает ${code(x.slotSays)}, красит ${x.paints.map(code).join(', ')}`,
   `<p>${ruText(x.name)}</p>`));
+
+const statePairGroups = Object.entries(base.statePairs.groups).map(([key, g]) => {
+  const rows = base.statePairs.rows.filter((r) => r.group === key);
+  return q(idOf(`statePairGroup:${key}`),
+    `Контраст через смену состояния: <b>${esc(key)}</b> — ${rows.length} ${rows.length === 1 ? 'пара' : 'пар'}`,
+    '<table><tr><th>Селектор</th><th>Передний план</th><th>На заливке</th><th>Светлый</th><th>Тёмный</th></tr>'
+    + rows.map((r) => {
+      const m = (v) => (v < 3 ? `<b class="warn">${v}</b>` : v < 4.5 ? `<b>${v}</b>` : String(v));
+      return `<tr><td>${code(r.selector)}</td><td>${code(r.fgRole.replace(/^color-/, ''))}</td>`
+        + `<td>${code(r.bgRole.replace(/^color-/, ''))}</td><td>${m(r.contrast.light)}</td><td>${m(r.contrast.dark)}</td></tr>`;
+    }).join('')
+    + '</table>'
+    + `<p>${ruText(key)}</p>`);
+});
+
+const sweepQs = base.sweep.items.map((x) => q(idOf(`sweep:${x.key}`), esc(x.title), `<p>${ruText(x.key)}</p>`));
 
 const conceptRows = base.concepts.filter((x) => x.decision === 'design').map((c) => q(idOf(`concept:${c.concept}`),
   `Одно понятие, разные роли: <b>${esc(c.concept)}</b>`,
@@ -373,12 +396,33 @@ const questionsPage = page('Fluent-next: открытые вопросы по р
 семь равнозначных по значению и две решённые порогом WCAG. Всё на этой странице двигает пиксель,
 меняет публичное имя или требует расширения пакета.</p>
 
-<h2>А. Дизайн — ${roleQs.length + ladderQs.length + contrastQs.length + slotQs.length + conceptRows.length} вопросов</h2>
+<h2>А. Дизайн — ${roleQs.length + ladderQs.length + contrastQs.length + statePairGroups.length + slotQs.length + conceptRows.length + sweepQs.length} вопросов</h2>
 <h3>Роль выбрана спорно</h3>${roleQs.join('')}
 <h3>Состояние неотличимо от соседнего</h3>${ladderQs.join('')}
 <h3>Контраст ниже порога</h3>${contrastQs.join('')}${nonTextSection}${whyContrast}
+<h3>Контраст, который теряется при смене состояния</h3>
+<p>Проверка добавлена ${esc(base.statePairs.measuredOn)} и она видит то, чего не видела предыдущая.
+Та измеряет только пару, записанную в одном правиле CSS. Лестница состояний так не пишется никогда:
+правило наведения или фокуса перекрашивает заливку и оставляет глиф тому правилу, что задало его
+в покое. Значит именно те состояния, где значение <b>двигается</b>, и были слепым пятном.
+Пары сводятся по элементу со снятыми классами состояний, поэтому отмеченный чекбокс никогда
+не сравнивается с неотмеченным. Порог: 4.5 если передний план — подпись, 3 если глиф или граница
+(WCAG 1.4.11, правила в axe под это нет и скриншот этого не видит).</p>
+<p class="meta">Первое, что она нашла, — <b>ошибку в этом же документе</b>: строка
+<code>.dx-checkbox-checked .dx-checkbox-icon</code> выше была помечена «глиф, порог 3:1 взят»
+по числу 3.36. Это число относится только к покою; в фокусе тот же элемент даёт 1.62.</p>
+${statePairGroups.join('')}
 <h3>Имя обещает одно, красит другое</h3>${slotQs.join('')}
 <h3>Одно понятие покрашено по-разному в разных компонентах</h3>${conceptRows.join('')}
+<h3>Найдено ручным проходом по реализациям соседей</h3>
+<p>${base.sweep.comment.map(esc).join(' ')}</p>
+${sweepQs.join('')}
+<h3>Что этот проход подтвердил дословно</h3>
+<p class="meta">Сверка шла в обе стороны. Здесь роли, которые чужая реализация назначает так же, —
+решать нечего, записано чтобы аудит их не переоткрывал.</p>
+<table><tr><th>У нас</th><th>У них</th><th>Итог</th></tr>
+${base.sweep.confirmed.rows.map((r) => `<tr><td>${code(r.ours)}</td><td>${esc(r.theirs)}</td><td>${esc(r.verdict)}</td></tr>`).join('')}
+</table>
 ${closedSection}
 
 <h2>Б. Команда пакета токенов — ${pkgQs.length} заявки</h2>

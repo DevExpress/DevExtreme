@@ -694,6 +694,81 @@ const lowContrast = pairs
   .sort((a, b) => Math.min(...Object.values(a.contrast)) - Math.min(...Object.values(b.contrast)));
 
 /*
+ * Contrast across a state change - the blind spot of the pass above.
+ *
+ * The rule-local pass only sees a foreground and a background written together. A state ladder
+ * never writes them together: the hovered/focused rule repaints the fill and leaves the glyph to
+ * the rule that set it in the rest state. So exactly the states where a value moves are the ones
+ * the rule-local pass cannot measure, and the checked+focused checkbox - 1.62 in dark, against a
+ * rest state that measures a comfortable 3.36 - sat under it unseen.
+ *
+ * Pairing rule: strip the state classes from a selector and two rules describe the same element.
+ * Variant classes (dx-checkbox-checked, dx-invalid) are NOT stripped, so a checked box is never
+ * paired with an unchecked one. A pair is reported only when the fill comes from a state rule and
+ * the glyph from the element's own rest rule - that is the cross-rule case by construction.
+ */
+const STATE_CLASS = /\.dx-state-(?:hover|focused|active|selected)\b/g;
+const elementKey = (selector) => selector
+  .replace(STATE_CLASS, '')
+  .replace(/:(?:hover|focus|focus-visible|active)\b/g, '')
+  .trim()
+  .replace(/\s+/g, ' ');
+
+const foregroundOf = new Map();
+const statePairs = [];
+if (existsSync(bundlePath)) {
+  const css = readFileSync(bundlePath, 'utf8');
+  const rules = [];
+  for (const [, selectorList, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    if (selectorList.trim().startsWith('@')) continue;
+    if (/dx-state-disabled|dx-state-readonly|dx-button-disable/.test(selectorList)) continue;
+    const grab = (property) => new RegExp(`(?:^|;)\\s*${property}\\s*:\\s*var\\(\\s*(--dx-[a-z0-9-]+)`).exec(body)?.[1];
+    const fg = grab('color');
+    const bg = grab('background-color') ?? grab('background');
+    if (!fg && !bg) continue;
+    for (const one of selectorList.split(',')) {
+      const selector = one.trim().replace(/\s+/g, ' ');
+      if (!selector) continue;
+      rules.push({ selector, key: elementKey(selector), fg, bg, stated: STATE_CLASS.test(selector) });
+      STATE_CLASS.lastIndex = 0;
+    }
+  }
+  // The rest-state foreground of each element: the last rule that sets `color` without a state.
+  for (const rule of rules) if (rule.fg && !rule.stated) foregroundOf.set(rule.key, rule);
+  for (const rule of rules) {
+    if (!rule.stated || !rule.bg || rule.fg) continue;
+    const rest = foregroundOf.get(rule.key);
+    if (!rest) continue;
+    const fgRole = roleOfTierName.get(rest.fg);
+    const bgRole = roleOfTierName.get(rule.bg);
+    if (!fgRole || !bgRole) continue;
+    const measured = {};
+    for (const mode of MODES) {
+      const a = hexOf(resolveRole(fgRole, mode));
+      const b = hexOf(resolveRole(bgRole, mode));
+      if (a && b) measured[mode] = Math.round(contrast(a, b) * 100) / 100;
+    }
+    if (!Object.keys(measured).length) continue;
+    statePairs.push({
+      selector: rule.selector.slice(0, 90),
+      restSelector: rest.selector.slice(0, 90),
+      fg: rest.fg,
+      bg: rule.bg,
+      fgRole,
+      bgRole,
+      contrast: measured,
+    });
+  }
+}
+/* Both thresholds are reported, as in the pass above: 4.5 for a label, 3 for a glyph or a
+ * boundary. Which one applies is decided by what the element is, and the table says so per row. */
+const GRAPHIC = 3;
+const lowStatePairs = statePairs
+  .filter((pair) => MODES.some((mode) => pair.contrast[mode] !== undefined && pair.contrast[mode] < AA))
+  .filter((pair, index, all) => all.findIndex((other) => other.fg === pair.fg && other.bg === pair.bg) === index)
+  .sort((a, b) => Math.min(...Object.values(a.contrast)) - Math.min(...Object.values(b.contrast)));
+
+/*
  * The same concept across components.
  *
  * Every check above asks about one declaration. This one asks the question the task is actually
@@ -813,6 +888,8 @@ const summary = {
   contrastPairsMeasured: pairs.length,
   contrastBelowAA: lowContrast.length,
   contrastDarkOnly: lowContrast.filter((p) => p.contrast.light >= AA && p.contrast.dark < AA).length,
+  statePairsMeasured: statePairs.length,
+  statePairsBelowGraphic: lowStatePairs.length,
   familyMismatch: count((f) => f.family),
   slotLies: count((f) => f.slotLies),
   familyMismatchExplainedByProperty: count((f) => f.family && f.slotLies
@@ -931,6 +1008,23 @@ const md = () => {
   }
   out.push('');
 
+  out.push(`## A glyph left behind by its own state - ${lowStatePairs.length} of ${statePairs.length} cross-state pairs\n`);
+  out.push('The table above can only measure a foreground and a background written in one rule. A state');
+  out.push('ladder never writes them together: the focused rule repaints the fill and leaves the glyph');
+  out.push('to the rest rule. These rows pair the two by element, with the state classes stripped, so');
+  out.push('the checked box is never matched against an unchecked one.\n');
+  out.push('Two thresholds, as above: 4.5:1 if the foreground is a label, 3:1 if it is a glyph or a');
+  out.push('boundary (WCAG 1.4.11, which no axe rule implements and no screenshot can see). A single');
+  out.push('warning marks a row under 4.5, a double one a row under 3.\n');
+  out.push('| Selector | Glyph | On the state fill | Light | Dark |');
+  out.push('|---|---|---|---|---|');
+  for (const pair of lowStatePairs) {
+    const mark = (value) => (value === undefined ? '-' : `${value}${value < GRAPHIC ? ' \u26a0\u26a0' : value < AA ? ' \u26a0' : ''}`);
+    out.push(`| \`${pair.selector}\` | \`${pair.fgRole}\` | \`${pair.bgRole}\` `
+      + `| ${mark(pair.contrast.light)} | ${mark(pair.contrast.dark)} |`);
+  }
+  out.push('');
+
   out.push(`## States that resolve to one role - ${ladders.length}\n`);
   out.push('A state in the name that the eye cannot find. `focused` reusing `hovered` is accepted -');
   out.push('the foundation has no focused state - and is not listed; everything below is a ladder the');
@@ -994,7 +1088,7 @@ const md = () => {
 
 if (process.argv.includes('--json')) {
   console.log(JSON.stringify({
-    summary, findings, typography, ladders, lowContrast, concepts, unusedRoles,
+    summary, findings, typography, ladders, lowContrast, lowStatePairs, concepts, unusedRoles,
   }, null, 2));
 } else if (process.argv.includes('--md')) {
   console.log(md());

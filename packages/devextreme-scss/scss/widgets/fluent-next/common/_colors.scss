@@ -24,7 +24,7 @@ $palette-border: ds.$color-border !default;
 
 // Non-color theme-level values (opacity/font family) — kept referencing the theme layer.
 $global-font-family: ds.$font-family-sans-serif !default;
-$invalid-badge-bg: ds.$color-content-danger-shared !default;
+$invalid-badge-bg: ds.$color-bg-danger-shared !default;
 $invalid-badge-content: ds.$color-content-static-dark !default;
 $valid-badge-content: ds.$color-content-success !default;
 $palette-text: ds.$color-content !default;

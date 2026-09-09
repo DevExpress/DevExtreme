@@ -37,7 +37,9 @@ type Open = {
 const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'design'];
 const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design'];
 const LADDER_DECISIONS = ['no-rung', 'design'];
-const CONTRAST_DECISIONS = ['graphic-ok', 'package-gap', 'design'];
+const CONTRAST_DECISIONS = ['graphic-ok', 'graphic-ok-rest-only', 'package-gap', 'design'];
+const STATE_PAIR_DECISIONS = ['graphic-ok', 'design'];
+const SWEEP_DECISIONS = ['design'];
 const CONCEPT_DECISIONS = ['spelling', 'shade', 'design'];
 
 type Concept = {
@@ -48,6 +50,12 @@ type Concept = {
 type ContrastPair = {
   selector: string; fgRole: string; bgRole: string; contrast: Record<string, number>;
   decision?: string; why?: string;
+};
+
+type StatePair = {
+  bg: string; fg: string; fgRole: string; bgRole: string;
+  contrast: Record<string, number>; selector: string;
+  group?: string; decision?: string;
 };
 
 type Ladder = { stem: string; states: string[]; role: string[]; decision?: string; why?: string };
@@ -65,6 +73,7 @@ const run = (theme?: string): {
   typography: Typography[];
   ladders: (Ladder & { unusedRungs: unknown[] })[];
   lowContrast: ContrastPair[];
+  lowStatePairs: StatePair[];
   concepts: (Concept & { clusters: unknown[]; oneColour: boolean })[];
   unusedRoles: { capability: { role: string }[]; stale: { role: string }[] };
 } => JSON.parse(
@@ -304,6 +313,82 @@ test('every coverage lever is measured and costed', () => {
  * eventually disagree with the data it claims to show - which already happened, with a hardcoded
  * "39%" next to a computed 226 of 714. So staleness is a red test rather than a habit.
  */
+/*
+ * The pass above measures a foreground and a background only where one rule writes both. A state
+ * ladder never does: the focused rule repaints the fill and leaves the glyph to the rest rule, so
+ * the states where a value actually moves were the blind spot. It cost a wrong verdict once - the
+ * checked checkbox was banked as graphic-ok on 3.36, and the focused rung of the same element is
+ * 1.62 - which is why this is exact equality and not a ratchet.
+ */
+test('contrast lost across a state change is the reviewed set', () => {
+  const measured = actual.lowStatePairs
+    .map(({
+      bg, fg, fgRole, bgRole, contrast, selector,
+    }) => ({
+      bg, fg, fgRole, bgRole, contrast, selector,
+    }))
+    .sort((a, b) => (a.bg + a.selector).localeCompare(b.bg + b.selector));
+  const banked = baseline.statePairs.rows
+    .map(({
+      bg, fg, fgRole, bgRole, contrast, selector,
+    }: StatePair) => ({
+      bg, fg, fgRole, bgRole, contrast, selector,
+    }))
+    .sort((a: StatePair, b: StatePair) => (a.bg + a.selector).localeCompare(b.bg + b.selector));
+  expect(measured).toEqual(banked);
+});
+
+test('every cross-state pair carries a decision, and every design group a reason', () => {
+  const undecided = baseline.statePairs.rows
+    .filter((r: StatePair) => !r.decision || !STATE_PAIR_DECISIONS.includes(r.decision))
+    .map((r: StatePair) => r.bg);
+  expect(undecided).toEqual([]);
+
+  const groups = [...new Set(baseline.statePairs.rows
+    .filter((r: StatePair) => r.group)
+    .map((r: StatePair) => r.group as string) as string[])].sort();
+  expect(Object.keys(baseline.statePairs.groups).sort()).toEqual(groups);
+
+  const unreasoned = Object.entries(baseline.statePairs.groups)
+    .filter(([, g]) => !(g as { why?: string }).why?.trim())
+    .map(([key]) => key);
+  expect(unreasoned).toEqual([]);
+});
+
+/*
+ * Findings a signal cannot produce: they came from reading a neighbour's implementation rather
+ * than its token set. Nothing recomputes them, so the gate holds their shape - a title, a reason
+ * and a permanent number each - and the page generator refuses to render one without Russian text.
+ */
+test('every sweep finding is titled, reasoned and numbered', () => {
+  const broken = baseline.sweep.items
+    .filter((x: { key: string; title?: string; why?: string; decision?: string }) => !x.key
+      || !x.title?.trim()
+      || !x.why?.trim()
+      || !SWEEP_DECISIONS.includes(x.decision ?? ''))
+    .map((x: { key: string }) => x.key);
+  expect(broken).toEqual([]);
+
+  const unnumbered = baseline.sweep.items
+    .map((x: { key: string }) => x.key)
+    .filter((key: string) => !baseline.questionIds.map[`sweep:${key}`]);
+  expect(unnumbered).toEqual([]);
+
+  const thin = baseline.sweep.confirmed.rows
+    .filter((r: { ours?: string; theirs?: string; verdict?: string }) => !r.ours?.trim()
+      || !r.theirs?.trim() || !r.verdict?.trim())
+    .map((r: { ours?: string }) => r.ours);
+  expect(thin).toEqual([]);
+});
+
+test('every applied change records what it did to the value', () => {
+  const thin = baseline.applied.rows
+    .filter((r: { what?: string; change?: string; effect?: string }) => !r.what?.trim()
+      || !r.change?.trim() || !r.effect?.trim())
+    .map((r: { what?: string }) => r.what);
+  expect(thin).toEqual([]);
+});
+
 test('the decision pages match the data they are generated from', () => {
   const pages = join(packageRoot, 'tools', 'review', 'roles-pages.mjs');
   let output = '';
