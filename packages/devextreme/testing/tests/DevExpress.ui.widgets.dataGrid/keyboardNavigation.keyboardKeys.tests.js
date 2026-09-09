@@ -1810,14 +1810,12 @@ QUnit.module('Keyboard keys', {
                 return $container;
             };
 
-            this.dataController.store = function() {
-                return {
-                    key: function() { },
-                    update: function(key, values) {
-                        isStoreUpdated = true;
-                        return $.Deferred().resolve(key, values);
-                    }
-                };
+            this.dataControllerOptions.store = {
+                key: function() { },
+                update: function(key, values) {
+                    isStoreUpdated = true;
+                    return $.Deferred().resolve(key, values);
+                }
             };
 
             // act

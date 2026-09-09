@@ -2591,7 +2591,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   private _fireFocusedRowChanging(eventArgs: any, $newFocusedRow: dxElementWrapper) {
     const newRowIndex = this._getRowIndex($newFocusedRow);
     const prevFocusedRowIndex = this.option('focusedRowIndex');
-    const loadingOperationTypes = this._dataController.loadingOperationTypes();
+    const loadingOperationTypes = this.dataSourceController.loadingOperationTypes();
 
     const args: any = {
       rowElement: $newFocusedRow,

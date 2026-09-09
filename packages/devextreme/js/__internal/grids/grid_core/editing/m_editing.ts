@@ -617,7 +617,8 @@ class EditingControllerImpl extends modules.ViewController {
       if (change.type === 'insert') {
         this._addInsertInfo(change);
       } else {
-        const items = dataController.getCachedStoreData() || dataController.items()?.map((item) => item.data);
+        const items = this.dataSourceController.getCachedStoreData()
+          || dataController.items()?.map((item) => item.data);
         const rowIndex = gridCoreUtils.getIndexByKey(change.key, items, dataController.key());
         this._addInternalData({ key: change.key, oldData: items[rowIndex] });
       }
@@ -1006,7 +1007,7 @@ class EditingControllerImpl extends modules.ViewController {
    */
   protected addRow(parentKey) {
     const dataController = this._dataController;
-    const store = dataController.store();
+    const store = this.dataSourceController.store();
 
     if (!store) {
       dataController.fireError('E1052', this.component.NAME);
@@ -1018,9 +1019,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   protected _addRow(parentKey) {
-    const dataController = this._dataController;
-    const store = dataController.store();
-    const key = store && store.key();
+    const key = this.dataSourceController.key();
     const param: any = { data: {} };
     const oldEditRowIndex = this._getVisibleEditRowIndex();
     // @ts-expect-error
@@ -1615,7 +1614,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _processChanges(deferreds, results, dataChanges, changes) {
-    const store = this._dataController.store() as Store;
+    const store = this.dataSourceController.store() as Store;
 
     each(changes, (index, change) => {
       const oldData = this._getOldData(change.key);

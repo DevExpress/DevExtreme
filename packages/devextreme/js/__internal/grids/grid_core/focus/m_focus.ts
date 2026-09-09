@@ -919,14 +919,6 @@ const editing = (Base: ModuleType<EditingController>) => class FocusEditingContr
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController extends Base {
   private _scrollToFocusOnResize: any;
 
-  private dataSourceController!: DataSourceController;
-
-  public init(): void {
-    this.dataSourceController = this.getController('dataSource');
-
-    super.init();
-  }
-
   protected _createRow(row) {
     // @ts-expect-error
     const $row = super._createRow.apply(this, arguments);
@@ -946,7 +938,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     super._checkRowKeys.apply(this, arguments);
 
     if (this.option('focusedRowEnabled') && this.option('dataSource')) {
-      const store = this._dataController.store();
+      const store = this.dataSourceController.store();
       if (store && !store.key()) {
         this._dataController.fireError('E1042', 'Row focusing');
       }

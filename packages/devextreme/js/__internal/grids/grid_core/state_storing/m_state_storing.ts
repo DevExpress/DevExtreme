@@ -13,7 +13,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsVi
     super.init();
 
     this._dataController.stateLoaded.add(() => {
-      if (this._dataController.isLoaded() && !this._dataController.getDataSource()) {
+      if (this._dataController.isLoaded() && !this.dataSourceController.getDataSource()) {
         this.setLoading(false);
         this.renderNoDataText();
         // TODO getView
