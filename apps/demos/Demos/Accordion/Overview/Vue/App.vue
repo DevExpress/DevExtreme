@@ -90,7 +90,7 @@ const selectedCompanies = computed({
 });
 
 </script>
-<style scoped>
+<style>
 #accordion {
   height: 700px;
 }

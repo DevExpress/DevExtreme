@@ -86,7 +86,7 @@ const priorityGroups = ['priorityId'];
 const currentDate = new Date(2021, 3, 27);
 </script>
 
-<style scoped>
+<style>
   .dx-scheduler-work-space-week .dx-scheduler-header-panel-cell,
   .dx-scheduler-work-space-work-week .dx-scheduler-header-panel-cell {
     text-align: center;

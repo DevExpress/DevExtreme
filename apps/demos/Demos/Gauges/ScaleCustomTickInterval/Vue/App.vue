@@ -32,7 +32,7 @@ import {
   DxLinearGauge, DxScale, DxMinorTick, DxExport, DxTitle, DxFont,
 } from 'devextreme-vue/linear-gauge';
 </script>
-<style scoped>
+<style>
 #gauge {
   height: 440px;
   width: 100%;

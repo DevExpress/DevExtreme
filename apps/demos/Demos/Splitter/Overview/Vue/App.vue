@@ -79,7 +79,7 @@ import { DxSplitter, DxItem } from 'devextreme-vue/splitter';
 import PaneContent from './PaneContent.vue';
 </script>
 
-<style scoped>
+<style>
   .demo-container {
     height: 500px;
   }

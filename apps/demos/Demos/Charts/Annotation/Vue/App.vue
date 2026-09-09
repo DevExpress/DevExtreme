@@ -64,7 +64,7 @@ import { dataSource, annotationSources } from './data.ts';
 
 const customizeTooltip = ({ description }: Record<string, any>) => ({ html: `<div class='tooltip'>${description}</div>` });
 </script>
-<style scoped>
+<style>
 #chart {
   height: 440px;
 }

@@ -73,7 +73,7 @@ import {
 const subvalues = [5, 25];
 const value = 17;
 </script>
-<style scoped>
+<style>
 #gauge {
   height: 440px;
   width: 100%;

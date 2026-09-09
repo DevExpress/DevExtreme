@@ -78,7 +78,7 @@ import { employees } from './data.ts';
 
 const formatDate = new Intl.DateTimeFormat('en-US').format;
 </script>
-<style scoped>
+<style>
 #gridContainer {
   height: 450px;
 }

@@ -65,7 +65,7 @@ function onOptionChanged(args: DxSchedulerTypes.OptionChangedEvent) {
 }
 </script>
 
-<style scoped>
+<style>
   .option {
     display: flex;
   }
