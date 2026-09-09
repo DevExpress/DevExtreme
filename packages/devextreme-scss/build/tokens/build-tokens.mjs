@@ -496,7 +496,10 @@ const parseDeclarations = (content) => content.split('\n').reduce((declarations,
 const readsOf = (value) => [...value.matchAll(/var\(\s*(--[\w-]+)/g)].map(([, name]) => name);
 
 const modeDependentNames = (light, dark, aliases) => {
-  const tainted = new Set([...light.keys()].filter((name) => light.get(name) !== dark.get(name)));
+  // Both key sets, not just the light one: a name only one mode declares differs by definition,
+  // and seeding from one side would drop it from the other scope without moving it to :root.
+  const tainted = new Set([...light.keys(), ...dark.keys()]
+    .filter((name) => light.get(name) !== dark.get(name)));
 
   for (let grew = true; grew;) {
     grew = false;
@@ -547,7 +550,7 @@ async function splitModeScopedLayers() {
     'utf-8',
   )));
 
-  // The light file carries the shared roles: for those two, light and dark agree by definition.
+  // Either mode file carries the shared roles: for those, light and dark agree by definition.
   const shared = [...parsed.light, ...parsed.aliases].filter(([name]) => !dependent.has(name));
   const header = sources.light.content.slice(0, sources.light.content.indexOf('@mixin'));
   const body = shared.map(([name, value]) => `  ${name}: ${value};`).join('\n');
