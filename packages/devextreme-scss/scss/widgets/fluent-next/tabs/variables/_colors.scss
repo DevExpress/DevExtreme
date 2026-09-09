@@ -6,14 +6,14 @@ $tabs-tab-content-selected: ds.$color-content !default;
 
 $tabs-tab-content-disabled: ds.$color-content-disabled !default;
 
-$tabs-tab-basic-border-selected: ds.$color-border-primary-shared !default;
-$tabs-tab-border-selected-active: ds.$color-border-primary-shared-active !default;
-$tabs-tab-border-selected-hovered: ds.$color-border-primary-shared-hovered !default;
-$tabs-tab-border-selected-focused: ds.$color-border-primary-shared !default;
-$tabs-tab-border-active: ds.$color-border-active !default;
-$tabs-tab-border-hovered: ds.$color-border-hovered !default;
+$tabs-tab-basic-selector-selected: ds.$color-border-primary-shared !default;
+$tabs-tab-selector-selected-active: ds.$color-border-primary-shared-active !default;
+$tabs-tab-selector-selected-hovered: ds.$color-border-primary-shared-hovered !default;
+$tabs-tab-selector-selected-focused: ds.$color-border-primary-shared !default;
+$tabs-tab-selector-active: ds.$color-border-active !default;
+$tabs-tab-selector-hovered: ds.$color-border-hovered !default;
 
-$tabs-tab-border-disabled: ds.$color-content-disabled !default;
+$tabs-tab-selector-disabled: ds.$color-content-disabled !default;
 
 $tabs-tab-bg: transparent !default;
 
