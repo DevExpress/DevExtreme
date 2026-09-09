@@ -143,7 +143,9 @@ describe('resolveTargetOrigin', () => {
 
   test('allows any scheme for an entry that omits one', () => {
     embedIn('http://js.devexpress.com');
-    const { resolveTargetOrigin } = loadRuntime();
+    const { setAllowedOrigins, resolveTargetOrigin } = loadRuntime();
+
+    setAllowedOrigins(['js.devexpress.com']);
 
     expect(resolveTargetOrigin()).toBe('http://js.devexpress.com');
   });
