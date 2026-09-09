@@ -1619,10 +1619,6 @@ export class DataController extends modules.Controller {
     return (this._dataSource ? this._dataSource.itemsCount() : 0);
   }
 
-  public totalItemsCount(): number {
-    return (this._dataSource ? this._dataSource.totalItemsCount() : 0);
-  }
-
   /**
    * @extended: state_storing
    */

@@ -176,4 +176,8 @@ export class DataSourceController<
   public hasKnownLastPage(): boolean {
     return this.adapter ? this.adapter.hasKnownLastPage() : true;
   }
+
+  public totalItemsCount(): number {
+    return this.adapter ? this.adapter.totalItemsCount() : 0;
+  }
 }

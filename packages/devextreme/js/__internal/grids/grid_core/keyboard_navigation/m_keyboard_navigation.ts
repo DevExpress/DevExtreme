@@ -1463,7 +1463,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private getFirstOrLastRowIndex(needFirstRow: boolean): number {
     const rowCount = this._isVirtualScrolling()
-      ? this._dataController.totalItemsCount()
+      ? this.dataSourceController.totalItemsCount()
       : this._dataController.items(true)?.length;
 
     return needFirstRow ? 0 : rowCount - 1;

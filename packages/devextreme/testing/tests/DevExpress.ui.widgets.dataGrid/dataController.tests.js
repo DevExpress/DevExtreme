@@ -2848,7 +2848,7 @@ QUnit.module('No dataSource', { beforeEach: setupModule, afterEach: teardownModu
 
     QUnit.test('getters', function(assert) {
         assert.strictEqual(this.dataController.items().length, 0);
-        assert.strictEqual(this.dataController.totalItemsCount(), 0);
+        assert.strictEqual(this.dataSourceController.totalItemsCount(), 0);
         assert.strictEqual(this.dataController.pageCount(), 1);
         assert.strictEqual(this.dataController.pageIndex(), 0);
         assert.strictEqual(this.dataController.pageSize(), 0);
@@ -3606,7 +3606,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
     });
 
     QUnit.test('getAllRowsCount for virtual scrolling', function(assert) {
-        assert.strictEqual(this.dataController.totalItemsCount(), 1000);
+        assert.strictEqual(this.dataSourceController.totalItemsCount(), 1000);
     });
 
     // T308521
@@ -3958,7 +3958,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
 
         const rowsScrollController = this.dataController._rowsScrollController;
         const defaultItemSize = rowsScrollController.getItemSize();
-        const bottomPosition = (this.dataController.totalItemsCount() - this.dataController.viewportSize()) * defaultItemSize;
+        const bottomPosition = (this.dataSourceController.totalItemsCount() - this.dataController.viewportSize()) * defaultItemSize;
 
         // act
         this.dataController.setViewportPosition(bottomPosition);
@@ -14296,7 +14296,7 @@ QUnit.module('Using DataSource instance', {
 
         assert.deepEqual(changes, ['columns', 'data']);
         assert.equal(this.dataController.itemsCount(), 5);
-        assert.equal(this.dataController.totalItemsCount(), 8);
+        assert.equal(this.dataSourceController.totalItemsCount(), 8);
         assert.equal(this.dataController.items()[0].rowType, 'group');
         assert.equal(this.dataController.items()[1].rowType, 'data');
         assert.equal(this.dataController.items()[1].data.field3, 3);
@@ -14338,7 +14338,7 @@ QUnit.module('Using DataSource instance', {
 
         assert.deepEqual(changes, ['columns', 'data']);
         assert.equal(this.dataController.itemsCount(), 5);
-        assert.equal(this.dataController.totalItemsCount(), 5);
+        assert.equal(this.dataSourceController.totalItemsCount(), 5);
         assert.equal(this.dataController.items()[0].data.field3, 7);
         assert.equal(this.dataController.items()[4].data.field3, 3);
     });
@@ -14373,7 +14373,7 @@ QUnit.module('Using DataSource instance', {
         this.clock.tick(10);
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 3);
+        assert.equal(this.dataSourceController.totalItemsCount(), 3);
         assert.equal(this.dataController.items().length, 3);
 
         // act
@@ -14381,7 +14381,7 @@ QUnit.module('Using DataSource instance', {
         this.clock.tick(10);
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 5);
+        assert.equal(this.dataSourceController.totalItemsCount(), 5);
         assert.equal(this.dataController.items().length, 5);
 
         const spy = sinon.spy();
@@ -14392,7 +14392,7 @@ QUnit.module('Using DataSource instance', {
         this.clock.tick(10);
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 3);
+        assert.equal(this.dataSourceController.totalItemsCount(), 3);
         assert.equal(this.dataController.items().length, 3);
         assert.equal(this.dataController.pageIndex(), 0);
         assert.equal(this.dataSource.pageIndex(), 0);
@@ -14420,7 +14420,7 @@ QUnit.module('Using DataSource instance', {
         // assert
         assert.equal(this.columnsController.getGroupColumns().length, 1, 'grouped columns count');
         assert.deepEqual(this.dataSourceController.getAdapter().group(), [{ selector: 'field1', desc: false, isExpanded: false }], 'dataSource group when autoExpandAll false');
-        assert.equal(this.dataController.totalItemsCount(), 2);
+        assert.equal(this.dataSourceController.totalItemsCount(), 2);
         assert.equal(this.dataController.items().length, 2);
     });
 

@@ -58,6 +58,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             hasKnownLastPage: function() {
                 return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
             },
+            totalItemsCount: function() {
+                return options.totalItemsCount;
+            },
             dispose: function() {
             },
             store: function() {
@@ -224,10 +227,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             itemsCount: function() {
                 return options.itemsCount;
-            },
-
-            totalItemsCount: function() {
-                return options.totalItemsCount;
             },
 
             isLoading: function() {

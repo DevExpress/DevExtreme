@@ -199,7 +199,7 @@ export const virtualScrollingDataControllerExtender = (
       },
       totalItemsCount() {
         if (isVirtualPaging(that)) {
-          return that.totalItemsCount();
+          return that.dataSourceController.totalItemsCount();
         }
 
         return that.option(LEGACY_SCROLLING_MODE) === false ? that._itemCount : that._items.filter(isItemCountable).length;
@@ -672,7 +672,7 @@ export const virtualScrollingDataControllerExtender = (
     let result = true;
 
     if (isInfiniteMode(this) && this.dataSourceController.hasKnownLastPage() || isVirtualMode(this)) {
-      result = pageIndex * this.pageSize() < this.totalItemsCount();
+      result = pageIndex * this.pageSize() < this.dataSourceController.totalItemsCount();
     }
 
     return result;
@@ -681,7 +681,7 @@ export const virtualScrollingDataControllerExtender = (
   private isAllLoadedInAppendMode(): boolean {
     const loadedItemCount = this.pageSize() * (this._dataSource?.loadPageCount() ?? 0);
 
-    return isInfiniteMode(this) && this.totalItemsCount() < loadedItemCount;
+    return isInfiniteMode(this) && this.dataSourceController.totalItemsCount() < loadedItemCount;
   }
 
   // T1326786: the grid is scrolled to paging.pageIndex on the first resize only,
