@@ -78,3 +78,7 @@ export const flushAsync = async (): Promise<void> => {
   jest.runAllTimers();
   await Promise.resolve();
 };
+
+export const toPlainFilter = (value: unknown): unknown => (Array.isArray(value)
+  ? Array.from(value, toPlainFilter)
+  : value);
