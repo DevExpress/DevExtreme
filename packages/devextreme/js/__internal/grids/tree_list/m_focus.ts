@@ -1,5 +1,5 @@
 import { Deferred } from '@js/core/utils/deferred';
-import { focusModule } from '@ts/grids/grid_core/focus/m_focus';
+import { focusModule } from '@ts/grids/grid_core/focus/focus_module';
 
 import type { DataController } from '../grid_core/data_controller/data_controller';
 import type { ModuleType } from '../grid_core/m_types';

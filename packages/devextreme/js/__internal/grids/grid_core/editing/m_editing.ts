@@ -1877,7 +1877,7 @@ class EditingControllerImpl extends modules.ViewController {
     const isFullRefresh = refreshMode !== 'reshape' && refreshMode !== 'repaint';
 
     if (!isFullRefresh) {
-      dataController.push(dataChanges);
+      this.dataSourceController.push(dataChanges);
     }
 
     when(dataController.refresh({
