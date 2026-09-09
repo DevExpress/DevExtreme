@@ -531,6 +531,17 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
       });
   }
 
+  _addRoute(options: RouteOptions): Promise<EngineRouteObject> {
+    return this._renderRoute(options).then((routeObject) => {
+      if (routeObject.engineRoute) {
+        this._routes.push({ ...routeObject, options });
+        this._fireRouteAddedAction({ options, originalRoute: routeObject.instance });
+      }
+
+      return routeObject;
+    });
+  }
+
   _renderRoute(options: RouteOptions): Promise<EngineRouteObject> {
     const engineMap = this._engineMap;
     if (!engineMap) {
