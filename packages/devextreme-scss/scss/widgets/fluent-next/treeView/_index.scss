@@ -43,8 +43,11 @@
 }
 
 .dx-treeview-item-with-checkbox {
+  /* Фокус элемента красит его чекбокс, но неактивный чекбокс остаётся неактивным: без :not()
+     эта ветка перебивала бы собственное disabled-правило чекбокса по длине селектора, и его
+     пришлось бы возвращать копией disabled-значений — как и было до 09.09.2026. */
   &.dx-state-focused > .dx-treeview-item {
-    .dx-checkbox {
+    .dx-checkbox:not(.dx-state-disabled) {
       .dx-checkbox-icon {
         border-color: var(--dx-tree-view-checkbox-border-focused);
         background-color: var(--dx-tree-view-checkbox-bg-focused);
