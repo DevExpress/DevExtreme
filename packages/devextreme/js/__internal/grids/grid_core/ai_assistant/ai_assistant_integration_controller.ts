@@ -49,7 +49,7 @@ export class AIAssistantIntegrationController extends Controller {
 
   protected buildContext(): GridContext {
     return {
-      keyExpr: this.option('keyExpr') ?? this.dataSourceController.key(),
+      keyExpr: this.option('keyExpr') ?? this.dataSourceController.store()?.key(),
       columns: this.buildColumnsContext(),
       filtering: {
         filterValue: this.option('filterValue'),

@@ -12,6 +12,12 @@ export interface DataGridInstance extends DataGrid {
   getView: <T extends keyof Views>(name: T) => Views[T];
 }
 
+// Reads the DataController._dataSource mirror. Assertions that pin the mirror have to read the
+// protected field itself rather than a delegating method. Goes away with the field, in Task B4.
+export const getMirroredAdapter = (
+  instance: { getController: (name: 'data') => unknown },
+): unknown => (instance.getController('data') as { _dataSource?: unknown })._dataSource;
+
 export const SELECTORS = {
   gridContainer: '#gridContainer',
 };

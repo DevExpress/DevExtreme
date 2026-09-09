@@ -551,7 +551,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
   public getSortDataSourceParameters(_, sortByKey?) {
     // @ts-expect-error
     let result = super.getSortDataSourceParameters.apply(this, arguments);
-    let key = this.dataSourceController.key();
+    let key = this.dataSourceController.store()?.key();
     const remoteOperations = this.dataSourceController.remoteOperations();
     const isLocalOperations = Object.keys(remoteOperations).every((operationName) => !remoteOperations[operationName]);
 

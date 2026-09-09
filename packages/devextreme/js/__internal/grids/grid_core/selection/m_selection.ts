@@ -72,7 +72,7 @@ const processLongTap = function (that, dxEvent) {
 
 const isSeveralRowsSelected = function (that, selectionFilter) {
   let keyIndex = 0;
-  const key = that.dataSourceController.key();
+  const key = that.dataSourceController.store()?.key();
   const isComplexKey = Array.isArray(key);
 
   if (!selectionFilter.length) {
@@ -234,10 +234,10 @@ export class SelectionController extends modules.Controller {
         return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
       },
       key() {
-        return dataController?.key();
+        return dataSourceController.key();
       },
       keyOf(item) {
-        return dataController?.keyOf(item);
+        return dataSourceController.keyOf(item);
       },
       dataFields() {
         return dataSourceController.select();
