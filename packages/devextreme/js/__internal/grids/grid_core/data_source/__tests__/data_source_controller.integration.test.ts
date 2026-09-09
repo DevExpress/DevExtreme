@@ -65,6 +65,14 @@ describe('dataSource module registration', () => {
       .toBe(instance.getController('dataSource').totalCount());
   });
 
+  it('owns the pageCount widget method', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA, paging: { pageSize: 1 } });
+
+    expect(instance.pageCount()).toBe(DATA.length);
+    expect(instance.pageCount())
+      .toBe(instance.getController('dataSource').pageCount());
+  });
+
   it('sits at the bottom of the controller order', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
 

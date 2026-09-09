@@ -737,7 +737,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _pageUpDownKeyHandler(eventArgs) {
     const pageIndex = this._dataController.pageIndex();
-    const pageCount = this._dataController.pageCount();
+    const pageCount = this.dataSourceController.pageCount();
     const pagingEnabled = this.option('paging.enabled');
     const isPageUp = eventArgs.keyName === 'pageUp';
     const pageStep = isPageUp ? -1 : 1;

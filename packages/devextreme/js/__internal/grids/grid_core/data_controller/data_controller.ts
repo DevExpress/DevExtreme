@@ -186,7 +186,6 @@ export class DataController extends modules.Controller {
       'getKeyByRowIndex',
       'getRowIndexByKey',
       'getVisibleRows',
-      'pageCount',
       'pageIndex',
       'pageSize',
       'refresh',
@@ -1328,10 +1327,6 @@ export class DataController extends modules.Controller {
     return !this.items().length;
   }
 
-  public pageCount(): number {
-    return this._dataSource ? this._dataSource.pageCount() : 1;
-  }
-
   public loadAllItems(
     data?: RawItemData[],
     skipFilter = false,
@@ -1598,7 +1593,7 @@ export class DataController extends modules.Controller {
    */
   public isLastPageLoaded(): boolean {
     const pageIndex = this.pageIndex();
-    const pageCount = this.pageCount();
+    const pageCount = this.dataSourceController.pageCount();
     return pageIndex === (pageCount - 1);
   }
 

@@ -34,7 +34,7 @@ export class PagerView extends modules.View {
           pager.option({
             pageIndex: getPageIndex(dataController),
             pageSize: dataController.pageSize(),
-            pageCount: dataController.pageCount(),
+            pageCount: this.dataSourceController.pageCount(),
             itemCount: this.dataSourceController.totalCount(),
             hasKnownLastPage: this.dataSourceController.hasKnownLastPage(),
           });
@@ -91,7 +91,7 @@ export class PagerView extends modules.View {
     const options: any = {
       maxPagesCount: MAX_PAGES_COUNT,
       pageIndex: getPageIndex(dataController),
-      pageCount: dataController.pageCount(),
+      pageCount: that.dataSourceController.pageCount(),
       pageSize: dataController.pageSize(),
       showPageSizeSelector: pagerOptions.showPageSizeSelector,
       showInfo: pagerOptions.showInfo,
@@ -169,7 +169,7 @@ export class PagerView extends modules.View {
       if (scrolling && (scrolling.mode === 'virtual' || scrolling.mode === 'infinite')) {
         pagerVisible = false;
       } else {
-        pagerVisible = dataController.pageCount() > 1
+        pagerVisible = this.dataSourceController.pageCount() > 1
           || (dataController.isLoaded() && !this.dataSourceController.hasKnownLastPage());
       }
     }

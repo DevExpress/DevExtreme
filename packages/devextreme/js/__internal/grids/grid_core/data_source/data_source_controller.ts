@@ -38,7 +38,7 @@ export class DataSourceController<
   }
 
   public publicMethods(): string[] {
-    return ['getDataSource', 'keyOf', 'totalCount'];
+    return ['getDataSource', 'keyOf', 'pageCount', 'totalCount'];
   }
 
   /**
@@ -183,5 +183,9 @@ export class DataSourceController<
 
   public totalCount(): number {
     return this.adapter ? this.adapter.totalCount() : 0;
+  }
+
+  public pageCount(): number {
+    return this.adapter ? this.adapter.pageCount() : 1;
   }
 }

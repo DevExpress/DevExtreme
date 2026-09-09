@@ -152,7 +152,9 @@ export const virtualScrollingDataControllerExtender = (
       return;
     }
 
-    const pageIndex = !isVirtualMode(this) && this.pageIndex() >= this.pageCount() ? this.pageCount() - 1 : this.pageIndex();
+    const pageIndex = !isVirtualMode(this) && this.pageIndex() >= this.dataSourceController.pageCount()
+      ? this.dataSourceController.pageCount() - 1
+      : this.pageIndex();
     this._rowPageIndex = Math.ceil(pageIndex * this.pageSize() / this.getRowPageSize());
     this._visibleItems = this.option(LEGACY_SCROLLING_MODE) === false ? null : [];
     this._viewportChanging = false;
@@ -764,7 +766,8 @@ export const virtualScrollingDataControllerExtender = (
   }
 
   private handlePagesLoaded(viewportChanging: boolean): void {
-    const isLastPage = this.pageCount() > 0 && this.pageIndex() === this.pageCount() - 1;
+    const isLastPage = this.dataSourceController.pageCount() > 0
+      && this.pageIndex() === this.dataSourceController.pageCount() - 1;
 
     if (viewportChanging || isLastPage) {
       this._updateVisiblePageIndex();
@@ -964,7 +967,7 @@ export const virtualScrollingDataControllerExtender = (
 
     if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this)) {
       const { pageIndex, loadPageCount } = this.getLoadPageParams(true);
-      const pageCount = this.pageCount();
+      const pageCount = this.dataSourceController.pageCount();
 
       result = pageIndex + loadPageCount >= pageCount;
     } else {
