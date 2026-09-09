@@ -1,5 +1,6 @@
 const OWN_ORIGIN = 'http://localhost:8080';
-const ALLOWED_PARENT = 'https://js.devexpress.com';
+const ALLOWED_PARENT_HOST = 'js.devexpress.com';
+const ALLOWED_PARENT = `https://${ALLOWED_PARENT_HOST}`;
 
 let messages;
 let root;
@@ -107,7 +108,7 @@ describe('signal', () => {
 
     expect(messages).toHaveLength(0);
     expect(warnings).toHaveLength(1);
-    expect(warnings[0]).toContain('*.devexpress.com');
+    expect(warnings[0]).toContain(ALLOWED_PARENT_HOST);
   });
 
   test('gives up for good after a dropped message', () => {
@@ -130,12 +131,9 @@ describe('resolveTargetOrigin', () => {
   });
 
   test.each([
-    'https://az-jsserver.corp.devexpress.com',
-    'https://js-stage.devexpress.com',
     'https://js.devexpress.com',
-    'https://js.devexpress.devx',
-    'http://localhost:44332',
     'http://localhost:8080',
+    'http://localhost:3000',
   ])('allows the %s sandbox', (origin) => {
     embedIn(origin);
     const { resolveTargetOrigin } = loadRuntime();
@@ -151,9 +149,8 @@ describe('resolveTargetOrigin', () => {
   });
 
   test.each([
-    ['the apex domain, which no sandbox uses', 'https://devexpress.com'],
-    ['a host that only ends with the wildcard suffix', 'https://evil-devexpress.com'],
-    ['a host shorter than the wildcard suffix', 'https://dx.com'],
+    ['the apex of an allowed host', 'https://devexpress.com'],
+    ['a host that merely ends with an allowed one', 'https://evil-js.devexpress.com'],
     ['a host that merely starts with an allowed one', 'https://localhost.evil.example'],
     ['an opaque origin', 'null'],
   ])('rejects %s', (_, origin) => {
@@ -176,18 +173,40 @@ describe('resolveTargetOrigin', () => {
     embedIn('http://localhost:9999');
     const { setAllowedOrigins, resolveTargetOrigin } = loadRuntime();
 
-    setAllowedOrigins(['localhost:44332']);
+    setAllowedOrigins(['localhost:8080']);
 
     expect(resolveTargetOrigin()).toBeNull();
   });
 
   test('matches a pinned port', () => {
-    embedIn('http://localhost:44332');
+    embedIn('http://localhost:8080');
     const { setAllowedOrigins, resolveTargetOrigin } = loadRuntime();
 
-    setAllowedOrigins(['http://localhost:44332']);
+    setAllowedOrigins(['http://localhost:8080']);
 
-    expect(resolveTargetOrigin()).toBe('http://localhost:44332');
+    expect(resolveTargetOrigin()).toBe('http://localhost:8080');
+  });
+
+  test('allows a subdomain of a wildcard entry', () => {
+    embedIn('https://demos.example.com');
+    const { setAllowedOrigins, resolveTargetOrigin } = loadRuntime();
+
+    setAllowedOrigins(['*.example.com']);
+
+    expect(resolveTargetOrigin()).toBe('https://demos.example.com');
+  });
+
+  test.each([
+    ['the apex domain', 'https://example.com'],
+    ['a host that only ends with the wildcard suffix', 'https://evil-example.com'],
+    ['a host shorter than the wildcard suffix', 'https://ex.com'],
+  ])('rejects %s for a wildcard entry', (_, origin) => {
+    embedIn(origin);
+    const { setAllowedOrigins, resolveTargetOrigin } = loadRuntime();
+
+    setAllowedOrigins(['*.example.com']);
+
+    expect(resolveTargetOrigin()).toBeNull();
   });
 
   test('ignores an entry that is not a bare origin', () => {
@@ -258,13 +277,12 @@ describe('setAllowedOrigins', () => {
   });
 
   test('keeps the default allowlist when the build injects nothing', () => {
-    const { setAllowedOrigins, resolveTargetOrigin, DEFAULT_ALLOWED_ORIGINS } = loadRuntime();
+    const { setAllowedOrigins, resolveTargetOrigin } = loadRuntime();
 
     setAllowedOrigins(null);
     setAllowedOrigins([]);
 
     expect(resolveTargetOrigin()).toBe(ALLOWED_PARENT);
-    expect(DEFAULT_ALLOWED_ORIGINS).toContain('*.devexpress.com');
   });
 });
 
