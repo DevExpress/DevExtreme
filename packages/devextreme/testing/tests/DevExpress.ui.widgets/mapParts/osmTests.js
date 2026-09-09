@@ -2108,6 +2108,44 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         }
     });
 
+    QUnit.test('missing route callback warns once for initial and subsequently added routes', async function(assert) {
+        const log = sinon.stub(errors, 'log');
+        try {
+            const map = await createMap({
+                routes: [route, { ...route, mode: 'walking' }],
+                providerConfig: { tileServer }
+            });
+            assert.ok(log.calledOnceWithExactly('W1033'), 'initial routes share one configuration warning');
+
+            await map.addRoute({ ...route });
+            await map.addRoute({ ...route, mode: 'walking' });
+            assert.ok(log.calledOnceWithExactly('W1033'), 'later attempts do not repeat the warning');
+        } finally {
+            log.restore();
+        }
+    });
+
+    QUnit.test('a route callback configured after a warning is still called', async function(assert) {
+        const log = sinon.stub(errors, 'log');
+        const providerConfig = {};
+        const provider = new OsmProvider({ option: () => ({ providerConfig }) }, null);
+        const calculateRoute = sinon.stub().returns(Promise.resolve(path));
+        try {
+            assert.strictEqual(await provider._calculateRoute(route), undefined, 'unconfigured route is skipped');
+            providerConfig.calculateRoute = calculateRoute;
+
+            const locations = await provider._calculateRoute(route);
+            assert.ok(calculateRoute.calledOnceWithExactly({
+                locations: [{ lat: 40.7, lng: -74 }, { lat: 40.8, lng: -73.9 }],
+                mode: 'driving'
+            }), 'warning suppression does not skip a configured callback');
+            assert.deepEqual(locations, path.map(([lat, lng]) => ({ lat, lng })), 'route geometry is returned');
+            assert.ok(log.calledOnceWithExactly('W1033'), 'only the missing configuration was reported');
+        } finally {
+            log.restore();
+        }
+    });
+
     QUnit.test('missing route callback skips address lookup and does not block map initialization', async function(assert) {
         const calculateLocation = sinon.stub().returns(new Promise(() => {}));
         const log = sinon.stub(errors, 'log');

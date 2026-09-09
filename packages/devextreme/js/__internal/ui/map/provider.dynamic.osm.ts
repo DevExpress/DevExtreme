@@ -150,6 +150,8 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
 
   _calculateLocationWarningLogged = false;
 
+  _calculateRouteWarningLogged = false;
+
   _loadImpl(): Promise<void> {
     const window = getWindow() as Window & { ol?: unknown };
     const engine = getRegisteredMapEngine() ?? createOpenLayersEngine(window.ol);
@@ -515,7 +517,10 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
   _calculateRoute(options: RouteOptions): Promise<MapLocation[] | undefined> {
     const calculateRoute = this._option('providerConfig')?.calculateRoute;
     if (!calculateRoute) {
-      errors.log('W1033');
+      if (!this._calculateRouteWarningLogged) {
+        errors.log('W1033');
+        this._calculateRouteWarningLogged = true;
+      }
 
       return Promise.resolve(undefined);
     }
