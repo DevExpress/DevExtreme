@@ -83,26 +83,6 @@
       "why": "goes to base as $handle-color and is a FILL - radial-gradient stops and inset box-shadows. color-bg is the right role; the slot word `content` is what disagrees"
     },
     {
-      "name": "gallery-nav-button-bg",
-      "verdict": "cross-family",
-      "roles": [
-        "color-content-subtle"
-      ],
-      "slot": "bg",
-      "decision": "design",
-      "why": "Re-checked 09.09 against an implementation rather than a token set, and the answer changed. Blazor's carousel draws no disc at all - carousel-button-border-width is border-width-0 and the arrow is color-content - and where something must sit over an image it uses color-bg at opacity-85 (carousel-pages-background-color, carousel-overlay-color). So a scrim IS solved in the family: as a bg role at reduced opacity, not as a content role used opaque. The earlier reading, that the family offers nothing, was wrong. Three options now, in order of how much they change: (1) keep the disc and give it color-bg at an opacity, which is the family pattern and needs no new role; (2) drop the disc, as Blazor does, and rely on the arrow alone; (3) ask the package for a scrim role. wpf/gallery agrees with Blazor that content-subtle names the arrow, not the disc."
-    },
-    {
-      "name": "gallery-nav-button-bg-disabled",
-      "verdict": "cross-family",
-      "roles": [
-        "color-content-disabled"
-      ],
-      "slot": "bg",
-      "decision": "design",
-      "why": "Same question as gallery-nav-button-bg, disabled state. Whatever shape the scrim takes, this follows it."
-    },
-    {
       "name": "load-indicator-segment-inner-border",
       "verdict": "family-conflict",
       "roles": [
@@ -1662,9 +1642,7 @@
       "color-bg-on-color-alpha-disabled",
       "color-bg-on-color-alpha-hovered",
       "color-bg-primary-shared-hovered",
-      "color-bg-static-dark",
       "color-bg-static-dark-active",
-      "color-bg-static-dark-disabled",
       "color-bg-static-dark-hovered",
       "color-bg-static-dark-selected",
       "color-bg-static-light-active",
@@ -1713,7 +1691,6 @@
       "color-content-primary-shared",
       "color-content-primary-shared-active",
       "color-content-primary-shared-hovered",
-      "color-content-static-dark-disabled",
       "color-content-static-light-disabled",
       "color-content-success-shared",
       "color-content-success-shared-active",
@@ -1987,11 +1964,11 @@
       "Д4": "tree-view-checkbox-border-disabled — снято: treeView больше не стилизует чекбокс",
       "Д8": "list-border-disabled — удалено вместе с правилом, красило несуществующий псевдоэлемент",
       "Д9": "tabs-tab-border-disabled — значение верно, семь имён переименованы border → selector",
-      "Д15": "menu bg rest - расхождения нет: Blazor красит menu-bg тем же color-bg, а третий участник группы это сепаратор, у которого своя роль border-subtle. Снято 09.09"
+      "Д15": "menu bg rest - расхождения нет: Blazor красит menu-bg тем же color-bg, а третий участник группы это сепаратор, у которого своя роль border-subtle. Снято 09.09",
+      "Д1": "gallery-nav-button-bg - принято, диск переведён на bg-static-dark: пакет держит статическое семейство парой, и content-половину мы уже читали",
+      "Д2": "gallery-nav-button-bg-disabled - принято вместе с Д1, bg-static-dark-disabled, и стрелка получила content-static-dark-disabled"
     },
     "map": {
-      "open:gallery-nav-button-bg": "Д1",
-      "open:gallery-nav-button-bg-disabled": "Д2",
       "ladder:accordion-title-bg": "Д5",
       "ladder:tile-view-bg": "Д6",
       "contrast:.dx-splitter .dx-resize-handle": "Д7",
@@ -2416,6 +2393,16 @@
         "what": "chat-message-editing-preview-accent-content",
         "change": "color-bg-primary -> color-content-primary",
         "effect": "light identical (#0f6cbd both roles), dark #0f6cbd -> #4b90d9. The variable is read twice: the 2px accent bar of the editing preview, and the preview caption text. As text on the chat background the caption measured 2.88 in dark against the 4.5 AA asks, and the bar 2.88 against the 3:1 a graphic asks; both are now 4.65. Nothing in CI could see it - the preview only exists while a message is being edited, so no static demo state reaches it"
+      },
+      {
+        "what": "gallery-nav-button-bg (Д1)",
+        "change": "content-subtle -> bg-static-dark",
+        "effect": "light #444444 -> #242424, dark #cbcbcb -> #242424. The disc sits over a photograph, so it must not follow the theme; content-subtle does, and in dark it turned the disc light while the arrow stayed content-static-dark #ffffff in both modes - white on #cbcbcb, 1.62 against the 3:1 a glyph needs. It was also a regression: legacy fluent flipped BOTH, dark scrim with a white arrow in light, light scrim with a BLACK arrow in dark. The package ships bg-static-dark and content-static-dark as a matched pair and we already read the content half; reading the other half fixes the family conflict and the mode at once. 15.52 in both modes now. The light value also lands back on legacy: bg-static-dark is #242424 = rgb(36,36,36), exactly the base colour legacy scrimmed at 54% alpha"
+      },
+      {
+        "what": "gallery-nav-button-bg-disabled (Д2), and a disabled colour for the arrow",
+        "change": "content-disabled -> bg-static-dark-disabled; new gallery-nav-arrow-content-disabled on content-static-dark-disabled",
+        "effect": "disc #ababab / #767676 -> #161616 in both modes. Nothing here is protected by NFR-1: legacy fluent has no disabled rules for the gallery at all, the block came from the disabled-paint wave, and this slot was already recorded once as a role-family error. The arrow needed the second half: only the button carried the disabled colour, while the ::before rule kept painting it content-static-dark, so a disabled arrow rendered full white - 2.30 on the old light disc, and it would have read as enabled on the new near-black one. Now #767676 on #161616, 3.98, dimmed as a disabled control should be. Cascade checked in four scenarios including a disabled ancestor"
       }
     ]
   },
