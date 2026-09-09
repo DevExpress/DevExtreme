@@ -125,7 +125,7 @@ export class DataController extends modules.Controller {
   // TODO public controller
   public _columnsController!: Controllers['columns'];
 
-  private _filterExcludedColumn: Column | null = null;
+  protected filterController!: Controllers['filter'];
 
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
@@ -138,6 +138,7 @@ export class DataController extends modules.Controller {
     this._cachedProcessedItems = null;
     this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
+    this.filterController = this.getController('filter');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -328,23 +329,18 @@ export class DataController extends modules.Controller {
     return this.combinedFilter(undefined, returnDataField);
   }
 
-  public getFilterExcludedColumn(): Column | null {
-    return this._filterExcludedColumn;
-  }
-
   public getCombinedFilterWithExcludedColumn(
     excludedColumn: Column | null,
     returnDataField?: boolean,
   ): DataFilter {
-    this._filterExcludedColumn = excludedColumn;
-    try {
-      return this.getCombinedFilter(returnDataField);
-    } finally {
-      this._filterExcludedColumn = null;
-    }
+    return this.combinedFilter(undefined, returnDataField, excludedColumn);
   }
 
-  private combinedFilter(filter: DataFilter, returnDataField?: boolean): DataFilter {
+  private combinedFilter(
+    filter: DataFilter,
+    returnDataField?: boolean,
+    excludedColumn: Column | null = null,
+  ): DataFilter {
     if (!this._dataSource) {
       return filter;
     }
@@ -355,7 +351,7 @@ export class DataController extends modules.Controller {
       || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
-      const additionalFilter = this.calculateAdditionalFilter();
+      const additionalFilter = this.filterController.getAdditionalFilter(excludedColumn);
 
       combined = additionalFilter
         ? gridCoreUtils.combineFilters([additionalFilter, combined])
@@ -569,7 +565,7 @@ export class DataController extends modules.Controller {
         this._isDataSourceApplying = false;
 
         const hasAdditionalFilter = (): boolean => {
-          const additionalFilter = this.calculateAdditionalFilter();
+          const additionalFilter = this.filterController.getAdditionalFilter();
           return Boolean(additionalFilter?.length);
         };
 
@@ -1211,13 +1207,6 @@ export class DataController extends modules.Controller {
 
   private _fireLoadingChanged(): void {
     this.loadingChanged.fire(this.isLoading(), this._loadingText);
-  }
-
-  /**
-   * @extended: filter_row, filter_sync, header_filter, search
-   */
-  protected calculateAdditionalFilter(): DataFilter {
-    return null;
   }
 
   /**

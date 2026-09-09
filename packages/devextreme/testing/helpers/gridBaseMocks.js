@@ -282,8 +282,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getCombinedFilter: commonUtils.noop,
 
-            getFilterExcludedColumn: commonUtils.noop,
-
             getCombinedFilterWithExcludedColumn: commonUtils.noop,
 
             getRowIndexByKey: function(key) {
@@ -1016,9 +1014,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         _subscribeToEvents(rootElement) { }
     };
 
-    // The dataSource controller is a leaf that the data controller resolves in init(),
-    // so it is always included rather than listed by every caller.
-    const ALWAYS_INCLUDED_MODULES = ['dataSource'];
+    // The dataSource and filter controllers are leaves that the data controller resolves
+    // in init(), so they are always included rather than listed by every caller.
+    const ALWAYS_INCLUDED_MODULES = ['dataSource', 'filter'];
 
     exports['setup' + nameWidget + 'Modules'] = function(that, moduleNames, options) {
         const modules = [];
