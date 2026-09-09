@@ -3077,7 +3077,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
         assert.equal(this.dataController.totalCount(), 7);
         assert.equal(this.dataController.pageCount(), 2);
         assert.equal(this.dataController.pageIndex(), 0);
-        assert.ok(this.dataController.hasKnownLastPage());
+        assert.ok(this.dataSourceController.hasKnownLastPage());
         assert.deepEqual(this.dataController.items()[0].values, ['Alex', 215]);
         assert.deepEqual(this.dataController.items()[0].data, { name: 'Alex', pay: 215 });
     });
@@ -3337,7 +3337,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
 
         assert.equal(this.dataController.pageIndex(), 1);
         assert.equal(this.dataController.pageCount(), 3);
-        assert.ok(this.dataController.hasKnownLastPage());
+        assert.ok(this.dataSourceController.hasKnownLastPage());
         assert.equal(this.dataController.totalCount(), 7);
         assert.equal(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].values, ['Dan3', 153]);
@@ -5682,7 +5682,7 @@ QUnit.module('Infinite scrolling', {
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 0);
-        assert.strictEqual(this.dataController.hasKnownLastPage(), false);
+        assert.strictEqual(this.dataSourceController.hasKnownLastPage(), false);
         assert.strictEqual(this.dataController.items().length, 20);
     });
 
@@ -5692,7 +5692,7 @@ QUnit.module('Infinite scrolling', {
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 1);
-        assert.strictEqual(this.dataController.hasKnownLastPage(), false);
+        assert.strictEqual(this.dataSourceController.hasKnownLastPage(), false);
         assert.strictEqual(this.dataController.items().length, 40);
     });
 
@@ -5712,7 +5712,7 @@ QUnit.module('Infinite scrolling', {
         // assert
         assert.strictEqual(loadingCount, 1);
         assert.strictEqual(this.dataController.pageIndex(), 1);
-        assert.strictEqual(this.dataController.hasKnownLastPage(), false);
+        assert.strictEqual(this.dataSourceController.hasKnownLastPage(), false);
         assert.strictEqual(this.dataController.items().length, 40);
     });
 
@@ -5724,7 +5724,7 @@ QUnit.module('Infinite scrolling', {
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 1);
-        assert.strictEqual(this.dataController.hasKnownLastPage(), false);
+        assert.strictEqual(this.dataSourceController.hasKnownLastPage(), false);
         assert.strictEqual(this.dataController.items().length, 40);
     });
 
@@ -5736,7 +5736,7 @@ QUnit.module('Infinite scrolling', {
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 2);
-        assert.strictEqual(this.dataController.hasKnownLastPage(), true);
+        assert.strictEqual(this.dataSourceController.hasKnownLastPage(), true);
         assert.strictEqual(this.dataController.items().length, 50);
     });
 
@@ -5764,7 +5764,7 @@ QUnit.module('Infinite scrolling', {
 
         // assert
         assert.strictEqual(this.dataController.pageIndex(), 0);
-        assert.strictEqual(this.dataController.hasKnownLastPage(), false);
+        assert.strictEqual(this.dataSourceController.hasKnownLastPage(), false);
         assert.strictEqual(this.dataController.items().length, 20);
     });
 
@@ -9420,7 +9420,7 @@ QUnit.module('Remote Grouping', {
         assert.strictEqual(storeLoadOptions.requireTotalCount, true, 'requireTotalCount option');
         assert.ok(!this.dataController.isLoading());
         assert.equal(this.dataController.totalCount(), 10, 'totalCount');
-        assert.equal(this.dataController.hasKnownLastPage(), true, 'hasKnownLastPage');
+        assert.equal(this.dataSourceController.hasKnownLastPage(), true, 'hasKnownLastPage');
         assert.equal(this.dataController.items().length, 2, 'items count');
         assert.equal(this.dataController.pageCount(), 5, 'pageCount');
     });

@@ -1,6 +1,7 @@
 import messageLocalization from '@js/common/core/localization/message';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import Pagination from '@ts/pagination/wrappers/pagination';
 
 import modules from '../m_modules';
@@ -19,8 +20,12 @@ export class PagerView extends modules.View {
 
   private _pageSizes: any;
 
+  private dataSourceController!: DataSourceController;
+
   public init() {
     const dataController = this.getController('data');
+
+    this.dataSourceController = this.getController('dataSource');
 
     dataController.changed.add((e) => {
       if (e && e.repaintChangesOnly) {
@@ -31,7 +36,7 @@ export class PagerView extends modules.View {
             pageSize: dataController.pageSize(),
             pageCount: dataController.pageCount(),
             itemCount: dataController.totalCount(),
-            hasKnownLastPage: dataController.hasKnownLastPage(),
+            hasKnownLastPage: this.dataSourceController.hasKnownLastPage(),
           });
         } else {
           this.render();
@@ -96,7 +101,7 @@ export class PagerView extends modules.View {
       label: pagerOptions.label,
       allowedPageSizes: that.getPageSizes(),
       itemCount: dataController.totalCount(),
-      hasKnownLastPage: dataController.hasKnownLastPage(),
+      hasKnownLastPage: that.dataSourceController.hasKnownLastPage(),
       rtlEnabled: that.option('rtlEnabled'),
       isGridCompatibilityMode: true,
       _getParentComponentRootNode: () => this.component.element(),
@@ -164,7 +169,8 @@ export class PagerView extends modules.View {
       if (scrolling && (scrolling.mode === 'virtual' || scrolling.mode === 'infinite')) {
         pagerVisible = false;
       } else {
-        pagerVisible = dataController.pageCount() > 1 || (dataController.isLoaded() && !dataController.hasKnownLastPage());
+        pagerVisible = dataController.pageCount() > 1
+          || (dataController.isLoaded() && !this.dataSourceController.hasKnownLastPage());
       }
     }
     return !!pagerVisible;

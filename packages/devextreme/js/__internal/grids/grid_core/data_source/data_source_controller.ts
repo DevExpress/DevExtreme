@@ -172,4 +172,8 @@ export class DataSourceController<
   public getCachedStoreData(): RawItemData[] | undefined {
     return this.adapter?.getCachedStoreData();
   }
+
+  public hasKnownLastPage(): boolean {
+    return this.adapter ? this.adapter.hasKnownLastPage() : true;
+  }
 }

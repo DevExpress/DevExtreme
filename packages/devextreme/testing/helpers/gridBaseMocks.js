@@ -55,6 +55,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             loadingOperationTypes: function() {
                 return undefined;
             },
+            hasKnownLastPage: function() {
+                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
+            },
             dispose: function() {
             },
             store: function() {
@@ -128,10 +131,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getPageSizes: function() {
                 return typeUtils.isDefined(options.pageSizes) ? options.pageSizes : [];
-            },
-
-            hasKnownLastPage: function() {
-                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
             },
 
             updatePagesCount: function(count) {

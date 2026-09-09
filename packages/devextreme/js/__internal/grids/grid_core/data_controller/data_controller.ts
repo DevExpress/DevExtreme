@@ -1623,10 +1623,6 @@ export class DataController extends modules.Controller {
     return (this._dataSource ? this._dataSource.totalItemsCount() : 0);
   }
 
-  public hasKnownLastPage(): boolean {
-    return (this._dataSource ? this._dataSource.hasKnownLastPage() : true);
-  }
-
   /**
    * @extended: state_storing
    */

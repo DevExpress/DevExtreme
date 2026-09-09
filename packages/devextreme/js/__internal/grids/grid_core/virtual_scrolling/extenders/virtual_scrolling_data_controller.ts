@@ -205,7 +205,7 @@ export const virtualScrollingDataControllerExtender = (
         return that.option(LEGACY_SCROLLING_MODE) === false ? that._itemCount : that._items.filter(isItemCountable).length;
       },
       hasKnownLastPage() {
-        return that.option(LEGACY_SCROLLING_MODE) === false ? that.hasKnownLastPage() : true;
+        return that.option(LEGACY_SCROLLING_MODE) === false ? that.dataSourceController.hasKnownLastPage() : true;
       },
       pageIndex(index) {
         if (index !== undefined) {
@@ -671,7 +671,7 @@ export const virtualScrollingDataControllerExtender = (
   private _pageIndexIsValid(pageIndex) {
     let result = true;
 
-    if (isInfiniteMode(this) && this.hasKnownLastPage() || isVirtualMode(this)) {
+    if (isInfiniteMode(this) && this.dataSourceController.hasKnownLastPage() || isVirtualMode(this)) {
       result = pageIndex * this.pageSize() < this.totalItemsCount();
     }
 

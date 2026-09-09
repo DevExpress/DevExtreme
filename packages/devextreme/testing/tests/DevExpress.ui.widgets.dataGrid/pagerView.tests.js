@@ -443,7 +443,7 @@ QUnit.module('Pager', {
         const isVisible = pagerView.isVisible();
 
         // assert
-        assert.ok(!this.dataController.hasKnownLastPage());
+        assert.ok(!this.dataSourceController.hasKnownLastPage());
         assert.equal(this.dataController.pageCount(), 1);
         assert.ok(isVisible);
     });
