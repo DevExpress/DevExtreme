@@ -2015,5 +2015,30 @@
       }
     ],
     "consequence": "Вопрос Д7 переформулирован: не «какую роль дать точкам грипа», а «различима ли полоса сплиттера вообще». В светлом — нет, 1.62 при пороге 3:1, и это не видит ни axe (нет правила под 1.4.11), ни скриншоты (эталон совпадает сам с собой). Померен только сплиттер: сплошной проверки нетекстового контраста в теме нет."
+  },
+  "questionIds": {
+    "comment": [
+      "Постоянные номера вопросов. Присваиваются один раз и не переиспользуются: закрытая запись",
+      "уносит свой номер с собой, новая получает следующий свободный. Раньше номер вычислялся от",
+      "позиции в списке, и закрытие одной записи сдвигало все следующие - ссылка «Д8 — вариант 1»",
+      "через день указывала на другой вопрос.",
+      "Закрытые: Д-list-border-disabled (удалён), Д-tabs-tab-border-disabled (переименован в selector)."
+    ],
+    "next": 14,
+    "map": {
+      "open:gallery-nav-button-bg": "Д1",
+      "open:gallery-nav-button-bg-disabled": "Д2",
+      "open:switch-on-border-focused": "Д3",
+      "open:tree-view-checkbox-border-disabled": "Д4",
+      "ladder:accordion-title-bg": "Д5",
+      "ladder:tile-view-bg": "Д6",
+      "contrast:.dx-splitter .dx-resize-handle": "Д7",
+      "concept:accent border rest": "Д8",
+      "concept:accent content rest": "Д9",
+      "concept:base bg rest": "Д10",
+      "concept:base content rest": "Д11",
+      "concept:invalid content rest": "Д12",
+      "concept:menu bg rest": "Д13"
+    }
   }
 }
