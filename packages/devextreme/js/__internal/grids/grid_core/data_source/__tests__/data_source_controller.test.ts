@@ -27,6 +27,7 @@ interface AdapterStub {
   getDataIndexGetter: jest.Mock<() => (data: RawItemData) => number>;
   hasKnownLastPage: jest.Mock<() => boolean>;
   totalItemsCount: jest.Mock<() => number>;
+  totalCount: jest.Mock<() => number>;
   dispose: jest.Mock<(isShared?: boolean) => void>;
   init: jest.Mock<(dataSource: DataSource) => void>;
   push: jest.Mock<(changes: StoreChange[], fromStore: boolean) => void>;
@@ -47,6 +48,7 @@ const createAdapterStub = (marker: string): AdapterStub => ({
   getDataIndexGetter: jest.fn(() => (): number => 0),
   hasKnownLastPage: jest.fn(() => false),
   totalItemsCount: jest.fn(() => 42),
+  totalCount: jest.fn(() => 99),
   dispose: jest.fn(),
   init: jest.fn(),
   push: jest.fn(),
@@ -183,6 +185,7 @@ describe('DataSourceController', () => {
 
     it('counts no items', () => {
       expect(createController().totalItemsCount()).toBe(0);
+      expect(createController().totalCount()).toBe(0);
     });
 
     it('returns an empty object from remoteOperations, so callers can enumerate it', () => {
@@ -242,6 +245,13 @@ describe('DataSourceController', () => {
 
       expect(controller.totalItemsCount()).toBe(42);
       expect(adapter.totalItemsCount).toHaveBeenCalledTimes(1);
+    });
+
+    it('delegates totalCount to the adapter', () => {
+      const { controller, adapter } = withAdapter();
+
+      expect(controller.totalCount()).toBe(99);
+      expect(adapter.totalCount).toHaveBeenCalledTimes(1);
     });
 
     it('returns the inner DataSource from getDataSource, not the adapter', () => {

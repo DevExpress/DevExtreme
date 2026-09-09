@@ -57,6 +57,14 @@ describe('dataSource module registration', () => {
       .toBe(instance.getController('dataSource').keyOf(DATA[1]));
   });
 
+  it('owns the totalCount widget method', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+
+    expect(instance.totalCount()).toBe(DATA.length);
+    expect(instance.totalCount())
+      .toBe(instance.getController('dataSource').totalCount());
+  });
+
   it('sits at the bottom of the controller order', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
 

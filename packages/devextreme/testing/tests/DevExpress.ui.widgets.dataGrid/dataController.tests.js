@@ -3074,7 +3074,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
         this.dataSource.load();
 
         assert.equal(this.dataController.items().length, 5);
-        assert.equal(this.dataController.totalCount(), 7);
+        assert.equal(this.dataSourceController.totalCount(), 7);
         assert.equal(this.dataController.pageCount(), 2);
         assert.equal(this.dataController.pageIndex(), 0);
         assert.ok(this.dataSourceController.hasKnownLastPage());
@@ -3098,7 +3098,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
         // assert
         assert.equal(changedCount, 1);
         assert.equal(this.dataController.items().length, 1);
-        assert.equal(this.dataController.totalCount(), 1);
+        assert.equal(this.dataSourceController.totalCount(), 1);
         assert.equal(this.dataController.pageCount(), 1);
         assert.equal(this.dataController.pageIndex(), 0);
         assert.deepEqual(this.dataController.items()[0].values, ['Dan3', 153]);
@@ -3319,7 +3319,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
         this.dataSource.reload(true);
 
         assert.equal(this.dataController.pageIndex(), 0);
-        assert.equal(this.dataController.totalCount(), 11);
+        assert.equal(this.dataSourceController.totalCount(), 11);
         assert.equal(this.dataController.pageCount(), 3);
         assert.equal(changedCount, 1, 'changed raise after reload');
     });
@@ -3338,7 +3338,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
         assert.equal(this.dataController.pageIndex(), 1);
         assert.equal(this.dataController.pageCount(), 3);
         assert.ok(this.dataSourceController.hasKnownLastPage());
-        assert.equal(this.dataController.totalCount(), 7);
+        assert.equal(this.dataSourceController.totalCount(), 7);
         assert.equal(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].values, ['Dan3', 153]);
     });
@@ -9334,7 +9334,7 @@ QUnit.module('Remote Grouping', {
         assert.strictEqual(storeLoadOptions.take, undefined, 'no take option');
         assert.deepEqual(storeLoadOptions.group, [{ selector: 'name', desc: false, isExpanded: false }], 'group option');
 
-        assert.equal(this.dataController.totalCount(), -1, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), -1, 'totalCount');
         assert.equal(this.dataController.pageCount(), 1, 'pageCount');
     });
 
@@ -9379,7 +9379,7 @@ QUnit.module('Remote Grouping', {
         assert.strictEqual(storeLoadOptions.take, undefined, 'no take option');
         assert.deepEqual(storeLoadOptions.group, [{ selector: 'name', desc: false, isExpanded: false }], 'group option');
 
-        assert.equal(this.dataController.totalCount(), -1, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), -1, 'totalCount');
         assert.equal(this.dataController.pageCount(), 1, 'pageCount');
     });
 
@@ -9419,7 +9419,7 @@ QUnit.module('Remote Grouping', {
         assert.strictEqual(storeLoadOptions.take, 2, 'take option');
         assert.strictEqual(storeLoadOptions.requireTotalCount, true, 'requireTotalCount option');
         assert.ok(!this.dataController.isLoading());
-        assert.equal(this.dataController.totalCount(), 10, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 10, 'totalCount');
         assert.equal(this.dataSourceController.hasKnownLastPage(), true, 'hasKnownLastPage');
         assert.equal(this.dataController.items().length, 2, 'items count');
         assert.equal(this.dataController.pageCount(), 5, 'pageCount');
@@ -9449,7 +9449,7 @@ QUnit.module('Remote Grouping', {
         this.clock.tick(10);
 
         // assert
-        assert.equal(this.dataController.totalCount(), 2, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 2, 'totalCount');
         assert.equal(this.dataController.pageCount(), 1, 'pageCount');
         assert.deepEqual(this.dataController.items()[0].rowType, 'group', 'item 1 rowType');
         assert.deepEqual(this.dataController.items()[0].key, ['1980/10/15'], 'item 1 key');
@@ -9605,7 +9605,7 @@ QUnit.module('Summary', {
         assert.strictEqual(storeLoadOptions.take, 2, 'take option');
         assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: 'age', summaryType: 'custom' }], 'totalSummary option');
         assert.ok(!this.dataController.isLoading());
-        assert.equal(this.dataController.totalCount(), 10, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 10, 'totalCount');
         assert.deepEqual(this.dataController.footerItems(), [{
             rowType: 'totalFooter', summaryCells: [[], [{
                 value: 3,
@@ -9701,7 +9701,7 @@ QUnit.module('Summary', {
         assert.strictEqual(storeLoadOptions.take, 2, 'take option');
         assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: 'age', summaryType: 'custom' }], 'totalSummary option');
         assert.ok(!this.dataController.isLoading());
-        assert.equal(this.dataController.totalCount(), 10, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 10, 'totalCount');
         assert.deepEqual(this.dataController.footerItems(), [{
             rowType: 'totalFooter', summaryCells: [[], [{
                 value: 3,
@@ -9783,7 +9783,7 @@ QUnit.module('Summary', {
         assert.strictEqual(storeLoadOptions.take, 2, 'take option');
         assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: 'age', summaryType: 'min' }], 'summary totalItems option');
         assert.ok(!this.dataController.isLoading());
-        assert.equal(this.dataController.totalCount(), 10, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 10, 'totalCount');
         assert.deepEqual(this.dataController.footerItems(), [{
             rowType: 'totalFooter', summaryCells: [[], [{
                 column: 'age',
@@ -9845,7 +9845,7 @@ QUnit.module('Summary', {
         assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: 'age', summaryType: 'min' }], 'summary totalItems option');
         assert.deepEqual(storeLoadOptions.groupSummary, undefined, 'summary groupItems option');
         assert.ok(!this.dataController.isLoading());
-        assert.equal(this.dataController.totalCount(), 4, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 4, 'totalCount');
         assert.equal(this.dataController.pageCount(), 4, 'pageCount');
         assert.deepEqual(this.dataController.items().length, 2);
         assert.deepEqual(this.dataController.items()[0].data, {
@@ -9918,7 +9918,7 @@ QUnit.module('Summary', {
         assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: 'age', summaryType: 'min' }], 'summary totalItems option');
         assert.deepEqual(storeLoadOptions.groupSummary, undefined, 'summary groupItems option');
         assert.ok(!this.dataController.isLoading());
-        assert.equal(this.dataController.totalCount(), 4, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 4, 'totalCount');
         assert.equal(this.dataController.pageCount(), 4, 'pageCount');
         assert.deepEqual(this.dataController.items().length, 2);
         assert.deepEqual(this.dataController.items()[0].data, {
@@ -9986,7 +9986,7 @@ QUnit.module('Summary', {
         assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: 'age', summaryType: 'min' }], 'summary totalItems option');
         assert.deepEqual(storeLoadOptions.groupSummary, undefined, 'summary groupItems option');
         assert.ok(!this.dataController.isLoading());
-        assert.equal(this.dataController.totalCount(), 10, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 10, 'totalCount');
         assert.equal(this.dataController.pageCount(), 5, 'pageCount');
         assert.deepEqual(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].data, {
@@ -10045,7 +10045,7 @@ QUnit.module('Summary', {
         assert.strictEqual(storeLoadOptions.take, 2, 'take option');
         assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: 'age', summaryType: 'min' }, { selector: 'date', summaryType: 'max' }], 'summary totalItems option');
         assert.ok(!this.dataController.isLoading());
-        assert.equal(this.dataController.totalCount(), 10, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 10, 'totalCount');
         assert.deepEqual(this.dataController.footerItems(), [{
             rowType: 'totalFooter', summaryCells: [[], [{
                 value: 3,
@@ -10107,7 +10107,7 @@ QUnit.module('Summary', {
         assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: 'age', summaryType: 'min' }], 'summary totalItems option');
         assert.deepEqual(storeLoadOptions.groupSummary, [{ selector: 'age', summaryType: 'count' }], 'summary groupItems option');
         assert.ok(!this.dataController.isLoading());
-        assert.equal(this.dataController.totalCount(), 2, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 2, 'totalCount');
         assert.equal(this.dataController.pageCount(), 1, 'pageCount');
         assert.deepEqual(this.dataController.items()[0].summaryCells, [[], [{
             column: 'age',
@@ -10172,7 +10172,7 @@ QUnit.module('Summary', {
         assert.deepEqual(storeLoadOptions.totalSummary, [{ selector: 'age', summaryType: 'min' }], 'summary totalItems option');
         assert.deepEqual(storeLoadOptions.groupSummary, [{ selector: 'age', summaryType: 'count' }], 'summary groupItems option');
         assert.ok(!this.dataController.isLoading());
-        assert.equal(this.dataController.totalCount(), 2, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 2, 'totalCount');
         assert.equal(this.dataController.pageCount(), 1, 'pageCount');
         assert.deepEqual(this.dataController.items()[0].summaryCells, [[], [{
             column: 'age',
@@ -10241,7 +10241,7 @@ QUnit.module('Summary', {
         assert.strictEqual(storeLoadOptions.take, undefined, 'no take option');
         assert.deepEqual(storeLoadOptions.filter, [['group', '=', 'Group1'], 'or', ['group', '=', 'Group0']], 'filter option');
         assert.deepEqual(storeLoadOptions.sort, [{ 'desc': false, 'isExpanded': true, 'selector': 'group' }], 'sort option');
-        assert.equal(this.dataController.totalCount(), 3, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 3, 'totalCount');
         assert.equal(this.dataController.pageCount(), 2, 'pageCount');
         const items = this.dataController.items();
         assert.equal(items.length, 4, 'item count');
@@ -10367,7 +10367,7 @@ QUnit.module('Summary', {
             [[['group1', '=', 'Group1'], 'and', ['group2', '=', 'Group1_0']], 'or', [['group1', '=', 'Group0'], 'and', ['group2', '=', 'Group0_0']]], 'filter option');
         assert.deepEqual(storeLoadOptions.sort,
             [{ 'desc': false, 'isExpanded': true, 'selector': 'group1' }, { 'desc': false, 'isExpanded': true, 'selector': 'group2' }], 'sort option');
-        assert.equal(this.dataController.totalCount(), 3, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 3, 'totalCount');
         assert.equal(this.dataController.pageCount(), 2, 'pageCount');
         const items = this.dataController.items();
         assert.equal(items.length, 6, 'item count');
@@ -14248,7 +14248,7 @@ QUnit.module('Using DataSource instance', {
         // assert
         assert.ok(!this.dataSource.filter(), 'no filter');
         assert.equal(this.dataController.itemsCount(), 3);
-        assert.equal(this.dataController.totalCount(), 3);
+        assert.equal(this.dataSourceController.totalCount(), 3);
 
         // act
         this.dataSource.filter(['field1', '=', 2]);
@@ -14260,7 +14260,7 @@ QUnit.module('Using DataSource instance', {
         assert.deepEqual(this.dataSource.filter(), [filter[0], '=', 2], 'changed filter');
         assert.equal(this.dataController.items()[0].data.field3, 6);
         assert.equal(this.dataController.itemsCount(), 2);
-        assert.equal(this.dataController.totalCount(), 2);
+        assert.equal(this.dataSourceController.totalCount(), 2);
     });
 
     QUnit.test('change group', function(assert) {
@@ -14441,7 +14441,7 @@ QUnit.module('Using DataSource instance', {
 
         // assert
         assert.equal(this.dataController.items().length, 3, 'items count');
-        assert.equal(this.dataController.totalCount(), 5, 'total count');
+        assert.equal(this.dataSourceController.totalCount(), 5, 'total count');
         assert.equal(this.dataController.pageCount(), 2, 'page count');
     });
 

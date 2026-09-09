@@ -35,7 +35,7 @@ export class PagerView extends modules.View {
             pageIndex: getPageIndex(dataController),
             pageSize: dataController.pageSize(),
             pageCount: dataController.pageCount(),
-            itemCount: dataController.totalCount(),
+            itemCount: this.dataSourceController.totalCount(),
             hasKnownLastPage: this.dataSourceController.hasKnownLastPage(),
           });
         } else {
@@ -100,7 +100,7 @@ export class PagerView extends modules.View {
       showNavigationButtons: pagerOptions.showNavigationButtons,
       label: pagerOptions.label,
       allowedPageSizes: that.getPageSizes(),
-      itemCount: dataController.totalCount(),
+      itemCount: that.dataSourceController.totalCount(),
       hasKnownLastPage: that.dataSourceController.hasKnownLastPage(),
       rtlEnabled: that.option('rtlEnabled'),
       isGridCompatibilityMode: true,

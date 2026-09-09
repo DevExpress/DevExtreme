@@ -61,6 +61,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             totalItemsCount: function() {
                 return options.totalItemsCount;
             },
+            totalCount: function() {
+                return options.totalCount || 0;
+            },
             dispose: function() {
             },
             store: function() {
@@ -143,10 +146,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             pageCount: function() {
                 return options.pageCount;
-            },
-
-            totalCount: function() {
-                return options.totalCount || 0;
             },
 
             pageIndex: function(index) {

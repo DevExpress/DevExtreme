@@ -1004,7 +1004,7 @@ export class RowsView extends ColumnsView {
     const contentElement = this._findContentElement();
     const freeSpaceRowElements = this._getFreeSpaceRowElements($table);
 
-    if (freeSpaceRowElements && contentElement && dataController.totalCount() >= 0) {
+    if (freeSpaceRowElements && contentElement && this.dataSourceController.totalCount() >= 0) {
       let isFreeSpaceRowVisible = false;
 
       if (itemCount > 0) {

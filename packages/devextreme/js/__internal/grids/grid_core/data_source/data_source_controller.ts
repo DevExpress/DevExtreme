@@ -38,7 +38,7 @@ export class DataSourceController<
   }
 
   public publicMethods(): string[] {
-    return ['getDataSource', 'keyOf'];
+    return ['getDataSource', 'keyOf', 'totalCount'];
   }
 
   /**
@@ -179,5 +179,9 @@ export class DataSourceController<
 
   public totalItemsCount(): number {
     return this.adapter ? this.adapter.totalItemsCount() : 0;
+  }
+
+  public totalCount(): number {
+    return this.adapter ? this.adapter.totalCount() : 0;
   }
 }

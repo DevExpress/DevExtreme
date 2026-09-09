@@ -569,7 +569,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // assert
         assert.equal(this.dataSourceController.totalItemsCount(), 1, 'count visible items');
-        assert.equal(this.dataController.totalCount(), 3, 'count all items');
+        assert.equal(this.dataSourceController.totalCount(), 3, 'count all items');
     });
 
     QUnit.test('Getting key when there are keyExpr and store hasn\'t key', function(assert) {

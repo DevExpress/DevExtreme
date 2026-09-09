@@ -191,7 +191,6 @@ export class DataController extends modules.Controller {
       'pageSize',
       'refresh',
       'repaintRows',
-      'totalCount',
     ];
   }
 
@@ -1624,10 +1623,6 @@ export class DataController extends modules.Controller {
    */
   public isLoaded(): boolean {
     return (this._dataSource ? this._dataSource.isLoaded() : true);
-  }
-
-  public totalCount(): number {
-    return (this._dataSource ? this._dataSource.totalCount() : 0);
   }
 
   public hasLoadOperation(): boolean {
