@@ -179,9 +179,15 @@
       $('<div>').appendTo(host).dxButton({
         text: 'Open a popup',
         onClick: function () {
+          /*
+           * Not modal, and anchored to the block that opened it: the point of this section is to
+           * have all three open at once and compare them, and a shader would both hide the others
+           * and block the buttons further down the page.
+           */
           var instance = $('<div>').appendTo(host).dxPopup({
             title: 'Painted in the owner’s mode',
-            width: 320, height: 180, visible: true, showCloseButton: true,
+            width: 300, height: 150, visible: true, showCloseButton: true, shading: false,
+            position: { my: 'top left', at: 'bottom left', of: host, offset: '0 6', collision: 'fit' },
             contentTemplate: function () { return $('<p>').text('This popup lives in the viewport, yet it resolved the mode of the block that opened it.'); }
           }).dxPopup('instance');
 
