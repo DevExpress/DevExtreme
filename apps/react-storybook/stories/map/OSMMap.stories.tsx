@@ -11,17 +11,18 @@ import React from 'react';
 import Button from 'devextreme-react/button';
 import Map, { type MapRef } from 'devextreme-react/map';
 import type {
+    CalculateOsmRouteInfo,
     MapLocation,
     MapType,
     ReadyEvent,
+    OsmRouteResult,
+    RouteMode,
 } from 'devextreme/ui/map';
 import 'devextreme/ui/map/openlayers';
 
-const CENTER = { lat: 40.7484, lng: -73.9857 };
+import { ROUTE_PATHS } from './routes';
+
 const CENTRAL_PARK_CENTER = { lat: 40.7829, lng: -73.9654 };
-const DEFAULT_MARKER_LOCATION = 'Empire State Building';
-const CUSTOM_MARKER_LOCATION = 'Bryant Park';
-const ADDED_MARKER_LOCATION = 'Times Square';
 const EXTENT: [number, number, number, number] = [-74.08, 40.67, -73.85, 40.88];
 const TILE_SERVER = {
     url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -29,30 +30,74 @@ const TILE_SERVER = {
     maxZoom: 19,
 };
 const MARKER_LOCATIONS: Record<string, MapLocation> = {
-    [DEFAULT_MARKER_LOCATION]: CENTER,
-    [CUSTOM_MARKER_LOCATION]: { lat: 40.7536, lng: -73.9832 },
-    [ADDED_MARKER_LOCATION]: { lat: 40.758, lng: -73.9855 },
+    'Columbus Circle': { lat: 40.768161, lng: -73.981906 },
+    'Belvedere Castle': { lat: 40.779316, lng: -73.968882 },
+    'Great Hill': { lat: 40.797269, lng: -73.958993 },
+    'Dana Discovery Center': { lat: 40.797064, lng: -73.951349 },
+    'Conservatory Garden': { lat: 40.793621, lng: -73.95261 },
+    'Bethesda Fountain': { lat: 40.774498, lng: -73.970867 },
+};
+const ROUTE_PRESETS = {
+    walking: {
+        title: 'Central Park Run — approx. 10.1 km',
+        markerDescription: 'Blue: Columbus Circle start / finish. Red: Dana Discovery Center.',
+        center: { lat: 40.7827, lng: -73.9666 },
+        zoom: 14,
+        locations: [
+            'Columbus Circle',
+            'Belvedere Castle',
+            'Great Hill',
+            'Dana Discovery Center',
+            'Conservatory Garden',
+            'Bethesda Fountain',
+            'Columbus Circle',
+        ],
+        markers: [{
+            location: 'Columbus Circle',
+        }, {
+            location: 'Dana Discovery Center',
+            iconSrc: 'images/maps/map-marker.png',
+        }],
+        extraMarker: MARKER_LOCATIONS['Belvedere Castle'],
+    },
+    driving: {
+        title: 'Manhattan Drive — official Routes demo waypoints, approx. 11 km',
+        markerDescription: 'Four markers: coordinate string, arrays and an object. Red: custom icon.',
+        center: { lat: 40.75, lng: -73.986 },
+        zoom: 14,
+        locations: [
+            [40.7825, -73.966111],
+            [40.755833, -73.986389],
+            [40.753889, -73.981389],
+            [40.713474, -74.005536],
+        ],
+        markers: [{
+            location: '40.7825, -73.966111',
+        }, {
+            location: [40.755833, -73.986389],
+            iconSrc: 'images/maps/map-marker.png',
+        }, {
+            location: { lat: 40.753889, lng: -73.981389 },
+        }, {
+            location: [40.713474, -74.005536],
+        }],
+        extraMarker: { lat: 40.748441, lng: -73.985664 },
+    },
 };
 const PROVIDER_CONFIG = {
     calculateLocation: (query: string): Promise<MapLocation | undefined> => (
         Promise.resolve(MARKER_LOCATIONS[query])
     ),
+    calculateRoute: ({ mode }: CalculateOsmRouteInfo): Promise<OsmRouteResult> => (
+        Promise.resolve(mode === 'walking'
+            ? ROUTE_PATHS.walking
+            : ROUTE_PATHS.driving.coordinates.map(([lng, lat]) => [lat, lng]))
+    ),
     tileServer: () => TILE_SERVER,
 };
 const handleMarkerClick = fn();
-const DEFAULT_MARKER = {
-    location: DEFAULT_MARKER_LOCATION,
-    onClick: handleMarkerClick,
-};
-const CUSTOM_MARKER = {
-    location: CUSTOM_MARKER_LOCATION,
-    iconSrc: 'images/maps/map-marker.png',
-    onClick: handleMarkerClick,
-};
-const ADDED_MARKER = {
-    location: ADDED_MARKER_LOCATION,
-    onClick: handleMarkerClick,
-};
+const handleRouteAdded = fn();
+const handleRouteRemoved = fn();
 const STORY_STYLE: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
@@ -71,6 +116,11 @@ interface OsmStoryArgs {
     disabled: boolean;
     focusStateEnabled: boolean;
     rtlEnabled: boolean;
+    showRoute: boolean;
+    routeColor: string;
+    routeMode: RouteMode;
+    routeOpacity: number;
+    routeWeight: number;
     type: MapType;
     zoom: number;
 }
@@ -107,14 +157,39 @@ const OsmMapStory = ({
     disabled,
     focusStateEnabled,
     rtlEnabled,
+    showRoute,
+    routeColor,
+    routeMode,
+    routeOpacity,
+    routeWeight,
     type,
     updateArgs,
     zoom,
 }: OsmMapStoryProps): React.ReactElement => {
     const mapRef = React.useRef<MapRef>(null);
     const [markerAdded, setMarkerAdded] = React.useState(false);
-    const markers = React.useMemo(() => [DEFAULT_MARKER, CUSTOM_MARKER], []);
-    const center = centerOnCentralPark ? CENTRAL_PARK_CENTER : CENTER;
+    const preset = ROUTE_PRESETS[routeMode];
+    const markers = React.useMemo(() => preset.markers.map((marker) => ({
+        ...marker,
+        onClick: handleMarkerClick,
+    })), [preset]);
+    const addedMarker = React.useMemo(() => ({
+        location: preset.extraMarker,
+        onClick: handleMarkerClick,
+    }), [preset]);
+    const routes = React.useMemo(() => showRoute ? [{
+        locations: preset.locations,
+        color: routeColor,
+        mode: routeMode,
+        opacity: routeOpacity,
+        weight: routeWeight,
+    }] : [], [preset, showRoute, routeColor, routeMode, routeOpacity, routeWeight]);
+    const center = centerOnCentralPark ? CENTRAL_PARK_CENTER : preset.center;
+
+    React.useEffect(() => {
+        setMarkerAdded(false);
+        mapRef.current?.instance()?.option('zoom', preset.zoom);
+    }, [preset]);
 
     React.useEffect(() => {
         mapRef.current?.instance()?.option('center', center);
@@ -127,7 +202,7 @@ const OsmMapStory = ({
         }
 
         setMarkerAdded(true);
-        void map.addMarker(ADDED_MARKER).then(undefined, () => setMarkerAdded(false));
+        void map.addMarker(addedMarker).then(undefined, () => setMarkerAdded(false));
     };
 
     const removeMarker = (): void => {
@@ -137,11 +212,12 @@ const OsmMapStory = ({
         }
 
         setMarkerAdded(false);
-        void map.removeMarker(ADDED_MARKER).then(undefined, () => setMarkerAdded(true));
+        void map.removeMarker(addedMarker).then(undefined, () => setMarkerAdded(true));
     };
 
     return (
         <div style={STORY_STYLE}>
+            <div>{preset.title}. {preset.markerDescription}</div>
             <div style={TOOLBAR_STYLE}>
                 <Button
                     text="Add Marker"
@@ -160,11 +236,14 @@ const OsmMapStory = ({
                 provider="osm"
                 providerConfig={PROVIDER_CONFIG}
                 autoAdjust={autoAdjust}
-                defaultCenter={CENTER}
+                defaultCenter={preset.center}
                 controls={controls}
                 disabled={disabled}
                 focusStateEnabled={focusStateEnabled}
                 markers={markers}
+                routes={routes}
+                onRouteAdded={handleRouteAdded}
+                onRouteRemoved={handleRouteRemoved}
                 rtlEnabled={rtlEnabled}
                 type={type}
                 zoom={zoom}
@@ -191,11 +270,11 @@ const meta: Meta<OsmStoryArgs> = {
     argTypes: {
         autoAdjust: {
             control: 'boolean',
-            description: 'Automatically adjusts the map viewport when markers change.',
+            description: 'Automatically adjusts the map viewport when markers or routes change.',
         },
         centerOnCentralPark: {
             control: 'boolean',
-            description: 'Switches the map center between the default New York location and Central Park.',
+            description: 'Switches the map center between the selected route and Central Park.',
         },
         controls: {
             control: 'boolean',
@@ -209,6 +288,16 @@ const meta: Meta<OsmStoryArgs> = {
         rtlEnabled: {
             control: 'boolean',
         },
+        showRoute: { control: 'boolean' },
+        routeColor: { control: 'color' },
+        routeMode: {
+            control: 'select',
+            options: ['driving', 'walking'],
+            description: 'Saved OSRM routes: official Routes demo waypoints or an independently calculated Central Park loop. '
+                + 'Driving returns coordinate tuples; walking returns a GeoJSON LineString. No routing service is called.',
+        },
+        routeOpacity: { control: { type: 'range', min: 0, max: 1, step: 0.1 } },
+        routeWeight: { control: { type: 'number', min: 0, max: 20 } },
         type: {
             control: 'select',
             options: ['roadmap', 'satellite', 'hybrid'],
@@ -238,7 +327,12 @@ export const Default: Story = {
         disabled: false,
         focusStateEnabled: true,
         rtlEnabled: false,
+        showRoute: true,
+        routeColor: 'blue',
+        routeMode: 'driving',
+        routeOpacity: 0.5,
+        routeWeight: 6,
         type: 'roadmap',
-        zoom: 15,
+        zoom: 14,
     },
 };
