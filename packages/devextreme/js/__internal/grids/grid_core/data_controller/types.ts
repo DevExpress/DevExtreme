@@ -73,6 +73,13 @@ export interface ProcessedItem extends GeneratedItem {
   watch?: RowWatch;
 }
 
+type LoadAllItemsCallback = (items: ProcessedItem[], totalAggregates?: unknown[]) => void;
+
+export type LoadAllItemsDeferred = Omit<DeferredObj<ProcessedItem[]>, 'done' | 'resolve'> & {
+  done: (callback: LoadAllItemsCallback) => LoadAllItemsDeferred;
+  resolve: LoadAllItemsCallback;
+};
+
 /** changes */
 
 export type RowChangeType = 'update' | 'insert' | 'remove';

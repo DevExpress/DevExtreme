@@ -36,6 +36,7 @@ import type {
   ItemChangeOptions,
   ItemOperationOptions,
   ItemProcessingOptions,
+  LoadAllItemsDeferred,
   PagingChanges,
   PagingDataSource,
   PagingOptionName,
@@ -1377,8 +1378,8 @@ export class DataController extends modules.Controller {
   public loadAllItems(
     data?: RawItemData[],
     skipFilter = false,
-  ): DeferredObj<ProcessedItem[]> {
-    const d = Deferred<ProcessedItem[]>();
+  ): LoadAllItemsDeferred {
+    const d = Deferred<ProcessedItem[]>() as LoadAllItemsDeferred;
     const dataSource = this._dataSource;
 
     if (!dataSource) {
@@ -1420,7 +1421,7 @@ export class DataController extends modules.Controller {
    * @extended: summary (DataGrid)
    */
   protected resolveLoadAllItems(
-    d: DeferredObj<ProcessedItem[]>,
+    d: LoadAllItemsDeferred,
     loadResult: CustomLoadResult,
   ): void {
     d.resolve(this.processLoadAllItems(loadResult));
