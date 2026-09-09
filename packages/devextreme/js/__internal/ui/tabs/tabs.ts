@@ -342,9 +342,7 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
     const { _itemAriaLabelExpr } = this.option();
     const label = _itemAriaLabelExpr?.(itemData);
 
-    if (label) {
-      this.setAria('label', label, itemElement);
-    }
+    this.setAria('label', label, itemElement);
   }
 
   _renderScrolling(): void {
@@ -865,6 +863,7 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
         super._optionChanged(args);
         break;
       case 'badgeExpr':
+      case '_itemAriaLabelExpr':
         this._invalidate();
         break;
       case 'focusedElement': {

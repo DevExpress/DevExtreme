@@ -7,7 +7,7 @@ const SVG_ICON_CLASS = 'dx-svg-icon';
 
 const NOT_URL_REGEXP = /^(?!(?:https?:\/\/)|(?:ftp:\/\/)|(?:www\.))[^\s]+$/;
 const FILE_NAME_REGEXP = /.+\/([^.]+)\..+$/;
-const SVG_TITLE_REGEXP = /<title>(.*?)<\/title>/;
+const SVG_TITLE_REGEXP = /<title>(.+?)<\/title>/;
 
 export const getImageSourceType = (source) => {
   if (!source || typeof source !== 'string') {
@@ -48,20 +48,20 @@ export const getImageContainer = (source) => {
   }
 };
 
-export const getImageAriaLabel = (source: string): string => {
+export const getImageAriaLabel = (source: string): string | undefined => {
   switch (getImageSourceType(source)) {
     case 'image': {
       const isPathToImage = !source.includes('base64') && NOT_URL_REGEXP.test(source);
 
-      return isPathToImage ? source.replace(FILE_NAME_REGEXP, '$1') : '';
+      return isPathToImage ? source.replace(FILE_NAME_REGEXP, '$1') : undefined;
     }
     case 'dxIcon':
       return messageLocalization.format(camelize(source, true)) || source;
     case 'fontIcon':
       return source;
     case 'svg':
-      return SVG_TITLE_REGEXP.exec(source)?.[1] ?? '';
+      return SVG_TITLE_REGEXP.exec(source)?.[1];
     default:
-      return '';
+      return undefined;
   }
 };
