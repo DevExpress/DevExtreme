@@ -15,10 +15,6 @@ $tree-view-spin-icon: ds.$color-content-subtle !default;
 $tree-view-spin-icon-disabled: ds.$color-content-disabled !default;
 $tree-view-checkbox-checked-border-focused: ds.$color-border-primary-shared-active !default;
 
-$tree-view-checkbox-border-disabled: ds.$color-content-disabled !default;
-$tree-view-checkbox-icon-disabled: ds.$color-content-disabled !default;
-$tree-view-checkbox-indeterminate-bg-disabled: ds.$color-content-disabled !default;
-$tree-view-checkbox-bg-disabled: ds.$color-bg-disabled !default;
 $tree-view-item-content-disabled: ds.$color-content-disabled !default;
 
 /* Was fed by a *-disabled token holding a neutral grey; 262.15.0 dropped it. The neutral border
