@@ -5,7 +5,6 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
-import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
@@ -111,8 +110,6 @@ export class DataController extends modules.Controller {
 
   public pageChanged!: Callback<[number?]>;
 
-  public pushed!: Callback<[StoreChange[]]>;
-
   public changed!: Callback<[DataChange]>;
 
   public loadingChanged!: Callback<[boolean, string?]>;
@@ -130,8 +127,6 @@ export class DataController extends modules.Controller {
 
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
-  private dataPushedHandlerProxy!: (changes: StoreChange[]) => void;
-
   private dataChangedHandlerProxy!: (e?: ChangedEvent) => void;
 
   public init(): void {
@@ -145,7 +140,6 @@ export class DataController extends modules.Controller {
     this._currentOperationTypes = null;
     this.dataChangedHandlerProxy = this.dataChangedHandler.bind(this);
     this.loadErrorHandlerProxy = this.loadErrorHandler.bind(this);
-    this.dataPushedHandlerProxy = this.dataPushedHandler.bind(this);
 
     this._columnsController.columnsChanged.add(this.columnsChangedHandler.bind(this));
 
@@ -170,7 +164,7 @@ export class DataController extends modules.Controller {
   }
 
   protected callbackNames(): string[] {
-    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed', 'rowIndicesChanged'];
+    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'rowIndicesChanged'];
   }
 
   protected callbackFlags(name?: string): CallbackFlags | undefined {
@@ -595,10 +589,6 @@ export class DataController extends modules.Controller {
    */
   protected loadErrorHandler(e: Error | string): void {
     this.dataErrorOccurred.fire(e);
-  }
-
-  protected dataPushedHandler(changes: StoreChange[]): void {
-    this.pushed.fire(changes);
   }
 
   public fireError(...args: unknown[]): void {
@@ -1304,7 +1294,6 @@ export class DataController extends modules.Controller {
     dataSourceAdapter.loadError.add(this.loadErrorHandlerProxy);
     dataSourceAdapter.customizeStoreLoadOptions.add(this.customizeStoreLoadOptionsHandler);
     dataSourceAdapter.changing.add(this.changingHandler);
-    dataSourceAdapter.pushed.add(this.dataPushedHandlerProxy);
   }
 
   private unsubscribeFromDataSource(dataSourceAdapter: DataSourceAdapter): void {
@@ -1313,7 +1302,6 @@ export class DataController extends modules.Controller {
     dataSourceAdapter.loadError.remove(this.loadErrorHandlerProxy);
     dataSourceAdapter.customizeStoreLoadOptions.remove(this.customizeStoreLoadOptionsHandler);
     dataSourceAdapter.changing.remove(this.changingHandler);
-    dataSourceAdapter.pushed.remove(this.dataPushedHandlerProxy);
   }
 
   private setDataSource(dataSource: DataSource): void {
@@ -1646,10 +1634,6 @@ export class DataController extends modules.Controller {
 
   public reload(reload?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
     return this._dataSource?.reload(reload, changesOnly) as DeferredObj<unknown>;
-  }
-
-  public push(changes: StoreChange[], fromStore = false): void {
-    this._dataSource?.push(changes, fromStore);
   }
 
   private itemsCount(): number {
