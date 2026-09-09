@@ -8,7 +8,6 @@ import {
 } from '@ts/filter_builder/m_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/data_controller/types';
-import type { ModuleItem } from '@ts/grids/grid_core/m_modules';
 
 import { FILTER_ROW_OPERATIONS, FILTER_TYPES_EXCLUDE, FILTER_TYPES_INCLUDE } from './const';
 import type {
@@ -28,16 +27,6 @@ const getFilterTypeByOperation = (operation: unknown): Column['filterType'] | un
     default:
       return undefined;
   }
-};
-
-// A free function so that both the `data` and the `filter` extender can read the flag
-// without one of them reaching for the other controller.
-export const isFilterSyncActive = (
-  moduleItem: Pick<ModuleItem, 'option'>,
-): boolean | undefined => {
-  const filterSyncEnabled = moduleItem.option('filterSyncEnabled');
-
-  return filterSyncEnabled === 'auto' ? moduleItem.option('filterPanel.visible') : filterSyncEnabled;
 };
 
 export const getColumnIdentifier = (
