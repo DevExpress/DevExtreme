@@ -201,26 +201,6 @@
       "slot": "content",
       "decision": "rule-5",
       "why": "paints background-color and border-color of the checkbox, never color: - a dual-role value whose name claims the content slot it does not use"
-    },
-    {
-      "name": "tree-view-checkbox-border-disabled",
-      "verdict": "cross-family",
-      "roles": [
-        "color-content-disabled"
-      ],
-      "slot": "border",
-      "decision": "design",
-      "why": "border-color: from color-content-disabled. The package's checkbox separates them - border-disabled #d7d7d7/#4c4c4c against our #ababab/#767676. This is the answer to the journal's open question about the three roles split 06.08 out of one value"
-    },
-    {
-      "name": "tree-view-checkbox-indeterminate-bg-disabled",
-      "verdict": "cross-family",
-      "roles": [
-        "color-content-disabled"
-      ],
-      "slot": "bg",
-      "decision": "confirmed",
-      "why": "the package assigns content-disabled to indeterminate.icon.disabled - the dash is content. Our role is right; the slot word says bg because the property is background-color"
     }
   ],
   "typographyUnmarked": [
