@@ -1224,8 +1224,8 @@
           "role": "color-border-danger-shared-active"
         }
       ],
-      "decision": "spelling",
-      "why": "the components paint the identical colour and spell it from different families - free to unify, and until then the next palette change moves some of them and not the others"
+      "decision": "answered",
+      "why": "Answered 09.09, and the answer is not to unify. Measured: the whole *-danger-shared family resolves to ONE value across bg, border and content in both modes - that is what shared means in this set. So the family segment carries no colour information here; it records which property paints the value. The canonical spelling is therefore already decided by the theme's own slot rule (NAMING M3, family follows the painted property), and unifying the three would throw away the only information the segment carries. If the package ever diverges the three, each element will then correctly follow its own family - which is the outcome the original worry asked for. Every member of the cluster already obeys the rule: checkBox border paints border-color, checkBox fill paints background-color, checkBox mark is a glyph, common badge is a fill. The one exception is radioButton, which paints a border AND a fill from a single variable - that is not a spelling choice, it is the anatomy question filed as sweep:radio-invalid-vs-checkbox-invalid. All three roles here resolve to one colour (#76000b light / #9d0013 dark), so this row is a pure spelling cluster and nothing else."
     },
     {
       "concept": "invalid bg hovered",
@@ -1258,8 +1258,8 @@
           "role": "color-border-danger"
         }
       ],
-      "decision": "spelling",
-      "why": "the components paint the identical colour and spell it from different families - free to unify, and until then the next palette change moves some of them and not the others"
+      "decision": "answered",
+      "why": "Answered 09.09, and the answer is not to unify. Measured: the whole *-danger-shared family resolves to ONE value across bg, border and content in both modes - that is what shared means in this set. So the family segment carries no colour information here; it records which property paints the value. The canonical spelling is therefore already decided by the theme's own slot rule (NAMING M3, family follows the painted property), and unifying the three would throw away the only information the segment carries. If the package ever diverges the three, each element will then correctly follow its own family - which is the outcome the original worry asked for. Every member of the cluster already obeys the rule: checkBox border paints border-color, checkBox fill paints background-color, checkBox mark is a glyph, common badge is a fill. The one exception is radioButton, which paints a border AND a fill from a single variable - that is not a spelling choice, it is the anatomy question filed as sweep:radio-invalid-vs-checkbox-invalid. Note the row is NOT one colour: beside the shared cluster (#9d0013 / #ee726a) it holds slider on border-danger, a different shade. That member is a shade divergence, not a spelling one, and the page used to claim the whole row was free to change."
     },
     {
       "concept": "invalid bg rest",
@@ -1306,8 +1306,8 @@
           "role": "color-border-danger"
         }
       ],
-      "decision": "spelling",
-      "why": "the components paint the identical colour and spell it from different families - free to unify, and until then the next palette change moves some of them and not the others"
+      "decision": "answered",
+      "why": "Answered 09.09, and the answer is not to unify. Measured: the whole *-danger-shared family resolves to ONE value across bg, border and content in both modes - that is what shared means in this set. So the family segment carries no colour information here; it records which property paints the value. The canonical spelling is therefore already decided by the theme's own slot rule (NAMING M3, family follows the painted property), and unifying the three would throw away the only information the segment carries. If the package ever diverges the three, each element will then correctly follow its own family - which is the outcome the original worry asked for. Every member of the cluster already obeys the rule: checkBox border paints border-color, checkBox fill paints background-color, checkBox mark is a glyph, common badge is a fill. The one exception is radioButton, which paints a border AND a fill from a single variable - that is not a spelling choice, it is the anatomy question filed as sweep:radio-invalid-vs-checkbox-invalid. Note the row is NOT one colour: beside the shared cluster (#c50f1f / #e4554f) it holds gridBase on bg-danger-subtler, progressBar on bg-danger and slider on border-danger - three different shades. Same correction as the hovered row."
     },
     {
       "concept": "invalid border focused",
@@ -2418,5 +2418,70 @@
         "effect": "light identical (#0f6cbd both roles), dark #0f6cbd -> #4b90d9. The variable is read twice: the 2px accent bar of the editing preview, and the preview caption text. As text on the chat background the caption measured 2.88 in dark against the 4.5 AA asks, and the bar 2.88 against the 3:1 a graphic asks; both are now 4.65. Nothing in CI could see it - the preview only exists while a message is being edited, so no static demo state reaches it"
       }
     ]
+  },
+  "decisionClasses": {
+    "comment": [
+      "Каждый вердикт - в одну и только одну секцию страницы. Таблица «решения не требуется» строится",
+      "отсюда и считается по данным: раньше это был литеральный массив в генераторе, и он уже разошёлся",
+      "с данными - graphic-ok печатался как 2, когда строк было 1, а graphic-ok-rest-only не попадал",
+      "никуда вовсе. Гейт держит равенство в обе стороны: вердикт без класса и класс без строк роняют",
+      "проверку, и сумма по секциям обязана сойтись с числом разобранных строк.",
+      "Класс заводится только когда строка с таким вердиктом есть в данных: пустой класс роняет гейт так",
+      "же, как неотнесённый вердикт. Поэтому spelling здесь нет - все три строки отвечены (answered)."
+    ],
+    "classes": {
+      "design": {
+        "section": "А",
+        "ru": "решает человек"
+      },
+      "answered": {
+        "section": "В",
+        "ru": "вопрос был открыт и закрыт ответом, а не правкой"
+      },
+      "package-gap": {
+        "section": "Б",
+        "ru": "нужной роли в пакете нет"
+      },
+      "naming": {
+        "section": "Г",
+        "ru": "роль верна, врёт слово в имени"
+      },
+      "confirmed": {
+        "section": "Е",
+        "ru": "пакет назначает ровно эту роль - расходится только слово слота"
+      },
+      "rule-5": {
+        "section": "Е",
+        "ru": "одно значение в двух свойствах, названо по доминирующей роли; принято ревью-раундом 2"
+      },
+      "hairline": {
+        "section": "Е",
+        "ru": "волосяная линия фоном сохраняет border-роль; подтверждено core (у tabs это слот selector)"
+      },
+      "no-rung": {
+        "section": "Е",
+        "ru": "состояния схлопнуты там же, где их схлопывает сама система"
+      },
+      "shade": {
+        "section": "Е",
+        "ru": "то же семейство, другой оттенок - расхождение, которое компоненты вправе иметь"
+      },
+      "graphic-ok": {
+        "section": "Е",
+        "ru": "глиф, порог 3:1 взят"
+      },
+      "graphic-ok-rest-only": {
+        "section": "Е",
+        "ru": "покой глифа порог берёт, а состояние - нет; состояние вынесено отдельным вопросом"
+      },
+      "bridge": {
+        "section": "Е",
+        "ru": "мост с альфой, инвентаризован в BRIDGES.md"
+      },
+      "known": {
+        "section": "Е",
+        "ru": "расхождение уже записано в DIVERGENCES.md"
+      }
+    }
   }
 }

@@ -122,6 +122,9 @@ const RU = {
   '.dx-splitter .dx-resize-handle': 'Грип ресайза даёт <b>2.8 в тёмном</b> при пороге 3:1 для нетекстового элемента управления. Проходящая роль есть — <code>content</code> даёт 4.54, — но она же делает грип заметно темнее в светлом (6 → 11.15). Пол задаёт стандарт, выбор роли — нет.',
   'tabs-tab-border-disabled': 'Единственный член собственной лестницы не на border-роли: <code>selected-active</code>, <code>selected-hovered</code>, <code>selected-focused</code>, <code>active</code> и <code>hovered</code> читают <code>border-*</code>, и только <code>disabled</code> — <code>content-disabled</code>.<br><b>Варианты:</b> ① <code>border-disabled</code> — лестница становится согласованной, индикатор бледнеет с #ababab / #767676 до #d7d7d7 / #4c4c4c, что для неактивного состояния и ожидается; ② оставить и записать как осознанное исключение. Рекомендация — ①: это следование собственной лестнице, а не смена вкуса.',
   'load-indicator-segment-inner-border': 'Внутренняя рамка лоад-индикатора красится <code>bg-primary-subtle</code>, потому что border-роли с этой насыщенностью в пакете <b>не существует</b>. Менять не на что — нужна роль <code>border-primary-subtle</code>.',
+  'invalid bg focused': 'Отвечено. Мерили: всё семейство <code>*-danger-shared</code> разрешается в <b>одно значение</b> через bg, border и content <b>в обоих режимах</b> — это и значит shared. Значит сегмент семейства здесь не несёт цвета, он записывает, <b>каким свойством</b> значение красится. Каноническая запись, стало быть, уже задана собственным правилом слота темы (NAMING M3: семейство следует за красящим свойством), а унификация выбросила бы единственную информацию, которую сегмент несёт. Если пакет когда-нибудь разведёт три роли, каждый элемент поедет за своим семейством — ровно то, ради чего вопрос и заводили. Все участники кластера правилу уже следуют: рамка чекбокса красит <code>border-color</code>, заливка чекбокса — <code>background-color</code>, метка чекбокса это глиф, бейдж — заливка. Единственное исключение — radioButton, который красит и рамку, и точку <b>одной</b> переменной; это не выбор записи, а анатомия, и она вынесена в Д21.<br>В этой строке все три роли действительно один цвет (#76000b светлый / #9d0013 тёмный) — чистый кластер записи и ничего кроме.',
+  'invalid bg hovered': 'Тот же ответ, что и по предыдущей строке: записи расходятся не по вкусу, а по красящему свойству, и менять нечего.<br><b>Поправка к самой строке:</b> она <b>не</b> одноцветная. Кроме кластера (#9d0013 / #ee726a) в ней сидит slider на <code>border-danger</code> — другой оттенок. Это расхождение оттенка, а не записи, и прежняя формулировка «правка ничего не двигает» на него не распространялась.',
+  'invalid bg rest': 'Тот же ответ.<br><b>Поправка к самой строке:</b> она <b>не</b> одноцветная. Кроме кластера (#c50f1f / #e4554f) в ней gridBase на <code>bg-danger-subtler</code>, progressBar на <code>bg-danger</code> и slider на <code>border-danger</code> — три разных оттенка. Та же поправка, что и в строке наведения.',
   'checkbox-focused-fill': 'Отмеченный чекбокс в фокусе или под нажатием заливается <code>bg-primary-active</code>, а галка остаётся на <code>content-inverted</code>. Эти две роли по-разному ведут себя между режимами: content-inverted <b>переворачивается</b> (#ffffff в светлом, #161616 в тёмном), bg-primary-active <b>нет</b> (#003c70 в обоих). Светлый даёт 11.17, тёмный — <b class="warn">1.62</b>: галки не видно, и сам бокс против страницы 1.39. Покой (3.36) и наведение (4.30) в порядке, проваливается только эта ступень.<br><b>Варианты заливки в тёмном</b> (галка / бокс): ① <code>bg-primary-hovered</code> #2b7ecf — 4.30 / 3.69, проходит, и это <b>ровно та ступень, которую на фокус уже берёт кнопка</b> (<code>button-default-contained-bg-focused</code> читает <code>bg-primary-hovered</code>); ② <code>bg-primary-shared-active</code> #005397 — 2.31 / 1.98, всё ещё провал, то есть приём из Д3 сюда не переносится; ③ оставить 1.62 / 1.39. Рекомендация — ①, тогда чекбокс согласуется с кнопкой. Светлый при этом идёт 11.17 → 7.82, заливка #003c70 → #005397: эталоны пересъёмка, поэтому вопрос, а не правка.',
   'outlined-button-label': 'Обведённые кнопки — <code>default</code>, <code>success</code>, <code>danger</code> — держат подпись на <code>content-&lt;оттенок&gt;</code>, пока заливка идёт по лестнице <code>bg-&lt;оттенок&gt;-subtler</code> через hovered, focused, selected и active. Подпись это текст, порог 4.5, и <b>ни одно состояние после покоя его не берёт</b>: наведение и фокус 4.02–4.43, selected 3.22–3.78, нажатие 2.94–3.18 в светлом.<br>Blazor поднимает <b>обе</b> стороны: <code>outline-primary-hover-color</code> = <code>content-primary-hovered</code>, <code>-active-color</code> = <code>content-primary-active</code>. Померено — ответ неоднородный: <code>content-primary-hovered</code> на <code>bg-primary-subtler-hovered</code> даёт <b>5.85 / 5.11</b>, проходит в обоих режимах против наших 4.02 / 4.11; а <code>content-primary-active</code> на <code>bg-primary-subtler-active</code> даёт 6.10 / <b class="warn">2.05</b> — меняет светлый на тёмный; <code>content-primary-selected</code> не существует вовсе.<br><b>Варианты:</b> ① взять ступени hovered и focused как у Blazor — доказуемо, оба режима, три роли; ② для selected и active проходящей пары в пакете нет: либо не двигать заливку в этих состояниях, либо заявка в пакет; ③ <code>content-on-subtle-primary</code> — роль, которую пакет держит ровно под эту поверхность и которую мы не читаем нигде, — берёт всё с запасом (10.82 / 16), но она <b>нейтральная, не синяя</b>: подпись перестанет быть акцентной. Рекомендация: ① сейчас, ③ только если дизайн хочет нейтральную подпись.',
   'contained-button-label': 'Залитые <code>default</code> и <code>success</code>, а также индикатор пройденного шага степпера, кладут белую подпись на <code>bg-&lt;оттенок&gt;-hovered</code> и дают <b class="warn">4.18–4.21</b> в тёмном при пороге 4.5. В светлом 7.5–7.8, то есть проблема только тёмная. Передний план — <code>content-static-dark</code>, он #ffffff в обоих режимах по замыслу, так что всё движение в заливке: <code>bg-primary</code> в тёмном #0f6cbd даёт 5.38, а его ступень наведения светлеет до #2b7ecf и даёт 4.21. Светлеть на наведении в тёмном режиме правильно — перебор в величине шага. Темой это не чинится: пара — две роли пакета, использованные ровно по назначению. Вопрос вынесен, чтобы подтвердить, что мы это <b>заявляем в пакет</b>, а не подменяем роль.',
@@ -209,6 +212,10 @@ const pkgQs = [...base.open, ...base.contrast].filter((x) => x.decision === 'pac
 
 // --- C. унификация
 n = 0;
+const answeredQs = base.concepts.filter((x) => x.decision === 'answered').map((c) => q(num('У'),
+  `<b>${esc(c.concept)}</b> — отвечено, правка не нужна`,
+  `<p class="meta">${roleList(c.roles)}</p><p>${ruText(c.concept)}</p>`));
+
 const spellQs = base.concepts.filter((x) => x.decision === 'spelling').map((c) => q(num('У'),
   `<b>${esc(c.concept)}</b> — один цвет записан ${c.roles.length} ролями`,
   `<p>${roleList(c.roles)}</p><p>Правка ничего не двигает. Нужно назвать каноническую запись.</p>`));
@@ -247,16 +254,30 @@ const unusedQs = [
     + 'в отдельных местах, а поверхностные и границы — нет.</p>'),
 ];
 
-const noAction = [
-  ['confirmed', base.open.filter((x) => x.decision === 'confirmed').length, 'пакет назначает ровно эту роль — расходится только слово слота'],
-  ['rule-5', base.open.filter((x) => x.decision === 'rule-5').length + base.slotLies.filter((x) => x.decision === 'rule-5').length, 'одно значение в двух свойствах, названо по доминирующей роли; принято ревью-раундом 2'],
-  ['hairline', base.slotLies.filter((x) => x.decision === 'hairline').length, 'волосяная линия фоном сохраняет border-роль; подтверждено core (у tabs это слот selector)'],
-  ['no-rung', base.ladders.filter((x) => x.decision === 'no-rung').length, 'состояния схлопнуты там же, где их схлопывает сама система'],
-  ['shade', base.concepts.filter((x) => x.decision === 'shade').length, 'то же семейство, другой оттенок — расхождение, которое компоненты вправе иметь'],
-  ['graphic-ok', base.contrast.filter((x) => x.decision === 'graphic-ok').length, 'глиф, порог 3:1 взят'],
-  ['bridge / known', 2, 'уже инвентаризовано в BRIDGES.md и DIVERGENCES.md'],
-  ['stale в наборах соседей', data.unusedRoles.stale.length, 'blazor и wpf ссылаются на имена, которых семантический слой не объявляет — их дрейф, не наш'],
+/*
+ * Таблица «решения не требуется» и весь баланс страницы считаются по данным. До 09.09 это был
+ * литеральный массив, и он разошёлся: graphic-ok печатался как 2 при одной строке, а вердикт
+ * graphic-ok-rest-only не попадал ни в одну секцию вообще. Гейт теперь требует класс для каждого
+ * вердикта, и сумма по секциям обязана сойтись с числом разобранных строк.
+ */
+const reviewed = [
+  ...base.open, ...base.slotLies, ...base.ladders, ...base.contrast,
+  ...base.concepts, ...base.statePairs.rows, ...base.sweep.items,
 ];
+const classes = base.decisionClasses.classes;
+const countByDecision = new Map();
+for (const row of reviewed) countByDecision.set(row.decision, (countByDecision.get(row.decision) ?? 0) + 1);
+for (const decision of countByDecision.keys()) {
+  if (!classes[decision]) {
+    throw new Error(`вердикт "${decision}" не отнесён ни к одной секции - добавьте в decisionClasses `
+      + 'в tests/roles.baseline.json');
+  }
+}
+const bySection = (letter) => [...countByDecision]
+  .filter(([decision]) => classes[decision].section === letter)
+  .sort((a, b2) => b2[1] - a[1]);
+const noAction = bySection('Е').map(([decision, count]) => [decision, count, classes[decision].ru]);
+const staleCount = data.unusedRoles.stale.length;
 
 
 // --- Ж. покрытие и как его поднять
@@ -443,9 +464,10 @@ ${closedSection}
 <h2>Б. Команда пакета токенов — ${pkgQs.length} заявки</h2>
 <p>Роли, которая нужна, в пакете нет — обменять не на что.</p>${pkgQs.join('')}
 
-<h2>В. Унификация, правка бесплатна — ${spellQs.length}</h2>
-<p>Компоненты кладут один и тот же цвет и пишут его ролями из разных семейств. Пока каноническая
-запись не выбрана, следующая перепривязка палитры разведёт их молча.</p>${spellQs.join('')}
+<h2>В. Одно значение, разные записи — ${spellQs.length + answeredQs.length}</h2>
+<p>Компоненты кладут один и тот же цвет и пишут его ролями из разных семейств. Вопрос был: какая
+запись каноническая. ${answeredQs.length ? `Отвечено ${answeredQs.length}, открыто ${spellQs.length}.` : ''}</p>
+${spellQs.join('')}${answeredQs.join('')}
 
 <h2>Г. Переименование компонентного тира — ${renames.length} имён</h2>
 <p>Роль верна, врёт слово в имени.</p>
@@ -472,7 +494,18 @@ ${unusedQs.join('')}
 ${data.unusedRoles.capability.map((u) => `<tr><td>${code(u.role.replace(/^color-/, ''))}</td><td>${u.sets.join(', ')}</td></tr>`).join('')}
 </table></details>
 
-<h2>Е. Решения не требуется — записано, чтобы не переоткрывали</h2>
+<h2>Е. Решения не требуется — ${noAction.reduce((t, r) => t + r[1], 0)} из ${reviewed.length} разобранных строк</h2>
+<p>Это <b>замыкающий баланс аудита</b>, а не справка: каждая разобранная строка обязана попасть ровно
+в одну секцию этой страницы, и таблица ниже — та часть, которая закрыта без действия. Числа считаются
+по данным, класс каждого вердикта объявлен в базлайне, и гейт роняет проверку, если появится вердикт
+без секции или секция без строк. До 09.09 таблица была литеральным массивом в генераторе и уже
+разошлась с данными.</p>
+<p class="meta">Расклад по секциям:
+${['А', 'Б', 'В', 'Г', 'Е'].map((letter) => `<b>${letter}</b> ${bySection(letter).reduce((t, r) => t + r[1], 0)}`).join(' · ')}
+— в сумме ${reviewed.length}. Отдельно ${data.unusedRoles.capability.length} возможностей пакета (секция Д)
+и ${staleCount} протухших имён у соседей: это счёт от пакета внутрь, а не наши объявления.</p>
+<p class="meta">Что стоит за каждым классом — поимённо в <code>tests/roles.baseline.json</code>
+и в <code>ROLES.md</code>: страница держит счёт, разбор держат они.</p>
 <table><tr><th>Класс</th><th>Сколько</th><th>Почему закрыто</th></tr>
 ${noAction.map(([k, c, why]) => `<tr><td>${code(k)}</td><td>${c}</td><td>${esc(why)}</td></tr>`).join('')}
 </table>

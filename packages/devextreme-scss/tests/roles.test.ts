@@ -40,7 +40,7 @@ const LADDER_DECISIONS = ['no-rung', 'design'];
 const CONTRAST_DECISIONS = ['graphic-ok', 'graphic-ok-rest-only', 'package-gap', 'design'];
 const STATE_PAIR_DECISIONS = ['graphic-ok', 'design'];
 const SWEEP_DECISIONS = ['design'];
-const CONCEPT_DECISIONS = ['spelling', 'shade', 'design'];
+const CONCEPT_DECISIONS = ['spelling', 'shade', 'design', 'answered'];
 
 type Concept = {
   concept: string; roles: string[]; families: string[];
@@ -387,6 +387,36 @@ test('every applied change records what it did to the value', () => {
       || !r.change?.trim() || !r.effect?.trim())
     .map((r: { what?: string }) => r.what);
   expect(thin).toEqual([]);
+});
+
+/*
+ * The closing balance. Every reviewed row has to land in exactly one section of the page, and the
+ * section it lands in has to be declared next to the data rather than written into the generator.
+ * It was written into the generator until 09.09, and it had already drifted: the table printed
+ * graphic-ok as 2 when one row carried it, and graphic-ok-rest-only reached no section at all.
+ */
+test('every verdict is assigned to exactly one page section', () => {
+  const reviewed = [
+    ...baseline.open, ...baseline.slotLies, ...baseline.ladders, ...baseline.contrast,
+    ...baseline.concepts, ...baseline.statePairs.rows, ...baseline.sweep.items,
+  ] as { decision?: string }[];
+  const classes = baseline.decisionClasses.classes as Record<string, { section: string; ru: string }>;
+
+  const seen = [...new Set(reviewed.map((r) => r.decision))].sort();
+  expect(seen.filter((d) => !d || !classes[d])).toEqual([]);
+  expect(Object.keys(classes).sort()).toEqual(seen);
+
+  const thin = Object.entries(classes)
+    .filter(([, c]) => !c.section?.trim() || !c.ru?.trim())
+    .map(([key]) => key);
+  expect(thin).toEqual([]);
+
+  const perSection: Record<string, number> = {};
+  for (const row of reviewed) {
+    const { section } = classes[row.decision!];
+    perSection[section] = (perSection[section] ?? 0) + 1;
+  }
+  expect(Object.values(perSection).reduce((t, n) => t + n, 0)).toBe(reviewed.length);
 });
 
 test('the decision pages match the data they are generated from', () => {
