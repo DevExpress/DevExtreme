@@ -52,8 +52,8 @@ $scheduler-appointment-15min-icon-inset-inline-end: null !default;
 $scheduler-appointment-20min-recurrence-padding-inline-end: null !default;
 $scheduler-appointment-20min-icon-inset-inline-end: null !default;
 
-$scheduler-left-column-width: 65px !default; // dx-offscale: 65px
-$scheduler-timeline-date-table-cell-height: 50px !default; // dx-offscale: 50px
+$scheduler-left-column-width: 64px !default; // dx-literal-required: base/scheduler/_index.scss:128 multiplies it by a factor, and var() cannot take part in Sass arithmetic
+$scheduler-timeline-date-table-cell-height: ds.$spacing-480 !default;
 
 $scheduler-border-radius: 0 !default;
 
@@ -74,7 +74,7 @@ $scheduler-agenda-appointment-title-font-size: null !default;
 $scheduler-header-height: null !default;
 $scheduler-header-offset: null !default;
 
-$scheduler-timeline-cell-height: 50px !default; // dx-offscale: 50px
+$scheduler-timeline-cell-height: ds.$spacing-480 !default;
 
 $scheduler-header-day-element-height: null !default;
 
@@ -91,7 +91,7 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-workspace-date-table-cell-height: ds.$spacing-380 !default;
 
   $scheduler-header-panel-day-font-size: ds.$font-size-title-sm !default;
-  $scheduler-header-height: 46px !default; // dx-offscale: 46px
+  $scheduler-header-height: ds.$spacing-480 !default;
   $scheduler-header-offset: 0 ds.$spacing-120 !default;
 
   $scheduler-appointment-tooltip-title-font-size: ds.$font-size-title-sm !default;
@@ -284,10 +284,10 @@ $scheduler-timeline-group-two-empty-cell-width: ds.$spacing-1600 !default;
 $scheduler-timeline-group-header-width: ds.$spacing-800 !default;
 $scheduler-timeline-group-three-empty-cell-width: 240px !default; // dx-offscale: 240px
 $scheduler-timeline-cell-width: 200px !default; // dx-offscale: 200px
-$scheduler-agenda-left-column-width: 70px !default; // dx-offscale: 70px
+$scheduler-agenda-left-column-width: ds.$spacing-720 !default;
 $scheduler-group-header-agenda-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: 18px has no font-size role
 $scheduler-agenda-date-table-padding-block-start: ds.$spacing-100 !default;
-$scheduler-virtual-row-height: 50px !default; // dx-offscale: 50px
+$scheduler-virtual-row-height: ds.$spacing-480 !default;
 
 /*
  * Derived values, moved out of _index.scss: a file that emits rules must not declare
