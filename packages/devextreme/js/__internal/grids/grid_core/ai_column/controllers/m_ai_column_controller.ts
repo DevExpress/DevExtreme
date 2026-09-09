@@ -105,7 +105,7 @@ export class AIColumnController extends Controller {
   }
 
   private unsubscribeFromStoreEvents(): void {
-    const store = this.dataController.store();
+    const store = this.dataSourceController.store();
 
     if (this.storeUpdatedHandler) {
       store?.off('updated', this.storeUpdatedHandler);
@@ -119,7 +119,7 @@ export class AIColumnController extends Controller {
   }
 
   private subscribeToStoreEvents(): void {
-    const store = this.dataController.store();
+    const store = this.dataSourceController.store();
 
     if (!store) {
       return;
@@ -159,7 +159,7 @@ export class AIColumnController extends Controller {
   }
 
   private checkStoreKey(): boolean {
-    const store = this.dataController.store();
+    const store = this.dataSourceController.store();
 
     if (store && !store.key()) {
       this.dataController.fireError('E1042', 'AI Column');

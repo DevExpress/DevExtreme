@@ -8,7 +8,6 @@ import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
-import type Store from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent } from '@ts/data/data_source/types';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
@@ -125,7 +124,7 @@ export class DataController extends modules.Controller {
   // TODO public controller
   public _columnsController!: Controllers['columns'];
 
-  private _filterExcludedColumn: Column | null = null;
+  protected filterController!: Controllers['filter'];
 
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
@@ -138,6 +137,7 @@ export class DataController extends modules.Controller {
     this._cachedProcessedItems = null;
     this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
+    this.filterController = this.getController('filter');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
@@ -200,7 +200,6 @@ export class DataController extends modules.Controller {
       'endCustomLoading',
       'filter',
       'getCombinedFilter',
-      'getDataSource',
       'getKeyByRowIndex',
       'getRowIndexByKey',
       'getVisibleRows',
@@ -234,7 +233,7 @@ export class DataController extends modules.Controller {
     )) {
       const isValueChanged = args.value !== args.previousValue;
       if (isValueChanged) {
-        const store = this.store();
+        const store = this.dataSourceController.store();
         if (isLocalStore(store)) {
           store._array = args.value;
         }
@@ -320,31 +319,22 @@ export class DataController extends modules.Controller {
     return !this._isLoading;
   }
 
-  public getDataSource(): DataSource | null {
-    return this._dataSource?._dataSource ?? null;
-  }
-
   public getCombinedFilter(returnDataField?: boolean): DataFilter {
     return this.combinedFilter(undefined, returnDataField);
-  }
-
-  public getFilterExcludedColumn(): Column | null {
-    return this._filterExcludedColumn;
   }
 
   public getCombinedFilterWithExcludedColumn(
     excludedColumn: Column | null,
     returnDataField?: boolean,
   ): DataFilter {
-    this._filterExcludedColumn = excludedColumn;
-    try {
-      return this.getCombinedFilter(returnDataField);
-    } finally {
-      this._filterExcludedColumn = null;
-    }
+    return this.combinedFilter(undefined, returnDataField, excludedColumn);
   }
 
-  private combinedFilter(filter: DataFilter, returnDataField?: boolean): DataFilter {
+  private combinedFilter(
+    filter: DataFilter,
+    returnDataField?: boolean,
+    excludedColumn: Column | null = null,
+  ): DataFilter {
     if (!this._dataSource) {
       return filter;
     }
@@ -355,7 +345,7 @@ export class DataController extends modules.Controller {
       || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
-      const additionalFilter = this.calculateAdditionalFilter();
+      const additionalFilter = this.filterController.getAdditionalFilter(excludedColumn);
 
       combined = additionalFilter
         ? gridCoreUtils.combineFilters([additionalFilter, combined])
@@ -569,7 +559,7 @@ export class DataController extends modules.Controller {
         this._isDataSourceApplying = false;
 
         const hasAdditionalFilter = (): boolean => {
-          const additionalFilter = this.calculateAdditionalFilter();
+          const additionalFilter = this.filterController.getAdditionalFilter();
           return Boolean(additionalFilter?.length);
         };
 
@@ -1185,13 +1175,6 @@ export class DataController extends modules.Controller {
     );
   }
 
-  public loadingOperationTypes(): OperationTypes {
-    const dataSourceAdapter = this.dataSourceController.getAdapter();
-    const operationTypes: OperationTypes | undefined = dataSourceAdapter?.loadingOperationTypes();
-
-    return operationTypes ?? {};
-  }
-
   /**
    * @extended: virtual_scrolling, focus
    */
@@ -1211,13 +1194,6 @@ export class DataController extends modules.Controller {
 
   private _fireLoadingChanged(): void {
     this.loadingChanged.fire(this.isLoading(), this._loadingText);
-  }
-
-  /**
-   * @extended: filter_row, filter_sync, header_filter, search
-   */
-  protected calculateAdditionalFilter(): DataFilter {
-    return null;
   }
 
   /**
@@ -1370,10 +1346,6 @@ export class DataController extends modules.Controller {
     return this._dataSource ? this._dataSource.pageCount() : 1;
   }
 
-  public store(): Store | undefined {
-    return this._dataSource?.store();
-  }
-
   public loadAllItems(
     data?: RawItemData[],
     skipFilter = false,
@@ -1438,11 +1410,11 @@ export class DataController extends modules.Controller {
   }
 
   public keyOf(data: RawItemData): RowKey | undefined {
-    return this.store()?.keyOf(data);
+    return this.dataSourceController.store()?.keyOf(data);
   }
 
   private byKey(key: RowKey): DeferredObj<RawItemData> {
-    const store = this.store();
+    const store = this.dataSourceController.store();
 
     if (!store) {
       return Deferred<RawItemData>().reject();
@@ -1458,7 +1430,7 @@ export class DataController extends modules.Controller {
   }
 
   public key(): string | string[] | undefined {
-    return this.store()?.key();
+    return this.dataSourceController.key();
   }
 
   /**
@@ -1547,7 +1519,7 @@ export class DataController extends modules.Controller {
   public refresh(options?: boolean | RefreshOptions): DeferredObj<unknown> {
     const refreshOptions = getRefreshOptions(options);
 
-    const dataSource = this.getDataSource();
+    const dataSource = this.dataSourceController.getDataSource();
     const { changesOnly } = refreshOptions;
     const d = Deferred();
 
@@ -1630,10 +1602,6 @@ export class DataController extends modules.Controller {
       pageIndex: this.pageIndex(),
       pageSize: this.pageSize(),
     };
-  }
-
-  public getCachedStoreData(): RawItemData[] | undefined {
-    return this._dataSource?.getCachedStoreData();
   }
 
   /**

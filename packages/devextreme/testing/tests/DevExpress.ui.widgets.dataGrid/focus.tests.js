@@ -4571,8 +4571,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            this.getController('data').store = function() {
-            };
+            this.getController('dataSource').disposeAdapter();
 
             this.getController('data').dataErrorOccurred.add(function(e) {
                 dataErrors.push(e);

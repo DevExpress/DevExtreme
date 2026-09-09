@@ -72,8 +72,7 @@ const processLongTap = function (that, dxEvent) {
 
 const isSeveralRowsSelected = function (that, selectionFilter) {
   let keyIndex = 0;
-  const store = that._dataController.store();
-  const key = store?.key();
+  const key = that.dataSourceController.key();
   const isComplexKey = Array.isArray(key);
 
   if (!selectionFilter.length) {

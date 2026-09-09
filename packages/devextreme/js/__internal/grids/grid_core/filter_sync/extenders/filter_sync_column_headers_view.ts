@@ -1,15 +1,20 @@
 import { filterHasField } from '@ts/filter_builder/m_utils';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 
 import { getColumnIdentifier } from '../utils';
-import type { FilterSyncDataControllerExtension } from './filter_sync_data_controller';
 
 export const filterSyncColumnHeadersViewExtender = (
   Base: ModuleType<ColumnHeadersView>,
 ): ModuleType<ColumnHeadersView> => class ColumnHeadersViewFilterSyncExtender extends Base {
-  declare protected _dataController: DataController & FilterSyncDataControllerExtension;
+  private filterController!: FilterController;
+
+  public init(): void {
+    this.filterController = this.getController('filter');
+
+    super.init();
+  }
 
   public optionChanged(args: OptionChanged): void {
     if (args.name === 'filterValue') {
@@ -21,7 +26,7 @@ export const filterSyncColumnHeadersViewExtender = (
   }
 
   private _isHeaderFilterEmpty(column): boolean {
-    if (this._dataController.isFilterSyncActive()) {
+    if (this.filterController.isFilterSyncActive()) {
       return !filterHasField(this.option('filterValue'), getColumnIdentifier(column));
     }
 
@@ -30,6 +35,6 @@ export const filterSyncColumnHeadersViewExtender = (
   }
 
   private _needUpdateFilterIndicators(): boolean {
-    return !this._dataController.isFilterSyncActive();
+    return !this.filterController.isFilterSyncActive();
   }
 };
