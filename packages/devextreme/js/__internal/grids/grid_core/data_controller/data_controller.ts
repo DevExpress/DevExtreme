@@ -47,7 +47,7 @@ import type {
   UpdateItemChange,
   UserState,
 } from './types';
-import { resolvePaginate, syncPaging } from './utils/paging';
+import { syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
   attachChangedItems,
@@ -275,7 +275,6 @@ export class DataController extends modules.Controller {
       case 'remoteOperations':
       case 'keyExpr':
       case 'dataSource':
-      case 'scrolling':
         args.handled = true;
         this.reset();
         break;
@@ -617,17 +616,29 @@ export class DataController extends modules.Controller {
   }
 
   private applyPagingOptions(dataSource: PagingDataSource): PagingChanges {
-    const { scrolling, paging } = this.option();
+    const { paging } = this.option();
 
-    // Not paging state to reconcile, but a per-load request flag: infinite
-    // scrolling detects the last page locally and needs no grand total.
-    dataSource.requireTotalCount(scrolling?.mode !== 'infinite');
+    dataSource.requireTotalCount(this.requiresTotalCount());
 
     return syncPaging(dataSource, {
-      paginate: resolvePaginate(paging?.enabled, scrolling?.mode),
+      paginate: this.resolvePaginate(paging?.enabled),
       pageSize: paging?.pageSize,
       pageIndex: paging?.pageIndex,
     });
+  }
+
+  /**
+   * @extended: virtual_scrolling
+   */
+  protected resolvePaginate(enabled: boolean | undefined): boolean | undefined {
+    return enabled;
+  }
+
+  /**
+   * @extended: virtual_scrolling
+   */
+  protected requiresTotalCount(): boolean {
+    return true;
   }
 
   /**
