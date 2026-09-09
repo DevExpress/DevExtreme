@@ -382,17 +382,58 @@ testModule('render', moduleConfig, () => {
         });
     });
 
+    test('Theme mode - refreshMode leaves an overlay whose scope did not change where it is', function(assert) {
+        withModeStyles(() => {
+            const $scope = $('<div>').addClass('mode-light').appendTo('#container');
+            const overlay = $('<div>').appendTo($scope).dxOverlay({ visible: true }).dxOverlay('instance');
+            const $wrapper = overlay.$wrapper();
+            const container = $wrapper.parent().get(0);
+
+            /*
+             * Re-appending a child that is already in place is not a no-op: the node is detached
+             * and re-inserted, which takes the focus out of the overlay, restarts its animations
+             * and reloads any iframe in its content. Watching for the detach is steadier than
+             * asserting on document.activeElement, which needs the window to be focused.
+             */
+            const containerWatch = new MutationObserver(() => {});
+            const wrapperWatch = new MutationObserver(() => {});
+
+            containerWatch.observe(container, { childList: true });
+            wrapperWatch.observe($wrapper.get(0), { childList: true });
+
+            themes.refreshMode();
+
+            const moves = containerWatch.takeRecords().length + wrapperWatch.takeRecords().length;
+
+            containerWatch.disconnect();
+            wrapperWatch.disconnect();
+
+            assert.strictEqual(overlay.$wrapper().parent().get(0), container, 'still in the same container');
+            assert.strictEqual(moves, 0, 'and nothing was detached to put it back where it already was');
+
+            overlay.dispose();
+            $scope.remove();
+        });
+    });
+
     test('Theme mode - a disposed overlay stops listening', function(assert) {
         withModeStyles(() => {
             const $scope = $('<div>').addClass('mode-light').appendTo('#container');
             const overlay = $('<div>').appendTo($scope).dxOverlay({ visible: true }).dxOverlay('instance');
+            let told = 0;
+
+            overlay._themeModeChangeHandler = () => { told += 1; };
+
+            themes.refreshMode();
+
+            assert.strictEqual(told, 1, 'a live overlay is subscribed - without this the case below passes for the wrong reason');
 
             overlay.dispose();
             $scope.removeClass('mode-light').addClass('mode-dark');
 
             themes.refreshMode();
 
-            assert.expect(0);
+            assert.strictEqual(told, 1, 'and a disposed one is not told again');
             $scope.remove();
         });
     });

@@ -660,10 +660,14 @@ class Overlay<
       return;
     }
 
-    const { container } = this.option();
+    // Reading `$container` re-resolves the scope. Move only when it named a different node:
+    // appending is not a no-op for a child already in place, and detaching the wrapper takes the
+    // focus out of the overlay, restarts its animations and reloads any iframe inside it.
+    const { $container } = this._positionController;
 
-    this._positionController.updateContainer(container);
-    this._moveToContainer();
+    if ($container && $container.get(0) !== this._$wrapper?.parent().get(0)) {
+      this._moveToContainer();
+    }
   }
 
   _renderWrapperAttributes(): void {
