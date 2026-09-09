@@ -1988,27 +1988,30 @@
   },
   "questionIds": {
     "comment": [
-      "Постоянные номера вопросов. Присваиваются один раз и не переиспользуются: закрытая запись",
-      "уносит свой номер с собой, новая получает следующий свободный. Раньше номер вычислялся от",
-      "позиции в списке, и закрытие одной записи сдвигало все следующие - ссылка «Д8 — вариант 1»",
-      "через день указывала на другой вопрос.",
-      "Закрытые: Д-list-border-disabled (удалён), Д-tabs-tab-border-disabled (переименован в selector)."
+      "Постоянные номера вопросов. Выданы по списку, каким его читали до первых закрытий, и не",
+      "переиспользуются: закрытая запись уносит номер с собой, новая получает следующий свободный.",
+      "В closed перечислено, что было под освободившимися номерами - чтобы ссылка из переписки или",
+      "из старой копии страницы находила ответ, а не чужой вопрос."
     ],
-    "next": 14,
+    "next": 16,
+    "closed": {
+      "Д3": "switch-on-border-focused — принято, переведён на border-primary-shared-active",
+      "Д4": "tree-view-checkbox-border-disabled — снято: treeView больше не стилизует чекбокс",
+      "Д8": "list-border-disabled — удалено вместе с правилом, красило несуществующий псевдоэлемент",
+      "Д9": "tabs-tab-border-disabled — значение верно, семь имён переименованы border → selector"
+    },
     "map": {
       "open:gallery-nav-button-bg": "Д1",
       "open:gallery-nav-button-bg-disabled": "Д2",
-      "open:switch-on-border-focused": "Д3",
-      "open:tree-view-checkbox-border-disabled": "Д4",
       "ladder:accordion-title-bg": "Д5",
       "ladder:tile-view-bg": "Д6",
       "contrast:.dx-splitter .dx-resize-handle": "Д7",
-      "concept:accent border rest": "Д8",
-      "concept:accent content rest": "Д9",
-      "concept:base bg rest": "Д10",
-      "concept:base content rest": "Д11",
-      "concept:invalid content rest": "Д12",
-      "concept:menu bg rest": "Д13"
+      "concept:accent border rest": "Д10",
+      "concept:accent content rest": "Д11",
+      "concept:base bg rest": "Д12",
+      "concept:base content rest": "Д13",
+      "concept:invalid content rest": "Д14",
+      "concept:menu bg rest": "Д15"
     }
   }
 }

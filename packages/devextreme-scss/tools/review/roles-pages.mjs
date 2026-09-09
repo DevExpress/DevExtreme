@@ -356,6 +356,16 @@ ${nt.findings.map((f) => `<p class="meta"><b>${esc(f.what)}:</b> ${esc(f.verdict
 <p class="meta"><b>Оговорка:</b> ${esc(nt.comment[3])}</p></div>
 `;
 
+
+// --- закрытые вопросы: номера зарезервированы, ссылки из переписки должны находить ответ
+const closedSection = Object.entries(base.questionIds?.closed ?? {}).length ? `
+<h3>Закрыто — номера не переиспользуются</h3>
+<p class="meta">Если у вас на руках ссылка на один из этих номеров, вопрос уже решён; номер за ним
+и остался, новым вопросам он не достаётся.</p>
+<table><tr><th></th><th>Что было и чем закончилось</th></tr>
+${Object.entries(base.questionIds.closed).map(([id, what]) => `<tr><td><b>${esc(id)}</b></td><td>${esc(what)}</td></tr>`).join('')}
+</table>` : '';
+
 const questionsPage = page('Fluent-next: открытые вопросы по ролям', `
 <h1>Fluent-next: открытые вопросы по ролям</h1>
 <p class="lede">Всё, что аудит нашёл и не стал решать сам. Ответы можно давать номерами: «Д3 — второй вариант».<br>
@@ -369,6 +379,7 @@ const questionsPage = page('Fluent-next: открытые вопросы по р
 <h3>Контраст ниже порога</h3>${contrastQs.join('')}${nonTextSection}${whyContrast}
 <h3>Имя обещает одно, красит другое</h3>${slotQs.join('')}
 <h3>Одно понятие покрашено по-разному в разных компонентах</h3>${conceptRows.join('')}
+${closedSection}
 
 <h2>Б. Команда пакета токенов — ${pkgQs.length} заявки</h2>
 <p>Роли, которая нужна, в пакете нет — обменять не на что.</p>${pkgQs.join('')}
