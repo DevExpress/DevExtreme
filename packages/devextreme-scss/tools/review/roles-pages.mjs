@@ -389,12 +389,27 @@ const closedSection = Object.entries(base.questionIds?.closed ?? {}).length ? `
 ${Object.entries(base.questionIds.closed).map(([id, what]) => `<tr><td><b>${esc(id)}</b></td><td>${esc(what)}</td></tr>`).join('')}
 </table>` : '';
 
+const plural = (n, one, few, many) => {
+  const mod100 = n % 100;
+  if (mod100 >= 11 && mod100 <= 14) return many;
+  const mod10 = n % 10;
+  if (mod10 === 1) return one;
+  if (mod10 >= 2 && mod10 <= 4) return few;
+  return many;
+};
+
 const questionsPage = page('Fluent-next: открытые вопросы по ролям', `
 <h1>Fluent-next: открытые вопросы по ролям</h1>
 <p class="lede">Всё, что аудит нашёл и не стал решать сам. Ответы можно давать номерами: «Д3 — второй вариант».<br>
-Проверено ${data.summary.declarations} цветовых объявлений в 64 папках; применено девять правок —
-семь равнозначных по значению и две решённые порогом WCAG. Всё на этой странице двигает пиксель,
+Проверено ${data.summary.declarations} цветовых объявлений в 64 папках; применено
+${base.applied.rows.length} ${plural(base.applied.rows.length, 'правка', 'правки', 'правок')} —
+каждая с доказанным эффектом на значение, список ниже. Всё на этой странице двигает пиксель,
 меняет публичное имя или требует расширения пакета.</p>
+<h2>Уже применено — ${base.applied.rows.length}</h2>
+<p>${base.applied.comment.map(esc).join(' ')}</p>
+<table><tr><th>Что</th><th>Как изменилось</th><th>Что стало со значением</th></tr>
+${base.applied.rows.map((r) => `<tr><td>${code(r.what)}</td><td>${code(r.change)}</td><td>${esc(r.effect)}</td></tr>`).join('')}
+</table>
 
 <h2>А. Дизайн — ${roleQs.length + ladderQs.length + contrastQs.length + statePairGroups.length + slotQs.length + conceptRows.length + sweepQs.length} вопросов</h2>
 <h3>Роль выбрана спорно</h3>${roleQs.join('')}

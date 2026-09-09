@@ -2356,10 +2356,57 @@
   },
   "applied": {
     "comment": [
-      "Что этот проход изменил в исходниках. Резолв-дифф по всем 2262 переменным тира:",
-      "светлый 0 сдвигов, тёмный 1."
+      "Каждая правка, применённая этим аудитом, с доказанным эффектом на значение. Список ведётся",
+      "здесь, а не прозой на странице: число применённых правок печатается со счётчика этого массива,",
+      "иначе оно протухает - так уже было с процентом покрытия.",
+      "Итоговый резолв-дифф прохода 09.09 по всем 2262 переменным тира: светлый 0, тёмный 1."
     ],
     "rows": [
+      {
+        "what": "switch-on-border, switch-on-border-hovered",
+        "change": "bg-primary-shared* -> border-primary-shared*",
+        "effect": "value-neutral in both modes: the primary-shared family is one value across bg and border. A border now reads a border role"
+      },
+      {
+        "what": "switch-on-border-focused (Д3)",
+        "change": "bg-primary-active -> border-primary-shared-active",
+        "effect": "light identical, dark #003c70 -> #005397. Accepted after checking the neighbours: it joins the two siblings already moved, and the old value is the one the primary ramp fails to invert for dark"
+      },
+      {
+        "what": "tabs: seven names border -> selector",
+        "change": "renamed, roles untouched",
+        "effect": "zero values moved. The package calls this element the selector, and the tabs indicator is not a border - seven names out, seven in"
+      },
+      {
+        "what": "textEditor invalid content",
+        "change": "a component token -> content-danger",
+        "effect": "the invalid message is text and now reads a content role"
+      },
+      {
+        "what": "valid-badge-content",
+        "change": "bg-success -> content-success",
+        "effect": "dark 2.89 -> 4.73, which is what a standard decides rather than a person"
+      },
+      {
+        "what": "fieldset-field-value-invalid-content",
+        "change": "border-danger -> content-danger",
+        "effect": "light 2.90 -> 6.07, same reason"
+      },
+      {
+        "what": "check-box-invalid-mark-bg trio",
+        "change": "content-danger-shared* -> bg-danger-shared*, then reverted",
+        "effect": "value-neutral either way - the danger-shared family is one value across all three families. Reverted after Blazor's implementation showed the stem-consistent triple is right"
+      },
+      {
+        "what": "list-border-disabled",
+        "change": "deleted, variable and rule",
+        "effect": "dead: the pseudo-element it painted never had content, so nothing rendered"
+      },
+      {
+        "what": "treeView disabled overrides",
+        "change": "four variables and two blocks removed, focused branch scoped with :not(.dx-state-disabled)",
+        "effect": "the checkbox keeps its own disabled paint. The scoping was needed because removing the block let the focused branch win on selector length - caught by a cascade harness, not by eye"
+      },
       {
         "what": "invalid-badge-bg",
         "change": "color-content-danger-shared -> color-bg-danger-shared",
