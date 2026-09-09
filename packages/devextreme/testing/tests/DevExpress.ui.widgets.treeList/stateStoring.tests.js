@@ -34,6 +34,9 @@ QUnit.module('State Storing', {
                     keyExpr: 'id',
                     parentIdExpr: 'parentId',
                     loadingTimeout: null,
+                    paging: {
+                        enabled: true
+                    },
                     scrolling: {
                         mode: 'virtual'
                     }
