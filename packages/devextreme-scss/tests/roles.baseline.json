@@ -925,7 +925,7 @@
         "dark": 3.05
       },
       "decision": "package-gap",
-      "why": "3.05 in dark against 4.5 for a label - and no role in the family clears it: content-danger-hovered, the strongest, reaches 3.87 on the same surface. The design system ships no danger content role that meets AA on its own hovered surface in dark. A request, not a swap"
+      "why": "Widened 09.09 after asking whether danger passes anywhere else. It does not, and the reason is that the role is tuned to one surface. In dark content-danger is danger-80 #e4554f, and it measures 4.58 on the page canvas (bg-canvas #1d1d1d), 4.22 on an ordinary surface (bg #242424) and 3.05 on a hovered one (bg-hovered #3b3b3b). So it clears AA on the canvas by 0.08 and fails everywhere below it. Eleven theme variables put real text on this role - the outlined danger button label, the chat alert list, the chat delete item, the fieldset invalid value, the grid AI error, the informer error, two stepper invalid labels, the text editor invalid message, the validation message and the validation summary - and every one of them sits at 4.22 wherever its widget has its own background. Three more read the role for a glyph (diagram, filterBuilder, cardView), where 4.22 clears the 3:1 that applies. The request splits in two: on an ordinary surface the miss is 0.28 and one ramp step fixes it - danger-70 #ee726a gives 5.36 - so ask the package to move content-danger in dark; on a hovered surface nothing in the family clears AA, danger-70 reaching only 3.87, so that half is a genuine gap. Light is fine throughout (6.07 on the canvas, 5.56 hovered). Why the audit saw one row and not twelve: the rule-local pass needs both colours in one rule, and a validation message takes its background from an ancestor. Third instance of that blind spot in one day."
     },
     {
       "selector": ".dx-splitter .dx-resize-handle",
@@ -2483,5 +2483,66 @@
         "ru": "расхождение уже записано в DIVERGENCES.md"
       }
     }
+  },
+  "dangerSurfaces": {
+    "comment": [
+      "Почему danger «где-то проходит, а где-то нет» - вопрос 09.09. Роль настроена под канву:",
+      "на ней берёт порог с запасом 0.08, на любой поверхности ниже - не берёт. Числа тёмного режима,",
+      "светлый проходит везде."
+    ],
+    "measuredOn": "2026-09-09",
+    "role": "color-content-danger = danger-80 #e4554f (тёмный)",
+    "surfaces": [
+      {
+        "surface": "канва bg-canvas #1d1d1d",
+        "contrast": 4.58,
+        "verdict": "берёт 4.5 с запасом 0.08"
+      },
+      {
+        "surface": "поверхность bg #242424",
+        "contrast": 4.22,
+        "verdict": "провал для подписи, глиф прошёл бы"
+      },
+      {
+        "surface": "наведение bg-hovered #3b3b3b",
+        "contrast": 3.05,
+        "verdict": "провал и для подписи, и почти для глифа"
+      }
+    ],
+    "ifPackageMovedOneStep": [
+      {
+        "surface": "канва #1d1d1d",
+        "contrast": 5.82,
+        "verdict": "ок"
+      },
+      {
+        "surface": "поверхность #242424",
+        "contrast": 5.36,
+        "verdict": "ок"
+      },
+      {
+        "surface": "наведение #3b3b3b",
+        "contrast": 3.87,
+        "verdict": "всё ещё провал"
+      }
+    ],
+    "textReaders": [
+      "button-danger-outlined-content",
+      "chat-alert-list-content",
+      "chat-message-list-context-menu-delete-button-content",
+      "fieldset-field-value-invalid-content",
+      "grid-ai-chat-message-error-content",
+      "informer-error-content",
+      "stepper-step-invalid-content",
+      "stepper-step-invalid-label-content",
+      "text-editor-invalid-content",
+      "validation-message-content",
+      "validation-summary-content"
+    ],
+    "glyphReaders": [
+      "card-view-header-panel-item-dragged-prohibition-icon",
+      "diagram-danger-icon",
+      "filter-builder-remove-icon"
+    ]
   }
 }

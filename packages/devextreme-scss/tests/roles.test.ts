@@ -419,6 +419,37 @@ test('every verdict is assigned to exactly one page section', () => {
   expect(Object.values(perSection).reduce((t, n) => t + n, 0)).toBe(reviewed.length);
 });
 
+/*
+ * The П2 measurement is the reason a role can look fine and fail anyway: content-danger in dark
+ * clears AA on the page canvas by 0.08 and misses on every surface below it. The numbers come from
+ * outside this tool - they pair a role with a surface the rule-local pass cannot see - so the gate
+ * holds their shape and their arithmetic instead of recomputing them.
+ */
+test('the danger surface measurement stays complete and consistent', () => {
+  const d = baseline.dangerSurfaces;
+  expect(d.surfaces).toHaveLength(d.ifPackageMovedOneStep.length);
+  const thin = [...d.surfaces, ...d.ifPackageMovedOneStep]
+    .filter((r: { surface?: string; contrast?: number; verdict?: string }) => !r.surface?.trim()
+      || typeof r.contrast !== 'number' || !r.verdict?.trim())
+    .map((r: { surface?: string }) => r.surface);
+  expect(thin).toEqual([]);
+
+  // Each step down the surface ladder is darker behind a light-red text, so contrast can only fall.
+  const falling = (rows: { contrast: number }[]) => rows
+    .every((row, i) => i === 0 || row.contrast < rows[i - 1].contrast);
+  expect(falling(d.surfaces)).toBe(true);
+  expect(falling(d.ifPackageMovedOneStep)).toBe(true);
+
+  // The whole point of the request: one ramp step lifts every surface.
+  const lifted = d.surfaces.every((row: { contrast: number }, i: number) => d
+    .ifPackageMovedOneStep[i].contrast > row.contrast);
+  expect(lifted).toBe(true);
+
+  const readers = [...d.textReaders, ...d.glyphReaders];
+  expect(readers.filter((name: string) => !name.trim())).toEqual([]);
+  expect(new Set(readers).size).toBe(readers.length);
+});
+
 test('the decision pages match the data they are generated from', () => {
   const pages = join(packageRoot, 'tools', 'review', 'roles-pages.mjs');
   let output = '';
