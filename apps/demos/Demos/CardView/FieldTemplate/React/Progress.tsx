@@ -6,7 +6,7 @@ interface ProgressProps {
 }
 
 const progressElementAttributes = { 'aria-label': 'Progress Bar' };
-const formatProgressStatus = (_: unknown, value: number) => `${value}%`;
+const formatPercent = (_: unknown, value: number) => `${value}%`;
 
 const Progress = ({ value }: ProgressProps) => (
   <div className="task__progress">
