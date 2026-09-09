@@ -1,18 +1,11 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { isDefined } from '@js/core/utils/type';
-import {
-  getFilterExpression,
-  removeFieldConditionsFromFilter,
-} from '@ts/filter_builder/m_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import { FILTER_TYPES_EXCLUDE } from '@ts/grids/grid_core/filter_sync/const';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
-import { getColumnIdentifier } from '@ts/grids/grid_core/filter_sync/utils';
+import { isFilterSyncActive } from '@ts/grids/grid_core/filter_sync/utils';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 export interface FilterSyncDataControllerExtension {
   isFilterSyncActive: () => boolean | undefined;
@@ -67,47 +60,7 @@ export const filterSyncDataControllerExtender = (
   }
 
   public isFilterSyncActive(): boolean | undefined {
-    const filterSyncEnabledValue = this.option('filterSyncEnabled');
-    return filterSyncEnabledValue === 'auto' ? this.option('filterPanel.visible') : filterSyncEnabledValue;
-  }
-
-  private skipCalculateColumnFilters(): boolean | undefined {
-    const hasFilterValueOrSyncing = isDefined(this.option('filterValue'))
-      || this.filterSyncController.isSyncingColumnOptions();
-
-    return hasFilterValueOrSyncing && this.isFilterSyncActive();
-  }
-
-  protected calculateAdditionalFilter(): DataFilter {
-    const columns = this._columnsController.getFilteringColumns();
-    const isFilterValueDisabled = this.option('filterPanel.filterEnabled') === false;
-
-    if (!columns?.length || isFilterValueDisabled) {
-      return super.calculateAdditionalFilter();
-    }
-
-    const filters = [super.calculateAdditionalFilter()];
-    let filterValue = this.option('filterValue');
-
-    if (this.isFilterSyncActive()) {
-      const excludedColumn = this.getFilterExcludedColumn();
-
-      if (isDefined(excludedColumn) && filterValue) {
-        filterValue = removeFieldConditionsFromFilter(
-          filterValue,
-          getColumnIdentifier(excludedColumn),
-        );
-      }
-    }
-
-    const customOperations = this.filterSyncController.getCustomFilterOperations();
-    const calculatedFilterValue: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
-
-    if (calculatedFilterValue) {
-      filters.push(calculatedFilterValue);
-    }
-
-    return gridCoreUtils.combineFilters(filters);
+    return isFilterSyncActive(this);
   }
 
   private parseColumnPropertyName(fullName: string): string | null {

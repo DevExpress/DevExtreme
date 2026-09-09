@@ -210,6 +210,7 @@ export interface Controllers {
   editorFactory: import('./editor_factory/m_editor_factory').EditorFactory;
   errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
   export: import('../data_grid/export/m_export').ExportController;
+  filter: import('./filter/filter_controller').FilterController;
   filterSync: import('./filter_sync/m_filter_sync').FilterSyncController;
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
