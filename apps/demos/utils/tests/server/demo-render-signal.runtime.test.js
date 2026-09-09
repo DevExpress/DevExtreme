@@ -1,4 +1,4 @@
-const OWN_ORIGIN = 'http://localhost:8080';
+const OWN_ORIGIN = 'https://demos.test';
 const ALLOWED_PARENT_HOST = 'js.devexpress.com';
 const ALLOWED_PARENT = `https://${ALLOWED_PARENT_HOST}`;
 
@@ -221,11 +221,10 @@ describe('resolveTargetOrigin', () => {
   });
 
   test('allows an embedder on the demo own origin, allowlisted or not', () => {
-    global.window.location.origin = 'https://unlisted.example';
-    embedIn('https://unlisted.example');
+    embedIn(OWN_ORIGIN);
     const { resolveTargetOrigin } = loadRuntime();
 
-    expect(resolveTargetOrigin()).toBe('https://unlisted.example');
+    expect(resolveTargetOrigin()).toBe(OWN_ORIGIN);
   });
 
   test('targets the own origin when the demo is not framed', () => {
