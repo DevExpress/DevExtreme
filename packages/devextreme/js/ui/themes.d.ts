@@ -35,6 +35,22 @@ export default class themes {
      * @public
      */
     static initialized(callback: Function): void;
+    /**
+     * @docid ui.themes.mode
+     * @publicName mode(element)
+     * @param1 element:Element|jQuery
+     * @return String
+     * @static
+     * @public
+     */
+    static mode(element: UserDefinedElement): 'light' | 'dark';
+    /**
+     * @docid ui.themes.refreshMode
+     * @publicName refreshMode()
+     * @static
+     * @public
+     */
+    static refreshMode(): void;
 }
 
 export function current(): string;
@@ -44,17 +60,5 @@ export function isMaterial(theme: string): boolean;
 export function isGeneric(theme: string): boolean;
 export function isCompact(theme: string): boolean;
 
-/**
- * The colour mode an element is rendered in: 'light' or 'dark'.
- *
- * Unlike `current()` and `isDark()`, which answer for the loaded stylesheet, this answers for a
- * place on the page - a theme may ship both modes in one bundle and let a class pick between them.
- */
 export function mode(element: UserDefinedElement): 'light' | 'dark';
-
-/**
- * Re-reads the colour mode for widgets that render outside the element they belong to, such as an
- * open popup. Call it after changing what an element resolves to: moving a `dx-theme-mode-*` class,
- * or switching the whole theme.
- */
 export function refreshMode(): void;
