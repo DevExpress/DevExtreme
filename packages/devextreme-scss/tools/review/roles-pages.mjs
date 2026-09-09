@@ -130,6 +130,19 @@ const ruText = (key) => {
   return text;
 };
 
+/*
+ * Постоянные номера из базлайна. Считать их от позиции нельзя: закрытая запись сдвигала все
+ * следующие, и ссылка «Д8 — вариант 1» через день указывала на другой вопрос. Новая запись без
+ * номера роняет генерацию, а не получает чужой.
+ */
+const idOf = (key) => {
+  const id = base.questionIds?.map?.[key];
+  if (!id) {
+    throw new Error(`нет постоянного номера для "${key}" - перевыдайте номера в tests/roles.baseline.json `
+      + `(questionIds.map, следующий свободный ${base.questionIds?.next ?? '?'})`);
+  }
+  return id;
+};
 let n = 0;
 const num = (prefix) => `${prefix}${++n}`;
 
@@ -140,27 +153,27 @@ const roleQs = design.map((x) => {
   const f = find(x.name);
   const near = (f?.near ?? []).slice(0, 2)
     .map((c) => `${code(c.role.replace(/^color-/, ''))} — двигает ${c.moves.join(' и ')}`).join('<br>');
-  return q(num('Д'), `${code(x.name)} = ${roleList(x.roles)}`,
+  return q(idOf(`open:${x.name}`), `${code(x.name)} = ${roleList(x.roles)}`,
     `<p class="meta">Значение сейчас: ${values(x.name) || '—'}</p>`
     + `<p>${ruText(x.name)}</p>`
     + (near ? `<p class="opt"><b>Ближайшие роли верного семейства:</b><br>${near}</p>` : ''));
 });
 
-const ladderQs = base.ladders.filter((x) => x.decision === 'design').map((x) => q(num('Д'),
+const ladderQs = base.ladders.filter((x) => x.decision === 'design').map((x) => q(idOf(`ladder:${x.stem}`),
   `${code(x.stem)} — состояния ${x.states.map((s2) => code(s2)).join(' = ')} дают одну роль ${roleList(x.role)}`,
   `<p>${ruText(x.stem)}</p>`));
 
-const contrastQs = base.contrast.filter((x) => x.decision === 'design').map((x) => q(num('Д'),
+const contrastQs = base.contrast.filter((x) => x.decision === 'design').map((x) => q(idOf(`contrast:${x.selector}`),
   `Контраст: ${code(x.selector)}`,
   `<p class="meta">${code(x.fgRole.replace(/^color-/, ''))} на ${code(x.bgRole.replace(/^color-/, ''))} — `
   + `светлый <b>${x.contrast.light}</b>, тёмный <b class="warn">${x.contrast.dark}</b></p>`
   + `<p>${ruText(x.selector)}</p>`));
 
-const slotQs = base.slotLies.filter((x) => x.decision === 'design').map((x) => q(num('Д'),
+const slotQs = base.slotLies.filter((x) => x.decision === 'design').map((x) => q(idOf(`slot:${x.name}`),
   `${code(x.name)} — слот обещает ${code(x.slotSays)}, красит ${x.paints.map(code).join(', ')}`,
   `<p>${ruText(x.name)}</p>`));
 
-const conceptRows = base.concepts.filter((x) => x.decision === 'design').map((c) => q(num('Д'),
+const conceptRows = base.concepts.filter((x) => x.decision === 'design').map((c) => q(idOf(`concept:${c.concept}`),
   `Одно понятие, разные роли: <b>${esc(c.concept)}</b>`,
   `<p class="meta">Семейства: ${c.families.join(' / ')}</p><table><tr><th>Компонент</th><th>Роль</th></tr>`
   + c.members.map((m) => `<tr><td>${esc(m.folder)}</td><td>${code(m.role.replace(/^color-/, ''))}</td></tr>`).join('')
