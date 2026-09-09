@@ -111,7 +111,7 @@ class EditingController extends editingModule.controllers.editing {
     const result = super._beforeSaveEditData.apply(this, arguments);
 
     if (change && change.type !== DATA_EDIT_DATA_INSERT_TYPE) {
-      const key = this.dataSourceController.key();
+      const key = this.dataSourceController.store()?.key();
 
       if (!isDefined(key)) {
         throw errors.Error('E1045');

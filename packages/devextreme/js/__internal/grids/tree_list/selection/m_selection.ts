@@ -102,7 +102,7 @@ SelectionController & TreeListSelectionControllerExtension
       return result || [];
     };
     config.isItemSelected = (item) => {
-      const key = this._dataController.keyOf(item);
+      const key = this.dataSourceController.keyOf(item);
 
       return this.isRowSelected(key);
     };

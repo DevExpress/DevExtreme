@@ -203,7 +203,6 @@ export class DataController extends modules.Controller {
       'getKeyByRowIndex',
       'getRowIndexByKey',
       'getVisibleRows',
-      'keyOf',
       'pageCount',
       'pageIndex',
       'pageSize',
@@ -759,7 +758,7 @@ export class DataController extends modules.Controller {
     return {
       rowType: 'data',
       data,
-      key: this.keyOf(data),
+      key: this.dataSourceController.keyOf(data),
     };
   }
 
@@ -1409,10 +1408,6 @@ export class DataController extends modules.Controller {
     return this.items()?.[this.getRowIndexByKey(key)];
   }
 
-  public keyOf(data: RawItemData): RowKey | undefined {
-    return this.dataSourceController.store()?.keyOf(data);
-  }
-
   private byKey(key: RowKey): DeferredObj<RawItemData> {
     const store = this.dataSourceController.store();
 
@@ -1427,10 +1422,6 @@ export class DataController extends modules.Controller {
     }
 
     return fromPromise(store.byKey(key)) as DeferredObj<RawItemData>;
-  }
-
-  public key(): string | string[] | undefined {
-    return this.dataSourceController.key();
   }
 
   /**
