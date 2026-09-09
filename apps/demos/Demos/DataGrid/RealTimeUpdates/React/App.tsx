@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import DataGrid, {
   Column, Summary, TotalItem, MasterDetail, Paging,
 } from 'devextreme-react/data-grid';
@@ -24,43 +24,35 @@ const getDetailGridDataSource = (product: Product) => ({
 
 const getAmount = (order: Order) => order.UnitPrice * order.Quantity;
 
-const detailRender = (detail: DataGridTypes.MasterDetailTemplateData) => (
-  <DataGrid
-    dataSource={getDetailGridDataSource(detail.data)}
-    repaintChangesOnly={true}
-    columnAutoWidth={true}
-    showBorders={true}>
-    <Paging defaultPageSize={5} />
-    <Column
-      dataField="OrderID"
-      dataType="number" />
-    <Column
-      dataField="ShipCity"
-      dataType="string" />
-    <Column
-      dataField="OrderDate"
-      dataType="datetime"
-      format="yyyy/MM/dd HH:mm:ss" />
-    <Column
-      dataField="UnitPrice"
-      dataType="number"
-      format="currency" />
-    <Column
-      dataField="Quantity"
-      dataType="number" />
-    <Column
-      caption="Amount"
-      dataType="number"
-      format="currency"
-      allowSorting={true}
-      calculateCellValue={getAmount} />
-    <Summary>
-      <TotalItem column="OrderID" summaryType="count" />
-      <TotalItem column="Quantity" summaryType="sum" displayFormat="{0}" />
-      <TotalItem column="Amount" summaryType="sum" displayFormat="{0}" valueFormat="currency" />
-    </Summary>
-  </DataGrid>
-);
+const DetailGrid = ({ data: detail }: { data: DataGridTypes.MasterDetailTemplateData }) => {
+  const detailDataSource = getDetailGridDataSource(detail.data);
+
+  return (
+    <DataGrid
+      dataSource={detailDataSource}
+      repaintChangesOnly={true}
+      columnAutoWidth={true}
+      showBorders={true}>
+      <Paging defaultPageSize={5} />
+      <Column dataField="OrderID" dataType="number" />
+      <Column dataField="ShipCity" dataType="string" />
+      <Column dataField="OrderDate" dataType="datetime" format="yyyy/MM/dd HH:mm:ss" />
+      <Column dataField="UnitPrice" dataType="number" format="currency" />
+      <Column dataField="Quantity" dataType="number" />
+      <Column
+        caption="Amount"
+        dataType="number"
+        format="currency"
+        allowSorting={true}
+        calculateCellValue={getAmount} />
+      <Summary>
+        <TotalItem column="OrderID" summaryType="count" />
+        <TotalItem column="Quantity" summaryType="sum" displayFormat="{0}" />
+        <TotalItem column="Amount" summaryType="sum" displayFormat="{0}" valueFormat="currency" />
+      </Summary>
+    </DataGrid>
+  );
+};
 
 const App = () => {
   const [updateFrequency, setUpdateFrequency] = useState(100);
@@ -79,9 +71,9 @@ const App = () => {
     return () => clearInterval(interval);
   }, [updateFrequency]);
 
-  const onUpdateFrequencyChanged = (e: SliderTypes.ValueChangedEvent) => {
+  const onUpdateFrequencyChanged = useCallback((e: SliderTypes.ValueChangedEvent) => {
     setUpdateFrequency(e.value);
-  };
+  }, []);
 
   return (
     <div>
@@ -115,7 +107,7 @@ const App = () => {
         </Summary>
         <MasterDetail
           enabled={true}
-          render={detailRender}>
+          component={DetailGrid}>
         </MasterDetail>
       </DataGrid>
       <div className="options">

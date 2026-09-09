@@ -6,6 +6,8 @@ import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridSemanticSearch';
 const numberBoxAttr = { 'aria-label': 'Similarity Factor' };
+const toolbarStyle = { display: 'flex', alignItems: 'center' };
+const similarityFactorLabelStyle = { marginRight: '8px' };
 
 const App = () => {
   const searchValueRef = useRef<string>('');
@@ -58,8 +60,8 @@ const App = () => {
       <SearchPanel visible={true} />
       <Toolbar>
         <Item location="before">
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <span style={{ marginRight: '8px' }}>Similarity Factor:</span>
+          <div style={toolbarStyle}>
+            <span style={similarityFactorLabelStyle}>Similarity Factor:</span>
             <NumberBox
               defaultValue={similarityFactorRef.current}
               min={0}

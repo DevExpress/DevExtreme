@@ -5,12 +5,15 @@ interface ProgressProps {
   value: number;
 }
 
+const progressElementAttributes = { 'aria-label': 'Progress Bar' };
+const formatProgressStatus = (_: unknown, value: number) => `${value}%`;
+
 const Progress = ({ value }: ProgressProps) => (
   <div className="task__progress">
     <ProgressBar
       value={value}
-      elementAttr={{ 'aria-label': 'Progress Bar' }}
-      statusFormat={(_, value: number) => `${value}%`}
+      elementAttr={progressElementAttributes}
+      statusFormat={formatProgressStatus}
     />
   </div>
 );
