@@ -10,7 +10,6 @@ preferWorkspacePackages: true
 saveWorkspaceProtocol: false
 packageManagerStrict: false
 engineStrict: true
-minimumReleaseAge: 0
 
 overrides:
   "basic-ftp@<5.3.1": ">=5.3.1"
