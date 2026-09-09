@@ -1986,18 +1986,33 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         assert.strictEqual(onRouteRemoved.firstCall.args[0].options, drivingRoute, 'removal event identifies the removed route');
     });
 
-    QUnit.test('route updates reuse one layer and honor zero opacity and weight', async function(assert) {
+    QUnit.test('route updates reuse one layer and honor zero opacity', async function(assert) {
         const map = await createMap({ routes: [route] });
         const source = getRouteSource();
         const oldFeature = source.getFeatures()[0];
-        map.option('routes', [{ ...route, color: '#ff0000', opacity: 0, weight: 0 }]);
+        map.option('routes', [{ ...route, color: '#ff0000', opacity: 0, weight: 8 }]);
         await map._lastAsyncAction;
         const features = source.getFeatures();
         assert.strictEqual(features.length, 1, 'old route is replaced');
         assert.notStrictEqual(features[0], oldFeature, 'updated route has a new feature');
         assert.strictEqual(openLayersMock.addedVectorLayers.length, 1, 'vector layer is reused');
         assert.deepEqual(features[0].getStyle().getStroke().getColor(), [255, 0, 0, 0], 'zero opacity is preserved');
-        assert.strictEqual(features[0].getStyle().getStroke().getWidth(), 0, 'zero weight is preserved');
+        assert.strictEqual(features[0].getStyle().getStroke().getWidth(), 8, 'weight is updated');
+    });
+
+    QUnit.test('zero weight omits the stroke but keeps a removable route instance', async function(assert) {
+        const onRouteAdded = sinon.spy();
+        const onRouteRemoved = sinon.spy();
+        const map = await createMap({ routes: [{ ...route, weight: 8 }], onRouteAdded, onRouteRemoved });
+        const zeroWeightRoute = { ...route, weight: 0 };
+        const feature = await map.addRoute(zeroWeightRoute);
+        assert.ok(feature, 'valid geometry still creates a route instance');
+        assert.notOk(feature.getStyle().getStroke(), 'no stroke is sent to the renderer for zero weight');
+        assert.strictEqual(getRouteSource().getFeatures().length, 2, 'both valid routes remain in the source');
+        assert.strictEqual(onRouteAdded.secondCall.args[0].originalRoute, feature, 'added event exposes the instance');
+        await map.removeRoute(zeroWeightRoute);
+        assert.strictEqual(onRouteRemoved.firstCall.args[0].options, zeroWeightRoute, 'removed event identifies the route');
+        assert.strictEqual(getRouteSource().getFeatures().length, 1, 'the other route remains');
     });
 
     ['walking', 'cycling'].forEach(mode => {
