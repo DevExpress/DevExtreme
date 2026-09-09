@@ -55,6 +55,15 @@ const modeScopesOf = (selector: string): string[] => MODE_SCOPES
 // A rule lands on the document element - the one place a mode class below it cannot reach.
 const isDocumentRoot = (selector: string): boolean => [':root', 'html'].includes(subjectOf(selector));
 
+/*
+ * Reaching the document element is what freezes a value, and a rule can do that while also
+ * matching something else: `:root, .dx-button { … }` still declares on <html> for every button
+ * that is not inside one. So the question is not whether EVERY selector is the root - it is
+ * whether ANY is, with no mode scope in the same list to re-resolve it.
+ */
+const freezesOnDocumentRoot = (selectors: string[]): boolean => selectors.some(isDocumentRoot)
+  && !selectors.some((selector) => modeScopesOf(selector).length);
+
 interface BundleFacts {
   scopeNames: Record<string, Set<string>>;
   rootDeclarations: { property: string; reads: string[]; selector: string }[];
@@ -71,7 +80,7 @@ const readBundle = (name: string): BundleFacts => {
 
   root.walkRules((rule) => {
     const scopes = new Set(rule.selectors.flatMap(modeScopesOf));
-    const onDocumentRoot = rule.selectors.every(isDocumentRoot);
+    const onDocumentRoot = freezesOnDocumentRoot(rule.selectors);
 
     rule.each((node) => {
       if (node.type !== 'decl' || !node.prop.startsWith('--')) {
