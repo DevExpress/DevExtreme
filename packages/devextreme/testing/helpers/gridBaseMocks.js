@@ -2,14 +2,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
     const exports = {};
 
     exports.MockDataSourceAdapter = function(options) {
-        const store = function() {
+        // Loads read options.items: the stores tests pass in options.store are write-only spies.
+        const itemsStore = function() {
             return new ArrayStore(options.items);
         };
 
         const loadCustomResult = (loadOptions) => {
             const d = $.Deferred();
 
-            store().load(loadOptions)
+            itemsStore().load(loadOptions)
                 .done((data, extra) => {
                     d.resolve({ data: data, extra: extra });
                 })
@@ -19,6 +20,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         };
 
         return {
+            _dataSource: options.dataSource,
             beginLoading: function() {
             },
             endLoading: function() {
@@ -47,11 +49,19 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             getDataIndexGetter: function() {
                 return undefined;
             },
+            getCachedStoreData: function() {
+                return undefined;
+            },
+            loadingOperationTypes: function() {
+                return undefined;
+            },
             dispose: function() {
             },
-            store: store,
+            store: function() {
+                return options.store;
+            },
             load: function(loadOptions) {
-                return store().load(loadOptions);
+                return itemsStore().load(loadOptions);
             },
             customLoader: {
                 load: loadCustomResult,
@@ -171,10 +181,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 });
             },
 
-            store: function() {
-                return options.store;
-            },
-
             insertItems: function(insertingItems) {
                 $.each(insertingItems, function() {
                     options.items.push(this);
@@ -286,10 +292,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getRowIndexByKey: function(key) {
                 return gridCore.getIndexByKey(key, options.items);
-            },
-
-            loadingOperationTypes: function() {
-                return {};
             },
 
             skipProcessingPagingChange: commonUtils.noop,

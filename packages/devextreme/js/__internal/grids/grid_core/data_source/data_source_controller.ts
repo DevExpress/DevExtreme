@@ -17,6 +17,10 @@ export class DataSourceController extends modules.Controller {
 
   private isShared = false;
 
+  public publicMethods(): string[] {
+    return ['getDataSource'];
+  }
+
   /**
    * @extended: DataGrid's data_source_controller
    */
@@ -108,6 +112,10 @@ export class DataSourceController extends modules.Controller {
     return this.adapter?.operationTypes();
   }
 
+  public loadingOperationTypes(): OperationTypes {
+    return this.adapter?.loadingOperationTypes() ?? {};
+  }
+
   public isLoading(): boolean {
     return this.adapter?.isLoading() ?? false;
   }
@@ -118,5 +126,9 @@ export class DataSourceController extends modules.Controller {
 
   public lastLoadOptions(): Partial<NonNullable<LoadOperation['lastLoadOptions']>> {
     return this.adapter?.lastLoadOptions() ?? {};
+  }
+
+  public getCachedStoreData(): RawItemData[] | undefined {
+    return this.adapter?.getCachedStoreData();
   }
 }
