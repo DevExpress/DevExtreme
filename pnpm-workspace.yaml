@@ -3,6 +3,7 @@ packages:
   - 'e2e/*'
   - 'packages/*'
   - '!packages/sbom'
+  - 'tools/*'
 
 linkWorkspacePackages: true
 preferWorkspacePackages: true
