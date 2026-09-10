@@ -16,7 +16,6 @@ import type {
     MapType,
     ReadyEvent,
     OsmRouteResult,
-    RouteMode,
 } from 'devextreme/ui/map';
 import 'devextreme/ui/map/openlayers';
 
@@ -38,7 +37,8 @@ const MARKER_LOCATIONS: Record<string, MapLocation> = {
     'Bethesda Fountain': { lat: 40.774498, lng: -73.970867 },
 };
 const ROUTE_PRESETS = {
-    walking: {
+    centralParkRun: {
+        mode: 'walking',
         title: 'Central Park Run — approx. 10.1 km',
         markerDescription: 'Blue: Columbus Circle start / finish. Red: Dana Discovery Center.',
         center: { lat: 40.7827, lng: -73.9666 },
@@ -60,7 +60,8 @@ const ROUTE_PRESETS = {
         }],
         extraMarker: MARKER_LOCATIONS['Belvedere Castle'],
     },
-    driving: {
+    manhattanDrive: {
+        mode: 'driving',
         title: 'Manhattan Drive — official Routes demo waypoints, approx. 11 km',
         markerDescription: 'Four markers: coordinate string, arrays and an object. Red: custom icon.',
         center: { lat: 40.75, lng: -73.986 },
@@ -118,7 +119,7 @@ interface OsmStoryArgs {
     rtlEnabled: boolean;
     showRoute: boolean;
     routeColor: string;
-    routeMode: RouteMode;
+    routePreset: keyof typeof ROUTE_PRESETS;
     routeOpacity: number;
     routeWeight: number;
     type: MapType;
@@ -159,7 +160,7 @@ const OsmMapStory = ({
     rtlEnabled,
     showRoute,
     routeColor,
-    routeMode,
+    routePreset,
     routeOpacity,
     routeWeight,
     type,
@@ -168,7 +169,7 @@ const OsmMapStory = ({
 }: OsmMapStoryProps): React.ReactElement => {
     const mapRef = React.useRef<MapRef>(null);
     const [markerAdded, setMarkerAdded] = React.useState(false);
-    const preset = ROUTE_PRESETS[routeMode];
+    const preset = ROUTE_PRESETS[routePreset];
     const markers = React.useMemo(() => preset.markers.map((marker) => ({
         ...marker,
         onClick: handleMarkerClick,
@@ -180,10 +181,10 @@ const OsmMapStory = ({
     const routes = React.useMemo(() => showRoute ? [{
         locations: preset.locations,
         color: routeColor,
-        mode: routeMode,
+        mode: preset.mode,
         opacity: routeOpacity,
         weight: routeWeight,
-    }] : [], [preset, showRoute, routeColor, routeMode, routeOpacity, routeWeight]);
+    }] : [], [preset, showRoute, routeColor, routeOpacity, routeWeight]);
     const center = centerOnCentralPark ? CENTRAL_PARK_CENTER : preset.center;
 
     React.useEffect(() => {
@@ -270,7 +271,7 @@ const meta: Meta<OsmStoryArgs> = {
     argTypes: {
         autoAdjust: {
             control: 'boolean',
-            description: 'Automatically adjusts the map viewport when markers or routes change.',
+            description: 'Automatically adjusts the map viewport when markers or routes are added.',
         },
         centerOnCentralPark: {
             control: 'boolean',
@@ -289,10 +290,19 @@ const meta: Meta<OsmStoryArgs> = {
             control: 'boolean',
         },
         showRoute: { control: 'boolean' },
-        routeColor: { control: 'color' },
-        routeMode: {
-            control: 'select',
-            options: ['driving', 'walking'],
+        routeColor: {
+            control: {
+                type: 'select',
+                labels: { '#0000ff': 'Blue', '#008000': 'Green', '#ff0000': 'Red' },
+            },
+            options: ['#0000ff', '#008000', '#ff0000'],
+        },
+        routePreset: {
+            control: {
+                type: 'select',
+                labels: { manhattanDrive: 'Manhattan Drive', centralParkRun: 'Central Park Run' },
+            },
+            options: ['manhattanDrive', 'centralParkRun'],
             description: 'Saved OSRM routes: official Routes demo waypoints or an independently calculated Central Park loop. '
                 + 'Driving returns coordinate tuples; walking returns a GeoJSON LineString. No routing service is called.',
         },
@@ -328,8 +338,8 @@ export const Default: Story = {
         focusStateEnabled: true,
         rtlEnabled: false,
         showRoute: true,
-        routeColor: 'blue',
-        routeMode: 'driving',
+        routeColor: '#0000ff',
+        routePreset: 'manhattanDrive',
         routeOpacity: 0.5,
         routeWeight: 6,
         type: 'roadmap',
