@@ -2350,6 +2350,71 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         assert.deepEqual(openLayersMock.fittedExtent, [-74100, 40600, -73800, 40900], 'fit includes intermediate route points and the marker');
     });
 
+    QUnit.test('marker resize refits cached route bounds without visiting every vertex', async function(assert) {
+        let markerSize = { height: 30, width: 20 };
+        openLayersMock.getOverlayRect = () => markerSize;
+        const calculateRoute = sinon.stub().resolves(Array.from({ length: 100 }, (_, index) => path[index % path.length]));
+        const map = await createMap({
+            autoAdjust: true,
+            routes: [route],
+            markers: [{ location: [40.6, -74.1] }],
+            providerConfig: { tileServer, calculateRoute }
+        });
+        const extendBounds = sinon.spy(map._provider, '_extendBounds');
+        const markerElement = openLayersMock.addedOverlays[0].options.element;
+        const initialFitCallCount = openLayersMock.fitCallCount;
+
+        try {
+            markerSize = { height: 60, width: 40 };
+            triggerResize(markerElement);
+            markerSize = { height: 90, width: 60 };
+            triggerResize(markerElement);
+
+            assert.strictEqual(openLayersMock.fitCallCount, initialFitCallCount + 2, 'both size changes refit the view');
+            assert.strictEqual(extendBounds.callCount, 6, 'each refit uses one marker and two route corners');
+            assert.deepEqual(openLayersMock.fittedExtent, [-74100, 40600, -73800, 40900], 'cached bounds still include intermediate route points');
+            assert.ok(calculateRoute.calledOnce, 'resizing does not request the route again');
+        } finally {
+            extendBounds.restore();
+        }
+    });
+
+    QUnit.test('autoAdjust uses cached route bounds when enabled after rendering', async function(assert) {
+        const calculateRoute = sinon.stub().resolves(path);
+        const map = await createMap({
+            routes: [route],
+            providerConfig: { tileServer, calculateRoute }
+        });
+
+        map.option('autoAdjust', true);
+        await map._lastAsyncAction;
+
+        assert.deepEqual(openLayersMock.fittedExtent, [-74000, 40700, -73800, 40900], 'route bounds are available even when rendered without autoAdjust');
+        assert.ok(calculateRoute.calledOnce, 'enabling autoAdjust does not recalculate the route');
+    });
+
+    QUnit.test('replacing and removing routes does not retain old route bounds', async function(assert) {
+        const map = await createMap({
+            autoAdjust: true,
+            routes: [route],
+            markers: [{ location: [5, 178] }],
+            providerConfig: { tileServer, calculateRoute: ({ locations }) => Promise.resolve(locations.map(({ lat, lng }) => [lat, lng])) }
+        });
+        const replacementRoute = { locations: [[10, 179], [30, -178], [-20, -179], [15, 178]] };
+
+        map.option('routes', [replacementRoute]);
+        await map._lastAsyncAction;
+
+        assert.deepEqual(openLayersMock.fittedExtent, [178000, -20000, 182000, 30000], 'only replacement route bounds and the marker are fitted');
+
+        await map.removeRoute(replacementRoute);
+        assert.strictEqual(getRouteSource().getFeatures().length, 0, 'replacement route is removed');
+
+        await map.addMarker({ location: [7, 179] });
+
+        assert.deepEqual(openLayersMock.fittedExtent, [178000, 5000, 179000, 7000], 'the next fit includes only markers and no removed route bounds');
+    });
+
     QUnit.test('antimeridian route uses adjacent world coordinates and narrow bounds', async function(assert) {
         await createMap({
             autoAdjust: true,

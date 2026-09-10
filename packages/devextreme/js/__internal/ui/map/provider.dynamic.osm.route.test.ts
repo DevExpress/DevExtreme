@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { getRouteLocations, getRouteLongitudeRange, toRouteCoordinates } from './provider.dynamic.osm.route';
+import { getRouteBounds, getRouteLocations, toRouteCoordinates } from './provider.dynamic.osm.route';
 
 describe('OSM route results', () => {
   const locations = [{ lat: 40.7, lng: -74 }, { lat: 40.8, lng: -73.9 }];
@@ -60,7 +60,7 @@ describe('toRouteCoordinates', () => {
   });
 });
 
-describe('getRouteLongitudeRange', () => {
+describe('getRouteBounds', () => {
   it.each([
     [[-74, -73, -75], [-75, -73]],
     [[179, -179], [179, 181]],
@@ -69,7 +69,21 @@ describe('getRouteLongitudeRange', () => {
     [[0, 120, -120, 0], [0, 360]],
     [[10, 10], [10, 10]],
   ])('finds the continuous range of longitudes %j', (longitudes, expected) => {
-    expect(getRouteLongitudeRange(longitudes.map((lng) => ({ lat: 10, lng }))))
-      .toEqual(expected);
+    expect(getRouteBounds(longitudes.map((lng) => ({ lat: 10, lng }))))
+      .toEqual({ northEast: [10, expected[1]], southWest: [10, expected[0]] });
+  });
+
+  it('includes interior latitude extremes without modifying the route', () => {
+    const locations = Object.freeze([
+      Object.freeze({ lat: 10, lng: 179 }),
+      Object.freeze({ lat: 30, lng: -178 }),
+      Object.freeze({ lat: -20, lng: -179 }),
+      Object.freeze({ lat: 15, lng: 178 }),
+    ]);
+
+    expect(getRouteBounds([...locations])).toEqual({
+      northEast: [30, 182],
+      southWest: [-20, 178],
+    });
   });
 });

@@ -30,7 +30,7 @@ import {
   SUBDOMAIN_PLACEHOLDER,
 } from './provider.dynamic.osm.engine';
 import { createOpenLayersEngine } from './provider.dynamic.osm.openlayers';
-import { getRouteLocations, getRouteLongitudeRange } from './provider.dynamic.osm.route';
+import { getRouteBounds, getRouteLocations } from './provider.dynamic.osm.route';
 
 const DEFAULT_MAX_ZOOM = 19;
 const DEFAULT_SUBDOMAINS = 'abc';
@@ -67,7 +67,7 @@ export const normalizeLongitude = (longitude: number): number => {
 
 export const createBounds = (
   locations: MapLocation[],
-  routes: MapLocation[][] = [],
+  routes: RouteObject[] = [],
 ): MapEngineBounds | undefined => {
   if (!locations.length) {
     return undefined;
@@ -83,7 +83,6 @@ export const createBounds = (
     south = Math.min(south, lat);
   });
   longitudes.sort((first, second) => first - second);
-  const routeRanges = routes.filter((route) => route.length).map(getRouteLongitudeRange);
   let largestGap = -1;
   let westIndex = 0;
 
@@ -93,7 +92,13 @@ export const createBounds = (
       : longitudes[index + 1];
     const gap = nextLongitude - longitude;
     const midpoint = longitude + gap / 2;
-    const crossesRoute = routeRanges.some(([west, east]) => {
+    const crossesRoute = routes.some(({ southWest, northEast }) => {
+      if (!southWest || !northEast) {
+        return false;
+      }
+
+      const west = southWest[1];
+      const east = northEast[1];
       const offset = (((midpoint - west) % FULL_CIRCLE_DEGREES) + FULL_CIRCLE_DEGREES)
         % FULL_CIRCLE_DEGREES;
 
@@ -127,7 +132,6 @@ interface EngineMarkerObject extends MarkerObject {
 
 interface EngineRouteObject extends RouteObject {
   engineRoute?: MapEngineRoute;
-  locations: MapLocation[];
 }
 
 const areLocationsEqual = (
@@ -462,8 +466,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
 
   _fitBounds(): Promise<void> {
     this._updateBounds();
-    this._bounds = createBounds(this._boundLocations, this._routes.map((route) => route.locations))
-      ?? null;
+    this._bounds = createBounds(this._boundLocations, this._routes) ?? null;
 
     const engineMap = this._engineMap;
     if (!engineMap || !this._bounds || !this._option('autoAdjust')) {
@@ -580,7 +583,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
           throw new Error('The map was disposed or replaced during route creation.');
         }
         if (!locations) {
-          return { locations: [] };
+          return {};
         }
 
         const engineRoute = engineMap.addRoute({
@@ -590,21 +593,12 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
           weight: options.weight ?? this._defaultRouteWeight(),
         });
 
-        return { engineRoute, locations, instance: engineRoute.originalRoute };
+        return { ...getRouteBounds(locations), engineRoute, instance: engineRoute.originalRoute };
       });
   }
 
   _destroyRoute(route: EngineRouteObject): void {
     route.engineRoute?.dispose();
-  }
-
-  _updateBounds(): void {
-    super._updateBounds();
-    if (this._option('autoAdjust')) {
-      this._routes.forEach((route) => {
-        route.locations.forEach((location) => this._extendBounds(location));
-      });
-    }
   }
 
   clean(): Promise<void> {

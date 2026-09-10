@@ -1,5 +1,7 @@
 import type { MapLocation } from '@js/ui/map';
 
+import type { RouteObject } from './provider.dynamic';
+
 export const getRouteLocations = (result: unknown): MapLocation[] | undefined => {
   const isGeoJson = result !== null && typeof result === 'object'
     && 'type' in result && result.type === 'LineString';
@@ -41,14 +43,23 @@ export const toRouteCoordinates = (locations: MapLocation[]): [number, number][]
   });
 };
 
-export const getRouteLongitudeRange = (locations: MapLocation[]): [number, number] => {
+export const getRouteBounds = (
+  locations: MapLocation[],
+): Required<Pick<RouteObject, 'northEast' | 'southWest'>> => {
+  let north = locations[0].lat;
+  let south = north;
   let west = locations[0].lng;
   let east = west;
 
-  for (const [longitude] of toRouteCoordinates(locations)) {
+  for (const [longitude, latitude] of toRouteCoordinates(locations)) {
+    north = Math.max(north, latitude);
+    south = Math.min(south, latitude);
     west = Math.min(west, longitude);
     east = Math.max(east, longitude);
   }
 
-  return [west, east];
+  return {
+    northEast: [north, east],
+    southWest: [south, west],
+  };
 };

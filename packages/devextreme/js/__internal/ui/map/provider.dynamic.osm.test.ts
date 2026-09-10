@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { createBounds, normalizeLongitude } from './provider.dynamic.osm';
+import { getRouteBounds } from './provider.dynamic.osm.route';
 
 describe('OSM bounds', () => {
   describe('normalizeLongitude', () => {
@@ -111,16 +112,24 @@ describe('OSM bounds', () => {
       [[[170, -175], [-170, 175]], [], 170, -170],
       [[[-120, 0, 120], [120, -120]], [], -180, 180],
       [[[0, 120, -120, 0]], [], -180, 180],
+      [[[0, 90, 180, 270, 360, 450, 540]], [], -180, 180],
+      [[[-180, 180]], [], -180, -180],
+      [[[539, -539]], [], 179, -179],
       [[[10, 10]], [], 10, 10],
       [[[]], [15], 15, 15],
     ] as [number[][], number[], number, number][])(
       'does not cut route segments in %j with markers %j',
       (routeLongitudes, markerLongitudes, west, east) => {
         const routes = routeLongitudes.map((longitudes) => (
-          longitudes.map((lng) => ({ lat: 10, lng }))
+          longitudes.length ? getRouteBounds(longitudes.map((lng) => ({ lat: 10, lng }))) : {}
         ));
         const markers = markerLongitudes.map((lng) => ({ lat: 10, lng }));
-        expect(createBounds([...routes.flat(), ...markers], routes)).toEqual({
+        const routeCorners = routes.flatMap(({ northEast, southWest }) => (
+          northEast && southWest
+            ? [northEast, southWest].map(([lat, lng]) => ({ lat, lng }))
+            : []
+        ));
+        expect(createBounds([...routeCorners, ...markers], routes)).toEqual({
           northEast: { lat: 10, lng: east },
           southWest: { lat: 10, lng: west },
         });
