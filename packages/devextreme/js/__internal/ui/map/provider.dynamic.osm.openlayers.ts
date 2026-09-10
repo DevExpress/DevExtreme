@@ -351,9 +351,9 @@ class OpenLayersMap implements MapEngineMap {
     const feature = new api.Feature(geometry);
     const { r, g, b } = new Color(options.color);
     feature.setStyle(new api.style.Style({
-      stroke: options.weight === 0
-        ? undefined
-        : new api.style.Stroke({ color: [r, g, b, options.opacity], width: options.weight }),
+      stroke: Number.isFinite(options.weight) && options.weight > 0
+        ? new api.style.Stroke({ color: [r, g, b, options.opacity], width: options.weight })
+        : undefined,
     }));
 
     if (!this._routeSource) {
