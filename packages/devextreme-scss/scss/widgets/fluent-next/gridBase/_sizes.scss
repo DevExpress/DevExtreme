@@ -65,7 +65,7 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-command-edit-column-width: ds.$spacing-1200 !default;
   $grid-command-edit-column-with-icons-width: ds.$spacing-940 !default;
   $grid-adaptive-column-height: ds.$spacing-400 !default;
-  $grid-no-data-font-size: ds.$spacing-170 !default;
+  $grid-no-data-font-size: ds.$spacing-170 !default; // dx-foreign-scale: 17px, the font-size scale has no such step
 
   $grid-filter-row-editor-padding-inline: ds.$spacing-120 !default;
 

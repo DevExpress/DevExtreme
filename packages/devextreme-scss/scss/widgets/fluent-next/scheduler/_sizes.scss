@@ -40,7 +40,7 @@ $scheduler-appointment-15min-height: 17px !default; // dx-literal-required: used
 $scheduler-appointment-20min-height: 24px !default; // dx-literal-required: used in @container conditions, var() is invalid there
 $scheduler-appointment-25min-height: 32px !default; // dx-literal-required: used in @container conditions, var() is invalid there
 $scheduler-appointment-10min-recurrence-padding-inline-end: ds.$spacing-140 !default;
-$scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default;
+$scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default; // dx-foreign-scale: 8px, below the whole font-size scale (it starts at 10px)
 $scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
 $scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
 $scheduler-appointment-10min-icon-inset-inline-end: ds.$spacing-20 !default;
@@ -65,8 +65,8 @@ $scheduler-time-panel-font-size: ds.$font-size-caption-md !default;
 $scheduler-header-panel-margin: ds.$spacing-140 !default;
 $scheduler-group-header-font-size: ds.$font-size-title-xs !default;
 $scheduler-group-header-table-cell-width: ds.$spacing-1000 !default;
-$scheduler-appointment-transparent-left-border: ds.$spacing-10 solid transparent !default;
-$scheduler-appointment-transparent-right-border: ds.$spacing-10 solid transparent !default;
+$scheduler-appointment-transparent-left-border: ds.$border-width-10 solid transparent !default;
+$scheduler-appointment-transparent-right-border: ds.$border-width-10 solid transparent !default;
 $scheduler-workspace-month-header-height: ds.$spacing-220 !default;
 $scheduler-workspace-month-timeline-time-height: ds.$spacing-340 !default;
 
@@ -169,7 +169,7 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-appointment-popup-days-of-week-buttons-gap: ds.$spacing-80 !default;
   $scheduler-appointment-popup-repeat-end-item-height: ds.$spacing-240 !default;
 
-  $scheduler-agenda-appointment-title-font-size: ds.$spacing-130 !default;
+  $scheduler-agenda-appointment-title-font-size: ds.$spacing-130 !default; // dx-foreign-scale: 13px, the font-size scale has no such step
 
   $scheduler-appointment-15min-recurrence-padding-inline-end: ds.$spacing-160 !default;
   $scheduler-appointment-15min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
@@ -305,7 +305,7 @@ $scheduler-reduced-icon-inset-inline: ds.$spacing-50 !default;
 $scheduler-recurrence-icon-inset-inline: ds.$spacing-200 !default;
 $scheduler-agenda-appointment-margin: ds.$spacing-50 !default;
 $scheduler-agenda-appointment-last-margin: ds.$spacing-200 !default;
-$scheduler-time-indicator-font-size: ds.$font-size-300 !default;
+$scheduler-time-indicator-font-size: ds.$font-size-300 !default; // dx-no-semantic-role: 30px has no font-size role
 $scheduler-time-indicator-size: ds.$spacing-10 !default;
 $scheduler-small-font-size: ds.$font-size-140 !default;
 $scheduler-group-header-cell-height: ds.$spacing-300 !default;

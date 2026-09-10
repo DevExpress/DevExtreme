@@ -17,7 +17,7 @@ $button-height: null !default;
 $button-icon-size: null !default;
 $button-icon-margin: null !default;
 
-$button-box-shadow: 0 ds.$spacing-10 ds.$spacing-30 !default;
+$button-box-shadow: 0 ds.$spacing-10 ds.$spacing-30 !default; // dx-shadow-geometry: offset and blur off the spacing scale, while the package ships box-shadow roles the theme never reads
 
 @if $size == "default" {
   $button-height: ds.$spacing-320 !default;
