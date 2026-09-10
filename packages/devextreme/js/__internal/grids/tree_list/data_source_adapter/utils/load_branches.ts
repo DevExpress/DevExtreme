@@ -161,8 +161,6 @@ const loadParentsOrChildren = (
   };
 
   const filter: DataFilter = isFilterTooLong ? keyMapFilter : idFilter;
-  // A remote store cannot run the predicate, so it loads unfiltered
-  // and the predicate is applied to the result below.
   const needLocalFiltering = isFilterTooLong && isRemoteFiltering;
 
   const loadOptions = extend(
