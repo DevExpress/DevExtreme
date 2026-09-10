@@ -662,9 +662,26 @@ class Overlay<
     // Move only if the scope named a different node: appending is not a no-op for a child already
     // in place, and the detach takes the focus out, restarts animations and reloads any iframe.
     const { $container } = this._positionController;
+    const wrapper = this._$wrapper?.get(0) as HTMLElement | undefined;
 
-    if ($container && $container.get(0) !== this._$wrapper?.parent().get(0)) {
-      this._moveToContainer();
+    if (!$container || $container.get(0) === wrapper?.parentElement) {
+      return;
+    }
+
+    /*
+     * The move detaches the wrapper, and a detached element loses the focus for good - the browser
+     * does not hand it back on re-insert. Unlike a container the application changed on one named
+     * overlay, this runs on every open overlay at once, because an application announced that a
+     * class moved somewhere; taking the caret out of whatever the user was typing in is not part
+     * of that. The selection survives on the element itself, so restoring the focus is enough.
+     */
+    const focused = domAdapter.getActiveElement(wrapper) as HTMLElement | null;
+    const shouldRestoreFocus = !!wrapper && !!focused && domUtils.contains(wrapper, focused);
+
+    this._moveToContainer();
+
+    if (shouldRestoreFocus) {
+      focused?.focus();
     }
   }
 

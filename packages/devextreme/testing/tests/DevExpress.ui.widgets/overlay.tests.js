@@ -407,6 +407,33 @@ testModule('render', moduleConfig, () => {
         $scope.remove();
     });
 
+    test('Theme mode - a move keeps the focus inside the overlay', function(assert) {
+        const $scope = modeScope('light');
+        const overlay = $('<div>').appendTo($scope).dxOverlay({
+            visible: true,
+            contentTemplate: () => $('<input class="probe-input" value="hello world">')
+        }).dxOverlay('instance');
+
+        const input = overlay.$content().find('.probe-input').get(0);
+        // under ?shadowDom the overlay lives in a shadow root, and the document reports its host
+        const focused = () => input.getRootNode().activeElement;
+
+        input.focus();
+        input.setSelectionRange(4, 4);
+
+        assert.strictEqual(focused(), input, 'the caret starts inside the overlay');
+
+        declareMode($scope, 'dark');
+        themes.refreshMode();
+
+        assert.ok(overlay.$wrapper().parent().hasClass('dx-theme-mode-dark'), 'the overlay did move');
+        assert.strictEqual(focused(), input, 'and the focus came back to where it was');
+        assert.strictEqual(input.selectionStart, 4, 'with the caret still in place');
+
+        overlay.dispose();
+        $scope.remove();
+    });
+
     test('Theme mode - a disposed overlay stops listening', function(assert) {
         const $scope = modeScope('light');
         const overlay = $('<div>').appendTo($scope).dxOverlay({ visible: true }).dxOverlay('instance');
