@@ -585,7 +585,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
 
         const engineRoute = engineMap.addRoute({
           locations,
-          color: options.color ?? this._defaultRouteColor(),
+          color: options.color || this._defaultRouteColor(),
           opacity: options.opacity ?? this._defaultRouteOpacity(),
           weight: options.weight ?? this._defaultRouteWeight(),
         });

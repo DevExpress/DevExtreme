@@ -1986,6 +1986,13 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         assert.strictEqual(onRouteRemoved.firstCall.args[0].options, drivingRoute, 'removal event identifies the removed route');
     });
 
+    QUnit.test('empty route color uses the default color', async function(assert) {
+        const map = await createMap();
+        const feature = await map.addRoute({ ...route, color: '' });
+
+        assert.deepEqual(feature.getStyle().getStroke().getColor(), [0, 0, 255, 0.5], 'empty color uses the shared route default');
+    });
+
     QUnit.test('route updates reuse one layer and honor zero opacity', async function(assert) {
         const map = await createMap({ routes: [route] });
         const source = getRouteSource();
