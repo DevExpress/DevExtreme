@@ -46,7 +46,7 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _cachedData: any;
 
-  protected _cachedStoreData: any;
+  protected _cachedStoreData?: RawItemData[];
 
   private _cachedPagingData: any;
 
@@ -259,7 +259,7 @@ export default class DataSourceAdapter extends modules.Controller {
     this._totalCountCorrection = 0;
   }
 
-  protected setCachedStoreData(data): void {
+  protected setCachedStoreData(data: RawItemData[] | undefined): void {
     this._cachedStoreData = data;
     this._dataIndexByKey = undefined;
   }
@@ -616,7 +616,7 @@ export default class DataSourceAdapter extends modules.Controller {
           if (!this._cachedStoreData) {
             this.setCachedStoreData(cloneItems(options.data, gridCoreUtils.normalizeSortingInfo(storeLoadOptions.group).length));
           } else if (options.mergeStoreLoadData) {
-            this.setCachedStoreData(this._cachedStoreData.concat(options.data));
+            this.setCachedStoreData(this._cachedStoreData.concat(options.data as RawItemData[]));
             options.data = this._cachedStoreData;
           }
         }

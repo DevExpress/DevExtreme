@@ -415,6 +415,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
 
     if (data.isConverted && this._cachedStoreData) {
+      // @ts-expect-error
       this._cachedStoreData.isConverted = true;
     }
   }
