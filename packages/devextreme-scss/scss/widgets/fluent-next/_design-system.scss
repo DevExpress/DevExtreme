@@ -84,7 +84,9 @@ $accent: colors.$color !default;
   @error "fluent-next: unknown colour mode #{meta.inspect(colors.$mode)}; expected \"light\" or \"dark\".";
 }
 
-// Inverted first: a named class on the SAME element has to win, and at equal weight source order
-// is what decides.
+/*
+ * Inverted first: a named class on the SAME element has to win, and at equal weight source order
+ * is what decides.
+ */
 @include inverted-scope();
 @include named-scopes(colors.$mode, if(colors.$mode == "light", "dark", "light"));
