@@ -4,6 +4,7 @@ import type { DataChange, ProcessedItem } from '@ts/grids/grid_core/data_control
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType, RowKey } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import type { MasterDetailDataControllerExtension } from '@ts/grids/grid_core/master_detail/m_master_detail';
 
 import {
   ADAPTIVE_ROW_TYPE,
@@ -15,8 +16,10 @@ import type { AdaptiveColumnsController } from '../m_adaptivity';
 import type { AdaptivityDataController } from '../types';
 import { getAdaptiveDetailRowIndex, resolveAdaptiveDetailRowTarget } from '../utils';
 
+type AdaptivityDataControllerBase = DataController & MasterDetailDataControllerExtension;
+
 export const adaptivityDataControllerExtender = (
-  Base: ModuleType<DataController>,
+  Base: ModuleType<AdaptivityDataControllerBase>,
 ): ModuleType<AdaptivityDataController> => class AdaptivityDataControllerExtender extends Base {
   private adaptiveExpandedKey?: RowKey;
 
@@ -59,7 +62,7 @@ export const adaptivityDataControllerExtender = (
     return processedItems;
   }
 
-  protected getRowIndicesForExpand(key: RowKey): number[] {
+  public getRowIndicesForExpand = (key: RowKey): number[] => {
     const rowIndices = super.getRowIndicesForExpand(key);
 
     if (this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(key)) {
@@ -69,7 +72,7 @@ export const adaptivityDataControllerExtender = (
     }
 
     return rowIndices;
-  }
+  };
 
   public toggleExpandAdaptiveDetailRow(key?: RowKey, alwaysExpanded = false): void {
     const oldKey = this.adaptiveExpandedKey;
