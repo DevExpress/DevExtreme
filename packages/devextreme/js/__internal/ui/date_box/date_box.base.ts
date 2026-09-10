@@ -1,3 +1,4 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import config from '@js/core/config';
@@ -581,6 +582,28 @@ class DateBox<
     return inputType(mode)
       ? null
       : uiDateUtils.FORMATS_MAP[mode] as string | null;
+  }
+
+  _focusOutHandler(e: DxEvent): void {
+    if (this._shouldCommitTextOnFocusOut()) {
+      eventsEngine.triggerHandler(this._input(), { type: 'change' });
+    }
+
+    super._focusOutHandler(e);
+  }
+
+  _shouldCommitTextOnFocusOut(): boolean {
+    const { text, valueChangeEvent } = this.option();
+    const includesChangeEvent = valueChangeEvent?.split(' ').includes('change');
+
+    if (!includesChangeEvent) {
+      return false;
+    }
+
+    const currentValue = this.getDateOption('value');
+    const displayedText = this._getDisplayedText(currentValue) ?? '';
+
+    return (text ?? '') !== displayedText;
   }
 
   _valueChangeEventHandler(
