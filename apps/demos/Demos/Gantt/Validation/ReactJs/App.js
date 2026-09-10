@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Gantt, {
   Tasks, Dependencies, Column, Validation, Editing,
 } from 'devextreme-react/gantt';
@@ -11,24 +11,24 @@ function App() {
     validateDependencies: true,
     enablePredecessorGap: true,
   });
-  const onEnablePredecessorGapChanged = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+  const onEnablePredecessorGapChanged = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       enablePredecessorGap: value,
-    });
-  };
-  const onAutoUpdateParentTasksChanged = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+    }));
+  }, []);
+  const onAutoUpdateParentTasksChanged = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       autoUpdateParentTasks: value,
-    });
-  };
-  const onValidateDependenciesChanged = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+    }));
+  }, []);
+  const onValidateDependenciesChanged = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       validateDependencies: value,
-    });
-  };
+    }));
+  }, []);
   return (
     <div id="form-demo">
       <div className="options">

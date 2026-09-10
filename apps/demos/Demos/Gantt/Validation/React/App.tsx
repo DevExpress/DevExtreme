@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Gantt, {
   Tasks, Dependencies, Column, Validation, Editing,
 } from 'devextreme-react/gantt';
@@ -13,26 +13,26 @@ function App() {
     enablePredecessorGap: true,
   });
 
-  const onEnablePredecessorGapChanged: ICheckBoxOptions['onValueChanged'] = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+  const onEnablePredecessorGapChanged: ICheckBoxOptions['onValueChanged'] = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       enablePredecessorGap: value,
-    });
-  };
+    }));
+  }, []);
 
-  const onAutoUpdateParentTasksChanged: ICheckBoxOptions['onValueChanged'] = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+  const onAutoUpdateParentTasksChanged: ICheckBoxOptions['onValueChanged'] = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       autoUpdateParentTasks: value,
-    });
-  };
+    }));
+  }, []);
 
-  const onValidateDependenciesChanged: ICheckBoxOptions['onValueChanged'] = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+  const onValidateDependenciesChanged: ICheckBoxOptions['onValueChanged'] = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       validateDependencies: value,
-    });
-  };
+    }));
+  }, []);
 
   return (
     <div id="form-demo">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Gantt, {
   Tasks,
   Dependencies,
@@ -19,18 +19,18 @@ function App() {
     disableContextMenu: false,
     contextMenuItems: getContextMenuItems(),
   });
-  const onCustomizeContextMenu = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+  const onCustomizeContextMenu = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       contextMenuItems: value ? getContextMenuItems() : undefined,
-    });
-  };
-  const onPreventContextMenuShowing = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+    }));
+  }, []);
+  const onPreventContextMenuShowing = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       disableContextMenu: value,
-    });
-  };
+    }));
+  }, []);
   return (
     <div id="form-demo">
       <div className="options">
