@@ -15,7 +15,9 @@ $typography-heading-6-font-size: null !default;
 
 /*
  * The xl/l/m/s/xs classes are raw size utilities (.dx-font-*), not text roles —
- * they intentionally stay on the base scale.
+ * they intentionally stay on the base scale, so "this value has no role" is the intent here and
+ * not a finding. The one real oddity is xl: the base font-size scale has no 34px at all, so that
+ * utility alone reads a spacing step (see the marker on it).
  *
  * The headings are a role ladder end to end, decided with design on 10.09.2026. The ramp
  * fluent-next inherited from fluent (40/36/32/26/22/22, compact 32/28/24/20/16/16) had four
@@ -30,7 +32,7 @@ $typography-heading-6-font-size: null !default;
  * weight, and two heading levels would render identically.
  */
 @if $size == "default" {
-  $typography-xl-font-size: ds.$spacing-340 !default;
+  $typography-xl-font-size: ds.$spacing-340 !default; // dx-foreign-scale: 34px, the font-size scale jumps 32 -> 36, so this one utility had to borrow from spacing
   $typography-l-font-size: ds.$font-size-280 !default;
   $typography-m-font-size: ds.$font-size-200 !default;
   $typography-s-font-size: ds.$font-size-180 !default;

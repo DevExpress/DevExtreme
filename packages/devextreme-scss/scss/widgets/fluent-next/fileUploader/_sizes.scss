@@ -11,7 +11,7 @@ $file-uploader-padding-block: ds.$spacing-70 !default;
 $file-uploader-files-container-padding: ds.$spacing-120 ds.$spacing-40 0 !default;
 $file-uploader-file-size-margin: null !default;
 $file-uploader-file-icon-font-size: null !default;
-$file-uploader-files-container-border-radius: ds.$spacing-40 !default;
+$file-uploader-files-container-border-radius: ds.$border-radius-40 !default;
 
 @if $size == "default" {
   $file-uploader-file-container-padding: ds.$spacing-50 ds.$spacing-80 !default;
