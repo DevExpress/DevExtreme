@@ -27,7 +27,7 @@ $pagination-page-index-compact-min-width: null !default;
 
 // Values hoisted from style-file literals (tokenized)
 $pagination-font-weight-selected: ds.$font-weight-base-strong !default;
-$pagination-page-border-radius: 20px !default; // dx-offscale: 20px (pill; candidate: ds.$border-radius-full)
+$pagination-page-border-radius: ds.$border-radius-full !default;
 $pagination-navigate-button-width: ds.$spacing-90 !default;
 
 // Base-layer sizing injected with design tokens (wave B2)

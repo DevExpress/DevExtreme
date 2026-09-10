@@ -16,4 +16,13 @@ $gallery-indicator-item-border-selected: ds.$border-width-20 solid !default;
 $gallery-border-width: ds.$border-width-10 !default;
 $gallery-indicator-inset-block-end: ds.$spacing-100 !default;
 $gallery-indicator-height: ds.$spacing-100 !default;
-$gallery-indicator-item-margin: 0 ds.$spacing-20 !default;
+
+/*
+ * The item is centred in the indicator row, so the block margin is half the difference between the
+ * row height and the item - which is what the 5px literal in _index.scss used to spell out by hand
+ * (half of the 10px row). Written here rather than in the rule: the base layer already applies this
+ * variable to .dx-gallery-indicator-item, and the theme was overriding its own declaration in the
+ * same rule, which left --dx-gallery-indicator-item-margin dead.
+ */
+$gallery-indicator-item-margin: calc((#{$gallery-indicator-height} - #{$gallery-indicator-size}) / 2) ds.$spacing-60 !default;
+$gallery-indicator-item-margin-selected: calc((#{$gallery-indicator-height} - #{$gallery-indicator-size-selected}) / 2) ds.$spacing-60 !default;
