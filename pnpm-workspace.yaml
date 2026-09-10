@@ -10,7 +10,10 @@ preferWorkspacePackages: true
 saveWorkspaceProtocol: false
 packageManagerStrict: false
 engineStrict: true
-minimumReleaseAge: 0
+
+# Supply-chain guard: ignore npm versions published less than 24 hours ago.
+# Need a fresher version? Add a targeted minimumReleaseAgeExclude entry with the exact version.
+minimumReleaseAge: 1440 # ⚠️ Do NOT modify this.
 
 overrides:
   "basic-ftp@<5.3.1": ">=5.3.1"
