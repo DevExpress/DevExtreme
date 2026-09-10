@@ -513,6 +513,11 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
   }
 
   _calculateRoute(options: RouteOptions): Promise<MapLocation[] | undefined> {
+    const waypoints = options.locations ?? [];
+    if (waypoints.length < 2) {
+      return Promise.resolve(undefined);
+    }
+
     const calculateRoute = this._option('providerConfig')?.calculateRoute;
     if (!calculateRoute) {
       if (!this._calculateRouteWarningLogged) {
@@ -525,7 +530,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
 
     const engineMap = this._engineMap;
     return Promise.all(
-      (options.locations ?? []).map((location) => this._resolveRouteLocation(location)),
+      waypoints.map((location) => this._resolveRouteLocation(location)),
     )
       .then((locations) => {
         if (engineMap !== this._engineMap) {

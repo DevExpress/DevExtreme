@@ -2107,6 +2107,34 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         });
     });
 
+    [
+        ['missing locations', undefined],
+        ['empty locations', []],
+        ['one coordinate', [[40.7, -74]]],
+        ['one address', ['Start']]
+    ].forEach(([name, locations]) => {
+        QUnit.test(`fewer than two waypoints skip geocoding and routing (${name})`, async function(assert) {
+            const calculateLocation = sinon.stub().returns(Promise.resolve({ lat: 40.7, lng: -74 }));
+            const calculateRoute = sinon.stub().returns(Promise.resolve(path));
+            const onRouteAdded = sinon.spy();
+            const onRouteRemoved = sinon.spy();
+            const map = await createMap({
+                providerConfig: { tileServer, calculateLocation, calculateRoute },
+                onRouteAdded,
+                onRouteRemoved
+            });
+            const incompleteRoute = { locations };
+
+            assert.strictEqual(await map.addRoute(incompleteRoute), undefined, 'incomplete waypoints do not create a route');
+            assert.ok(calculateLocation.notCalled, 'geocoding is not requested');
+            assert.ok(calculateRoute.notCalled, 'routing is not requested');
+            assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'no route is drawn');
+            assert.ok(onRouteAdded.notCalled, 'no added event is fired');
+            await map.removeRoute(incompleteRoute);
+            assert.ok(onRouteRemoved.notCalled, 'no removed event is fired');
+        });
+    });
+
     QUnit.test('explicit zero coordinates and a successfully calculated zero location are valid route waypoints', async function(assert) {
         const calculateLocation = sinon.stub().returns(Promise.resolve({ lat: 0, lng: 0 }));
         const calculateRoute = sinon.stub().returns(Promise.resolve(path));
