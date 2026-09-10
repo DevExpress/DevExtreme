@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import {
   DataGrid,
@@ -12,25 +12,29 @@ import DetailView from './DetailView.tsx';
 import { vehicles } from './data.ts';
 import { type Vehicle } from './types.ts';
 
-const onRowExpanding = ({ component }: DataGridTypes.RowExpandingEvent) => {
-  component.collapseAll(-1);
-};
-
-const onCellClick = ({ column, row, component, key }: DataGridTypes.CellClickEvent) => {
-  if (column.type === 'detailExpand' && row.rowType === 'data') {
-    if (row.isExpanded) {
-      component.collapseRow(key);
-    } else {
-      component.expandRow(key);
-    }
-  }
-};
-
-const renderSparkleIcon = () => <div className="dx-icon-sparkle" />;
-
-const calculateModel = (data: Vehicle) => `${data.TrademarkName} ${data.Name}`;
-
 export default function App() {
+  const onRowExpanding = useCallback(({ component }: DataGridTypes.RowExpandingEvent) => {
+    component.collapseAll(-1);
+  }, []);
+
+  const onCellClick = useCallback(({ column, row, component, key }: DataGridTypes.CellClickEvent) => {
+    if (column.type === 'detailExpand' && row.rowType === 'data') {
+      if (row.isExpanded) {
+        component.collapseRow(key);
+      } else {
+        component.expandRow(key);
+      }
+    }
+  }, []);
+
+  const renderSparkleIcon = useCallback(() => {
+    return <div className="dx-icon-sparkle" />;
+  }, []);
+
+  const calculateModel = useCallback((data: Vehicle) => {
+    return `${data.TrademarkName} ${data.Name}`;
+  }, []);
+
   return (
     <>
       <DataGrid
