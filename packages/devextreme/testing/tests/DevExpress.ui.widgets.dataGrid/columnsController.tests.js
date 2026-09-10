@@ -4955,7 +4955,6 @@ QUnit.module('Move Columns', { beforeEach: setupModule, afterEach: teardownModul
 });
 
 QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModule }, () => {
-
     QUnit.test('update exist column parameter', function(assert) {
         this.applyOptions({ columns: ['field1', 'field2', 'field3'] });
 
