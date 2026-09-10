@@ -118,12 +118,7 @@ const promptValue = ref('');
 const responseValue = ref('');
 const isLoading = ref(false);
 const isError = ref(false);
-const submitButtonText = computed(() => {
-  if (!responseValue.value && !isError.value) {
-    return 'Submit';
-  }
-  return 'Resubmit';
-});
+const submitButtonText = ref('Submit');
 
 function onSuggestionClick({ itemData: suggestion }: DxButtonGroupTypes.ItemClickEvent) {
   promptValue.value = suggestion.prompt;
@@ -148,6 +143,7 @@ async function handleSubmit({ event }: SubmitEvent) {
     responseValue.value = '';
     isError.value = true;
   } finally {
+    submitButtonText.value = 'Resubmit';
     isLoading.value = false;
     (event?.target as HTMLElement)?.focus();
   }

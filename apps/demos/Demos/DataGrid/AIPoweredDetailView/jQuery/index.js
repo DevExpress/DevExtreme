@@ -51,7 +51,6 @@ $(() => {
       loadPanel.show();
       event?.target?.blur();
     } else {
-      submitButton.option('text', 'Resubmit');
       loadPanel.hide();
       event?.target?.focus();
     }
@@ -75,6 +74,7 @@ $(() => {
       responseEditor.option('value', '');
       $errorMessage.show();
     } finally {
+      submitButton.option('text', 'Resubmit');
       toggleLoadingState(false, event);
     }
   }

@@ -30,6 +30,7 @@ export class DetailViewComponent {
 
   responseValue: string = '';
 
+  submitButtonText: string = 'Submit';
 
   isLoading: boolean = false;
 
@@ -81,6 +82,7 @@ export class DetailViewComponent {
       this.isError = true;
     } finally {
       this.isLoading = false;
+      this.submitButtonText = 'Resubmit';
       this.changeDetectorRef.detectChanges();
       (event?.target as HTMLElement)?.focus();
     }

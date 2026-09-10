@@ -23,7 +23,7 @@
   <div class="submit-container">
     <dx-button
       icon="sparkle"
-      [text]="!responseValue && !isError ? 'Submit' : 'Resubmit'"
+      [text]="submitButtonText"
       type="default"
       [disabled]="!promptValue || isLoading"
       (onClick)="handleSubmit($event)"

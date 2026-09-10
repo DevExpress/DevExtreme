@@ -32,12 +32,7 @@ const DetailView = ({ data: templateData }) => {
   const [responseValue, setResponseValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const submitButtonText = useMemo(() => {
-    if (!responseValue && !isError) {
-      return 'Submit';
-    }
-    return 'Resubmit';
-  }, [responseValue, isError]);
+  const [submitButtonText, setSubmitButtonText] = useState('Submit');
   const outputAreaMinHeight = useMemo(() => {
     const isMaterial = themes.current().startsWith('material');
     if (isMaterial) return 68;
@@ -78,6 +73,7 @@ const DetailView = ({ data: templateData }) => {
         setResponseValue('');
         setIsError(true);
       } finally {
+        setSubmitButtonText('Resubmit');
         setIsLoading(false);
         event?.target?.focus();
       }
