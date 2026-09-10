@@ -30,7 +30,7 @@ $(() => {
     const response = await aiService.chat.completions.create(params);
     const result = response.choices[0].message?.content;
 
-    return result;
+    return result ?? '';
   }
 
   const createCategoryTemplate = ({ CategoryName, CategoryID }) => $('<div>')
@@ -69,6 +69,7 @@ $(() => {
         { role: 'user', content: `User prompt: ${userPrompt}\nRow data: ${JSON.stringify(rowData)}` },
       ];
       const aiResponse = await getAIResponse(messages);
+      if (aiResponse === '') throw new Error('AI response is empty');
       responseEditor.option('value', aiResponse);
     } catch {
       responseEditor.option('value', '');

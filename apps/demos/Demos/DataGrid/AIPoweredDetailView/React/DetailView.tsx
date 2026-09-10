@@ -74,6 +74,7 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
         { role: 'user', content: `User prompt: ${promptValue}\nRow data: ${JSON.stringify(rowData)}` },
       ];
       const aiResponse = await getAIResponse(messages);
+      if (aiResponse === '') throw new Error('AI response is empty');
       setResponseValue(aiResponse);
     } catch {
       setResponseValue('');

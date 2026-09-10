@@ -74,6 +74,7 @@ export class DetailViewComponent {
         { role: 'user', content: `User prompt: ${this.promptValue}\nRow data: ${JSON.stringify(this.rowData)}` },
       ];
       const aiResponse = await this.aiService.getAIResponse(messages);
+      if (aiResponse === '') throw new Error('AI response is empty');
       this.responseValue = aiResponse;
     } catch {
       this.responseValue = '';

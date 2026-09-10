@@ -142,6 +142,7 @@ async function handleSubmit({ event }: SubmitEvent) {
       { role: 'user', content: `User prompt: ${promptValue.value}\nRow data: ${JSON.stringify(rowData)}` },
     ];
     const aiResponse = await getAIResponse(messages);
+    if (aiResponse === '') throw new Error('AI response is empty');
     responseValue.value = aiResponse;
   } catch {
     responseValue.value = '';

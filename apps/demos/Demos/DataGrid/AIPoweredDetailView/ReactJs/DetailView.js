@@ -72,6 +72,7 @@ const DetailView = ({ data: templateData }) => {
           },
         ];
         const aiResponse = await getAIResponse(messages);
+        if (aiResponse === '') throw new Error('AI response is empty');
         setResponseValue(aiResponse);
       } catch {
         setResponseValue('');
