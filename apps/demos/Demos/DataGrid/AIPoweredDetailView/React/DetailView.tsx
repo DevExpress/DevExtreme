@@ -129,8 +129,8 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
         readOnly={true}
         disabled={isLoading || !responseValue}
         stylingMode="outlined"
-        hoverStateEnabled={true}
-        focusStateEnabled={true}
+        hoverStateEnabled={false}
+        focusStateEnabled={false}
         elementAttr={responseElementAttr}
       />
 
