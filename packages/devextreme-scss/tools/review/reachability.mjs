@@ -252,7 +252,22 @@ while (frontier.length) {
 
 const unread = [...declaredAt.keys()].filter((name) => !live.has(name)).sort();
 const unreadPath = join(here, 'unread-tier.json');
-const pinned = JSON.parse(readFileSync(unreadPath, 'utf8'));
+/*
+ * The pin is a committed file, not something the tool can rebuild on the fly: without it there is
+ * nothing to compare against, and passing would mean the gate quietly stopped working. So fail —
+ * but say what is wrong, rather than throwing ENOENT from readFileSync. This happened on CI once:
+ * reachability.mjs was committed and its pin was left untracked.
+ */
+let pinned;
+try {
+  pinned = JSON.parse(readFileSync(unreadPath, 'utf8'));
+} catch (error) {
+  process.stdout.write(`✘ the unread-name pin is missing or unreadable: ${unreadPath}\n`);
+  process.stdout.write(`     ${error.message}\n`);
+  process.stdout.write('     cure: the file is committed alongside this tool — check it is not left untracked.\n');
+  process.stdout.write('     To create it from scratch: write {"names": []} there and run --update-unread.\n');
+  process.exit(1);
+}
 
 if (process.argv.includes('--update-unread')) {
   writeFileSync(unreadPath, `${JSON.stringify({ ...pinned, names: unread }, null, 2)}\n`);
