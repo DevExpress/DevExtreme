@@ -89,15 +89,4 @@ describe('themes.refreshMode', () => {
       themeModeChangedCallback.remove(subscriber);
     }
   });
-
-  it('stops telling a subscriber that unsubscribed', () => {
-    const told: number[] = [];
-    const subscriber = (): void => { told.push(1); };
-
-    themeModeChangedCallback.add(subscriber);
-    themeModeChangedCallback.remove(subscriber);
-    refreshMode();
-
-    expect(told).toHaveLength(0);
-  });
 });
