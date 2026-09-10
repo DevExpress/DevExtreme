@@ -62,7 +62,7 @@ export const adaptivityDataControllerExtender = (
     return processedItems;
   }
 
-  public getRowIndicesForExpand = (key: RowKey): number[] => {
+  public override getRowIndicesForExpand(key: RowKey): number[] {
     const rowIndices = super.getRowIndicesForExpand(key);
 
     if (this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(key)) {
@@ -72,7 +72,7 @@ export const adaptivityDataControllerExtender = (
     }
 
     return rowIndices;
-  };
+  }
 
   public toggleExpandAdaptiveDetailRow(key?: RowKey, alwaysExpanded = false): void {
     const oldKey = this.adaptiveExpandedKey;
