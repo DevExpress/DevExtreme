@@ -1,12 +1,13 @@
-import React, { useCallback, useState } from "react";
-import { Button } from "devextreme-react/button";
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import rehypeMinifyWhitespace from "rehype-minify-whitespace";
-import rehypeStringify from "rehype-stringify";
-import HTMLReactParser from "html-react-parser";
-import { REGENERATION_TEXT } from "./data.js";
+import React, { useCallback, useState } from 'react';
+import { Button } from 'devextreme-react/button';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import rehypeMinifyWhitespace from 'rehype-minify-whitespace';
+import rehypeStringify from 'rehype-stringify';
+import HTMLReactParser from 'html-react-parser';
+import { REGENERATION_TEXT } from './data.js';
+
 function convertToHtml(value) {
   return unified()
     .use(remarkParse)
@@ -17,12 +18,12 @@ function convertToHtml(value) {
     .toString();
 }
 const Message = ({ text, onRegenerateButtonClick }) => {
-  const [icon, setIcon] = useState("copy");
+  const [icon, setIcon] = useState('copy');
   const onCopyButtonClick = useCallback(() => {
     navigator.clipboard?.writeText(text);
-    setIcon("check");
+    setIcon('check');
     setTimeout(() => {
-      setIcon("copy");
+      setIcon('copy');
     }, 2500);
   }, [text]);
   if (text === REGENERATION_TEXT) {

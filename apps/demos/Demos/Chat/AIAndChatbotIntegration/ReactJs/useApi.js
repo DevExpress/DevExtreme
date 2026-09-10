@@ -1,10 +1,11 @@
-import { useCallback, useState } from "react";
-import { CustomStore, DataSource } from "devextreme-react/common/data";
-import { ALERT_TIMEOUT, assistant, REGENERATION_TEXT } from "./data.js";
-import { getAIResponse } from "./service.js";
+import { useCallback, useState } from 'react';
+import { CustomStore, DataSource } from 'devextreme-react/common/data';
+import { ALERT_TIMEOUT, assistant, REGENERATION_TEXT } from './data.js';
+import { getAIResponse } from './service.js';
+
 const store = [];
 const customStore = new CustomStore({
-  key: "id",
+  key: 'id',
   load: () =>
     new Promise((resolve) => {
       setTimeout(() => {
@@ -30,19 +31,19 @@ const dataItemToMessage = (item) => ({
 const getMessageHistory = () => [...dataSource.items()].map(dataItemToMessage);
 const getErrorMessage = (err) => {
   if (err instanceof Error) return err.message;
-  if (typeof err === "string") return err;
-  return "Unknown error";
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
 };
 export const useApi = () => {
   const [alerts, setAlerts] = useState([]);
   const insertMessage = useCallback((data) => {
-    dataSource.store().push([{ type: "insert", data }]);
+    dataSource.store().push([{ type: 'insert', data }]);
   }, []);
   const updateLastMessageContent = useCallback((text) => {
     const lastMessage = dataSource.items().at(-1);
     dataSource.store().push([
       {
-        type: "update",
+        type: 'update',
         key: lastMessage.id,
         data: { text },
       },
@@ -73,7 +74,7 @@ export const useApi = () => {
         alertError(getErrorMessage(err));
       }
     },
-    [alertError, insertMessage]
+    [alertError, insertMessage],
   );
   const regenerateLastAIResponse = useCallback(async () => {
     setAlerts([]);
@@ -81,7 +82,7 @@ export const useApi = () => {
     updateLastMessageContent(REGENERATION_TEXT);
     try {
       const aiResponse = await getAIResponse(messageHistory.slice(0, -1));
-      if (typeof aiResponse === "string") {
+      if (typeof aiResponse === 'string') {
         updateLastMessageContent(aiResponse);
       }
     } catch (err) {
