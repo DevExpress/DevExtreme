@@ -11,7 +11,7 @@
 .dx-slider-wrapper {
   height: var(--dx-slider-wrapper-height);
 
-  @include dx-popover-arrow-size(14px, 2px); // dx-fixed-size: 14px arrow width and 2px offset
+  @include dx-popover-arrow-size(14px, 2px); // dx-literal-required: the mixin divides the width by sqrt(2), and var() cannot take part in Sass arithmetic
 }
 
 .dx-slider-bar {

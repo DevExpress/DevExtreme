@@ -1880,7 +1880,8 @@
       "stop-3"
     ],
     "text-area": [
-      "content"
+      "content",
+      "input-container"
     ],
     "number-box": [
       "spin",
