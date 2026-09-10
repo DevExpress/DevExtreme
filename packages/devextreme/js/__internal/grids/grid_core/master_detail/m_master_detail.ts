@@ -45,7 +45,8 @@ const initMasterDetail = function (that) {
 };
 
 export interface MasterDetailDataControllerExtension {
-  getRowIndicesForExpand: (key: RowKey) => number[];
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  getRowIndicesForExpand(key: RowKey): number[];
 }
 
 export const dataMasterDetailExtenderMixin = (

@@ -12,7 +12,7 @@ import {
   createTreeList,
 } from '@ts/grids/tree_list/__tests__/__mock__/helpers/utils';
 
-type ExposedDataController = DataController & MasterDetailDataControllerExtension;
+type MasterDetailDataController = DataController & MasterDetailDataControllerExtension;
 
 const DATA = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
@@ -24,7 +24,7 @@ describe('DataController getRowIndicesForExpand', () => {
     it('should reach master_detail through the adaptivity chain', async () => {
       const { instance } = await createDataGrid({ dataSource: DATA });
       await flushAsync();
-      const dataController = instance.getController('data') as unknown as ExposedDataController;
+      const dataController = instance.getController('data') as MasterDetailDataController;
 
       expect(dataController.getRowIndicesForExpand(1)).toEqual([0, 1]);
       expect(dataController.getRowIndicesForExpand(3)).toEqual([2, 3]);
@@ -38,7 +38,7 @@ describe('DataController getRowIndicesForExpand', () => {
     it('should reach master_detail through the adaptivity chain', async () => {
       const { instance } = await createTreeList({ dataSource: DATA });
       await flushAsync();
-      const dataController = instance.getController('data') as unknown as ExposedDataController;
+      const dataController = instance.getController('data') as MasterDetailDataController;
 
       expect(dataController.getRowIndicesForExpand(1)).toEqual([0, 1]);
       expect(dataController.getRowIndicesForExpand(3)).toEqual([2, 3]);
