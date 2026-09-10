@@ -20,7 +20,9 @@ A dataset in the format: { column1: value1, column2: value2, ...}.
 Instructions: The output must be in plain text and should not exceed 2000 characters.
 `;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AiService {
   chatService: AzureOpenAI;
 
