@@ -106,21 +106,21 @@ catalog:
 
 catalogs:
   angular:
-    "@angular-devkit/build-angular": ~20.3.21
-    "@angular-devkit/architect": ~0.2003.21
-    "@angular-devkit/schematics": ~20.3.21
-    "@angular/cli": ~20.3.21
-    "@angular/common": ~20.3.27
-    "@angular/compiler": ~20.3.27
-    "@angular/compiler-cli": ~20.3.27
-    "@angular/core": ~20.3.27
-    "@angular/forms": ~20.3.27
-    "@angular/platform-browser": ~20.3.27
-    "@angular/platform-browser-dynamic": ~20.3.27
-    "@angular/platform-server": ~20.3.27
-    "@angular/router": ~20.3.27
-    "ng-packagr": ~20.3.0
-    "typescript": ~5.8.0
+    "@angular-devkit/build-angular": ~21.2.23
+    "@angular-devkit/architect": ~0.2102.23
+    "@angular-devkit/schematics": ~21.2.23
+    "@angular/cli": ~21.2.23
+    "@angular/common": ~21.2.22
+    "@angular/compiler": ~21.2.22
+    "@angular/compiler-cli": ~21.2.22
+    "@angular/core": ~21.2.22
+    "@angular/forms": ~21.2.22
+    "@angular/platform-browser": ~21.2.22
+    "@angular/platform-browser-dynamic": ~21.2.22
+    "@angular/platform-server": ~21.2.22
+    "@angular/router": ~21.2.22
+    "ng-packagr": ~21.2.7
+    "typescript": ~5.9.3
     "zone.js": ~0.15.1
   tools:
     "devextreme-internal-tools": 22.0.0
