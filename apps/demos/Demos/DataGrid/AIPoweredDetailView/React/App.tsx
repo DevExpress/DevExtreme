@@ -27,13 +27,9 @@ export default function App() {
     }
   }, []);
 
-  const renderSparkleIcon = useCallback(() => {
-    return <div className="dx-icon-sparkle" />;
-  }, []);
+  const renderSparkleIcon = useCallback(() => <div className="dx-icon-sparkle" />, []);
 
-  const calculateModel = useCallback((data: Vehicle) => {
-    return `${data.TrademarkName} ${data.Name}`;
-  }, []);
+  const calculateModel = useCallback((data: Vehicle) => `${data.TrademarkName} ${data.Name}`, []);
 
   return (
     <>
