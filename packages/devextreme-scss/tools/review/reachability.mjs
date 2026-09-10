@@ -21,7 +21,24 @@
  *      playground/tier-reachability-audit.html, and this list is the material for its gallery: every
  *      new name here must be either proven nested or added as a root to registries.rootSelectors.
  *
- * Run: node tools/review/reachability.mjs [--report]
+ *   3) GATE (fails): a name declared and never read. Questions 1 and 2 both ask "the read happens,
+ *      does it land" — neither notices a name nothing reads at all. Such a name is still API: it
+ *      ships in the bundle, a user sets it and nothing moves. Before publication that is free to
+ *      fix, after publication the name cannot be withdrawn, which is why this one is pinned rather
+ *      than reported. _public.scss is generated from the Sass declarations regardless of whether
+ *      the resulting property is consumed, so build-time helpers leak out as dead API:
+ *      $tree-view-checkbox-offset only composes $tree-view-select-all-item-padding and is folded
+ *      away at build time, $scheduler-left-column-width has to stay a number because the base layer
+ *      multiplies it. Liveness is transitive — a name read only by another dead name is dead too —
+ *      so it is computed as a fixpoint from the reads in ordinary properties.
+ *
+ * Known gap, deliberately not gated here: a name that IS read, by a declaration that never wins.
+ * --dx-time-view-field-number-box-spin-touch-friendly-width is overwritten by the next declaration
+ * of the same property in the same rule; --dx-scheduler-timeline-date-table-cell-height loses
+ * `height` to a three-class selector. Deciding that needs the cascade, not the text, and a wrong
+ * verdict would be worse than none.
+ *
+ * Run: node tools/review/reachability.mjs [--report] [--update-scopes] [--update-unread]
  * With no built bundle it exits quietly with zero (the gate cannot judge what does not exist).
  */
 
@@ -200,6 +217,63 @@ unreviewed.forEach(([key, example]) => {
   process.stdout.write(`     or, having proven nesting with the runtime audit, add "${scope}" to nested-scopes.json["${component}"]\n`);
 });
 
+/* --- 4. gate: declared and never read --------------------------------------------------------
+ * Liveness spreads backwards from the ordinary properties: a tier name is live when a normal
+ * declaration reads it, or when a live tier name reads it. Everything the fixpoint does not reach
+ * is declared for nobody. The known list is pinned in unread-tier.json by exact set equality, the
+ * way the calc budget and the naming baseline are pinned: a name that becomes live is banked by
+ * regenerating, a name that goes dead is a review, not a rerun. Bank a drop with:
+ *
+ *   node tools/review/reachability.mjs --update-unread
+ */
+const declaredValues = new Map();
+root.walkDecls((decl) => {
+  if (!isTierName(decl.prop)) return;
+  declaredValues.set(decl.prop, [...(declaredValues.get(decl.prop) ?? []), decl.value]);
+});
+
+const live = new Set();
+const frontier = [];
+root.walkDecls((decl) => {
+  if (isTierName(decl.prop)) return;
+  readsOf(decl.value).forEach((name) => {
+    if (live.has(name)) return;
+    live.add(name);
+    frontier.push(name);
+  });
+});
+while (frontier.length) {
+  (declaredValues.get(frontier.pop()) ?? []).forEach((value) => readsOf(value).forEach((name) => {
+    if (live.has(name)) return;
+    live.add(name);
+    frontier.push(name);
+  }));
+}
+
+const unread = [...declaredAt.keys()].filter((name) => !live.has(name)).sort();
+const unreadPath = join(here, 'unread-tier.json');
+const pinned = JSON.parse(readFileSync(unreadPath, 'utf8'));
+
+if (process.argv.includes('--update-unread')) {
+  writeFileSync(unreadPath, `${JSON.stringify({ ...pinned, names: unread }, null, 2)}\n`);
+  process.stdout.write(`unread-tier.json rewritten: ${unread.length} name(s)\n`);
+}
+
+const appeared = unread.filter((name) => !pinned.names.includes(name));
+const revived = pinned.names.filter((name) => !unread.includes(name));
+
+appeared.forEach((name) => {
+  process.stdout.write(`✘ declared and never read: ${name}\n`);
+  process.stdout.write(`     declared on ${[...declaredAt.get(name)].sort().join(', ')}\n`);
+  process.stdout.write('     cure: read it where it belongs, or stop publishing it — a name that moves nothing\n');
+  process.stdout.write('     is still API once the theme ships, and then it cannot be withdrawn\n');
+});
+
+if (revived.length) {
+  process.stdout.write(`✘ ${revived.length} pinned name(s) are read now: ${revived.join(', ')}\n`);
+  process.stdout.write('     cure: bank the drop — node tools/review/reachability.mjs --update-unread\n');
+}
+
 crossScope.forEach(([key, list]) => {
   const [sel, prop] = key.split('§');
   process.stdout.write(`✘ cross-scope duplicate: ${prop}  @  ${sel}\n`);
@@ -210,5 +284,7 @@ crossScope.forEach(([key, list]) => {
 });
 
 process.stdout.write(`${orphans.size} read(s) outside the root text in ${seenScopes.size} scope(s) `
-  + `(${unreviewed.length} unreviewed), ${crossScope.length} cross-scope duplicate(s)\n`);
-process.exit(crossScope.length || unreviewed.length || portals.length ? 1 : 0);
+  + `(${unreviewed.length} unreviewed), ${crossScope.length} cross-scope duplicate(s), `
+  + `${unread.length} name(s) declared and never read (${appeared.length} new)\n`);
+process.exit(crossScope.length || unreviewed.length || portals.length
+  || appeared.length || revived.length ? 1 : 0);
