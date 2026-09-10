@@ -126,17 +126,17 @@ $(() => {
   }
 
   function getOutputAreaMinHeight() {
-    const isMaterial = $('.dx-theme-material').length > 0;
+    const isMaterial = DevExpress.ui.themes.current().startsWith('material');
     if (isMaterial) return 68;
 
     return 56;
   }
 
   function getOutputAreaMaxHeight() {
-    const isMaterial = $('.dx-theme-material').length > 0;
+    const isMaterial = DevExpress.ui.themes.current().startsWith('material');
     if (isMaterial) return 244;
 
-    const isGeneric = $('.dx-theme-generic').length > 0;
+    const isGeneric = DevExpress.ui.themes.current().startsWith('generic');
     if (isGeneric) return 178;
 
     return 196;

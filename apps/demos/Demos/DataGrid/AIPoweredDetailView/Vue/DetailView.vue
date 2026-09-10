@@ -81,6 +81,7 @@ import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-gr
 import { DxButton } from 'devextreme-vue/button';
 import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxLoadPanel, DxPosition } from 'devextreme-vue/load-panel';
+import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT, type AIMessage } from './service.ts';
 import { type Vehicle, type SubmitEvent } from './data.ts';
 
@@ -97,17 +98,17 @@ const suggestions = [
 ];
 
 const outputAreaMinHeight = (() => {
-  const isMaterial = document.querySelector('.dx-theme-material');
+  const isMaterial = themes.current().startsWith('material');
   if (isMaterial) return 68;
 
   return 56;
 })();
 
 const outputAreaMaxHeight = (() => {
-  const isMaterial = document.querySelector('.dx-theme-material');
+  const isMaterial = themes.current().startsWith('material');
   if (isMaterial) return 244;
 
-  const isGeneric = document.querySelector('.dx-theme-generic');
+  const isGeneric = themes.current().startsWith('generic');
   if (isGeneric) return 178;
 
   return 196;

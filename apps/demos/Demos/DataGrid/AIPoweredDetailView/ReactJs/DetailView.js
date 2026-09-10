@@ -4,6 +4,7 @@ import { ButtonGroup } from 'devextreme-react/button-group';
 import { Button } from 'devextreme-react/button';
 import { TextArea } from 'devextreme-react/text-area';
 import { LoadPanel, Position } from 'devextreme-react/load-panel';
+import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT } from './service.js';
 
 const promptElementAttr = { class: 'prompt-editor' };
@@ -38,14 +39,14 @@ const DetailView = ({ data: templateData }) => {
     return 'Resubmit';
   }, [responseValue, isError]);
   const outputAreaMinHeight = useMemo(() => {
-    const isMaterial = document.querySelector('.dx-theme-material');
+    const isMaterial = themes.current().startsWith('material');
     if (isMaterial) return 68;
     return 56;
   }, []);
   const outputAreaMaxHeight = useMemo(() => {
-    const isMaterial = document.querySelector('.dx-theme-material');
+    const isMaterial = themes.current().startsWith('material');
     if (isMaterial) return 244;
-    const isGeneric = document.querySelector('.dx-theme-generic');
+    const isGeneric = themes.current().startsWith('generic');
     if (isGeneric) return 178;
     return 196;
   }, []);

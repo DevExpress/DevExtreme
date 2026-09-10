@@ -4,6 +4,7 @@ import { DxTextBoxModule, DxButtonGroupModule, DxButtonModule, DxTextAreaModule,
 import { type DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 import { type DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
 import { type DxButtonTypes } from 'devextreme-angular/ui/button';
+import themes from 'devextreme/ui/themes';
 import { type Vehicle } from '../app.service';
 import { AiService, type AIMessage } from '../ai/ai.service';
 
@@ -46,8 +47,8 @@ export class DetailViewComponent {
   ];
 
   constructor(private readonly aiService: AiService, private readonly changeDetectorRef: ChangeDetectorRef) {
-    const isMaterial = document.querySelector('.dx-theme-material');
-    const isGeneric = document.querySelector('.dx-theme-generic');
+    const isMaterial = themes.current().startsWith('material');
+    const isGeneric = themes.current().startsWith('generic');
 
     if (isMaterial) {
       this.outputAreaMinHeight = 68;
