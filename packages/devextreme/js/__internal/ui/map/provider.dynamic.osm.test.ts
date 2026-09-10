@@ -120,14 +120,12 @@ describe('OSM bounds', () => {
     ] as [number[][], number[], number, number][])(
       'does not cut route segments in %j with markers %j',
       (routeLongitudes, markerLongitudes, west, east) => {
-        const routes = routeLongitudes.map((longitudes) => (
-          longitudes.length ? getRouteBounds(longitudes.map((lng) => ({ lat: 10, lng }))) : {}
-        ));
+        const routes = routeLongitudes
+          .filter((longitudes) => longitudes.length)
+          .map((longitudes) => getRouteBounds(longitudes.map((lng) => ({ lat: 10, lng }))));
         const markers = markerLongitudes.map((lng) => ({ lat: 10, lng }));
         const routeCorners = routes.flatMap(({ northEast, southWest }) => (
-          northEast && southWest
-            ? [northEast, southWest].map(([lat, lng]) => ({ lat, lng }))
-            : []
+          [northEast, southWest].map(([lat, lng]) => ({ lat, lng }))
         ));
         expect(createBounds([...routeCorners, ...markers], routes)).toEqual({
           northEast: { lat: 10, lng: east },
