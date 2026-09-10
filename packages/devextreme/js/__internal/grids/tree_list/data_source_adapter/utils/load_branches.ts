@@ -1,12 +1,3 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @stylistic/comma-dangle */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable no-plusplus */
-/* eslint-disable @typescript-eslint/init-declarations */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import ArrayStore from '@js/common/data/array_store';
 import query from '@js/common/data/query';
 import storeHelper from '@js/common/data/store_helper';
@@ -14,38 +5,51 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import type { DataSource } from '@ts/data/data_source/data_source';
+import type { StoreLoadOptions } from '@ts/data/data_source/types';
+import type { DataFilter, DataFilterPredicate } from '@ts/grids/grid_core/data_controller/types';
 import type { CustomLoader, CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import type { LoadOperation, TreeNode } from '../types';
 import { createIdFilter } from './create_id_filter';
 
-export interface LoadBranchesContext {
-  dataSource: DataSource,
-  customLoader: CustomLoader,
-  rootValue: any;
-  maxFilterLengthInRequest: any;
-  parentIdExpr: any;
-  keyExpr: any;
-  _parentIdGetter: (data: any) => any;
-  _keyGetter: (data: any) => any;
-  isRowExpanded: (data: any) => boolean;
-  getCachedData: () => any;
-  setCachedData: (data: any) => void;
-  getLastOperationId: () => any,
-  getNodeByKey: (key: any) => TreeNode | undefined,
-}
-
 const { queryByOptions } = storeHelper;
 
-const applySorting = (data: any[], sort: any): any => queryByOptions(
+export interface LoadBranchesContext {
+  dataSource: DataSource;
+  customLoader: CustomLoader;
+  rootValue: unknown;
+  maxFilterLengthInRequest: number;
+  parentIdExpr: unknown;
+  keyExpr: unknown;
+  _parentIdGetter: (data: unknown) => unknown;
+  _keyGetter: (data: unknown) => unknown;
+  isRowExpanded: (key: unknown) => boolean;
+  getCachedData: () => RawItemData[] | undefined;
+  setCachedData: (data: RawItemData[]) => void;
+  getLastOperationId: () => number | undefined;
+  getNodeByKey: (key: unknown) => TreeNode | undefined;
+}
+
+interface InfoToLoad {
+  keyMap: Record<string, boolean>;
+  keys: unknown[];
+}
+
+const applySorting = (
+  data: RawItemData[],
+  sort: StoreLoadOptions['sort'],
+): RawItemData[] => queryByOptions(
   query(data),
   {
     sort,
   },
-).toArray();
+).toArray() as RawItemData[];
 
-const isOperationIdOutdated = (context: LoadBranchesContext, operationId): boolean => {
+const isOperationIdOutdated = (
+  context: LoadBranchesContext,
+  operationId: number | undefined,
+): boolean => {
   const lastOperationId = context.getLastOperationId();
 
   return operationId !== undefined
@@ -53,25 +57,34 @@ const isOperationIdOutdated = (context: LoadBranchesContext, operationId): boole
     && operationId !== lastOperationId;
 };
 
-const generateInfoToLoad = (context: LoadBranchesContext, data, needChildren) => {
-  let key;
-  const keyMap = {};
-  const resultKeyMap = {};
-  const resultKeys: any[] = [];
+const generateInfoToLoad = (
+  context: LoadBranchesContext,
+  data: RawItemData[],
+  needChildren?: boolean,
+): InfoToLoad => {
+  const keyMap: Record<string, boolean> = {};
+  const resultKeyMap: Record<string, boolean> = {};
+  const resultKeys: unknown[] = [];
   const { rootValue } = context;
-  let i;
 
-  for (i = 0; i < data.length; i++) {
-    key = needChildren ? context._parentIdGetter(data[i]) : context._keyGetter(data[i]);
-    keyMap[key] = true;
+  for (const item of data) {
+    const key = needChildren
+      ? context._parentIdGetter(item)
+      : context._keyGetter(item);
+
+    keyMap[key as string] = true;
   }
 
-  for (i = 0; i < data.length; i++) {
-    key = needChildren ? context._keyGetter(data[i]) : context._parentIdGetter(data[i]);
-    const needToLoad = needChildren ? context.isRowExpanded(key) : key !== rootValue;
+  for (const item of data) {
+    const key = needChildren
+      ? context._keyGetter(item)
+      : context._parentIdGetter(item);
+    const needToLoad = needChildren
+      ? context.isRowExpanded(key)
+      : key !== rootValue;
 
-    if (!keyMap[key] && !resultKeyMap[key] && needToLoad) {
-      resultKeyMap[key] = true;
+    if (!keyMap[key as string] && !resultKeyMap[key as string] && needToLoad) {
+      resultKeyMap[key as string] = true;
       resultKeys.push(key);
     }
   }
@@ -82,38 +95,33 @@ const generateInfoToLoad = (context: LoadBranchesContext, data, needChildren) =>
   };
 };
 
-const loadParentsOrChildren = (context: LoadBranchesContext, data, options, needChildren?): any => {
+const loadParentsOrChildren = (
+  context: LoadBranchesContext,
+  data: RawItemData[],
+  options: LoadOperation,
+  needChildren?: boolean,
+): DeferredObj<RawItemData[]> => {
+  const d = Deferred<RawItemData[]>();
+
   if (isOperationIdOutdated(context, options.operationId)) {
-    context.dataSource.cancel(options.operationId);
-    const rejectedDeferred = Deferred();
-    rejectedDeferred.reject();
-    return rejectedDeferred;
+    context.dataSource.cancel(options.operationId as number);
+    return d.reject();
   }
 
-  let filter;
-  let needLocalFiltering;
   const { keys, keyMap } = generateInfoToLoad(context, data, needChildren);
-  // @ts-expect-error
-  const d = new Deferred();
-  const isRemoteFiltering = options.remoteOperations.filtering;
-  const { maxFilterLengthInRequest } = context;
+
+  const isRemoteFiltering = !!options.remoteOperations?.filtering;
   const sort = options.storeLoadOptions?.sort ?? options.loadOptions?.sort;
-  let loadOptions = isRemoteFiltering ? options.storeLoadOptions : options.loadOptions;
 
-  const concatLoadedData = (loadedData): any => {
+  const concatLoadedData = (loadedData: RawItemData[]): RawItemData[] => {
     if (isRemoteFiltering) {
-      const updatedData = applySorting(
-        context.getCachedData().concat(loadedData),
-        sort,
-      );
+      const cachedData = context.getCachedData() as RawItemData[];
+      const sortedData = applySorting(cachedData.concat(loadedData), sort);
 
-      context.setCachedData(updatedData);
+      context.setCachedData(sortedData);
     }
 
-    return applySorting(
-      data.concat(loadedData),
-      sort,
-    );
+    return applySorting(data.concat(loadedData), sort);
   };
 
   if (!keys.length) {
@@ -121,42 +129,49 @@ const loadParentsOrChildren = (context: LoadBranchesContext, data, options, need
   }
 
   let cachedNodes = keys
-    .map((id) => context.getNodeByKey(id))
-    .filter((node) => node?.data) as TreeNode[];
+    .map((key) => context.getNodeByKey(key))
+    .filter((node): node is TreeNode => !!node?.data);
 
   if (cachedNodes.length === keys.length) {
     if (needChildren) {
-      cachedNodes = cachedNodes.reduce((result: TreeNode[], node) => result.concat(node.children), []);
+      cachedNodes = cachedNodes.flatMap((node) => node.children);
     }
 
     if (cachedNodes.length) {
       return loadParentsOrChildren(
         context,
-        concatLoadedData(cachedNodes.map((node) => node.data)),
+        concatLoadedData(cachedNodes.map((node) => node.data as RawItemData)),
         options,
-        needChildren
+        needChildren,
       );
     }
   }
 
   const keyExpr = needChildren ? context.parentIdExpr : context.keyExpr;
-  filter = createIdFilter(keyExpr, keys);
-  const filterLength = encodeURI(JSON.stringify(filter)).length;
+  const idFilter = createIdFilter(keyExpr, keys);
+  const filterLength = encodeURI(JSON.stringify(idFilter)).length;
+  const isFilterTooLong = filterLength > context.maxFilterLengthInRequest;
 
-  if (filterLength > maxFilterLengthInRequest) {
-    filter = (itemData) => {
-      const key = needChildren
-        ? context._parentIdGetter(itemData)
-        : context._keyGetter(itemData);
-      return keyMap[key];
-    };
+  const keyMapFilter: DataFilterPredicate = (itemData) => {
+    const key = needChildren
+      ? context._parentIdGetter(itemData)
+      : context._keyGetter(itemData);
 
-    needLocalFiltering = isRemoteFiltering;
-  }
+    return !!keyMap[key as string];
+  };
 
-  loadOptions = extend({}, loadOptions, {
-    filter: !needLocalFiltering ? filter : null,
-  });
+  const filter: DataFilter = isFilterTooLong ? keyMapFilter : idFilter;
+  // A remote store cannot run the predicate, so it loads unfiltered
+  // and the predicate is applied to the result below.
+  const needLocalFiltering = isFilterTooLong && isRemoteFiltering;
+
+  const loadOptions = extend(
+    {},
+    isRemoteFiltering ? options.storeLoadOptions : options.loadOptions,
+    {
+      filter: needLocalFiltering ? null : filter,
+    },
+  );
 
   const loadBranchItemsDeferred = options.fullData
     ? new ArrayStore(options.fullData).load(loadOptions)
@@ -164,29 +179,31 @@ const loadParentsOrChildren = (context: LoadBranchesContext, data, options, need
 
   loadBranchItemsDeferred
     .done((loadResult: CustomLoadResult | unknown[]) => {
-      let loadedData = Array.isArray(loadResult) ? loadResult : loadResult.data;
+      const loadedData = Array.isArray(loadResult)
+        ? loadResult as RawItemData[]
+        : loadResult.data;
 
       if (isOperationIdOutdated(context, options.operationId)) {
         d.reject();
         return;
       }
 
-      if (loadedData.length) {
-        if (needLocalFiltering) {
-          loadedData = query(loadedData).filter(filter).toArray();
-        }
-
-        loadParentsOrChildren(
-          context,
-          concatLoadedData(loadedData),
-          options,
-          needChildren
-        ).done(d.resolve).fail(d.reject);
-      } else {
+      if (!loadedData.length) {
         d.resolve(data);
+        return;
       }
+
+      const branchData = needLocalFiltering
+        ? query(loadedData).filter(keyMapFilter).toArray() as RawItemData[]
+        : loadedData;
+
+      loadParentsOrChildren(context, concatLoadedData(branchData), options, needChildren)
+        .done((nextLoadedData: RawItemData[]): void => { d.resolve(nextLoadedData); })
+        // @ts-expect-error badly typed Deferred.fail
+        .fail((...args: unknown[]): void => { d.reject(...args); });
     })
-    .fail(d.reject);
+    // @ts-expect-error badly typed Deferred.fail
+    .fail((...args: unknown[]): void => { d.reject(...args); });
 
   return d;
 };
@@ -198,19 +215,24 @@ export const loadBranches = (
   needChildren: boolean,
 ): DeferredObj<RawItemData[]> => {
   const d = Deferred<RawItemData[]>();
+  const resolve = (branchData: RawItemData[]): void => { d.resolve(branchData); };
+  const reject = (...args: unknown[]): void => {
+    // @ts-expect-error badly typed Deferred.reject
+    d.reject(...args);
+  };
 
   loadParentsOrChildren(context, data, options)
-    .done((data) => {
+    .done((parentsData) => {
       if (!needChildren) {
-        d.resolve(data);
+        resolve(parentsData);
         return;
       }
 
-      loadParentsOrChildren(context, data, options, true)
-        .done(d.resolve)
-        .fail(d.reject);
+      loadParentsOrChildren(context, parentsData, options, true)
+        .done(resolve)
+        .fail(reject);
     })
-    .fail(d.reject);
+    .fail(reject);
 
   return d;
 };

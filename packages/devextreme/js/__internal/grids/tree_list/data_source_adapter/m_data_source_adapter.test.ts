@@ -134,7 +134,7 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
 
     // The context snapshots the dataSource and the customLoader, so it has to be
     // built after the stubs above are in place.
-    const context = (dataSourceAdapter as any).createBranchLoaderContext();
+    const context = (dataSourceAdapter as any).getLoadBranchesContext();
 
     loadBranches(context, childData, options, false);
 
