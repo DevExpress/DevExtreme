@@ -29,4 +29,4 @@ $toolbar-menu-section-border-block-end: ds.$border-width-10 solid !default;
 // Base-layer sizing injected with design tokens (wave B2)
 $toolbar-item-padding: 0 ds.$spacing-50 !default;
 $toolbar-group-margin: 0 ds.$spacing-100 !default;
-$toolbar-text-editor-width: 150px !default; // dx-offscale: 150px
+$toolbar-text-editor-width: ds.$spacing-1600 !default;
