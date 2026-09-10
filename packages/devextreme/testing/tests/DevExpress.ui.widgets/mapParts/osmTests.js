@@ -2074,6 +2074,39 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         });
     });
 
+    [
+        ['null', null],
+        ['undefined', undefined],
+        ['NaN latitude', { lat: NaN, lng: 10 }],
+        ['infinite longitude', { lat: 10, lng: Infinity }],
+        ['incomplete tuple', [10]],
+        ['extra tuple component', [10, 20, 30]],
+        ['numeric strings', { lat: '10', lng: '20' }],
+        ['empty object', {}],
+        ['boolean', true]
+    ].forEach(([name, location]) => {
+        QUnit.test(`invalid non-string waypoint skips routing without a zero-coordinate fallback (${name})`, async function(assert) {
+            const calculateLocation = sinon.spy();
+            const calculateRoute = sinon.stub().returns(Promise.resolve(path));
+            const onRouteAdded = sinon.spy();
+            const onRouteRemoved = sinon.spy();
+            const map = await createMap({
+                providerConfig: { tileServer, calculateLocation, calculateRoute },
+                onRouteAdded,
+                onRouteRemoved
+            });
+            const invalidRoute = { locations: [location, [40.8, -73.9]] };
+
+            assert.strictEqual(await map.addRoute(invalidRoute), undefined, 'invalid waypoints do not create a route');
+            assert.ok(calculateLocation.notCalled, 'non-string waypoints do not invoke geocoding');
+            assert.ok(calculateRoute.notCalled, 'invalid waypoints are not passed to the route service');
+            assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'no route is drawn');
+            assert.ok(onRouteAdded.notCalled, 'no added event is fired');
+            await map.removeRoute(invalidRoute);
+            assert.ok(onRouteRemoved.notCalled, 'no removed event is fired');
+        });
+    });
+
     QUnit.test('explicit zero coordinates and a successfully calculated zero location are valid route waypoints', async function(assert) {
         const calculateLocation = sinon.stub().returns(Promise.resolve({ lat: 0, lng: 0 }));
         const calculateRoute = sinon.stub().returns(Promise.resolve(path));

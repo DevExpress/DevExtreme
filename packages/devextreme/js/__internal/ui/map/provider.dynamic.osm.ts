@@ -502,16 +502,14 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
   }
 
   _resolveRouteLocation(location: LocationOption): Promise<MapLocation | undefined> {
-    if (typeof location !== 'string') {
-      return this._resolveLocation(location);
-    }
-
     const coordinates = this._getLatLng(location);
     if (coordinates && Number.isFinite(coordinates.lat) && Number.isFinite(coordinates.lng)) {
       return Promise.resolve(coordinates);
     }
 
-    return this._geocodeLocation(location);
+    return typeof location === 'string'
+      ? this._geocodeLocation(location)
+      : Promise.resolve(undefined);
   }
 
   _calculateRoute(options: RouteOptions): Promise<MapLocation[] | undefined> {
