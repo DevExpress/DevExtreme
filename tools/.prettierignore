@@ -1,0 +1,3 @@
+# Shared by every tools/* package. Prettier does not search parent directories for this file,
+# so each package passes it explicitly via --ignore-path.
+*.json

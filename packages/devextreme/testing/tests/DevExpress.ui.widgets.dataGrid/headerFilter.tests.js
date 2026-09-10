@@ -5,7 +5,6 @@ import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 import $ from 'jquery';
 import ArrayStore from 'common/data/array_store';
-import { noop } from 'core/utils/common';
 import ODataStore from 'common/data/odata/store';
 import devices from '__internal/core/m_devices';
 import { DataSource } from 'common/data/data_source/data_source';
@@ -536,10 +535,10 @@ QUnit.module('Header Filter', {
         const that = this;
         const testElement = $('#container');
 
+        that.generateItems(5);
         that.setupDataGrid();
 
-        that.dataController.dataSource = noop;
-
+        that.dataSourceController.disposeAdapter();
 
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
@@ -4085,7 +4084,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.setupDataGrid();
 
         const column = that.columnsController.getVisibleColumns()[0];
-        that.dataController.store().on('loading', function(options) {
+        that.dataSourceController.store().on('loading', function(options) {
             loadOptions = options;
         });
 

@@ -18,9 +18,9 @@ export interface RefreshOptions {
 }
 
 export interface UserState {
-  searchText: string | undefined;
   pageIndex: number;
   pageSize: number;
+  searchText?: string;
   expandedRowKeys?: unknown[];
 }
 
@@ -72,6 +72,13 @@ export interface ProcessedItem extends GeneratedItem {
   update?: RowUpdate;
   watch?: RowWatch;
 }
+
+type LoadAllItemsCallback = (items: ProcessedItem[], totalAggregates?: unknown[]) => void;
+
+export type LoadAllItemsDeferred = Omit<DeferredObj<ProcessedItem[]>, 'done' | 'resolve'> & {
+  done: (callback: LoadAllItemsCallback) => LoadAllItemsDeferred;
+  resolve: LoadAllItemsCallback;
+};
 
 /** changes */
 

@@ -3,6 +3,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import type { Properties } from '@js/ui/data_grid';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ItemProcessingOptions, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import { countRowsBefore } from '@ts/grids/grid_core/data_controller/utils/row_changes';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type {
   ModuleType,
@@ -16,7 +17,7 @@ import type {
   ChangeRowExpandArgs, GroupItem, ProcessGroupItemsOptions,
 } from '../types';
 import {
-  isGroupNode, isGroupRow, isSameContinuationState, isSameExpandedState,
+  getGroupColumnIndices, isGroupNode, isGroupRow, isSameContinuationState, isSameExpandedState,
 } from '../utils';
 
 export const groupingDataControllerExtender = (
@@ -132,6 +133,25 @@ export const groupingDataControllerExtender = (
     }
 
     return resultItems;
+  }
+
+  protected adjustInsertRowIndex(visibleRowIndex: number): number {
+    const groupRowCount = countRowsBefore(this.getVisibleRows(), visibleRowIndex, 'group');
+
+    return super.adjustInsertRowIndex(visibleRowIndex) + groupRowCount;
+  }
+
+  protected getChangedColumnIndices(
+    oldItem: ProcessedItem,
+    newItem: ProcessedItem,
+    visibleRowIndex: number,
+    isLiveUpdate?: boolean,
+  ): number[] | undefined {
+    if (oldItem.rowType === 'group' && newItem.rowType === 'group') {
+      return getGroupColumnIndices(oldItem, newItem);
+    }
+
+    return super.getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
   }
 
   protected isSameRowState(item1: ProcessedItem, item2: ProcessedItem): boolean {

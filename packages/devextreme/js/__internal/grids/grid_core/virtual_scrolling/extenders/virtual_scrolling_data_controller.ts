@@ -25,7 +25,7 @@ import type {
   DataChange, PagingOptionName, PagingResult, ProcessedItem, RefreshOptions,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import gridCoreUtils from '../../m_utils';
@@ -123,7 +123,7 @@ export const virtualScrollingDataControllerExtender = (
         const rowIndex = Math.floor(itemIndex) - rowIndexOffset;
         const { component } = this;
         const scrollable = component.getScrollable && component.getScrollable();
-        const isSortingOperation = this.dataSource()?.operationTypes()?.sorting;
+        const isSortingOperation = this.dataSourceController.operationTypes()?.sorting;
 
         if (scrollable && !isSortingOperation && rowIndex >= 0) {
           const rowElement = component.getRowElement(rowIndex);
@@ -931,6 +931,28 @@ export const virtualScrollingDataControllerExtender = (
     }
 
     return result;
+  }
+
+  protected resolvePaginate(enabled: boolean | undefined): boolean | undefined {
+    if (enabled === undefined) {
+      return undefined;
+    }
+
+    return enabled || isVirtualPaging(this);
+  }
+
+  protected requiresTotalCount(): boolean {
+    return !isInfiniteMode(this);
+  }
+
+  public optionChanged(args: OptionChanged): void {
+    if (args.name === 'scrolling') {
+      args.handled = true;
+      this.reset();
+      return;
+    }
+
+    super.optionChanged(args);
   }
 
   public isEmpty(): boolean {

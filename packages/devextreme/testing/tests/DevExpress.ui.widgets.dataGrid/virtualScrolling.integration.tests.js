@@ -6916,7 +6916,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         this.clock.tick(10);
         // assert
         assert.ok(dataGrid.getController('data').viewportSize() > 0);
-        assert.ok(!dataGrid.getController('data').dataSource().requireTotalCount());
+        assert.ok(!dataGrid.getController('dataSource').getAdapter().requireTotalCount());
     });
 
     QUnit.test('New mode. Load panel should not be displayed at the bottom when all items are loaded', function(assert) {

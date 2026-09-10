@@ -38,6 +38,8 @@ describe('Builder integration tests', () => {
     return buildTheme(config).then((result) => {
       expect(result.css).not.toBe('');
       expect(result.swatchSelector).toBe('.dx-swatch-custom-scheme');
+      expect(result.css).not.toMatch(/\.dx-swatch-custom-scheme\s*:root/);
+      expect(result.css).toMatch(/\.dx-swatch-custom-scheme\s*\{[^}]*--dx-color-primary:/);
     });
   }, buildTimeout);
 
@@ -117,6 +119,22 @@ describe('Builder integration tests', () => {
     return buildTheme(config).then((result) => {
       const themeBuilderCss = normalizeCss(result.css);
       const cssPath = path.resolve(__dirname, '../../../devextreme/artifacts/css/dx.light.css');
+      const distributionCss = normalizeCss(readFileSync(cssPath, 'utf8'));
+      expect(themeBuilderCss).toBe(distributionCss);
+    });
+  }, buildTimeout);
+
+  test('Theme built without parameters is the same that in distribution (fluent)', async () => {
+    const config: ConfigSettings = {
+      command: commands.BUILD_THEME,
+      outputColorScheme: 'custom-scheme',
+      baseTheme: 'fluent.blue.light',
+      items: [],
+    };
+
+    return buildTheme(config).then((result) => {
+      const themeBuilderCss = normalizeCss(result.css);
+      const cssPath = path.resolve(__dirname, '../../../devextreme/artifacts/css/dx.fluent.blue.light.css');
       const distributionCss = normalizeCss(readFileSync(cssPath, 'utf8'));
       expect(themeBuilderCss).toBe(distributionCss);
     });

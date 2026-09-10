@@ -6,11 +6,11 @@
 @use "../../material/tooltip/colors" as *;
 @use "../../base/slider";
 
-$material-slider-radius: 50%;
-$material-slider-handle-active-border-width: 2px;
-$material-slider-handle-inner-size: 12px;
-$material-slider-handle-inner-border-width: 1px;
-$material-slider-handle-inner-disabled-size: 2px;
+$material-slider-radius: 50% !default;
+$material-slider-handle-active-border-width: 2px !default;
+$material-slider-handle-inner-size: 12px !default;
+$material-slider-handle-inner-border-width: 1px !default;
+$material-slider-handle-inner-disabled-size: 2px !default;
 
 .dx-slider-wrapper {
   height: $material-slider-wrapper-height;

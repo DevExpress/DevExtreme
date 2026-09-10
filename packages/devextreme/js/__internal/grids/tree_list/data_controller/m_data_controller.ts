@@ -2,23 +2,13 @@ import { equalByValue } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { DataController, dataControllerModule } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { DataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { RowKey } from '@ts/grids/grid_core/m_types';
 
 import type { DataSourceAdapterTreeList } from '../data_source_adapter/m_data_source_adapter';
-import dataSourceAdapterProvider from '../data_source_adapter/m_data_source_adapter';
 import treeListCore from '../m_core';
 
 export class TreeListDataController extends DataController {
   public declare _dataSource?: DataSourceAdapterTreeList | null;
-
-  public dataSource(): DataSourceAdapterTreeList | undefined {
-    return this._dataSource ?? undefined;
-  }
-
-  protected _getDataSourceAdapterProvider(): DataSourceAdapterProvider {
-    return dataSourceAdapterProvider;
-  }
 
   private _getNodeLevel(node) {
     let level = -1;
@@ -81,18 +71,6 @@ export class TreeListDataController extends DataController {
     this.createAction('onRowCollapsed');
 
     super.init.apply(this, arguments as any);
-  }
-
-  public keyOf(data) {
-    const dataSource = this._dataSource;
-
-    if (dataSource) {
-      return dataSource.keyOf(data);
-    }
-  }
-
-  public key() {
-    return this._dataSource?.getKeyExpr();
   }
 
   public publicMethods() {

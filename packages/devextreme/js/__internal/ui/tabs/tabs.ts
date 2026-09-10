@@ -9,7 +9,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
-import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
@@ -27,8 +26,13 @@ import type {
 } from '@js/ui/tabs';
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { render } from '@ts/core/utils/ink_ripple';
+import { getImageAriaLabel, getImageContainer } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { CollectionItemInfo, InkRippleEvent } from '@ts/ui/collection/collection_widget.base';
+import type {
+  CollectionItemInfo,
+  InkRippleEvent,
+  PostprocessRenderItemInfo,
+} from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import {
@@ -136,6 +140,8 @@ export interface TabsProperties extends Properties, Omit<
 
   badgeExpr?: (data) => string | undefined;
 
+  _itemAriaLabelExpr?: (data: Item) => string | undefined;
+
   _indicatorPosition?: Position | null;
 }
 
@@ -179,6 +185,13 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
       useInkRipple: false,
       badgeExpr(data: Item): string | undefined {
         return data?.badge;
+      },
+      _itemAriaLabelExpr(data: Item): string | undefined {
+        if (data?.text || data?.html || !data?.icon) {
+          return undefined;
+        }
+
+        return getImageAriaLabel(data.icon);
       },
       _itemAttributes: { role: 'tab' },
       _indicatorPosition: null,
@@ -316,6 +329,20 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
 
   _postProcessRenderItems(): void {
     this._renderScrolling();
+  }
+
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<Item>): void {
+    super._postprocessRenderItem(args);
+
+    this._renderItemAriaLabel(args);
+  }
+
+  _renderItemAriaLabel({ itemData, itemElement }: PostprocessRenderItemInfo<Item>): void {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _itemAriaLabelExpr } = this.option();
+    const label = _itemAriaLabelExpr?.(itemData);
+
+    this.setAria('label', label, itemElement);
   }
 
   _renderScrolling(): void {
@@ -836,6 +863,7 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
         super._optionChanged(args);
         break;
       case 'badgeExpr':
+      case '_itemAriaLabelExpr':
         this._invalidate();
         break;
       case 'focusedElement': {

@@ -7,6 +7,7 @@ import errors from '@js/ui/widget/ui.errors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 
 import { Controller } from '../m_modules';
 import type {
@@ -21,6 +22,8 @@ export class AIAssistantIntegrationController extends Controller {
   private columnsController!: ColumnsController;
 
   private dataController!: DataController;
+
+  private dataSourceController!: DataSourceController;
 
   private getAICommandCallbacks(
     callbacks?: RequestCallbacks<ExecuteGridAssistantCommandResult>,
@@ -46,7 +49,7 @@ export class AIAssistantIntegrationController extends Controller {
 
   protected buildContext(): GridContext {
     return {
-      keyExpr: this.option('keyExpr') ?? this.dataController.getDataSource()?.store()?.key(),
+      keyExpr: this.option('keyExpr') ?? this.dataSourceController.store()?.key(),
       columns: this.buildColumnsContext(),
       filtering: {
         filterValue: this.option('filterValue'),
@@ -97,6 +100,7 @@ export class AIAssistantIntegrationController extends Controller {
   public init(): void {
     this.createAction('onAIAssistantRequestCreating');
     this.dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this.columnsController = this.getController('columns');
   }
 

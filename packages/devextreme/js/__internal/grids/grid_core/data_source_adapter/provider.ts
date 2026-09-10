@@ -2,16 +2,16 @@ import type { ModuleType } from '../m_types';
 import type DataSourceAdapter from './m_data_source_adapter';
 import type { DataSourceAdapterProvider } from './types';
 
-export function createDataSourceAdapterProvider(
-  BaseType: ModuleType<DataSourceAdapter>,
-): DataSourceAdapterProvider {
+export function createDataSourceAdapterProvider<TAdapter extends DataSourceAdapter>(
+  BaseType: ModuleType<TAdapter>,
+): DataSourceAdapterProvider<TAdapter> {
   let AdapterType = BaseType;
 
   return {
     extend(extender): void {
-      AdapterType = extender(AdapterType);
+      AdapterType = extender(AdapterType) as ModuleType<TAdapter>;
     },
-    create(component): DataSourceAdapter {
+    create(component): TAdapter {
       return new AdapterType(component);
     },
   };

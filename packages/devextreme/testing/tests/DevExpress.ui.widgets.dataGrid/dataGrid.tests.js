@@ -1577,7 +1577,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         // assert
         assert.ok(dataGrid.getController('data').isEmpty(), 'no data');
-        assert.ok(!dataGrid.getController('data').dataSource(), 'no dataSource');
+        assert.ok(!dataGrid.getController('dataSource').getAdapter(), 'no dataSource');
         assert.strictEqual(dataGrid.getController('data')._cachedProcessedItems, null, 'cached processed items are cleared'); // T1045202
         assert.strictEqual(dataGrid.getController('columns')._dataSource, null, 'no dataSource inside columnsController'); // T1045202
         assert.equal(dataGrid.getController('data').items().length, 0, 'items count');
@@ -2101,7 +2101,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         });
 
         // assert
-        const dataSource = dataGrid.getController('data').dataSource();
+        const dataSource = dataGrid.getController('dataSource').getAdapter();
         assert.ok(!errorMessage, 'No error messages');
         assert.ok(dataSource, 'dataSource assigned');
         assert.ok(dataSource.requireTotalCount(), 'requireTotalCount assigned');

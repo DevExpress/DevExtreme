@@ -5,7 +5,7 @@
 @use "sizes" as *;
 @use "../../base/slider";
 
-$generic-slider-radius: 2px;
+$generic-slider-radius: 2px !default;
 
 .dx-slider {
   .dx-tooltip-wrapper {
