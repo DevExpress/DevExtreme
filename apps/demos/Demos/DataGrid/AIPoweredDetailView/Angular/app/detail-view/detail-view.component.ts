@@ -30,7 +30,6 @@ export class DetailViewComponent {
 
   responseValue: string = '';
 
-  isSubmitButtonDisabled: boolean = true;
 
   isLoading: boolean = false;
 
