@@ -12,6 +12,7 @@ const currentDate = new Date(2021, 3, 27);
 const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const typeGroups = ['typeId'];
 const priorityGroups = ['priorityId'];
+const colCountByScreen = { xs: 3 };
 const DateCell = ({ data: cellData }) => (
   <>
     <div className="name">{dayOfWeekNames[cellData.date.getDay()]}</div>
@@ -67,7 +68,7 @@ const App = () => (
             <Item
               name="priorityIdGroup"
               colCount={3}
-              colCountByScreen={{ xs: 3 }}
+              colCountByScreen={colCountByScreen}
             >
               <Item name="priorityIdIcon" />
               <Item name="priorityIdEditor" />

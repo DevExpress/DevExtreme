@@ -13,6 +13,7 @@ const currentDate = new Date(2021, 3, 27);
 const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const typeGroups = ['typeId'];
 const priorityGroups = ['priorityId'];
+const colCountByScreen = { xs: 3 };
 
 type DateCellProps = {
   data: any;
@@ -67,7 +68,7 @@ const App = () => (
           <Item name="dateGroup" />
           <Item name="repeatGroup" />
           <Item name="resourcesGroup">
-            <Item name="priorityIdGroup" colCount={3} colCountByScreen={{ xs: 3 }}>
+            <Item name="priorityIdGroup" colCount={3} colCountByScreen={colCountByScreen}>
               <Item name="priorityIdIcon" />
               <Item name="priorityIdEditor" />
               <Item name="typeIdEditor" />

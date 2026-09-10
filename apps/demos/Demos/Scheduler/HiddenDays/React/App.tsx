@@ -16,6 +16,20 @@ const defaultVisible: SchedulerTypes.DayOfWeek[] = [0, 1, 2, 4, 6];
 const views: SchedulerTypes.Properties['views'] = ['week', 'workWeek', 'month', 'timelineWeek', 'agenda'];
 const currentDate = new Date(2021, 3, 26);
 const VALIDATION_MESSAGE = 'The hiddenWeekDays option cannot hide all days of the week. At least one day must remain visible.';
+const DayCheckBox = ({
+  dayIndex, label, value, onDayToggle,
+}: {
+  dayIndex: SchedulerTypes.DayOfWeek;
+  label: string;
+  value: boolean;
+  onDayToggle: (dayIndex: SchedulerTypes.DayOfWeek, e: CheckBoxTypes.ValueChangedEvent) => void;
+}) => {
+  const onValueChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+    onDayToggle(dayIndex, e);
+  }, [dayIndex, onDayToggle]);
+
+  return <CheckBox text={label} value={value} onValueChanged={onValueChanged} />;
+};
 
 const App = () => {
   const [visibleDays, setVisibleDays] = useState<SchedulerTypes.DayOfWeek[]>(defaultVisible);
@@ -51,10 +65,11 @@ const App = () => {
         <div className="caption">Visible Week Days</div>
         {dayLabels.map((label, idx) => (
           <div className="option" key={label}>
-            <CheckBox
-              text={label}
+            <DayCheckBox
+              dayIndex={idx as SchedulerTypes.DayOfWeek}
+              label={label}
               value={visibleDays.includes(idx as SchedulerTypes.DayOfWeek)}
-              onValueChanged={(e) => onDayToggle(idx as SchedulerTypes.DayOfWeek, e)}
+              onDayToggle={onDayToggle}
             />
           </div>
         ))}
