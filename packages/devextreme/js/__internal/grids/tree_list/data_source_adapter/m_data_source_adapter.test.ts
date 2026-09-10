@@ -7,6 +7,8 @@ import CustomStore from '@js/data/custom_store';
 import DataSource from '@js/data/data_source';
 
 import { DataSourceAdapterTreeList } from './m_data_source_adapter';
+import type { LoadOperation } from './types';
+import { loadBranches } from './utils/load_branches';
 
 describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
   let dataSourceAdapter: DataSourceAdapterTreeList;
@@ -95,7 +97,7 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
     dataSourceAdapter = undefined as any;
   });
 
-  test('T1311885 - _loadParentsOrChildren should NOT throw concat error when _cachedStoreData is cleared', async () => {
+  test('T1311885 - loading branches should NOT throw concat error when _cachedStoreData is cleared', async () => {
     let firstLoadDeferred: any = null;
     let errorMessage = '';
 
@@ -116,7 +118,7 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
       storeLoadOptions: { sort: null },
       loadOptions: { sort: null },
       operationId: OPERATION_ID.FIRST,
-    };
+    } as unknown as LoadOperation;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     dataSourceAdapter.customLoader.loadFromStore = jest.fn((loadOptions) => {
@@ -130,10 +132,11 @@ describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
       return deferred.promise();
     });
 
-    (dataSourceAdapter as any)._loadParentsOrChildren(
-      childData,
-      options,
-    );
+    // The context snapshots the dataSource and the customLoader, so it has to be
+    // built after the stubs above are in place.
+    const context = (dataSourceAdapter as any).createBranchLoaderContext();
+
+    loadBranches(context, childData, options, false);
 
     expect(dataSourceAdapter.customLoader.loadFromStore).toHaveBeenCalledTimes(1);
     expect(firstLoadDeferred).toBeDefined();
