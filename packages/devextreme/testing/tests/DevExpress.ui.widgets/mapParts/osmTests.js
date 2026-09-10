@@ -1193,6 +1193,34 @@ QUnit.module('OSM: markers', moduleConfig, () => {
         url: 'https://tiles.example.com/{z}/{x}/{y}.png',
         attribution: 'Example attribution'
     };
+    QUnit.test('addMarker completes after disposal during location calculation', async function(assert) {
+        let completeLocation;
+        let locationStarted;
+        const started = new Promise(resolve => { locationStarted = resolve; });
+        const calculateLocation = () => new Promise(resolve => {
+            completeLocation = resolve;
+            locationStarted();
+        });
+        const onMarkerAdded = sinon.spy();
+        const map = await new Promise(resolve => {
+            $('#map').dxMap({
+                provider: 'osm',
+                autoAdjust: false,
+                providerConfig: { tileServer, calculateLocation },
+                onMarkerAdded,
+                onReady: ({ component }) => resolve(component)
+            });
+        });
+        const pending = map.addMarker({ location: 'Start' });
+        await started;
+        map.dispose();
+        completeLocation({ lat: 40.7, lng: -74 });
+
+        assert.strictEqual(await pending, undefined, 'the public operation completes without an instance');
+        assert.strictEqual(openLayersMock.addedOverlays.length, 0, 'no marker is added to the disposed map');
+        assert.ok(onMarkerAdded.notCalled, 'no added event is fired');
+    });
+
     QUnit.test('initial marker uses an OpenLayers overlay', function(assert) {
         const done = assert.async();
         const marker = {
@@ -2410,12 +2438,11 @@ QUnit.module('OSM: routes', moduleConfig, () => {
         });
         const onRouteAdded = sinon.spy();
         const map = await createMap({ providerConfig: { tileServer, calculateRoute }, onRouteAdded });
-        map.addRoute(route);
-        const pending = map._lastAsyncAction;
+        const pending = map.addRoute(route);
         await started;
         map.dispose();
         completeRoute(path);
-        await pending;
+        assert.strictEqual(await pending, undefined, 'the public operation completes without an instance');
         assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'stale result creates no layer');
         assert.ok(onRouteAdded.notCalled, 'stale result fires no route event');
     });

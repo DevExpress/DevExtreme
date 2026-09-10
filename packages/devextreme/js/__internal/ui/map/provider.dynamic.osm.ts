@@ -598,11 +598,6 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
     route.engineRoute?.dispose();
   }
 
-  updateRoutes(routesToRemove: RouteOptions[], routesToAdd: RouteOptions[]): Promise<unknown> {
-    return this._applyFunctionIfNeeded('removeRoutes', routesToRemove)
-      .then(() => this._applyFunctionIfNeeded('addRoutes', routesToAdd));
-  }
-
   _updateBounds(): void {
     super._updateBounds();
     if (this._option('autoAdjust')) {

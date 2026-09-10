@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import testing from './utils.js';
 import Map from 'ui/map';
+import Provider from '__internal/ui/map/provider';
 import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 
@@ -934,6 +935,59 @@ QUnit.module('disposed widget', {
                     done();
                 }
             );
+        });
+    });
+});
+
+QUnit.module('provider update operations', () => {
+    ['Markers', 'Routes'].forEach(collection => {
+        const updateMethod = `update${collection}`;
+        const addMethod = `add${collection}`;
+        const removeMethod = `remove${collection}`;
+
+        QUnit.test(`${updateMethod} waits for removal and returns the addition result`, async function(assert) {
+            const provider = new Provider(null, null);
+            const removedOptions = [{}];
+            const addedOptions = [{}];
+            const addedResult = [false, [{}]];
+            let completeRemoval;
+            const removal = new Promise(resolve => { completeRemoval = resolve; });
+            const remove = sinon.stub(provider, removeMethod).returns(removal);
+            const add = sinon.stub(provider, addMethod).returns(Promise.resolve(addedResult));
+
+            const pending = provider[updateMethod](removedOptions, addedOptions);
+            assert.ok(remove.calledOnceWithExactly(removedOptions), 'removal receives its options');
+            assert.ok(add.notCalled, 'addition waits for removal to finish');
+            completeRemoval(true);
+
+            assert.strictEqual(await pending, addedResult, 'addition result is preserved');
+            assert.ok(add.calledOnceWithExactly(addedOptions), 'addition receives its options');
+        });
+
+        ['add', 'remove'].forEach(operation => {
+            QUnit.test(`${updateMethod} rejects when ${operation} fails`, async function(assert) {
+                const provider = new Provider(null, null);
+                const reason = new Error('Provider operation failed');
+                const remove = sinon.stub(provider, removeMethod).returns(Promise.resolve());
+                const add = sinon.stub(provider, addMethod).returns(Promise.resolve());
+                const failingOperation = operation === 'add' ? add : remove;
+                failingOperation.callsFake(() => Promise.reject(reason));
+
+                await assert.rejects(provider[updateMethod]([{}], [{}]), reason, 'the update rejects with the original error');
+                if(operation === 'remove') {
+                    assert.ok(add.notCalled, 'failed removal prevents addition');
+                }
+            });
+        });
+
+        QUnit.test(`${updateMethod} skips empty batches`, async function(assert) {
+            const provider = new Provider(null, null);
+            const remove = sinon.spy(provider, removeMethod);
+            const add = sinon.spy(provider, addMethod);
+
+            assert.strictEqual(await provider[updateMethod]([], []), undefined, 'empty update completes without a result');
+            assert.ok(remove.notCalled, 'empty removal is skipped');
+            assert.ok(add.notCalled, 'empty addition is skipped');
         });
     });
 });
