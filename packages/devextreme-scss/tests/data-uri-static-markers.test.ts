@@ -71,7 +71,7 @@ const expand = (hex: string): string => {
 
 /*
  * A bundle declares each role more than once: the mode it was built for sits on `:root`, and the
- * opposite mode sits on the `dx-theme-mode-*` classes (see THEME_MODES.html). A literal baked into
+ * opposite mode sits on the `dx-theme-mode-*` classes. A literal baked into
  * a data-uri is what a page with no mode class shows, so only the `:root` scope may answer here —
  * scanning the whole text would hand back whichever block happens to come first.
  */
