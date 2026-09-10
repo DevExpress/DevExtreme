@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  memo, useCallback, useEffect, useState,
+} from 'react';
 import DataGrid, {
   Column,
   Summary,
@@ -22,7 +24,7 @@ const getDetailGridDataSource = (product) => ({
   filter: ['ProductID', '=', product.ProductID],
 });
 const getAmount = (order) => order.UnitPrice * order.Quantity;
-const DetailGrid = ({ data: detail }) => {
+const DetailGrid = memo(({ data: detail }) => {
   const detailDataSource = getDetailGridDataSource(detail.data);
   return (
     <DataGrid
@@ -80,7 +82,7 @@ const DetailGrid = ({ data: detail }) => {
       </Summary>
     </DataGrid>
   );
-};
+});
 const App = () => {
   const [updateFrequency, setUpdateFrequency] = useState(100);
   useEffect(() => {

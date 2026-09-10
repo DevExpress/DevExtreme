@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  memo, useCallback, useEffect, useState,
+} from 'react';
 import DataGrid, {
   Column, Summary, TotalItem, MasterDetail, Paging,
 } from 'devextreme-react/data-grid';
@@ -24,7 +26,7 @@ const getDetailGridDataSource = (product: Product) => ({
 
 const getAmount = (order: Order) => order.UnitPrice * order.Quantity;
 
-const DetailGrid = ({ data: detail }: { data: DataGridTypes.MasterDetailTemplateData }) => {
+const DetailGrid: React.ComponentType<{ data: DataGridTypes.MasterDetailTemplateData }> = memo(({ data: detail }) => {
   const detailDataSource = getDetailGridDataSource(detail.data);
 
   return (
@@ -52,7 +54,7 @@ const DetailGrid = ({ data: detail }: { data: DataGridTypes.MasterDetailTemplate
       </Summary>
     </DataGrid>
   );
-};
+});
 
 const App = () => {
   const [updateFrequency, setUpdateFrequency] = useState(100);

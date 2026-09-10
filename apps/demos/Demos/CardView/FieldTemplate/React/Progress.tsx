@@ -13,7 +13,7 @@ const Progress = ({ value }: ProgressProps) => (
     <ProgressBar
       value={value}
       elementAttr={progressElementAttributes}
-      statusFormat={formatProgressStatus}
+      statusFormat={formatPercent}
     />
   </div>
 );

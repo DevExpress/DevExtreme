@@ -9,10 +9,8 @@ const ownerLabel = { 'aria-label': 'Owner' };
 const clearContextMenu = (event) => {
   event.items = [];
 };
-const EmployeeDropDownBoxComponent = (props) => {
-  const {
-    data: { value: dataValue },
-  } = props;
+const EmployeeDropDownBoxComponent = ({ data }) => {
+  const { value: dataValue } = data;
   const initialSelectedRowKeys = dataValue !== null && dataValue !== undefined ? [dataValue] : [];
   const [selectedRowKeys, setSelectedRowKeys] = useState(initialSelectedRowKeys);
   const [isDropDownOpened, setDropDownOpened] = useState(false);
@@ -25,14 +23,14 @@ const EmployeeDropDownBoxComponent = (props) => {
     (args) => {
       setSelectedRowKeys(args.selectedRowKeys);
       setDropDownOpened(false);
-      props.data.setValue(args.selectedRowKeys[0]);
+      data.setValue(args.selectedRowKeys[0]);
     },
-    [props.data],
+    [data],
   );
   const contentRender = useCallback(
     () => (
       <DataGrid
-        dataSource={props.data.column.lookup.dataSource}
+        dataSource={data.column.lookup.dataSource}
         remoteOperations={true}
         height={250}
         selectedRowKeys={selectedRowKeys}
@@ -53,14 +51,14 @@ const EmployeeDropDownBoxComponent = (props) => {
         <Selection mode="single" />
       </DataGrid>
     ),
-    [props.data, onSelectionChanged, selectedRowKeys],
+    [data, onSelectionChanged, selectedRowKeys],
   );
   return (
     <DropDownBox
       onOptionChanged={boxOptionChanged}
       opened={isDropDownOpened}
       dropDownOptions={dropDownOptions}
-      dataSource={props.data.column.lookup.dataSource}
+      dataSource={data.column.lookup.dataSource}
       value={selectedRowKeys[0]}
       displayExpr="FullName"
       valueExpr="ID"
