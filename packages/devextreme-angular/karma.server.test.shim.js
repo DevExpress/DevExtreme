@@ -9,8 +9,10 @@ const windowMock = {};
 windowMock.window = windowMock;
 windowUtils.setWindow(windowMock);
 
+const { ZoneTestingModule } = require('./karma.zone-testing.module');
+
 testing.TestBed.initTestEnvironment(
-  server.ServerTestingModule,
+  [server.ServerTestingModule, ZoneTestingModule],
   server.platformServerTesting(),
 );
 
