@@ -78,6 +78,27 @@ describe('DateBox commits the input text on focus out when the browser fires no 
     expect(onValueChanged).toHaveBeenCalledTimes(1);
   });
 
+  it('does not validate the same text again on focus out (T1334896)', () => {
+    const onOptionChanged = jest.fn<(e: { name: string }) => void>();
+    const dateBox = createDateBox({ onOptionChanged });
+    const input = dateBox.getInputElement();
+
+    input.value = 'not a date';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+
+    const validationChangesAfterChange = onOptionChanged.mock.calls
+      .filter(([{ name }]) => name === 'validationError').length;
+
+    dateBox.blurInput();
+
+    const validationChangesAfterBlur = onOptionChanged.mock.calls
+      .filter(([{ name }]) => name === 'validationError').length;
+
+    expect(dateBox.getInstance().option('isValid')).toBe(false);
+    expect(validationChangesAfterBlur).toBe(validationChangesAfterChange);
+  });
+
   it('keeps the value when valueChangeEvent excludes change (T1334896)', () => {
     const dateBox = createDateBox({ valueChangeEvent: 'paste' });
 

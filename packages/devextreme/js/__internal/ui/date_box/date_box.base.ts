@@ -115,6 +115,8 @@ class DateBox<
 
   _pickerType?: DatePickerType;
 
+  _handledText?: string;
+
   _storedPadding?: number;
 
   _userOptions?: DateBoxBaseProperties;
@@ -596,7 +598,7 @@ class DateBox<
     const { text, valueChangeEvent } = this.option();
     const includesChangeEvent = valueChangeEvent?.split(' ').includes('change');
 
-    if (!includesChangeEvent) {
+    if (!includesChangeEvent || text === this._handledText) {
       return false;
     }
 
@@ -611,6 +613,8 @@ class DateBox<
   ): void {
     const { text, type = 'date', validationError } = this.option();
     const currentValue = this.getDateOption('value');
+
+    this._handledText = text;
 
     if (text === this._getDisplayedText(currentValue)) {
       this._recallInternalValidation(currentValue, validationError);
