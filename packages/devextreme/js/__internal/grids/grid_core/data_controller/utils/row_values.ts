@@ -1,4 +1,4 @@
-import { AI_COLUMN_NAME } from '@ts/grids/grid_core/ai_column/const';
+import { columnHasValue } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { RawItemData } from '../../data_source_adapter/types';
@@ -13,7 +13,7 @@ export function generateRowValues(
   const emptyValue = isModified ? undefined : null;
 
   return columns.map((column) => {
-    if (column.command && column.type !== AI_COLUMN_NAME) {
+    if (!columnHasValue(column)) {
       return emptyValue;
     }
 
