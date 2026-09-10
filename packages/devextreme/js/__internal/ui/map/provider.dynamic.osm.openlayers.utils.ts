@@ -42,6 +42,22 @@ export interface OverlayLike {
   setPosition: (position: Coordinate) => void;
 }
 
+export interface GeometryLike {
+  transform: (source: unknown, destination: unknown) => GeometryLike;
+}
+
+export interface FeatureLike {
+  getGeometry: () => GeometryLike | undefined;
+  setStyle: (style: unknown) => void;
+}
+
+export interface VectorSourceLike {
+  addFeature: (feature: FeatureLike) => void;
+  clear: () => void;
+  getFeatures: () => FeatureLike[];
+  removeFeature: (feature: FeatureLike) => void;
+}
+
 export interface MapLike {
   addControl: (control: ControlLike) => void;
   addLayer: (layer: unknown) => void;
@@ -60,9 +76,13 @@ export interface MapLike {
 }
 
 export interface OpenLayersApi {
+  Feature: new (geometry: GeometryLike) => FeatureLike;
   Map: new (options: Options) => MapLike;
   Overlay: new (options: Options) => OverlayLike;
   View: new (options: Options) => ViewLike;
+  geom: {
+    LineString: new (coordinates: Coordinate[]) => GeometryLike;
+  };
   control: {
     Zoom: new () => ControlLike;
     defaults: {
@@ -76,6 +96,7 @@ export interface OpenLayersApi {
   };
   layer: {
     Tile: new (options: Options) => TileLayerLike;
+    Vector: new (options: Options) => object;
   };
   proj: {
     getUserProjection: () => unknown | null;
@@ -85,6 +106,11 @@ export interface OpenLayersApi {
   };
   source: {
     ImageTile: new (options: Options) => unknown;
+    Vector: new (options?: Options) => VectorSourceLike;
+  };
+  style: {
+    Stroke: new (options: Options) => unknown;
+    Style: new (options: Options) => unknown;
   };
 }
 
@@ -101,9 +127,11 @@ export const isOpenLayersApi = (api: unknown): api is OpenLayersApi => {
     return false;
   }
 
-  return typeof api.Map === 'function'
+  return typeof api.Feature === 'function'
+    && typeof api.Map === 'function'
     && typeof api.Overlay === 'function'
     && typeof api.View === 'function'
+    && hasFunction(api.geom, 'LineString')
     && isRecord(api.control)
     && hasFunction(api.control, 'Zoom')
     && isRecord(api.control.defaults)
@@ -112,11 +140,15 @@ export const isOpenLayersApi = (api: unknown): api is OpenLayersApi => {
     && isRecord(api.interaction.defaults)
     && hasFunction(api.interaction.defaults, 'defaults')
     && hasFunction(api.layer, 'Tile')
+    && hasFunction(api.layer, 'Vector')
     && hasFunction(api.proj, 'getUserProjection')
     && hasFunction(api.proj, 'toLonLat')
     && hasFunction(api.proj, 'transform')
     && hasFunction(api.proj, 'transformExtent')
-    && hasFunction(api.source, 'ImageTile');
+    && hasFunction(api.source, 'ImageTile')
+    && hasFunction(api.source, 'Vector')
+    && hasFunction(api.style, 'Stroke')
+    && hasFunction(api.style, 'Style');
 };
 
 export const getCoordinateProjection = (

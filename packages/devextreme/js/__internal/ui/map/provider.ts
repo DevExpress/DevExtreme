@@ -88,17 +88,9 @@ class Provider {
     markerOptionsToRemove: MarkerOptions[],
     markerOptionsToAdd: MarkerOptions[],
   ): Promise<unknown> {
-    return new Promise((resolve) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove)
-        .then((removeValue) => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd)
-            .then((addValue) => {
-              resolve(addValue || removeValue);
-            });
-        });
-    });
+    return this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove)
+      .then((removeValue) => this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd)
+        .then((addValue) => addValue || removeValue));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -119,17 +111,9 @@ class Provider {
     routeOptionsToRemove: RouteOptions[],
     routeOptionsToAdd: RouteOptions[],
   ): Promise<unknown> {
-    return new Promise((resolve) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove)
-        .then((removeValue) => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd)
-            .then((addValue) => {
-              resolve(addValue || removeValue);
-            });
-        });
-    });
+    return this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove)
+      .then((removeValue) => this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd)
+        .then((addValue) => addValue || removeValue));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

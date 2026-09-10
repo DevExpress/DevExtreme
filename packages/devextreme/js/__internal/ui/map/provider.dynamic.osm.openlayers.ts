@@ -1,3 +1,4 @@
+import Color from '@js/color';
 import messageLocalization from '@js/common/core/localization/message';
 import resizeObserverSingleton from '@js/core/resize_observer';
 import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/core/utils/m_selectors';
@@ -11,6 +12,8 @@ import type {
   MapEngineMap,
   MapEngineMarker,
   MapEngineMarkerOptions,
+  MapEngineRoute,
+  MapEngineRouteOptions,
   MapEngineSetViewOptions,
   MapEngineTileLayerOptions,
   MapEngineUpdateDimensionsResult,
@@ -34,6 +37,7 @@ import type {
   Options,
   OverlayLike,
   TileLayerLike,
+  VectorSourceLike,
   ViewLike,
 } from './provider.dynamic.osm.openlayers.utils';
 import {
@@ -46,6 +50,7 @@ import {
   toCoordinate,
   toLocation,
 } from './provider.dynamic.osm.openlayers.utils';
+import { toRouteCoordinates } from './provider.dynamic.osm.route';
 
 interface MapBrowserEventLike {
   coordinate?: Coordinate;
@@ -105,6 +110,10 @@ class OpenLayersMap implements MapEngineMap {
 
   private _tileLayer?: TileLayerLike;
 
+  private _routeLayer?: object;
+
+  private _routeSource?: VectorSourceLike;
+
   private _disposed = false;
 
   private _markerFitNeedsLayout = false;
@@ -160,6 +169,16 @@ class OpenLayersMap implements MapEngineMap {
     }
 
     this._subscribedView.un('change:center', this._viewCenterChangeHandler);
+    const previousProjection = getCoordinateProjection(
+      this._api,
+      this._subscribedView.getProjection(),
+    );
+    const projection = getCoordinateProjection(this._api, view.getProjection());
+    if (previousProjection !== projection) {
+      this._routeSource?.getFeatures().forEach((feature) => {
+        feature.getGeometry()?.transform(previousProjection, projection);
+      });
+    }
     this._subscribedView = view;
     this._subscribedView.on('change:center', this._viewCenterChangeHandler);
     this._syncMarkerPositions();
@@ -320,6 +339,35 @@ class OpenLayersMap implements MapEngineMap {
     this._syncMarkerTabIndex(handle);
 
     return handle;
+  }
+
+  addRoute(options: MapEngineRouteOptions): MapEngineRoute {
+    const { _api: api } = this;
+    const geometry = new api.geom.LineString(toRouteCoordinates(options.locations));
+    geometry.transform(
+      GEOGRAPHIC_PROJECTION,
+      getCoordinateProjection(api, this.originalMap.getView().getProjection()),
+    );
+    const feature = new api.Feature(geometry);
+    const { r, g, b } = new Color(options.color);
+    feature.setStyle(new api.style.Style({
+      stroke: Number.isFinite(options.weight) && options.weight > 0
+        ? new api.style.Stroke({ color: [r, g, b, options.opacity], width: options.weight })
+        : undefined,
+    }));
+
+    if (!this._routeSource) {
+      this._routeSource = new api.source.Vector();
+      this._routeLayer = new api.layer.Vector({ source: this._routeSource, zIndex: 1 });
+      this.originalMap.addLayer(this._routeLayer);
+    }
+    const source = this._routeSource;
+    source.addFeature(feature);
+
+    return {
+      originalRoute: feature,
+      dispose: (): void => source.removeFeature(feature),
+    };
   }
 
   private _getMarkerPosition(location: MapEngineMarkerOptions['location']): Coordinate {
@@ -540,6 +588,12 @@ class OpenLayersMap implements MapEngineMap {
     this._subscribedView.un('change:center', this._viewCenterChangeHandler);
     this._removeOwnedInert();
     [...this._markers].forEach((marker) => marker.dispose());
+    this._routeSource?.clear();
+    this._routeSource = undefined;
+    if (this._routeLayer) {
+      this.originalMap.removeLayer(this._routeLayer);
+      this._routeLayer = undefined;
+    }
     this.setControls(false);
     if (this._tileLayer) {
       this.originalMap.removeLayer(this._tileLayer);

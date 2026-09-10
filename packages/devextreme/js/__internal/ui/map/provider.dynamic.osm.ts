@@ -11,6 +11,7 @@ import type {
   LocationOption,
   MarkerObject,
   MarkerOptions,
+  RouteObject,
   RouteOptions,
 } from './provider.dynamic';
 import DynamicProvider from './provider.dynamic';
@@ -20,6 +21,7 @@ import type {
   MapEngineClickEvent,
   MapEngineMap,
   MapEngineMarker,
+  MapEngineRoute,
   MapEngineTileLayerOptions,
   MapEngineViewState,
 } from './provider.dynamic.osm.engine';
@@ -28,6 +30,7 @@ import {
   SUBDOMAIN_PLACEHOLDER,
 } from './provider.dynamic.osm.engine';
 import { createOpenLayersEngine } from './provider.dynamic.osm.openlayers';
+import { getRouteBounds, getRouteLocations } from './provider.dynamic.osm.route';
 
 const DEFAULT_MAX_ZOOM = 19;
 const DEFAULT_SUBDOMAINS = 'abc';
@@ -62,7 +65,10 @@ export const normalizeLongitude = (longitude: number): number => {
   return (positive % FULL_CIRCLE_DEGREES) - HALF_CIRCLE_DEGREES;
 };
 
-export const createBounds = (locations: MapLocation[]): MapEngineBounds | undefined => {
+export const createBounds = (
+  locations: MapLocation[],
+  routes: RouteObject[] = [],
+): MapEngineBounds | undefined => {
   if (!locations.length) {
     return undefined;
   }
@@ -85,8 +91,21 @@ export const createBounds = (locations: MapLocation[]): MapEngineBounds | undefi
       ? longitudes[0] + FULL_CIRCLE_DEGREES
       : longitudes[index + 1];
     const gap = nextLongitude - longitude;
+    const midpoint = longitude + gap / 2;
+    const crossesRoute = routes.some(({ southWest, northEast }) => {
+      if (!southWest || !northEast) {
+        return false;
+      }
 
-    if (gap > largestGap) {
+      const west = southWest[1];
+      const east = northEast[1];
+      const offset = (((midpoint - west) % FULL_CIRCLE_DEGREES) + FULL_CIRCLE_DEGREES)
+        % FULL_CIRCLE_DEGREES;
+
+      return offset < east - west;
+    });
+
+    if (gap > largestGap && !crossesRoute) {
       largestGap = gap;
       westIndex = (index + 1) % longitudes.length;
     }
@@ -95,11 +114,13 @@ export const createBounds = (locations: MapLocation[]): MapEngineBounds | undefi
   return {
     northEast: {
       lat: north,
-      lng: longitudes[(westIndex + longitudes.length - 1) % longitudes.length],
+      lng: largestGap < 0
+        ? HALF_CIRCLE_DEGREES
+        : longitudes[(westIndex + longitudes.length - 1) % longitudes.length],
     },
     southWest: {
       lat: south,
-      lng: longitudes[westIndex],
+      lng: largestGap < 0 ? -HALF_CIRCLE_DEGREES : longitudes[westIndex],
     },
   };
 };
@@ -107,6 +128,10 @@ export const createBounds = (locations: MapLocation[]): MapEngineBounds | undefi
 interface EngineMarkerObject extends MarkerObject {
   engineMarker: MapEngineMarker;
   location: MapLocation;
+}
+
+interface EngineRouteObject extends RouteObject {
+  engineRoute?: MapEngineRoute;
 }
 
 const areLocationsEqual = (
@@ -117,6 +142,8 @@ const areLocationsEqual = (
   && Math.abs(first.lng - second.lng) < LOCATION_EPSILON;
 
 class OsmProvider extends DynamicProvider<MapLocation | undefined> {
+  declare _routes: (EngineRouteObject & { options: RouteOptions })[];
+
   _engine?: MapEngine;
 
   _engineMap?: MapEngineMap;
@@ -126,6 +153,8 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
   _boundLocations: MapLocation[] = [];
 
   _calculateLocationWarningLogged = false;
+
+  _calculateRouteWarningLogged = false;
 
   _loadImpl(): Promise<void> {
     const window = getWindow() as Window & { ol?: unknown };
@@ -437,7 +466,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
 
   _fitBounds(): Promise<void> {
     this._updateBounds();
-    this._bounds = createBounds(this._boundLocations) ?? null;
+    this._bounds = createBounds(this._boundLocations, this._routes) ?? null;
 
     const engineMap = this._engineMap;
     if (!engineMap || !this._bounds || !this._option('autoAdjust')) {
@@ -475,13 +504,107 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
     this._boundLocations = [];
   }
 
-  addRoutes(routes: RouteOptions[]): Promise<[boolean, unknown[]]> {
-    return Promise.resolve([false, routes.map(() => undefined)]);
+  _resolveRouteLocation(location: LocationOption): Promise<MapLocation | undefined> {
+    const coordinates = this._getLatLng(location);
+    if (coordinates && Number.isFinite(coordinates.lat) && Number.isFinite(coordinates.lng)) {
+      return Promise.resolve(coordinates);
+    }
+
+    return typeof location === 'string'
+      ? this._geocodeLocation(location)
+      : Promise.resolve(undefined);
+  }
+
+  _calculateRoute(options: RouteOptions): Promise<MapLocation[] | undefined> {
+    const waypoints = options.locations ?? [];
+    if (waypoints.length < 2) {
+      return Promise.resolve(undefined);
+    }
+
+    const calculateRoute = this._option('providerConfig')?.calculateRoute;
+    if (!calculateRoute) {
+      if (!this._calculateRouteWarningLogged) {
+        errors.log('W1033');
+        this._calculateRouteWarningLogged = true;
+      }
+
+      return Promise.resolve(undefined);
+    }
+
+    const engineMap = this._engineMap;
+    return Promise.all(
+      waypoints.map((location) => this._resolveRouteLocation(location)),
+    )
+      .then((locations) => {
+        if (engineMap !== this._engineMap) {
+          throw new Error('The map was disposed or replaced during route creation.');
+        }
+        if (!locations.every((location): location is MapLocation => location !== undefined)) {
+          return undefined;
+        }
+
+        return Promise.resolve()
+          .then(() => calculateRoute({ locations, mode: options.mode ?? 'driving' }))
+          .then((result) => {
+            const routeLocations = getRouteLocations(result);
+            if (!routeLocations) {
+              errors.log('W1006', 'calculateRoute returned an invalid result.');
+            }
+
+            return routeLocations;
+          }, (error) => {
+            errors.log('W1006', error);
+
+            return undefined;
+          });
+      });
+  }
+
+  _addRoute(options: RouteOptions): Promise<EngineRouteObject> {
+    return this._renderRoute(options).then((routeObject) => {
+      if (routeObject.engineRoute) {
+        this._routes.push({ ...routeObject, options });
+        this._fireRouteAddedAction({ options, originalRoute: routeObject.instance });
+      }
+
+      return routeObject;
+    });
+  }
+
+  _renderRoute(options: RouteOptions): Promise<EngineRouteObject> {
+    const engineMap = this._engineMap;
+    if (!engineMap) {
+      return Promise.reject(errors.Error('E1069'));
+    }
+
+    return this._calculateRoute(options)
+      .then((locations) => {
+        if (engineMap !== this._engineMap) {
+          throw new Error('The map was disposed or replaced during route creation.');
+        }
+        if (!locations) {
+          return {};
+        }
+
+        const engineRoute = engineMap.addRoute({
+          locations,
+          color: options.color || this._defaultRouteColor(),
+          opacity: options.opacity ?? this._defaultRouteOpacity(),
+          weight: options.weight ?? this._defaultRouteWeight(),
+        });
+
+        return { ...getRouteBounds(locations), engineRoute, instance: engineRoute.originalRoute };
+      });
+  }
+
+  _destroyRoute(route: EngineRouteObject): void {
+    route.engineRoute?.dispose();
   }
 
   clean(): Promise<void> {
     if (this._engineMap) {
       this._clearMarkers();
+      this._clearRoutes();
     }
     this._engineMap?.dispose();
     this._engineMap = undefined;

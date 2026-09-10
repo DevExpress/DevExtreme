@@ -62,6 +62,28 @@ QUnit.test('default options', function(assert) {
     });
 });
 
+[
+    ['markers', 'removeMarker', MARKERS[0]],
+    ['routes', 'removeRoute', ROUTES[0]]
+].forEach(([option, removeMethod, item]) => {
+    QUnit.test(`removing the last ${option} item still raises the ready event`, async function(assert) {
+        const map = await new Promise(resolve => {
+            new Map($('#map'), {
+                provider: 'googleStatic',
+                [option]: [item],
+                onReady: ({ component }) => resolve(component)
+            });
+        });
+        const onReady = sinon.spy();
+        map.option('onReady', onReady);
+
+        await map[removeMethod](item);
+
+        assert.deepEqual(map.option(option), [], 'the item is removed');
+        assert.ok(onReady.calledOnce, 'the removal result still reports a refreshed map');
+    });
+});
+
 QUnit.test('dimensions', function(assert) {
     return new Promise(function(resolve) {
         const map = new Map($('#map'), {

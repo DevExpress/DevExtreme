@@ -50,6 +50,18 @@ export interface MapEngineMarker {
   dispose: () => void;
 }
 
+export interface MapEngineRouteOptions {
+  locations: MapLocation[];
+  color: string;
+  opacity: number;
+  weight: number;
+}
+
+export interface MapEngineRoute {
+  readonly originalRoute: unknown;
+  dispose: () => void;
+}
+
 export interface MapEngineEventHandlers {
   click: (event: MapEngineClickEvent) => void;
   markerSizeChange: () => void;
@@ -59,6 +71,7 @@ export interface MapEngineEventHandlers {
 export interface MapEngineMap {
   readonly originalMap: unknown;
   addMarker: (options: MapEngineMarkerOptions) => MapEngineMarker;
+  addRoute: (options: MapEngineRouteOptions) => MapEngineRoute;
   attachHandlers: (handlers: MapEngineEventHandlers) => void;
   dispose: () => void;
   fitBounds: (bounds: MapEngineBounds, options?: MapEngineFitBoundsOptions) => void;

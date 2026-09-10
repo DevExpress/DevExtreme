@@ -23,6 +23,7 @@ const resetOpenLayersMock = () => {
         addedControls: [],
         addedOverlays: [],
         addedTileLayers: [],
+        addedVectorLayers: [],
         controlOptions: null,
         fitCallCount: 0,
         fitZoom: undefined,
@@ -1032,6 +1033,7 @@ QUnit.module('OSM: location calculation', moduleConfig, () => {
             setView
         };
         provider._markers = [];
+        provider._routes = [];
         const update = provider.updateCenter();
         provider.clean();
         resolveLocation({
@@ -1166,6 +1168,7 @@ QUnit.module('OSM: location calculation', moduleConfig, () => {
             dispose: sinon.spy()
         };
         provider._markers = [];
+        provider._routes = [];
         const add = provider.addMarkers([{
             location: 'New York'
         }]);
@@ -1190,6 +1193,34 @@ QUnit.module('OSM: markers', moduleConfig, () => {
         url: 'https://tiles.example.com/{z}/{x}/{y}.png',
         attribution: 'Example attribution'
     };
+    QUnit.test('addMarker completes after disposal during location calculation', async function(assert) {
+        let completeLocation;
+        let locationStarted;
+        const started = new Promise(resolve => { locationStarted = resolve; });
+        const calculateLocation = () => new Promise(resolve => {
+            completeLocation = resolve;
+            locationStarted();
+        });
+        const onMarkerAdded = sinon.spy();
+        const map = await new Promise(resolve => {
+            $('#map').dxMap({
+                provider: 'osm',
+                autoAdjust: false,
+                providerConfig: { tileServer, calculateLocation },
+                onMarkerAdded,
+                onReady: ({ component }) => resolve(component)
+            });
+        });
+        const pending = map.addMarker({ location: 'Start' });
+        await started;
+        map.dispose();
+        completeLocation({ lat: 40.7, lng: -74 });
+
+        assert.strictEqual(await pending, undefined, 'the public operation completes without an instance');
+        assert.strictEqual(openLayersMock.addedOverlays.length, 0, 'no marker is added to the disposed map');
+        assert.ok(onMarkerAdded.notCalled, 'no added event is fired');
+    });
+
     QUnit.test('initial marker uses an OpenLayers overlay', function(assert) {
         const done = assert.async();
         const marker = {
@@ -1871,6 +1902,654 @@ QUnit.module('OSM: markers', moduleConfig, () => {
                 done();
             }
         });
+    });
+});
+QUnit.module('OSM: routes', moduleConfig, () => {
+    const tileServer = {
+        url: 'https://tiles.example.com/{z}/{x}/{y}.png',
+        attribution: 'Example attribution'
+    };
+    const path = [[40.7, -74], [40.9, -73.8], [40.8, -73.9]];
+    const route = { locations: [[40.7, -74], [40.8, -73.9]] };
+    const createMap = (options = {}) => new Promise(resolve => {
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            providerConfig: { tileServer, calculateRoute: () => Promise.resolve(path) },
+            ...options,
+            onReady: ({ component }) => resolve(component)
+        });
+    });
+    const getRouteSource = () => openLayersMock.addedVectorLayers[0].getSource();
+
+    [false, true].forEach(geoJson => {
+        QUnit.test(`initial route renders ${geoJson ? 'GeoJSON' : 'tuples'} with default styles`, async function(assert) {
+            const result = geoJson ? {
+                type: 'LineString',
+                coordinates: path.map(([lat, lng]) => [lng, lat, 10])
+            } : path;
+            const calculateRoute = sinon.stub().returns(Promise.resolve(result));
+            const onRouteAdded = sinon.spy();
+            await createMap({
+                routes: [route],
+                providerConfig: { tileServer, calculateRoute },
+                onRouteAdded
+            });
+            const feature = getRouteSource().getFeatures()[0];
+            assert.deepEqual(feature.getGeometry().getCoordinates(), [[-74000, 40700], [-73800, 40900], [-73900, 40800]], 'geometry is in the view projection');
+            assert.deepEqual(calculateRoute.firstCall.args[0], {
+                locations: [{ lat: 40.7, lng: -74 }, { lat: 40.8, lng: -73.9 }],
+                mode: 'driving'
+            }, 'callback receives resolved locations and default mode');
+            assert.strictEqual(onRouteAdded.firstCall.args[0].originalRoute, feature, 'event exposes the OpenLayers feature');
+            assert.deepEqual(feature.getStyle().getStroke().getColor(), [0, 0, 255, 0.5], 'shared route color and opacity defaults');
+            assert.strictEqual(feature.getStyle().getStroke().getWidth(), 5, 'shared route weight default');
+            assert.strictEqual(openLayersMock.fitCallCount, 0, 'autoAdjust false preserves the viewport');
+        });
+    });
+
+    QUnit.test('addRoute and removeRoute manage features, return values and events', async function(assert) {
+        const onRouteAdded = sinon.spy();
+        const onRouteRemoved = sinon.spy();
+        const map = await createMap({ onRouteAdded, onRouteRemoved });
+        const originalRoute = await map.addRoute(route);
+        assert.strictEqual(originalRoute, getRouteSource().getFeatures()[0], 'addRoute returns the feature');
+        assert.strictEqual(onRouteAdded.firstCall.args[0].options, route, 'original route options are reported');
+        await map.removeRoute(route);
+        assert.strictEqual(getRouteSource().getFeatures().length, 0, 'feature is removed');
+        assert.strictEqual(onRouteRemoved.firstCall.args[0].options, route, 'removal event has the route options');
+    });
+
+    QUnit.test('multiple routes keep separate geometry and styles when one is removed', async function(assert) {
+        const drivingRoute = { ...route, mode: 'driving', color: '#ff0000', opacity: 0.7, weight: 3 };
+        const walkingRoute = {
+            locations: [[40.6, -73.7], [40.65, -73.6]],
+            mode: 'walking', color: '#008000', opacity: 0.4, weight: 8
+        };
+        const walkingPath = {
+            type: 'LineString',
+            coordinates: [[-73.7, 40.6], [-73.65, 40.62], [-73.6, 40.65]]
+        };
+        const calculateRoute = sinon.stub().callsFake(({ mode }) => Promise.resolve(mode === 'driving' ? path : walkingPath));
+        const onRouteAdded = sinon.spy();
+        const onRouteRemoved = sinon.spy();
+        const map = await createMap({
+            routes: [drivingRoute, walkingRoute],
+            providerConfig: { tileServer, calculateRoute },
+            onRouteAdded,
+            onRouteRemoved
+        });
+        const source = getRouteSource();
+        const drivingFeature = onRouteAdded.getCalls().find(call => call.args[0].options === drivingRoute).args[0].originalRoute;
+        const walkingFeature = onRouteAdded.getCalls().find(call => call.args[0].options === walkingRoute).args[0].originalRoute;
+
+        assert.strictEqual(calculateRoute.callCount, 2, 'each route is calculated once');
+        assert.ok(calculateRoute.calledWithExactly({
+            locations: [{ lat: 40.7, lng: -74 }, { lat: 40.8, lng: -73.9 }], mode: 'driving'
+        }), 'driving callback receives its own waypoints and mode');
+        assert.ok(calculateRoute.calledWithExactly({
+            locations: [{ lat: 40.6, lng: -73.7 }, { lat: 40.65, lng: -73.6 }], mode: 'walking'
+        }), 'walking callback receives its own waypoints and mode');
+        assert.strictEqual(source.getFeatures().length, 2, 'both routes are rendered');
+        assert.ok(source.getFeatures().includes(drivingFeature), 'driving event exposes its rendered feature');
+        assert.ok(source.getFeatures().includes(walkingFeature), 'walking event exposes its rendered feature');
+        assert.deepEqual(drivingFeature.getGeometry().getCoordinates(), [[-74000, 40700], [-73800, 40900], [-73900, 40800]], 'driving route uses the tuple result');
+        assert.deepEqual(walkingFeature.getGeometry().getCoordinates(), [[-73700, 40600], [-73650, 40620], [-73600, 40650]], 'walking route uses the GeoJSON result');
+        assert.deepEqual(drivingFeature.getStyle().getStroke().getColor(), [255, 0, 0, 0.7], 'driving color and opacity');
+        assert.strictEqual(drivingFeature.getStyle().getStroke().getWidth(), 3, 'driving weight');
+        assert.deepEqual(walkingFeature.getStyle().getStroke().getColor(), [0, 128, 0, 0.4], 'walking color and opacity');
+        assert.strictEqual(walkingFeature.getStyle().getStroke().getWidth(), 8, 'walking weight');
+
+        await map.removeRoute(drivingRoute);
+
+        assert.deepEqual(map.option('routes'), [walkingRoute], 'only the requested route is removed from options');
+        assert.strictEqual(source.getFeatures().length, 1, 'one route remains');
+        assert.strictEqual(source.getFeatures()[0], walkingFeature, 'the remaining feature is not recreated');
+        assert.deepEqual(walkingFeature.getGeometry().getCoordinates(), [[-73700, 40600], [-73650, 40620], [-73600, 40650]], 'remaining geometry is unchanged');
+        assert.deepEqual(walkingFeature.getStyle().getStroke().getColor(), [0, 128, 0, 0.4], 'remaining color and opacity are unchanged');
+        assert.strictEqual(walkingFeature.getStyle().getStroke().getWidth(), 8, 'remaining weight is unchanged');
+        assert.strictEqual(calculateRoute.callCount, 2, 'removal does not recalculate the remaining route');
+        assert.strictEqual(onRouteAdded.callCount, 2, 'removal does not add the remaining route again');
+        assert.strictEqual(onRouteRemoved.callCount, 1, 'one removal event is raised');
+        assert.strictEqual(onRouteRemoved.firstCall.args[0].options, drivingRoute, 'removal event identifies the removed route');
+    });
+
+    QUnit.test('empty route color uses the default color', async function(assert) {
+        const map = await createMap();
+        const feature = await map.addRoute({ ...route, color: '' });
+
+        assert.deepEqual(feature.getStyle().getStroke().getColor(), [0, 0, 255, 0.5], 'empty color uses the shared route default');
+    });
+
+    QUnit.test('route updates reuse one layer and honor zero opacity', async function(assert) {
+        const map = await createMap({ routes: [route] });
+        const source = getRouteSource();
+        const oldFeature = source.getFeatures()[0];
+        map.option('routes', [{ ...route, color: '#ff0000', opacity: 0, weight: 8 }]);
+        await map._lastAsyncAction;
+        const features = source.getFeatures();
+        assert.strictEqual(features.length, 1, 'old route is replaced');
+        assert.notStrictEqual(features[0], oldFeature, 'updated route has a new feature');
+        assert.strictEqual(openLayersMock.addedVectorLayers.length, 1, 'vector layer is reused');
+        assert.deepEqual(features[0].getStyle().getStroke().getColor(), [255, 0, 0, 0], 'zero opacity is preserved');
+        assert.strictEqual(features[0].getStyle().getStroke().getWidth(), 8, 'weight is updated');
+    });
+
+    [0, -1, NaN, Infinity, -Infinity].forEach(weight => {
+        QUnit.test(`non-positive or non-finite weight omits the stroke but keeps a removable route instance (${weight})`, async function(assert) {
+            const onRouteAdded = sinon.spy();
+            const onRouteRemoved = sinon.spy();
+            const map = await createMap({ routes: [{ ...route, weight: 8 }], onRouteAdded, onRouteRemoved });
+            const invisibleRoute = { ...route, weight };
+            const feature = await map.addRoute(invisibleRoute);
+            assert.ok(feature, 'valid geometry still creates a route instance');
+            assert.notOk(feature.getStyle().getStroke(), 'no stroke is sent to the renderer');
+            assert.strictEqual(getRouteSource().getFeatures().length, 2, 'both valid routes remain in the source');
+            assert.strictEqual(onRouteAdded.secondCall.args[0].originalRoute, feature, 'added event exposes the instance');
+            await map.removeRoute(invisibleRoute);
+            assert.strictEqual(onRouteRemoved.firstCall.args[0].options, invisibleRoute, 'removed event identifies the route');
+            assert.strictEqual(getRouteSource().getFeatures().length, 1, 'the other route remains');
+        });
+    });
+
+    ['walking', 'cycling'].forEach(mode => {
+        QUnit.test(`route callback resolves addresses and passes ${mode} unchanged with a PromiseLike result`, async function(assert) {
+            const calculateLocation = sinon.stub().callsFake(query => Promise.resolve(query === 'Start'
+                ? { lat: 40.7, lng: -74 } : { lat: 40.8, lng: -73.9 }));
+            const calculateRoute = sinon.stub().callsFake(() => $.Deferred().resolve(path).promise());
+            await createMap({
+                routes: [{ locations: ['Start', 'Finish'], mode }],
+                providerConfig: { tileServer, calculateLocation, calculateRoute }
+            });
+            assert.deepEqual(calculateRoute.firstCall.args[0], {
+                locations: [{ lat: 40.7, lng: -74 }, { lat: 40.8, lng: -73.9 }], mode
+            }, 'locations and mode are passed to the callback');
+            assert.strictEqual(calculateLocation.callCount, 2, 'addresses are resolved once');
+            assert.strictEqual(getRouteSource().getFeatures().length, 1, 'thenable result is rendered');
+        });
+    });
+
+    ['missing', 'undefined', 'throw', 'reject'].forEach(failure => {
+        QUnit.test(`unresolved route address skips routing without a zero-coordinate fallback (${failure})`, async function(assert) {
+            const reason = new Error('Location service unavailable');
+            const calculateLocation = sinon.stub().callsFake(() => {
+                if(failure === 'throw') {
+                    throw reason;
+                }
+                return failure === 'reject' ? Promise.reject(reason) : Promise.resolve(undefined);
+            });
+            const calculateRoute = sinon.stub().returns(Promise.resolve(path));
+            const onRouteAdded = sinon.spy();
+            const onRouteRemoved = sinon.spy();
+            const providerConfig = { tileServer, calculateRoute };
+            if(failure !== 'missing') {
+                providerConfig.calculateLocation = calculateLocation;
+            }
+            const log = sinon.stub(errors, 'log');
+            try {
+                const map = await createMap({ providerConfig, onRouteAdded, onRouteRemoved });
+                const failedRoute = { locations: ['Unknown address', [40.8, -73.9]] };
+                assert.strictEqual(await map.addRoute(failedRoute), undefined, 'the operation completes without an instance');
+                assert.ok(calculateRoute.notCalled, 'unresolved waypoints are not passed to the route service');
+                assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'no route is drawn');
+                assert.ok(onRouteAdded.notCalled, 'no added event is fired');
+                assert.ok(log.calledOnceWithExactly(...(failure === 'missing'
+                    ? ['W1031']
+                    : ['W1006', failure === 'undefined' ? 'calculateLocation returned an invalid result.' : reason])), 'existing location diagnostics report the failure');
+                await map.removeRoute(failedRoute);
+                assert.ok(onRouteRemoved.notCalled, 'no removed event is fired');
+                if(failure !== 'missing') {
+                    calculateLocation.callsFake(() => Promise.resolve({ lat: 40.7, lng: -74 }));
+                    const result = await map.addRoute(failedRoute);
+                    assert.ok(result, 'an explicit later attempt can succeed');
+                    assert.ok(calculateLocation.calledTwice, 'failed geocoding was not cached');
+                    assert.ok(calculateRoute.calledOnce, 'only the successful attempt requests a route');
+                }
+            } finally {
+                log.restore();
+            }
+        });
+    });
+
+    [
+        ['null', null],
+        ['undefined', undefined],
+        ['NaN latitude', { lat: NaN, lng: 10 }],
+        ['infinite longitude', { lat: 10, lng: Infinity }],
+        ['incomplete tuple', [10]],
+        ['extra tuple component', [10, 20, 30]],
+        ['numeric strings', { lat: '10', lng: '20' }],
+        ['empty object', {}],
+        ['boolean', true]
+    ].forEach(([name, location]) => {
+        QUnit.test(`invalid non-string waypoint skips routing without a zero-coordinate fallback (${name})`, async function(assert) {
+            const calculateLocation = sinon.spy();
+            const calculateRoute = sinon.stub().returns(Promise.resolve(path));
+            const onRouteAdded = sinon.spy();
+            const onRouteRemoved = sinon.spy();
+            const map = await createMap({
+                providerConfig: { tileServer, calculateLocation, calculateRoute },
+                onRouteAdded,
+                onRouteRemoved
+            });
+            const invalidRoute = { locations: [location, [40.8, -73.9]] };
+
+            assert.strictEqual(await map.addRoute(invalidRoute), undefined, 'invalid waypoints do not create a route');
+            assert.ok(calculateLocation.notCalled, 'non-string waypoints do not invoke geocoding');
+            assert.ok(calculateRoute.notCalled, 'invalid waypoints are not passed to the route service');
+            assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'no route is drawn');
+            assert.ok(onRouteAdded.notCalled, 'no added event is fired');
+            await map.removeRoute(invalidRoute);
+            assert.ok(onRouteRemoved.notCalled, 'no removed event is fired');
+        });
+    });
+
+    [
+        ['missing locations', undefined],
+        ['empty locations', []],
+        ['one coordinate', [[40.7, -74]]],
+        ['one address', ['Start']]
+    ].forEach(([name, locations]) => {
+        QUnit.test(`fewer than two waypoints skip geocoding and routing (${name})`, async function(assert) {
+            const calculateLocation = sinon.stub().returns(Promise.resolve({ lat: 40.7, lng: -74 }));
+            const calculateRoute = sinon.stub().returns(Promise.resolve(path));
+            const onRouteAdded = sinon.spy();
+            const onRouteRemoved = sinon.spy();
+            const map = await createMap({
+                providerConfig: { tileServer, calculateLocation, calculateRoute },
+                onRouteAdded,
+                onRouteRemoved
+            });
+            const incompleteRoute = { locations };
+
+            assert.strictEqual(await map.addRoute(incompleteRoute), undefined, 'incomplete waypoints do not create a route');
+            assert.ok(calculateLocation.notCalled, 'geocoding is not requested');
+            assert.ok(calculateRoute.notCalled, 'routing is not requested');
+            assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'no route is drawn');
+            assert.ok(onRouteAdded.notCalled, 'no added event is fired');
+            await map.removeRoute(incompleteRoute);
+            assert.ok(onRouteRemoved.notCalled, 'no removed event is fired');
+        });
+    });
+
+    QUnit.test('explicit zero coordinates and a successfully calculated zero location are valid route waypoints', async function(assert) {
+        const calculateLocation = sinon.stub().returns(Promise.resolve({ lat: 0, lng: 0 }));
+        const calculateRoute = sinon.stub().returns(Promise.resolve(path));
+        await createMap({
+            routes: [{ locations: [[0, 0], { lat: 0, lng: 0 }, '0, 0', 'Known location'] }],
+            providerConfig: { tileServer, calculateLocation, calculateRoute }
+        });
+        assert.ok(calculateLocation.calledOnceWithExactly('Known location'), 'coordinate strings bypass geocoding');
+        assert.deepEqual(calculateRoute.firstCall.args[0].locations, Array(4).fill({ lat: 0, lng: 0 }), 'valid zero coordinates are passed unchanged');
+        assert.strictEqual(getRouteSource().getFeatures().length, 1, 'the route is rendered');
+    });
+
+    QUnit.test('missing callback warns without drawing a straight line', async function(assert) {
+        const log = sinon.stub(errors, 'log');
+        const onRouteAdded = sinon.spy();
+        const onRouteRemoved = sinon.spy();
+        try {
+            const map = await createMap({ providerConfig: { tileServer }, onRouteAdded, onRouteRemoved });
+            const result = await map.addRoute(route);
+            assert.ok(log.calledOnceWithExactly('W1033'), 'missing callback is reported');
+            assert.strictEqual(result, undefined, 'skipped route has no instance');
+            assert.ok(onRouteAdded.notCalled, 'skipped route fires no added event');
+            assert.strictEqual(map._provider._routes.length, 0, 'skipped route is not stored in the provider');
+            assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'no fallback line is drawn');
+            await map.addMarker({ location: [40.7, -74] });
+            await map.removeRoute(route);
+            assert.ok(onRouteRemoved.notCalled, 'removing skipped route options fires no removed event');
+            assert.deepEqual(map.option('routes'), [], 'skipped route options can still be removed');
+            assert.strictEqual(openLayersMock.addedOverlays.length, 1, 'map continues to accept operations');
+        } finally {
+            log.restore();
+        }
+    });
+
+    QUnit.test('missing route callback warns once for initial and subsequently added routes', async function(assert) {
+        const log = sinon.stub(errors, 'log');
+        try {
+            const map = await createMap({
+                routes: [route, { ...route, mode: 'walking' }],
+                providerConfig: { tileServer }
+            });
+            assert.ok(log.calledOnceWithExactly('W1033'), 'initial routes share one configuration warning');
+
+            await map.addRoute({ ...route });
+            await map.addRoute({ ...route, mode: 'walking' });
+            assert.ok(log.calledOnceWithExactly('W1033'), 'later attempts do not repeat the warning');
+        } finally {
+            log.restore();
+        }
+    });
+
+    QUnit.test('a route callback configured after a warning is still called', async function(assert) {
+        const log = sinon.stub(errors, 'log');
+        const providerConfig = {};
+        const provider = new OsmProvider({ option: () => ({ providerConfig }) }, null);
+        const calculateRoute = sinon.stub().returns(Promise.resolve(path));
+        try {
+            assert.strictEqual(await provider._calculateRoute(route), undefined, 'unconfigured route is skipped');
+            providerConfig.calculateRoute = calculateRoute;
+
+            const locations = await provider._calculateRoute(route);
+            assert.ok(calculateRoute.calledOnceWithExactly({
+                locations: [{ lat: 40.7, lng: -74 }, { lat: 40.8, lng: -73.9 }],
+                mode: 'driving'
+            }), 'warning suppression does not skip a configured callback');
+            assert.deepEqual(locations, path.map(([lat, lng]) => ({ lat, lng })), 'route geometry is returned');
+            assert.ok(log.calledOnceWithExactly('W1033'), 'only the missing configuration was reported');
+        } finally {
+            log.restore();
+        }
+    });
+
+    QUnit.test('missing route callback skips address lookup and does not block map initialization', async function(assert) {
+        const calculateLocation = sinon.stub().returns(new Promise(() => {}));
+        const log = sinon.stub(errors, 'log');
+        try {
+            const map = await createMap({
+                routes: [{ locations: ['Start', 'Finish'] }],
+                providerConfig: { tileServer, calculateLocation }
+            });
+            assert.ok(calculateLocation.notCalled, 'no geocoding is needed when routing is unavailable');
+            assert.ok(log.calledOnceWithExactly('W1033'), 'missing callback is reported once');
+            assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'no fallback line is drawn');
+            await map.addMarker({ location: [40.7, -74] });
+            assert.strictEqual(openLayersMock.addedOverlays.length, 1, 'the action queue remains usable');
+        } finally {
+            log.restore();
+        }
+    });
+
+    [false, true].forEach(geoJson => {
+        QUnit.test(`invalid route latitude warns and skips rendering (${geoJson ? 'GeoJSON' : 'tuples'})`, async function(assert) {
+            const result = geoJson
+                ? { type: 'LineString', coordinates: [[10, 95], [11, 96]] }
+                : [[95, 10], [96, 11]];
+            const log = sinon.stub(errors, 'log');
+            try {
+                await createMap({
+                    routes: [route],
+                    providerConfig: { tileServer, calculateRoute: () => Promise.resolve(result) }
+                });
+                assert.ok(log.calledOnceWithExactly('W1006', 'calculateRoute returned an invalid result.'), 'invalid coordinates are reported');
+                assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'invalid geometry is not rendered');
+            } finally {
+                log.restore();
+            }
+        });
+    });
+
+    ['invalid', 'throw', 'reject'].forEach(failure => {
+        QUnit.test(`${failure} result skips the route, reports the reason and does not retry`, async function(assert) {
+            const reason = new Error('Routing service unavailable');
+            const calculateRoute = sinon.stub().callsFake(() => {
+                if(failure === 'throw') {
+                    throw reason;
+                }
+                return failure === 'reject' ? Promise.reject(reason) : Promise.resolve({ type: 'Point', coordinates: [-74, 40.7] });
+            });
+            const log = sinon.stub(errors, 'log');
+            const onRouteAdded = sinon.spy();
+            const onRouteRemoved = sinon.spy();
+            try {
+                const map = await createMap({ routes: [route], providerConfig: { tileServer, calculateRoute }, onRouteAdded, onRouteRemoved });
+                assert.ok(calculateRoute.calledOnce, 'callback is not retried');
+                assert.ok(log.calledOnceWithExactly('W1006', failure === 'invalid' ? 'calculateRoute returned an invalid result.' : reason), 'warning preserves the service reason');
+                assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'failed route is not rendered');
+                assert.ok(onRouteAdded.notCalled, 'failed route fires no added event');
+                assert.strictEqual(map._provider._routes.length, 0, 'failed route is not stored in the provider');
+                await map.removeRoute(route);
+                assert.ok(onRouteRemoved.notCalled, 'failed route fires no removed event');
+                calculateRoute.callsFake(() => Promise.resolve(path));
+                const originalRoute = await map.addRoute({ ...route });
+                assert.strictEqual(originalRoute, getRouteSource().getFeatures()[0], 'later explicit request succeeds without a cached failure');
+                assert.ok(onRouteAdded.calledOnce, 'only the successful route fires an added event');
+            } finally {
+                log.restore();
+            }
+        });
+    });
+
+    QUnit.test('mixed route results preserve result positions and only register successful routes', async function(assert) {
+        const firstRoute = { ...route, color: 'red' };
+        const skippedRoute = { ...route, mode: 'walking' };
+        const lastRoute = { ...route, color: 'green' };
+        const calculateRoute = sinon.stub().callsFake(({ mode }) => Promise.resolve(mode === 'walking' ? undefined : path));
+        const onRouteAdded = sinon.spy();
+        const onRouteRemoved = sinon.spy();
+        const log = sinon.stub(errors, 'log');
+        try {
+            const map = await createMap({ providerConfig: { tileServer, calculateRoute }, onRouteAdded, onRouteRemoved });
+            const results = await map.addRoute([firstRoute, skippedRoute, lastRoute]);
+            assert.strictEqual(results.length, 3, 'result positions match the requested routes');
+            assert.strictEqual(results[1], undefined, 'skipped result retains its position');
+            assert.deepEqual(getRouteSource().getFeatures(), [results[0], results[2]], 'only successful routes have features');
+            assert.deepEqual(map._provider._routes.map(item => item.options), [firstRoute, lastRoute], 'only successful routes are registered');
+            assert.strictEqual(onRouteAdded.callCount, 2, 'only successful routes fire added events');
+            assert.ok(onRouteAdded.alwaysCalledWithMatch({ originalRoute: sinon.match.truthy }), 'added events always expose a route instance');
+            await map.removeRoute(skippedRoute);
+            assert.ok(onRouteRemoved.notCalled, 'removing skipped route options fires no event');
+            assert.deepEqual(map.option('routes'), [firstRoute, lastRoute], 'successful route options remain');
+            map.option('routes', []);
+            await map._lastAsyncAction;
+            assert.strictEqual(onRouteRemoved.callCount, 2, 'both created routes fire removed events');
+            assert.strictEqual(getRouteSource().getFeatures().length, 0, 'all route features are removed');
+        } finally {
+            log.restore();
+        }
+    });
+
+    QUnit.test('autoAdjust includes the full route geometry and markers', async function(assert) {
+        await createMap({
+            autoAdjust: true,
+            routes: [route],
+            markers: [{ location: [40.6, -74.1] }]
+        });
+        assert.deepEqual(openLayersMock.fittedExtent, [-74100, 40600, -73800, 40900], 'fit includes intermediate route points and the marker');
+    });
+
+    QUnit.test('marker resize refits cached route bounds without visiting every vertex', async function(assert) {
+        let markerSize = { height: 30, width: 20 };
+        openLayersMock.getOverlayRect = () => markerSize;
+        const calculateRoute = sinon.stub().resolves(Array.from({ length: 100 }, (_, index) => path[index % path.length]));
+        const map = await createMap({
+            autoAdjust: true,
+            routes: [route],
+            markers: [{ location: [40.6, -74.1] }],
+            providerConfig: { tileServer, calculateRoute }
+        });
+        const extendBounds = sinon.spy(map._provider, '_extendBounds');
+        const markerElement = openLayersMock.addedOverlays[0].options.element;
+        const initialFitCallCount = openLayersMock.fitCallCount;
+
+        try {
+            markerSize = { height: 60, width: 40 };
+            triggerResize(markerElement);
+            markerSize = { height: 90, width: 60 };
+            triggerResize(markerElement);
+
+            assert.strictEqual(openLayersMock.fitCallCount, initialFitCallCount + 2, 'both size changes refit the view');
+            assert.strictEqual(extendBounds.callCount, 6, 'each refit uses one marker and two route corners');
+            assert.deepEqual(openLayersMock.fittedExtent, [-74100, 40600, -73800, 40900], 'cached bounds still include intermediate route points');
+            assert.ok(calculateRoute.calledOnce, 'resizing does not request the route again');
+        } finally {
+            extendBounds.restore();
+        }
+    });
+
+    QUnit.test('autoAdjust uses cached route bounds when enabled after rendering', async function(assert) {
+        const calculateRoute = sinon.stub().resolves(path);
+        const map = await createMap({
+            routes: [route],
+            providerConfig: { tileServer, calculateRoute }
+        });
+
+        map.option('autoAdjust', true);
+        await map._lastAsyncAction;
+
+        assert.deepEqual(openLayersMock.fittedExtent, [-74000, 40700, -73800, 40900], 'route bounds are available even when rendered without autoAdjust');
+        assert.ok(calculateRoute.calledOnce, 'enabling autoAdjust does not recalculate the route');
+    });
+
+    QUnit.test('replacing and removing routes does not retain old route bounds', async function(assert) {
+        const map = await createMap({
+            autoAdjust: true,
+            routes: [route],
+            markers: [{ location: [5, 178] }],
+            providerConfig: { tileServer, calculateRoute: ({ locations }) => Promise.resolve(locations.map(({ lat, lng }) => [lat, lng])) }
+        });
+        const replacementRoute = { locations: [[10, 179], [30, -178], [-20, -179], [15, 178]] };
+
+        map.option('routes', [replacementRoute]);
+        await map._lastAsyncAction;
+
+        assert.deepEqual(openLayersMock.fittedExtent, [178000, -20000, 182000, 30000], 'only replacement route bounds and the marker are fitted');
+
+        await map.removeRoute(replacementRoute);
+        assert.strictEqual(getRouteSource().getFeatures().length, 0, 'replacement route is removed');
+
+        await map.addMarker({ location: [7, 179] });
+
+        assert.deepEqual(openLayersMock.fittedExtent, [178000, 5000, 179000, 7000], 'the next fit includes only markers and no removed route bounds');
+    });
+
+    QUnit.test('antimeridian route uses adjacent world coordinates and narrow bounds', async function(assert) {
+        await createMap({
+            autoAdjust: true,
+            routes: [{ locations: [[10, 179], [20, -179]] }],
+            providerConfig: { tileServer, calculateRoute: () => Promise.resolve([[10, 179], [20, -179]]) }
+        });
+        assert.deepEqual(getRouteSource().getFeatures()[0].getGeometry().getCoordinates(), [[179000, 10000], [181000, 20000]], 'line does not cross the whole world');
+        assert.deepEqual(openLayersMock.fittedExtent, [179000, 10000, 181000, 20000], 'bounds include the short crossing');
+    });
+
+    QUnit.test('autoAdjust includes continuous route segments, not just their endpoints', async function(assert) {
+        const locations = [[0, -120], [0, 0], [0, 120]];
+        await createMap({
+            autoAdjust: true,
+            routes: [{ locations }],
+            providerConfig: { tileServer, calculateRoute: () => Promise.resolve(locations) }
+        });
+        assert.deepEqual(getRouteSource().getFeatures()[0].getGeometry().getCoordinates(), [[-120000, 0], [0, 0], [120000, 0]], 'line spans both hemispheres through zero');
+        assert.deepEqual(openLayersMock.fittedExtent, [-120000, 0, 120000, 0], 'fit preserves the full line instead of cutting one segment');
+    });
+
+    QUnit.test('autoAdjust combines antimeridian routes and markers in a narrow extent', async function(assert) {
+        await createMap({
+            autoAdjust: true,
+            routes: [{ locations: [[10, 170], [20, -175]] }, { locations: [[15, -170], [25, 175]] }],
+            markers: [{ location: [5, 168] }],
+            providerConfig: { tileServer, calculateRoute: ({ locations }) => Promise.resolve(locations.map(({ lat, lng }) => [lat, lng])) }
+        });
+        assert.deepEqual(openLayersMock.fittedExtent, [168000, 5000, 190000, 25000], 'fit includes both continuous routes and the marker');
+    });
+
+    QUnit.test('feature geometry honors the user projection', async function(assert) {
+        openLayersMock.userProjection = 'EPSG:4326';
+        await createMap({ routes: [route] });
+        const geometry = getRouteSource().getFeatures()[0].getGeometry();
+        assert.deepEqual(geometry.getCoordinates()[0], [-74, 40.7], 'geometry uses the user projection expected by the renderer');
+        openLayersMock.mapInstance.setView(new openLayersMock.View({ projection: 'EPSG:4326', center: [-74, 40.7], zoom: 10 }));
+        assert.deepEqual(geometry.getCoordinates()[0], [-74, 40.7], 'view replacement preserves the user-projected route');
+    });
+
+    QUnit.test('view projection replacement reprojects existing routes', async function(assert) {
+        await createMap({ routes: [route] });
+        const geometry = getRouteSource().getFeatures()[0].getGeometry();
+        openLayersMock.mapInstance.setView(new openLayersMock.View({ projection: 'EPSG:4326', center: [-74, 40.7], zoom: 10 }));
+        assert.deepEqual(geometry.getCoordinates()[0], [-74, 40.7], 'route is transformed to the replacement view projection');
+    });
+
+    [
+        ['red', [255, 0, 0, 0.7]],
+        ['#f00', [255, 0, 0, 0.7]],
+        ['rgba(10, 20, 30, 0.2)', [10, 20, 30, 0.7]],
+    ].forEach(([color, expected]) => {
+        QUnit.test(`route color ${color} uses shared color parsing and separate opacity`, async function(assert) {
+            await createMap({ routes: [{ ...route, color, opacity: 0.7 }] });
+            const feature = getRouteSource().getFeatures()[0];
+            assert.deepEqual(feature.getStyle().getStroke().getColor(), expected);
+        });
+    });
+
+    QUnit.test('invalid route color does not block subsequent map operations', async function(assert) {
+        const map = await createMap();
+        const firstRoute = await map.addRoute({ ...route, color: '#oops' });
+        assert.deepEqual(firstRoute.getStyle().getStroke().getColor(), [0, 0, 0, 0.5], 'shared Color fallback is applied');
+        const secondRoute = await map.addRoute({ ...route, color: '#ff0000' });
+        assert.deepEqual(secondRoute.getStyle().getStroke().getColor(), [255, 0, 0, 0.5], 'the next route renders normally');
+        await map.addMarker({ location: [40.7, -74] });
+        assert.strictEqual(openLayersMock.addedOverlays.length, 1, 'the action queue also accepts marker updates');
+    });
+
+    QUnit.test('disposal removes route features and the vector layer', async function(assert) {
+        const map = await createMap({ routes: [route] });
+        const layer = openLayersMock.addedVectorLayers[0];
+        const source = layer.getSource();
+        map.dispose();
+        assert.strictEqual(source.getFeatures().length, 0, 'route source is cleared');
+        assert.ok(openLayersMock.removedLayers.includes(layer), 'vector layer is detached');
+    });
+
+    QUnit.test('pending route result is ignored after map disposal', async function(assert) {
+        let completeRoute;
+        let callbackStarted;
+        const started = new Promise(resolve => { callbackStarted = resolve; });
+        const calculateRoute = () => new Promise(resolve => {
+            completeRoute = resolve;
+            callbackStarted();
+        });
+        const onRouteAdded = sinon.spy();
+        const map = await createMap({ providerConfig: { tileServer, calculateRoute }, onRouteAdded });
+        const pending = map.addRoute(route);
+        await started;
+        map.dispose();
+        completeRoute(path);
+        assert.strictEqual(await pending, undefined, 'the public operation completes without an instance');
+        assert.strictEqual(openLayersMock.addedVectorLayers.length, 0, 'stale result creates no layer');
+        assert.ok(onRouteAdded.notCalled, 'stale result fires no route event');
+    });
+
+    QUnit.test('pending route result does not duplicate a route after repaint', async function(assert) {
+        let completeRoute;
+        let callbackStarted;
+        const started = new Promise(resolve => { callbackStarted = resolve; });
+        const calculateRoute = sinon.stub();
+        calculateRoute.onFirstCall().callsFake(() => new Promise(resolve => {
+            completeRoute = resolve;
+            callbackStarted();
+        }));
+        calculateRoute.onSecondCall().returns(Promise.resolve(path));
+        const onRouteAdded = sinon.spy();
+        const map = await createMap({ providerConfig: { tileServer, calculateRoute }, onRouteAdded });
+        const pending = map.addRoute(route);
+        await started;
+        map.repaint();
+        await map._lastAsyncAction;
+        completeRoute(path);
+        await pending;
+        assert.strictEqual(getRouteSource().getFeatures().length, 1, 'only the replacement map route exists');
+        assert.ok(onRouteAdded.calledOnce, 'stale route does not fire a second event');
+    });
+
+    QUnit.test('disposal while resolving waypoints does not request a route', async function(assert) {
+        let completeLocation;
+        let locationStarted;
+        const started = new Promise(resolve => { locationStarted = resolve; });
+        const calculateLocation = () => new Promise(resolve => {
+            completeLocation = resolve;
+            locationStarted();
+        });
+        const calculateRoute = sinon.spy();
+        const map = await createMap({ providerConfig: { tileServer, calculateLocation, calculateRoute } });
+        const pending = map.addRoute({ locations: ['Start', [40.8, -73.9]] });
+        await started;
+        map.dispose();
+        completeLocation({ lat: 40.7, lng: -74 });
+        await pending;
+        assert.ok(calculateRoute.notCalled, 'stale geocoding does not start a routing request');
     });
 });
 QUnit.module('OSM: viewport and interactions', moduleConfig, () => {

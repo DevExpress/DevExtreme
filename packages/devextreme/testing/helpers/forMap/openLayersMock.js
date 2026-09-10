@@ -149,6 +149,10 @@
         }
 
         addLayer(layer) {
+            if(layer instanceof MockVectorLayer) {
+                api.addedVectorLayers.push(layer);
+                return;
+            }
             api.tileLayer = layer;
             api.addedTileLayers.push(layer);
         }
@@ -233,10 +237,82 @@
             api.tileSourceChanges.push(source);
         }
     }
+    class MockLineString {
+        constructor(coordinates) {
+            this.coordinates = coordinates;
+        }
+        transform(source, destination) {
+            this.coordinates = this.coordinates.map(coordinate => transformCoordinate(coordinate, source, destination));
+            return this;
+        }
+        getCoordinates() {
+            return this.coordinates;
+        }
+    }
+    class MockFeature {
+        constructor(geometry) {
+            this.geometry = geometry;
+        }
+        getGeometry() {
+            return this.geometry;
+        }
+        setStyle(style) {
+            this.style = style;
+        }
+        getStyle() {
+            return this.style;
+        }
+    }
+    class MockVectorSource {
+        constructor() {
+            this.features = [];
+        }
+        addFeature(feature) {
+            this.features.push(feature);
+        }
+        removeFeature(feature) {
+            this.features = this.features.filter(item => item !== feature);
+        }
+        getFeatures() {
+            return this.features.slice();
+        }
+        clear() {
+            this.features = [];
+        }
+    }
+    class MockVectorLayer {
+        constructor(options) {
+            this.options = options;
+        }
+        getSource() {
+            return this.options.source;
+        }
+    }
+    class MockStroke {
+        constructor(options) {
+            this.options = options;
+        }
+        getColor() {
+            return this.options.color;
+        }
+        getWidth() {
+            return this.options.width;
+        }
+    }
+    class MockStyle {
+        constructor(options) {
+            this.options = options;
+        }
+        getStroke() {
+            return this.options.stroke;
+        }
+    }
     Object.assign(api, {
+        Feature: MockFeature,
         Map: MockMap,
         Overlay: MockOverlay,
         View: MockView,
+        geom: { LineString: MockLineString },
         control: {
             Zoom: MockZoom,
             defaults: {
@@ -256,7 +332,8 @@
             }
         },
         layer: {
-            Tile: MockTileLayer
+            Tile: MockTileLayer,
+            Vector: MockVectorLayer
         },
         proj: {
             getUserProjection() {
@@ -295,8 +372,10 @@
             }
         },
         source: {
-            ImageTile: MockImageTile
-        }
+            ImageTile: MockImageTile,
+            Vector: MockVectorSource
+        },
+        style: { Stroke: MockStroke, Style: MockStyle }
     });
     window.ol = api;
 })();
