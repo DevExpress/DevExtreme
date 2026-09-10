@@ -109,14 +109,10 @@ function renderAssistantMessage(text: string): void {
 }
 
 function getErrorMessage(err: unknown): string {
-  if (typeof err === 'object' && err !== null) {
-    const e = err as { error?: { message?: unknown }; message?: unknown };
-    if (typeof e.error?.message === 'string') return e.error.message;
-    if (typeof e.message === 'string') return e.message;
-  }
+  if (err instanceof Error) return err.message;
   if (typeof err === 'string') return err;
   return 'Unknown error';
-}
+};
 
 async function processMessageSending(
   message: DxChatTypes.TextMessage,
@@ -194,6 +190,7 @@ function onCopyButtonClick(message: { text: string }): void {
 }
 
 function onRegenerateButtonClick(): void {
+  alerts.value = [];
   updateLastMessage();
   regenerate();
 }

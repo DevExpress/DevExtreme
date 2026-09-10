@@ -39,11 +39,7 @@ const dataItemToMessage = (item: ChatTypes.Message): AIMessage => ({
 const getMessageHistory = (): AIMessage[] => [...dataSource.items()].map(dataItemToMessage);
 
 const getErrorMessage = (err: unknown): string => {
-  if (typeof err === 'object' && err !== null) {
-    const e = err as { error?: { message?: unknown }; message?: unknown };
-    if (typeof e.error?.message === 'string') return e.error.message;
-    if (typeof e.message === 'string') return e.message;
-  }
+  if (err instanceof Error) return err.message;
   if (typeof err === 'string') return err;
   return 'Unknown error';
 };
@@ -93,6 +89,7 @@ export const useApi = () => {
   }, [alertError, insertMessage]);
 
   const regenerateLastAIResponse = useCallback(async (): Promise<void> => {
+    setAlerts([]);
     const messageHistory = getMessageHistory();
     updateLastMessageContent(REGENERATION_TEXT);
 

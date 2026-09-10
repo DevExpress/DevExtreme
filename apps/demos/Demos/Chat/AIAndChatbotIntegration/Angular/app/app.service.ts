@@ -113,12 +113,8 @@ export class AppService {
     }
   }
 
-  private getErrorMessage(err: unknown): string {
-    if (typeof err === 'object' && err !== null) {
-      const e = err as { error?: { message?: unknown }; message?: unknown };
-      if (typeof e.error?.message === 'string') return e.error.message;
-      if (typeof e.message === 'string') return e.message;
-    }
+  getErrorMessage(err: unknown): string {
+    if (err instanceof Error) return err.message;
     if (typeof err === 'string') return err;
     return 'Unknown error';
   }
@@ -162,6 +158,7 @@ export class AppService {
 
   async regenerate() {
     try {
+      this.setAlerts([]);
       const aiResponse = await this.getAIResponse(this.messages.slice(0, -1));
 
       this.updateLastMessage(aiResponse);

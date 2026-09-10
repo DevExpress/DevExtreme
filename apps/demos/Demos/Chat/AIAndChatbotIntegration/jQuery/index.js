@@ -32,6 +32,12 @@ $(() => {
     return data.choices[0].message?.content;
   }
 
+  function getErrorMessage(err) {
+    if (err instanceof Error) return err.message;
+    if (typeof err === 'string') return err;
+    return 'Unknown error';
+  }
+
   function alertError(message) {
     instance.option({
       alerts: [{
@@ -73,11 +79,7 @@ $(() => {
     } catch (err) {
       instance.option({ typingUsers: [] });
       messages.pop();
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        'Unknown error';
-      alertError(errorMessage);
+      alertError(getErrorMessage(err));
     } finally {
       toggleDisabledState(false, event);
     }
@@ -93,11 +95,7 @@ $(() => {
       messages.at(-1).content = aiResponse;
     } catch (err) {
       updateLastMessage(messages.at(-1).content);
-      const errorMessage =
-        err.error?.message ??
-        err.message ??
-        'Unknown error';
-      alertError(errorMessage);
+      alertError(getErrorMessage(err));
     } finally {
       toggleDisabledState(false);
     }
@@ -151,10 +149,7 @@ $(() => {
   }
 
   function onRegenerateButtonClick() {
-    if (instance.option('alerts').length) {
-      return;
-    }
-
+    instance.option('alerts', []);
     updateLastMessage();
     regenerate();
   }
