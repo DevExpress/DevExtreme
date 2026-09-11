@@ -10,6 +10,7 @@ import { getAIResponse, SYSTEM_PROMPT } from './service.js';
 const promptElementAttr = { class: 'prompt-editor' };
 const suggestionsElementAttr = { class: 'dx-chat-suggestions' };
 const responseElementAttr = { class: 'response-editor' };
+const responseInputAttr = { 'aria-label': 'AI Response' };
 const suggestions = [
   {
     type: 'default',
@@ -129,6 +130,7 @@ const DetailView = ({ data: templateData }) => {
           hoverStateEnabled={false}
           focusStateEnabled={false}
           elementAttr={responseElementAttr}
+          inputAttr={responseInputAttr}
         />
 
         <LoadPanel

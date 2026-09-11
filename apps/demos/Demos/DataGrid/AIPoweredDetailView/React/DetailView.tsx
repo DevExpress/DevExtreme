@@ -15,6 +15,7 @@ type SubmitEvent = TextBoxTypes.EnterKeyEvent | ButtonTypes.ClickEvent;
 const promptElementAttr = { class: 'prompt-editor' };
 const suggestionsElementAttr = { class: 'dx-chat-suggestions' };
 const responseElementAttr = { class: 'response-editor' };
+const responseInputAttr = { 'aria-label': 'AI Response' };
 
 const suggestions = [
   { type: 'default', text: '✨ Summary', prompt: 'Display general information about this vehicle and its features.' },
@@ -128,6 +129,7 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
         hoverStateEnabled={false}
         focusStateEnabled={false}
         elementAttr={responseElementAttr}
+        inputAttr={responseInputAttr}
       />
 
       <LoadPanel

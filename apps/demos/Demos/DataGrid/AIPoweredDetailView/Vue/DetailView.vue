@@ -45,6 +45,7 @@
       :hover-state-enabled="false"
       :focus-state-enabled="false"
       :element-attr="responseElementAttr"
+      :input-attr="responseInputAttr"
     />
 
     <DxLoadPanel
@@ -90,6 +91,7 @@ const { rowData } = defineProps<{ rowData: Vehicle }>();
 const promptElementAttr = { class: 'prompt-editor' };
 const suggestionsElementAttr = { class: 'dx-chat-suggestions' };
 const responseElementAttr = { class: 'response-editor' };
+const responseInputAttr = { 'aria-label': 'AI Response' };
 
 const suggestions = [
   { type: 'default', text: '✨ Summary', prompt: 'Display general information about this vehicle and its features.' },

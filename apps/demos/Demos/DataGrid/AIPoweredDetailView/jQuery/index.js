@@ -156,6 +156,7 @@ $(() => {
       hoverStateEnabled: false,
       focusStateEnabled: false,
       elementAttr: { class: 'response-editor' },
+      inputAttr: { 'aria-label': 'AI Response' },
     });
     responseEditor = $responseEditor.dxTextArea('instance');
 
