@@ -1,0 +1,2024 @@
+{
+  "comment": [
+    "Every role the package disagrees with, and what was decided about it.",
+    "",
+    "Exact equality, not a ratchet down: a new disagreement and a resolved one both fail, because both",
+    "are a decision somebody has to record. Re-bank deliberately with UPDATE_ROLES_BASELINE=1 pnpm test,",
+    "and fill in the decision - a banked entry without one fails too.",
+    "",
+    "verdict   cross-family   - the package uses this role, but only for a slot of another kind",
+    "          family-conflict - the package paints this slot from another family entirely",
+    "decision  confirmed   - the package assigns this very role here; only our slot word differs",
+    "          naming      - the role is right for what the property paints; the slot word is not",
+    "          rule-5      - one value in two roles, named after the dominant one (DIVERGENCES)",
+    "          bridge      - built with rgb(from role / a); the foundation names no role for it",
+    "          package-gap - no role of the right family exists; a request, not a swap",
+    "          design      - a correction would move a pixel, so it is not ours to make",
+    "",
+    "typographyUnmarked - typography step reads that carry no marker at all. The px gate only looks at",
+    "literals, so a step read slipped past it; these are banked until each one is routed to a role or",
+    "marked with a reason.",
+    "",
+    "slotLies - the slot word contradicts the CSS property the bundle shows it painting. Same rules as",
+    "above: banked with a decision, exact equality. hairline and rule-5 are deliberate and stay; naming",
+    "is a rename wave waiting for a changelog, not a role defect.",
+    "",
+    "ladders - a slot whose states resolve to one role. `focused` reusing `hovered` is accepted",
+    "convention and never listed. decision no-rung means the system has no role for the second state",
+    "either; design means it does and we skip it.",
+    "",
+    "contrast - foreground and background the bundle puts in ONE rule, resolved per mode. Alpha-bridge",
+    "values and disabled selectors are excluded: the first renders as a tint over an unknown surface,",
+    "the second is exempt from WCAG 1.4.3 and gated by disabled-paint.test.ts. decision graphic-ok means",
+    "the pair is a glyph and clears 3:1; design means it misses the threshold that applies to it.",
+    "",
+    "concepts - one anatomical concept (modifiers + slot + state, sub-elements dropped) painted with",
+    "several roles across components. This is the only check that asks the question the task is named",
+    "after; every other one reads a single declaration. decision spelling means the roles resolve to one",
+    "colour and differ only in family, shade means same family different value, design means the",
+    "components disagree about the colour itself.",
+    "",
+    "judgmentCalls - where the decision was not read off the package or a standard. Kept because a",
+    "fixed item leaves the lists above and its reasoning would leave with it."
+  ],
+  "open": [
+    {
+      "name": "chat-message-editing-preview-accent-content",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-bg-primary"
+      ],
+      "slot": "content",
+      "decision": "rule-5",
+      "why": "one value paints the accent bar (background-color) and the caption (color) in base/chat/.../_mixins.scss:14,25 - dominant role recorded per rule 5. The text half wants content-primary in dark (#4b90d9 vs our #0f6cbd); same shape as the danger/success/warning fix of review round 1"
+    },
+    {
+      "name": "check-box-invalid-mark-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
+      "name": "check-box-invalid-mark-bg-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-active"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
+      "name": "check-box-invalid-mark-bg-hovered",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
+      "name": "color-view-handle-content",
+      "verdict": "cross-family",
+      "roles": [
+        "color-bg"
+      ],
+      "slot": "content",
+      "decision": "naming",
+      "why": "goes to base as $handle-color and is a FILL - radial-gradient stops and inset box-shadows. color-bg is the right role; the slot word `content` is what disagrees"
+    },
+    {
+      "name": "gallery-nav-button-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-subtle"
+      ],
+      "slot": "bg",
+      "decision": "design",
+      "why": "a content role used as the scrim behind nav buttons over images. No bg role carries this value; the package paints its nav glyph with it, not the disc. Needs a scrim decision, not a swap"
+    },
+    {
+      "name": "gallery-nav-button-bg-disabled",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "slot": "bg",
+      "decision": "design",
+      "why": "same scrim question as gallery-nav-button-bg, disabled state"
+    },
+    {
+      "name": "load-indicator-segment-inner-border",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-bg-primary-subtle"
+      ],
+      "slot": "border",
+      "decision": "package-gap",
+      "why": "border-color: from color-bg-primary-subtle because color-border-primary-subtle does not exist. Nothing to swap to - a role request"
+    },
+    {
+      "name": "radio-button-invalid-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-border-danger-shared"
+      ],
+      "slot": "bg",
+      "decision": "rule-5",
+      "why": "the ring's border-color and the dot's background-color travel as one value - recorded in DIVERGENCES as a rule-5 pair, accepted by review round 2"
+    },
+    {
+      "name": "radio-button-invalid-bg-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-border-danger-shared-active"
+      ],
+      "slot": "bg",
+      "decision": "rule-5",
+      "why": "see radio-button-invalid-bg"
+    },
+    {
+      "name": "radio-button-invalid-bg-hovered",
+      "verdict": "cross-family",
+      "roles": [
+        "color-border-danger-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "rule-5",
+      "why": "see radio-button-invalid-bg"
+    },
+    {
+      "name": "switch-handle-bg-disabled",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "see switch-handle-off-bg"
+    },
+    {
+      "name": "switch-handle-off-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-subtle"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the package paints the switch knob (its `trigger` slot) from exactly this role. Our role is right; only the slot word differs, because the property is background-color"
+    },
+    {
+      "name": "switch-handle-on-shadow",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-inverted"
+      ],
+      "slot": "shadow",
+      "decision": "bridge",
+      "why": "rgb(from color-content-inverted / .1) - the foundation names no switch shadow role, recorded in DIVERGENCES and inventoried in BRIDGES.md"
+    },
+    {
+      "name": "switch-on-border-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-bg-primary-active"
+      ],
+      "slot": "border",
+      "decision": "design",
+      "why": "the only member of the on-border trio still on a bg role; its siblings were corrected. color-border-primary-shared-active matches in light and moves dark #003c70 -> #005397, so it is a pixel, not hygiene"
+    },
+    {
+      "name": "tree-view-checkbox-accent-content-focused",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-bg-primary-hovered"
+      ],
+      "slot": "content",
+      "decision": "rule-5",
+      "why": "paints background-color and border-color of the checkbox, never color: - a dual-role value whose name claims the content slot it does not use"
+    }
+  ],
+  "typographyUnmarked": [
+    {
+      "variable": "grid-column-chooser-title-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-appointment-month-text-font-size",
+      "reads": "font-size-120",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-month-date-text-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-small-font-size",
+      "reads": "font-size-140",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-time-indicator-font-size",
+      "reads": "font-size-300",
+      "roleExists": false
+    },
+    {
+      "variable": "typography-l-font-size",
+      "reads": "font-size-200",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-l-font-size",
+      "reads": "font-size-280",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-m-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-m-font-size",
+      "reads": "font-size-200",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-s-font-size",
+      "reads": "font-size-140",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-s-font-size",
+      "reads": "font-size-180",
+      "roleExists": false
+    },
+    {
+      "variable": "typography-xl-font-size",
+      "reads": "font-size-240",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-xs-font-size",
+      "reads": "font-size-120",
+      "roleExists": true
+    }
+  ],
+  "slotLies": [
+    {
+      "name": "color-view-border",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "box-shadow"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "color-view-border-disabled",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "box-shadow"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "color-view-handle-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background",
+        "box-shadow"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "date-view-roller-bottom-shadow",
+      "slot": "shadow",
+      "slotSays": "shadow",
+      "paints": [
+        "background-image"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "date-view-roller-top-shadow",
+      "slot": "shadow",
+      "slotSays": "shadow",
+      "paints": [
+        "background-image"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "diagram-selection-bg",
+      "slot": "bg",
+      "slotSays": "bg",
+      "paints": [
+        "fill"
+      ],
+      "decision": "known",
+      "why": "already inventoried as a divergence - the foundation names no role for it"
+    },
+    {
+      "name": "filter-builder-group-operation-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-group-operation-content-disabled",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-group-operation-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-group-operation-content-hovered",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-field-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-field-content-disabled",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-field-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-field-content-hovered",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-operator-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-operator-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-operator-content-hovered",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-value-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-value-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "filter-builder-item-value-content-hovered",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "gantt-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "border-color",
+        "border-left-color",
+        "border-top-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "grid-border-focused",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "pivot-grid-accent-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "border-color",
+        "outline-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "pivot-grid-grand-total-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "pivot-grid-total-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "radio-button-content-read-only",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "border-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "scheduler-appointment-content-active",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "scheduler-appointment-start-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "box-shadow"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "scheduler-workspace-cell-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "naming",
+      "why": "the role matches the property the bundle shows; the slot word in the name does not"
+    },
+    {
+      "name": "slider-accent-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background",
+        "border-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "slider-invalid-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "border-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    },
+    {
+      "name": "splitter-bar-border",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "splitter-bar-border-disabled",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "a 1px line drawn with background-color keeps its border role - the property is how it is drawn, not what it is. Consistent across tabs, splitterBar and gridBase"
+    },
+    {
+      "name": "tree-view-checkbox-accent-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "border-color"
+      ],
+      "decision": "rule-5",
+      "why": "one value paints two properties; named after the dominant role, second recorded (DIVERGENCES)"
+    }
+  ],
+  "ladders": [
+    {
+      "stem": "accordion-title-bg",
+      "states": [
+        "active",
+        "hovered"
+      ],
+      "role": [
+        "color-bg-hovered"
+      ],
+      "decision": "design",
+      "why": "pressing the header looks exactly like hovering it: both read color-bg-hovered while the system ships color-bg-active (#e1e1e1 light / #1d1d1d dark), which the theme already uses elsewhere. Fluent 2 settles the principle: colorSubtleBackgroundHover #f5f5f5 and colorSubtleBackgroundPressed #e0e0e0 are separate tokens there, and the package mirrors those values as color-bg-hovered / color-bg-active. Still not applied here - conforming would move a pixel away from legacy fluent, and NFR-1 is the product's call, not the audit's"
+    },
+    {
+      "stem": "button-danger-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content-static-dark"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-danger-outlined-content",
+      "states": [
+        "hovered",
+        "selected"
+      ],
+      "role": [
+        "color-content-danger-hovered"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-default-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content-static-dark"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-default-outlined-content",
+      "states": [
+        "hovered",
+        "selected"
+      ],
+      "role": [
+        "color-content-primary-hovered"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-default-text-content",
+      "states": [
+        "hovered",
+        "selected"
+      ],
+      "role": [
+        "color-content-primary-hovered"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-normal-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-success-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content-static-dark"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-success-outlined-content",
+      "states": [
+        "hovered",
+        "selected"
+      ],
+      "role": [
+        "color-content-success-hovered"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "calendar-invalid-border",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-border-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "chat-message-list-context-menu-delete-button-content",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-content-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "check-box-border",
+      "states": [
+        "disabled",
+        "read-only"
+      ],
+      "role": [
+        "color-border-disabled"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "file-manager-file-item-select-bg",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-bg-primary"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "file-manager-file-item-select-content",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-content-inverted"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "list-item-bg",
+      "states": [
+        "active",
+        "selected-focused"
+      ],
+      "role": [
+        "color-bg-active"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "lookup-icon",
+      "states": [
+        "active",
+        "rest"
+      ],
+      "role": [
+        "color-content-subtle"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "radio-button-content",
+      "states": [
+        "disabled",
+        "read-only"
+      ],
+      "role": [
+        "color-content-disabled"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "slider-invalid-bg",
+      "states": [
+        "hovered",
+        "rest"
+      ],
+      "role": [
+        "color-border-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "switch-invalid-border",
+      "states": [
+        "focused",
+        "hovered",
+        "rest"
+      ],
+      "role": [
+        "color-border-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "tabs-tab-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "tag-box-tag-content",
+      "states": [
+        "active",
+        "rest"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "text-editor-border",
+      "states": [
+        "disabled",
+        "read-only"
+      ],
+      "role": [
+        "color-border-disabled"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "tile-view-bg",
+      "states": [
+        "hovered",
+        "rest"
+      ],
+      "role": [
+        "color-bg"
+      ],
+      "decision": "design",
+      "why": "rest and hovered are one value while active is not - the slot clearly means to ladder and the hovered rung is flat. color-bg-hovered exists. Fluent 2 ladders a subtle surface from transparent through colorSubtleBackgroundHover, though a tile is not obviously that control - weaker evidence than the accordion"
+    },
+    {
+      "stem": "tree-view-content",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    }
+  ],
+  "contrast": [
+    {
+      "selector": ".dx-checkbox-checked .dx-checkbox-icon",
+      "fgRole": "color-content-inverted",
+      "bgRole": "color-bg-primary",
+      "contrast": {
+        "light": 5.38,
+        "dark": 3.36
+      },
+      "decision": "graphic-ok",
+      "why": "the checkmark is a glyph: 3.36 clears the 3:1 threshold. Recorded so it is not rediscovered, and so a drop below 3 is caught"
+    },
+    {
+      "selector": ".dx-field-value.dx-attention::before",
+      "fgRole": "color-content-static-dark",
+      "bgRole": "color-content-danger-shared",
+      "contrast": {
+        "light": 6.07,
+        "dark": 3.68
+      },
+      "decision": "graphic-ok",
+      "why": "the attention mark is a glyph on the invalid disc: 3.68 clears 3:1. Same reason to keep it listed"
+    },
+    {
+      "selector": ".dx-messagelist-context-menu-content .dx-menu-item:has(.dx-icon-trash).dx-state-focused",
+      "fgRole": "color-content-danger",
+      "bgRole": "color-bg-hovered",
+      "contrast": {
+        "light": 5.56,
+        "dark": 3.05
+      },
+      "decision": "package-gap",
+      "why": "3.05 in dark against 4.5 for a label - and no role in the family clears it: content-danger-hovered, the strongest, reaches 3.87 on the same surface. The design system ships no danger content role that meets AA on its own hovered surface in dark. A request, not a swap"
+    },
+    {
+      "selector": ".dx-splitter .dx-resize-handle",
+      "fgRole": "color-content-subtle",
+      "bgRole": "color-border",
+      "contrast": {
+        "light": 6,
+        "dark": 2.8
+      },
+      "decision": "design",
+      "why": "Measured further 09.09 and the question moved. WCAG 1.4.11 asks about what identifies the component, and that is the bar against the panes, not the dots inside it - so the grip at 2.8 may not be in scope at all. The bar is: color-border on color-bg is 1.62 in LIGHT against the same 3:1, and its hovered state 1.82. The splitter is not identifiable by contrast in light at all, which is worse than what this row originally reported and in the mode that has screenshots. The focused state fails the other way: bg-primary on color-bg is 2.88 in dark."
+    }
+  ],
+  "concepts": [
+    {
+      "concept": "accent border rest",
+      "roles": [
+        "color-content-primary",
+        "color-border-primary",
+        "color-border"
+      ],
+      "families": [
+        "content",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "diagram",
+          "role": "color-content-primary"
+        },
+        {
+          "folder": "gantt",
+          "role": "color-border-primary"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-border"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "accent content focused",
+      "roles": [
+        "color-bg-primary-active",
+        "color-bg-primary-hovered"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "slider",
+          "role": "color-bg-primary-active"
+        },
+        {
+          "folder": "treeView",
+          "role": "color-bg-primary-hovered"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "accent content rest",
+      "roles": [
+        "color-bg-primary",
+        "color-border-primary",
+        "color-content-primary"
+      ],
+      "families": [
+        "bg",
+        "border",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "chat",
+          "role": "color-bg-primary"
+        },
+        {
+          "folder": "pivotGrid",
+          "role": "color-border-primary"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-content-primary"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "base bg rest",
+      "roles": [
+        "color-border-subtle",
+        "color-bg"
+      ],
+      "families": [
+        "border",
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "list",
+          "role": "color-border-subtle"
+        },
+        {
+          "folder": "stepper",
+          "role": "color-bg"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "base content rest",
+      "roles": [
+        "color-content-subtle",
+        "color-bg-primary-subtle",
+        "color-content"
+      ],
+      "families": [
+        "content",
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "diagram",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-bg-primary-subtle"
+        },
+        {
+          "folder": "stepper",
+          "role": "color-content"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "empty content rest",
+      "roles": [
+        "color-content-subtle",
+        "color-content"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "cardView",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "chat",
+          "role": "color-content"
+        },
+        {
+          "folder": "chat",
+          "role": "color-content-subtle"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "error bg rest",
+      "roles": [
+        "color-bg-danger",
+        "color-bg-danger-subtler"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "gridBase",
+          "role": "color-bg-danger"
+        },
+        {
+          "folder": "informer",
+          "role": "color-bg-danger-subtler"
+        },
+        {
+          "folder": "toast",
+          "role": "color-bg-danger"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "error content rest",
+      "roles": [
+        "color-content-static-dark",
+        "color-content-danger"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "gridBase",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "gridBase",
+          "role": "color-content-danger"
+        },
+        {
+          "folder": "informer",
+          "role": "color-content-danger"
+        },
+        {
+          "folder": "toast",
+          "role": "color-content-static-dark"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "highlighted bg rest",
+      "roles": [
+        "color-bg-highlight",
+        "color-bg-primary-alpha-active"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "cardView",
+          "role": "color-bg-highlight"
+        },
+        {
+          "folder": "htmlEditor",
+          "role": "color-bg-primary-alpha-active"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "info content rest",
+      "roles": [
+        "color-content",
+        "color-content-subtle"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "informer",
+          "role": "color-content"
+        },
+        {
+          "folder": "pagination",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "toast",
+          "role": "color-content"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid bg focused",
+      "roles": [
+        "color-bg-danger-shared-active",
+        "color-content-danger-shared-active",
+        "color-border-danger-shared-active"
+      ],
+      "families": [
+        "bg",
+        "content",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared-active"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared-active"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-border-danger-shared-active"
+        }
+      ],
+      "decision": "spelling",
+      "why": "the components paint the identical colour and spell it from different families - free to unify, and until then the next palette change moves some of them and not the others"
+    },
+    {
+      "concept": "invalid bg hovered",
+      "roles": [
+        "color-bg-danger-shared-hovered",
+        "color-content-danger-shared-hovered",
+        "color-border-danger-shared-hovered",
+        "color-border-danger"
+      ],
+      "families": [
+        "bg",
+        "content",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared-hovered"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-border-danger-shared-hovered"
+        },
+        {
+          "folder": "slider",
+          "role": "color-border-danger"
+        }
+      ],
+      "decision": "spelling",
+      "why": "the components paint the identical colour and spell it from different families - free to unify, and until then the next palette change moves some of them and not the others"
+    },
+    {
+      "concept": "invalid bg rest",
+      "roles": [
+        "color-bg-danger-shared",
+        "color-content-danger-shared",
+        "color-bg-danger-subtler",
+        "color-bg-danger",
+        "color-border-danger-shared",
+        "color-border-danger"
+      ],
+      "families": [
+        "bg",
+        "content",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared"
+        },
+        {
+          "folder": "common",
+          "role": "color-content-danger-shared"
+        },
+        {
+          "folder": "gridBase",
+          "role": "color-bg-danger-subtler"
+        },
+        {
+          "folder": "progressBar",
+          "role": "color-bg-danger"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-border-danger-shared"
+        },
+        {
+          "folder": "slider",
+          "role": "color-border-danger"
+        }
+      ],
+      "decision": "spelling",
+      "why": "the components paint the identical colour and spell it from different families - free to unify, and until then the next palette change moves some of them and not the others"
+    },
+    {
+      "concept": "invalid border focused",
+      "roles": [
+        "color-border-danger",
+        "color-border-danger-shared-active"
+      ],
+      "families": [
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "calendar",
+          "role": "color-border-danger"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-border-danger-shared-active"
+        },
+        {
+          "folder": "switch",
+          "role": "color-border-danger"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid border hovered",
+      "roles": [
+        "color-border-danger-shared-hovered",
+        "color-border-danger"
+      ],
+      "families": [
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-border-danger-shared-hovered"
+        },
+        {
+          "folder": "switch",
+          "role": "color-border-danger"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid border rest",
+      "roles": [
+        "color-border-danger",
+        "color-border-danger-shared"
+      ],
+      "families": [
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "calendar",
+          "role": "color-border-danger"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-border-danger-shared"
+        },
+        {
+          "folder": "switch",
+          "role": "color-border-danger"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid content rest",
+      "roles": [
+        "color-content-static-dark",
+        "color-content-danger",
+        "color-bg-danger"
+      ],
+      "families": [
+        "content",
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "common",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "fieldset",
+          "role": "color-content-danger"
+        },
+        {
+          "folder": "fileUploader",
+          "role": "color-bg-danger"
+        },
+        {
+          "folder": "stepper",
+          "role": "color-content-danger"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "inverted content rest",
+      "roles": [
+        "color-content-static-dark",
+        "color-content-inverted"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "fileManager",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "list",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-content-inverted"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "menu bg rest",
+      "roles": [
+        "color-bg",
+        "color-border-subtle"
+      ],
+      "families": [
+        "bg",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "list",
+          "role": "color-bg"
+        },
+        {
+          "folder": "menu",
+          "role": "color-bg"
+        },
+        {
+          "folder": "menu",
+          "role": "color-border-subtle"
+        }
+      ],
+      "decision": "design",
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "menu icon rest",
+      "roles": [
+        "color-content-subtle",
+        "color-content"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "contextMenu",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "filterBuilder",
+          "role": "color-content"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "menu shadow rest",
+      "roles": [
+        "box-shadow-md",
+        "color-shadow-ambient"
+      ],
+      "families": [
+        "shadow"
+      ],
+      "members": [
+        {
+          "folder": "contextMenu",
+          "role": "box-shadow-md"
+        },
+        {
+          "folder": "list",
+          "role": "color-shadow-ambient"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "success content rest",
+      "roles": [
+        "color-content-success",
+        "color-content-static-dark"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "gridBase",
+          "role": "color-content-success"
+        },
+        {
+          "folder": "toast",
+          "role": "color-content-static-dark"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "text content focused",
+      "roles": [
+        "color-content-static-dark",
+        "color-content-primary"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "filterBuilder",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "textEditor",
+          "role": "color-content-primary"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "text content rest",
+      "roles": [
+        "color-content",
+        "color-content-subtle"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "cardView",
+          "role": "color-content"
+        },
+        {
+          "folder": "diagram",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "textEditor",
+          "role": "color-content"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    }
+  ],
+  "judgmentCalls": [
+    {
+      "what": "the hairline idiom: a border role drawn with background-color keeps the border role (11 declarations left as they are)",
+      "against": "nothing - but no guideline states it either",
+      "basis": "three places in the theme agree (tabs, splitterBar, gridBase), and core/tabs confirms it independently: its selected-tab bar is a `selector` slot painted from border-primary-shared",
+      "cost": "none - nothing was changed on this basis, it only kept 11 names off the defect list",
+      "open": false
+    },
+    {
+      "what": "the classifiers themselves: the slot->family table, the kinship table, the folder->component map, the shared cross-cutting list",
+      "against": "nothing - they encode NAMING.md, but the specific 30-slot mapping and which slots count as ambiguous are mine",
+      "basis": "seeded from registries.json and the ROOTS map in package-disabled.mjs; every finding they produce carries its own evidence, so a wrong classifier shows up as a wrong finding rather than a hidden bias",
+      "cost": "three revisions during the audit already removed seven false conflicts and eight false ladders",
+      "open": false
+    },
+    {
+      "what": "Fluent 2 was consulted only for four questions (typography ramp, focus stroke, checkbox anatomy, subtle hover vs pressed)",
+      "against": "nothing - but it is a spot check, not a sweep",
+      "basis": "those were the places where an external answer could change a decision; the rest of the report still rests on the package and the three sibling products",
+      "cost": "the 277 declarations no product describes remain without external authority",
+      "open": true
+    }
+  ],
+  "fluent2": {
+    "comment": [
+      "Checked against fluent2.microsoft.design and microsoft/fluentui packages/tokens on 08.09.2026.",
+      "Only the places where an external answer changes something are recorded."
+    ],
+    "findings": [
+      {
+        "about": "typography off the role grid (37 step reads, 17 of them font-weight 500)",
+        "fluent2": "the web type ramp has three weights - Regular, Semibold, Bold - and no Medium at all. Its sizes are 10/12/14/16/20/24/28/32/40/68px, which the package grid mirrors exactly bar Display",
+        "answer": "font-weight 500 and sizes 11/18/22/26/36px are legacy fluent values with no home in Fluent 2. The package grid is faithful, not short of steps, so design#1555 asked the wrong way round: the question is whether to keep the legacy values, not which steps deserve roles"
+      },
+      {
+        "about": "the focus ring reading color-border-primary-shared while the package ships four focus roles unread",
+        "fluent2": "focus is a two-tone stroke - colorStrokeFocus1 #ffffff inner, colorStrokeFocus2 #000000 outer - specifically so it survives any background. It is not an accent-coloured single stroke",
+        "answer": "the four unread roles (focus, -inverted, -static, -static-inverted) are the package mirroring Fluent 2. The theme paints focus in a way Fluent 2 does not"
+      },
+      {
+        "about": "the checkBox invalid mark, swapped to a bg role earlier in this audit",
+        "fluent2": "the checkbox box is colorCompoundBrandBackground and the checkmark is colorNeutralForegroundInverted - the mark is foreground",
+        "answer": "reverted. Two external sources against one reading of an internal rule"
+      },
+      {
+        "about": "accordion hover and pressed resolving to one role",
+        "fluent2": "colorSubtleBackgroundHover #f5f5f5 and colorSubtleBackgroundPressed #e0e0e0 are distinct tokens",
+        "answer": "the collapse deviates from Fluent 2, and the package already carries both values. Left for the product because conforming moves away from legacy fluent"
+      }
+    ]
+  },
+  "unusedRoles": {
+    "comment": [
+      "Counted from the package inward: roles the four component sets assign that the theme reads",
+      "nowhere. capability - the role exists in the semantic layer and we simply never reached for it;",
+      "stale - the neighbours reference a name no layer declares, which is their drift, not our gap.",
+      "Exact equality: a role leaving this list means the theme started using it, which is a decision."
+    ],
+    "capability": [
+      "color-bg-high",
+      "color-bg-info",
+      "color-bg-info-active",
+      "color-bg-info-hovered",
+      "color-bg-info-selected",
+      "color-bg-info-subtler",
+      "color-bg-info-subtler-active",
+      "color-bg-info-subtler-hovered",
+      "color-bg-info-subtler-selected",
+      "color-bg-inverted-active",
+      "color-bg-inverted-disabled",
+      "color-bg-inverted-hovered",
+      "color-bg-inverted-selected",
+      "color-bg-low-active",
+      "color-bg-on-color",
+      "color-bg-on-color-alpha",
+      "color-bg-on-color-alpha-active",
+      "color-bg-on-color-alpha-disabled",
+      "color-bg-on-color-alpha-hovered",
+      "color-bg-primary-shared-hovered",
+      "color-bg-static-dark",
+      "color-bg-static-dark-active",
+      "color-bg-static-dark-disabled",
+      "color-bg-static-dark-hovered",
+      "color-bg-static-dark-selected",
+      "color-bg-static-light-active",
+      "color-bg-static-light-disabled",
+      "color-bg-static-light-hovered",
+      "color-bg-static-light-selected",
+      "color-bg-success-shared",
+      "color-bg-success-shared-active",
+      "color-bg-success-shared-hovered",
+      "color-bg-warning-active",
+      "color-bg-warning-hovered",
+      "color-bg-warning-selected",
+      "color-bg-warning-subtler",
+      "color-bg-warning-subtler-active",
+      "color-bg-warning-subtler-hovered",
+      "color-bg-warning-subtler-selected",
+      "color-border-info",
+      "color-border-inverted",
+      "color-border-inverted-active",
+      "color-border-inverted-disabled",
+      "color-border-inverted-hovered",
+      "color-border-on-color-shared",
+      "color-border-on-color-shared-disabled",
+      "color-border-static-dark",
+      "color-border-static-dark-active",
+      "color-border-static-dark-disabled",
+      "color-border-static-dark-hovered",
+      "color-border-static-light",
+      "color-border-static-light-active",
+      "color-border-static-light-disabled",
+      "color-border-static-light-hovered",
+      "color-border-success-shared",
+      "color-border-success-shared-active",
+      "color-border-success-shared-hovered",
+      "color-border-warning",
+      "color-content-info",
+      "color-content-info-active",
+      "color-content-info-hovered",
+      "color-content-inverted-disabled",
+      "color-content-on-color",
+      "color-content-on-color-disabled",
+      "color-content-on-color-shared",
+      "color-content-on-color-shared-disabled",
+      "color-content-on-color-subtler",
+      "color-content-on-subtle-primary",
+      "color-content-primary-shared",
+      "color-content-primary-shared-active",
+      "color-content-primary-shared-hovered",
+      "color-content-static-dark-disabled",
+      "color-content-static-light-disabled",
+      "color-content-success-shared",
+      "color-content-success-shared-active",
+      "color-content-success-shared-hovered",
+      "color-content-warning",
+      "color-content-warning-active",
+      "color-content-warning-hovered",
+      "color-focus",
+      "color-focus-inverted",
+      "color-focus-static",
+      "color-focus-static-inverted"
+    ],
+    "stale": [
+      "color-bg-none",
+      "color-border-contrast-disabled",
+      "color-border-none",
+      "color-content-active",
+      "color-content-none",
+      "color-content-static-dark-active",
+      "color-content-subtle-active",
+      "color-content-subtle-hovered",
+      "color-content-subtle-selected",
+      "color-content-subtler-disabled"
+    ]
+  },
+  "coverage": {
+    "comment": [
+      "How much of the theme has an external counterpart to compare against, and what it would cost to",
+      "raise that. Measured 09.09.2026 against repositories outside this one, so the tool cannot",
+      "recompute it - the numbers are banked with their source and go stale on purpose, loudly, when",
+      "someone reads them next to a fresh no-counterpart count."
+    ],
+    "measuredOn": "2026-09-09",
+    "levers": [
+      {
+        "id": "Р1",
+        "lever": "Карта «наша папка → компонент пакета»",
+        "status": "сделано",
+        "covers": 51,
+        "needs": "ничего — источник тот же",
+        "detail": "Карта сопоставляла по похожести имён. cardView — это пакетный grid (так его и мапит package-disabled.mjs), speedDialAction — button, lookup — listbox, actionSheet — popup, validation — field. Шесть строк, 277 → 226, и ни одного нового расхождения: все 51 попали в agrees."
+      },
+      {
+        "id": "Р2",
+        "lever": "Реализация Blazor как пятый источник",
+        "status": "предложение",
+        "covers": 110,
+        "needs": "парсер ds.$ по папкам + карта из семи строк",
+        "detail": "В пакете у Blazor 20 компонентов, в реализации (dxvcs/.../ds-themes/components) — 57, и роли он читает через тот же мост ds.$, что и мы: карта имён ролей не нужна. Имена папок опять другие: rollers — это dateView, edit-dropdown — dropDownEditor. Покрывает scheduler 43 (у них 38 ролей), filterBuilder 28 (59), pivotGrid 19, fileUploader 10, dateView 5, splitterBar 3, dropDownEditor 2."
+      },
+      {
+        "id": "Р3",
+        "lever": "Fluent UI React",
+        "status": "предложение",
+        "covers": 13,
+        "needs": "карта имён Fluent 2 → dxds, ~40-60 пар",
+        "detail": "У Fluent есть Slider, и его стили называют девять цветовых токенов по частям. Но ни имена (colorCompoundBrandBackground против color-bg-primary-shared), ни значения (бренд #0078d4 против #0f6cbd) не совпадают — нужна разовая карта."
+      },
+      {
+        "id": "Р4",
+        "lever": "WPF — только на уровне семейства",
+        "status": "предложение",
+        "covers": 47,
+        "needs": "разбор PaletteSemantics.md, 142 ключа",
+        "detail": "Компоненты у WPF есть (Gantt 12 xaml, Diagram 14, RichEdit 8), но их темы НЕ затокенизированы: семантические ключи вида AccordionHeaderBackgroundRest получают только компоненты из components/wpf, а Gantt и Diagram красятся легаси-палитрой Lightweight, где Color.Foreground.Primary — это литерал #FF1A1A1A. Зато Lightweight/Common/PaletteSemantics.md описывает смысл 142 ключей словами («Color.Border — primary border brush for controls»). Это сигнал уровня семейства (border / bg / content), а не роли, и он покрывает ровно то, чего нет больше нигде: gantt 14, diagram 20, htmlEditor 13."
+      }
+    ],
+    "rejected": [
+      {
+        "lever": "Реализация vnext",
+        "why": "18 компонентов, все до одного уже описаны пакетом. Не добавляет ничего."
+      }
+    ],
+    "floor": {
+      "declarations": 56,
+      "folders": [
+        "stepper",
+        "fileManager",
+        "tileView",
+        "sortable",
+        "widget"
+      ],
+      "why": "Виджеты, которых нет ни в одной дизайн-системе. Единственный путь — дизайн-ревью по скриншотам."
+    }
+  },
+  "neighbourAgreement": {
+    "comment": [
+      "Do the neighbours agree with each other? Measured 09.09.2026 over the four component sets,",
+      "comparing only where the anatomy path matches exactly (component + everything after `color.`).",
+      "Banked because it qualifies the whole method: this audit compares our roles against theirs, and",
+      "that is worth what their own consistency is worth."
+    ],
+    "measuredOn": "2026-09-09",
+    "comparableSlots": 583,
+    "agreeing": 541,
+    "disagreeing": 42,
+    "staleNoneSpelling": 9,
+    "realDisagreements": 33,
+    "pairs": [
+      {
+        "pair": "core ↔ vnext",
+        "shared": 579,
+        "agree": 100
+      },
+      {
+        "pair": "blazor ↔ core",
+        "shared": 115,
+        "agree": 77
+      },
+      {
+        "pair": "blazor ↔ vnext",
+        "shared": 116,
+        "agree": 76
+      },
+      {
+        "pair": "core ↔ wpf",
+        "shared": 33,
+        "agree": 70
+      },
+      {
+        "pair": "blazor ↔ wpf",
+        "shared": 3,
+        "agree": 0
+      }
+    ],
+    "anatomyOverlap": [
+      {
+        "component": "button",
+        "paths": 401,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor+wpf"
+      },
+      {
+        "component": "checkbox",
+        "paths": 126,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor"
+      },
+      {
+        "component": "toast",
+        "paths": 92,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor"
+      },
+      {
+        "component": "grid",
+        "paths": 66,
+        "sharedByAll": 8,
+        "sets": "core+vnext+wpf"
+      },
+      {
+        "component": "switch",
+        "paths": 57,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor+wpf"
+      },
+      {
+        "component": "ribbon",
+        "paths": 46,
+        "sharedByAll": 8,
+        "sets": "core+vnext+wpf"
+      },
+      {
+        "component": "radio-button",
+        "paths": 36,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor"
+      },
+      {
+        "component": "text-input",
+        "paths": 35,
+        "sharedByAll": 0,
+        "sets": "core+vnext+blazor+wpf"
+      }
+    ],
+    "realExamples": [
+      {
+        "what": "button, вариант outline",
+        "detail": "blazor кладёт фон на bg-none / bg-hovered / bg-active, core и vnext — на альфа-лестницу bg-alpha*. На button приходится 19 расхождений из 33."
+      },
+      {
+        "what": "ribbon",
+        "detail": "у wpf он акцентный: content-inverted вместо content, bg-primary-hovered вместо bg-hovered. У веба нейтральный. Похоже на осознанное десктопное решение, а не на разнобой."
+      },
+      {
+        "what": "grid",
+        "detail": "wpf сидит на bg-low и border, веб — на bg и border-subtle."
+      },
+      {
+        "what": "tabs",
+        "detail": "иконка при наведении: blazor content-primary-hovered, wpf content."
+      }
+    ],
+    "conclusion": "Там, где соседи описывают одно и то же одними словами, они согласны на 93%. Но одними словами они описывают почти ничего: у button 401 путь анатомии на четыре продукта и ноль общих для всех четырёх. Расходится не назначение ролей, а анатомия — каждый продукт моделирует свои варианты, суб-элементы и состояния."
+  },
+  "whyContrastDoesNotFailCi": {
+    "comment": [
+      "Why a contrast pair below AA does not turn the dark a11y job red. Asked 09.09.2026 and grounded",
+      "in axe-core 4.12.1 source rather than assumed - the answer is structural, so it applies to every",
+      "future finding of the same shape."
+    ],
+    "reasons": [
+      {
+        "reason": "axe reads DOM text nodes, and an icon glyph is not one",
+        "detail": "visibleTextNodes() in axe-core collects children with nodeType === 3. DevExtreme icon fonts render through ::before { content: \"\\fXXX\" }, which is generated content, not a child node - so an element whose only text is a glyph never enters the color-contrast rule. The splitter grip is exactly that: dx-icon-sizing sets a font-size on .dx-resize-handle-icon and the glyph arrives from the icon font.",
+        "covers": "every chevron, checkmark, arrow, grip and spinner in the theme"
+      },
+      {
+        "reason": "WCAG 1.4.11 has no axe rule at all",
+        "detail": "Non-text contrast - 3:1 for control boundaries and graphics - is not implemented in axe. Borders, focus rings, indicators and switch tracks are outside the gate by construction, not by suppression.",
+        "covers": "the whole non-text half of the contrast requirement"
+      },
+      {
+        "reason": "the state has to be reached",
+        "detail": "The delete item in the message-list context menu measures 3.05 in dark, and it is real text - but only while the menu is open and that item focused. A pair that needs a state the a11y suite never enters is invisible even when the rule applies to it.",
+        "covers": "findings in transient states: focused, opened, invalid"
+      }
+    ],
+    "consequence": "Тёмный a11y-прогон идёт и color-contrast в нём включён - но он видит только настоящий текст в достижимых состояниях. Контраст глифов и нетекстовых элементов не проверяет никто, и таблица контраста в этом отчёте - единственное место, где он измерен."
+  },
+  "nonTextContrast": {
+    "comment": [
+      "WCAG 1.4.11, the 3:1 floor for control boundaries and graphics. No axe rule implements it and no",
+      "screenshot can see it, so nothing in CI measures it. Recorded 09.09.2026 after asking whether the",
+      "splitter grip row was worth acting on - it turned out to be the wrong element to measure.",
+      "This is a first sample, not a sweep: only the splitter was measured this way."
+    ],
+    "measuredOn": "2026-09-09",
+    "findings": [
+      {
+        "what": "полоса сплиттера на фоне панели",
+        "pair": "color-border на color-bg",
+        "light": 1.62,
+        "dark": 3.42,
+        "verdict": "провал в светлом, порог 3:1. Элемент управления не опознаётся контрастом."
+      },
+      {
+        "what": "полоса сплиттера при наведении",
+        "pair": "color-border-hovered на color-bg",
+        "light": 1.82,
+        "dark": 6.76,
+        "verdict": "провал в светлом: наведение не делает полосу различимой."
+      },
+      {
+        "what": "полоса сплиттера в фокусе",
+        "pair": "color-bg-primary на color-bg",
+        "light": 5.38,
+        "dark": 2.88,
+        "verdict": "провал в тёмном: индикация фокуса ниже 3:1."
+      },
+      {
+        "what": "грип внутри полосы (исходная строка Д7)",
+        "pair": "color-content-subtle на color-border",
+        "light": 6,
+        "dark": 2.8,
+        "verdict": "ниже 3:1 в тёмном, но применимость 1.4.11 спорна: это аффорданс внутри уже опознанного элемента, а не то, что его опознаёт."
+      }
+    ],
+    "consequence": "Вопрос Д7 переформулирован: не «какую роль дать точкам грипа», а «различима ли полоса сплиттера вообще». В светлом — нет, 1.62 при пороге 3:1, и это не видит ни axe (нет правила под 1.4.11), ни скриншоты (эталон совпадает сам с собой). Померен только сплиттер: сплошной проверки нетекстового контраста в теме нет."
+  },
+  "questionIds": {
+    "comment": [
+      "Постоянные номера вопросов. Присваиваются один раз и не переиспользуются: закрытая запись",
+      "уносит свой номер с собой, новая получает следующий свободный. Раньше номер вычислялся от",
+      "позиции в списке, и закрытие одной записи сдвигало все следующие - ссылка «Д8 — вариант 1»",
+      "через день указывала на другой вопрос.",
+      "Закрытые: Д-list-border-disabled (удалён), Д-tabs-tab-border-disabled (переименован в selector)."
+    ],
+    "next": 14,
+    "map": {
+      "open:gallery-nav-button-bg": "Д1",
+      "open:gallery-nav-button-bg-disabled": "Д2",
+      "open:switch-on-border-focused": "Д3",
+      "open:tree-view-checkbox-border-disabled": "Д4",
+      "ladder:accordion-title-bg": "Д5",
+      "ladder:tile-view-bg": "Д6",
+      "contrast:.dx-splitter .dx-resize-handle": "Д7",
+      "concept:accent border rest": "Д8",
+      "concept:accent content rest": "Д9",
+      "concept:base bg rest": "Д10",
+      "concept:base content rest": "Д11",
+      "concept:invalid content rest": "Д12",
+      "concept:menu bg rest": "Д13"
+    }
+  }
+}

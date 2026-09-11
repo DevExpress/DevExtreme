@@ -22,10 +22,6 @@
 .dx-state-disabled {
   .dx-list-select-all-label {
     color: var(--dx-list-content-disabled);
-
-    &::after {
-      color: var(--dx-list-border-disabled);
-    }
   }
 
   .dx-list-item-chevron {

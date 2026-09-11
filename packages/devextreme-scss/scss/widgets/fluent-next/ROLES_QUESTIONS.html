@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fluent-next: открытые вопросы по ролям</title><style>
+:root { color-scheme: light dark; --fg:#161616; --bg:#fff; --muted:#616161; --line:#e1e1e1;
+        --accent:#0f6cbd; --warn:#c50f1f; --panel:#f8f8f8; }
+@media (prefers-color-scheme: dark) { :root { --fg:#f5f5f5; --bg:#242424; --muted:#a1a1a1;
+        --line:#4c4c4c; --accent:#4b90d9; --warn:#e4554f; --panel:#1d1d1d; } }
+* { box-sizing: border-box; }
+body { margin:0; padding:2.5rem 1.5rem 6rem; background:var(--bg); color:var(--fg);
+       font:15px/1.6 "Segoe UI", system-ui, sans-serif; }
+main { max-width: 62rem; margin: 0 auto; }
+h1 { font-size:1.9rem; font-weight:600; margin:0 0 .3rem; letter-spacing:-.01em; }
+h2 { font-size:1.3rem; font-weight:600; margin:3rem 0 .6rem; padding-top:1.2rem;
+     border-top:2px solid var(--line); }
+h3 { font-size:1.05rem; font-weight:600; margin:2rem 0 .5rem; }
+p, li { margin:.5rem 0; }
+.lede { color:var(--muted); margin-bottom:2rem; }
+table { border-collapse:collapse; width:100%; margin:.9rem 0; font-size:.92em; }
+th, td { border:1px solid var(--line); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+th { background:var(--panel); font-weight:600; }
+code { font:.88em ui-monospace, "Cascadia Code", Menlo, monospace;
+       background:var(--panel); padding:.1em .35em; border-radius:3px; }
+.q { border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:4px;
+     padding:.9rem 1.1rem; margin:1.1rem 0; background:var(--panel); }
+.q > .id { font-weight:600; color:var(--accent); font-size:.85em; letter-spacing:.06em;
+     text-transform:uppercase; display:block; margin-bottom:.25rem; }
+.q > .t { font-weight:600; margin-bottom:.4rem; }
+.q .opt { margin:.5rem 0 0 0; padding-left:1.2rem; }
+.warn { color:var(--warn); font-weight:600; }
+.swatch { display:inline-block; width:.85em; height:.85em; border:1px solid var(--line);
+     border-radius:2px; vertical-align:-.1em; margin-right:.3em; }
+.meta { color:var(--muted); font-size:.88em; }
+.none { color:var(--muted); font-style:italic; }
+footer { margin-top:4rem; padding-top:1rem; border-top:1px solid var(--line);
+     color:var(--muted); font-size:.85em; }
+</style></head>
+<body><main>
+<h1>Fluent-next: открытые вопросы по ролям</h1>
+<p class="lede">Всё, что аудит нашёл и не стал решать сам. Ответы можно давать номерами: «Д3 — второй вариант».<br>
+Проверено 709 цветовых объявлений в 64 папках; применено девять правок —
+семь равнозначных по значению и две решённые порогом WCAG. Всё на этой странице двигает пиксель,
+меняет публичное имя или требует расширения пакета.</p>
+
+<h2>А. Дизайн — 12 вопросов</h2>
+<h3>Роль выбрана спорно</h3><div class="q"><span class="id">Д1</span>
+<div class="t"><code>gallery-nav-button-bg</code> = <code>content-subtle</code></div><p class="meta">Значение сейчас: <span class="swatch" style="background:#444444"></span><code>#444444</code> / <span class="swatch" style="background:#cbcbcb"></span><code>#cbcbcb</code></p><p>Content-роль использована как <b>подложка</b> под навигационными кнопками поверх картинок. Bg-роли с таким значением в пакете нет, а сам пакет красит этой ролью глиф стрелки, а не диск под ним. Вопрос: нужна ли отдельная роль затемняющей подложки, или диск берёт существующую bg-роль и меняет тон.</p><p class="opt"><b>Ближайшие роли верного семейства:</b><br><code>bg-active</code> — двигает light и dark<br><code>bg-hovered</code> — двигает light и dark</p></div><div class="q"><span class="id">Д2</span>
+<div class="t"><code>gallery-nav-button-bg-disabled</code> = <code>content-disabled</code></div><p class="meta">Значение сейчас: <span class="swatch" style="background:#ababab"></span><code>#ababab</code> / <span class="swatch" style="background:#767676"></span><code>#767676</code></p><p>Тот же вопрос о подложке, неактивное состояние.</p><p class="opt"><b>Ближайшие роли верного семейства:</b><br><code>bg-active</code> — двигает light и dark<br><code>bg-hovered</code> — двигает light и dark</p></div><div class="q"><span class="id">Д3</span>
+<div class="t"><code>switch-on-border-focused</code> = <code>bg-primary-active</code></div><p class="meta">Значение сейчас: <span class="swatch" style="background:#003c70"></span><code>#003c70</code> / <span class="swatch" style="background:#003c70"></span><code>#003c70</code></p><p>Два соседа по трио (покой и наведение) уже переведены на border-роли равнозначно. Третий не переведён: <code>border-primary-shared-active</code> совпадает в светлом и <b>двигает тёмный</b> — #003c70 → #005397. Вопрос: принимаем сдвиг ради однородности трио.</p><p class="opt"><b>Ближайшие роли верного семейства:</b><br><code>border-primary-shared-active</code> — двигает dark<br><code>border-contrast</code> — двигает light и dark</p></div>
+<h3>Состояние неотличимо от соседнего</h3><div class="q"><span class="id">Д5</span>
+<div class="t"><code>accordion-title-bg</code> — состояния <code>active</code> = <code>hovered</code> дают одну роль <code>bg-hovered</code></div><p>Наведение и нажатие читают одну роль: нажать на заголовок аккордеона выглядит ровно как навести. Fluent 2 здесь однозначен — <code>colorSubtleBackgroundHover</code> #f5f5f5 и <code>colorSubtleBackgroundPressed</code> #e0e0e0 у него разные токены, и пакет несёт оба значения как <code>bg-hovered</code> / <code>bg-active</code>. Не применили только потому, что приведение уводит пиксель от legacy-fluent, а это решение продукта (NFR-1).</p></div><div class="q"><span class="id">Д6</span>
+<div class="t"><code>tile-view-bg</code> — состояния <code>hovered</code> = <code>rest</code> дают одну роль <code>bg</code></div><p>Покой и наведение — одно значение, а нажатие отличается. Слот явно задуман с лестницей, плоская у него ступень наведения. Доказательство слабее, чем у аккордеона: плитка не обязана вести себя как «subtle surface» из Fluent 2.</p></div>
+<h3>Контраст ниже порога</h3><div class="q"><span class="id">Д7</span>
+<div class="t">Контраст: <code>.dx-splitter .dx-resize-handle</code></div><p class="meta"><code>content-subtle</code> на <code>border</code> — светлый <b>6</b>, тёмный <b class="warn">2.8</b></p><p>Грип ресайза даёт <b>2.8 в тёмном</b> при пороге 3:1 для нетекстового элемента управления. Проходящая роль есть — <code>content</code> даёт 4.54, — но она же делает грип заметно темнее в светлом (6 → 11.15). Пол задаёт стандарт, выбор роли — нет.</p></div>
+<div class="q"><span class="id">нетекстовый контраст · WCAG 1.4.11</span>
+<div class="t">Порог 3:1 для границ элементов управления и графики</div>
+<p>Его не реализует ни одно правило axe и не видит ни один скриншот — в CI его не меряет никто.
+Замер 2026-09-09, и он появился как проверка того, стоит ли действовать по строке грипа выше.</p>
+<table><tr><th>Что</th><th>Пара</th><th>Светлый</th><th>Тёмный</th></tr>
+<tr><td>полоса сплиттера на фоне панели</td><td><code>color-border на color-bg</code></td><td><b class="warn">1.62</b></td><td>3.42</td></tr><tr><td>полоса сплиттера при наведении</td><td><code>color-border-hovered на color-bg</code></td><td><b class="warn">1.82</b></td><td>6.76</td></tr><tr><td>полоса сплиттера в фокусе</td><td><code>color-bg-primary на color-bg</code></td><td>5.38</td><td><b class="warn">2.88</b></td></tr><tr><td>грип внутри полосы (исходная строка Д7)</td><td><code>color-content-subtle на color-border</code></td><td>6</td><td><b class="warn">2.8</b></td></tr>
+</table>
+<p class="meta"><b>полоса сплиттера на фоне панели:</b> провал в светлом, порог 3:1. Элемент управления не опознаётся контрастом.</p><p class="meta"><b>полоса сплиттера при наведении:</b> провал в светлом: наведение не делает полосу различимой.</p><p class="meta"><b>полоса сплиттера в фокусе:</b> провал в тёмном: индикация фокуса ниже 3:1.</p><p class="meta"><b>грип внутри полосы (исходная строка Д7):</b> ниже 3:1 в тёмном, но применимость 1.4.11 спорна: это аффорданс внутри уже опознанного элемента, а не то, что его опознаёт.</p>
+<p>Вопрос Д7 переформулирован: не «какую роль дать точкам грипа», а «различима ли полоса сплиттера вообще». В светлом — нет, 1.62 при пороге 3:1, и это не видит ни axe (нет правила под 1.4.11), ни скриншоты (эталон совпадает сам с собой). Померен только сплиттер: сплошной проверки нетекстового контраста в теме нет.</p>
+<p class="meta"><b>Оговорка:</b> This is a first sample, not a sweep: only the splitter was measured this way.</p></div>
+
+<div class="q"><span class="id">почему это не ловит CI</span>
+<p>Тёмный a11y-прогон существует, и <code>color-contrast</code> в нём включён — но ни одна из
+строк выше его не роняет. Причины проверены по исходнику axe-core 4.12.1, а не предположены:</p>
+<p><b>axe reads DOM text nodes, and an icon glyph is not one.</b> visibleTextNodes() in axe-core collects children with nodeType === 3. DevExtreme icon fonts render through ::before { content: "\fXXX" }, which is generated content, not a child node - so an element whose only text is a glyph never enters the color-contrast rule. The splitter grip is exactly that: dx-icon-sizing sets a font-size on .dx-resize-handle-icon and the glyph arrives from the icon font.<br><span class="meta">Касается: every chevron, checkmark, arrow, grip and spinner in the theme</span></p><p><b>WCAG 1.4.11 has no axe rule at all.</b> Non-text contrast - 3:1 for control boundaries and graphics - is not implemented in axe. Borders, focus rings, indicators and switch tracks are outside the gate by construction, not by suppression.<br><span class="meta">Касается: the whole non-text half of the contrast requirement</span></p><p><b>the state has to be reached.</b> The delete item in the message-list context menu measures 3.05 in dark, and it is real text - but only while the menu is open and that item focused. A pair that needs a state the a11y suite never enters is invisible even when the rule applies to it.<br><span class="meta">Касается: findings in transient states: focused, opened, invalid</span></p>
+<p>Тёмный a11y-прогон идёт и color-contrast в нём включён - но он видит только настоящий текст в достижимых состояниях. Контраст глифов и нетекстовых элементов не проверяет никто, и таблица контраста в этом отчёте - единственное место, где он измерен.</p></div>
+
+<h3>Имя обещает одно, красит другое</h3>
+<h3>Одно понятие покрашено по-разному в разных компонентах</h3><div class="q"><span class="id">Д8</span>
+<div class="t">Одно понятие, разные роли: <b>accent border rest</b></div><p class="meta">Семейства: content / border</p><table><tr><th>Компонент</th><th>Роль</th></tr><tr><td>diagram</td><td><code>content-primary</code></td></tr><tr><td>gantt</td><td><code>border-primary</code></td></tr><tr><td>scheduler</td><td><code>border</code></td></tr></table><p>Вопрос: должны ли эти компоненты красить одно и то же одинаково, и если да — какой ролью.</p></div><div class="q"><span class="id">Д9</span>
+<div class="t">Одно понятие, разные роли: <b>accent content rest</b></div><p class="meta">Семейства: bg / border / content</p><table><tr><th>Компонент</th><th>Роль</th></tr><tr><td>chat</td><td><code>bg-primary</code></td></tr><tr><td>pivotGrid</td><td><code>border-primary</code></td></tr><tr><td>scheduler</td><td><code>content-primary</code></td></tr></table><p>Вопрос: должны ли эти компоненты красить одно и то же одинаково, и если да — какой ролью.</p></div><div class="q"><span class="id">Д10</span>
+<div class="t">Одно понятие, разные роли: <b>base bg rest</b></div><p class="meta">Семейства: border / bg</p><table><tr><th>Компонент</th><th>Роль</th></tr><tr><td>list</td><td><code>border-subtle</code></td></tr><tr><td>stepper</td><td><code>bg</code></td></tr></table><p>Вопрос: должны ли эти компоненты красить одно и то же одинаково, и если да — какой ролью.</p></div><div class="q"><span class="id">Д11</span>
+<div class="t">Одно понятие, разные роли: <b>base content rest</b></div><p class="meta">Семейства: content / bg</p><table><tr><th>Компонент</th><th>Роль</th></tr><tr><td>diagram</td><td><code>content-subtle</code></td></tr><tr><td>scheduler</td><td><code>bg-primary-subtle</code></td></tr><tr><td>stepper</td><td><code>content</code></td></tr></table><p>Вопрос: должны ли эти компоненты красить одно и то же одинаково, и если да — какой ролью.</p></div><div class="q"><span class="id">Д12</span>
+<div class="t">Одно понятие, разные роли: <b>invalid content rest</b></div><p class="meta">Семейства: content / bg</p><table><tr><th>Компонент</th><th>Роль</th></tr><tr><td>common</td><td><code>content-static-dark</code></td></tr><tr><td>fieldset</td><td><code>content-danger</code></td></tr><tr><td>fileUploader</td><td><code>bg-danger</code></td></tr><tr><td>stepper</td><td><code>content-danger</code></td></tr></table><p>Вопрос: должны ли эти компоненты красить одно и то же одинаково, и если да — какой ролью.</p></div><div class="q"><span class="id">Д13</span>
+<div class="t">Одно понятие, разные роли: <b>menu bg rest</b></div><p class="meta">Семейства: bg / border</p><table><tr><th>Компонент</th><th>Роль</th></tr><tr><td>list</td><td><code>bg</code></td></tr><tr><td>menu</td><td><code>bg</code></td></tr><tr><td>menu</td><td><code>border-subtle</code></td></tr></table><p>Вопрос: должны ли эти компоненты красить одно и то же одинаково, и если да — какой ролью.</p></div>
+
+<h2>Б. Команда пакета токенов — 2 заявки</h2>
+<p>Роли, которая нужна, в пакете нет — обменять не на что.</p><div class="q"><span class="id">П1</span>
+<div class="t"><code>load-indicator-segment-inner-border</code></div><p>Внутренняя рамка лоад-индикатора красится <code>bg-primary-subtle</code>, потому что border-роли с этой насыщенностью в пакете <b>не существует</b>. Менять не на что — нужна роль <code>border-primary-subtle</code>.</p></div><div class="q"><span class="id">П2</span>
+<div class="t"><code>.dx-messagelist-context-menu-content .dx-menu-item:has(.dx-icon-trash).dx-state-focused</code></div><p>Пункт удаления в контекстном меню списка сообщений даёт <b>3.05</b> при пороге 4.5 для подписи. Проверены все роли семейства: самая сильная, <code>content-danger-hovered</code>, даёт на той же поверхности 3.87 — тоже провал. Нет danger-content роли, проходящей AA на своей же наведённой поверхности в тёмном.</p></div>
+
+<h2>В. Унификация, правка бесплатна — 3</h2>
+<p>Компоненты кладут один и тот же цвет и пишут его ролями из разных семейств. Пока каноническая
+запись не выбрана, следующая перепривязка палитры разведёт их молча.</p><div class="q"><span class="id">У1</span>
+<div class="t"><b>invalid bg focused</b> — один цвет записан 3 ролями</div><p><code>bg-danger-shared-active</code> · <code>content-danger-shared-active</code> · <code>border-danger-shared-active</code></p><p>Правка ничего не двигает. Нужно назвать каноническую запись.</p></div><div class="q"><span class="id">У2</span>
+<div class="t"><b>invalid bg hovered</b> — один цвет записан 4 ролями</div><p><code>bg-danger-shared-hovered</code> · <code>content-danger-shared-hovered</code> · <code>border-danger-shared-hovered</code> · <code>border-danger</code></p><p>Правка ничего не двигает. Нужно назвать каноническую запись.</p></div><div class="q"><span class="id">У3</span>
+<div class="t"><b>invalid bg rest</b> — один цвет записан 6 ролями</div><p><code>bg-danger-shared</code> · <code>content-danger-shared</code> · <code>bg-danger-subtler</code> · <code>bg-danger</code> · <code>border-danger-shared</code> · <code>border-danger</code></p><p>Правка ничего не двигает. Нужно назвать каноническую запись.</p></div>
+
+<h2>Г. Переименование компонентного тира — 21 имён</h2>
+<p>Роль верна, врёт слово в имени.</p>
+<p><b>Окно открыто:</b> компонентный тир fluent-next ещё не отгружен, поэтому переименования и
+удаления сейчас бесплатны — ни ченджлога, ни цикла устаревания. После релиза каждое такое имя
+становится контрактом с приложениями, и та же правка будет стоить депрекации. Это довод сделать
+волну до выпуска, а не после.</p>
+<p class="meta">Не путать с легаси-38: <code>--dx-toolbar-height</code>,
+<code>--dx-font-size-heading-*</code> и ещё пятнадцать имён отгружены с 25.2 и решением 27.08.2026
+заморожены — их это окно не касается.</p>
+<table><tr><th>Имя</th><th>Слот обещает</th><th>Красит</th></tr>
+<tr><td><code>color-view-handle-content</code></td><td>content</td><td>background, box-shadow</td></tr><tr><td><code>date-view-roller-bottom-shadow</code></td><td>shadow</td><td>background-image</td></tr><tr><td><code>date-view-roller-top-shadow</code></td><td>shadow</td><td>background-image</td></tr><tr><td><code>filter-builder-group-operation-content</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-group-operation-content-disabled</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-group-operation-content-focused</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-group-operation-content-hovered</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-item-field-content</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-item-field-content-disabled</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-item-field-content-focused</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-item-field-content-hovered</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-item-operator-content</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-item-operator-content-focused</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-item-operator-content-hovered</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-item-value-content</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-item-value-content-focused</code></td><td>content</td><td>background-color</td></tr><tr><td><code>filter-builder-item-value-content-hovered</code></td><td>content</td><td>background-color</td></tr><tr><td><code>pivot-grid-grand-total-content</code></td><td>content</td><td>background-color</td></tr><tr><td><code>pivot-grid-total-content</code></td><td>content</td><td>background-color</td></tr><tr><td><code>scheduler-appointment-content-active</code></td><td>content</td><td>background-color</td></tr><tr><td><code>scheduler-workspace-cell-content-focused</code></td><td>content</td><td>background-color</td></tr>
+</table>
+<p class="meta">Четырнадцать из 21 — filterBuilder: его чипы уходят в базовый
+<code>button-color()</code>, который ставит фон, а названы они <code>-content</code>.</p>
+
+<h2>Д. Возможности пакета, которыми тема не пользуется — 83 ролей</h2>
+<p>Счёт от пакета внутрь, а не от наших объявлений наружу: целое семейство может отсутствовать, и при
+этом ни одно объявление не выглядит неверным. Из 175 ролей, которые
+назначают четыре набора, тема читает 82.</p>
+<div class="q"><span class="id">Н1</span>
+<div class="t">Индикатор фокуса — четыре роли пакета не читаются нигде</div><p><code>focus</code> · <code>focus-inverted</code> · <code>focus-static</code> · <code>focus-static-inverted</code></p><p>Тема красит фокус ролью границы <code>border-primary-shared</code>. Fluent 2 рисует фокус <b>двухтонной обводкой</b> — <code>colorStrokeFocus1</code> #ffffff внутри <code>colorStrokeFocus2</code> #000000, — чтобы она выживала на любом фоне. Это не оттенок в сторону, а другой механизм. Вариантов <code>inverted</code> и <code>static</code> у темы нет вовсе.</p></div><div class="q"><span class="id">Н2</span>
+<div class="t">Интент <code>info</code> не используется</div><p>Пакет назначает <code>bg-info</code> · <code>content-info</code> · <code>border-info</code> и их состояния. Тема не читает ни одной: компоненты с модификатором <code>info</code> (informer, toast, pagination) красят его нейтральными ролями.</p></div><div class="q"><span class="id">Н3</span>
+<div class="t">Лестница «на цветной поверхности» (<code>on-color</code>) не используется</div><p><code>content-on-color</code> · <code>content-on-color-shared</code> · <code>content-on-color-subtler</code> · <code>bg-on-color</code> · <code>bg-on-color-alpha</code> · <code>border-on-color-shared</code></p><p>Пакет описывает ими элементы, лежащие на залитой акцентом поверхности — например вариант <code>on-surface</code> чекбокса. У темы такого варианта нет.</p></div><div class="q"><span class="id">Н4</span>
+<div class="t">Статические роли (<code>static-dark</code> / <code>static-light</code>) не используются</div><p>Роли, не меняющиеся между режимами. Тема вместо них берёт <code>content-static-dark</code> в отдельных местах, а поверхностные и границы — нет.</p></div>
+<details><summary>Полный список 83 ролей</summary>
+<table><tr><th>Роль</th><th>Назначают</th></tr>
+<tr><td><code>bg-high</code></td><td>core, vnext</td></tr><tr><td><code>bg-info</code></td><td>blazor, core, vnext</td></tr><tr><td><code>bg-info-active</code></td><td>blazor, core, vnext</td></tr><tr><td><code>bg-info-hovered</code></td><td>blazor, core, vnext</td></tr><tr><td><code>bg-info-selected</code></td><td>blazor</td></tr><tr><td><code>bg-info-subtler</code></td><td>blazor, wpf</td></tr><tr><td><code>bg-info-subtler-active</code></td><td>wpf</td></tr><tr><td><code>bg-info-subtler-hovered</code></td><td>wpf</td></tr><tr><td><code>bg-info-subtler-selected</code></td><td>wpf</td></tr><tr><td><code>bg-inverted-active</code></td><td>blazor</td></tr><tr><td><code>bg-inverted-disabled</code></td><td>blazor</td></tr><tr><td><code>bg-inverted-hovered</code></td><td>blazor</td></tr><tr><td><code>bg-inverted-selected</code></td><td>blazor</td></tr><tr><td><code>bg-low-active</code></td><td>core, vnext</td></tr><tr><td><code>bg-on-color</code></td><td>core, wpf</td></tr><tr><td><code>bg-on-color-alpha</code></td><td>core, vnext</td></tr><tr><td><code>bg-on-color-alpha-active</code></td><td>core, vnext</td></tr><tr><td><code>bg-on-color-alpha-disabled</code></td><td>core, vnext</td></tr><tr><td><code>bg-on-color-alpha-hovered</code></td><td>core, vnext</td></tr><tr><td><code>bg-primary-shared-hovered</code></td><td>core, vnext</td></tr><tr><td><code>bg-static-dark</code></td><td>blazor, core, vnext</td></tr><tr><td><code>bg-static-dark-active</code></td><td>blazor</td></tr><tr><td><code>bg-static-dark-disabled</code></td><td>blazor</td></tr><tr><td><code>bg-static-dark-hovered</code></td><td>blazor</td></tr><tr><td><code>bg-static-dark-selected</code></td><td>blazor</td></tr><tr><td><code>bg-static-light-active</code></td><td>blazor</td></tr><tr><td><code>bg-static-light-disabled</code></td><td>blazor</td></tr><tr><td><code>bg-static-light-hovered</code></td><td>blazor</td></tr><tr><td><code>bg-static-light-selected</code></td><td>blazor</td></tr><tr><td><code>bg-success-shared</code></td><td>blazor</td></tr><tr><td><code>bg-success-shared-active</code></td><td>blazor</td></tr><tr><td><code>bg-success-shared-hovered</code></td><td>blazor</td></tr><tr><td><code>bg-warning-active</code></td><td>blazor, core, vnext</td></tr><tr><td><code>bg-warning-hovered</code></td><td>blazor, core, vnext</td></tr><tr><td><code>bg-warning-selected</code></td><td>blazor</td></tr><tr><td><code>bg-warning-subtler</code></td><td>blazor, vnext, wpf</td></tr><tr><td><code>bg-warning-subtler-active</code></td><td>wpf</td></tr><tr><td><code>bg-warning-subtler-hovered</code></td><td>wpf</td></tr><tr><td><code>bg-warning-subtler-selected</code></td><td>wpf</td></tr><tr><td><code>border-info</code></td><td>blazor</td></tr><tr><td><code>border-inverted</code></td><td>blazor</td></tr><tr><td><code>border-inverted-active</code></td><td>blazor</td></tr><tr><td><code>border-inverted-disabled</code></td><td>blazor</td></tr><tr><td><code>border-inverted-hovered</code></td><td>blazor</td></tr><tr><td><code>border-on-color-shared</code></td><td>core, vnext</td></tr><tr><td><code>border-on-color-shared-disabled</code></td><td>core</td></tr><tr><td><code>border-static-dark</code></td><td>blazor, core, vnext, wpf</td></tr><tr><td><code>border-static-dark-active</code></td><td>blazor</td></tr><tr><td><code>border-static-dark-disabled</code></td><td>blazor</td></tr><tr><td><code>border-static-dark-hovered</code></td><td>blazor</td></tr><tr><td><code>border-static-light</code></td><td>blazor</td></tr><tr><td><code>border-static-light-active</code></td><td>blazor</td></tr><tr><td><code>border-static-light-disabled</code></td><td>blazor</td></tr><tr><td><code>border-static-light-hovered</code></td><td>blazor</td></tr><tr><td><code>border-success-shared</code></td><td>blazor</td></tr><tr><td><code>border-success-shared-active</code></td><td>blazor</td></tr><tr><td><code>border-success-shared-hovered</code></td><td>blazor</td></tr><tr><td><code>border-warning</code></td><td>blazor, vnext</td></tr><tr><td><code>content-info</code></td><td>blazor, wpf</td></tr><tr><td><code>content-info-active</code></td><td>blazor, core, vnext</td></tr><tr><td><code>content-info-hovered</code></td><td>blazor, core, vnext</td></tr><tr><td><code>content-inverted-disabled</code></td><td>blazor</td></tr><tr><td><code>content-on-color</code></td><td>blazor, core, vnext</td></tr><tr><td><code>content-on-color-disabled</code></td><td>core, vnext</td></tr><tr><td><code>content-on-color-shared</code></td><td>wpf</td></tr><tr><td><code>content-on-color-shared-disabled</code></td><td>core</td></tr><tr><td><code>content-on-color-subtler</code></td><td>core, vnext</td></tr><tr><td><code>content-on-subtle-primary</code></td><td>wpf</td></tr><tr><td><code>content-primary-shared</code></td><td>core, vnext</td></tr><tr><td><code>content-primary-shared-active</code></td><td>core, vnext</td></tr><tr><td><code>content-primary-shared-hovered</code></td><td>core, vnext</td></tr><tr><td><code>content-static-dark-disabled</code></td><td>blazor</td></tr><tr><td><code>content-static-light-disabled</code></td><td>blazor, wpf</td></tr><tr><td><code>content-success-shared</code></td><td>blazor</td></tr><tr><td><code>content-success-shared-active</code></td><td>blazor</td></tr><tr><td><code>content-success-shared-hovered</code></td><td>blazor</td></tr><tr><td><code>content-warning</code></td><td>blazor, vnext, wpf</td></tr><tr><td><code>content-warning-active</code></td><td>blazor, core, vnext</td></tr><tr><td><code>content-warning-hovered</code></td><td>blazor, core, vnext</td></tr><tr><td><code>focus</code></td><td>core, vnext</td></tr><tr><td><code>focus-inverted</code></td><td>core, vnext</td></tr><tr><td><code>focus-static</code></td><td>core, vnext</td></tr><tr><td><code>focus-static-inverted</code></td><td>core, vnext</td></tr>
+</table></details>
+
+<h2>Е. Решения не требуется — записано, чтобы не переоткрывали</h2>
+<table><tr><th>Класс</th><th>Сколько</th><th>Почему закрыто</th></tr>
+<tr><td><code>confirmed</code></td><td>5</td><td>пакет назначает ровно эту роль — расходится только слово слота</td></tr><tr><td><code>rule-5</code></td><td>12</td><td>одно значение в двух свойствах, названо по доминирующей роли; принято ревью-раундом 2</td></tr><tr><td><code>hairline</code></td><td>5</td><td>волосяная линия фоном сохраняет border-роль; подтверждено core (у tabs это слот selector)</td></tr><tr><td><code>no-rung</code></td><td>22</td><td>состояния схлопнуты там же, где их схлопывает сама система</td></tr><tr><td><code>shade</code></td><td>15</td><td>то же семейство, другой оттенок — расхождение, которое компоненты вправе иметь</td></tr><tr><td><code>graphic-ok</code></td><td>2</td><td>глиф, порог 3:1 взят</td></tr><tr><td><code>bridge / known</code></td><td>2</td><td>уже инвентаризовано в BRIDGES.md и DIVERGENCES.md</td></tr><tr><td><code>stale в наборах соседей</code></td><td>10</td><td>blazor и wpf ссылаются на имена, которых семантический слой не объявляет — их дрейф, не наш</td></tr>
+</table>
+
+<h2>Ж. Чего эта проверка не видела, и как это сократить</h2>
+
+<p><b>226 цветовых объявлений из 709 — 31.9% темы — сравнивать не с чем.</b>
+Это компоненты, которых нет ни у core, ни у vnext, ни у blazor, ни у wpf в пакете токенов. По ним
+работали только проверки темы против себя самой: семейство, слот против свойства, лестницы состояний,
+контраст и согласованность понятий между компонентами.</p>
+<table><tr><th>Папка</th><th>Объявлений</th></tr>
+<tr><td>scheduler</td><td>43</td></tr><tr><td>filterBuilder</td><td>28</td></tr><tr><td>stepper</td><td>25</td></tr><tr><td>diagram</td><td>20</td></tr><tr><td>fileManager</td><td>20</td></tr><tr><td>pivotGrid</td><td>19</td></tr><tr><td>gantt</td><td>14</td></tr><tr><td>htmlEditor</td><td>13</td></tr><tr><td>slider</td><td>13</td></tr><tr><td>fileUploader</td><td>10</td></tr><tr><td>tileView</td><td>7</td></tr><tr><td>dateView</td><td>5</td></tr><tr><td>sortable</td><td>3</td></tr><tr><td>splitterBar</td><td>3</td></tr><tr><td>dropDownEditor</td><td>2</td></tr><tr><td>widget</td><td>1</td></tr>
+</table>
+
+<h3>Чем это сокращается — измерено 2026-09-09</h3>
+<p>Числа сняты по репозиториям за пределами этого, поэтому инструмент их не пересчитывает: они
+забанкованы вместе с источником и протухнут заметно, если прочитать их рядом со свежим счётчиком выше.</p>
+<div class="q"><span class="id">Р1</span>
+<div class="t">Карта «наша папка → компонент пакета» — <b>сделано</b></div><p>Карта сопоставляла по похожести имён. cardView — это пакетный grid (так его и мапит package-disabled.mjs), speedDialAction — button, lookup — listbox, actionSheet — popup, validation — field. Шесть строк, 277 → 226, и ни одного нового расхождения: все 51 попали в agrees.</p></div><div class="q"><span class="id">Р2</span>
+<div class="t">Реализация Blazor как пятый источник — покрывает 110</div><p>В пакете у Blazor 20 компонентов, в реализации (dxvcs/.../ds-themes/components) — 57, и роли он читает через тот же мост ds.$, что и мы: карта имён ролей не нужна. Имена папок опять другие: rollers — это dateView, edit-dropdown — dropDownEditor. Покрывает scheduler 43 (у них 38 ролей), filterBuilder 28 (59), pivotGrid 19, fileUploader 10, dateView 5, splitterBar 3, dropDownEditor 2.</p><p class="meta"><b>Что нужно:</b> парсер ds.$ по папкам + карта из семи строк</p></div><div class="q"><span class="id">Р3</span>
+<div class="t">Fluent UI React — покрывает 13</div><p>У Fluent есть Slider, и его стили называют девять цветовых токенов по частям. Но ни имена (colorCompoundBrandBackground против color-bg-primary-shared), ни значения (бренд #0078d4 против #0f6cbd) не совпадают — нужна разовая карта.</p><p class="meta"><b>Что нужно:</b> карта имён Fluent 2 → dxds, ~40-60 пар</p></div><div class="q"><span class="id">Р4</span>
+<div class="t">WPF — только на уровне семейства — покрывает 47</div><p>Компоненты у WPF есть (Gantt 12 xaml, Diagram 14, RichEdit 8), но их темы НЕ затокенизированы: семантические ключи вида AccordionHeaderBackgroundRest получают только компоненты из components/wpf, а Gantt и Diagram красятся легаси-палитрой Lightweight, где Color.Foreground.Primary — это литерал #FF1A1A1A. Зато Lightweight/Common/PaletteSemantics.md описывает смысл 142 ключей словами («Color.Border — primary border brush for controls»). Это сигнал уровня семейства (border / bg / content), а не роли, и он покрывает ровно то, чего нет больше нигде: gantt 14, diagram 20, htmlEditor 13.</p><p class="meta"><b>Что нужно:</b> разбор PaletteSemantics.md, 142 ключа</p></div>
+
+<h3>Куда это приводит</h3>
+<table><tr><th></th><th>Рычаг</th><th>Покрывает</th><th>Останется</th></tr>
+<tr><td>—</td><td>сейчас</td><td></td><td>226 (31.9%)</td></tr>
+<tr><td>Р2</td><td>Реализация Blazor как пятый источник</td><td>−110</td><td>116 (16.4%)</td></tr><tr><td>Р3</td><td>Fluent UI React</td><td>−13</td><td>103 (14.5%)</td></tr><tr><td>Р4</td><td>WPF — только на уровне семейства</td><td>−47</td><td>56 (7.9%)</td></tr></table>
+<p>Ниже этого не опускается: <b>56 объявлений</b> в папках
+<code>stepper</code>, <code>fileManager</code>, <code>tileView</code>, <code>sortable</code>, <code>widget</code>. Виджеты, которых нет ни в одной дизайн-системе. Единственный путь — дизайн-ревью по скриншотам.</p>
+<p class="meta"><b>Померено и отброшено.</b> Реализация vnext: 18 компонентов, все до одного уже описаны пакетом. Не добавляет ничего.</p>
+
+<h3>Оговорка о самой проверке</h3>
+<p>Правки инструмента шли в одну сторону — к меньшему числу находок: конфликтов семейств 11 → 3,
+cross-family 24 → 15, кнопочных лестниц 8 → 0. Каждое сокращение проверено вручную и описано в
+коммите, но направление у них одно: скорее недосчитал, чем перебрал.</p>
+
+
+<h2>З. Согласны ли соседи между собой</h2>
+
+<p>Весь аудит сравнивает наши роли с чужими, поэтому он стоит ровно столько, сколько стоит
+согласованность самих соседей. Замер 2026-09-09 по четырём наборам пакета: сравнивались
+только слоты, у которых <b>полностью совпадает путь анатомии</b> — компонент плюс всё после
+<code>color.</code>.</p>
+<p><b>Там, где они говорят об одном и том же одними словами, они согласны.</b>
+583 сравнимых слотов, роль совпадает у 541
+(93%).</p>
+<table><tr><th>Пара</th><th>Общих слотов</th><th>Совпадает</th></tr>
+<tr><td>core ↔ vnext</td><td>579</td><td>100%</td></tr><tr><td>blazor ↔ core</td><td>115</td><td>77%</td></tr><tr><td>blazor ↔ vnext</td><td>116</td><td>76%</td></tr><tr><td>core ↔ wpf</td><td>33</td><td>70%</td></tr><tr><td>blazor ↔ wpf</td><td>3</td><td>0%</td></tr>
+</table>
+<p class="meta">core и vnext — практически один набор (vnext = core плюс <code>field</code>), поэтому их
+100% ничего не доказывают. Значимы пары с blazor и wpf. У пары blazor ↔ wpf всего три общих слота —
+это не выборка.</p>
+
+<p><b>Но одними словами они почти ничего не описывают.</b> Пересечение анатомии, а не ролей, —
+вот что расходится:</p>
+<table><tr><th>Компонент</th><th>Наборы</th><th>Путей всего</th><th>Общих для всех</th></tr>
+<tr><td>button</td><td class="meta">core+vnext+blazor+wpf</td><td>401</td><td><span class="warn">0</span></td></tr><tr><td>checkbox</td><td class="meta">core+vnext+blazor</td><td>126</td><td><span class="warn">0</span></td></tr><tr><td>toast</td><td class="meta">core+vnext+blazor</td><td>92</td><td><span class="warn">0</span></td></tr><tr><td>grid</td><td class="meta">core+vnext+wpf</td><td>66</td><td>8</td></tr><tr><td>switch</td><td class="meta">core+vnext+blazor+wpf</td><td>57</td><td><span class="warn">0</span></td></tr><tr><td>ribbon</td><td class="meta">core+vnext+wpf</td><td>46</td><td>8</td></tr><tr><td>radio-button</td><td class="meta">core+vnext+blazor</td><td>36</td><td><span class="warn">0</span></td></tr><tr><td>text-input</td><td class="meta">core+vnext+blazor+wpf</td><td>35</td><td><span class="warn">0</span></td></tr>
+</table>
+<p>У <code>button</code> четыреста один путь анатомии на четыре продукта и <b>ноль</b> общих для всех
+четырёх. Каждый моделирует свои варианты, суб-элементы и состояния.</p>
+
+<p><b>Расхождений всего 42, и 9 из них — не расхождения.</b>
+Blazor запинен на 262.9.1 и всё ещё пишет <code>bg-none</code> / <code>border-none</code> /
+<code>content-none</code> там, где в действующем слое одна роль <code>none</code>. Настоящих
+остаётся <b>33</b>:</p>
+<p><b>button, вариант outline.</b> blazor кладёт фон на bg-none / bg-hovered / bg-active, core и vnext — на альфа-лестницу bg-alpha*. На button приходится 19 расхождений из 33.</p><p><b>ribbon.</b> у wpf он акцентный: content-inverted вместо content, bg-primary-hovered вместо bg-hovered. У веба нейтральный. Похоже на осознанное десктопное решение, а не на разнобой.</p><p><b>grid.</b> wpf сидит на bg-low и border, веб — на bg и border-subtle.</p><p><b>tabs.</b> иконка при наведении: blazor content-primary-hovered, wpf content.</p>
+
+<h3>Что из этого следует для самой проверки</h3>
+<p>Там, где соседи описывают одно и то же одними словами, они согласны на 93%. Но одними словами они описывают почти ничего: у button 401 путь анатомии на четыре продукта и ноль общих для всех четырёх. Расходится не назначение ролей, а анатомия — каждый продукт моделирует свои варианты, суб-элементы и состояния.</p>
+<p>Отсюда и устройство сравнения: оно <b>на уровне слота, а не пути</b>. Сравнение по полному пути
+нашло бы почти ничего — наша анатомия не совпадает с чужой ровно так же, как их анатомии не
+совпадают между собой. Цена этого выбора честная: инструмент отвечает на вопрос «использует ли пакет
+эту роль для слота такого рода в этом компоненте», а не «использует ли он её именно здесь». Поэтому
+<code>cross-family</code> сформулирован как вопрос, а не как вердикт.</p>
+
+
+<footer>Сгенерировано <code>node tools/review/roles-pages.mjs</code> ·
+пакет <code>@devexpress/design-tokens-internal@262.16.0</code> ·
+данные: <code>tools/review/roles.mjs</code> + <code>tests/roles.baseline.json</code> ·
+править руками не нужно, перегенерируйте.</footer>
+</main></body></html>
