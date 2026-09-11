@@ -2607,7 +2607,7 @@ QUnit.module('Selection SelectAllMode', {
         // assert
         assert.equal(this.array.length, 0, 'array length');
         assert.equal(this.dataController.items().length, 0, 'items count');
-        assert.equal(this.dataController.totalCount(), 0, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 0, 'totalCount');
     });
 
     QUnit.test('Select All for multiple selection change page', function(assert) {
