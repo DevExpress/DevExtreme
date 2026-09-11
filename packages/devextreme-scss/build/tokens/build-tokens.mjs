@@ -282,11 +282,14 @@ StyleDictionary.registerFormat({
 
 const ACCENT_PROPERTY = '--dx-accent-color';
 const PRIMARY_STEP_DECLARATION = /^(\s*)--dxds-primary-(\d+):\s*([^;]+);$/gm;
+const PRIMARY_STEP_TOKEN = /^dxds-primary-\d+$/;
 
 StyleDictionary.registerFormat({
   name: 'dx/accent-palette',
   format: async (args) => {
     const palette = await StyleDictionary.hooks.formats['css/variables'](args);
+    const stepsInDictionary = args.dictionary.allTokens
+      .filter(({ name }) => PRIMARY_STEP_TOKEN.test(name)).length;
     let wrapped = 0;
     const withAccentFallback = palette.replace(
       PRIMARY_STEP_DECLARATION,
@@ -297,8 +300,9 @@ StyleDictionary.registerFormat({
       },
     );
 
-    if (wrapped === 0) {
-      throw new Error('An accent palette without a single --dxds-primary-* step');
+    if (!stepsInDictionary || wrapped !== stepsInDictionary) {
+      throw new Error(`An accent palette with ${stepsInDictionary} --dxds-primary-* steps, `
+        + `${wrapped} of them wrapped into ${ACCENT_PROPERTY}-*`);
     }
 
     return withAccentFallback;
