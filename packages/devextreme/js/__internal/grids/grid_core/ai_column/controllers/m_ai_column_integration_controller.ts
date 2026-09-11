@@ -8,6 +8,7 @@ import errors from '@js/ui/widget/ui.errors';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
+import type { DataSourceController } from '../../data_source/data_source_controller';
 import type { RawItemData } from '../../data_source_adapter/types';
 import type { ErrorHandlingViewController } from '../../error_handling/error_handling_view_controller';
 import { Controller } from '../../m_modules';
@@ -22,6 +23,8 @@ export class AIColumnIntegrationController extends Controller {
   private columnsController!: ColumnsController;
 
   private dataController!: DataController;
+
+  private dataSourceController!: DataSourceController;
 
   private errorHandlingController!: ErrorHandlingViewController;
 
@@ -78,12 +81,13 @@ export class AIColumnIntegrationController extends Controller {
   }
 
   private getRowKeyHash(item: RawItemData): PropertyKey {
-    return getKeyHash(this.dataController.keyOf(item)) as PropertyKey;
+    return getKeyHash(this.dataSourceController.keyOf(item)) as PropertyKey;
   }
 
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this.errorHandlingController = this.getController('errorHandling');
 
     this.aiColumnCacheController = new AIColumnCacheController(this.component);
@@ -136,7 +140,7 @@ export class AIColumnIntegrationController extends Controller {
       return;
     }
 
-    const keyField = this.dataController.key();
+    const keyField = this.dataSourceController.key();
     if (keyField === undefined || isKeyMissingInData(args.data, keyField)) {
       this.dataController.fireError('E1046', keyField);
       return;

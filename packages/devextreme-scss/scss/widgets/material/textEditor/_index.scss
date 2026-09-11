@@ -13,10 +13,10 @@
 @use "../../base/textEditor/mixins" as *;
 @use "../colorBox/sizes" as *;
 
-$material-base-standard-texteditor-input-horizontal-padding: 0;
-$material-texteditor-icon-container-size: $material-base-icon-size - 2px;
-$material-texteditor-invalid-badge-size: $material-invalid-badge-size + 2 * $material-invalid-badge-horizontal-padding;
-$material-editor-custom-button-margin: 5px;
+$material-base-standard-texteditor-input-horizontal-padding: 0 !default;
+$material-texteditor-icon-container-size: $material-base-icon-size - 2px !default;
+$material-texteditor-invalid-badge-size: $material-invalid-badge-size + 2 * $material-invalid-badge-horizontal-padding !default;
+$material-editor-custom-button-margin: 5px !default;
 
 @mixin dx-texteditor-icon() {
   position: absolute;

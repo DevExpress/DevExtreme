@@ -20,6 +20,12 @@ export type OptionSpy = jest.Mock<(optionName: string, optionValue?: unknown) =>
 export const spyOnOption = (instance: InternalGrid): OptionSpy => jest
   .spyOn(instance, 'option') as unknown as OptionSpy;
 
+// Reads the DataController._dataSource mirror. Assertions that pin the mirror have to read the
+// protected field itself rather than a delegating method. Goes away with the field, in Task B4.
+export const getMirroredAdapter = (
+  instance: { getController: (name: 'data') => unknown },
+): unknown => (instance.getController('data') as { _dataSource?: unknown })._dataSource;
+
 export const SELECTORS = {
   gridContainer: '#gridContainer',
 };
@@ -78,3 +84,7 @@ export const flushAsync = async (): Promise<void> => {
   jest.runAllTimers();
   await Promise.resolve();
 };
+
+export const toPlainFilter = (value: unknown): unknown => (Array.isArray(value)
+  ? Array.from(value, toPlainFilter)
+  : value);

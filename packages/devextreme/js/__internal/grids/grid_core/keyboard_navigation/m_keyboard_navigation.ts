@@ -28,6 +28,7 @@ import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { RowIndexCorrection } from '@ts/grids/grid_core/data_controller/types';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import type { RowsViewScrollEvent } from '@ts/grids/grid_core/views/types';
@@ -131,6 +132,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   protected _dataController!: DataController & Partial<VirtualScrollingDataControllerExtension>;
 
+  protected dataSourceController!: DataSourceController;
+
   private _selectionController!: Controllers['selection'];
 
   protected _editingController!: Controllers['editing'];
@@ -152,6 +155,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   // #region Initialization
   public init() {
     this._dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this._selectionController = this.getController('selection');
     this._editingController = this.getController('editing');
     this._editorFactory = this.getController('editorFactory');
@@ -704,7 +708,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const $row = this._focusedView && this._focusedView.getRow(visibleRowIndex);
     const $event = eventArgs.originalEvent;
     const isUpArrow = eventArgs.keyName === 'upArrow';
-    const dataSource = this._dataController.dataSource();
     const isRowEditingInCurrentRow = this._editingController?.isEditRowByIndex?.(visibleRowIndex);
     const isEditingNavigationMode = this._isFastEditingStarted();
     const isInsideMasterDetail = this.isInsideMasterDetail($($event?.target));
@@ -719,8 +722,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         if (
           this._isVirtualRowRender()
           && isUpArrow
-          && dataSource
-          && !dataSource.isLoading()
+          && this.dataSourceController.hasAdapter()
+          && !this.dataSourceController.isLoading()
         ) {
           const rowHeight = getOuterHeight($row);
           const rowIndex = this._focusedCellPosition.rowIndex - 1;
@@ -2588,7 +2591,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   private _fireFocusedRowChanging(eventArgs: any, $newFocusedRow: dxElementWrapper) {
     const newRowIndex = this._getRowIndex($newFocusedRow);
     const prevFocusedRowIndex = this.option('focusedRowIndex');
-    const loadingOperationTypes = this._dataController.loadingOperationTypes();
+    const loadingOperationTypes = this.dataSourceController.loadingOperationTypes();
 
     const args: any = {
       rowElement: $newFocusedRow,

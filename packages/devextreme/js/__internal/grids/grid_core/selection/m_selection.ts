@@ -27,6 +27,7 @@ import type { SelectionChangeEvent, SelectionFilter, SelectionOptions } from '@t
 
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
+import type { DataSourceController } from '../data_source/data_source_controller';
 import { isEditRow } from '../keyboard_navigation/utils';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
@@ -71,8 +72,7 @@ const processLongTap = function (that, dxEvent) {
 
 const isSeveralRowsSelected = function (that, selectionFilter) {
   let keyIndex = 0;
-  const store = that._dataController.store();
-  const key = store?.key();
+  const key = that.dataSourceController.store()?.key();
   const isComplexKey = Array.isArray(key);
 
   if (!selectionFilter.length) {
@@ -120,6 +120,8 @@ const selectionHeaderTemplate = (container, options) => {
 export class SelectionController extends modules.Controller {
   protected _dataController!: DataController;
 
+  protected dataSourceController!: DataSourceController;
+
   private _columnsController!: ColumnsController;
 
   protected _stateStoringController!: StateStoringController;
@@ -144,6 +146,7 @@ export class SelectionController extends modules.Controller {
     }
 
     this._dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
     this._stateStoringController = this.getController('stateStoring');
     // mode has a default value
@@ -156,7 +159,7 @@ export class SelectionController extends modules.Controller {
 
     if (!this._dataPushedHandler) {
       this._dataPushedHandler = this._handleDataPushed.bind(this);
-      this._dataController.pushed.add(this._dataPushedHandler);
+      this.dataSourceController.pushed.add(this._dataPushedHandler);
     }
   }
 
@@ -206,6 +209,7 @@ export class SelectionController extends modules.Controller {
    */
   protected _getSelectionConfig(): SelectionOptions {
     const dataController = this._dataController;
+    const { dataSourceController } = this;
     const columnsController = this._columnsController;
     const selectionOptions: any = this.option('selection') ?? {};
     const { deferred } = selectionOptions;
@@ -230,17 +234,17 @@ export class SelectionController extends modules.Controller {
         return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
       },
       key() {
-        return dataController?.key();
+        return dataSourceController.key();
       },
       keyOf(item) {
-        return dataController?.keyOf(item);
+        return dataSourceController.keyOf(item);
       },
       dataFields() {
-        return dataController.dataSource()?.select();
+        return dataSourceController.select();
       },
       load(options) {
         // @ts-expect-error
-        return dataController.dataSource()?.customLoader.load(options) || new Deferred().resolve([]);
+        return dataSourceController.getAdapter()?.customLoader.load(options) || new Deferred().resolve([]);
       },
       // eslint-disable-next-line
       plainItems(cached?) {
@@ -261,7 +265,7 @@ export class SelectionController extends modules.Controller {
       },
       totalCount: () => dataController.totalCount(),
       getLoadOptions(loadItemIndex, focusedItemIndex, shiftItemIndex) {
-        const { sort, filter } = dataController.dataSource()?.lastLoadOptions() ?? {};
+        const { sort, filter } = dataSourceController.lastLoadOptions();
         let minIndex = Math.min(loadItemIndex, focusedItemIndex);
         let maxIndex = Math.max(loadItemIndex, focusedItemIndex);
 

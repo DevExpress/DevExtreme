@@ -5,6 +5,7 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
+import type { DataSourceController } from '../../data_source/data_source_controller';
 import type { ChangedEvent, RawItemData } from '../../data_source_adapter/types';
 import { Controller } from '../../m_modules';
 import type { RowKey } from '../../m_types';
@@ -15,6 +16,8 @@ import { AIColumnIntegrationController } from './m_ai_column_integration_control
 
 export class AIColumnController extends Controller {
   private dataController!: DataController;
+
+  private dataSourceController!: DataSourceController;
 
   private columnsController!: ColumnsController;
 
@@ -56,12 +59,12 @@ export class AIColumnController extends Controller {
 
   private addAICommandColumn(): void {
     const that = this;
-    const { dataController, aiColumnIntegrationController } = this;
+    const { dataSourceController, aiColumnIntegrationController } = this;
 
     this.columnsController.addCommandColumn({
       ...getAICommandColumnDefaultOptions(),
       calculateCellValue(data: RawItemData) {
-        const key = dataController.keyOf(data);
+        const key = dataSourceController.keyOf(data);
         const cellValue = aiColumnIntegrationController.getAIColumnText(this.name, key);
         const defaultValue = that.getDefaultCellValue(this, cellValue);
 
@@ -73,7 +76,7 @@ export class AIColumnController extends Controller {
 
   private subscribeToDataSourceChanged(): void {
     this.dataSourceChangedHandler = this.handleDataSourceChanged.bind(this);
-    this.dataController.dataSource()?.changed.add(this.dataSourceChangedHandler);
+    this.dataSourceController.getAdapter()?.changed.add(this.dataSourceChangedHandler);
   }
 
   private unsubscribeFromDataControllerChanged(): void {
@@ -102,7 +105,7 @@ export class AIColumnController extends Controller {
   }
 
   private unsubscribeFromStoreEvents(): void {
-    const store = this.dataController.store();
+    const store = this.dataSourceController.store();
 
     if (this.storeUpdatedHandler) {
       store?.off('updated', this.storeUpdatedHandler);
@@ -116,7 +119,7 @@ export class AIColumnController extends Controller {
   }
 
   private subscribeToStoreEvents(): void {
-    const store = this.dataController.store();
+    const store = this.dataSourceController.store();
 
     if (!store) {
       return;
@@ -156,7 +159,7 @@ export class AIColumnController extends Controller {
   }
 
   private checkStoreKey(): boolean {
-    const store = this.dataController.store();
+    const store = this.dataSourceController.store();
 
     if (store && !store.key()) {
       this.dataController.fireError('E1042', 'AI Column');
@@ -204,6 +207,7 @@ export class AIColumnController extends Controller {
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
 
     this.aiColumnIntegrationController = new AIColumnIntegrationController(this.component);
     this.aiColumnIntegrationController.init();
@@ -326,7 +330,7 @@ export class AIColumnController extends Controller {
 
   public dispose(): void {
     super.dispose();
-    this.dataController.dataSource()?.changed.remove(this.dataSourceChangedHandler);
+    this.dataSourceController.getAdapter()?.changed.remove(this.dataSourceChangedHandler);
     this.unsubscribeFromStoreEvents();
     this.unsubscribeFromDataControllerChanged();
   }

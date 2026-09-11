@@ -18,8 +18,8 @@ import { isCommandKeyPressed } from '@ts/events/utils/index';
 import Draggable from '@ts/m_draggable';
 import type { EditorProperties, ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
-import NumberBox from '@ts/ui/number_box/m_number_box';
-import { WIDGET_CLASS as NUMBERBOX_CLASS } from '@ts/ui/number_box/m_number_box.base';
+import NumberBox from '@ts/ui/number_box/number_box';
+import { WIDGET_CLASS as NUMBERBOX_CLASS } from '@ts/ui/number_box/number_box.base';
 import TextBox from '@ts/ui/text_box/text_box';
 
 const COLOR_VIEW_CLASS = 'dx-colorview';
