@@ -186,12 +186,10 @@ export class DataController extends modules.Controller {
       'getKeyByRowIndex',
       'getRowIndexByKey',
       'getVisibleRows',
-      'pageCount',
       'pageIndex',
       'pageSize',
       'refresh',
       'repaintRows',
-      'totalCount',
     ];
   }
 
@@ -1329,10 +1327,6 @@ export class DataController extends modules.Controller {
     return !this.items().length;
   }
 
-  public pageCount(): number {
-    return this._dataSource ? this._dataSource.pageCount() : 1;
-  }
-
   public loadAllItems(
     data?: RawItemData[],
     skipFilter = false,
@@ -1599,7 +1593,7 @@ export class DataController extends modules.Controller {
    */
   public isLastPageLoaded(): boolean {
     const pageIndex = this.pageIndex();
-    const pageCount = this.pageCount();
+    const pageCount = this.dataSourceController.pageCount();
     return pageIndex === (pageCount - 1);
   }
 
@@ -1615,27 +1609,11 @@ export class DataController extends modules.Controller {
     return this._dataSource?.reload(reload, changesOnly) as DeferredObj<unknown>;
   }
 
-  private itemsCount(): number {
-    return (this._dataSource ? this._dataSource.itemsCount() : 0);
-  }
-
-  public totalItemsCount(): number {
-    return (this._dataSource ? this._dataSource.totalItemsCount() : 0);
-  }
-
-  public hasKnownLastPage(): boolean {
-    return (this._dataSource ? this._dataSource.hasKnownLastPage() : true);
-  }
-
   /**
    * @extended: state_storing
    */
   public isLoaded(): boolean {
     return (this._dataSource ? this._dataSource.isLoaded() : true);
-  }
-
-  public totalCount(): number {
-    return (this._dataSource ? this._dataSource.totalCount() : 0);
   }
 
   public hasLoadOperation(): boolean {

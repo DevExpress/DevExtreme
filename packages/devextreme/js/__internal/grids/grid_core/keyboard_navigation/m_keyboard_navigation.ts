@@ -737,7 +737,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _pageUpDownKeyHandler(eventArgs) {
     const pageIndex = this._dataController.pageIndex();
-    const pageCount = this._dataController.pageCount();
+    const pageCount = this.dataSourceController.pageCount();
     const pagingEnabled = this.option('paging.enabled');
     const isPageUp = eventArgs.keyName === 'pageUp';
     const pageStep = isPageUp ? -1 : 1;
@@ -1463,7 +1463,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private getFirstOrLastRowIndex(needFirstRow: boolean): number {
     const rowCount = this._isVirtualScrolling()
-      ? this._dataController.totalItemsCount()
+      ? this.dataSourceController.totalItemsCount()
       : this._dataController.items(true)?.length;
 
     return needFirstRow ? 0 : rowCount - 1;
