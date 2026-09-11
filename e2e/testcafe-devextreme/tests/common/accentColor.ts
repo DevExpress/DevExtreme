@@ -1,9 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import { getThemeName } from '../../helpers/themeUtils';
-
-const forFluentNext = getThemeName() === 'fluent-next' ? test : test.skip;
+import { isFluentNext } from '../../helpers/themeUtils';
 
 const STEPS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180];
 const ARBITRARY_ACCENT = '#a703ff';
@@ -88,7 +86,7 @@ fixture`Custom accent color`
     await measurePalette(null, []);
   });
 
-forFluentNext('the accent seeded with the designed step 100 gives the palette back', async (t) => {
+(isFluentNext() ? test : test.skip)('the designed seed gives the palette back', async (t) => {
   const designed = await measurePalette(null, STEPS);
   const designedSteps = designed.measured;
   const seed = stepOf(designedSteps, 100);
@@ -108,7 +106,7 @@ forFluentNext('the accent seeded with the designed step 100 gives the palette ba
     .eql([]);
 });
 
-forFluentNext('an arbitrary accent keeps the hue, the order and the clamps', async (t) => {
+(isFluentNext() ? test : test.skip)('an arbitrary accent keeps hue, order and clamps', async (t) => {
   const { measured, source, settings } = await measurePalette(ARBITRARY_ACCENT, STEPS);
   const steps = measured;
   const lightest = stepOf(steps, 10);
