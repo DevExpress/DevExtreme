@@ -1963,7 +1963,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         });
         dataGrid.selectRows({ a: 1111, b: 222 });
 
-        assert.deepEqual(dataGrid.getController('data').pageCount(), 2, 'pages count');
+        assert.deepEqual(dataGrid.getController('dataSource').pageCount(), 2, 'pages count');
         assert.deepEqual(dataGrid.getController('data').items().length, 3, 'items count');
         assert.ok(dataGrid.getView('pagerView').isVisible(), 'pager visibility');
 
@@ -1971,7 +1971,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('paging.enabled', false);
 
         // assert
-        assert.deepEqual(dataGrid.getController('data').pageCount(), 1, 'pages count when paging disabled');
+        assert.deepEqual(dataGrid.getController('dataSource').pageCount(), 1, 'pages count when paging disabled');
         assert.deepEqual(dataGrid.getController('data').items().length, 5, 'items count when paging disabled');
         assert.ok(!dataGrid.getView('pagerView').isVisible(), 'pager visibility when paging disabled');
     });

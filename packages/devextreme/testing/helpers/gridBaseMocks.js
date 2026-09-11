@@ -55,11 +55,26 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             loadingOperationTypes: function() {
                 return undefined;
             },
+            hasKnownLastPage: function() {
+                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
+            },
+            totalItemsCount: function() {
+                return options.totalItemsCount;
+            },
+            totalCount: function() {
+                return options.totalCount || 0;
+            },
+            pageCount: function() {
+                return options.pageCount;
+            },
             dispose: function() {
             },
             store: function() {
                 return options.store;
             },
+            push: function() {
+            },
+            pushed: $.Callbacks(),
             load: function(loadOptions) {
                 return itemsStore().load(loadOptions);
             },
@@ -127,21 +142,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return typeUtils.isDefined(options.pageSizes) ? options.pageSizes : [];
             },
 
-            hasKnownLastPage: function() {
-                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
-            },
-
             updatePagesCount: function(count) {
                 options.pageCount = count;
                 this.changed.fire();
-            },
-
-            pageCount: function() {
-                return options.pageCount;
-            },
-
-            totalCount: function() {
-                return options.totalCount || 0;
             },
 
             pageIndex: function(index) {
@@ -224,10 +227,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return options.itemsCount;
             },
 
-            totalItemsCount: function() {
-                return options.totalItemsCount;
-            },
-
             isLoading: function() {
                 return false;
             },
@@ -300,7 +299,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             dataErrorOccurred: $.Callbacks('stopOnFalse'),
             pageChanged: $.Callbacks(),
             dataSourceChanged: $.Callbacks(),
-            pushed: $.Callbacks(),
             rowIndicesChanged: $.Callbacks(),
             fireError: function() { },
             loadViewport: commonUtils.noop,

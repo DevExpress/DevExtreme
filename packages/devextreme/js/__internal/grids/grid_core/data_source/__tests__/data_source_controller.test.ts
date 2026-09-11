@@ -5,6 +5,9 @@ import {
   jest,
 } from '@jest/globals';
 import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
+import type { Callback } from '@js/core/utils/callbacks';
+import Callbacks from '@js/core/utils/callbacks';
+import type { StoreChange } from '@js/data/store';
 import type Store from '@ts/data/abstract_store';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
@@ -22,8 +25,14 @@ interface AdapterStub {
   key: jest.Mock<() => StoreKey | undefined>;
   remoteOperations: jest.Mock<() => RemoteOperationsOptions>;
   getDataIndexGetter: jest.Mock<() => (data: RawItemData) => number>;
+  hasKnownLastPage: jest.Mock<() => boolean>;
+  totalItemsCount: jest.Mock<() => number>;
+  totalCount: jest.Mock<() => number>;
+  pageCount: jest.Mock<() => number>;
   dispose: jest.Mock<(isShared?: boolean) => void>;
   init: jest.Mock<(dataSource: DataSource) => void>;
+  push: jest.Mock<(changes: StoreChange[], fromStore: boolean) => void>;
+  pushed: Callback<[StoreChange[]]>;
 }
 
 interface ProviderStub {
@@ -38,8 +47,14 @@ const createAdapterStub = (marker: string): AdapterStub => ({
   key: jest.fn(() => marker as StoreKey),
   remoteOperations: jest.fn(() => ({ filtering: true } as RemoteOperationsOptions)),
   getDataIndexGetter: jest.fn(() => (): number => 0),
+  hasKnownLastPage: jest.fn(() => false),
+  totalItemsCount: jest.fn(() => 42),
+  totalCount: jest.fn(() => 99),
+  pageCount: jest.fn(() => 7),
   dispose: jest.fn(),
   init: jest.fn(),
+  push: jest.fn(),
+  pushed: Callbacks(),
 });
 
 const asAdapter = (stub: AdapterStub): DataSourceAdapter => stub as unknown as DataSourceAdapter;
@@ -86,6 +101,8 @@ const asProvider = (
 ): DataSourceAdapterProvider => stub as unknown as DataSourceAdapterProvider;
 
 const SOURCE = { marker: 'source' } as unknown as DataSource;
+
+const CHANGES: StoreChange[] = [{ type: 'remove', key: 1 }];
 
 const withProvider = (adapter: AdapterStub): {
   controller: TestDataSourceController;
@@ -164,6 +181,19 @@ describe('DataSourceController', () => {
       expect(createController().getDataIndexGetter()).toBeUndefined();
     });
 
+    it('reports the last page as known', () => {
+      expect(createController().hasKnownLastPage()).toBe(true);
+    });
+
+    it('counts no items', () => {
+      expect(createController().totalItemsCount()).toBe(0);
+      expect(createController().totalCount()).toBe(0);
+    });
+
+    it('reports a single page', () => {
+      expect(createController().pageCount()).toBe(1);
+    });
+
     it('returns an empty object from remoteOperations, so callers can enumerate it', () => {
       const controller = createController();
 
@@ -207,6 +237,34 @@ describe('DataSourceController', () => {
 
       expect(getter).toBe(adapter.getDataIndexGetter.mock.results[0]?.value);
       expect(adapter.getDataIndexGetter).toHaveBeenCalledTimes(1);
+    });
+
+    it('delegates hasKnownLastPage to the adapter', () => {
+      const { controller, adapter } = withAdapter();
+
+      expect(controller.hasKnownLastPage()).toBe(false);
+      expect(adapter.hasKnownLastPage).toHaveBeenCalledTimes(1);
+    });
+
+    it('delegates totalItemsCount to the adapter', () => {
+      const { controller, adapter } = withAdapter();
+
+      expect(controller.totalItemsCount()).toBe(42);
+      expect(adapter.totalItemsCount).toHaveBeenCalledTimes(1);
+    });
+
+    it('delegates totalCount to the adapter', () => {
+      const { controller, adapter } = withAdapter();
+
+      expect(controller.totalCount()).toBe(99);
+      expect(adapter.totalCount).toHaveBeenCalledTimes(1);
+    });
+
+    it('delegates pageCount to the adapter', () => {
+      const { controller, adapter } = withAdapter();
+
+      expect(controller.pageCount()).toBe(7);
+      expect(adapter.pageCount).toHaveBeenCalledTimes(1);
     });
 
     it('returns the inner DataSource from getDataSource, not the adapter', () => {
@@ -258,6 +316,7 @@ describe('DataSourceController', () => {
       controller.key();
       controller.remoteOperations();
       controller.getDataIndexGetter();
+      controller.push(CHANGES);
       controller.disposeAdapter();
 
       expect(getController).not.toHaveBeenCalled();
@@ -488,6 +547,65 @@ describe('DataSourceController', () => {
       controller.disposeAdapter();
 
       expect(getController).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('the pushed callback', () => {
+    it('re-fires what the adapter pushed', () => {
+      const { controller, adapter } = withAdapter();
+      const handler = jest.fn<(changes: StoreChange[]) => void>();
+
+      controller.pushed.add(handler);
+      adapter.pushed.fire(CHANGES);
+
+      expect(handler).toHaveBeenCalledTimes(1);
+      expect(handler).toHaveBeenCalledWith(CHANGES);
+    });
+
+    it('goes quiet once the adapter is disposed', () => {
+      const { controller, adapter } = withAdapter();
+      const handler = jest.fn<(changes: StoreChange[]) => void>();
+
+      controller.pushed.add(handler);
+      controller.disposeAdapter();
+      adapter.pushed.fire(CHANGES);
+
+      expect(handler).not.toHaveBeenCalled();
+    });
+
+    it('follows the adapter that replaced the previous one', () => {
+      const { controller, provider } = withAdapter();
+      const second = createAdapterStub('second');
+      const handler = jest.fn<(changes: StoreChange[]) => void>();
+
+      provider.nextAdapter = second;
+      controller.createAdapter(SOURCE);
+      controller.pushed.add(handler);
+      second.pushed.fire(CHANGES);
+
+      expect(handler).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('push', () => {
+    it('delegates to the adapter, defaulting fromStore to false', () => {
+      const { controller, adapter } = withAdapter();
+
+      controller.push(CHANGES);
+
+      expect(adapter.push).toHaveBeenCalledWith(CHANGES, false);
+    });
+
+    it('passes fromStore through', () => {
+      const { controller, adapter } = withAdapter();
+
+      controller.push(CHANGES, true);
+
+      expect(adapter.push).toHaveBeenCalledWith(CHANGES, true);
+    });
+
+    it('does nothing when there is no adapter', () => {
+      expect(() => createController().push(CHANGES)).not.toThrow();
     });
   });
 });
