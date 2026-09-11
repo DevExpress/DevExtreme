@@ -991,7 +991,7 @@ class EditingControllerImpl extends modules.ViewController {
     const newRowPosition: any = this._getNewRowPosition();
     const dataController = this._dataController;
     const pageIndex = dataController.pageIndex();
-    const lastPageIndex = dataController.pageCount() - 1;
+    const lastPageIndex = this.dataSourceController.pageCount() - 1;
 
     if (newRowPosition === FIRST_NEW_ROW_POSITION && pageIndex !== 0) {
       return 0;

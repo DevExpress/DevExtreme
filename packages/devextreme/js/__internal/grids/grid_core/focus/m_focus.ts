@@ -288,7 +288,7 @@ export class FocusController extends core.ViewController {
       const offset = rowsScrollController.getItemOffset(focusedRowIndex);
 
       const triggerUpdateFocusedRow = () => {
-        if (this.getDataController().totalCount() && !this.getDataController().items().length) {
+        if (this.getDataSourceController().totalCount() && !this.getDataController().items().length) {
           return;
         }
         this.component.off('contentReady', triggerUpdateFocusedRow);
