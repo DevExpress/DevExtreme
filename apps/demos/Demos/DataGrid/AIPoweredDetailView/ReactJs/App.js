@@ -24,47 +24,45 @@ export default function App() {
   const renderSparkleIcon = useCallback(() => <div className="dx-icon-sparkle" />, []);
   const calculateModel = useCallback((data) => `${data.TrademarkName} ${data.Name}`, []);
   return (
-    <>
-      <DataGrid
-        dataSource={vehicles}
-        showBorders={true}
-        keyExpr="ID"
-        height={500}
-        onRowExpanding={onRowExpanding}
-        onCellClick={onCellClick}
-      >
-        <Paging pageSize={10} />
+    <DataGrid
+      dataSource={vehicles}
+      showBorders={true}
+      keyExpr="ID"
+      height={500}
+      onRowExpanding={onRowExpanding}
+      onCellClick={onCellClick}
+    >
+      <Paging pageSize={10} />
 
-        <Column
-          type="detailExpand"
-          cellRender={renderSparkleIcon}
-        />
-        <Column
-          dataField="Model"
-          calculateCellValue={calculateModel}
-        />
-        <Column
-          dataField="Price"
-          alignment="left"
-          format="currency"
-        />
-        <Column
-          caption="Category"
-          minWidth={180}
-          cellRender={Category}
-        />
-        <Column dataField="Modification" />
-        <Column dataField="Horsepower" />
-        <Column
-          dataField="BodyStyleName"
-          caption="Body Style"
-        />
+      <Column
+        type="detailExpand"
+        cellRender={renderSparkleIcon}
+      />
+      <Column
+        dataField="Model"
+        calculateCellValue={calculateModel}
+      />
+      <Column
+        dataField="Price"
+        alignment="left"
+        format="currency"
+      />
+      <Column
+        caption="Category"
+        minWidth={180}
+        cellRender={Category}
+      />
+      <Column dataField="Modification" />
+      <Column dataField="Horsepower" />
+      <Column
+        dataField="BodyStyleName"
+        caption="Body Style"
+      />
 
-        <MasterDetail
-          enabled={true}
-          component={DetailView}
-        />
-      </DataGrid>
-    </>
+      <MasterDetail
+        enabled={true}
+        component={DetailView}
+      />
+    </DataGrid>
   );
 }

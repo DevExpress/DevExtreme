@@ -40,6 +40,7 @@ $(() => {
 
   function toggleLoadingState(isLoading, event) {
     const responseText = responseEditor.option('value');
+
     responseEditor.option('disabled', isLoading || !responseText);
     promptEditor.option('disabled', isLoading);
     suggestions.option('disabled', isLoading);
