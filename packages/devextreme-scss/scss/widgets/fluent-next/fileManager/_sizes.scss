@@ -4,7 +4,7 @@
 @use "../splitterBar/sizes" as splitterBarSizes;
 
 $file-manager-toolbar-separator-height: null !default;
-$file-manager-toolbar-viewmode-width: null !default;
+$file-manager-toolbar-viewmode-width: ds.$spacing-1600 !default;
 $file-manager-toolbar-viewmode-padding: null !default;
 $file-manager-breadcrumbs-item-padding-block-start: null !default;
 $file-manager-breadcrumbs-item-padding-block-end: null !default;
@@ -23,11 +23,10 @@ $file-manager-toolbar-height: toolbarSizes.$toolbar-height !default;
 
 @if $size == "default" {
   $file-manager-toolbar-separator-height: ds.$spacing-360 !default;
-  $file-manager-toolbar-viewmode-width: 190px !default; // dx-offscale: 190px
   $file-manager-toolbar-viewmode-padding: ds.$spacing-60 !default;
   $file-manager-breadcrumbs-item-padding-block-start: ds.$spacing-70 !default;
   $file-manager-breadcrumbs-item-padding-block-end: ds.$spacing-80 !default;
-  $file-manager-details-view-checkbox-column-width: 49px !default; // dx-offscale: 49px
+  $file-manager-details-view-checkbox-column-width: ds.$spacing-480 !default;
   $file-manager-file-actions-button-size: ds.$spacing-280 !default;
   $file-manager-tree-view-item-top-bottom-padding: ds.$spacing-110 !default;
   $file-manager-file-actions-button-top-bottom-padding: ds.$spacing-20 !default;
@@ -41,11 +40,10 @@ $file-manager-toolbar-height: toolbarSizes.$toolbar-height !default;
 
 @else if $size == "compact" {
   $file-manager-toolbar-separator-height: ds.$spacing-260 !default;
-  $file-manager-toolbar-viewmode-width: 150px !default; // dx-offscale: 150px
   $file-manager-toolbar-viewmode-padding: ds.$spacing-50 !default;
   $file-manager-breadcrumbs-item-padding-block-start: ds.$spacing-80 !default;
   $file-manager-breadcrumbs-item-padding-block-end: ds.$spacing-90 !default;
-  $file-manager-details-view-checkbox-column-width: 43px !default; // dx-offscale: 43px
+  $file-manager-details-view-checkbox-column-width: ds.$spacing-440 !default;
   $file-manager-file-actions-button-size: ds.$spacing-220 !default;
   $file-manager-tree-view-item-top-bottom-padding: ds.$spacing-80 !default;
   $file-manager-file-actions-button-top-bottom-padding: ds.$spacing-90 !default;

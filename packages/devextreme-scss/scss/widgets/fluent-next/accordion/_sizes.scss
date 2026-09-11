@@ -32,4 +32,4 @@ $accordion-item-opened-margin: 0 !default;
 }
 
 // Values hoisted from style-file literals (tokenized)
-$accordion-title-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$accordion-title-font-weight: ds.$font-weight-base-strong !default;

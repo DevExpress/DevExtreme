@@ -31,6 +31,16 @@
       "scale": "spacing"
     },
     {
+      "id": "foreign",
+      "marker": "dx-foreign-scale",
+      "source": "sources",
+      "title": "A2. Sizes taken from another family's scale",
+      "question": "does the property's own scale deserve these steps",
+      "literals": "steps",
+      "why": "A length read from the spacing scale although the property has a scale of its own - a font size, a border width - because that scale has no step at the value. Unlike A the number is not a literal: it does sit on a scale, just not the one the property belongs to, so nothing looks wrong until you read which family the step came from. Unlike B a role could not be attached even if the package wanted one, because there is no step to attach it to. A value that DOES exist in the right family is not listed here - that is a plain mistake and gets fixed, not classified.",
+      "scale": "font-size"
+    },
+    {
       "id": "norole",
       "marker": "dx-no-semantic-role",
       "source": "sources",

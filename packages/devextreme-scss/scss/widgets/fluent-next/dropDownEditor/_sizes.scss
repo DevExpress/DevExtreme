@@ -13,7 +13,7 @@ $drop-down-editor-list-line-height: null !default;
 }
 
 @else if $size == "compact" {
-  $drop-down-editor-list-font-size: ds.$spacing-130 !default;
+  $drop-down-editor-list-font-size: ds.$spacing-130 !default; // dx-foreign-scale: 13px, the font-size scale has no such step
   $drop-down-editor-list-line-height: ds.$line-height-base-sm !default;
 }
 

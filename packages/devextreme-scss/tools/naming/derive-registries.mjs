@@ -1052,7 +1052,9 @@ const OVERRIDES = {
     informer: ['icon'],
     // `stop-N` are the three colours of one decorative gradient — again an enumerated entity.
     'load-indicator': ['segment', 'inner', 'sparkle', 'stop-1', 'stop-2', 'stop-3'],
-    'text-area': ['content'],
+    // `input-container` is .dx-texteditor-input-container: the editor's box, but the text area is
+    // the only widget that re-margins it, so the knob is named after the text area.
+    'text-area': ['content', 'input-container'],
     'number-box': ['spin', 'container', 'icon'],
     'date-box': [
       'overlay', 'item', 'popup', 'content', 'title', 'container', 'cell', 'button',

@@ -24,8 +24,8 @@ $toast-content-font-weight: ds.$font-weight-base-default !default;
 
 // Base-layer sizing injected with design tokens (wave B2)
 $toast-content-padding: ds.$spacing-100 !default;
-$toast-icon-width: 35px !default; // dx-offscale: 35px
-$toast-icon-height: 35px !default; // dx-offscale: 35px
+$toast-icon-width: ds.$spacing-360 !default;
+$toast-icon-height: ds.$spacing-360 !default;
 $toast-icon-margin-inline-end: ds.$spacing-100 !default;
 $toast-icon-rtl-margin-inline-end: ds.$spacing-100 !default;
 $toast-stack-gap: ds.$spacing-30 !default;
