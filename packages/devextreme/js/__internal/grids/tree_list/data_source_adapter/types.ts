@@ -12,7 +12,7 @@ export interface LoadOperation extends BaseLoadOperation {
 export interface TreeNode {
   key: unknown;
   children: TreeNode[];
-  data?: unknown;
+  data?: RawItemData;
   parent?: TreeNode;
   level?: number;
   visible?: boolean;
