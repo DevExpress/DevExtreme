@@ -108,6 +108,12 @@ function renderAssistantMessage(text: string): void {
   dataSource.store().push([{ type: 'insert', data: message }]);
 }
 
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (typeof err === 'string') return err;
+  return 'Unknown error';
+}
+
 async function processMessageSending(
   message: DxChatTypes.TextMessage,
   event: Events.EventObject | undefined,
@@ -125,18 +131,18 @@ async function processMessageSending(
       messages.push({ role: 'assistant', content: aiResponse });
       renderAssistantMessage(aiResponse);
     }, 200);
-  } catch {
+  } catch (err: unknown) {
     typingUsers.value = [];
     messages.pop();
-    alertLimitReached();
+    alertError(getErrorMessage(err));
   } finally {
     toggleDisabledState(false, event);
   }
 }
 
-function alertLimitReached(): void {
+function alertError(message: string): void {
   alerts.value = [{
-    message: 'Request limit reached, try again in a minute.',
+    message,
   }];
 
   setTimeout(() => {
@@ -156,12 +162,11 @@ async function regenerate(): Promise<void> {
     if (lastMessage?.content) {
       lastMessage.content = aiResponse;
     }
-  } catch {
+  } catch (err: unknown) {
     if (lastMessage?.content) {
       updateLastMessage(lastMessage.content);
     }
-
-    alertLimitReached();
+    alertError(getErrorMessage(err));
   } finally {
     toggleDisabledState(false);
   }
@@ -185,6 +190,7 @@ function onCopyButtonClick(message: { text: string }): void {
 }
 
 function onRegenerateButtonClick(): void {
+  alerts.value = [];
   updateLastMessage();
   regenerate();
 }
