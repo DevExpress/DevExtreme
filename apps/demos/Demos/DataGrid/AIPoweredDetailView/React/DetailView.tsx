@@ -142,7 +142,7 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
 
       {
         !isLoading && !responseValue && !isError && (
-          <div className="output-empty-message">
+          <div className="output-initial-message">
             AI Assistant is ready to answer your questions about this record.
           </div>
         )

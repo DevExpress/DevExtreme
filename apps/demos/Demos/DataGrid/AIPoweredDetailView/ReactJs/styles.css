@@ -66,7 +66,7 @@
   color: var(--dx-color-text);
 }
 
-.output-empty-message {
+.output-initial-message {
   text-align: center;
   white-space: pre-wrap;
   margin-left: 8px;
@@ -171,7 +171,7 @@
     background-color: rgb(from var(--dx-color-success) r g b / 40%);
   }
 
-  .output-empty-message {
+  .output-initial-message {
     color: #757575;
   }
 }

@@ -45,7 +45,7 @@
     color: var(--dx-color-text);
 }
 
-.output-empty-message {
+.output-initial-message {
     text-align: center;
     white-space: pre-wrap;
     margin-left: 8px;
@@ -81,7 +81,7 @@
 }
 
 :host-context(.dx-theme-generic) {
-    .output-empty-message {
+    .output-initial-message {
         color: #757575;
     }
 }

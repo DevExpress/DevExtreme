@@ -59,7 +59,7 @@
 
     <div
       v-if="!isLoading && !responseValue && !isError"
-      class="output-empty-message"
+      class="output-initial-message"
     >
       AI Assistant is ready to answer your questions about this record.
     </div>
@@ -198,7 +198,7 @@ async function handleSubmit({ event }: SubmitEvent) {
   color: var(--dx-color-text);
 }
 
-.output-empty-message {
+.output-initial-message {
   text-align: center;
   white-space: pre-wrap;
   margin-left: 8px;
@@ -234,7 +234,7 @@ async function handleSubmit({ event }: SubmitEvent) {
 }
 
 .dx-theme-generic {
-  .output-empty-message {
+  .output-initial-message {
     color: #757575;
   }
 }

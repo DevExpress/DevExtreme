@@ -170,7 +170,7 @@ $(() => {
     loadPanel = $loadPanel.dxLoadPanel('instance');
 
     $emptyMessage = $('<div>')
-      .addClass('output-empty-message')
+      .addClass('output-initial-message')
       .text('AI Assistant is ready to answer your questions about this record.');
 
     $errorMessage = $('<div>')
