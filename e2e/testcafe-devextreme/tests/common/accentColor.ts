@@ -1,7 +1,11 @@
 /* eslint-disable spellcheck/spell-checker */
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import { createWidget } from '../../helpers/createWidget';
+import { appendElementTo } from '../../helpers/domUtils';
 import url from '../../helpers/getPageUrl';
-import { isFluentNext } from '../../helpers/themeUtils';
+import { getData } from '../dataGrid/helpers/generateDataSourceData';
+import { isFluentNext, testScreenshot } from '../../helpers/themeUtils';
 
 const STEPS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180];
 const ARBITRARY_ACCENT = '#a703ff';
@@ -65,6 +69,59 @@ const measurePalette = ClientFunction((accent: string | null, steps: number[]) =
   };
 });
 
+const PALETTE_STRIP = 'accent-palette';
+const ACCENT_GRID = 'accent-grid';
+const GRID_DATA = getData(5, 2);
+const SHIPPED_ACCENTS = [
+  { palette: 'blue', color: '#0f6cbd' },
+  { palette: 'rust', color: '#da3b01' },
+  { palette: 'mint', color: '#018574' },
+];
+
+const drawPaletteStrip = ClientFunction((accent: string, steps: number[]) => {
+  document.documentElement.style.setProperty('--dx-accent-color', accent);
+  const strip = document.getElementById(PALETTE_STRIP)!;
+  strip.textContent = '';
+
+  const swatches = steps.map((step) => {
+    const column = document.createElement('div');
+    column.style.cssText = 'width: 60px; font: 10px/14px monospace; color: #000; text-align: center';
+
+    const swatch = document.createElement('div');
+    swatch.style.cssText = 'height: 60px; border: 1px solid #000';
+    swatch.style.backgroundColor = `var(--dxds-primary-${step})`;
+
+    const caption = document.createElement('div');
+    caption.textContent = `${step}`;
+
+    column.appendChild(swatch);
+    column.appendChild(caption);
+    strip.appendChild(column);
+
+    return { step, swatch, caption };
+  });
+
+  const asHex = (color: string): string => {
+    const probe = document.createElement('div');
+    probe.style.backgroundColor = `rgb(from ${color} r g b)`;
+    strip.appendChild(probe);
+    const resolved = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+    const channels = (resolved.match(/[-\d.]+/g) ?? []).slice(0, 3);
+    const scale = resolved.startsWith('color(') ? 255 : 1;
+
+    return channels.length === 3
+      ? `#${channels
+        .map((raw) => Math.round(Math.min(255, Math.max(0, +raw * scale))).toString(16).padStart(2, '0'))
+        .join('')}`
+      : resolved;
+  };
+
+  swatches.forEach(({ step, swatch, caption }) => {
+    caption.textContent = `${step}\n${asHex(getComputedStyle(swatch).backgroundColor)}`;
+    caption.style.whiteSpace = 'pre';
+  });
+}, { dependencies: { PALETTE_STRIP } });
 const oklchDistance = (first: Oklch, second: Oklch): number => {
   const radians = Math.PI / 180;
   const firstA = first.c * Math.cos(first.h * radians);
@@ -130,4 +187,31 @@ fixture`Custom accent color`
     lighteningSteps: [],
     stepsOffHue: [],
   });
+});
+
+(isFluentNext() ? test : test.skip)('the derived palette is drawn as designed', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  for (const { palette, color } of SHIPPED_ACCENTS) {
+    await drawPaletteStrip(color, STEPS);
+    await testScreenshot(t, takeScreenshot, `Accent palette ${palette}.png`, {
+      element: '#container',
+    });
+  }
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', PALETTE_STRIP, { display: 'flex' });
+  await appendElementTo('#container', 'div', ACCENT_GRID, { marginTop: '8px', width: '1080px' });
+  await createWidget('dxDataGrid', {
+    dataSource: GRID_DATA,
+    keyExpr: 'field_0',
+    selection: { mode: 'multiple' },
+    selectedRowKeys: [GRID_DATA[0].field_0, GRID_DATA[1].field_0],
+    focusedRowEnabled: true,
+    focusedRowKey: GRID_DATA[2].field_0,
+    showBorders: true,
+  }, `#${ACCENT_GRID}`);
 });
