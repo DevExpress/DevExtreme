@@ -806,7 +806,8 @@ function dateGenerator(options) {
   );
 }
 
-export const tickGenerator = function (options) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let tickGenerator = function (options) {
   let result;
 
   if (options.rangeIsEmpty) {
@@ -823,3 +824,11 @@ export const tickGenerator = function (options) {
 
   return result;
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_tickGenerator(value: typeof tickGenerator): void {
+  tickGenerator = value;
+}
+/// #ENDDEBUG

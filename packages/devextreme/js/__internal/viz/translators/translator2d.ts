@@ -164,7 +164,8 @@ function getCheckingMethodsAboutBreaks(inverted) {
   };
 }
 
-const _Translator2d = function (businessRange, canvas, options) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+let _Translator2d = function (businessRange, canvas, options) {
   this.update(businessRange, canvas, options);
 };
 
@@ -722,3 +723,9 @@ _Translator2d.prototype = {
 };
 
 export { _Translator2d as Translator2D };
+
+/// #DEBUG
+export function DEBUG_set_Translator2D(value: typeof _Translator2d): void {
+  _Translator2d = value;
+}
+/// #ENDDEBUG

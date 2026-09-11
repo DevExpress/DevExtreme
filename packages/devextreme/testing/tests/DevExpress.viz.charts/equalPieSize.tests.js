@@ -6,6 +6,7 @@ import layoutManagerModule from 'viz/chart_components/layout_manager';
 import dxPieChart from 'viz/pie_chart';
 import { MockSeries, MockPoint, insertMockFactory, restoreMockFactory, resetMockFactory, seriesMockData } from '../../helpers/chartMocks.js';
 import { rendererModule, resetModules } from './chartParts/commons.js';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 function getContainer(hidden) {
     const div = $('<div>').appendTo('#qunit-fixture');
@@ -60,18 +61,18 @@ const dataSourceTemplate = [
     { cat: 'Third', val: 300 }
 ];
 
-rendererModule.Renderer = sinon.spy(function(parameters) {
+rendererModule.DEBUG_set_Renderer(sinon.spy(function(parameters) {
     return new Renderer(parameters);
-});
+}));
 
 const environment = {
     beforeEach: function() {
         setupMocks.call(this);
 
         this.originalLayoutManagerCtor = layoutManagerModule.LayoutManager;
-        this.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager');
+        this.LayoutManager = stubSeam(layoutManagerModule, 'LayoutManager', 'DEBUG_set_LayoutManager');
 
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
+        this.validateData = stubSeam(dataValidatorModule, 'validateData', 'DEBUG_set_validateData').callsFake(function(data) {
             return { arg: data || [] };
         });
     },

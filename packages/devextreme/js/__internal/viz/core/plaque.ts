@@ -223,7 +223,8 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
   return buildPath('M', points, 'Z');
 }
 
-export class Plaque {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Plaque = class {
   widget;
 
   options;
@@ -480,4 +481,10 @@ export class Plaque {
     const { width, height } = this._size || {};
     return Math.abs(x - this.x) <= width / 2 && Math.abs(y - this.y) <= height / 2;
   }
+};
+
+/// #DEBUG
+export function DEBUG_set_Plaque(value: typeof Plaque): void {
+  Plaque = value;
 }
+/// #ENDDEBUG

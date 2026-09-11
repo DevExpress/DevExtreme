@@ -57,7 +57,8 @@ const processSeriesFamilies = function (series, minBubbleSize, maxBubbleSize, ba
   return families;
 };
 
-export const SeriesDataSource = function (options) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let SeriesDataSource = function (options) {
   const that = this;
   const themeManager = that._themeManager = createThemeManager(options.chart);
 
@@ -278,3 +279,11 @@ SeriesDataSource.prototype = {
     return this._themeManager;
   },
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_SeriesDataSource(value: typeof SeriesDataSource): void {
+  SeriesDataSource = value;
+}
+/// #ENDDEBUG

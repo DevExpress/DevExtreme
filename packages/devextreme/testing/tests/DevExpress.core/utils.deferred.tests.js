@@ -1,12 +1,9 @@
-define(function(require) {
-    const isFunction = require('core/utils/type').isFunction;
-    const deferredUtils = require('core/utils/deferred');
-    const Deferred = deferredUtils.Deferred;
+import { isFunction } from 'core/utils/type';
+import * as deferredUtils from 'core/utils/deferred';
 
-    if(!QUnit.urlParams['nojquery']) {
-        return;
-    }
+const { Deferred } = deferredUtils;
 
+if(QUnit.urlParams['nojquery']) {
     QUnit.module('when');
 
     QUnit.test('when should be resolved synchronously', function(assert) {
@@ -491,4 +488,4 @@ define(function(require) {
 
         deferred.resolve(1);
     });
-});
+}

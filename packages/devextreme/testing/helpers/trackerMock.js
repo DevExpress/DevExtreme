@@ -1,16 +1,13 @@
-const mock = require('./mockModule.js').mock;
-const vizMocks = require('./vizMocks.js');
-const { ChartTracker, PieTracker } = require('viz/chart_components/tracker');
-const ChartTrackerStub = vizMocks.stubClass(ChartTracker);
-const PieTrackerStub = vizMocks.stubClass(PieTracker);
+import { stubClass } from './vizMocks.js';
+import trackerModule from 'viz/chart_components/tracker';
 
-const trackerModule = mock('viz/chart_components/tracker', {
-    ChartTracker: sinon.spy((parameters) => new ChartTrackerStub(parameters)),
-    PieTracker: sinon.spy((parameters) => new PieTrackerStub(parameters))
-});
+const ChartTrackerStub = stubClass(trackerModule.ChartTracker);
+const PieTrackerStub = stubClass(trackerModule.PieTracker);
 
-exports.default = trackerModule;
-exports.__esModule = true;
+trackerModule.ChartTracker = sinon.spy((parameters) => new ChartTrackerStub(parameters));
+trackerModule.PieTracker = sinon.spy((parameters) => new PieTrackerStub(parameters));
 
-exports.ChartTracker = trackerModule.ChartTracker;
-exports.PieTracker = trackerModule.PieTracker;
+export default trackerModule;
+
+export const ChartTracker = trackerModule.ChartTracker;
+export const PieTracker = trackerModule.PieTracker;

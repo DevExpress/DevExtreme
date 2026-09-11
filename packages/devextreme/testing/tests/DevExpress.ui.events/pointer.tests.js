@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
 QUnit.testStart(function() {
     const markup =
@@ -9,8 +9,8 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-require('./pointerParts/baseTests.js');
-require('./pointerParts/mouseTests.js');
-require('./pointerParts/touchTests.js');
-require('./pointerParts/mouseAndTouchTests.js');
-require('./pointerParts/strategySelectionTests.js');
+import './pointerParts/baseTests.js';
+import './pointerParts/mouseTests.js';
+import './pointerParts/touchTests.js';
+import './pointerParts/mouseAndTouchTests.js';
+import './pointerParts/strategySelectionTests.js';

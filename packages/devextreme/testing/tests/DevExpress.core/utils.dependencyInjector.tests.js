@@ -1,4 +1,4 @@
-const dependencyInjector = require('core/utils/dependency_injector');
+import dependencyInjector from 'core/utils/dependency_injector';
 
 QUnit.module('dependencyInjector');
 

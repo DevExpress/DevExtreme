@@ -1,4 +1,4 @@
-const callOnce = require('core/utils/call_once');
+import callOnce from 'core/utils/call_once';
 
 QUnit.module('callOnce');
 

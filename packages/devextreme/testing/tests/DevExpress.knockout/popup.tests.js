@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const viewPort = require('core/utils/view_port').value;
-const devices = require('core/devices');
-const themes = require('ui/themes');
-const ko = require('knockout');
+import $ from 'jquery';
+import { value as viewPort } from 'core/utils/view_port';
+import devices from 'core/devices';
+import themes from 'ui/themes';
+import ko from 'knockout';
 
-require('ui/popup');
-require('integration/knockout');
+import 'ui/popup';
+import 'integration/knockout';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

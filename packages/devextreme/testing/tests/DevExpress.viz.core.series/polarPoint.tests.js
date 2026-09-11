@@ -5,6 +5,7 @@ import {
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import SeriesModule from 'viz/series/base_series';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const Series = SeriesModule.Series;
 
@@ -61,7 +62,7 @@ const environment = {
         series._argumentChecker.returns(true);
         series._valueChecker.returns(true);
 
-        this.createLabel = sinon.stub(labelModule, 'Label').callsFake(function() {
+        this.createLabel = stubSeam(labelModule, 'Label', 'DEBUG_set_Label').callsFake(function() {
             label.getBoundingRect.returns({ x: 1, y: 2, width: 20, height: 10 });
             label.getLayoutOptions.returns({ alignment: 'center', radialOffset: 0 });
             resetStub(label);

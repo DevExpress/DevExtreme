@@ -32,7 +32,8 @@ function getThemePart(theme, path) {
   return _theme;
 }
 
-export const BaseThemeManager = Class.inherit({ // TODO: test hack
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let BaseThemeManager = Class.inherit({ // TODO: test hack
   ctor(options) {
     this._themeSection = options.themeSection;
     this._fontFields = options.fontFields || [];
@@ -115,3 +116,9 @@ export const BaseThemeManager = Class.inherit({ // TODO: test hack
     _extend(font, this._font, _extend({}, font));
   },
 });
+
+/// #DEBUG
+export function DEBUG_set_BaseThemeManager(value: typeof BaseThemeManager): void {
+  BaseThemeManager = value;
+}
+/// #ENDDEBUG

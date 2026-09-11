@@ -1,22 +1,22 @@
-require('common/core/localization/globalize/core');
-require('common/core/localization/globalize/number');
-require('common/core/localization/globalize/currency');
-require('common/core/localization/globalize/date');
-require('common/core/localization/globalize/message');
-const cldrData = [
-    require('devextreme-cldr-data/fr.json!json')
-];
+import 'common/core/localization/globalize/core';
+import 'common/core/localization/globalize/number';
+import 'common/core/localization/globalize/currency';
+import 'common/core/localization/globalize/date';
+import 'common/core/localization/globalize/message';
 
-const ValidationEngine = require('ui/validation_engine');
-const Globalize = require('globalize');
-const localization = require('localization');
-const fr = require('localization/messages/fr.json!');
+import ValidationEngine from 'ui/validation_engine';
+import Globalize from 'globalize';
+import { loadMessages } from 'localization';
+import fr from 'localization/messages/fr.json!';
+import frCldr from 'devextreme-cldr-data/fr.json!json';
+
+const cldrData = [frCldr];
 
 cldrData.forEach(localeCldrData => {
     Globalize.load(localeCldrData);
 });
 
-localization.loadMessages(fr);
+loadMessages(fr);
 
 QUnit.module('culture-specific validation', {
     beforeEach: function() {

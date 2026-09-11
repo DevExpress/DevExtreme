@@ -9,9 +9,10 @@
 const TOOLTIP_OFFSET = 12;
 
 // TODO: Somehow it should be merged with the core.Tooltip
-export function TooltipViewer(params) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let TooltipViewer = function (params) {
   this._subscribeToTracker(params.tracker, params.tooltip, params.layerCollection);
-}
+};
 
 TooltipViewer.prototype = {
   constructor: TooltipViewer,
@@ -45,3 +46,11 @@ TooltipViewer.prototype = {
     });
   },
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_TooltipViewer(value: typeof TooltipViewer): void {
+  TooltipViewer = value;
+}
+/// #ENDDEBUG

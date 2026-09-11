@@ -3,6 +3,7 @@ import {
     Renderer
 } from '../../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer_default';
+import { stubSeam } from '../../../helpers/moduleSeam.js';
 import * as tiling from '__internal/viz/funnel/tiling';
 
 import '__internal/viz/funnel/funnel';
@@ -44,7 +45,7 @@ export const environment = {
 
         this.itemGroupNumber = 0;
 
-        sinon.stub(rendererModule, 'Renderer').callsFake(function() {
+        stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(function() {
             return that.renderer;
         });
     },

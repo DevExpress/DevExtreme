@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import legendModule, { Legend } from 'viz/components/legend';
+import legendModule from 'viz/components/legend';
 import {
     Renderer,
     Title,
@@ -8,6 +8,7 @@ import {
     stubClass
 } from '../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer_default';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import titleModule from 'viz/core/title';
 import tooltipModule from 'viz/core/tooltip';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
@@ -15,11 +16,13 @@ import dxBarGauge from 'viz/bar_gauge';
 
 import '__internal/viz/gauges/bar_gauge';
 
+const { Legend } = legendModule;
+
 const environment = {
     beforeEach() {
         this.renderer = new Renderer();
 
-        sinon.stub(rendererModule, 'Renderer').callsFake(() => {
+        stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(() => {
             return this.renderer;
         });
     },
@@ -47,13 +50,13 @@ $('<div id="test-container"></div>')
 const _LoadingIndicator = loadingIndicatorModule.LoadingIndicator;
 
 titleModule.DEBUG_set_title(Title);
-tooltipModule.Tooltip = Tooltip;
+tooltipModule.DEBUG_set_tooltip(Tooltip);
 loadingIndicatorModule.DEBUG_set_LoadingIndicator(LoadingIndicator);
 
 QUnit.module('Misc', {
     beforeEach: function() {
         const renderer = this.renderer = new Renderer();
-        rendererModule.Renderer = function() { return renderer; };
+        rendererModule.DEBUG_set_Renderer(function() { return renderer; });
     },
 
     create: function(options) {
@@ -169,7 +172,7 @@ QUnit.module('Legend', {
     beforeEach() {
         this.renderer = new Renderer();
 
-        sinon.stub(rendererModule, 'Renderer').callsFake(() => {
+        stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(() => {
             return this.renderer;
         });
 

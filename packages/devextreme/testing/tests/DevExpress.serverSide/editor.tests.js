@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets.editors/editor.markup.tests.js');
+import '../DevExpress.ui.widgets.editors/editor.markup.tests.js';

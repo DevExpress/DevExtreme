@@ -124,7 +124,8 @@ export const move = function (
   }
 };
 
-export const resetPosition = function (
+/* eslint-disable import/no-mutable-exports -- description seam for tests */
+export let resetPosition = function (
   $element: dxElementWrapper | Element | undefined,
   finishTransition?: boolean,
 ): void {
@@ -170,3 +171,11 @@ export const parseTranslate = function (translateString: string): TranslateVecto
     z: parseFloat(result[2]),
   };
 };
+
+/// #DEBUG
+/* eslint-disable @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_resetPosition(value: typeof resetPosition): void {
+  resetPosition = value;
+}
+/// #ENDDEBUG
