@@ -1,6 +1,6 @@
+import { EventsStrategy } from '@ts/core/events_strategy';
 import { Guid } from '@ts/core/guid';
 import Class from '@ts/core/m_class';
-import { EventsStrategy } from '@ts/core/m_events_strategy';
 import { Deferred } from '@ts/core/utils/m_deferred';
 import { extend } from '@ts/core/utils/m_extend';
 import { each, map } from '@ts/core/utils/m_iterator';

@@ -159,7 +159,7 @@ export class SelectionController extends modules.Controller {
 
     if (!this._dataPushedHandler) {
       this._dataPushedHandler = this._handleDataPushed.bind(this);
-      this._dataController.pushed.add(this._dataPushedHandler);
+      this.dataSourceController.pushed.add(this._dataPushedHandler);
     }
   }
 

@@ -1,6 +1,8 @@
 import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
+import type { Callback } from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
+import type { StoreChange } from '@js/data/store';
 import type Store from '@ts/data/abstract_store';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
@@ -20,11 +22,19 @@ export class DataSourceController<
 
   private isShared = false;
 
+  public pushed!: Callback<[StoreChange[]]>;
+
+  private readonly dataPushedHandlerProxy = this.dataPushedHandler.bind(this);
+
   /**
    * @extended: DataGrid's and TreeList's data_source_controller
    */
   protected getAdapterProvider(): DataSourceAdapterProvider<TAdapter> {
     throw new Error('Method not implemented.');
+  }
+
+  protected callbackNames(): string[] {
+    return ['pushed'];
   }
 
   public publicMethods(): string[] {
@@ -77,7 +87,10 @@ export class DataSourceController<
     const adapter = this.getAdapterProvider().create(this.component);
 
     adapter.init(dataSource);
+
     this.adapter = adapter;
+
+    adapter.pushed.add(this.dataPushedHandlerProxy);
 
     return adapter;
   }
@@ -91,12 +104,24 @@ export class DataSourceController<
   }
 
   public disposeAdapter(): void {
+    this.adapter?.pushed.remove(this.dataPushedHandlerProxy);
     this.adapter?.dispose(this.isShared);
     this.adapter = null;
   }
 
+  /**
+   * @extended: focus
+   */
+  protected dataPushedHandler(changes: StoreChange[]): void {
+    this.pushed.fire(changes);
+  }
+
   public store(): Store | undefined {
     return this.adapter?.store();
+  }
+
+  public push(changes: StoreChange[], fromStore = false): void {
+    this.adapter?.push(changes, fromStore);
   }
 
   /**
