@@ -6,7 +6,9 @@
  * scss/widgets/fluent-next/DIVERGENCES.md for why the literals exist at all.
  *
  * The token side is read from the built bundles — the `test` target depends on `build:themes`, so
- * they are fresh here, and a missing bundle fails loudly rather than passing on an empty scan.
+ * they are fresh here, and a missing bundle fails loudly rather than passing on an empty scan. Only
+ * the `:root` scope of a bundle counts: the mode classes carry the opposite mode's values, and a
+ * baked literal answers for a page that names no mode.
  *
  * There is nothing to regenerate: a failure means either the literal or the marker is wrong, and
  * which one it is has to be decided by looking at the token.
@@ -67,18 +69,34 @@ const expand = (hex: string): string => {
     : value;
 };
 
-function resolve(css: string, property: string, depth = 0): string | null {
-  const found = new RegExp(`${property.replace(/-/g, '\\-')}:([^;}]*)`).exec(css);
-  if (!found) return null;
-  const value = found[1].trim();
+/*
+ * A bundle declares each role more than once: the mode it was built for sits on `:root`, and the
+ * opposite mode sits on the `dx-theme-mode-*` classes. A literal baked into
+ * a data-uri is what a page with no mode class shows, so only the `:root` scope may answer here —
+ * scanning the whole text would hand back whichever block happens to come first.
+ */
+const rootDeclarations = (css: string): Map<string, string> => {
+  const declarations = new Map<string, string>();
+  for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    if (!selector.split(',').some((one) => one.trim() === ':root')) continue;
+    for (const [, property, value] of body.matchAll(/(--[a-z0-9-]+):([^;]*)/g)) {
+      declarations.set(property, value.trim());
+    }
+  }
+  return declarations;
+};
+
+function resolve(declarations: Map<string, string>, property: string, depth = 0): string | null {
+  const value = declarations.get(property);
+  if (value === undefined) return null;
   const indirect = /^var\((--[a-z0-9-]+)\)$/.exec(value);
-  return indirect && depth < 8 ? resolve(css, indirect[1], depth + 1) : value;
+  return indirect && depth < 8 ? resolve(declarations, indirect[1], depth + 1) : value;
 }
 
-const bundles: Record<string, string> = {};
+const bundles: Record<string, Map<string, string>> = {};
 for (const mode of ['light', 'dark']) {
   const path = join(artifactsCss, `dx.fluent-next.blue.${mode}.css`);
-  if (existsSync(path)) bundles[mode] = readFileSync(path, 'utf8');
+  if (existsSync(path)) bundles[mode] = rootDeclarations(readFileSync(path, 'utf8'));
 }
 
 test('every dx-data-uri-static literal still equals the token it names', () => {

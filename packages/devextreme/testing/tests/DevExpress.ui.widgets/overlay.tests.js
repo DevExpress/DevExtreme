@@ -20,6 +20,7 @@ import * as zIndex from '__internal/ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
 import selectors from '__internal/core/utils/m_selectors';
 import swatch from '__internal/core/utils/swatch_container';
+import themes from 'ui/themes';
 import documentSizeCallbacks from '__internal/core/utils/document_size_callbacks';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -323,6 +324,134 @@ testModule('render', moduleConfig, () => {
 
         assert.ok(overlayContainer.hasClass('dx-swatch-my-color_scheme1'), 'overlay\'s container has right class');
         assert.ok(overlayContainer.parent().hasClass(VIEWPORT_CLASS), 'overlay\'s container is the viewport\'s child');
+    });
+
+    /*
+     * The generic bundle this suite loads scopes no modes, so these declare --dx-theme-mode
+     * themselves. It goes on the scope element rather than into a document stylesheet: under
+     * ?shadowDom the fixture lives in a shadow root, which a rule in <head> cannot reach, while a
+     * declaration on the element inherits down either way - and inheriting is the whole mechanism.
+     */
+    const declareMode = ($scope, mode) => {
+        $scope.get(0).style.setProperty('--dx-theme-mode', mode);
+
+        return $scope;
+    };
+
+    const modeScope = (mode) => declareMode($('<div>').appendTo('#container'), mode);
+
+    test('Theme mode - an open overlay moves to the mode its owner resolves to after refreshMode', function(assert) {
+        const $scope = modeScope('light');
+        const overlay = $('<div>').appendTo($scope).dxOverlay({ visible: true }).dxOverlay('instance');
+
+        assert.ok(overlay.$wrapper().parent().hasClass('dx-theme-mode-light'), 'starts in the mode of its owner');
+
+        declareMode($scope, 'dark');
+        themes.refreshMode();
+
+        const container = overlay.$wrapper().parent();
+
+        assert.ok(container.hasClass('dx-theme-mode-dark'), 'moved to the new mode');
+        assert.ok(container.parent().hasClass(VIEWPORT_CLASS), 'still a child of the viewport');
+
+        overlay.dispose();
+        $scope.remove();
+    });
+
+    test('Theme mode - refreshMode leaves a hidden overlay alone until it is shown', function(assert) {
+        const $scope = modeScope('light');
+        const overlay = $('<div>').appendTo($scope).dxOverlay({ visible: false }).dxOverlay('instance');
+
+        declareMode($scope, 'dark');
+        themes.refreshMode();
+
+        assert.strictEqual(overlay.$wrapper().parent().length, 0, 'a hidden overlay is not attached anywhere');
+
+        overlay.show();
+
+        assert.ok(overlay.$wrapper().parent().hasClass('dx-theme-mode-dark'), 'and picks the current mode when shown');
+
+        overlay.dispose();
+        $scope.remove();
+    });
+
+    test('Theme mode - refreshMode leaves an overlay whose scope did not change where it is', function(assert) {
+        const $scope = modeScope('light');
+        const overlay = $('<div>').appendTo($scope).dxOverlay({ visible: true }).dxOverlay('instance');
+        const $wrapper = overlay.$wrapper();
+        const container = $wrapper.parent().get(0);
+
+        /*
+         * Re-appending a child that is already in place is not a no-op: the node is detached and
+         * re-inserted, which takes the focus out of the overlay, restarts its animations and
+         * reloads any iframe in its content. Watching for the detach is steadier than asserting on
+         * document.activeElement, which needs the window to be focused.
+         */
+        const containerWatch = new MutationObserver(() => {});
+        const wrapperWatch = new MutationObserver(() => {});
+
+        containerWatch.observe(container, { childList: true });
+        wrapperWatch.observe($wrapper.get(0), { childList: true });
+
+        themes.refreshMode();
+
+        const moves = containerWatch.takeRecords().length + wrapperWatch.takeRecords().length;
+
+        containerWatch.disconnect();
+        wrapperWatch.disconnect();
+
+        assert.strictEqual(overlay.$wrapper().parent().get(0), container, 'still in the same container');
+        assert.strictEqual(moves, 0, 'and nothing was detached to put it back where it already was');
+
+        overlay.dispose();
+        $scope.remove();
+    });
+
+    test('Theme mode - a move keeps the focus inside the overlay', function(assert) {
+        const $scope = modeScope('light');
+        const overlay = $('<div>').appendTo($scope).dxOverlay({
+            visible: true,
+            contentTemplate: () => $('<input class="probe-input" value="hello world">')
+        }).dxOverlay('instance');
+
+        const input = overlay.$content().find('.probe-input').get(0);
+        // under ?shadowDom the overlay lives in a shadow root, and the document reports its host
+        const focused = () => input.getRootNode().activeElement;
+
+        input.focus();
+        input.setSelectionRange(4, 4);
+
+        assert.strictEqual(focused(), input, 'the caret starts inside the overlay');
+
+        declareMode($scope, 'dark');
+        themes.refreshMode();
+
+        assert.ok(overlay.$wrapper().parent().hasClass('dx-theme-mode-dark'), 'the overlay did move');
+        assert.strictEqual(focused(), input, 'and the focus came back to where it was');
+        assert.strictEqual(input.selectionStart, 4, 'with the caret still in place');
+
+        overlay.dispose();
+        $scope.remove();
+    });
+
+    test('Theme mode - a disposed overlay stops listening', function(assert) {
+        const $scope = modeScope('light');
+        const overlay = $('<div>').appendTo($scope).dxOverlay({ visible: true }).dxOverlay('instance');
+        let told = 0;
+
+        overlay._themeModeChangeHandler = () => { told += 1; };
+
+        themes.refreshMode();
+
+        assert.strictEqual(told, 1, 'a live overlay is subscribed - without this the case below passes for the wrong reason');
+
+        overlay.dispose();
+        declareMode($scope, 'dark');
+
+        themes.refreshMode();
+
+        assert.strictEqual(told, 1, 'and a disposed one is not told again');
+        $scope.remove();
     });
 
     test('Overlay does not fail if swatch is undefined (render before documentReady, T713615, T1143527)', function(assert) {

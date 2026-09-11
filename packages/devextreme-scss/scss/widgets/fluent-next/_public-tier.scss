@@ -77,7 +77,10 @@
 @use "validation/public" as validationPublic;
 @use "widget/public" as widgetPublic;
 
-:root {
+:root,
+.dx-theme-mode-light,
+.dx-theme-mode-dark,
+.dx-theme-mode-inverted {
   @include commonPublic.publish();
   @include typographyPublic.publish();
 }

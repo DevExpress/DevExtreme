@@ -66,7 +66,10 @@ $grid-text-stub-bg: rgb(from #{ds.$color-bg-inverted} r g b / 0.1) !default; // 
 $grid-filter-panel-content: ds.$color-content-primary !default;
 $grid-draggable-column-content: ds.$color-content !default;
 
-:root {
+:root,
+.dx-theme-mode-light,
+.dx-theme-mode-dark,
+.dx-theme-mode-inverted {
   --dx-datagrid-row-alternation-bg: #{$grid-row-alternation-bg};
 }
 
