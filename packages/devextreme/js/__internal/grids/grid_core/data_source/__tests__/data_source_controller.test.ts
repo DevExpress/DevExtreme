@@ -5,6 +5,9 @@ import {
   jest,
 } from '@jest/globals';
 import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
+import type { Callback } from '@js/core/utils/callbacks';
+import Callbacks from '@js/core/utils/callbacks';
+import type { StoreChange } from '@js/data/store';
 import type Store from '@ts/data/abstract_store';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
@@ -24,6 +27,8 @@ interface AdapterStub {
   getDataIndexGetter: jest.Mock<() => (data: RawItemData) => number>;
   dispose: jest.Mock<(isShared?: boolean) => void>;
   init: jest.Mock<(dataSource: DataSource) => void>;
+  push: jest.Mock<(changes: StoreChange[], fromStore: boolean) => void>;
+  pushed: Callback<[StoreChange[]]>;
 }
 
 interface ProviderStub {
@@ -40,6 +45,8 @@ const createAdapterStub = (marker: string): AdapterStub => ({
   getDataIndexGetter: jest.fn(() => (): number => 0),
   dispose: jest.fn(),
   init: jest.fn(),
+  push: jest.fn(),
+  pushed: Callbacks(),
 });
 
 const asAdapter = (stub: AdapterStub): DataSourceAdapter => stub as unknown as DataSourceAdapter;
@@ -86,6 +93,8 @@ const asProvider = (
 ): DataSourceAdapterProvider => stub as unknown as DataSourceAdapterProvider;
 
 const SOURCE = { marker: 'source' } as unknown as DataSource;
+
+const CHANGES: StoreChange[] = [{ type: 'remove', key: 1 }];
 
 const withProvider = (adapter: AdapterStub): {
   controller: TestDataSourceController;
@@ -258,6 +267,7 @@ describe('DataSourceController', () => {
       controller.key();
       controller.remoteOperations();
       controller.getDataIndexGetter();
+      controller.push(CHANGES);
       controller.disposeAdapter();
 
       expect(getController).not.toHaveBeenCalled();
@@ -488,6 +498,65 @@ describe('DataSourceController', () => {
       controller.disposeAdapter();
 
       expect(getController).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('the pushed callback', () => {
+    it('re-fires what the adapter pushed', () => {
+      const { controller, adapter } = withAdapter();
+      const handler = jest.fn<(changes: StoreChange[]) => void>();
+
+      controller.pushed.add(handler);
+      adapter.pushed.fire(CHANGES);
+
+      expect(handler).toHaveBeenCalledTimes(1);
+      expect(handler).toHaveBeenCalledWith(CHANGES);
+    });
+
+    it('goes quiet once the adapter is disposed', () => {
+      const { controller, adapter } = withAdapter();
+      const handler = jest.fn<(changes: StoreChange[]) => void>();
+
+      controller.pushed.add(handler);
+      controller.disposeAdapter();
+      adapter.pushed.fire(CHANGES);
+
+      expect(handler).not.toHaveBeenCalled();
+    });
+
+    it('follows the adapter that replaced the previous one', () => {
+      const { controller, provider } = withAdapter();
+      const second = createAdapterStub('second');
+      const handler = jest.fn<(changes: StoreChange[]) => void>();
+
+      provider.nextAdapter = second;
+      controller.createAdapter(SOURCE);
+      controller.pushed.add(handler);
+      second.pushed.fire(CHANGES);
+
+      expect(handler).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('push', () => {
+    it('delegates to the adapter, defaulting fromStore to false', () => {
+      const { controller, adapter } = withAdapter();
+
+      controller.push(CHANGES);
+
+      expect(adapter.push).toHaveBeenCalledWith(CHANGES, false);
+    });
+
+    it('passes fromStore through', () => {
+      const { controller, adapter } = withAdapter();
+
+      controller.push(CHANGES, true);
+
+      expect(adapter.push).toHaveBeenCalledWith(CHANGES, true);
+    });
+
+    it('does nothing when there is no adapter', () => {
+      expect(() => createController().push(CHANGES)).not.toThrow();
     });
   });
 });

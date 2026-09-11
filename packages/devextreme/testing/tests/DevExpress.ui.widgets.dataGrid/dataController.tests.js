@@ -213,7 +213,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         const dataSource = createDataSource(array, { key: 'id' });
 
-        this.dataController.pushed.add(pushedSpy);
+        this.dataSourceController.pushed.add(pushedSpy);
 
         // assert
         assert.strictEqual(pushedSpy.callCount, 0, 'the pushed callback was not called');
@@ -239,7 +239,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         let dataSource = createDataSource(array, { key: 'id' });
 
-        this.dataController.dataPushedHandlerProxy = dataPushedHandlerSpy;
+        this.dataSourceController.dataPushedHandlerProxy = dataPushedHandlerSpy;
         this.dataController.setDataSource(dataSource);
         dataSource = this.dataSourceController.getAdapter();
         dataSource.load();
