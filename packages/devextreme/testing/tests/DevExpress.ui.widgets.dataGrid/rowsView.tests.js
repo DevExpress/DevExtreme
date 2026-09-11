@@ -4653,7 +4653,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         that.rowsView.resize();
 
         // assert
-        assert.equal(that.dataController.pageCount(), 3, 'page count = 3');
+        assert.equal(that.dataSourceController.pageCount(), 3, 'page count = 3');
         assert.ok(!that.rowsView._hasHeight, 'not has height');
         assert.ok(that.rowsView._rowHeight > 0, 'row height > 0');
         assert.equal(Math.round(getHeight(that.rowsView._getFreeSpaceRowElements())), Math.round(that.rowsView._rowHeight * 2), 'height free space row');
@@ -4679,7 +4679,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         that.rowsView.resize();
 
         // assert
-        assert.equal(that.dataController.pageCount(), 3, 'page count = 3');
+        assert.equal(that.dataSourceController.pageCount(), 3, 'page count = 3');
         assert.ok(!that.rowsView._hasHeight, 'not has height');
         assert.ok(that.rowsView._rowHeight > 0, 'row height > 0');
         assert.equal(getHeight(that.rowsView._getFreeSpaceRowElements()), 0, 'no height free space row');
