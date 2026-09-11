@@ -1,8 +1,11 @@
 $(() => {
-  const deployment = 'demo-mini';
-  const apiVersion = '2024-02-01';
-  const endpoint = 'https://public-api.devexpress.com/demo-openai';
-  const apiKey = 'DEMO';
+  const AzureOpenAIConfig = {
+    dangerouslyAllowBrowser: true,
+    deployment: 'demo-mini',
+    apiVersion: '2024-02-01',
+    endpoint: 'https://public-api.devexpress.com/demo-openai',
+    apiKey: 'DEMO',
+  };
   let promptEditor;
   let suggestions;
   let submitButton;
@@ -11,18 +14,12 @@ $(() => {
   let $emptyMessage;
   let $errorMessage;
 
-  const aiService = new AzureOpenAI({
-    dangerouslyAllowBrowser: true,
-    deployment,
-    endpoint,
-    apiVersion,
-    apiKey,
-  });
+  const aiService = new AzureOpenAI(AzureOpenAIConfig);
 
   async function getAIResponse(messages) {
     const params = {
       messages,
-      model: deployment,
+      model: AzureOpenAIConfig.deployment,
       max_completion_tokens: 1000,
       temperature: 0.7,
     };
