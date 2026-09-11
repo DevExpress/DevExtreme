@@ -39,6 +39,7 @@ export interface MapEngineMarkerOptions {
   location: MapLocation;
   onClick?: () => void;
   rtlEnabled?: boolean;
+  tooltip?: { text: string; visible: boolean };
 }
 
 export interface MapEngineUpdateDimensionsResult {
@@ -47,7 +48,7 @@ export interface MapEngineUpdateDimensionsResult {
 
 export interface MapEngineMarker {
   readonly originalMarker: unknown;
-  dispose: () => void;
+  dispose: (restoreFocus?: boolean) => void;
 }
 
 export interface MapEngineRouteOptions {

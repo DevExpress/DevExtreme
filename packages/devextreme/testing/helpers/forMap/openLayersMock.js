@@ -138,6 +138,7 @@
             this.eventHandlers = {};
             this.overlayContainer = document.createElement('div');
             this.overlayContainerStopEvent = document.createElement('div');
+            options.target.append(this.overlayContainer, this.overlayContainerStopEvent);
             api.mapCreated = true;
             api.mapInstance = this;
             api.mapOptions = options;

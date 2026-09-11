@@ -37,3 +37,27 @@
 .dx-map-marker-tooltip {
   margin: 10px;
 }
+
+.dx-map-marker-popover {
+  .dx-popup-content {
+    padding: 0;
+  }
+}
+
+.dx-map-marker-popover-content {
+  display: flex;
+  overflow-wrap: anywhere;
+
+  .dx-map-marker-tooltip {
+    min-width: 0;
+    margin-inline-end: 0;
+  }
+
+  .dx-map-marker-tooltip-close {
+    flex-shrink: 0;
+
+    .dx-button-content {
+      padding: 0;
+    }
+  }
+}
