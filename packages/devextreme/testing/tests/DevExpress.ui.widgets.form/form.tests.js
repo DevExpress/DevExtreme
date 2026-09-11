@@ -6,7 +6,8 @@ import resizeCallbacks from '__internal/core/utils/m_resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
 import messageLocalization from 'localization/message';
-import visibilityEventsModule from 'common/core/events/visibility_change';
+import * as visibilityEventsModule from 'common/core/events/visibility_change';
+import { spyVisibilityEvent } from '../../helpers/visibilityChangeMock.js';
 import { TABS_ITEM_CLASS } from '__internal/ui/tabs/tabs';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
@@ -1042,7 +1043,7 @@ QUnit.module('T986577', () => {
     }
 
     QUnit.test('Toolbar is rendered inside form. alignItemLabels = false', function(assert) {
-        const resizeEventSpy = sinon.spy(visibilityEventsModule, 'triggerResizeEvent');
+        const resizeEventSpy = spyVisibilityEvent('triggerResizeEvent');
         const $form = $('#form').dxForm(extend({ alignItemLabels: false }, getFormConfig()));
 
         const resizeEventArg = resizeEventSpy.getCall(0).args[0];
@@ -1055,7 +1056,7 @@ QUnit.module('T986577', () => {
     });
 
     QUnit.test('Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
-        const resizeEventSpy = sinon.spy(visibilityEventsModule, 'triggerResizeEvent');
+        const resizeEventSpy = spyVisibilityEvent('triggerResizeEvent');
         const $form = $('#form').dxForm(extend({ alignItemLabels: true }, getFormConfig()));
 
         const resizeEventArg = resizeEventSpy.getCall(0).args[0];

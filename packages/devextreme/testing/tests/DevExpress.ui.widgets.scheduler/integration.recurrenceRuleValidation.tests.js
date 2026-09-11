@@ -1,4 +1,14 @@
-const $ = require('jquery');
+import $ from 'jquery';
+
+import 'fluent_blue_light.css!';
+
+import fx from 'common/core/animation/fx';
+import * as dragEvents from 'common/core/events/drag';
+import { DataSource } from 'common/data/data_source/data_source';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
+
+import '__internal/scheduler/scheduler';
+import 'ui/drop_down_button';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -6,16 +16,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require('fluent_blue_light.css!');
-
-const fx = require('common/core/animation/fx');
-const dragEvents = require('common/core/events/drag');
-const DataSource = require('common/data/data_source/data_source').DataSource;
-const { createWrapper } = require('../../helpers/scheduler/helpers.js');
-
-require('__internal/scheduler/scheduler');
-require('ui/drop_down_button');
 
 QUnit.module('Integration: recurrence rules validation', {
     beforeEach: function() {

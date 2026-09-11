@@ -1,5 +1,5 @@
-const $ = require('jquery');
-const transformEvent = require('common/core/events/transform');
+import $ from 'jquery';
+import * as transformEvent from 'common/core/events/transform';
 
 $('#qunit-fixture').addClass('qunit-fixture-visible');
 QUnit.testStart(function() {

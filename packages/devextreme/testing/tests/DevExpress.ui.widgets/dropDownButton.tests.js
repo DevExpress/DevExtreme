@@ -1,7 +1,7 @@
 import { getHeight, getOuterHeight, getOuterWidth, getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import DropDownButton from 'ui/drop_down_button';
-import typeUtils, { isRenderer } from 'core/utils/type';
+import { isRenderer, isPromise } from 'core/utils/type';
 import config from 'core/config';
 import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -1726,7 +1726,7 @@ QUnit.module('public methods', {
 
         const togglePromise = this.dropDownButton.toggle();
         assert.strictEqual(popup.option('visible'), false, 'popup visibility is inverted');
-        assert.ok(typeUtils.isPromise(togglePromise), 'toggle should return promise');
+        assert.ok(isPromise(togglePromise), 'toggle should return promise');
     });
 
     QUnit.test('open method', function(assert) {
@@ -1735,7 +1735,7 @@ QUnit.module('public methods', {
 
         const openPromise = this.dropDownButton.open();
         assert.strictEqual(popup.option('visible'), true, 'popup is opened');
-        assert.ok(typeUtils.isPromise(openPromise), 'open should return promise');
+        assert.ok(isPromise(openPromise), 'open should return promise');
     });
 
     QUnit.test('close method', function(assert) {
@@ -1745,7 +1745,7 @@ QUnit.module('public methods', {
 
         const closePromise = this.dropDownButton.close();
         assert.strictEqual(popup.option('visible'), false, 'popup is closed');
-        assert.ok(typeUtils.isPromise(closePromise), 'close should return promise');
+        assert.ok(isPromise(closePromise), 'close should return promise');
     });
 
     QUnit.test('opened option', function(assert) {

@@ -4,6 +4,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
 import vizUtils from 'viz/core/utils_default';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
 import {
@@ -78,7 +79,7 @@ const environmentWithSinonStubPoint = {
         environment.beforeEach.call(this);
         let mockPointIndex = 0;
 
-        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(series, data) {
+        this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function(series, data) {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.angle = -data.argument;
@@ -1350,7 +1351,7 @@ function setDiscreteType(series) {
             this.options = {
                 type: 'line'
             };
-            this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
+            this.createPoint = stubSeam(pointModule, 'Point', 'DEBUG_set_Point').callsFake(function() {
                 const stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);
@@ -2277,7 +2278,7 @@ function setDiscreteType(series) {
     QUnit.module('polar Series', {
         beforeEach: function() {
             environmentWithSinonStubPoint.beforeEach.call(this);
-            sinon.stub(vizUtils, 'getCosAndSin');
+            stubSeam(vizUtils, 'getCosAndSin', 'DEBUG_set_getCosAndSin');
             vizUtils.getCosAndSin.returns({ cos: 1, sin: -1 });
         },
         afterEach: function() {

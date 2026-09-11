@@ -1,18 +1,13 @@
-define(function(require) {
-    if(QUnit.urlParams['nojquery']) {
-        return;
-    }
+import $ from 'jquery';
+import 'integration/jquery';
+import dxButton from 'ui/button';
 
-    const $ = require('jquery');
-
-    require('bundles/dx.all.js');
-
-
+if(!QUnit.urlParams['nojquery']) {
     QUnit.module('jquery integration');
 
     QUnit.test('renderer uses correct strategy', function(assert) {
         const node = document.createElement('div');
-        const element = new DevExpress.ui.dxButton(node).element();
+        const element = new dxButton(node).element();
 
         assert.ok(element instanceof window.jQuery);
     });
@@ -22,4 +17,4 @@ define(function(require) {
 
         assert.equal(typeof $element.dxButton, 'function');
     });
-});
+}

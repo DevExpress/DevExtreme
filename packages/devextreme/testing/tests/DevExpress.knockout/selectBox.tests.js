@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const SelectBox = require('ui/select_box');
-const fx = require('common/core/animation/fx');
-const ko = require('knockout');
+import $ from 'jquery';
+import SelectBox from 'ui/select_box';
+import fx from 'common/core/animation/fx';
+import ko from 'knockout';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

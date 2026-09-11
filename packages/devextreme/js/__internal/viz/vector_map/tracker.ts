@@ -57,7 +57,7 @@ let Focus;
 
 setupEvents();
 
-export function Tracker(parameters) {
+export let Tracker = function (parameters) {
   const that = this;
   that._root = parameters.root;
   that._createEventHandlers(parameters.dataKey);
@@ -67,7 +67,7 @@ export function Tracker(parameters) {
     that._fire(name, arg);
   });
   that._attachHandlers();
-}
+};
 
 Tracker.prototype = {
   constructor: Tracker,
@@ -580,3 +580,9 @@ function adjustWheelDelta(delta, lock) {
   }
   return sign * _delta;
 }
+
+/// #DEBUG
+export function DEBUG_set_Tracker(value: typeof Tracker): void {
+  Tracker = value;
+}
+/// #ENDDEBUG

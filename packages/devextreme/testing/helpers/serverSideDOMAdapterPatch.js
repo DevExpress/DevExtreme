@@ -1,5 +1,5 @@
-const domAdapter = require('core/dom_adapter');
-const readyCallbacks = require('core/utils/ready_callbacks');
+import domAdapter from 'core/dom_adapter';
+import readyCallbacks from 'core/utils/ready_callbacks';
 
 const documentMock = (function() {
     const documentMock = {
@@ -20,7 +20,7 @@ const documentMock = (function() {
     return documentMock;
 })();
 
-exports.set = function() {
+export function set() {
     // Emulate Angular DOM Adapter considering it's restricitons
     domAdapter.inject({
         // `document` should be used only as is
@@ -73,4 +73,4 @@ exports.set = function() {
 
     // Ready callbacks should be fired by the integration
     readyCallbacks.fire();
-};
+}

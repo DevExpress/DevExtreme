@@ -194,10 +194,11 @@ export function registerPalette(name, palette) {
   }
 }
 
-export function getAccentColor(palette, themeDefault) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let getAccentColor = function (palette, themeDefault) {
   palette = getPalette(palette, { themeDefault });
   return palette.accentColor || palette[0];
-}
+};
 
 function RingBuf(buf) {
   let ind = 0;
@@ -430,7 +431,8 @@ function getColorMixer(palette, parameters) {
   };
 }
 
-export function createPalette(palette, parameters, themeDefaultPalette?) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let createPalette = function (palette, parameters, themeDefaultPalette?) {
   const paletteObj = {
     dispose() {
       this._extensionStrategy = null;
@@ -469,7 +471,7 @@ export function createPalette(palette, parameters, themeDefaultPalette?) {
   paletteObj.reset();
 
   return paletteObj;
-}
+};
 
 function getAlteredPalette(originalPalette, step) {
   const palette = [];
@@ -495,7 +497,8 @@ function getLightness(color) {
   return color.r * 0.3 + color.g * 0.59 + color.b * 0.11;
 }
 
-export function getDiscretePalette(source, size, themeDefaultPalette) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let getDiscretePalette = function (source, size, themeDefaultPalette) {
   const palette = size > 0 ? createDiscreteColors(getPalette(source, { type: 'gradientSet', themeDefault: themeDefaultPalette }), size) : [];
 
   return {
@@ -503,7 +506,7 @@ export function getDiscretePalette(source, size, themeDefaultPalette) {
       return palette[index] || null;
     },
   };
-}
+};
 
 function createDiscreteColors(source, count) {
   const colorCount = count - 1;
@@ -549,4 +552,16 @@ export function getGradientPalette(source, themeDefaultPalette) {
 
 /// #DEBUG
 export const _DEBUG_palettes = palettes;
+/// #ENDDEBUG
+
+/// #DEBUG
+export function DEBUG_set_getAccentColor(value: typeof getAccentColor): void {
+  getAccentColor = value;
+}
+export function DEBUG_set_createPalette(value: typeof createPalette): void {
+  createPalette = value;
+}
+export function DEBUG_set_getDiscretePalette(value: typeof getDiscretePalette): void {
+  getDiscretePalette = value;
+}
 /// #ENDDEBUG

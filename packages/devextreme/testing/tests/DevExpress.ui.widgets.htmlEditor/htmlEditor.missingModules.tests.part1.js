@@ -1,2 +1,2 @@
-require('../../helpers/ignoreQuillTimers.js');
-require('./htmlEditorParts/importQuill.tests.js');
+import '../../helpers/ignoreQuillTimers.js';
+import './htmlEditorParts/importQuill.tests.js';

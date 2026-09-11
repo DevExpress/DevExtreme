@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const ko = require('knockout');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import ko from 'knockout';
 
-require('ui/action_sheet');
-require('integration/knockout');
+import 'ui/action_sheet';
+import 'integration/knockout';
 
 if(QUnit.urlParams['nocsp']) {
     QUnit.module('actionSheet');

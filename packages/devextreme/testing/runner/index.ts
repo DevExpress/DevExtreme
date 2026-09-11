@@ -82,6 +82,7 @@ const pages = createPagesRenderer({
   contentWithCacheBuster,
   getCacheBuster,
   jsonString,
+  packageRoot: PACKAGE_ROOT,
   renderTemplate: templates.renderTemplate,
 });
 const suitesService = createSuitesService({
@@ -100,7 +101,6 @@ const vectorMapService = createVectorMapService({
 const staticFiles = createStaticFileService({
   escapeHtml,
   rootDirectory: WORKSPACE_ROOT,
-  setNoCacheHeaders,
   setStaticCacheHeaders,
 });
 
@@ -121,8 +121,10 @@ function start(): void {
     });
   });
 
+  // Bind all interfaces for Docker/CI, but advertise localhost — browsers
+  // reject fetches to http://0.0.0.0/ (Chrome: "Failed to fetch … 0.0.0.0").
   server.listen(QUNIT_PORT, '0.0.0.0', () => {
-    logger.writeLine(`QUnit runner server listens on http://0.0.0.0:${QUNIT_PORT}...`);
+    logger.writeLine(`QUnit runner server listens on http://localhost:${QUNIT_PORT}...`);
   });
 }
 

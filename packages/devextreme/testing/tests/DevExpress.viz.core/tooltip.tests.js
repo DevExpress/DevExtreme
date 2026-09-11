@@ -56,11 +56,11 @@ function getInitialOptions() {
     };
 }
 
-rendererModule.Renderer = function(parameters) {
+rendererModule.DEBUG_set_Renderer(function(parameters) {
     const renderer = new Renderer(parameters);
     currentTest().renderer = renderer;
     return renderer;
-};
+});
 
 QUnit.module('Main functionality', {
     beforeEach: function() {
@@ -68,10 +68,10 @@ QUnit.module('Main functionality', {
 
         this._oldPatchFontOptions = vizUtils.patchFontOptions;
         this.patchFontOptions = sinon.spy(function() { return this._oldPatchFontOptions.apply(null, arguments); }.bind(this));
-        vizUtils.patchFontOptions = this.patchFontOptions;
+        vizUtils.DEBUG_set_patchFontOptions(this.patchFontOptions);
     },
     afterEach: function() {
-        vizUtils.patchFontOptions = this._oldPatchFontOptions;
+        vizUtils.DEBUG_set_patchFontOptions(this._oldPatchFontOptions);
     }
 });
 

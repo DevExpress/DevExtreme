@@ -1,8 +1,10 @@
-const $ = require('jquery');
-const CustomStore = require('common/data/custom_store').CustomStore;
-const { isLoadResultObject, isGroupItemsArray, isItemsArray } = require('common/data/custom_store');
-const processRequestResultLock = require('common/data/utils').processRequestResultLock;
-const config = require('core/config');
+import $ from 'jquery';
+import { CustomStore, isLoadResultObject, isGroupItemsArray, isItemsArray } from 'common/data/custom_store';
+import { processRequestResultLock } from 'common/data/utils';
+import config from 'core/config';
+import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
+import ajaxMock from '../../helpers/ajaxMock.js';
+
 const ERRORS = {
     INVALID_RETURN: 'E4012',
     MISSING_USER_FUNC: 'E4011',
@@ -10,8 +12,6 @@ const ERRORS = {
     QUERY_NOT_SUPPORTED: 'E4010',
     REQUEST_ERROR: 'E4013'
 };
-const ErrorHandlingHelper = require('../../helpers/data.errorHandlingHelper.js');
-const ajaxMock = require('../../helpers/ajaxMock.js');
 
 QUnit.testDone(function() {
     ajaxMock.clear();

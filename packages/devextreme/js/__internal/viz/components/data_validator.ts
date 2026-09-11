@@ -505,7 +505,8 @@ function verifyData(source, incidentOccurred) {
   return data;
 }
 
-export function validateData(data, groupsData, incidentOccurred, options) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let validateData = function (data, groupsData, incidentOccurred, options) {
   data = verifyData(data, incidentOccurred);
 
   groupsData.argumentType = groupsData.argumentAxisType = null;
@@ -524,4 +525,10 @@ export function validateData(data, groupsData, incidentOccurred, options) {
   const dataByArgumentFields = sortData(data, groupsData, options, getUniqueArgumentFields(groupsData));
 
   return dataByArgumentFields;
+};
+
+/// #DEBUG
+export function DEBUG_set_validateData(value: typeof validateData): void {
+  validateData = value;
 }
+/// #ENDDEBUG
