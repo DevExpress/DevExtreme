@@ -116,6 +116,8 @@ interface OsmStoryArgs {
     controls: boolean;
     disabled: boolean;
     focusStateEnabled: boolean;
+    tooltipsEnabled: boolean;
+    tooltipsInitiallyShown: boolean;
     rtlEnabled: boolean;
     showRoute: boolean;
     routeColor: string;
@@ -157,6 +159,8 @@ const OsmMapStory = ({
     controls,
     disabled,
     focusStateEnabled,
+    tooltipsEnabled,
+    tooltipsInitiallyShown,
     rtlEnabled,
     showRoute,
     routeColor,
@@ -170,14 +174,20 @@ const OsmMapStory = ({
     const mapRef = React.useRef<MapRef>(null);
     const [markerAdded, setMarkerAdded] = React.useState(false);
     const preset = ROUTE_PRESETS[routePreset];
-    const markers = React.useMemo(() => preset.markers.map((marker) => ({
+    const markers = React.useMemo(() => preset.markers.map((marker, index) => ({
         ...marker,
         onClick: handleMarkerClick,
-    })), [preset]);
+        tooltip: tooltipsEnabled
+            ? index === 0 ? 'Start' : {
+                text: `<strong>Stop ${index + 1}</strong><br>Explore this location.`,
+                isShown: tooltipsInitiallyShown,
+            }
+            : undefined,
+    })), [preset, tooltipsEnabled, tooltipsInitiallyShown]);
     const addedMarker = React.useMemo(() => ({
         location: preset.extraMarker,
-        onClick: handleMarkerClick,
-    }), [preset]);
+        tooltip: tooltipsEnabled ? 'Additional stop' : undefined,
+    }), [preset, tooltipsEnabled]);
     const routes = React.useMemo(() => showRoute ? [{
         locations: preset.locations,
         color: routeColor,
@@ -189,6 +199,9 @@ const OsmMapStory = ({
 
     React.useEffect(() => {
         setMarkerAdded(false);
+    }, [preset, tooltipsEnabled, tooltipsInitiallyShown]);
+
+    React.useEffect(() => {
         mapRef.current?.instance()?.option('zoom', preset.zoom);
     }, [preset]);
 
@@ -286,6 +299,11 @@ const meta: Meta<OsmStoryArgs> = {
         focusStateEnabled: {
             control: 'boolean',
         },
+        tooltipsEnabled: { control: 'boolean' },
+        tooltipsInitiallyShown: {
+            control: 'boolean',
+            description: 'Sets isShown for object-form tooltips. The Start marker uses a string tooltip.',
+        },
         rtlEnabled: {
             control: 'boolean',
         },
@@ -329,13 +347,15 @@ export default meta;
 
 type Story = StoryObj<OsmStoryArgs>;
 
-export const Default: Story = {
+export const Overview: Story = {
     args: {
         autoAdjust: false,
         centerOnCentralPark: false,
         controls: true,
         disabled: false,
         focusStateEnabled: true,
+        tooltipsEnabled: true,
+        tooltipsInitiallyShown: false,
         rtlEnabled: false,
         showRoute: true,
         routeColor: '#0000ff',

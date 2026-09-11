@@ -144,6 +144,8 @@ const areLocationsEqual = (
 class OsmProvider extends DynamicProvider<MapLocation | undefined> {
   declare _routes: (EngineRouteObject & { options: RouteOptions })[];
 
+  private _isCleaning = false;
+
   _engine?: MapEngine;
 
   _engineMap?: MapEngineMap;
@@ -450,6 +452,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
           ? (): void => markerClickAction({ location })
           : undefined,
         rtlEnabled: Boolean(this._option('rtlEnabled')),
+        tooltip: options.tooltip ? this._parseTooltipOptions(options.tooltip) : undefined,
       });
 
       return {
@@ -461,7 +464,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
   }
 
   _destroyMarker(marker: EngineMarkerObject): void {
-    marker.engineMarker.dispose();
+    marker.engineMarker.dispose(!this._isCleaning);
   }
 
   _fitBounds(): Promise<void> {
@@ -602,14 +605,19 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
   }
 
   clean(): Promise<void> {
-    if (this._engineMap) {
-      this._clearMarkers();
-      this._clearRoutes();
+    this._isCleaning = true;
+    try {
+      if (this._engineMap) {
+        this._clearMarkers();
+        this._clearRoutes();
+      }
+      this._engineMap?.dispose();
+      this._engineMap = undefined;
+      this._engine = undefined;
+      this._map = undefined;
+    } finally {
+      this._isCleaning = false;
     }
-    this._engineMap?.dispose();
-    this._engineMap = undefined;
-    this._engine = undefined;
-    this._map = undefined;
 
     return Promise.resolve();
   }

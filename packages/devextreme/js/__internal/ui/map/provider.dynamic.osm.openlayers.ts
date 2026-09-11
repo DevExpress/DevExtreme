@@ -1,5 +1,6 @@
 import Color from '@js/color';
 import messageLocalization from '@js/common/core/localization/message';
+import domAdapter from '@js/core/dom_adapter';
 import resizeObserverSingleton from '@js/core/resize_observer';
 import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/core/utils/m_selectors';
 
@@ -25,8 +26,10 @@ import {
   DEFAULT_MARKER_SIZE,
   MARKER_FALLBACK_HEIGHT,
   MARKER_FALLBACK_WIDTH,
+  type MarkerElementInfo,
   type MarkerKind,
 } from './provider.dynamic.osm.openlayers.marker';
+import { OpenLayersMarkerTooltip } from './provider.dynamic.osm.openlayers.tooltip';
 import type {
   ControlLike,
   Coordinate,
@@ -77,6 +80,7 @@ interface OpenLayersMarker extends MapEngineMarker {
   offset: number[];
   overlay: OverlayLike;
   positioning: string;
+  tooltip?: OpenLayersMarkerTooltip;
 }
 
 class OpenLayersMap implements MapEngineMap {
@@ -192,7 +196,8 @@ class OpenLayersMap implements MapEngineMap {
 
   private _attachMarkerElementHandlers(
     element: HTMLElement,
-    onClick: MapEngineMarkerOptions['onClick'],
+    onClick?: (event: MouseEvent) => void,
+    onSizeChange?: () => void,
   ): MarkerElementBinding {
     const keyboardInteractive = Boolean(onClick)
       && !element.querySelector(ALL_FOCUSABLE_ELEMENTS_SELECTOR);
@@ -206,9 +211,13 @@ class OpenLayersMap implements MapEngineMap {
     const clickHandler: EventListener | undefined = onClick
       ? (event): void => {
         event.stopPropagation();
-        onClick();
+        if (!this._disabled) {
+          onClick(event as MouseEvent);
+        }
       }
       : undefined;
+    let spacePressed = false;
+    const blurHandler = (): void => { spacePressed = false; };
     const keydownHandler: EventListener | undefined = focusTargets.length
       ? (event): void => {
         event.stopPropagation();
@@ -223,6 +232,9 @@ class OpenLayersMap implements MapEngineMap {
         }
 
         event.preventDefault();
+        if (keyboardEvent.key === ' ') {
+          spacePressed = true;
+        }
         if (keyboardEvent.key === 'Enter' && !keyboardEvent.repeat) {
           element.click();
         }
@@ -237,7 +249,10 @@ class OpenLayersMap implements MapEngineMap {
 
         event.preventDefault();
         event.stopPropagation();
-        element.click();
+        if (spacePressed) {
+          spacePressed = false;
+          element.click();
+        }
       }
       : undefined;
     let { height, width } = element.getBoundingClientRect();
@@ -249,6 +264,7 @@ class OpenLayersMap implements MapEngineMap {
 
       height = rect.height;
       width = rect.width;
+      onSizeChange?.();
       if (this._markerSizeRefitEnabled) {
         this._eventHandlers?.markerSizeChange();
       }
@@ -273,6 +289,7 @@ class OpenLayersMap implements MapEngineMap {
     }
     if (keyReleaseHandler) {
       element.addEventListener(KEY_RELEASE_EVENT, keyReleaseHandler);
+      element.addEventListener('blur', blurHandler);
     }
     resizeObserverSingleton.observe(element, resizeHandler);
 
@@ -287,6 +304,7 @@ class OpenLayersMap implements MapEngineMap {
         }
         if (keyReleaseHandler) {
           element.removeEventListener(KEY_RELEASE_EVENT, keyReleaseHandler);
+          element.removeEventListener('blur', blurHandler);
         }
         resizeObserverSingleton.unobserve(element);
       },
@@ -294,12 +312,10 @@ class OpenLayersMap implements MapEngineMap {
   }
 
   addMarker(options: MapEngineMarkerOptions): MapEngineMarker {
+    const markerElement = createMarkerElement(this._container.ownerDocument, options);
     const {
       element, kind, offset, positioning,
-    } = createMarkerElement(
-      this._container.ownerDocument,
-      options,
-    );
+    } = markerElement;
     element.setAttribute('dir', options.rtlEnabled ? 'rtl' : 'ltr');
     const marker = new this._api.Overlay({
       element,
@@ -310,25 +326,49 @@ class OpenLayersMap implements MapEngineMap {
       stopEvent: false,
     });
     this.originalMap.addOverlay(marker);
-    const markerElementBinding = this._attachMarkerElementHandlers(element, options.onClick);
+    const tooltip = options.tooltip
+      ? this._createMarkerTooltip(markerElement, options.tooltip.text, Boolean(options.rtlEnabled))
+      : undefined;
+    const onClick = options.onClick || tooltip
+      ? (event: MouseEvent): void => {
+        tooltip?.show(event.detail === 0 && this._focusEnabled);
+        options.onClick?.();
+      }
+      : undefined;
+    const markerElementBinding = this._attachMarkerElementHandlers(
+      element,
+      onClick,
+      () => tooltip?.syncPosition(),
+    );
+    tooltip?.setTriggers(markerElementBinding.focusTargets.map((target) => target.element));
+    const tooltipFocusTargets = tooltip
+      ? Array.from(tooltip.element.querySelectorAll<HTMLElement>(ALL_FOCUSABLE_ELEMENTS_SELECTOR))
+        .map((target) => ({ element: target, tabIndex: target.getAttribute('tabindex') }))
+      : [];
     this._markerSizeRefitEnabled = true;
 
     let disposed = false;
     const handle: OpenLayersMarker = {
       element,
-      focusTargets: markerElementBinding.focusTargets,
+      focusTargets: [...markerElementBinding.focusTargets, ...tooltipFocusTargets],
       kind,
       location: { ...options.location },
       offset,
       overlay: marker,
       positioning,
+      tooltip,
       originalMarker: marker,
-      dispose: (): void => {
+      dispose: (restoreFocus = true): void => {
         if (disposed) {
           return;
         }
 
         disposed = true;
+        if (restoreFocus && !this._disposed
+          && tooltip?.element.contains(domAdapter.getActiveElement(tooltip.element))) {
+          (this._container as HTMLElement).focus({ preventScroll: true });
+        }
+        tooltip?.dispose();
         markerElementBinding.detach();
         this.originalMap.removeOverlay(marker);
         this._markers.delete(handle);
@@ -337,8 +377,25 @@ class OpenLayersMap implements MapEngineMap {
 
     this._markers.add(handle);
     this._syncMarkerTabIndex(handle);
+    if (options.tooltip?.visible) {
+      tooltip?.show();
+    }
 
     return handle;
+  }
+
+  private _createMarkerTooltip(
+    element: MarkerElementInfo,
+    text: string,
+    rtlEnabled: boolean,
+  ): OpenLayersMarkerTooltip {
+    return new OpenLayersMarkerTooltip(
+      this.originalMap,
+      this._container,
+      element.element,
+      text,
+      rtlEnabled,
+    );
   }
 
   addRoute(options: MapEngineRouteOptions): MapEngineRoute {
@@ -396,16 +453,18 @@ class OpenLayersMap implements MapEngineMap {
       const position = this._getMarkerPosition(marker.location);
       if (!areCoordinatesEqual(marker.overlay.getPosition(), position)) {
         marker.overlay.setPosition(position);
+        marker.tooltip?.syncPosition();
       }
     });
   }
 
   private _syncMarkerTabIndex(marker: OpenLayersMarker, viewExtent?: Extent): void {
     const extent = viewExtent ?? this.originalMap.getView().calculateExtent();
-    const isVisible = this._isMarkerVisible(marker, extent);
+    const isVisible = this._isMarkerVisible(marker.overlay, extent);
 
     marker.focusTargets.forEach(({ element, tabIndex }) => {
-      if (!this._focusEnabled || this._disabled || !isVisible) {
+      const isMarkerOutsideView = !isVisible && marker.element.contains(element);
+      if (!this._focusEnabled || this._disabled || isMarkerOutsideView) {
         element.setAttribute('tabindex', '-1');
       } else if (tabIndex === null) {
         element.removeAttribute('tabindex');
@@ -425,8 +484,8 @@ class OpenLayersMap implements MapEngineMap {
     this._markers.forEach((marker) => this._syncMarkerTabIndex(marker, viewExtent));
   }
 
-  private _isMarkerVisible(marker: OpenLayersMarker, viewExtent: Extent): boolean {
-    const position = marker.overlay.getPosition();
+  private _isMarkerVisible(marker: OverlayLike, viewExtent: Extent): boolean {
+    const position = marker.getPosition();
     if (!position) {
       return false;
     }
@@ -443,7 +502,7 @@ class OpenLayersMap implements MapEngineMap {
   private _moveMarkerFocusToMap(marker: OpenLayersMarker): void {
     const markerRoot = marker.element.getRootNode() as Document | ShadowRoot;
     const { activeElement } = markerRoot;
-    const markerHasFocus = marker.focusTargets.some(({ element }) => element === activeElement);
+    const markerHasFocus = marker.element.contains(activeElement);
     const container = this._container as HTMLElement;
 
     if (markerHasFocus && typeof container.focus === 'function') {
@@ -538,7 +597,9 @@ class OpenLayersMap implements MapEngineMap {
       return false;
     }
 
-    return [...this._markers].some(({ element }) => element.contains(eventTarget));
+    return [...this._markers].some(({ element, tooltip }) => (
+      element.contains(eventTarget) || tooltip?.element.contains(eventTarget)
+    ));
   }
 
   private _detachHandlers(): void {
