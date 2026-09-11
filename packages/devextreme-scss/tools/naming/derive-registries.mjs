@@ -31,6 +31,9 @@ const output = join(here, 'registries.json');
 // Judgment calls. Everything else in registries.json is derived.
 // ---------------------------------------------------------------------------------------------
 
+// Public contract of widgets/fluent-next/_design-system.scss: an element naming a theme mode.
+const THEME_MODE_SELECTORS = ['.dx-theme-mode-light', '.dx-theme-mode-dark', '.dx-theme-mode-inverted'];
+
 const OVERRIDES = {
   // folder -> component, only where kebab(folder) is not the component name
   components: {
@@ -198,8 +201,13 @@ const OVERRIDES = {
    * that component's consumption wave lands.
    */
   rootSelectors: {
-    // system tier: theme-wide values (system concerns of common/) live on the document root
-    common: [':root'],
+    /*
+     * System tier: theme-wide values live on the document root — plus every element that names a
+     * theme mode, because a `:root`-only alias onto a role resolves once, on <html>, and would
+     * freeze at the bundle's mode. The component tier needs no entry: its roots sit inside the
+     * mode scope already.
+     */
+    common: [':root', ...THEME_MODE_SELECTORS],
     /*
      * The drop-down editor's inner button is a dxButton whose root carries dx-button-normal +
      * dx-dropdowneditor-button but NOT dx-button (found by the F12 runtime reachability audit:
@@ -377,7 +385,7 @@ const OVERRIDES = {
     // the type scale is cross-component (chat, stepper and toolbar read it), so it lives on
     // :root like icon — the surface class .dx-theme-fluent-next-typography is opt-in and would
     // leave the borrowers outside the values they read
-    typography: [':root'],
+    typography: [':root', ...THEME_MODE_SELECTORS],
   },
 
   // System-tier concerns (common/). Each must map to a non-component token family.
