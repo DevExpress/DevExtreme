@@ -435,7 +435,7 @@
     .dx-dropdowneditor-field-before-template-wrapper {
       .dx-icon {
         font-size: $diagram-toolbar-icon-size;
-        color: $diagram-content;
+        color: var(--dx-global-content);
       }
     }
   }

@@ -22,7 +22,10 @@ $theme-marker-mode: null !default;
  * --dx-color-shadow carries alpha (the DS ships no solid-black token; the shadow roles are
  * rgba over black) — unlike the legacy solid #000 of the other themes.
  */
-:root {
+:root,
+.dx-theme-mode-light,
+.dx-theme-mode-dark,
+.dx-theme-mode-inverted {
   --dx-component-color-bg: #{ds.$color-bg};
   --dx-color-main-bg: #{ds.$color-bg-canvas};
   --dx-color-primary: #{ds.$color-content-primary};

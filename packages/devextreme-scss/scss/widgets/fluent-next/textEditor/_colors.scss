@@ -32,7 +32,10 @@ $text-editor-content-disabled: ds.$color-content-disabled !default;
 
 $text-editor-label-content-focused: ds.$color-content-primary !default;
 
-:root {
+:root,
+.dx-theme-mode-light,
+.dx-theme-mode-dark,
+.dx-theme-mode-inverted {
   --dx-texteditor-color-text: #{$text-editor-content};
   --dx-texteditor-color-label: #{$text-editor-placeholder};
 }
