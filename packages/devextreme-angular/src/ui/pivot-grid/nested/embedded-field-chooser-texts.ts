@@ -23,13 +23,13 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-pivot-grid-field-chooser-texts',
+    selector: 'dxo-pivot-grid-embedded-field-chooser-texts',
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoPivotGridFieldChooserTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridEmbeddedFieldChooserTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allFields(): string {
         return this._getOption('allFields');
@@ -97,10 +97,10 @@ export class DxoPivotGridFieldChooserTextsComponent extends NestedOption impleme
 
 @NgModule({
   imports: [
-    DxoPivotGridFieldChooserTextsComponent
+    DxoPivotGridEmbeddedFieldChooserTextsComponent
   ],
   exports: [
-    DxoPivotGridFieldChooserTextsComponent
+    DxoPivotGridEmbeddedFieldChooserTextsComponent
   ],
 })
-export class DxoPivotGridFieldChooserTextsModule { }
+export class DxoPivotGridEmbeddedFieldChooserTextsModule { }

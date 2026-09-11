@@ -74,6 +74,28 @@ const PivotGrid = memo(
 
 
 // owners:
+// FieldChooser
+type IEmbeddedFieldChooserTextsProps = React.PropsWithChildren<{
+  allFields?: string;
+  columnFields?: string;
+  dataFields?: string;
+  filterFields?: string;
+  rowFields?: string;
+}>
+const _componentEmbeddedFieldChooserTexts = (props: IEmbeddedFieldChooserTextsProps) => {
+  return React.createElement(NestedOption<IEmbeddedFieldChooserTextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const EmbeddedFieldChooserTexts = Object.assign<typeof _componentEmbeddedFieldChooserTexts, NestedComponentMeta>(_componentEmbeddedFieldChooserTexts, {
+  componentType: "option",
+});
+
+// owners:
 // PivotGrid
 type IExportProps = React.PropsWithChildren<{
   enabled?: boolean;
@@ -116,7 +138,7 @@ const _componentFieldChooser = (props: IFieldChooserProps) => {
     elementDescriptor: {
       OptionName: "fieldChooser",
       ExpectedChildren: {
-        fieldChooserTexts: { optionName: "texts", isCollectionItem: false },
+        embeddedFieldChooserTexts: { optionName: "texts", isCollectionItem: false },
         texts: { optionName: "texts", isCollectionItem: false }
       },
     },
@@ -124,28 +146,6 @@ const _componentFieldChooser = (props: IFieldChooserProps) => {
 };
 
 const FieldChooser = Object.assign<typeof _componentFieldChooser, NestedComponentMeta>(_componentFieldChooser, {
-  componentType: "option",
-});
-
-// owners:
-// FieldChooser
-type IFieldChooserTextsProps = React.PropsWithChildren<{
-  allFields?: string;
-  columnFields?: string;
-  dataFields?: string;
-  filterFields?: string;
-  rowFields?: string;
-}>
-const _componentFieldChooserTexts = (props: IFieldChooserTextsProps) => {
-  return React.createElement(NestedOption<IFieldChooserTextsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "texts",
-    },
-  });
-};
-
-const FieldChooserTexts = Object.assign<typeof _componentFieldChooserTexts, NestedComponentMeta>(_componentFieldChooserTexts, {
   componentType: "option",
 });
 
@@ -422,12 +422,12 @@ export {
   PivotGrid,
   IPivotGridOptions,
   PivotGridRef,
+  EmbeddedFieldChooserTexts,
+  IEmbeddedFieldChooserTextsProps,
   Export,
   IExportProps,
   FieldChooser,
   IFieldChooserProps,
-  FieldChooserTexts,
-  IFieldChooserTextsProps,
   FieldPanel,
   IFieldPanelProps,
   FieldPanelTexts,
