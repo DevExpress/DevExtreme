@@ -347,7 +347,7 @@ export default meta;
 
 type Story = StoryObj<OsmStoryArgs>;
 
-export const Default: Story = {
+export const Overview: Story = {
     args: {
         autoAdjust: false,
         centerOnCentralPark: false,
