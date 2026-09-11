@@ -1,0 +1,33 @@
+{
+  "comment": "The application -> CSS contract of the custom accent, the mirror image of runtime-contract.json's JS -> CSS one: an application writes ONE colour into --dx-accent-color and scss/widgets/fluent-next/_accent-color.scss derives the whole primary scale from it with relative colour syntax. These names are not part of the component tier - `accent` is neither a component nor a registered system concern - and fluent-next is the only theme that derives a palette, so tests/fluent-next-naming.test.ts excludes them from the public-surface checks. tests/accent-palette.test.ts holds the stylesheet, the generated palettes and the built bundles to this file.",
+  "declaredIn": "fluent-next/_accent-color.scss",
+  "input": {
+    "name": "--dx-accent-color",
+    "setBy": "the application, on the root element",
+    "whenUnset": "every derived step is invalid at computed-value time, so each generated palette keeps the designed colour through var(--dx-accent-color-<step>, <designed value>)"
+  },
+  "source": {
+    "name": "--dx-accent-color-source",
+    "purpose": "the single read of the application's name, so the 18 step expressions do not each carry it"
+  },
+  "settings": [
+    {
+      "name": "--dx-accent-lightness-max",
+      "purpose": "the lightness the light end of the scale arrives at"
+    },
+    {
+      "name": "--dx-accent-lightness-min",
+      "purpose": "the lightness the dark end of the scale arrives at"
+    },
+    {
+      "name": "--dx-accent-chroma-min",
+      "purpose": "the chroma both ends fade to"
+    }
+  ],
+  "steps": {
+    "prefix": "--dx-accent-color-",
+    "values": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180],
+    "readIn": "_design-system/fluent/accents/*.scss",
+    "fallback": "the designed value of the step, so an unset accent leaves the theme exactly as drawn"
+  }
+}
