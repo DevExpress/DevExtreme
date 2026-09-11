@@ -60,6 +60,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             store: function() {
                 return options.store;
             },
+            push: function() {
+            },
+            pushed: $.Callbacks(),
             load: function(loadOptions) {
                 return itemsStore().load(loadOptions);
             },
@@ -300,7 +303,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             dataErrorOccurred: $.Callbacks('stopOnFalse'),
             pageChanged: $.Callbacks(),
             dataSourceChanged: $.Callbacks(),
-            pushed: $.Callbacks(),
             rowIndicesChanged: $.Callbacks(),
             fireError: function() { },
             loadViewport: commonUtils.noop,
