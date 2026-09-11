@@ -511,7 +511,9 @@
     "--dx-toolbar-height"
   ],
   "publicSurfaceUndeclared": [],
-  "publicSurfaceDifferences": [],
+  "publicSurfaceDifferences": [
+    "--dx-theme-mode: only in fluent-next"
+  ],
   "publicTierManualDeclarations": [
     "fluent-next/_colors.scss: --dx-color-border",
     "fluent-next/_colors.scss: --dx-color-danger",
@@ -527,6 +529,7 @@
     "fluent-next/_colors.scss: --dx-color-text",
     "fluent-next/_colors.scss: --dx-color-warning",
     "fluent-next/_colors.scss: --dx-component-color-bg",
+    "fluent-next/_design-system.scss: --dx-theme-mode",
     "fluent-next/_sizes.scss: --dx-border-radius",
     "fluent-next/_sizes.scss: --dx-border-width",
     "fluent-next/_sizes.scss: --dx-component-height",

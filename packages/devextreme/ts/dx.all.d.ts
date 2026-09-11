@@ -34103,6 +34103,14 @@ declare module DevExpress.ui {
      * [descr:ui.themes.initialized(callback)]
      */
     static initialized(callback: Function): void;
+    /**
+     * [descr:ui.themes.mode(element)]
+     */
+    static mode(element: DevExpress.core.UserDefinedElement): 'light' | 'dark';
+    /**
+     * [descr:ui.themes.refreshMode()]
+     */
+    static refreshMode(): void;
   }
   /**
    * [descr:Widget]

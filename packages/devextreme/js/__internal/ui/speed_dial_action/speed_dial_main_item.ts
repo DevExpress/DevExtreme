@@ -314,7 +314,7 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
 
     for (const action of actions) {
       const $actionElement = $('<div>')
-        .appendTo(getSwatchContainer(action.$element()));
+        .appendTo(getSwatchContainer(action.$element()) ?? $());
 
       eventsEngine.off($actionElement, 'click');
       eventsEngine.on($actionElement, 'click', () => {
@@ -483,7 +483,7 @@ export function initAction(newAction: SpeedDialAction): void {
 
   if (!speedDialMainItem) {
     const $fabMainElement = $('<div>')
-      .appendTo(getSwatchContainer(newAction.$element()));
+      .appendTo(getSwatchContainer(newAction.$element()) ?? $());
 
     speedDialMainItem = newAction._createComponent(
       $fabMainElement,
