@@ -691,8 +691,8 @@ class DataAdapter {
     lookForParents(matches, 0);
 
     if (this.options.sort) {
+      // @ts-expect-error queryByOptions().toArray() is typed as unknown[]
       matches = storeHelper
-        // @ts-expect-error ts-error
         .queryByOptions(query(matches), {
           sort: this.options.sort,
           langParams: this.options.langParams,

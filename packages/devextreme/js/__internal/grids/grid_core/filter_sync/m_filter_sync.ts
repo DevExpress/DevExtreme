@@ -11,11 +11,9 @@ import type {
 } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/data_controller/types';
+import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
 import modules from '@ts/grids/grid_core/m_modules';
 
-import type {
-  FilterSyncDataControllerExtension,
-} from './extenders/filter_sync_data_controller';
 import { anyOf, noneOf } from './m_filter_custom_operations';
 import {
   checkForErrors,
@@ -31,15 +29,18 @@ import {
 export class FilterSyncController extends modules.Controller {
   private skipSyncColumnOptions = false;
 
-  private dataController!: DataController & FilterSyncDataControllerExtension;
+  private dataController!: DataController;
 
   private columnsController!: ColumnsController;
 
-  public init(): void {
-    this.dataController = this.getController('data') as DataController & FilterSyncDataControllerExtension;
-    this.columnsController = this.getController('columns');
+  private filterController!: FilterController;
 
-    if (this.dataController.isFilterSyncActive()) {
+  public init(): void {
+    this.dataController = this.getController('data');
+    this.columnsController = this.getController('columns');
+    this.filterController = this.getController('filter');
+
+    if (this.filterController.isFilterSyncActive()) {
       if (this.columnsController.isAllDataTypesDefined()) {
         this.initSync();
       } else {
@@ -132,7 +133,7 @@ export class FilterSyncController extends modules.Controller {
   public getFilterValueFromColumns(
     columns: ColumnUserState[] | undefined,
   ): FilterValue {
-    if (!this.dataController.isFilterSyncActive()) {
+    if (!this.filterController.isFilterSyncActive()) {
       return null;
     }
 

@@ -22,6 +22,7 @@ import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import { generateRowValues } from '@ts/grids/grid_core/data_controller/utils/row_values';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { ValidatingController } from '@ts/grids/grid_core/validating/m_validating';
@@ -104,6 +105,8 @@ export class RowsView extends ColumnsView {
 
   protected _validatingController!: ValidatingController;
 
+  protected dataSourceController!: DataSourceController;
+
   public _columnHeadersView!: ColumnHeadersView;
 
   public _hasHeight: boolean | undefined;
@@ -135,6 +138,7 @@ export class RowsView extends ColumnsView {
     this._focusController = this.getController('focus');
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._validatingController = this.getController('validating');
+    this.dataSourceController = this.getController('dataSource');
     this._columnHeadersView = this.getView('columnHeadersView');
     this._rowHeight = 0;
     this._scrollTop = 0;
@@ -353,7 +357,7 @@ export class RowsView extends ColumnsView {
       $element.append('<div>');
     }
     if (force || !that._loadPanel) {
-      that._renderLoadPanel($element, $element.parent(), isLocalStore(that._dataController.store()));
+      that._renderLoadPanel($element, $element.parent(), isLocalStore(that.dataSourceController.store()));
     }
 
     if ((force || !that.getScrollable()) && that._dataController.isLoaded()) {
@@ -578,7 +582,7 @@ export class RowsView extends ColumnsView {
   protected _checkRowKeys(options) {
     const that = this;
     const rows = that._getRows(options);
-    const keyExpr = that._dataController.store()?.key();
+    const keyExpr = that.dataSourceController.store()?.key();
 
     keyExpr && rows.some((row) => {
       if (row.rowType === 'data' && row.key === undefined) {
@@ -1236,7 +1240,7 @@ export class RowsView extends ColumnsView {
       return;
     }
 
-    if (!loadPanel && messageText !== undefined && isLocalStore(dataController.store()) && loadPanelOptions.enabled === 'auto' && $element) {
+    if (!loadPanel && messageText !== undefined && isLocalStore(that.dataSourceController.store()) && loadPanelOptions.enabled === 'auto' && $element) {
       that._renderLoadPanel($element, $element.parent());
       loadPanel = that._loadPanel;
     }

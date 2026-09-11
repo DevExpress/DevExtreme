@@ -15,7 +15,11 @@ import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import filterUtils from '@js/ui/shared/filtering';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
+import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -79,13 +83,11 @@ function ungroupUTCDates(items, dateParts?, dates?) {
 
 export function convertDataFromUTCToLocal(data, column) {
   const dates = ungroupUTCDates(data);
-  // @ts-expect-error
   const query = dataQuery(dates);
   const group = gridCoreUtils.getHeaderFilterGroupParameters({
     ...column,
     calculateCellValue: (date) => date,
   });
-  // @ts-expect-error
   return storeHelper.queryByOptions(query, { group }).toArray();
 }
 
@@ -122,11 +124,14 @@ export class HeaderFilterController extends Modules.ViewController {
 
   private _dataController!: DataController;
 
+  private dataSourceController!: DataSourceController;
+
   private _headerFilterView!: HeaderFilterView;
 
   public init() {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this._headerFilterView = this.getView('headerFilterView');
   }
 
@@ -232,8 +237,8 @@ export class HeaderFilterController extends Modules.ViewController {
   }
 
   private getDataSource(column) {
-    const dataSource = this._dataController.dataSource();
-    const remoteGrouping = dataSource?.remoteOperations().grouping;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+    const remoteGrouping = this.dataSourceController.remoteOperations().grouping;
     const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
     const headerFilterDataSource = column.headerFilter?.dataSource;
     const headerFilterOptions = this.option('headerFilter');
@@ -242,10 +247,9 @@ export class HeaderFilterController extends Modules.ViewController {
       component: this.component,
     };
 
-    if (!dataSource) return;
+    if (!dataSourceAdapter) return;
 
     if (isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
-      // @ts-expect-error
       options.dataSource = normalizeDataSourceOptions(headerFilterDataSource);
     } else if (column.lookup) {
       isLookup = true;
@@ -253,7 +257,7 @@ export class HeaderFilterController extends Modules.ViewController {
       if (this.option('syncLookupFilterValues')) {
         const filter = this._dataController.getCombinedFilterWithExcludedColumn(column);
 
-        options.dataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+        options.dataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSourceAdapter, filter);
       } else {
         options.dataSource = gridCoreUtils.normalizeLookupDataSource(column.lookup);
       }
@@ -272,9 +276,10 @@ export class HeaderFilterController extends Modules.ViewController {
           // TODO remove in 16.1
           options.dataField = column.dataField || column.name;
 
-          dataSource.customLoader.load(options).done(({ data }) => {
+          dataSourceAdapter.customLoader.load(options).done(({ data }) => {
             const convertUTCDates = remoteGrouping && isUTCFormat(column.serializationFormat) && cutoffLevel > 3;
             if (convertUTCDates) {
+              // @ts-expect-error queryByOptions().toArray() is typed as unknown[]
               data = convertDataFromUTCToLocal(data, column);
             }
             that._processGroupItems(data, null, null, {
@@ -351,8 +356,7 @@ export class HeaderFilterController extends Modules.ViewController {
 
     if (column) {
       const groupInterval = filterUtils.getGroupInterval(column);
-      const dataSource = that._dataController.dataSource();
-      const remoteFiltering = dataSource && dataSource.remoteOperations().filtering;
+      const remoteFiltering = that.dataSourceController.remoteOperations().filtering;
       const previousOnHidden = options.onHidden;
 
       extend(options, column, {
@@ -493,20 +497,20 @@ export function invertFilterExpression(filter) {
   return ['!', filter];
 }
 
-const data = (Base: ModuleType<DataController>) => class DataControllerFilterRowExtender extends Base {
+const filterController = (
+  Base: ModuleType<FilterController>,
+) => class FilterControllerHeaderFilterExtender extends Base {
   private skipCalculateColumnFilters() {
     return false;
   }
 
-  protected calculateAdditionalFilter() {
+  public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
     if (this.skipCalculateColumnFilters()) {
-      return super.calculateAdditionalFilter();
+      return super.getAdditionalFilter(excludedColumn);
     }
 
-    const that = this;
-    const filters = [super.calculateAdditionalFilter()];
-    const columns = that._columnsController.getVisibleColumns(null, true);
-    const excludedColumn = this.getFilterExcludedColumn();
+    const filters = [super.getAdditionalFilter(excludedColumn)];
+    const columns = this.columnsController.getVisibleColumns(null, true);
 
     each(columns, (_, column) => {
       let filter;
@@ -576,7 +580,7 @@ export const headerFilterModule = {
   },
   extenders: {
     controllers: {
-      data,
+      filter: filterController,
     },
     views: {
       columnHeadersView,

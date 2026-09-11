@@ -490,7 +490,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
     // T135244
     QUnit.test('set selectedRows. Not Loading data then no selected rows', function(assert) {
         let loadingCount = 0;
-        this.dataController.store().on('loading', function() {
+        this.dataSourceController.store().on('loading', function() {
             loadingCount++;
         });
 
@@ -1002,7 +1002,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         this.dataController.optionChanged({ name: 'dataSource' });
 
         this.clock.tick(10);
-        this.dataController.store().on('loading', function(options) {
+        this.dataSourceController.store().on('loading', function(options) {
             loadOptions = options;
         });
 
@@ -1344,7 +1344,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         this.dataController.resetDataSource();
 
         let loadingCount = 0;
-        this.dataController.store().on('loading', function() {
+        this.dataSourceController.store().on('loading', function() {
             loadingCount++;
         });
 
@@ -2120,7 +2120,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 allowSelectAll: true
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         this.selectionController.selectRows([2]);
 
@@ -2146,7 +2146,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 allowSelectAll: true
             },
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         // act
         this.selectionController.selectRows([1]);
@@ -2177,7 +2177,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 allowSelectAll: true
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         // act
         this.selectionController.selectAll();
@@ -2206,7 +2206,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 mode: 'multiple',
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         sinon.spy(this.selectionController, '_updateSelectedOnPush');
         sinon.spy(this.selectionController, 'getSelectedRowsData');
@@ -2227,7 +2227,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 deferred: true
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         sinon.spy(this.selectionController, '_updateSelectedOnPush');
         sinon.spy(this.selectionController, 'getSelectedRowsData');
@@ -2599,7 +2599,7 @@ QUnit.module('Selection SelectAllMode', {
 
         // act
         $.each(this.selectionController.getSelectedRowKeys(), function(index, key) {
-            that.dataController.store().remove(key);
+            that.dataSourceController.store().remove(key);
         });
 
         this.dataController.refresh();
@@ -3192,7 +3192,7 @@ QUnit.module('Selection when grouping', {
         this.dataController.pageIndex(1);
         this.selectionController.changeItemSelection(1);
 
-        assert.ok(this.dataController._dataSource.items()[0].isContinuation);
+        assert.ok(this.dataSourceController.getAdapter().items()[0].isContinuation);
         assert.ok(!this.dataController.items()[0].isSelected);
         assert.ok(this.dataController.items()[1].isSelected);
         assert.ok(!this.dataController.items()[2].isSelected);

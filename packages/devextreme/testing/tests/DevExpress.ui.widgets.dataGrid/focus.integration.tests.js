@@ -1286,7 +1286,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         const rowsView = dataGrid.getView('rowsView');
         const $lastRow = rowsView.getRow(2);
-        const dataSource = dataGrid.getController('data').dataSource();
+        const dataSource = dataGrid.getController('dataSource').getAdapter();
 
         sinon.spy(dataSource, 'load');
 

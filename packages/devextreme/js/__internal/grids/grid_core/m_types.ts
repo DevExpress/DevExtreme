@@ -203,12 +203,14 @@ export interface Controllers {
   columnsResizer: import('./columns_resizing_reordering/m_columns_resizing_reordering').ColumnsResizerViewController;
   contextMenu: import('./context_menu/m_context_menu').ContextMenuController;
   data: import('./data_controller/data_controller').DataController;
+  dataSource: import('./data_source/data_source_controller').DataSourceController;
   draggingHeader: import('./columns_resizing_reordering/m_columns_resizing_reordering').DraggingHeaderViewController;
   // todo: export is dataGrid-only controller
   editing: import('./editing/m_editing').EditingController;
   editorFactory: import('./editor_factory/m_editor_factory').EditorFactory;
   errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
   export: import('../data_grid/export/m_export').ExportController;
+  filter: import('./filter/filter_controller').FilterController;
   filterSync: import('./filter_sync/m_filter_sync').FilterSyncController;
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;

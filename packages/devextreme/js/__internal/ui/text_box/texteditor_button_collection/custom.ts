@@ -6,11 +6,11 @@ import $ from '@js/core/renderer';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type TextEditorBase from '@ts/ui/text_box/text_editor.base';
-import TextEditorButton, { isButtonInstance } from '@ts/ui/text_box/texteditor_button_collection/button';
+import TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/button';
 
 const CUSTOM_BUTTON_HOVERED_CLASS = 'dx-custom-button-hovered';
 
-export default class CustomButton extends TextEditorButton {
+export default class CustomButton extends TextEditorButton<TextEditorBase, Button> {
   _attachEvents(
     instance: Button,
     $element: dxElementWrapper,
@@ -70,7 +70,7 @@ export default class CustomButton extends TextEditorButton {
   update(): boolean {
     const isUpdated = super.update();
 
-    if (isButtonInstance(this.instance)) {
+    if (this.instance) {
       this.instance.option('disabled', this._isDisabled());
     }
 
@@ -86,7 +86,7 @@ export default class CustomButton extends TextEditorButton {
   _isDisabled(): boolean | undefined {
     const isDefinedByUser = this.options.disabled !== undefined;
     if (isDefinedByUser) {
-      if (isButtonInstance(this.instance)) {
+      if (this.instance) {
         return this.instance.option('disabled');
       }
 
