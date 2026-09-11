@@ -1,0 +1,321 @@
+name: Playwright tests
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'apps/**/*.md'
+  merge_group:
+  workflow_dispatch:
+
+env:
+  NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
+  RUN_TESTS: true
+
+jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+      styles-changed: ${{ steps.changes.outputs.styles }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
+      - uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          filters: |
+            styles:
+              - 'packages/devextreme-scss/scss/**'
+              - 'packages/devextreme-scss/icons/**'
+              - 'packages/devextreme-scss/images/**'
+              - 'packages/devextreme-scss/fonts/**'
+              - 'packages/devextreme/js/**/themes/**'
+              - 'e2e/playwright/helpers/accessibility/**'
+
+  build:
+    name: Build DevExtreme
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
+
+    runs-on: devextreme-shr2
+    timeout-minutes: 15
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v6
+
+    - name: Use Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: '.node-version'
+
+    - uses: pnpm/action-setup@v6
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v5
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - uses: actions/cache@v5
+      name: Setup nx cache
+      with:
+        path: |
+          .nx/cache
+          .nx/workspace-data/*.db
+          .nx/workspace-data/*.db-wal
+          .nx/workspace-data/*.db-shm
+        key: ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-${{ github.sha }}-
+          ${{ runner.os }}-nx-v2-${{ github.workflow }}-${{ github.job }}-
+          ${{ runner.os }}-nx-v2-
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Build
+      shell: bash
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+      run: |
+        pnpm exec nx build devextreme-scss
+        pnpm exec nx build devextreme -c testing
+
+    - name: Zip artifacts
+      working-directory: ./packages/devextreme
+      run: |
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: devextreme-artifacts-playwright
+        path: ./packages/devextreme/artifacts.zip
+        retention-days: 1
+
+  determine-playwright-matrix:
+    runs-on: ubuntu-latest
+    name: Determine Playwright matrix
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
+    steps:
+      - name: Build matrix
+        id: matrix
+        run: |
+          base_matrix_start=$(cat <<'JSON'
+          [
+            { "componentFolder": "accessibility", "name": "accessibility", "concurrency": 6 }
+          ]
+          JSON
+          )
+
+          base_matrix_end=$(cat <<'JSON'
+          [
+            { "componentFolder": "common", "name": "common", "concurrency": 3 },
+
+            { "name": "generic", "theme": "generic.light", "concurrency": 2 },
+            { "name": "material", "theme": "material.blue.light", "concurrency": 2 },
+            { "name": "material - compact", "theme": "material.blue.light.compact", "concurrency": 2 },
+
+            { "componentFolder": "cardView", "name": "cardView" },
+            { "componentFolder": "dataGrid", "name": "dataGrid (1/4)", "indices": "1/4", "concurrency": 5 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (2/4)", "indices": "2/4", "concurrency": 5 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (3/4)", "indices": "3/4", "concurrency": 5 },
+            { "componentFolder": "dataGrid", "name": "dataGrid (4/4)", "indices": "4/4", "concurrency": 5 },
+
+            { "componentFolder": "editors", "name": "editors" },
+            { "componentFolder": "navigation", "name": "navigation", "concurrency": 6 },
+
+            { "componentFolder": "scheduler/common", "name": "scheduler / common (1/3)", "indices": "1/3", "concurrency": 6 },
+            { "componentFolder": "scheduler/common", "name": "scheduler / common (2/3)", "indices": "2/3", "concurrency": 6 },
+            { "componentFolder": "scheduler/common", "name": "scheduler / common (3/3)", "indices": "3/3", "concurrency": 6 },
+            { "componentFolder": "scheduler/viewOffset", "name": "scheduler / viewOffset (1/2)", "indices": "1/2", "concurrency": 4 },
+            { "componentFolder": "scheduler/viewOffset", "name": "scheduler / viewOffset (2/2)", "indices": "2/2", "concurrency": 4 },
+            { "componentFolder": "scheduler/timezones", "name": "scheduler / timezones (Europe/Berlin)", "timezone": "Europe/Berlin" },
+            { "componentFolder": "scheduler/timezones", "name": "scheduler / timezones (America/Los_Angeles)", "timezone": "America/Los_Angeles" }
+          ]
+          JSON
+          )
+
+          style_dependent_matrix=$(cat <<'JSON'
+          [
+            { "componentFolder": "accessibility", "name": "accessibility - fluent.dark", "theme": "fluent.blue.dark", "concurrency": 6 },
+            { "componentFolder": "accessibility", "name": "accessibility - material.light", "theme": "material.blue.light", "concurrency": 6 },
+            { "componentFolder": "accessibility", "name": "accessibility - material.dark", "theme": "material.blue.dark", "concurrency": 6 }
+          ]
+          JSON
+          )
+
+          matrix=$(jq -c -n \
+            --argjson baseStart "$base_matrix_start" \
+            --argjson baseEnd "$base_matrix_end" \
+            --argjson styleDependent "$style_dependent_matrix" \
+            --arg stylesChanged "${{ needs.check-should-run.outputs.styles-changed }}" \
+            '{ include: ($baseStart + (if $stylesChanged == "true" then $styleDependent else [] end) + $baseEnd) }')
+
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
+
+  playwright:
+    name: ${{ matrix.name }}${{ !matrix.theme && ' - fluent' || '' }}
+    if: |
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-playwright-matrix.result == 'success' &&
+      needs.build.result == 'success'
+    needs: [check-should-run, build, determine-playwright-matrix]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.determine-playwright-matrix.outputs.matrix) }}
+    runs-on: devextreme-shr2
+    timeout-minutes: 45
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v6
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v8
+      with:
+        name: devextreme-artifacts-playwright
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '150.0.7871.181'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: '.node-version'
+
+    - uses: pnpm/action-setup@v6
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v5
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Run Playwright tests
+      working-directory: ./e2e/playwright
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        # The browser context takes the timezone, so the agent clock is left alone.
+        TIMEZONE: ${{ matrix.timezone }}
+      run: |
+        THEME="--theme ${{ matrix.theme || 'fluent.blue.light' }}"
+        [ "${{ matrix.componentFolder }}" != "" ] && COMPONENT_FOLDER="--componentFolder ${{ matrix.componentFolder }}"
+        [ "${{ matrix.indices }}" != "" ] && INDICES="--indices ${{ matrix.indices }}"
+        [ "${{ matrix.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.concurrency }}"
+        all_args="$COMPONENT_FOLDER $CONCURRENCY $INDICES $THEME"
+        echo "$all_args"
+        pnpm run test $all_args
+
+    - name: Sanitize job name
+      if: ${{ always() }}
+      run: echo "JOB_NAME=$(echo "${{ matrix.name }}" | tr '/' '-')" >> $GITHUB_ENV
+
+    - name: Upload test report
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-report-${{ env.JOB_NAME }}
+        path: ${{ github.workspace }}/e2e/playwright/artifacts/playwright-report
+        if-no-files-found: ignore
+
+    - name: Upload test traces and screenshot diffs
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: playwright-traces-${{ env.JOB_NAME }}
+        path: ${{ github.workspace }}/e2e/playwright/artifacts/test-results
+        if-no-files-found: ignore
+
+  merge-artifacts:
+    runs-on: ubuntu-latest
+    needs: [playwright]
+    if: ${{ always() }}
+
+    steps:
+    - name: Detect mergeable artifacts
+      id: mergeable-artifacts
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId,
+            per_page: 100,
+          });
+
+          const artifactGroups = {
+            reports: /^playwright-report-/,
+            traces: /^playwright-traces-/,
+          };
+
+          for (const [outputName, pattern] of Object.entries(artifactGroups)) {
+            const names = artifacts
+              .map((artifact) => artifact.name)
+              .filter((name) => pattern.test(name));
+
+            core.setOutput(outputName, names.length > 0 ? 'true' : 'false');
+            core.info(`${outputName}: ${names.length ? names.join(', ') : '(none)'}`);
+          }
+
+    - name: Merge test reports
+      if: steps.mergeable-artifacts.outputs.reports == 'true'
+      uses: actions/upload-artifact/merge@v7
+      continue-on-error: true
+      with:
+        name: playwright-reports
+        pattern: playwright-report-*
+        separate-directories: true
+        delete-merged: true
+
+    - name: Merge test traces
+      if: steps.mergeable-artifacts.outputs.traces == 'true'
+      uses: actions/upload-artifact/merge@v7
+      continue-on-error: true
+      with:
+        name: playwright-traces
+        pattern: playwright-traces-*
+        separate-directories: true
+        delete-merged: true
