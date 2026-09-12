@@ -11,6 +11,8 @@ export interface PaneRestrictions {
   size?: number;
   maxSize?: number;
   minSize?: number;
+  // size was measured by the widget itself, not requested by the user
+  isSizeAuto?: boolean;
 }
 
 export interface ResizeOffset {
