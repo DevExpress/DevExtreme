@@ -81,7 +81,7 @@ const priorities: Resource[] = [
   }, {
     text: 'Low priority',
     id: 2,
-    color: '#DD2C00',
+    color: '#CD2900',
   },
 ];
 

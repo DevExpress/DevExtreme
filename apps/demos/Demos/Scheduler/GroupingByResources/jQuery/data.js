@@ -150,6 +150,6 @@ const priorityData = [
   }, {
     text: 'High Priority',
     id: 2,
-    color: '#DD2C00',
+    color: '#CD2900',
   },
 ];
