@@ -333,7 +333,7 @@ export class DataController extends modules.Controller {
 
     const isRemoteFiltering = this._dataSource.remoteOperations().filtering || returnDataField;
 
-    combined = this._columnsController.updateFilter(combined, isRemoteFiltering);
+    combined = this.filterController.normalizeFilterSelectors(combined, isRemoteFiltering);
 
     return combined;
   }

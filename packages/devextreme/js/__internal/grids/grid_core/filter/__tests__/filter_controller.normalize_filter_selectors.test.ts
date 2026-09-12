@@ -14,6 +14,8 @@ import {
   beforeTest,
   createDataGrid,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
+import type { ColumnSelector } from '@ts/grids/grid_core/columns_controller/types';
+import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 
 const DATA = [
   { id: 1, name: 'Alex', age: 15 },
@@ -35,14 +37,15 @@ const createGrid = (): Promise<{
   columns: ['name', 'age'],
 });
 
-const updateFilter = (
+const normalizeFilterSelectors = (
   instance: DataGridInstance,
   filter: unknown,
   remoteFiltering: boolean,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): any => instance.getController('columns').updateFilter(filter, remoteFiltering);
+): unknown => instance
+  .getController('filter')
+  .normalizeFilterSelectors(filter as DataFilter, remoteFiltering);
 
-describe('ColumnsController.updateFilter', () => {
+describe('FilterController.normalizeFilterSelectors', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
@@ -51,7 +54,7 @@ describe('ColumnsController.updateFilter', () => {
       const { instance } = await createGrid();
       const nameColumn = instance.getController('columns').getVisibleColumns()[0];
 
-      const result = updateFilter(instance, ['name', '=', 'Alex'], false);
+      const result = normalizeFilterSelectors(instance, ['name', '=', 'Alex'], false) as unknown[];
 
       expect(result[0]).toBe(nameColumn.selector);
     });
@@ -60,30 +63,30 @@ describe('ColumnsController.updateFilter', () => {
       const { instance } = await createGrid();
       const columns = instance.getController('columns').getVisibleColumns();
 
-      updateFilter(instance, ['age', '=', 15], false);
+      normalizeFilterSelectors(instance, ['age', '=', 15], false);
 
-      expect((columns[1].selector as TaggedSelector).columnIndex).toBe(columns[1].index);
+      expect(columns[1].selector?.columnIndex).toBe(columns[1].index);
     });
 
     it('should walk nested groups', async () => {
       const { instance } = await createGrid();
       const columns = instance.getController('columns').getVisibleColumns();
 
-      const result = updateFilter(
+      const result = normalizeFilterSelectors(
         instance,
         [['name', '=', 'Alex'], 'and', ['age', '=', 15]],
         false,
-      );
+      ) as unknown[];
 
-      expect(result[0][0]).toBe(columns[0].selector);
+      expect((result[0] as unknown[])[0]).toBe(columns[0].selector);
       expect(result[1]).toBe('and');
-      expect(result[2][0]).toBe(columns[1].selector);
+      expect((result[2] as unknown[])[0]).toBe(columns[1].selector);
     });
 
     it('should leave an unknown field alone', async () => {
       const { instance } = await createGrid();
 
-      expect(updateFilter(instance, ['unknown', '=', 1], false)).toEqual(['unknown', '=', 1]);
+      expect(normalizeFilterSelectors(instance, ['unknown', '=', 1], false)).toEqual(['unknown', '=', 1]);
     });
   });
 
@@ -91,7 +94,7 @@ describe('ColumnsController.updateFilter', () => {
     it('should keep the data fields', async () => {
       const { instance } = await createGrid();
 
-      expect(updateFilter(instance, ['name', '=', 'Alex'], true)).toEqual(['name', '=', 'Alex']);
+      expect(normalizeFilterSelectors(instance, ['name', '=', 'Alex'], true)).toEqual(['name', '=', 'Alex']);
     });
   });
 
@@ -104,7 +107,7 @@ describe('ColumnsController.updateFilter', () => {
       filter.filterValue = 'ZZ';
       filter.selectedFilterOperation = 'between';
 
-      const result = updateFilter(instance, filter, false);
+      const result = normalizeFilterSelectors(instance, filter, false) as TaggedSelector;
 
       expect(result.columnIndex).toBe(7);
       expect(result.filterValue).toBe('ZZ');
@@ -113,18 +116,18 @@ describe('ColumnsController.updateFilter', () => {
 
     it('should pass columnIndex and filterValue down but not selectedFilterOperation', async () => {
       const { instance } = await createGrid();
-      const customSelector = (): number => 1;
+      const customSelector: ColumnSelector = (): number => 1;
       const filter = extend([], [[customSelector, '=', 'Alex']]);
 
       filter.columnIndex = 3;
       filter.filterValue = 'inherited';
       filter.selectedFilterOperation = 'between';
 
-      updateFilter(instance, filter, false);
+      normalizeFilterSelectors(instance, filter, false);
 
-      expect((customSelector as TaggedSelector).columnIndex).toBe(3);
-      expect((customSelector as TaggedSelector).filterValue).toBe('inherited');
-      expect((customSelector as TaggedSelector).selectedFilterOperation).toBeUndefined();
+      expect(customSelector.columnIndex).toBe(3);
+      expect(customSelector.filterValue).toBe('inherited');
+      expect(customSelector.selectedFilterOperation).toBeUndefined();
     });
   });
 });

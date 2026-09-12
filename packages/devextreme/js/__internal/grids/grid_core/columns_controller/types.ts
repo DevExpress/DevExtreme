@@ -1,4 +1,5 @@
 import type { ColumnAIOptions, ColumnBase } from '@js/common/grids';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import type {
   COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
@@ -19,10 +20,18 @@ export type ColumnUserState = Pick<Column, typeof USER_STATE_FIELD_NAMES[number]
 
 export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
 
+export type ColumnSelector = ((data: RawItemData) => unknown) & {
+  columnIndex?: number;
+  filterValue?: unknown;
+  selectedFilterOperation?: unknown;
+  originalCallback?: unknown;
+};
+
 export interface InternalColumnOptions {
   parseValue?: (text: string) => unknown;
   deserializeValue?: (value: unknown) => unknown;
-  serializeValue?: (value: unknown) => unknown;
+  serializeValue?: (value: unknown, target?: string) => unknown;
+  selector?: ColumnSelector;
   index?: number;
   groupIndex?: number;
   type?: string;

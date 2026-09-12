@@ -3,7 +3,6 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
-import config from '@js/core/config';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
@@ -1440,40 +1439,6 @@ export class ColumnsController extends modules.Controller {
         fireColumnsChanged(that);
       }
     }
-  }
-
-  public updateFilter(filter, remoteFiltering, columnIndex?, filterValue?) {
-    const that = this;
-
-    if (!Array.isArray(filter)) return filter;
-
-    filter = extend([], filter);
-
-    columnIndex = filter.columnIndex !== undefined ? filter.columnIndex : columnIndex;
-    filterValue = filter.filterValue !== undefined ? filter.filterValue : filterValue;
-
-    if (isString(filter[0]) && filter[0] !== '!') {
-      const column = that.columnOption(filter[0]);
-
-      if (remoteFiltering) {
-        if (config().forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
-          filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1], 'filter');
-        }
-      } else if (column && column.selector) {
-        filter[0] = column.selector;
-        filter[0].columnIndex = column.index;
-      }
-    } else if (isFunction(filter[0])) {
-      filter[0].columnIndex = columnIndex;
-      filter[0].filterValue = filterValue;
-      filter[0].selectedFilterOperation = filter.selectedFilterOperation;
-    }
-
-    for (let i = 0; i < filter.length; i++) {
-      filter[i] = that.updateFilter(filter[i], remoteFiltering, columnIndex, filterValue);
-    }
-
-    return filter;
   }
 
   public columnCount() {
