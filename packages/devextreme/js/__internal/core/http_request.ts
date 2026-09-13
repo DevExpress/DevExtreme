@@ -4,9 +4,11 @@ import { injector } from '@ts/core/utils/dependency_injector';
 const window = getWindow();
 
 const nativeXMLHttpRequest = {
-  getXhr() {
+  getXhr(): XMLHttpRequest {
     // @ts-expect-error no XMLHttpRequest on Window
-    return new window.XMLHttpRequest();
+    const xhr: XMLHttpRequest = new window.XMLHttpRequest();
+
+    return xhr;
   },
 };
 
