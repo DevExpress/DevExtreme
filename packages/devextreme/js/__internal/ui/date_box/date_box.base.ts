@@ -548,6 +548,7 @@ class DateBox<
   _renderValue(): DeferredObj<unknown> {
     const value = this.getDateOption('value');
 
+    this._committedText = undefined;
     this.option('text', this._getDisplayedText(value));
     this._strategy.renderValue();
 

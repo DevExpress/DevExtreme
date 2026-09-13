@@ -116,6 +116,25 @@ describe('DateBox commits the input text on focus out when the browser fires no 
     expect(onChange).toHaveBeenCalledTimes(1);
   });
 
+  it('resets the value on a repeated clear after a calendar pick (T1334896)', () => {
+    const dateBox = createDateBox();
+
+    dateBox.open();
+    dateBox.getCalendarCells()[0].click();
+    dateBox.clearInput();
+    dateBox.blurInput();
+    expect(dateBox.getInstance().option('value')).toBeNull();
+
+    dateBox.open();
+    dateBox.getCalendarCells()[0].click();
+    expect(dateBox.getInstance().option('value')).not.toBeNull();
+
+    dateBox.clearInput();
+    dateBox.blurInput();
+
+    expect(dateBox.getInstance().option('value')).toBeNull();
+  });
+
   it('keeps the value when valueChangeEvent excludes change (T1334896)', () => {
     const dateBox = createDateBox({ valueChangeEvent: 'paste' });
 
