@@ -16,6 +16,13 @@ export class TextEditorModel extends BaseModel {
     input.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
+  public pressKey(key: string): void {
+    const input = this.getInputElement();
+
+    input.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+    input.dispatchEvent(new KeyboardEvent('keyup', { key, bubbles: true }));
+  }
+
   public blurInput(): void {
     this.getInputElement().dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
   }

@@ -99,6 +99,24 @@ describe('DateBox commits the input text on focus out when the browser fires no 
     expect(validationChangesAfterBlur).toBe(validationChangesAfterChange);
   });
 
+  it('fires the change once on focus out in mask mode when the typed date is out of range (T1334896)', () => {
+    const onChange = jest.fn();
+    const dateBox = createDateBox({
+      useMaskBehavior: true,
+      value: new Date(2026, 8, 9),
+      max: new Date(2026, 8, 10),
+      onChange,
+    });
+
+    dateBox.pressKey('ArrowUp');
+    dateBox.pressKey('ArrowUp');
+    dateBox.pressKey('ArrowUp');
+    dateBox.blurInput();
+
+    expect(dateBox.getInstance().option('isValid')).toBe(false);
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
   it('keeps the value when valueChangeEvent excludes change (T1334896)', () => {
     const dateBox = createDateBox({ valueChangeEvent: 'paste' });
 
