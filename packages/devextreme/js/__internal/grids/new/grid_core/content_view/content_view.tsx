@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
-import { resizeObserverSingleton } from '@ts/core/m_resize_observer';
+import { resizeObserverSingleton } from '@ts/core/resize_observer';
 import type { ErrorRowProperties } from '@ts/grids/new/grid_core/content_view/error_row';
 import { ErrorRow } from '@ts/grids/new/grid_core/content_view/error_row';
 import type { NoDataTextProperties } from '@ts/grids/new/grid_core/content_view/no_data_text';
