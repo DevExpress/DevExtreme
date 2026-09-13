@@ -2,17 +2,16 @@ import {
   afterEach, beforeAll, describe, expect, it, jest,
 } from '@jest/globals';
 import fx from '@js/common/core/animation/fx';
-import $ from '@js/core/renderer';
+import type { Properties } from '@js/ui/date_box';
+import DateBox from '@js/ui/date_box';
 import { DateBoxModel } from '@ts/ui/__tests__/__mock__/model/date_box';
-
-import DateBox from '../date_box';
 
 const dateBoxes: DateBox[] = [];
 
-const createDateBox = (options = {}): DateBoxModel => {
-  const element = $('<div>').appendTo(document.body).get(0) as HTMLElement;
-  // @ts-expect-error DOMComponent constructor is not typed for direct instantiation
-  const instance: DateBox = new DateBox(element, {
+const createDateBox = (options: Partial<Properties> = {}): DateBoxModel => {
+  const element = document.body.appendChild(document.createElement('div'));
+
+  const instance = new DateBox(element, {
     type: 'date',
     pickerType: 'calendar',
     ...options,
