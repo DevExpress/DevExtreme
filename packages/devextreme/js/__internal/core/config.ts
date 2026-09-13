@@ -3,6 +3,13 @@
 import errors from '@js/core/errors';
 import { extend } from '@js/core/utils/extend';
 
+type ConfigOptions = Record<string, unknown>;
+
+const normalizeToJSONString = (optionsString: string): string => optionsString
+  .replace(/'/g, '"') // replace all ' to "
+  .replace(/,\s*([\]}])/g, '$1') // remove trailing commas
+  .replace(/([{,])\s*([^":\s]+)\s*:/g, '$1"$2":'); // add quotes for unquoted keys
+
 const config = {
   rtlEnabled: false,
   defaultCurrency: 'USD',
@@ -43,32 +50,26 @@ const config = {
     direction: 'auto',
   },
 
-  optionsParser: (optionsString) => {
-    if (optionsString.trim().charAt(0) !== '{') {
-      optionsString = `{${optionsString}}`;
-    }
+  optionsParser: (optionsString: string): unknown => {
+    const normalizedString = !optionsString.trim().startsWith('{')
+      ? `{${optionsString}}`
+      : optionsString;
 
     try {
-      return JSON.parse(optionsString);
+      return JSON.parse(normalizedString);
     } catch (ex) {
       try {
-        return JSON.parse(normalizeToJSONString(optionsString));
+        return JSON.parse(normalizeToJSONString(normalizedString));
       } catch (exNormalize) {
-        throw errors.Error('E3018', ex, optionsString);
+        throw errors.Error('E3018', ex, normalizedString);
       }
     }
   },
 };
 
-const normalizeToJSONString = (optionsString) => optionsString
-  .replace(/'/g, '"') // replace all ' to "
-  .replace(/,\s*([\]}])/g, '$1') // remove trailing commas
-  .replace(/([{,])\s*([^":\s]+)\s*:/g, '$1"$2":'); // add quotes for unquoted keys
-
 const deprecatedFields = ['decimalSeparator', 'thousandsSeparator'];
 
-// @ts-expect-error not all code paths return value
-const configMethod = (...args) => {
+const configMethod = (...args: ConfigOptions[]): typeof config | undefined => {
   if (!args.length) {
     return config;
   }
@@ -83,6 +84,8 @@ const configMethod = (...args) => {
   });
 
   extend(config, newConfig);
+
+  return undefined;
 };
 
 // @ts-expect-error typescript cant see global
