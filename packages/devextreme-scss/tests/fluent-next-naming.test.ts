@@ -175,6 +175,30 @@ const RUNTIME_CONTRACT = new Set<string>(
     .map(({ name }) => name),
 );
 
+/*
+ * The application -> CSS contract of the custom accent, the second category outside the component
+ * tier: one colour written by the application and the scale fluent-next derives from it. The names,
+ * the reasons and the step set live in tools/naming/accent-contract.json, next to the runtime
+ * contract; tests/accent-palette.test.ts holds the stylesheet and the generated palettes to it.
+ */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const accentContract = require('../tools/naming/accent-contract.json') as {
+  declaredIn: string;
+  input: { name: string };
+  source: { name: string };
+  settings: { name: string }[];
+  steps: { prefix: string; values: number[] };
+};
+const isAccentContractFile = (file: string): boolean => file.endsWith(
+  join(...accentContract.declaredIn.split('/')),
+);
+const ACCENT_CONTRACT = new Set([
+  accentContract.input.name,
+  accentContract.source.name,
+  ...accentContract.settings.map(({ name }) => name),
+  ...accentContract.steps.values.map((step) => `${accentContract.steps.prefix}${step}`),
+]);
+
 /** Every `--dx-*` read anywhere outside the theme sources, or null when the monorepo is unavailable. */
 const publicNameConsumers = (): Set<string> | null => {
   const roots = [
@@ -436,7 +460,7 @@ const findings = {
   publicSurfaceUnused: (() => {
     const declared = new Set<string>();
     THEMES.forEach((theme) => walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
-      .filter((file) => !isPublicTierFile(file))
+      .filter((file) => !isPublicTierFile(file) && !isAccentContractFile(file))
       .forEach((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
         .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
         .forEach((match) => declared.add(match[1]))));
@@ -448,14 +472,15 @@ const findings = {
   publicSurfaceUndeclared: (() => {
     const declared = new Set<string>();
     THEMES.forEach((theme) => walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
-      .filter((file) => !isPublicTierFile(file))
+      .filter((file) => !isPublicTierFile(file) && !isAccentContractFile(file))
       .forEach((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
         .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
         .forEach((match) => declared.add(match[1]))));
     const consumers = publicNameConsumers();
     if (consumers === null) return [];
     return [...consumers]
-      .filter((name) => !declared.has(name) && !RUNTIME_CONTRACT.has(name))
+      .filter((name) => !declared.has(name) && !RUNTIME_CONTRACT.has(name)
+        && !ACCENT_CONTRACT.has(name))
       .sort();
   })(),
 
@@ -463,7 +488,7 @@ const findings = {
     const perTheme = THEMES.map((theme) => {
       const names = new Set<string>();
       walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
-        .filter((file) => !isPublicTierFile(file))
+        .filter((file) => !isPublicTierFile(file) && !isAccentContractFile(file))
         .forEach((file) => {
           [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
             .forEach((match) => names.add(match[1]));
@@ -484,7 +509,7 @@ const findings = {
    * bits). Exact list by design: a new manual emission is a conscious baseline edit.
    */
   publicTierManualDeclarations: walk(themeRoot, '.scss')
-    .filter((file) => !isPublicTierFile(file))
+    .filter((file) => !isPublicTierFile(file) && !isAccentContractFile(file))
     .flatMap((file) => [...declarationBody(readFileSync(file, 'utf8'), sourceLabel(file))
       .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
       .map((match) => `${sourceLabel(file)}: ${match[1]}`))
@@ -962,6 +987,7 @@ test('component tier: every --dx-… read in the theme resolves to a declared na
   const declared = new Set([
     ...[...tierDeclared.keys()].map((variable) => `--dx-${variable.slice(1)}`),
     ...RUNTIME_CONTRACT,
+    ...ACCENT_CONTRACT,
     ...findings.publicTierManualDeclarations.map((entry) => entry.slice(entry.indexOf(': ') + 2)),
   ]);
   const READS = [
