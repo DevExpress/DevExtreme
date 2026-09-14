@@ -1,7 +1,8 @@
-define(function(require) {
-    window.DevExpress_ui_widget_errors = require('ui/widget/ui.errors');
-    window.ajaxMock = require('../../helpers/ajaxMock.js');
-    require('bundles/dx.web.js');
-    require('aspnet.js');
-    require('./aspnet.tests.js');
-});
+import DevExpress_ui_widget_errors from 'ui/widget/ui.errors';
+import ajaxMock from '../../helpers/ajaxMock.js';
+import 'bundles/dx.web.js';
+import 'aspnet.js';
+import './aspnet.tests.js';
+
+window.DevExpress_ui_widget_errors = DevExpress_ui_widget_errors;
+window.ajaxMock = ajaxMock;

@@ -9,6 +9,7 @@ import {
 import { Axis } from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const StubTranslator = stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
@@ -29,7 +30,7 @@ function getArray(len, content) {
 const environment = {
     beforeEach: function() {
         const that = this;
-        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
+        stubSeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D').callsFake(function() {
             return that.translator;
         });
         this.renderer = new Renderer();

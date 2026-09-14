@@ -13,6 +13,7 @@ import {
 import trackerModule from 'viz/vector_map/tracker';
 import { _TESTS_eventEmitterMethods } from '__internal/viz/vector_map/event_emitter';
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const FOCUS_OFF_DELAY = 100;
 
@@ -55,8 +56,8 @@ const environment = {
         $.each(this.stubbedCallbacks || [], $.proxy(function(_, name) {
             this[name] = sinon.stub();
         }, this));
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake(noop);
-        this.cancelAnimationFrameStub = sinon.stub(animationFrame, 'cancelAnimationFrame').callsFake(noop);
+        this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake(noop);
+        this.cancelAnimationFrameStub = stubSeam(animationFrame, 'cancelAnimationFrame', 'DEBUG_set_cancelAnimationFrame').callsFake(noop);
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {

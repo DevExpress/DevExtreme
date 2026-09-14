@@ -1,1 +1,1 @@
-window.jQuery = module.exports = null;
+export default null;

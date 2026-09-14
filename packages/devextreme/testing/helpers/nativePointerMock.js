@@ -1,13 +1,6 @@
-(function(root, factory) {
-    /* global jQuery */
-    if(typeof define === 'function' && define.amd) {
-        define(function(require, exports, module) {
-            root.nativePointerMock = module.exports = factory(require('jquery'));
-        });
-    } else {
-        root.nativePointerMock = factory(jQuery);
-    }
-}(window, function($) {
+import $ from 'jquery';
+
+const __moduleExports = (function($) {
     const UA = (function() {
         const ua = window.navigator.userAgent;
         let matches;
@@ -980,4 +973,8 @@
 
     return result;
 
-}));
+})($);
+
+window.nativePointerMock = __moduleExports;
+
+export default __moduleExports;

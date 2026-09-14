@@ -1,10 +1,11 @@
 import { getHeight, getOuterHeight, getOuterWidth, getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
-import visibilityChange from 'common/core/events/visibility_change';
+import { spyVisibilityEvent } from '../../helpers/visibilityChangeMock.js';
 import ArrayStore from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -731,7 +732,7 @@ QUnit.module('behavior', {
     });
 
     QUnit.test('resizeCallback is called after item is rendered (T1132935)', function(assert) {
-        const resizeEventSpy = sinon.spy(visibilityChange, 'triggerResizeEvent');
+        const resizeEventSpy = spyVisibilityEvent('triggerResizeEvent');
 
         this.$element.dxGallery({
             items: [0, 1, 2, 3],
@@ -2176,7 +2177,7 @@ QUnit.module('api', {
     QUnit.test('animationDuration', function(assert) {
         fx.off = false;
 
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+        this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake((callback) => {
             return window.setTimeout(callback, 10);
         });
 
