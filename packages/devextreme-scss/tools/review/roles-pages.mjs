@@ -200,7 +200,8 @@ const statePairGroups = Object.entries(base.statePairs.groups).map(([key, g]) =>
 const ringTable = `<table><tr><th>Где</th><th>Как сделано</th><th>Что не так</th></tr>`
   + base.ringAndFill.members.map((m) => `<tr><td>${esc(m.what)}</td><td>${esc(m.how)}</td><td>${esc(m.verdict)}</td></tr>`).join('')
   + '</table>';
-const sweepQs = base.sweep.items.map((x) => q(idOf(`sweep:${x.key}`), esc(x.title),
+const sweepQs = base.sweep.items.filter((x) => x.decision === 'design')
+  .map((x) => q(idOf(`sweep:${x.key}`), esc(x.title),
   `<p>${ruText(x.key)}</p>`
   + (x.key === 'radio-invalid-vs-checkbox-invalid'
     ? `<p class="meta">${base.ringAndFill.comment.map(esc).join(' ')}</p>${ringTable}` : '')));

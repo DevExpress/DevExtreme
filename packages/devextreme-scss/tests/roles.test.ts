@@ -36,10 +36,10 @@ type Open = {
 
 const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'design'];
 const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design', 'drawn-mark', 'ring-and-fill'];
-const LADDER_DECISIONS = ['no-rung', 'design'];
+const LADDER_DECISIONS = ['no-rung', 'design', 'answered'];
 const CONTRAST_DECISIONS = ['graphic-ok', 'graphic-ok-rest-only', 'package-gap', 'design'];
 const STATE_PAIR_DECISIONS = ['graphic-ok', 'design'];
-const SWEEP_DECISIONS = ['design'];
+const SWEEP_DECISIONS = ['design', 'answered'];
 const CONCEPT_DECISIONS = ['spelling', 'shade', 'design', 'answered'];
 
 type Concept = {
@@ -369,10 +369,18 @@ test('every sweep finding is titled, reasoned and numbered', () => {
     .map((x: { key: string }) => x.key);
   expect(broken).toEqual([]);
 
+  // An answered finding hands its number to questionIds.closed and stops being a question.
   const unnumbered = baseline.sweep.items
+    .filter((x: { decision?: string }) => x.decision === 'design')
     .map((x: { key: string }) => x.key)
     .filter((key: string) => !baseline.questionIds.map[`sweep:${key}`]);
   expect(unnumbered).toEqual([]);
+
+  const stillNumbered = baseline.sweep.items
+    .filter((x: { decision?: string }) => x.decision === 'answered')
+    .map((x: { key: string }) => x.key)
+    .filter((key: string) => baseline.questionIds.map[`sweep:${key}`]);
+  expect(stillNumbered).toEqual([]);
 
   const thin = baseline.sweep.confirmed.rows
     .filter((r: { ours?: string; theirs?: string; verdict?: string }) => !r.ours?.trim()

@@ -341,18 +341,6 @@
   ],
   "ladders": [
     {
-      "stem": "accordion-title-bg",
-      "states": [
-        "active",
-        "hovered"
-      ],
-      "role": [
-        "color-bg-hovered"
-      ],
-      "decision": "design",
-      "why": "Confirmed from three directions now, and the recommendation firms up. Fluent 2 separates colorSubtleBackgroundHover #f5f5f5 from colorSubtleBackgroundPressed #e0e0e0; the package carries both as bg-hovered / bg-active; and Blazor has a distinct pressed rung on BOTH sides of its accordion - header-hover-bg bg-alpha-hovered against header-active-bg bg-alpha-active, and header-hover-color content-hovered against header-active-color content-active. Two coherent ladders exist: opaque (bg-hovered -> bg-active, what Fluent 2 states and what our hover rung already is) and translucent (Blazor's bg-alpha pair, black 4% then 13%). Ours is opaque on hover, so a translucent active would mix idioms - the rung is bg-active, #e1e1e1. Not applied: it moves the pixel away from legacy fluent, which is the product call (NFR-1)."
-    },
-    {
       "stem": "button-danger-contained-content",
       "states": [
         "rest",
@@ -615,7 +603,7 @@
         "color-bg"
       ],
       "decision": "design",
-      "why": "rest and hovered are one value while active is not - the slot clearly means to ladder and the hovered rung is flat. color-bg-hovered exists. Fluent 2 ladders a subtle surface from transparent through colorSubtleBackgroundHover, though a tile is not obviously that control - weaker evidence than the accordion"
+      "why": "Re-read 14.09 after being asked whether the accordion answer transfers and whether cardView holds the answer. It does not transfer, and the row was reading one slot instead of the element. The tile IS laddered, just not on the background: rest is color-bg with a color-border-subtle edge, hover and focus keep the same background and move the edge to color-border-primary, and the pressed state tints with color-bg-alpha-active and drops the edge to transparent. So the hover cue is the border, the flat background is deliberate, and the pressed state is already on the very alpha role the accordion has just adopted. cardView offers no counter-example: its card has no hover rule at all, and its header panel item uses a third idiom, bg-low to bg-low-hovered. What is left is a smaller, real defect: $tile-view-bg-hovered exists only to restate the rest value, so it is a name that promises a state and delivers none. Options: (1) delete it and the background-color line in the hover rule - value-neutral, one fewer public name, and it records that the cue is the border; (2) follow the accordion and give it bg-alpha-hovered, so the tile gains a tint on top of the border cue - a pixel change and an etalon re-shoot. Recommendation: (1), unless design wants the tile to feel like the accordion."
     },
     {
       "stem": "tree-view-content",
@@ -1697,10 +1685,11 @@
       "Д15": "menu bg rest - расхождения нет: Blazor красит menu-bg тем же color-bg, а третий участник группы это сепаратор, у которого своя роль border-subtle. Снято 09.09",
       "Д1": "gallery-nav-button-bg - принято, диск переведён на bg-static-dark: пакет держит статическое семейство парой, и content-половину мы уже читали",
       "Д2": "gallery-nav-button-bg-disabled - принято вместе с Д1, bg-static-dark-disabled, и стрелка получила content-static-dark-disabled",
-      "Д11": "accent content rest - расхождение исчезло: pivotGrid переименован в accent-outline (роль border-primary, красит outline-color), а chat переехал на content-primary вместе с правкой контраста. Осталось двое на одной роли - группы больше нет"
+      "Д11": "accent content rest - расхождение исчезло: pivotGrid переименован в accent-outline (роль border-primary, красит outline-color), а chat переехал на content-primary вместе с правкой контраста. Осталось двое на одной роли - группы больше нет",
+      "Д5": "accordion-title-bg - принято 14.09: hover на bg-alpha-hovered, active на bg-alpha-active. Продукт выбрал полупрозрачную лестницу (так у Blazor, в Core-библиотеке и в vNext), а не непрозрачную, которую рекомендовал аудит",
+      "Д19": "scheduler-grid-line-strength - принято 14.09: если обе линии должны быть одного цвета, читать одну роль двумя переменными нормально. Записано как осознанное"
     },
     "map": {
-      "ladder:accordion-title-bg": "Д5",
       "ladder:tile-view-bg": "Д6",
       "contrast:.dx-splitter .dx-resize-handle": "Д7",
       "concept:accent border rest": "Д10",
@@ -1710,7 +1699,6 @@
       "statePairGroup:checkbox-focused-fill": "Д16",
       "statePairGroup:outlined-button-label": "Д17",
       "statePairGroup:contained-button-label": "Д18",
-      "sweep:scheduler-grid-line-strength": "Д19",
       "sweep:scheduler-form-icon-on-bg-role": "Д20",
       "sweep:radio-invalid-vs-checkbox-invalid": "Д21",
       "sweep:tree-view-checkbox-focus-still-unique": "Д22"
@@ -1999,9 +1987,9 @@
     "items": [
       {
         "key": "scheduler-grid-line-strength",
-        "decision": "design",
-        "title": "scheduler: две силы линии сетки читают одну роль",
-        "why": "The base markup draws two strengths of grid line: $scheduler-base-border-color on every cell, and $scheduler-accent-border-color on the week or work-week boundary and on the odd-row rule (base/scheduler/views/_index.scss:178, :187, :528, :544). Our theme gives both ds.$color-border, so the emphasis the markup encodes is not painted. This is not a regression - legacy fluent collapses them too, and material as well - but generic does not: it hand-rolls the pair as base-border at 60% alpha against accent-border darkened 10%. So the distinction is part of the product design language and only the fluent line loses it. The design system ships exactly the ladder generic hand-rolls: border-subtle / border / border-contrast, and this same widget already reads border-contrast for its group separator, so a three-rung scheduler would be internally consistent. Options: (1) keep the collapse, legacy parity, and record it as deliberate; (2) drop the ordinary cell line to border-subtle and leave the boundary on border - the boundary keeps its pixel and only the weaker line changes; (3) raise the boundary to border-contrast, which is what the group separator already uses and would make the two emphases share one role. Recommendation: (2), the smaller move, if design wants the boundary back at all."
+        "decision": "answered",
+        "title": "scheduler: две силы линии сетки на одной роли - принято",
+        "why": "Answered 14.09: if both lines are meant to be the same colour then two variables reading one role is fine, and the collapse is deliberate rather than a loss. Recorded so the audit does not reopen it. Worth noting what is NOT a problem here: the word accent in $scheduler-accent-border comes from the base layer, which names the parameter $scheduler-accent-border-color, and the theme takes its anatomy from base (NAMING M1). So the name is not lying about the theme - it is repeating the anatomy the markup already draws, which still has two lines even when they share a colour. Both variables stay: base needs two parameters, and a future theme may want them apart, as generic already does with 60% alpha against a 10% darkened edge."
       },
       {
         "key": "scheduler-form-icon-on-bg-role",
@@ -2148,6 +2136,11 @@
         "what": "gallery disabled rules: both forms",
         "change": "the ancestor form was .dx-state-disabled .dx-gallery-nav-button-*, missing .dx-gallery in the middle; now matches the idiom the indicator rules in the same file already use",
         "effect": "same elements matched - a nav button exists only inside a gallery - so no pixel moves, verified by re-running the cascade harness on four scenarios. Five entries leave tests/disabled-both-forms.baseline.json and none is added"
+      },
+      {
+        "what": "accordion-title-bg-hovered and -bg-active (Д5)",
+        "change": "bg-hovered / bg-hovered -> bg-alpha-hovered / bg-alpha-active",
+        "effect": "two variables moved, nothing else. Composited over color-bg the hover stays where it was (#f5f5f5 -> #f6f6f6 light, #3b3b3b -> #3a3a3a dark) and the pressed state separates for the first time (#f5f5f5 -> #e1e1e1 light, #3b3b3b -> #2f2f2f dark). Chosen by the product over the opaque rung the audit recommended, because Blazor, the Core library and vNext all use the alpha ladder"
       }
     ]
   },
@@ -2168,7 +2161,7 @@
       },
       "answered": {
         "section": "В",
-        "ru": "вопрос был открыт и закрыт ответом, а не правкой"
+        "ru": "вопрос был открыт и закрыт ответом - правкой или решением оставить как есть"
       },
       "package-gap": {
         "section": "Б",
