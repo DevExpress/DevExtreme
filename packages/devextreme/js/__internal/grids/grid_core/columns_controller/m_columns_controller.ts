@@ -1332,10 +1332,8 @@ export class ColumnsController extends modules.Controller {
 
     updateColumnChanges(this, 'columns');
 
-    if (this._columnChanges) {
-      this._columnChanges.appliedFilters ??= [];
-      this._columnChanges.appliedFilters.push(parameters.filtering);
-    }
+    this._columnChanges!.appliedFilters ??= [];
+    this._columnChanges!.appliedFilters.push(parameters.filtering);
   }
 
   public updateSortingGrouping(dataSource, fromDataSource?: boolean): void {
