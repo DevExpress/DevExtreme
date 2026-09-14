@@ -111,11 +111,7 @@ $(() => {
 
   function createSuggestions(promptEditor) {
     return $('<div>').dxButtonGroup({
-      items: [
-        { type: 'default', text: '✨ Summary', prompt: 'Display general information about this vehicle and its features.' },
-        { type: 'default', text: '⚡ Ideal Buyer', prompt: 'Describe who this vehicle appeals to the most in a sentence.' },
-        { type: 'default', text: '🏎️ Competitors', prompt: 'List 2-3 models that directly compete with this vehicle.' },
-      ],
+      items: suggestions,
       stylingMode: 'outlined',
       selectionMode: 'none',
       elementAttr: { class: 'dx-chat-suggestions' },
@@ -126,7 +122,7 @@ $(() => {
     }).dxButtonGroup('instance');
   }
 
-  function createInputArea(rowData) {
+  function createInputArea() {
     const submitButton = createSubmitButton();
     const promptEditor = createPromptEditor(submitButton);
     const suggestions = createSuggestions(promptEditor);

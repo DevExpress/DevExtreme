@@ -5,6 +5,12 @@ A dataset in the format: { column1: value1, column2: value2, ...}.
 Instructions: The output must be in plain text and should not exceed 2000 characters.
 `;
 
+const suggestions = [
+  { type: 'default', text: '✨ Summary', prompt: 'Display general information about this vehicle and its features.' },
+  { type: 'default', text: '⚡ Ideal Buyer', prompt: 'Describe who this vehicle appeals to the most in a sentence.' },
+  { type: 'default', text: '🏎️ Competitors', prompt: 'List 2-3 models that directly compete with this vehicle.' },
+];
+
 const vehicles = [
   {
     ID: 1,
