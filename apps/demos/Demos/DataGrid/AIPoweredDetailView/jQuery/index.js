@@ -8,13 +8,6 @@ $(() => {
     endpoint: 'https://public-api.devexpress.com/demo-openai',
     apiKey: 'DEMO',
   };
-  let promptEditor;
-  let suggestions;
-  let submitButton;
-  let responseEditor;
-  let loadPanel;
-  let $emptyMessage;
-  let $errorMessage;
 
   const aiService = new AzureOpenAI(AzureOpenAIConfig);
 
@@ -37,7 +30,17 @@ $(() => {
     .addClass(`category-${CategoryID}__bg-color`)
     .text(CategoryName);
 
-  function toggleLoadingState(isLoading, event) {
+  function toggleLoadingState(isLoading, event, controls) {
+    const {
+      responseEditor,
+      promptEditor,
+      suggestions,
+      submitButton,
+      $emptyMessage,
+      $errorMessage,
+      loadPanel
+    } = controls;
+
     const responseText = responseEditor.option('value');
 
     responseEditor.option('disabled', isLoading || !responseText);
@@ -56,13 +59,14 @@ $(() => {
     }
   }
 
-  async function submit(event, rowData) {
+  async function handleSubmit(event, rowData, controls) {
+    const { promptEditor, responseEditor, submitButton, $errorMessage } = controls;
     const userPrompt = promptEditor.option('value');
     if (userPrompt === '') return;
 
     abortController = new AbortController();
 
-    toggleLoadingState(true, event);
+    toggleLoadingState(true, event, controls);
 
     try {
       const messages = [
@@ -80,7 +84,7 @@ $(() => {
     } finally {
       abortController = null;
       submitButton.option('text', 'Resubmit');
-      toggleLoadingState(false, event);
+      toggleLoadingState(false, event, controls);
     }
   }
 
@@ -92,10 +96,9 @@ $(() => {
       onValueChanged({ value }) {
         submitButton.option('disabled', !value);
       },
-      onEnterKey: ({ event }) => submit(event, rowData),
       elementAttr: { class: 'prompt-editor' },
     });
-    promptEditor = $promptEditor.dxTextBox('instance');
+    const promptEditor = $promptEditor.dxTextBox('instance');
 
     const $suggestions = $('<div>').dxButtonGroup({
       items: [
@@ -112,23 +115,24 @@ $(() => {
         promptEditor.option('value', suggestion.prompt);
       },
     });
-    suggestions = $suggestions.dxButtonGroup('instance');
+    const suggestions = $suggestions.dxButtonGroup('instance');
 
     const $submitButton = $('<div>').dxButton({
       icon: 'sparkle',
       text: 'Submit',
       type: 'default',
       disabled: true,
-      onClick: ({ event }) => submit(event, rowData),
     });
-    submitButton = $submitButton.dxButton('instance');
+    const submitButton = $submitButton.dxButton('instance');
 
-    return $('<div>')
+    const $inputArea = $('<div>')
       .addClass('input-container')
       .append(
         $('<div>').addClass('prompt-container').append($promptEditor, $suggestions),
         $('<div>').addClass('submit-container').append($submitButton),
       );
+
+    return { $inputArea, promptEditor, suggestions, submitButton };
   }
 
   function getOutputAreaMinHeight() {
@@ -162,7 +166,7 @@ $(() => {
       elementAttr: { class: 'response-editor' },
       inputAttr: { 'aria-label': 'AI Response' },
     });
-    responseEditor = $responseEditor.dxTextArea('instance');
+    const responseEditor = $responseEditor.dxTextArea('instance');
 
     const $loadPanel = $('<div>').dxLoadPanel({
       container: '.output-container',
@@ -172,13 +176,13 @@ $(() => {
       message: '',
       visible: false,
     });
-    loadPanel = $loadPanel.dxLoadPanel('instance');
+    const loadPanel = $loadPanel.dxLoadPanel('instance');
 
-    $emptyMessage = $('<div>')
+    const $emptyMessage = $('<div>')
       .addClass('output-initial-message')
       .text('AI Assistant is ready to answer your questions about this record.');
 
-    $errorMessage = $('<div>')
+    const $errorMessage = $('<div>')
       .addClass('output-error-message')
       .append(
         $('<span>').addClass('dx-icon-warning'),
@@ -186,9 +190,11 @@ $(() => {
       )
       .hide();
 
-    return $('<div>')
+    const $outputArea = $('<div>')
       .addClass('output-container')
       .append($loadPanel, $responseEditor, $emptyMessage, $errorMessage);
+
+    return { $outputArea, responseEditor, loadPanel, $emptyMessage, $errorMessage };
   }
 
   $('#gridContainer').dxDataGrid({
@@ -238,9 +244,15 @@ $(() => {
     masterDetail: {
       enabled: true,
       template: (container, { data }) => {
-        const inputArea = createInputArea(data);
-        const outputArea = createOutputArea();
-        container.append(inputArea, outputArea);
+        const { $inputArea, ...input } = createInputArea(data);
+        const { $outputArea, ...output } = createOutputArea();
+        const controls = { ...input, ...output };
+        const onSubmit = ({ event }) => handleSubmit(event, data, controls);
+
+        input.promptEditor.option('onEnterKey', onSubmit);
+        input.submitButton.option('onClick', onSubmit);
+
+        container.append($inputArea, $outputArea);
       },
     },
     onRowExpanding(e) {
