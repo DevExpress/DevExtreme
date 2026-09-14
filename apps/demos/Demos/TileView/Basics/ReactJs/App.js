@@ -5,7 +5,7 @@ import { homes } from './data.js';
 const HomeImage = (data) => (
   <div
     className="tile-image"
-    style={{ backgroundImage: `url(${data.ImageSrc})` }}
+    style={React.useMemo(() => ({ backgroundImage: `url(${data.ImageSrc})` }), [data.ImageSrc])}
   ></div>
 );
 const App = () => (

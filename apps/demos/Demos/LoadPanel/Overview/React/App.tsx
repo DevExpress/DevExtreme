@@ -7,6 +7,8 @@ import { LoadPanel } from 'devextreme-react/load-panel';
 import { employee } from './data.ts';
 import type { Employee } from './types.ts';
 
+const loadPanelPosition = { of: '#employee' };
+
 export default function App() {
   const [employeeInfo, setEmployeeInfo] = useState<Employee | null>(null);
   const [loadPanelVisible, setLoadPanelVisible] = useState<boolean>(false);
@@ -68,7 +70,7 @@ export default function App() {
 
       <LoadPanel
         shadingColor="rgba(0, 0, 0, 0.4)"
-        position={{ of: '#employee' }}
+        position={loadPanelPosition}
         onHiding={hideLoadPanel}
         visible={loadPanelVisible}
         showIndicator={showIndicator}

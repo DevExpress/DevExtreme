@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import type { FC } from 'react';
 import type { ChatTypes } from 'devextreme-react/chat';
 import { suggestionCards } from './data.ts';
@@ -8,8 +8,10 @@ interface EmptyViewProps {
   onSuggestionClick: (prompt: string) => void;
 }
 
-const EmptyView: FC<EmptyViewProps> = ({ texts, onSuggestionClick }: EmptyViewProps) => (
-  <div>
+const EmptyView: FC<EmptyViewProps> = ({ texts, onSuggestionClick }: EmptyViewProps) => {
+  const handleSuggestionClick = useCallback((prompt: string) => () => onSuggestionClick(prompt), [onSuggestionClick]);
+
+  return <div>
     <div className='dx-chat-messagelist-empty-message'>{texts.message}</div>
     <div className='dx-chat-messagelist-empty-prompt'>{texts.prompt}</div>
     <div className='chat-suggestion-cards'>
@@ -18,14 +20,14 @@ const EmptyView: FC<EmptyViewProps> = ({ texts, onSuggestionClick }: EmptyViewPr
           key={card.title}
           type='button'
           className='chat-suggestion-card'
-          onClick={() => onSuggestionClick(card.prompt)}
+          onClick={handleSuggestionClick(card.prompt)}
         >
           <div className='chat-suggestion-card-title'>{card.title}</div>
           <div className='chat-suggestion-card-prompt'>{card.description}</div>
         </button>
       ))}
     </div>
-  </div>
-);
+  </div>;
+};
 
 export default EmptyView;

@@ -2,6 +2,12 @@ import React, { memo } from 'react';
 import 'devextreme/ui/date_range_box';
 import { Form, SimpleItem } from 'devextreme-react/form';
 
+const editorOptions = {
+  startDatePlaceholder: 'Check-in',
+  endDatePlaceholder: 'Check-out',
+  elementAttr: { id: 'datesPicker' },
+};
+const label = { visible: false };
 const DatesForm = memo(({ formData, validationGroup }) => (
   <>
     <p>
@@ -17,12 +23,8 @@ const DatesForm = memo(({ formData, validationGroup }) => (
         isRequired
         dataField="dates"
         editorType="dxDateRangeBox"
-        editorOptions={{
-          startDatePlaceholder: 'Check-in',
-          endDatePlaceholder: 'Check-out',
-          elementAttr: { id: 'datesPicker' },
-        }}
-        label={{ visible: false }}
+        editorOptions={editorOptions}
+        label={label}
       />
     </Form>
   </>
