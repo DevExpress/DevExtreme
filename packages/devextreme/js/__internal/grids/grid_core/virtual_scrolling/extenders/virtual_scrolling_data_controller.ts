@@ -38,7 +38,6 @@ import {
 import type { VirtualScrollingDataSourceAdapter } from '../m_virtual_scrolling';
 import { VirtualScrollController } from '../m_virtual_scrolling_core';
 import type { ChangedLoadParams } from '../types';
-import type { GroupCountableDataSource } from '../utils/items';
 import {
   correctCount,
   isItemCountableByDataSource,
@@ -187,7 +186,7 @@ export const virtualScrollingDataControllerExtender = (
   private _getRowsScrollDataOptions() {
     const that = this;
     const isItemCountable = function (item) {
-      return isItemCountableByDataSource(item, that.dataSourceController.getAdapter() as unknown as GroupCountableDataSource);
+      return isItemCountableByDataSource(item, that.dataSourceController.getAdapter());
     };
 
     return {
@@ -381,7 +380,7 @@ export const virtualScrollingDataControllerExtender = (
 
       processedItems.forEach((item) => {
         const { rowType } = item;
-        const itemCountable = isItemCountableByDataSource(item, dataSourceAdapter as unknown as GroupCountableDataSource);
+        const itemCountable = isItemCountableByDataSource(item, dataSourceAdapter);
 
         const isNextGroupItem = rowType === 'group' && (prevCountable || (prevRowType !== 'group' && currentIndex > 0));
         const isNextDataItem = rowType === 'data' && itemCountable && (prevCountable || prevRowType !== 'group');
@@ -415,7 +414,9 @@ export const virtualScrollingDataControllerExtender = (
   }
 
   protected _afterProcessItems(processedItems: ProcessedItem[]): ProcessedItem[] {
-    this._itemCount = processedItems.filter((item) => isItemCountableByDataSource(item, this.dataSourceController.getAdapter() as unknown as GroupCountableDataSource)).length;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+
+    this._itemCount = processedItems.filter((item) => isItemCountableByDataSource(item, dataSourceAdapter)).length;
 
     if (isDefined(this._loadViewportParams)) {
       this._updateLoadViewportParams();
@@ -450,7 +451,9 @@ export const virtualScrollingDataControllerExtender = (
 
     if (removeCount) {
       const fromEnd = changeType === 'prepend';
-      removeCount = correctCount(that._items, removeCount, fromEnd, (item, isNextAfterLast) => isItemCountableByDataSource(item, that.dataSourceController.getAdapter() as unknown as GroupCountableDataSource) || (item.rowType === 'group' && isNextAfterLast));
+      const dataSourceAdapter = that.dataSourceController.getAdapter();
+
+      removeCount = correctCount(that._items, removeCount, fromEnd, (item, isNextAfterLast) => isItemCountableByDataSource(item, dataSourceAdapter) || (item.rowType === 'group' && isNextAfterLast));
 
       change.removeCount = removeCount;
     }
