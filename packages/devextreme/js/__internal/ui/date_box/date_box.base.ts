@@ -1,3 +1,4 @@
+import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import config from '@js/core/config';
@@ -113,6 +114,8 @@ class DateBox<
   _strategy!: StrategyInstance;
 
   _pickerType?: DatePickerType;
+
+  _committedText?: string;
 
   _storedPadding?: number;
 
@@ -545,6 +548,7 @@ class DateBox<
   _renderValue(): DeferredObj<unknown> {
     const value = this.getDateOption('value');
 
+    this._committedText = undefined;
     this.option('text', this._getDisplayedText(value));
     this._strategy.renderValue();
 
@@ -583,11 +587,36 @@ class DateBox<
       : uiDateUtils.FORMATS_MAP[mode] as string | null;
   }
 
+  _focusOutHandler(e: DxEvent): void {
+    if (this._shouldCommitTextOnFocusOut()) {
+      eventsEngine.triggerHandler(this._input(), { type: 'change' });
+    }
+
+    super._focusOutHandler(e);
+  }
+
+  _shouldCommitTextOnFocusOut(): boolean {
+    const { text, valueChangeEvent } = this.option();
+    const includesChangeEvent = valueChangeEvent?.split(' ').includes('change');
+    const currentText = text ?? '';
+
+    if (!includesChangeEvent || currentText === this._committedText) {
+      return false;
+    }
+
+    const currentValue = this.getDateOption('value');
+    const displayedText = this._getDisplayedText(currentValue) ?? '';
+
+    return currentText !== displayedText;
+  }
+
   _valueChangeEventHandler(
     e: InteractionEvent,
   ): void {
     const { text, type = 'date', validationError } = this.option();
     const currentValue = this.getDateOption('value');
+
+    this._committedText = text;
 
     if (text === this._getDisplayedText(currentValue)) {
       this._recallInternalValidation(currentValue, validationError);
