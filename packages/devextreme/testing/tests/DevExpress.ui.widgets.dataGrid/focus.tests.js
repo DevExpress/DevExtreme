@@ -5836,7 +5836,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             this.clock.tick(10);
 
             // act
-            this.getController('data')._dataSource.operationTypes = () => undefined;
+            this.getController('dataSource').getAdapter().operationTypes = () => undefined;
             try {
                 this.option('focusedRowKey', 'Dan');
             } catch(e) {

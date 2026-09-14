@@ -65,8 +65,6 @@ import {
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends modules.Controller {
-  protected _dataSource?: DataSourceAdapter | null;
-
   protected _items!: ProcessedItem[];
 
   private _cachedProcessedItems!: ProcessedItem[] | null;
@@ -1309,8 +1307,6 @@ export class DataController extends modules.Controller {
   private setDataSource(dataSource: DataSource): void {
     const dataSourceAdapter = this.dataSourceController.createAdapter(dataSource);
 
-    this._dataSource = dataSourceAdapter;
-
     this._isLoading = !dataSourceAdapter.isLoaded();
     this._needApplyFilter = true;
     this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
@@ -1556,7 +1552,6 @@ export class DataController extends modules.Controller {
       this.unsubscribeFromDataSource(oldDataSource);
     }
 
-    this._dataSource = null;
     this.dataSourceController.disposeAdapter();
   }
 
