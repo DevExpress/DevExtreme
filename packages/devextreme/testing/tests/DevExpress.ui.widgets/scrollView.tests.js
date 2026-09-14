@@ -3,6 +3,7 @@ import renderer from 'core/renderer';
 import { noop } from 'core/utils/common';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import devices from '__internal/core/m_devices';
 import eventsEngine from 'common/core/events/core/events_engine';
 import themes from 'ui/themes';
@@ -55,7 +56,7 @@ devices.current('iPhone');
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+        this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake((callback) => {
             callback();
         });
         return new Promise((resolve) => themes.initialized(resolve));

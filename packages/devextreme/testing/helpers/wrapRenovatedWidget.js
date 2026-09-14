@@ -1,7 +1,7 @@
 // eslint-disable-next-line spellcheck/spell-checker
-const reRender = require('inferno').rerender;
+import { rerender as reRender } from 'inferno';
 
-exports.wrapRenovatedWidget = function wrapRenovatedWidget(renovatedWidget) {
+export function wrapRenovatedWidget(renovatedWidget) {
     class WrappedWidget extends renovatedWidget {
         callMethod(name, ...args) {
             const result = super[name](...args);
@@ -28,4 +28,4 @@ exports.wrapRenovatedWidget = function wrapRenovatedWidget(renovatedWidget) {
     const result = WrappedWidget;
     result.IS_RENOVATED_WIDGET = true;
     return result;
-};
+}

@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import $ from 'jquery';
+import ko from 'knockout';
 
-require('ui/draggable');
-require('integration/knockout');
+import 'ui/draggable';
+import 'integration/knockout';
 
 if(QUnit.urlParams['nocsp']) {
     QUnit.module('draggable');

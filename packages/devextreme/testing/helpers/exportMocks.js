@@ -1,4 +1,4 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
 exports.MockDataProvider = function(data, columns) {
     data = data || [

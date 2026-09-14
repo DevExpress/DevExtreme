@@ -1,6 +1,6 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('bundles/dx.viz.js');
+import 'bundles/dx.viz.js';
 
 QUnit.test('DevExpress namespaces', function(assert) {
     const namespaces = [
@@ -16,8 +16,8 @@ QUnit.test('DevExpress namespaces', function(assert) {
     });
 });
 
-require('./bundlesParts/core.tests.js');
-require('./bundlesParts/events.tests.js');
-require('./bundlesParts/data.tests.js');
-require('./bundlesParts/data.odata.tests.js');
-require('./bundlesParts/animation.tests.js');
+import './bundlesParts/core.tests.js';
+import './bundlesParts/events.tests.js';
+import './bundlesParts/data.tests.js';
+import './bundlesParts/data.odata.tests.js';
+import './bundlesParts/animation.tests.js';

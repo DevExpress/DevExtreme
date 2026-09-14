@@ -1,4 +1,4 @@
-const Guid = require('core/guid');
+import Guid from 'core/guid';
 
 QUnit.module('Guid');
 

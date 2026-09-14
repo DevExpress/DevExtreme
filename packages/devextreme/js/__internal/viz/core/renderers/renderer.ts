@@ -1843,7 +1843,7 @@ function unlinkItem(target) {
   updateIndexes(items, i);
 }
 
-export function Renderer(options) {
+export let Renderer = function (options) {
   const that = this;
   that.root = that._createElement('svg', {
     xmlns: 'http://www.w3.org/2000/svg',
@@ -1868,7 +1868,7 @@ export function Renderer(options) {
   that.root.append({ element: options.container });
   that._locker = 0;
   that._backed = false;
-}
+};
 
 Renderer.prototype = {
   constructor: Renderer,
@@ -2362,10 +2362,15 @@ const DEBUG_set_ArcSvgElement = function (value) {
 const DEBUG_set_TextSvgElement = function (value) {
   TextSvgElement = value;
 };
+
+const DEBUG_set_Renderer = function (value) {
+  Renderer = value;
+};
 /// #ENDDEBUG
 
 /// #DEBUG
 exports.DEBUG_set_ArcSvgElement = DEBUG_set_ArcSvgElement;
+exports.DEBUG_set_Renderer = DEBUG_set_Renderer;
 exports.DEBUG_set_PathSvgElement = DEBUG_set_PathSvgElement;
 exports.DEBUG_set_RectSvgElement = DEBUG_set_RectSvgElement;
 exports.DEBUG_set_SvgElement = DEBUG_set_SvgElement;
