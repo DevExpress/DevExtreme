@@ -6,6 +6,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 import dataGridCore from '../m_core';
 import { createGroupFilter } from '../m_utils';
@@ -210,12 +211,12 @@ const createNotGroupFilter = function (path, storeLoadOptions, group) {
     for (let j = 0; j <= i; j++) {
       filterElement.push([groups[j].selector, i === j ? '<>' : '=', path[j]]);
     }
-    filter.push(dataGridCore.combineFilters(filterElement));
+    filter.push(combineFilters(filterElement));
   }
   // @ts-expect-error
-  filter = dataGridCore.combineFilters(filter, 'or');
+  filter = combineFilters(filter, 'or');
 
-  return dataGridCore.combineFilters([filter, storeLoadOptions.filter]);
+  return combineFilters([filter, storeLoadOptions.filter]);
 };
 
 const getGroupCount = function (item, groupCount) {

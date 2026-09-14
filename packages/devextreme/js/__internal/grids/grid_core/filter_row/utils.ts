@@ -1,6 +1,6 @@
 import { isDefined } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { isColumnExcluded } from '@ts/grids/grid_core/filter/utils';
 
 const allowFilterRowFiltering = (column: Column): boolean => !!(

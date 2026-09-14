@@ -17,9 +17,10 @@ import filterUtils from '@js/ui/shared/filtering';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -538,13 +539,13 @@ const filterController = (
           filterValues.push(filter);
         });
 
-        filterValues = gridCoreUtils.combineFilters(filterValues, 'or');
+        filterValues = combineFilters(filterValues, 'or');
 
         filters.push(column.filterType === 'exclude' ? ['!', filterValues] : filterValues);
       }
     });
 
-    return gridCoreUtils.combineFilters(filters);
+    return combineFilters(filters);
   }
 };
 

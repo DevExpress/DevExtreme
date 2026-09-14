@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 import type {
   FilterValueCondition,
   FilterValueOperand,
-} from '@ts/grids/grid_core/data_controller/types';
+} from '@ts/grids/grid_core/filter/types';
 
 import type { FilterSyncColumn } from '../types';
 import {
