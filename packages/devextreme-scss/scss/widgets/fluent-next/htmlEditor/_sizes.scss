@@ -30,7 +30,7 @@ $html-editor-ai-dialog-border-radius: null !default;
 }
 
 @else if $size == "compact" {
-  $html-editor-toolbar-size-editor-width: 90px !default; // dx-offscale: 90px
+  $html-editor-toolbar-size-editor-width: ds.$spacing-880 !default;
   $html-editor-padding-block: ds.$spacing-120 !default;
   $html-editor-padding-inline: ds.$spacing-120 !default;
   $html-editor-add-image-dialog-file-uploader-padding: ds.$spacing-400 0 ds.$spacing-180 !default;

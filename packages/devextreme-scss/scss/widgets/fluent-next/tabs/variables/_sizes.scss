@@ -10,7 +10,7 @@ $tabs-item-padding-inline: null !default;
 $tabs-tab-height: auto !default;
 
 $tabs-tab-basic-font-weight: ds.$font-weight-base-default !default;
-$tabs-tab-accent-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$tabs-tab-accent-font-weight: ds.$font-weight-base-strong !default;
 $tabs-icon-size: $global-icon-size !default;
 
 $tabs-tab-nav-button-icon-width: null !default;
