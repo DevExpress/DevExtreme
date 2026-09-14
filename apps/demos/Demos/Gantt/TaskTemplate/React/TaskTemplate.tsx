@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 interface TaskTemplateProps {
   taskData: {
@@ -26,8 +26,10 @@ function getTaskColor(taskId: number) {
 }
 
 export default function TaskTemplate({ taskData, taskSize, taskResources }: TaskTemplateProps) {
+  const taskWrapperStyle = useMemo(() => ({ width: `${taskSize.width}px` }), [taskSize.width]);
+  const progressStyle = useMemo(() => ({ width: `${taskData.progress}%` }), [taskData.progress]);
   return (
-    <div className={`custom-task ${getTaskColor(taskData.id)}`} style={ { width: `${taskSize.width}px` } }>
+    <div className={`custom-task ${getTaskColor(taskData.id)}`} style={taskWrapperStyle}>
       <div className="custom-task-img-wrapper">
         <img className="custom-task-img" src={getImagePath(taskData.id)} />
       </div>
@@ -35,7 +37,7 @@ export default function TaskTemplate({ taskData, taskSize, taskResources }: Task
         <div className='custom-task-title'>{taskData.title}</div>
         <div className='custom-task-row'>{taskResources[0].text}</div>
       </div>
-      <div className='custom-task-progress' style={ { width: `${taskData.progress}%` } }></div>
+      <div className='custom-task-progress' style={progressStyle}></div>
     </div>
   );
 }
