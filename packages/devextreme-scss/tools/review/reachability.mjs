@@ -219,10 +219,11 @@ unreviewed.forEach(([key, example]) => {
 
 /* --- 4. gate: declared and never read --------------------------------------------------------
  * Liveness spreads backwards from the ordinary properties: a tier name is live when a normal
- * declaration reads it, or when a live tier name reads it. Everything the fixpoint does not reach
- * is declared for nobody. The known list is pinned in unread-tier.json by exact set equality, the
- * way the calc budget and the naming baseline are pinned: a name that becomes live is banked by
- * regenerating, a name that goes dead is a review, not a rerun. Bank a drop with:
+ * declaration reads it, when a style query asks about it, or when a live tier name reads it.
+ * Everything the fixpoint does not reach is declared for nobody. The known list is pinned in
+ * unread-tier.json by exact set equality, the way the calc budget and the naming baseline are
+ * pinned: a name that becomes live is banked by regenerating, a name that goes dead is a review,
+ * not a rerun. Bank a drop with:
  *
  *   node tools/review/reachability.mjs --update-unread
  */
@@ -232,22 +233,30 @@ root.walkDecls((decl) => {
   declaredValues.set(decl.prop, [...(declaredValues.get(decl.prop) ?? []), decl.value]);
 });
 
+/*
+ * A style query reads the name without a var(): `@container style(--dx-theme-mode: dark)` is what
+ * resolves an inverted scope against its NEAREST ancestor, and core/utils/theme_mode.ts asks the
+ * browser for the same property. Counting only var() would call the name that carries the whole
+ * mode mechanism dead API and ask for it to be withdrawn.
+ */
+const STYLE_QUERY_READ = /style\(\s*(--dx-[a-z0-9-]+)/g;
+
 const live = new Set();
 const frontier = [];
+const wake = (name) => {
+  if (live.has(name)) return;
+  live.add(name);
+  frontier.push(name);
+};
 root.walkDecls((decl) => {
   if (isTierName(decl.prop)) return;
-  readsOf(decl.value).forEach((name) => {
-    if (live.has(name)) return;
-    live.add(name);
-    frontier.push(name);
-  });
+  readsOf(decl.value).forEach(wake);
+});
+root.walkAtRules('container', (rule) => {
+  [...rule.params.matchAll(STYLE_QUERY_READ)].map(([, name]) => name).filter(isTierName).forEach(wake);
 });
 while (frontier.length) {
-  (declaredValues.get(frontier.pop()) ?? []).forEach((value) => readsOf(value).forEach((name) => {
-    if (live.has(name)) return;
-    live.add(name);
-    frontier.push(name);
-  }));
+  (declaredValues.get(frontier.pop()) ?? []).forEach((value) => readsOf(value).forEach(wake));
 }
 
 const unread = [...declaredAt.keys()].filter((name) => !live.has(name)).sort();
