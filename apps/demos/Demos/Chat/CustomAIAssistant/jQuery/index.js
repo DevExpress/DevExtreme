@@ -491,9 +491,10 @@ To filter a date column by a year and/or month (the same thing the grid's own he
       if (failure) return failure;
 
       const caption = column.caption ?? args.column;
+      const columnName = column.dataField ?? column.name;
       let { value } = args;
 
-      if (args.column === 'Completion' && typeof value !== 'boolean') {
+      if (columnName === 'Completion' && typeof value !== 'boolean') {
         const normalized = String(value).trim().toLowerCase();
         value = value === 100 || ['true', 'completed', 'yes', '100'].includes(normalized);
       }
@@ -520,7 +521,7 @@ To filter a date column by a year and/or month (the same thing the grid's own he
       }
 
       try {
-        const newCondition = [args.column, args.operator, value];
+        const newCondition = [columnName, args.operator, value];
         grid.option('filterValue', combineFilterConditions(grid.option('filterValue'), newCondition));
         return {
           status: 'success',
