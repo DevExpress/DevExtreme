@@ -39,6 +39,6 @@
   ></dxo-data-grid-master-detail>
 
   <div *dxTemplate="let masterDetailItem of 'masterDetail'">
-    <detail-view [rowData]="masterDetailItem.data"></detail-view>
+    <detail-view #detailView [rowData]="masterDetailItem.data"></detail-view>
   </div>
 </dx-data-grid>

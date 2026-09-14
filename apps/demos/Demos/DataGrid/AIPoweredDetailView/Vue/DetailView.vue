@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { DxTextBox } from 'devextreme-vue/text-box';
 import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import { DxButton } from 'devextreme-vue/button';
@@ -87,6 +87,12 @@ import { getAIResponse, SYSTEM_PROMPT, type AIMessage } from './service.ts';
 import { type Vehicle, type SubmitEvent } from './data.ts';
 
 const { rowData } = defineProps<{ rowData: Vehicle }>();
+
+const abortController = ref<AbortController | null>(null);
+
+defineExpose({
+  abortRequest: () => abortController.value?.abort(),
+});
 
 const promptElementAttr = { class: 'prompt-editor' };
 const suggestionsElementAttr = { class: 'dx-chat-suggestions' };
@@ -129,6 +135,8 @@ function onSuggestionClick({ itemData: suggestion }: DxButtonGroupTypes.ItemClic
 async function handleSubmit({ event }: SubmitEvent) {
   if (promptValue.value === '') return;
 
+  const controller = new AbortController();
+  abortController.value = controller;
   isError.value = false;
   isLoading.value = true;
   (event?.target as HTMLElement)?.blur();
@@ -138,13 +146,16 @@ async function handleSubmit({ event }: SubmitEvent) {
       { role: 'system', content: SYSTEM_PROMPT },
       { role: 'user', content: `User prompt: ${promptValue.value}\nRow data: ${JSON.stringify(rowData)}` },
     ];
-    const aiResponse = await getAIResponse(messages);
+
+    const aiResponse = await getAIResponse(messages, controller.signal);
+
     if (aiResponse === '') throw new Error('AI response is empty');
     responseValue.value = aiResponse;
   } catch {
     responseValue.value = '';
     isError.value = true;
   } finally {
+    abortController.value = null;
     submitButtonText.value = 'Resubmit';
     isLoading.value = false;
     (event?.target as HTMLElement)?.focus();

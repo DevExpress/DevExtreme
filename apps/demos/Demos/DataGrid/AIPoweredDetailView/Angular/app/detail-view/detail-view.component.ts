@@ -40,6 +40,8 @@ export class DetailViewComponent {
 
   outputAreaMaxHeight: number = 196;
 
+  abortController: AbortController | null = null;
+
   suggestions = [
     { type: 'default', text: '✨ Summary', prompt: 'Display general information about this vehicle and its features.' },
     { type: 'default', text: '⚡ Ideal Buyer', prompt: 'Describe who this vehicle appeals to the most in a sentence.' },
@@ -65,6 +67,7 @@ export class DetailViewComponent {
   async handleSubmit({ event }: SubmitEvent) {
     if (this.promptValue === '') return;
 
+    this.abortController = new AbortController();
     this.isError = false;
     this.isLoading = true;
     (event?.target as HTMLElement)?.blur();
@@ -74,17 +77,24 @@ export class DetailViewComponent {
         { role: 'system', content: this.aiService.getSystemPrompt() },
         { role: 'user', content: `User prompt: ${this.promptValue}\nRow data: ${JSON.stringify(this.rowData)}` },
       ];
-      const aiResponse = await this.aiService.getAIResponse(messages);
+
+      const aiResponse = await this.aiService.getAIResponse(messages, this.abortController.signal);
+
       if (aiResponse === '') throw new Error('AI response is empty');
       this.responseValue = aiResponse;
     } catch {
       this.responseValue = '';
       this.isError = true;
     } finally {
+      this.abortController = null;
       this.isLoading = false;
       this.submitButtonText = 'Resubmit';
       this.changeDetectorRef.detectChanges();
       (event?.target as HTMLElement)?.focus();
     }
+  }
+
+  abortRequest() {
+    this.abortController?.abort();
   }
 }

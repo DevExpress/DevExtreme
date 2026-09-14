@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   DataGrid, Column, Paging, MasterDetail,
 } from 'devextreme-react/data-grid';
@@ -7,7 +7,21 @@ import DetailView from './DetailView.js';
 import { vehicles } from './data.js';
 
 export default function App() {
+  const abortActiveRequest = useRef(() => {});
+  const onAbortReady = useCallback((abortRequest) => {
+    abortActiveRequest.current = abortRequest;
+  }, []);
+  const renderDetailView = useCallback(
+    (templateData) => (
+      <DetailView
+        {...templateData}
+        onAbortReady={onAbortReady}
+      />
+    ),
+    [onAbortReady],
+  );
   const onRowExpanding = useCallback(({ component }) => {
+    abortActiveRequest.current();
     component.collapseAll(-1);
   }, []);
   const onCellClick = useCallback(({
@@ -15,6 +29,7 @@ export default function App() {
   }) => {
     if (column.type === 'detailExpand' && row.rowType === 'data') {
       if (row.isExpanded) {
+        abortActiveRequest.current();
         component.collapseRow(key);
       } else {
         component.expandRow(key);
@@ -61,7 +76,7 @@ export default function App() {
 
       <MasterDetail
         enabled={true}
-        component={DetailView}
+        component={renderDetailView}
       />
     </DataGrid>
   );

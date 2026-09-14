@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { type DataGridTypes } from 'devextreme-react/data-grid';
 import { TextBox, type TextBoxTypes } from 'devextreme-react/text-box';
@@ -10,6 +10,9 @@ import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT } from './service.ts';
 import { type AIMessage } from './types.ts';
 
+type DetailViewProps = DataGridTypes.MasterDetailTemplateData & {
+  onAbortReady: (abortRequest: () => void) => void;
+};
 type SubmitEvent = TextBoxTypes.EnterKeyEvent | ButtonTypes.ClickEvent;
 
 const promptElementAttr = { class: 'prompt-editor' };
@@ -23,7 +26,8 @@ const suggestions = [
   { type: 'default', text: '🏎️ Competitors', prompt: 'List 2-3 models that directly compete with this vehicle.' },
 ];
 
-const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateData) => {
+const DetailView = ({ data: templateData, onAbortReady }: DetailViewProps) => {
+  const abortControllerRef = useRef<AbortController | null>(null);
   const [promptValue, setPromptValue] = useState('');
   const [responseValue, setResponseValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -58,6 +62,10 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
   const handleSubmit = useCallback(async ({ event }: SubmitEvent) => {
     if (promptValue === '') return;
 
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    onAbortReady(() => controller.abort());
+
     setIsError(false);
     setIsLoading(true);
     (event?.target as HTMLElement)?.blur();
@@ -68,13 +76,18 @@ const DetailView = ({ data: templateData }: DataGridTypes.MasterDetailTemplateDa
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: `User prompt: ${promptValue}\nRow data: ${JSON.stringify(rowData)}` },
       ];
-      const aiResponse = await getAIResponse(messages);
+
+      const aiResponse = await getAIResponse(messages, controller.signal);
+
       if (aiResponse === '') throw new Error('AI response is empty');
       setResponseValue(aiResponse);
     } catch {
       setResponseValue('');
       setIsError(true);
     } finally {
+      abortControllerRef.current = null;
+      onAbortReady(() => {});
+
       setSubmitButtonText('Resubmit');
       setIsLoading(false);
       (event?.target as HTMLElement)?.focus();

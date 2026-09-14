@@ -14,14 +14,14 @@ Input: A user prompt that describes what should be generated.
 A dataset in the format: { column1: value1, column2: value2, ...}.
 Instructions: The output must be in plain text and should not exceed 2000 characters.
 `;
-export async function getAIResponse(messages) {
+export async function getAIResponse(messages, signal) {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,
     max_completion_tokens: 1000,
     temperature: 0.7,
   };
-  const response = await aiService.chat.completions.create(params);
+  const response = await aiService.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
   return result ?? '';
 }

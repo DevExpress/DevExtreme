@@ -30,7 +30,7 @@ export class AiService {
     this.chatService = new AzureOpenAI(AzureOpenAIConfig);
   }
 
-  async getAIResponse(messages: AIMessage[]) {
+  async getAIResponse(messages: AIMessage[], signal?: AbortSignal) {
     const params = {
       messages,
       model: AzureOpenAIConfig.deployment,
@@ -38,7 +38,7 @@ export class AiService {
       temperature: 0.7,
     };
 
-    const response = await this.chatService.chat.completions.create(params);
+    const response = await this.chatService.chat.completions.create(params, { signal });
     const result = response.choices[0].message?.content;
 
     return result ?? '';

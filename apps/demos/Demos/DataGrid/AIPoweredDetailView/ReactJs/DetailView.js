@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback, useMemo, useRef, useState,
+} from 'react';
 import { TextBox } from 'devextreme-react/text-box';
 import { ButtonGroup } from 'devextreme-react/button-group';
 import { Button } from 'devextreme-react/button';
@@ -28,7 +30,8 @@ const suggestions = [
     prompt: 'List 2-3 models that directly compete with this vehicle.',
   },
 ];
-const DetailView = ({ data: templateData }) => {
+const DetailView = ({ data: templateData, onAbortReady }) => {
+  const abortControllerRef = useRef(null);
   const [promptValue, setPromptValue] = useState('');
   const [responseValue, setResponseValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +58,9 @@ const DetailView = ({ data: templateData }) => {
   const handleSubmit = useCallback(
     async ({ event }) => {
       if (promptValue === '') return;
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+      onAbortReady(() => controller.abort());
       setIsError(false);
       setIsLoading(true);
       event?.target?.blur();
@@ -67,13 +73,15 @@ const DetailView = ({ data: templateData }) => {
             content: `User prompt: ${promptValue}\nRow data: ${JSON.stringify(rowData)}`,
           },
         ];
-        const aiResponse = await getAIResponse(messages);
+        const aiResponse = await getAIResponse(messages, controller.signal);
         if (aiResponse === '') throw new Error('AI response is empty');
         setResponseValue(aiResponse);
       } catch {
         setResponseValue('');
         setIsError(true);
       } finally {
+        abortControllerRef.current = null;
+        onAbortReady(() => {});
         setSubmitButtonText('Resubmit');
         setIsLoading(false);
         event?.target?.focus();

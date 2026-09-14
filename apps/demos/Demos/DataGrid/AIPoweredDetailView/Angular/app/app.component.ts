@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, type Vehicle } from './app.service';
 import { Category } from './category/category.component';
@@ -21,6 +21,8 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
+  @ViewChild(DetailViewComponent) detailView?: DetailViewComponent;
+
   vehicles: Vehicle[];
 
   constructor(service: Service) {
@@ -32,12 +34,14 @@ export class AppComponent {
   }
 
   onRowExpanding({ component }: DxDataGridTypes.RowExpandingEvent) {
+    this.detailView?.abortRequest();
     component.collapseAll(-1);
   }
 
   onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickEvent) {
     if (column.type === 'detailExpand' && row.rowType === 'data') {
       if (row.isExpanded) {
+        this.detailView?.abortRequest();
         component.collapseRow(key);
       } else {
         component.expandRow(key);

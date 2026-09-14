@@ -48,24 +48,32 @@
       template="master-detail"
     />
     <template #master-detail="{ data: { data: vehicle } }">
-      <DetailView :row-data="vehicle"/>
+      <DetailView
+        ref="detailViewRef"
+        :row-data="vehicle"
+      />
     </template>
   </DxDataGrid>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { DxDataGrid, DxColumn, DxPaging, DxMasterDetail, type DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { vehicles, type Vehicle } from './data.ts';
 import Category from './Category.vue';
 import DetailView from './DetailView.vue';
 
+const detailViewRef = ref<{ abortRequest: () => void } | null>(null);
+
 function onRowExpanding({ component }: DxDataGridTypes.RowExpandingEvent) {
+  detailViewRef.value?.abortRequest();
   component.collapseAll(-1);
 }
 
 function onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickEvent) {
   if (column.type === 'detailExpand' && row.rowType === 'data') {
     if (row.isExpanded) {
+      detailViewRef.value?.abortRequest();
       component.collapseRow(key);
     } else {
       component.expandRow(key);

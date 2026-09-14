@@ -1,4 +1,6 @@
 $(() => {
+  let abortController = null;
+
   const AzureOpenAIConfig = {
     dangerouslyAllowBrowser: true,
     deployment: 'demo-mini',
@@ -16,7 +18,7 @@ $(() => {
 
   const aiService = new AzureOpenAI(AzureOpenAIConfig);
 
-  async function getAIResponse(messages) {
+  async function getAIResponse(messages, signal) {
     const params = {
       messages,
       model: AzureOpenAIConfig.deployment,
@@ -24,7 +26,7 @@ $(() => {
       temperature: 0.7,
     };
 
-    const response = await aiService.chat.completions.create(params);
+    const response = await aiService.chat.completions.create(params, { signal });
     const result = response.choices[0].message?.content;
 
     return result ?? '';
@@ -58,6 +60,8 @@ $(() => {
     const userPrompt = promptEditor.option('value');
     if (userPrompt === '') return;
 
+    abortController = new AbortController();
+
     toggleLoadingState(true, event);
 
     try {
@@ -65,13 +69,16 @@ $(() => {
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: `User prompt: ${userPrompt}\nRow data: ${JSON.stringify(rowData)}` },
       ];
-      const aiResponse = await getAIResponse(messages);
+
+      const aiResponse = await getAIResponse(messages, abortController.signal);
+
       if (aiResponse === '') throw new Error('AI response is empty');
       responseEditor.option('value', aiResponse);
     } catch {
       responseEditor.option('value', '');
       $errorMessage.show();
     } finally {
+      abortController = null;
       submitButton.option('text', 'Resubmit');
       toggleLoadingState(false, event);
     }
@@ -237,11 +244,13 @@ $(() => {
       },
     },
     onRowExpanding(e) {
+      abortController?.abort();
       e.component.collapseAll(-1);
     },
     onCellClick(e) {
       if (e.column.type === 'detailExpand' && e.rowType === 'data') {
         if (e.row.isExpanded) {
+          abortController?.abort();
           e.component.collapseRow(e.key);
         } else {
           e.component.expandRow(e.key);

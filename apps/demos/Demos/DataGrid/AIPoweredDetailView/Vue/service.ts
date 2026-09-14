@@ -21,7 +21,7 @@ A dataset in the format: { column1: value1, column2: value2, ...}.
 Instructions: The output must be in plain text and should not exceed 2000 characters.
 `;
 
-export async function getAIResponse(messages: AIMessage[]): Promise<string> {
+export async function getAIResponse(messages: AIMessage[], signal: AbortSignal): Promise<string> {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,
@@ -29,7 +29,7 @@ export async function getAIResponse(messages: AIMessage[]): Promise<string> {
     temperature: 0.7,
   };
 
-  const response = await service.chat.completions.create(params);
+  const response = await service.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
 
   return result ?? '';
