@@ -8,8 +8,6 @@ import  dxDataGrid from "devextreme/ui/data_grid";
 import  dxOverlay from "devextreme/ui/overlay";
 import  DOMComponent from "devextreme/core/dom_component";
 import  dxPopup from "devextreme/ui/popup";
-import  dxSortable from "devextreme/ui/sortable";
-import  dxDraggable from "devextreme/ui/draggable";
 import {
  AIAssistant,
  ColumnChooser,
@@ -50,7 +48,6 @@ import {
  EnterKeyAction,
  EnterKeyDirection,
  PagerPageSize,
- GridBase,
  DataRenderMode,
  StateStoreType,
 } from "devextreme/common/grids";
@@ -111,6 +108,13 @@ import {
  SelectionSensitivity,
  DataGridPredefinedToolbarItem,
  DataGridExportFormat,
+ RowDraggingAddEvent,
+ RowDraggingChangeEvent,
+ RowDraggingEndEvent,
+ RowDraggingMoveEvent,
+ RowDraggingStartEvent,
+ RowDraggingRemoveEvent,
+ RowDraggingReorderEvent,
  DataGridScrollMode,
  dxDataGridToolbarItem,
 } from "devextreme/ui/data_grid";
@@ -3808,13 +3812,13 @@ const DxRowDraggingConfig = {
     filter: String,
     group: String,
     handle: String,
-    onAdd: Function as PropType<((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onDragChange: Function as PropType<((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onDragEnd: Function as PropType<((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onDragMove: Function as PropType<((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onDragStart: Function as PropType<((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void)>,
-    onRemove: Function as PropType<((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onReorder: Function as PropType<((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
+    onAdd: Function as PropType<((e: RowDraggingAddEvent) => void)>,
+    onDragChange: Function as PropType<((e: RowDraggingChangeEvent) => void)>,
+    onDragEnd: Function as PropType<((e: RowDraggingEndEvent) => void)>,
+    onDragMove: Function as PropType<((e: RowDraggingMoveEvent) => void)>,
+    onDragStart: Function as PropType<((e: RowDraggingStartEvent) => void)>,
+    onRemove: Function as PropType<((e: RowDraggingRemoveEvent) => void)>,
+    onReorder: Function as PropType<((e: RowDraggingReorderEvent) => void)>,
     scrollSensitivity: Number,
     scrollSpeed: Number,
     showDragIcons: Boolean
