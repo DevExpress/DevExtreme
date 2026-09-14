@@ -87,7 +87,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const dataSource = createDataSource(array, { key: 'name' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         assert.equal(this.dataController.items().length, 2);
@@ -106,7 +106,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const dataSource = createDataSource(array);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         assert.equal(this.dataController.items().length, 2);
@@ -125,7 +125,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         this.applyOptions({ columns: ['name', { dataField: 'age', visible: false }, 'phone'] });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         assert.equal(this.dataController.items().length, 2);
@@ -192,7 +192,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.strictEqual(changedCount, 0);
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // assert
@@ -218,7 +218,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         // assert
         assert.strictEqual(pushedSpy.callCount, 0, 'the pushed callback was not called');
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -240,7 +240,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         let dataSource = createDataSource(array, { key: 'id' });
 
         this.dataSourceController.dataPushedHandlerProxy = dataPushedHandlerSpy;
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource = this.dataSourceController.getAdapter();
         dataSource.load();
 
@@ -274,7 +274,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         const dataSource = createDataSource(array);
 
-        that.dataController.setDataSource(dataSource);
+        that.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         that.dataController.changed.add(function() {
@@ -337,7 +337,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
     QUnit.test('dataSource should be disposed after calling dispose method', function(assert) {
         const dataSource = createDataSource([]);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         // act
         this.dataController.dispose();
@@ -379,11 +379,11 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             onLoadingChanged: loadingChangedSpy
         });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
-        this.dataController._disposeDataSource();
+        this.dataController.disposeDataSourceAdapter();
 
         // assert
         assert.strictEqual(loadingChangedSpy.callCount, 2, 'loadingChanged call count');
@@ -403,7 +403,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         const rows = this.dataController.items();
@@ -434,7 +434,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             changedCount++;
         });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.clock.tick(10);
@@ -466,7 +466,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         this.columnsController.setUserState([{ dataField: 'name', visible: true, sortOrder: 'desc', sortIndex: 0, index: 0 }, { dataField: 'age', visible: true, sortOrder: 'asc', sortIndex: 1, index: 1 }]);
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // assert
@@ -1981,7 +1981,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             sorting: { mode: 'single' }
         });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.columnsController.changeSortOrder(0, 'asc');
@@ -2004,7 +2004,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const dataSource = createDataSource(array, { key: 'name' }, { sort: 'name' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         assert.ok(this.dataSourceController.getAdapter().sort(), 'sort parameters');
 
@@ -2033,7 +2033,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
                 columns[1].groupIndex = 0;
             }
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         assert.ok(this.dataSourceController.getAdapter().group());
@@ -2055,7 +2055,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.columnsController.setUserState([{ dataField: 'name', visible: true, groupIndex: 0, index: 0 }, { dataField: 'age', visible: true, index: 1 }]);
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // assert
@@ -2105,7 +2105,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         const dataSource = createDataSource(array, { key: 'name' }, { group: 'name' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         assert.ok(this.dataSourceController.getAdapter().group());
         // act
@@ -2129,7 +2129,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             commonColumnSettings: { allowSorting: true },
             sorting: { mode: 'single' }
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         this.dataController.pageIndex(1);
 
@@ -2159,7 +2159,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             }, 'age'],
             sorting: { mode: 'single' }
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
 
@@ -2196,7 +2196,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             }, 'age'],
             sorting: { mode: 'single' }
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -2224,7 +2224,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             }, 'age'],
             sorting: { mode: 'single' }
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
 
@@ -2249,7 +2249,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             sorting: { mode: 'single' }
         });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.columnsController.changeSortOrder(0, 'asc');
@@ -2280,7 +2280,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.columnsController.columnsChanged.add(function(e) {
             columnsChangedArgs.push(e);
         });
-        dataController.setDataSource(dataSource);
+        dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         this.clock.tick(10);
 
@@ -2311,7 +2311,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.columnsController.columnsChanged.add(function(e) {
             columnsChangedArgs.push(e);
         });
-        dataController.setDataSource(dataSource);
+        dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         this.clock.tick(10);
 
@@ -2344,7 +2344,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.columnsController.columnsChanged.add(function(e) {
             columnsChangedArgs.push(e);
         });
-        dataController.setDataSource(dataSource);
+        dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         this.clock.tick(10);
 
@@ -2381,7 +2381,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
                 }
             }]
         });
-        dataController.setDataSource(dataSource);
+        dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         this.clock.tick(10);
 
@@ -2439,7 +2439,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             }]
         });
 
-        dataController.setDataSource(dataSource);
+        dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         dataController.changed.add(function(args) {
@@ -2481,7 +2481,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
                 }
             }]
         });
-        dataController.setDataSource(dataSource);
+        dataController.initDataSourceAdapter(dataSource);
 
         dataController.changed.add(function(args) {
             changedCount++;
@@ -2521,7 +2521,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
                 }
             }]
         });
-        dataController.setDataSource(dataSource);
+        dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         this.clock.tick(10);
 
@@ -2554,7 +2554,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -2578,7 +2578,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -2602,7 +2602,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -2677,7 +2677,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act, assert
@@ -2696,7 +2696,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act, assert
@@ -2951,7 +2951,7 @@ QUnit.module('Loading', { beforeEach: setupModule, afterEach: teardownModule }, 
         const dataSource = createDataSource([{ id: 1 }, { id: 2 }, { id: 3 }], {}, {
             pageSize: 2
         });
-        that.dataController.setDataSource(dataSource);
+        that.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         that.dataController.loadingChanged.add(function(isLoading) {
@@ -2975,7 +2975,7 @@ QUnit.module('Loading', { beforeEach: setupModule, afterEach: teardownModule }, 
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // assert
@@ -2985,7 +2985,7 @@ QUnit.module('Loading', { beforeEach: setupModule, afterEach: teardownModule }, 
     QUnit.test('begin custom loading', function(assert) {
         const loadingStates = [];
         const dataSource = createDataSource([]);
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.dataController.loadingChanged.add(function(isLoading) {
@@ -3005,7 +3005,7 @@ QUnit.module('Loading', { beforeEach: setupModule, afterEach: teardownModule }, 
     QUnit.test('end custom loading', function(assert) {
         const loadingStates = [];
         const dataSource = createDataSource([]);
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.dataController.loadingChanged.add(function(isLoading) {
@@ -3050,7 +3050,7 @@ QUnit.module('Loading', { beforeEach: setupModule, afterEach: teardownModule }, 
         this.dataController.loadingChanged.add(function(isLoading) {
             loadingStates.push(isLoading);
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // assert
@@ -3078,7 +3078,7 @@ QUnit.module('Parsing values', { beforeEach: setupModule, afterEach: teardownMod
             columns: ['name', { dataField: 'birthday', dataType: 'date', format: 'shortDate' }]
         });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         assert.deepEqual(this.dataController.items()[0].values, ['Alex', null]);
@@ -3095,7 +3095,7 @@ QUnit.module('Parsing values', { beforeEach: setupModule, afterEach: teardownMod
             columns: [{ calculateCellValue: function(data) { return data.firstName + ' ' + data.secondName; } }]
         });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         assert.equal(this.dataController.items().length, 2);
@@ -3131,7 +3131,7 @@ const teardownPagingModule = function() {
 QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagingModule }, () => {
 
     QUnit.test('PagesCount, TotalCount, Rows after initialization', function(assert) {
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         assert.equal(this.dataController.items().length, 5);
@@ -3146,7 +3146,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
     QUnit.test('PagesCount after filter dataSource', function(assert) {
         let changedCount = 0;
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.dataController.changed.add(function() {
             changedCount++;
@@ -3169,7 +3169,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
     // arrange
         let countCallPageChanged = 0;
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.dataController.pageChanged.add(function() {
@@ -3189,7 +3189,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
     });
 
     QUnit.test('get pageIndex after change dataSource pageIndex', function(assert) {
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.dataSource.pageIndex(1);
         this.dataSource.reload(true);
@@ -3200,7 +3200,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
 
     // B233043
     QUnit.test('change pageIndex to greater then pageCount', function(assert) {
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.dataController.pageIndex(5);
 
@@ -3217,7 +3217,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
         const loadingSpy = sinon.spy();
         this.dataSource.store().on('loading', loadingSpy);
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.pageIndex(1);
         this.dataSource.load();
 
@@ -3236,7 +3236,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
     // arrange
         let countCallPageChanged = 0;
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.dataController.pageIndex(1);
 
@@ -3306,7 +3306,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
     QUnit.test('Rise changed on set pageSize', function(assert) {
         let changedCount = 0;
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.dataController.pageSize(10);
@@ -3325,7 +3325,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
     QUnit.test('Rise changed on set pageSize with changing pageCount', function(assert) {
         let changedCount = 0;
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.dataController.changed.add(function(controller) {
             changedCount++;
@@ -3342,7 +3342,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
     QUnit.test('Rise changed on set pageIndex', function(assert) {
         let changedCallCount = 0;
         const dataController = this.dataController;
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         dataController.changed.add(function() {
             changedCallCount++;
@@ -3356,7 +3356,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
 
     QUnit.test('Not Rise changed on get pageIndex', function(assert) {
         let changedCount = 0;
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.dataController.changed.add(function() {
             changedCount++;
@@ -3367,7 +3367,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
 
     QUnit.test('update pageCount after insert', function(assert) {
         let changedCount = 0;
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.dataController.changed.add(function() {
             changedCount++;
@@ -3405,7 +3405,7 @@ QUnit.module('Paging', { beforeEach: setupPagingModule, afterEach: teardownPagin
     });
 
     QUnit.test('Page size of data source is not changed for old value_T242652', function(assert) {
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // act
@@ -3447,7 +3447,7 @@ const setupVirtualScrollingModule = function() {
 
     this.array = array;
 
-    this.dataController.setDataSource(dataSource);
+    this.dataController.initDataSourceAdapter(dataSource);
     this.dataController.viewportSize(10);
     dataSource.load();
     this.dataSource = dataSource;
@@ -3468,7 +3468,7 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         this.applyOptions({
             scrolling: { mode: 'standard' }
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         assert.ok(!this.dataController.virtualItemsCount());
     });
@@ -4309,7 +4309,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.setupDataSource = function(options) {
             this.options.paging.pageSize = options.pageSize;
             this.dataSource = createDataSource(options.data || TEN_NUMBERS, {}, $.extend({ paginate: true }, options));
-            this.dataController.setDataSource(this.dataSource);
+            this.dataController.initDataSourceAdapter(this.dataSource);
             this.dataSource.load();
             this.dataController.viewportSize(2);
         };
@@ -4628,7 +4628,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
                 return loadResult || [];
             }
         });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
 
         const dataController = this.dataController;
         let isLoadingByEvent;
@@ -5729,7 +5729,7 @@ QUnit.module('Infinite scrolling', {
             scrolling: { mode: 'infinite' },
             pager: { visible: 'auto' }
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         this.dataController.viewportSize(10);
         dataSource.load();
         this.dataSource = dataSource;
@@ -5957,7 +5957,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         this.setupDataSource = function(options) {
             this.dataSource = createDataSource(options.data || TEN_NUMBERS, {}, $.extend({ paginate: true, requireTotalCount: false }, options));
-            this.dataController.setDataSource(this.dataSource);
+            this.dataController.initDataSourceAdapter(this.dataSource);
             this.dataSource.load();
         };
 
@@ -6306,7 +6306,7 @@ QUnit.module('Filtering', {
                         }
                     }]
             });
-            this.dataController.setDataSource(this.dataSource);
+            this.dataController.initDataSourceAdapter(this.dataSource);
             this.dataSource.load();
         };
     },
@@ -6319,7 +6319,7 @@ QUnit.module('Filtering', {
             { name: 'Dan', age: 19 }
         ], {}, { filter: ['name', 'Dan'] });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // assert
@@ -6363,7 +6363,7 @@ QUnit.module('Filtering', {
         });
 
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // act
@@ -6453,7 +6453,7 @@ QUnit.module('Filtering', {
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ], {}, { filter: ['name', 'Dan'] });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.dataController.pageChanged.add(function() {
@@ -6480,7 +6480,7 @@ QUnit.module('Filtering', {
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ]);
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.dataController.pageChanged.add(function() {
@@ -6504,7 +6504,7 @@ QUnit.module('Filtering', {
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ], {}, { filter: ['name', 'Dan'] });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.dataController.pageChanged.add(function() {
@@ -6525,7 +6525,7 @@ QUnit.module('Filtering', {
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ], {}, { filter: ['name', 'Dan'] });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
 
@@ -6542,7 +6542,7 @@ QUnit.module('Filtering', {
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 19 }
         ], { onLoading: function() { loadingCount++; } }, { filter: ['name', 'Dan'] });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
 
@@ -6582,7 +6582,7 @@ QUnit.module('Filtering', {
             }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
 
@@ -6612,7 +6612,7 @@ QUnit.module('Filtering', {
             columns: [{ dataField: 'age', dataType: 'number', filterValue: 15 }],
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         assert.deepEqual(this.getCombinedFilter(true), ['age', '=', 15]);
@@ -6645,7 +6645,7 @@ QUnit.module('Filtering', {
             }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // act
@@ -6671,7 +6671,7 @@ QUnit.module('Filtering', {
             }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // act
@@ -6698,7 +6698,7 @@ QUnit.module('Filtering', {
             }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
 
@@ -6728,7 +6728,7 @@ QUnit.module('Filtering', {
             }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
 
@@ -6767,7 +6767,7 @@ QUnit.module('Filtering', {
             }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
 
@@ -6796,7 +6796,7 @@ QUnit.module('Filtering', {
             }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
 
@@ -6826,7 +6826,7 @@ QUnit.module('Filtering', {
             columns: [{ dataField: 'age', dataType: 'number', filterValue: [15, 20], selectedFilterOperation: 'between', filterValues: [17] }]
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
 
@@ -6854,7 +6854,7 @@ QUnit.module('Filtering', {
         });
 
         // act
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // assert
@@ -6883,7 +6883,7 @@ QUnit.module('Filtering', {
         });
 
         // act
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // assert
@@ -6921,7 +6921,7 @@ QUnit.module('Filtering', {
             });
 
             // act
-            this.dataController.setDataSource(this.dataSource);
+            this.dataController.initDataSourceAdapter(this.dataSource);
             this.dataSource.load();
 
             // assert
@@ -6951,7 +6951,7 @@ QUnit.module('Filtering', {
             });
 
             // act
-            this.dataController.setDataSource(this.dataSource);
+            this.dataController.initDataSourceAdapter(this.dataSource);
             this.dataSource.load();
 
             // assert
@@ -6980,7 +6980,7 @@ QUnit.module('Filtering', {
         that.applyOptions({
             columns: [{ dataField: 'name' }, { dataField: 'age', filterValue: 19 }]
         });
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
         that.clock.tick(10);
 
@@ -7017,7 +7017,7 @@ QUnit.module('Filtering', {
         that.applyOptions({
             columns: [{ dataField: 'name', filterValues: ['Alex', 'Dan', 'Bob'] }, { dataField: 'age', filterValue: 19 }]
         });
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
         that.dataController.searchByText('Bob');
         that.clock.tick(10);
@@ -7071,7 +7071,7 @@ QUnit.module('Filtering', {
         that.applyOptions({
             columns: [{ dataField: 'name', filterValues: ['Alex', 'Dan', 'Bob', 'Bobbi'] }, { dataField: 'age', filterValue: 19 }]
         });
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
         that.dataController.searchByText('Bob');
 
@@ -7120,7 +7120,7 @@ QUnit.module('Filtering', {
         that.applyOptions({
             columns: [{ dataField: 'name', filterValues: ['Alex', 'Dan', 'Bob'] }, { dataField: 'age', filterValue: 19 }]
         });
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
         that.dataController.searchByText('Bob');
 
@@ -7169,7 +7169,7 @@ QUnit.module('Filtering', {
         that.applyOptions({
             columns: [{ dataField: 'name', filterValues: ['Alex', 'Dan', 'Bob'] }, { dataField: 'age', filterValue: 19 }]
         });
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
         that.dataController.searchByText('Bob');
 
@@ -7217,7 +7217,7 @@ QUnit.module('Filtering', {
         that.applyOptions({
             columns: [{ dataField: 'name', filterValues: ['Alex', 'Dan', 'Bob'] }, { dataField: 'age', filterValue: 19 }]
         });
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
         that.dataController.searchByText('Bob');
 
@@ -7265,7 +7265,7 @@ QUnit.module('Filtering', {
         that.applyOptions({
             columns: [{ dataField: 'name', filterValues: ['Alex', 'Dan', 'Bob'] }, { dataField: 'age', filterValue: 19 }]
         });
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
         that.dataController.searchByText('Bob');
 
@@ -7303,7 +7303,7 @@ QUnit.module('Filtering', {
             { name: 'Max', age: 21 }
         ], {}, { pageSize: 2, pageIndex: 1 });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
 
@@ -7353,7 +7353,7 @@ QUnit.module('Filtering', {
             { name: 'Dan', age: 19, birthDate: new Date(1996, 1, 20) }
         ], {}, { filter: ['age', '>', 16] });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         assert.equal(this.dataController.items().length, 2);
 
@@ -7409,7 +7409,7 @@ QUnit.module('Filtering', {
             isDataSourceReloaded = true;
         });
 
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
         // assert
         assert.ok(isDataSourceReloaded);
@@ -7433,7 +7433,7 @@ QUnit.module('Filtering', {
             ]
         });
 
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
 
         sinon.spy(errors, 'log');
 
@@ -7468,7 +7468,7 @@ QUnit.module('Filtering', {
             ]
         });
 
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
 
         sinon.spy(errors, 'log');
 
@@ -7505,7 +7505,7 @@ QUnit.module('Filtering', {
             loadCount++;
         });
 
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
 
         that.dataSource.load();
         // assert
@@ -7567,7 +7567,7 @@ QUnit.module('Filtering', {
             { name: 'Alla', age: 21, birthDate: new Date(1993, 5, 2), state: 0, processed: false },
             { name: 'Dan', age: 19, birthDate: new Date(1996, 1, 20), state: 1, processed: true }
         ]);
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         this.columnsController.columnOption('name', 'filterValue', 'Al');
 
@@ -7806,7 +7806,7 @@ QUnit.module('Filtering', {
             remoteOperations: { filtering: true }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
 
         let loadingCount = 0;
         this.dataSource.store().on('loading', function() {
@@ -7999,7 +7999,7 @@ QUnit.module('Filtering', {
         });
 
         // act
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
 
         // assert
@@ -8020,7 +8020,7 @@ QUnit.module('Filtering', {
         ], {}, { asyncLoadEnabled: true });
 
         // act
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.clock.tick(10);
@@ -8051,7 +8051,7 @@ QUnit.module('Filtering', {
 
         // act
         that.columnsController.reset();
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
 
         // assert
@@ -8143,7 +8143,7 @@ QUnit.module('Filtering', {
                 filterValue: new Date(1992, 7, 6, 12, 30, 21)
             }]
         });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // act, assert
@@ -8188,7 +8188,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rows = this.dataController.items();
 
@@ -8228,7 +8228,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rows = this.dataController.items();
 
@@ -8276,7 +8276,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         const rows = this.dataController.items();
@@ -8338,7 +8338,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.dataController.changeRowExpand(['1']);
@@ -8375,7 +8375,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rows = this.dataController.items();
 
@@ -8415,7 +8415,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rows = this.dataController.items();
 
@@ -8454,7 +8454,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rows = this.dataController.items();
 
@@ -8500,7 +8500,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rows = this.dataController.items();
 
@@ -8542,7 +8542,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rows = this.dataController.items();
 
@@ -8582,7 +8582,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rows = this.dataController.items();
 
@@ -8627,7 +8627,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rows = this.dataController.items();
 
@@ -8680,7 +8680,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         });
 
         // act
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rows = this.dataController.items();
 
@@ -8707,7 +8707,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
             itemsCount: 1
         };
 
-        this.dataController.setDataSource(new MockGridDataSource(dataSourceOptions));
+        this.dataController.initDataSourceAdapter(new MockGridDataSource(dataSourceOptions));
 
         this.dataController.pageChanged.add(function() {
             countCallPageChanged++;
@@ -8730,7 +8730,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
             pageIndex: 1
         };
 
-        this.dataController.setDataSource(new MockGridDataSource(dataSourceOptions));
+        this.dataController.initDataSourceAdapter(new MockGridDataSource(dataSourceOptions));
 
         // act
         this.dataController.collapseAll(1);
@@ -8747,7 +8747,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
             pageIndex: 1
         };
 
-        this.dataController.setDataSource(new MockGridDataSource(dataSourceOptions));
+        this.dataController.initDataSourceAdapter(new MockGridDataSource(dataSourceOptions));
 
         // act
         this.dataController.expandAll(1);
@@ -8763,7 +8763,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
         const that = this;
         const dataSource = createDataSource([]);
 
-        that.dataController.setDataSource(dataSource);
+        that.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         that.applyOptions({ columns: ['field1', 'field2', { dataField: 'field3', groupIndex: 0 }, { dataField: 'field4', groupIndex: 1 }, 'field5'] });
@@ -8800,7 +8800,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
             City: 'Bentonville'
         }]);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         // act
         dataSource.load();
@@ -8825,7 +8825,7 @@ QUnit.module('Editing', { beforeEach: function() {
 
         const dataSource = createDataSource(array, { key: 'name' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -8857,7 +8857,7 @@ QUnit.module('Editing', { beforeEach: function() {
 
         const dataSource = createDataSource(array, { key: 'name' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -8889,7 +8889,7 @@ QUnit.module('Editing', { beforeEach: function() {
 
         const dataSource = createDataSource(array, { key: 'name' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -8914,7 +8914,7 @@ QUnit.module('Editing', { beforeEach: function() {
 
         const dataSource = createDataSource(array, { key: 'name' }, { group: 'name' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         this.expandAll();
 
@@ -8945,7 +8945,7 @@ QUnit.module('Editing', { beforeEach: function() {
 
         const dataSource = createDataSource(array, { key: 'name' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         this.editingController.addRow();
         // act
@@ -8969,7 +8969,7 @@ QUnit.module('Editing', { beforeEach: function() {
 
         const dataSource = createDataSource(array, { key: 'name' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.editingController.addRow();
@@ -8992,7 +8992,7 @@ QUnit.module('Editing', { beforeEach: function() {
 
         const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.editingController.addRow();
@@ -9017,7 +9017,7 @@ QUnit.module('Editing', { beforeEach: function() {
 
         const dataSource = createDataSource(array, { key: 'id' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.expandRow(1);
@@ -9046,7 +9046,7 @@ QUnit.module('Editing', { beforeEach: function() {
 
         const dataSource = createDataSource(array, { key: 'id' });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.expandRow(2);
@@ -9082,7 +9082,7 @@ QUnit.module('Editing', { beforeEach: function() {
             remove: () => ++removeHandlerCallCount
         });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.applyOptions({
@@ -9126,7 +9126,7 @@ QUnit.module('Editing', { beforeEach: function() {
             }
         });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.applyOptions({
@@ -13031,7 +13031,7 @@ QUnit.module('Partial update', {
                 { name: 'Bob', age: 20 }
             ];
             that.dataSource = createDataSource(that.array, { key: 'name' });
-            that.dataController.setDataSource(that.dataSource);
+            that.dataController.initDataSourceAdapter(that.dataSource);
             that.dataSource.load();
         };
 
@@ -13437,7 +13437,7 @@ QUnit.module('Refresh changesOnly', {
                 { id: 3, name: 'Bob', age: 20 }
             ];
             that.dataSource = createDataSource(that.array, { key: 'id' }, options);
-            that.dataController.setDataSource(that.dataSource);
+            that.dataController.initDataSourceAdapter(that.dataSource);
             that.dataSource.load();
         };
 
@@ -15413,7 +15413,7 @@ QUnit.module('Sorting', { beforeEach: setupModule, afterEach: teardownModule }, 
             { name: 'Dan', age: 15 }
         ]);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         const calculateSortValue = function(data) { return data[this.dataField]; };

@@ -166,7 +166,7 @@ moduleWithoutCsp('initialization from dataSource', {
             { name: ko.observable('Tom'), age: ko.observable(18), birthDate: ko.observable(new Date(1992, 8, 14)) }
         ];
         const dataSource = new DataSource(this.array);
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.applyOptions({

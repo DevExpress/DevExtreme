@@ -1,6 +1,6 @@
 import type { ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 
-export interface GroupCountableDataSource {
+export interface GroupCountableDataSourceAdapter {
   isGroupItemCountable: (data: unknown) => boolean;
 }
 
@@ -28,11 +28,22 @@ export const correctCount = (
   return result;
 };
 
+// `isGroupItemCountable` is installed on the adapter by the DataGrid grouping module through
+// `provider.extend()`, so no adapter type declares it. This is the one place that checks for it.
+const asGroupCountableAdapter = (
+  dataSourceAdapter: unknown,
+): GroupCountableDataSourceAdapter | undefined => (
+  typeof (dataSourceAdapter as GroupCountableDataSourceAdapter | undefined)?.isGroupItemCountable === 'function'
+    ? dataSourceAdapter as GroupCountableDataSourceAdapter
+    : undefined
+);
+
 export const isItemCountableByDataSource = (
   item: ProcessedItem,
-  dataSourceAdapter: GroupCountableDataSource | null | undefined,
+  dataSourceAdapter: unknown,
 ): boolean => (item.rowType === 'data' && !item.isNewRow)
-  || (item.rowType === 'group' && (dataSourceAdapter?.isGroupItemCountable(item.data) ?? false));
+  || (item.rowType === 'group'
+    && (asGroupCountableAdapter(dataSourceAdapter)?.isGroupItemCountable(item.data) ?? false));
 
 export const updateItemIndices = (items: ProcessedItem[]): ProcessedItem[] => {
   items.forEach((item, index) => {
