@@ -5468,7 +5468,8 @@ QUnit.module('Column Option', { beforeEach: setupModule, afterEach: teardownModu
         assert.strictEqual(columnsChangedCount, 1);
         assert.deepEqual(lastArgs, {
             changeTypes: { columns: true, length: 1 },
-            optionNames: { all: true, visibleWidth: true, length: 2 }
+            optionNames: { all: true, visibleWidth: true, length: 2 },
+            appliedFilters: [undefined]
         });
     });
 
