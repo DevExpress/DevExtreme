@@ -598,15 +598,16 @@ class DateBox<
   _shouldCommitTextOnFocusOut(): boolean {
     const { text, valueChangeEvent } = this.option();
     const includesChangeEvent = valueChangeEvent?.split(' ').includes('change');
+    const currentText = text ?? '';
 
-    if (!includesChangeEvent || text === this._committedText) {
+    if (!includesChangeEvent || currentText === this._committedText) {
       return false;
     }
 
     const currentValue = this.getDateOption('value');
     const displayedText = this._getDisplayedText(currentValue) ?? '';
 
-    return (text ?? '') !== displayedText;
+    return currentText !== displayedText;
   }
 
   _valueChangeEventHandler(
