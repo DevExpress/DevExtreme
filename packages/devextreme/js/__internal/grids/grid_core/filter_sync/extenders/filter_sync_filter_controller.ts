@@ -1,13 +1,10 @@
 import { isDefined } from '@js/core/utils/type';
-import {
-  getFilterExpression,
-  removeFieldConditionsFromFilter,
-} from '@ts/filter_builder/m_utils';
+import { getFilterExpression } from '@ts/filter_builder/m_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
-import { getColumnIdentifier } from '@ts/grids/grid_core/filter_sync/utils';
+import { excludeColumnFromFilterValue } from '@ts/grids/grid_core/filter_sync/utils';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
@@ -38,14 +35,11 @@ export const filterSyncFilterControllerExtender = (
     }
 
     const filters = [super.getAdditionalFilter(excludedColumn)];
-    let filterValue = this.option('filterValue');
-
-    if (this.isFilterSyncActive() && isDefined(excludedColumn) && filterValue) {
-      filterValue = removeFieldConditionsFromFilter(
-        filterValue,
-        getColumnIdentifier(excludedColumn),
-      );
-    }
+    const filterValue = excludeColumnFromFilterValue(
+      this.option('filterValue'),
+      excludedColumn ?? null,
+      !!this.isFilterSyncActive(),
+    );
 
     const customOperations = this.filterSyncController.getCustomFilterOperations();
     const calculatedFilterValue: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
