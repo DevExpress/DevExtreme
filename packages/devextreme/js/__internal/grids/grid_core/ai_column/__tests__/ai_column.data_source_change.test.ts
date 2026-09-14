@@ -24,12 +24,13 @@ interface RequestResult {
 
 const AI_COLUMN_INDEX = 2;
 
-const initialItems = [
+// A push mutates the array behind the store, so each test gets its own copy.
+const createInitialItems = (): Record<string, number>[] => [
   { id: 1, value: 10 },
   { id: 2, value: 20 },
 ];
 
-const nextItems = [
+const createNextItems = (): Record<string, number>[] => [
   { id: 2, value: 20 },
   { id: 3, value: 30 },
 ];
@@ -77,7 +78,7 @@ describe('Data source replacement', () => {
   }> => {
     const { $container, instance, component } = await createDataGrid({
       ...options,
-      dataSource: initialItems,
+      dataSource: createInitialItems(),
       keyExpr: 'id',
       columns: [
         { dataField: 'id' },
@@ -100,7 +101,7 @@ describe('Data source replacement', () => {
   const replaceDataSource = async (instance: DataGridInstance): Promise<void> => {
     instance.option(
       'dataSource',
-      new DataSource({ store: new ArrayStore({ data: nextItems, key: 'id' }) }),
+      new DataSource({ store: new ArrayStore({ data: createNextItems(), key: 'id' }) }),
     );
     jest.runAllTimers();
     await Promise.resolve();
@@ -153,7 +154,7 @@ describe('Data source replacement', () => {
     await replaceDataSource(instance);
     sendRequestSpy.mockClear();
 
-    // the row survives the replacement, so a stale handler is the only thing that can clear it
+    // the row survives the replacement, so only a stale handler could clear it
     expect(instance.getAIColumnText('myAIColumn', 2)).toEqual('Response with value=20');
 
     replacedStore.push([{
@@ -168,6 +169,27 @@ describe('Data source replacement', () => {
     expect(instance.getAIColumnText('myAIColumn', 2)).toEqual('Response with value=20');
   });
 
+  it('should ignore a row pushed through the store of a removed data source', async () => {
+    const { instance } = await createGridWithAIColumn();
+    const removedStore = instance.getDataSource().store();
+
+    instance.option('dataSource', undefined);
+    jest.runAllTimers();
+    await Promise.resolve();
+
+    expect(instance.getAIColumnText('myAIColumn', 2)).toEqual('Response with value=20');
+
+    removedStore.push([{
+      type: 'update',
+      key: 2,
+      data: { value: 200 },
+    }]);
+    jest.runAllTimers();
+    await Promise.resolve();
+
+    expect(instance.getAIColumnText('myAIColumn', 2)).toEqual('Response with value=20');
+  });
+
   it('should report E1042 when the new store has no key', async () => {
     const onDataErrorOccurred = jest.fn();
     const { instance } = await createGridWithAIColumn({ onDataErrorOccurred });
@@ -176,7 +198,7 @@ describe('Data source replacement', () => {
 
     instance.option(
       'dataSource',
-      new DataSource({ store: new ArrayStore({ data: nextItems }) }),
+      new DataSource({ store: new ArrayStore({ data: createNextItems() }) }),
     );
     jest.runAllTimers();
     await Promise.resolve();
