@@ -1,11 +1,13 @@
 import type { Callback } from '@js/core/utils/callbacks';
 import type { StoreChange } from '@js/data/store';
 import { isDefined } from '@ts/core/utils/m_type';
+import type Store from '@ts/data/abstract_store';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnsController } from '../../columns_controller/m_columns_controller';
 import type { DataController } from '../../data_controller/data_controller';
 import type { DataSourceController } from '../../data_source/data_source_controller';
+import type DataSourceAdapter from '../../data_source_adapter/m_data_source_adapter';
 import type { ChangedEvent, RawItemData } from '../../data_source_adapter/types';
 import { Controller } from '../../m_modules';
 import type { RowKey } from '../../m_types';
@@ -24,6 +26,14 @@ export class AIColumnController extends Controller {
   private aiColumnIntegrationController!: AIColumnIntegrationController;
 
   private dataSourceChangedHandler!: (e?: ChangedEvent) => void;
+
+  private renewSubscriptionsHandler!: () => void;
+
+  // The data source adapter and the store are replaced whenever the data source is rebuilt, so
+  // the objects the handlers were attached to have to be kept to be able to detach from them.
+  private subscribedDataSourceAdapter: DataSourceAdapter | null = null;
+
+  private subscribedStore: Store | null = null;
 
   private storeUpdatedHandler!: (key: RowKey) => void;
 
@@ -75,8 +85,35 @@ export class AIColumnController extends Controller {
   }
 
   private subscribeToDataSourceChanged(): void {
-    this.dataSourceChangedHandler = this.handleDataSourceChanged.bind(this);
-    this.dataSourceController.getAdapter()?.changed.add(this.dataSourceChangedHandler);
+    this.dataSourceChangedHandler = this.dataSourceChangedHandler
+      ?? this.handleDataSourceChanged.bind(this);
+
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+
+    if (dataSourceAdapter === this.subscribedDataSourceAdapter) {
+      return;
+    }
+
+    this.unsubscribeFromDataSourceChanged();
+
+    dataSourceAdapter?.changed.add(this.dataSourceChangedHandler);
+    this.subscribedDataSourceAdapter = dataSourceAdapter;
+  }
+
+  private unsubscribeFromDataSourceChanged(): void {
+    if (!this.dataSourceChangedHandler) {
+      return;
+    }
+
+    this.subscribedDataSourceAdapter?.changed.remove(this.dataSourceChangedHandler);
+    this.subscribedDataSourceAdapter = null;
+  }
+
+  private renewDataSourceSubscriptions(): void {
+    this.subscribeToDataSourceChanged();
+
+    this.unsubscribeFromStoreEvents();
+    this.subscribeToStoreEvents();
   }
 
   private unsubscribeFromDataControllerChanged(): void {
@@ -105,7 +142,7 @@ export class AIColumnController extends Controller {
   }
 
   private unsubscribeFromStoreEvents(): void {
-    const store = this.dataSourceController.store();
+    const store = this.subscribedStore;
 
     if (this.storeUpdatedHandler) {
       store?.off('updated', this.storeUpdatedHandler);
@@ -116,6 +153,8 @@ export class AIColumnController extends Controller {
     if (this.storeBeforePushHandler) {
       store?.off('beforePush', this.storeBeforePushHandler);
     }
+
+    this.subscribedStore = null;
   }
 
   private subscribeToStoreEvents(): void {
@@ -133,6 +172,8 @@ export class AIColumnController extends Controller {
     store.on('updated', this.storeUpdatedHandler);
     store.on('removed', this.storeRemovedHandler);
     store.on('beforePush', this.storeBeforePushHandler);
+
+    this.subscribedStore = store;
   }
 
   private handleStoreUpdated(key: RowKey): void {
@@ -215,10 +256,10 @@ export class AIColumnController extends Controller {
     this.aiColumnOptionChangedHandler = this.aiColumnOptionChanged.bind(this);
     this.columnsController.aiColumnOptionChanged.add(this.aiColumnOptionChangedHandler);
 
-    this.subscribeToDataSourceChanged();
+    this.renewSubscriptionsHandler = this.renewDataSourceSubscriptions.bind(this);
+    this.dataController.dataSourceChanged.add(this.renewSubscriptionsHandler);
 
-    this.unsubscribeFromStoreEvents();
-    this.subscribeToStoreEvents();
+    this.renewDataSourceSubscriptions();
 
     this.unsubscribeFromDataControllerChanged();
     this.subscribeToDataControllerChanged();
@@ -330,7 +371,8 @@ export class AIColumnController extends Controller {
 
   public dispose(): void {
     super.dispose();
-    this.dataSourceController.getAdapter()?.changed.remove(this.dataSourceChangedHandler);
+    this.dataController.dataSourceChanged.remove(this.renewSubscriptionsHandler);
+    this.unsubscribeFromDataSourceChanged();
     this.unsubscribeFromStoreEvents();
     this.unsubscribeFromDataControllerChanged();
   }
