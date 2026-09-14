@@ -57,6 +57,22 @@ describe('dataSource module registration', () => {
       .toBe(instance.getController('dataSource').keyOf(DATA[1]));
   });
 
+  it('owns the totalCount widget method', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+
+    expect(instance.totalCount()).toBe(DATA.length);
+    expect(instance.totalCount())
+      .toBe(instance.getController('dataSource').totalCount());
+  });
+
+  it('owns the pageCount widget method', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA, paging: { pageSize: 1 } });
+
+    expect(instance.pageCount()).toBe(DATA.length);
+    expect(instance.pageCount())
+      .toBe(instance.getController('dataSource').pageCount());
+  });
+
   it('sits at the bottom of the controller order', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
 

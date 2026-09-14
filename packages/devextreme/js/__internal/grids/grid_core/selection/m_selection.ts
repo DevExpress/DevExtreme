@@ -263,7 +263,7 @@ export class SelectionController extends modules.Controller {
       filter() {
         return dataController.getCombinedFilter(deferred);
       },
-      totalCount: () => dataController.totalCount(),
+      totalCount: () => dataSourceController.totalCount(),
       getLoadOptions(loadItemIndex, focusedItemIndex, shiftItemIndex) {
         const { sort, filter } = dataSourceController.lastLoadOptions();
         let minIndex = Math.min(loadItemIndex, focusedItemIndex);

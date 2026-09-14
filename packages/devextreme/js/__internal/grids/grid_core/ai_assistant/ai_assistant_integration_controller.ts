@@ -57,7 +57,7 @@ export class AIAssistantIntegrationController extends Controller {
       paging: {
         pageIndex: this.dataController.pageIndex(),
         pageSize: this.dataController.pageSize(),
-        totalCount: this.dataController.totalCount(),
+        totalCount: this.dataSourceController.totalCount(),
         visibleRowCount: this.dataController
           .getVisibleRows()
           .filter((row) => row.rowType === 'data')

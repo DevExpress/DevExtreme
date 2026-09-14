@@ -1004,7 +1004,7 @@ export class RowsView extends ColumnsView {
     const contentElement = this._findContentElement();
     const freeSpaceRowElements = this._getFreeSpaceRowElements($table);
 
-    if (freeSpaceRowElements && contentElement && dataController.totalCount() >= 0) {
+    if (freeSpaceRowElements && contentElement && this.dataSourceController.totalCount() >= 0) {
       let isFreeSpaceRowVisible = false;
 
       if (itemCount > 0) {
@@ -1012,7 +1012,7 @@ export class RowsView extends ColumnsView {
           const freeSpaceRowCount = dataController.pageSize() - itemCount;
           const scrollingMode = this.option('scrolling.mode');
 
-          if (freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
+          if (freeSpaceRowCount > 0 && this.dataSourceController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
             setHeight(freeSpaceRowElements, freeSpaceRowCount * this._rowHeight);
             isFreeSpaceRowVisible = true;
           }

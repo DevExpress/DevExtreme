@@ -38,7 +38,7 @@ export class DataSourceController<
   }
 
   public publicMethods(): string[] {
-    return ['getDataSource', 'keyOf'];
+    return ['getDataSource', 'keyOf', 'pageCount', 'totalCount'];
   }
 
   /**
@@ -171,5 +171,21 @@ export class DataSourceController<
 
   public getCachedStoreData(): RawItemData[] | undefined {
     return this.adapter?.getCachedStoreData();
+  }
+
+  public hasKnownLastPage(): boolean {
+    return this.adapter ? this.adapter.hasKnownLastPage() : true;
+  }
+
+  public totalItemsCount(): number {
+    return this.adapter ? this.adapter.totalItemsCount() : 0;
+  }
+
+  public totalCount(): number {
+    return this.adapter ? this.adapter.totalCount() : 0;
+  }
+
+  public pageCount(): number {
+    return this.adapter ? this.adapter.pageCount() : 1;
   }
 }

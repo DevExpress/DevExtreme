@@ -486,7 +486,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 4, 'totalItemsCount');
+        assert.equal(this.dataSourceController.totalItemsCount(), 4, 'totalItemsCount');
         const items = this.dataController.items();
         assert.equal(items.length, 3, 'count items');
 
@@ -517,7 +517,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 5, 'totalItemsCount');
+        assert.equal(this.dataSourceController.totalItemsCount(), 5, 'totalItemsCount');
         assert.equal(this.getVisibleRows().length, 2, 'row count');
         assert.strictEqual(this.getVisibleRows()[0].node, this.getNodeByKey(1), 'first node instance is correct');
     });
@@ -545,7 +545,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.expandRow(2);
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 5, 'totalItemsCount');
+        assert.equal(this.dataSourceController.totalItemsCount(), 5, 'totalItemsCount');
         const items = this.dataController.items();
         assert.equal(items.length, 3, 'count items');
 
@@ -568,8 +568,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.load();
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 1, 'count visible items');
-        assert.equal(this.dataController.totalCount(), 3, 'count all items');
+        assert.equal(this.dataSourceController.totalItemsCount(), 1, 'count visible items');
+        assert.equal(this.dataSourceController.totalCount(), 3, 'count all items');
     });
 
     QUnit.test('Getting key when there are keyExpr and store hasn\'t key', function(assert) {
