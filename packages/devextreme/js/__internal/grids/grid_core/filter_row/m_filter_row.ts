@@ -6,7 +6,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
+import { map } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Menu from '@js/ui/menu';
@@ -27,6 +27,8 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
+
+import { createFilterRowExpressions } from './utils';
 
 const OPERATION_ICONS = {
   '=': 'filter-operation-equals',
@@ -828,16 +830,11 @@ const filterController = (
       return super.getAdditionalFilter(excludedColumn);
     }
 
-    const filters = [super.getAdditionalFilter(excludedColumn)];
-    const columns = this.columnsController.getVisibleColumns(null, true);
-
-    each(columns, function () {
-      const shouldSkip = excludedColumn?.index === this.index;
-      if (this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue) && !shouldSkip) {
-        const filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
-        filters.push(filter);
-      }
-    });
+    const columns: Column[] = this.columnsController.getVisibleColumns(null, true);
+    const filters = [
+      super.getAdditionalFilter(excludedColumn),
+      ...createFilterRowExpressions(columns, excludedColumn ?? null),
+    ];
 
     return gridCoreUtils.combineFilters(filters);
   }
