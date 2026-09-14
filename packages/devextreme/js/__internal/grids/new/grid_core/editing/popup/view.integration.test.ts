@@ -41,7 +41,7 @@ const getEditorValues = (): string[] => [
   ...document.querySelectorAll<HTMLInputElement>(SELECTORS.editorInput),
 ].map((input) => input.value);
 
-describe('edit popup form', () => {
+describe('(T1335190) edit popup form', () => {
   afterEach(() => {
     cardView?.dispose();
     cardView = null;
