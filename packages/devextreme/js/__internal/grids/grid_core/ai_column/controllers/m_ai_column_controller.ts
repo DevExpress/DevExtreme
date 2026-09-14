@@ -24,10 +24,10 @@ export class AIColumnController extends Controller {
 
   private dataSourceChangedHandler!: (e?: ChangedEvent) => void;
 
-  private renewSubscriptionsHandler!: () => void;
+  private adapterChangedHandler!: () => void;
 
-  // The data source adapter and the store are replaced whenever the data source is rebuilt, so
-  // the objects the handlers were attached to have to be kept to be able to detach from them.
+  private dataSourceReadyHandler!: () => void;
+
   private subscribedDataSourceAdapter: DataSourceAdapter | null = null;
 
   private subscribedStore: Store | null = null;
@@ -106,8 +106,10 @@ export class AIColumnController extends Controller {
     this.subscribedDataSourceAdapter = null;
   }
 
-  private renewDataSourceSubscriptions(): void {
-    this.subscribeToDataSourceChanged();
+  // The adapter handler is not attached here: it would run ahead of the data controller's own,
+  // leaving `sendRequests` on the previous rows. `dataSourceChanged` attaches it instead.
+  private handleAdapterChanged(): void {
+    this.unsubscribeFromDataSourceChanged();
 
     this.unsubscribeFromStoreEvents();
     this.subscribeToStoreEvents();
@@ -252,10 +254,17 @@ export class AIColumnController extends Controller {
     this.aiColumnOptionChangedHandler = this.aiColumnOptionChanged.bind(this);
     this.columnsController.aiColumnOptionChanged.add(this.aiColumnOptionChangedHandler);
 
-    this.renewSubscriptionsHandler = this.renewDataSourceSubscriptions.bind(this);
-    this.dataController.dataSourceChanged.add(this.renewSubscriptionsHandler);
+    this.adapterChangedHandler = this.handleAdapterChanged.bind(this);
+    this.dataController.adapterChanged.add(this.adapterChangedHandler);
 
-    this.renewDataSourceSubscriptions();
+    // Fires inside the adapter's `changed` pass, so a handler attached there still runs for it.
+    this.dataSourceReadyHandler = this.subscribeToDataSourceChanged.bind(this);
+    this.dataController.dataSourceChanged.add(this.dataSourceReadyHandler);
+
+    this.subscribeToDataSourceChanged();
+
+    this.unsubscribeFromStoreEvents();
+    this.subscribeToStoreEvents();
 
     this.unsubscribeFromDataControllerChanged();
     this.subscribeToDataControllerChanged();
@@ -367,7 +376,8 @@ export class AIColumnController extends Controller {
 
   public dispose(): void {
     super.dispose();
-    this.dataController.dataSourceChanged.remove(this.renewSubscriptionsHandler);
+    this.dataController.adapterChanged.remove(this.adapterChangedHandler);
+    this.dataController.dataSourceChanged.remove(this.dataSourceReadyHandler);
     this.unsubscribeFromDataSourceChanged();
     this.unsubscribeFromStoreEvents();
     this.unsubscribeFromDataControllerChanged();
