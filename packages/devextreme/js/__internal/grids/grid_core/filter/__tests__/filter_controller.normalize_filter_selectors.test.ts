@@ -15,7 +15,7 @@ import {
   createDataGrid,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import type { ColumnSelector } from '@ts/grids/grid_core/columns_controller/types';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 
 const DATA = [
   { id: 1, name: 'Alex', age: 15 },
