@@ -9,11 +9,15 @@ export class TextEditorModel extends BaseModel {
     return this.root.querySelector(`.${CLASSES.input}`) as HTMLInputElement;
   }
 
-  public clearInput(): void {
+  public setInputText(text: string): void {
     const input = this.getInputElement();
 
-    input.value = '';
+    input.value = text;
     input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  public clearInput(): void {
+    this.setInputText('');
   }
 
   public pressKey(key: string): void {

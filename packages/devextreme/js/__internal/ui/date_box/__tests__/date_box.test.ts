@@ -60,6 +60,21 @@ describe('DateBox commits the input text on focus out when the browser fires no 
     expect(dateBox.getInstance().option('value')).toBeNull();
   });
 
+  it('commits the original date typed back after a calendar pick (T1334896)', () => {
+    const initialValue = new Date(2026, 8, 1);
+    const dateBox = createDateBox({ value: initialValue });
+    const initialText = dateBox.getInputElement().value;
+
+    dateBox.open();
+    dateBox.getCalendarCells()[10].click();
+    expect(dateBox.getInstance().option('value')).not.toEqual(initialValue);
+
+    dateBox.setInputText(initialText);
+    dateBox.blurInput();
+
+    expect(dateBox.getInstance().option('value')).toEqual(initialValue);
+  });
+
   it('commits the text once when the browser does fire the change event (T1334896)', () => {
     const onValueChanged = jest.fn();
     const dateBox = createDateBox({ onValueChanged });
