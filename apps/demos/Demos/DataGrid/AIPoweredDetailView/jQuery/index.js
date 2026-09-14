@@ -88,8 +88,17 @@ $(() => {
     }
   }
 
-  function createInputArea(rowData) {
-    const $promptEditor = $('<div>').dxTextBox({
+  function createSubmitButton() {
+    return $('<div>').dxButton({
+      icon: 'sparkle',
+      text: 'Submit',
+      type: 'default',
+      disabled: true,
+    }).dxButton('instance');
+  }
+
+  function createPromptEditor(submitButton) {
+    return $('<div>').dxTextBox({
       placeholder: 'Ask AI Assistant...',
       stylingMode: 'filled',
       valueChangeEvent: 'input',
@@ -97,10 +106,11 @@ $(() => {
         submitButton.option('disabled', !value);
       },
       elementAttr: { class: 'prompt-editor' },
-    });
-    const promptEditor = $promptEditor.dxTextBox('instance');
+    }).dxTextBox('instance');
+  }
 
-    const $suggestions = $('<div>').dxButtonGroup({
+  function createSuggestions(promptEditor) {
+    return $('<div>').dxButtonGroup({
       items: [
         { type: 'default', text: '✨ Summary', prompt: 'Display general information about this vehicle and its features.' },
         { type: 'default', text: '⚡ Ideal Buyer', prompt: 'Describe who this vehicle appeals to the most in a sentence.' },
@@ -111,28 +121,24 @@ $(() => {
       elementAttr: { class: 'dx-chat-suggestions' },
       onItemClick(e) {
         const suggestion = e.itemData;
-        const promptEditor = $promptEditor.dxTextBox('instance');
         promptEditor.option('value', suggestion.prompt);
       },
-    });
-    const suggestions = $suggestions.dxButtonGroup('instance');
+    }).dxButtonGroup('instance');
+  }
 
-    const $submitButton = $('<div>').dxButton({
-      icon: 'sparkle',
-      text: 'Submit',
-      type: 'default',
-      disabled: true,
-    });
-    const submitButton = $submitButton.dxButton('instance');
+  function createInputArea(rowData) {
+    const submitButton = createSubmitButton();
+    const promptEditor = createPromptEditor(submitButton);
+    const suggestions = createSuggestions(promptEditor);
 
     const $inputArea = $('<div>')
       .addClass('input-container')
       .append(
-        $('<div>').addClass('prompt-container').append($promptEditor, $suggestions),
-        $('<div>').addClass('submit-container').append($submitButton),
+        $('<div>').addClass('prompt-container').append(promptEditor.element(), suggestions.element()),
+        $('<div>').addClass('submit-container').append(submitButton.element()),
       );
 
-    return { $inputArea, promptEditor, suggestions, submitButton };
+    return { $inputArea, submitButton, promptEditor, suggestions };
   }
 
   function getOutputAreaMinHeight() {
@@ -152,8 +158,8 @@ $(() => {
     return 196;
   }
 
-  function createOutputArea() {
-    const $responseEditor = $('<div>').dxTextArea({
+  function createResponseEditor() {
+    return $('<div>').dxTextArea({
       autoResizeEnabled: true,
       width: '100%',
       minHeight: getOutputAreaMinHeight(),
@@ -165,34 +171,45 @@ $(() => {
       focusStateEnabled: false,
       elementAttr: { class: 'response-editor' },
       inputAttr: { 'aria-label': 'AI Response' },
-    });
-    const responseEditor = $responseEditor.dxTextArea('instance');
+    }).dxTextArea('instance');
+  }
 
-    const $loadPanel = $('<div>').dxLoadPanel({
+  function createLoadPanel() {
+    return $('<div>').dxLoadPanel({
       container: '.output-container',
       position: { of: '.output-container' },
       showPane: false,
       shading: true,
       message: '',
       visible: false,
-    });
-    const loadPanel = $loadPanel.dxLoadPanel('instance');
+    }).dxLoadPanel('instance');
+  }
 
-    const $emptyMessage = $('<div>')
+  function createEmptyMessage() {
+    return $('<div>')
       .addClass('output-initial-message')
       .text('AI Assistant is ready to answer your questions about this record.');
+  }
 
-    const $errorMessage = $('<div>')
+  function createErrorMessage() {
+    return $('<div>')
       .addClass('output-error-message')
       .append(
         $('<span>').addClass('dx-icon-warning'),
         'An unexpected error occurred. Please try again.',
       )
       .hide();
+  }
+
+  function createOutputArea() {
+    const responseEditor = createResponseEditor();
+    const loadPanel = createLoadPanel();
+    const $emptyMessage = createEmptyMessage();
+    const $errorMessage = createErrorMessage();
 
     const $outputArea = $('<div>')
       .addClass('output-container')
-      .append($loadPanel, $responseEditor, $emptyMessage, $errorMessage);
+      .append(loadPanel.element(), responseEditor.element(), $emptyMessage, $errorMessage);
 
     return { $outputArea, responseEditor, loadPanel, $emptyMessage, $errorMessage };
   }
