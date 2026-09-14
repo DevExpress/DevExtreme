@@ -95,14 +95,14 @@ export const virtualScrollingDataControllerExtender = (
     return baseResult;
   }
 
-  protected _loadDataSource(): DeferredObj<unknown> {
+  protected loadDataSourceAdapter(): DeferredObj<unknown> {
     if (this._rowsScrollController && isVirtualPaging(this)) {
       const { loadPageCount } = isDefined(this._loadViewportParams) ? this.getLoadPageParams() : { loadPageCount: 0 };
 
       loadPageCount >= 1 && this.dataSourceController.getAdapter()?.loadPageCount(loadPageCount);
     }
 
-    return super._loadDataSource.apply(this, arguments as any);
+    return super.loadDataSourceAdapter.apply(this, arguments as any);
   }
 
   private getRowPageSize() {

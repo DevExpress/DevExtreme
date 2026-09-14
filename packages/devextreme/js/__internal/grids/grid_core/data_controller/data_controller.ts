@@ -174,7 +174,6 @@ export class DataController extends modules.Controller {
 
   public publicMethods(): string[] {
     return [
-      '_disposeDataSource',
       'beginCustomLoading',
       'byKey',
       'clearFilter',
@@ -624,16 +623,16 @@ export class DataController extends modules.Controller {
    * @extended: state_storing, virtual_scrolling
    */
   protected resetDataSource(): DeferredObj<unknown> | undefined {
-    this._initDataSource();
-    this._loadDataSource();
+    this.rebuildDataSource();
+    this.loadDataSourceAdapter();
 
     return undefined;
   }
 
-  protected _initDataSource(): void {
-    const hadDataSource = this.dataSourceController.hasAdapter();
+  protected rebuildDataSource(): void {
+    const hadDataSourceAdapter = this.dataSourceController.hasAdapter();
 
-    this._disposeDataSource();
+    this.disposeDataSourceAdapter();
 
     const dataSource = this.dataSourceController.createDataSource();
     this._useSortingGroupingFromColumns = true;
@@ -643,8 +642,8 @@ export class DataController extends modules.Controller {
       const { isPageIndexChanged } = this.applyPagingOptions(dataSource);
 
       this._isPaging = isPageIndexChanged;
-      this.setDataSource(dataSource);
-    } else if (hadDataSource) {
+      this.initDataSourceAdapter(dataSource);
+    } else if (hadDataSourceAdapter) {
       this.updateItems();
     }
   }
@@ -652,7 +651,7 @@ export class DataController extends modules.Controller {
   /**
    * @extended: selection, virtual_scrolling
    */
-  protected _loadDataSource(): DeferredObj<unknown> {
+  protected loadDataSourceAdapter(): DeferredObj<unknown> {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
     const result: DeferredObj<unknown> = Deferred();
 
@@ -1288,7 +1287,7 @@ export class DataController extends modules.Controller {
     this.dataSourceChanged.fire();
   };
 
-  private subscribeToDataSource(dataSourceAdapter: DataSourceAdapter): void {
+  private subscribeToDataSourceAdapter(dataSourceAdapter: DataSourceAdapter): void {
     dataSourceAdapter.changed.add(this.dataChangedHandlerProxy);
     dataSourceAdapter.loadingChanged.add(this.loadingChangedHandler);
     dataSourceAdapter.loadError.add(this.loadErrorHandlerProxy);
@@ -1296,7 +1295,7 @@ export class DataController extends modules.Controller {
     dataSourceAdapter.changing.add(this.changingHandler);
   }
 
-  private unsubscribeFromDataSource(dataSourceAdapter: DataSourceAdapter): void {
+  private unsubscribeFromDataSourceAdapter(dataSourceAdapter: DataSourceAdapter): void {
     dataSourceAdapter.changed.remove(this.dataChangedHandlerProxy);
     dataSourceAdapter.loadingChanged.remove(this.loadingChangedHandler);
     dataSourceAdapter.loadError.remove(this.loadErrorHandlerProxy);
@@ -1304,7 +1303,7 @@ export class DataController extends modules.Controller {
     dataSourceAdapter.changing.remove(this.changingHandler);
   }
 
-  private setDataSource(dataSource: DataSource): void {
+  private initDataSourceAdapter(dataSource: DataSource): void {
     const dataSourceAdapter = this.dataSourceController.createAdapter(dataSource);
 
     this._isLoading = !dataSourceAdapter.isLoaded();
@@ -1312,7 +1311,7 @@ export class DataController extends modules.Controller {
     this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
 
     this.changed.add(this.fireDataSourceChanged);
-    this.subscribeToDataSource(dataSourceAdapter);
+    this.subscribeToDataSourceAdapter(dataSourceAdapter);
   }
 
   /**
@@ -1543,20 +1542,20 @@ export class DataController extends modules.Controller {
     return this.items();
   }
 
-  protected _disposeDataSource(): void {
-    const oldDataSource = this.dataSourceController.getAdapter();
+  protected disposeDataSourceAdapter(): void {
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-    if (oldDataSource) {
+    if (dataSourceAdapter) {
       // Before unsubscribing: cancelling in-flight loads still notifies this controller.
-      oldDataSource.cancelAll();
-      this.unsubscribeFromDataSource(oldDataSource);
+      dataSourceAdapter.cancelAll();
+      this.unsubscribeFromDataSourceAdapter(dataSourceAdapter);
     }
 
     this.dataSourceController.disposeAdapter();
   }
 
   public dispose(): void {
-    this._disposeDataSource();
+    this.disposeDataSourceAdapter();
     super.dispose();
   }
 
