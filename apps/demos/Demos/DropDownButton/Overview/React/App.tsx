@@ -20,13 +20,13 @@ import 'whatwg-fetch';
 
 const buttonDropDownOptions = { width: 230 };
 
-const ItemTemplateRender: React.FC<{ size: number; text: string }> = (item) => {
-  const style = React.useMemo(() => ({ fontSize: `${item.size}px` }), [item.size]);
+const getItemTemplateStyle = (item: { size: number }) => ({ fontSize: `${item.size}px` });
 
-  return <div style={style}>
+const ItemTemplateRender: React.FC<{ size: number; text: string }> = (item) => (
+  <div style={getItemTemplateStyle(item)}>
     {item.text}
-  </div>;
-};
+  </div>
+);
 const App = () => {
   const [alignment, setAlignment] = useState<TextAlign>('left');
   const [color, setColor] = useState<string | null>(null);

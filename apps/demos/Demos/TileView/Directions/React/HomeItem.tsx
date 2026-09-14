@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react';
+import React from 'react';
+
+const getImageStyle = (data: { ImageSrc: string; }) => ({ backgroundImage: `url(${data.ImageSrc})` });
 
 export default function RenderHomeItem(data: { ImageSrc: string; }) {
-  const style = useMemo(() => ({ backgroundImage: `url(${data.ImageSrc})` }), [data.ImageSrc]);
-
   return (
     <div
       className="tile-image"
-      style={style}
+      style={getImageStyle(data)}
     />
   );
 }
