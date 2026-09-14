@@ -15,21 +15,34 @@ $typography-heading-6-font-size: null !default;
 
 /*
  * The xl/l/m/s/xs classes are raw size utilities (.dx-font-*), not text roles —
- * they intentionally stay on the base scale. Headings map to semantic headline
- * roles where a role with the exact legacy value exists (see TOKENS_MIGRATION.md).
+ * they intentionally stay on the base scale, so "this value has no role" is the intent here and
+ * not a finding. The one real oddity is xl: the base font-size scale has no 34px at all, so that
+ * utility alone reads a spacing step (see the marker on it).
+ *
+ * The headings are a role ladder end to end, decided with design on 10.09.2026. The ramp
+ * fluent-next inherited from fluent (40/36/32/26/22/22, compact 32/28/24/20/16/16) had four
+ * values with no role at all, so it was replaced rather than adjusted: the package ladder is
+ * 40 / 32 / 28 / 24 / 20 / 16 / 14, and each branch takes six consecutive rungs, compact one
+ * rung below default. That also fixes the relation between the branches - it used to be
+ * -8/-8/-8/-6/-6/-6, which is not a step in any scale.
+ *
+ * h5 lost its strong weight in the same decision: with the ramp regular, h5 already differs
+ * from h6 by size, so the extra emphasis had nothing left to say. That is what forces
+ * compact h6 down to title-xs - at title-sm it would have become h5's twin in both size and
+ * weight, and two heading levels would render identically.
  */
 @if $size == "default" {
-  $typography-xl-font-size: ds.$spacing-340 !default;
+  $typography-xl-font-size: ds.$spacing-340 !default; // dx-foreign-scale: 34px, the font-size scale jumps 32 -> 36, so this one utility had to borrow from spacing
   $typography-l-font-size: ds.$font-size-280 !default;
   $typography-m-font-size: ds.$font-size-200 !default;
   $typography-s-font-size: ds.$font-size-180 !default;
 
   $typography-heading-1-font-size: ds.$font-size-headline-xl !default;
-  $typography-heading-2-font-size: ds.$font-size-360 !default; // dx-no-semantic-role: 360 is off the font-size-role scale
-  $typography-heading-3-font-size: ds.$font-size-headline-lg !default;
-  $typography-heading-4-font-size: ds.$font-size-260 !default; // dx-no-semantic-role: 260 is off the font-size-role scale
-  $typography-heading-5-font-size: ds.$font-size-220 !default; // dx-no-semantic-role: 220 is off the font-size-role scale
-  $typography-heading-6-font-size: ds.$font-size-220 !default; // dx-no-semantic-role: 220 is off the font-size-role scale
+  $typography-heading-2-font-size: ds.$font-size-headline-lg !default;
+  $typography-heading-3-font-size: ds.$font-size-headline-md !default;
+  $typography-heading-4-font-size: ds.$font-size-headline-sm !default;
+  $typography-heading-5-font-size: ds.$font-size-title-md !default;
+  $typography-heading-6-font-size: ds.$font-size-title-sm !default;
 }
 
 @else if $size == "compact" {
@@ -39,11 +52,11 @@ $typography-heading-6-font-size: null !default;
   $typography-s-font-size: ds.$font-size-140 !default;
 
   $typography-heading-1-font-size: ds.$font-size-headline-lg !default;
-  $typography-heading-2-font-size: ds.$font-size-280 !default; // dx-no-semantic-role: default branch (360) is off the role scale
+  $typography-heading-2-font-size: ds.$font-size-headline-md !default;
   $typography-heading-3-font-size: ds.$font-size-headline-sm !default;
-  $typography-heading-4-font-size: ds.$font-size-200 !default; // dx-no-semantic-role: default branch (260) is off the role scale
-  $typography-heading-5-font-size: ds.$font-size-160 !default; // dx-no-semantic-role: default branch (220) is off the role scale
-  $typography-heading-6-font-size: ds.$font-size-160 !default; // dx-no-semantic-role: default branch (220) is off the role scale
+  $typography-heading-4-font-size: ds.$font-size-title-md !default;
+  $typography-heading-5-font-size: ds.$font-size-title-sm !default;
+  $typography-heading-6-font-size: ds.$font-size-title-xs !default;
 }
 
 :root {
@@ -65,5 +78,5 @@ $typography-heading-1-font-weight: ds.$font-weight-headline-default !default;
 $typography-heading-2-font-weight: ds.$font-weight-headline-default !default;
 $typography-heading-3-font-weight: ds.$font-weight-headline-default !default;
 $typography-heading-4-font-weight: ds.$font-weight-headline-default !default;
-$typography-heading-5-font-weight: ds.$font-weight-headline-strong !default;
-$typography-heading-6-font-weight: ds.$font-weight-500 !default; // dx-no-semantic-role: 500 is off the weight-role scale (400/600/700)
+$typography-heading-5-font-weight: ds.$font-weight-headline-default !default;
+$typography-heading-6-font-weight: ds.$font-weight-headline-default !default;

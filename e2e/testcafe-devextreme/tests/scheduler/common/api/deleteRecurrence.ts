@@ -1,6 +1,7 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { getThemeName } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Scheduler API - deleteRecurrence`
   .page(url(__dirname, '../../../container.html'));
@@ -63,19 +64,23 @@ test('should exclude from recurrence if mode is "occurrence"', async (t) => {
     .expect(scheduler.getAppointmentCount())
     .eql(2);
 
+  // fluent-next narrowed the left column by 1px (65 -> 64) and raised the header by 2px
+  // (46 -> 48); the other themes were not touched
+  const isFluentNext = getThemeName() === 'fluent-next';
+
   const rect0 = await appointment0.element.boundingClientRect;
   await t
     .expect(rect0.left)
-    .within(318, 319)
+    .within(isFluentNext ? 317 : 318, isFluentNext ? 318 : 319)
     .expect(rect0.top)
-    .within(140, 141);
+    .within(isFluentNext ? 142 : 140, isFluentNext ? 143 : 141);
 
   const rect1 = await appointment1.element.boundingClientRect;
   await t
     .expect(rect1.left)
     .within(562, 563)
     .expect(rect1.top)
-    .within(140, 141);
+    .within(isFluentNext ? 142 : 140, isFluentNext ? 143 : 141);
 }).before(async () => createWidget(
   'dxScheduler',
   {

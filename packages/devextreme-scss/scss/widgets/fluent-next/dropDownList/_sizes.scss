@@ -1,4 +1,4 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 // Base-layer sizing injected with design tokens (wave B2)
-$drop-down-list-min-height: 35px !default; // dx-offscale: 35px
+$drop-down-list-min-height: ds.$spacing-360 !default;
