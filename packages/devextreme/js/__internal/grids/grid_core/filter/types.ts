@@ -1,6 +1,11 @@
+import type { LangParams } from '@js/common/data';
 import type { SearchOperation } from '@js/common/data.types';
 import type { ScalarFilterValue } from '@js/common/grids';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { Controllers } from '@ts/grids/grid_core/m_types';
+
+import type { SOURCE_ORDER } from './const';
 
 export type FilterCombiner = 'and' | 'or';
 
@@ -47,3 +52,16 @@ export type FilterValueExpression = FilterValueCondition
   | [FilterValueExpression, ...(FilterCombiner | FilterValueExpression)[]];
 
 export type FilterValue = FilterValueExpression | null | undefined;
+
+export interface FilterSourceContext {
+  readonly langParams: LangParams | undefined;
+  readonly excludedColumn: Column | null;
+  readonly filterSyncActive: boolean;
+  readonly columnsController: Controllers['columns'];
+}
+
+export interface FilterSource {
+  getFilterExpressions: (context: FilterSourceContext) => DataFilter[];
+}
+
+export type FilterSourceName = typeof SOURCE_ORDER[number];

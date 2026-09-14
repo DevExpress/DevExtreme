@@ -2,8 +2,10 @@ import { isDefined } from '@js/core/utils/type';
 import type { CustomOperation } from '@js/ui/filter_builder';
 import {
   addItem,
+  getFilterExpression,
   getMatchedConditions,
   getNormalizedFilter,
+  removeFieldConditionsFromFilter,
 } from '@ts/filter_builder/m_utils';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type {
@@ -11,7 +13,9 @@ import type {
 } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
-import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/filter/types';
+import type {
+  DataFilter, FilterSource, FilterSourceContext, FilterValue, FilterValueCondition,
+} from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 
 import { anyOf, noneOf } from './m_filter_custom_operations';
@@ -26,7 +30,7 @@ import {
   getHeaderFilterFromCondition,
 } from './utils';
 
-export class FilterSyncController extends modules.Controller {
+export class FilterSyncController extends modules.Controller implements FilterSource {
   private skipSyncColumnOptions = false;
 
   private dataController!: DataController;
@@ -58,12 +62,33 @@ export class FilterSyncController extends modules.Controller {
   }
 
   public withColumnOptionsSync<T>(sync: () => T): T {
+    const wasSyncing = this.skipSyncColumnOptions;
+
     this.skipSyncColumnOptions = true;
     try {
-      return sync();
+      return this.filterController.suspendColumnSources(sync);
     } finally {
-      this.skipSyncColumnOptions = false;
+      this.skipSyncColumnOptions = wasSyncing;
     }
+  }
+
+  public getFilterExpressions(
+    {
+      excludedColumn,
+      columnsController,
+      filterSyncActive,
+    }: FilterSourceContext,
+  ): DataFilter[] {
+    const currentFilterValue = this.option('filterValue');
+    const shouldExcludeColumn = filterSyncActive && isDefined(excludedColumn);
+    const filterValue = shouldExcludeColumn
+      ? removeFieldConditionsFromFilter(currentFilterValue, getColumnIdentifier(excludedColumn))
+      : currentFilterValue;
+    const columns = columnsController.getFilteringColumns();
+    const customOperations = this.getCustomFilterOperations();
+    const filterExpression: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
+
+    return filterExpression ? [filterExpression] : [];
   }
 
   public syncFilterValue(): void {

@@ -14,12 +14,11 @@ import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import filterUtils from '@js/ui/shared/filtering';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
-import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
-import type { DataFilter } from '@ts/grids/grid_core/filter/types';
-import { combineFilters } from '@ts/grids/grid_core/filter/utils';
+import type {
+  DataFilter, FilterSource, FilterSourceContext,
+} from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -119,7 +118,7 @@ export const getFormatOptions = function (value, column, currentLevel) {
   return result;
 };
 
-export class HeaderFilterController extends Modules.ViewController {
+export class HeaderFilterController extends Modules.ViewController implements FilterSource {
   private _columnsController!: ColumnsController;
 
   private _dataController!: DataController;
@@ -133,6 +132,15 @@ export class HeaderFilterController extends Modules.ViewController {
     this._dataController = this.getController('data');
     this.dataSourceController = this.getController('dataSource');
     this._headerFilterView = this.getView('headerFilterView');
+  }
+
+  public getFilterExpressions({
+    excludedColumn,
+    columnsController,
+  }: FilterSourceContext): DataFilter[] {
+    const columns = columnsController.getVisibleColumns(null, true);
+
+    return createHeaderFilterExpressions(columns, excludedColumn);
   }
 
   private _updateSelectedState(items, column) {
@@ -493,28 +501,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelHeaderFi
   }
 };
 
-const filterController = (
-  Base: ModuleType<FilterController>,
-) => class FilterControllerHeaderFilterExtender extends Base {
-  private skipCalculateColumnFilters() {
-    return false;
-  }
-
-  public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
-    if (this.skipCalculateColumnFilters()) {
-      return super.getAdditionalFilter(excludedColumn);
-    }
-
-    const columns: Column[] = this.columnsController.getVisibleColumns(null, true);
-    const filters = [
-      super.getAdditionalFilter(excludedColumn),
-      ...createHeaderFilterExpressions(columns, excludedColumn ?? null),
-    ];
-
-    return combineFilters(filters);
-  }
-};
-
 export const headerFilterModule = {
   defaultOptions() {
     return {
@@ -546,9 +532,6 @@ export const headerFilterModule = {
     headerFilterView: HeaderFilterView,
   },
   extenders: {
-    controllers: {
-      filter: filterController,
-    },
     views: {
       columnHeadersView,
       headerPanel,
