@@ -76,7 +76,7 @@ QUnit.module('Keyboard navigation accessibility', {
         }, this.options);
 
         setupDataGridModules(this,
-            ['data', 'columns', 'columnHeaders', 'sorting', 'columnFixing', 'grouping', 'groupPanel', 'headerPanel', 'pager', 'headerFilter', 'filterSync', 'filterPanel', 'filterRow',
+            ['data', 'columns', 'columnHeaders', 'sorting', 'columnFixing', 'grouping', 'groupPanel', 'headerPanel', 'pager', 'headerFilter', 'filterSync', 'filterPanel', 'filterBuilder', 'filterRow',
                 'rows', 'editorFactory', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'selection', 'focus', 'groupPanelKeyboardNavigation', 'headersKeyboardNavigation', 'keyboardNavigation', 'validating', 'masterDetail'],
             { initViews: true }
         );

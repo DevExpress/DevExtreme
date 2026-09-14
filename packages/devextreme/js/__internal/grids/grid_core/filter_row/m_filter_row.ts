@@ -18,9 +18,9 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
-import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
-import type { DataFilter } from '@ts/grids/grid_core/filter/types';
-import { combineFilters } from '@ts/grids/grid_core/filter/utils';
+import type {
+  DataFilter, FilterSourceContext,
+} from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -819,28 +819,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-const filterController = (
-  Base: ModuleType<FilterController>,
-) => class FilterControllerFilterRowExtender extends Base {
-  private skipCalculateColumnFilters() {
-    return false;
-  }
-
-  public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
-    if (this.skipCalculateColumnFilters()) {
-      return super.getAdditionalFilter(excludedColumn);
-    }
-
-    const columns: Column[] = this.columnsController.getVisibleColumns(null, true);
-    const filters = [
-      super.getAdditionalFilter(excludedColumn),
-      ...createFilterRowExpressions(columns, excludedColumn ?? null),
-    ];
-
-    return combineFilters(filters);
-  }
-};
-
 export class ApplyFilterViewController extends modules.ViewController {
   private _headerPanel: any;
 
@@ -848,6 +826,19 @@ export class ApplyFilterViewController extends modules.ViewController {
 
   public init() {
     this._columnsController = this.getController('columns');
+  }
+
+  public isFilterSourceActive({ columnSourcesActive }: FilterSourceContext): boolean {
+    return columnSourcesActive;
+  }
+
+  public getFilterExpressions({
+    excludedColumn,
+    columnsController,
+  }: FilterSourceContext): DataFilter[] {
+    const columns: Column[] = columnsController.getVisibleColumns(null, true);
+
+    return createFilterRowExpressions(columns, excludedColumn);
   }
 
   private _getHeaderPanel() {
@@ -1049,7 +1040,6 @@ export const filterRowModule = {
   },
   extenders: {
     controllers: {
-      filter: filterController,
       columnsResizer,
       editing,
     },
