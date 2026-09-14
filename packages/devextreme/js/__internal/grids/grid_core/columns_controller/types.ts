@@ -1,10 +1,15 @@
-import type { ColumnAIOptions, ColumnBase } from '@js/common/grids';
+import type { ColumnAIOptions, ColumnBase, ColumnLookup } from '@js/common/grids';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import type { DataFilter } from '../filter/types';
 import type {
   COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
 } from './const';
+
+type InternalColumnLookup = ColumnLookup & {
+  items?: RawItemData[];
+  dataType?: string;
+};
 
 export type DropLocationNames = typeof GROUP_LOCATION
   | typeof COLUMN_CHOOSER_LOCATION
@@ -55,6 +60,7 @@ export interface InternalColumnOptions {
   bufferedFilterValue?: ColumnBase['filterValue'];
   bufferedSelectedFilterOperation?: ColumnBase['selectedFilterOperation'];
   added?: AddedColumn;
+  lookup?: InternalColumnLookup;
 }
 
 export type Column = ColumnBase & InternalColumnOptions;
