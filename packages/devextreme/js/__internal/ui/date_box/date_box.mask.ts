@@ -819,6 +819,7 @@ class DateBoxMask extends DateBoxBase {
     const { text } = this.option();
 
     if (this._useMaskBehavior()) {
+      this._committedText = text;
       this._saveValueChangeEvent(e);
       if (!text) {
         this._maskValue = null;
