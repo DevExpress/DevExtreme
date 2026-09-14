@@ -1,5 +1,4 @@
 import type { ColumnAIOptions, ColumnBase } from '@js/common/grids';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 
 import type {
   COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
@@ -62,5 +61,5 @@ export interface ColumnsChanges {
   };
   columnIndex?: number;
   columnIndices?: number[];
-  appliedFilters?: DataFilter[];
+  appliedFilters?: unknown[];
 }
