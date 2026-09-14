@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import clickEvent from 'common/core/events/click';
+import { removeEvent } from 'common/core/events/remove';
 import domUtils from '__internal/core/utils/m_dom';
 import support from '__internal/core/utils/m_support';
 import devices from '__internal/core/m_devices';
@@ -424,4 +425,53 @@ QUnit.test('dxclick should not be fired twice when \'click\' is triggered from i
 
     pointer.start().down().up();
     $(document).off('dxclick', $.noop);
+});
+
+QUnit.test('foreign dxremove handler on the previously clicked node should survive a dxclick on another node (5025)', function(assert) {
+    let clickedNodeClickCount = 0;
+    let otherNodeClickCount = 0;
+    let foreignHandlerCallCount = 0;
+
+    const $clicked = $('#first').on('dxclick', function() {
+        clickedNodeClickCount++;
+    });
+    const $other = $('#second').on('dxclick', function() {
+        otherNodeClickCount++;
+    });
+
+    nativePointerMock($clicked).start().click();
+
+    $clicked.on(removeEvent, function() {
+        foreignHandlerCallCount++;
+    });
+
+    nativePointerMock($other).start().click();
+
+    $clicked.triggerHandler({ type: removeEvent });
+
+    assert.equal(clickedNodeClickCount, 1, 'dxclick fired on the clicked node');
+    assert.equal(otherNodeClickCount, 1, 'dxclick fired on the other node');
+    assert.equal(foreignHandlerCallCount, 1, `foreign ${removeEvent} handler is still subscribed`);
+});
+
+QUnit.test('foreign dxremove handler should survive a second dxclick on the same node', function(assert) {
+    let clickCount = 0;
+    let foreignHandlerCallCount = 0;
+
+    const $clicked = $('#first').on('dxclick', function() {
+        clickCount++;
+    });
+
+    nativePointerMock($clicked).start().click();
+
+    $clicked.on(removeEvent, function() {
+        foreignHandlerCallCount++;
+    });
+
+    nativePointerMock($clicked).start().click();
+
+    $clicked.triggerHandler({ type: removeEvent });
+
+    assert.equal(clickCount, 2, 'dxclick fired twice on the same node');
+    assert.equal(foreignHandlerCallCount, 1, `foreign ${removeEvent} handler is still subscribed`);
 });

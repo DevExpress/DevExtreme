@@ -490,7 +490,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
     // T135244
     QUnit.test('set selectedRows. Not Loading data then no selected rows', function(assert) {
         let loadingCount = 0;
-        this.dataController.store().on('loading', function() {
+        this.dataSourceController.store().on('loading', function() {
             loadingCount++;
         });
 
@@ -1002,7 +1002,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         this.dataController.optionChanged({ name: 'dataSource' });
 
         this.clock.tick(10);
-        this.dataController.store().on('loading', function(options) {
+        this.dataSourceController.store().on('loading', function(options) {
             loadOptions = options;
         });
 
@@ -1344,7 +1344,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         this.dataController.resetDataSource();
 
         let loadingCount = 0;
-        this.dataController.store().on('loading', function() {
+        this.dataSourceController.store().on('loading', function() {
             loadingCount++;
         });
 
@@ -2599,7 +2599,7 @@ QUnit.module('Selection SelectAllMode', {
 
         // act
         $.each(this.selectionController.getSelectedRowKeys(), function(index, key) {
-            that.dataController.store().remove(key);
+            that.dataSourceController.store().remove(key);
         });
 
         this.dataController.refresh();
@@ -2607,7 +2607,7 @@ QUnit.module('Selection SelectAllMode', {
         // assert
         assert.equal(this.array.length, 0, 'array length');
         assert.equal(this.dataController.items().length, 0, 'items count');
-        assert.equal(this.dataController.totalCount(), 0, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 0, 'totalCount');
     });
 
     QUnit.test('Select All for multiple selection change page', function(assert) {

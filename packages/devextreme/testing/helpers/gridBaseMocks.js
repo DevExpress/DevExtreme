@@ -2,14 +2,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
     const exports = {};
 
     exports.MockDataSourceAdapter = function(options) {
-        const store = function() {
+        // Loads read options.items: the stores tests pass in options.store are write-only spies.
+        const itemsStore = function() {
             return new ArrayStore(options.items);
         };
 
         const loadCustomResult = (loadOptions) => {
             const d = $.Deferred();
 
-            store().load(loadOptions)
+            itemsStore().load(loadOptions)
                 .done((data, extra) => {
                     d.resolve({ data: data, extra: extra });
                 })
@@ -19,6 +20,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         };
 
         return {
+            _dataSource: options.dataSource,
             beginLoading: function() {
             },
             endLoading: function() {
@@ -47,11 +49,34 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             getDataIndexGetter: function() {
                 return undefined;
             },
+            getCachedStoreData: function() {
+                return undefined;
+            },
+            loadingOperationTypes: function() {
+                return undefined;
+            },
+            hasKnownLastPage: function() {
+                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
+            },
+            totalItemsCount: function() {
+                return options.totalItemsCount;
+            },
+            totalCount: function() {
+                return options.totalCount || 0;
+            },
+            pageCount: function() {
+                return options.pageCount;
+            },
             dispose: function() {
             },
-            store: store,
+            store: function() {
+                return options.store;
+            },
+            push: function() {
+            },
+            pushed: $.Callbacks(),
             load: function(loadOptions) {
-                return store().load(loadOptions);
+                return itemsStore().load(loadOptions);
             },
             customLoader: {
                 load: loadCustomResult,
@@ -117,21 +142,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return typeUtils.isDefined(options.pageSizes) ? options.pageSizes : [];
             },
 
-            hasKnownLastPage: function() {
-                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
-            },
-
             updatePagesCount: function(count) {
                 options.pageCount = count;
                 this.changed.fire();
-            },
-
-            pageCount: function() {
-                return options.pageCount;
-            },
-
-            totalCount: function() {
-                return options.totalCount || 0;
             },
 
             pageIndex: function(index) {
@@ -169,10 +182,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     changeType: 'refresh',
                     items: options.items
                 });
-            },
-
-            store: function() {
-                return options.store;
             },
 
             insertItems: function(insertingItems) {
@@ -216,10 +225,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             itemsCount: function() {
                 return options.itemsCount;
-            },
-
-            totalItemsCount: function() {
-                return options.totalItemsCount;
             },
 
             isLoading: function() {
@@ -282,16 +287,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getCombinedFilter: commonUtils.noop,
 
-            getFilterExcludedColumn: commonUtils.noop,
-
             getCombinedFilterWithExcludedColumn: commonUtils.noop,
 
             getRowIndexByKey: function(key) {
                 return gridCore.getIndexByKey(key, options.items);
-            },
-
-            loadingOperationTypes: function() {
-                return {};
             },
 
             skipProcessingPagingChange: commonUtils.noop,
@@ -300,7 +299,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             dataErrorOccurred: $.Callbacks('stopOnFalse'),
             pageChanged: $.Callbacks(),
             dataSourceChanged: $.Callbacks(),
-            pushed: $.Callbacks(),
             rowIndicesChanged: $.Callbacks(),
             fireError: function() { },
             loadViewport: commonUtils.noop,
@@ -1016,9 +1014,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         _subscribeToEvents(rootElement) { }
     };
 
-    // The dataSource controller is a leaf that the data controller resolves in init(),
-    // so it is always included rather than listed by every caller.
-    const ALWAYS_INCLUDED_MODULES = ['dataSource'];
+    // The dataSource and filter controllers are leaves that the data controller resolves
+    // in init(), so they are always included rather than listed by every caller.
+    const ALWAYS_INCLUDED_MODULES = ['dataSource', 'filter'];
 
     exports['setup' + nameWidget + 'Modules'] = function(that, moduleNames, options) {
         const modules = [];

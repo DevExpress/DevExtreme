@@ -373,14 +373,14 @@ QUnit.module('Keyboard navigation accessibility', {
         headersWrapper.getHeaderItem(0, 0).focus();
 
         // assert
-        assert.notOk(this.getController('data').getDataSource().sort(), 'Sorting');
+        assert.notOk(this.getController('dataSource').getDataSource().sort(), 'Sorting');
 
         // act
         fireKeyDown(headersWrapper.getHeaderItem(0, 0), 'Enter');
         this.clock.tick(10);
 
         // assert
-        assert.deepEqual(this.getController('data').getDataSource().sort(), [{ selector: 'name', desc: false }], 'Sorting');
+        assert.deepEqual(this.getController('dataSource').getDataSource().sort(), [{ selector: 'name', desc: false }], 'Sorting');
         assert.equal(keyDownFiresCount, 1, 'keyDownFiresCount');
 
         // act
@@ -388,7 +388,7 @@ QUnit.module('Keyboard navigation accessibility', {
         this.clock.tick(10);
 
         // assert
-        assert.deepEqual(this.getController('data').getDataSource().sort(), [{ selector: 'name', desc: true }], 'Sorting');
+        assert.deepEqual(this.getController('dataSource').getDataSource().sort(), [{ selector: 'name', desc: true }], 'Sorting');
         assert.equal(keyDownFiresCount, 2, 'keyDownFiresCount');
     });
 

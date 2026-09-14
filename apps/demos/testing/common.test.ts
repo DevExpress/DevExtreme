@@ -111,10 +111,6 @@ const getIgnoredRules = (testName) => {
     'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
 
     'Localization-UsingGlobalize': ['label'],
-
-    // Icon-only tabs render no text, so they have no accessible name.
-    // Naming them needs Tabs widget support (like Button labels icon-only buttons).
-    'Tabs-Overview': ['aria-tab-name'],
   };
 
   return [

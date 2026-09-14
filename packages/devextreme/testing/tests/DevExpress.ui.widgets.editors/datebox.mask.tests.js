@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { renderDateParts, getDatePartIndexByPosition } from '__internal/ui/date_box/date_box.mask.parts';
 import dateParser from '__internal/core/localization/ldml/dateParserModule';
+import { spySeam } from '../../helpers/moduleSeam.js';
 import dateLocalization from 'common/core/localization/date';
 import localization from 'localization';
 import { noop } from 'core/utils/common';
@@ -1761,7 +1762,7 @@ module('Options changed', setupModule, () => {
     });
 
     test('performance - value change should not lead to recreate regexp and format pattern', function(assert) {
-        const regExpInfo = sinon.spy(dateParser, 'getRegExpInfo');
+        const regExpInfo = spySeam(dateParser, 'getRegExpInfo', 'DEBUG_set_getRegExpInfo');
 
         this.instance.option('displayFormat', 'dd.MM');
         assert.strictEqual(regExpInfo.callCount, 1, 'regexpInfo should be called when format changed');

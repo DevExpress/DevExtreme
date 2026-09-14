@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SpinButton from '__internal/ui/number_box/m_number_box.spin';
+import SpinButton from '__internal/ui/number_box/number_box.spin';
 import config from 'core/config';
 import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';

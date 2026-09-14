@@ -1,6 +1,7 @@
 import './module_not_extended/column_headers';
 import './m_columns_controller';
 import './data_source/data_source_module';
+import './module_not_extended/filter';
 import './data_controller/m_data_controller';
 import './module_not_extended/sorting';
 import './rows/m_rows';
@@ -34,6 +35,7 @@ treeListCore.registerModulesOrder([
   'masterDetail',
   'validating',
   'adaptivity',
+  'filter',
   'data',
   'virtualScrolling',
   'aiColumn',

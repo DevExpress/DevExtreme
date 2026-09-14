@@ -4,7 +4,6 @@ import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
-import type { StoreChange } from '@js/data/store';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
@@ -19,6 +18,7 @@ import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
 import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
+import type { FocusDataSourceControllerExtension } from './extenders/focus_data_source_controller';
 import { UiGridCoreFocusUtils } from './m_focus_utils';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
@@ -288,7 +288,7 @@ export class FocusController extends core.ViewController {
       const offset = rowsScrollController.getItemOffset(focusedRowIndex);
 
       const triggerUpdateFocusedRow = () => {
-        if (this.getDataController().totalCount() && !this.getDataController().items().length) {
+        if (this.getDataSourceController().totalCount() && !this.getDataController().items().length) {
           return;
         }
         this.component.off('contentReady', triggerUpdateFocusedRow);
@@ -446,7 +446,7 @@ export class FocusController extends core.ViewController {
   }
 }
 
-const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class FocusKeyboardNavigationExtender extends Base {
+export const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class FocusKeyboardNavigationExtender extends Base {
   public init() {
     const rowIndex = this.option('focusedRowIndex');
     const columnIndex = this.option('focusedColumnIndex');
@@ -505,7 +505,7 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
   }
 };
 
-const focusEditorFactoryViewControllerExtender = (
+export const focusEditorFactoryViewControllerExtender = (
   Base: ModuleType<EditorFactory>,
 ) => class FocusEditorFactoryExtender extends Base {
   protected keyboardNavigationController!: KeyboardNavigationController;
@@ -536,7 +536,7 @@ const focusEditorFactoryViewControllerExtender = (
   }
 };
 
-const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExtender extends Base {
+export const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExtender extends Base {
   protected focusController!: FocusController;
 
   protected dataSourceController!: DataSourceController;
@@ -551,7 +551,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
   public getSortDataSourceParameters(_, sortByKey?) {
     // @ts-expect-error
     let result = super.getSortDataSourceParameters.apply(this, arguments);
-    let key = this.dataSourceController.key();
+    let key = this.dataSourceController.store()?.key();
     const remoteOperations = this.dataSourceController.remoteOperations();
     const isLocalOperations = Object.keys(remoteOperations).every((operationName) => !remoteOperations[operationName]);
 
@@ -573,10 +573,11 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
   }
 };
 
-const focusDataControllerExtender = (
+export const focusDataControllerExtender = (
   Base: ModuleType<DataController & Partial<VirtualScrollingDataControllerExtension>>,
 ) => class FocusDataControllerExtender extends Base {
-  private _isDataPushed = false;
+  protected declare dataSourceController: DataSourceController
+  & FocusDataSourceControllerExtension;
 
   private _lastRenderingPageIndex?: number;
 
@@ -602,9 +603,7 @@ const focusDataControllerExtender = (
   protected _fireChanged(e) {
     super._fireChanged(e);
 
-    const forceUpdateFocusedRow = this._isDataPushed;
-
-    this._isDataPushed = false;
+    const forceUpdateFocusedRow = this.dataSourceController.consumeDataPushed();
 
     if (this.option('focusedRowEnabled') && this._dataSource) {
       const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
@@ -642,14 +641,6 @@ const focusDataControllerExtender = (
     if (isFocusedRowVisible && isFocusedRowInChange) {
       this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
     }
-  }
-
-  protected dataPushedHandler(changes: StoreChange[]): void {
-    super.dataPushedHandler(changes);
-
-    const focusedRowKey = this.option('focusedRowKey');
-
-    this._isDataPushed = isDefined(focusedRowKey) && !!changes.length;
   }
 
   private _updatePageIndexes() {
@@ -899,7 +890,7 @@ const focusDataControllerExtender = (
   }
 };
 
-const editing = (Base: ModuleType<EditingController>) => class FocusEditingControllerExtender extends Base {
+export const editing = (Base: ModuleType<EditingController>) => class FocusEditingControllerExtender extends Base {
   protected _deleteRowCore(rowIndex) {
     // @ts-expect-error
     const deferred = super._deleteRowCore.apply(this, arguments);
@@ -916,16 +907,8 @@ const editing = (Base: ModuleType<EditingController>) => class FocusEditingContr
   }
 };
 
-const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController extends Base {
+export const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController extends Base {
   private _scrollToFocusOnResize: any;
-
-  private dataSourceController!: DataSourceController;
-
-  public init(): void {
-    this.dataSourceController = this.getController('dataSource');
-
-    super.init();
-  }
 
   protected _createRow(row) {
     // @ts-expect-error
@@ -946,7 +929,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     super._checkRowKeys.apply(this, arguments);
 
     if (this.option('focusedRowEnabled') && this.option('dataSource')) {
-      const store = this._dataController.store();
+      const store = this.dataSourceController.store();
       if (store && !store.key()) {
         this._dataController.fireError('E1042', 'Row focusing');
       }
@@ -1068,42 +1051,4 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
 
     return d.resolve();
   }
-};
-
-export const focusModule = {
-  defaultOptions() {
-    return {
-      focusedRowEnabled: false,
-
-      autoNavigateToFocusedRow: true,
-
-      focusedRowKey: null,
-
-      focusedRowIndex: -1,
-
-      focusedColumnIndex: -1,
-    };
-  },
-
-  controllers: {
-    focus: FocusController,
-  },
-
-  extenders: {
-    controllers: {
-      keyboardNavigation,
-
-      editorFactory: focusEditorFactoryViewControllerExtender,
-
-      columns,
-
-      data: focusDataControllerExtender,
-
-      editing,
-    },
-
-    views: {
-      rowsView,
-    },
-  },
 };

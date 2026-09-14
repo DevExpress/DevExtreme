@@ -1,4 +1,4 @@
-const objectUtils = require('core/utils/object');
+import * as objectUtils from 'core/utils/object';
 
 QUnit.test('orderEach', function(assert) {
     const checkOrderEach = function(mapKeys, keys) {

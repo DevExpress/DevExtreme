@@ -312,7 +312,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   public getUpdatedData(data) {
-    const key = this._dataController.keyOf(data);
+    const key = this.dataSourceController.keyOf(data);
     const changes = this.getChanges();
     const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 
@@ -617,8 +617,9 @@ class EditingControllerImpl extends modules.ViewController {
       if (change.type === 'insert') {
         this._addInsertInfo(change);
       } else {
-        const items = dataController.getCachedStoreData() || dataController.items()?.map((item) => item.data);
-        const rowIndex = gridCoreUtils.getIndexByKey(change.key, items, dataController.key());
+        const items = this.dataSourceController.getCachedStoreData()
+          || dataController.items()?.map((item) => item.data);
+        const rowIndex = gridCoreUtils.getIndexByKey(change.key, items, this.dataSourceController.key());
         this._addInternalData({ key: change.key, oldData: items[rowIndex] });
       }
     });
@@ -720,7 +721,7 @@ class EditingControllerImpl extends modules.ViewController {
             if (equalByValue(item.key, key)) {
               result = index;
             }
-          } else if (equalByValue(dataController.keyOf(item as RawItemData), key)) {
+          } else if (equalByValue(this.dataSourceController.keyOf(item as RawItemData), key)) {
             result = index;
           }
         }
@@ -913,7 +914,7 @@ class EditingControllerImpl extends modules.ViewController {
       return change.key;
     }
 
-    const keyExpr = this._dataController.key();
+    const keyExpr = this.dataSourceController.key();
     let keyValue;
     if (change.data && keyExpr && !Array.isArray(keyExpr)) {
       keyValue = change.data[keyExpr];
@@ -990,7 +991,7 @@ class EditingControllerImpl extends modules.ViewController {
     const newRowPosition: any = this._getNewRowPosition();
     const dataController = this._dataController;
     const pageIndex = dataController.pageIndex();
-    const lastPageIndex = dataController.pageCount() - 1;
+    const lastPageIndex = this.dataSourceController.pageCount() - 1;
 
     if (newRowPosition === FIRST_NEW_ROW_POSITION && pageIndex !== 0) {
       return 0;
@@ -1006,7 +1007,7 @@ class EditingControllerImpl extends modules.ViewController {
    */
   protected addRow(parentKey) {
     const dataController = this._dataController;
-    const store = dataController.store();
+    const store = this.dataSourceController.store();
 
     if (!store) {
       dataController.fireError('E1052', this.component.NAME);
@@ -1018,9 +1019,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   protected _addRow(parentKey) {
-    const dataController = this._dataController;
-    const store = dataController.store();
-    const key = store && store.key();
+    const key = this.dataSourceController.store()?.key();
     const param: any = { data: {} };
     const oldEditRowIndex = this._getVisibleEditRowIndex();
     // @ts-expect-error
@@ -1615,7 +1614,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _processChanges(deferreds, results, dataChanges, changes) {
-    const store = this._dataController.store() as Store;
+    const store = this.dataSourceController.store() as Store;
 
     each(changes, (index, change) => {
       const oldData = this._getOldData(change.key);
@@ -1878,7 +1877,7 @@ class EditingControllerImpl extends modules.ViewController {
     const isFullRefresh = refreshMode !== 'reshape' && refreshMode !== 'repaint';
 
     if (!isFullRefresh) {
-      dataController.push(dataChanges);
+      this.dataSourceController.push(dataChanges);
     }
 
     when(dataController.refresh({

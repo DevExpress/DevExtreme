@@ -52,9 +52,9 @@ $.each(ABSTRACT_METHODS, function(_, name) {
     BaseGauge.prototype[name] = sinon.stub();
 });
 
-rendererModule.Renderer = sinon.spy(function() {
+rendererModule.DEBUG_set_Renderer(sinon.spy(function() {
     return currentTest().renderer;
-});
+}));
 
 themeManagerModule.ThemeManager = sinon.spy(function() {
     return currentTest().themeManager;

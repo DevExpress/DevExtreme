@@ -1,4 +1,4 @@
-const compare = require('core/utils/version').compare;
+import { compare } from 'core/utils/version';
 
 QUnit.module('version');
 

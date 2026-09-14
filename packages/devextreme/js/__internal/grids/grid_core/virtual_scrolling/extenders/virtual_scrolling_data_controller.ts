@@ -25,7 +25,7 @@ import type {
   DataChange, PagingOptionName, PagingResult, ProcessedItem, RefreshOptions,
 } from '@ts/grids/grid_core/data_controller/types';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
-import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 import type { VirtualItemsCount } from '@ts/grids/grid_core/virtual_data_loader/types';
 
 import gridCoreUtils from '../../m_utils';
@@ -152,7 +152,9 @@ export const virtualScrollingDataControllerExtender = (
       return;
     }
 
-    const pageIndex = !isVirtualMode(this) && this.pageIndex() >= this.pageCount() ? this.pageCount() - 1 : this.pageIndex();
+    const pageIndex = !isVirtualMode(this) && this.pageIndex() >= this.dataSourceController.pageCount()
+      ? this.dataSourceController.pageCount() - 1
+      : this.pageIndex();
     this._rowPageIndex = Math.ceil(pageIndex * this.pageSize() / this.getRowPageSize());
     this._visibleItems = this.option(LEGACY_SCROLLING_MODE) === false ? null : [];
     this._viewportChanging = false;
@@ -199,13 +201,13 @@ export const virtualScrollingDataControllerExtender = (
       },
       totalItemsCount() {
         if (isVirtualPaging(that)) {
-          return that.totalItemsCount();
+          return that.dataSourceController.totalItemsCount();
         }
 
         return that.option(LEGACY_SCROLLING_MODE) === false ? that._itemCount : that._items.filter(isItemCountable).length;
       },
       hasKnownLastPage() {
-        return that.option(LEGACY_SCROLLING_MODE) === false ? that.hasKnownLastPage() : true;
+        return that.option(LEGACY_SCROLLING_MODE) === false ? that.dataSourceController.hasKnownLastPage() : true;
       },
       pageIndex(index) {
         if (index !== undefined) {
@@ -671,8 +673,8 @@ export const virtualScrollingDataControllerExtender = (
   private _pageIndexIsValid(pageIndex) {
     let result = true;
 
-    if (isInfiniteMode(this) && this.hasKnownLastPage() || isVirtualMode(this)) {
-      result = pageIndex * this.pageSize() < this.totalItemsCount();
+    if (isInfiniteMode(this) && this.dataSourceController.hasKnownLastPage() || isVirtualMode(this)) {
+      result = pageIndex * this.pageSize() < this.dataSourceController.totalItemsCount();
     }
 
     return result;
@@ -681,7 +683,7 @@ export const virtualScrollingDataControllerExtender = (
   private isAllLoadedInAppendMode(): boolean {
     const loadedItemCount = this.pageSize() * (this._dataSource?.loadPageCount() ?? 0);
 
-    return isInfiniteMode(this) && this.totalItemsCount() < loadedItemCount;
+    return isInfiniteMode(this) && this.dataSourceController.totalItemsCount() < loadedItemCount;
   }
 
   // T1326786: the grid is scrolled to paging.pageIndex on the first resize only,
@@ -764,7 +766,8 @@ export const virtualScrollingDataControllerExtender = (
   }
 
   private handlePagesLoaded(viewportChanging: boolean): void {
-    const isLastPage = this.pageCount() > 0 && this.pageIndex() === this.pageCount() - 1;
+    const isLastPage = this.dataSourceController.pageCount() > 0
+      && this.pageIndex() === this.dataSourceController.pageCount() - 1;
 
     if (viewportChanging || isLastPage) {
       this._updateVisiblePageIndex();
@@ -933,6 +936,28 @@ export const virtualScrollingDataControllerExtender = (
     return result;
   }
 
+  protected resolvePaginate(enabled: boolean | undefined): boolean | undefined {
+    if (enabled === undefined) {
+      return undefined;
+    }
+
+    return enabled || isVirtualPaging(this);
+  }
+
+  protected requiresTotalCount(): boolean {
+    return !isInfiniteMode(this);
+  }
+
+  public optionChanged(args: OptionChanged): void {
+    if (args.name === 'scrolling') {
+      args.handled = true;
+      this.reset();
+      return;
+    }
+
+    super.optionChanged(args);
+  }
+
   public isEmpty(): boolean {
     return this.option(LEGACY_SCROLLING_MODE) === false ? !this.items(true).length : super.isEmpty.apply(this, arguments as any);
   }
@@ -942,7 +967,7 @@ export const virtualScrollingDataControllerExtender = (
 
     if (this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this)) {
       const { pageIndex, loadPageCount } = this.getLoadPageParams(true);
-      const pageCount = this.pageCount();
+      const pageCount = this.dataSourceController.pageCount();
 
       result = pageIndex + loadPageCount >= pageCount;
     } else {

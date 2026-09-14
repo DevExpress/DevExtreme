@@ -72,8 +72,7 @@ const processLongTap = function (that, dxEvent) {
 
 const isSeveralRowsSelected = function (that, selectionFilter) {
   let keyIndex = 0;
-  const store = that._dataController.store();
-  const key = store?.key();
+  const key = that.dataSourceController.store()?.key();
   const isComplexKey = Array.isArray(key);
 
   if (!selectionFilter.length) {
@@ -160,7 +159,7 @@ export class SelectionController extends modules.Controller {
 
     if (!this._dataPushedHandler) {
       this._dataPushedHandler = this._handleDataPushed.bind(this);
-      this._dataController.pushed.add(this._dataPushedHandler);
+      this.dataSourceController.pushed.add(this._dataPushedHandler);
     }
   }
 
@@ -235,10 +234,10 @@ export class SelectionController extends modules.Controller {
         return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
       },
       key() {
-        return dataController?.key();
+        return dataSourceController.key();
       },
       keyOf(item) {
-        return dataController?.keyOf(item);
+        return dataSourceController.keyOf(item);
       },
       dataFields() {
         return dataSourceController.select();
@@ -264,7 +263,7 @@ export class SelectionController extends modules.Controller {
       filter() {
         return dataController.getCombinedFilter(deferred);
       },
-      totalCount: () => dataController.totalCount(),
+      totalCount: () => dataSourceController.totalCount(),
       getLoadOptions(loadItemIndex, focusedItemIndex, shiftItemIndex) {
         const { sort, filter } = dataSourceController.lastLoadOptions();
         let minIndex = Math.min(loadItemIndex, focusedItemIndex);

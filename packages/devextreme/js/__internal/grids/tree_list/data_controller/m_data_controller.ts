@@ -73,18 +73,6 @@ export class TreeListDataController extends DataController {
     super.init.apply(this, arguments as any);
   }
 
-  public keyOf(data) {
-    const dataSource = this._dataSource;
-
-    if (dataSource) {
-      return dataSource.keyOf(data);
-    }
-  }
-
-  public key() {
-    return this._dataSource?.getKeyExpr();
-  }
-
   public publicMethods() {
     return super.publicMethods().concat(['expandRow', 'collapseRow', 'isRowExpanded', 'getRootNode', 'getNodeByKey', 'loadDescendants', 'forEachNode']);
   }

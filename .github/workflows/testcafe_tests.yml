@@ -472,6 +472,9 @@ jobs:
         new_flakes_summary=./artifacts/new-flakes-summary.txt
         new_flakes=./artifacts/flaky-candidates.jsonl
         report_json=./artifacts/flaky-candidates.json
+        # base_ref is empty for push and merge_group, which carry the target elsewhere.
+        base_branch="${{ github.base_ref || github.event.merge_group.base_ref || github.ref_name }}"
+        base_branch="${base_branch#refs/heads/}"
         mkdir -p ./artifacts
         : > "$new_flakes_summary"
         : > "$new_flakes"
@@ -560,8 +563,8 @@ jobs:
             fi
             jq -cn --arg test "$name" --arg sourceJob "$job_name" --arg theme "$theme" \
               --arg componentFolder "$componentFolder" --arg timezone "$timezone" \
-              --arg platform "$platform" --arg verdict "$verdict" \
-              '{ test: $test, sourceJob: $sourceJob, theme: $theme, componentFolder: $componentFolder, timezone: $timezone, platform: $platform, verdict: $verdict }' \
+              --arg platform "$platform" --arg verdict "$verdict" --arg baseBranch "$base_branch" \
+              '{ test: $test, sourceJob: $sourceJob, theme: $theme, componentFolder: $componentFolder, timezone: $timezone, platform: $platform, verdict: $verdict, baseBranch: $baseBranch }' \
               >> "$new_flakes"
           done < <(jq -r '.tests[]' "$report")
         done

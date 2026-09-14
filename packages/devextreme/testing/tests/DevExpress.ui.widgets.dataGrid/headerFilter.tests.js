@@ -4084,7 +4084,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.setupDataGrid();
 
         const column = that.columnsController.getVisibleColumns()[0];
-        that.dataController.store().on('loading', function(options) {
+        that.dataSourceController.store().on('loading', function(options) {
             loadOptions = options;
         });
 

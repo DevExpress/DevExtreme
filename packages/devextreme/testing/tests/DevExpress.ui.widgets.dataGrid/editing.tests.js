@@ -3638,7 +3638,7 @@ QUnit.module('Editing with real dataController', {
         // arrange
         const that = this;
         const rowsView = this.rowsView;
-        const originalInsert = that.dataController.store().insert;
+        const originalInsert = that.dataSourceController.store().insert;
         const testElement = $('#container');
 
         $.extend(that.options.editing, {
@@ -3649,7 +3649,7 @@ QUnit.module('Editing with real dataController', {
             }
         });
 
-        that.dataController.store().insert = function(values) {
+        that.dataSourceController.store().insert = function(values) {
             // assert
             assert.deepEqual(values, {
                 Test1: 'test1',
@@ -3691,7 +3691,7 @@ QUnit.module('Editing with real dataController', {
         assert.equal(testElement.find('input').length, 0, 'not has inputs');
 
         // arrange
-        that.dataController.store().insert = originalInsert;
+        that.dataSourceController.store().insert = originalInsert;
         that.option('onRowInserting', function(params) {
             params.cancel = true;
         });
@@ -4163,7 +4163,7 @@ QUnit.module('Editing with real dataController', {
         // arrange
         const that = this;
         const rowsView = that.rowsView;
-        const originalUpdate = that.dataController.store().update;
+        const originalUpdate = that.dataSourceController.store().update;
         const testElement = $('#container');
 
         $.extend(that.options.editing, {
@@ -4174,7 +4174,7 @@ QUnit.module('Editing with real dataController', {
             }
         });
 
-        that.dataController.store().update = function(key, values) {
+        that.dataSourceController.store().update = function(key, values) {
             // assert
             assert.deepEqual(values, {
                 age: 15,
@@ -4247,7 +4247,7 @@ QUnit.module('Editing with real dataController', {
         assert.equal(testElement.find('.dx-cell-modified').length, 0, 'no element with class name dx-cell-modified');
 
         // arrange
-        that.dataController.store().update = originalUpdate;
+        that.dataSourceController.store().update = originalUpdate;
         that.option('onRowUpdating', function(params) {
             params.cancel = true;
         });
@@ -4295,7 +4295,7 @@ QUnit.module('Editing with real dataController', {
             }
         });
 
-        sinon.spy(that.dataController.store(), 'update');
+        sinon.spy(that.dataSourceController.store(), 'update');
 
         const cancelDeferred = $.Deferred();
 
@@ -4326,14 +4326,14 @@ QUnit.module('Editing with real dataController', {
         that.saveEditData();
 
         // assert
-        assert.ok(!that.dataController.store().update.called, 'update is not called');
+        assert.ok(!that.dataSourceController.store().update.called, 'update is not called');
 
         // act
         cancelDeferred.resolve();
 
         // assert
-        assert.equal(that.dataController.store().update.callCount, 1, 'update called one time');
-        assert.deepEqual(that.dataController.store().update.lastCall.args, [that.array[0], { name: 'Test1', room: 666 }], 'update args');
+        assert.equal(that.dataSourceController.store().update.callCount, 1, 'update called one time');
+        assert.deepEqual(that.dataSourceController.store().update.lastCall.args, [that.array[0], { name: 'Test1', room: 666 }], 'update args');
     });
 
     QUnit.test('Update cell when edit mode batch and cancel in onRowUpdating is Promise and resolved', function(assert) {
@@ -4350,7 +4350,7 @@ QUnit.module('Editing with real dataController', {
             }
         });
 
-        sinon.spy(that.dataController.store(), 'update');
+        sinon.spy(that.dataSourceController.store(), 'update');
 
         let resolve;
         const cancelPromise = new Promise(function(onResolve) {
@@ -4384,10 +4384,10 @@ QUnit.module('Editing with real dataController', {
         that.saveEditData();
 
         // assert
-        assert.ok(!that.dataController.store().update.called, 'update is not called');
+        assert.ok(!that.dataSourceController.store().update.called, 'update is not called');
         cancelPromise.then(function() {
-            assert.equal(that.dataController.store().update.callCount, 1, 'update called one time');
-            assert.deepEqual(that.dataController.store().update.lastCall.args, [that.array[0], { name: 'Test1', room: 666 }], 'update args');
+            assert.equal(that.dataSourceController.store().update.callCount, 1, 'update called one time');
+            assert.deepEqual(that.dataSourceController.store().update.lastCall.args, [that.array[0], { name: 'Test1', room: 666 }], 'update args');
         });
 
         // act
@@ -4410,7 +4410,7 @@ QUnit.module('Editing with real dataController', {
             }
         });
 
-        sinon.spy(that.dataController.store(), 'update');
+        sinon.spy(that.dataSourceController.store(), 'update');
 
         const dataErrors = [];
 
@@ -4446,13 +4446,13 @@ QUnit.module('Editing with real dataController', {
         that.saveEditData();
 
         // assert
-        assert.ok(!that.dataController.store().update.called, 'update is not called');
+        assert.ok(!that.dataSourceController.store().update.called, 'update is not called');
 
         // act
         cancelDeferred.resolve(true);
 
         // assert
-        assert.ok(!that.dataController.store().update.called, 'update is not called');
+        assert.ok(!that.dataSourceController.store().update.called, 'update is not called');
         assert.ok(!dataErrors.length, 'no data errors');
     });
 
@@ -4470,7 +4470,7 @@ QUnit.module('Editing with real dataController', {
             }
         });
 
-        sinon.spy(that.dataController.store(), 'update');
+        sinon.spy(that.dataSourceController.store(), 'update');
 
         const cancelDeferred = $.Deferred();
 
@@ -4507,7 +4507,7 @@ QUnit.module('Editing with real dataController', {
         cancelDeferred.reject('Test Error Message');
 
         // assert
-        assert.ok(!that.dataController.store().update.called, 'update is not called');
+        assert.ok(!that.dataSourceController.store().update.called, 'update is not called');
 
         assert.deepEqual(dataErrors.length, 1, 'data errors count');
         assert.ok(dataErrors[0] instanceof Error, 'error has Error type');
@@ -5827,10 +5827,10 @@ QUnit.module('Editing with real dataController', {
             return testElement;
         };
 
-        const oldUpdate = that.dataController.store().update;
+        const oldUpdate = that.dataSourceController.store().update;
 
         const updateDeferred = $.Deferred();
-        that.dataController.store().update = function() {
+        that.dataSourceController.store().update = function() {
             updateCallCount++;
             oldUpdate.apply(this, arguments);
             return updateDeferred;
@@ -12850,7 +12850,7 @@ QUnit.module('Editing with validation', {
             }, 'lastName']
         });
 
-        this.dataController.store().update = function() {
+        this.dataSourceController.store().update = function() {
             return $.Deferred().reject('Test Error');
         };
 

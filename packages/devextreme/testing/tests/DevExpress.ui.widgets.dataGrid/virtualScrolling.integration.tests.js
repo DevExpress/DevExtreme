@@ -3242,7 +3242,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.deepEqual(dataGrid.getController('data').pageCount(), 2, 'pages count');
+        assert.deepEqual(dataGrid.getController('dataSource').pageCount(), 2, 'pages count');
         assert.deepEqual(dataGrid.getController('data').items().length, 5, 'items count');
         assert.ok(!dataGrid.getView('pagerView').isVisible(), 'pager visibility');
     });

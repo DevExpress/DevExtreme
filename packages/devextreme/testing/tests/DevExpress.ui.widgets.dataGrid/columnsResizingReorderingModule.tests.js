@@ -968,6 +968,13 @@ QUnit.module('Columns resizing', {
                     ]
                 }),
 
+                dataSource: {
+                    key: noop,
+                    store: noop,
+                    pageCount: () => 1,
+                    totalCount: () => 0
+                },
+
                 columnsResizer: {
                     isResizing: () => true
                 },
