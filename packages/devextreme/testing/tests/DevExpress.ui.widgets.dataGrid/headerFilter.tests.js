@@ -9,7 +9,7 @@ import ODataStore from 'common/data/odata/store';
 import devices from '__internal/core/m_devices';
 import { DataSource } from 'common/data/data_source/data_source';
 import { isFunction } from 'core/utils/type';
-import { invertFilterExpression } from '__internal/grids/grid_core/header_filter/m_header_filter';
+import { invertFilterExpression } from '__internal/grids/grid_core/header_filter/utils';
 import dragEvents from 'common/core/events/drag';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import viewPortUtils from 'core/utils/view_port';
