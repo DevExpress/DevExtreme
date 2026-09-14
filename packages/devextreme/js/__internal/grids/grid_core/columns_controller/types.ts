@@ -70,4 +70,5 @@ export interface ColumnsChanges {
   };
   columnIndex?: number;
   columnIndices?: number[];
+  appliedFilters?: unknown[];
 }
