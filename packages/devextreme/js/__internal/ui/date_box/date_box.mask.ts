@@ -273,7 +273,7 @@ class DateBoxMask<
     this._caret(this._getActivePartProp('caret'));
   }
 
-  _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
+  _keyPressHandler(e: DxEvent<InputEvent>): void {
     const { originalEvent: event } = e;
 
     const isBackwardDeletion = event?.inputType === 'deleteContentBackward';

@@ -4,11 +4,9 @@ import { logger } from '@js/core/utils/console';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
-import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
-import type Store from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent } from '@ts/data/data_source/types';
 import type { Column, ColumnsChanges } from '@ts/grids/grid_core/columns_controller/types';
@@ -36,6 +34,7 @@ import type {
   ItemChangeOptions,
   ItemOperationOptions,
   ItemProcessingOptions,
+  LoadAllItemsDeferred,
   PagingChanges,
   PagingDataSource,
   PagingOptionName,
@@ -48,7 +47,7 @@ import type {
   UpdateItemChange,
   UserState,
 } from './types';
-import { resolvePaginate, syncPaging } from './utils/paging';
+import { syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
   attachChangedItems,
@@ -66,7 +65,7 @@ import {
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends modules.Controller {
-  public _dataSource?: DataSourceAdapter | null;
+  protected _dataSource?: DataSourceAdapter | null;
 
   protected _items!: ProcessedItem[];
 
@@ -110,8 +109,6 @@ export class DataController extends modules.Controller {
 
   public pageChanged!: Callback<[number?]>;
 
-  public pushed!: Callback<[StoreChange[]]>;
-
   public changed!: Callback<[DataChange]>;
 
   public loadingChanged!: Callback<[boolean, string?]>;
@@ -125,11 +122,9 @@ export class DataController extends modules.Controller {
   // TODO public controller
   public _columnsController!: Controllers['columns'];
 
-  private _filterExcludedColumn: Column | null = null;
+  protected filterController!: Controllers['filter'];
 
   private loadErrorHandlerProxy!: (e: Error | string) => void;
-
-  private dataPushedHandlerProxy!: (changes: StoreChange[]) => void;
 
   private dataChangedHandlerProxy!: (e?: ChangedEvent) => void;
 
@@ -138,12 +133,12 @@ export class DataController extends modules.Controller {
     this._cachedProcessedItems = null;
     this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
+    this.filterController = this.getController('filter');
 
     this._isPaging = false;
     this._currentOperationTypes = null;
     this.dataChangedHandlerProxy = this.dataChangedHandler.bind(this);
     this.loadErrorHandlerProxy = this.loadErrorHandler.bind(this);
-    this.dataPushedHandlerProxy = this.dataPushedHandler.bind(this);
 
     this._columnsController.columnsChanged.add(this.columnsChangedHandler.bind(this));
 
@@ -160,18 +155,6 @@ export class DataController extends modules.Controller {
   }
 
   /**
-   * TODO: Define this method only in masterDetail.
-   * Remove the override from adaptive behavior
-   * and move the implementation to masterDetail.
-   *
-   * @extended: adaptivity, master_detail
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getRowIndicesForExpand(key: RowKey): number[] {
-    return [];
-  }
-
-  /**
    * @extended: virtual_scrolling
    */
   protected _getPagingOptionValue(optionName: PagingOptionName): number {
@@ -180,7 +163,7 @@ export class DataController extends modules.Controller {
   }
 
   protected callbackNames(): string[] {
-    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed', 'rowIndicesChanged'];
+    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'rowIndicesChanged'];
   }
 
   protected callbackFlags(name?: string): CallbackFlags | undefined {
@@ -200,17 +183,13 @@ export class DataController extends modules.Controller {
       'endCustomLoading',
       'filter',
       'getCombinedFilter',
-      'getDataSource',
       'getKeyByRowIndex',
       'getRowIndexByKey',
       'getVisibleRows',
-      'keyOf',
-      'pageCount',
       'pageIndex',
       'pageSize',
       'refresh',
       'repaintRows',
-      'totalCount',
     ];
   }
 
@@ -234,7 +213,7 @@ export class DataController extends modules.Controller {
     )) {
       const isValueChanged = args.value !== args.previousValue;
       if (isValueChanged) {
-        const store = this.store();
+        const store = this.dataSourceController.store();
         if (isLocalStore(store)) {
           store._array = args.value;
         }
@@ -276,21 +255,20 @@ export class DataController extends modules.Controller {
       case 'remoteOperations':
       case 'keyExpr':
       case 'dataSource':
-      case 'scrolling':
         args.handled = true;
         this.reset();
         break;
       case 'paging': {
-        const dataSource = this.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-        if (dataSource) {
-          const changedPagingOptions = this.applyPagingOptions(dataSource);
+        if (dataSourceAdapter) {
+          const changedPagingOptions = this.applyPagingOptions(dataSourceAdapter);
           if (changedPagingOptions.hasChanges) {
-            const pageIndex = dataSource.pageIndex();
+            const pageIndex = dataSourceAdapter.pageIndex();
 
             this._isPaging = changedPagingOptions.isPageIndexChanged;
 
-            dataSource.load().done(() => {
+            dataSourceAdapter.load().done(() => {
               this._isPaging = false;
               this.pageChanged.fire(pageIndex);
             });
@@ -303,11 +281,11 @@ export class DataController extends modules.Controller {
         this.reset();
         break;
       case 'columns': {
-        const dataSource = this.dataSource();
+        const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-        if (dataSource?.isLoading() && args.name === args.fullName) {
+        if (dataSourceAdapter?.isLoading() && args.name === args.fullName) {
           this._useSortingGroupingFromColumns = true;
-          dataSource.load();
+          dataSourceAdapter.load();
         }
         break;
       }
@@ -320,31 +298,22 @@ export class DataController extends modules.Controller {
     return !this._isLoading;
   }
 
-  public getDataSource(): DataSource | null {
-    return this._dataSource?._dataSource ?? null;
-  }
-
   public getCombinedFilter(returnDataField?: boolean): DataFilter {
     return this.combinedFilter(undefined, returnDataField);
-  }
-
-  public getFilterExcludedColumn(): Column | null {
-    return this._filterExcludedColumn;
   }
 
   public getCombinedFilterWithExcludedColumn(
     excludedColumn: Column | null,
     returnDataField?: boolean,
   ): DataFilter {
-    this._filterExcludedColumn = excludedColumn;
-    try {
-      return this.getCombinedFilter(returnDataField);
-    } finally {
-      this._filterExcludedColumn = null;
-    }
+    return this.combinedFilter(undefined, returnDataField, excludedColumn);
   }
 
-  private combinedFilter(filter: DataFilter, returnDataField?: boolean): DataFilter {
+  private combinedFilter(
+    filter: DataFilter,
+    returnDataField?: boolean,
+    excludedColumn: Column | null = null,
+  ): DataFilter {
     if (!this._dataSource) {
       return filter;
     }
@@ -355,7 +324,7 @@ export class DataController extends modules.Controller {
       || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
-      const additionalFilter = this.calculateAdditionalFilter();
+      const additionalFilter = this.filterController.getAdditionalFilter(excludedColumn);
 
       combined = additionalFilter
         ? gridCoreUtils.combineFilters([additionalFilter, combined])
@@ -569,7 +538,7 @@ export class DataController extends modules.Controller {
         this._isDataSourceApplying = false;
 
         const hasAdditionalFilter = (): boolean => {
-          const additionalFilter = this.calculateAdditionalFilter();
+          const additionalFilter = this.filterController.getAdditionalFilter();
           return Boolean(additionalFilter?.length);
         };
 
@@ -618,26 +587,34 @@ export class DataController extends modules.Controller {
     this.dataErrorOccurred.fire(e);
   }
 
-  protected dataPushedHandler(changes: StoreChange[]): void {
-    this.pushed.fire(changes);
-  }
-
   public fireError(...args: unknown[]): void {
     this.dataErrorOccurred.fire(errors.Error(...args));
   }
 
   private applyPagingOptions(dataSource: PagingDataSource): PagingChanges {
-    const { scrolling, paging } = this.option();
+    const { paging } = this.option();
 
-    // Not paging state to reconcile, but a per-load request flag: infinite
-    // scrolling detects the last page locally and needs no grand total.
-    dataSource.requireTotalCount(scrolling?.mode !== 'infinite');
+    dataSource.requireTotalCount(this.requiresTotalCount());
 
     return syncPaging(dataSource, {
-      paginate: resolvePaginate(paging?.enabled, scrolling?.mode),
+      paginate: this.resolvePaginate(paging?.enabled),
       pageSize: paging?.pageSize,
       pageIndex: paging?.pageIndex,
     });
+  }
+
+  /**
+   * @extended: virtual_scrolling
+   */
+  protected resolvePaginate(enabled: boolean | undefined): boolean | undefined {
+    return enabled;
+  }
+
+  /**
+   * @extended: virtual_scrolling
+   */
+  protected requiresTotalCount(): boolean {
+    return true;
   }
 
   /**
@@ -769,7 +746,7 @@ export class DataController extends modules.Controller {
     return {
       rowType: 'data',
       data,
-      key: this.keyOf(data),
+      key: this.dataSourceController.keyOf(data),
     };
   }
 
@@ -1114,9 +1091,7 @@ export class DataController extends modules.Controller {
   }
 
   private readonly changingHandler = (e: ChangingEvent): void => {
-    const dataSource = this.dataSource();
-
-    if (!dataSource) {
+    if (!this.dataSourceController.hasAdapter()) {
       return;
     }
 
@@ -1165,7 +1140,7 @@ export class DataController extends modules.Controller {
       return;
     }
 
-    const operationTypes = this.dataSource()?.operationTypes() ?? undefined;
+    const operationTypes = this.dataSourceController.operationTypes() ?? undefined;
 
     change.isDataChanged = true;
     change.repaintChangesOnly = resolveRepaintChangesOnly(
@@ -1187,13 +1162,6 @@ export class DataController extends modules.Controller {
     );
   }
 
-  public loadingOperationTypes(): OperationTypes {
-    const dataSource = this.dataSource();
-    const operationTypes: OperationTypes | undefined = dataSource?.loadingOperationTypes();
-
-    return operationTypes ?? {};
-  }
-
   /**
    * @extended: virtual_scrolling, focus
    */
@@ -1213,13 +1181,6 @@ export class DataController extends modules.Controller {
 
   private _fireLoadingChanged(): void {
     this.loadingChanged.fire(this.isLoading(), this._loadingText);
-  }
-
-  /**
-   * @extended: filter_row, filter_sync, header_filter, search
-   */
-  protected calculateAdditionalFilter(): DataFilter {
-    return null;
   }
 
   /**
@@ -1328,7 +1289,6 @@ export class DataController extends modules.Controller {
     dataSourceAdapter.loadError.add(this.loadErrorHandlerProxy);
     dataSourceAdapter.customizeStoreLoadOptions.add(this.customizeStoreLoadOptionsHandler);
     dataSourceAdapter.changing.add(this.changingHandler);
-    dataSourceAdapter.pushed.add(this.dataPushedHandlerProxy);
   }
 
   private unsubscribeFromDataSource(dataSourceAdapter: DataSourceAdapter): void {
@@ -1337,7 +1297,6 @@ export class DataController extends modules.Controller {
     dataSourceAdapter.loadError.remove(this.loadErrorHandlerProxy);
     dataSourceAdapter.customizeStoreLoadOptions.remove(this.customizeStoreLoadOptionsHandler);
     dataSourceAdapter.changing.remove(this.changingHandler);
-    dataSourceAdapter.pushed.remove(this.dataPushedHandlerProxy);
   }
 
   private setDataSource(dataSource: DataSource): void {
@@ -1368,23 +1327,11 @@ export class DataController extends modules.Controller {
     return !this.items().length;
   }
 
-  public pageCount(): number {
-    return this._dataSource ? this._dataSource.pageCount() : 1;
-  }
-
-  public dataSource(): DataSourceAdapter | undefined {
-    return this._dataSource ?? undefined;
-  }
-
-  public store(): Store | undefined {
-    return this._dataSource?.store();
-  }
-
   public loadAllItems(
     data?: RawItemData[],
     skipFilter = false,
-  ): DeferredObj<ProcessedItem[]> {
-    const d = Deferred<ProcessedItem[]>();
+  ): LoadAllItemsDeferred {
+    const d = Deferred<ProcessedItem[]>() as LoadAllItemsDeferred;
     const dataSource = this._dataSource;
 
     if (!dataSource) {
@@ -1392,14 +1339,8 @@ export class DataController extends modules.Controller {
       return d;
     }
 
-    const resolveWithProcessedItems = (loadResult: CustomLoadResult): void => {
-      const items = this._processItems(
-        this._beforeProcessItems(loadResult.data),
-        { changeType: 'loadingAll' },
-      );
-
-      // @ts-expect-error DataGrid-only summary leaks into grid_core
-      d.resolve(items, loadResult.extra?.summary);
+    const resolveLoaded = (loadResult: CustomLoadResult): void => {
+      this.resolveLoadAllItems(d, loadResult);
     };
 
     if (data) {
@@ -1408,17 +1349,34 @@ export class DataController extends modules.Controller {
         group: dataSource.group(),
         sort: dataSource.sort(),
       })
-        .done(resolveWithProcessedItems)
+        .done(resolveLoaded)
         .fail(d.reject as (...args: unknown[]) => void);
     } else if (!dataSource.isLoading()) {
       dataSource.customLoader.loadAll()
-        .done(resolveWithProcessedItems)
+        .done(resolveLoaded)
         .fail(d.reject as (...args: unknown[]) => void);
     } else {
       d.reject();
     }
 
     return d;
+  }
+
+  protected processLoadAllItems(loadResult: CustomLoadResult): ProcessedItem[] {
+    return this._processItems(
+      this._beforeProcessItems(loadResult.data),
+      { changeType: 'loadingAll' },
+    );
+  }
+
+  /**
+   * @extended: summary (DataGrid)
+   */
+  protected resolveLoadAllItems(
+    d: LoadAllItemsDeferred,
+    loadResult: CustomLoadResult,
+  ): void {
+    d.resolve(this.processLoadAllItems(loadResult));
   }
 
   public async getAllDataRowKeys(): Promise<RowKey[]> {
@@ -1443,12 +1401,8 @@ export class DataController extends modules.Controller {
     return this.items()?.[this.getRowIndexByKey(key)];
   }
 
-  public keyOf(data: RawItemData): RowKey | undefined {
-    return this.store()?.keyOf(data);
-  }
-
   private byKey(key: RowKey): DeferredObj<RawItemData> {
-    const store = this.store();
+    const store = this.dataSourceController.store();
 
     if (!store) {
       return Deferred<RawItemData>().reject();
@@ -1461,10 +1415,6 @@ export class DataController extends modules.Controller {
     }
 
     return fromPromise(store.byKey(key)) as DeferredObj<RawItemData>;
-  }
-
-  public key(): string | string[] | undefined {
-    return this.store()?.key();
   }
 
   /**
@@ -1553,7 +1503,7 @@ export class DataController extends modules.Controller {
   public refresh(options?: boolean | RefreshOptions): DeferredObj<unknown> {
     const refreshOptions = getRefreshOptions(options);
 
-    const dataSource = this.getDataSource();
+    const dataSource = this.dataSourceController.getDataSource();
     const { changesOnly } = refreshOptions;
     const d = Deferred();
 
@@ -1629,18 +1579,13 @@ export class DataController extends modules.Controller {
   }
 
   /**
-   * @extended: TreeList's state_storing
+   * @extended: search, TreeList's state_storing
    */
   public getUserState(): UserState {
     return {
-      searchText: this.option('searchPanel.text'),
       pageIndex: this.pageIndex(),
       pageSize: this.pageSize(),
     };
-  }
-
-  public getCachedStoreData(): RawItemData[] | undefined {
-    return this._dataSource?.getCachedStoreData();
   }
 
   /**
@@ -1648,7 +1593,7 @@ export class DataController extends modules.Controller {
    */
   public isLastPageLoaded(): boolean {
     const pageIndex = this.pageIndex();
-    const pageCount = this.pageCount();
+    const pageCount = this.dataSourceController.pageCount();
     return pageIndex === (pageCount - 1);
   }
 
@@ -1664,31 +1609,11 @@ export class DataController extends modules.Controller {
     return this._dataSource?.reload(reload, changesOnly) as DeferredObj<unknown>;
   }
 
-  public push(changes: StoreChange[], fromStore = false): void {
-    this._dataSource?.push(changes, fromStore);
-  }
-
-  private itemsCount(): number {
-    return (this._dataSource ? this._dataSource.itemsCount() : 0);
-  }
-
-  public totalItemsCount(): number {
-    return (this._dataSource ? this._dataSource.totalItemsCount() : 0);
-  }
-
-  public hasKnownLastPage(): boolean {
-    return (this._dataSource ? this._dataSource.hasKnownLastPage() : true);
-  }
-
   /**
    * @extended: state_storing
    */
   public isLoaded(): boolean {
     return (this._dataSource ? this._dataSource.isLoaded() : true);
-  }
-
-  public totalCount(): number {
-    return (this._dataSource ? this._dataSource.totalCount() : 0);
   }
 
   public hasLoadOperation(): boolean {

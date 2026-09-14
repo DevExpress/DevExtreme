@@ -1823,7 +1823,6 @@ export class ColumnsController extends modules.Controller {
             }
             if (isPlainObject(dataSource) || (dataSource instanceof Store) || Array.isArray(dataSource)) {
               if (that.valueExpr) {
-                // @ts-expect-error
                 const dataSourceOptions = normalizeDataSourceOptions(dataSource);
                 dataSourceOptions.paginate = false;
                 dataSource = new DataSource(dataSourceOptions);

@@ -14,7 +14,9 @@ const items: Item[] = [
   { title: 'Olivia Peyton', text: 'Olivia Peyton' },
   { title: 'Ed Holmes', text: 'Ed Holmes' },
   { title: 'Wally Hobbs', text: 'Wally Hobbs' },
-  { title: 'Brad Jameson', text: 'Brad Jameson' },
+  { title: 'Brad Jameson', text: 'Brad Jameson', icon: 'user' },
+  { icon: 'chart', text: 'Chart' },
+  { icon: 'find', badge: '3', text: 'Find' },
 ];
 
 const options: Options<Properties> = {

@@ -33,6 +33,7 @@ export const DISABLED_STATE_CLASS = 'dx-state-disabled';
 export const ACTIVE_STATE_CLASS = 'dx-state-active';
 export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 export const HOVER_STATE_CLASS = 'dx-state-hover';
+export const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 export const EMPTY_ACTIVE_STATE_UNIT = '';

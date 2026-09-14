@@ -41,6 +41,11 @@
   [elementAttr]="{ 'aria-labelledby': 'label-iconOnly' }"
 >
   <div *dxTemplate="let data of 'item'">
-    <i class="dx-icon" [class]="'dx-icon-' + data.icon"></i>
+    <i
+      class="dx-icon"
+      [class]="'dx-icon-' + data.icon"
+      role="img"
+      [attr.aria-label]="data.label"
+    ></i>
   </div>
 </dx-stepper>

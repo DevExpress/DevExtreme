@@ -31,7 +31,7 @@ QUnit.test('should clean elementDataMap when using subscribeNodesDisposing and u
         ? afterSubscribeElementData[removeEvent].handleObjects.length
         : 0;
 
-    unsubscribeNodesDisposing(clickEvent, subscriptionData.callback, subscriptionData.nodes);
+    unsubscribeNodesDisposing(clickEvent, subscriptionData.onceCallback, subscriptionData.nodes);
 
     const finalElementData = eventsEngine.elementDataMap.get(document);
     const afterUnsubscribeHandleObjectsCount = finalElementData && finalElementData[removeEvent]

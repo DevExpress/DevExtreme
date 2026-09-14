@@ -187,8 +187,7 @@ const resolveKeysFromAllPages = (
   component: InternalGrid,
   indexes: number[],
 ): Promise<RowKey[] | null> => {
-  const dataController = component.getController('data');
-  const isRemotePaging = !!dataController.dataSource()?.remoteOperations()?.paging;
+  const isRemotePaging = !!component.getController('dataSource').remoteOperations().paging;
 
   return isRemotePaging
     ? resolveKeysFromAllPagesRemote(component, indexes)

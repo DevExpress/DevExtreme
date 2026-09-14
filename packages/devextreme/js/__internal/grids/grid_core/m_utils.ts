@@ -674,11 +674,10 @@ export default {
         lookupDataSourceOptions = lookupDataSourceOptions({});
       }
     }
-    // @ts-expect-error
     return normalizeDataSourceOptions(lookupDataSourceOptions);
   },
 
-  getWrappedLookupDataSource(column, dataSource: DataSourceAdapter | undefined, filter) {
+  getWrappedLookupDataSource(column, dataSource: DataSourceAdapter | null | undefined, filter) {
     if (!dataSource) {
       return [];
     }

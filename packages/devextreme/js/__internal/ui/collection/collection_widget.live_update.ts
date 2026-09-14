@@ -204,7 +204,6 @@ class CollectionWidgetLiveUpdate<
     } else {
       const changedItem = items[indexByKey(keyInfo, items, change.key)];
       if (changedItem) {
-        // @ts-expect-error ts-error
         update(keyInfo, items, change.key, change.data).done(() => {
           this._renderItem(
             items.indexOf(changedItem),
@@ -224,7 +223,6 @@ class CollectionWidgetLiveUpdate<
     isPartialRefresh?: boolean,
   ): void {
     when(
-      // @ts-expect-error ts-error
       isPartialRefresh ?? insert(keyInfo, items, change.data, change.index),
     ).done(() => {
       this._beforeItemElementInserted(change);

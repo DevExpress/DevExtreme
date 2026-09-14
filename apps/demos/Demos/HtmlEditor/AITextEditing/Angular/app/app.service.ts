@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { type DxHtmlEditorTypes } from 'devextreme-angular/ui/html_editor';
+import { type DxHtmlEditorTypes } from 'devextreme-angular/ui/html-editor';
 
 const extractKeywordsPrompt: DxHtmlEditorTypes.AICustomCommand['prompt'] = () =>
   'Extract a list of keywords from the text and return it as a comma-separated string';

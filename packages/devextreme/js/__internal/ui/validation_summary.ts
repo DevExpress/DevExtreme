@@ -3,6 +3,7 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { OptionChanged } from '@ts/core/widget/types';
+import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
@@ -17,7 +18,6 @@ import ValidationEngine from '@ts/ui/validation_engine';
 import type Validator from '@ts/ui/validator';
 
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
-const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 const ITEM_CLASS = `${VALIDATION_SUMMARY_CLASS}-item`;
 const ITEM_DATA_KEY = `${VALIDATION_SUMMARY_CLASS}-item-data`;
 

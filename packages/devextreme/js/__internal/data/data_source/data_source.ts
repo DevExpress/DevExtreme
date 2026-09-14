@@ -28,6 +28,7 @@ import type {
   ChangedEvent, DataSourceEventName, EventOptionName, LoadOperation,
   LoadResult, NormalizedDataSourceOptions, StoreLoadOptions,
 } from './types';
+import type { Mapper } from './utils';
 
 // Mirrors the coercion the global `isFinite` applies to non-numeric values.
 const isFiniteValue = (value: unknown): value is number => isFinite(Number(value));
@@ -58,11 +59,11 @@ export class DataSource {
 
   _onPushHandler: Function;
 
-  _aggregationTimeoutId?: number;
+  _aggregationTimeoutId?: ReturnType<typeof setTimeout>;
 
   _storeLoadOptions: StoreLoadOptions;
 
-  _mapFunc?: Function;
+  _mapFunc?: Mapper;
 
   _postProcessFunc?: Function;
 
@@ -567,7 +568,6 @@ export class DataSource {
         dataSourceChanges = changingArgs.postProcessChanges(dataSourceChanges);
       }
 
-      // @ts-expect-error array_utils is untyped: `applyBatch` destructures every option as required
       applyBatch({
         keyInfo: this.store(),
         data: items,

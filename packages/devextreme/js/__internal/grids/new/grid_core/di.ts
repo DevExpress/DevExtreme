@@ -6,6 +6,7 @@ import { AccessibilityController } from './accessibility/controller';
 import * as ColumnChooserModule from './column_chooser/index';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
+import { CompatibilityDataSourceController } from './data_source/compatibility';
 import { ConfirmController } from './editing/confirm_controller';
 import { EditingController } from './editing/controller';
 import { EditPopupView } from './editing/popup/view';
@@ -33,6 +34,7 @@ import { ToolbarView } from './toolbar/view';
 export function register(diContext: DIContext): void {
   diContext.register(DataControllerModule.DataController);
   diContext.register(DataControllerModule.CompatibilityDataController);
+  diContext.register(CompatibilityDataSourceController);
   diContext.register(ItemsController);
   diContext.register(ColumnsControllerModule.ColumnsController);
   diContext.register(SelectionControllerModule.Controller);

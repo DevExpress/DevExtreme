@@ -10,10 +10,6 @@ import treeListCore from '../m_core';
 export class TreeListDataController extends DataController {
   public declare _dataSource?: DataSourceAdapterTreeList | null;
 
-  public dataSource(): DataSourceAdapterTreeList | undefined {
-    return this._dataSource ?? undefined;
-  }
-
   private _getNodeLevel(node) {
     let level = -1;
     while (node.parent) {
@@ -75,18 +71,6 @@ export class TreeListDataController extends DataController {
     this.createAction('onRowCollapsed');
 
     super.init.apply(this, arguments as any);
-  }
-
-  public keyOf(data) {
-    const dataSource = this._dataSource;
-
-    if (dataSource) {
-      return dataSource.keyOf(data);
-    }
-  }
-
-  public key() {
-    return this._dataSource?.getKeyExpr();
   }
 
   public publicMethods() {

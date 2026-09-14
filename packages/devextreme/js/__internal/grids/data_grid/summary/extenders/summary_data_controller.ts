@@ -6,7 +6,10 @@ import type { Format } from '@js/localization';
 import type { SummaryGroupItem as SummaryGroupItemOption } from '@js/ui/data_grid';
 import type { Column } from '@ts/grids/data_grid/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { DataChange, ItemProcessingOptions, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
+import type {
+  DataChange, ItemProcessingOptions, LoadAllItemsDeferred, ProcessedItem,
+} from '@ts/grids/grid_core/data_controller/types';
+import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 
@@ -299,6 +302,13 @@ export const summaryDataControllerExtender = (
     }
 
     return super.getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+  }
+
+  protected resolveLoadAllItems(
+    d: LoadAllItemsDeferred,
+    loadResult: CustomLoadResult,
+  ): void {
+    d.resolve(this.processLoadAllItems(loadResult), loadResult.extra?.summary);
   }
 
   protected _updateItemsCore(change: DataChange): void {

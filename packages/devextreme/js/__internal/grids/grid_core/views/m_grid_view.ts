@@ -23,6 +23,7 @@ import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
+import type { DataSourceController } from '../data_source/data_source_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import type { RowsView } from './m_rows_view';
@@ -89,6 +90,8 @@ export class ResizingController extends modules.ViewController {
 
   public _dataController!: DataController;
 
+  private dataSourceController!: DataSourceController;
+
   protected _rowsView!: RowsView;
 
   private _columnHeadersView!: ColumnHeadersView;
@@ -130,6 +133,7 @@ export class ResizingController extends modules.ViewController {
   public init() {
     this._prevContentMinHeight = null;
     this._dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
     this._columnHeadersView = this.getView('columnHeadersView');
     this.adaptiveColumnsController = this.getController('adaptiveColumns');
@@ -231,7 +235,7 @@ export class ResizingController extends modules.ViewController {
     let labelParts: string[] = [];
 
     const columnCount = this._columnsController?._columns?.filter(({ visible }) => !!visible).length ?? 0;
-    const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
+    const totalItemsCount = Math.max(0, this.dataSourceController.totalItemsCount());
     const widgetAriaLabel = this._getWidgetAriaLabel();
     widgetStatusText = messageLocalization
       // @ts-expect-error Badly typed format method

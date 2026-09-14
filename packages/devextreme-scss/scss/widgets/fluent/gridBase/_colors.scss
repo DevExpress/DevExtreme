@@ -155,7 +155,8 @@ $datagrid-summary-bg: $datagrid-base-background-color !default;
 $datagrid-column-separator-bg: $base-accent !default;
 $datagrid-filter-row-background-color: null !default;
 $datagrid-active-header-filter-icon-color: $base-accent !default;
-$datagrid-text-stub-background-image-path: null !default;
+
+$datagrid-text-stub-background-image-path: data-uri("images/widgets/fluent/grid/text-stub.png") !default;
 $datagrid-filter-panel-color: $base-accent !default;
 $datagrid-draggable-column-text-color: null !default;
 
@@ -177,7 +178,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
   $datagrid-row-alternation-bg: color.adjust($datagrid-base-background-color, $lightness: -4%, $space: hsl) !default;
-  $datagrid-text-stub-background-image-path: data-uri("images/widgets/fluent/color-schemes/light/grid/text-stub.png") !default;
   $datagrid-draggable-column-text-color: color.adjust($base-text-color, $lightness: 60%, $space: hsl) !default;
 }
 
@@ -189,7 +189,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
   $datagrid-columnchooser-item-bg: color.adjust($datagrid-columnchooser-bg, $lightness: 3%, $space: hsl) !default;
   $datagrid-row-alternation-bg: color.adjust($datagrid-base-background-color, $lightness: 4%, $space: hsl) !default;
-  $datagrid-text-stub-background-image-path: data-uri("images/widgets/fluent/color-schemes/dark/grid/text-stub.png") !default;
   $datagrid-draggable-column-text-color: color.adjust($base-text-color, $lightness: -63.9%, $space: hsl) !default;
 }
 

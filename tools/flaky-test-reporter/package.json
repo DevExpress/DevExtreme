@@ -1,0 +1,27 @@
+{
+  "name": "flaky-test-reporter",
+  "version": "26.2.0",
+  "type": "commonjs",
+  "private": true,
+  "author": "Developer Express Inc.",
+  "license": "MIT",
+  "scripts": {
+    "collect": "ts-node src/main.ts",
+    "format": "prettier --write . --ignore-path ../.prettierignore",
+    "format:check": "prettier --check . --ignore-path ../.prettierignore",
+    "lint": "pnpm run format:check",
+    "test": "jest"
+  },
+  "dependencies": {
+    "yargs": "17.7.2"
+  },
+  "devDependencies": {
+    "@types/jest": "30.0.0",
+    "@types/node": "catalog:tools",
+    "@types/yargs": "17.0.35",
+    "prettier": "catalog:tools",
+    "ts-jest": "29.4.12",
+    "ts-node": "catalog:tools",
+    "typescript": "catalog:tools"
+  }
+}

@@ -105,6 +105,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
           groups[i].isExpanded = group[i].isExpanded;
         }
       }
+      // @ts-expect-error normalizeSortingInfo() types selector wider than public KeySelector
       dataSource.group(groups);
       that._grouping.foreachGroups((groupInfo, parents) => {
         if (groupIndex === undefined || groupIndex === parents.length - 1) {

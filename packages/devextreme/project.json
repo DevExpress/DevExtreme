@@ -1849,15 +1849,6 @@
         "lint-texts"
       ]
     },
-    "lint-css": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "lint-css"
-      },
-      "inputs": [
-        "{projectRoot}/scss/**/*"
-      ]
-    },
     "lint-dts": {
       "executor": "nx:run-script",
       "options": {
@@ -1924,17 +1915,6 @@
         "{projectRoot}/js/**/*",
         "{projectRoot}/build/**/*",
         "{projectRoot}/jest.*"
-      ]
-    },
-    "test-styles": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "test-styles"
-      },
-      "inputs": [
-        "default",
-        "!{projectRoot}/js/**/*",
-        "!{projectRoot}/ts/**/*"
       ]
     }
   },

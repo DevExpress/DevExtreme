@@ -57,7 +57,11 @@
   >
     <template #item="{ data }">
       <div>
-        <i :class="'dx-icon dx-icon-' + data.icon"/>
+        <i
+          :class="'dx-icon dx-icon-' + data.icon"
+          role="img"
+          :aria-label="data.label"
+        />
       </div>
     </template>
   </DxStepper>
