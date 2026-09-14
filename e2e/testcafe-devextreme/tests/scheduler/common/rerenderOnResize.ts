@@ -2,6 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { getStyleAttribute, setStyleAttribute } from '../../../helpers/domUtils';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { getThemeName } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Re-render on resize`
   .page(url(__dirname, '../../container.html'));
@@ -60,5 +61,9 @@ test.meta({ browserSize: [300, 300] })('Appointment should not re-rendered on wi
 
   await setStyleAttribute(element, 'background-color: red;');
 
-  await t.expect(await getStyleAttribute(element)).eql('transform: translate(0px, 30px); width: 200px; height: 61.7539px; background-color: red;');
+  // fluent-next raised the header by 2px, so with a fixed widget height the work space lost
+  // the same 2px and the appointment's share of it shrank by half a pixel
+  const height = getThemeName() === 'fluent-next' ? '61.2539px' : '61.7539px';
+
+  await t.expect(await getStyleAttribute(element)).eql(`transform: translate(0px, 30px); width: 200px; height: ${height}; background-color: red;`);
 }).before(async () => createScheduler('#container', { width: 600, height: 400 }));

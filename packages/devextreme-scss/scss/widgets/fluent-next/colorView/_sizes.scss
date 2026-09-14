@@ -1,6 +1,29 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$color-view-container-width: 450px !default; // dx-offscale: 450px
+/*
+ * The colorview layout is hand-fitted and holds itself together, not the scale. The container
+ * row is a three-cell table whose outer widths must add up to the container width, or the right
+ * edge sticks out and the border gets clipped:
+ *
+ *   palette 288 + borders 2 + margins 2    = 292
+ *   hue scale 20 + borders 2 + margin 19   =  41
+ *   controls 90 + margin 27                = 117
+ *                                           --- 450
+ *
+ * Two of the numbers below are therefore remainders, not sizes:
+ *
+ *   $color-view-container-alpha-label-margin  43 = 450 - 292 - 115
+ *   $color-view-controls-container-margin     27 = 450 - 292 - 41 - 90
+ *
+ * Do not snap them to the nearest step: up pushes the block past the container by exactly that
+ * much, down leaves a gap on the right. packages/devextreme/playground/sizes-colorview.html
+ * carries an overflow check for exactly this.
+ *
+ * The spacing scale stops at 160px, so 450, 288, 299 and 115 are out of its reach anyway. The
+ * dx-offscale markers below are there because the px-literal gate demands one, not because these
+ * places want a step - colorView is off the tokenization queue.
+ */
+$color-view-container-width: 450px !default; // dx-offscale: 450px, the fixed layout width
 $color-view-palette-width: 288px !default; // dx-offscale: 288px
 $color-view-palette-height: 299px !default; // dx-offscale: 299px
 $color-view-alpha-row-margin-block-start: ds.$spacing-100 !default;
@@ -12,12 +35,12 @@ $color-view-preview-container-margin: ds.$spacing-340 !default;
 $color-view-container-line-height: normal !default;
 $color-view-container-hex-margin: ds.$spacing-200 0 0 0 !default;
 $color-view-container-alpha-label-width: 115px !default; // dx-offscale: 115px
-$color-view-container-alpha-label-margin: 43px !default; // dx-offscale: 43px
+$color-view-container-alpha-label-margin: 43px !default; // dx-offscale: 43px, a remainder - see the note above
 $color-view-container-textbox-width: 69px !default; // dx-offscale: 69px
 $color-view-container-textbox-margin: 0 0 0 ds.$spacing-100 !default;
 
 $color-view-controls-container-width: 90px !default; // dx-offscale: 90px
-$color-view-controls-container-margin: 27px !default; // dx-offscale: 27px
+$color-view-controls-container-margin: 27px !default; // dx-offscale: 27px, a remainder - see the note above
 
 // Values hoisted from style-file literals (tokenized)
 $color-view-container-margin-block-end: ds.$spacing-100 !default;

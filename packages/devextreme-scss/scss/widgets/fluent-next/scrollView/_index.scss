@@ -58,7 +58,7 @@
   margin-right: 0;
   height: var(--dx-scroll-view-load-indicator-size);
   width: var(--dx-scroll-view-load-indicator-size);
-  border-radius: math.div($scroll-view-load-indicator-size, 2);
+  border-radius: calc(var(--dx-scroll-view-load-indicator-size) / 2);
   display: inline-flex;
   justify-content: center;
   flex-direction: column;
@@ -78,7 +78,7 @@
 .dx-scrollview-pull-down-indicator {
   position: relative;
   margin-left: 0;
-  margin-top: math.div(-$scroll-view-load-indicator-size, 2);
+  margin-top: calc(var(--dx-scroll-view-load-indicator-size) / -2);
 }
 
 .dx-scrollview-pull-down-text {

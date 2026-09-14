@@ -6,6 +6,7 @@
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../textEditor/colors" as textEditorColors;
 @use "../dropDownEditor" as *;
+@use "../../base/dropDownEditor/mixins" as *;
 @use "../common/mixins" as *;
 @use "../../base/lookup";
 @use "../../base/lookup/mixins" as *;
@@ -33,12 +34,12 @@
   &.dx-editor-underlined {
     .dx-lookup-field {
       padding-inline-start: textEditorSizes.$text-editor-input-underlined-padding-inline;
-      padding-inline-end: calc(#{textEditorSizes.$text-editor-input-underlined-padding-inline} + #{$global-icon-size} + #{textEditorSizes.$text-editor-spin-button-padding-inline});
+      padding-inline-end: lookup-field-padding(textEditorSizes.$text-editor-input-underlined-padding-inline, $global-icon-size, 1, textEditorSizes.$text-editor-spin-button-padding-inline);
     }
 
     &.dx-invalid {
       .dx-lookup-field {
-        padding-inline-end: calc(#{textEditorSizes.$text-editor-input-underlined-padding-inline} + #{$global-icon-size} * 2 + #{textEditorSizes.$text-editor-spin-button-padding-inline});
+        padding-inline-end: lookup-field-padding(textEditorSizes.$text-editor-input-underlined-padding-inline, $global-icon-size, 2, textEditorSizes.$text-editor-spin-button-padding-inline);
       }
     }
   }

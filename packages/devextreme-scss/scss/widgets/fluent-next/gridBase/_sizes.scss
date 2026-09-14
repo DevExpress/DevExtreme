@@ -62,10 +62,10 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-column-chooser-padding: ds.$spacing-160 $grid-column-chooser-padding-inline ds.$spacing-90 !default;
   $grid-header-panel-padding: ds.$spacing-80 0 !default;
 
-  $grid-command-edit-column-width: 115px !default; // dx-offscale: 115px
-  $grid-command-edit-column-with-icons-width: 93px !default; // dx-offscale: 93px
+  $grid-command-edit-column-width: ds.$spacing-1200 !default;
+  $grid-command-edit-column-with-icons-width: ds.$spacing-940 !default;
   $grid-adaptive-column-height: ds.$spacing-400 !default;
-  $grid-no-data-font-size: ds.$spacing-170 !default;
+  $grid-no-data-font-size: ds.$spacing-170 !default; // dx-foreign-scale: 17px, the font-size scale has no such step
 
   $grid-filter-row-editor-padding-inline: ds.$spacing-120 !default;
 
@@ -75,7 +75,7 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-command-edit-icon-size: ds.$spacing-200 !default;
   $grid-filter-panel-icon-size: ds.$spacing-200 !default;
   $grid-command-ai-icon-size: ds.$spacing-200 !default;
-  $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + 8px) !default; // dx-px-nudge: +8px over the AI icon size
+  $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + #{ds.$spacing-80}) !default;
   $grid-command-ai-button-max-width: ds.$spacing-80 !default;
 }
 
@@ -94,7 +94,7 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-column-chooser-padding: ds.$spacing-80 $grid-column-chooser-padding-inline ds.$spacing-80 !default;
   $grid-header-panel-padding: ds.$spacing-60 0 !default;
 
-  $grid-command-edit-column-width: 105px !default; // dx-offscale: 105px
+  $grid-command-edit-column-width: ds.$spacing-1000 !default;
   $grid-command-edit-column-with-icons-width: ds.$spacing-800 !default;
   $grid-adaptive-column-height: ds.$spacing-260 !default;
   $grid-no-data-font-size: ds.$font-size-base-md !default;
@@ -107,7 +107,7 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-command-edit-icon-size: ds.$spacing-160 !default;
   $grid-filter-panel-icon-size: ds.$spacing-160 !default;
   $grid-command-ai-icon-size: ds.$spacing-160 !default;
-  $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + 6px) !default; // dx-px-nudge: +6px over the AI icon size
+  $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + #{ds.$spacing-60}) !default;
   $grid-command-ai-button-max-width: ds.$spacing-60 !default;
 }
 
@@ -120,13 +120,15 @@ $grid-sort-index-icon-padding-inline-end: ds.$spacing-40 !default;
 $grid-sort-index-icon-margin-inline-start: -1px !default; // dx-offscale: -1px
 $grid-sort-index-icon-inset-block-end: ds.$spacing-10 !default;
 $grid-header-cell-sort-index-margin-inline-start: ds.$spacing-40 !default;
-$grid-error-message-padding-inline-end: 35px !default; // dx-offscale: 35px
+$grid-error-message-padding-inline-end: ds.$spacing-360 !default;
 $grid-tree-view-node-padding-inline-start: ds.$spacing-200 !default;
 $grid-column-chooser-list-item-margin: ds.$spacing-20 ds.$spacing-20 $grid-column-chooser-item-margin ds.$spacing-20 !default;
 $grid-column-chooser-item-height: ds.$spacing-20 !default;
 $grid-after-inset-inline-end: ds.$spacing-10 !default;
 $grid-overlay-content-padding: ds.$spacing-90 ds.$spacing-170 ds.$spacing-90 !default;
 $grid-revert-button-margin: 0 0 0 ds.$spacing-10 !default;
+$grid-revert-button-padding: ds.$spacing-20 !default;
+$grid-revert-button-icon-size: ds.$spacing-180 !default;
 $grid-content-padding: ds.$spacing-80 ds.$spacing-80 0 ds.$spacing-80 !default;
 $grid-filter-panel-padding: ds.$spacing-180 $grid-cell-padding-inline !default;
 $grid-header-row-padding-block-start: ds.$spacing-120 !default;
@@ -153,7 +155,7 @@ $grid-command-expand-column-width: ds.$spacing-300 !default;
  * stops asserting 36px while the theme renders something else.
  */
 $grid-command-adaptive-column-width: calc(2 * #{$grid-cell-padding-inline} + #{$global-icon-size}) !default;
-$grid-ai-confirm-dialog-button-width: 50px !default; // dx-offscale: 50px
+$grid-ai-confirm-dialog-button-width: ds.$spacing-520 !default;
 
 // Sizes hoisted out of the shared layer's rules; values match what it used to pin
 $grid-context-menu-item-padding-block: ds.$spacing-70 !default;

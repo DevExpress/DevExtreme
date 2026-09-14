@@ -16,8 +16,8 @@ $popup-toolbar-height: null !default;
 $popup-button-margin: 0 ds.$spacing-80 !default;
 $popup-toolbar-item-spacing: ds.$spacing-80 !default;
 
-$popup-content-box-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-ambient, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-key !default;
-$popup-content-box-shadow-focused: 0 0 ds.$spacing-120 0 $popup-content-shadow-focused, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-focused !default;
+$popup-content-box-shadow: 0 0 ds.$spacing-80 0 $popup-content-shadow-ambient, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-key !default; // dx-shadow-geometry: two layers assembled by hand from spacing steps
+$popup-content-box-shadow-focused: 0 0 ds.$spacing-120 0 $popup-content-shadow-focused, 0 ds.$spacing-320 ds.$spacing-640 0 $popup-content-shadow-focused !default; // dx-shadow-geometry: two layers assembled by hand from spacing steps
 
 @if $size == "default" {
   $popup-content-padding: ds.$spacing-240 !default;

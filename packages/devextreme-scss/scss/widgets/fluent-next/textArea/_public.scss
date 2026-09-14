@@ -3,4 +3,5 @@
 
 @mixin publish {
   --dx-text-area-content-line-height: #{$text-area-content-line-height};
+  --dx-text-area-input-container-margin: #{$text-area-input-container-margin};
 }
