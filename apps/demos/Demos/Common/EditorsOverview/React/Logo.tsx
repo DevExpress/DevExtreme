@@ -18,7 +18,7 @@ function Logo(props: LogoProps) {
     transform,
     border,
   } = props;
-  const containerStyle = useMemo(() => ({
+  const containerStyle = useMemo<React.CSSProperties>(() => ({
     outlineStyle: border ? 'solid' : 'none',
     outlineColor: color,
   }), [border, color]);
