@@ -458,7 +458,8 @@ function getFilterConditions(filterValue) {
 }
 
 function combineFilterConditions(existingFilterValue, newCondition) {
-  const conditions = getFilterConditions(existingFilterValue).filter((condition) => condition[0] !== newCondition[0]);
+  const [newColumn, newOperator] = newCondition;
+  const conditions = getFilterConditions(existingFilterValue).filter(([column, operator]) => column !== newColumn || operator !== newOperator);
   conditions.push(newCondition);
 
   return conditions.length === 1 ? conditions[0] : conditions.flatMap((condition, index) => (index === 0 ? [condition] : ['and', condition]));
