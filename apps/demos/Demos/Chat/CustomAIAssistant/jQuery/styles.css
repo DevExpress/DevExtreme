@@ -9,6 +9,13 @@
   min-height: 360px;
 }
 
+.priority-badge {
+  border-radius: 24px;
+  padding: 2px 8px;
+  display: inline-block;
+  text-align: center;
+}
+
 #form-container {
   border: 1px solid #e0e0e0;
   padding: 16px;

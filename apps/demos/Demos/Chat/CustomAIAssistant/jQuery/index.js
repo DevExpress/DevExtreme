@@ -308,13 +308,8 @@ $(() => {
           caption: 'Priority',
           cellTemplate: (container, options) => {
             $('<div>')
-              .css({
-                background: colors[options.value],
-                borderRadius: '24px',
-                padding: '2px 8px',
-                display: 'inline-block',
-                textAlign: 'center',
-              })
+              .addClass('priority-badge')
+              .css('background', colors[options.value])
               .text(options.value)
               .appendTo(container);
           },
@@ -502,14 +497,16 @@ To filter a date column by a year and/or month (the same thing the grid's own he
         value = value === 100 || ['true', 'completed', 'yes', '100'].includes(normalized);
       }
 
-      if ((column.dataType === 'date' || column.dataType === 'datetime') && typeof value === 'string') {
+      const isDateColumn = column.dataType === 'date' || column.dataType === 'datetime';
+
+      if (isDateColumn && typeof value === 'string') {
         const parsedDate = new Date(value);
         if (!Number.isNaN(parsedDate.getTime())) {
           value = parsedDate;
         }
       }
 
-      if (args.operator === 'anyof' && Array.isArray(value)) {
+      if (args.operator === 'anyof' && isDateColumn && Array.isArray(value)) {
         const mentionedYears = new Set(String(rawText ?? '').match(/\b\d{4}\b/g));
         const hasUnrecognizedYear = value.some((entry) => !mentionedYears.has(String(entry).split('/')[0]));
 
