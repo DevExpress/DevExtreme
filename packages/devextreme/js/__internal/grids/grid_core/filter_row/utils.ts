@@ -11,8 +11,7 @@ const allowFilterRowFiltering = (column: Column): boolean => !!(
 
 export const createFilterRowExpression = (column: Column): DataFilter => {
   const selectedFilterOperation = column.selectedFilterOperation
-    ?? column.defaultFilterOperation
-    ?? null;
+    || column.defaultFilterOperation;
 
   return column.createFilterExpression?.(column.filterValue, selectedFilterOperation, 'filterRow');
 };
@@ -24,4 +23,4 @@ export const createFilterRowExpressions = (
   .filter((column) => allowFilterRowFiltering(column)
     && isDefined(column.filterValue)
     && !isColumnExcluded(column, excludedColumn))
-  .map((column) => createFilterRowExpression(column));
+  .map(createFilterRowExpression);

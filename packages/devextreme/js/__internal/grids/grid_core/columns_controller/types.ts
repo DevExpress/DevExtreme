@@ -37,7 +37,7 @@ export interface InternalColumnOptions {
   selector?: ColumnSelector;
   createFilterExpression?: (
     filterValue: unknown,
-    selectedFilterOperation: string | null,
+    selectedFilterOperation: string | null | undefined,
     target: FilterTargets,
   ) => DataFilter;
   index?: number;

@@ -38,18 +38,30 @@ describe('createFilterRowExpressions', () => {
         .toEqual([['name', 'startswith', 'Alex', 'filterRow']]);
     });
 
+    it('should fall back to the default operation when the selected one is empty', () => {
+      const column = createColumn({
+        dataField: 'name',
+        filterValue: 'Alex',
+        selectedFilterOperation: '' as Column['selectedFilterOperation'],
+        defaultFilterOperation: 'startswith',
+      });
+
+      expect(createFilterRowExpressions([column], null))
+        .toEqual([['name', 'startswith', 'Alex', 'filterRow']]);
+    });
+
     it('should pass no operation when the column has neither', () => {
       const column = createColumn({ dataField: 'name', filterValue: 'Alex' });
 
       expect(createFilterRowExpressions([column], null))
-        .toEqual([['name', null, 'Alex', 'filterRow']]);
+        .toEqual([['name', undefined, 'Alex', 'filterRow']]);
     });
 
     it('should keep falsy values that are still defined', () => {
       const column = createColumn({ dataField: 'age', filterValue: 0 });
 
       expect(createFilterRowExpressions([column], null))
-        .toEqual([['age', null, 0, 'filterRow']]);
+        .toEqual([['age', undefined, 0, 'filterRow']]);
     });
   });
 
@@ -81,7 +93,16 @@ describe('createFilterRowExpressions', () => {
       ];
 
       expect(createFilterRowExpressions(columns, columns[0]))
-        .toEqual([['age', null, 15, 'filterRow']]);
+        .toEqual([['age', undefined, 15, 'filterRow']]);
+    });
+  });
+
+  describe('when no column is excluded', () => {
+    it('should keep a column that has no index', () => {
+      const column = createColumn({ index: undefined, dataField: 'name', filterValue: 'Alex' });
+
+      expect(createFilterRowExpressions([column], null))
+        .toEqual([['name', undefined, 'Alex', 'filterRow']]);
     });
   });
 });
