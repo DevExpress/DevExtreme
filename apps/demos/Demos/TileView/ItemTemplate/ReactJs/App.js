@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import TileView from 'devextreme-react/tile-view';
 import { homes } from './data.js';
 
@@ -18,13 +18,16 @@ const App = () => (
     itemComponent={TileViewItem}
   />
 );
-const TileViewItem = ({ data }) => (
-  <div className="dx-tile-content">
-    <div className="price">{currencyFormatter.format(data.Price)}</div>
-    <div
-      className="image"
-      style={{ backgroundImage: `url(${data.ImageSrc})` }}
-    ></div>
-  </div>
-);
+const TileViewItem = ({ data }) => {
+  const style = useMemo(() => ({ backgroundImage: `url(${data.ImageSrc})` }), [data.ImageSrc]);
+  return (
+    <div className="dx-tile-content">
+      <div className="price">{currencyFormatter.format(data.Price)}</div>
+      <div
+        className="image"
+        style={style}
+      ></div>
+    </div>
+  );
+};
 export default App;

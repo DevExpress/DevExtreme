@@ -11,12 +11,24 @@ import DropDownButtonTemplate from './DropDownButtonTemplate.js';
 import 'whatwg-fetch';
 
 const buttonDropDownOptions = { width: 230 };
-const itemTemplateRender = (item) => <div style={{ fontSize: `${item.size}px` }}>{item.text}</div>;
+const ItemTemplateRender = (item) => {
+  const style = React.useMemo(() => ({ fontSize: `${item.size}px` }), [item.size]);
+  return <div style={style}>{item.text}</div>;
+};
 const App = () => {
   const [alignment, setAlignment] = useState('left');
   const [color, setColor] = useState(null);
   const [fontSize, setFontSize] = useState(14);
   const [lineHeight, setLineHeight] = useState(1.35);
+  const textStyle = useMemo(
+    () => ({
+      color: color ?? undefined,
+      textAlign: alignment,
+      lineHeight,
+      fontSize: `${fontSize}px`,
+    }),
+    [color, alignment, lineHeight, fontSize],
+  );
   const [colorPicker, setColorPicker] = useState(undefined);
   const onButtonClick = useCallback((e) => {
     notify(
@@ -157,18 +169,13 @@ const App = () => {
             </Template>
             <Template
               name="fontItem"
-              render={itemTemplateRender}
+              render={ItemTemplateRender}
             ></Template>
           </Toolbar>
         </div>
         <div
           className="dx-field"
-          style={{
-            color: color ?? undefined,
-            textAlign: alignment,
-            lineHeight,
-            fontSize: `${fontSize}px`,
-          }}
+          style={textStyle}
         >
           <p id="text">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
