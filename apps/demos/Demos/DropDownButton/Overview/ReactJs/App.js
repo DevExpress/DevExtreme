@@ -11,10 +11,8 @@ import DropDownButtonTemplate from './DropDownButtonTemplate.js';
 import 'whatwg-fetch';
 
 const buttonDropDownOptions = { width: 230 };
-const ItemTemplateRender = (item) => {
-  const style = React.useMemo(() => ({ fontSize: `${item.size}px` }), [item.size]);
-  return <div style={style}>{item.text}</div>;
-};
+const getItemTemplateStyle = (item) => ({ fontSize: `${item.size}px` });
+const ItemTemplateRender = (item) => <div style={getItemTemplateStyle(item)}>{item.text}</div>;
 const App = () => {
   const [alignment, setAlignment] = useState('left');
   const [color, setColor] = useState(null);

@@ -8,7 +8,9 @@ interface Home {
   ImageSrc: string;
 }
 
-const HomeImage = (data: Home) => <div className="tile-image" style={React.useMemo(() => ({ backgroundImage: `url(${data.ImageSrc})` }), [data.ImageSrc])}></div>;
+const getHomeImageStyle = (data: Home) => ({ backgroundImage: `url(${data.ImageSrc})` });
+
+const HomeImage = (data: Home) => <div className="tile-image" style={getHomeImageStyle(data)}></div>;
 
 const App = () => (
   <TileView
