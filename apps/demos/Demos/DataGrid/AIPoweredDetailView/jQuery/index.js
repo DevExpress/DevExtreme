@@ -36,14 +36,10 @@ $(() => {
     if ($newMessage) $outputArea.append($newMessage);
   }
 
-  function toggleLoadingState(isLoading, event, controls, $outputArea) {
-    const {
-      responseEditor,
-      promptEditor,
-      suggestions,
-      submitButton,
-      loadPanel
-    } = controls;
+  function toggleLoadingState(isLoading, event, controls) {
+    const { inputArea, outputArea } = controls;
+    const { promptEditor, suggestions, submitButton } = inputArea;
+    const { responseEditor, loadPanel, $container } = outputArea;
 
     const responseText = responseEditor.option('value');
 
@@ -53,7 +49,7 @@ $(() => {
     submitButton.option('disabled', isLoading);
 
     if (isLoading) {
-      setMessage($outputArea, null);
+      setMessage($container, null);
       loadPanel.show();
       event?.target?.blur();
     } else {
@@ -62,14 +58,17 @@ $(() => {
     }
   }
 
-  async function handleSubmit(event, rowData, controls, $outputArea) {
-    const { promptEditor, responseEditor, submitButton } = controls;
+  async function handleSubmit(event, rowData, controls) {
+    const { inputArea, outputArea } = controls;
+    const { promptEditor, submitButton } = inputArea;
+    const { responseEditor, $container } = outputArea;
+    
     const userPrompt = promptEditor.option('value');
     if (userPrompt === '') return;
 
     abortController = new AbortController();
 
-    toggleLoadingState(true, event, controls, $outputArea);
+    toggleLoadingState(true, event, controls);
 
     try {
       const messages = [
@@ -83,11 +82,11 @@ $(() => {
       responseEditor.option('value', aiResponse);
     } catch {
       responseEditor.option('value', '');
-      setMessage($outputArea, createErrorMessage());
+      setMessage($container, createErrorMessage());
     } finally {
       abortController = null;
       submitButton.option('text', 'Resubmit');
-      toggleLoadingState(false, event, controls, $outputArea);
+      toggleLoadingState(false, event, controls);
     }
   }
 
@@ -130,14 +129,14 @@ $(() => {
     const promptEditor = createPromptEditor(submitButton);
     const suggestions = createSuggestions(promptEditor);
 
-    const $inputArea = $('<div>')
+    const $container = $('<div>')
       .addClass('input-container')
       .append(
         $('<div>').addClass('prompt-container').append(promptEditor.element(), suggestions.element()),
         $('<div>').addClass('submit-container').append(submitButton.element()),
       );
 
-    return { $inputArea, submitButton, promptEditor, suggestions };
+    return { $container, submitButton, promptEditor, suggestions };
   }
 
   function getThemeSizeConfig() {
@@ -220,13 +219,13 @@ $(() => {
     const responseEditor = createResponseEditor();
     const loadPanel = createLoadPanel();
 
-    const $outputArea = $('<div>')
+    const $container = $('<div>')
       .addClass('output-container')
       .append(loadPanel.element(), responseEditor.element());
 
-    setMessage($outputArea, createInitialMessage());
+    setMessage($container, createInitialMessage());
 
-    return { $outputArea, responseEditor, loadPanel };
+    return { $container, responseEditor, loadPanel };
   }
 
   $('#gridContainer').dxDataGrid({
@@ -276,15 +275,15 @@ $(() => {
     masterDetail: {
       enabled: true,
       template: (container, { data }) => {
-        const { $inputArea, ...input } = createInputArea(data);
-        const { $outputArea, ...output } = createOutputArea();
-        const controls = { ...input, ...output };
-        const onSubmit = ({ event }) => handleSubmit(event, data, controls, $outputArea);
+        const inputArea = createInputArea();
+        const outputArea = createOutputArea();
+        const controls = { inputArea, outputArea };
+        const onSubmit = ({ event }) => handleSubmit(event, data, controls);
 
-        input.promptEditor.option('onEnterKey', onSubmit);
-        input.submitButton.option('onClick', onSubmit);
+        inputArea.promptEditor.option('onEnterKey', onSubmit);
+        inputArea.submitButton.option('onClick', onSubmit);
 
-        container.append($inputArea, $outputArea);
+        container.append(inputArea.$container, outputArea.$container);
       },
     },
     onRowExpanding(e) {
