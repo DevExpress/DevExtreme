@@ -1,0 +1,11 @@
+.dx-chat { max-width: 900px; border-radius: 0; min-height: 20em; }
+#grid-container { margin-top: 20px; min-height: 360px; }
+.priority-badge { border-radius: 24px; padding: 2px 8px; display: inline-block; text-align: center; }
+.priority-badge--high { background: #F1BBBC; }
+.priority-badge--normal { background: #F9E2AE; }
+.priority-badge--low { background: #9FD89F; }
+#form-container { border: 1px solid #e0e0e0; padding: 16px; }
+.demo-container { margin: 20px; height: 556px; }
+.dx-popup-content { padding: 0; }
+.dx-chat-messagebox { border-top-color: transparent; }
+.dx-layout-manager .dx-field-item.save-button { padding-bottom: 0; }
