@@ -1,0 +1,65 @@
+<dx-popup
+  #popup
+  title="AI Assistant"
+  [wrapperAttr]="{ class: 'chat-popup' }"
+  [width]="400"
+  height="90%"
+  [dragEnabled]="true"
+  [resizeEnabled]="true"
+  [showCloseButton]="true"
+  [shading]="false"
+  [(visible)]="popupVisible"
+  [position]="popupPosition"
+  (onHiding)="onPopupHiding()"
+  (onShowing)="onPopupShowing()"
+>
+  <dxi-popup-toolbar-item
+    toolbar="top"
+    location="after"
+    widget="dxButton"
+    [cssClass]="CLASSES.clearChatButton"
+    [options]="clearButtonOptions"
+  ></dxi-popup-toolbar-item>
+
+  <div class="ai-chat-content">
+    <dx-chat
+      [disabled]="disabled"
+      height="100%"
+      [showAvatar]="false"
+      width="auto"
+      [dataSource]="dataSource"
+      [reloadOnChange]="true"
+      [user]="{ id: 'user' }"
+      [showUserName]="false"
+      [speechToTextEnabled]="true"
+      emptyViewTemplate="emptyViewTemplate"
+      (onMessageEntered)="onMessageEntered($event)"
+    >
+      <dxo-chat-suggestions
+        [items]="suggestions"
+        [onItemClick]="onSuggestionClick"
+      ></dxo-chat-suggestions>
+
+      <div
+        class="dx-chat-messagelist-empty-view"
+        *dxTemplate="let data of 'emptyViewTemplate'"
+      >
+        <div
+          class="dx-chat-messagelist-empty-image dx-ai-chat__empty-image"
+        ></div>
+        <div class="ai-chat-empty-message">{{ emptyViewMessage }}</div>
+        <div
+          class="ai-chat-empty-prompt"
+          [innerHTML]="emptyViewPromptHtml"
+        ></div>
+      </div>
+    </dx-chat>
+  </div>
+</dx-popup>
+
+<dx-speed-dial-action
+  icon="sparkle"
+  label="AI Assistant"
+  [visible]="fabVisible"
+  (onClick)="toggle()"
+></dx-speed-dial-action>

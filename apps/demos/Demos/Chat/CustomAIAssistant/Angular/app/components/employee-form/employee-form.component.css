@@ -1,0 +1,12 @@
+::ng-deep #form-container {
+  border: 1px solid #e0e0e0;
+  padding: 16px;
+}
+
+::ng-deep .dx-color-scheme-blue-light #form-container {
+  background-color: #fff;
+}
+
+::ng-deep .dx-layout-manager .dx-field-item.save-button {
+  padding-bottom: 0;
+}
