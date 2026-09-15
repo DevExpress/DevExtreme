@@ -77,7 +77,6 @@ export const initMobileViewport = function (
   }
 
   if (realDevice.ios) {
-    // @ts-expect-error
     const isPhoneGap = domAdapter.getLocation().protocol === 'file:';
 
     if (!isPhoneGap) {
