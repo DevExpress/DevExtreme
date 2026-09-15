@@ -3605,7 +3605,6 @@ QUnit.test('Axes zooming - pinch', function(assert) {
     assert.roughEqual(valueAxis.getAxisPosition(), 400, 2.01, 'value axis moved - zoom out');
 });
 
-// March 1994 starts on Tuesday, so every Saturday and Sunday produces a weekend break
 const workdaysDataSource = (() => {
     const arr = [];
     for(let day = 1; day <= 31; day++) {

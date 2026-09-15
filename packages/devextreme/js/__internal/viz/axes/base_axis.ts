@@ -1307,9 +1307,6 @@ Axis.prototype = {
     return this._options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval;
   },
 
-  // breaks of the whole range, for consumers that show the whole range at once - the scroll
-  // bar - so that they measure the rendered content and not the calendar time. Their widths
-  // are the ones that end up rendered, the same the visible length is measured with.
   getWholeRangeBreaks() {
     const businessRange = this._translator.getBusinessRange();
 
@@ -1373,8 +1370,6 @@ Axis.prototype = {
     return isDate(value) ? new Date(value.valueOf() + diff) : value + diff;
   },
 
-  // anchor tells which edge is known and must be kept: 'start' when the range comes from the
-  // scroll bar thumb, otherwise the edge the gesture moves towards
   adjustPannedRange(range, anchor?) {
     const that = this;
     const storedParams = that._storedZoomEndParams;

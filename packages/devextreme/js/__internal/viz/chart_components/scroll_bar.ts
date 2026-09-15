@@ -60,8 +60,6 @@ ScrollBar.prototype = {
     const scrollElement = this._scroll.element;
 
     eventsEngine.on(scrollElement, dragEventStart, (e) => {
-      // the drag offset is counted from the gesture start, so the thumb position it applies to
-      // has to be the one the gesture started with, not the one of the last render
       this._dragStartOffset = this._offset;
 
       fireEvent({
@@ -115,8 +113,6 @@ ScrollBar.prototype = {
     return (this._dragStartOffset ?? this._offset) + offset;
   },
 
-  // where the thumb points now, so that the chart can move the visual range to the thumb
-  // instead of converting the gesture into a translation whose result depends on the scale
   _getRangeAtPosition(position) {
     const translator = this._translator;
     const length = translator.canvasLength / this._scale;
@@ -125,7 +121,6 @@ ScrollBar.prototype = {
       return undefined;
     }
 
-    // the thumb cannot leave the bar, which is what keeps the range inside the whole range
     const visibleArea = translator.getCanvasVisibleArea();
     const lastPosition = _max(visibleArea.max - length, visibleArea.min);
     const start = _min(_max(position, visibleArea.min), lastPosition);
@@ -171,9 +166,6 @@ ScrollBar.prototype = {
     const isDiscrete = range.axisType === 'discrete';
     that._translateWithOffset = (isDiscrete && !stick && 1) || 0;
     that._hasBreaks = !!wholeRangeBreaks?.length;
-    // the bar shows the whole range, so the breaks of the visual range do not belong here;
-    // the breaks of the whole range do, and they are what makes the thumb measure the
-    // rendered content instead of the calendar time. They take no room on the bar itself.
     that._translator.update(extend({}, range, {
       minVisible: null,
       maxVisible: null,
@@ -260,8 +252,6 @@ ScrollBar.prototype = {
   setPosition(min, max) {
     const that = this;
     const translator = that._translator;
-    // a non-zero direction keeps translate() from returning null for an edge that falls
-    // inside a scale break; breaks take no room here, so both of their sides are one point
     const direction = that._translateWithOffset || (that._hasBreaks ? 1 : 0);
     const minPoint = isDefined(min) ? translator.translate(min, -direction) : translator.translate('canvas_position_start');
     const maxPoint = isDefined(max) ? translator.translate(max, direction) : translator.translate('canvas_position_end');
@@ -269,8 +259,6 @@ ScrollBar.prototype = {
     const thumbLength = Math.abs(maxPoint - minPoint);
 
     that._offset = _min(minPoint, maxPoint);
-    // the ratio of the bar length to the thumb length: taking it from the values instead
-    // would ignore the scale breaks the bar now accounts for
     that._scale = thumbLength
       ? translator.canvasLength / thumbLength
       : translator.getScale(min, max);

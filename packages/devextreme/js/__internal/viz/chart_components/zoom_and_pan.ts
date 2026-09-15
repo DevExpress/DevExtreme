@@ -268,10 +268,6 @@ export default {
       zoomStarted && chart._requestChange(['VISUAL_RANGE']);
     }
 
-    // The scroll bar reports where its thumb points instead of a translation, so the visual
-    // range follows the thumb exactly, the way the visual range follows the cursor when the
-    // chart itself is dragged. A translation would not do it here: its result depends on the
-    // scale, and the scale changes as scale breaks enter and leave the range.
     function panArgumentAxisToThumb(e, scrollRange) {
       const axes = getFilteredAxes(chart._argumentAxes);
 

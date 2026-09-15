@@ -5195,8 +5195,6 @@ QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
 
         return {
             position: parseFloat($thumb.attr('y')),
-            // the thumb measures the rendered content, so its share of the bar must match the
-            // share of the rendered content the visual range covers
             barShare: parseFloat($thumb.attr('height')) / (barArea.max - barArea.min),
             contentShare: axis.getVisibleRangeLength()
                 / axis.getVisibleRangeLength({ minVisible: wholeRange.min, maxVisible: wholeRange.max })
@@ -5210,8 +5208,6 @@ QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
         }
 
         for(let i = 1; i < thumbs.length; i++) {
-            // a range that starts on a non-working day renders the same content as the one that
-            // starts on the weekend before it, so the thumb may stand still - but never go back
             assert.ok(thumbs[i].position >= thumbs[i - 1].position,
                 `thumb never moves back on March ${i + 1} (${thumbs[i - 1].position} -> ${thumbs[i].position})`);
             assert.roughEqual(thumbs[i].barShare, thumbs[i].contentShare, 0.02,
