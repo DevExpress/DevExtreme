@@ -34,7 +34,7 @@ const DetailView = ({ data: templateData, onRequestStart, onRequestEnd }: Detail
     return {
       isCompact: themeName.endsWith('compact'),
       isMaterial: themeName.startsWith('material'),
-      isGeneric: themeName.startsWith('generic')
+      isGeneric: themeName.startsWith('generic'),
     };
   }, []);
 

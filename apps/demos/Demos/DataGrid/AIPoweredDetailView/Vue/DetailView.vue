@@ -112,7 +112,7 @@ const getTheme = () => {
   return {
     isCompact: themeName.endsWith('compact'),
     isMaterial: themeName.startsWith('material'),
-    isGeneric: themeName.startsWith('generic')
+    isGeneric: themeName.startsWith('generic'),
   };
 };
 
