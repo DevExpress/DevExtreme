@@ -64,7 +64,7 @@
 
   &.dx-state-focused {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-icon-checked-bg-focused);
+      border-color: var(--dx-check-box-icon-checked-border-focused);
     }
   }
 
@@ -88,7 +88,7 @@
 .dx-checkbox-checked {
   .dx-checkbox-icon {
     color: var(--dx-check-box-icon-bg);
-    border-color: var(--dx-check-box-icon-checked-bg);
+    border-color: var(--dx-check-box-icon-checked-border);
     background-color: var(--dx-check-box-icon-checked-bg);
 
     @include dx-icon(check);
@@ -100,7 +100,7 @@
 
   &.dx-state-hover {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-icon-checked-bg-hovered);
+      border-color: var(--dx-check-box-icon-checked-border-hovered);
       background-color: var(--dx-check-box-icon-checked-bg-hovered);
     }
 
@@ -115,7 +115,7 @@
   &.dx-state-active,
   &.dx-state-focused {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-icon-checked-bg-focused);
+      border-color: var(--dx-check-box-icon-checked-border-focused);
       background-color: var(--dx-check-box-icon-checked-bg-focused);
     }
 
@@ -154,7 +154,7 @@
 
 .dx-checkbox-indeterminate {
   .dx-checkbox-icon {
-    border-color: var(--dx-check-box-icon-checked-bg);
+    border-color: var(--dx-check-box-icon-checked-border);
   }
 
   &.dx-invalid {
@@ -167,7 +167,7 @@
 
   &.dx-state-hover {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-icon-checked-bg-hovered);
+      border-color: var(--dx-check-box-icon-checked-border-hovered);
 
       &::before {
         background-color: var(--dx-check-box-icon-checked-bg-hovered);
@@ -188,7 +188,7 @@
   &.dx-state-active,
   &.dx-state-focused {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-icon-checked-bg-focused);
+      border-color: var(--dx-check-box-icon-checked-border-focused);
 
       &::before {
         background-color: var(--dx-check-box-icon-checked-bg-focused);

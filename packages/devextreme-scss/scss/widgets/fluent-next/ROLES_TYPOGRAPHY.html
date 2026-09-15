@@ -64,11 +64,13 @@ footer { margin-top:4rem; padding-top:1rem; border-top:1px solid var(--line);
 .only-light { display:inline; } .only-dark { display:none; }
 :root[data-mode="dark"] .only-light { display:none; }
 :root[data-mode="dark"] .only-dark { display:inline; }
-.sp-chip { min-width:5.2rem; padding:.4em .8em; border:1px solid; border-radius:4px;
+/* Только width и style: сокращённое border сбросило бы цвет в currentColor и перебило бы
+   .v, которое идёт выше - образец тогда рисует край не той ролью, а цветом подписи. */
+.sp-chip { min-width:5.2rem; padding:.4em .8em; border-width:1px; border-style:solid; border-radius:4px;
      font-size:.95em; white-space:nowrap; }
-.sp-box { width:1.35rem; height:1.35rem; border:1.5px solid; border-radius:3px;
+.sp-box { width:1.35rem; height:1.35rem; border-width:1.5px; border-style:solid; border-radius:3px;
      display:flex; align-items:center; justify-content:center; font-size:.95rem; line-height:1; }
-.sp-ring { width:1.35rem; height:1.35rem; border:1.5px solid; border-radius:50%;
+.sp-ring { width:1.35rem; height:1.35rem; border-width:1.5px; border-style:solid; border-radius:50%;
      display:flex; align-items:center; justify-content:center; }
 .sp-dot { width:.6rem; height:.6rem; border-radius:50%; }
 .sp-disc { width:2.2rem; height:2.2rem; border-radius:50%; display:flex; align-items:center;

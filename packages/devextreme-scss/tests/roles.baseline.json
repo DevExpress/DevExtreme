@@ -1979,7 +1979,7 @@
     "groups": {
       "checkbox-focused-fill": {
         "decision": "design",
-        "why": "The checked checkbox, focused or pressed, fills with bg-primary-active and keeps its checkmark on content-inverted. Those two roles behave differently across modes: content-inverted flips (#ffffff light, #161616 dark), bg-primary-active does not (#003c70 in both). Light gets 11.17, dark gets 1.62 - the mark is gone, and the box itself is 1.39 against the page. The rest state is 3.36 and the hovered state 4.30, so only this rung fails. Measured alternatives for the fill in dark, mark first, box second: bg-primary-hovered #2b7ecf 4.30 / 3.69 (passes, and it is the rung the contained button already uses for focus - see button/_colors.scss, bg-focused reads bg-primary-hovered); bg-primary-shared-active #005397 2.31 / 1.98 (still fails, so the Д3 move does not transfer here); leaving it 1.62 / 1.39. Recommendation: bg-primary-hovered, which makes the checkbox agree with the button. Light moves 11.17 -> 7.82 and the fill goes #003c70 -> #005397, so etalons need re-shooting - that is why it is a question and not applied."
+        "why": "Resolved in part on 15.09, when the designer produced the package tokens for checkbox/color/checked. Three slots, not one: border, bg and icon each have their own token, and our theme painted the border from the BG variable. Figma and Blazor agree that the border is border-primary-shared*, so that half was not a judgement call and is applied - three new names, light pixel-identical (primary-100/120/140 exactly as before), dark better at every rung: the box outline against the page goes 2.88 -> 4.65 at rest, 3.69 -> 5.79 hovered, 1.39 -> 1.98 pressed.\nWHAT REMAINS. The fill. Figma says bg-primary*, Blazor implements content-primary-shared*, and the two are identical in light and differ in dark - which is exactly what decides this row. On Figma's fill the mark reads 3.36 at rest and 1.62 pressed; on Blazor's, 5.42 and 2.31. Neither clears 3.0 in the pressed state, because no primary family inverts its active rung for dark - the same package defect П2 records for danger.\nAND A THIRD THING THE TOKENS SETTLE. The package state list is rest / hovered / active / read-only / disabled - there is no focused. Our theme paints .dx-state-focused AND .dx-state-active from one variable, so a keyboard user SITS at the value the package intends for a transient press. The button already separates them (bg-focused reads bg-primary-hovered). Splitting focus from active would leave the 1.62 where the package put it - under a finger, for the length of a click - and take the keyboard user to 4.30."
       },
       "outlined-button-label": {
         "decision": "design",
@@ -2431,5 +2431,51 @@
       ]
     ],
     "provenCollision": "отмеченный чекбокс при наведении: сам по себе берёт --dx-check-box-icon-checked-bg-hovered, внутри списка с декоратором выбора - --dxds-color-bg-primary-hovered. Проверено каскадом на настоящем бандле, шесть классов против трёх."
+  },
+  "checkboxSpec": {
+    "comment": [
+      "Токены чекбокса, которые дал дизайнер 15.09 (Figma, узел checkbox/color/checked), сверенные",
+      "с нашей темой и с реализацией Blazor. Три источника, и по заливке два из них расходятся -",
+      "это и есть то, что осталось решить."
+    ],
+    "receivedOn": "2026-09-15",
+    "rows": [
+      {
+        "slot": "border, rest / hovered / active",
+        "figma": "border-primary-shared / -hovered / -active",
+        "blazor": "border-primary-shared / -hovered (active не заведён)",
+        "ours": "красился ролью ЗАЛИВКИ (bg-primary*)",
+        "verdict": "источники согласны между собой, мы расходились с обоими - ПРИМЕНЕНО"
+      },
+      {
+        "slot": "bg, rest / hovered / active",
+        "figma": "bg-primary / -hovered / -active",
+        "blazor": "content-primary-shared / -hovered",
+        "ours": "bg-primary* - как в Figma",
+        "verdict": "Figma и реализация Blazor расходятся; наша тройка совпадает с Figma"
+      },
+      {
+        "slot": "icon",
+        "figma": "content-inverted, для всех состояний кроме disabled",
+        "blazor": "content-inverted ($check-element-check-icon-primary-color)",
+        "ours": "content-inverted",
+        "verdict": "все три согласны"
+      },
+      {
+        "slot": "read-only",
+        "figma": "bg = content-disabled, border = border-disabled",
+        "blazor": "bg = bg-disabled, border = border-disabled",
+        "ours": "bg = content-inverted (заливка невыбранного), метка = content-disabled",
+        "verdict": "полярность обратная: у нас серая метка на белой коробке, в Figma белая метка на серой. Порог WCAG сюда не достаёт (1.4.3 освобождает неактивное), решение дизайна"
+      },
+      {
+        "slot": "disabled",
+        "figma": "bg = color/none 0%, border = border-disabled, icon = content-disabled",
+        "blazor": "bg = bg-none (для невыбранного)",
+        "ours": "bg = content-inverted, border = border-disabled, icon = content-disabled",
+        "verdict": "наша заливка непрозрачная там, где Figma просит прозрачную; в светлом это тот же белый, в тёмном #161616 против фона страницы"
+      }
+    ],
+    "openQuestion": "Заливка отмеченного чекбокса: bg-primary* (Figma, и так у нас) или content-primary-shared* (реализация Blazor). В СВЕТЛОМ обе дают одно и то же. В ТЁМНОМ расходятся, и расхождение решает вопрос Д16: bg-primary даёт метку 3.36 в покое и 1.62 в нажатии при пороге 3.0, а content-primary-shared - 5.42 и 2.31. Дополнительный довод за вариант Blazor: наша собственная невалидная тройка уже сидит на стеме content-danger-shared, так что чекбокс сейчас внутренне непоследователен - невалидная заливка на content-*-shared, отмеченная на bg-*. У Blazor все три (primary, danger, success) на content-<оттенок>-shared."
   }
 }
