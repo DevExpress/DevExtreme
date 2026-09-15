@@ -1,0 +1,24 @@
+{
+  "name": "devextreme-playwright-tests",
+  "version": "26.2.0",
+  "scripts": {
+    "test": "node ./runner.mjs",
+    "lint": "eslint"
+  },
+  "devDependencies": {
+    "@playwright/test": "catalog:",
+    "@types/jquery": "catalog:",
+    "devextreme": "workspace:*",
+    "eslint": "catalog:",
+    "@eslint/js": "catalog:",
+    "@stylistic/eslint-plugin": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint-config-devextreme": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "eslint-plugin-no-only-tests": "catalog:",
+    "typescript": "5.8.3",
+    "eslint-migration-utils": "workspace:*",
+    "@types/node": "catalog:tools"
+  }
+}
