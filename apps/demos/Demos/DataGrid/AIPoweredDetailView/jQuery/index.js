@@ -1,6 +1,15 @@
 $(() => {
   let abortController = null;
 
+  const CLASS = {
+    categoryWrapper: 'category__wrapper',
+    promptEditor: 'prompt-editor',
+    chatSuggestions: 'dx-chat-suggestions',
+    responseEditor: 'response-editor',
+    outputInitialMessage: 'output-initial-message',
+    outputErrorMessage: 'output-error-message',
+  };
+
   const AzureOpenAIConfig = {
     dangerouslyAllowBrowser: true,
     deployment: 'demo-mini',
@@ -26,12 +35,12 @@ $(() => {
   }
 
   const createCategoryTemplate = ({ CategoryName, CategoryID }) => $('<div>')
-    .addClass('category__wrapper')
+    .addClass(CLASS.categoryWrapper)
     .addClass(`category-${CategoryID}__bg-color`)
     .text(CategoryName);
 
   function setMessage($outputArea, $newMessage) {
-    const $oldMessage = $outputArea.find('.output-initial-message, .output-error-message');
+    const $oldMessage = $outputArea.find(`.${CLASS.outputInitialMessage}, .${CLASS.outputErrorMessage}`);
     $oldMessage.remove();
     if ($newMessage) $outputArea.append($newMessage);
   }
@@ -107,7 +116,7 @@ $(() => {
       onValueChanged({ value }) {
         submitButton.option('disabled', !value);
       },
-      elementAttr: { class: 'prompt-editor' },
+      elementAttr: { class: CLASS.promptEditor },
     }).dxTextBox('instance');
   }
 
@@ -116,7 +125,7 @@ $(() => {
       items: suggestions,
       stylingMode: 'outlined',
       selectionMode: 'none',
-      elementAttr: { class: 'dx-chat-suggestions' },
+      elementAttr: { class: CLASS.chatSuggestions },
       onItemClick(e) {
         const suggestion = e.itemData;
         promptEditor.option('value', suggestion.prompt);
@@ -184,7 +193,7 @@ $(() => {
       stylingMode: 'outlined',
       hoverStateEnabled: false,
       focusStateEnabled: false,
-      elementAttr: { class: 'response-editor' },
+      elementAttr: { class: CLASS.responseEditor },
       inputAttr: { 'aria-label': 'AI Response' },
     }).dxTextArea('instance');
   }
@@ -202,13 +211,13 @@ $(() => {
 
   function createInitialMessage() {
     return $('<div>')
-      .addClass('output-initial-message')
+      .addClass(CLASS.outputInitialMessage)
       .text('AI Assistant is ready to answer your questions about this record.');
   }
 
   function createErrorMessage() {
     return $('<div>')
-      .addClass('output-error-message')
+      .addClass(CLASS.outputErrorMessage)
       .append(
         $('<span>').addClass('dx-icon-warning'),
         'An unexpected error occurred. Please try again.',
