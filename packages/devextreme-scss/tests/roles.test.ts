@@ -40,7 +40,7 @@ const LADDER_DECISIONS = ['no-rung', 'design', 'answered'];
 const CONTRAST_DECISIONS = ['graphic-ok', 'graphic-ok-rest-only', 'package-gap', 'design'];
 const STATE_PAIR_DECISIONS = ['graphic-ok', 'design'];
 const SWEEP_DECISIONS = ['design', 'answered'];
-const CONCEPT_DECISIONS = ['spelling', 'shade', 'design', 'answered'];
+const CONCEPT_DECISIONS = ['spelling', 'shade', 'design', 'answered', 'deferred-to'];
 
 type Concept = {
   concept: string; roles: string[]; families: string[];

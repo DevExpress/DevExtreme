@@ -8,13 +8,20 @@ $check-box-icon-bg: ds.$color-content-inverted !default;
 
 $check-box-icon-checked-bg: ds.$color-bg-primary !default;
 $check-box-icon-checked-bg-hovered: ds.$color-bg-primary-hovered !default;
-$check-box-icon-checked-bg-focused: ds.$color-bg-primary-active !default;
+
+/* Фокус берёт ступень НАВЕДЕНИЯ, а не нажатия. В наборе пакета состояния focused нет вовсе -
+   есть rest / hovered / active, - а тема красила фокус значением, которое пакет отвёл под
+   мгновенное нажатие: в тёмном это #003c70, и галка content-inverted на нём даёт 1.62.
+   Кнопка развела их так же: bg-focused у неё читает bg-primary-hovered. */
+$check-box-icon-checked-bg-focused: ds.$color-bg-primary-hovered !default;
+$check-box-icon-checked-bg-active: ds.$color-bg-primary-active !default;
 
 /* Контур коробки - своя роль, как у невалидного варианта ниже и как в наборе пакета
    (checkbox/color/checked/border). Совпадает с заливкой в светлом и расходится в тёмном. */
 $check-box-icon-checked-border: ds.$color-border-primary-shared !default;
 $check-box-icon-checked-border-hovered: ds.$color-border-primary-shared-hovered !default;
-$check-box-icon-checked-border-focused: ds.$color-border-primary-shared-active !default;
+$check-box-icon-checked-border-focused: ds.$color-border-primary-shared-hovered !default;
+$check-box-icon-checked-border-active: ds.$color-border-primary-shared-active !default;
 
 $check-box-invalid-border: ds.$color-border-danger-shared !default;
 $check-box-invalid-border-hovered: ds.$color-border-danger-shared-hovered !default;

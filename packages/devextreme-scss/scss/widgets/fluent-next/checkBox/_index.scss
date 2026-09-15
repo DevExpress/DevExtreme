@@ -127,6 +127,16 @@
     }
   }
 
+  /* Нажатие возвращается на ступень active, которую назначает пакет: фокус держится долго,
+     нажатие - мгновение. Правило идёт следом за общим и той же специфичности, поэтому
+     выигрывает порядком; невалидная ветка выше специфичнее и не задевается. */
+  &.dx-state-active {
+    .dx-checkbox-icon {
+      border-color: var(--dx-check-box-icon-checked-border-active);
+      background-color: var(--dx-check-box-icon-checked-bg-active);
+    }
+  }
+
   &.dx-invalid {
     .dx-checkbox-icon {
       background-color: var(--dx-check-box-invalid-bg);
@@ -202,6 +212,16 @@
         &::before {
           background-color: var(--dx-check-box-invalid-mark-bg-focused);
         }
+      }
+    }
+  }
+
+  &.dx-state-active {
+    .dx-checkbox-icon {
+      border-color: var(--dx-check-box-icon-checked-border-active);
+
+      &::before {
+        background-color: var(--dx-check-box-icon-checked-bg-active);
       }
     }
   }
