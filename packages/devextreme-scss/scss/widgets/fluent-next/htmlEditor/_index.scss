@@ -1,9 +1,9 @@
+@use "../textEditor/colors" as textEditorColors;
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/sizes" as buttonSizes;
-@use "../textEditor/colors" as textEditorColors;
 @use "../textEditor/index" as *;
 @use "../toolbar/sizes" as toolbarSizes;
 @use "../common/mixins" as *;
@@ -69,7 +69,7 @@
   &.dx-state-active {
     &::before {
       border-bottom: var(--dx-html-editor-border-block-end-active);
-      border-bottom-color: textEditorColors.$text-editor-indicator;
+      border-bottom-color: var(--dx-text-editor-indicator);
       transform: scale(1);
       transition-property: transform;
       transition-duration: 0.2s;
@@ -117,7 +117,7 @@
 .dx-invalid.dx-htmleditor {
   &.dx-state-hover {
     &::after {
-      border-bottom-color: textEditorColors.$text-editor-invalid-border;
+      border-bottom-color: var(--dx-text-editor-invalid-border);
     }
   }
 
@@ -125,7 +125,7 @@
   &.dx-state-active {
     &::before {
       border-bottom: var(--dx-html-editor-border-block-end-active);
-      border-bottom-color: textEditorColors.$text-editor-invalid-border-focused;
+      border-bottom-color: var(--dx-text-editor-invalid-border-focused);
     }
   }
 }

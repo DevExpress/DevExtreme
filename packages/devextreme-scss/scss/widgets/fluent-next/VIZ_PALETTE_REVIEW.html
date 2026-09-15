@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ревью палитры Fluent Next</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* ---------- tokens: light is the complete set ---------- */
+  :root {
+    --ground:        #f5f8fb;
+    --surface:       #ffffff;
+    --surface-2:     #eaf0f7;
+    --ink:           #111a22;
+    --ink-2:         #3d4d5c;
+    --ink-3:         #6c7d8c;
+    --hairline:      #d8e2ec;
+    --hairline-firm: #bccbd9;
+
+    /* the page's accent is fluent-next's own primary (--dxds-primary-100) */
+    --accent:        #0f6cbd;
+    --accent-quiet:  #e7effa;
+    --accent-ink:    #0b5493;
+
+    /* severity uses the Fluent Next indicatingSet for its designed purpose */
+    --bad:           #c83d3d;
+    --bad-ink:       #a12f2f;
+    --bad-quiet:     #fbeceb;
+    --warn:          #eaa300;
+    --warn-ink:      #7d5800;
+    --warn-quiet:    #fdf3de;
+    --good:          #008f04;
+    --good-ink:      #00680b;
+    --good-quiet:    #e6f4e7;
+
+    --measure: 68ch;
+    --shadow: 0 1px 2px rgba(17, 26, 34, .05), 0 8px 24px -16px rgba(17, 26, 34, .18);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:        #13181e;
+      --surface:       #1a2027;
+      --surface-2:     #232c35;
+      --ink:           #e7eef5;
+      --ink-2:         #b2c0cd;
+      --ink-3:         #8496a5;
+      --hairline:      #2a333d;
+      --hairline-firm: #3b4753;
+
+      /* mirrors the theme: dark primary is --dxds-primary-80 */
+      --accent:        #4b90d9;
+      --accent-quiet:  #1b2a3a;
+      --accent-ink:    #7db1e8;
+
+      --bad:           #d95757;
+      --bad-ink:       #f0908f;
+      --bad-quiet:     #33201f;
+      --warn:          #eaa300;
+      --warn-ink:      #e6b344;
+      --warn-quiet:    #322a15;
+      --good:          #17a01f;
+      --good-ink:      #4fbf58;
+      --good-quiet:    #16291a;
+
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -16px rgba(0, 0, 0, .7);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:        #13181e;
+    --surface:       #1a2027;
+    --surface-2:     #232c35;
+    --ink:           #e7eef5;
+    --ink-2:         #b2c0cd;
+    --ink-3:         #8496a5;
+    --hairline:      #2a333d;
+    --hairline-firm: #3b4753;
+
+    --accent:        #4b90d9;
+    --accent-quiet:  #1b2a3a;
+    --accent-ink:    #7db1e8;
+
+    --bad:           #d95757;
+    --bad-ink:       #f0908f;
+    --bad-quiet:     #33201f;
+    --warn:          #eaa300;
+    --warn-ink:      #e6b344;
+    --warn-quiet:    #322a15;
+    --good:          #17a01f;
+    --good-ink:      #4fbf58;
+    --good-quiet:    #16291a;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -16px rgba(0, 0, 0, .7);
+  }
+
+  /* ---------- base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 84ch;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1.1rem, 4vw, 2rem) 5rem;
+  }
+
+  h1, h2, h3 {
+    font-family: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  h1 { font-size: clamp(1.95rem, 5.2vw, 2.9rem); letter-spacing: -.018em; }
+  h2 { font-size: clamp(1.3rem, 3.2vw, 1.6rem); letter-spacing: -.012em; }
+  h3 { font-size: 1.06rem; font-weight: 600; letter-spacing: -.005em; }
+
+  p { margin: 0; max-width: var(--measure); }
+  a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: .16em; text-decoration-thickness: 1px; }
+  a:hover { text-decoration-thickness: 2px; }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  code, .mono {
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .855em;
+  }
+  code {
+    background: var(--surface-2);
+    color: var(--ink);
+    padding: .1em .34em;
+    border-radius: 3px;
+    overflow-wrap: anywhere;
+  }
+
+  .eyebrow {
+    font-size: .705rem;
+    font-weight: 600;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* ---------- header ---------- */
+  header.masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    padding-bottom: 1.9rem;
+    border-bottom: 2px solid var(--ink);
+  }
+  .lede {
+    font-size: 1.115rem;
+    color: var(--ink-2);
+    max-width: 62ch;
+  }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- PR verdict pair ---------- */
+  .verdicts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+    gap: .8rem;
+    margin-top: .3rem;
+  }
+  .pr {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-top: 3px solid var(--pr-tone, var(--hairline-firm));
+    border-radius: 2px;
+    padding: .85rem 1rem .95rem;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    box-shadow: var(--shadow);
+  }
+  .pr.is-green { --pr-tone: var(--good); }
+  .pr.is-red   { --pr-tone: var(--bad); }
+  .pr.is-warn  { --pr-tone: var(--warn); }
+  .pr-top { display: flex; align-items: baseline; justify-content: space-between; gap: .6rem; }
+  .pr-num { font-family: "IBM Plex Mono", monospace; font-size: 1.02rem; font-weight: 500; }
+  .pr-num a { color: var(--ink); text-decoration-color: var(--hairline-firm); }
+  .pr-ci {
+    font-size: .69rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--pr-tone); white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .pr-title { font-size: .93rem; color: var(--ink-2); }
+  .pr-scale { font-size: .8rem; color: var(--ink-3); font-family: "IBM Plex Mono", monospace; }
+
+  /* ---------- sections ---------- */
+  section { margin-top: 3.1rem; }
+  .sec-head { display: flex; flex-direction: column; gap: .35rem; margin-bottom: 1.5rem; }
+  .sec-head .rule { height: 1px; background: var(--hairline-firm); margin-top: .9rem; }
+
+  /* ---------- palette strip ---------- */
+  .palette {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+    padding: 1.25rem 1.25rem 1.1rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+  .set { display: flex; flex-direction: column; gap: .5rem; }
+  .set-name {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .78rem;
+    color: var(--ink-3);
+    display: flex; align-items: baseline; gap: .55rem; flex-wrap: wrap;
+  }
+  .set-name b { color: var(--ink-2); font-weight: 500; }
+  .swatches { display: flex; flex-wrap: wrap; gap: .45rem; }
+  .sw { display: flex; flex-direction: column; gap: .3rem; width: 5.55rem; }
+  .sw i {
+    display: block; height: 2.5rem; border-radius: 2px;
+    border: 1px solid rgba(17, 26, 34, .16);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1);
+  }
+  .sw span {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .715rem;
+    color: var(--ink-2);
+    text-transform: uppercase;
+    letter-spacing: .02em;
+  }
+  .palette-foot {
+    font-size: .85rem; color: var(--ink-3); border-top: 1px solid var(--hairline);
+    padding-top: .85rem; max-width: var(--measure);
+  }
+
+  /* ---------- findings ---------- */
+  .findings { display: flex; flex-direction: column; }
+  .finding {
+    display: flex; flex-direction: column; gap: .6rem;
+    padding: 1.55rem 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .finding:first-child { border-top: none; padding-top: 0; }
+  .finding:last-child { padding-bottom: .4rem; }
+  .f-head { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; }
+
+  .chip {
+    font-size: .665rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    padding: .21rem .5rem; border-radius: 2px; white-space: nowrap;
+    background: var(--chip-bg); color: var(--chip-ink);
+    border: 1px solid currentColor;
+  }
+  .chip.blocker { --chip-bg: var(--bad-quiet);    --chip-ink: var(--bad-ink); }
+  .chip.gap     { --chip-bg: var(--warn-quiet);   --chip-ink: var(--warn-ink); }
+  .chip.ok      { --chip-bg: var(--good-quiet);   --chip-ink: var(--good-ink); }
+  .chip.info    { --chip-bg: var(--accent-quiet); --chip-ink: var(--accent-ink); }
+
+  .finding p + p { margin-top: .25rem; }
+
+  /* verified list */
+  .checks { display: flex; flex-direction: column; gap: .95rem; margin: 0; padding: 0; list-style: none; }
+  .checks li {
+    display: grid;
+    grid-template-columns: 1.15rem 1fr;
+    gap: .1rem .65rem;
+    max-width: var(--measure);
+  }
+  .checks li::before {
+    content: "";
+    grid-row: 1 / span 2;
+    width: .52rem; height: .52rem;
+    margin-top: .58rem;
+    border-radius: 50%;
+    background: var(--good);
+  }
+  .checks b { font-weight: 600; }
+  .checks span { color: var(--ink-2); font-size: .935rem; }
+
+  /* ---------- theme inheritance chain (a descent, so it reads top-down) ---------- */
+  .chain {
+    list-style: none;
+    margin: .55rem 0 .35rem;
+    padding: .15rem 0 .15rem 1.5rem;
+    border-left: 2px solid var(--hairline);
+    display: flex; flex-direction: column; gap: .5rem;
+  }
+  .chain > li {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--hairline-firm);
+    border-radius: 2px;
+    padding: .5rem .8rem .55rem;
+    max-width: 44ch;
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    gap: .05rem .65rem;
+  }
+  .chain > li::before {
+    content: "";
+    position: absolute;
+    left: -1.5rem; top: 1.05rem;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--dot, var(--hairline-firm));
+    box-shadow: 0 0 0 3px var(--ground);
+    transform: translateX(calc(-50% + 1px));
+  }
+  .chain .n-name { font-family: "IBM Plex Mono", monospace; font-size: .8rem; color: var(--ink); }
+  .chain .n-note { font-size: .755rem; color: var(--ink-3); }
+  .chain > li.sets {
+    --dot: var(--warn);
+    border-color: var(--warn);
+    background: var(--warn-quiet);
+  }
+  .chain > li.sets .n-note { color: var(--warn-ink); font-weight: 600; }
+  .chain > li.target {
+    --dot: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-quiet);
+  }
+  .chain > li.target .n-note { color: var(--accent-ink); font-weight: 600; }
+
+  .contrast {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: .75rem;
+    margin-top: .35rem;
+  }
+  .contrast > div {
+    border: 1px solid var(--hairline);
+    border-left: 3px solid var(--tone, var(--hairline-firm));
+    background: var(--surface);
+    border-radius: 2px;
+    padding: .7rem .85rem .75rem;
+    display: flex; flex-direction: column; gap: .2rem;
+  }
+  .contrast .css { --tone: var(--good); }
+  .contrast .viz { --tone: var(--bad); }
+  .contrast .lbl { font-size: .69rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .contrast .val { font-family: "IBM Plex Mono", monospace; font-size: .78rem; color: var(--ink); overflow-wrap: anywhere; }
+
+  /* ---------- accents grid ---------- */
+  .accent-tags { display: flex; flex-wrap: wrap; gap: .34rem; margin-top: .2rem; }
+  .accent-tags code { font-size: .755rem; }
+
+  /* ---------- action list ---------- */
+  .actions {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+    box-shadow: var(--shadow);
+    padding: 1.15rem 1.3rem 1.25rem;
+    display: flex; flex-direction: column; gap: .85rem;
+  }
+  .actions ol { margin: 0; padding-left: 1.35rem; display: flex; flex-direction: column; gap: .6rem; }
+  .actions li { max-width: 60ch; }
+  .actions li::marker { color: var(--accent); font-weight: 600; font-family: "IBM Plex Mono", monospace; }
+
+  footer {
+    margin-top: 3.4rem; padding-top: 1.15rem;
+    border-top: 1px solid var(--hairline);
+    font-size: .82rem; color: var(--ink-3);
+    max-width: var(--measure);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <div class="eyebrow">Ревью · fluent-next в viz · состояние на 15.09.2026</div>
+    <h1>Палитра Fluent&nbsp;Next: что закрыто и что осталось</h1>
+    <p class="lede">
+      Из трёх пунктов закрылись два. Палитра серий влита 01.09, шрифт и тёмная поверхность - 06.09,
+      и QUnit-покрытие выросло втрое. Осталась <strong>неосведомлённость графиков об акцентах</strong>,
+      и 14.09 она стала заметнее: Custom Accent уехал в продукт, не тронув viz ни одной строкой.
+    </p>
+
+    <div class="verdicts">
+      <div class="pr is-green">
+        <div class="pr-top">
+          <span class="pr-num"><a href="https://github.com/DevExpress/DevExtreme/pull/34981">#34981</a> <a href="https://github.com/DevExpress/DevExtreme/pull/34984">#34984</a></span>
+          <span class="pr-ci">влито 01.09</span>
+        </div>
+        <div class="pr-title">Палитра серий Fluent Next</div>
+        <div class="pr-scale">палитра + тема + QUnit + 61 эталон</div>
+      </div>
+      <div class="pr is-green">
+        <div class="pr-top">
+          <span class="pr-num"><a href="https://github.com/DevExpress/DevExtreme/pull/35059">#35059</a></span>
+          <span class="pr-ci">влито 06.09</span>
+        </div>
+        <div class="pr-title">Шрифт из токена и тёмная поверхность</div>
+        <div class="pr-scale">карточка #5051 · +3 теста на тему</div>
+      </div>
+      <div class="pr is-warn">
+        <div class="pr-top">
+          <span class="pr-num"><a href="https://github.com/DevExpress/DevExtreme/pull/35096">#35096</a></span>
+          <span class="pr-ci">viz не покрыт</span>
+        </div>
+        <div class="pr-title">Custom Accent support</div>
+        <div class="pr-scale">11 палитр + произвольный цвет · в диффе нет viz</div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Предмет ревью</div>
+      <h2>Палитра, как она лежит в коде</h2>
+      <div class="rule"></div>
+    </div>
+
+    <div class="palette">
+      <div class="set">
+        <div class="set-name"><b>simpleSet</b> - цвета серий</div>
+        <div class="swatches">
+          <div class="sw"><i style="background:#0078d4"></i><span>#0078d4</span></div>
+          <div class="sw"><i style="background:#c83d3d"></i><span>#c83d3d</span></div>
+          <div class="sw"><i style="background:#008f04"></i><span>#008f04</span></div>
+          <div class="sw"><i style="background:#eaa300"></i><span>#eaa300</span></div>
+          <div class="sw"><i style="background:#e43ba6"></i><span>#e43ba6</span></div>
+          <div class="sw"><i style="background:#865cbf"></i><span>#865cbf</span></div>
+        </div>
+      </div>
+
+      <div class="set">
+        <div class="set-name"><b>indicatingSet</b> - хорошо / внимание / плохо</div>
+        <div class="swatches">
+          <div class="sw"><i style="background:#008f04"></i><span>#008f04</span></div>
+          <div class="sw"><i style="background:#eaa300"></i><span>#eaa300</span></div>
+          <div class="sw"><i style="background:#c83d3d"></i><span>#c83d3d</span></div>
+        </div>
+      </div>
+
+      <div class="set">
+        <div class="set-name"><b>gradientSet</b> - концы градиента</div>
+        <div class="swatches">
+          <div class="sw"><i style="background:#0078d4"></i><span>#0078d4</span></div>
+          <div class="sw"><i style="background:#008f04"></i><span>#008f04</span></div>
+        </div>
+      </div>
+
+      <div class="set">
+        <div class="set-name"><b>accentColor</b> - единственное значение палитры, которое читает VectorMap</div>
+        <div class="swatches">
+          <div class="sw"><i style="background:#0f6cbd"></i><span>#0f6cbd</span></div>
+        </div>
+      </div>
+
+      <p class="palette-foot">
+        Значения не менялись с 01.09 и по-прежнему совпадают с таблицей issue&nbsp;#5020: все четыре
+        набора, светлый и тёмный режимы идентичны, поэтому dark-варианта палитры нет.
+        <code>normalizeEnum('Fluent Next')</code> даёт <code>'fluent next'</code> - ключ реестра.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Закрыто с прошлого ревью</div>
+      <h2>Что уехало в ветку</h2>
+      <div class="rule"></div>
+    </div>
+
+    <ul class="checks">
+      <li>
+        <b>Шрифт больше не Roboto от Material.</b>
+        <span>В теме появился <code>FONT_FAMILY</code> со стеком <code>'segoe ui'</code> во главе -
+        литерал-зеркало <code>--dxds-font-family-sans-serif</code>. Проставлен и на
+        <code>font.family</code>, и на <code>title.font.family</code>, на обоих корнях. Это был
+        главный пункт прошлого ревью.</span>
+      </li>
+      <li>
+        <b>Тёмный режим получил свою поверхность.</b>
+        <span><code>#242424</code> = <code>--dxds-color-bg</code> вместо material-овского
+        <code>#363640</code>, вместе с производными: кнопка экспорта в трёх состояниях, вырез
+        слайдера rangeSelector, граница области карты, точка sparkline, граница элемента funnel.</span>
+      </li>
+      <li>
+        <b>Тестов стало вдвое больше.</b>
+        <span>Было три на тему, стало шесть: регистрация, шрифт, фон, три набора палитры, акцент
+        на восьми свойствах и вырезы тёмного режима - на каждую из четырёх тем.</span>
+      </li>
+      <li>
+        <b>Палитра и покрытие держатся.</b>
+        <span>Значения в <code>palette.ts</code> не тронуты, все 101 chart-демо имеют эталон
+        <code>(fluent-next.blue.light)</code>.</span>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Что осталось</div>
+      <h2>Открытые хвосты</h2>
+      <div class="rule"></div>
+    </div>
+
+    <div class="findings">
+
+      <article class="finding">
+        <div class="f-head">
+          <span class="chip gap">Главное</span>
+          <h3>Графики не знают про акцент, и теперь это виднее</h3>
+        </div>
+        <p>
+          Custom Accent влит 14.09: <code>_accent-color.scss</code>, правки генератора токенов,
+          контракт имён, юнит-тест формулы и e2e-скриншоты на blue / mint / rust. В диффе
+          <strong>нет ни одной строки viz</strong> - графики остались на захардкоженных
+          <code>#0F6CBD</code> и <code>#4B90D9</code> под акцент <code>blue</code>.
+        </p>
+        <div class="accent-tags">
+          <code>blue</code><code>cool-blue</code><code>desert</code><code>mint</code><code>moss</code><code>orchid</code><code>purple</code><code>rose</code><code>rust</code><code>steel</code><code>storm</code><code>+ произвольный (#5049)</code>
+        </div>
+        <p>
+          То есть на 11 палитр плюс произвольный цвет приходится один цвет графиков: интерфейс
+          перекрашивается, диаграммы - нет. Раньше это была оговорка на будущее, теперь - расхождение
+          с отгруженной функциональностью.
+        </p>
+      </article>
+
+      <article class="finding">
+        <div class="f-head">
+          <span class="chip gap">Как чинить</span>
+          <h3>Нужен слой резолва, а не третий литерал</h3>
+        </div>
+        <p>
+          Шрифт и фон закрыли литералами-зеркалами токенов - быстро и в стиле <code>material</code>,
+          но для акцента так уже не выйдет: значений столько же, сколько палитр. Правильная форма -
+          читать <code>--dxds-*</code> через <code>getComputedStyle(container)</code> в
+          <code>base_theme_manager.refresh()</code> с понятным приоритетом:
+        </p>
+
+        <ol class="chain">
+          <li>
+            <span class="n-name">опция виджета</span>
+            <span class="n-note">явное значение пользователя</span>
+          </li>
+          <li class="target">
+            <span class="n-name">токен --dxds-*</span>
+            <span class="n-note">то, чего сейчас нет</span>
+          </li>
+          <li class="sets">
+            <span class="n-name">литерал темы</span>
+            <span class="n-note">то, что влито - остаётся как fallback</span>
+          </li>
+        </ol>
+
+        <p>
+          Ключевое ограничение, из-за которого нельзя просто положить <code>var()</code> в тему:
+          экспорт умеет работать с открепленной разметкой, и тогда стиль читается сырым.
+        </p>
+        <div class="contrast">
+          <div class="css">
+            <div class="lbl">корень в DOM (rootAppended)</div>
+            <div class="val">getComputedStyle → font-family резолвится</div>
+          </div>
+          <div class="viz">
+            <div class="lbl">exportFromMarkup(string)</div>
+            <div class="val">element.style как есть → var(…) попадает в ctx.font</div>
+          </div>
+        </div>
+        <p>
+          Проверено по <code>__internal/exporter/image_creator.ts</code>: <code>parseStyles()</code>
+          копирует <code>element.style</code> напрямую, а к <code>getComputedStyle</code> обращается
+          только под флагом <code>rootAppended</code>. Так что слой резолва обязан отдавать теме уже
+          посчитанное значение, а не <code>var()</code>.
+        </p>
+      </article>
+
+      <article class="finding">
+        <div class="f-head">
+          <span class="chip info">Показать дизайнеру</span>
+          <h3>У Segoe UI нет грани 500</h3>
+        </div>
+        <p>
+          <code>title.font.weight: 500</code> унаследован от Material и на Windows отрисуется как
+          Regular 400, тогда как заголовки компонентов берут
+          <code>--dxds-font-weight-title-default</code> = 600. Карточка #5051 просила вес не трогать,
+          поэтому пункт живой: его стоит показать при согласовании эталонов. Кегль заголовка (20)
+          тоже пришёл из рампы Material, а не из тип-шкалы.
+        </p>
+      </article>
+
+      <article class="finding">
+        <div class="f-head">
+          <span class="chip info">Контекст</span>
+          <h3>Тёмный режим скриншотами не покрыт</h3>
+        </div>
+        <p>
+          В <code>visual-tests-demos.yml</code> скриншоты снимаются только для
+          <code>*.blue.light</code>, а тёмный идёт как accessibility. Поэтому и
+          <code>#4B90D9</code>, и новые вырезы тёмного фона держатся исключительно на QUnit -
+          что теперь надёжнее, чем в прошлом ревью, но глазами их никто не сверяет.
+        </p>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Чтобы закрыть тему</div>
+      <h2>Порядок действий</h2>
+      <div class="rule"></div>
+    </div>
+
+    <div class="actions">
+      <ol>
+        <li>Довести карточку про слой резолва токенов в <code>base_theme_manager</code> - это снимает и акцент, и будущие подобные пункты разом.</li>
+        <li>Показать дизайнеру вес заголовка (500 против 600) при согласовании эталонов.</li>
+        <li>Сверить .NET-сторону: там та же палитра и тот же вопрос про акцент.</li>
+        <li>По желанию - дописать ассерт на <code>accentColor</code> самой палитры: его читает VectorMap для слоёв без темового цвета.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    Состояние ветки <span class="mono">feature/26_2_new_fluent_theme_with_design_tokens</span> на
+    15&nbsp;сентября&nbsp;2026 (<span class="mono">225c581b66</span>). Подробности - в доках темы:
+    две записи в <span class="mono">DIVERGENCES.journal.md</span>, строка viz и открытое
+    направление&nbsp;15 в <span class="mono">README.md</span>, п.&nbsp;2 в
+    <span class="mono">CUSTOM_ACCENT.md</span>. Акцент этой страницы и цвета серьёзности взяты из
+    самой палитры: <span class="mono">#0F6CBD</span> / <span class="mono">#4B90D9</span> - primary
+    fluent-next в светлом и тёмном, а зелёный, жёлтый и красный - её собственный
+    <span class="mono">indicatingSet</span>.
+  </footer>
+
+</div>
+</body>
+</html>

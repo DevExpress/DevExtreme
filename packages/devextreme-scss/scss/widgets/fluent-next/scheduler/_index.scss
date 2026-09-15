@@ -1,9 +1,9 @@
+@use "../list/colors" as listColors;
 @use "../mixins" as *;
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../list/colors" as listColors;
 @use "../radioGroup/sizes" as radioGroupSizes;
 @use "../toolbar/sizes" as toolbarSizes;
 @use "../../base/scheduler/layout/header" as baseSchedulerHeader;
@@ -130,7 +130,6 @@
   $scheduler-tooltip-subject-font-size: var(--dx-scheduler-tooltip-subject-font-size),
   $scheduler-tooltip-date-font-size: var(--dx-scheduler-tooltip-date-font-size)
 );
-@use "../button/colors" as buttonColors;
 @use "../button/mixins" as *;
 @use "../tooltip/sizes" as tooltipSizes;
 @use "../recurrenceEditor" as *;
@@ -997,13 +996,13 @@
     padding: 0;
 
     @include dx-button-flat-color-styling(
-      buttonColors.$button-default-text-content,
-      buttonColors.$button-default-text-content-hovered,
-      buttonColors.$button-default-outlined-content-active,
-      buttonColors.$button-default-text-bg,
-      buttonColors.$button-default-outlined-bg-hovered,
-      buttonColors.$button-default-outlined-bg-focused,
-      buttonColors.$button-default-outlined-bg-active
+      var(--dx-button-default-text-content),
+      var(--dx-button-default-text-content-hovered),
+      var(--dx-button-default-outlined-content-active),
+      var(--dx-button-default-text-bg),
+      var(--dx-button-default-outlined-bg-hovered),
+      var(--dx-button-default-outlined-bg-focused),
+      var(--dx-button-default-outlined-bg-active)
     );
 
     .dx-icon {

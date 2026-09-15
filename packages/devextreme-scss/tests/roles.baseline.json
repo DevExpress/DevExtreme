@@ -340,14 +340,14 @@
       "why": "Re-classified 09.09, and this one turned out to be correct. Every use is a drawn foreground mark, not a container: the milestone diamond as a box background, the dependency lines as 1px hairlines, the arrowhead as a border triangle. content is the right role for a mark and the right word for the name; the four CSS properties are just how CSS draws marks. This was sitting under rule-5, which claimed the name picked the dominant of two painted families - it does not, and it does not need to."
     },
     {
-      "name": "grid-border-focused",
-      "slot": "border",
-      "slotSays": "border",
+      "name": "grid-content-focused",
+      "slot": "content",
+      "slotSays": "content",
       "paints": [
-        "background-color"
+        "outline-color"
       ],
-      "decision": "hairline",
-      "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
+      "decision": "drawn-mark",
+      "why": "внутреннее кольцо фокусной ячейки рисуется outline-color ролью content-inverted - белый волосок внутри синей рамки. Слово слота от свойства, роль от того, чем элемент является. Стало видно сканеру только когда Д23 дал краске имя тира; пиксель не двигался"
     },
     {
       "name": "splitter-bar-border",
@@ -637,6 +637,17 @@
     }
   ],
   "contrast": [
+    {
+      "selector": ".dx-datagrid-group-panel .dx-block-separator",
+      "fgRole": "color-content",
+      "bgRole": "color-bg-primary",
+      "contrast": {
+        "light": 3.36,
+        "dark": 5.38
+      },
+      "decision": "graphic-ok",
+      "why": "полоса-разделитель панели группировки: 2px в bg-primary, графика с порогом 3:1, и 3.36 его берёт. Текст панели лежит рядом с полосой, а не на ней. Всплыло из-за Д23, значение не двигалось"
+    },
     {
       "selector": ".dx-messagelist-context-menu-content .dx-menu-item:has(.dx-icon-trash).dx-state-focused",
       "fgRole": "color-content-danger",
@@ -1711,11 +1722,11 @@
       "Д13": "base content rest - закрыт 15.09 валидацией: обе роли верны, расходится оттенок",
       "Д26": "radio-focus-rung-and-family - принято 15.09 первым вариантом: радиокнопка берёт решения чекбокса. Кольцо на border-primary-shared-hovered, точка на bg-primary-shared-hovered, фокус отделён от нажатия. Тёмный 1.98 -> 5.79; мёртвая $radio-button-icon-bg-focused удалена",
       "Д21": "radio-invalid-vs-checkbox-invalid - принято 15.09 первым вариантом: форма чекбокса везде. Пакет назвал анатомию сам - radio-button.color.checked даёт bg=none, border=border-primary-shared, icon=content-primary-shared, - поэтому у каждого кольца теперь своё имя на border-роли, а у каждой точки своё на content-роли. База получила два необязательных параметра",
-      "Д14": "invalid content rest - закрыт 15.09 ответом «для common bg-danger, для остальных content-danger». Три текстовых участника уже на content-danger; у common участник группы это белый знак на красном диске, поэтому перевод коснулся диска: invalid-badge-bg с bg-danger-shared на bg-danger, и знак держит 6.07 в обоих режимах вместо 6.07/3.68"
+      "Д14": "invalid content rest - закрыт 15.09 ответом «для common bg-danger, для остальных content-danger». Три текстовых участника уже на content-danger; у common участник группы это белый знак на красном диске, поэтому перевод коснулся диска: invalid-badge-bg с bg-danger-shared на bg-danger, и знак держит 6.07 в обоих режимах вместо 6.07/3.68",
+      "Д23": "tier-bypassed-by-neighbours - принято 15.09 обоими вариантами сразу: 131 чтение чужого модуля цветов переведено на имя тира соседа, два места получили собственное имя. Прямых красок мимо тира 234 -> 47, и все 47 гейт достижимости отвергает по названной причине - портал или непроверенная область"
     },
     "map": {
       "statePairGroup:outlined-button-label": "Д17",
-      "sweep:tier-bypassed-by-neighbours": "Д23",
       "sweep:tree-focus-on-disabled-node": "Д25",
       "sweep:invalid-focus-rung": "Д27"
     }
@@ -1730,45 +1741,6 @@
     ],
     "rows": [
       {
-        "bg": "--dx-check-box-icon-checked-bg-active",
-        "fg": "--dx-check-box-mark-content",
-        "fgRole": "color-content-inverted",
-        "bgRole": "color-bg-primary-shared-active",
-        "contrast": {
-          "light": 11.17,
-          "dark": 2.31
-        },
-        "selector": ".dx-checkbox-checked.dx-state-active .dx-checkbox-icon",
-        "group": "checkbox-focused-fill",
-        "decision": "answered"
-      },
-      {
-        "bg": "--dx-button-default-outlined-bg-active",
-        "fg": "--dx-button-default-outlined-content",
-        "fgRole": "color-content-primary",
-        "bgRole": "color-bg-primary-subtler-active",
-        "contrast": {
-          "light": 2.94,
-          "dark": 4.79
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-active",
-        "group": "outlined-button-label",
-        "decision": "design"
-      },
-      {
-        "bg": "--dx-button-success-outlined-bg-active",
-        "fg": "--dx-button-success-outlined-content",
-        "fgRole": "color-content-success",
-        "bgRole": "color-bg-success-subtler-active",
-        "contrast": {
-          "light": 3.02,
-          "dark": 4.75
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-active",
-        "group": "outlined-button-label",
-        "decision": "design"
-      },
-      {
         "bg": "--dx-button-danger-outlined-bg-active",
         "fg": "--dx-button-danger-outlined-content",
         "fgRole": "color-content-danger",
@@ -1778,60 +1750,8 @@
           "dark": 5.01
         },
         "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-active",
-        "group": "outlined-button-label",
-        "decision": "design"
-      },
-      {
-        "bg": "--dx-button-danger-outlined-bg-selected",
-        "fg": "--dx-button-danger-outlined-content",
-        "fgRole": "color-content-danger",
-        "bgRole": "color-bg-danger-subtler-selected",
-        "contrast": {
-          "light": 3.78,
-          "dark": 3.22
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-selected",
-        "group": "outlined-button-label",
-        "decision": "design"
-      },
-      {
-        "bg": "--dx-button-success-outlined-bg-selected",
-        "fg": "--dx-button-success-outlined-content",
-        "fgRole": "color-content-success",
-        "bgRole": "color-bg-success-subtler-selected",
-        "contrast": {
-          "light": 3.51,
-          "dark": 3.23
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-selected",
-        "group": "outlined-button-label",
-        "decision": "design"
-      },
-      {
-        "bg": "--dx-button-default-outlined-bg-selected",
-        "fg": "--dx-button-default-outlined-content",
-        "fgRole": "color-content-primary",
-        "bgRole": "color-bg-primary-subtler-selected",
-        "contrast": {
-          "light": 3.45,
-          "dark": 3.35
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-selected",
-        "group": "outlined-button-label",
-        "decision": "design"
-      },
-      {
-        "bg": "--dx-button-danger-outlined-bg-hovered",
-        "fg": "--dx-button-danger-outlined-content",
-        "fgRole": "color-content-danger",
-        "bgRole": "color-bg-danger-subtler-hovered",
-        "contrast": {
-          "light": 4.43,
-          "dark": 3.92
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-hover",
-        "group": "outlined-button-label",
-        "decision": "design"
+        "decision": "design",
+        "group": "outlined-button-label"
       },
       {
         "bg": "--dx-button-danger-outlined-bg-focused",
@@ -1843,99 +1763,34 @@
           "dark": 3.92
         },
         "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-focused",
-        "group": "outlined-button-label",
-        "decision": "design"
+        "decision": "design",
+        "group": "outlined-button-label"
       },
       {
-        "bg": "--dx-button-default-outlined-bg-hovered",
-        "fg": "--dx-button-default-outlined-content",
-        "fgRole": "color-content-primary",
-        "bgRole": "color-bg-primary-subtler-hovered",
+        "bg": "--dx-button-danger-outlined-bg-hovered",
+        "fg": "--dx-button-danger-outlined-content",
+        "fgRole": "color-content-danger",
+        "bgRole": "color-bg-danger-subtler-hovered",
         "contrast": {
-          "light": 4.02,
-          "dark": 4.11
+          "light": 4.43,
+          "dark": 3.92
         },
-        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-hover",
-        "group": "outlined-button-label",
-        "decision": "design"
+        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-hover",
+        "decision": "design",
+        "group": "outlined-button-label"
       },
       {
-        "bg": "--dx-button-default-outlined-bg-focused",
-        "fg": "--dx-button-default-outlined-content",
-        "fgRole": "color-content-primary",
-        "bgRole": "color-bg-primary-subtler-hovered",
+        "bg": "--dx-button-danger-outlined-bg-selected",
+        "fg": "--dx-button-danger-outlined-content",
+        "fgRole": "color-content-danger",
+        "bgRole": "color-bg-danger-subtler-selected",
         "contrast": {
-          "light": 4.02,
-          "dark": 4.11
+          "light": 3.78,
+          "dark": 3.22
         },
-        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-focused",
-        "group": "outlined-button-label",
-        "decision": "design"
-      },
-      {
-        "bg": "--dx-button-success-outlined-bg-hovered",
-        "fg": "--dx-button-success-outlined-content",
-        "fgRole": "color-content-success",
-        "bgRole": "color-bg-success-subtler-hovered",
-        "contrast": {
-          "light": 4.04,
-          "dark": 4.03
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-hover",
-        "group": "outlined-button-label",
-        "decision": "design"
-      },
-      {
-        "bg": "--dx-button-success-outlined-bg-focused",
-        "fg": "--dx-button-success-outlined-content",
-        "fgRole": "color-content-success",
-        "bgRole": "color-bg-success-subtler-hovered",
-        "contrast": {
-          "light": 4.04,
-          "dark": 4.03
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-focused",
-        "group": "outlined-button-label",
-        "decision": "design"
-      },
-      {
-        "bg": "--dx-button-success-contained-bg-hovered",
-        "fg": "--dx-button-success-contained-content",
-        "fgRole": "color-content-static-dark",
-        "bgRole": "color-bg-success-hovered",
-        "contrast": {
-          "light": 7.53,
-          "dark": 4.18
-        },
-        "selector": ".dx-button.dx-button-success.dx-state-hover",
-        "group": "contained-button-label",
-        "decision": "answered"
-      },
-      {
-        "bg": "--dx-button-success-contained-bg-focused",
-        "fg": "--dx-button-success-contained-content",
-        "fgRole": "color-content-static-dark",
-        "bgRole": "color-bg-success-hovered",
-        "contrast": {
-          "light": 7.53,
-          "dark": 4.18
-        },
-        "selector": ".dx-button.dx-button-success.dx-state-focused",
-        "group": "contained-button-label",
-        "decision": "answered"
-      },
-      {
-        "bg": "--dx-button-default-contained-bg-hovered",
-        "fg": "--dx-button-default-contained-content",
-        "fgRole": "color-content-static-dark",
-        "bgRole": "color-bg-primary-hovered",
-        "contrast": {
-          "light": 7.82,
-          "dark": 4.21
-        },
-        "selector": ".dx-button.dx-button-default.dx-state-hover",
-        "group": "contained-button-label",
-        "decision": "answered"
+        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-selected",
+        "decision": "design",
+        "group": "outlined-button-label"
       },
       {
         "bg": "--dx-button-default-contained-bg-focused",
@@ -1947,8 +1802,216 @@
           "dark": 4.21
         },
         "selector": ".dx-button.dx-button-default.dx-state-focused",
-        "group": "contained-button-label",
-        "decision": "answered"
+        "decision": "answered",
+        "group": "contained-button-label"
+      },
+      {
+        "bg": "--dx-button-default-contained-bg-hovered",
+        "fg": "--dx-button-default-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-primary-hovered",
+        "contrast": {
+          "light": 7.82,
+          "dark": 4.21
+        },
+        "selector": ".dx-button.dx-button-default.dx-state-hover",
+        "decision": "answered",
+        "group": "contained-button-label"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-active",
+        "fg": "--dx-button-default-outlined-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-active",
+        "contrast": {
+          "light": 2.94,
+          "dark": 4.79
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-active",
+        "decision": "design",
+        "group": "outlined-button-label"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-active",
+        "fg": "--dx-button-default-text-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-active",
+        "contrast": {
+          "light": 2.94,
+          "dark": 4.79
+        },
+        "selector": ".dx-popup-content .dx-scheduler-dropdown-appointment-buttons-block .dx-button.dx-state-sel",
+        "decision": "graphic-ok",
+        "why": "пара стала измеримой только после Д23: раньше одна сторона приходила ролью дизайн-системы и сканер не мог её атрибутировать. Значения не двигались, элемент - подпись кнопки на собственной заливке"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-focused",
+        "fg": "--dx-button-default-outlined-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-hovered",
+        "contrast": {
+          "light": 4.02,
+          "dark": 4.11
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-focused",
+        "decision": "design",
+        "group": "outlined-button-label"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-focused",
+        "fg": "--dx-button-default-text-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-hovered",
+        "contrast": {
+          "light": 4.02,
+          "dark": 4.11
+        },
+        "selector": ".dx-popup-content .dx-scheduler-dropdown-appointment-buttons-block .dx-button.dx-state-foc",
+        "decision": "graphic-ok",
+        "why": "пара стала измеримой только после Д23: раньше одна сторона приходила ролью дизайн-системы и сканер не мог её атрибутировать. Значения не двигались, элемент - подпись кнопки на собственной заливке"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-hovered",
+        "fg": "--dx-button-default-outlined-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-hovered",
+        "contrast": {
+          "light": 4.02,
+          "dark": 4.11
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-hover",
+        "decision": "design",
+        "group": "outlined-button-label"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-hovered",
+        "fg": "--dx-button-default-text-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-hovered",
+        "contrast": {
+          "light": 4.02,
+          "dark": 4.11
+        },
+        "selector": ".dx-popup-content .dx-scheduler-dropdown-appointment-buttons-block .dx-button.dx-state-hov",
+        "decision": "graphic-ok",
+        "why": "пара стала измеримой только после Д23: раньше одна сторона приходила ролью дизайн-системы и сканер не мог её атрибутировать. Значения не двигались, элемент - подпись кнопки на собственной заливке"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-selected",
+        "fg": "--dx-button-default-outlined-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-selected",
+        "contrast": {
+          "light": 3.45,
+          "dark": 3.35
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-selected",
+        "decision": "design",
+        "group": "outlined-button-label"
+      },
+      {
+        "bg": "--dx-button-success-contained-bg-focused",
+        "fg": "--dx-button-success-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-success-hovered",
+        "contrast": {
+          "light": 7.53,
+          "dark": 4.18
+        },
+        "selector": ".dx-button.dx-button-success.dx-state-focused",
+        "decision": "answered",
+        "group": "contained-button-label"
+      },
+      {
+        "bg": "--dx-button-success-contained-bg-hovered",
+        "fg": "--dx-button-success-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-success-hovered",
+        "contrast": {
+          "light": 7.53,
+          "dark": 4.18
+        },
+        "selector": ".dx-button.dx-button-success.dx-state-hover",
+        "decision": "answered",
+        "group": "contained-button-label"
+      },
+      {
+        "bg": "--dx-button-success-outlined-bg-active",
+        "fg": "--dx-button-success-outlined-content",
+        "fgRole": "color-content-success",
+        "bgRole": "color-bg-success-subtler-active",
+        "contrast": {
+          "light": 3.02,
+          "dark": 4.75
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-active",
+        "decision": "design",
+        "group": "outlined-button-label"
+      },
+      {
+        "bg": "--dx-button-success-outlined-bg-focused",
+        "fg": "--dx-button-success-outlined-content",
+        "fgRole": "color-content-success",
+        "bgRole": "color-bg-success-subtler-hovered",
+        "contrast": {
+          "light": 4.04,
+          "dark": 4.03
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-focused",
+        "decision": "design",
+        "group": "outlined-button-label"
+      },
+      {
+        "bg": "--dx-button-success-outlined-bg-hovered",
+        "fg": "--dx-button-success-outlined-content",
+        "fgRole": "color-content-success",
+        "bgRole": "color-bg-success-subtler-hovered",
+        "contrast": {
+          "light": 4.04,
+          "dark": 4.03
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-hover",
+        "decision": "design",
+        "group": "outlined-button-label"
+      },
+      {
+        "bg": "--dx-button-success-outlined-bg-selected",
+        "fg": "--dx-button-success-outlined-content",
+        "fgRole": "color-content-success",
+        "bgRole": "color-bg-success-subtler-selected",
+        "contrast": {
+          "light": 3.51,
+          "dark": 3.23
+        },
+        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-selected",
+        "decision": "design",
+        "group": "outlined-button-label"
+      },
+      {
+        "bg": "--dx-check-box-icon-checked-bg-active",
+        "fg": "--dx-check-box-mark-content",
+        "fgRole": "color-content-inverted",
+        "bgRole": "color-bg-primary-shared-active",
+        "contrast": {
+          "light": 11.17,
+          "dark": 2.31
+        },
+        "selector": ".dx-checkbox-checked.dx-state-active .dx-checkbox-icon",
+        "decision": "answered",
+        "group": "checkbox-focused-fill"
+      },
+      {
+        "bg": "--dx-speed-dial-action-main-bg-hovered",
+        "fg": "--dx-button-default-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-primary-hovered",
+        "contrast": {
+          "light": 7.82,
+          "dark": 4.21
+        },
+        "selector": ".dx-fa-button.dx-fa-button-main .dx-overlay-content.dx-state-hover",
+        "decision": "graphic-ok",
+        "why": "пара стала измеримой только после Д23: раньше одна сторона приходила ролью дизайн-системы и сканер не мог её атрибутировать. Значения не двигались, элемент - подпись кнопки на собственной заливке"
       },
       {
         "bg": "--dx-stepper-step-bg-selected-hovered",
@@ -1960,8 +2023,8 @@
           "dark": 4.21
         },
         "selector": ".dx-step.dx-state-hover.dx-step-completed .dx-step-indicator",
-        "group": "contained-button-label",
-        "decision": "answered"
+        "decision": "answered",
+        "group": "contained-button-label"
       }
     ],
     "groups": {
@@ -2015,9 +2078,9 @@
       },
       {
         "key": "tier-bypassed-by-neighbours",
-        "decision": "design",
+        "decision": "answered",
         "title": "Соседний виджет красит чужой контрол мимо тира - и перебивает его публичное имя",
-        "why": "Found 15.09 while answering what role the checkbox uses on hover. The checkbox itself moves only its border - border-contrast to border-contrast-hovered, the fill untouched - which is the same shape the tile uses and corroborates the Д6 answer. But the list repaints the same checkbox on ITEM hover, and it does it by importing the checkbox theme variable directly (list/_index.scss reads checkBoxColors.$check-box-icon-checked-bg-hovered), not through a name of its own. The variable holds ds.$color-bg-primary-hovered, so the compiled rule paints from var(--dxds-color-bg-primary-hovered) - the design-system name - with no component-tier name in between.\nTHE CONSEQUENCE IS DEMONSTRABLE, not theoretical. Checked with a cascade harness on the real bundle: a checked checkbox on its own resolves to var(--dx-check-box-icon-checked-bg-hovered), and the same checkbox inside a list with a selection decorator resolves to var(--dxds-color-bg-primary-hovered), because the list selector carries six classes against three. So overriding the checkbox's public name changes the control everywhere EXCEPT inside a list - the one place a consumer is least likely to test.\nHOW WIDE. 230 colour declarations in the bundle paint straight from --dxds- with no tier name: color 32, background-color and the border colours the rest, concentrated in toolbar-menu-section (40), dataGrid (20), treeList (16), popup-content (10), menu-item (5), list (4). Sizes and typography do the same 510 more times, but that is by design - the tier is colour-first and the sizes sit on the scales on purpose. The colour half is not by design.\nThirteen theme files import a neighbour colour module inside _index.scss and paint with it directly; the same import inside a _colors.scss is harmless, because there it becomes the value of the widget's OWN tier name.\nOptions: (1) give every such paint a tier name of its own, valued from the neighbour as chat/_colors.scss already does - the widest fix, and it grows the tier; (2) fix only the cases where the borrowed paint collides with an existing public name, which is the demonstrable bug - list and scheduler over checkBox and radioButton; (3) record the 230 as deliberate and say in the docs that colour outside a tier name is not overridable. Recommendation: (2) now, (1) as a wave before the tier ships, because after release each missing name is a customisation that cannot be written."
+        "why": "Found 15.09 while answering what role the checkbox uses on hover. The checkbox itself moves only its border - border-contrast to border-contrast-hovered, the fill untouched - which is the same shape the tile uses and corroborates the Д6 answer. But the list repaints the same checkbox on ITEM hover, and it does it by importing the checkbox theme variable directly (list/_index.scss reads checkBoxColors.$check-box-icon-checked-bg-hovered), not through a name of its own. The variable holds ds.$color-bg-primary-hovered, so the compiled rule paints from var(--dxds-color-bg-primary-hovered) - the design-system name - with no component-tier name in between.\nTHE CONSEQUENCE IS DEMONSTRABLE, not theoretical. Checked with a cascade harness on the real bundle: a checked checkbox on its own resolves to var(--dx-check-box-icon-checked-bg-hovered), and the same checkbox inside a list with a selection decorator resolves to var(--dxds-color-bg-primary-hovered), because the list selector carries six classes against three. So overriding the checkbox's public name changes the control everywhere EXCEPT inside a list - the one place a consumer is least likely to test.\nHOW WIDE. 230 colour declarations in the bundle paint straight from --dxds- with no tier name: color 32, background-color and the border colours the rest, concentrated in toolbar-menu-section (40), dataGrid (20), treeList (16), popup-content (10), menu-item (5), list (4). Sizes and typography do the same 510 more times, but that is by design - the tier is colour-first and the sizes sit on the scales on purpose. The colour half is not by design.\nThirteen theme files import a neighbour colour module inside _index.scss and paint with it directly; the same import inside a _colors.scss is harmless, because there it becomes the value of the widget's OWN tier name.\nANSWERED 15.09 with options (1) AND (2) together. Every read of a neighbour's colour module outside _colors.scss - 131 of them in 21 files - was rewritten to read that component's TIER name instead of its Sass variable, which is what put the design-system name in the bundle. All 131 already had a published name, so no name had to be invented for the conversion itself; (1) showed up as two places that had none: the cardView sort indicator, which was the one base mirror in its file still reading a role directly, and the dateRangeBox separator, which had been borrowing the text editor's -disabled name for a muted colour and now has its own.\nDirect design-system colour paints in the bundle: 234 before, 47 after. Every one of the 47 is refused by the reachability gate for a reason it names: a portal (the grid and treeList revert tooltips and focus overlays, the scheduler appointment tooltip, the column choosers, the drag headers, the form dialog - the element is mounted outside its owner's root, so var() would resolve to nothing), or a scope outside the owner's roots that the runtime audit could not prove because the gallery never builds it.\nProof that nothing moved: a resolve-diff over both modes, 11676 rule-property pairs, expanding every var() chain to its final value. Exactly 17 differences, all inside the toolbar's overflow menu, all intended - see the applied rows. The runtime reachability audit on the built bundle reports no new holes, and all 49 non-fluent-next bundles are byte-identical.\n23 scopes were added to nested-scopes.json, each proven by that runtime audit rather than asserted."
       },
       {
         "key": "radio-checked-fill-stem",
@@ -2245,6 +2308,16 @@
         "what": "slider disabled ring, check box mark, calendar today ring (Д21 sweep)",
         "change": "new $slider-border-disabled on border-disabled for the handle ring, the fills keep content-disabled; new $check-box-mark-content for the tick, the box background keeps $check-box-icon-bg; new $calendar-cell-today-border on border-primary-shared, passed to the base parameter that draws only the today outline",
         "effect": "three more places where one name painted two elements. The slider ring goes #ababab -> #d7d7d7 light and #767676 -> #4c4c4c dark, joining the check box and the radio, whose disabled rings already read border-disabled. The check box split is value-identical - the box fill and the tick are both content-inverted - and only makes the anatomy visible in the names. The calendar today outline was drawn with the selected cell FILL: light identical #0f6cbd, dark #0f6cbd -> #4b90d9, because the flat primary family does not invert and the outline stayed the light-mode blue on a dark calendar"
+      },
+      {
+        "what": "the component tier stops being bypassed (Д23, options 1 and 2)",
+        "change": "131 reads of a neighbour colour module in 21 _index.scss files rewritten from the Sass variable to that component tier name; 26 now-unused @use lines removed; new $card-view-header-item-sort-indicator-border and $date-range-box-separator-content where no name existed; 23 scopes registered in nested-scopes.json",
+        "effect": "direct design-system colour paints go 234 -> 47. A user who overrides a public name now sees the control change inside the composites that render it - the list and the tree for the check box and the radio, the toolbar overflow menu and the scheduler tooltip for the button - which was the proved bug. Value-neutral: a resolve-diff over 11676 rule-property pairs in both modes shows only the 17 intended toolbar rows. The 47 that stay are each refused by the reachability gate: a portal, or a scope the runtime audit cannot build. The dateRangeBox separator also leaves the disabled-paint gate - it had been reading the text editor -disabled name while nothing was disabled"
+      },
+      {
+        "what": "toolbar overflow menu reads the button's text mode (Д23)",
+        "change": "the four hue blocks now pass the same argument lists as button/_index.scss does for .dx-button-mode-text",
+        "effect": "17 values corrected. The danger and success LABELS were painted with the button fill - bg-danger and bg-success, mode-static - which read 2.56 in dark against the 4.5 AA asks; they now read content-danger / content-success, 4.22 and 4.73 in dark. The selected state took the active value where the button takes the selected one, in all four hues, and the default label on selected took the rest colour where the button takes the hovered one. Light moves only on the selected rungs"
       }
     ]
   },
@@ -2264,7 +2337,8 @@
       "закрылись сами - чекбокс и радиокнопка сошлись на одном стеме, а treeView перестал",
       "красить чекбокс. Класс остался без строк, и проверка это поймала.",
       "ring-and-fill ушёл 15.09: Д21 развёл кольцо и метку по отдельным именам, и все три строки, которые классом помечались, вышли из списка. Класс остался без записей - гейт это и поймал.",
-      "graphic-ok ушёл 15.09: единственной его строкой был белый знак на диске невалидного бейджа, и после перевода диска на bg-danger (Д14) пара вышла из списка контраста вовсе - 6.07 в обоих режимах."
+      "graphic-ok ушёл 15.09: единственной его строкой был белый знак на диске невалидного бейджа, и после перевода диска на bg-danger (Д14) пара вышла из списка контраста вовсе - 6.07 в обоих режимах.",
+      "graphic-ok вернулся 15.09: Д23 сделал видимыми пары, которые инструмент раньше не мог атрибутировать. Класс уходит и возвращается вместе со строками - в этом и смысл гейта."
     ],
     "classes": {
       "design": {
@@ -2314,6 +2388,10 @@
       "false-group": {
         "section": "Е",
         "ru": "группа сложилась по слову в именах, а не по существу - участники красят разные элементы, и каждая роль верна для своего"
+      },
+      "graphic-ok": {
+        "section": "Е",
+        "ru": "глиф или графика, порог 3:1 взят"
       }
     }
   },

@@ -252,6 +252,10 @@ $cardview-card__content__field-value--highlighted-box-shadow: 0 1px 3px var(--dx
 
 $cardview-columnchooser--empty__message-color: var(--dx-card-view-column-chooser-empty-message-content) !default;
 
-$cardview-header-item__sort-indicator__border-color: ds.$color-border-primary !default;
+/* Индикатор сортировки - единственный зеркальный параметр базы в этом файле, который читал роль
+   напрямую, поэтому цвет уезжал в бандл мимо имени тира (Д23). Остальные пары в файле устроены так
+   же, как эта теперь. */
+$card-view-header-item-sort-indicator-border: ds.$color-border-primary !default;
+$cardview-header-item__sort-indicator__border-color: var(--dx-card-view-header-item-sort-indicator-border) !default;
 
 $card-view-content-disabled: ds.$color-content-disabled !default;

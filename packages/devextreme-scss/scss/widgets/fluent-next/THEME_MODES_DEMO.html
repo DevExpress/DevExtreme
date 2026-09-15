@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fluent Next - theme modes as CSS classes</title>
+<style>
+  :root{
+    --page-bg:#f7f8fa; --panel:#ffffff; --ink:#1b2430; --ink-soft:#4a5568; --line:#dde3ea;
+    --accent:#0f6cbd; --code-bg:#f0f3f7; --code-ink:#243044;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --page-bg:#10151c; --panel:#171e28; --ink:#e6ecf4; --ink-soft:#9aa8ba; --line:#2a3442;
+      --accent:#5aa4e0; --code-bg:#1d2531; --code-ink:#d6dfeb;
+    }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--page-bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:16px; line-height:1.6;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:40px 22px 72px}
+  h1{font-size:clamp(24px,4vw,32px); font-weight:700; line-height:1.15; margin:0 0 10px; text-wrap:balance}
+  .kicker{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; margin-bottom:9px}
+  .lede{color:var(--ink-soft); max-width:66ch; margin:0 0 6px}
+  h2{font-size:18px; font-weight:700; margin:36px 0 8px}
+  p{max-width:70ch}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.86em; background:var(--code-bg); border-radius:5px; padding:.1em .4em}
+  pre{background:var(--code-bg); color:var(--code-ink); border:1px solid var(--line); border-radius:8px; padding:13px 15px; overflow-x:auto;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12.6px; line-height:1.6; margin:10px 0}
+  pre .c{color:var(--ink-soft)}
+  .foot{margin-top:40px; padding-top:14px; border-top:1px solid var(--line); font-size:13px; color:var(--ink-soft)}
+
+  /* ---------- the stand ---------- */
+  .stage{border:1px solid var(--line); border-radius:10px; overflow:hidden; margin:14px 0; background:var(--panel)}
+  .stage-bar{display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:11px 13px; border-bottom:1px solid var(--line)}
+  .stage-bar .lbl{font-size:12.5px; color:var(--ink-soft); margin-right:4px}
+  .sw{font:inherit; font-size:13.5px; font-weight:600; padding:6px 13px; border-radius:6px; border:1px solid var(--line);
+      background:var(--panel); color:var(--ink); cursor:pointer}
+  .sw[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff}
+  .sw:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .meter{margin-inline-start:auto; font-size:12.5px; color:var(--ink-soft); font-variant-numeric:tabular-nums}
+
+  /* Real role values of the fluent-next blue theme, resolved to literals.
+     The declaration structure mirrors the proposed packing of a bundle. */
+  .app,
+  .app.dx-theme-mode-light{
+    --dxds-color-bg:#ffffff; --dxds-color-bg-canvas:#fafafa; --dxds-color-bg-hovered:#f5f5f5;
+    --dxds-color-content:#161616; --dxds-color-content-subtle:#444444; --dxds-color-border:#cbcbcb;
+    --dxds-color-bg-primary:#0f6cbd; --dxds-color-content-primary:#0f6cbd; --dxds-color-content-on-primary:#ffffff;
+  }
+  .app.dx-theme-mode-dark,
+  .app .dx-theme-mode-inverted{
+    --dxds-color-bg:#242424; --dxds-color-bg-canvas:#1d1d1d; --dxds-color-bg-hovered:#3b3b3b;
+    --dxds-color-content:#ffffff; --dxds-color-content-subtle:#cbcbcb; --dxds-color-border:#767676;
+    --dxds-color-bg-primary:#0f6cbd; --dxds-color-content-primary:#4b90d9; --dxds-color-content-on-primary:#ffffff;
+  }
+  .app.dx-theme-mode-dark .dx-theme-mode-inverted{
+    --dxds-color-bg:#ffffff; --dxds-color-bg-canvas:#fafafa; --dxds-color-bg-hovered:#f5f5f5;
+    --dxds-color-content:#161616; --dxds-color-content-subtle:#444444; --dxds-color-border:#cbcbcb;
+    --dxds-color-bg-primary:#0f6cbd; --dxds-color-content-primary:#0f6cbd; --dxds-color-content-on-primary:#ffffff;
+  }
+
+  .app{background:var(--dxds-color-bg-canvas); color:var(--dxds-color-content); padding:15px;
+       transition:background-color .18s ease, color .18s ease}
+  .app-head{padding:10px 14px; border-radius:8px; background:var(--dxds-color-bg);
+            border:1px solid var(--dxds-color-border); margin-bottom:13px}
+  .app-title{font-weight:700; font-size:15px}
+  .app-sub{font-size:12.5px; color:var(--dxds-color-content-subtle)}
+  .app-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:13px}
+  .w{background:var(--dxds-color-bg); border:1px solid var(--dxds-color-border); border-radius:8px; padding:13px}
+  .w h3{margin:0 0 7px; font-size:14px; font-weight:700; color:var(--dxds-color-content)}
+  .w p{margin:0 0 11px; font-size:13.5px; color:var(--dxds-color-content-subtle); max-width:none}
+  .btn{font:inherit; font-size:13.5px; font-weight:600; padding:7px 13px; border-radius:6px; cursor:pointer; border:1px solid transparent}
+  .btn.primary{background:var(--dxds-color-bg-primary); color:var(--dxds-color-content-on-primary)}
+  .btn.ghost{background:transparent; color:var(--dxds-color-content-primary); border-color:var(--dxds-color-border)}
+  .field{display:block; width:100%; font:inherit; font-size:13.5px; padding:7px 10px; border-radius:6px;
+         border:1px solid var(--dxds-color-border); background:var(--dxds-color-bg); color:var(--dxds-color-content)}
+  .rows{width:100%; border-collapse:collapse; font-size:13.5px}
+  .rows th{text-align:left; padding:6px 9px; color:var(--dxds-color-content-subtle); font-size:11px;
+           text-transform:uppercase; letter-spacing:.06em; border-bottom:1px solid var(--dxds-color-border)}
+  .rows td{padding:7px 9px; border-bottom:1px solid var(--dxds-color-border); color:var(--dxds-color-content)}
+  .rows tbody tr:hover td{background:var(--dxds-color-bg-hovered)}
+  .invert{border-radius:8px; padding:13px; background:var(--dxds-color-bg-canvas); border:1px dashed var(--dxds-color-border)}
+  .invert-label{font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--dxds-color-content-subtle); margin-bottom:9px}
+  @media (prefers-reduced-motion: reduce){ .app{transition:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Fluent Next - proposal</div>
+  <h1>Theme modes as CSS classes</h1>
+  <p class="lede">Light and dark bundles stay as they are. The proposal is that each bundle also carries the second mode, reachable by a class - so the mode can be switched without swapping the stylesheet, and a block can use the opposite mode.</p>
+  <p class="lede">The stand below runs on the real role values of our blue theme. Switch the mode and watch the counter: the page is already loaded and the stylesheet is never re-fetched - only a class changes.</p>
+
+  <div class="stage">
+    <div class="stage-bar">
+      <span class="lbl">Mode:</span>
+      <button class="sw" data-mode="light" aria-pressed="true">Light</button>
+      <button class="sw" data-mode="dark" aria-pressed="false">Dark</button>
+      <span class="meter" id="meter">switches: 0 &middot; stylesheet loads: 1</span>
+    </div>
+    <div class="app dx-theme-mode-light" id="app">
+      <div class="app-head">
+        <div class="app-title">Orders</div>
+        <div class="app-sub">The mode is applied by a class on this container</div>
+      </div>
+      <div class="app-grid">
+        <div class="w">
+          <h3>Card</h3>
+          <p>Background, text and borders come from roles - the same ones our components read.</p>
+          <button class="btn primary">Primary action</button>
+          <button class="btn ghost">Cancel</button>
+        </div>
+        <div class="w">
+          <h3>Input</h3>
+          <p>The field border and background are roles as well.</p>
+          <input class="field" value="Jane Cooper" aria-label="Customer">
+        </div>
+        <div class="w">
+          <h3>Table</h3>
+          <table class="rows">
+            <thead><tr><th>Order</th><th>Total</th></tr></thead>
+            <tbody>
+              <tr><td>#1041</td><td>$12,400</td></tr>
+              <tr><td>#1042</td><td>$8,900</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="invert dx-theme-mode-inverted">
+          <div class="invert-label">Inverted block</div>
+          <div class="w">
+            <h3>Preview panel</h3>
+            <p>Always the opposite of the page mode - try switching.</p>
+            <button class="btn primary">Open</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>What this looks like in a bundle</h2>
+  <pre><span class="c">/* dx.fluent-next.blue.light.css - the same light bundle as today */</span>
+:root, .dx-theme-mode-light {
+  --dxds-color-bg: #ffffff;
+  --dxds-color-content: #161616;
+  --dxds-color-border: #cbcbcb;
+}
+
+<span class="c">/* added: the second mode, reachable by a class */</span>
+.dx-theme-mode-dark, .dx-theme-mode-inverted {
+  --dxds-color-bg: #242424;
+  --dxds-color-content: #ffffff;
+  --dxds-color-border: #767676;
+}</pre>
+  <p>The dark bundle is the mirror image: dark values on <code>:root</code>, light values reachable by class. The loaded file sets the default, the class switches the mode inside the page, and <code>dx-theme-mode-inverted</code> always means the opposite of the current mode.</p>
+
+  <h2>What this stand is and is not</h2>
+  <p>The role values and the declaration structure are genuine - taken from our generated design system for the blue theme. The widgets are simplified mockups, not our components: the stand demonstrates the switching and nesting mechanics, not the product look.</p>
+
+  <div class="foot">Self-contained page: no external resources, opens offline. DevExtreme, Fluent Next theme.</div>
+</div>
+<script>
+  (function () {
+    var app = document.getElementById('app');
+    var meter = document.getElementById('meter');
+    var buttons = Array.prototype.slice.call(document.querySelectorAll('.sw'));
+    var switches = 0;
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        app.classList.remove('dx-theme-mode-light', 'dx-theme-mode-dark');
+        app.classList.add('dx-theme-mode-' + btn.dataset.mode);
+        buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+        switches += 1;
+        var sheets = document.querySelectorAll('link[rel="stylesheet"]').length + 1;
+        meter.textContent = 'switches: ' + switches + ' · stylesheet loads: ' + sheets;
+      });
+    });
+  })();
+</script>
+</body>
+</html>

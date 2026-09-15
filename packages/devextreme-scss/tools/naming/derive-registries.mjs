@@ -1066,7 +1066,7 @@ const OVERRIDES = {
       'overlay', 'item', 'popup', 'content', 'title', 'container', 'cell', 'button',
       'apply-button', 'input',
     ],
-    'date-range-box': ['active-bar', 'custom-button', 'input'],
+    'date-range-box': ['active-bar', 'custom-button', 'input', 'separator'],
     'select-box': ['list'],
     lookup: ['field', 'search', 'arrow', 'popup', 'content'],
     'tag-box': ['tag', 'content', 'container', 'remove-button', 'select-all', 'list'],

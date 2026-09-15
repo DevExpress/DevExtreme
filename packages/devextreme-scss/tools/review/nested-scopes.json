@@ -11,6 +11,7 @@
     "dx-button"
   ],
   "button": [
+    "dx-ai-chat__empty-image",
     "dx-button-content",
     "dx-button-has-icon",
     "dx-button-mode-contained",
@@ -20,7 +21,9 @@
     "dx-calendar-navigator-next-view",
     "dx-calendar-navigator-previous-view",
     "dx-dropdownbutton",
-    "dx-scheduler-header"
+    "dx-fa-button",
+    "dx-scheduler-header",
+    "dx-toolbar-menu-section"
   ],
   "button-group": [
     "dx-buttongroup-mode-contained",
@@ -102,7 +105,8 @@
     "dx-checkbox-checked",
     "dx-checkbox-icon",
     "dx-checkbox-indeterminate",
-    "dx-checkbox-text"
+    "dx-checkbox-text",
+    "dx-list"
   ],
   "color-box": [
     "dx-colorbox-color-result-preview"
@@ -275,6 +279,9 @@
     "dx-datagrid-filter-range-overlay",
     "dx-datagrid-filter-row",
     "dx-datagrid-focus-overlay",
+    "dx-datagrid-group-closed",
+    "dx-datagrid-group-opened",
+    "dx-datagrid-group-panel",
     "dx-datagrid-header-panel",
     "dx-datagrid-headers",
     "dx-datagrid-invalid",
@@ -283,12 +290,17 @@
     "dx-datagrid-rowsview",
     "dx-datagrid-search-panel",
     "dx-datagrid-search-text",
+    "dx-datagrid-sticky-columns",
     "dx-datagrid-summary-item",
     "dx-datagrid-total-footer",
     "dx-editor-cell",
+    "dx-gridbase-container",
+    "dx-header-multi-row",
     "dx-header-row",
     "dx-highlight-outline",
+    "dx-pivotgrid-fields-container",
     "dx-row",
+    "dx-sortable-dragging",
     "dx-treelist-adaptive-more",
     "dx-treelist-borders",
     "dx-treelist-bottom-load-panel",
@@ -368,9 +380,14 @@
   ],
   "menu": [
     "dx-context-menu",
+    "dx-datagrid-filter-row",
     "dx-menu",
     "dx-menu-horizontal",
-    "dx-menu-vertical"
+    "dx-menu-item",
+    "dx-menu-item-expanded",
+    "dx-menu-item-selected",
+    "dx-menu-vertical",
+    "dx-treelist-filter-row"
   ],
   "number-box": [
     "dx-numberbox-spin-button",
@@ -383,11 +400,13 @@
     "dx-pivotgrid-scrollbar-measure-element"
   ],
   "popup": [
+    "dx-datagrid-column-chooser",
     "dx-dialog-message",
     "dx-dialog-root",
     "dx-popup-bottom",
     "dx-popup-content",
-    "dx-popup-title"
+    "dx-popup-title",
+    "dx-treelist-column-chooser"
   ],
   "progress-bar": [
     "dx-invalid",
@@ -398,6 +417,7 @@
   ],
   "radio-button": [
     "dx-invalid",
+    "dx-list",
     "dx-radio-value-container",
     "dx-radiobutton-checked",
     "dx-radiobutton-icon",
@@ -480,6 +500,7 @@
     "dx-scrollview-scrollbottom-text"
   ],
   "scrollable": [
+    "dx-scrollable-native",
     "dx-scrollable-scroll",
     "dx-scrollable-scroll-content",
     "dx-scrollable-scrollbars-alwaysvisible",
@@ -548,6 +569,7 @@
   ],
   "text-editor": [
     "dx-clear-button-area",
+    "dx-daterangebox-separator",
     "dx-editor-filled",
     "dx-editor-outlined",
     "dx-editor-underlined",
@@ -555,6 +577,7 @@
     "dx-numberbox-spin",
     "dx-numberbox-spin-touch-friendly",
     "dx-placeholder",
+    "dx-searchbox",
     "dx-show-clear-button",
     "dx-texteditor-input",
     "dx-texteditor-label"
@@ -612,5 +635,8 @@
   "validation": [
     "dx-validationsummary-item",
     "dx-validationsummary-item-content"
+  ],
+  "date-range-box": [
+    "dx-daterangebox-separator"
   ]
 }

@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Мосты rgb(from … / a) — материал к задаче</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --ink: #14171c; --ink-soft: #565e6b; --ink-faint: #858d9a;
+  --page: #f4f6f8; --card: #fff; --line: #e0e5ec; --line-soft: #eef1f5;
+  --accent: #0f6cbd; --accent-soft: #e8f0fa;
+  --sans: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#e7eaef; --ink-soft:#a6aeba; --ink-faint:#79818e; --page:#0f1216; --card:#171b21;
+    --line:#272d36; --line-soft:#1e232a; --accent:#6aa9e6; --accent-soft:#17242f; }
+}
+:root[data-theme="dark"] { --ink:#e7eaef; --ink-soft:#a6aeba; --ink-faint:#79818e; --page:#0f1216;
+  --card:#171b21; --line:#272d36; --line-soft:#1e232a; --accent:#6aa9e6; --accent-soft:#17242f; }
+:root[data-theme="light"] { --ink:#14171c; --ink-soft:#565e6b; --ink-faint:#858d9a; --page:#f4f6f8;
+  --card:#fff; --line:#e0e5ec; --line-soft:#eef1f5; --accent:#0f6cbd; --accent-soft:#e8f0fa; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--page); color:var(--ink); font:15px/1.55 var(--sans); }
+h1,h2,h3 { margin:0; font-weight:600; text-wrap:balance; }
+p { margin:0; }
+code { font-family:var(--mono); }
+:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.wrap { max-width:1180px; margin:0 auto; padding:28px; display:flex; flex-direction:column; gap:20px; }
+header.top { background:var(--card); border-bottom:1px solid var(--line); padding:34px 28px 26px; }
+.kicker { font:600 11px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--ink-faint); }
+header.top h1 { font-size:clamp(25px,3.2vw,35px); letter-spacing:-.02em; margin-top:14px; }
+.lede { color:var(--ink-soft); max-width:70ch; margin-top:12px; }
+.facts { display:flex; flex-wrap:wrap; gap:10px 28px; margin-top:18px; }
+.fact b { font:600 20px/1.1 var(--sans); font-variant-numeric:tabular-nums; display:block; }
+.fact span { font-size:12px; color:var(--ink-faint); }
+section.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px;
+  display:flex; flex-direction:column; gap:14px; }
+section.card h2 { font-size:19px; }
+section.card h3 { font-size:14.5px; }
+.sub { color:var(--ink-soft); max-width:74ch; }
+pre { margin:0; background:var(--page); border:1px solid var(--line-soft); border-radius:8px;
+  padding:12px 14px; overflow-x:auto; font:12.5px/1.6 var(--mono); }
+pre .cmt { color:var(--ink-faint); }
+.tablewrap { overflow-x:auto; border:1px solid var(--line-soft); border-radius:8px; }
+table { border-collapse:collapse; width:100%; font-size:13px; }
+thead th { text-align:left; font:600 11px/1 var(--sans); letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-faint); padding:9px 12px; border-bottom:1px solid var(--line); }
+td, tbody th { padding:8px 12px; border-bottom:1px solid var(--line-soft); vertical-align:middle; text-align:left; }
+tbody tr:last-child td { border-bottom:0; }
+.place code { font-size:11.5px; color:var(--ink-soft); word-break:break-word; }
+.prop { display:inline-block; margin-left:6px; font:11px var(--mono); color:var(--ink-faint);
+  border:1px solid var(--line); border-radius:4px; padding:1px 5px; white-space:nowrap; }
+.req { font:12px var(--mono); white-space:nowrap; }
+.req b { font-weight:600; }
+.n { font-variant-numeric:tabular-nums; text-align:right; }
+.pvpair { display:flex; align-items:center; gap:8px; }
+.pv { display:flex; flex-direction:column; gap:4px; min-width:126px; }
+.pv i { display:block; height:34px; border-radius:5px; background-color:var(--ground);
+  background-repeat:no-repeat; box-shadow:inset 0 0 0 1px rgba(128,128,128,.3);
+  --stripes:repeating-linear-gradient(45deg, rgba(128,128,128,.25) 0 5px, transparent 0 10px); }
+td.prev { min-width:250px; }
+.place { min-width:250px; }
+.pv code { font-size:10.5px; color:var(--ink-faint); word-break:break-all; }
+.pvnone { font-size:11px; color:var(--ink-faint); font-style:italic; }
+.arr { color:var(--ink-faint); }
+.modehead { font:600 12px/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); }
+.legend { display:flex; flex-wrap:wrap; gap:8px 20px; font-size:12.5px; color:var(--ink-soft); }
+footer { color:var(--ink-faint); font-size:12.5px; padding:0 28px 44px; max-width:1180px; margin:0 auto; }
+@media print { body { background:#fff; } section.card { break-inside:avoid; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div style="max-width:1180px;margin:0 auto">
+    <p class="kicker">DevExtreme · fluent-next · материал к задаче · решение 3 дизайн-ревью</p>
+    <h1>Мосты <code>rgb(from … / a)</code></h1>
+    <p class="lede">Вопрос задачи: оставить мосты штатным механизмом темы — или заказать в пакет токенов
+      роли с альфой. Ниже полный инвентарь: каждое место, где мост реально отрисовывается, с тем, что
+      стояло там в legacy fluent, и во что мост превращается в каждом режиме.</p>
+    <p class="lede"><b>Карточка: <a href="https://github.com/DevExpress/design/issues/1554">design#1554</a></b>
+      — рассмотрение идёт там. Выпуск темы вопрос не блокирует: механизм работает и сохраняет связь
+      значения с ролью.</p>
+    <div class="facts">
+      <div class="fact"><b>18</b><span>объявлений в исходниках</span></div>
+      <div class="fact"><b>54</b><span>мест в бандле</span></div>
+      <div class="fact"><b>18</b><span>заявок «роль + альфа»</span></div>
+      <div class="fact"><b>2</b><span>режима на каждое место</span></div>
+    </div>
+    <div class="facts" style="margin-top:6px">
+      <p class="sub" style="font-size:12.5px">В превью цвет положен поверх диагональных полос и подложки
+        своего режима — так одновременно видно и краску, и то, насколько она прозрачна.</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="card">
+    <h2>Что такое мост и зачем он</h2>
+    <p class="sub">Месту нужен цвет роли с прозрачностью, а роли с такой альфой в foundation нет.
+      Тема берёт существующую роль и задаёт альфу поверх неё средствами CSS — значение остаётся
+      связанным с ролью и поедет вместе с ней при ре-скине. Литерал такой связи не даёт.</p>
+    <pre><span class="cmt">// было в legacy fluent — альфа считалась Sass-функцией от значения</span>
+$datagrid-drag-header-border-color: color.change($base-accent, $alpha: .5);
+
+<span class="cmt">// стало в fluent-next — роль сохранена, альфа задана на месте</span>
+$grid-drag-header-border: rgb(from #{ds.$color-border-primary} r g b / 0.5);</pre>
+    <p class="sub">Поддержка: relative color работает в Chrome 119+, Safari 16.4+, Firefox 128+ —
+      внутри <code>browserslist</code> пакета (<code>last 2 versions</code>). Если роли с альфой появятся
+      в пакете, каждое место ниже заменяется прямой ссылкой на роль.</p>
+  </section>
+
+  <section class="card">
+    <h2>Что просить у пакета</h2>
+    <p class="sub">Одна строка — один запрос. Мосты сведены по паре «роль-источник + альфа»: именно
+      столько ролей нужно, чтобы механизм исчез полностью.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Роль-источник</th><th>Альфа</th><th class="n">Мест</th><th>Где</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="req"><b>color-border-primary</b></td>
+          <td class="req">50%</td>
+          <td class="n">12</td>
+          <td>Гриды, прочее, PivotGrid</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-content</b></td>
+          <td class="req">3%</td>
+          <td class="n">8</td>
+          <td>Scheduler</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-bg-inverted</b></td>
+          <td class="req">20%</td>
+          <td class="n">6</td>
+          <td>Gantt</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-content</b></td>
+          <td class="req">8%</td>
+          <td class="n">4</td>
+          <td>прочее</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-bg</b></td>
+          <td class="req">80%</td>
+          <td class="n">3</td>
+          <td>DateView, Gallery</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-content</b></td>
+          <td class="req">80%</td>
+          <td class="n">3</td>
+          <td>HtmlEditor</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-content</b></td>
+          <td class="req">10%</td>
+          <td class="n">3</td>
+          <td>FileManager</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-bg</b></td>
+          <td class="req">0%</td>
+          <td class="n">2</td>
+          <td>DateView</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-content-subtle</b></td>
+          <td class="req">15%</td>
+          <td class="n">2</td>
+          <td>HtmlEditor</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-bg</b></td>
+          <td class="req">40%</td>
+          <td class="n">2</td>
+          <td>HtmlEditor</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-border-contrast</b></td>
+          <td class="req">2%</td>
+          <td class="n">2</td>
+          <td>Diagram</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-content-inverted</b></td>
+          <td class="req">10%</td>
+          <td class="n">2</td>
+          <td>Switch</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-content</b></td>
+          <td class="req">24%</td>
+          <td class="n">1</td>
+          <td>прочее</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-bg-low</b></td>
+          <td class="req">90%</td>
+          <td class="n">1</td>
+          <td>PivotGrid</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-bg-primary-subtle</b></td>
+          <td class="req">15%</td>
+          <td class="n">1</td>
+          <td>Scheduler</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-border</b></td>
+          <td class="req">80%</td>
+          <td class="n">1</td>
+          <td>HtmlEditor</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-bg-primary</b></td>
+          <td class="req">80%</td>
+          <td class="n">1</td>
+          <td>FileManager</td>
+        </tr>
+        <tr>
+          <td class="req"><b>color-bg-primary</b></td>
+          <td class="req">70%</td>
+          <td class="n">1</td>
+          <td>FileManager</td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  
+  <section class="card">
+    <h2>Scheduler <span class="modehead">9</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-scheduler-work-space-month.dx-scheduler-work-space-count .dx-scheduler-date-table-first-of-month</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-bg-primary-subtle</b> @ 15%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(198.3,226.2,250.5,.15), rgba(198.3,226.2,250.5,.15)), var(--stripes);"></i><code>rgba(198.3,226.2,250.5,.15)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(180, 210, 244, 0.15), rgba(180, 210, 244, 0.15)), var(--stripes);"></i><code>rgba(180, 210, 244, 0.15)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(3.6701030928,35.6,67.5298969072,.15), rgba(3.6701030928,35.6,67.5298969072,.15)), var(--stripes);"></i><code>rgba(3.6701030928,35.6,67.5298969072,.15)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(0, 72, 132, 0.15), rgba(0, 72, 132, 0.15)), var(--stripes);"></i><code>rgba(0, 72, 132, 0.15)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-scheduler-date-time-shader-all-day</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 3%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.03), rgba(22, 22, 22, 0.03)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.03)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.03)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-scheduler-work-space-day .dx-scheduler-date-time-shader-bottom::before</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 3%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.03), rgba(22, 22, 22, 0.03)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.03)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.03)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-scheduler-work-space-day .dx-scheduler-date-time-shader-top::before</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 3%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.03), rgba(22, 22, 22, 0.03)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.03)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.03)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-scheduler-work-space-week .dx-scheduler-date-time-shader-bottom::before</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 3%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.03), rgba(22, 22, 22, 0.03)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.03)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.03)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-scheduler-work-space-week .dx-scheduler-date-time-shader-top::before</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 3%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.03), rgba(22, 22, 22, 0.03)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.03)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.03)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-scheduler-work-space-work-week .dx-scheduler-date-time-shader-bottom::before</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 3%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.03), rgba(22, 22, 22, 0.03)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.03)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.03)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-scheduler-work-space-work-week .dx-scheduler-date-time-shader-top::before</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 3%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.03), rgba(22, 22, 22, 0.03)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.03)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.03)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-scheduler-timeline .dx-scheduler-date-time-shader::before</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 3%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.03), rgba(22, 22, 22, 0.03)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.03)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(0,0,0,.03), rgba(0,0,0,.03)), var(--stripes);"></i><code>rgba(0,0,0,.03)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.03)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>прочее <span class="modehead">8</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-calendar-cell.dx-calendar-empty-cell</code><span class="prop">color</span></td>
+          <td class="req"><b>color-content</b> @ 24%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.24), rgba(36,36,36,.24)), var(--stripes);"></i><code>rgba(36,36,36,.24)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.24), rgba(22, 22, 22, 0.24)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.24)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.24), rgba(255,255,255,.24)), var(--stripes);"></i><code>rgba(255,255,255,.24)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.24)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.24)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>@keyframes dx-datagrid-highlight-change { 50%</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 8%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.08), rgba(36,36,36,.08)), var(--stripes);"></i><code>rgba(36,36,36,.08)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.08), rgba(22, 22, 22, 0.08)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.08)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.08), rgba(255,255,255,.08)), var(--stripes);"></i><code>rgba(255,255,255,.08)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.08)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>@keyframes dx-datagrid-highlight-change { from</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 8%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.08), rgba(36,36,36,.08)), var(--stripes);"></i><code>rgba(36,36,36,.08)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.08), rgba(22, 22, 22, 0.08)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.08)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.08), rgba(255,255,255,.08)), var(--stripes);"></i><code>rgba(255,255,255,.08)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.08)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>@keyframes dx-treelist-highlight-change { 50%</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 8%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.08), rgba(36,36,36,.08)), var(--stripes);"></i><code>rgba(36,36,36,.08)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.08), rgba(22, 22, 22, 0.08)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.08)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.08), rgba(255,255,255,.08)), var(--stripes);"></i><code>rgba(255,255,255,.08)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.08)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>@keyframes dx-treelist-highlight-change { from</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content</b> @ 8%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.08), rgba(36,36,36,.08)), var(--stripes);"></i><code>rgba(36,36,36,.08)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.08), rgba(22, 22, 22, 0.08)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.08)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.08), rgba(255,255,255,.08)), var(--stripes);"></i><code>rgba(255,255,255,.08)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.08)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-ai-chat</code><span class="prop">--dx-grid-drag-header-border</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(103, 162, 225, 0.5), rgba(103, 162, 225, 0.5)), var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(75, 144, 217, 0.5), rgba(75, 144, 217, 0.5)), var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-cardview</code><span class="prop">--dx-grid-drag-header-border</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(103, 162, 225, 0.5), rgba(103, 162, 225, 0.5)), var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(75, 144, 217, 0.5), rgba(75, 144, 217, 0.5)), var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-header-filter-menu</code><span class="prop">--dx-grid-drag-header-border</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(103, 162, 225, 0.5), rgba(103, 162, 225, 0.5)), var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(75, 144, 217, 0.5), rgba(75, 144, 217, 0.5)), var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>Гриды <span class="modehead">8</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-sortable-dragging&gt;div&gt;.dx-gridbase-container&gt;.dx-datagrid-rowsview</code><span class="prop">border-color</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(15,108,189,.5); background-image: var(--stripes);"></i><code>rgba(15,108,189,.5)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(103, 162, 225, 0.5); background-image: var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(71,158,245,.5); background-image: var(--stripes);"></i><code>rgba(71,158,245,.5)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(75, 144, 217, 0.5); background-image: var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-sortable-dragging&gt;div&gt;.dx-gridbase-container&gt;.dx-treelist-rowsview</code><span class="prop">border-color</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(15,108,189,.5); background-image: var(--stripes);"></i><code>rgba(15,108,189,.5)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(103, 162, 225, 0.5); background-image: var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(71,158,245,.5); background-image: var(--stripes);"></i><code>rgba(71,158,245,.5)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(75, 144, 217, 0.5); background-image: var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-datagrid</code><span class="prop">--dx-grid-drag-header-border</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(103, 162, 225, 0.5), rgba(103, 162, 225, 0.5)), var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(75, 144, 217, 0.5), rgba(75, 144, 217, 0.5)), var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-datagrid-column-chooser</code><span class="prop">--dx-grid-drag-header-border</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(103, 162, 225, 0.5), rgba(103, 162, 225, 0.5)), var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(75, 144, 217, 0.5), rgba(75, 144, 217, 0.5)), var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-datagrid-drag-header</code><span class="prop">--dx-grid-drag-header-border</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(103, 162, 225, 0.5), rgba(103, 162, 225, 0.5)), var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(75, 144, 217, 0.5), rgba(75, 144, 217, 0.5)), var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-treelist</code><span class="prop">--dx-grid-drag-header-border</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(103, 162, 225, 0.5), rgba(103, 162, 225, 0.5)), var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(75, 144, 217, 0.5), rgba(75, 144, 217, 0.5)), var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-treelist-column-chooser</code><span class="prop">--dx-grid-drag-header-border</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(103, 162, 225, 0.5), rgba(103, 162, 225, 0.5)), var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(75, 144, 217, 0.5), rgba(75, 144, 217, 0.5)), var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-treelist-drag-header</code><span class="prop">--dx-grid-drag-header-border</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(103, 162, 225, 0.5), rgba(103, 162, 225, 0.5)), var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(75, 144, 217, 0.5), rgba(75, 144, 217, 0.5)), var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>HtmlEditor <span class="modehead">8</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-htmleditor-content .ql-code-block-container</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content-subtle</b> @ 15%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(191,191,191,.15), rgba(191,191,191,.15)), var(--stripes);"></i><code>rgba(191,191,191,.15)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(68, 68, 68, 0.15), rgba(68, 68, 68, 0.15)), var(--stripes);"></i><code>rgba(68, 68, 68, 0.15)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(191,191,191,.15), rgba(191,191,191,.15)), var(--stripes);"></i><code>rgba(191,191,191,.15)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(203, 203, 203, 0.15), rgba(203, 203, 203, 0.15)), var(--stripes);"></i><code>rgba(203, 203, 203, 0.15)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-htmleditor-content .ql-code-block-container</code><span class="prop">color</span></td>
+          <td class="req"><b>color-content</b> @ 80%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.8), rgba(36,36,36,.8)), var(--stripes);"></i><code>rgba(36,36,36,.8)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.8), rgba(22, 22, 22, 0.8)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.8)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)), var(--stripes);"></i><code>rgba(255,255,255,.8)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.8)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-htmleditor-content code</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-content-subtle</b> @ 15%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(191,191,191,.15), rgba(191,191,191,.15)), var(--stripes);"></i><code>rgba(191,191,191,.15)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(68, 68, 68, 0.15), rgba(68, 68, 68, 0.15)), var(--stripes);"></i><code>rgba(68, 68, 68, 0.15)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(191,191,191,.15), rgba(191,191,191,.15)), var(--stripes);"></i><code>rgba(191,191,191,.15)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(203, 203, 203, 0.15), rgba(203, 203, 203, 0.15)), var(--stripes);"></i><code>rgba(203, 203, 203, 0.15)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-htmleditor-content code</code><span class="prop">color</span></td>
+          <td class="req"><b>color-content</b> @ 80%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.8), rgba(36,36,36,.8)), var(--stripes);"></i><code>rgba(36,36,36,.8)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.8), rgba(22, 22, 22, 0.8)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.8)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)), var(--stripes);"></i><code>rgba(255,255,255,.8)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.8)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-htmleditor.dx-state-disabled .dx-htmleditor-toolbar-wrapper::before</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-bg</b> @ 40%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(255,255,255,.4), rgba(255,255,255,.4)), var(--stripes);"></i><code>rgba(255,255,255,.4)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.4)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(41,41,41,.4), rgba(41,41,41,.4)), var(--stripes);"></i><code>rgba(41,41,41,.4)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(36, 36, 36, 0.4), rgba(36, 36, 36, 0.4)), var(--stripes);"></i><code>rgba(36, 36, 36, 0.4)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-htmleditor.dx-state-readonly .dx-htmleditor-toolbar-wrapper::before</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-bg</b> @ 40%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(255,255,255,.4), rgba(255,255,255,.4)), var(--stripes);"></i><code>rgba(255,255,255,.4)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.4)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(41,41,41,.4), rgba(41,41,41,.4)), var(--stripes);"></i><code>rgba(41,41,41,.4)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(36, 36, 36, 0.4), rgba(36, 36, 36, 0.4)), var(--stripes);"></i><code>rgba(36, 36, 36, 0.4)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-htmleditor-content blockquote</code><span class="prop">color</span></td>
+          <td class="req"><b>color-content</b> @ 80%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.8), rgba(36,36,36,.8)), var(--stripes);"></i><code>rgba(36,36,36,.8)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.8), rgba(22, 22, 22, 0.8)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.8)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)), var(--stripes);"></i><code>rgba(255,255,255,.8)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.8)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-htmleditor-add-image-popup .dx-fileuploader-dragover .dx-fileuploader-content</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-border</b> @ 80%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(224,224,224,.8), rgba(224,224,224,.8)), var(--stripes);"></i><code>rgba(224,224,224,.8)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(203, 203, 203, 0.8), rgba(203, 203, 203, 0.8)), var(--stripes);"></i><code>rgba(203, 203, 203, 0.8)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(97,97,97,.8), rgba(97,97,97,.8)), var(--stripes);"></i><code>rgba(97,97,97,.8)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(118, 118, 118, 0.8), rgba(118, 118, 118, 0.8)), var(--stripes);"></i><code>rgba(118, 118, 118, 0.8)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>Gantt <span class="modehead">6</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task .dx-gantt-tPrg</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-bg-inverted</b> @ 20%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), var(--stripes);"></i><code>rgba(0,0,0,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36, 36, 36, 0.2), rgba(36, 36, 36, 0.2)), var(--stripes);"></i><code>rgba(36, 36, 36, 0.2)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.2), rgba(255,255,255,.2)), var(--stripes);"></i><code>rgba(255,255,255,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.2)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent:not(.dx-gantt-noPrg) .dx-gantt-tPrg</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-bg-inverted</b> @ 20%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.2)), var(--stripes);"></i><code>rgba(0,0,0,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36, 36, 36, 0.2), rgba(36, 36, 36, 0.2)), var(--stripes);"></i><code>rgba(36, 36, 36, 0.2)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.2), rgba(255,255,255,.2)), var(--stripes);"></i><code>rgba(255,255,255,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.2)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before</code><span class="prop">border-left-color</span></td>
+          <td class="req"><b>color-bg-inverted</b> @ 20%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(0,0,0,.2); background-image: var(--stripes);"></i><code>rgba(0,0,0,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(36, 36, 36, 0.2); background-image: var(--stripes);"></i><code>rgba(36, 36, 36, 0.2)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(255,255,255,.2); background-image: var(--stripes);"></i><code>rgba(255,255,255,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(255, 255, 255, 0.2); background-image: var(--stripes);"></i><code>rgba(255, 255, 255, 0.2)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before</code><span class="prop">border-top-color</span></td>
+          <td class="req"><b>color-bg-inverted</b> @ 20%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(0,0,0,.2); background-image: var(--stripes);"></i><code>rgba(0,0,0,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(36, 36, 36, 0.2); background-image: var(--stripes);"></i><code>rgba(36, 36, 36, 0.2)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(255,255,255,.2); background-image: var(--stripes);"></i><code>rgba(255,255,255,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(255, 255, 255, 0.2); background-image: var(--stripes);"></i><code>rgba(255, 255, 255, 0.2)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent.dx-gantt-cmpl::after</code><span class="prop">border-right-color</span></td>
+          <td class="req"><b>color-bg-inverted</b> @ 20%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(0,0,0,.2); background-image: var(--stripes);"></i><code>rgba(0,0,0,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(36, 36, 36, 0.2); background-image: var(--stripes);"></i><code>rgba(36, 36, 36, 0.2)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(255,255,255,.2); background-image: var(--stripes);"></i><code>rgba(255,255,255,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(255, 255, 255, 0.2); background-image: var(--stripes);"></i><code>rgba(255, 255, 255, 0.2)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-gantt .dx-gantt-taskWrapper .dx-gantt-task.dx-gantt-parent.dx-gantt-cmpl::after</code><span class="prop">border-top-color</span></td>
+          <td class="req"><b>color-bg-inverted</b> @ 20%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(0,0,0,.2); background-image: var(--stripes);"></i><code>rgba(0,0,0,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(36, 36, 36, 0.2); background-image: var(--stripes);"></i><code>rgba(36, 36, 36, 0.2)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(255,255,255,.2); background-image: var(--stripes);"></i><code>rgba(255,255,255,.2)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(255, 255, 255, 0.2); background-image: var(--stripes);"></i><code>rgba(255, 255, 255, 0.2)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>FileManager <span class="modehead">5</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-filemanager .dx-filemanager-toolbar .dx-texteditor.dx-editor-filled.dx-state-active</code><span class="prop">background</span></td>
+          <td class="req"><b>color-content</b> @ 10%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.1), rgba(36,36,36,.1)), var(--stripes);"></i><code>rgba(36,36,36,.1)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.1), rgba(22, 22, 22, 0.1)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.1)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.1), rgba(255,255,255,.1)), var(--stripes);"></i><code>rgba(255,255,255,.1)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.1)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-filemanager .dx-filemanager-toolbar .dx-texteditor.dx-editor-filled.dx-state-focused</code><span class="prop">background</span></td>
+          <td class="req"><b>color-content</b> @ 10%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.1), rgba(36,36,36,.1)), var(--stripes);"></i><code>rgba(36,36,36,.1)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.1), rgba(22, 22, 22, 0.1)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.1)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.1), rgba(255,255,255,.1)), var(--stripes);"></i><code>rgba(255,255,255,.1)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.1)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-filemanager .dx-filemanager-toolbar .dx-texteditor.dx-editor-filled.dx-state-hover</code><span class="prop">background</span></td>
+          <td class="req"><b>color-content</b> @ 10%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(36,36,36,.1), rgba(36,36,36,.1)), var(--stripes);"></i><code>rgba(36,36,36,.1)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.1), rgba(22, 22, 22, 0.1)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.1)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255,255,255,.1), rgba(255,255,255,.1)), var(--stripes);"></i><code>rgba(255,255,255,.1)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.1)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-filemanager .dx-filemanager-thumbnails .dx-filemanager-thumbnails-item.dx-item-selected</code><span class="prop">background</span></td>
+          <td class="req"><b>color-bg-primary</b> @ 80%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(15,108,189,.8), rgba(15,108,189,.8)), var(--stripes);"></i><code>rgba(15,108,189,.8)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(15, 108, 189, 0.8), rgba(15, 108, 189, 0.8)), var(--stripes);"></i><code>rgba(15, 108, 189, 0.8)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(71,158,245,.8), rgba(71,158,245,.8)), var(--stripes);"></i><code>rgba(71,158,245,.8)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(15, 108, 189, 0.8), rgba(15, 108, 189, 0.8)), var(--stripes);"></i><code>rgba(15, 108, 189, 0.8)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-filemanager .dx-filemanager-thumbnails .dx-filemanager-thumbnails-item.dx-item-selected.dx-state-focused</code><span class="prop">background</span></td>
+          <td class="req"><b>color-bg-primary</b> @ 70%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(15,108,189,.7), rgba(15,108,189,.7)), var(--stripes);"></i><code>rgba(15,108,189,.7)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(15, 108, 189, 0.7), rgba(15, 108, 189, 0.7)), var(--stripes);"></i><code>rgba(15, 108, 189, 0.7)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(71,158,245,.7), rgba(71,158,245,.7)), var(--stripes);"></i><code>rgba(71,158,245,.7)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(15, 108, 189, 0.7), rgba(15, 108, 189, 0.7)), var(--stripes);"></i><code>rgba(15, 108, 189, 0.7)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>DateView <span class="modehead">2</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-dateview-rollers</code><span class="prop">--dx-date-view-roller-bottom-shadow</span></td>
+          <td class="req"><b>color-bg</b> @ 0%<br><b>color-bg</b> @ 80%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(180deg,rgba(255, 255, 255, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%, 180deg,rgba(255, 255, 255, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%), var(--stripes);"></i><code>180deg,rgba(255, 255, 255, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(180deg,rgba(36, 36, 36, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%, 180deg,rgba(36, 36, 36, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%), var(--stripes);"></i><code>180deg,rgba(36, 36, 36, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-dateview-rollers</code><span class="prop">--dx-date-view-roller-top-shadow</span></td>
+          <td class="req"><b>color-bg</b> @ 0%<br><b>color-bg</b> @ 80%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(0deg,rgba(255, 255, 255, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%, 0deg,rgba(255, 255, 255, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%), var(--stripes);"></i><code>0deg,rgba(255, 255, 255, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(0deg,rgba(36, 36, 36, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%, 0deg,rgba(36, 36, 36, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%), var(--stripes);"></i><code>0deg,rgba(36, 36, 36, 0) 0%,rgb(from var(--dxds-color-bg) r g b/0.8) 60%</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>PivotGrid <span class="modehead">2</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box</code><span class="prop">background-color</span></td>
+          <td class="req"><b>color-bg-low</b> @ 90%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(240.006,240.006,240.006,.9), rgba(240.006,240.006,240.006,.9)), var(--stripes);"></i><code>rgba(240.006,240.006,240.006,.9)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(245, 245, 245, 0.9), rgba(245, 245, 245, 0.9)), var(--stripes);"></i><code>rgba(245, 245, 245, 0.9)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(9.992,9.992,9.992,.9), rgba(9.992,9.992,9.992,.9)), var(--stripes);"></i><code>rgba(9.992,9.992,9.992,.9)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.9), rgba(22, 22, 22, 0.9)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.9)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-pivotgrid</code><span class="prop">--dx-grid-drag-header-border</span></td>
+          <td class="req"><b>color-border-primary</b> @ 50%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(103, 162, 225, 0.5), rgba(103, 162, 225, 0.5)), var(--stripes);"></i><code>rgba(103, 162, 225, 0.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(75, 144, 217, 0.5), rgba(75, 144, 217, 0.5)), var(--stripes);"></i><code>rgba(75, 144, 217, 0.5)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>Diagram <span class="modehead">2</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-diagram .dxdi-control:not(.focused) .dxdi-canvas .items-selection-rect</code><span class="prop">fill</span></td>
+          <td class="req"><b>color-border-contrast</b> @ 2%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(144,144,144,0.02), rgba(144,144,144,0.02)), var(--stripes);"></i><code>rgba(144,144,144,0.02)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(118, 118, 118, 0.02), rgba(118, 118, 118, 0.02)), var(--stripes);"></i><code>rgba(118, 118, 118, 0.02)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(144,144,144,0.02), rgba(144,144,144,0.02)), var(--stripes);"></i><code>rgba(144,144,144,0.02)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(171, 171, 171, 0.02), rgba(171, 171, 171, 0.02)), var(--stripes);"></i><code>rgba(171, 171, 171, 0.02)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-diagram .dxdi-control:not(.focused) .dxdi-canvas .item-multi-selection-rect</code><span class="prop">fill</span></td>
+          <td class="req"><b>color-border-contrast</b> @ 2%</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(144,144,144,0.02), rgba(144,144,144,0.02)), var(--stripes);"></i><code>rgba(144,144,144,0.02)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(118, 118, 118, 0.02), rgba(118, 118, 118, 0.02)), var(--stripes);"></i><code>rgba(118, 118, 118, 0.02)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(144,144,144,0.02), rgba(144,144,144,0.02)), var(--stripes);"></i><code>rgba(144,144,144,0.02)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(171, 171, 171, 0.02), rgba(171, 171, 171, 0.02)), var(--stripes);"></i><code>rgba(171, 171, 171, 0.02)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>Switch <span class="modehead">2</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-switch</code><span class="prop">--dx-switch-handle-on-box-shadow</span></td>
+          <td class="req"><b>color-content-inverted</b> @ 10%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(0 0 0 0 rgba(255, 255, 255, 0.1), 0 0 0 0 rgba(255, 255, 255, 0.1)), var(--stripes);"></i><code>0 0 0 0 rgba(255, 255, 255, 0.1)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(0 0 0 0 rgba(22, 22, 22, 0.1), 0 0 0 0 rgba(22, 22, 22, 0.1)), var(--stripes);"></i><code>0 0 0 0 rgba(22, 22, 22, 0.1)</code></div></div></td>
+        </tr>
+        <tr>
+          <td class="place"><code>.dx-switch</code><span class="prop">--dx-switch-handle-on-shadow</span></td>
+          <td class="req"><b>color-content-inverted</b> @ 10%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.1)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(22, 22, 22, 0.1), rgba(22, 22, 22, 0.1)), var(--stripes);"></i><code>rgba(22, 22, 22, 0.1)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>Gallery <span class="modehead">1</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-gallery</code><span class="prop">--dx-gallery-indicator-border-selected</span></td>
+          <td class="req"><b>color-bg</b> @ 80%</td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), var(--stripes);"></i><code>rgba(255, 255, 255, 0.8)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv"><span class="pvnone">нет в fluent</span></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="background-image: linear-gradient(rgba(36, 36, 36, 0.8), rgba(36, 36, 36, 0.8)), var(--stripes);"></i><code>rgba(36, 36, 36, 0.8)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section class="card">
+    <h2>Sortable <span class="modehead">1</span></h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Место</th><th>Заявка</th><th>Светлый: fluent → fluent-next</th><th>Тёмный: fluent → fluent-next</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="place"><code>.dx-sortable-dragging&gt;*</code><span class="prop">border-color</span></td>
+          <td class="req">составное</td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgba(15,108,189,.5); background-image: var(--stripes);"></i><code>rgba(15,108,189,.5)</code></div><span class="arr">→</span><div class="pv" style="--ground:#ffffff"><i style="border: 4px solid rgb(from var(--dx-sortable-placeholder-border) r g b/.5); background-image: var(--stripes);"></i><code>rgb(from var(--dx-sortable-placeholder-border) r g b/.5)</code></div></div></td>
+          <td class="prev"><div class="pvpair"><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgba(71,158,245,.5); background-image: var(--stripes);"></i><code>rgba(71,158,245,.5)</code></div><span class="arr">→</span><div class="pv" style="--ground:#242424"><i style="border: 4px solid rgb(from var(--dx-sortable-placeholder-border) r g b/.5); background-image: var(--stripes);"></i><code>rgb(from var(--dx-sortable-placeholder-border) r g b/.5)</code></div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2>Как решать</h2>
+    <p class="sub"><b>Оставить мосты.</b> Ноль правок, механизм уже работает и сохраняет связь с ролью.
+      Цена: в теме живёт приём, которого нет в дизайн-системе, и каждое новое такое место требует
+      ручного выбора альфы.</p>
+    <p class="sub"><b>Заказать роли.</b> 18 новых ролей закрывают все 54 мест;
+      после их появления правка механическая — замена выражения на ссылку, по строке на объявление.
+      Цена: расширение публичной поверхности пакета и ожидание релиза.</p>
+    <p class="sub"><b>Смешанный вариант.</b> Заказать роли только там, где мост встречается больше
+      одного раза (это верхние строки таблицы «Что просить у пакета»), остальное оставить мостом как
+      единичные случаи.</p>
+  </section>
+</div>
+
+<footer>
+  Собрано из бандлов <code>dx.fluent-next.blue.{light,dark}.css</code> и <code>dx.fluent.blue.{light,dark}.css</code>:
+  <code>node tools/review/bridges.mjs</code>. Значения показаны после разворачивания <code>var()</code> по
+  <code>:root</code>-карте своего бандла; превью рисуются реальным CSS-значением поверх подложки режима
+  (#ffffff / #242424).
+</footer>
+</body>
+</html>

@@ -24,6 +24,7 @@ $palette-border: ds.$color-border !default;
 
 // Non-color theme-level values (opacity/font family) — kept referencing the theme layer.
 $global-font-family: ds.$font-family-sans-serif !default;
+
 /* Бейдж это фиксированный красный диск с белым восклицательным знаком, и обе половины пары
    держатся режимо-статическими: content-static-dark белый в обоих режимах, поэтому и диск
    не должен светлеть в тёмном. Стем shared уводил диск в #e4554f, и белый знак на нём падал

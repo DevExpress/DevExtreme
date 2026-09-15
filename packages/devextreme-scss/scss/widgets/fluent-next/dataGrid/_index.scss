@@ -3,7 +3,6 @@
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../gridBase" as *;
-@use "../gridBase/colors" as gridBaseColors;
 @use "../gridBase/sizes" as gridBaseSizes;
 @use "../../base/dataGrid" as baseGrid with (
   $datagrid-draggable-column-opacity: var(--dx-grid-draggable-column-opacity),
@@ -21,18 +20,18 @@
   $datagrid-error-message-margin-bottom: var(--dx-data-grid-error-message-margin-block-end),
   $datagrid-button-margin-right: var(--dx-data-grid-form-buttons-rtl-margin-inline-start),
   $datagrid-border: gridBaseSizes.$grid-border-width solid,
-  $datagrid-border-color: gridBaseColors.$grid-border,
-  $datagrid-drag-header-border-color: gridBaseColors.$grid-drag-header-border,
-  $datagrid-row-error-bg: gridBaseColors.$grid-row-error-bg,
-  $datagrid-row-error-color: gridBaseColors.$grid-row-error-content,
-  $datagrid-base-color: gridBaseColors.$grid-content,
-  $datagrid-base-background-color: gridBaseColors.$grid-bg,
-  $datagrid-focused-border-color: gridBaseColors.$grid-border-focused,
-  $header-filter-color: gridBaseColors.$grid-content,
-  $header-filter-color-empty: gridBaseColors.$grid-content,
-  $base-focus-color: gridBaseColors.$grid-content-focused,
+  $datagrid-border-color: var(--dx-grid-border),
+  $datagrid-drag-header-border-color: var(--dx-grid-drag-header-border),
+  $datagrid-row-error-bg: var(--dx-grid-row-error-bg),
+  $datagrid-row-error-color: var(--dx-grid-row-error-content),
+  $datagrid-base-color: var(--dx-grid-content),
+  $datagrid-base-background-color: var(--dx-grid-bg),
+  $datagrid-focused-border-color: var(--dx-grid-border-focused),
+  $header-filter-color: var(--dx-grid-content),
+  $header-filter-color-empty: var(--dx-grid-content),
+  $base-focus-color: var(--dx-grid-content-focused),
   $datagrid-text-stub-mask-image: data-uri("images/widgets/fluent-next/grid/text-stub.png"),
-  $datagrid-text-stub-bg: gridBaseColors.$grid-text-stub-bg,
+  $datagrid-text-stub-bg: var(--dx-grid-text-stub-bg),
   $datagrid-group-row-border: var(--dx-data-grid-group-row-border),
   $datagrid-sticky-column-border: var(--dx-data-grid-sticky-column-border),
   $datagrid-cell-focus-outline: var(--dx-data-grid-cell-outline-focused),
@@ -45,7 +44,7 @@
   touch-action: pinch-zoom;
 
   .dx-group-panel-message {
-    color: gridBaseColors.$grid-content;
+    color: var(--dx-grid-content);
     font-weight: gridBaseSizes.$grid-column-chooser-font-weight;
     padding: var(--dx-data-grid-cell-padding) 0;
     border-top: gridBaseSizes.$grid-hidden-border;
@@ -55,7 +54,7 @@
 
   .dx-group-panel-item {
     margin-right: gridBaseSizes.$grid-group-panel-item-margin-inline;
-    color: gridBaseColors.$grid-content;
+    color: var(--dx-grid-content);
     font-weight: var(--dx-data-grid-group-panel-item-font-weight);
     font-size: gridBaseSizes.$grid-cell-font-size;
     line-height: gridBaseSizes.$grid-header-line-height;
@@ -69,13 +68,13 @@
 
   .dx-block-separator {
     margin-right: gridBaseSizes.$grid-group-panel-item-margin-inline;
-    color: gridBaseColors.$grid-content;
+    color: var(--dx-grid-content);
     font-weight: gridBaseSizes.$grid-column-chooser-font-weight;
     background-color: var(--dx-data-grid-block-separator-bg);
   }
 
   .dx-sort {
-    color: gridBaseColors.$grid-content;
+    color: var(--dx-grid-content);
   }
 }
 
@@ -97,8 +96,8 @@
 
   .dx-row.dx-group-row {
     &:not(.dx-row-focused) {
-      color: gridBaseColors.$grid-content;
-      background-color: gridBaseColors.$grid-group-row-bg;
+      color: var(--dx-grid-content);
+      background-color: var(--dx-grid-group-row-bg);
     }
 
     font-size: gridBaseSizes.$grid-cell-font-size;
@@ -110,20 +109,20 @@
   @include dx-icon(chevrondown);
   @include dx-icon-sizing($global-icon-size);
 
-  color: gridBaseColors.$grid-chevron-icon;
+  color: var(--dx-grid-chevron-icon);
 }
 
 .dx-datagrid-group-closed {
   @include dx-icon(chevronright);
   @include dx-icon-sizing($global-icon-size);
 
-  color: gridBaseColors.$grid-chevron-icon;
+  color: var(--dx-grid-chevron-icon);
 }
 
 .dx-row.dx-datagrid-group-footer {
   &.dx-column-lines {
     border-bottom: gridBaseSizes.$grid-border-width solid;
-    border-bottom-color: gridBaseColors.$grid-border;
+    border-bottom-color: var(--dx-grid-border);
   }
 }
 

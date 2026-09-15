@@ -2,7 +2,6 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../gridBase/colors" as gridBaseColors;
 @use "../treeView/sizes" as treeViewSizes;
 @use "../button/sizes" as buttonSizes;
 @use "../../base/pivotGrid" as basePivotGrid with (
@@ -40,8 +39,8 @@
   $pivotgrid-border-color: var(--dx-pivot-grid-border),
   $pivotgrid-common-left-right-padding: var(--dx-pivot-grid-left-right-padding),
   $pivotgrid-area-color: var(--dx-pivot-grid-area-content),
-  $header-filter-color: gridBaseColors.$grid-content,
-  $header-filter-color-empty: gridBaseColors.$grid-content,
+  $header-filter-color: var(--dx-grid-content),
+  $header-filter-color-empty: var(--dx-grid-content),
   $pivotgrid-area-background: var(--dx-pivot-grid-area-bg),
   $pivotgrid-common-top-bottom-padding: var(--dx-pivot-grid-area-field-padding-block),
   $pivotgrid-header-top-bottom-padding: var(--dx-pivot-grid-header-top-bottom-padding),

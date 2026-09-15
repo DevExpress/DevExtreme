@@ -1,11 +1,11 @@
 @use "../../colors" as *;
 @use "../../../../base/gridBase/layout/aiChat/mixins" as *;
 @use "../../../colors" as *;
-@use "../../../button/colors" as buttonColors;
 @use "./sizes" as *;
+@use "../../../button/colors" as buttonColors;
 @include ai-chat-messagelist-empty(
   buttonColors.$button-default-contained-bg,
-  buttonColors.$button-default-outlined-bg-hovered,
+  var(--dx-button-default-outlined-bg-hovered),
 );
 @include ai-chat-message-pending(var(--dx-grid-ai-chat-message-pending-content));
 @include ai-chat-message-success(var(--dx-grid-ai-chat-message-success-content));

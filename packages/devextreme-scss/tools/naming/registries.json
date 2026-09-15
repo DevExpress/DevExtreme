@@ -1912,7 +1912,8 @@
     "date-range-box": [
       "active-bar",
       "custom-button",
-      "input"
+      "input",
+      "separator"
     ],
     "select-box": [
       "list"

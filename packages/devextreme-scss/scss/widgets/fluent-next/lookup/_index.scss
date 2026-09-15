@@ -4,13 +4,13 @@
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../textEditor/sizes" as textEditorSizes;
-@use "../textEditor/colors" as textEditorColors;
 @use "../dropDownEditor" as *;
 @use "../../base/dropDownEditor/mixins" as *;
 @use "../common/mixins" as *;
 @use "../../base/lookup";
 @use "../../base/lookup/mixins" as *;
 @use "../dropDownList";
+@use "../textEditor/colors" as textEditorColors;
 
 .dx-lookup {
   .dx-lookup-arrow {
