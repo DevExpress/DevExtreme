@@ -106,21 +106,32 @@ const suggestions = [
   { type: 'default', text: '🏎️ Competitors', prompt: 'List 2-3 models that directly compete with this vehicle.' },
 ];
 
-const outputAreaMinHeight = (() => {
-  const isMaterial = themes.current().startsWith('material');
-  if (isMaterial) return 68;
+const getTheme = () => {
+  const themeName = themes.current();
 
-  return 56;
+  return {
+    isCompact: themeName.endsWith('compact'),
+    isMaterial: themeName.startsWith('material'),
+    isGeneric: themeName.startsWith('generic')
+  };
+};
+
+const outputAreaMinHeight = (() => {
+  const { isCompact, isMaterial } = getTheme();
+
+  if (isMaterial) return isCompact ? 60 : 68;
+
+  return isCompact ? 42 : 56;
 })();
 
 const outputAreaMaxHeight = (() => {
-  const isMaterial = themes.current().startsWith('material');
-  if (isMaterial) return 244;
+  const { isCompact, isMaterial, isGeneric } = getTheme();
 
-  const isGeneric = themes.current().startsWith('generic');
-  if (isGeneric) return 178;
+  if (isMaterial) return isCompact ? 200 : 244;
 
-  return 196;
+  if (isGeneric) return isCompact ? 154 : 178;
+
+  return isCompact ? 154 : 196;
 })();
 
 const promptValue = ref('');

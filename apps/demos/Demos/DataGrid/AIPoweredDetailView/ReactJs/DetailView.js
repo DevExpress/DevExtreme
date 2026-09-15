@@ -37,18 +37,25 @@ const DetailView = ({ data: templateData, onAbortReady }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [submitButtonText, setSubmitButtonText] = useState('Submit');
+  const getTheme = useCallback(() => {
+    const themeName = themes.current();
+    return {
+      isCompact: themeName.endsWith('compact'),
+      isMaterial: themeName.startsWith('material'),
+      isGeneric: themeName.startsWith('generic'),
+    };
+  }, []);
   const outputAreaMinHeight = useMemo(() => {
-    const isMaterial = themes.current().startsWith('material');
-    if (isMaterial) return 68;
-    return 56;
-  }, []);
+    const { isCompact, isMaterial } = getTheme();
+    if (isMaterial) return isCompact ? 60 : 68;
+    return isCompact ? 42 : 56;
+  }, [getTheme]);
   const outputAreaMaxHeight = useMemo(() => {
-    const isMaterial = themes.current().startsWith('material');
-    if (isMaterial) return 244;
-    const isGeneric = themes.current().startsWith('generic');
-    if (isGeneric) return 178;
-    return 196;
-  }, []);
+    const { isCompact, isMaterial, isGeneric } = getTheme();
+    if (isMaterial) return isCompact ? 200 : 244;
+    if (isGeneric) return isCompact ? 154 : 178;
+    return isCompact ? 154 : 196;
+  }, [getTheme]);
   const handlePromptChange = useCallback((value) => {
     setPromptValue(value);
   }, []);

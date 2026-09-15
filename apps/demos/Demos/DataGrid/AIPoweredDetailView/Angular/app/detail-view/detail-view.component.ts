@@ -35,9 +35,9 @@ export class DetailViewComponent {
 
   isError: boolean = false;
 
-  outputAreaMinHeight: number = 56;
+  outputAreaMinHeight: number;
 
-  outputAreaMaxHeight: number = 196;
+  outputAreaMaxHeight: number;
 
   abortController: AbortController | null = null;
 
@@ -48,14 +48,19 @@ export class DetailViewComponent {
   ];
 
   constructor(private readonly aiService: AiService, private readonly changeDetectorRef: ChangeDetectorRef) {
+    const isCompact = themes.current().endsWith('compact');
     const isMaterial = themes.current().startsWith('material');
     const isGeneric = themes.current().startsWith('generic');
 
     if (isMaterial) {
-      this.outputAreaMinHeight = 68;
-      this.outputAreaMaxHeight = 244;
+      this.outputAreaMinHeight = isCompact ? 60 : 68;
+      this.outputAreaMaxHeight = isCompact ? 200 : 244;
     } else if (isGeneric) {
-      this.outputAreaMaxHeight = 178;
+      this.outputAreaMinHeight = isCompact ? 42 : 56;
+      this.outputAreaMaxHeight = isCompact ? 154 : 178;
+    } else {
+      this.outputAreaMinHeight = isCompact ? 42 : 56;
+      this.outputAreaMaxHeight = isCompact ? 154 : 196;
     }
   }
 

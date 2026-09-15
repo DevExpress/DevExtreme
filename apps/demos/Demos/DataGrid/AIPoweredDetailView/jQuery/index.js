@@ -146,7 +146,7 @@ $(() => {
     return { $container, submitButton, promptEditor, suggestions };
   }
 
-  function getThemeSizeConfig() {
+  function getTheme() {
     const themeName = DevExpress.ui.themes.current();
 
     return {
@@ -157,25 +157,19 @@ $(() => {
   }
 
   function getOutputAreaMinHeight() {
-    const { isCompact, isMaterial } = getThemeSizeConfig();
+    const { isCompact, isMaterial } = getTheme();
 
-    if (isMaterial) {
-      return isCompact ? 60 : 68;
-    }
+    if (isMaterial) return isCompact ? 60 : 68;
 
     return isCompact ? 42 : 56;
   }
 
   function getOutputAreaMaxHeight() {
-    const { isCompact, isMaterial, isGeneric } = getThemeSizeConfig();
+    const { isCompact, isMaterial, isGeneric } = getTheme();
 
-    if (isMaterial) {
-      return isCompact ? 200 : 244;
-    }
+    if (isMaterial) return isCompact ? 200 : 244;
 
-    if (isGeneric) {
-      return isCompact ? 154 : 178;
-    }
+    if (isGeneric) return isCompact ? 154 : 178;
 
     return isCompact ? 154 : 196;
   }
