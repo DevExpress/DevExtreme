@@ -4,11 +4,23 @@ $slider-bar-bg: ds.$color-border-contrast !default;
 
 $slider-accent-bg: ds.$color-bg-primary !default;
 $slider-accent-bg-hovered: ds.$color-bg-primary-hovered !default;
-$slider-accent-content-focused: ds.$color-bg-primary-active !default;
+
+/* Ручка это кольцо плюс метка внутри - два свойства, поэтому два имени (Д21): рамка ручки
+   красится border-ролью, внутренняя точка content-ролью, как точка радиокнопки.
+   Ступени active у плоского семейства border-primary в пакете нет, а стем shared несёт её
+   во всех трёх семействах - и он же переворачивается для тёмного, чего плоское не делает.
+   Светлый остаётся #003c70, тёмный уходит #003c70 -> #005397: тот же ход, что у свитча (Д3),
+   чекбокса (Д16) и радиокнопки (Д24). */
+$slider-accent-border-focused: ds.$color-border-primary-shared-active !default;
+$slider-accent-bg-focused: ds.$color-content-primary-shared-active !default;
 
 $slider-invalid-bg: ds.$color-border-danger !default;
 $slider-invalid-bg-hovered: ds.$color-border-danger !default;
-$slider-invalid-content-focused: ds.$color-border-danger !default;
+
+/* Та же пара, danger-оттенок. Кольцо уже было на border-роли, а точка ехала с ним же -
+   теперь она читает content-danger: светлый #ee726a -> #c50f1f, тёмный не двигается. */
+$slider-invalid-border-focused: ds.$color-border-danger !default;
+$slider-invalid-bg-focused: ds.$color-content-danger !default;
 
 $slider-bg-disabled: ds.$color-content-disabled !default;
 $slider-bar-bg-disabled: ds.$color-bg-disabled !default;

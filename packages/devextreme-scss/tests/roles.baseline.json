@@ -83,10 +83,60 @@
       "why": "border-color: from color-bg-primary-subtle because color-border-primary-subtle does not exist. Nothing to swap to - a role request"
     },
     {
+      "name": "radio-button-bg-read-only",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "read-only paints the dot, which is the radio's mark - content-disabled, exactly as the package writes radio-button.color.checked.icon.read-only. The ring beside it reads border-read-only on border-disabled, which is checked.border.read-only. The -bg slot word again comes from the property. Banked by Д21"
+    },
+    {
+      "name": "radio-button-checked-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-primary-shared"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the dot is the radio's MARK, the way the tick is the check box's, and the package models it as an icon: radio-button.color.checked.icon.* = content-primary-shared*, while radio-button.color.checked.bg.rest is color.none - the disc has no fill at all. NAMING decides the SLOT WORD from the property, so the name keeps -bg (it paints background-color) and only the role family follows what the element is. Same judgment call, and the same wording, as check-box-invalid-mark-bg. Value-neutral: primary-shared is one value across bg, border and content. Banked by Д21"
+    },
+    {
+      "name": "radio-button-checked-bg-active",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-primary-shared-active"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the dot is the radio's MARK, the way the tick is the check box's, and the package models it as an icon: radio-button.color.checked.icon.* = content-primary-shared*, while radio-button.color.checked.bg.rest is color.none - the disc has no fill at all. NAMING decides the SLOT WORD from the property, so the name keeps -bg (it paints background-color) and only the role family follows what the element is. Same judgment call, and the same wording, as check-box-invalid-mark-bg. Value-neutral: primary-shared is one value across bg, border and content. Banked by Д21"
+    },
+    {
+      "name": "radio-button-checked-bg-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-primary-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the dot is the radio's MARK, the way the tick is the check box's, and the package models it as an icon: radio-button.color.checked.icon.* = content-primary-shared*, while radio-button.color.checked.bg.rest is color.none - the disc has no fill at all. NAMING decides the SLOT WORD from the property, so the name keeps -bg (it paints background-color) and only the role family follows what the element is. Same judgment call, and the same wording, as check-box-invalid-mark-bg. Value-neutral: primary-shared is one value across bg, border and content. Banked by Д21"
+    },
+    {
+      "name": "radio-button-checked-bg-hovered",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-primary-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the dot is the radio's MARK, the way the tick is the check box's, and the package models it as an icon: radio-button.color.checked.icon.* = content-primary-shared*, while radio-button.color.checked.bg.rest is color.none - the disc has no fill at all. NAMING decides the SLOT WORD from the property, so the name keeps -bg (it paints background-color) and only the role family follows what the element is. Same judgment call, and the same wording, as check-box-invalid-mark-bg. Value-neutral: primary-shared is one value across bg, border and content. Banked by Д21"
+    },
+    {
       "name": "radio-button-invalid-bg",
       "verdict": "cross-family",
       "roles": [
-        "color-border-danger-shared"
+        "color-content-danger-shared"
       ],
       "slot": "bg",
       "decision": "rule-5",
@@ -96,7 +146,7 @@
       "name": "radio-button-invalid-bg-focused",
       "verdict": "cross-family",
       "roles": [
-        "color-border-danger-shared-active"
+        "color-content-danger-shared-active"
       ],
       "slot": "bg",
       "decision": "rule-5",
@@ -106,7 +156,7 @@
       "name": "radio-button-invalid-bg-hovered",
       "verdict": "cross-family",
       "roles": [
-        "color-border-danger-shared-hovered"
+        "color-content-danger-shared-hovered"
       ],
       "slot": "bg",
       "decision": "rule-5",
@@ -278,39 +328,6 @@
       ],
       "decision": "hairline",
       "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
-    },
-    {
-      "name": "radio-button-content-read-only",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color",
-        "border-color"
-      ],
-      "decision": "ring-and-fill",
-      "why": "Moved out of rule-5 on 09.09. The rule excuses a name that picks the dominant of two painted families; these names pick a family that is painted by NEITHER property. All four paint a ring (border-color) and a fill (background-color) of the same small control from one variable, and none of them paints text. See the widened radio-invalid-vs-checkbox-invalid question: the same anatomy is resolved four different ways across four controls."
-    },
-    {
-      "name": "slider-accent-content-focused",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background",
-        "border-color"
-      ],
-      "decision": "ring-and-fill",
-      "why": "Moved out of rule-5 on 09.09. The rule excuses a name that picks the dominant of two painted families; these names pick a family that is painted by NEITHER property. All four paint a ring (border-color) and a fill (background-color) of the same small control from one variable, and none of them paints text. See the widened radio-invalid-vs-checkbox-invalid question: the same anatomy is resolved four different ways across four controls."
-    },
-    {
-      "name": "slider-invalid-content-focused",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color",
-        "border-color"
-      ],
-      "decision": "ring-and-fill",
-      "why": "Moved out of rule-5 on 09.09. The rule excuses a name that picks the dominant of two painted families; these names pick a family that is painted by NEITHER property. All four paint a ring (border-color) and a fill (background-color) of the same small control from one variable, and none of them paints text. See the widened radio-invalid-vs-checkbox-invalid question: the same anatomy is resolved four different ways across four controls."
     },
     {
       "name": "splitter-bar-border",
@@ -515,16 +532,16 @@
       "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
     },
     {
-      "stem": "radio-button-content",
+      "stem": "radio-button-border",
       "states": [
         "disabled",
         "read-only"
       ],
       "role": [
-        "color-content-disabled"
+        "color-border-disabled"
       ],
-      "decision": "no-rung",
-      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+      "decision": "answered",
+      "why": "read-only and disabled resolve to one role, border-disabled, and that is what the package assigns: radio-button.color.checked.border.read-only and .disabled are both {color.border-disabled}. The stem replaced radio-button-content, which held the same pair before Д21 split ring from mark - same collapse, now on the family that actually paints the ring"
     },
     {
       "stem": "slider-invalid-bg",
@@ -704,6 +721,98 @@
       "why": "Answered 15.09 by validation, confirmed. After the scheduler member was renamed to -base-bg and left for the bg group, two remain: diagram-image-icon-base-content on content-subtle and stepper-step-base-content on content. Both are content roles on content slots painting color:, and they differ by shade - which is a divergence components are entitled to. The naming point this group carried belonged to the scheduler member and is fixed."
     },
     {
+      "concept": "checked bg active",
+      "roles": [
+        "color-bg-primary-shared-active",
+        "color-content-primary-shared-active"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared-active"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-primary-shared-active"
+        }
+      ],
+      "decision": "false-group",
+      "why": "grouped by the slot word, not by the element: the check box's -checked-bg IS a fill (checkbox.color.checked.default.bg.* = bg-primary*) and the radio's -checked-bg is the DOT, which the package models as an icon (radio-button.color.checked.icon.* = content-primary-shared*, with checked.bg.rest = color.none). Two families here is the anatomy being right, not a disagreement - and the values coincide anyway, primary-shared being one colour across families. Opened by Д21"
+    },
+    {
+      "concept": "checked bg focused",
+      "roles": [
+        "color-bg-primary-shared-hovered",
+        "color-content-primary-shared-hovered"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-primary-shared-hovered"
+        }
+      ],
+      "decision": "false-group",
+      "why": "grouped by the slot word, not by the element: the check box's -checked-bg IS a fill (checkbox.color.checked.default.bg.* = bg-primary*) and the radio's -checked-bg is the DOT, which the package models as an icon (radio-button.color.checked.icon.* = content-primary-shared*, with checked.bg.rest = color.none). Two families here is the anatomy being right, not a disagreement - and the values coincide anyway, primary-shared being one colour across families. Opened by Д21"
+    },
+    {
+      "concept": "checked bg hovered",
+      "roles": [
+        "color-bg-primary-shared-hovered",
+        "color-content-primary-shared-hovered"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-primary-shared-hovered"
+        }
+      ],
+      "decision": "false-group",
+      "why": "grouped by the slot word, not by the element: the check box's -checked-bg IS a fill (checkbox.color.checked.default.bg.* = bg-primary*) and the radio's -checked-bg is the DOT, which the package models as an icon (radio-button.color.checked.icon.* = content-primary-shared*, with checked.bg.rest = color.none). Two families here is the anatomy being right, not a disagreement - and the values coincide anyway, primary-shared being one colour across families. Opened by Д21"
+    },
+    {
+      "concept": "checked bg rest",
+      "roles": [
+        "color-bg-primary-shared",
+        "color-content-primary-shared"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-primary-shared"
+        }
+      ],
+      "decision": "false-group",
+      "why": "grouped by the slot word, not by the element: the check box's -checked-bg IS a fill (checkbox.color.checked.default.bg.* = bg-primary*) and the radio's -checked-bg is the DOT, which the package models as an icon (radio-button.color.checked.icon.* = content-primary-shared*, with checked.bg.rest = color.none). Two families here is the anatomy being right, not a disagreement - and the values coincide anyway, primary-shared being one colour across families. Opened by Д21"
+    },
+    {
       "concept": "empty content rest",
       "roles": [
         "color-content-subtle",
@@ -838,12 +947,11 @@
       "roles": [
         "color-bg-danger-shared-active",
         "color-content-danger-shared-active",
-        "color-border-danger-shared-active"
+        "color-content-danger"
       ],
       "families": [
         "bg",
-        "content",
-        "border"
+        "content"
       ],
       "members": [
         {
@@ -856,7 +964,11 @@
         },
         {
           "folder": "radioButton",
-          "role": "color-border-danger-shared-active"
+          "role": "color-content-danger-shared-active"
+        },
+        {
+          "folder": "slider",
+          "role": "color-content-danger"
         }
       ],
       "decision": "answered",
@@ -867,7 +979,6 @@
       "roles": [
         "color-bg-danger-shared-hovered",
         "color-content-danger-shared-hovered",
-        "color-border-danger-shared-hovered",
         "color-border-danger"
       ],
       "families": [
@@ -886,7 +997,7 @@
         },
         {
           "folder": "radioButton",
-          "role": "color-border-danger-shared-hovered"
+          "role": "color-content-danger-shared-hovered"
         },
         {
           "folder": "slider",
@@ -903,7 +1014,6 @@
         "color-content-danger-shared",
         "color-bg-danger-subtler",
         "color-bg-danger",
-        "color-border-danger-shared",
         "color-border-danger"
       ],
       "families": [
@@ -934,7 +1044,7 @@
         },
         {
           "folder": "radioButton",
-          "role": "color-border-danger-shared"
+          "role": "color-content-danger-shared"
         },
         {
           "folder": "slider",
@@ -963,6 +1073,14 @@
           "role": "color-border-danger-shared-active"
         },
         {
+          "folder": "radioButton",
+          "role": "color-border-danger-shared-active"
+        },
+        {
+          "folder": "slider",
+          "role": "color-border-danger"
+        },
+        {
           "folder": "switch",
           "role": "color-border-danger"
         }
@@ -982,6 +1100,10 @@
       "members": [
         {
           "folder": "checkBox",
+          "role": "color-border-danger-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
           "role": "color-border-danger-shared-hovered"
         },
         {
@@ -1008,6 +1130,10 @@
         },
         {
           "folder": "checkBox",
+          "role": "color-border-danger-shared"
+        },
+        {
+          "folder": "radioButton",
           "role": "color-border-danger-shared"
         },
         {
@@ -1340,9 +1466,6 @@
       "color-content-on-color-shared-disabled",
       "color-content-on-color-subtler",
       "color-content-on-subtle-primary",
-      "color-content-primary-shared",
-      "color-content-primary-shared-active",
-      "color-content-primary-shared-hovered",
       "color-content-static-light-disabled",
       "color-content-success-shared",
       "color-content-success-shared-active",
@@ -1592,12 +1715,12 @@
       "Д10": "accent border rest - закрыт 15.09 валидацией: группа ложная, у диаграммы это дуга спиннера, и роль content-primary у неё верна",
       "Д12": "base bg rest - закрыт 15.09 валидацией: три верных роли, слово base у них означает разное",
       "Д13": "base content rest - закрыт 15.09 валидацией: обе роли верны, расходится оттенок",
-      "Д26": "radio-focus-rung-and-family - принято 15.09 первым вариантом: радиокнопка берёт решения чекбокса. Кольцо на border-primary-shared-hovered, точка на bg-primary-shared-hovered, фокус отделён от нажатия. Тёмный 1.98 -> 5.79; мёртвая $radio-button-icon-bg-focused удалена"
+      "Д26": "radio-focus-rung-and-family - принято 15.09 первым вариантом: радиокнопка берёт решения чекбокса. Кольцо на border-primary-shared-hovered, точка на bg-primary-shared-hovered, фокус отделён от нажатия. Тёмный 1.98 -> 5.79; мёртвая $radio-button-icon-bg-focused удалена",
+      "Д21": "radio-invalid-vs-checkbox-invalid - принято 15.09 первым вариантом: форма чекбокса везде. Пакет назвал анатомию сам - radio-button.color.checked даёт bg=none, border=border-primary-shared, icon=content-primary-shared, - поэтому у каждого кольца теперь своё имя на border-роли, а у каждой точки своё на content-роли. База получила два необязательных параметра"
     },
     "map": {
       "concept:invalid content rest": "Д14",
       "statePairGroup:outlined-button-label": "Д17",
-      "sweep:radio-invalid-vs-checkbox-invalid": "Д21",
       "sweep:tier-bypassed-by-neighbours": "Д23",
       "sweep:tree-focus-on-disabled-node": "Д25",
       "sweep:invalid-focus-rung": "Д27"
@@ -1886,9 +2009,9 @@
       },
       {
         "key": "radio-invalid-vs-checkbox-invalid",
-        "decision": "design",
+        "decision": "answered",
         "title": "Кольцо и заливка мелкого контрола: одна анатомия, четыре решения",
-        "why": "Widened 09.09 when category Г was taken to the end. It started as radio versus checkbox and it is bigger: four controls paint the same anatomy - the ring of a small control plus its fill - and each resolves it differently. The checkbox splits it in two, border role on the ring and content role on the mark. The radio paints both from one variable on a border role but calls the variable bg. The read-only radio paints both from one variable on a CONTENT role, though no property is text. The slider does it twice with roles from different families - accent focused on a bg role, invalid focused on a border role - for the identical pair of properties. The treeView checkbox does it on a bg role and follows its own question. Nothing here is about pixels: the whole *-danger-shared family resolves to one value across bg, border and content in both modes. It is about which anatomy the family agrees on. Splitting is not free in code either - the radio rest-state variable is a parameter of dx-radiobutton-states-mixin in base, so splitting it changes a base signature and touches generic and material. Options: (1) adopt the checkbox shape everywhere, correct anatomy, costs a base parameter; (2) keep one variable per control but name and role it by the ring, which is the part always drawn, so the fill borrows a border role openly; (3) leave the four as they are and record the divergence. Recommendation: (2) now, since it is theme-local and value-neutral, and (1) whenever the base is opened for other reasons."
+        "why": "Widened 09.09 when category Г was taken to the end. It started as radio versus checkbox and it is bigger: four controls paint the same anatomy - the ring of a small control plus its fill - and each resolves it differently. The checkbox splits it in two, border role on the ring and content role on the mark. The radio paints both from one variable on a border role but calls the variable bg. The read-only radio paints both from one variable on a CONTENT role, though no property is text. The slider does it twice with roles from different families - accent focused on a bg role, invalid focused on a border role - for the identical pair of properties. The treeView checkbox does it on a bg role and follows its own question. Nothing here is about pixels: the whole *-danger-shared family resolves to one value across bg, border and content in both modes. It is about which anatomy the family agrees on. Splitting is not free in code either - the radio rest-state variable is a parameter of dx-radiobutton-states-mixin in base, so splitting it changes a base signature and touches generic and material. ANSWERED 15.09 with option (1): the check box's shape everywhere, and the package settled what the shape is. core and vnext describe a radio in THREE slots - radio-button.color.checked.bg.rest = color.none, checked.border.* = border-primary-shared*, checked.icon.* = content-primary-shared* - so the disc has no fill at all, the ring is a border and the dot is an ICON, the same way a check box's tick is. blazor's set says the same for the invalid hue: radio.root.color.checked.invalid.icon = content-danger-shared, .border = border-danger-shared. Read-only is spelled out too: checked.border.read-only = border-disabled, checked.icon.read-only = content-disabled.\nEvery ring now has its own name on a border role and every dot its own name on a content role. The name keeps the slot word the property gives it (NAMING M3), so a dot stays -bg - it paints background-color - and only the role family follows what the element IS. That is the same reading the check box's invalid-mark-bg already carries.\nThe base mixin got what option (1) said it would cost: two optional parameters, $checked-border-color and $invalid-border-color, both defaulting to null and falling back to the single colour. generic and material pass neither, so their output is byte-identical.\nValues: the radio does not move at all - primary-shared and danger-shared each resolve to one value across bg, border and content. The slider does, twice, and both are recorded in applied. The treeView member went away with Д22."
       },
       {
         "key": "tree-view-checkbox-focus-still-unique",
@@ -2103,6 +2226,16 @@
         "what": "radioButton focus, and the ring family (Д26)",
         "change": "new $radio-button-checked-border-hovered/-focused/-active on border-primary-shared*, new -bg-focused on bg-primary-shared-hovered; focus split out of the block it shared with the press; $radio-button-icon-bg-focused deleted; dxList follows for both controls",
         "effect": "focus moves one rung, from active to hovered: light #003c70 -> #005397, dark #005397 -> #67a2e1. In dark that is 1.98 -> 5.79 against the 3:1 a non-text indicator asks, and the focused control stops being harder to see than the same control at rest (4.65) or hovered (5.79). Light stays well over the floor (11.17 -> 7.82). Hover and press rings move bg -> border family with no value change, since primary-shared is one value across the two. The press keeps the active rung. The deleted variable painted .dx-radiobutton-icon::after, which the theme switches off with content: none and a zero size - a live role feeding a rule that renders nothing"
+      },
+      {
+        "what": "radioButton ring and dot split (Д21)",
+        "change": "new $radio-button-checked-border, -invalid-border/-hovered/-focused and -border-read-only on border roles; the dot names keep their -bg slot word and move to content-primary-shared* / content-danger-shared* / content-disabled; $radio-button-content-read-only renamed to -bg-read-only; the base mixin gained $checked-border-color and $invalid-border-color, both optional",
+        "effect": "the ring and the dot stop sharing one variable in every state. Value-neutral for the checked and invalid families - primary-shared and danger-shared each resolve to one value across bg, border and content - and the read-only ring moves #ababab -> #d7d7d7 light, #767676 -> #4c4c4c dark, which is what core assigns (checked.border.read-only = border-disabled) and what the check box and the radio own disabled ring already read. generic and material pass neither new parameter, so their bundles are byte-identical"
+      },
+      {
+        "what": "slider handle ring and dot split (Д21)",
+        "change": "$slider-accent-content-focused -> $slider-accent-border-focused (border-primary-shared-active) + $slider-accent-bg-focused (content-primary-shared-active); $slider-invalid-content-focused -> $slider-invalid-border-focused (border-danger, unchanged) + $slider-invalid-bg-focused (content-danger)",
+        "effect": "the handle is a ring plus a mark and now reads one role for each. The accent ring had no border role at the active rung - the flat border-primary family has only a rest value - so it takes the shared stem, which every sibling control has already taken for the same reason: light stays #003c70, dark goes #003c70 -> #005397. The invalid mark moves #ee726a -> #c50f1f in light and does not move in dark"
       }
     ]
   },
@@ -2120,7 +2253,8 @@
       "контраста, и класс остался без единой записи - гейт это и поймал.",
       "deferred-to ушёл 15.09 вслед за graphic-ok-rest-only: обе группы, которые он помечал,",
       "закрылись сами - чекбокс и радиокнопка сошлись на одном стеме, а treeView перестал",
-      "красить чекбокс. Класс остался без строк, и проверка это поймала."
+      "красить чекбокс. Класс остался без строк, и проверка это поймала.",
+      "ring-and-fill ушёл 15.09: Д21 развёл кольцо и метку по отдельным именам, и все три строки, которые классом помечались, вышли из списка. Класс остался без записей - гейт это и поймал."
     ],
     "classes": {
       "design": {
@@ -2170,10 +2304,6 @@
       "drawn-mark": {
         "section": "Е",
         "ru": "передний план, нарисованный не текстом - маркер, волосок, треугольник из границ; роль content верна"
-      },
-      "ring-and-fill": {
-        "section": "А",
-        "ru": "кольцо и заливка мелкого контрола из одной переменной - разобрано одним вопросом"
       },
       "false-group": {
         "section": "Е",
@@ -2244,42 +2374,50 @@
   },
   "ringAndFill": {
     "comment": [
-      "Одна анатомия - кольцо контрола плюс его заливка - и четыре разных решения в четырёх виджетах.",
+      "Одна анатомия - кольцо контрола плюс его метка внутри - и четыре разных решения в четырёх виджетах.",
       "Выяснилось 09.09, когда категорию Г довели до конца: семь имён сидели под вердиктом rule-5,",
       "который оправдывает выбор доминирующего из ДВУХ покрашенных семейств. Здесь же имя называло",
       "семейство, которого нет ни в одном из двух свойств: все они красят border-color и",
-      "background-color и не красят текст."
+      "background-color и не красят текст.",
+      "Разведено 15.09 по Д21. Анатомию назвал пакет: radio-button.color.checked.bg.rest = color.none,",
+      "checked.border.* - кольцо, checked.icon.* - точка. То есть точка это метка, а не заливка,",
+      "и читает content-роль; заливки у диска нет вовсе."
     ],
     "members": [
       {
         "what": "checkBox, невалидное состояние",
         "how": "две переменные: check-box-invalid-border* (border-роль) на кольцо, check-box-invalid-mark-bg* (content-роль) на метку",
-        "verdict": "разведено, анатомия названа честно"
+        "verdict": "эталон - с него и снята форма для остальных"
+      },
+      {
+        "what": "radioButton, отмеченное состояние",
+        "how": "было: одна checked-bg на bg-роли красила и кольцо, и точку - кольцо через параметр базы. Стало: checked-border* на border-primary-shared*, checked-bg* на content-primary-shared*",
+        "verdict": "разведено 15.09, значения не двинулись"
       },
       {
         "what": "radioButton, невалидное состояние",
-        "how": "одна переменная radio-button-invalid-bg* на border-роли красит и кольцо, и точку",
-        "verdict": "имя говорит bg, роль и главное свойство говорят border"
+        "how": "было: одна radio-button-invalid-bg* на border-роли. Стало: invalid-border* на border-danger-shared*, invalid-bg* на content-danger-shared*",
+        "verdict": "разведено 15.09, значения не двинулись"
       },
       {
         "what": "radioButton, только для чтения",
-        "how": "одна переменная radio-button-content-read-only на content-роли красит и кольцо, и точку",
-        "verdict": "имя и роль говорят content, текста нет"
+        "how": "было: одна radio-button-content-read-only на content-роли. Стало: border-read-only на border-disabled, bg-read-only на content-disabled - ровно как пакет пишет checked.border.read-only и checked.icon.read-only",
+        "verdict": "разведено 15.09; кольцо посветлело #ababab -> #d7d7d7 и #767676 -> #4c4c4c, к чекбоксу и к собственному disabled"
       },
       {
         "what": "slider, ручка в фокусе",
-        "how": "одна переменная slider-accent-content-focused на bg-роли красит и кольцо, и внутреннюю точку",
-        "verdict": "имя говорит content, роль говорит bg"
+        "how": "было: одна slider-accent-content-focused на bg-роли. Стало: accent-border-focused на border-primary-shared-active, accent-bg-focused на content-primary-shared-active",
+        "verdict": "разведено 15.09; ступени active у плоского border-primary в пакете нет, взят стем shared - светлый #003c70 тот же, тёмный #003c70 -> #005397"
       },
       {
         "what": "slider, невалидная ручка в фокусе",
-        "how": "одна переменная slider-invalid-content-focused на border-роли красит и кольцо, и точку",
-        "verdict": "та же анатомия, что у соседней строки, но роль из другого семейства"
+        "how": "было: одна slider-invalid-content-focused на border-роли. Стало: invalid-border-focused на border-danger, invalid-bg-focused на content-danger",
+        "verdict": "разведено 15.09; кольцо не двинулось, точка #ee726a -> #c50f1f в светлом, тёмный тот же"
       },
       {
         "what": "treeView, чекбокс при фокусе элемента",
-        "how": "одна переменная tree-view-checkbox-accent-content-focused на bg-роли красит и кольцо, и заливку",
-        "verdict": "следует за судьбой блока фокуса treeView, отдельный вопрос"
+        "how": "одна переменная tree-view-checkbox-accent-content-focused на bg-роли красила и кольцо, и заливку",
+        "verdict": "снято вместе с блоком фокуса treeView (Д22) - переменной больше нет"
       }
     ]
   },

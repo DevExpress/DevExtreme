@@ -4,8 +4,9 @@
 
 @mixin publish {
   --dx-slider-accent-bg: #{$slider-accent-bg};
+  --dx-slider-accent-bg-focused: #{$slider-accent-bg-focused};
   --dx-slider-accent-bg-hovered: #{$slider-accent-bg-hovered};
-  --dx-slider-accent-content-focused: #{$slider-accent-content-focused};
+  --dx-slider-accent-border-focused: #{$slider-accent-border-focused};
   --dx-slider-bar-bg: #{$slider-bar-bg};
   --dx-slider-bar-bg-disabled: #{$slider-bar-bg-disabled};
   --dx-slider-bg-disabled: #{$slider-bg-disabled};
@@ -18,8 +19,9 @@
   --dx-slider-handle-size: #{$slider-handle-size};
   --dx-slider-height: #{$slider-height};
   --dx-slider-invalid-bg: #{$slider-invalid-bg};
+  --dx-slider-invalid-bg-focused: #{$slider-invalid-bg-focused};
   --dx-slider-invalid-bg-hovered: #{$slider-invalid-bg-hovered};
-  --dx-slider-invalid-content-focused: #{$slider-invalid-content-focused};
+  --dx-slider-invalid-border-focused: #{$slider-invalid-border-focused};
   --dx-slider-label-bottom-inset-block-end: #{$slider-label-bottom-inset-block-end};
   --dx-slider-label-bottom-padding-block-end: #{$slider-label-bottom-padding-block-end};
   --dx-slider-label-top-inset-block-start: #{$slider-label-top-inset-block-start};

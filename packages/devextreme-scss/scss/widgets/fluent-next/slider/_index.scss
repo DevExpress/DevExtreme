@@ -62,10 +62,10 @@
   }
 
   &.dx-state-focused {
-    border-color: var(--dx-slider-accent-content-focused);
+    border-color: var(--dx-slider-accent-border-focused);
 
     &::after {
-      background: var(--dx-slider-accent-content-focused);
+      background: var(--dx-slider-accent-bg-focused);
     }
   }
 
@@ -127,10 +127,10 @@
     }
 
     &.dx-state-focused {
-      border-color: var(--dx-slider-invalid-content-focused);
+      border-color: var(--dx-slider-invalid-border-focused);
 
       &::after {
-        background-color: var(--dx-slider-invalid-content-focused);
+        background-color: var(--dx-slider-invalid-bg-focused);
       }
     }
   }
