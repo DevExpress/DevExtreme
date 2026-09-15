@@ -183,6 +183,26 @@
       "why": "the package paints the switch knob (its `trigger` slot) from exactly this role. Our role is right; only the slot word differs, because the property is background-color"
     },
     {
+      "name": "switch-handle-off-bg-active",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the handle is the switch's TRIGGER - the package names it as its own slot and gives it content roles: switch.color.unchecked.trigger.rest = content-subtle, .hovered and .active = content. The name keeps the -bg slot word because it paints background-color (NAMING M3) and only the family follows what the element is, the same judgment call as the radio dot and check-box-invalid-mark-bg. Before 15.09 these two did not exist and the handle was painted from the TRACK BORDER colour, one variable across two elements - Д21"
+    },
+    {
+      "name": "switch-handle-off-bg-hovered",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the handle is the switch's TRIGGER - the package names it as its own slot and gives it content roles: switch.color.unchecked.trigger.rest = content-subtle, .hovered and .active = content. The name keeps the -bg slot word because it paints background-color (NAMING M3) and only the family follows what the element is, the same judgment call as the radio dot and check-box-invalid-mark-bg. Before 15.09 these two did not exist and the handle was painted from the TRACK BORDER colour, one variable across two elements - Д21"
+    },
+    {
       "name": "switch-handle-on-shadow",
       "verdict": "cross-family",
       "roles": [
@@ -556,17 +576,16 @@
       "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
     },
     {
-      "stem": "switch-invalid-border",
+      "stem": "switch-handle-off-bg",
       "states": [
-        "focused",
-        "hovered",
-        "rest"
+        "active",
+        "hovered"
       ],
       "role": [
-        "color-border-danger"
+        "color-content"
       ],
-      "decision": "no-rung",
-      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+      "decision": "answered",
+      "why": "hovered and active resolve to one role because the package assigns one: switch.color.unchecked.trigger.hovered and .active are both {color.content}. The stem is new - before Д21 the handle had no state names of its own at all, it followed the track border"
     },
     {
       "stem": "tabs-tab-content",
@@ -958,6 +977,10 @@
         {
           "folder": "slider",
           "role": "color-content-danger"
+        },
+        {
+          "folder": "switch",
+          "role": "color-bg-danger-shared-active"
         }
       ],
       "decision": "answered",
@@ -991,6 +1014,10 @@
         {
           "folder": "slider",
           "role": "color-border-danger"
+        },
+        {
+          "folder": "switch",
+          "role": "color-bg-danger-shared-hovered"
         }
       ],
       "decision": "answered",
@@ -1038,6 +1065,10 @@
         {
           "folder": "slider",
           "role": "color-border-danger"
+        },
+        {
+          "folder": "switch",
+          "role": "color-bg-danger-shared"
         }
       ],
       "decision": "answered",
@@ -1071,33 +1102,7 @@
         },
         {
           "folder": "switch",
-          "role": "color-border-danger"
-        }
-      ],
-      "decision": "shade",
-      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
-    },
-    {
-      "concept": "invalid border hovered",
-      "roles": [
-        "color-border-danger-shared-hovered",
-        "color-border-danger"
-      ],
-      "families": [
-        "border"
-      ],
-      "members": [
-        {
-          "folder": "checkBox",
-          "role": "color-border-danger-shared-hovered"
-        },
-        {
-          "folder": "radioButton",
-          "role": "color-border-danger-shared-hovered"
-        },
-        {
-          "folder": "switch",
-          "role": "color-border-danger"
+          "role": "color-border-danger-shared-active"
         }
       ],
       "decision": "shade",
@@ -1127,7 +1132,7 @@
         },
         {
           "folder": "switch",
-          "role": "color-border-danger"
+          "role": "color-border-danger-shared"
         }
       ],
       "decision": "shade",
@@ -1726,7 +1731,7 @@
     "rows": [
       {
         "bg": "--dx-check-box-icon-checked-bg-active",
-        "fg": "--dx-check-box-icon-bg",
+        "fg": "--dx-check-box-mark-content",
         "fgRole": "color-content-inverted",
         "bgRole": "color-bg-primary-shared-active",
         "contrast": {
@@ -2230,6 +2235,16 @@
         "what": "invalid-badge-bg (Д14)",
         "change": "bg-danger-shared -> bg-danger",
         "effect": "light identical (#c50f1f both roles), dark #e4554f -> #c50f1f. The badge is a fixed error marker with a white exclamation mark on it, and the mark is mode-static by role - content-static-dark is #ffffff in both modes - so a disc that lightens in dark breaks the pair: the mark read 3.68 there against 6.07 in light, and now reads 6.07 in both. The matched-pair reasoning is the one Д1 used for the gallery disc"
+      },
+      {
+        "what": "switch: three slots instead of two (Д21 sweep)",
+        "change": "the handle gets $switch-handle-off-bg-hovered/-active on content roles; the ON track gets $switch-on-bg-hovered/-focused for the fill beside the existing -border- names; $switch-on-border-disabled on color-none; the invalid pair splits into -border-* on border-danger-shared* and -bg-* on bg-danger-shared*. The base mixin gained nine optional parameters, all defaulting to the single colour",
+        "effect": "the package names three slots for a switch - bg, border and trigger - and the theme read two. The handle was painted from the TRACK BORDER colour: #767676 at rest where the package assigns content-subtle #444444, and border-contrast-hovered/-active on hover and press where it assigns content #161616. The ON fill and the ON border shared one name, and so did the disabled pair, where the package gives the border color-none - the fill shows through the transparent border, so those pixels do not move. The invalid trio was one value on three rungs (border-danger #ee726a light, #e4554f dark); it now reads the danger-shared ladder the check box already reads: #c50f1f / #9d0013 / #76000b light, #e4554f / #ee726a / #9d0013 dark. legacy fluent passes none of the new parameters and its bundle is byte-identical, as are all 49"
+      },
+      {
+        "what": "slider disabled ring, check box mark, calendar today ring (Д21 sweep)",
+        "change": "new $slider-border-disabled on border-disabled for the handle ring, the fills keep content-disabled; new $check-box-mark-content for the tick, the box background keeps $check-box-icon-bg; new $calendar-cell-today-border on border-primary-shared, passed to the base parameter that draws only the today outline",
+        "effect": "three more places where one name painted two elements. The slider ring goes #ababab -> #d7d7d7 light and #767676 -> #4c4c4c dark, joining the check box and the radio, whose disabled rings already read border-disabled. The check box split is value-identical - the box fill and the tick are both content-inverted - and only makes the anatomy visible in the names. The calendar today outline was drawn with the selected cell FILL: light identical #0f6cbd, dark #0f6cbd -> #4b90d9, because the flat primary family does not invert and the outline stayed the light-mode blue on a dark calendar"
       }
     ]
   },

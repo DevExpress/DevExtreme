@@ -87,7 +87,7 @@
 
 .dx-checkbox-checked {
   .dx-checkbox-icon {
-    color: var(--dx-check-box-icon-bg);
+    color: var(--dx-check-box-mark-content);
     border-color: var(--dx-check-box-icon-checked-border);
     background-color: var(--dx-check-box-icon-checked-bg);
 
@@ -155,7 +155,7 @@
 }
 
 @include dx-checkbox-icon-indeterminate(
-  var(--dx-check-box-icon-bg),
+  var(--dx-check-box-mark-content),
   var(--dx-check-box-icon-checked-bg),
   $check-box-indeterminate-icon-height,
   $check-box-indeterminate-icon-width,

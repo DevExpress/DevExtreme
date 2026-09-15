@@ -145,7 +145,7 @@
   &.dx-slider,
 
   &.dx-slider-handle {
-    border-color: var(--dx-slider-bg-disabled);
+    border-color: var(--dx-slider-border-disabled);
 
     &::after {
       background: var(--dx-slider-bg-disabled);

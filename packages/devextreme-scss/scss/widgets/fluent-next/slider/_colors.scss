@@ -22,6 +22,10 @@ $slider-invalid-bg-hovered: ds.$color-border-danger !default;
 $slider-invalid-border-focused: ds.$color-border-danger !default;
 $slider-invalid-bg-focused: ds.$color-content-danger !default;
 
+/* Кольцо ручки это граница, и в неактивном состоянии оно читает border-роль - как у
+   чекбокса и радиокнопки. Заливки (внутренняя метка ручки и закрашенный диапазон)
+   остаются на content-disabled: bg-disabled там почти сливается с дорожкой. */
+$slider-border-disabled: ds.$color-border-disabled !default;
 $slider-bg-disabled: ds.$color-content-disabled !default;
 $slider-bar-bg-disabled: ds.$color-bg-disabled !default;
 

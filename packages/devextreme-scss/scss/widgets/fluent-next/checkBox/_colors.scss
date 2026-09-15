@@ -4,7 +4,10 @@ $check-box-border: ds.$color-border-contrast !default;
 $check-box-border-hovered: ds.$color-border-contrast-hovered !default;
 $check-box-border-active: ds.$color-border-contrast-active !default;
 
+/* Заливка пустого бокса и сама галочка это два разных элемента: одно значение, но
+   назначения разные, и имя должно быть у каждого (Д21). Значение одно и то же. */
 $check-box-icon-bg: ds.$color-content-inverted !default;
+$check-box-mark-content: ds.$color-content-inverted !default;
 
 $check-box-icon-checked-bg: ds.$color-bg-primary-shared !default;
 $check-box-icon-checked-bg-hovered: ds.$color-bg-primary-shared-hovered !default;

@@ -12,6 +12,11 @@ $calendar-bg-hovered: ds.$color-bg-primary-subtler-selected !default;
 
 $calendar-cell-bg-selected-disabled: ds.$color-bg-disabled !default;
 $calendar-cell-bg-selected: ds.$color-bg-primary !default;
+
+/* Контур сегодняшней даты и заливка выбранной это два разных элемента, и до 15.09 их красила
+   одна переменная (Д21). Контур это граница, значит border-роль; стем shared берётся потому,
+   что плоское семейство не переворачивается для тёмного - там оно осталось бы #0f6cbd. */
+$calendar-cell-today-border: ds.$color-border-primary-shared !default;
 $calendar-cell-content-selected: ds.$color-content-static-dark !default;
 $calendar-cell-bg-active: ds.$color-bg-primary-subtler-active !default;
 $calendar-invalid-border: ds.$color-border-danger !default;
