@@ -59,6 +59,68 @@ test('DataGrid – Resize indicator is moved when resizing a grouped column if s
   });
 });
 
+// T1329677
+test('DataGrid - column width changed via columnOption should be applied immediately, without a repaint (T1329677)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiColumnOption('Task_Assigned_Employee_ID', 'width', 700);
+
+  const assignedColumnWidth = await dataGrid.getHeaders().getHeaderRow(0)
+    .getHeaderCell(1).element.clientWidth;
+
+  await t
+    .expect(assignedColumnWidth)
+    .within(
+      700 - 1,
+      700 + 1,
+      'columnOption width should be applied immediately, without an explicit repaint',
+    );
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{ Task_Subject: 'Test' }],
+    columnAutoWidth: true,
+    columns: [
+      { dataField: 'Task_Subject' },
+      { dataField: 'Task_Assigned_Employee_ID', caption: 'Assigned' },
+    ],
+  });
+});
+
+// T1329677
+test('DataGrid - other column width should be updated immediately when another column width is changed via columnOption (T1329677)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  const firstColumnOldWidth = await dataGrid.getDataCell(0, 0).element.clientWidth;
+
+  await dataGrid.apiColumnOption('Col2', 'width', 200);
+
+  const firstColumnNewWidth = await dataGrid.getDataCell(0, 0).element.clientWidth;
+
+  await t
+    .expect(firstColumnOldWidth).notEql(firstColumnNewWidth, 'first column width should be changed');
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      Col1: 'Test 1',
+      Col2: 'Test 2',
+      Col3: 'Test 3',
+      Col4: 'Test 4',
+    }],
+    width: 400,
+    columnAutoWidth: true,
+    columns: [
+      { dataField: 'Col1' },
+      { dataField: 'Col2' },
+      { dataField: 'Col3' },
+      { dataField: 'Col4' },
+    ],
+  });
+});
+
 const tryResizeHeaderInBandArea = (
   dataGrid: DataGrid,
   columnIndex: number,
