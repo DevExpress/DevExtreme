@@ -7,11 +7,14 @@
   --dx-radio-button-border-disabled: #{$radio-button-border-disabled};
   --dx-radio-button-checked-bg: #{$radio-button-checked-bg};
   --dx-radio-button-checked-bg-active: #{$radio-button-checked-bg-active};
+  --dx-radio-button-checked-bg-focused: #{$radio-button-checked-bg-focused};
   --dx-radio-button-checked-bg-hovered: #{$radio-button-checked-bg-hovered};
+  --dx-radio-button-checked-border-active: #{$radio-button-checked-border-active};
+  --dx-radio-button-checked-border-focused: #{$radio-button-checked-border-focused};
+  --dx-radio-button-checked-border-hovered: #{$radio-button-checked-border-hovered};
   --dx-radio-button-content-disabled: #{$radio-button-content-disabled};
   --dx-radio-button-content-read-only: #{$radio-button-content-read-only};
   --dx-radio-button-icon-bg: #{$radio-button-icon-bg};
-  --dx-radio-button-icon-bg-focused: #{$radio-button-icon-bg-focused};
   --dx-radio-button-icon-border: #{$radio-button-icon-border};
   --dx-radio-button-icon-border-active: #{$radio-button-icon-border-active};
   --dx-radio-button-icon-border-hovered: #{$radio-button-icon-border-hovered};

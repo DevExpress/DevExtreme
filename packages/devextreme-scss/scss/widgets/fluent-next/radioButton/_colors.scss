@@ -8,14 +8,25 @@ $radio-button-icon-bg: ds.$color-bg !default;
 $radio-button-icon-border: ds.$color-border-contrast !default;
 $radio-button-icon-border-hovered: ds.$color-border-contrast-hovered !default;
 $radio-button-icon-border-active: ds.$color-border-contrast-active !default;
-$radio-button-icon-bg-focused: ds.$color-bg-alpha-hovered !default;
 
 /* Стем shared: плоское семейство не переворачивается для тёмного - bg-primary там отдаёт
    то же #0f6cbd, что и в светлом, и точка против страницы даёт 2.88. Так же переведён
    чекбокс; светлый ни на одной ступени не двигается. */
 $radio-button-checked-bg: ds.$color-bg-primary-shared !default;
 $radio-button-checked-bg-hovered: ds.$color-bg-primary-shared-hovered !default;
+$radio-button-checked-bg-focused: ds.$color-bg-primary-shared-hovered !default;
 $radio-button-checked-bg-active: ds.$color-bg-primary-shared-active !default;
+
+/* Кольцо это граница, и в состояниях, которые красит сама тема, оно читает border-роль.
+   Покой остаётся на bg-имени: там кольцо и точку красит один параметр базового миксина -
+   это Д21, и разделение меняет сигнатуру базы.
+   Фокус берёт ступень hovered, а нажатие - свою: те же решения, что у чекбокса (Д16).
+   Ступень active в тёмном не переворачивается (#005397), и точка на ней давала 1.98
+   против порога 3 - хуже, чем тот же контрол в покое. */
+$radio-button-checked-border-hovered: ds.$color-border-primary-shared-hovered !default;
+$radio-button-checked-border-focused: ds.$color-border-primary-shared-hovered !default;
+$radio-button-checked-border-active: ds.$color-border-primary-shared-active !default;
+
 $radio-button-invalid-bg: ds.$color-border-danger-shared !default;
 $radio-button-invalid-bg-hovered: ds.$color-border-danger-shared-hovered !default;
 $radio-button-invalid-bg-focused: ds.$color-border-danger-shared-active !default;

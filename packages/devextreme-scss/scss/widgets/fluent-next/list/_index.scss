@@ -150,11 +150,11 @@
 
         &.dx-state-hover {
           .dx-radiobutton-icon {
-            border-color: radioButtonColors.$radio-button-checked-bg-hovered;
+            border-color: radioButtonColors.$radio-button-checked-border-hovered;
           }
 
           .dx-checkbox-icon {
-            border-color: checkBoxColors.$check-box-icon-checked-bg-hovered;
+            border-color: checkBoxColors.$check-box-icon-checked-border-hovered;
           }
 
           .dx-radiobutton-checked {
@@ -180,16 +180,16 @@
 
         &.dx-state-focused {
           .dx-radiobutton-icon {
-            border-color: radioButtonColors.$radio-button-checked-bg-active;
+            border-color: radioButtonColors.$radio-button-checked-border-focused;
           }
 
           .dx-checkbox-icon {
-            border-color: checkBoxColors.$check-box-icon-checked-bg-focused;
+            border-color: checkBoxColors.$check-box-icon-checked-border-focused;
           }
 
           .dx-radiobutton-checked {
             .dx-radiobutton-icon-dot {
-              background-color: radioButtonColors.$radio-button-checked-bg-active;
+              background-color: radioButtonColors.$radio-button-checked-bg-focused;
             }
           }
 
