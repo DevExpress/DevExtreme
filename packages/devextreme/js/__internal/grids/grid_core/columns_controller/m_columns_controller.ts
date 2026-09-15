@@ -20,7 +20,6 @@ import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
 import type { Column, ColumnsChanges, FilterField } from '@ts/grids/grid_core/columns_controller/types';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
@@ -130,8 +129,6 @@ export class ColumnsController extends modules.Controller {
 
   public _columnChanges?: ColumnsChanges;
 
-  protected _dataController!: DataController;
-
   public _isWarnedAboutUnsupportedProperties?: boolean;
 
   private getCommonColumnSettings(column): Partial<Column> {
@@ -156,7 +153,6 @@ export class ColumnsController extends modules.Controller {
   }
 
   public init(isApplyingUserState?: boolean): void {
-    this._dataController = this.getController('data');
     const columns = this.option('columns');
 
     this._commandColumns = this._commandColumns || [];
@@ -1291,8 +1287,12 @@ export class ColumnsController extends modules.Controller {
     }
 
     if (!dataSource || dataSource.isLoaded()) {
-      const sortParameters = dataSource ? dataSource.sort() || [] : this.getSortDataSourceParameters();
-      const groupParameters = dataSource ? dataSource.group() || [] : this.getGroupDataSourceParameters();
+      const sortParameters = dataSource
+        ? (dataSource.sort() ?? [])
+        : this.getSortDataSourceParameters();
+      const groupParameters = dataSource
+        ? (dataSource.group() ?? [])
+        : this.getGroupDataSourceParameters();
       const filterParameters = dataSource?.lastLoadOptions().filter;
 
       if (!isApplyingUserState) {
@@ -1305,7 +1305,11 @@ export class ColumnsController extends modules.Controller {
       return when(this.refresh(true)).always(() => {
         if (this._columns !== columns) return;
 
-        this._updateChanges(dataSource, { sorting: sortParameters, grouping: groupParameters, filtering: filterParameters });
+        this._updateChanges(dataSource, {
+          sorting: sortParameters,
+          grouping: groupParameters,
+          filtering: filterParameters,
+        });
 
         fireColumnsChanged(this);
       });
@@ -1313,8 +1317,6 @@ export class ColumnsController extends modules.Controller {
   }
 
   private _updateChanges(dataSource, parameters) {
-    const langParams = dataSource?.loadOptions?.()?.langParams;
-
     if (dataSource) {
       this.updateColumnDataTypes(dataSource);
       this._dataSourceApplied = true;
@@ -1327,11 +1329,10 @@ export class ColumnsController extends modules.Controller {
       updateColumnChanges(this, 'grouping');
     }
 
-    if (this._dataController
-      && !gridCoreUtils.equalFilterParameters(parameters.filtering, this._dataController.getCombinedFilter(), langParams)) {
-      updateColumnChanges(this, 'filtering');
-    }
     updateColumnChanges(this, 'columns');
+
+    this._columnChanges!.appliedFilters ??= [];
+    this._columnChanges!.appliedFilters.push(parameters.filtering);
   }
 
   public updateSortingGrouping(dataSource, fromDataSource?: boolean): void {
