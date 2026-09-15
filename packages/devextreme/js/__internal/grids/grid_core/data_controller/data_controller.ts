@@ -1057,12 +1057,14 @@ export class DataController extends modules.Controller {
     change.operationTypes ??= this._currentOperationTypes;
     this._currentOperationTypes = null;
 
-    if (!this.dataSourceController.hasAdapter()) {
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+
+    if (!dataSourceAdapter) {
       this._items = [];
       return;
     }
 
-    const newItems = this._afterProcessItems(this.getProcessedItems(change, dataSource));
+    const newItems = this._afterProcessItems(this.getProcessedItems(change, dataSourceAdapter));
     const oldItems = this._items.length === newItems.length ? this._items : null;
 
     change.items = newItems;
@@ -1078,7 +1080,10 @@ export class DataController extends modules.Controller {
     this._rowIndexOffset = this.getRowIndexOffset();
   }
 
-  private getProcessedItems(change: DataChange, dataSource: DataSourceAdapter): ProcessedItem[] {
+  private getProcessedItems(
+    change: DataChange,
+    dataSourceAdapter: DataSourceAdapter,
+  ): ProcessedItem[] {
     const useProcessedItemsCache = 'useProcessedItemsCache' in change && change.useProcessedItemsCache;
 
     if (useProcessedItemsCache && this._cachedProcessedItems) {
@@ -1087,7 +1092,7 @@ export class DataController extends modules.Controller {
 
     // change.items at this stage is defined only if virtualScrolling
     // + legacyScrollingMode enabled
-    const items = (change.items ?? dataSource.items()) as RawItemData[];
+    const items = (change.items ?? dataSourceAdapter.items()) as RawItemData[];
     const dataItems = this._beforeProcessItems(items);
     const processedItems = this._processItems(dataItems, change);
 
