@@ -5,6 +5,7 @@ import { each } from '@js/core/utils/iterator';
 import errors from '@js/ui/widget/ui.errors';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 import dataGridCore from '../m_core';
 import { createGroupFilter } from '../m_utils';
@@ -283,7 +284,7 @@ function loadLastLevelGroupItems(that: GroupingHelper, options, expandedInfo, da
   let { filter } = options.storeLoadOptions;
 
   if (!options.storeLoadOptions.isLoadingAll) {
-    filter = dataGridCore.combineFilters([filter, dataGridCore.combineFilters(expandedFilters, 'or')]);
+    filter = combineFilters([filter, combineFilters(expandedFilters, 'or')]);
   }
 
   const loadOptions = extend({}, options.storeLoadOptions, {

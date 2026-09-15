@@ -69,7 +69,7 @@ const setHttpTimeout = function (timeout, xhr) {
 };
 
 const sendRequest = function (options) {
-  const xhr = httpRequest.getXhr();
+  const xhr: XMLHttpRequest & { customStatus?: string } = httpRequest.getXhr();
   // @ts-expect-error only void function can be called with new
   const d = new Deferred();
   const result = d.promise();

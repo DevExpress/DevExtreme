@@ -157,6 +157,10 @@ export class DataSourceController<
     return this.adapter?.loadingOperationTypes() ?? {};
   }
 
+  public isLoaded(): boolean {
+    return this.adapter ? this.adapter.isLoaded() : true;
+  }
+
   public isLoading(): boolean {
     return this.adapter?.isLoading() ?? false;
   }

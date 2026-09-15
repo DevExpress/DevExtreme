@@ -1,16 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 const FIRST = ['a', '=', 1];
 const SECOND = ['b', '=', 2];
 const THIRD = ['c', '=', 3];
 const MATCH_NOTHING = ['!'];
-
-const combineFilters = (
-  filters: unknown[],
-  operation?: 'and' | 'or',
-): DataFilter => gridCoreUtils.combineFilters(filters as DataFilter[], operation);
 
 describe('combineFilters', () => {
   describe('when the list is empty', () => {

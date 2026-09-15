@@ -1,17 +1,6 @@
-(function(root, factory) {
-    /* global jQuery */
-    if(typeof define === 'function' && define.amd) {
-        define(function(require, exports, module) {
-            root.memoryLeaksHelper = module.exports = factory(
-                require('jquery')
-            );
-        });
-    } else {
-        jQuery.extend(window, factory(
-            jQuery
-        ));
-    }
-}(window, function($) {
+import $ from 'jquery';
+
+const __moduleExports = (function($) {
 
     const exports = {};
 
@@ -142,4 +131,8 @@
     };
 
     return exports;
-}));
+})($);
+
+window.memoryLeaksHelper = __moduleExports;
+
+export default __moduleExports;

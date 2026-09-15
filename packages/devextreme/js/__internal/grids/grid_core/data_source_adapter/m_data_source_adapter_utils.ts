@@ -2,6 +2,7 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import commonUtils from '@ts/core/utils/m_common';
 
+import { equalFilterParameters } from '../filter/utils';
 import gridCoreUtils from '../m_utils';
 import type { OperationTypes } from './types';
 
@@ -33,7 +34,7 @@ export const calculateOperationTypes = (
         loadOptions.group,
         lastLoadOptions.group,
       ) || lastLoadOptions.groupExpand,
-      filtering: !gridCoreUtils.equalFilterParameters(
+      filtering: !equalFilterParameters(
         loadOptions.filter,
         lastLoadOptions.filter,
         loadOptions.langParams,

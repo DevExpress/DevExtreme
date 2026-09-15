@@ -8,13 +8,14 @@
 const _ln = Math.log;
 const _LN2 = Math.LN2;
 
-export function GestureHandler(params) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let GestureHandler = function (params) {
   const that = this;
   that._projection = params.projection;
   that._renderer = params.renderer;
   that._x = that._y = 0;
   that._subscribeToTracker(params.tracker);
-}
+};
 
 GestureHandler.prototype = {
   constructor: GestureHandler,
@@ -106,3 +107,9 @@ GestureHandler.prototype = {
     }
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_GestureHandler(value: typeof GestureHandler): void {
+  GestureHandler = value;
+}
+/// #ENDDEBUG

@@ -235,7 +235,8 @@ export const isPossibleForParsingFormat = (patterns: string[]): boolean => {
   });
 };
 
-export const getRegExpInfo = (
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let getRegExpInfo = (
   format: string,
   dateParts: LdlmDateLocalization,
 ): {
@@ -381,3 +382,11 @@ export const getParser = (format: string, dateParts: LdlmDateLocalization) => {
     return null;
   };
 };
+
+/// #DEBUG
+/* eslint-disable-next-line @typescript-eslint/naming-convention
+  -- description seam setter for tests stubs */
+export function DEBUG_set_getRegExpInfo(value: typeof getRegExpInfo): void {
+  getRegExpInfo = value;
+}
+/// #ENDDEBUG

@@ -1,4 +1,4 @@
-import errors from '@ts/core/m_errors';
+import errors from '@ts/core/errors';
 import errorUtils from '@ts/core/utils/m_error';
 
 export default errorUtils(errors.ERROR_MESSAGES, {

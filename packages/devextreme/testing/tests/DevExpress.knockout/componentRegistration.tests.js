@@ -1,17 +1,17 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const ko = require('knockout');
-const registerComponent = require('core/component_registrator');
-const DOMComponent = require('core/dom_component');
-const Widget = require('ui/widget/ui.widget');
-const KoTemplate = require('__internal/integration/knockout/template').KoTemplate;
-const CollectionWidget = require('ui/collection/ui.collection_widget.edit');
-const config = require('core/config');
-const dataUtils = require('core/element_data');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import ko from 'knockout';
+import registerComponent from 'core/component_registrator';
+import DOMComponent from 'core/dom_component';
+import Widget from 'ui/widget/ui.widget';
+import { KoTemplate } from '__internal/integration/knockout/template';
+import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
+import config from 'core/config';
+import * as dataUtils from 'core/element_data';
 
-require('ui/select_box');
-require('ui/lookup');
-require('integration/knockout');
+import 'ui/select_box';
+import 'ui/lookup';
+import 'integration/knockout';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

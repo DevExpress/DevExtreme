@@ -19,7 +19,7 @@ import {
 import exportModule from '__internal/viz/core/exportModule';
 import seriesModule from 'viz/series/base_series';
 import { BaseChart } from '__internal/viz/chart_components/base_chart';
-import * as labelModule from 'viz/series/points/label';
+import labelModule from 'viz/series/points/label';
 import dataValidatorModule from 'viz/components/data_validator';
 import translator1DModule from 'viz/translators/translator1d';
 import { CustomStore } from 'common/data/custom_store';
@@ -35,6 +35,7 @@ import TemplateManagerModule from '__internal/core/m_template_manager';
 import graphicObjects from '__internal/common/charts';
 import eventsEngine from 'common/core/events/core/events_engine';
 import devices from '__internal/core/m_devices';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const LabelCtor = new ObjectPool(labelModule.Label);
 
@@ -46,9 +47,9 @@ const dataSourceTemplate = [
     { cat: 'Third', val: 300 }
 ];
 
-rendererModule.Renderer = sinon.spy(function(parameters) {
+rendererModule.DEBUG_set_Renderer(sinon.spy(function(parameters) {
     return new Renderer(parameters);
-});
+}));
 
 function createPieChart(options) {
     this.container = $('#chartContainer');
@@ -168,14 +169,14 @@ const environment = {
         that.layoutManager.needMoreSpaceForPanesCanvas.returns(true);
         that.layoutManager.applyPieChartSeriesLayout.returns({ radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200 });
 
-        that.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
+        that.LayoutManager = stubSeam(layoutManagerModule, 'LayoutManager', 'DEBUG_set_LayoutManager').callsFake(function() {
             return that.layoutManager;
         });
 
-        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
+        this.createThemeManager = stubSeam(chartThemeManagerModule, 'ThemeManager', 'DEBUG_set_ThemeManager').callsFake(function() {
             return that.themeManager;
         });
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
+        this.validateData = stubSeam(dataValidatorModule, 'validateData', 'DEBUG_set_validateData').callsFake(function(data) {
             return { arg: data || [] };
         });
     },
@@ -717,7 +718,7 @@ const overlappingEnvironment = $.extend({}, environment, {
     QUnit.test('dxChart with single series, series type is unknown', function(assert) {
         const stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
-        seriesModule.Series = function() { return { isUpdated: false }; };
+        seriesModule.DEBUG_set_Series(function() { return { isUpdated: false }; });
 
         const chart = this.createPieChart({
             dataSource: dataSourceTemplate,
@@ -832,7 +833,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             environment.beforeEach.apply(this, arguments);
             const translatorClass = new stubClass(translator1DModule.Translator1D);
 
-            sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
+            stubSeam(translator1DModule, 'Translator1D', 'DEBUG_set_Translator1D').callsFake(function() {
                 const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
@@ -891,7 +892,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
             const translatorClass = new stubClass(translator1DModule.Translator1D);
 
-            sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
+            stubSeam(translator1DModule, 'Translator1D', 'DEBUG_set_Translator1D').callsFake(function() {
                 const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
@@ -1073,7 +1074,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             this.mockSeries2 = new MockSeries({ argumentField: 'arg' });
             const translatorClass = new stubClass(translator1DModule.Translator1D);
 
-            sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
+            stubSeam(translator1DModule, 'Translator1D', 'DEBUG_set_Translator1D').callsFake(function() {
                 const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
@@ -2046,7 +2047,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
             const translatorClass = new stubClass(translator1DModule.Translator1D);
 
-            sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
+            stubSeam(translator1DModule, 'Translator1D', 'DEBUG_set_Translator1D').callsFake(function() {
                 const translator = new translatorClass();
                 translator.stub('setDomain').returnsThis();
                 translator.stub('setCodomain').returnsThis();
