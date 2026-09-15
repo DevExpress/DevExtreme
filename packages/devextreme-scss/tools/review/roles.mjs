@@ -1098,9 +1098,27 @@ const md = () => {
   return out.join('\n');
 };
 
+/*
+ * Every role the theme reads, resolved in both modes.
+ *
+ * The decision page draws specimens - a real checkbox fill with a real mark on it, a real button
+ * in each state - and a specimen is only worth looking at if it is painted with the value the
+ * bundle actually ships. Emitting the palette here keeps the page from re-implementing the
+ * resolver and from drifting away from the numbers printed beside the picture.
+ */
+const palette = {};
+for (const role of [...new Set(declarations.flatMap((d) => d.roles))].sort()) {
+  const entry = {};
+  for (const mode of MODES) {
+    const value = resolveRole(role, mode);
+    if (value) entry[mode] = value;
+  }
+  if (Object.keys(entry).length) palette[role] = entry;
+}
+
 if (process.argv.includes('--json')) {
   console.log(JSON.stringify({
-    summary, findings, typography, ladders, lowContrast, lowStatePairs, concepts, unusedRoles,
+    summary, findings, typography, ladders, lowContrast, lowStatePairs, concepts, unusedRoles, palette,
   }, null, 2));
 } else if (process.argv.includes('--md')) {
   console.log(md());

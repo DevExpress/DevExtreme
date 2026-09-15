@@ -155,8 +155,23 @@
   ],
   "typographyUnmarked": [
     {
+      "variable": "card-view-card-header-font-size",
+      "reads": "font-size-140",
+      "roleExists": true
+    },
+    {
+      "variable": "card-view-card-header-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
       "variable": "grid-column-chooser-title-font-size",
       "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-appointment-month-font-size",
+      "reads": "font-size-120",
       "roleExists": true
     },
     {
@@ -175,9 +190,9 @@
       "roleExists": true
     },
     {
-      "variable": "scheduler-time-indicator-font-size",
-      "reads": "font-size-300",
-      "roleExists": false
+      "variable": "scheduler-workspace-info-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
     },
     {
       "variable": "typography-l-font-size",
@@ -2350,5 +2365,27 @@
       "а не убирает находки."
     ],
     "declarationsMissingFromBundle": 0
+  },
+  "rebase": {
+    "comment": [
+      "Ветка пересажена на upstream/feature/26_2_new_fluent_theme_with_design_tokens 15.09.2026.",
+      "33 моих коммита легли поверх без единого конфликта; апстрим принёс 103 коммита и 2742 файла.",
+      "Все применённые правки уцелели - проверено пофайлово, а не по факту успешного ребейза."
+    ],
+    "onto": "upstream/feature/26_2_new_fluent_theme_with_design_tokens",
+    "date": "2026-09-15",
+    "myCommits": 33,
+    "broughtIn": {
+      "typographyUnmarked": [
+        "card-view-card-header-font-size = font-size-140",
+        "card-view-card-header-font-size = font-size-160",
+        "scheduler-appointment-month-font-size = font-size-120",
+        "scheduler-workspace-info-font-size = font-size-160"
+      ],
+      "typographyGone": [
+        "scheduler-time-indicator-font-size = font-size-300"
+      ],
+      "note": "Четыре новых чтения ступени без маркера пришли с апстримом, одно ушло. Это не наши правки и не регресс аудита - но вопрос по ним тот же, что и по остальным тринадцати, поэтому они просто пополнили список на странице типографики."
+    }
   }
 }
