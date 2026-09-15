@@ -1691,7 +1691,7 @@
       "В closed перечислено, что было под освободившимися номерами - чтобы ссылка из переписки или",
       "из старой копии страницы находила ответ, а не чужой вопрос."
     ],
-    "next": 23,
+    "next": 24,
     "closed": {
       "Д3": "switch-on-border-focused — принято, переведён на border-primary-shared-active",
       "Д4": "tree-view-checkbox-border-disabled — снято: treeView больше не стилизует чекбокс",
@@ -1716,7 +1716,8 @@
       "statePairGroup:contained-button-label": "Д18",
       "sweep:scheduler-form-icon-on-bg-role": "Д20",
       "sweep:radio-invalid-vs-checkbox-invalid": "Д21",
-      "sweep:tree-view-checkbox-focus-still-unique": "Д22"
+      "sweep:tree-view-checkbox-focus-still-unique": "Д22",
+      "sweep:tier-bypassed-by-neighbours": "Д23"
     }
   },
   "statePairs": {
@@ -2023,6 +2024,12 @@
         "decision": "design",
         "title": "treeView всё ещё красит чекбокс по-своему в фокусе элемента",
         "why": "The disabled overrides are gone. The focus block is not: when the treeView ITEM has focus, the checkbox inside it is repainted with three values of its own (treeView/_index.scss:18-72). They are not the checkbox own focus values: unchecked border goes to color-border where the checkbox uses bg-primary-active, unchecked fill goes to bg-low where the checkbox sets none, and the checked fill goes to bg-primary-hovered where the checkbox uses bg-primary-active. So three distinct divergences remain, and the rule stated for this widget - no unique checkbox styling in treeView - is not yet met. Removing the block is NOT value-neutral, which is why it was not done with the disabled one: legacy fluent carries the same block, so the pixel is inherited, not invented. There is a real argument for removing it beyond tidiness: the checkbox itself is not focused here, the item is, so painting the checkbox as focused states something untrue to a keyboard user. Options: (1) remove the block - the checkbox stops reacting to item focus, three variables and one public name go, etalons re-shoot; (2) keep the block but point its three values at the checkbox own focus roles, so treeView adds no roles of its own - still a pixel change, smaller; (3) keep as is for legacy parity. Note that (1) and (2) both collide with the checkbox-focused-fill question: whatever the checkbox focus fill becomes, this follows it. Recommendation: settle checkbox-focused-fill first, then (1)."
+      },
+      {
+        "key": "tier-bypassed-by-neighbours",
+        "decision": "design",
+        "title": "Соседний виджет красит чужой контрол мимо тира - и перебивает его публичное имя",
+        "why": "Found 15.09 while answering what role the checkbox uses on hover. The checkbox itself moves only its border - border-contrast to border-contrast-hovered, the fill untouched - which is the same shape the tile uses and corroborates the Д6 answer. But the list repaints the same checkbox on ITEM hover, and it does it by importing the checkbox theme variable directly (list/_index.scss reads checkBoxColors.$check-box-icon-checked-bg-hovered), not through a name of its own. The variable holds ds.$color-bg-primary-hovered, so the compiled rule paints from var(--dxds-color-bg-primary-hovered) - the design-system name - with no component-tier name in between.\nTHE CONSEQUENCE IS DEMONSTRABLE, not theoretical. Checked with a cascade harness on the real bundle: a checked checkbox on its own resolves to var(--dx-check-box-icon-checked-bg-hovered), and the same checkbox inside a list with a selection decorator resolves to var(--dxds-color-bg-primary-hovered), because the list selector carries six classes against three. So overriding the checkbox's public name changes the control everywhere EXCEPT inside a list - the one place a consumer is least likely to test.\nHOW WIDE. 230 colour declarations in the bundle paint straight from --dxds- with no tier name: color 32, background-color and the border colours the rest, concentrated in toolbar-menu-section (40), dataGrid (20), treeList (16), popup-content (10), menu-item (5), list (4). Sizes and typography do the same 510 more times, but that is by design - the tier is colour-first and the sizes sit on the scales on purpose. The colour half is not by design.\nThirteen theme files import a neighbour colour module inside _index.scss and paint with it directly; the same import inside a _colors.scss is harmless, because there it becomes the value of the widget's OWN tier name.\nOptions: (1) give every such paint a tier name of its own, valued from the neighbour as chat/_colors.scss already does - the widest fix, and it grows the tier; (2) fix only the cases where the borrowed paint collides with an existing public name, which is the demonstrable bug - list and scheduler over checkBox and radioButton; (3) record the 230 as deliberate and say in the docs that colour outside a tier name is not overridable. Recommendation: (2) now, (1) as a wave before the tier ships, because after release each missing name is a customisation that cannot be written."
       }
     ],
     "confirmed": {
@@ -2387,5 +2394,42 @@
       ],
       "note": "Четыре новых чтения ступени без маркера пришли с апстримом, одно ушло. Это не наши правки и не регресс аудита - но вопрос по ним тот же, что и по остальным тринадцати, поэтому они просто пополнили список на странице типографики."
     }
+  },
+  "tierBypass": {
+    "comment": [
+      "Замер 15.09: сколько цветовых деклараций в собранном бандле красят прямо из --dxds-,",
+      "минуя компонентный тир. Размеры и типографика так делают намеренно - тир цветовой,",
+      "шкалы лежат в дизайн-системе; цветовая половина намеренной не была."
+    ],
+    "measuredOn": "2026-09-15",
+    "colourDeclarations": 230,
+    "sizeAndTypography": 510,
+    "topWidgets": [
+      [
+        "dx-toolbar-menu-section",
+        40
+      ],
+      [
+        "dx-datagrid",
+        20
+      ],
+      [
+        "dx-treelist-container",
+        16
+      ],
+      [
+        "dx-popup-content",
+        10
+      ],
+      [
+        "dx-menu-item",
+        5
+      ],
+      [
+        "dx-list",
+        4
+      ]
+    ],
+    "provenCollision": "отмеченный чекбокс при наведении: сам по себе берёт --dx-check-box-icon-checked-bg-hovered, внутри списка с декоратором выбора - --dxds-color-bg-primary-hovered. Проверено каскадом на настоящем бандле, шесть классов против трёх."
   }
 }
