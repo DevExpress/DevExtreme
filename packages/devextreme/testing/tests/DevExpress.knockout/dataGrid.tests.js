@@ -71,7 +71,7 @@ const processColumnsForCompare = function(columns, parameterNames) {
     return processedColumns;
 };
 
-const createDataSource = function(context, config, remoteOperations) {
+const createDataSourceAdapter = function(context, config, remoteOperations) {
     const dataSource = new DataSource(config);
     const dataAdapter = dataSourceAdapter.create(context);
     dataAdapter.init(dataSource, remoteOperations);
@@ -136,13 +136,13 @@ moduleWithoutCsp('initialization from dataSource', {
 }, function() {
     // T111157
     QUnit.test('Initialize from array store with observable fields', function(assert) {
-        const dataSource = createDataSource(this, [
+        const dataSource = createDataSourceAdapter(this, [
             { name: ko.observable('Alex'), age: ko.observable(15), birthDate: ko.observable(new Date(1995, 5, 23)) },
             { name: ko.observable('Dan'), age: ko.observable(19), birthDate: ko.observable(new Date(1991, 6, 15)) }
         ]);
         dataSource.load();
 
-        this.columnsController.applyDataSource(dataSource);
+        this.columnsController.applyDataSourceAdapter(dataSource);
 
         const visibleColumns = this.columnsController.getVisibleColumns();
 
