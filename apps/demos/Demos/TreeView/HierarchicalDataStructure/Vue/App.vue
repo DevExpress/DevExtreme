@@ -61,10 +61,6 @@ function selectItem({ itemData }: DxTreeViewTypes.ItemClickEvent) {
   font-size: 24px;
 }
 
-.dark #product-details > div {
-  color: #f0f0f0;
-}
-
 .hidden {
   visibility: hidden;
 }

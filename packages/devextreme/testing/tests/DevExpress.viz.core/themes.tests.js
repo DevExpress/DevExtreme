@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import themeModule from 'viz/themes';
+import { createPalette, getGradientPalette } from 'viz/palette';
 import uiThemeModule from 'ui/themes';
 
 uiThemeModule.setDefaultTimeout(0);
@@ -355,6 +356,90 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
         themeModule.currentTheme(theme);
 
         assert.strictEqual(themeModule.currentTheme(), theme);
+    });
+});
+
+const FLUENT_NEXT_FONT_FAMILY = '\'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'helvetica neue\', helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif';
+
+[
+    { theme: 'fluent-next.blue.light', accentColor: '#0F6CBD', backgroundColor: '#ffffff' },
+    { theme: 'fluent-next.blue.light.compact', accentColor: '#0F6CBD', backgroundColor: '#ffffff' },
+    { theme: 'fluent-next.blue.dark', accentColor: '#4B90D9', backgroundColor: '#242424' },
+    { theme: 'fluent-next.blue.dark.compact', accentColor: '#4B90D9', backgroundColor: '#242424' },
+].forEach(({ theme, accentColor, backgroundColor }) => {
+    QUnit.test(`fluent-next theme should be registered: ${theme}`, function(assert) {
+        themeModule.currentTheme(theme);
+
+        assert.strictEqual(themeModule.currentTheme(), theme);
+    });
+
+    QUnit.test(`fluent-next theme should render text with the theme font: ${theme}`, function(assert) {
+        const registeredTheme = themeModule.getTheme(theme);
+
+        assert.strictEqual(registeredTheme.font.family, FLUENT_NEXT_FONT_FAMILY, 'font');
+        assert.strictEqual(registeredTheme.title.font.family, FLUENT_NEXT_FONT_FAMILY, 'title font');
+        assert.strictEqual(registeredTheme.title.subtitle.font.family, FLUENT_NEXT_FONT_FAMILY, 'subtitle font');
+        assert.strictEqual(registeredTheme.chart.title.font.family, FLUENT_NEXT_FONT_FAMILY, 'chart title font');
+        assert.strictEqual(registeredTheme.gauge.title.font.family, FLUENT_NEXT_FONT_FAMILY, 'gauge title font');
+        assert.strictEqual(registeredTheme.title.font.size, 20, 'title font size is inherited');
+        assert.strictEqual(registeredTheme.title.font.weight, 500, 'title font weight is inherited');
+    });
+
+    QUnit.test(`fluent-next theme should paint the background with the theme surface color: ${theme}`, function(assert) {
+        const registeredTheme = themeModule.getTheme(theme);
+
+        assert.strictEqual(registeredTheme.backgroundColor, backgroundColor, 'backgroundColor');
+        assert.strictEqual(registeredTheme.chart.containerBackgroundColor, backgroundColor, 'chart container');
+        assert.strictEqual(registeredTheme.gauge.containerBackgroundColor, backgroundColor, 'gauge container');
+        assert.strictEqual(registeredTheme.rangeSelector.containerBackgroundColor, backgroundColor, 'rangeSelector container');
+        assert.strictEqual(registeredTheme.chart.commonSeriesSettings.candlestick.innerColor, backgroundColor, 'candlestick inner color');
+        assert.strictEqual(registeredTheme.gauge.scale.tick.color, backgroundColor, 'gauge tick');
+        assert.strictEqual(registeredTheme.map.background.color, backgroundColor, 'map background');
+        assert.strictEqual(registeredTheme.map['layer:area'].borderColor, backgroundColor, 'map area border');
+        assert.strictEqual(registeredTheme.map.controlBar.color, backgroundColor, 'map control bar');
+        assert.strictEqual(registeredTheme.sparkline.pointColor, backgroundColor, 'sparkline point');
+        assert.strictEqual(registeredTheme.loadingIndicator.backgroundColor, backgroundColor, 'loading indicator');
+        assert.strictEqual(registeredTheme.export.backgroundColor, backgroundColor, 'export background');
+        assert.strictEqual(registeredTheme.chart.export.backgroundColor, backgroundColor, 'chart export background');
+        assert.strictEqual(registeredTheme.export.button.default.backgroundColor, backgroundColor, 'export button background');
+    });
+
+    QUnit.test(`fluent-next theme should color series with the Fluent Next palette: ${theme}`, function(assert) {
+        const defaultPalette = themeModule.getTheme(theme).defaultPalette;
+
+        const simpleSet = createPalette(undefined, {}, defaultPalette).generateColors(6);
+        const indicatingSet = createPalette(undefined, { type: 'indicatingSet' }, defaultPalette).generateColors(3);
+        const gradientSet = getGradientPalette(undefined, defaultPalette);
+
+        assert.deepEqual(simpleSet, ['#0078d4', '#c83d3d', '#008f04', '#eaa300', '#e43ba6', '#865cbf'], 'simpleSet');
+        assert.deepEqual(indicatingSet, ['#008f04', '#eaa300', '#c83d3d'], 'indicatingSet');
+        assert.deepEqual([gradientSet.getColor(0), gradientSet.getColor(1)], ['#0078d4', '#008f04'], 'gradientSet');
+    });
+
+    QUnit.test(`fluent-next theme should accent widgets with its own primary color: ${theme}`, function(assert) {
+        const registeredTheme = themeModule.getTheme(theme);
+
+        assert.strictEqual(registeredTheme.rangeSelector.selectedRangeColor, accentColor, 'rangeSelector selected range');
+        assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.color, accentColor, 'rangeSelector slider marker');
+        assert.strictEqual(registeredTheme.rangeSelector.sliderHandle.color, accentColor, 'rangeSelector slider handle');
+        assert.strictEqual(registeredTheme.map['layer:marker:dot'].color, accentColor, 'map dot marker');
+        assert.strictEqual(registeredTheme.map['layer:marker:bubble'].color, accentColor, 'map bubble marker');
+        assert.strictEqual(registeredTheme.map.legend.markerColor, accentColor, 'map legend marker');
+        assert.strictEqual(registeredTheme.bullet.color, accentColor, 'bullet');
+        assert.strictEqual(registeredTheme.gauge.valueIndicators.rangebar.color, accentColor, 'gauge rangebar');
+        assert.strictEqual(registeredTheme.gauge.valueIndicators['textcloud'].color, accentColor, 'gauge textcloud');
+    });
+});
+
+['fluent-next.blue.dark', 'fluent-next.blue.dark.compact'].forEach((theme) => {
+    QUnit.test(`fluent-next dark theme should cut out shapes with the surface color instead of the material one: ${theme}`, function(assert) {
+        const registeredTheme = themeModule.getTheme(theme);
+
+        assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.font.color, '#242424', 'rangeSelector slider marker text');
+        assert.strictEqual(registeredTheme.funnel.item.border.color, '#242424', 'funnel item border');
+        assert.strictEqual(registeredTheme.export.button.hover.backgroundColor, '#3b3b3b', 'export button hover');
+        assert.strictEqual(registeredTheme.export.button.focus.backgroundColor, '#1d1d1d', 'export button focus');
+        assert.strictEqual(registeredTheme.export.button.active.backgroundColor, '#1d1d1d', 'export button active');
     });
 });
 

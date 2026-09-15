@@ -1,5 +1,11 @@
 @use "./mixins" as *;
 
+$progressbar-status-font-size: 12px !default;
+
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$progressbar-status-padding-right: 8px !default;
+$progressbar-status-padding-left: 8px !default;
+
 .dx-progressbar {
   .dx-position-left,
   .dx-position-right {
@@ -34,11 +40,11 @@
   }
 
   .dx-position-left .dx-progressbar-status {
-    padding-right: 8px;
+    padding-right: $progressbar-status-padding-right;
   }
 
   .dx-position-right .dx-progressbar-status {
-    padding-left: 8px;
+    padding-left: $progressbar-status-padding-left;
   }
 
   &::before {
@@ -78,7 +84,7 @@
   top: 0;
   left: 0;
   width: auto;
-  font-size: 12px;
+  font-size: $progressbar-status-font-size;
 }
 
 .dx-progressbar-animating-segment {

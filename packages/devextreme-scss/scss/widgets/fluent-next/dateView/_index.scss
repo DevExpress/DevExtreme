@@ -1,0 +1,143 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/dateView";
+@use "../scrollable";
+
+.dx-dateview-rollers {
+  width: auto;
+  text-align: center;
+  display: block;
+}
+
+.dx-dateviewroller-current {
+  .dx-dateview-item {
+    transition: font-size 0.2s ease-out;
+  }
+}
+
+.dx-dateviewroller {
+  min-width: var(--dx-date-view-roller-min-width);
+  text-align: center;
+  display: inline-block;
+
+  .dx-button {
+    display: none;
+  }
+
+  .dx-scrollable-content::before,
+  .dx-scrollable-content::after {
+    content: "";
+    height: var(--dx-date-view-roller-padding);
+    display: block;
+  }
+
+  .dx-scrollable-container {
+    height: var(--dx-date-view-roller-height);
+  }
+
+  &.dx-dateviewroller-year {
+    min-width: var(--dx-date-view-roller-year-min-width);
+  }
+
+  &.dx-state-active {
+    .dx-button {
+      display: none;
+    }
+  }
+}
+
+.dx-dateviewroller-month {
+  min-width: var(--dx-date-view-roller-month-min-width);
+}
+
+.dx-dateviewroller-hours {
+  &::after {
+    content: ":";
+    font-size: var(--dx-date-view-hours-colon-font-size);
+    position: absolute;
+    inset-inline-end: -9%;
+    font-weight: bold;
+    top: 37%;
+    color: var(--dx-date-view-content);
+  }
+
+  .dx-dateview-item-selected-frame {
+    padding-left: 20%;
+  }
+}
+
+.dx-dateviewroller-minutes {
+  .dx-dateview-item-selected-frame {
+    width: 80%;
+  }
+}
+
+.dx-dateview-item {
+  height: var(--dx-date-view-roller-item-height);
+  line-height: var(--dx-date-view-roller-item-height);
+  text-align: center;
+  font-size: var(--dx-date-view-item-font-size);
+  color: var(--dx-date-view-content);
+}
+
+.dx-dateview-item-selected {
+  font-size: var(--dx-date-view-item-font-size-selected);
+  color: var(--dx-date-view-item-content-selected);
+}
+
+.dx-dateview-item-selected-frame {
+  position: absolute;
+  top: var(--dx-date-view-roller-padding);
+  width: 100%;
+
+  &::before,
+  &::after {
+    backface-visibility: hidden;
+    content: "";
+    display: block;
+    width: 100%;
+    position: absolute;
+    height: var(--dx-date-view-roller-padding);
+  }
+
+  &::before {
+    top: calc(-1 * var(--dx-date-view-roller-padding));
+
+    @include gradient-linear(var(--dx-date-view-roller-top-shadow));
+  }
+
+  &::after {
+    top: var(--dx-date-view-roller-item-height);
+
+    @include gradient-linear(var(--dx-date-view-roller-bottom-shadow));
+  }
+}
+
+.dx-device-tablet,
+.dx-device-phone {
+  .dx-dateview-rollers {
+    @include flex-container(row, nowrap);
+  }
+
+  .dx-dateviewroller-month {
+    min-width: var(--dx-date-view-roller-month-phone-min-width);
+  }
+
+  .dx-dateview-item {
+    font-size: var(--dx-date-view-item-phone-font-size);
+  }
+
+  .dx-dateview-item-selected {
+    font-size: var(--dx-date-view-item-phone-font-size-selected);
+  }
+}
+
+.dx-dateview.dx-state-disabled,
+.dx-state-disabled .dx-dateview {
+  .dx-dateview-item,
+  .dx-dateview-item-selected {
+    color: var(--dx-date-view-content-disabled);
+  }
+}

@@ -1,0 +1,72 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../colorView/colors" as colorViewColors;
+@use "../../base/colorBox" with (
+  $colorbox-input-left-padding: var(--dx-color-box-input-min-width),
+  $colorbox-texteditor-input-container-width: var(--dx-color-box-input-container-width),
+  $colorbox-texteditor-input-container-height: var(--dx-color-box-input-container-height),
+  $colorbox-texteditor-input-container-inset-inline-start: var(--dx-color-box-input-container-inset-inline-start),
+  $colorbox-overlay-padding: var(--dx-color-box-overlay-padding),
+  $colorbox-toolbar-item-padding-right: var(--dx-color-box-toolbar-item-padding-inline-end),
+);
+@use "../../base/colorBox/mixins" as *;
+@use "../colorView";
+@use "../dropDownEditor";
+
+.dx-colorbox {
+  .dx-colorbox-input-container {
+    .dx-placeholder::before,
+    .dx-colorbox-input {
+      padding-inline-start: var(--dx-color-box-preview-min-width);
+    }
+
+    &::after {
+      left: calc(var(--dx-color-box-preview-inset-inline-start) + 1px); // dx-px-nudge: +1px over the preview inset
+    }
+  }
+
+  &.dx-texteditor {
+    .dx-texteditor-label {
+      .dx-label-before {
+        min-width: var(--dx-color-box-preview-min-width);
+      }
+    }
+  }
+}
+
+.dx-colorbox-color-result-preview {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: var(--dx-color-box-preview-icon-size);
+  height: var(--dx-color-box-preview-icon-size);
+  margin-top: calc(var(--dx-color-box-preview-icon-size) / -2);
+  inset-inline-start: var(--dx-color-box-preview-inset-inline-start);
+  border: var(--dx-color-box-preview-border);
+  border-color: colorViewColors.$color-view-border;
+
+  .dx-icon-colordismiss {
+    color: var(--dx-color-box-preview-icon);
+  }
+
+  .dx-state-disabled & {
+    border-color: colorViewColors.$color-view-border-disabled;
+
+    .dx-icon-colordismiss {
+      color: var(--dx-color-box-content-disabled);
+    }
+  }
+}
+
+.dx-colorbox-overlay {
+  &.dx-overlay-content {
+    background-color: var(--dx-color-box-overlay-bg);
+  }
+
+  .dx-popup-content {
+    padding: var(--dx-color-box-overlay-content-padding);
+  }
+
+  padding: 0;
+}

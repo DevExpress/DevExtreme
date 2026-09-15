@@ -1,0 +1,22 @@
+[
+  "dx-chat .dx-chat-messagebox",
+  "dx-fa-button .dx-fa-button-icon",
+  "dx-fa-button .dx-icon",
+  "dx-fa-button .dx-overlay-content",
+  "dx-fa-button .dx-overlay-content .dx-fa-button-label-wrapper .dx-fa-button-label",
+  "dx-fileuploader .dx-fileuploader-input",
+  "dx-gallery",
+  "dx-gallery .dx-gallery-nav-button-next",
+  "dx-gallery .dx-gallery-nav-button-next::after",
+  "dx-gallery .dx-gallery-nav-button-prev",
+  "dx-gallery .dx-gallery-nav-button-prev::after",
+  "dx-htmleditor .dx-htmleditor-toolbar-wrapper::before",
+  "dx-pager .dx-page-sizes .dx-selection",
+  "dx-pager .dx-pages .dx-selection",
+  "dx-scheduler .dx-scheduler-time-panel-cell",
+  "dx-tagbox .dx-texteditor-input",
+  "dx-timeview .dx-widget",
+  "dx-toolbar",
+  "dx-toolbar .dx-button .dx-icon",
+  "dx-toolbar .dx-button-text"
+]

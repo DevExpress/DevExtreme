@@ -2,6 +2,9 @@
 @use "./mixins" as *;
 @use "sass:string" as string;
 
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$texteditor-clear-button-area-width: 34px !default;
+
 .dx-texteditor {
   display: block;
 
@@ -93,7 +96,7 @@
 
 .dx-clear-button-area {
   height: 100%;
-  width: 34px;
+  width: $texteditor-clear-button-area-width;
   position: relative;
   cursor: pointer;
   text-align: justify;

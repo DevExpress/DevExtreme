@@ -1,0 +1,59 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/speedDialAction" as baseSpeedDialAction with (
+  $speeddialaction-fa-button-label-border-radius: var(--dx-speed-dial-action-fa-button-label-border-radius),
+);
+@use "../button/colors" as buttonColors;
+@use "../overlay";
+@include baseSpeedDialAction.dx-fa-button-mixin(
+  var(--dx-speed-dial-action-main-fa-button-size),
+  var(--dx-speed-dial-action-fa-button-size),
+  $global-icon-size,
+  $global-font-size,
+  var(--dx-speed-dial-action-fa-button-label-padding),
+  var(--dx-speed-dial-action-fa-button-label-offset),
+  var(--dx-speed-dial-action-content),
+  var(--dx-speed-dial-action-bg),
+  var(--dx-speed-dial-action-shadow),
+  var(--dx-speed-dial-action-backdrop),
+  var(--dx-speed-dial-action-bg-hovered),
+  var(--dx-speed-dial-action-bg-active),
+  var(--dx-speed-dial-action-label-shadow),
+  var(--dx-speed-dial-action-main-bg),
+  buttonColors.$button-default-contained-content,
+  var(--dx-speed-dial-action-main-bg-hovered),
+  var(--dx-speed-dial-action-main-bg-active)
+);
+
+.dx-fa-button {
+  &.dx-fa-button-main {
+    .dx-overlay-content {
+      .dx-fa-button-label {
+        padding: var(--dx-speed-dial-action-main-fa-button-label-padding);
+        font-size: $global-font-size;
+        font-weight: var(--dx-speed-dial-action-fa-button-label-font-weight);
+      }
+    }
+
+    &.dx-fa-button-with-label {
+      .dx-overlay-content {
+        .dx-fa-button-icon {
+          padding-inline-start: var(--dx-speed-dial-action-main-fa-button-padding-inline);
+        }
+      }
+    }
+  }
+}
+
+.dx-fa-button.dx-state-disabled {
+  .dx-overlay-content,
+  .dx-fa-button-icon {
+    background-color: var(--dx-speed-dial-action-bg-disabled);
+  }
+
+  .dx-overlay-content .dx-fa-button-label-wrapper .dx-fa-button-label,
+  .dx-icon {
+    color: var(--dx-speed-dial-action-content-disabled);
+  }
+}

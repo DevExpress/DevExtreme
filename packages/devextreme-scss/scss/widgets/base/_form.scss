@@ -1,6 +1,17 @@
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$form-first-row-padding-top: 10px !default;
+$form-switch-margin-top: 7px !default;
+$form-switch-margin-bottom: 4px !default;
+$form-multiview-item-content-padding: 20px !default;
+$form-group-content-padding-top: 19px !default;
+$form-group-content-padding-bottom: 20px !default;
+$form-group-content-margin-top: 6px !default;
+$form-field-item-label-location-left-padding-inline-end: 10px !default;
+$form-field-item-label-location-right-padding-inline-start: 10px !default;
+
 .dx-layout-manager {
   .dx-field-item:not(.dx-first-row) {
-    padding-top: 10px;
+    padding-top: $form-first-row-padding-top;
   }
 
   .dx-field-empty-item {
@@ -80,8 +91,8 @@
       // TODO: form layout manager should not contain settings with checkbox/switch classes
       .dx-checkbox,
       .dx-switch {
-        margin-top: 7px;
-        margin-bottom: 4px;
+        margin-top: $form-switch-margin-top;
+        margin-bottom: $form-switch-margin-bottom;
       }
     }
 
@@ -94,7 +105,7 @@
 
   .dx-tabpanel {
     .dx-multiview-item-content {
-      padding: 20px;
+      padding: $form-multiview-item-content-padding;
     }
   }
 }
@@ -124,9 +135,9 @@
 
 .dx-form-group-with-caption {
   & > .dx-form-group-content {
-    padding-top: 19px;
-    padding-bottom: 20px;
-    margin-top: 6px;
+    padding-top: $form-group-content-padding-top;
+    padding-bottom: $form-group-content-padding-bottom;
+    margin-top: $form-group-content-margin-top;
   }
 }
 
@@ -142,11 +153,11 @@
 }
 
 .dx-field-item-label-location-left {
-  padding-inline-end: 10px;
+  padding-inline-end: $form-field-item-label-location-left-padding-inline-end;
 }
 
 .dx-field-item-label-location-right {
-  padding-inline-start: 10px;
+  padding-inline-start: $form-field-item-label-location-right-padding-inline-start;
 }
 
 .dx-field-item-required,

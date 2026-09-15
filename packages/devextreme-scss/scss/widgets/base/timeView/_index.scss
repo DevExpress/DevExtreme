@@ -1,5 +1,9 @@
 @use "./mixins";
 
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$timeview-numberbox-width: 70px !default;
+$timeview-numberbox-spin-touch-friendly-width: 110px !default;
+
 .dx-timeview {
   &.dx-state-disabled,
   .dx-state-disabled {
@@ -15,9 +19,9 @@
 }
 
 .dx-timeview-field .dx-numberbox {
-  width: 70px;
+  width: $timeview-numberbox-width;
 
   &.dx-numberbox-spin-touch-friendly {
-    width: 110px;
+    width: $timeview-numberbox-spin-touch-friendly-width;
   }
 }

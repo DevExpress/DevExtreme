@@ -1,0 +1,7 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// Values hoisted from style-file literals (tokenized)
+$tab-panel-tabs-top-border: ds.$border-width-10 solid !default;
+$tab-panel-tabs-bottom-border: ds.$border-width-10 solid !default;
+$tab-panel-tabs-left-border: ds.$border-width-10 solid !default;
+$tab-panel-tabs-right-border: ds.$border-width-10 solid !default;

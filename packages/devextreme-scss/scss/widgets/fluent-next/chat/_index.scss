@@ -1,0 +1,186 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/chat" with (
+  $chat-disabled-opacity: false,
+  $chat-file-name-font-weight: var(--dx-chat-file-name-font-weight),
+  $chat-editing-preview-caption-font-weight: var(--dx-chat-editing-preview-caption-font-weight),
+  $chat-messagebox-border-block-start-width: var(--dx-chat-message-box-border-block-start-width),
+  $chat-messagebubble-padding-image: var(--dx-chat-bubble-image-padding),
+  $chat-messagebubble-border-radius-image: var(--dx-chat-bubble-image-border-radius),
+  $chat-messagebubble-max-width-image: var(--dx-chat-bubble-image-max-width),
+  $chat-messagebubble-max-height-image: var(--dx-chat-bubble-image-max-height),
+);
+@use "../../base/chat/mixins" as *;
+@use "../common/mixins" as *;
+@include chat(
+  var(--dx-chat-bg),
+  var(--dx-chat-border),
+  var(--dx-chat-border-radius),
+  $border-width: var(--dx-chat-border-width),
+);
+@include chat-avatar(
+  var(--dx-chat-avatar-size),
+  var(--dx-chat-avatar-content),
+  var(--dx-chat-avatar-bg),
+);
+@include chat-file(
+  var(--dx-chat-file-container-width),
+  var(--dx-chat-file-container-padding),
+  var(--dx-chat-file-container-bg),
+  var(--dx-chat-file-container-border-radius),
+  var(--dx-chat-file-container-box-shadow),
+  var(--dx-chat-file-button-size),
+  var(--dx-chat-file-secondary-font-size),
+  var(--dx-chat-file-secondary-content),
+  var(--dx-chat-file-base-section-gap),
+  var(--dx-chat-file-size-max-width),
+  var(--dx-chat-file-icon-font-size),
+);
+@include chat-fileview(
+  var(--dx-chat-file-view-items-gap),
+  var(--dx-chat-file-container-width),
+);
+@include chat-alertlist(
+  var(--dx-chat-alert-list-content),
+  var(--dx-chat-alerts-padding-block),
+  var(--dx-chat-alerts-padding-inline),
+  var(--dx-chat-alert-padding-block),
+  var(--dx-chat-alerts-row-gap),
+);
+@include chat-messagebox(
+  var(--dx-chat-message-box-padding),
+  var(--dx-chat-message-box-border),
+  var(--dx-chat-message-box-gap),
+  var(--dx-chat-message-box-textarea-border-radius),
+  var(--dx-chat-message-box-textarea-padding),
+  var(--dx-chat-message-box-toolbar-min-height),
+  var(--dx-chat-file-container-width),
+  var(--dx-chat-message-box-files-container-padding),
+  var(--dx-chat-message-box-files-container-padding-block-start),
+  var(--dx-chat-message-box-file-bg),
+  var(--dx-chat-message-box-file-cancel-button-secondary-content),
+  var(--dx-chat-file-container-box-shadow),
+);
+@include chat-messagebubble(
+  var(--dx-chat-bubble-padding),
+  var(--dx-chat-bubble-border-radius),
+  var(--dx-chat-bubble-secondary-content),
+  var(--dx-chat-bubble-secondary-bg),
+  var(--dx-chat-bubble-primary-content),
+  var(--dx-chat-bubble-primary-bg),
+  var(--dx-chat-bubble-container-gap),
+  var(--dx-chat-bubble-delete-gap),
+  var(--dx-chat-bubble-delete-icon-size),
+  var(--dx-chat-bubble-gap),
+);
+@include chat-messagegroup(
+  var(--dx-chat-message-group-gap),
+  var(--dx-chat-message-group-start-grid-template-columns),
+  var(--dx-chat-message-group-alignment-start-gap),
+  var(--dx-chat-message-group-padding),
+  var(--dx-chat-information-font-size),
+  var(--dx-chat-information-author-name-content),
+  var(--dx-chat-information-timestamp-content),
+  var(--dx-chat-information-gap),
+  var(--dx-chat-information-icon-size),
+  var(--dx-chat-information-edited-gap),
+);
+@include chat-messagelist-empty(
+  var(--dx-chat-message-list-padding),
+  var(--dx-chat-message-list-empty-icon-box-size),
+  var(--dx-chat-message-list-empty-icon-size),
+  var(--dx-chat-message-list-empty-icon-margin-block-end),
+  var(--dx-chat-message-list-empty-row-gap),
+  var(--dx-chat-message-list-empty-icon),
+  var(--dx-chat-message-list-empty-icon-bg),
+  var(--dx-chat-message-list-empty-message-font-size),
+  var(--dx-chat-message-list-empty-message-content),
+  var(--dx-chat-message-list-empty-prompt-font-size),
+  var(--dx-chat-message-list-empty-prompt-content),
+);
+@include chat-messagelist(
+  var(--dx-chat-message-list-padding),
+  var(--dx-chat-message-list-day-header-content),
+  var(--dx-chat-message-list-day-header-padding-block-end),
+  var(--dx-chat-message-list-day-header-first-padding-block-start),
+  var(--dx-chat-message-list-day-header-font-size),
+);
+@include chat-messagelist-contextmenu(
+  var(--dx-chat-message-list-context-menu-delete-button-content),
+  var(--dx-chat-message-list-context-menu-delete-button-content-focused),
+  var(--dx-chat-message-list-context-menu-delete-button-bg-focused),
+);
+@include chat-typingindicator(
+  var(--dx-chat-typing-indicator-grid-template-columns),
+  var(--dx-chat-typing-indicator-padding),
+  var(--dx-chat-typing-indicator-row-gap),
+  var(--dx-chat-typing-indicator-font-size),
+  var(--dx-chat-typing-indicator-content),
+  var(--dx-chat-typing-indicator-bubble-padding-block),
+  var(--dx-chat-typing-indicator-bubble-padding-inline),
+  var(--dx-chat-typing-indicator-bubble-border-radius),
+  var(--dx-chat-typing-indicator-bubble-bg),
+  var(--dx-chat-typing-indicator-bubble-column-gap),
+  var(--dx-chat-typing-indicator-circle-size),
+  var(--dx-chat-typing-indicator-circle-center-size),
+  var(--dx-chat-typing-indicator-circle-border-radius),
+  var(--dx-chat-typing-indicator-circle-bg),
+  var(--dx-chat-typing-indicator-circle-center-bg),
+);
+@include message-editing-preview(
+  var(--dx-chat-message-editing-preview-content-padding-inline),
+  var(--dx-chat-message-editing-preview-content-row-gap),
+  var(--dx-chat-message-editing-preview-accent-content),
+  var(--dx-chat-message-editing-preview-caption-font-size),
+  var(--dx-chat-message-box-padding),
+  var(--dx-chat-message-editing-preview-border-width),
+  var(--dx-chat-message-editing-preview-cancel-button-content),
+);
+@include chat-confirmation-popup(
+  var(--dx-chat-border-radius),
+  var(--dx-chat-confirmation-popup-content-padding),
+  0 var(--dx-chat-confirmation-popup-toolbar-padding-block),
+  var(--dx-chat-confirmation-popup-toolbar-padding-inline),
+  var(--dx-chat-confirmation-popup-toolbar-gap),
+);
+@include chat-suggestions(
+  var(--dx-chat-suggestions-padding),
+  var(--dx-chat-suggestions-button-border-radius),
+  var(--dx-chat-suggestions-border-width),
+  var(--dx-chat-suggestions-button-max-width),
+  var(--dx-chat-suggestions-gap),
+  var(--dx-chat-suggestions-box-shadow),
+);
+
+.dx-chat-file {
+  @include dx-base-typography();
+}
+
+.dx-chat.dx-state-disabled {
+  .dx-chat-messagebox {
+    border-top-color: var(--dx-chat-message-box-border-disabled);
+  }
+}
+
+.dx-chat.dx-state-disabled,
+.dx-state-disabled .dx-chat {
+  .dx-chat-file,
+  .dx-chat-file .dx-icon,
+  .dx-chat-file-size {
+    color: var(--dx-chat-file-content-disabled);
+  }
+
+  .dx-chat-messagebubble {
+    color: var(--dx-chat-content-disabled);
+  }
+
+  .dx-chat-messagelist-day-header,
+  .dx-chat-messagegroup-author-name,
+  .dx-chat-messagegroup-time,
+  .dx-chat-message-edited,
+  .dx-chat-messagelist-empty-message,
+  .dx-chat-messagelist-empty-prompt,
+  .dx-chat-messagelist-empty-image {
+    color: var(--dx-chat-information-content-disabled);
+  }
+}

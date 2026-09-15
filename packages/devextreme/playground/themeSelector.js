@@ -19,6 +19,16 @@ const themeList = [
     },
 
     {
+        group: 'Fluent (Design System)',
+        list: [
+            { theme: 'fluent-next.blue.light' },
+            { theme: 'fluent-next.blue.light.compact' },
+            { theme: 'fluent-next.blue.dark' },
+            { theme: 'fluent-next.blue.dark.compact' },
+        ]
+    },
+
+    {
         group: 'Material',
         list: [
             { theme: 'material.purple.dark.compact' },

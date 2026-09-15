@@ -1,0 +1,64 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/switch";
+@use "../../base/switch/mixins" as *;
+@include dx-switch(
+  var(--dx-switch-width),
+  var(--dx-switch-height),
+  var(--dx-switch-padding),
+  var(--dx-switch-handle-height),
+  var(--dx-switch-container-height),
+  var(--dx-switch-container-padding-inline),
+  var(--dx-switch-container-margin-block),
+  var(--dx-switch-handle-margin),
+  var(--dx-switch-handle-border-radius),
+  var(--dx-switch-transition),
+  $switch-container-border-radius: var(--dx-switch-container-border-radius),
+  $switch-label-padding: var(--dx-switch-label-padding),
+  $switch-off-padding-bottom: var(--dx-switch-off-padding-block-end),
+);
+@include dx-switch-states-fluent(
+  var(--dx-switch-on-bg-disabled),
+  var(--dx-switch-handle-bg-disabled),
+  var(--dx-switch-box-shadow),
+  var(--dx-switch-bg),
+  var(--dx-switch-on-bg),
+  var(--dx-switch-on-border-hovered),
+  var(--dx-switch-on-border-focused),
+  var(--dx-switch-handle-on-box-shadow),
+  var(--dx-switch-handle-off-bg),
+  var(--dx-switch-handle-on-bg),
+  1px solid, // dx-line-width: 1px, the off-state border
+  var(--dx-switch-off-border),
+  var(--dx-switch-off-border-hovered),
+  var(--dx-switch-off-border-active),
+  var(--dx-switch-on-border),
+  var(--dx-switch-invalid-border),
+  var(--dx-switch-invalid-border-hovered),
+  var(--dx-switch-invalid-border-focused),
+  var(--dx-switch-border-disabled),
+
+  $disabled-opacity-reset: null,
+);
+@include dx-switch-rtl(
+  calc(var(--dx-switch-handle-height) - var(--dx-switch-handle-margin)),
+  var(--dx-switch-handle-on-box-shadow-blur),
+  var(--dx-switch-container-rtl-offset),
+);
+
+.dx-state-disabled .dx-switch {
+  .dx-switch-handle::before {
+    background-color: var(--dx-switch-handle-bg-disabled);
+  }
+
+  .dx-switch-container::before {
+    border-color: var(--dx-switch-border-disabled);
+    background-color: transparent;
+  }
+
+  &.dx-switch-on-value .dx-switch-container::before {
+    border-color: var(--dx-switch-on-bg-disabled);
+    background-color: var(--dx-switch-on-bg-disabled);
+  }
+}

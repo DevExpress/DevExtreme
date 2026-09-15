@@ -1,0 +1,83 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../../base/numberBox" with (
+  $spin-container-width: var(--dx-number-box-spin-container-width),
+  $touch-friendly-spin-container-width: var(--dx-number-box-spin-container-touch-friendly-width),
+  $numberbox-spin-idle-opacity: false,
+);
+@use "../textEditor" as *;
+
+.dx-numberbox {
+  &.dx-editor-outlined,
+  &.dx-editor-filled {
+    .dx-numberbox-spin-up {
+      border-start-end-radius: $global-border-radius;
+    }
+
+    .dx-numberbox-spin-down {
+      border-end-end-radius: $global-border-radius;
+    }
+  }
+}
+
+.dx-numberbox-spin-container {
+  overflow: hidden;
+  width: var(--dx-number-box-spin-container-width);
+}
+
+.dx-numberbox-spin-up-icon {
+  @include dx-icon(spinup);
+
+  color: var(--dx-number-box-spin-icon);
+}
+
+.dx-numberbox-spin-down-icon {
+  @include dx-icon(spindown);
+
+  color: var(--dx-number-box-spin-icon);
+}
+
+.dx-numberbox-spin-up-icon,
+.dx-numberbox-spin-down-icon {
+  @include dx-icon-font-centered-sizing($global-icon-size);
+}
+
+.dx-numberbox-spin-button {
+  height: 50%;
+
+  &.dx-state-hover {
+    background-color: var(--dx-number-box-spin-bg-hovered);
+  }
+
+  &.dx-state-active {
+    background-color: var(--dx-number-box-spin-bg-active);
+  }
+
+  &.dx-state-disabled,
+  .dx-state-disabled & {
+    .dx-numberbox-spin-up-icon,
+    .dx-numberbox-spin-down-icon {
+      color: var(--dx-number-box-content-disabled);
+    }
+  }
+}
+
+.dx-numberbox-spin.dx-numberbox-box {
+  @include validation-icon-position();
+}
+
+.dx-numberbox-spin-touch-friendly {
+  @include validation-icon-position();
+
+  .dx-numberbox-spin-container {
+    width: var(--dx-number-box-spin-container-touch-friendly-width);
+    border-inline-start: none;
+  }
+
+  .dx-numberbox-spin-up-icon,
+  .dx-numberbox-spin-down-icon {
+    background-position: center;
+  }
+}

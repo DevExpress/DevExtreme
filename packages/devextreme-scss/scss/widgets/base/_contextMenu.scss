@@ -1,3 +1,8 @@
+// Design sizing values (parametrizable; fluent-next injects tokens)
+$contextmenu-menu-items-container-padding: 1px !default;
+$contextmenu-menu-separator-height: 1px !default;
+$contextmenu-menu-separator-margin: 5px 0 !default;
+
 .dx-context-menu {
   &.dx-overlay-content {
     overflow: inherit;
@@ -5,7 +10,11 @@
   }
 
   .dx-menu-items-container {
-    padding: 1px;
+
+    // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
+    @if $contextmenu-menu-items-container-padding {
+      padding: $contextmenu-menu-items-container-padding;
+    }
   }
 
   .dx-menu-item .dx-submenu {
@@ -14,7 +23,7 @@
   }
 
   .dx-menu-separator {
-    height: 1px;
-    margin: 5px 0;
+    height: $contextmenu-menu-separator-height;
+    margin: $contextmenu-menu-separator-margin;
   }
 }

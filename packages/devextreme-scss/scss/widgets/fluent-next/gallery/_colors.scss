@@ -1,0 +1,26 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$gallery-indicator-bg: ds.$color-bg !default;
+
+$gallery-indicator-item-bg-selected: ds.$color-bg-primary !default;
+
+$gallery-indicator-bg-focused: ds.$color-bg-primary !default;
+$gallery-indicator-item-border: ds.$color-border-subtle !default;
+
+// Semi-transparent surface over the indicator — relative-color bridge.
+$gallery-indicator-border-selected: rgb(from #{ds.$color-bg} r g b / 0.8) !default;
+$gallery-nav-button-bg: ds.$color-content-subtle !default;
+$gallery-nav-arrow-content: ds.$color-content-static-dark !default;
+
+$gallery-nav-button-bg-hovered: ds.$color-bg-primary !default;
+
+$gallery-nav-button-bg-active: ds.$color-bg-primary-active !default;
+
+$gallery-border-focused: ds.$color-bg-primary !default;
+
+$gallery-content-disabled: ds.$color-content-disabled !default;
+
+$gallery-nav-button-bg-disabled: ds.$color-content-disabled !default;
+
+$gallery-indicator-item-bg-selected-disabled: ds.$color-content-disabled !default;
+$gallery-indicator-item-bg-disabled: ds.$color-border-disabled !default;
