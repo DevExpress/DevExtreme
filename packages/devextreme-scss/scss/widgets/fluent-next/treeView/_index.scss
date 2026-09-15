@@ -20,8 +20,16 @@
    не получает, поэтому собственные фокусные правила чекбокса здесь не срабатывают и индикацию
    рисует дерево. Значения берём у чекбокса - своих ролей дерево не заводит. Так же устроен
    dxList с включёнными декораторами выбора.
-   :not() нужен, чтобы ветка не перебивала собственное disabled-правило чекбокса длиной селектора. */
+   :not() нужен у покраски чекбокса, чтобы ветка не перебивала его собственное disabled-правило
+   длиной селектора. У фона строки охраны нет намеренно (Д25): фокус доходит и до неактивного
+   узла, и метка «ты здесь» должна оставаться. Так же устроены табы - у них неактивный таб в
+   фокусе сохраняет фон, а неактивность говорит цветом содержимого; роль там та же, bg-hovered.
+   Базовый миксин красит этот фон только у варианта .dx-treeview-item-without-checkbox. */
 .dx-treeview-item-with-checkbox.dx-state-focused > .dx-treeview-item {
+  background-color: var(--dx-tree-view-bg-focused);
+  color: var(--dx-tree-view-content-focused);
+  border-radius: var(--dx-tree-view-item-border-radius);
+
   .dx-checkbox:not(.dx-state-disabled) {
     .dx-checkbox-icon {
       border-color: var(--dx-check-box-icon-checked-border-focused);
