@@ -21,6 +21,7 @@ import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
 import type { Column, ColumnsChanges, FilterField } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
@@ -45,7 +46,7 @@ import {
   columnOptionCore,
   convertOwnerBandToColumnReference,
   createColumn,
-  createColumnsFromDataSource,
+  createColumnsFromDataSourceAdapter,
   createColumnsFromOptions,
   defaultSetCellValue,
   digitsCount,
@@ -100,7 +101,7 @@ export class ColumnsController extends modules.Controller {
 
   private _dataSourceApplied: any;
 
-  private _dataSource: any;
+  private appliedDataSourceAdapter?: DataSourceAdapter | null;
 
   public _ignoreColumnOptionNames: any;
 
@@ -173,7 +174,7 @@ export class ColumnsController extends modules.Controller {
     addExpandColumn(this);
 
     if (this._dataSourceApplied) {
-      this.applyDataSource(this._dataSource, true, isApplyingUserState);
+      this.applyDataSource(this.appliedDataSourceAdapter, true, isApplyingUserState);
     } else {
       updateIndexes(this);
     }
@@ -196,7 +197,7 @@ export class ColumnsController extends modules.Controller {
     };
   }
 
-  public _getFirstItems(dataSource) {
+  public _getFirstItems(dataSourceAdapter) {
     let groupsCount;
     let items: any = [];
 
@@ -212,9 +213,9 @@ export class ColumnsController extends modules.Controller {
       }
     };
 
-    if (dataSource && dataSource.items().length > 0) {
-      groupsCount = gridCoreUtils.normalizeSortingInfo(dataSource.group()).length;
-      items = getFirstItemsCore(dataSource.items(), groupsCount) || [];
+    if (dataSourceAdapter && dataSourceAdapter.items().length > 0) {
+      groupsCount = gridCoreUtils.normalizeSortingInfo(dataSourceAdapter.group()).length;
+      items = getFirstItemsCore(dataSourceAdapter.items(), groupsCount) || [];
     }
     return items;
   }
@@ -337,27 +338,31 @@ export class ColumnsController extends modules.Controller {
     return ['addColumn', 'deleteColumn', 'columnOption', 'columnCount', 'clearSorting', 'clearGrouping', 'getVisibleColumns', 'getVisibleColumnIndex', 'getColumns'];
   }
 
-  public applyDataSource(dataSource, forceApplying?, isApplyingUserState?) {
+  public applyDataSource(
+    dataSourceAdapter,
+    forceApplying?,
+    isApplyingUserState?,
+  ) {
     const that = this;
-    const isDataSourceLoaded = dataSource && dataSource.isLoaded();
+    const isDataSourceAdapterLoaded = dataSourceAdapter && dataSourceAdapter.isLoaded();
 
-    that._dataSource = dataSource;
+    that.appliedDataSourceAdapter = dataSourceAdapter;
 
     if (!that._dataSourceApplied || that._dataSourceColumnsCount === 0 || forceApplying || that.option('regenerateColumnsByVisibleItems')) {
-      if (isDataSourceLoaded) {
+      if (isDataSourceAdapterLoaded) {
         if (!that._isColumnsFromOptions) {
-          const columnsFromDataSource = createColumnsFromDataSource(that, dataSource);
-          if (columnsFromDataSource.length) {
-            assignColumns(that, columnsFromDataSource);
+          const columnsFromDataSourceAdapter = createColumnsFromDataSourceAdapter(that, dataSourceAdapter);
+          if (columnsFromDataSourceAdapter.length) {
+            assignColumns(that, columnsFromDataSourceAdapter);
             that._dataSourceColumnsCount = that._columns.length;
             applyUserState(that);
           }
         }
-        return that.updateColumns(dataSource, forceApplying, isApplyingUserState);
+        return that.updateColumns(dataSourceAdapter, forceApplying, isApplyingUserState);
       }
       that._dataSourceApplied = false;
       updateIndexes(that);
-    } else if (isDataSourceLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSource)) {
+    } else if (isDataSourceAdapterLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSourceAdapter)) {
       updateColumnChanges(that, 'columns');
       fireColumnsChanged(that);
       // @ts-expect-error
@@ -366,7 +371,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public reset() {
-    this._dataSource = null;
+    this.appliedDataSourceAdapter = null;
     this._dataSourceApplied = false;
     this._dataSourceColumnsCount = undefined;
     this.reinit();
@@ -1191,10 +1196,10 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  public updateColumnDataTypes(dataSource) {
+  public updateColumnDataTypes(dataSourceAdapter) {
     const that = this;
     const dateSerializationFormat = that.option('dateSerializationFormat');
-    const firstItems = that._getFirstItems(dataSource);
+    const firstItems = that._getFirstItems(dataSourceAdapter);
     let isColumnDataTypesUpdated = false;
 
     each(that._columns, (index, column) => {
@@ -1285,15 +1290,15 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  public updateColumns(dataSource?, forceApplying?, isApplyingUserState?): any {
+  public updateColumns(dataSourceAdapter?, forceApplying?, isApplyingUserState?): any {
     if (!forceApplying) {
-      this.updateSortingGrouping(dataSource);
+      this.updateSortingGrouping(dataSourceAdapter);
     }
 
-    if (!dataSource || dataSource.isLoaded()) {
-      const sortParameters = dataSource ? dataSource.sort() || [] : this.getSortDataSourceParameters();
-      const groupParameters = dataSource ? dataSource.group() || [] : this.getGroupDataSourceParameters();
-      const filterParameters = dataSource?.lastLoadOptions().filter;
+    if (!dataSourceAdapter || dataSourceAdapter.isLoaded()) {
+      const sortParameters = dataSourceAdapter ? dataSourceAdapter.sort() || [] : this.getSortDataSourceParameters();
+      const groupParameters = dataSourceAdapter ? dataSourceAdapter.group() || [] : this.getGroupDataSourceParameters();
+      const filterParameters = dataSourceAdapter?.lastLoadOptions().filter;
 
       if (!isApplyingUserState) {
         this._customizeColumns(this._columns);
@@ -1305,18 +1310,18 @@ export class ColumnsController extends modules.Controller {
       return when(this.refresh(true)).always(() => {
         if (this._columns !== columns) return;
 
-        this._updateChanges(dataSource, { sorting: sortParameters, grouping: groupParameters, filtering: filterParameters });
+        this._updateChanges(dataSourceAdapter, { sorting: sortParameters, grouping: groupParameters, filtering: filterParameters });
 
         fireColumnsChanged(this);
       });
     }
   }
 
-  private _updateChanges(dataSource, parameters) {
-    const langParams = dataSource?.loadOptions?.()?.langParams;
+  private _updateChanges(dataSourceAdapter, parameters) {
+    const langParams = dataSourceAdapter?.loadOptions?.()?.langParams;
 
-    if (dataSource) {
-      this.updateColumnDataTypes(dataSource);
+    if (dataSourceAdapter) {
+      this.updateColumnDataTypes(dataSourceAdapter);
       this._dataSourceApplied = true;
     }
 
@@ -1334,7 +1339,7 @@ export class ColumnsController extends modules.Controller {
     updateColumnChanges(this, 'columns');
   }
 
-  public updateSortingGrouping(dataSource, fromDataSource?: boolean): void {
+  public updateSortingGrouping(dataSourceAdapter, fromDataSource?: boolean): void {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -1389,9 +1394,9 @@ export class ColumnsController extends modules.Controller {
         }
       });
     };
-    if (dataSource) {
-      const sortParameters = gridCoreUtils.normalizeSortingInfo(dataSource.sort());
-      const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSource.group());
+    if (dataSourceAdapter) {
+      const sortParameters = gridCoreUtils.normalizeSortingInfo(dataSourceAdapter.sort());
+      const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSourceAdapter.group());
       const columnsGroupParameters = that.getGroupDataSourceParameters();
       const columnsSortParameters = that.getSortDataSourceParameters();
       const changeTypes = this._columnChanges?.changeTypes;
@@ -1532,7 +1537,7 @@ export class ColumnsController extends modules.Controller {
 
     column.added = options;
     updateIndexes(that, column);
-    that.updateColumns(that._dataSource);
+    that.updateColumns(that.appliedDataSourceAdapter);
     that._checkColumns();
   }
 
@@ -1550,7 +1555,7 @@ export class ColumnsController extends modules.Controller {
       }
 
       updateIndexes(that);
-      that.updateColumns(that._dataSource);
+      that.updateColumns(that.appliedDataSourceAdapter);
     }
   }
 
@@ -1589,7 +1594,7 @@ export class ColumnsController extends modules.Controller {
 
   public setUserState(state) {
     const that = this;
-    const dataSource = that._dataSource;
+    const dataSourceAdapter = that.appliedDataSourceAdapter;
 
     let ignoreColumnOptionNames: any = that.option('stateStoring.ignoreColumnOptionNames');
 
@@ -1617,9 +1622,9 @@ export class ColumnsController extends modules.Controller {
     updateColumnChanges(that, 'filtering');
     that.init(true);
 
-    if (dataSource) {
-      dataSource.sort(that.getSortDataSourceParameters());
-      dataSource.group(that.getGroupDataSourceParameters());
+    if (dataSourceAdapter) {
+      dataSourceAdapter.sort(that.getSortDataSourceParameters());
+      dataSourceAdapter.group(that.getGroupDataSourceParameters());
     }
   }
 
