@@ -43,7 +43,7 @@ const createValueExpression = (column: Column, filterValue: unknown): DataFilter
   return column.createFilterExpression?.(value, '=', 'headerFilter');
 };
 
-export const createHeaderFilterExpression = (column: Column): DataFilter => {
+const createHeaderFilterExpression = (column: Column): DataFilter => {
   const valueExpressions = (column.filterValues ?? []).map(
     (filterValue) => withColumnIndex(createValueExpression(column, filterValue), column.index),
   );
@@ -61,4 +61,4 @@ export const createHeaderFilterExpressions = (
   .filter((column) => allowHeaderFilterExpression(column)
     && hasHeaderFilterValues(column)
     && !isColumnExcluded(column, excludedColumn))
-  .map((column) => createHeaderFilterExpression(column));
+  .map(createHeaderFilterExpression);
