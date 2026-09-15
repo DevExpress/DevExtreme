@@ -789,6 +789,13 @@
       }
     }
 
+    /* Кружок у поля Subject - это не иконка формы, а метка цвета встречи: он показывает,
+       каким цветом встреча ляжет в календарь, поэтому читает заливку встречи, а не цвет
+       иконок формы. Снятие этого правила 15.09 было ошибкой - кружок становился серым. */
+    .dx-scheduler-form-subject-group .dx-scheduler-form-icon {
+      color: var(--dx-scheduler-appointment-base-bg);
+    }
+
     .dx-scheduler-form-icon-sized-gap {
       width: $global-icon-size;
     }

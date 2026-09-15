@@ -1714,7 +1714,7 @@
       "Д6": "tile-view-bg - закрыт 15.09 тем же ходом, что и контур чекбокса: край наведения переведён на border-primary-shared, а лишняя переменная фона удалена",
       "Д18": "contained-button-label - передан дизайнерам, оставляем как есть. Пара - две роли пакета, использованные по назначению, темой не чинится",
       "Д24": "radio-checked-fill-stem - принято, точка переведена на bg-primary-shared* вслед за чекбоксом",
-      "Д20": "scheduler-form-icon-on-bg-role - закрыт 15.09 снятием исключения: иконка Subject перестала переопределяться и встала в общий ряд формы на scheduler-form-icon",
+      "Д20": "scheduler-form-icon-on-bg-role - закрыт 15.09, но первым ответом неверно: исключение сняли, и кружок у поля Subject стал серым, как остальные иконки формы. Он не иконка - это метка цвета встречи, показывающая, каким цветом встреча ляжет в календарь, поэтому и читает заливку встречи. Правило вернули 15.09 на --dx-scheduler-appointment-base-bg; проверено на живой форме: кружок #b4d2f4 и заливка встречи на той же странице #b4d2f4, остальные иконки формы остались #444444. Контраст 1.56 к вопросу не относится - это не глиф, а образец цвета",
       "Д16": "checkbox-focused-fill - закрыт 15.09 целиком: контур получил свою роль border-primary-shared*, фокус развели с нажатием, заливка ушла на стем shared. Осталась одна ступень ниже порога - нажатие, 2.31 в тёмном, - и это дефект пакета из П2, а не выбор темы",
       "Д22": "tree-view-checkbox-focus-still-unique - закрыт 15.09: четыре переменные дерева удалены, чекбокс внутри дерева берёт все решения чекбокса. Первая редакция снимала блок целиком; проверка с клавиатуры показала, что тогда у дерева с чекбоксами не остаётся индикации фокуса вообще - базовый миксин красит фокусный фон только у .dx-treeview-item-without-checkbox. Блок вернули, но он читает фокусные имена самого чекбокса, как dxList с декораторами выбора",
       "Д10": "accent border rest - закрыт 15.09 валидацией: группа ложная, у диаграммы это дуга спиннера, и роль content-primary у неё верна",
@@ -2272,7 +2272,7 @@
       {
         "what": "scheduler-appointment-base-content -> -base-bg",
         "change": "renamed, role untouched",
-        "effect": "the rename became visible only after the Д20 fix: with the form icon no longer reading it, the variable stopped painting any color: and was left named -content while painting a background, a box-shadow and the appointment fill. Zero values moved - the role expression is the same - and the slot check went back to eleven rows"
+        "effect": "the variable paints the appointment fill, a box-shadow and the Subject colour swatch in the appointment form; it was named -content while the dominant use is a background, so the name followed the property. Zero values moved - the role expression is the same. The swatch reads it with color: on purpose: it is a sample of the appointment fill, not a form icon, which is why the first answer to Д20 - dropping that override - was wrong and was reverted the same day"
       },
       {
         "what": "treeView stops styling the checkbox (Д22)",
@@ -2318,6 +2318,11 @@
         "what": "toolbar overflow menu reads the button's text mode (Д23)",
         "change": "the four hue blocks now pass the same argument lists as button/_index.scss does for .dx-button-mode-text",
         "effect": "17 values corrected. The danger and success LABELS were painted with the button fill - bg-danger and bg-success, mode-static - which read 2.56 in dark against the 4.5 AA asks; they now read content-danger / content-success, 4.22 and 4.73 in dark. The selected state took the active value where the button takes the selected one, in all four hues, and the default label on selected took the rest colour where the button takes the hovered one. Light moves only on the selected rungs"
+      },
+      {
+        "what": "scheduler Subject colour swatch, correction to Д20",
+        "change": "the .dx-scheduler-form-subject-group .dx-scheduler-form-icon override is back, now reading --dx-scheduler-appointment-base-bg",
+        "effect": "the dot next to Subject shows what colour the appointment will take in the calendar, so it must be that colour. Dropping the override made it #444444 like the clock and repeat icons beside it - a real regression, reported from the running form. Measured after the revert on the live form: the dot is #b4d2f4 and an appointment on the same page is #b4d2f4, while the other form icons stay #444444. The 1.56 contrast the audit measured here never applied - a colour swatch is not a glyph that has to be read"
       }
     ]
   },
