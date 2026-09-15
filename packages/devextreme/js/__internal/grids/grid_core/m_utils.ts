@@ -613,8 +613,8 @@ export default {
     return normalizeDataSourceOptions(lookupDataSourceOptions);
   },
 
-  getWrappedLookupDataSource(column, dataSource: DataSourceAdapter | null | undefined, filter) {
-    if (!dataSource) {
+  getWrappedLookupDataSource(column, dataSourceAdapter: DataSourceAdapter | null | undefined, filter) {
+    if (!dataSourceAdapter) {
       return [];
     }
 
@@ -624,7 +624,7 @@ export default {
       return lookupDataSourceOptions;
     }
 
-    const hasGroupPaging = dataSource.remoteOperations().groupPaging;
+    const hasGroupPaging = dataSourceAdapter.remoteOperations().groupPaging;
     const hasLookupOptimization = column.displayField && isString(column.displayField);
 
     let cachedUniqueRelevantItems;
@@ -654,7 +654,7 @@ export default {
       } else {
         previousSkip = loadOptions.skip;
         previousTake = loadOptions.take;
-        dataSource.customLoader.load({
+        dataSourceAdapter.customLoader.load({
           filter,
           group,
           take: hasGroupPaging ? loadOptions.take : undefined,
