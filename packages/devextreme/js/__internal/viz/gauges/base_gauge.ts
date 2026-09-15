@@ -283,7 +283,7 @@ export const BaseGauge = BaseWidget.inherit({
 });
 
 //  TODO: find a better place for it
-export const formatValue = function (value, options, extra) {
+export const formatValue = function (value, options, extra?) {
   if (Object.is(value, -0)) {
     value = 0;
   }
@@ -299,9 +299,7 @@ export const formatValue = function (value, options, extra) {
 
 //  TODO: find a better place for it
 export const getSampleText = function (translator, options) {
-  // @ts-expect-error
   const text1 = formatValue(translator.getDomainStart(), options);
-  // @ts-expect-error
   const text2 = formatValue(translator.getDomainEnd(), options);
   return text1.length >= text2.length ? text1 : text2;
 };
