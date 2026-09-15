@@ -1,6 +1,4 @@
-import React, {
-  useCallback, useMemo, useRef, useState,
-} from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { TextBox } from 'devextreme-react/text-box';
 import { ButtonGroup } from 'devextreme-react/button-group';
 import { Button } from 'devextreme-react/button';
@@ -30,8 +28,7 @@ const suggestions = [
     prompt: 'List 2-3 models that directly compete with this vehicle.',
   },
 ];
-const DetailView = ({ data: templateData, onAbortReady }) => {
-  const abortControllerRef = useRef(null);
+const DetailView = ({ data: templateData, onRequestStart, onRequestEnd }) => {
   const [promptValue, setPromptValue] = useState('');
   const [responseValue, setResponseValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -63,8 +60,7 @@ const DetailView = ({ data: templateData, onAbortReady }) => {
     async (event, prompt) => {
       if (!prompt) return;
       const controller = new AbortController();
-      abortControllerRef.current = controller;
-      onAbortReady(() => controller.abort());
+      onRequestStart(controller);
       setIsError(false);
       setIsLoading(true);
       event?.target?.blur();
@@ -81,14 +77,13 @@ const DetailView = ({ data: templateData, onAbortReady }) => {
         setResponseValue('');
         setIsError(true);
       } finally {
-        abortControllerRef.current = null;
-        onAbortReady(() => {});
+        onRequestEnd(controller);
         setSubmitButtonText('Resubmit');
         setIsLoading(false);
         event?.target?.focus();
       }
     },
-    [templateData.data],
+    [templateData.data, onRequestStart, onRequestEnd],
   );
   const onSubmit = useCallback(
     (e) => {

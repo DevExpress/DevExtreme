@@ -1,5 +1,5 @@
 $(() => {
-  let abortController = null;
+  let activeAbortController = null;
 
   const { formatMessage } = DevExpress.localization;
 
@@ -77,7 +77,8 @@ $(() => {
     const userPrompt = promptEditor.option('value');
     if (!userPrompt) return;
 
-    abortController = new AbortController();
+    const controller = new AbortController();
+    activeAbortController = controller;
 
     toggleLoadingState(true, event, controls);
 
@@ -87,7 +88,7 @@ $(() => {
         { role: 'user', content: `User prompt: ${userPrompt}\nRow data: ${JSON.stringify(rowData)}` },
       ];
 
-      const aiResponse = await getAIResponse(messages, abortController.signal);
+      const aiResponse = await getAIResponse(messages, controller.signal);
 
       if (aiResponse === '') throw new Error('AI response is empty');
       responseEditor.option('value', aiResponse);
@@ -95,7 +96,9 @@ $(() => {
       responseEditor.option('value', '');
       setMessage($container, createErrorMessage());
     } finally {
-      abortController = null;
+      if (activeAbortController === controller) {
+        activeAbortController = null;
+      }
       submitButton.option('text', 'Resubmit');
       toggleLoadingState(false, event, controls);
     }
@@ -294,13 +297,13 @@ $(() => {
       },
     },
     onRowExpanding(e) {
-      abortController?.abort();
+      activeAbortController?.abort();
       e.component.collapseAll(-1);
     },
     onCellClick(e) {
       if (e.column.type === 'detailExpand' && e.rowType === 'data') {
         if (e.row.isExpanded) {
-          abortController?.abort();
+          activeAbortController?.abort();
           e.component.collapseRow(e.key);
         } else {
           e.component.expandRow(e.key);

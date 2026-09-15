@@ -1,4 +1,5 @@
 import { OpenAI } from 'openai';
+import { type DataGridTypes } from 'devextreme-react/data-grid';
 
 export interface Vehicle {
   ID: number;
@@ -30,4 +31,9 @@ export interface Vehicle {
 
 export type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
   content: string;
+};
+
+export type DetailViewProps = DataGridTypes.MasterDetailTemplateData & {
+  onRequestStart: (controller: AbortController) => void;
+  onRequestEnd: (controller: AbortController) => void;
 };

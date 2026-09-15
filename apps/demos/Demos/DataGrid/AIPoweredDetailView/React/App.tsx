@@ -14,25 +14,31 @@ import { vehicles } from './data.ts';
 import { type Vehicle } from './types.ts';
 
 export default function App() {
-  const abortActiveRequest = useRef<() => void>(() => {});
+  const activeAbortController = useRef<AbortController | null>(null);
 
-  const onAbortReady = useCallback((abortRequest: () => void) => {
-    abortActiveRequest.current = abortRequest;
+  const onRequestStart = useCallback((controller: AbortController) => {
+    activeAbortController.current = controller;
+  }, []);
+
+  const onRequestEnd = useCallback((controller: AbortController) => {
+    if (activeAbortController.current === controller) {
+      activeAbortController.current = null;
+    }
   }, []);
 
   const renderDetailView = useCallback((templateData: DataGridTypes.MasterDetailTemplateData) => (
-    <DetailView {...templateData} onAbortReady={onAbortReady} />
-  ), [onAbortReady]);
+    <DetailView {...templateData} onRequestStart={onRequestStart} onRequestEnd={onRequestEnd} />
+  ), [onRequestStart, onRequestEnd]);
 
   const onRowExpanding = useCallback(({ component }: DataGridTypes.RowExpandingEvent) => {
-    abortActiveRequest.current();
+    activeAbortController.current?.abort();
     component.collapseAll(-1);
   }, []);
 
   const onCellClick = useCallback(({ column, row, component, key }: DataGridTypes.CellClickEvent) => {
     if (column.type === 'detailExpand' && row.rowType === 'data') {
       if (row.isExpanded) {
-        abortActiveRequest.current();
+        activeAbortController.current?.abort();
         component.collapseRow(key);
       } else {
         component.expandRow(key);

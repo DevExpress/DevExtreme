@@ -1,6 +1,5 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
-import { type DataGridTypes } from 'devextreme-react/data-grid';
 import { TextBox, type TextBoxTypes } from 'devextreme-react/text-box';
 import { ButtonGroup, type ButtonGroupTypes } from 'devextreme-react/button-group';
 import { Button, type ButtonTypes } from 'devextreme-react/button';
@@ -9,11 +8,7 @@ import { LoadPanel, Position } from 'devextreme-react/load-panel';
 import { type DxEvent } from 'devextreme/events';
 import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT } from './service.ts';
-import { type AIMessage } from './types.ts';
-
-type DetailViewProps = DataGridTypes.MasterDetailTemplateData & {
-  onAbortReady: (abortRequest: () => void) => void;
-};
+import { type AIMessage, type DetailViewProps } from './types.ts';
 
 const promptElementAttr = { class: 'prompt-editor' };
 const suggestionsElementAttr = { class: 'dx-chat-suggestions' };
@@ -26,8 +21,7 @@ const suggestions = [
   { type: 'default', text: '🏎️ Competitors', prompt: 'List 2-3 models that directly compete with this vehicle.' },
 ];
 
-const DetailView = ({ data: templateData, onAbortReady }: DetailViewProps) => {
-  const abortControllerRef = useRef<AbortController | null>(null);
+const DetailView = ({ data: templateData, onRequestStart, onRequestEnd }: DetailViewProps) => {
   const [promptValue, setPromptValue] = useState('');
   const [responseValue, setResponseValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -70,8 +64,7 @@ const DetailView = ({ data: templateData, onAbortReady }: DetailViewProps) => {
     if (!prompt) return;
 
     const controller = new AbortController();
-    abortControllerRef.current = controller;
-    onAbortReady(() => controller.abort());
+    onRequestStart(controller);
 
     setIsError(false);
     setIsLoading(true);
@@ -92,14 +85,13 @@ const DetailView = ({ data: templateData, onAbortReady }: DetailViewProps) => {
       setResponseValue('');
       setIsError(true);
     } finally {
-      abortControllerRef.current = null;
-      onAbortReady(() => {});
+      onRequestEnd(controller);
 
       setSubmitButtonText('Resubmit');
       setIsLoading(false);
       (event?.target as HTMLElement)?.focus();
     }
-  }, [templateData.data]);
+  }, [templateData.data, onRequestStart, onRequestEnd]);
 
   const onSubmit = useCallback((e: TextBoxTypes.EnterKeyEvent | ButtonTypes.ClickEvent) => {
     handleSubmit(e.event, promptValue);

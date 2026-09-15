@@ -8,21 +8,27 @@ import DetailView from './DetailView.js';
 import { vehicles } from './data.js';
 
 export default function App() {
-  const abortActiveRequest = useRef(() => {});
-  const onAbortReady = useCallback((abortRequest) => {
-    abortActiveRequest.current = abortRequest;
+  const activeAbortController = useRef(null);
+  const onRequestStart = useCallback((controller) => {
+    activeAbortController.current = controller;
+  }, []);
+  const onRequestEnd = useCallback((controller) => {
+    if (activeAbortController.current === controller) {
+      activeAbortController.current = null;
+    }
   }, []);
   const renderDetailView = useCallback(
     (templateData) => (
       <DetailView
         {...templateData}
-        onAbortReady={onAbortReady}
+        onRequestStart={onRequestStart}
+        onRequestEnd={onRequestEnd}
       />
     ),
-    [onAbortReady],
+    [onRequestStart, onRequestEnd],
   );
   const onRowExpanding = useCallback(({ component }) => {
-    abortActiveRequest.current();
+    activeAbortController.current?.abort();
     component.collapseAll(-1);
   }, []);
   const onCellClick = useCallback(({
@@ -30,7 +36,7 @@ export default function App() {
   }) => {
     if (column.type === 'detailExpand' && row.rowType === 'data') {
       if (row.isExpanded) {
-        abortActiveRequest.current();
+        activeAbortController.current?.abort();
         component.collapseRow(key);
       } else {
         component.expandRow(key);
