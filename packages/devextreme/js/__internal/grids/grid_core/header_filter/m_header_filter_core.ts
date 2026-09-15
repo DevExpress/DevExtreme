@@ -18,6 +18,7 @@ import List from '@ts/ui/list/list.edit.search';
 import TreeView from '@ts/ui/tree_view/tree_view.search';
 
 import gridCoreUtils from '../m_utils';
+import { allowHeaderFiltering } from './utils';
 
 type CheckBoxValueChangedEvent = NativeEventInfo<dxCheckBox> & ValueChangedInfo;
 type CheckBoxValueChangedHandler = (event: CheckBoxValueChangedEvent) => void;
@@ -511,10 +512,6 @@ export class HeaderFilterView extends Modules.View {
     this.element().addClass(HEADER_FILTER_MENU_CLASS);
   }
 }
-
-export const allowHeaderFiltering = function (column) {
-  return isDefined(column.allowHeaderFiltering) ? column.allowHeaderFiltering : column.allowFiltering;
-};
 
 // TODO Fix types of this mixin
 export const headerFilterMixin = <T extends ModuleType<any>>(Base: T) => class HeaderFilterMixin extends Base {

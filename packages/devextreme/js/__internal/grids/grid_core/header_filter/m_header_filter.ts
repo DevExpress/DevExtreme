@@ -9,7 +9,6 @@ import storeHelper from '@js/common/data/store_helper';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
@@ -27,11 +26,11 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import gridCoreUtils from '../m_utils';
 import {
-  allowHeaderFiltering,
   headerFilterMixin,
   HeaderFilterView,
   updateHeaderFilterItemSelectionState,
 } from './m_header_filter_core';
+import { allowHeaderFiltering, createHeaderFilterExpressions } from './utils';
 
 const DATE_INTERVAL_FORMATS = {
   year(value) {
@@ -493,10 +492,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelHeaderFi
   }
 };
 
-export function invertFilterExpression(filter) {
-  return ['!', filter];
-}
-
 const filterController = (
   Base: ModuleType<FilterController>,
 ) => class FilterControllerHeaderFilterExtender extends Base {
@@ -509,40 +504,11 @@ const filterController = (
       return super.getAdditionalFilter(excludedColumn);
     }
 
-    const filters = [super.getAdditionalFilter(excludedColumn)];
-    const columns = this.columnsController.getVisibleColumns(null, true);
-
-    each(columns, (_, column) => {
-      let filter;
-
-      if (excludedColumn && excludedColumn.index === column.index) {
-        return;
-      }
-
-      if (allowHeaderFiltering(column) && column.calculateFilterExpression && Array.isArray(column.filterValues) && column.filterValues.length) {
-        let filterValues: any = [];
-
-        each(column.filterValues, (_, filterValue) => {
-          if (Array.isArray(filterValue)) {
-            filter = filterValue;
-          } else {
-            if (column.deserializeValue && !gridCoreUtils.isDateType(column.dataType) && column.dataType !== 'number') {
-              filterValue = column.deserializeValue(filterValue);
-            }
-
-            filter = column.createFilterExpression(filterValue, '=', 'headerFilter');
-          }
-          if (filter) {
-            filter.columnIndex = column.index;
-          }
-          filterValues.push(filter);
-        });
-
-        filterValues = gridCoreUtils.combineFilters(filterValues, 'or');
-
-        filters.push(column.filterType === 'exclude' ? ['!', filterValues] : filterValues);
-      }
-    });
+    const columns: Column[] = this.columnsController.getVisibleColumns(null, true);
+    const filters = [
+      super.getAdditionalFilter(excludedColumn),
+      ...createHeaderFilterExpressions(columns, excludedColumn ?? null),
+    ];
 
     return gridCoreUtils.combineFilters(filters);
   }
