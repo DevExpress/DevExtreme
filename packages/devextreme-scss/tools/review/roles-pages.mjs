@@ -291,7 +291,6 @@ const RU = {
   'switch-on-border-focused': 'Два соседа по трио (покой и наведение) уже переведены на border-роли равнозначно. Третий не переведён: <code>border-primary-shared-active</code> совпадает в светлом и <b>двигает тёмный</b> — #003c70 → #005397. Вопрос: принимаем сдвиг ради однородности трио.',
   'tree-view-checkbox-border-disabled': 'Content-роль красит <code>border-color</code>. Пакет для чекбокса разводит их: рамке неактивного состояния он даёт <code>border-disabled</code> (#d7d7d7 / #4c4c4c), заметно светлее нашего #ababab / #767676. Это прямой ответ на вопрос из журнала: 06.08 одно значение разложили на три роли и записали, что совпадение «видно в коде» — вот чем оно должно было разойтись.',
   'accordion-title-bg': 'Наведение и нажатие читают одну роль: нажать на заголовок аккордеона выглядит ровно как навести. Fluent 2 здесь однозначен — <code>colorSubtleBackgroundHover</code> #f5f5f5 и <code>colorSubtleBackgroundPressed</code> #e0e0e0 у него разные токены, и пакет несёт оба значения как <code>bg-hovered</code> / <code>bg-active</code>. Не применили только потому, что приведение уводит пиксель от legacy-fluent, а это решение продукта (NFR-1).',
-  'tile-view-bg': 'Спросили 15.09, не сделать ли фон наведения <code>bg-alpha-hovered</code>, вслед за аккордеоном. Померил — <b>нет</b>, и замер дал не вкусовой ответ, а правило.<br><br><b>Правило.</b> Blazor читает <code>bg-alpha-hovered</code> в девятнадцати местах, и в <b>каждом</b> покой это <code>color-bg-none</code>: заголовок и элемент аккордеона, обе его кнопки, элемент и кнопка treeview, ячейка календаря. Ни у одного нет собственной поверхности. Наш аккордеон ложится ровно туда — <code>$accordion-bg: transparent</code>, — поэтому Д5 и был прав. Альфа-лестница для тех, кто <b>занимает</b> чужую поверхность и подкрашивает её. Плитка не занимает: это карточка, <code>color-bg</code> плюс собственный край.<br><br><b>Что ломается.</b> <code>background-color</code> у плитки одно, поэтому альфа не подкрасит плитку — она <b>заменит</b> её непрозрачную поверхность вуалью поверх того, что сзади. А <code>.dx-tileview</code> фона не задаёт вовсе, то есть сзади — приложение. Померено: на панели <code>color-bg</code> светлое наведение даёт <b>#f6f6f6</b>, на холсте — <b>#f1f1f1</b>; в тёмном #3a3a3a против #343434. Одно состояние, два цвета, и выбирает их то, куда виджет положили. Непрозрачная ступень <code>bg-hovered</code> даёт #f5f5f5 всегда.<br><br><b>И выигрыша нет.</b> Тон тот же: альфа на панели сдвигает плитку на 1.08 от покоя, <code>bg-hovered</code> — на 1.09; в тёмном 1.36 против 1.39. То есть меняем предсказуемость на ничью.<br><br><b>Легаси согласно.</b> <code>$tileview-hover-bg</code> там равен <code>$base-element-bg</code> — значению покоя, — а сигнал висит на <code>$tileview-hover-border-color</code>, акцент с альфой 0.4; альфа-заливка только у нажатия. Плоская ступень унаследована намеренно, миграция её воспроизвела.<br><br><b>Что действительно слабо.</b> Сигнал наведения — край <code>border-subtle</code> → <code>border-primary</code>: контраст края к плитке удваивается, 1.31 → <b>2.68</b> в светлом и 1.81 → 4.65 в тёмном. В светлом 2.68 <b>ниже 3:1</b>, которые просит граница элемента управления, — вот на что стоит потратить правку. <code>border-primary</code> здесь белая ворона семейства: единственная роль, у которой светлое значение это бледный primary-70. <code>border-primary-shared</code> даёт <b>5.38 / 4.65</b>, это border-роль на border-слоте и тот самый стем, который уже держат селектор табов и свитч. Светлый пиксель при этом едет (#67a2e1 → #0f6cbd), так что это решение дизайна, а не бесплатная правка.<br><br><b>Честная оговорка.</b> Нажатие уже несёт это возражение: <code>bg-alpha-active</code> так же заменяет непрозрачную поверхность, и цвет нажатия тоже зависит от подложки. Но так делало легаси, это одно состояние, а не то, в котором стоит курсор, и «нажатая плитка проваливается в страницу» — законное прочтение идиомы.<br><br><b>Варианты:</b> ① оставить заливку плоской и удалить <code>$tile-view-bg-hovered</code>, который только повторяет покой — равнозначно по значению, минус одно публичное имя; ② вдобавок поднять край наведения до <code>border-primary-shared</code> — чинит 2.68 и оставляет карточку карточкой; ③ всё-таки взять <code>bg-alpha-hovered</code>, согласившись, что цвет наведения зависит от подложки. Рекомендация: ① и ②. Не ③.',
   'tabs-tab-border-disabled': 'Единственный член собственной лестницы не на border-роли: <code>selected-active</code>, <code>selected-hovered</code>, <code>selected-focused</code>, <code>active</code> и <code>hovered</code> читают <code>border-*</code>, и только <code>disabled</code> — <code>content-disabled</code>.<br><b>Варианты:</b> ① <code>border-disabled</code> — лестница становится согласованной, индикатор бледнеет с #ababab / #767676 до #d7d7d7 / #4c4c4c, что для неактивного состояния и ожидается; ② оставить и записать как осознанное исключение. Рекомендация — ①: это следование собственной лестнице, а не смена вкуса.',
   'load-indicator-segment-inner-border': 'Внутренняя рамка лоад-индикатора красится <code>bg-primary-subtle</code>, потому что border-роли с этой насыщенностью в пакете <b>не существует</b>. Менять не на что — нужна роль <code>border-primary-subtle</code>.',
   'invalid bg focused': 'Отвечено. Мерили: всё семейство <code>*-danger-shared</code> разрешается в <b>одно значение</b> через bg, border и content <b>в обоих режимах</b> — это и значит shared. Значит сегмент семейства здесь не несёт цвета, он записывает, <b>каким свойством</b> значение красится. Каноническая запись, стало быть, уже задана собственным правилом слота темы (NAMING M3: семейство следует за красящим свойством), а унификация выбросила бы единственную информацию, которую сегмент несёт. Если пакет когда-нибудь разведёт три роли, каждый элемент поедет за своим семейством — ровно то, ради чего вопрос и заводили. Все участники кластера правилу уже следуют: рамка чекбокса красит <code>border-color</code>, заливка чекбокса — <code>background-color</code>, метка чекбокса это глиф, бейдж — заливка. Единственное исключение — radioButton, который красит и рамку, и точку <b>одной</b> переменной; это не выбор записи, а анатомия, и она вынесена в Д21.<br>В этой строке все три роли действительно один цвет (#76000b светлый / #9d0013 тёмный) — чистый кластер записи и ничего кроме.',
@@ -327,32 +326,6 @@ const ruText = (key) => {
  * так же бесполезен, как вопрос без образца.
  * ---------------------------------------------------------------------------------------- */
 const SPECIMEN = {
-  'Д6': () => '<p class="meta">Как есть сейчас - сигнал даёт край, не фон:</p>' + row([
-    tile('покой', box({ bg: 'color-bg', bd: 'color-border-subtle' }),
-      `<br>край к плитке ${ratios('color-border-subtle', 'color-bg', 3)}`),
-    tile('наведение', box({ bg: 'color-bg', bd: 'color-border-primary' }),
-      `<br>фон <b>тот же</b><br>край ${ratios('color-border-primary', 'color-bg', 3)}`),
-    tile('нажатие', box({ bg: 'color-bg-alpha-active', bd: 'transparent' }),
-      '<br><code>bg-alpha-active</code><br>края нет'),
-  ])
-  + '<p class="meta">Вариант ③ - альфа на наведении. Плитка ложится на разные подложки, '
-  + 'и одно состояние даёт разный цвет:</p>'
-  + row([
-    tile('альфа на панели', box({ bg: 'color-bg-alpha-hovered', bd: 'color-border-primary' }),
-      '<br>поверх <code>bg</code>', 'color-bg'),
-    tile('альфа на холсте', box({ bg: 'color-bg-alpha-hovered', bd: 'color-border-primary' }),
-      '<br>поверх <code>bg-canvas</code> -<br>другой цвет того же состояния', 'color-bg-canvas'),
-    tile('непрозрачная ступень', box({ bg: 'color-bg-hovered', bd: 'color-border-primary' }),
-      '<br><code>bg-hovered</code> -<br>один цвет всюду', 'color-bg-canvas'),
-  ])
-  + '<p class="meta">Вариант ② - поднять край, а не заливку:</p>'
-  + row([
-    tile('край сейчас', box({ bg: 'color-bg', bd: 'color-border-primary' }),
-      `<br><code>border-primary</code><br>${ratios('color-border-primary', 'color-bg', 3)}`),
-    tile('край, вариант ②', box({ bg: 'color-bg', bd: 'color-border-primary-shared' }),
-      `<br><code>border-primary-shared</code><br>${ratios('color-border-primary-shared', 'color-bg', 3)}`),
-  ]),
-
   'Д10': () => row([
     tile('diagram, обводка иконки', glyph({ fg: 'color-content-primary', mark: '◈' }),
       '<br><code>content-primary</code>'),
@@ -752,25 +725,6 @@ ${wc.reasons.map((r) => `<p><b>${esc(r.reason)}.</b> ${esc(r.detail)}<br>`
 
 
 // --- нетекстовый контраст (WCAG 1.4.11)
-const nt = base.nonTextContrast;
-const nonTextSection = `
-<div class="q"><span class="id">нетекстовый контраст · WCAG 1.4.11</span>
-<div class="t">Порог 3:1 для границ элементов управления и графики</div>
-<p>Его не реализует ни одно правило axe и не видит ни один скриншот — в CI его не меряет никто.
-Замер ${esc(nt.measuredOn)}, и он появился как проверка того, стоит ли действовать по строке грипа выше.</p>
-<table><tr><th>Что</th><th>Пара</th><th>Светлый</th><th>Тёмный</th></tr>
-${nt.findings.map((f) => {
-    const bad = (v) => (v < 3 ? `<b class="warn">${v}</b>` : v);
-    return `<tr><td>${esc(f.what)}</td><td>${code(f.pair)}</td><td>${bad(f.light)}</td><td>${bad(f.dark)}</td></tr>`;
-  }).join('')}
-</table>
-${nt.findings.map((f) => `<p class="meta"><b>${esc(f.what)}:</b> ${esc(f.verdict)}</p>`).join('')}
-<p>${esc(nt.consequence)}</p>
-<p class="meta"><b>Оговорка:</b> ${esc(nt.comment[3])}</p></div>
-`;
-
-
-// --- закрытые вопросы: номера зарезервированы, ссылки из переписки должны находить ответ
 const closedSection = Object.entries(base.questionIds?.closed ?? {}).length ? `
 <h3>Закрыто — номера не переиспользуются</h3>
 <p class="meta">Если у вас на руках ссылка на один из этих номеров, вопрос уже решён; номер за ним
@@ -818,7 +772,7 @@ ${base.applied.rows.map((r) => `<tr><td>${code(r.what)}</td><td>${code(r.change)
 <h2>А. Дизайн — ${roleQs.length + ladderQs.length + contrastQs.length + statePairGroups.length + slotQs.length + conceptRows.length + sweepQs.length} вопросов</h2>
 <h3>Роль выбрана спорно</h3>${roleQs.join('')}
 <h3>Состояние неотличимо от соседнего</h3>${ladderQs.join('')}
-<h3>Контраст ниже порога</h3>${contrastQs.join('')}${nonTextSection}${whyContrast}
+${contrastQs.length ? `<h3>Контраст ниже порога</h3>${contrastQs.join('')}` : ''}
 <h3>Контраст, который теряется при смене состояния</h3>
 <p>Проверка добавлена ${esc(base.statePairs.measuredOn)} и она видит то, чего не видела предыдущая.
 Та измеряет только пару, записанную в одном правиле CSS. Лестница состояний так не пишется никогда:
@@ -830,7 +784,7 @@ ${base.applied.rows.map((r) => `<tr><td>${code(r.what)}</td><td>${code(r.change)
 <p class="meta">Первое, что она нашла, — <b>ошибку в этом же документе</b>: строка
 <code>.dx-checkbox-checked .dx-checkbox-icon</code> выше была помечена «глиф, порог 3:1 взят»
 по числу 3.36. Это число относится только к покою; в фокусе тот же элемент даёт 1.62.</p>
-${statePairGroups.join('')}
+${statePairGroups.join('')}${whyContrast}
 <h3>Имя обещает одно, красит другое</h3>${slotQs.join('')}
 <h3>Одно понятие покрашено по-разному в разных компонентах</h3>${conceptRows.join('')}
 <h3>Найдено ручным проходом по реализациям соседей</h3>

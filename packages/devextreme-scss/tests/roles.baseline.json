@@ -609,18 +609,6 @@
       "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
     },
     {
-      "stem": "tile-view-bg",
-      "states": [
-        "hovered",
-        "rest"
-      ],
-      "role": [
-        "color-bg"
-      ],
-      "decision": "design",
-      "why": "Asked on 15.09 whether the hover fill should become bg-alpha-hovered, following the accordion. Measured, and the answer is no - but the measurement produced a rule worth keeping rather than a taste.\nTHE RULE. Blazor reads bg-alpha-hovered in nineteen places, and in every one of them the rest state is color-bg-none: accordion group header, accordion group item, both accordion buttons, treeview item, treeview button, calendar item. Not one of them has a surface of its own. Our accordion fits exactly - $accordion-bg is transparent - which is why Д5 was right. The alpha ladder is for elements that BORROW a surface; it tints what is underneath. The tile does not borrow: it is a card, color-bg with a border of its own.\nWHAT GOES WRONG. background-color on the tile is one property, so an alpha hover does not tint the tile - it REPLACES its opaque surface with a veil over whatever is behind, and .dx-tileview declares no background at all, so what is behind is the application. Measured: on a color-bg panel the light hover lands on #f6f6f6, on the canvas it lands on #f1f1f1; dark gives #3a3a3a and #343434. One state, two colours, decided by where the widget was dropped. The opaque rung bg-hovered is #f5f5f5 wherever it stands.\nAND IT BUYS NOTHING. The two are the same tone: alpha on a panel shifts the tile 1.08 from rest, bg-hovered shifts it 1.09; dark 1.36 against 1.39. So the trade is determinism for no visible gain.\nLEGACY AGREES. Legacy fluent sets $tileview-hover-bg to $base-element-bg - the rest value - and puts the cue on $tileview-hover-border-color, the accent at 40% alpha, with an alpha fill only on the pressed state. The flat rung is inherited on purpose, and the migration reproduced it.\nWHAT IS ACTUALLY WEAK. The hover cue is the border going border-subtle -> border-primary, which doubles the edge contrast against the tile: 1.31 -> 2.68 in light, 1.81 -> 4.65 in dark. In light 2.68 is below the 3:1 a control boundary wants, and that is the one thing in this hover worth spending a change on. border-primary is the odd member of the primary family - the only one whose light value is the pale primary-70. border-primary-shared gives 5.38 light / 4.65 dark, is a border role on a border slot, and is the stem the tabs selector and the switch already use. It moves the light pixel (#67a2e1 -> #0f6cbd), so it is a design call, not a free fix.\nONE HONEST CAVEAT. The pressed state already carries the objection - bg-alpha-active replaces the same opaque surface, so the press colour depends on the backdrop too. Legacy did the same, it is one state rather than the one the pointer sits in, and a press that sinks INTO the page is a defensible reading of that idiom.\nOPTIONS. (1) leave the fill flat and delete $tile-view-bg-hovered, which only restates the rest value - value-neutral, one fewer public name; (2) also lift the hover edge to border-primary-shared, which fixes the 2.68 and keeps the card a card; (3) adopt bg-alpha-hovered anyway, accepting a hover colour that depends on the backdrop. Recommendation: (1) plus (2). Not (3)."
-    },
-    {
       "stem": "tree-view-content",
       "states": [
         "focused",
@@ -1622,7 +1610,7 @@
       },
       {
         "reason": "WCAG 1.4.11 has no axe rule at all",
-        "detail": "Non-text contrast - 3:1 for control boundaries and graphics - is not implemented in axe. Borders, focus rings, indicators and switch tracks are outside the gate by construction, not by suppression.",
+        "detail": "Non-text contrast - 3:1 for control boundaries and graphics - is not implemented in axe. Borders, focus rings, indicators and switch tracks are outside the gate by construction, not by suppression. Сплошной проверки нетекстового контраста в теме тоже нет: 09.09 так был померен только сплиттер, и по его результату вопрос Д7 закрыт 15.09 - таблица тех замеров ушла со страницы вместе с ним, потому что описывала сплиттер, которого больше нет.",
         "covers": "the whole non-text half of the contrast requirement"
       },
       {
@@ -1632,46 +1620,6 @@
       }
     ],
     "consequence": "Тёмный a11y-прогон идёт и color-contrast в нём включён - но он видит только настоящий текст в достижимых состояниях. Контраст глифов и нетекстовых элементов не проверяет никто, и таблица контраста в этом отчёте - единственное место, где он измерен."
-  },
-  "nonTextContrast": {
-    "comment": [
-      "WCAG 1.4.11, the 3:1 floor for control boundaries and graphics. No axe rule implements it and no",
-      "screenshot can see it, so nothing in CI measures it. Recorded 09.09.2026 after asking whether the",
-      "splitter grip row was worth acting on - it turned out to be the wrong element to measure.",
-      "This is a first sample, not a sweep: only the splitter was measured this way."
-    ],
-    "measuredOn": "2026-09-09",
-    "findings": [
-      {
-        "what": "полоса сплиттера на фоне панели",
-        "pair": "color-border на color-bg",
-        "light": 1.62,
-        "dark": 3.42,
-        "verdict": "провал в светлом, порог 3:1. Элемент управления не опознаётся контрастом."
-      },
-      {
-        "what": "полоса сплиттера при наведении",
-        "pair": "color-border-hovered на color-bg",
-        "light": 1.82,
-        "dark": 6.76,
-        "verdict": "провал в светлом: наведение не делает полосу различимой."
-      },
-      {
-        "what": "полоса сплиттера в фокусе",
-        "pair": "color-bg-primary на color-bg",
-        "light": 5.38,
-        "dark": 2.88,
-        "verdict": "провал в тёмном: индикация фокуса ниже 3:1."
-      },
-      {
-        "what": "грип внутри полосы (исходная строка Д7)",
-        "pair": "color-content-subtle на color-border",
-        "light": 6,
-        "dark": 2.8,
-        "verdict": "ниже 3:1 в тёмном, но применимость 1.4.11 спорна: это аффорданс внутри уже опознанного элемента, а не то, что его опознаёт."
-      }
-    ],
-    "consequence": "Вопрос Д7 переформулирован: не «какую роль дать точкам грипа», а «различима ли полоса сплиттера вообще». В светлом — нет, 1.62 при пороге 3:1, и это не видит ни axe (нет правила под 1.4.11), ни скриншоты (эталон совпадает сам с собой). Померен только сплиттер: сплошной проверки нетекстового контраста в теме нет."
   },
   "questionIds": {
     "comment": [
@@ -1692,10 +1640,10 @@
       "Д11": "accent content rest - расхождение исчезло: pivotGrid переименован в accent-outline (роль border-primary, красит outline-color), а chat переехал на content-primary вместе с правкой контраста. Осталось двое на одной роли - группы больше нет",
       "Д5": "accordion-title-bg - принято 14.09: hover на bg-alpha-hovered, active на bg-alpha-active. Продукт выбрал полупрозрачную лестницу (так у Blazor, в Core-библиотеке и в vNext), а не непрозрачную, которую рекомендовал аудит",
       "Д19": "scheduler-grid-line-strength - принято 14.09: если обе линии должны быть одного цвета, читать одну роль двумя переменными нормально. Записано как осознанное",
-      "Д7": "splitter - принято 15.09 по набору пакета: полоса это жёлоб цвета холста, а аффорданс несёт грип. Грип ушёл с 2.80 на 10.39 в тёмном, строка вышла из списка контраста"
+      "Д7": "splitter - принято 15.09 по набору пакета: полоса это жёлоб цвета холста, а аффорданс несёт грип. Грип ушёл с 2.80 на 10.39 в тёмном, строка вышла из списка контраста",
+      "Д6": "tile-view-bg - закрыт 15.09 тем же ходом, что и контур чекбокса: край наведения переведён на border-primary-shared, а лишняя переменная фона удалена"
     },
     "map": {
-      "ladder:tile-view-bg": "Д6",
       "concept:accent border rest": "Д10",
       "concept:base bg rest": "Д12",
       "concept:base content rest": "Д13",
@@ -2157,6 +2105,11 @@
         "what": "splitter resize handle (Д7): bar rest and hovered, grip hovered",
         "change": "bar color-border -> bg-canvas, color-border-hovered -> bg-low-hovered; grip gains its own hovered value, content-primary-hovered, where it had only an alias to rest",
         "effect": "three variables, nothing else. The grip against the bar goes 2.80 -> 10.39 in dark at rest and 1.42 -> 5.21 hovered, and the row leaves the contrast list. It also settles the family: a bg slot stops reading a border role"
+      },
+      {
+        "what": "tileView hover (Д6)",
+        "change": "$tile-view-bg-hovered deleted along with the background-color line it fed; $tile-view-border-hovered moved from border-primary to border-primary-shared",
+        "effect": "the deleted variable only restated the rest value, so nothing moved when it went. The edge is the same move the checked checkbox outline had just made, to the same role: dark is IDENTICAL (both resolve to primary-80 #4b90d9) and light goes primary-70 -> primary-100, #67a2e1 -> #0f6cbd, which lifts the hover edge against the tile from 2.68 to 5.38 and over the 3:1 a control boundary asks for. One public name fewer"
       }
     ]
   },
@@ -2538,5 +2491,40 @@
       "note": "Наведение было хуже покоя в тёмном: полоса светлела до neutral-100, грип оставался neutral-70, два светлых серых давали 1.42. Этого никто не измерял, потому что у грипа не было своего значения на наведение - только алиас."
     },
     "auditGap": "Инструмент это видел и не показал. У splitter-resize-handle-bg и -bg-hovered стоит флаг несовпадения семейства (слот bg, роль border), но вердикт пакета у них role-new, а страница собирает вопросы только из cross-family и family-conflict. Значит несовпадение семейства на role-new не доходит до читателя вовсе - отдельная дыра, не эта правка."
+  },
+  "borderPrimaryCluster": {
+    "comment": [
+      "Почему ход с чекбокса переносится на плитку: color-border-primary и",
+      "color-border-primary-shared - ОДИН цвет в тёмном (#4b90d9) и разный в светлом",
+      "(#67a2e1 против #0f6cbd). Плоская роль это бледный primary-70, и на своей поверхности",
+      "она даёт 2.68 при пороге 3.0; shared даёт 5.38. То есть выбор между ними в светлом -",
+      "это выбор между провалом и запасом, а в тёмном его вообще нет."
+    ],
+    "measuredOn": "2026-09-15",
+    "sharedIsUsedBy": [
+      "focus-rect-outline - общее кольцо фокуса",
+      "switch-on-border*",
+      "check-box-icon-checked-border*",
+      "tree-view-checkbox-checked-border-focused",
+      "tabs-tab-selector*",
+      "card-view-card-outline-focused",
+      "card-view-header-panel-item-outline-focused",
+      "tile-view-border-hovered - добавлено 15.09"
+    ],
+    "flatRemainsOn": [
+      "grid-border-focused",
+      "file-manager-file-item-border-focused",
+      "tag-box-tag-border-focused",
+      "pivot-grid-accent-outline",
+      "card-view-card-border-selected",
+      "button-default-outlined-border",
+      "list-item-ghost-border",
+      "sortable-placeholder-border",
+      "html-editor-resize-frame-border",
+      "file-manager-drop-zone-placeholder-border",
+      "card-view-header-panel-dropzone-border",
+      "gantt-accent-border"
+    ],
+    "note": "Разделение почти складывается: на shared сидят контуры САМОГО контрола, на плоской - призраки перетаскивания, плейсхолдеры и декоративные линии. Почти - потому что четыре контура взаимодействия остались на плоской: grid-border-focused, file-manager-file-item-border-focused, tag-box-tag-border-focused и pivot-grid-accent-outline. cardView держит обе роли сразу и разводит их осмысленно: контур фокуса - shared, статичный край выбранной карточки - плоская. Это следующий кандидат на волну, отдельно от Д6."
   }
 }
