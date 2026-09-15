@@ -12,12 +12,12 @@ import { createGroupFilter } from '../m_utils';
 import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
 import type { DataItem, GroupInfoData, GroupItemData } from './types';
 
-const loadTotalCount = function (dataSource: DataSourceAdapter, options) {
+const loadTotalCount = function (dataSourceAdapter: DataSourceAdapter, options) {
   // @ts-expect-error
   const d = new Deferred();
   const loadOptions = extend({ skip: 0, take: 1, requireTotalCount: true }, options);
 
-  dataSource.customLoader.load(loadOptions).done(({ extra }) => {
+  dataSourceAdapter.customLoader.load(loadOptions).done(({ extra }) => {
     d.resolve(extra!.totalCount);
   }).fail(d.reject.bind(d));
   return d;
@@ -376,14 +376,14 @@ export class GroupingHelper extends GroupingHelperCore {
 
   private changeRowExpand(path) {
     const that = this;
-    const dataSource = that._dataSource;
+    const { dataSourceAdapter } = that;
     // @ts-expect-error badly typedDataSourceAdapter.beginPageIndex
-    const beginPageIndex = dataSource.beginPageIndex
+    const beginPageIndex = dataSourceAdapter.beginPageIndex
       // @ts-expect-error badly typedDataSourceAdapter.beginPageIndex
-      ? dataSource.beginPageIndex()
-      : dataSource.pageIndex();
-    const dataSourceItems = dataSource.items();
-    const offset = correctSkipLoadOption(that, beginPageIndex * dataSource.pageSize());
+      ? dataSourceAdapter.beginPageIndex()
+      : dataSourceAdapter.pageIndex();
+    const dataSourceItems = dataSourceAdapter.items();
+    const offset = correctSkipLoadOption(that, beginPageIndex * dataSourceAdapter.pageSize());
     const groupInfo = that.findGroupInfo(path);
     let groupCountQuery;
 
@@ -391,10 +391,10 @@ export class GroupingHelper extends GroupingHelperCore {
       // @ts-expect-error
       groupCountQuery = new Deferred().resolve(groupInfo.count);
     } else {
-      groupCountQuery = loadTotalCount(dataSource, {
+      groupCountQuery = loadTotalCount(dataSourceAdapter, {
         filter: createGroupFilter(path, {
-          filter: dataSource.filter(),
-          group: dataSource.group(),
+          filter: dataSourceAdapter.filter(),
+          group: dataSourceAdapter.group(),
         }),
       });
     }
@@ -421,7 +421,7 @@ export class GroupingHelper extends GroupingHelperCore {
       that.updateTotalItemsCount();
     }).fail(function () {
       // @ts-expect-error badly typedDataSourceAdapter._eventsStrategy
-      dataSource._eventsStrategy.fireEvent('loadError', arguments);
+      dataSourceAdapter._eventsStrategy.fireEvent('loadError', arguments);
     });
   }
 
@@ -432,15 +432,15 @@ export class GroupingHelper extends GroupingHelperCore {
   protected refresh(options, operationTypes?) {
     const that = this;
     const { storeLoadOptions } = options;
-    const dataSource = that._dataSource;
+    const { dataSourceAdapter } = that;
 
     // @ts-expect-error
     super.refresh.apply(this, arguments);
 
     if (operationTypes.reload) {
       return foreachCollapsedGroups(that, (groupInfo) => {
-        const groupCountQuery = loadTotalCount(dataSource, { filter: createGroupFilter(groupInfo.path, storeLoadOptions) });
-        const groupOffsetQuery = loadTotalCount(dataSource, { filter: createOffsetFilter(groupInfo.path, storeLoadOptions) });
+        const groupCountQuery = loadTotalCount(dataSourceAdapter, { filter: createGroupFilter(groupInfo.path, storeLoadOptions) });
+        const groupOffsetQuery = loadTotalCount(dataSourceAdapter, { filter: createOffsetFilter(groupInfo.path, storeLoadOptions) });
 
         return when(groupOffsetQuery, groupCountQuery).done((offset, count) => {
           // eslint-disable-next-line radix
