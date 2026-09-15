@@ -4,12 +4,12 @@ import {
   removeFieldConditionsFromFilter,
 } from '@ts/filter_builder/m_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
 import { getColumnIdentifier } from '@ts/grids/grid_core/filter_sync/utils';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 export const filterSyncFilterControllerExtender = (
   Base: ModuleType<FilterController>,
@@ -54,6 +54,6 @@ export const filterSyncFilterControllerExtender = (
       filters.push(calculatedFilterValue);
     }
 
-    return gridCoreUtils.combineFilters(filters);
+    return combineFilters(filters);
   }
 };

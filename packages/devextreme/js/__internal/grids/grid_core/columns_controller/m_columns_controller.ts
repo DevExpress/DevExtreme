@@ -23,6 +23,7 @@ import type { Column, ColumnsChanges, FilterField } from '@ts/grids/grid_core/co
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
+import { equalFilterParameters } from '../filter/utils';
 import modules from '../m_modules';
 import type { Module } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -1328,7 +1329,7 @@ export class ColumnsController extends modules.Controller {
     }
 
     if (this._dataController
-      && !gridCoreUtils.equalFilterParameters(parameters.filtering, this._dataController.getCombinedFilter(), langParams)) {
+      && !equalFilterParameters(parameters.filtering, this._dataController.getCombinedFilter(), langParams)) {
       updateColumnChanges(this, 'filtering');
     }
     updateColumnChanges(this, 'columns');

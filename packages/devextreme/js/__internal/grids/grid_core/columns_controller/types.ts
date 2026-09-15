@@ -1,7 +1,7 @@
 import type { ColumnAIOptions, ColumnBase } from '@js/common/grids';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
-import type { DataFilter } from '../data_controller/types';
+import type { DataFilter } from '../filter/types';
 import type {
   COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
 } from './const';
