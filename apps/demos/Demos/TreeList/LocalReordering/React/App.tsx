@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import TreeList, { Column, RowDragging } from 'devextreme-react/tree-list';
+import type { TreeListTypes } from 'devextreme-react/tree-list';
 
 import { employees as employeeList } from './data.ts';
 
@@ -16,10 +17,10 @@ const App = () => {
   const [allowReordering, setAllowReordering] = useState<CheckBoxValue>(true);
   const [showDragIcons, setShowDragIcons] = useState<CheckBoxValue>(true);
 
-  const onDragChange = useCallback((e) => {
+  const onDragChange = useCallback((e: TreeListTypes.RowDraggingChangeEvent) => {
     const visibleRows = e.component.getVisibleRows();
     const sourceNode = e.component.getNodeByKey(e.itemData.ID);
-    let targetNode = visibleRows[e.toIndex].node;
+    let targetNode: TreeListTypes.Node | undefined = visibleRows[e.toIndex].node;
 
     while (targetNode?.data) {
       if (targetNode.data.ID === sourceNode.data.ID) {
@@ -30,7 +31,7 @@ const App = () => {
     }
   }, []);
 
-  const onReorder = useCallback((e) => {
+  const onReorder = useCallback((e: TreeListTypes.RowDraggingReorderEvent) => {
     const visibleRows = e.component.getVisibleRows();
     let sourceData = e.itemData;
     const updatedEmployees = [...employees];
