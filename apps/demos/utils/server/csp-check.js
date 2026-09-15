@@ -307,11 +307,17 @@ async function collectViolations(tab, url, renderDeadlineMs) {
   await waitForDomIdle(tab);
 
   const res = await tab.send('Runtime.evaluate', {
-    expression: 'JSON.stringify(window.__cspViolations || [])',
+    expression: 'JSON.stringify(window.__cspViolations ?? null)',
     returnByValue: true,
   });
   const raw = res && res.result && res.result.value;
-  const all = raw ? JSON.parse(raw) : [];
+  const all = raw ? JSON.parse(raw) : null;
+
+  // `window.__cspViolations` absent means the listener never ran, which used to read as "no
+  // violations" — the one failure this check could not see.
+  if (!Array.isArray(all)) {
+    throw new Error(`CSP listener did not run for ${url}`);
+  }
 
   const seen = new Set();
   return all.filter((v) => {
@@ -338,6 +344,67 @@ async function visitPage(url, renderDeadlineMs = RENDER_DEADLINE_MS) {
     tab.close();
     await browserCdp.send('Target.closeTarget', { targetId });
   }
+}
+
+const CANARY_URL = `${SERVER_URL}/apps/demos/utils/server/csp-canary.html`;
+
+// Each probe in csp-canary.html, by the shape its violation comes back in.
+const CANARY_PROBES = [
+  {
+    what: 'inline <style> element',
+    match: (v) => v.effectiveDirective === 'style-src-elem' && v.blockedURI === 'inline',
+  },
+  {
+    what: 'stylesheet from a disallowed origin',
+    match: (v) => v.effectiveDirective === 'style-src-elem'
+      && v.blockedURI.startsWith('https://csp-canary.invalid/'),
+  },
+  {
+    what: 'style attribute',
+    match: (v) => v.effectiveDirective === 'style-src-attr' && v.blockedURI === 'inline',
+  },
+];
+
+function httpHeaders(url) {
+  return new Promise((resolve, reject) => {
+    const req = http.request(url, { method: 'GET' }, (res) => {
+      res.resume();
+      res.on('end', () => resolve(res.headers));
+    });
+    req.on('error', reject);
+    req.end();
+  });
+}
+
+/*
+ * A run that reports no violations is only worth something if the detector was alive. The canary
+ * page breaks the policy three ways on purpose; all three have to come back, or the demos were
+ * never really checked.
+ */
+async function verifyCanary() {
+  const headers = await httpHeaders(CANARY_URL);
+  const policy = headers['content-security-policy-report-only']
+    || headers['content-security-policy'];
+
+  if (!policy) {
+    throw new Error('the server served the canary page without a policy header');
+  }
+
+  if (!policy.includes('style-src')) {
+    throw new Error(`the policy carries no style-src directive: ${policy}`);
+  }
+
+  const violations = await visitPage(CANARY_URL);
+  const missed = CANARY_PROBES
+    .filter(({ match }) => !violations.some(match))
+    .map(({ what }) => what);
+
+  if (missed.length) {
+    throw new Error(`${missed.length} of ${CANARY_PROBES.length} probe(s) went unreported `
+      + `(${missed.join(', ')}); ${violations.length} violation(s) seen`);
+  }
+
+  console.log(`CSP canary: all ${CANARY_PROBES.length} probes reported\n`);
 }
 
 function httpRequest(url, method) {
@@ -418,6 +485,14 @@ async function main() {
   await startBrowser();
 
   try {
+    try {
+      await verifyCanary();
+    } catch (err) {
+      console.log(`\n❌ CSP canary failed — this run could not detect a violation: ${err.message}`);
+      process.exitCode = 1;
+      return;
+    }
+
     await runPool(demos, CONCURRENCY, async (demo, i) => {
       const idx = i + 1;
       try {

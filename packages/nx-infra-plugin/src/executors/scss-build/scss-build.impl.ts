@@ -17,6 +17,8 @@ const ACCENT_SOURCES_DIR = './scss/_design-system/fluent/accents';
 const ACCENT_OUTPUT_DIR_NAME = 'accents';
 const LEADING_COMMENT_REGEX = /^\s*\/\*[\s\S]*?\*\/\s*/;
 const GENERATOR_BANNER_MARKER = 'auto-generated';
+const TOKENS_PACKAGE = '@devexpress/design-tokens-internal';
+const TOKEN_BUILT_BUNDLE_PREFIX = 'dx.fluent-next.';
 const DEFAULT_DEV_BUNDLE_NAMES = [
   'light',
   'light.compact',
@@ -44,6 +46,8 @@ interface BuildDependencies {
   cleanCssSanitizeOptions: unknown;
   cleanCssDevOptions: unknown;
   devextremeVersion: string;
+  /** Version of the design-token package a theme is generated from; null when it is not installed. */
+  tokensVersion: string | null;
 }
 
 type MinifyProfile = 'all' | 'ci';
@@ -59,11 +63,21 @@ function readFileDataUri(filePath: string, svgEncoding?: string): string {
   return encodeDataUriContent(buffer, filePath, svgEncoding);
 }
 
-function createStarLicenseHeader(fileName: string, version: string): string {
+/*
+ * `tokensVersion` is stamped on the stylesheets generated from the design-token package. Values in
+ * those files come from a package version, not from this repository, so a bug report about a colour
+ * or a size cannot be placed without it.
+ */
+function createStarLicenseHeader(
+  fileName: string,
+  version: string,
+  tokensVersion?: string | null,
+): string {
   return [
     '/**',
     `* DevExtreme (${fileName.replace(/\\/g, '/')})`,
     `* Version: ${version}`,
+    ...(tokensVersion ? [`* Design tokens: ${TOKENS_PACKAGE} ${tokensVersion}`] : []),
     `* Build date: ${new Date().toDateString()}`,
     '*',
     `* Copyright (c) 2012 - ${new Date().getFullYear()} Developer Express Inc. ALL RIGHTS RESERVED`,
@@ -129,6 +143,15 @@ export function findMissingThemeCss(cssOutputDir: string, deps: BuildDependencie
   return declaredCssNames.filter((name) => !fs.existsSync(path.join(cssOutputDir, name)));
 }
 
+function readTokensVersion(projectRequire: NodeRequire): string | null {
+  try {
+    return projectRequire(`${TOKENS_PACKAGE}/package.json`).version ?? null;
+  } catch {
+    // A project that builds no token-generated theme does not depend on the package.
+    return null;
+  }
+}
+
 function loadDependencies(projectRoot: string): BuildDependencies {
   const projectRequire = createRequire(path.join(projectRoot, 'package.json'));
 
@@ -148,6 +171,7 @@ function loadDependencies(projectRoot: string): BuildDependencies {
     ),
     devextremeVersion: projectRequire(path.resolve(projectRoot, '../devextreme/package.json'))
       .version,
+    tokensVersion: readTokensVersion(projectRequire),
   };
 }
 
@@ -219,7 +243,11 @@ async function compileFile(
   const minified = minifier.minify(prefixed.css).styles;
 
   const outFileName = path.basename(sourceFile, '.scss') + '.css';
-  const license = createStarLicenseHeader(outFileName, deps.devextremeVersion);
+  const license = createStarLicenseHeader(
+    outFileName,
+    deps.devextremeVersion,
+    outFileName.startsWith(TOKEN_BUILT_BUNDLE_PREFIX) ? deps.tokensVersion : null,
+  );
   const withHeader = prependLicenseAndMoveCharsetFirst(minified, license);
   await writeFileText(path.join(outputDir, outFileName), withHeader);
 }
@@ -243,7 +271,11 @@ async function compileAccentOverrides(
     logger.verbose(`Compiling accent ${source}`);
     const compiled = deps.sass.compile(source);
     const outFileName = `${path.basename(source, '.scss')}.css`;
-    const license = createStarLicenseHeader(outFileName, deps.devextremeVersion);
+    const license = createStarLicenseHeader(
+      outFileName,
+      deps.devextremeVersion,
+      deps.tokensVersion,
+    );
     const leadingComment = LEADING_COMMENT_REGEX.exec(compiled.css)?.[0] ?? '';
     const css = leadingComment.includes(GENERATOR_BANNER_MARKER)
       ? compiled.css.slice(leadingComment.length)

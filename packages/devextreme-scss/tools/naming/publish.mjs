@@ -9,6 +9,11 @@
  *
  * The rules are the ones tests/fluent-next-naming.test.ts enforces; both read them from
  * tools/naming/tier.ts. Needs no built bundle.
+ *
+ * The published name is derived from the SCSS variable, so renaming a variable retires a public
+ * `--dx-*` name and this file's diff looks like plain regeneration. Record the retirement in
+ * tools/naming/public-renames.json in the same pull request; tests/public-renames.test.ts keeps a
+ * retired name from reappearing, as an alias or otherwise.
  */
 
 import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'fs';

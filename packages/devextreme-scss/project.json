@@ -240,6 +240,7 @@
       "inputs": [
         "{projectRoot}/build/tokens/**/*.ts",
         "{projectRoot}/tools/naming/**/*.ts",
+        "{projectRoot}/tools/tokens/**/*.ts",
         "{projectRoot}/tests/**/*.ts",
         "{projectRoot}/tsconfig.json"
       ],
