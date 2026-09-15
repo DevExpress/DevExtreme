@@ -56,10 +56,10 @@ const environmentWithDataSource = $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         const test = this;
-        seriesDataSourceModule.SeriesDataSource = function(params) {
+        seriesDataSourceModule.DEBUG_set_SeriesDataSource(function(params) {
             test.seriesDataSource = new _SeriesDataSource(params);
             return test.seriesDataSource;
-        };
+        });
     }
 });
 

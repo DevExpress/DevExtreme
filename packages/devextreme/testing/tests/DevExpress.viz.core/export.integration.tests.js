@@ -2,7 +2,8 @@ import '__internal/viz/tree_map/tree_map';
 import $ from 'jquery';
 import { Renderer, ExportMenu } from '../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer_default';
-import clientExporter from 'exporter';
+import * as clientExporter from 'exporter';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import exportModule from '__internal/viz/core/exportModule';
 import { Deferred } from 'core/utils/deferred';
 import { logger } from 'core/utils/console';
@@ -22,14 +23,14 @@ QUnit.module('Export', {
     beforeEach: function() {
         this.$container = $('#test-container');
         const renderer = this.renderer = new Renderer();
-        rendererModule.Renderer = function() {
+        rendererModule.DEBUG_set_Renderer(function() {
             return renderer;
-        };
+        });
 
         const exportMenu = this.exportMenu = new ExportMenu();
         exportModule.DEBUG_set_ExportMenu(sinon.spy(function() { return exportMenu; }));
 
-        sinon.stub(clientExporter, 'export').returns(new Deferred());
+        stubSeam(clientExporter, 'export').returns(new Deferred());
 
         this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, 'toDataURL');
         this.toDataURLStub.returnsArg(0);

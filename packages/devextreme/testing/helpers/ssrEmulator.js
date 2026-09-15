@@ -1,6 +1,6 @@
 import domAdapter from '__internal/core/m_dom_adapter';
 import windowUtils from 'core/utils/window';
-import serverSideDOMAdapter from './serverSideDOMAdapterPatch.js';
+import { set as setServerSideDOMAdapter } from './serverSideDOMAdapterPatch.js';
 
 (function emulateNoContains() {
     const originalContains = Element.prototype.contains;
@@ -229,5 +229,5 @@ QUnit.begin(function() {
     // Now domAdapter is allowed to use
     restoreOriginalDomAdapter();
     // Emulate DOMAdapter integration
-    serverSideDOMAdapter.set();
+    setServerSideDOMAdapter();
 });

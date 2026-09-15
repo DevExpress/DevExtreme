@@ -122,8 +122,9 @@ function getInnerRadius({ type, innerRadius }) {
   return type === 'pie' ? 0 : _isNumber(innerRadius) ? Number(innerRadius) : DEFAULT_INNER_RADIUS;
 }
 
-function LayoutManager() {
-}
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+let LayoutManager = function () {
+};
 
 function getAverageLabelWidth(centerX, radius, canvas, sizeLabels) {
   return (centerX - radius - RADIAL_LABEL_INDENT - canvas.left) / sizeLabels.outerLabelsCount;
@@ -278,3 +279,9 @@ LayoutManager.prototype = {
 };
 
 export { LayoutManager };
+
+/// #DEBUG
+export function DEBUG_set_LayoutManager(value: typeof LayoutManager): void {
+  LayoutManager = value;
+}
+/// #ENDDEBUG
