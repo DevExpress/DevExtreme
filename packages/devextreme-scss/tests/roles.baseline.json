@@ -666,17 +666,6 @@
       },
       "decision": "package-gap",
       "why": "Widened 09.09 after asking whether danger passes anywhere else. It does not, and the reason is that the role is tuned to one surface. In dark content-danger is danger-80 #e4554f, and it measures 4.58 on the page canvas (bg-canvas #1d1d1d), 4.22 on an ordinary surface (bg #242424) and 3.05 on a hovered one (bg-hovered #3b3b3b). So it clears AA on the canvas by 0.08 and fails everywhere below it. Eleven theme variables put real text on this role - the outlined danger button label, the chat alert list, the chat delete item, the fieldset invalid value, the grid AI error, the informer error, two stepper invalid labels, the text editor invalid message, the validation message and the validation summary - and every one of them sits at 4.22 wherever its widget has its own background. Three more read the role for a glyph (diagram, filterBuilder, cardView), where 4.22 clears the 3:1 that applies. The request splits in two: on an ordinary surface the miss is 0.28 and one ramp step fixes it - danger-70 #ee726a gives 5.36 - so ask the package to move content-danger in dark; on a hovered surface nothing in the family clears AA, danger-70 reaching only 3.87, so that half is a genuine gap. Light is fine throughout (6.07 on the canvas, 5.56 hovered). Why the audit saw one row and not twelve: the rule-local pass needs both colours in one rule, and a validation message takes its background from an ancestor. Third instance of that blind spot in one day."
-    },
-    {
-      "selector": ".dx-splitter .dx-resize-handle",
-      "fgRole": "color-content-subtle",
-      "bgRole": "color-border",
-      "contrast": {
-        "light": 6,
-        "dark": 2.8
-      },
-      "decision": "design",
-      "why": "Revised 09.09. Blazor sets splitter-resize-handle-color to content-subtle - our role exactly - so the grip is not an anomaly and there is nothing to swap it for on consistency grounds. The 2.8 in dark stands as an observation against the 3:1 floor. The wider claim this row grew into needs a qualifier: the bar is invisible in light at 1.62, but Blazor paints the same bar with bg-canvas, which is 1.04 against a pane - worse than ours. Every product in the family has an unidentifiable splitter in light, so this is a design-system question, not a defect of this theme."
     }
   ],
   "concepts": [
@@ -1702,11 +1691,11 @@
       "Д2": "gallery-nav-button-bg-disabled - принято вместе с Д1, bg-static-dark-disabled, и стрелка получила content-static-dark-disabled",
       "Д11": "accent content rest - расхождение исчезло: pivotGrid переименован в accent-outline (роль border-primary, красит outline-color), а chat переехал на content-primary вместе с правкой контраста. Осталось двое на одной роли - группы больше нет",
       "Д5": "accordion-title-bg - принято 14.09: hover на bg-alpha-hovered, active на bg-alpha-active. Продукт выбрал полупрозрачную лестницу (так у Blazor, в Core-библиотеке и в vNext), а не непрозрачную, которую рекомендовал аудит",
-      "Д19": "scheduler-grid-line-strength - принято 14.09: если обе линии должны быть одного цвета, читать одну роль двумя переменными нормально. Записано как осознанное"
+      "Д19": "scheduler-grid-line-strength - принято 14.09: если обе линии должны быть одного цвета, читать одну роль двумя переменными нормально. Записано как осознанное",
+      "Д7": "splitter - принято 15.09 по набору пакета: полоса это жёлоб цвета холста, а аффорданс несёт грип. Грип ушёл с 2.80 на 10.39 в тёмном, строка вышла из списка контраста"
     },
     "map": {
       "ladder:tile-view-bg": "Д6",
-      "contrast:.dx-splitter .dx-resize-handle": "Д7",
       "concept:accent border rest": "Д10",
       "concept:base bg rest": "Д12",
       "concept:base content rest": "Д13",
@@ -2163,6 +2152,11 @@
         "what": "accordion-title-bg-hovered and -bg-active (Д5)",
         "change": "bg-hovered / bg-hovered -> bg-alpha-hovered / bg-alpha-active",
         "effect": "two variables moved, nothing else. Composited over color-bg the hover stays where it was (#f5f5f5 -> #f6f6f6 light, #3b3b3b -> #3a3a3a dark) and the pressed state separates for the first time (#f5f5f5 -> #e1e1e1 light, #3b3b3b -> #2f2f2f dark). Chosen by the product over the opaque rung the audit recommended, because Blazor, the Core library and vNext all use the alpha ladder"
+      },
+      {
+        "what": "splitter resize handle (Д7): bar rest and hovered, grip hovered",
+        "change": "bar color-border -> bg-canvas, color-border-hovered -> bg-low-hovered; grip gains its own hovered value, content-primary-hovered, where it had only an alias to rest",
+        "effect": "three variables, nothing else. The grip against the bar goes 2.80 -> 10.39 in dark at rest and 1.42 -> 5.21 hovered, and the row leaves the contrast list. It also settles the family: a bg slot stops reading a border role"
       }
     ]
   },
@@ -2477,5 +2471,72 @@
       }
     ],
     "openQuestion": "Заливка отмеченного чекбокса: bg-primary* (Figma, и так у нас) или content-primary-shared* (реализация Blazor). В СВЕТЛОМ обе дают одно и то же. В ТЁМНОМ расходятся, и расхождение решает вопрос Д16: bg-primary даёт метку 3.36 в покое и 1.62 в нажатии при пороге 3.0, а content-primary-shared - 5.42 и 2.31. Дополнительный довод за вариант Blazor: наша собственная невалидная тройка уже сидит на стеме content-danger-shared, так что чекбокс сейчас внутренне непоследователен - невалидная заливка на content-*-shared, отмеченная на bg-*. У Blazor все три (primary, danger, success) на content-<оттенок>-shared."
+  },
+  "splitterSpec": {
+    "comment": [
+      "Токены сплиттера от дизайнера, 15.09. Они переворачивают вопрос: полоса не обязана",
+      "опознаваться контрастом, она жёлоб цвета холста; опознаётся грип внутри неё.",
+      "Прежний вывод аудита - «сплиттер не различим в светлом» - мерил не тот элемент."
+    ],
+    "receivedOn": "2026-09-15",
+    "rows": [
+      {
+        "slot": "грип, rest",
+        "spec": "content-subtle",
+        "ours": "content-subtle",
+        "verdict": "совпало"
+      },
+      {
+        "slot": "грип, hovered",
+        "spec": "content-primary-hovered",
+        "ours": "алиас на rest - состояния наведения у грипа не было вовсе",
+        "verdict": "ПРИМЕНЕНО"
+      },
+      {
+        "slot": "грип, active / focused",
+        "spec": "content-static-dark",
+        "ours": "content-static-dark",
+        "verdict": "совпало"
+      },
+      {
+        "slot": "полоса, rest",
+        "spec": "bg-canvas",
+        "ours": "color-border",
+        "verdict": "ПРИМЕНЕНО - и это снимает семейное расхождение: слот bg читал border-роль"
+      },
+      {
+        "slot": "полоса, hovered",
+        "spec": "bg-low-hovered",
+        "ours": "color-border-hovered",
+        "verdict": "ПРИМЕНЕНО, то же расхождение семейства"
+      },
+      {
+        "slot": "полоса, active / focused",
+        "spec": "bg-primary",
+        "ours": "bg-primary",
+        "verdict": "совпало"
+      },
+      {
+        "slot": "полоса, disabled",
+        "spec": "bg-disabled",
+        "ours": "bg-disabled",
+        "verdict": "совпало"
+      }
+    ],
+    "measured": {
+      "comment": "грип на полосе, порог 3.0 - светлый / тёмный",
+      "before": {
+        "rest": "6.00 / 2.80",
+        "hovered": "5.35 / 1.42",
+        "active": "5.38 / 5.38"
+      },
+      "after": {
+        "rest": "9.33 / 10.39",
+        "hovered": "5.98 / 5.21",
+        "active": "5.38 / 5.38"
+      },
+      "note": "Наведение было хуже покоя в тёмном: полоса светлела до neutral-100, грип оставался neutral-70, два светлых серых давали 1.42. Этого никто не измерял, потому что у грипа не было своего значения на наведение - только алиас."
+    },
+    "auditGap": "Инструмент это видел и не показал. У splitter-resize-handle-bg и -bg-hovered стоит флаг несовпадения семейства (слот bg, роль border), но вердикт пакета у них role-new, а страница собирает вопросы только из cross-family и family-conflict. Значит несовпадение семейства на role-new не доходит до читателя вовсе - отдельная дыра, не эта правка."
   }
 }
