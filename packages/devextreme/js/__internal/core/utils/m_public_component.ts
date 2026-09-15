@@ -4,6 +4,10 @@ import { data as elementData } from '@js/core/element_data';
 import { isDefined } from '@js/core/utils/type';
 
 const COMPONENT_NAMES_DATA_KEY = 'dxComponents';
+
+interface ComponentsData extends Record<string, unknown> {
+  dxComponents?: string[];
+}
 const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
 
 const componentNames = new WeakMap();
@@ -25,7 +29,7 @@ const getName = function (componentClass, newName?) {
 };
 
 export function attachInstanceToElement($element, componentInstance, disposeFn) {
-  const data = elementData($element.get(0));
+  const data = elementData<ComponentsData>($element.get(0));
   const name = getName(componentInstance.constructor);
 
   data[name] = componentInstance;
@@ -46,7 +50,7 @@ export function attachInstanceToElement($element, componentInstance, disposeFn) 
 export function getInstanceByElement<T = any>($element, componentClass): T {
   const name = getName(componentClass);
 
-  return elementData($element.get(0), name);
+  return elementData<T>($element.get(0), name);
 }
 
 export { getName as name };

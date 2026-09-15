@@ -13,7 +13,7 @@ interface CleanedNode extends Node {
 if (ko) {
   const originalKOCleanExternalData = ko.utils.domNodeDisposal.cleanExternalData;
   const patchCleanData = (): void => {
-    afterCleanData((nodes: CleanedNode[]) => {
+    afterCleanData((nodes: ArrayLike<CleanedNode>) => {
       // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < nodes.length; i += 1) {
         nodes[i].cleanedByJquery = true;
