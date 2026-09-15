@@ -1068,17 +1068,19 @@ export class DataController extends modules.Controller {
 
   /**
    * @extende: virtual_scrolling, editing
+   *
    */
   protected _updateItemsCore(change: DataChange): void {
     change.operationTypes ??= this._currentOperationTypes;
     this._currentOperationTypes = null;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-    if (!this.dataSourceController.hasAdapter()) {
+    if (!dataSourceAdapter) {
       this._items = [];
       return;
     }
 
-    const newItems = this._afterProcessItems(this.getProcessedItems(change));
+    const newItems = this._afterProcessItems(this.getProcessedItems(change, dataSourceAdapter));
     const oldItems = this._items.length === newItems.length ? this._items : null;
 
     change.items = newItems;
@@ -1094,7 +1096,10 @@ export class DataController extends modules.Controller {
     this._rowIndexOffset = this.getRowIndexOffset();
   }
 
-  private getProcessedItems(change: DataChange): ProcessedItem[] {
+  private getProcessedItems(
+    change: DataChange,
+    dataSourceAdapter: DataSourceAdapter,
+  ): ProcessedItem[] {
     const useProcessedItemsCache = 'useProcessedItemsCache' in change && change.useProcessedItemsCache;
 
     if (useProcessedItemsCache && this._cachedProcessedItems) {
@@ -1103,9 +1108,7 @@ export class DataController extends modules.Controller {
 
     // change.items at this stage is defined only if virtualScrolling
     // + legacyScrollingMode enabled
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const adapterItems = this.dataSourceController.getAdapter()!.items();
-    const items = (change.items ?? adapterItems) as RawItemData[];
+    const items = (change.items ?? dataSourceAdapter.items()) as RawItemData[];
     const dataItems = this._beforeProcessItems(items);
     const processedItems = this._processItems(dataItems, change);
 
