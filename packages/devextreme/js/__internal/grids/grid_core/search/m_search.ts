@@ -12,8 +12,10 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import type { DataController } from '../data_controller/data_controller';
-import type { DataFilter, UserState } from '../data_controller/types';
+import type { UserState } from '../data_controller/types';
 import type { FilterController } from '../filter/filter_controller';
+import type { DataFilter } from '../filter/types';
+import { combineFilters } from '../filter/utils';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType, OptionChanged } from '../m_types';
@@ -85,7 +87,7 @@ const filterController = (
       this.getLangParams(),
     );
 
-    return gridCoreUtils.combineFilters([filter, searchFilter]);
+    return combineFilters([filter, searchFilter]);
   }
 
   private calculateSearchFilter(text: string | undefined, langParams?: LangParams): DataFilter {
@@ -143,7 +145,7 @@ const filterController = (
       return ['!'];
     }
 
-    return gridCoreUtils.combineFilters(filters, 'or');
+    return combineFilters(filters, 'or');
   }
 };
 
