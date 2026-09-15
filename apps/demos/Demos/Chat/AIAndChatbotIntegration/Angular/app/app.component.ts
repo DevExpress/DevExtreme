@@ -93,7 +93,9 @@ export class AppComponent {
     try {
       await this.appService.regenerate();
     } finally {
-      this.toggleDisabledState(false);
+      setTimeout(() => {
+        this.toggleDisabledState(false);
+      });
     }
   }
 }

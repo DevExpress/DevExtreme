@@ -1,3 +1,3 @@
 // deprecated
-import { httpRequest } from '../__internal/core/m_http_request';
+import { httpRequest } from '../__internal/core/http_request';
 export default httpRequest;

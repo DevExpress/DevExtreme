@@ -1520,14 +1520,14 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             dataSource: dataSource
         });
 
-        const dataSourceInstance = dataGrid.getController('data')._dataSource;
+        const dataSourceInstance = dataGrid.getController('dataSource').getAdapter();
 
         // act
         dataSource.push({ id: 2 });
         dataGrid.option('dataSource', dataSource);
 
         // assert
-        assert.strictEqual(dataSourceInstance, dataGrid.getController('data')._dataSource, 'dataSource is not recreated');
+        assert.strictEqual(dataSourceInstance, dataGrid.getController('dataSource').getAdapter(), 'dataSource is not recreated');
         assert.strictEqual(dataGrid.getController('data').items().length, 2, 'data is updated');
     });
 
@@ -1702,7 +1702,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
                 store: [{ id: 1111 }]
             }
         });
-        assert.equal(dataGrid.getController('data')._dataSource.pageSize(), 20);
+        assert.equal(dataGrid.getController('dataSource').getAdapter().pageSize(), 20);
 
         // act
         dataGrid.option('dataSource', {
@@ -1711,7 +1711,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         });
 
         // assert
-        assert.equal(dataGrid.getController('data')._dataSource.pageSize(), 50);
+        assert.equal(dataGrid.getController('dataSource').getAdapter().pageSize(), 50);
     });
 
     QUnit.test('columns change', function(assert) {

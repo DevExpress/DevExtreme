@@ -3,7 +3,7 @@ import config from '@js/core/config';
 import { extend } from '@js/core/utils/extend';
 import { isFunction, isString } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 import type { Controllers } from '@ts/grids/grid_core/m_types';
 
