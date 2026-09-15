@@ -36,7 +36,7 @@ const prioritiesData: Priority[] = [
   }, {
     text: 'High Priority',
     id: 2,
-    color: '#DD2C00',
+    color: '#CD2900',
   },
 ];
 
@@ -48,7 +48,7 @@ const resourcesData: Resource[] = [
   }, {
     text: 'John Heart',
     id: 2,
-    color: '#2E7D32',
+    color: '#2D7C31',
   }, {
     text: 'Todd Hoffman',
     id: 3,
@@ -56,7 +56,7 @@ const resourcesData: Resource[] = [
   }, {
     text: 'Sandra Johnson',
     id: 4,
-    color: '#DD2C00',
+    color: '#CD2900',
   },
 ];
 
