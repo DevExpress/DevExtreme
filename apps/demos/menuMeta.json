@@ -139,6 +139,21 @@
                 "DemoType": "Web"
               }
             ]
+          },
+          {
+            "Name": "Custom AI Assistant",
+            "Equivalents": "AI, Chatbot, Assistant",
+            "Demos": [
+              {
+                "Title": "Custom AI Assistant",
+                "Name": "CustomAIAssistant",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "TopLevel": true,
+                "Modules": "openai",
+                "DemoType": "Web"
+              }
+            ]
           }
         ]
       },
@@ -4441,6 +4456,20 @@
                   "/Models/Chat/Message.cs",
                   "/ViewModels/ChatViewModel.cs"
                 ]
+              }
+            ]
+          },
+          {
+            "Name": "Custom AI Assistant",
+            "Equivalents": "AI, Chatbot, Assistant",
+            "Demos": [
+              {
+                "Title": "Custom AI Assistant",
+                "Name": "CustomAIAssistant",
+                "Widget": "Chat",
+                "Badge": "AI",
+                "Modules": "openai",
+                "DemoType": "Web"
               }
             ]
           },
