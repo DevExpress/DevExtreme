@@ -312,6 +312,10 @@ StyleDictionary.registerFormat({
 const FILE_OPTIONS = {
   outputReferences: true,
   themeable: true,
+  // 262.22.0 gave almost every semantic colour a $description, which Style Dictionary prints as a
+  // trailing `/** … */` on the declaration. Those comments are the package's own Figma bookkeeping,
+  // not something the bundle should carry, and the mode/shared split parses this generated text.
+  formatting: { commentStyle: 'none' },
 };
 
 // 'text' covers reference-only tokens such as popup.box-shadow.composite
