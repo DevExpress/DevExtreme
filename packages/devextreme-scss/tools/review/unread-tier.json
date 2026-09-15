@@ -123,7 +123,6 @@
     "--dx-texteditor-color-text",
     "--dx-tree-list-expand-icon-size",
     "--dx-tree-view-border-padding",
-    "--dx-tree-view-checkbox-checked-border-focused",
     "--dx-tree-view-checkbox-offset",
     "--dx-tree-view-container-with-border-offset",
     "--dx-tree-view-item-padding-inline",

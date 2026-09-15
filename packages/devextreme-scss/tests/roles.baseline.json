@@ -141,16 +141,6 @@
       "slot": "shadow",
       "decision": "bridge",
       "why": "rgb(from color-content-inverted / .1) - the foundation names no switch shadow role, recorded in DIVERGENCES and inventoried in BRIDGES.md"
-    },
-    {
-      "name": "tree-view-checkbox-accent-content-focused",
-      "verdict": "family-conflict",
-      "roles": [
-        "color-bg-primary-hovered"
-      ],
-      "slot": "content",
-      "decision": "rule-5",
-      "why": "paints background-color and border-color of the checkbox, never color: - a dual-role value whose name claims the content slot it does not use"
     }
   ],
   "typographyUnmarked": [
@@ -341,17 +331,6 @@
       ],
       "decision": "hairline",
       "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
-    },
-    {
-      "name": "tree-view-checkbox-accent-content-focused",
-      "slot": "content",
-      "slotSays": "content",
-      "paints": [
-        "background-color",
-        "border-color"
-      ],
-      "decision": "ring-and-fill",
-      "why": "Moved out of rule-5 on 09.09. The rule excuses a name that picks the dominant of two painted families; these names pick a family that is painted by NEITHER property. All four paint a ring (border-color) and a fill (background-color) of the same small control from one variable, and none of them paints text. See the widened radio-invalid-vs-checkbox-invalid question: the same anatomy is resolved four different ways across four controls."
     }
   ],
   "ladders": [
@@ -671,30 +650,8 @@
           "role": "color-border"
         }
       ],
-      "decision": "design",
-      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
-    },
-    {
-      "concept": "accent content focused",
-      "roles": [
-        "color-bg-primary-active",
-        "color-bg-primary-hovered"
-      ],
-      "families": [
-        "bg"
-      ],
-      "members": [
-        {
-          "folder": "slider",
-          "role": "color-bg-primary-active"
-        },
-        {
-          "folder": "treeView",
-          "role": "color-bg-primary-hovered"
-        }
-      ],
-      "decision": "shade",
-      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+      "decision": "false-group",
+      "why": "Answered 15.09 by validation, and the answer went against the guess. The three members are three unrelated things sharing the word accent: diagram paints stroke on .dxdi-spinner path - a SPINNER ARC; gantt paints border-color on a real border; scheduler paints the week-boundary grid line, which Д19 already accepted as deliberately equal to the ordinary line.\nThe diagram member keeps content-primary, and that is not a preference: our own loadIndicator spinner sits on the identical role, and Blazor confirms it (loading-panel-indicator-no-area-indicator-color = content-primary). Moving it to border-primary, as the group name suggests, would drop the arc from 5.38 to 2.68 in light - under the 3:1 a graphic needs - because border-primary is the pale primary-70 outlier of its family. Same verdict as gantt-content: a drawn mark, painted by whatever property draws it, with a content role that is right."
     },
     {
       "concept": "base bg rest",
@@ -721,8 +678,8 @@
           "role": "color-bg"
         }
       ],
-      "decision": "design",
-      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call Переименование scheduler-appointment-base-content в -base-bg 15.09 перевело его сюда из группы base content rest: теперь в группе трое - разделитель списка на border-subtle, заливка встречи на bg-primary-subtle и фон шага на bg. Все три верны по роли, слово base просто означает у них разное."
+      "decision": "false-group",
+      "why": "Answered 15.09 by validation, confirmed as the reading proposed. Three members, three correct roles: list-base-select-all-separator-bg paints background-color with border-subtle, which is the hairline idiom and exactly what the package calls separator.color; scheduler-appointment-base-bg is the appointment fill on bg-primary-subtle, the role Blazor gives the same element; stepper-step-base-bg is a plain surface on bg. The word base means a different thing in each, which is what made them one group. Nothing to change."
     },
     {
       "concept": "base content rest",
@@ -743,30 +700,8 @@
           "role": "color-content"
         }
       ],
-      "decision": "design",
-      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call После переименования scheduler ушёл в base bg rest, и здесь осталось двое: diagram на content-subtle и stepper на content. Обе роли верны, расходится оттенок."
-    },
-    {
-      "concept": "checked border focused",
-      "roles": [
-        "color-border-primary-shared-hovered",
-        "color-border-primary-shared-active"
-      ],
-      "families": [
-        "border"
-      ],
-      "members": [
-        {
-          "folder": "checkBox",
-          "role": "color-border-primary-shared-hovered"
-        },
-        {
-          "folder": "treeView",
-          "role": "color-border-primary-shared-active"
-        }
-      ],
-      "decision": "deferred-to",
-      "why": "Appeared 15.09 the moment option 1 landed, and it is the prediction in Д22 coming true the same day. The checkbox focused outline moved to border-primary-shared-hovered; treeView keeps its own copy on border-primary-shared-active, so the two are now a rung apart. This is not a separate question - it is the evidence for Д22, which says the treeView block will follow whatever the checkbox focus becomes. Nothing to decide here that Д22 does not already ask."
+      "decision": "shade",
+      "why": "Answered 15.09 by validation, confirmed. After the scheduler member was renamed to -base-bg and left for the bg group, two remain: diagram-image-icon-base-content on content-subtle and stepper-step-base-content on content. Both are content roles on content slots painting color:, and they differ by shade - which is a divergence components are entitled to. The naming point this group carried belonged to the scheduler member and is fixed."
     },
     {
       "concept": "empty content rest",
@@ -1651,17 +1586,17 @@
       "Д6": "tile-view-bg - закрыт 15.09 тем же ходом, что и контур чекбокса: край наведения переведён на border-primary-shared, а лишняя переменная фона удалена",
       "Д18": "contained-button-label - передан дизайнерам, оставляем как есть. Пара - две роли пакета, использованные по назначению, темой не чинится",
       "Д24": "radio-checked-fill-stem - принято, точка переведена на bg-primary-shared* вслед за чекбоксом",
-      "Д20": "scheduler-form-icon-on-bg-role - закрыт 15.09 снятием исключения: иконка Subject перестала переопределяться и встала в общий ряд формы на scheduler-form-icon"
+      "Д20": "scheduler-form-icon-on-bg-role - закрыт 15.09 снятием исключения: иконка Subject перестала переопределяться и встала в общий ряд формы на scheduler-form-icon",
+      "Д16": "checkbox-focused-fill - закрыт 15.09 целиком: контур получил свою роль border-primary-shared*, фокус развели с нажатием, заливка ушла на стем shared. Осталась одна ступень ниже порога - нажатие, 2.31 в тёмном, - и это дефект пакета из П2, а не выбор темы",
+      "Д22": "tree-view-checkbox-focus-still-unique - закрыт 15.09 первым вариантом: блок фокуса снят, четыре переменные удалены, чекбокс внутри дерева берёт все решения чекбокса",
+      "Д10": "accent border rest - закрыт 15.09 валидацией: группа ложная, у диаграммы это дуга спиннера, и роль content-primary у неё верна",
+      "Д12": "base bg rest - закрыт 15.09 валидацией: три верных роли, слово base у них означает разное",
+      "Д13": "base content rest - закрыт 15.09 валидацией: обе роли верны, расходится оттенок"
     },
     "map": {
-      "concept:accent border rest": "Д10",
-      "concept:base bg rest": "Д12",
-      "concept:base content rest": "Д13",
       "concept:invalid content rest": "Д14",
-      "statePairGroup:checkbox-focused-fill": "Д16",
       "statePairGroup:outlined-button-label": "Д17",
       "sweep:radio-invalid-vs-checkbox-invalid": "Д21",
-      "sweep:tree-view-checkbox-focus-still-unique": "Д22",
       "sweep:tier-bypassed-by-neighbours": "Д23"
     }
   },
@@ -1685,7 +1620,7 @@
         },
         "selector": ".dx-checkbox-checked.dx-state-active .dx-checkbox-icon",
         "group": "checkbox-focused-fill",
-        "decision": "design"
+        "decision": "answered"
       },
       {
         "bg": "--dx-button-default-outlined-bg-active",
@@ -1911,8 +1846,8 @@
     ],
     "groups": {
       "checkbox-focused-fill": {
-        "decision": "design",
-        "why": "Resolved in part on 15.09, when the designer produced the package tokens for checkbox/color/checked. Three slots, not one: border, bg and icon each have their own token, and our theme painted the border from the BG variable. Figma and Blazor agree that the border is border-primary-shared*, so that half was not a judgement call and is applied - three new names, light pixel-identical (primary-100/120/140 exactly as before), dark better at every rung: the box outline against the page goes 2.88 -> 4.65 at rest, 3.69 -> 5.79 hovered, 1.39 -> 1.98 pressed.\nWHAT REMAINS. The fill. Figma says bg-primary*, Blazor implements content-primary-shared*, and the two are identical in light and differ in dark - which is exactly what decides this row. On Figma's fill the mark reads 3.36 at rest and 1.62 pressed; on Blazor's, 5.42 and 2.31. Neither clears 3.0 in the pressed state, because no primary family inverts its active rung for dark - the same package defect П2 records for danger.\nAND A THIRD THING THE TOKENS SETTLE. The package state list is rest / hovered / active / read-only / disabled - there is no focused. Our theme paints .dx-state-focused AND .dx-state-active from one variable, so a keyboard user SITS at the value the package intends for a transient press. The button already separates them (bg-focused reads bg-primary-hovered). Splitting focus from active would leave the 1.62 where the package put it - under a finger, for the length of a click - and take the keyboard user to 4.30.\nRE-CHECKED 15.09 against a freshly pulled Blazor, and the stem argument above was WRONG. Blazor's checked fills are content-primary-shared for primary but bg-success-shared and bg-danger-shared for the other two - I had read the INDETERMINATE variables, where the dash is a content-coloured mark, as the checked fills. So primary is the outlier inside Blazor, our bg family agrees with their success and danger, and our invalid MARK on content-danger-shared agrees with their indeterminate mark. There was no internal inconsistency.\nWHICH LEAVES A CANDIDATE THAT SATISFIES BOTH SOURCES: bg-primary-shared*. The whole *-shared family is one value across bg, border and content, so it measures exactly like Blazor's content-primary-shared - mark 5.42 at rest and box 4.65 in dark against 3.36 and 2.88 today - while staying in the bg family Figma names, on the stem Blazor itself uses for success and danger. Light is identical to what ships now. The pressed rung still fails (2.31 / 1.98): no primary family inverts its active step for dark, which is П2's defect again.\nRESOLVED 15.09, option 1. Focus now takes the HOVERED rung and the press keeps the package's active one, which is the shape the contained button already had (bg-focused reads bg-primary-hovered, bg-active reads bg-primary-active). The package state list justifies it: there is no focused state in it at all, so painting focus with the value meant for a click was never what the tokens asked for.\nFour variables: -bg-focused and -border-focused moved down a rung, and -bg-active and -border-active were added to hold what the package assigns. The row that measured 1.62 split in two - the press keeps 1.62 on a state that lasts as long as a finger is down, and the focus a keyboard user SITS in went to 4.30, over the 3:1 a glyph needs. Light moves one step on focus, #003c70 -> #005397. Cascade verified on eight combinations: checked rest, hover, focus and press, the invalid pair, and the indeterminate pair including its ::before dash.\nThe fill STEM question is untouched and still open: bg-primary* as it ships, against bg-primary-shared* which reads 5.42 / 4.65 in dark where today it is 3.36 / 2.88.\nSTEM ACCEPTED 15.09. The checked fill moved from the plain bg-primary family to bg-primary-shared*. Light is pixel-identical at every rung - primary-100, 120, 120, 140 exactly as before - because the plain and shared families coincide in light. Dark improves everywhere: rest primary-100 -> 80, hovered and focused 90 -> 70, press 140 -> 120. The rest row left the contrast list (3.36 -> 5.42), hovered and focused left the state-pair list (4.30 -> 6.75), and the press went 1.62 -> 2.31 - still under 3, because the package gives no primary family an inverted active rung, which is П2 again.\nWhy the stem matters at all: the plain family does not know the mode. bg-primary is #0f6cbd in BOTH modes and bg-primary-active #003c70 in both, while the mark on them, content-inverted, does flip - to #161616 in dark. A fixed fill under a flipping mark is what produced 3.36 and 1.62. Every rung of the shared family flips."
+        "decision": "answered",
+        "why": "Resolved in part on 15.09, when the designer produced the package tokens for checkbox/color/checked. Three slots, not one: border, bg and icon each have their own token, and our theme painted the border from the BG variable. Figma and Blazor agree that the border is border-primary-shared*, so that half was not a judgement call and is applied - three new names, light pixel-identical (primary-100/120/140 exactly as before), dark better at every rung: the box outline against the page goes 2.88 -> 4.65 at rest, 3.69 -> 5.79 hovered, 1.39 -> 1.98 pressed.\nWHAT REMAINS. The fill. Figma says bg-primary*, Blazor implements content-primary-shared*, and the two are identical in light and differ in dark - which is exactly what decides this row. On Figma's fill the mark reads 3.36 at rest and 1.62 pressed; on Blazor's, 5.42 and 2.31. Neither clears 3.0 in the pressed state, because no primary family inverts its active rung for dark - the same package defect П2 records for danger.\nAND A THIRD THING THE TOKENS SETTLE. The package state list is rest / hovered / active / read-only / disabled - there is no focused. Our theme paints .dx-state-focused AND .dx-state-active from one variable, so a keyboard user SITS at the value the package intends for a transient press. The button already separates them (bg-focused reads bg-primary-hovered). Splitting focus from active would leave the 1.62 where the package put it - under a finger, for the length of a click - and take the keyboard user to 4.30.\nRE-CHECKED 15.09 against a freshly pulled Blazor, and the stem argument above was WRONG. Blazor's checked fills are content-primary-shared for primary but bg-success-shared and bg-danger-shared for the other two - I had read the INDETERMINATE variables, where the dash is a content-coloured mark, as the checked fills. So primary is the outlier inside Blazor, our bg family agrees with their success and danger, and our invalid MARK on content-danger-shared agrees with their indeterminate mark. There was no internal inconsistency.\nWHICH LEAVES A CANDIDATE THAT SATISFIES BOTH SOURCES: bg-primary-shared*. The whole *-shared family is one value across bg, border and content, so it measures exactly like Blazor's content-primary-shared - mark 5.42 at rest and box 4.65 in dark against 3.36 and 2.88 today - while staying in the bg family Figma names, on the stem Blazor itself uses for success and danger. Light is identical to what ships now. The pressed rung still fails (2.31 / 1.98): no primary family inverts its active step for dark, which is П2's defect again.\nRESOLVED 15.09, option 1. Focus now takes the HOVERED rung and the press keeps the package's active one, which is the shape the contained button already had (bg-focused reads bg-primary-hovered, bg-active reads bg-primary-active). The package state list justifies it: there is no focused state in it at all, so painting focus with the value meant for a click was never what the tokens asked for.\nFour variables: -bg-focused and -border-focused moved down a rung, and -bg-active and -border-active were added to hold what the package assigns. The row that measured 1.62 split in two - the press keeps 1.62 on a state that lasts as long as a finger is down, and the focus a keyboard user SITS in went to 4.30, over the 3:1 a glyph needs. Light moves one step on focus, #003c70 -> #005397. Cascade verified on eight combinations: checked rest, hover, focus and press, the invalid pair, and the indeterminate pair including its ::before dash.\nThe fill STEM question is untouched and still open: bg-primary* as it ships, against bg-primary-shared* which reads 5.42 / 4.65 in dark where today it is 3.36 / 2.88.\nSTEM ACCEPTED 15.09. The checked fill moved from the plain bg-primary family to bg-primary-shared*. Light is pixel-identical at every rung - primary-100, 120, 120, 140 exactly as before - because the plain and shared families coincide in light. Dark improves everywhere: rest primary-100 -> 80, hovered and focused 90 -> 70, press 140 -> 120. The rest row left the contrast list (3.36 -> 5.42), hovered and focused left the state-pair list (4.30 -> 6.75), and the press went 1.62 -> 2.31 - still under 3, because the package gives no primary family an inverted active rung, which is П2 again.\nWhy the stem matters at all: the plain family does not know the mode. bg-primary is #0f6cbd in BOTH modes and bg-primary-active #003c70 in both, while the mark on them, content-inverted, does flip - to #161616 in dark. A fixed fill under a flipping mark is what produced 3.36 and 1.62. Every rung of the shared family flips.\nCLOSED 15.09. All three parts are applied - the outline has its own role, focus is separated from the press, and the fill is on the shared stem. What is left below the floor is the press at 2.31 in dark, and no shipped role fixes it: every primary family keeps its active rung un-inverted for dark. That is the same package defect П2 files for danger, so it leaves the theme as a report rather than a question."
       },
       "outlined-button-label": {
         "decision": "design",
@@ -1954,9 +1889,9 @@
       },
       {
         "key": "tree-view-checkbox-focus-still-unique",
-        "decision": "design",
+        "decision": "answered",
         "title": "treeView всё ещё красит чекбокс по-своему в фокусе элемента",
-        "why": "The disabled overrides are gone. The focus block is not: when the treeView ITEM has focus, the checkbox inside it is repainted with three values of its own (treeView/_index.scss:18-72). They are not the checkbox own focus values: unchecked border goes to color-border where the checkbox uses bg-primary-active, unchecked fill goes to bg-low where the checkbox sets none, and the checked fill goes to bg-primary-hovered where the checkbox uses bg-primary-active. So three distinct divergences remain, and the rule stated for this widget - no unique checkbox styling in treeView - is not yet met. Removing the block is NOT value-neutral, which is why it was not done with the disabled one: legacy fluent carries the same block, so the pixel is inherited, not invented. There is a real argument for removing it beyond tidiness: the checkbox itself is not focused here, the item is, so painting the checkbox as focused states something untrue to a keyboard user. Options: (1) remove the block - the checkbox stops reacting to item focus, three variables and one public name go, etalons re-shoot; (2) keep the block but point its three values at the checkbox own focus roles, so treeView adds no roles of its own - still a pixel change, smaller; (3) keep as is for legacy parity. Note that (1) and (2) both collide with the checkbox-focused-fill question: whatever the checkbox focus fill becomes, this follows it. Recommendation: settle checkbox-focused-fill first, then (1)."
+        "why": "The disabled overrides are gone. The focus block is not: when the treeView ITEM has focus, the checkbox inside it is repainted with three values of its own (treeView/_index.scss:18-72). They are not the checkbox own focus values: unchecked border goes to color-border where the checkbox uses bg-primary-active, unchecked fill goes to bg-low where the checkbox sets none, and the checked fill goes to bg-primary-hovered where the checkbox uses bg-primary-active. So three distinct divergences remain, and the rule stated for this widget - no unique checkbox styling in treeView - is not yet met. Removing the block is NOT value-neutral, which is why it was not done with the disabled one: legacy fluent carries the same block, so the pixel is inherited, not invented. There is a real argument for removing it beyond tidiness: the checkbox itself is not focused here, the item is, so painting the checkbox as focused states something untrue to a keyboard user. Options: (1) remove the block - the checkbox stops reacting to item focus, three variables and one public name go, etalons re-shoot; (2) keep the block but point its three values at the checkbox own focus roles, so treeView adds no roles of its own - still a pixel change, smaller; (3) keep as is for legacy parity. Note that (1) and (2) both collide with the checkbox-focused-fill question: whatever the checkbox focus fill becomes, this follows it. Recommendation: settle checkbox-focused-fill first, then (1).\nCLOSED 15.09, option 1, once NFR-1 stopped holding it shut. Both blocks are gone and so are all four variables - the treeView no longer has a single colour name for the checkbox. Cascade checked on six scenarios: inside a focused item the checked box now resolves to check-box-icon-checked-bg and -border, the unchecked one to check-box-icon-bg and check-box-border, and a disabled one to check-box-border-disabled - all the checkbox own names, identical to a checkbox standing outside a tree. The select-all row still resolves to the checkbox FOCUS names, which is right: that element carries dx-checkbox itself, so there the checkbox really is the focused thing.\nA dead name came out with it. $tree-view-checkbox-checked-border-focused existed only to feed $checkbox-border-color-focused in the base treeview-checkbox mixin - a parameter the base declares and never reads, so it painted nothing at all. The argument is null now; deleting the parameter belongs to the base owners."
       },
       {
         "key": "tier-bypassed-by-neighbours",
@@ -2137,6 +2072,11 @@
         "what": "scheduler-appointment-base-content -> -base-bg",
         "change": "renamed, role untouched",
         "effect": "the rename became visible only after the Д20 fix: with the form icon no longer reading it, the variable stopped painting any color: and was left named -content while painting a background, a box-shadow and the appointment fill. Zero values moved - the role expression is the same - and the slot check went back to eleven rows"
+      },
+      {
+        "what": "treeView stops styling the checkbox (Д22)",
+        "change": "both focus blocks removed along with $tree-view-checkbox-border-focused, -bg-focused, -accent-content-focused and -checked-border-focused",
+        "effect": "the checkbox inside a focused tree item stops being painted as focused, which it never was - the item was. It now reads the checkbox own names in every scenario, verified on six. Pixels move: the checked box goes from bg-primary-hovered to the checkbox rest fill and the unchecked one from bg-low to content-inverted, so etalons re-shoot. The fourth variable was dead - it fed a base mixin parameter the base never reads"
       }
     ]
   },
@@ -2151,7 +2091,10 @@
       "же, как неотнесённый вердикт. Поэтому spelling здесь нет - все три строки отвечены (answered).",
       "graphic-ok-rest-only отсюда ушёл 15.09: он помечал строку, где покой брал порог, а состояние",
       "нет. После перевода заливки на стем shared покой дошёл до 5.42, строка вышла из списка",
-      "контраста, и класс остался без единой записи - гейт это и поймал."
+      "контраста, и класс остался без единой записи - гейт это и поймал.",
+      "deferred-to ушёл 15.09 вслед за graphic-ok-rest-only: обе группы, которые он помечал,",
+      "закрылись сами - чекбокс и радиокнопка сошлись на одном стеме, а treeView перестал",
+      "красить чекбокс. Класс остался без строк, и проверка это поймала."
     ],
     "classes": {
       "design": {
@@ -2206,9 +2149,9 @@
         "section": "А",
         "ru": "кольцо и заливка мелкого контрола из одной переменной - разобрано одним вопросом"
       },
-      "deferred-to": {
+      "false-group": {
         "section": "Е",
-        "ru": "расхождение уже разобрано отдельным вопросом - здесь только его след"
+        "ru": "группа сложилась по слову в именах, а не по существу - участники красят разные элементы, и каждая роль верна для своего"
       }
     }
   },
