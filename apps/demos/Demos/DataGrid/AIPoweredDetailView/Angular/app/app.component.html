@@ -17,10 +17,7 @@
   <div *dxTemplate="let model of 'detailExpandTemplate'">
     <div class="dx-icon-sparkle"></div>
   </div>
-  <dxi-data-grid-column
-    caption="Model"
-    [calculateCellValue]="calculateModel"
-  />
+  <dxi-data-grid-column caption="Model" [calculateCellValue]="calculateModel" />
   <dxi-data-grid-column dataField="Price" format="currency" alignment="left" />
   <dxi-data-grid-column
     caption="Category"

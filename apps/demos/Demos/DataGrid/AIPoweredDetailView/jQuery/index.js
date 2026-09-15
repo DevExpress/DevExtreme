@@ -289,7 +289,6 @@ $(() => {
         inputArea.suggestions.option('onItemClick', ({ itemData, event }) => {
           const suggestion = itemData;
           inputArea.promptEditor.option('value', suggestion.prompt);
-          console.log(event);
           handleSubmit(event, data, controls);
         });
 

@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from 'react';
+import { formatMessage } from 'devextreme/localization';
 import {
   DataGrid, Column, Paging, MasterDetail,
 } from 'devextreme-react/data-grid';
-import { formatMessage } from 'devextreme/localization';
 import Category from './Category.js';
 import DetailView from './DetailView.js';
 import { vehicles } from './data.js';
