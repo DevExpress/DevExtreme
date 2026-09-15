@@ -60,6 +60,12 @@
     .dx-checkbox-icon {
       border-color: var(--dx-check-box-border-active);
     }
+
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: var(--dx-check-box-invalid-border-active);
+      }
+    }
   }
 
   &.dx-state-focused {
@@ -134,6 +140,13 @@
     .dx-checkbox-icon {
       border-color: var(--dx-check-box-icon-checked-border-active);
       background-color: var(--dx-check-box-icon-checked-bg-active);
+    }
+
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: var(--dx-check-box-invalid-border-active);
+        background-color: var(--dx-check-box-invalid-bg-active);
+      }
     }
   }
 
@@ -222,6 +235,16 @@
 
       &::before {
         background-color: var(--dx-check-box-icon-checked-bg-active);
+      }
+    }
+
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: var(--dx-check-box-invalid-border-active);
+
+        &::before {
+          background-color: var(--dx-check-box-invalid-mark-bg-active);
+        }
       }
     }
   }

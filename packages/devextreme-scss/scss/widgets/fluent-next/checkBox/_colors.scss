@@ -30,17 +30,24 @@ $check-box-icon-checked-border-hovered: ds.$color-border-primary-shared-hovered 
 $check-box-icon-checked-border-focused: ds.$color-border-primary-shared-hovered !default;
 $check-box-icon-checked-border-active: ds.$color-border-primary-shared-active !default;
 
+/* Невалидное состояние держит ту же лестницу, что и обычное после Д16: фокус на ступени
+   hovered, нажатие на своей. Ступень active у danger-рампы в тёмном не переворачивается
+   (#76000b -> #9d0013), и невалидный бокс в фокусе давал там 1.81 против 4.22 в покое -
+   фокус делал контрол незаметнее, чем без него. На ступени hovered тёмный даёт 5.36. */
 $check-box-invalid-border: ds.$color-border-danger-shared !default;
 $check-box-invalid-border-hovered: ds.$color-border-danger-shared-hovered !default;
-$check-box-invalid-border-focused: ds.$color-border-danger-shared-active !default;
+$check-box-invalid-border-focused: ds.$color-border-danger-shared-hovered !default;
+$check-box-invalid-border-active: ds.$color-border-danger-shared-active !default;
 
 $check-box-invalid-bg: ds.$color-bg-danger-shared !default;
 $check-box-invalid-bg-hovered: ds.$color-bg-danger-shared-hovered !default;
-$check-box-invalid-bg-focused: ds.$color-bg-danger-shared-active !default;
+$check-box-invalid-bg-focused: ds.$color-bg-danger-shared-hovered !default;
+$check-box-invalid-bg-active: ds.$color-bg-danger-shared-active !default;
 
 $check-box-invalid-mark-bg: ds.$color-content-danger-shared !default;
 $check-box-invalid-mark-bg-hovered: ds.$color-content-danger-shared-hovered !default;
-$check-box-invalid-mark-bg-focused: ds.$color-content-danger-shared-active !default;
+$check-box-invalid-mark-bg-focused: ds.$color-content-danger-shared-hovered !default;
+$check-box-invalid-mark-bg-active: ds.$color-content-danger-shared-active !default;
 
 $check-box-border-disabled: ds.$color-border-disabled !default;
 

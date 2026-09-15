@@ -121,7 +121,6 @@
     }
   }
 
-  .dx-state-active,
   .dx-state-focused {
     &.dx-radiobutton {
       .dx-radiobutton-icon {
@@ -130,6 +129,18 @@
 
       .dx-radiobutton-icon-dot {
         background-color: var(--dx-radio-button-invalid-bg-focused);
+      }
+    }
+  }
+
+  .dx-state-active {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: var(--dx-radio-button-invalid-border-active);
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-invalid-bg-active);
       }
     }
   }

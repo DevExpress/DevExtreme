@@ -53,10 +53,20 @@
       "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
     },
     {
-      "name": "check-box-invalid-mark-bg-focused",
+      "name": "check-box-invalid-mark-bg-active",
       "verdict": "cross-family",
       "roles": [
         "color-content-danger-shared-active"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
+      "name": "check-box-invalid-mark-bg-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-hovered"
       ],
       "slot": "bg",
       "decision": "confirmed",
@@ -143,10 +153,20 @@
       "why": "the ring's border-color and the dot's background-color travel as one value - recorded in DIVERGENCES as a rule-5 pair, accepted by review round 2"
     },
     {
-      "name": "radio-button-invalid-bg-focused",
+      "name": "radio-button-invalid-bg-active",
       "verdict": "cross-family",
       "roles": [
         "color-content-danger-shared-active"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "невалидная точка радиокнопки это её метка, как галочка у чекбокса: пакет моделирует её иконкой (radio.root.color.checked.invalid.icon = content-danger-shared у blazor). Слово слота в имени идёт от свойства - точка красится background-color, - а семейство роли от того, чем элемент является. Тот же выбор, что у check-box-invalid-mark-bg и у обычной точки. Значения совпадают: *-danger-shared это один цвет через bg, border и content"
+    },
+    {
+      "name": "radio-button-invalid-bg-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-hovered"
       ],
       "slot": "bg",
       "decision": "rule-5",
@@ -962,11 +982,10 @@
       "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
     },
     {
-      "concept": "invalid bg focused",
+      "concept": "invalid bg active",
       "roles": [
         "color-bg-danger-shared-active",
-        "color-content-danger-shared-active",
-        "color-content-danger"
+        "color-content-danger-shared-active"
       ],
       "families": [
         "bg",
@@ -984,6 +1003,35 @@
         {
           "folder": "radioButton",
           "role": "color-content-danger-shared-active"
+        }
+      ],
+      "decision": "false-group",
+      "why": "группа сложилась по слову в именах: у чекбокса это заливка бокса, у радиокнопки - точка-метка, которую пакет моделирует иконкой. Обе роли верны для своего элемента, и значения совпадают - *-danger-shared один цвет через все три семейства. Открылось при Д27"
+    },
+    {
+      "concept": "invalid bg focused",
+      "roles": [
+        "color-bg-danger-shared-hovered",
+        "color-content-danger-shared-hovered",
+        "color-content-danger",
+        "color-bg-danger-shared-active"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared-hovered"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-danger-shared-hovered"
         },
         {
           "folder": "slider",
@@ -1089,6 +1137,7 @@
       "concept": "invalid border focused",
       "roles": [
         "color-border-danger",
+        "color-border-danger-shared-hovered",
         "color-border-danger-shared-active"
       ],
       "families": [
@@ -1101,11 +1150,11 @@
         },
         {
           "folder": "checkBox",
-          "role": "color-border-danger-shared-active"
+          "role": "color-border-danger-shared-hovered"
         },
         {
           "folder": "radioButton",
-          "role": "color-border-danger-shared-active"
+          "role": "color-border-danger-shared-hovered"
         },
         {
           "folder": "slider",
@@ -1724,11 +1773,11 @@
       "Д21": "radio-invalid-vs-checkbox-invalid - принято 15.09 первым вариантом: форма чекбокса везде. Пакет назвал анатомию сам - radio-button.color.checked даёт bg=none, border=border-primary-shared, icon=content-primary-shared, - поэтому у каждого кольца теперь своё имя на border-роли, а у каждой точки своё на content-роли. База получила два необязательных параметра",
       "Д14": "invalid content rest - закрыт 15.09 ответом «для common bg-danger, для остальных content-danger». Три текстовых участника уже на content-danger; у common участник группы это белый знак на красном диске, поэтому перевод коснулся диска: invalid-badge-bg с bg-danger-shared на bg-danger, и знак держит 6.07 в обоих режимах вместо 6.07/3.68",
       "Д23": "tier-bypassed-by-neighbours - принято 15.09 обоими вариантами сразу: 131 чтение чужого модуля цветов переведено на имя тира соседа, два места получили собственное имя. Прямых красок мимо тира 234 -> 47, и все 47 гейт достижимости отвергает по названной причине - портал или непроверенная область",
-      "Д25": "tree-focus-on-disabled-node - принято 15.09 первым вариантом: вариант с чекбоксами получил тот же фокусный фон строки, что уже был у варианта без них, и без охраны по disabled - как у табов. Неактивный узел в фокусе теперь помечен, а его чекбокс по-прежнему не красится активным"
+      "Д25": "tree-focus-on-disabled-node - принято 15.09 первым вариантом: вариант с чекбоксами получил тот же фокусный фон строки, что уже был у варианта без них, и без охраны по disabled - как у табов. Неактивный узел в фокусе теперь помечен, а его чекбокс по-прежнему не красится активным",
+      "Д27": "invalid-focus-rung - принято 15.09 первым вариантом: невалидный фокус у чекбокса и радиокнопки переведён на ступень hovered, нажатие получило свои имена на ступени active. Тёмный 1.81 -> 5.36"
     },
     "map": {
-      "statePairGroup:outlined-button-label": "Д17",
-      "sweep:invalid-focus-rung": "Д27"
+      "statePairGroup:outlined-button-label": "Д17"
     }
   },
   "statePairs": {
@@ -2102,9 +2151,9 @@
       },
       {
         "key": "invalid-focus-rung",
-        "decision": "design",
+        "decision": "answered",
         "title": "Невалидный контрол в фокусе: та же ступень active, тот же провал в тёмном",
-        "why": "Found 15.09 while applying Д26: the same shape on the danger ramp, and nobody has ruled on it. An invalid check box in focus reads bg-danger-shared-active / border-danger-shared-active, and the invalid radio reads $radio-button-invalid-bg-focused = border-danger-shared-active. That rung does not invert either: bg-danger-shared goes #c50f1f -> #e4554f between modes, hovered #9d0013 -> #ee726a, active only #76000b -> #9d0013. Measured on the built bundle: the invalid check box focused is #9d0013 on the #242424 surface = 1.81, against 4.22 for the same control at rest. Same failure as Д26, one ramp over.\nД16 moved the primary family to the hovered rung and left the danger family alone, because the question was the checked fill; Д26 moved the radio to the check box's decisions, and the check box's decision for invalid is the active rung - so the radio inherited it. Nobody chose it.\nOptions: (1) the symmetric fix - invalid focus takes the hovered rung, danger-shared-hovered: dark 1.81 -> 4.86, light 11.83 -> 8.51, six variables across check box and radio; (2) leave it, on the argument that an invalid control is already marked by its fill and the focus rung only has to differ from rest - which is exactly the argument Д26 rejected for the primary family; (3) fold it into the focus-ring decision, where focus stops being a recolour at all. Recommendation: (1), for the same reason Д26 took it."
+        "why": "Found 15.09 while applying Д26: the same shape on the danger ramp, and nobody has ruled on it. An invalid check box in focus reads bg-danger-shared-active / border-danger-shared-active, and the invalid radio reads $radio-button-invalid-bg-focused = border-danger-shared-active. That rung does not invert either: bg-danger-shared goes #c50f1f -> #e4554f between modes, hovered #9d0013 -> #ee726a, active only #76000b -> #9d0013. Measured on the built bundle: the invalid check box focused is #9d0013 on the #242424 surface = 1.81, against 4.22 for the same control at rest. Same failure as Д26, one ramp over.\nД16 moved the primary family to the hovered rung and left the danger family alone, because the question was the checked fill; Д26 moved the radio to the check box's decisions, and the check box's decision for invalid is the active rung - so the radio inherited it. Nobody chose it.\nANSWERED 15.09 with option (1), the symmetric fix, after validating the ramp on the built bundle: bg-danger-shared reads 6.07 light / 4.22 dark at rest, -hovered 8.60 / 5.36, -active 11.83 / 1.81. The active rung is the one that does not invert, exactly as on the primary ramp. Focus now takes the hovered rung on both controls - six names moved and six new -active names hold what the package assigns to a press: check box invalid bg, border and mark, radio invalid bg and border. The combined .dx-state-active, .dx-state-focused blocks were split the same way Д16 split them, so the press keeps its own value for the length of a click. Measured on the live invalid check box after the change: dark rest 4.22, hover 5.36, FOCUS 5.36 where it was 1.81, press 1.81; light 6.07 / 8.60 / 8.60 / 11.83"
       }
     ],
     "confirmed": {
@@ -2328,6 +2377,11 @@
         "what": "treeView focus on a node with a check box (Д25)",
         "change": ".dx-treeview-item-with-checkbox.dx-state-focused > .dx-treeview-item gains background-color, color and border-radius from the tree own --dx-tree-view-bg-focused / -content-focused / -item-border-radius, with no disabled guard",
         "effect": "the focus mark stops disappearing on a disabled node. The base mixin paints this background only for .dx-treeview-item-without-checkbox, so the with-checkbox variant had nothing once the check box was excluded - arrows walked onto a disabled node and nothing changed. Now both variants read the same: focused #f5f5f5 / #3b3b3b, focused disabled the same background with the text at #ababab / #767676 and the check box untouched at #d7d7d7 / #4c4c4c. The precedent is the theme own: a disabled tab that takes focus keeps its background on the very same role, and says disabled with the content colour"
+      },
+      {
+        "what": "invalid focus rung on the check box and the radio (Д27)",
+        "change": "six -invalid-*-focused names move from the danger-shared active rung to the hovered one; six new -invalid-*-active names hold the active rung; the combined active+focused invalid blocks split in four places, as Д16 split the normal family",
+        "effect": "the danger ramp does not invert its active rung either - #76000b light becomes #9d0013 dark - so an invalid control in focus read 1.81 in dark against 4.22 for the same control at rest: focus made it harder to see. Now dark reads 5.36 at focus, light 8.60 instead of 11.83, and the press keeps the package value for the length of a click. Measured on the live invalid check box in both modes"
       }
     ]
   },

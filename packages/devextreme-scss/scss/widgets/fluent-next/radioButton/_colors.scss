@@ -32,15 +32,20 @@ $radio-button-checked-border-hovered: ds.$color-border-primary-shared-hovered !d
 $radio-button-checked-border-focused: ds.$color-border-primary-shared-hovered !default;
 $radio-button-checked-border-active: ds.$color-border-primary-shared-active !default;
 
-/* Невалидное состояние - та же пара слотов, danger-оттенок. Значения не двигаются:
-   семейство *-danger-shared разрешается в одно значение через bg, border и content. */
+/* Невалидное состояние - та же пара слотов, danger-оттенок: семейство *-danger-shared
+   разрешается в одно значение через bg, border и content, поэтому разведение по слотам
+   значения не двигает. Лестница состояний та же, что у обычного и у чекбокса: фокус на
+   ступени hovered, нажатие на своей. Ступень active у danger-рампы в тёмном не
+   переворачивается, и точка в фокусе давала там 1.81 против 4.22 в покое (Д27). */
 $radio-button-invalid-bg: ds.$color-content-danger-shared !default;
 $radio-button-invalid-bg-hovered: ds.$color-content-danger-shared-hovered !default;
-$radio-button-invalid-bg-focused: ds.$color-content-danger-shared-active !default;
+$radio-button-invalid-bg-focused: ds.$color-content-danger-shared-hovered !default;
+$radio-button-invalid-bg-active: ds.$color-content-danger-shared-active !default;
 
 $radio-button-invalid-border: ds.$color-border-danger-shared !default;
 $radio-button-invalid-border-hovered: ds.$color-border-danger-shared-hovered !default;
-$radio-button-invalid-border-focused: ds.$color-border-danger-shared-active !default;
+$radio-button-invalid-border-focused: ds.$color-border-danger-shared-hovered !default;
+$radio-button-invalid-border-active: ds.$color-border-danger-shared-active !default;
 
 $radio-button-content-disabled: ds.$color-content-disabled !default;
 
