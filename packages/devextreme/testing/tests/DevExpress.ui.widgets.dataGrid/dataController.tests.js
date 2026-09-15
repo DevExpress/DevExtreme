@@ -2626,7 +2626,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -2652,7 +2652,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
