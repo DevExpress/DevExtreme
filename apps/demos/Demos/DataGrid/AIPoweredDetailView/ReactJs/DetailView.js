@@ -49,15 +49,12 @@ const DetailView = ({ data: templateData, onAbortReady }) => {
     if (isGeneric) return 178;
     return 196;
   }, []);
-  const onSuggestionClick = useCallback(({ itemData: suggestion }) => {
-    setPromptValue(suggestion.prompt);
-  }, []);
   const handlePromptChange = useCallback((value) => {
     setPromptValue(value);
   }, []);
   const handleSubmit = useCallback(
-    async ({ event }) => {
-      if (promptValue === '') return;
+    async (event, prompt) => {
+      if (!prompt) return;
       const controller = new AbortController();
       abortControllerRef.current = controller;
       onAbortReady(() => controller.abort());
@@ -68,10 +65,7 @@ const DetailView = ({ data: templateData, onAbortReady }) => {
         const rowData = templateData.data;
         const messages = [
           { role: 'system', content: SYSTEM_PROMPT },
-          {
-            role: 'user',
-            content: `User prompt: ${promptValue}\nRow data: ${JSON.stringify(rowData)}`,
-          },
+          { role: 'user', content: `User prompt: ${prompt}\nRow data: ${JSON.stringify(rowData)}` },
         ];
         const aiResponse = await getAIResponse(messages, controller.signal);
         if (aiResponse === '') throw new Error('AI response is empty');
@@ -87,7 +81,21 @@ const DetailView = ({ data: templateData, onAbortReady }) => {
         event?.target?.focus();
       }
     },
-    [promptValue, templateData.data],
+    [templateData.data],
+  );
+  const onSubmit = useCallback(
+    (e) => {
+      handleSubmit(e.event, promptValue);
+    },
+    [promptValue, handleSubmit],
+  );
+  const onSuggestionClick = useCallback(
+    (e) => {
+      const { itemData: suggestion, event } = e;
+      setPromptValue(suggestion.prompt);
+      handleSubmit(event, suggestion.prompt);
+    },
+    [handleSubmit],
   );
   return (
     <>
@@ -99,7 +107,7 @@ const DetailView = ({ data: templateData, onAbortReady }) => {
             valueChangeEvent="input"
             value={promptValue}
             onValueChange={handlePromptChange}
-            onEnterKey={handleSubmit}
+            onEnterKey={onSubmit}
             elementAttr={promptElementAttr}
             disabled={isLoading}
           />
@@ -120,7 +128,7 @@ const DetailView = ({ data: templateData, onAbortReady }) => {
             text={submitButtonText}
             type="default"
             disabled={!promptValue || isLoading}
-            onClick={handleSubmit}
+            onClick={onSubmit}
           />
         </div>
       </div>

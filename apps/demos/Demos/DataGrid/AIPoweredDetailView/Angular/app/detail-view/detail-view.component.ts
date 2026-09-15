@@ -4,11 +4,10 @@ import { DxTextBoxModule, DxButtonGroupModule, DxButtonModule, DxTextAreaModule,
 import { type DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 import { type DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
 import { type DxButtonTypes } from 'devextreme-angular/ui/button';
+import { type DxEvent } from 'devextreme/events';
 import themes from 'devextreme/ui/themes';
 import { type Vehicle } from '../app.service';
 import { AiService, type AIMessage } from '../ai/ai.service';
-
-type SubmitEvent = DxButtonTypes.ClickEvent | DxTextBoxTypes.EnterKeyEvent;
 
 @Component({
   selector: 'detail-view',
@@ -60,12 +59,17 @@ export class DetailViewComponent {
     }
   }
 
-  onSuggestionClick({ itemData: suggestion }: DxButtonGroupTypes.ItemClickEvent) {
-    this.promptValue = suggestion.prompt;
+  onSubmit({ event }: DxTextBoxTypes.EnterKeyEvent | DxButtonTypes.ClickEvent) {
+    this.handleSubmit(event);
   }
 
-  async handleSubmit({ event }: SubmitEvent) {
-    if (this.promptValue === '') return;
+  onSuggestionClick({ itemData: suggestion, event }: DxButtonGroupTypes.ItemClickEvent) {
+    this.promptValue = suggestion.prompt;
+    this.handleSubmit(event);
+  }
+
+  async handleSubmit(event?: DxEvent) {
+    if (!this.promptValue) return;
 
     this.abortController = new AbortController();
     this.isError = false;

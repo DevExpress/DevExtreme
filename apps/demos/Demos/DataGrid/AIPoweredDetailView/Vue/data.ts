@@ -1,8 +1,3 @@
-import { type DxButtonTypes } from 'devextreme-vue/button';
-import { type DxTextBoxTypes } from 'devextreme-vue/text-box';
-
-export type SubmitEvent = DxButtonTypes.ClickEvent | DxTextBoxTypes.EnterKeyEvent;
-
 export interface Vehicle {
   ID: number;
   TrademarkName: string;

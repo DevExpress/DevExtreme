@@ -6,7 +6,7 @@
         styling-mode="filled"
         value-change-event="input"
         v-model:value="promptValue"
-        @enter-key="handleSubmit"
+        @enter-key="onSubmit"
         :element-attr="promptElementAttr"
         :disabled="isLoading"
       />
@@ -27,7 +27,7 @@
         :text="submitButtonText"
         type="default"
         :disabled="!promptValue || isLoading"
-        @click="handleSubmit"
+        @click="onSubmit"
       />
     </div>
   </div>
@@ -77,14 +77,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxTextBox } from 'devextreme-vue/text-box';
+import { DxTextBox, type DxTextBoxTypes } from 'devextreme-vue/text-box';
 import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-group';
-import { DxButton } from 'devextreme-vue/button';
+import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
 import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxLoadPanel, DxPosition } from 'devextreme-vue/load-panel';
+import { type DxEvent } from 'devextreme/events';
 import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT, type AIMessage } from './service.ts';
-import { type Vehicle, type SubmitEvent } from './data.ts';
+import { type Vehicle } from './data.ts';
 
 const { rowData } = defineProps<{ rowData: Vehicle }>();
 
@@ -128,12 +129,8 @@ const isLoading = ref(false);
 const isError = ref(false);
 const submitButtonText = ref('Submit');
 
-function onSuggestionClick({ itemData: suggestion }: DxButtonGroupTypes.ItemClickEvent) {
-  promptValue.value = suggestion.prompt;
-}
-
-async function handleSubmit({ event }: SubmitEvent) {
-  if (promptValue.value === '') return;
+async function handleSubmit(event?: DxEvent) {
+  if (!promptValue.value) return;
 
   const controller = new AbortController();
   abortController.value = controller;
@@ -160,6 +157,15 @@ async function handleSubmit({ event }: SubmitEvent) {
     isLoading.value = false;
     (event?.target as HTMLElement)?.focus();
   }
+}
+
+function onSubmit({ event }: DxTextBoxTypes.EnterKeyEvent | DxButtonTypes.ClickEvent) {
+  handleSubmit(event);
+}
+
+function onSuggestionClick({ itemData: suggestion, event }: DxButtonGroupTypes.ItemClickEvent) {
+  promptValue.value = suggestion.prompt;
+  handleSubmit(event);
 }
 </script>
 

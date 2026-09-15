@@ -75,7 +75,7 @@ $(() => {
     const { responseEditor, $container } = outputArea;
     
     const userPrompt = promptEditor.option('value');
-    if (userPrompt === '') return;
+    if (!userPrompt) return;
 
     abortController = new AbortController();
 
@@ -122,23 +122,19 @@ $(() => {
     }).dxTextBox('instance');
   }
 
-  function createSuggestions(promptEditor) {
+  function createSuggestions() {
     return $('<div>').dxButtonGroup({
       items: suggestions,
       stylingMode: 'outlined',
       selectionMode: 'none',
       elementAttr: { class: CLASS.chatSuggestions },
-      onItemClick(e) {
-        const suggestion = e.itemData;
-        promptEditor.option('value', suggestion.prompt);
-      },
     }).dxButtonGroup('instance');
   }
 
   function createInputArea() {
     const submitButton = createSubmitButton();
     const promptEditor = createPromptEditor(submitButton);
-    const suggestions = createSuggestions(promptEditor);
+    const suggestions = createSuggestions();
 
     const $container = $('<div>')
       .addClass('input-container')
@@ -293,6 +289,12 @@ $(() => {
 
         inputArea.promptEditor.option('onEnterKey', onSubmit);
         inputArea.submitButton.option('onClick', onSubmit);
+        inputArea.suggestions.option('onItemClick', ({ itemData, event }) => {
+          const suggestion = itemData;
+          inputArea.promptEditor.option('value', suggestion.prompt);
+          console.log(event);
+          handleSubmit(event, data, controls);
+        });
 
         container.append(inputArea.$container, outputArea.$container);
       },

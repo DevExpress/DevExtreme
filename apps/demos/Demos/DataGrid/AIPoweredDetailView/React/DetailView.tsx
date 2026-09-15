@@ -6,6 +6,7 @@ import { ButtonGroup, type ButtonGroupTypes } from 'devextreme-react/button-grou
 import { Button, type ButtonTypes } from 'devextreme-react/button';
 import { TextArea } from 'devextreme-react/text-area';
 import { LoadPanel, Position } from 'devextreme-react/load-panel';
+import { type DxEvent } from 'devextreme/events';
 import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT } from './service.ts';
 import { type AIMessage } from './types.ts';
@@ -13,7 +14,6 @@ import { type AIMessage } from './types.ts';
 type DetailViewProps = DataGridTypes.MasterDetailTemplateData & {
   onAbortReady: (abortRequest: () => void) => void;
 };
-type SubmitEvent = TextBoxTypes.EnterKeyEvent | ButtonTypes.ClickEvent;
 
 const promptElementAttr = { class: 'prompt-editor' };
 const suggestionsElementAttr = { class: 'dx-chat-suggestions' };
@@ -51,16 +51,12 @@ const DetailView = ({ data: templateData, onAbortReady }: DetailViewProps) => {
     return 196;
   }, []);
 
-  const onSuggestionClick = useCallback(({ itemData: suggestion }: ButtonGroupTypes.ItemClickEvent) => {
-    setPromptValue(suggestion.prompt);
-  }, []);
-
   const handlePromptChange = useCallback((value: string) => {
     setPromptValue(value);
   }, []);
 
-  const handleSubmit = useCallback(async ({ event }: SubmitEvent) => {
-    if (promptValue === '') return;
+  const handleSubmit = useCallback(async (event?: DxEvent, prompt?: string) => {
+    if (!prompt) return;
 
     const controller = new AbortController();
     abortControllerRef.current = controller;
@@ -74,7 +70,7 @@ const DetailView = ({ data: templateData, onAbortReady }: DetailViewProps) => {
       const rowData = templateData.data;
       const messages: AIMessage[] = [
         { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: `User prompt: ${promptValue}\nRow data: ${JSON.stringify(rowData)}` },
+        { role: 'user', content: `User prompt: ${prompt}\nRow data: ${JSON.stringify(rowData)}` },
       ];
 
       const aiResponse = await getAIResponse(messages, controller.signal);
@@ -92,7 +88,17 @@ const DetailView = ({ data: templateData, onAbortReady }: DetailViewProps) => {
       setIsLoading(false);
       (event?.target as HTMLElement)?.focus();
     }
-  }, [promptValue, templateData.data]);
+  }, [templateData.data]);
+
+  const onSubmit = useCallback((e: TextBoxTypes.EnterKeyEvent | ButtonTypes.ClickEvent) => {
+    handleSubmit(e.event, promptValue);
+  }, [promptValue, handleSubmit]);
+
+  const onSuggestionClick = useCallback((e: ButtonGroupTypes.ItemClickEvent) => {
+    const { itemData: suggestion, event } = e;
+    setPromptValue(suggestion.prompt);
+    handleSubmit(event, suggestion.prompt)
+  }, [handleSubmit]);
 
   return (<>
     <div className="input-container">
@@ -103,7 +109,7 @@ const DetailView = ({ data: templateData, onAbortReady }: DetailViewProps) => {
           valueChangeEvent="input"
           value={promptValue}
           onValueChange={handlePromptChange}
-          onEnterKey={handleSubmit}
+          onEnterKey={onSubmit}
           elementAttr={promptElementAttr}
           disabled={isLoading}
         />
@@ -124,7 +130,7 @@ const DetailView = ({ data: templateData, onAbortReady }: DetailViewProps) => {
           text={submitButtonText}
           type="default"
           disabled={!promptValue || isLoading}
-          onClick={handleSubmit}
+          onClick={onSubmit}
         />
       </div>
     </div>
