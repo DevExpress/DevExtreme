@@ -38,14 +38,11 @@ export const filterSyncFilterControllerExtender = (
     }
 
     const filters = [super.getAdditionalFilter(excludedColumn)];
-    let filterValue = this.option('filterValue');
-
-    if (this.isFilterSyncActive() && isDefined(excludedColumn) && filterValue) {
-      filterValue = removeFieldConditionsFromFilter(
-        filterValue,
-        getColumnIdentifier(excludedColumn),
-      );
-    }
+    const currentFilterValue = this.option('filterValue');
+    const shouldExcludeColumn = this.isFilterSyncActive() && isDefined(excludedColumn);
+    const filterValue = shouldExcludeColumn
+      ? removeFieldConditionsFromFilter(currentFilterValue, getColumnIdentifier(excludedColumn))
+      : currentFilterValue;
 
     const customOperations = this.filterSyncController.getCustomFilterOperations();
     const calculatedFilterValue: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
