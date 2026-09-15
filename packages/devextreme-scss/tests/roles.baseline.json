@@ -430,11 +430,13 @@
     {
       "stem": "button-default-outlined-content",
       "states": [
+        "active",
         "hovered",
+        "rest",
         "selected"
       ],
       "role": [
-        "color-content-primary-hovered"
+        "color-content"
       ],
       "decision": "no-rung",
       "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
@@ -1474,6 +1476,7 @@
       "color-bg-on-color-alpha-active",
       "color-bg-on-color-alpha-disabled",
       "color-bg-on-color-alpha-hovered",
+      "color-bg-primary-subtler-hovered",
       "color-bg-static-dark-active",
       "color-bg-static-dark-hovered",
       "color-bg-static-dark-selected",
@@ -1484,6 +1487,9 @@
       "color-bg-success-shared",
       "color-bg-success-shared-active",
       "color-bg-success-shared-hovered",
+      "color-bg-success-subtler-active",
+      "color-bg-success-subtler-hovered",
+      "color-bg-success-subtler-selected",
       "color-bg-warning-active",
       "color-bg-warning-hovered",
       "color-bg-warning-selected",
@@ -1506,6 +1512,7 @@
       "color-border-static-light-active",
       "color-border-static-light-disabled",
       "color-border-static-light-hovered",
+      "color-border-success",
       "color-border-success-shared",
       "color-border-success-shared-active",
       "color-border-success-shared-hovered",
@@ -1520,6 +1527,7 @@
       "color-content-on-color-shared-disabled",
       "color-content-on-color-subtler",
       "color-content-on-subtle-primary",
+      "color-content-primary-active",
       "color-content-static-light-disabled",
       "color-content-success-shared",
       "color-content-success-shared-active",
@@ -1774,11 +1782,10 @@
       "Д14": "invalid content rest - закрыт 15.09 ответом «для common bg-danger, для остальных content-danger». Три текстовых участника уже на content-danger; у common участник группы это белый знак на красном диске, поэтому перевод коснулся диска: invalid-badge-bg с bg-danger-shared на bg-danger, и знак держит 6.07 в обоих режимах вместо 6.07/3.68",
       "Д23": "tier-bypassed-by-neighbours - принято 15.09 обоими вариантами сразу: 131 чтение чужого модуля цветов переведено на имя тира соседа, два места получили собственное имя. Прямых красок мимо тира 234 -> 47, и все 47 гейт достижимости отвергает по названной причине - портал или непроверенная область",
       "Д25": "tree-focus-on-disabled-node - принято 15.09 первым вариантом: вариант с чекбоксами получил тот же фокусный фон строки, что уже был у варианта без них, и без охраны по disabled - как у табов. Неактивный узел в фокусе теперь помечен, а его чекбокс по-прежнему не красится активным",
-      "Д27": "invalid-focus-rung - принято 15.09 первым вариантом: невалидный фокус у чекбокса и радиокнопки переведён на ступень hovered, нажатие получило свои имена на ступени active. Тёмный 1.81 -> 5.36"
+      "Д27": "invalid-focus-rung - принято 15.09 первым вариантом: невалидный фокус у чекбокса и радиокнопки переведён на ступень hovered, нажатие получило свои имена на ступени active. Тёмный 1.81 -> 5.36",
+      "Д17": "outlined-button-label - принято 15.09 первым вариантом: обведённая кнопка переведена на модель пакета. Подпись, рамка и заливка нейтральные (content / border / bg-alpha*), оттенок остался только в подписи на наведении и нажатии у danger и success - ровно как в button.color.outline.<оттенок> у core и vnext. Ранее группа мерилась неверно: кросс-состояньевый проход брал подпись покоя на фон состояния, и это починено в инструменте в тот же день"
     },
-    "map": {
-      "statePairGroup:outlined-button-label": "Д17"
-    }
+    "map": {}
   },
   "statePairs": {
     "comment": [
@@ -1789,32 +1796,6 @@
       "threshold: 4.5 where the foreground is a label, 3 where it is a glyph or a boundary (WCAG 1.4.11)."
     ],
     "rows": [
-      {
-        "bg": "--dx-button-danger-outlined-bg-active",
-        "fg": "--dx-button-danger-outlined-content-active",
-        "fgRole": "color-content-danger-active",
-        "bgRole": "color-bg-danger-subtler-active",
-        "contrast": {
-          "light": 6.2,
-          "dark": 2.14
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-active",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
-      {
-        "bg": "--dx-button-danger-outlined-bg-selected",
-        "fg": "--dx-button-danger-outlined-content-selected",
-        "fgRole": "color-content-danger-hovered",
-        "bgRole": "color-bg-danger-subtler-selected",
-        "contrast": {
-          "light": 5.36,
-          "dark": 4.08
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-selected",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
       {
         "bg": "--dx-button-default-contained-bg-focused",
         "fg": "--dx-button-default-contained-content",
@@ -1842,45 +1823,6 @@
         "group": "contained-button-label"
       },
       {
-        "bg": "--dx-button-default-outlined-bg-active",
-        "fg": "--dx-button-default-outlined-content-active",
-        "fgRole": "color-content-primary-active",
-        "bgRole": "color-bg-primary-subtler-active",
-        "contrast": {
-          "light": 6.1,
-          "dark": 2.05
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-active",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
-      {
-        "bg": "--dx-button-default-outlined-bg-active",
-        "fg": "--dx-button-default-text-content",
-        "fgRole": "color-content-primary",
-        "bgRole": "color-bg-primary-subtler-active",
-        "contrast": {
-          "light": 2.94,
-          "dark": 4.79
-        },
-        "selector": ".dx-popup-content .dx-scheduler-dropdown-appointment-buttons-block .dx-button.dx-state-sel",
-        "decision": "graphic-ok",
-        "why": "пара стала измеримой только после Д23: раньше одна сторона приходила ролью дизайн-системы и сканер не мог её атрибутировать. Значения не двигались, элемент - подпись кнопки на собственной заливке"
-      },
-      {
-        "bg": "--dx-button-default-outlined-bg-selected",
-        "fg": "--dx-button-default-outlined-content-selected",
-        "fgRole": "color-content-primary-hovered",
-        "bgRole": "color-bg-primary-subtler-selected",
-        "contrast": {
-          "light": 5.02,
-          "dark": 4.17
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-selected",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
-      {
         "bg": "--dx-button-success-contained-bg-focused",
         "fg": "--dx-button-success-contained-content",
         "fgRole": "color-content-static-dark",
@@ -1905,32 +1847,6 @@
         "selector": ".dx-button.dx-button-success.dx-state-hover",
         "decision": "answered",
         "group": "contained-button-label"
-      },
-      {
-        "bg": "--dx-button-success-outlined-bg-active",
-        "fg": "--dx-button-success-outlined-content-active",
-        "fgRole": "color-content-success-active",
-        "bgRole": "color-bg-success-subtler-active",
-        "contrast": {
-          "light": 5.95,
-          "dark": 2.07
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-active",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
-      {
-        "bg": "--dx-button-success-outlined-bg-selected",
-        "fg": "--dx-button-success-outlined-content-selected",
-        "fgRole": "color-content-success-hovered",
-        "bgRole": "color-bg-success-subtler-selected",
-        "contrast": {
-          "light": 4.92,
-          "dark": 4.06
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-selected",
-        "decision": "design",
-        "group": "outlined-button-label"
       },
       {
         "bg": "--dx-check-box-icon-checked-bg-active",
@@ -1976,10 +1892,6 @@
       "checkbox-focused-fill": {
         "decision": "answered",
         "why": "Resolved in part on 15.09, when the designer produced the package tokens for checkbox/color/checked. Three slots, not one: border, bg and icon each have their own token, and our theme painted the border from the BG variable. Figma and Blazor agree that the border is border-primary-shared*, so that half was not a judgement call and is applied - three new names, light pixel-identical (primary-100/120/140 exactly as before), dark better at every rung: the box outline against the page goes 2.88 -> 4.65 at rest, 3.69 -> 5.79 hovered, 1.39 -> 1.98 pressed.\nWHAT REMAINS. The fill. Figma says bg-primary*, Blazor implements content-primary-shared*, and the two are identical in light and differ in dark - which is exactly what decides this row. On Figma's fill the mark reads 3.36 at rest and 1.62 pressed; on Blazor's, 5.42 and 2.31. Neither clears 3.0 in the pressed state, because no primary family inverts its active rung for dark - the same package defect П2 records for danger.\nAND A THIRD THING THE TOKENS SETTLE. The package state list is rest / hovered / active / read-only / disabled - there is no focused. Our theme paints .dx-state-focused AND .dx-state-active from one variable, so a keyboard user SITS at the value the package intends for a transient press. The button already separates them (bg-focused reads bg-primary-hovered). Splitting focus from active would leave the 1.62 where the package put it - under a finger, for the length of a click - and take the keyboard user to 4.30.\nRE-CHECKED 15.09 against a freshly pulled Blazor, and the stem argument above was WRONG. Blazor's checked fills are content-primary-shared for primary but bg-success-shared and bg-danger-shared for the other two - I had read the INDETERMINATE variables, where the dash is a content-coloured mark, as the checked fills. So primary is the outlier inside Blazor, our bg family agrees with their success and danger, and our invalid MARK on content-danger-shared agrees with their indeterminate mark. There was no internal inconsistency.\nWHICH LEAVES A CANDIDATE THAT SATISFIES BOTH SOURCES: bg-primary-shared*. The whole *-shared family is one value across bg, border and content, so it measures exactly like Blazor's content-primary-shared - mark 5.42 at rest and box 4.65 in dark against 3.36 and 2.88 today - while staying in the bg family Figma names, on the stem Blazor itself uses for success and danger. Light is identical to what ships now. The pressed rung still fails (2.31 / 1.98): no primary family inverts its active step for dark, which is П2's defect again.\nRESOLVED 15.09, option 1. Focus now takes the HOVERED rung and the press keeps the package's active one, which is the shape the contained button already had (bg-focused reads bg-primary-hovered, bg-active reads bg-primary-active). The package state list justifies it: there is no focused state in it at all, so painting focus with the value meant for a click was never what the tokens asked for.\nFour variables: -bg-focused and -border-focused moved down a rung, and -bg-active and -border-active were added to hold what the package assigns. The row that measured 1.62 split in two - the press keeps 1.62 on a state that lasts as long as a finger is down, and the focus a keyboard user SITS in went to 4.30, over the 3:1 a glyph needs. Light moves one step on focus, #003c70 -> #005397. Cascade verified on eight combinations: checked rest, hover, focus and press, the invalid pair, and the indeterminate pair including its ::before dash.\nThe fill STEM question is untouched and still open: bg-primary* as it ships, against bg-primary-shared* which reads 5.42 / 4.65 in dark where today it is 3.36 / 2.88.\nSTEM ACCEPTED 15.09. The checked fill moved from the plain bg-primary family to bg-primary-shared*. Light is pixel-identical at every rung - primary-100, 120, 120, 140 exactly as before - because the plain and shared families coincide in light. Dark improves everywhere: rest primary-100 -> 80, hovered and focused 90 -> 70, press 140 -> 120. The rest row left the contrast list (3.36 -> 5.42), hovered and focused left the state-pair list (4.30 -> 6.75), and the press went 1.62 -> 2.31 - still under 3, because the package gives no primary family an inverted active rung, which is П2 again.\nWhy the stem matters at all: the plain family does not know the mode. bg-primary is #0f6cbd in BOTH modes and bg-primary-active #003c70 in both, while the mark on them, content-inverted, does flip - to #161616 in dark. A fixed fill under a flipping mark is what produced 3.36 and 1.62. Every rung of the shared family flips.\nCLOSED 15.09. All three parts are applied - the outline has its own role, focus is separated from the press, and the fill is on the shared stem. What is left below the floor is the press at 2.31 in dark, and no shipped role fixes it: every primary family keeps its active rung un-inverted for dark. That is the same package defect П2 files for danger, so it leaves the theme as a report rather than a question."
-      },
-      "outlined-button-label": {
-        "decision": "design",
-        "why": "REMEASURED 15.09, and the earlier numbers were wrong - the tool's own bug, fixed the same day. The cross-state pass paired a state's BACKGROUND with the element's REST foreground, because the theme sets the two in separate rules; it never noticed that the theme also moves the LABEL with the state. So it reported hover and focus at 4.02-4.43 where the button actually renders 5.67-6.28. The pass now prefers a foreground carrying the same state class, and the group went from 12 rows to 6, matching what a real .dx-button element measures in the browser.\nWhat is actually wrong, and only in dark: the PRESS reads 2.05-2.14 and SELECTED 4.06-4.17 against the 4.5 a label needs. Rest, hover and focus pass in both modes (light 5.14-6.28, dark 4.58-5.11). The cause is the one this audit keeps meeting: the -active rung does not invert, and here BOTH sides darken at once - the label goes content-<hue>-active while the fill goes bg-<hue>-subtler-active.\nNo coloured label passes both modes inside this model - measured for primary: keeping the hovered label on the pressed fill gives 4.28 light / 5.97 dark, the rest label 2.94 / 4.79, and for selected the rest label 3.45 / 3.35. The ramp simply has no pair that works.\nThe package does not build the button this way at all. core and vnext give button.color.outline.<hue>: content.rest = color.content, border.* = color.border / -hovered / -active, bg.* = color.bg-alpha / -hovered / -active. The outlined button is NEUTRAL by default there and takes the hue only on hover and press, and only for danger. That model measures 13.45-16.6.\nOPTIONS. (1) adopt the package model outright - neutral label, neutral border, neutral alpha fill: fixes everything, and changes the look most, since the button stops being tinted at rest. (2) keep the tinted border and fill and move only the LABEL to content-on-subtle-<hue> - a role the package ships for exactly this surface and which the theme reads nowhere: #0a0a0a light / #ffffff dark, measuring 10.82-16 on every one of our fills in both modes. The button keeps its colour identity in the border and the fill, the label goes neutral. (3) leave it and record the press at 2.05 and selected at 4.06 in dark. Recommendation: (2) - it closes both failures with a role the package already assigns to a tinted surface, and keeps the widget recognisable; (1) if the product wants to match the kit exactly."
       },
       "contained-button-label": {
         "decision": "answered",
@@ -2278,6 +2190,11 @@
         "what": "invalid focus rung on the check box and the radio (Д27)",
         "change": "six -invalid-*-focused names move from the danger-shared active rung to the hovered one; six new -invalid-*-active names hold the active rung; the combined active+focused invalid blocks split in four places, as Д16 split the normal family",
         "effect": "the danger ramp does not invert its active rung either - #76000b light becomes #9d0013 dark - so an invalid control in focus read 1.81 in dark against 4.22 for the same control at rest: focus made it harder to see. Now dark reads 5.36 at focus, light 8.60 instead of 11.83, and the press keeps the package value for the length of a click. Measured on the live invalid check box in both modes"
+      },
+      {
+        "what": "outlined buttons take the package model (Д17)",
+        "change": "default, danger and success outlined: content -> color-content, border -> color-border, bg -> color-bg-alpha / -hovered / -active / -selected; the hue stays only in content-hovered and content-active for danger and success, and primary loses it entirely, as core and vnext assign",
+        "effect": "the tinted model painted both the label and the fill with the same hue, and in dark both darkened together: pressed read 2.05-2.14 and selected 4.06-4.17 against the 4.5 a label needs, and no coloured label in the ramp passed both modes - measured, keeping the hovered label on the pressed fill gives 4.28 in light. On the package model, measured on real buttons: normal and default 12.94-17.34 light and 16.86-17.40 dark in every state; danger and success 6.61-8.46 light, 5.95-6.67 dark at rest, hover, focus and selected. The pressed label of danger and success reads 1.98 and 2.26 in dark - that is the package's own content-<hue>-active on its own bg-alpha-active, and it is kept for the same reason the check box and the radio keep theirs: a press lasts as long as a finger. The whole group leaves the cross-state list"
       }
     ]
   },
@@ -2301,10 +2218,6 @@
       "graphic-ok вернулся 15.09: Д23 сделал видимыми пары, которые инструмент раньше не мог атрибутировать. Класс уходит и возвращается вместе со строками - в этом и смысл гейта."
     ],
     "classes": {
-      "design": {
-        "section": "А",
-        "ru": "решает человек"
-      },
       "answered": {
         "section": "В",
         "ru": "вопрос был открыт и закрыт ответом - правкой или решением оставить как есть"

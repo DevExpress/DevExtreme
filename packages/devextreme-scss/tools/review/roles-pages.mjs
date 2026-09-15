@@ -321,22 +321,6 @@ const ruText = (key) => {
  * так же бесполезен, как вопрос без образца.
  * ---------------------------------------------------------------------------------------- */
 const SPECIMEN = {
-  'Д17': () => ['primary', 'success', 'danger'].map((hue) => {
-    const c = hue === 'primary' ? 'primary' : hue;
-    return row([
-      tile('покой', chip({ bg: `color-bg-${c}-subtler`, fg: `color-content-${c}`, bd: `color-border-${c}`, text: 'Кнопка' }),
-        `<br>${ratios(`color-content-${c}`, `color-bg-${c}-subtler`, 4.5)}`),
-      tile('наведение', chip({ bg: `color-bg-${c}-subtler-hovered`, fg: `color-content-${c}`, bd: `color-border-${c}`, text: 'Кнопка' }),
-        `<br>${ratios(`color-content-${c}`, `color-bg-${c}-subtler-hovered`, 4.5)}`),
-      tile('наведение, вариант ①', chip({ bg: `color-bg-${c}-subtler-hovered`, fg: `color-content-${c}-hovered`, bd: `color-border-${c}`, text: 'Кнопка' }),
-        `<br>подпись тоже едет<br>${ratios(`color-content-${c}-hovered`, `color-bg-${c}-subtler-hovered`, 4.5)}`),
-      tile('нажатие', chip({ bg: `color-bg-${c}-subtler-active`, fg: `color-content-${c}`, bd: `color-border-${c}`, text: 'Кнопка' }),
-        `<br>${ratios(`color-content-${c}`, `color-bg-${c}-subtler-active`, 4.5)}`),
-      tile('вариант ③', chip({ bg: `color-bg-${c}-subtler-active`, fg: 'color-content-on-subtle-primary', bd: `color-border-${c}`, text: 'Кнопка' }),
-        `<br><code>content-on-subtle-primary</code><br>${ratios('color-content-on-subtle-primary', `color-bg-${c}-subtler-active`, 4.5)}`),
-    ]);
-  }).join(''),
-
 };
 
 const idOf = (key) => {
