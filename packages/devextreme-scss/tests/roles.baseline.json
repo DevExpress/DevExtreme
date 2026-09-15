@@ -700,6 +700,7 @@
       "concept": "base bg rest",
       "roles": [
         "color-border-subtle",
+        "color-bg-primary-subtle",
         "color-bg"
       ],
       "families": [
@@ -712,23 +713,25 @@
           "role": "color-border-subtle"
         },
         {
+          "folder": "scheduler",
+          "role": "color-bg-primary-subtle"
+        },
+        {
           "folder": "stepper",
           "role": "color-bg"
         }
       ],
       "decision": "design",
-      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call Переименование scheduler-appointment-base-content в -base-bg 15.09 перевело его сюда из группы base content rest: теперь в группе трое - разделитель списка на border-subtle, заливка встречи на bg-primary-subtle и фон шага на bg. Все три верны по роли, слово base просто означает у них разное."
     },
     {
       "concept": "base content rest",
       "roles": [
         "color-content-subtle",
-        "color-bg-primary-subtle",
         "color-content"
       ],
       "families": [
-        "content",
-        "bg"
+        "content"
       ],
       "members": [
         {
@@ -736,82 +739,12 @@
           "role": "color-content-subtle"
         },
         {
-          "folder": "scheduler",
-          "role": "color-bg-primary-subtle"
-        },
-        {
           "folder": "stepper",
           "role": "color-content"
         }
       ],
       "decision": "design",
-      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
-    },
-    {
-      "concept": "checked bg active",
-      "roles": [
-        "color-bg-primary-shared-active",
-        "color-bg-primary-active"
-      ],
-      "families": [
-        "bg"
-      ],
-      "members": [
-        {
-          "folder": "checkBox",
-          "role": "color-bg-primary-shared-active"
-        },
-        {
-          "folder": "radioButton",
-          "role": "color-bg-primary-active"
-        }
-      ],
-      "decision": "deferred-to",
-      "why": "Appeared 15.09 the moment the checkbox fill took the shared stem, and it is the same defect one control over rather than a new one. The radio dot still reads the plain bg-primary family, which does not invert for dark: #0f6cbd in both modes at rest and #003c70 under a press. Against the page that is 2.88 at rest and 1.39 pressed, where a filled graphic wants 3.0; the shared stem gives 4.65 and 1.98, with light identical at every rung. Filed as sweep:radio-checked-fill-stem rather than decided here - it is the user call the checkbox just got, on the control next to it."
-    },
-    {
-      "concept": "checked bg hovered",
-      "roles": [
-        "color-bg-primary-shared-hovered",
-        "color-bg-primary-hovered"
-      ],
-      "families": [
-        "bg"
-      ],
-      "members": [
-        {
-          "folder": "checkBox",
-          "role": "color-bg-primary-shared-hovered"
-        },
-        {
-          "folder": "radioButton",
-          "role": "color-bg-primary-hovered"
-        }
-      ],
-      "decision": "deferred-to",
-      "why": "Appeared 15.09 the moment the checkbox fill took the shared stem, and it is the same defect one control over rather than a new one. The radio dot still reads the plain bg-primary family, which does not invert for dark: #0f6cbd in both modes at rest and #003c70 under a press. Against the page that is 2.88 at rest and 1.39 pressed, where a filled graphic wants 3.0; the shared stem gives 4.65 and 1.98, with light identical at every rung. Filed as sweep:radio-checked-fill-stem rather than decided here - it is the user call the checkbox just got, on the control next to it."
-    },
-    {
-      "concept": "checked bg rest",
-      "roles": [
-        "color-bg-primary-shared",
-        "color-bg-primary"
-      ],
-      "families": [
-        "bg"
-      ],
-      "members": [
-        {
-          "folder": "checkBox",
-          "role": "color-bg-primary-shared"
-        },
-        {
-          "folder": "radioButton",
-          "role": "color-bg-primary"
-        }
-      ],
-      "decision": "deferred-to",
-      "why": "Appeared 15.09 the moment the checkbox fill took the shared stem, and it is the same defect one control over rather than a new one. The radio dot still reads the plain bg-primary family, which does not invert for dark: #0f6cbd in both modes at rest and #003c70 under a press. Against the page that is 2.88 at rest and 1.39 pressed, where a filled graphic wants 3.0; the shared stem gives 4.65 and 1.98, with light identical at every rung. Filed as sweep:radio-checked-fill-stem rather than decided here - it is the user call the checkbox just got, on the control next to it."
+      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call После переименования scheduler ушёл в base bg rest, и здесь осталось двое: diagram на content-subtle и stepper на content. Обе роли верны, расходится оттенок."
     },
     {
       "concept": "checked border focused",
@@ -1154,12 +1087,10 @@
       "concept": "invalid content rest",
       "roles": [
         "color-content-static-dark",
-        "color-content-danger",
-        "color-bg-danger"
+        "color-content-danger"
       ],
       "families": [
-        "content",
-        "bg"
+        "content"
       ],
       "members": [
         {
@@ -1172,7 +1103,7 @@
         },
         {
           "folder": "fileUploader",
-          "role": "color-bg-danger"
+          "role": "color-content-danger"
         },
         {
           "folder": "stepper",
@@ -1397,7 +1328,7 @@
       {
         "about": "accordion hover and pressed resolving to one role",
         "fluent2": "colorSubtleBackgroundHover #f5f5f5 and colorSubtleBackgroundPressed #e0e0e0 are distinct tokens",
-        "answer": "the collapse deviates from Fluent 2, and the package already carries both values. Left for the product because conforming moves away from legacy fluent"
+        "answer": "the collapse deviates from Fluent 2, and the package already carries both values. Left for the product because conforming moves away from legacy fluent NFR-1 снят 15.09, так что этот довод больше не держит - а сам вопрос уже закрыт принятием Д5."
       }
     ]
   },
@@ -1717,7 +1648,10 @@
       "Д5": "accordion-title-bg - принято 14.09: hover на bg-alpha-hovered, active на bg-alpha-active. Продукт выбрал полупрозрачную лестницу (так у Blazor, в Core-библиотеке и в vNext), а не непрозрачную, которую рекомендовал аудит",
       "Д19": "scheduler-grid-line-strength - принято 14.09: если обе линии должны быть одного цвета, читать одну роль двумя переменными нормально. Записано как осознанное",
       "Д7": "splitter - принято 15.09 по набору пакета: полоса это жёлоб цвета холста, а аффорданс несёт грип. Грип ушёл с 2.80 на 10.39 в тёмном, строка вышла из списка контраста",
-      "Д6": "tile-view-bg - закрыт 15.09 тем же ходом, что и контур чекбокса: край наведения переведён на border-primary-shared, а лишняя переменная фона удалена"
+      "Д6": "tile-view-bg - закрыт 15.09 тем же ходом, что и контур чекбокса: край наведения переведён на border-primary-shared, а лишняя переменная фона удалена",
+      "Д18": "contained-button-label - передан дизайнерам, оставляем как есть. Пара - две роли пакета, использованные по назначению, темой не чинится",
+      "Д24": "radio-checked-fill-stem - принято, точка переведена на bg-primary-shared* вслед за чекбоксом",
+      "Д20": "scheduler-form-icon-on-bg-role - закрыт 15.09 снятием исключения: иконка Subject перестала переопределяться и встала в общий ряд формы на scheduler-form-icon"
     },
     "map": {
       "concept:accent border rest": "Д10",
@@ -1726,12 +1660,9 @@
       "concept:invalid content rest": "Д14",
       "statePairGroup:checkbox-focused-fill": "Д16",
       "statePairGroup:outlined-button-label": "Д17",
-      "statePairGroup:contained-button-label": "Д18",
-      "sweep:scheduler-form-icon-on-bg-role": "Д20",
       "sweep:radio-invalid-vs-checkbox-invalid": "Д21",
       "sweep:tree-view-checkbox-focus-still-unique": "Д22",
-      "sweep:tier-bypassed-by-neighbours": "Д23",
-      "sweep:radio-checked-fill-stem": "Д24"
+      "sweep:tier-bypassed-by-neighbours": "Д23"
     }
   },
   "statePairs": {
@@ -1923,7 +1854,7 @@
         },
         "selector": ".dx-button.dx-button-success.dx-state-hover",
         "group": "contained-button-label",
-        "decision": "design"
+        "decision": "answered"
       },
       {
         "bg": "--dx-button-success-contained-bg-focused",
@@ -1936,7 +1867,7 @@
         },
         "selector": ".dx-button.dx-button-success.dx-state-focused",
         "group": "contained-button-label",
-        "decision": "design"
+        "decision": "answered"
       },
       {
         "bg": "--dx-button-default-contained-bg-hovered",
@@ -1949,7 +1880,7 @@
         },
         "selector": ".dx-button.dx-button-default.dx-state-hover",
         "group": "contained-button-label",
-        "decision": "design"
+        "decision": "answered"
       },
       {
         "bg": "--dx-button-default-contained-bg-focused",
@@ -1962,7 +1893,7 @@
         },
         "selector": ".dx-button.dx-button-default.dx-state-focused",
         "group": "contained-button-label",
-        "decision": "design"
+        "decision": "answered"
       },
       {
         "bg": "--dx-stepper-step-bg-selected-hovered",
@@ -1975,7 +1906,7 @@
         },
         "selector": ".dx-step.dx-state-hover.dx-step-completed .dx-step-indicator",
         "group": "contained-button-label",
-        "decision": "design"
+        "decision": "answered"
       }
     ],
     "groups": {
@@ -1988,8 +1919,8 @@
         "why": "The outlined buttons - default, success, danger - hold their label on content-<hue> while the fill climbs bg-<hue>-subtler through hovered, focused, selected and active. The label is text, so the floor is 4.5, and no state after rest reaches it: hover and focus 4.02-4.43, selected 3.22-3.78, active 2.94-3.18 in light. Blazor climbs both sides - outline-primary-hover-color is content-primary-hovered and -active-color is content-primary-active - and measuring its pairing answers the question unevenly: content-primary-hovered on bg-primary-subtler-hovered gives 5.85 light / 5.11 dark, which clears AA in both and is a straight improvement on our 4.02 / 4.11; but content-primary-active on bg-primary-subtler-active gives 6.10 light / 2.05 dark, trading one mode for the other, and content-primary-selected does not exist at all. So: (1) adopt Blazor's hovered and focused rungs - provable, both modes, three roles; (2) for selected and active there is no shipped pair that passes, so either hold the fill still in those states or ask the package; (3) content-on-subtle-primary, which the package ships for exactly this surface and we never read, clears everything by a mile (10.82 / 16) but is neutral, not blue - it would stop the label being an accent. Recommendation: (1) now, (3) only if design wants a neutral label."
       },
       "contained-button-label": {
-        "decision": "design",
-        "why": "The filled default and success buttons, and the completed stepper indicator, put a white label on bg-<hue>-hovered and land at 4.18-4.21 in dark against the 4.5 a label needs. Light is 7.5-7.8, so this is dark-only. The foreground is content-static-dark, which is #ffffff in both modes by design, so the whole movement is in the fill: bg-primary in dark is #0f6cbd giving 5.38, and its hovered rung lightens to #2b7ecf giving 4.21. A hover that lightens is correct for dark; it is the amount that overshoots. Nothing in the theme can fix this - the pair is two package roles used exactly as intended - so this is a report to the design system, alongside the danger-content row already filed. Listed as a question only to confirm we file it rather than swap a role."
+        "decision": "answered",
+        "why": "The filled default and success buttons, and the completed stepper indicator, put a white label on bg-<hue>-hovered and land at 4.18-4.21 in dark against the 4.5 a label needs. Light is 7.5-7.8, so this is dark-only. The foreground is content-static-dark, which is #ffffff in both modes by design, so the whole movement is in the fill: bg-primary in dark is #0f6cbd giving 5.38, and its hovered rung lightens to #2b7ecf giving 4.21. A hover that lightens is correct for dark; it is the amount that overshoots. Nothing in the theme can fix this - the pair is two package roles used exactly as intended - so this is a report to the design system, alongside the danger-content row already filed. Listed as a question only to confirm we file it rather than swap a role.\nCLOSED 15.09: handed to the designers and left as it is. Nothing in the theme can move it - the pair is two package roles used exactly as intended - so the theme carries it as a known report rather than an open question."
       }
     },
     "measuredOn": "2026-09-09"
@@ -2011,9 +1942,9 @@
       },
       {
         "key": "scheduler-form-icon-on-bg-role",
-        "decision": "design",
+        "decision": "answered",
         "title": "scheduler: иконки формы встречи красятся bg-ролью, 1.56 в светлом",
-        "why": "The appointment form paints .dx-scheduler-form-subject-group .dx-scheduler-form-icon with --dx-scheduler-appointment-base-content, which reads bg-primary-subtle. In light that is primary-40 #b4d2f4 on the popup background #ffffff: 1.56 against the 3:1 a glyph needs. The role itself is right for what the variable mostly does - Blazor names the same role default-appointment-background-color, so bg-primary-subtle IS the appointment fill - but this variable is read by four different things: the appointment fill, the appointment marker, the focused-cell inset ring, and this icon. Legacy fluent does the same (the form icon takes $scheduler-appointment-base-color, accent lightened 48%), so NFR-1 protects the pixel and this is a report, not a fix. Options: (1) leave it, legacy parity; (2) split the icon off onto content-primary, which is 5.38 light / 4.65 dark, and accept a visible change in the appointment form; (3) split it off and keep the pale tint, which fixes the name but not the contrast. Recommendation: (2) if the form is meant to be usable, (1) if legacy parity outranks it - this one is genuinely a product call."
+        "why": "The appointment form paints .dx-scheduler-form-subject-group .dx-scheduler-form-icon with --dx-scheduler-appointment-base-content, which reads bg-primary-subtle. In light that is primary-40 #b4d2f4 on the popup background #ffffff: 1.56 against the 3:1 a glyph needs. The role itself is right for what the variable mostly does - Blazor names the same role default-appointment-background-color, so bg-primary-subtle IS the appointment fill - but this variable is read by four different things: the appointment fill, the appointment marker, the focused-cell inset ring, and this icon. Legacy fluent does the same, but NFR-1 was retired on 15.09, so that no longer settles it. Options: (1) leave it, legacy parity; (2) split the icon off onto content-primary, which is 5.38 light / 4.65 dark, and accept a visible change in the appointment form; (3) split it off and keep the pale tint, which fixes the name but not the contrast. Recommendation: (2) if the form is meant to be usable, (1) if legacy parity outranks it - this one is genuinely a product call.\nSHOWN IN THE REAL WIDGET 15.09, not reconstructed: a live dxScheduler on the built bundle, appointment form opened through showAppointmentPopup. The form has FOUR icons and they are read straight off the running page - the Subject icon is rgb(180,210,244) #b4d2f4 while the all-day clock, the repeat arrows and the description sheet are all rgb(68,68,68) #444444, which is content-subtle. So it is not a pale style for form icons: one icon out of four is the outlier, at 1.56 against the white form where its three siblings read 9.74. Dark is worse - the Subject icon becomes rgb(0,72,132) #004884 on a #242424 form while the others are #cbcbcb. With NFR-1 gone the recommendation stands without a counterweight: give the icon content-primary, 5.38 light and 4.65 dark, or content-subtle to match its three siblings exactly.\nFIXED 15.09, and the fix turned out to be a DELETION rather than a swap. The form already had a general rule - .dx-scheduler-form-icon reads --dx-scheduler-form-icon, which is content-subtle, and that is where the other three icons get #444444. On top of it sat one more specific rule for the subject group alone, swapping in --dx-scheduler-appointment-base-content. Removing that override drops the icon back into the row with its siblings: 1.56 becomes 9.74 in light and the dark navy dot becomes #cbcbcb. No new name, one fewer special case, and the four-roles-in-one-variable problem loses one of its four readers. The glyph is a real icon (dx-icon-isnotblank, drawn as a filled circle by the font), not a colour swatch - its colour never tracked the appointment, so there was nothing accent-specific to preserve."
       },
       {
         "key": "radio-invalid-vs-checkbox-invalid",
@@ -2035,9 +1966,9 @@
       },
       {
         "key": "radio-checked-fill-stem",
-        "decision": "design",
+        "decision": "answered",
         "title": "Точка радиокнопки осталась на семействе, которое не знает про режим",
-        "why": "The checkbox fill moved to bg-primary-shared* and the radio dot did not, so three concept groups opened the same day - checked bg rest, hovered and active, each with checkBox on the shared stem and radioButton on the plain one. This is not new damage: the radio has always read the plain family, which is mode-static, and the dot measures 2.88 against the page at rest in dark and 1.39 under a press, where a filled graphic wants 3.0. The shared stem gives 4.65 and 1.98 with light identical at every rung, exactly as it did for the checkbox. Options: (1) move radio-button-checked-bg* to bg-primary-shared* - the same move, the same cost, and the two controls stop disagreeing; (2) leave it and record the divergence, which means a form shows two sibling controls answering the same question differently. Recommendation: (1)."
+        "why": "The checkbox fill moved to bg-primary-shared* and the radio dot did not, so three concept groups opened the same day - checked bg rest, hovered and active, each with checkBox on the shared stem and radioButton on the plain one. This is not new damage: the radio has always read the plain family, which is mode-static, and the dot measures 2.88 against the page at rest in dark and 1.39 under a press, where a filled graphic wants 3.0. The shared stem gives 4.65 and 1.98 with light identical at every rung, exactly as it did for the checkbox. Options: (1) move radio-button-checked-bg* to bg-primary-shared* - the same move, the same cost, and the two controls stop disagreeing; (2) leave it and record the divergence, which means a form shows two sibling controls answering the same question differently. Recommendation: (1).\nACCEPTED 15.09, option 1. Applied."
       }
     ],
     "confirmed": {
@@ -2191,6 +2122,21 @@
         "what": "checked checkbox fill: the shared stem (Д16)",
         "change": "bg-primary* -> bg-primary-shared* on all four rungs",
         "effect": "light identical at every rung, since the two families coincide there. Dark: the rest row leaves the contrast list at 5.42 against 3.36, hovered and focused leave the state-pair list at 6.75 against 4.30, the press improves 1.62 -> 2.31. The plain family is mode-static - bg-primary is #0f6cbd in both modes - while the mark on it flips to near-black in dark, and that mismatch was the whole defect"
+      },
+      {
+        "what": "file-uploader-file-status-message-invalid-content (Д14)",
+        "change": "bg-danger -> content-danger",
+        "effect": "the variable paints color: on the status message, which is text. bg-danger is mode-static - #c50f1f in both modes - and read 2.56 in dark; content-danger reads 4.22. Light identical. Still under the 4.5 AA asks, which is П2 and not this variable"
+      },
+      {
+        "what": "radio-button-checked-bg* (Д24)",
+        "change": "bg-primary* -> bg-primary-shared*",
+        "effect": "the same move the checkbox took, on the control beside it. Light identical at every rung; dark: the dot against the page goes 2.88 -> 4.65 at rest, 3.69 -> 5.79 hovered and 1.39 -> 1.98 pressed. The three concept groups that opened when only the checkbox moved are closed by it"
+      },
+      {
+        "what": "scheduler-appointment-base-content -> -base-bg",
+        "change": "renamed, role untouched",
+        "effect": "the rename became visible only after the Д20 fix: with the form icon no longer reading it, the variable stopped painting any color: and was left named -content while painting a background, a box-shadow and the appointment fill. Zero values moved - the role expression is the same - and the slot check went back to eleven rows"
       }
     ]
   },
@@ -2645,5 +2591,70 @@
       }
     ],
     "weAreAhead": "Коммит #45507 у Blazor заменил роли, которых семантический слой больше не объявляет: content-subtle-hovered/-active/-disabled на content и content-disabled, bg-none и border-none на none. Наша тема этих ролей не читает вовсе, а color-none читает уже сейчас (scrollable, switch). То есть Blazor догонял нас, а не наоборот."
+  },
+  "policy": {
+    "comment": [
+      "NFR-1 - «выглядеть как legacy fluent, расходиться только оттенками» - снят 15.09.2026.",
+      "Продукт уходит от легаси в сторону правильного назначения ролей. Это меняет не факты,",
+      "а вес доводов: «так делало легаси» больше не закрывает вопрос, а «уводит от легаси»",
+      "больше не аргумент против. Ниже - решения, которые этим разблокированы."
+    ],
+    "retiredOn": "2026-09-15",
+    "unblocked": [
+      "Д20 - иконка формы встречи: раньше «легаси делает так же, поэтому отчёт, а не правка». Теперь вариант с content-primary открыт",
+      "Д22 - блок фокуса treeView: раньше «снятие не равнозначно, легаси несёт тот же блок». Теперь остаётся только цена пересъёмки эталонов",
+      "Т-вопросы типографики: font-weight 500 и ступени 11/18/22/26/36px держались ровно тем, что легаси их использует. Выбор «ступень сетки против значения легаси» теперь решается в сторону сетки"
+    ]
+  },
+  "conceptValidation": {
+    "comment": [
+      "Проверка перед правкой, 15.09: что каждая переменная РЕАЛЬНО красит в собранном бандле.",
+      "По одному пункту проверка разошлась с предположением - и это тот случай, ради которого",
+      "её и просили."
+    ],
+    "checkedOn": "2026-09-15",
+    "rows": [
+      {
+        "id": "Д10",
+        "guess": "у диаграммы роль должна быть border, как у gantt",
+        "found": "НЕ ПОДТВЕРДИЛОСЬ. diagram-image-icon-accent-border красит stroke у .dxdi-spinner path - это дуга СПИННЕРА внутри плашки изображения, а не граница фигуры. Наш собственный спиннер, load-indicator-segment-border, сидит ровно на той же роли content-primary, и она подтверждена реализацией Blazor (loading-panel-indicator-no-area-indicator-color = content-primary). Перевод на border-primary уронил бы обводку с 5.38 до 2.68 в светлом - ниже 3.0 для графики, - потому что border-primary это бледный primary-70. Группа ложная: дуга спиннера, граница gantt и линия сетки scheduler - три разные вещи под одним словом accent. Чинить надо ИМЯ (спиннер назван -border), а не роль.",
+        "action": "ничего не менял"
+      },
+      {
+        "id": "Д12",
+        "guess": "вроде бы верно",
+        "found": "ПОДТВЕРДИЛОСЬ. list-base-select-all-separator-bg на border-subtle красит background-color - это волосяная линия разделителя, и пакет называет separator.color именно border-subtle. stepper-step-base-bg на bg красит фон. Две разные вещи под словом base, обе верны.",
+        "action": "ничего не менял"
+      },
+      {
+        "id": "Д13",
+        "guess": "вроде бы верно",
+        "found": "ПОДТВЕРДИЛОСЬ ПО РОЛЯМ, с одной оговоркой по имени. diagram base-content на content-subtle и stepper base-content на content - верны. scheduler-appointment-base-content на bg-primary-subtle тоже верна по роли: Blazor называет ту же роль default-appointment-background-color. Но имя говорит content, а переменная красит фон встречи, маркер, внутреннее кольцо ячейки и иконку формы - это и есть Д20.",
+        "action": "ничего не менял"
+      },
+      {
+        "id": "Д14",
+        "guess": "для common bg-danger, для всех остальных content-danger",
+        "found": "ЧАСТИЧНО. fileUploader переведён: он красит color: у текста сообщения, а сидел на bg-danger, которая мод-статична (#c50f1f в обоих режимах) и даёт 2.56 в тёмном; content-danger даёт 4.22. fieldset и stepper уже на content-danger. А вот common - это invalid-badge-content, ГЛИФ внутри красного бейджа, и он сидит на content-static-dark (белый), 6.07 / 3.68. Заливка бейджа - отдельная переменная invalid-badge-bg, и она уже на bg-danger-shared. Если поставить глифу bg-danger, получится красное на красном: 1.00 в светлом и 1.65 в тёмном. Поэтому common не тронут - нужно подтверждение, что имелась в виду заливка бейджа, а не глиф.",
+        "action": "применён только fileUploader"
+      }
+    ]
+  },
+  "familyFlagGap": {
+    "comment": [
+      "Замер 15.09 после того, как это всплыло на сплиттере во второй раз.",
+      "Инструмент ставит флаг несовпадения семейства на объявление независимо от вердикта пакета,",
+      "а страница собирает вопросы только из cross-family и family-conflict. Значит флаг на любом",
+      "другом вердикте до читателя не доходит вовсе."
+    ],
+    "measuredOn": "2026-09-15",
+    "hidden": 50,
+    "byVerdict": {
+      "agrees-kin": 13,
+      "agrees": 7,
+      "no-counterpart": 26,
+      "role-new": 4
+    },
+    "note": "Два из них уже стоили правок, найденных случайно: splitter-resize-handle-bg и -bg-hovered (слот bg на border-роли, вердикт role-new) починились вместе с Д7, и file-uploader-file-status-message-invalid-content (слот content на bg-роли, вердикт no-counterpart) - вместе с Д14. Ни одно из трёх на странице не стояло. Чинить надо не список, а условие сбора: вопросом должен становиться ФЛАГ, а не вердикт пакета."
   }
 }

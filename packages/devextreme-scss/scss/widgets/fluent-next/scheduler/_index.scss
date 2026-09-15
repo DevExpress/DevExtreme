@@ -86,7 +86,7 @@
   $scheduler-tooltip-appointment-text-color: var(--dx-scheduler-tooltip-appointment-content),
   $scheduler-appointment-overlay-bg: var(--dx-scheduler-appointment-overlay-bg),
   $scheduler-tooltip-list-focused-bg: listColors.$list-item-bg-hovered,
-  $scheduler-appointment-base-color: var(--dx-scheduler-appointment-base-content),
+  $scheduler-appointment-base-color: var(--dx-scheduler-appointment-base-bg),
   $scheduler-appointment-start-color: var(--dx-scheduler-appointment-start-shadow),
   $scheduler-appointment-active-color: var(--dx-scheduler-appointment-bg-active),
   $scheduler-base-border-color: var(--dx-scheduler-base-border),
@@ -792,10 +792,6 @@
 
     .dx-scheduler-form-icon-sized-gap {
       width: $global-icon-size;
-    }
-
-    .dx-scheduler-form-subject-group .dx-scheduler-form-icon {
-      color: var(--dx-scheduler-appointment-base-content);
     }
 
     .dx-scheduler-days-of-week-buttons {

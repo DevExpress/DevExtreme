@@ -38,7 +38,7 @@ const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'de
 const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design', 'drawn-mark', 'ring-and-fill'];
 const LADDER_DECISIONS = ['no-rung', 'design', 'answered'];
 const CONTRAST_DECISIONS = ['graphic-ok', 'package-gap', 'design'];
-const STATE_PAIR_DECISIONS = ['graphic-ok', 'design'];
+const STATE_PAIR_DECISIONS = ['graphic-ok', 'design', 'answered'];
 const SWEEP_DECISIONS = ['design', 'answered'];
 const CONCEPT_DECISIONS = ['spelling', 'shade', 'design', 'answered', 'deferred-to'];
 

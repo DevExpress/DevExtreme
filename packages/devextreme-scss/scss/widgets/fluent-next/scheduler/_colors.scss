@@ -9,7 +9,7 @@ $scheduler-accent-border: ds.$color-border !default;
 
 $scheduler-appointment-content: ds.$color-content !default;
 
-$scheduler-appointment-base-content: ds.$color-bg-primary-subtle !default;
+$scheduler-appointment-base-bg: ds.$color-bg-primary-subtle !default;
 
 $scheduler-appointment-start-shadow: ds.$color-shadow-key-darker !default;
 $scheduler-appointment-bg-active: ds.$color-bg-primary-subtler-active !default;
@@ -46,7 +46,7 @@ $scheduler-agenda-appointment-content: ds.$color-content !default;
 
 $scheduler-header-panel-cell-date-content: ds.$color-content-subtle !default;
 
-$scheduler-first-month-cell-bg: rgb(from #{$scheduler-appointment-base-content} r g b / 0.15) !default;
+$scheduler-first-month-cell-bg: rgb(from #{$scheduler-appointment-base-bg} r g b / 0.15) !default;
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $scheduler-appointment-strip-bg: ds.$color-bg-primary !default;

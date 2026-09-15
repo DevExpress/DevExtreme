@@ -9,9 +9,13 @@ $radio-button-icon-border: ds.$color-border-contrast !default;
 $radio-button-icon-border-hovered: ds.$color-border-contrast-hovered !default;
 $radio-button-icon-border-active: ds.$color-border-contrast-active !default;
 $radio-button-icon-bg-focused: ds.$color-bg-alpha-hovered !default;
-$radio-button-checked-bg: ds.$color-bg-primary !default;
-$radio-button-checked-bg-hovered: ds.$color-bg-primary-hovered !default;
-$radio-button-checked-bg-active: ds.$color-bg-primary-active !default;
+
+/* Стем shared: плоское семейство не переворачивается для тёмного - bg-primary там отдаёт
+   то же #0f6cbd, что и в светлом, и точка против страницы даёт 2.88. Так же переведён
+   чекбокс; светлый ни на одной ступени не двигается. */
+$radio-button-checked-bg: ds.$color-bg-primary-shared !default;
+$radio-button-checked-bg-hovered: ds.$color-bg-primary-shared-hovered !default;
+$radio-button-checked-bg-active: ds.$color-bg-primary-shared-active !default;
 $radio-button-invalid-bg: ds.$color-border-danger-shared !default;
 $radio-button-invalid-bg-hovered: ds.$color-border-danger-shared-hovered !default;
 $radio-button-invalid-bg-focused: ds.$color-border-danger-shared-active !default;
