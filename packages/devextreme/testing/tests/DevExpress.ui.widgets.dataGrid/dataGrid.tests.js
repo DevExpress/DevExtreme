@@ -1579,7 +1579,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok(dataGrid.getController('data').isEmpty(), 'no data');
         assert.ok(!dataGrid.getController('dataSource').getAdapter(), 'no dataSource');
         assert.strictEqual(dataGrid.getController('data')._cachedProcessedItems, null, 'cached processed items are cleared'); // T1045202
-        assert.strictEqual(dataGrid.getController('columns')._dataSource, null, 'no dataSource inside columnsController'); // T1045202
+        assert.strictEqual(dataGrid.getController('columns').appliedDataSourceAdapter, null, 'no dataSourceAdapter inside columnsController'); // T1045202
         assert.equal(dataGrid.getController('data').items().length, 0, 'items count');
         assert.equal(contentReadyCount, 1, 'contentReady call count');
         assert.equal($(dataGrid.$element()).find('.dx-data-row').length, 0, 'data row count');
