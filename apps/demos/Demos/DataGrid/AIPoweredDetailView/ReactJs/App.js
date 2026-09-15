@@ -31,12 +31,14 @@ export default function App() {
     activeAbortController.current?.abort();
     component.collapseAll(-1);
   }, []);
+  const onRowCollapsing = useCallback(() => {
+    activeAbortController.current?.abort();
+  }, []);
   const onCellClick = useCallback(({
     column, row, component, key,
   }) => {
     if (column.type === 'detailExpand' && row.rowType === 'data') {
       if (row.isExpanded) {
-        activeAbortController.current?.abort();
         component.collapseRow(key);
       } else {
         component.expandRow(key);
@@ -62,6 +64,7 @@ export default function App() {
       keyExpr="ID"
       height={500}
       onRowExpanding={onRowExpanding}
+      onRowCollapsing={onRowCollapsing}
       onCellClick={onCellClick}
       onCellPrepared={onCellPrepared}
     >

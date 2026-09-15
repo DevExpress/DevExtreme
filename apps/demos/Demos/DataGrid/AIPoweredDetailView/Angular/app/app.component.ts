@@ -39,10 +39,13 @@ export class AppComponent {
     component.collapseAll(-1);
   }
 
+  onRowCollapsing() {
+    this.detailView?.abortRequest();
+  }
+
   onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickEvent) {
     if (column.type === 'detailExpand' && row.rowType === 'data') {
       if (row.isExpanded) {
-        this.detailView?.abortRequest();
         component.collapseRow(key);
       } else {
         component.expandRow(key);

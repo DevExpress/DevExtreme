@@ -299,10 +299,12 @@ $(() => {
       activeAbortController?.abort();
       e.component.collapseAll(-1);
     },
+    onRowCollapsing(e) {
+      activeAbortController?.abort();
+    },
     onCellClick(e) {
       if (e.column.type === 'detailExpand' && e.rowType === 'data') {
         if (e.row.isExpanded) {
-          activeAbortController?.abort();
           e.component.collapseRow(e.key);
         } else {
           e.component.expandRow(e.key);

@@ -5,6 +5,7 @@
     :show-borders="true"
     :height="500"
     @row-expanding="onRowExpanding"
+    @row-collapsing="onRowCollapsing"
     @cell-click="onCellClick"
     @cell-prepared="onCellPrepared"
   >
@@ -72,10 +73,13 @@ function onRowExpanding({ component }: DxDataGridTypes.RowExpandingEvent) {
   component.collapseAll(-1);
 }
 
+function onRowCollapsing() {
+  detailViewRef.value?.abortRequest();
+}
+
 function onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickEvent) {
   if (column.type === 'detailExpand' && row.rowType === 'data') {
     if (row.isExpanded) {
-      detailViewRef.value?.abortRequest();
       component.collapseRow(key);
     } else {
       component.expandRow(key);
