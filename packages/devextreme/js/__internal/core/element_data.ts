@@ -9,14 +9,12 @@ type ElementData = Record<DataKey, unknown>;
 
 type DataArgs = [element?: Node | null, key?: DataKey, value?: unknown];
 
-type NodeCollection = ArrayLike<Node> & Iterable<Node>;
-
 type CleanDataHook = (nodes: ArrayLike<Node>) => void;
 
 export interface DataStrategy {
   data: (...args: DataArgs) => unknown;
   removeData: (element: Node, key?: DataKey) => void;
-  cleanData: (nodes: NodeCollection) => unknown;
+  cleanData: (nodes: ArrayLike<Node>) => unknown;
 }
 
 const dataMap = new WeakMap<object, ElementData>();
@@ -65,8 +63,12 @@ const defaultStrategy: DataStrategy = {
     }
   },
 
-  cleanData: function (elements: NodeCollection): void {
-    for (const element of elements) {
+  cleanData: function (elements: ArrayLike<Node>): void {
+    const { length } = elements;
+
+    for (let i = 0; i < length; i += 1) {
+      const element = elements[i];
+
       eventsEngine.off(element);
       dataMap.delete(element);
     }
@@ -82,7 +84,7 @@ export const setDataStrategy = function (value: DataStrategy): void {
 
   const originalCleanData = strategy.cleanData;
 
-  strategy.cleanData = function (nodes: NodeCollection): unknown {
+  strategy.cleanData = function (nodes: ArrayLike<Node>): unknown {
     beforeCleanDataFunc(nodes);
 
     const result = originalCleanData.call(this, nodes);
@@ -111,7 +113,7 @@ export function afterCleanData(callback: CleanDataHook): void {
   afterCleanDataFunc = callback;
 }
 
-export function cleanData(nodes: NodeCollection): unknown {
+export function cleanData(nodes: ArrayLike<Node>): unknown {
   return strategy.cleanData.call(this, nodes);
 }
 
