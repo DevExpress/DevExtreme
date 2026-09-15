@@ -297,15 +297,6 @@ export default {
     return changes.length && changes.length === changesWithChangeNamesCount;
   },
 
-  proxyMethod(instance, methodName, defaultResult?) {
-    if (!instance[methodName]) {
-      instance[methodName] = function () {
-        const dataSource = this._dataSource;
-        return dataSource ? dataSource[methodName].apply(dataSource, arguments) : defaultResult;
-      };
-    }
-  },
-
   formatValue,
 
   getFormatOptionsByColumn(column, target) {
