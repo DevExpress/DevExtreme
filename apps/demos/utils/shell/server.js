@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const open = require('open');
 const rateLimit = require('express-rate-limit');
 const {
-  join, normalize, relative, isAbsolute,
+  join, normalize, relative, isAbsolute, sep,
 } = require('path');
 const {
   readFileSync, readdirSync, existsSync, statSync,
@@ -34,6 +34,7 @@ function isPathWithin(parentDir, candidatePath) {
 // Rebuilds on-demand, only for the demo actually being viewed, rather than
 // watching all ~2,500 demos.
 const BUNDLED_APPROACHES = new Set(['React', 'ReactJs', 'Vue', 'Angular']);
+const SAFE_SEGMENT = /^[A-Za-z0-9_-]+$/;
 const GENERATED_ENTRY_NAMES = new Set([
   'bundle.js', 'bundle.css', indexFileName, 'tsconfig.json', 'description.md', '_chunks',
 ]);
@@ -86,6 +87,11 @@ const demoIndexHandler = async (request, response) => {
   const { widget, name, approach } = request.params;
 
   if (widget && name && approach) {
+    if (![widget, name, approach].every((segment) => SAFE_SEGMENT.test(segment))) {
+      response.status(400).type('text/plain').send('Invalid demo path');
+      return;
+    }
+
     let result;
     try {
       result = await ensureBundleFresh(widget, name, approach);
@@ -108,8 +114,8 @@ const demoIndexHandler = async (request, response) => {
   }
 
   const fileSystemPath = normalize(join.apply(this, parts));
-  if (!isPathWithin(root, fileSystemPath)) {
-    response.status(403).send('Forbidden');
+  if (!fileSystemPath.startsWith(root + sep)) {
+    response.status(403).type('text/plain').send('Forbidden');
     return;
   }
   let fileContent = readFileSync(fileSystemPath).toString();
