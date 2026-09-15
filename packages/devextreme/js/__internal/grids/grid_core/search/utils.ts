@@ -44,15 +44,14 @@ export const createLookupFilterExpressions = (
   });
 };
 
-const createLookupSearchExpressions = (
+const getMatchingLookupItems = (
   column: Column,
   filterValue: unknown,
   langParams: LangParams | undefined,
-): DataFilter[] => {
+): RawItemData[] => {
   const { lookup, createFilterExpression, calculateFilterExpression } = column;
-  const filters: DataFilter[] = [];
 
-  dataQuery(lookup?.items ?? [], { langParams })
+  return dataQuery(lookup?.items ?? [], { langParams })
     .filter(
       createFilterExpression?.call(
         {
@@ -65,12 +64,7 @@ const createLookupSearchExpressions = (
         'search',
       ),
     )
-    .enumerate()
-    .done((items: unknown) => {
-      filters.push(...createLookupFilterExpressions(items as RawItemData[], column));
-    });
-
-  return filters;
+    .toArray() as RawItemData[];
 };
 
 const createColumnSearchExpressions = (
@@ -87,7 +81,9 @@ const createColumnSearchExpressions = (
   const filterValue = parseValue(column, text);
 
   if (lookup?.items) {
-    return createLookupSearchExpressions(column, filterValue, langParams);
+    const items = getMatchingLookupItems(column, filterValue, langParams);
+
+    return createLookupFilterExpressions(items, column);
   }
 
   return filterValue === undefined
