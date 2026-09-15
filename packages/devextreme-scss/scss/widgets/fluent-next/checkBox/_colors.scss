@@ -4,23 +4,50 @@ $check-box-border: ds.$color-border-contrast !default;
 $check-box-border-hovered: ds.$color-border-contrast-hovered !default;
 $check-box-border-active: ds.$color-border-contrast-active !default;
 
+/* Заливка пустого бокса и сама галочка это два разных элемента: одно значение, но
+   назначения разные, и имя должно быть у каждого (Д21). Значение одно и то же. */
 $check-box-icon-bg: ds.$color-content-inverted !default;
+$check-box-mark-content: ds.$color-content-inverted !default;
 
-$check-box-icon-checked-bg: ds.$color-bg-primary !default;
-$check-box-icon-checked-bg-hovered: ds.$color-bg-primary-hovered !default;
-$check-box-icon-checked-bg-focused: ds.$color-bg-primary-active !default;
+$check-box-icon-checked-bg: ds.$color-bg-primary-shared !default;
+$check-box-icon-checked-bg-hovered: ds.$color-bg-primary-shared-hovered !default;
 
+/* Заливка на стеме shared: без него роль не переворачивается для тёмного - bg-primary там
+   отдаёт то же #0f6cbd, что и в светлом, а метка content-inverted переворачивается в почти
+   чёрную. Отсюда метка 3.36 в покое и 1.62 под нажатием. В светлом стем ничего не меняет.
+
+   Фокус берёт ступень НАВЕДЕНИЯ, а не нажатия. В наборе пакета состояния focused нет вовсе -
+   есть rest / hovered / active, - а тема красила фокус значением, которое пакет отвёл под
+   мгновенное нажатие: в тёмном это #003c70, и галка content-inverted на нём даёт 1.62.
+   Кнопка развела их так же: bg-focused у неё читает bg-primary-hovered. */
+$check-box-icon-checked-bg-focused: ds.$color-bg-primary-shared-hovered !default;
+$check-box-icon-checked-bg-active: ds.$color-bg-primary-shared-active !default;
+
+/* Контур коробки - своя роль, как у невалидного варианта ниже и как в наборе пакета
+   (checkbox/color/checked/border). Совпадает с заливкой в светлом и расходится в тёмном. */
+$check-box-icon-checked-border: ds.$color-border-primary-shared !default;
+$check-box-icon-checked-border-hovered: ds.$color-border-primary-shared-hovered !default;
+$check-box-icon-checked-border-focused: ds.$color-border-primary-shared-hovered !default;
+$check-box-icon-checked-border-active: ds.$color-border-primary-shared-active !default;
+
+/* Невалидное состояние держит ту же лестницу, что и обычное после Д16: фокус на ступени
+   hovered, нажатие на своей. Ступень active у danger-рампы в тёмном не переворачивается
+   (#76000b -> #9d0013), и невалидный бокс в фокусе давал там 1.81 против 4.22 в покое -
+   фокус делал контрол незаметнее, чем без него. На ступени hovered тёмный даёт 5.36. */
 $check-box-invalid-border: ds.$color-border-danger-shared !default;
 $check-box-invalid-border-hovered: ds.$color-border-danger-shared-hovered !default;
-$check-box-invalid-border-focused: ds.$color-border-danger-shared-active !default;
+$check-box-invalid-border-focused: ds.$color-border-danger-shared-hovered !default;
+$check-box-invalid-border-active: ds.$color-border-danger-shared-active !default;
 
 $check-box-invalid-bg: ds.$color-bg-danger-shared !default;
 $check-box-invalid-bg-hovered: ds.$color-bg-danger-shared-hovered !default;
-$check-box-invalid-bg-focused: ds.$color-bg-danger-shared-active !default;
+$check-box-invalid-bg-focused: ds.$color-bg-danger-shared-hovered !default;
+$check-box-invalid-bg-active: ds.$color-bg-danger-shared-active !default;
 
 $check-box-invalid-mark-bg: ds.$color-content-danger-shared !default;
 $check-box-invalid-mark-bg-hovered: ds.$color-content-danger-shared-hovered !default;
-$check-box-invalid-mark-bg-focused: ds.$color-content-danger-shared-active !default;
+$check-box-invalid-mark-bg-focused: ds.$color-content-danger-shared-hovered !default;
+$check-box-invalid-mark-bg-active: ds.$color-content-danger-shared-active !default;
 
 $check-box-border-disabled: ds.$color-border-disabled !default;
 

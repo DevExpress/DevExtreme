@@ -2,7 +2,6 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
-@use "../gridBase/colors" as gridBaseColors;
 @use "../treeView/sizes" as treeViewSizes;
 @use "../button/sizes" as buttonSizes;
 @use "../../base/pivotGrid" as basePivotGrid with (
@@ -40,18 +39,18 @@
   $pivotgrid-border-color: var(--dx-pivot-grid-border),
   $pivotgrid-common-left-right-padding: var(--dx-pivot-grid-left-right-padding),
   $pivotgrid-area-color: var(--dx-pivot-grid-area-content),
-  $header-filter-color: gridBaseColors.$grid-content,
-  $header-filter-color-empty: gridBaseColors.$grid-content,
+  $header-filter-color: var(--dx-grid-content),
+  $header-filter-color-empty: var(--dx-grid-content),
   $pivotgrid-area-background: var(--dx-pivot-grid-area-bg),
   $pivotgrid-common-top-bottom-padding: var(--dx-pivot-grid-area-field-padding-block),
   $pivotgrid-header-top-bottom-padding: var(--dx-pivot-grid-header-top-bottom-padding),
   $pivotgrid-field-indicators-offset: var(--dx-pivot-grid-field-indicators-offset),
   $pivotgrid-indicators-line-height: var(--dx-pivot-grid-indicators-line-height),
-  $pivotgrid-totalcolor: var(--dx-pivot-grid-total-content),
+  $pivotgrid-totalcolor: var(--dx-pivot-grid-total-bg),
   $pivotgrid-field-area-text-color: var(--dx-pivot-grid-field-area-content),
   $pivotgrid-data-area-color: var(--dx-pivot-grid-data-area-content),
-  $pivotgrid-grandtotalcolor: var(--dx-pivot-grid-grand-total-content),
-  $pivotgrid-accent-color: var(--dx-pivot-grid-accent-content),
+  $pivotgrid-grandtotalcolor: var(--dx-pivot-grid-grand-total-bg),
+  $pivotgrid-accent-color: var(--dx-pivot-grid-accent-outline),
   $pivotgrid-empty-area-text-padding: var(--dx-pivot-grid-empty-area-text-padding),
   $pivotgrid-button-top-padding: var(--dx-pivot-grid-button-top-padding),
   $pivotgrid-header-cell-side-padding: var(--dx-pivot-grid-header-cell-padding-inline),

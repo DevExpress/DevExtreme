@@ -7,12 +7,12 @@ $pivot-grid-area-content: ds.$color-content !default;
 $pivot-grid-field-area-box-bg: ds.$color-bg-low !default;
 $pivot-grid-data-area-content: ds.$color-content !default;
 
-$pivot-grid-total-content: ds.$color-bg !default;
+$pivot-grid-total-bg: ds.$color-bg !default;
 
-$pivot-grid-grand-total-content: ds.$color-bg-low !default;
+$pivot-grid-grand-total-bg: ds.$color-bg-low !default;
 
 $pivot-grid-field-area-content: ds.$color-content-subtle !default;
-$pivot-grid-accent-content: ds.$color-border-primary !default;
+$pivot-grid-accent-outline: ds.$color-border-primary !default;
 $pivot-grid-drag-header-border: rgb(from #{ds.$color-border-primary} r g b / 0.5) !default;
 $pivot-grid-drag-header-first-shadow: ds.$color-shadow-ambient !default;
 $pivot-grid-drag-header-shadow-key: ds.$color-shadow-key !default;

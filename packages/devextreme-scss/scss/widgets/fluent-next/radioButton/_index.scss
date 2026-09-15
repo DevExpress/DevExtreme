@@ -12,16 +12,22 @@
 @include dx-radiobutton-states-mixin(
   var(--dx-radio-button-icon-bg),
   var(--dx-radio-button-icon-border),
-  var(--dx-radio-button-icon-border-read-only),
+  var(--dx-radio-button-border-read-only),
   null,
   null,
-  var(--dx-radio-button-icon-bg-focused),
+  /* Цвет ripple. Тема ripple гасит - у .dx-radiobutton-icon::after стоит content: none и
+     нулевой размер, - поэтому передавать сюда роль значит объявлять краску, которой нет. */
+  null,
   var(--dx-radio-button-checked-bg),
   var(--dx-radio-button-invalid-bg),
-  var(--dx-radio-button-invalid-bg-hovered),
-  var(--dx-radio-button-invalid-bg-focused),
+  /* Наведение и фокус невалидного состояния тема объявляет сама, ниже: базовые правила
+     с теми же селекторами она всё равно перебивает порядком, и без значений они не эмитятся. */
+  null,
+  null,
   null,
   true,
+  $checked-border-color: var(--dx-radio-button-checked-border),
+  $invalid-border-color: var(--dx-radio-button-invalid-border),
 );
 
 .dx-radiobutton-icon {
@@ -36,11 +42,7 @@
 
 .dx-state-readonly {
   .dx-radiobutton-icon-dot {
-    background-color: var(--dx-radio-button-content-read-only);
-  }
-
-  .dx-radiobutton-icon {
-    border-color: var(--dx-radio-button-content-read-only);
+    background-color: var(--dx-radio-button-bg-read-only);
   }
 
   .dx-radiobutton-checked {
@@ -48,7 +50,7 @@
     &.dx-state-focused,
     &.dx-state-active {
       .dx-radiobutton-icon-dot {
-        background-color: var(--dx-radio-button-content-read-only);
+        background-color: var(--dx-radio-button-bg-read-only);
       }
     }
   }
@@ -69,7 +71,7 @@
 
   &.dx-state-focused {
     .dx-radiobutton-icon {
-      border-color: var(--dx-radio-button-checked-bg-active);
+      border-color: var(--dx-radio-button-checked-border-focused);
     }
   }
 }
@@ -77,7 +79,7 @@
 .dx-radiobutton-checked {
   &.dx-state-hover {
     .dx-radiobutton-icon {
-      border-color: var(--dx-radio-button-checked-bg-hovered);
+      border-color: var(--dx-radio-button-checked-border-hovered);
     }
 
     .dx-radiobutton-icon-dot {
@@ -85,10 +87,19 @@
     }
   }
 
-  &.dx-state-active,
   &.dx-state-focused {
     .dx-radiobutton-icon {
-      border-color: var(--dx-radio-button-checked-bg-active);
+      border-color: var(--dx-radio-button-checked-border-focused);
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: var(--dx-radio-button-checked-bg-focused);
+    }
+  }
+
+  &.dx-state-active {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-checked-border-active);
     }
 
     .dx-radiobutton-icon-dot {
@@ -101,7 +112,7 @@
   .dx-state-hover {
     &.dx-radiobutton {
       .dx-radiobutton-icon {
-        border-color: var(--dx-radio-button-invalid-bg-hovered);
+        border-color: var(--dx-radio-button-invalid-border-hovered);
       }
 
       .dx-radiobutton-icon-dot {
@@ -110,11 +121,10 @@
     }
   }
 
-  .dx-state-active,
   .dx-state-focused {
     &.dx-radiobutton {
       .dx-radiobutton-icon {
-        border-color: var(--dx-radio-button-invalid-bg-focused);
+        border-color: var(--dx-radio-button-invalid-border-focused);
       }
 
       .dx-radiobutton-icon-dot {
@@ -123,10 +133,22 @@
     }
   }
 
+  .dx-state-active {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: var(--dx-radio-button-invalid-border-active);
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-invalid-bg-active);
+      }
+    }
+  }
+
   &.dx-state-readonly {
     .dx-radiobutton {
       .dx-radiobutton-icon-dot {
-        background-color: var(--dx-radio-button-content-read-only);
+        background-color: var(--dx-radio-button-bg-read-only);
       }
     }
   }

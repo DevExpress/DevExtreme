@@ -1,27 +1,44 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-$switch-on-border: ds.$color-bg-primary-shared !default;
-$switch-on-border-hovered: ds.$color-bg-primary-shared-hovered !default;
-$switch-on-border-focused: ds.$color-bg-primary-active !default;
+/* Три слота, как их называет пакет: switch.color.*.bg - заливка трека,
+   switch.color.*.border - его рамка, switch.color.*.trigger - бегунок, и он content-роль.
+   До 15.09 бегунок в выключенном состоянии красился рамкой трека, а заливка включённого
+   состояния - ролью рамки: одно имя на два разных элемента (Д21). */
+$switch-on-border: ds.$color-border-primary-shared !default;
+$switch-on-border-hovered: ds.$color-border-primary-shared-hovered !default;
+$switch-on-border-focused: ds.$color-border-primary-shared-active !default;
+$switch-on-border-disabled: ds.$color-none !default;
 
 $switch-bg: ds.$color-none !default;
 
-$switch-handle-off-bg: ds.$color-content-subtle !default;
-
 $switch-on-bg: ds.$color-bg-primary-shared !default;
-
-$switch-handle-on-bg: ds.$color-content-inverted !default;
+$switch-on-bg-hovered: ds.$color-bg-primary-shared-hovered !default;
+$switch-on-bg-focused: ds.$color-bg-primary-shared-active !default;
 $switch-on-bg-disabled: ds.$color-bg-disabled !default;
 
+/* Бегунок. Значения - ровно те, что назначает пакет: unchecked.trigger.rest = content-subtle,
+   .hovered и .active = content, checked.trigger.rest = content-inverted. */
+$switch-handle-off-bg: ds.$color-content-subtle !default;
+$switch-handle-off-bg-hovered: ds.$color-content !default;
+$switch-handle-off-bg-active: ds.$color-content !default;
+$switch-handle-on-bg: ds.$color-content-inverted !default;
 $switch-handle-bg-disabled: ds.$color-content-disabled !default;
+
 $switch-border-disabled: ds.$color-border-disabled !default;
 $switch-off-border: ds.$color-border-contrast !default;
 $switch-off-border-hovered: ds.$color-border-contrast-hovered !default;
 $switch-off-border-active: ds.$color-border-contrast-active !default;
 
-$switch-invalid-border: ds.$color-border-danger !default;
-$switch-invalid-border-hovered: ds.$color-border-danger !default;
-$switch-invalid-border-focused: ds.$color-border-danger !default;
+/* Невалидное состояние: рамка и заливка тоже разведены, и лестница состояний перестала быть
+   одним значением на три ступени. Пара взята у самого пакета (blazor: switcher.color.checked.
+   invalid.bg и .border) и совпадает с тем, что уже читает чекбокс. */
+$switch-invalid-border: ds.$color-border-danger-shared !default;
+$switch-invalid-border-hovered: ds.$color-border-danger-shared-hovered !default;
+$switch-invalid-border-focused: ds.$color-border-danger-shared-active !default;
+
+$switch-invalid-bg: ds.$color-bg-danger-shared !default;
+$switch-invalid-bg-hovered: ds.$color-bg-danger-shared-hovered !default;
+$switch-invalid-bg-focused: ds.$color-bg-danger-shared-active !default;
 
 // Subtle ring around the ON handle; no switch shadow role — relative-color bridge over the handle token (see DIVERGENCES.md)
 $switch-handle-on-shadow: rgb(from #{ds.$color-content-inverted} r g b / 0.1) !default;

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fluent-next: типографика вне ролевой сетки</title><style>
+:root { color-scheme: light dark; --fg:#161616; --bg:#fff; --muted:#616161; --line:#e1e1e1;
+        --accent:#0f6cbd; --warn:#c50f1f; --panel:#f8f8f8; }
+@media (prefers-color-scheme: dark) { :root:not([data-mode]) { --fg:#f5f5f5; --bg:#242424;
+        --muted:#a1a1a1; --line:#4c4c4c; --accent:#4b90d9; --warn:#e4554f; --panel:#1d1d1d; } }
+:root[data-mode="dark"] { color-scheme: dark; --fg:#f5f5f5; --bg:#242424; --muted:#a1a1a1;
+        --line:#4c4c4c; --accent:#4b90d9; --warn:#e4554f; --panel:#1d1d1d; }
+:root[data-mode="light"] { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin:0; padding:2.5rem 1.5rem 6rem; background:var(--bg); color:var(--fg);
+       font:15px/1.6 "Segoe UI", system-ui, sans-serif; }
+main { max-width: 62rem; margin: 0 auto; }
+h1 { font-size:1.9rem; font-weight:600; margin:0 0 .3rem; letter-spacing:-.01em; }
+h2 { font-size:1.3rem; font-weight:600; margin:3rem 0 .6rem; padding-top:1.2rem;
+     border-top:2px solid var(--line); }
+h3 { font-size:1.05rem; font-weight:600; margin:2rem 0 .5rem; }
+p, li { margin:.5rem 0; }
+.lede { color:var(--muted); margin-bottom:2rem; }
+table { border-collapse:collapse; width:100%; margin:.9rem 0; font-size:.92em; }
+th, td { border:1px solid var(--line); padding:.45rem .6rem; text-align:left; vertical-align:top; }
+th { background:var(--panel); font-weight:600; }
+code { font:.88em ui-monospace, "Cascadia Code", Menlo, monospace;
+       background:var(--panel); padding:.1em .35em; border-radius:3px; }
+.q { border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:4px;
+     padding:.9rem 1.1rem; margin:1.1rem 0; background:var(--panel); }
+.q > .id { font-weight:600; color:var(--accent); font-size:.85em; letter-spacing:.06em;
+     text-transform:uppercase; display:block; margin-bottom:.25rem; }
+.q > .t { font-weight:600; margin-bottom:.4rem; }
+.q .opt { margin:.5rem 0 0 0; padding-left:1.2rem; }
+.warn { color:var(--warn); font-weight:600; }
+.swatch { display:inline-block; width:.85em; height:.85em; border:1px solid var(--line);
+     border-radius:2px; vertical-align:-.1em; margin-right:.3em; }
+.meta { color:var(--muted); font-size:.88em; }
+.none { color:var(--muted); font-style:italic; }
+footer { margin-top:4rem; padding-top:1rem; border-top:1px solid var(--line);
+     color:var(--muted); font-size:.85em; }
+
+/* --- переключатель режима ---------------------------------------------------------------- */
+.modebar { position:sticky; top:0; z-index:9; display:flex; gap:.5rem; align-items:center;
+     justify-content:flex-end; padding:.5rem 0 .6rem; margin:-1rem 0 1rem;
+     background:var(--bg); border-bottom:1px solid var(--line); }
+.modebar span { color:var(--muted); font-size:.85em; margin-right:auto; }
+.modebar button { font:inherit; font-size:.85em; padding:.3em .9em; cursor:pointer;
+     border:1px solid var(--line); background:var(--panel); color:var(--fg); border-radius:4px; }
+.modebar button[aria-pressed="true"] { border-color:var(--accent); color:var(--accent); font-weight:600; }
+
+/* --- образцы: каждый узел несёт оба значения, режим выбирает ------------------------------ */
+.sp { margin:.8rem 0 .3rem; }
+.sp-row { display:flex; flex-wrap:wrap; gap:.7rem; align-items:flex-start; }
+.sp-tile { flex:0 0 auto; text-align:center; font-size:.78em; color:var(--muted); max-width:11rem; }
+.sp-stage { display:flex; align-items:center; justify-content:center; width:9.5rem; height:4.6rem;
+     border:1px solid var(--line); border-radius:4px; overflow:hidden; margin-bottom:.3rem; }
+.sp-cap { line-height:1.35; }
+.sp-cap b { color:var(--fg); font-weight:600; display:block; }
+.sp-num { font:.95em ui-monospace, Menlo, monospace; }
+.sp-num.bad { color:var(--warn); font-weight:600; }
+.v { background:var(--l-bg, transparent); color:var(--l-fg, inherit);
+     border-color:var(--l-bd, transparent); }
+:root[data-mode="dark"] .v { background:var(--d-bg, transparent); color:var(--d-fg, inherit);
+     border-color:var(--d-bd, transparent); }
+.only-light { display:inline; } .only-dark { display:none; }
+:root[data-mode="dark"] .only-light { display:none; }
+:root[data-mode="dark"] .only-dark { display:inline; }
+/* Только width и style: сокращённое border сбросило бы цвет в currentColor и перебило бы
+   .v, которое идёт выше - образец тогда рисует край не той ролью, а цветом подписи. */
+.sp-chip { min-width:5.2rem; padding:.4em .8em; border-width:1px; border-style:solid; border-radius:4px;
+     font-size:.95em; white-space:nowrap; }
+.sp-box { width:1.35rem; height:1.35rem; border-width:1.5px; border-style:solid; border-radius:3px;
+     display:flex; align-items:center; justify-content:center; font-size:.95rem; line-height:1; }
+.sp-ring { width:1.35rem; height:1.35rem; border-width:1.5px; border-style:solid; border-radius:50%;
+     display:flex; align-items:center; justify-content:center; }
+.sp-dot { width:.6rem; height:.6rem; border-radius:50%; }
+.sp-disc { width:2.2rem; height:2.2rem; border-radius:50%; display:flex; align-items:center;
+     justify-content:center; font-size:1.05rem; }
+.sp-bar { width:.55rem; height:100%; display:flex; align-items:center; justify-content:center; }
+.sp-grip { width:.18rem; height:1.1rem; border-radius:1rem; }
+.sp-pane { flex:1; height:100%; }
+.sp-sheet { width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+     gap:.4rem; font-size:.9em; }
+.sp-line { width:100%; height:1px; }
+.sp-glyph { font-size:1.3rem; line-height:1; }
+/* Символ галочки в части шрифтов подхватывается как эмодзи и рисуется своим цветом - образец
+   тогда врёт ровно про то, ради чего он нарисован. Рисуем фигурой от currentColor. */
+.sp-tick { width:.32rem; height:.62rem; border:solid currentColor; border-width:0 2px 2px 0;
+     transform:rotate(45deg); margin-top:-.16rem; }
+.sp-dash { width:.62rem; height:2px; background:currentColor; }
+</style></head>
+<body><main>
+<div class="modebar"><span>Образцы нарисованы значениями темы. Переключатель меняет и страницу, и их.</span>
+<button type="button" data-set="light" aria-pressed="false">Светлый</button>
+<button type="button" data-set="dark" aria-pressed="false">Тёмный</button>
+<button type="button" data-set="" aria-pressed="false">Как в системе</button></div>
+
+<h1>Fluent-next: типографика вне ролевой сетки</h1>
+<p class="lede">Материал к <a href="https://github.com/DevExpress/design/issues/1555">design#1555</a>.
+16 мест вне сетки и ещё 31, где роль есть, а тема читает ступень.<br>
+Типографика не зависит от режима — у каждого места одно значение, светлая и тёмная темы одинаковы.</p>
+
+<h2>Главное: карточка сформулирована в обратную сторону</h2>
+<p>design#1555 спрашивает, «каким ступеням нужны семантические роли». Сверка с Fluent 2 показывает,
+что вопрос не к пакету:</p>
+<ul>
+<li>веб-рампа Fluent 2 знает <b>три начертания</b> — Regular, Semibold, Bold. <b>Medium (500) в ней нет</b>;</li>
+<li>её размеры — <b>10 / 12 / 14 / 16 / 20 / 24 / 28 / 32 / 40 / 68 px</b>, и сетка ролей пакета
+повторяет их точно, кроме Display 68.</li>
+</ul>
+<p>Ни <code>font-weight: 500</code>, ни размеры 11 / 18 / 22 / 26 / 30 / 36 px в Fluent 2 не существуют.
+Пакет верен источнику. Все эти места — <b>значения, унаследованные от legacy-темы fluent</b>, которые
+миграция сохранила по требованию «визуально это тот же fluent» (NFR-1).</p>
+<p>Решать нужно не «расширять ли пакет», а <b>что важнее в каждом месте: совпадение с legacy или
+соответствие Fluent 2</b>.</p>
+
+<h2>Решения</h2>
+<div class="q"><span class="id">Т1</span>
+<div class="t"><code>font-weight: 500</code> — 0 мест</div><p>Ближайшие роли: <b>400</b> (Regular) и <b>600</b> (Semibold). Промежуточного веса у Fluent 2 нет, и у Segoe UI грани 500 тоже нет — на Windows эти места уже сегодня рендерятся как Regular 400, просто непредсказуемо по платформам.</p><p>Почти всё это заголовки групп, метки и подписи, то есть элементы с усилением. Колонка «предложение» — наша рекомендация, не решение.</p><table><tr><th>Где</th><th>Переменная</th><th>Предложение</th></tr></table></div><div class="q"><span class="id">Т2</span>
+<div class="t">Рампа заголовков — 4 места, следствие на все приложения</div><p>Самое дорогое решение: <code>--dx-font-size-heading-1…6</code> — публичные переменные, их читают приложения.</p><table><tr><th></th><th>h1</th><th>h2</th><th>h3</th><th>h4</th><th>h5</th><th>h6</th></tr><tr><td>сейчас, <b>default</b></td><td>40 ✓</td><td class="warn">36</td><td>32 ✓</td><td class="warn">26</td><td class="warn">22</td><td class="warn">22</td></tr><tr><td>сейчас, <b>compact</b></td><td>32 ✓</td><td>28 ✓</td><td>24 ✓</td><td>20 ✓</td><td>16 ✓</td><td>16 ✓</td></tr><tr><td><b>Fluent 2</b> / сетка ролей</td><td>40</td><td>32</td><td>28</td><td>24</td><td>20</td><td>16</td></tr></table><p class="meta">✓ — значение уже лежит на роли.</p><p><b>Compact-ветка целиком на сетке, а default — нет.</b> У default совпадают только h1 и h3. Если привести default к той же логике, что уже действует в compact, получится ровно ряд Fluent 2: 40 / 32 / 28 / 24 / 20 / 16. Цена: h2 36→32, h4 26→24, h5 22→20, h6 22→16 — последнее самое заметное.</p><p class="meta">Отдельно: <code>$typography-s-font-size</code> (18px) формально попадает в список, но это <b>утилита</b> <code>.dx-font-sm</code>, а не текстовая роль — в коде так и написано, что ряд xl/l/m/s/xs намеренно сидит на базовой шкале. Трогать не предлагаем.</p></div><div class="q"><span class="id">Т3</span>
+<div class="t">Одиночные размеры компонентов — 7 мест</div><table><tr><th>Где</th><th>Переменная</th><th>Сейчас</th><th>Вниз</th><th>Вверх</th></tr><tr><td><code>chat/_sizes.scss:102</code></td><td><code>chat-message-list-empty-message-font-size</code></td><td>18px</td><td>16px <code>base-lg</code></td><td>20px <code>title-md</code></td></tr><tr><td><code>fileManager/_sizes.scss:65</code></td><td><code>file-manager-progress-title-font-size</code></td><td>18px</td><td>16px <code>base-lg</code></td><td>20px <code>title-md</code></td></tr><tr><td><code>scheduler/_sizes.scss:229</code></td><td><code>scheduler-appointment-icon-font-size</code></td><td>18px</td><td>16px <code>base-lg</code></td><td>20px <code>title-md</code></td></tr><tr><td><code>scheduler/_sizes.scss:288</code></td><td><code>scheduler-group-header-agenda-font-size</code></td><td>18px</td><td>16px <code>base-lg</code></td><td>20px <code>title-md</code></td></tr><tr><td><code>scheduler/_sizes.scss:146</code></td><td><code>scheduler-appointment-tooltip-date-font-size</code></td><td>11px</td><td>10px <code>caption-sm</code></td><td>12px <code>caption-md</code></td></tr><tr><td><code>scheduler/_sizes.scss:266</code></td><td><code>scheduler-appointment-content-details-font-size</code></td><td>11px</td><td>10px <code>caption-sm</code></td><td>12px <code>caption-md</code></td></tr><tr><td><code>scheduler/_sizes.scss:308</code></td><td><code>scheduler-time-indicator-font-size</code></td><td>30px</td><td>28px <code>headline-md</code></td><td>32px <code>headline-lg</code></td></tr></table><p>Большая часть — scheduler. Если решение по нему будет одно («округляем вниз» или «вверх»), оно закроет список почти целиком.</p></div><div class="q"><span class="id">Т4</span>
+<div class="t"><code>line-height</code> вне сетки — 8 мест</div><p>Оговорка: шкала межстрочного у пакета <b>не полностью</b> повторяет Fluent 2 — у Fluent 2 есть 22 и 26, у пакета вместо них 24 и 28. Наши значения 12 и 18 не встречаются ни там, ни там.</p><table><tr><th>Где</th><th>Переменная</th><th>Сейчас</th><th>Ближайшая роль</th></tr><tr><td><code>diagram/_sizes.scss:94</code></td><td><code>diagram-popup-close-icon-line-height</code></td><td>12px</td><td>14px <code>caption-sm</code> · 14px <code>base-xs</code></td></tr><tr><td><code>pagination/_sizes.scss:9</code></td><td><code>pagination-page-line-height</code></td><td>12px</td><td>14px <code>caption-sm</code> · 14px <code>base-xs</code></td></tr><tr><td><code>pivotGrid/_sizes.scss:17</code></td><td><code>pivot-grid-indicators-line-height</code></td><td>12px</td><td>14px <code>caption-sm</code> · 14px <code>base-xs</code></td></tr><tr><td><code>scheduler/_sizes.scss:44</code></td><td><code>scheduler-appointment-10min-title-line-height</code></td><td>12px</td><td>14px <code>caption-sm</code> · 14px <code>base-xs</code></td></tr><tr><td><code>scheduler/_sizes.scss:175</code></td><td><code>scheduler-appointment-15min-title-line-height</code></td><td>12px</td><td>14px <code>caption-sm</code> · 14px <code>base-xs</code></td></tr><tr><td><code>validation/_sizes.scss:25</code></td><td><code>validation-message-line-height</code></td><td>12px</td><td>14px <code>caption-sm</code> · 14px <code>base-xs</code></td></tr><tr><td><code>gridBase/_sizes.scss:32</code></td><td><code>grid-header-line-height</code></td><td>18px</td><td>16px <code>caption-md</code> · 16px <code>base-sm</code></td></tr><tr><td><code>scheduler/_sizes.scss:127</code></td><td><code>scheduler-appointment-15min-title-line-height</code></td><td>18px</td><td>16px <code>caption-md</code> · 16px <code>base-sm</code></td></tr></table><p>У большинства межстрочное <b>меньше самой низкой роли</b>. Три из них — аппойнтменты scheduler на 10 и 15 минут, где высота строки прижата к высоте ячейки: там 12→14 может не поместиться, это надо смотреть на макете, а не решать по таблице.</p></div><div class="q"><span class="id">Т5</span>
+<div class="t">Роль существует, а тема читает ступень — 31 мест</div><p>Здесь значение <b>не меняется</b>: роль, называющая эту ступень, резолвится в неё же. Перевод равнозначен по построению. Решить нужно только, <b>какая</b> роль — на одной ступени их бывает несколько (caption / base / title), и это выбор смысла, а не значения.</p><p class="meta">15 из них не несут даже маркера: гейт <code>px-audit</code> смотрит только на литералы, а чтение ступени — не литерал, поэтому они не доезжали ни до SCALES.md, ни до дизайна.</p><table><tr><th>Где</th><th>Переменная</th><th>Читает</th><th>Роли с этой ступенью</th><th>Маркер</th></tr><tr><td><code>cardView/_sizes.scss:188</code></td><td><code>card-view-card-header-font-size</code></td><td>16px</td><td><code>base-lg</code> · <code>title-sm</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>cardView/_sizes.scss:270</code></td><td><code>card-view-card-header-font-size</code></td><td>14px</td><td><code>caption-lg</code> · <code>base-md</code> · <code>title-xs</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>chat/_sizes.scss:112</code></td><td><code>chat-file-icon-font-size</code></td><td>20px</td><td><code>title-md</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>chat/_sizes.scss:138</code></td><td><code>chat-message-list-empty-message-font-size</code></td><td>14px</td><td><code>caption-lg</code> · <code>base-md</code> · <code>title-xs</code></td><td><code>no-semantic-role</code></td></tr><tr><td><code>chat/_sizes.scss:148</code></td><td><code>chat-file-icon-font-size</code></td><td>16px</td><td><code>base-lg</code> · <code>title-sm</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>checkBox/_sizes.scss:5</code></td><td><code>check-box-icon-font-size</code></td><td>16px</td><td><code>base-lg</code> · <code>title-sm</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>diagram/_sizes.scss:93</code></td><td><code>diagram-popup-close-icon-font-size</code></td><td>12px</td><td><code>caption-md</code> · <code>base-sm</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>fileUploader/_sizes.scss:22</code></td><td><code>file-uploader-file-icon-font-size</code></td><td>20px</td><td><code>title-md</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>fileUploader/_sizes.scss:31</code></td><td><code>file-uploader-file-icon-font-size</code></td><td>16px</td><td><code>base-lg</code> · <code>title-sm</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>gallery/_sizes.scss:8</code></td><td><code>gallery-nav-icon-font-size</code></td><td>32px</td><td><code>headline-lg</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>gridBase/_sizes.scss:168</code></td><td><code>grid-column-chooser-title-font-size</code></td><td>16px</td><td><code>base-lg</code> · <code>title-sm</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>scheduler/_sizes.scss:45</code></td><td><code>scheduler-appointment-10min-icon-font-size</code></td><td>12px</td><td><code>caption-md</code> · <code>base-sm</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>scheduler/_sizes.scss:50</code></td><td><code>scheduler-appointment-15min-icon-font-size</code></td><td>12px</td><td><code>caption-md</code> · <code>base-sm</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>scheduler/_sizes.scss:61</code></td><td><code>scheduler-appointment-month-font-size</code></td><td>12px</td><td><code>caption-md</code> · <code>base-sm</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>scheduler/_sizes.scss:62</code></td><td><code>scheduler-workspace-info-font-size</code></td><td>16px</td><td><code>base-lg</code> · <code>title-sm</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>scheduler/_sizes.scss:98</code></td><td><code>scheduler-appointment-tooltip-date-font-size</code></td><td>14px</td><td><code>caption-lg</code> · <code>base-md</code> · <code>title-xs</code></td><td><code>no-semantic-role</code></td></tr><tr><td><code>scheduler/_sizes.scss:302</code></td><td><code>scheduler-appointment-month-text-font-size</code></td><td>12px</td><td><code>caption-md</code> · <code>base-sm</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>scheduler/_sizes.scss:310</code></td><td><code>scheduler-small-font-size</code></td><td>14px</td><td><code>caption-lg</code> · <code>base-md</code> · <code>title-xs</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>scheduler/_sizes.scss:312</code></td><td><code>scheduler-month-date-text-font-size</code></td><td>16px</td><td><code>base-lg</code> · <code>title-sm</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>scrollView/_sizes.scss:4</code></td><td><code>scroll-view-load-indicator-font-size</code></td><td>24px</td><td><code>title-lg</code> · <code>headline-sm</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>scrollView/_sizes.scss:12</code></td><td><code>scroll-view-pull-down-icon-font-size</code></td><td>24px</td><td><code>title-lg</code> · <code>headline-sm</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>tabs/variables/_sizes.scss:39</code></td><td><code>tabs-tab-nav-button-icon-font-size</code></td><td>20px</td><td><code>title-md</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>tabs/variables/_sizes.scss:48</code></td><td><code>tabs-tab-nav-button-icon-font-size</code></td><td>16px</td><td><code>base-lg</code> · <code>title-sm</code></td><td><code>icon-glyph-size</code></td></tr><tr><td><code>typography/_sizes.scss:8</code></td><td><code>typography-xs-font-size</code></td><td>12px</td><td><code>caption-md</code> · <code>base-sm</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>typography/_sizes.scss:36</code></td><td><code>typography-l-font-size</code></td><td>28px</td><td><code>headline-md</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>typography/_sizes.scss:37</code></td><td><code>typography-m-font-size</code></td><td>20px</td><td><code>title-md</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>typography/_sizes.scss:49</code></td><td><code>typography-xl-font-size</code></td><td>24px</td><td><code>title-lg</code> · <code>headline-sm</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>typography/_sizes.scss:50</code></td><td><code>typography-l-font-size</code></td><td>20px</td><td><code>title-md</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>typography/_sizes.scss:51</code></td><td><code>typography-m-font-size</code></td><td>16px</td><td><code>base-lg</code> · <code>title-sm</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>typography/_sizes.scss:52</code></td><td><code>typography-s-font-size</code></td><td>14px</td><td><code>caption-lg</code> · <code>base-md</code> · <code>title-xs</code></td><td><span class="warn">нет</span></td></tr><tr><td><code>validation/_sizes.scss:18</code></td><td><code>validation-message-line-height</code></td><td>16px</td><td><code>caption-md</code> · <code>base-sm</code></td><td><code>no-semantic-role</code></td></tr></table></div>
+
+<h2>Если решения приняты</h2>
+<p>Правки механические, значения меняются ровно в перечисленных строках, режимы не расходятся.
+После них потребуется пересъёмка эталонов скриншотов затронутых компонентов — отдельный проход,
+а не «заодно».</p>
+
+<footer>Сгенерировано <code>node tools/review/roles-pages.mjs</code> ·
+пакет <code>@devexpress/design-tokens-internal@262.23.0</code> ·
+данные: <code>tools/review/roles.mjs</code> + <code>tests/roles.baseline.json</code> ·
+править руками не нужно, перегенерируйте.</footer>
+</main>
+<script>
+(() => {
+  const root = document.documentElement;
+  const KEY = 'fluent-next-roles-mode';
+  const apply = (mode) => {
+    if (mode) root.setAttribute('data-mode', mode); else root.removeAttribute('data-mode');
+    for (const b of document.querySelectorAll('.modebar button')) {
+      b.setAttribute('aria-pressed', String((b.dataset.set || '') === (mode || '')));
+    }
+  };
+  let saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) { saved = null; }
+  apply(saved || '');
+  for (const b of document.querySelectorAll('.modebar button')) {
+    b.addEventListener('click', () => {
+      const mode = b.dataset.set || '';
+      apply(mode);
+      try { localStorage.setItem(KEY, mode); } catch (e) { /* приватное окно - переживём */ }
+    });
+  }
+})();
+</script>
+</body></html>

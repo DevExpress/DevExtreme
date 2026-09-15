@@ -1,6 +1,6 @@
 /*
  * Before/after evidence for the design review of fluent-next
- * (scss/widgets/fluent-next/DIVERGENCES.md, section "Агенда для дизайн-ревью").
+ * (scss/widgets/fluent-next/DIVERGENCES.journal.md, section "Агенда для дизайн-ревью").
  *
  *   node tools/review/evidence.mjs                 # all decisions, summary
  *   node tools/review/evidence.mjs --decision=1    # one decision, every place
@@ -340,7 +340,7 @@ if (asMarkdown) {
   out('<!-- Сгенерировано: node tools/review/evidence.mjs --md > REVIEW_EVIDENCE.md. Не править руками. -->');
   out('# Доказательства к агенде дизайн-ревью fluent-next\n');
   out('Что именно меняется на экране по каждому решению из таблицы «Агенда для дизайн-ревью» в');
-  out('[DIVERGENCES.md](DIVERGENCES.md). Не пересказ журнала, а сравнение **собранных бандлов**');
+  out('[DIVERGENCES.journal.md](DIVERGENCES.journal.md). Не пересказ журнала, а сравнение **собранных бандлов**');
   out('`dx.fluent.blue.{light,dark}.css` и `dx.fluent-next.blue.{light,dark}.css`: для каждого');
   out('селектора и свойства, которые есть в обеих темах, значение fluent-next прогоняется по');
   out('`:root`-карте своего бандла до литерала, и сравниваются уже литералы.\n');

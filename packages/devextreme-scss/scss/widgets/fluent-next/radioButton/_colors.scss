@@ -8,16 +8,50 @@ $radio-button-icon-bg: ds.$color-bg !default;
 $radio-button-icon-border: ds.$color-border-contrast !default;
 $radio-button-icon-border-hovered: ds.$color-border-contrast-hovered !default;
 $radio-button-icon-border-active: ds.$color-border-contrast-active !default;
-$radio-button-icon-bg-focused: ds.$color-bg-alpha-hovered !default;
-$radio-button-checked-bg: ds.$color-bg-primary !default;
-$radio-button-checked-bg-hovered: ds.$color-bg-primary-hovered !default;
-$radio-button-checked-bg-active: ds.$color-bg-primary-active !default;
-$radio-button-invalid-bg: ds.$color-border-danger-shared !default;
-$radio-button-invalid-bg-hovered: ds.$color-border-danger-shared-hovered !default;
-$radio-button-invalid-bg-focused: ds.$color-border-danger-shared-active !default;
+
+/* Анатомия радиокнопки у пакета в три слота, и мы читаем их все (Д21):
+   radio-button.color.checked.border.* - кольцо, border-роль;
+   radio-button.color.checked.icon.*   - точка, content-роль: точка это метка контрола,
+   как галочка у чекбокса, и пакет моделирует её иконкой;
+   radio-button.color.checked.bg.rest  - color.none, заливки у диска нет.
+   Слово слота в имени идёт от красящего свойства (NAMING M3), поэтому точка остаётся -bg:
+   она рисуется background-color. Семейство роли идёт от того, чем элемент является.
+   Стем shared: плоское семейство не переворачивается для тёмного - primary там отдаёт
+   то же #0f6cbd, что и в светлом, и точка против страницы даёт 2.88. Так же переведён
+   чекбокс; светлый ни на одной ступени не двигается.
+   Фокус берёт ступень hovered, а нажатие - свою: те же решения, что у чекбокса (Д16).
+   Ступень active в тёмном не переворачивается (#005397), и точка на ней давала 1.98
+   против порога 3 - хуже, чем тот же контрол в покое. */
+$radio-button-checked-bg: ds.$color-content-primary-shared !default;
+$radio-button-checked-bg-hovered: ds.$color-content-primary-shared-hovered !default;
+$radio-button-checked-bg-focused: ds.$color-content-primary-shared-hovered !default;
+$radio-button-checked-bg-active: ds.$color-content-primary-shared-active !default;
+
+$radio-button-checked-border: ds.$color-border-primary-shared !default;
+$radio-button-checked-border-hovered: ds.$color-border-primary-shared-hovered !default;
+$radio-button-checked-border-focused: ds.$color-border-primary-shared-hovered !default;
+$radio-button-checked-border-active: ds.$color-border-primary-shared-active !default;
+
+/* Невалидное состояние - та же пара слотов, danger-оттенок: семейство *-danger-shared
+   разрешается в одно значение через bg, border и content, поэтому разведение по слотам
+   значения не двигает. Лестница состояний та же, что у обычного и у чекбокса: фокус на
+   ступени hovered, нажатие на своей. Ступень active у danger-рампы в тёмном не
+   переворачивается, и точка в фокусе давала там 1.81 против 4.22 в покое (Д27). */
+$radio-button-invalid-bg: ds.$color-content-danger-shared !default;
+$radio-button-invalid-bg-hovered: ds.$color-content-danger-shared-hovered !default;
+$radio-button-invalid-bg-focused: ds.$color-content-danger-shared-hovered !default;
+$radio-button-invalid-bg-active: ds.$color-content-danger-shared-active !default;
+
+$radio-button-invalid-border: ds.$color-border-danger-shared !default;
+$radio-button-invalid-border-hovered: ds.$color-border-danger-shared-hovered !default;
+$radio-button-invalid-border-focused: ds.$color-border-danger-shared-hovered !default;
+$radio-button-invalid-border-active: ds.$color-border-danger-shared-active !default;
 
 $radio-button-content-disabled: ds.$color-content-disabled !default;
 
 $radio-button-border-disabled: ds.$color-border-disabled !default;
 
-$radio-button-content-read-only: ds.$color-content-disabled !default;
+/* Только для чтения: пакет разводит эту пару так же, как неактивное состояние -
+   checked.border.read-only = border-disabled, checked.icon.read-only = content-disabled. */
+$radio-button-bg-read-only: ds.$color-content-disabled !default;
+$radio-button-border-read-only: ds.$color-border-disabled !default;

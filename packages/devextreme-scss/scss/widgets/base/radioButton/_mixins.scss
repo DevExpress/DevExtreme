@@ -81,7 +81,15 @@
   $useRipple: false,
   $focused-ripple-bg: transparent,
   $invalid-focused-ripple-bg: transparent,
+  /* Кольцо и точка это два разных свойства - border-color и background-color, - и по умолчанию
+     миксин красит их одним значением: так его вызывают generic и material. Тема, которой нужно,
+     чтобы имя и роль отвечали за то, что красят, передаёт цвет кольца отдельно. */
+  $checked-border-color: null,
+  $invalid-border-color: null,
 ) {
+  $checked-border: if($checked-border-color, $checked-border-color, $checked-color);
+  $invalid-border: if($invalid-border-color, $invalid-border-color, $invalid-color);
+
   .dx-radiobutton-icon {
     border-color: $border-color;
     background-color: $foreground-color;
@@ -93,7 +101,7 @@
 
   .dx-radiobutton-icon-checked {
     @if $useRipple {
-      border-color: $checked-color;
+      border-color: $checked-border;
     }
 
     .dx-radiobutton-icon-dot {
@@ -152,7 +160,7 @@
 
   .dx-invalid {
     .dx-radiobutton-icon {
-      border-color: $invalid-color;
+      border-color: $invalid-border;
     }
 
     @if $useRipple {

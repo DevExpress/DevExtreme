@@ -4,7 +4,7 @@
 @use "public-links" as links;
 
 @mixin publish {
-  --dx-pivot-grid-accent-content: #{$pivot-grid-accent-content};
+  --dx-pivot-grid-accent-outline: #{$pivot-grid-accent-outline};
   --dx-pivot-grid-area-bg: #{$pivot-grid-area-bg};
   --dx-pivot-grid-area-box-border: #{$pivot-grid-area-box-border};
   --dx-pivot-grid-area-box-margin-block-end: #{$pivot-grid-area-box-margin-block-end};
@@ -52,7 +52,7 @@
   --dx-pivot-grid-fields-area-head-cell-padding-inline: #{$pivot-grid-fields-area-head-cell-padding-inline};
   --dx-pivot-grid-fields-area-head-padding: #{$pivot-grid-fields-area-head-padding};
   --dx-pivot-grid-fields-area-head-padding-inline-start: #{$pivot-grid-fields-area-head-padding-inline-start};
-  --dx-pivot-grid-grand-total-content: #{$pivot-grid-grand-total-content};
+  --dx-pivot-grid-grand-total-bg: #{$pivot-grid-grand-total-bg};
   --dx-pivot-grid-header-cell-padding-inline: #{$pivot-grid-header-cell-padding-inline};
   --dx-pivot-grid-header-filter-content: #{$pivot-grid-header-filter-content};
   --dx-pivot-grid-header-font-weight: #{$pivot-grid-header-font-weight};
@@ -73,7 +73,7 @@
   --dx-pivot-grid-toolbar-margin-inline-end: #{$pivot-grid-toolbar-margin-inline-end};
   --dx-pivot-grid-toolbar-margin-inline-start: #{$pivot-grid-toolbar-margin-inline-start};
   --dx-pivot-grid-toolbar-padding-inline-start: #{$pivot-grid-toolbar-padding-inline-start};
-  --dx-pivot-grid-total-content: #{$pivot-grid-total-content};
+  --dx-pivot-grid-total-bg: #{$pivot-grid-total-bg};
   --dx-pivot-grid-total-text-left-padding: #{$pivot-grid-total-text-left-padding};
   --dx-pivot-grid-tree-view-item-padding: #{$pivot-grid-tree-view-item-padding};
   --dx-pivot-grid-tree-view-node-container-padding-inline-end: #{$pivot-grid-tree-view-node-container-padding-inline-end};

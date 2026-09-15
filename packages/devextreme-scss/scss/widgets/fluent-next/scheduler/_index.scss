@@ -1,9 +1,9 @@
+@use "../list/colors" as listColors;
 @use "../mixins" as *;
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../list/colors" as listColors;
 @use "../radioGroup/sizes" as radioGroupSizes;
 @use "../toolbar/sizes" as toolbarSizes;
 @use "../../base/scheduler/layout/header" as baseSchedulerHeader;
@@ -86,9 +86,9 @@
   $scheduler-tooltip-appointment-text-color: var(--dx-scheduler-tooltip-appointment-content),
   $scheduler-appointment-overlay-bg: var(--dx-scheduler-appointment-overlay-bg),
   $scheduler-tooltip-list-focused-bg: listColors.$list-item-bg-hovered,
-  $scheduler-appointment-base-color: var(--dx-scheduler-appointment-base-content),
-  $scheduler-appointment-start-color: var(--dx-scheduler-appointment-start-content),
-  $scheduler-appointment-active-color: var(--dx-scheduler-appointment-content-active),
+  $scheduler-appointment-base-color: var(--dx-scheduler-appointment-base-bg),
+  $scheduler-appointment-start-color: var(--dx-scheduler-appointment-start-shadow),
+  $scheduler-appointment-active-color: var(--dx-scheduler-appointment-bg-active),
   $scheduler-base-border-color: var(--dx-scheduler-base-border),
   $scheduler-accent-border-color: var(--dx-scheduler-accent-border),
   $scheduler-current-time-cell-color: var(--dx-scheduler-current-time-cell-content),
@@ -105,7 +105,7 @@
   $scheduler-timeline-cell-height: var(--dx-scheduler-timeline-cell-height),
   $scheduler-workspace-active-cell-color: var(--dx-scheduler-workspace-cell-content-active),
   $scheduler-workspace-hovered-cell-color: var(--dx-scheduler-workspace-cell-content-hovered),
-  $scheduler-workspace-focused-cell-color: var(--dx-scheduler-workspace-cell-content-focused),
+  $scheduler-workspace-focused-cell-color: var(--dx-scheduler-workspace-cell-bg-focused),
   $scheduler-droppable-cell-background-color: var(--dx-scheduler-droppable-cell-bg),
   $scheduler-appointment-text-color: var(--dx-scheduler-appointment-content),
   /*
@@ -130,7 +130,6 @@
   $scheduler-tooltip-subject-font-size: var(--dx-scheduler-tooltip-subject-font-size),
   $scheduler-tooltip-date-font-size: var(--dx-scheduler-tooltip-date-font-size)
 );
-@use "../button/colors" as buttonColors;
 @use "../button/mixins" as *;
 @use "../tooltip/sizes" as tooltipSizes;
 @use "../recurrenceEditor" as *;
@@ -790,12 +789,15 @@
       }
     }
 
-    .dx-scheduler-form-icon-sized-gap {
-      width: $global-icon-size;
+    /* Кружок у поля Subject - это не иконка формы, а метка цвета встречи: он показывает,
+       каким цветом встреча ляжет в календарь, поэтому читает заливку встречи, а не цвет
+       иконок формы. Снятие этого правила 15.09 было ошибкой - кружок становился серым. */
+    .dx-scheduler-form-subject-group .dx-scheduler-form-icon {
+      color: var(--dx-scheduler-appointment-base-bg);
     }
 
-    .dx-scheduler-form-subject-group .dx-scheduler-form-icon {
-      color: var(--dx-scheduler-appointment-base-content);
+    .dx-scheduler-form-icon-sized-gap {
+      width: $global-icon-size;
     }
 
     .dx-scheduler-days-of-week-buttons {
@@ -1001,13 +1003,13 @@
     padding: 0;
 
     @include dx-button-flat-color-styling(
-      buttonColors.$button-default-text-content,
-      buttonColors.$button-default-text-content-hovered,
-      buttonColors.$button-default-outlined-content-active,
-      buttonColors.$button-default-text-bg,
-      buttonColors.$button-default-outlined-bg-hovered,
-      buttonColors.$button-default-outlined-bg-focused,
-      buttonColors.$button-default-outlined-bg-active
+      var(--dx-button-default-text-content),
+      var(--dx-button-default-text-content-hovered),
+      var(--dx-button-default-outlined-content-active),
+      var(--dx-button-default-text-bg),
+      var(--dx-button-default-outlined-bg-hovered),
+      var(--dx-button-default-outlined-bg-focused),
+      var(--dx-button-default-outlined-bg-active)
     );
 
     .dx-icon {

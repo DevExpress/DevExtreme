@@ -4,7 +4,6 @@
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../button/mixins" as *;
-@use "../checkBox/colors" as checkBoxColors;
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../button/sizes" as buttonSizes;
 @use "../../base/list" as baseList with (
@@ -16,16 +15,11 @@
   $list-searchbox-margin-bottom: var(--dx-list-search-box-margin-block-end),
 );
 @use "../../base/list/mixins" as *;
-@use "../radioButton/colors" as radioButtonColors;
 @use "../badge";
 
 .dx-state-disabled {
   .dx-list-select-all-label {
     color: var(--dx-list-content-disabled);
-
-    &::after {
-      color: var(--dx-list-border-disabled);
-    }
   }
 
   .dx-list-item-chevron {
@@ -154,29 +148,29 @@
 
         &.dx-state-hover {
           .dx-radiobutton-icon {
-            border-color: radioButtonColors.$radio-button-checked-bg-hovered;
+            border-color: var(--dx-radio-button-checked-border-hovered);
           }
 
           .dx-checkbox-icon {
-            border-color: checkBoxColors.$check-box-icon-checked-bg-hovered;
+            border-color: var(--dx-check-box-icon-checked-border-hovered);
           }
 
           .dx-radiobutton-checked {
             .dx-radiobutton-icon-dot {
-              background-color: radioButtonColors.$radio-button-checked-bg-hovered;
+              background-color: var(--dx-radio-button-checked-bg-hovered);
             }
           }
 
           .dx-checkbox-checked {
             .dx-checkbox-icon {
-              background-color: checkBoxColors.$check-box-icon-checked-bg-hovered;
+              background-color: var(--dx-check-box-icon-checked-bg-hovered);
             }
           }
 
           .dx-checkbox-indeterminate {
             .dx-checkbox-icon {
               &::before {
-                background-color: checkBoxColors.$check-box-icon-checked-bg-hovered;
+                background-color: var(--dx-check-box-icon-checked-bg-hovered);
               }
             }
           }
@@ -184,29 +178,29 @@
 
         &.dx-state-focused {
           .dx-radiobutton-icon {
-            border-color: radioButtonColors.$radio-button-checked-bg-active;
+            border-color: var(--dx-radio-button-checked-border-focused);
           }
 
           .dx-checkbox-icon {
-            border-color: checkBoxColors.$check-box-icon-checked-bg-focused;
+            border-color: var(--dx-check-box-icon-checked-border-focused);
           }
 
           .dx-radiobutton-checked {
             .dx-radiobutton-icon-dot {
-              background-color: radioButtonColors.$radio-button-checked-bg-active;
+              background-color: var(--dx-radio-button-checked-bg-focused);
             }
           }
 
           .dx-checkbox-checked {
             .dx-checkbox-icon {
-              background-color: checkBoxColors.$check-box-icon-checked-bg-focused;
+              background-color: var(--dx-check-box-icon-checked-bg-focused);
             }
           }
 
           .dx-checkbox-indeterminate {
             .dx-checkbox-icon {
               &::before {
-                background-color: checkBoxColors.$check-box-icon-checked-bg-focused;
+                background-color: var(--dx-check-box-icon-checked-bg-focused);
               }
             }
           }

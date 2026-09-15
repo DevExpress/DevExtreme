@@ -19,18 +19,18 @@
   $filterbuilder-bg: var(--dx-filter-builder-bg),
   $filterbuilder-text-color: var(--dx-filter-builder-content),
   $filterbuilder-text-focus-color: var(--dx-filter-builder-text-content-focused),
-  $filterbuilder-group-operation-color: var(--dx-filter-builder-group-operation-content),
-  $filterbuilder-group-operation-hover-color: var(--dx-filter-builder-group-operation-content-hovered),
-  $filterbuilder-group-operation-focus-color: var(--dx-filter-builder-group-operation-content-focused),
-  $filterbuilder-item-operator-color: var(--dx-filter-builder-item-operator-content),
-  $filterbuilder-item-operator-hover-color: var(--dx-filter-builder-item-operator-content-hovered),
-  $filterbuilder-item-operator-focus-color: var(--dx-filter-builder-item-operator-content-focused),
-  $filterbuilder-item-field-color: var(--dx-filter-builder-item-field-content),
-  $filterbuilder-item-field-hover-color: var(--dx-filter-builder-item-field-content-hovered),
-  $filterbuilder-item-field-focus-color: var(--dx-filter-builder-item-field-content-focused),
-  $filterbuilder-item-value-color: var(--dx-filter-builder-item-value-content),
-  $filterbuilder-item-value-hover-color: var(--dx-filter-builder-item-value-content-hovered),
-  $filterbuilder-item-value-focus-color: var(--dx-filter-builder-item-value-content-focused),
+  $filterbuilder-group-operation-color: var(--dx-filter-builder-group-operation-bg),
+  $filterbuilder-group-operation-hover-color: var(--dx-filter-builder-group-operation-bg-hovered),
+  $filterbuilder-group-operation-focus-color: var(--dx-filter-builder-group-operation-bg-focused),
+  $filterbuilder-item-operator-color: var(--dx-filter-builder-item-operator-bg),
+  $filterbuilder-item-operator-hover-color: var(--dx-filter-builder-item-operator-bg-hovered),
+  $filterbuilder-item-operator-focus-color: var(--dx-filter-builder-item-operator-bg-focused),
+  $filterbuilder-item-field-color: var(--dx-filter-builder-item-field-bg),
+  $filterbuilder-item-field-hover-color: var(--dx-filter-builder-item-field-bg-hovered),
+  $filterbuilder-item-field-focus-color: var(--dx-filter-builder-item-field-bg-focused),
+  $filterbuilder-item-value-color: var(--dx-filter-builder-item-value-bg),
+  $filterbuilder-item-value-hover-color: var(--dx-filter-builder-item-value-bg-hovered),
+  $filterbuilder-item-value-focus-color: var(--dx-filter-builder-item-value-bg-focused),
   $filterbuilder-plus-icon-color: var(--dx-filter-builder-plus-icon),
   $filterbuilder-plus-icon-hover-color: var(--dx-filter-builder-plus-icon-content-hovered),
   $filterbuilder-plus-icon-focus-color: var(--dx-filter-builder-plus-icon-content-focused),
@@ -147,7 +147,7 @@
 
 .dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-group-operation,
 .dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-group-operation {
-  background-color: var(--dx-filter-builder-group-operation-content-disabled);
+  background-color: var(--dx-filter-builder-group-operation-bg-disabled);
 }
 
 .dx-state-disabled .dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-field,
@@ -156,7 +156,7 @@
 .dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-field,
 .dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text.dx-filterbuilder-item-operation,
 .dx-filterbuilder.dx-state-disabled .dx-filterbuilder-group .dx-filterbuilder-text .dx-filterbuilder-item-value-text {
-  background-color: var(--dx-filter-builder-item-field-content-disabled);
+  background-color: var(--dx-filter-builder-item-field-bg-disabled);
 }
 
 .dx-state-disabled .dx-filterbuilder .dx-icon-plus,

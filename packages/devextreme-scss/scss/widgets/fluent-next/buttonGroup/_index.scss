@@ -1,11 +1,11 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../button/sizes" as buttonSizes;
-@use "../button/colors" as buttonColors;
 @use "../../base/buttonGroup" with (
   $buttongroup-mode-text-column-gap: var(--dx-button-group-text-column-gap),
 );
 @use "../../base/buttonGroup/mixins" as *;
+@use "../button/colors" as buttonColors;
 @include dx-buttongroup-sizing(
   buttonSizes.$button-border-radius,
   1px, // dx-line-width: 1px, the button border passed to dx-buttongroup-sizing

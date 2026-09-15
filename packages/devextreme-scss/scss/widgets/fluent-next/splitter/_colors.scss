@@ -2,11 +2,17 @@
 
 $splitter-resize-handle-content: ds.$color-content-subtle !default;
 
+/* Грип уходит в акцент при наведении, а не остаётся цветом покоя: набор пакета
+   (splitter/resize-handler/color/content) разводит rest и hovered. */
+$splitter-resize-handle-content-hovered: ds.$color-content-primary-hovered !default;
+
 $splitter-resize-handle-content-focused: ds.$color-content-static-dark !default;
 
-$splitter-resize-handle-bg: ds.$color-border !default;
+/* Полоса ресайза - жёлоб цвета холста, а не линия: аффорданс несёт грип внутри неё.
+   Набор пакета называет этот слот bar/color/inner-bg и даёт ему bg-роли. */
+$splitter-resize-handle-bg: ds.$color-bg-canvas !default;
 
-$splitter-resize-handle-bg-hovered: ds.$color-border-hovered !default;
+$splitter-resize-handle-bg-hovered: ds.$color-bg-low-hovered !default;
 
 $splitter-resize-handle-bg-focused: ds.$color-bg-primary !default;
 

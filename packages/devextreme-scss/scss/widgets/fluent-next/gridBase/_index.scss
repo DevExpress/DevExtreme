@@ -8,14 +8,10 @@
 @use "../textEditor" as *;
 @use "../textEditor/sizes" as textEditorSizes;
 @use "../common/mixins" as *;
-@use "../popup/colors" as popupColors;
 @use "../popup/sizes" as popupSizes;
-@use "../menu/colors" as menuColors;
 @use "../button/mixins" as *;
 @use "../button/sizes" as buttonSizes;
 @use "../../base/button/mixins" as *;
-@use "../button/colors" as buttonColors;
-@use "../validation/colors" as validationColors;
 @use "../typography/sizes" as typographySizes;
 @use "../dropDownEditor/sizes" as dropDownEditorSizes;
 @use "../scrollable";
@@ -77,6 +73,7 @@
 @forward "variables";
 @use "layout/cell" as *;
 @use "layout/aiChat" as *;
+@use "../button/colors" as buttonColors;
 
 @mixin grid-base($widget-name) {
   @include fluent-grid-base-cell($widget-name);
@@ -577,7 +574,7 @@
       .dx-popup-title {
         background-color: transparent;
         border-bottom: var(--dx-grid-popup-title-border-block-end);
-        border-bottom-color: popupColors.$popup-title-border;
+        border-bottom-color: var(--dx-popup-title-border);
 
         .dx-toolbar-label {
           font-size: typographySizes.$typography-m-font-size;
@@ -710,7 +707,7 @@
       }
 
       .dx-overlay-content {
-        color: menuColors.$menu-content;
+        color: var(--dx-menu-content);
       }
     }
 
@@ -859,8 +856,8 @@
     .dx-overlay-wrapper.dx-invalid-message {
       .dx-overlay-content {
         padding: var(--dx-grid-overlay-content-padding);
-        background-color: validationColors.$validation-message-bg;
-        color: validationColors.$validation-message-content;
+        background-color: var(--dx-validation-message-bg);
+        color: var(--dx-validation-message-content);
       }
     }
 

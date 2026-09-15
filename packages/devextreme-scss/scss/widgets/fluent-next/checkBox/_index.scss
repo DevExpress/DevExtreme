@@ -60,11 +60,17 @@
     .dx-checkbox-icon {
       border-color: var(--dx-check-box-border-active);
     }
+
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: var(--dx-check-box-invalid-border-active);
+      }
+    }
   }
 
   &.dx-state-focused {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-icon-checked-bg-focused);
+      border-color: var(--dx-check-box-icon-checked-border-focused);
     }
   }
 
@@ -87,8 +93,8 @@
 
 .dx-checkbox-checked {
   .dx-checkbox-icon {
-    color: var(--dx-check-box-icon-bg);
-    border-color: var(--dx-check-box-icon-checked-bg);
+    color: var(--dx-check-box-mark-content);
+    border-color: var(--dx-check-box-icon-checked-border);
     background-color: var(--dx-check-box-icon-checked-bg);
 
     @include dx-icon(check);
@@ -100,7 +106,7 @@
 
   &.dx-state-hover {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-icon-checked-bg-hovered);
+      border-color: var(--dx-check-box-icon-checked-border-hovered);
       background-color: var(--dx-check-box-icon-checked-bg-hovered);
     }
 
@@ -115,7 +121,7 @@
   &.dx-state-active,
   &.dx-state-focused {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-icon-checked-bg-focused);
+      border-color: var(--dx-check-box-icon-checked-border-focused);
       background-color: var(--dx-check-box-icon-checked-bg-focused);
     }
 
@@ -123,6 +129,23 @@
       .dx-checkbox-icon {
         border-color: var(--dx-check-box-invalid-border-focused);
         background-color: var(--dx-check-box-invalid-bg-focused);
+      }
+    }
+  }
+
+  /* Нажатие возвращается на ступень active, которую назначает пакет: фокус держится долго,
+     нажатие - мгновение. Правило идёт следом за общим и той же специфичности, поэтому
+     выигрывает порядком; невалидная ветка выше специфичнее и не задевается. */
+  &.dx-state-active {
+    .dx-checkbox-icon {
+      border-color: var(--dx-check-box-icon-checked-border-active);
+      background-color: var(--dx-check-box-icon-checked-bg-active);
+    }
+
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: var(--dx-check-box-invalid-border-active);
+        background-color: var(--dx-check-box-invalid-bg-active);
       }
     }
   }
@@ -145,7 +168,7 @@
 }
 
 @include dx-checkbox-icon-indeterminate(
-  var(--dx-check-box-icon-bg),
+  var(--dx-check-box-mark-content),
   var(--dx-check-box-icon-checked-bg),
   $check-box-indeterminate-icon-height,
   $check-box-indeterminate-icon-width,
@@ -154,7 +177,7 @@
 
 .dx-checkbox-indeterminate {
   .dx-checkbox-icon {
-    border-color: var(--dx-check-box-icon-checked-bg);
+    border-color: var(--dx-check-box-icon-checked-border);
   }
 
   &.dx-invalid {
@@ -167,7 +190,7 @@
 
   &.dx-state-hover {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-icon-checked-bg-hovered);
+      border-color: var(--dx-check-box-icon-checked-border-hovered);
 
       &::before {
         background-color: var(--dx-check-box-icon-checked-bg-hovered);
@@ -188,7 +211,7 @@
   &.dx-state-active,
   &.dx-state-focused {
     .dx-checkbox-icon {
-      border-color: var(--dx-check-box-icon-checked-bg-focused);
+      border-color: var(--dx-check-box-icon-checked-border-focused);
 
       &::before {
         background-color: var(--dx-check-box-icon-checked-bg-focused);
@@ -201,6 +224,26 @@
 
         &::before {
           background-color: var(--dx-check-box-invalid-mark-bg-focused);
+        }
+      }
+    }
+  }
+
+  &.dx-state-active {
+    .dx-checkbox-icon {
+      border-color: var(--dx-check-box-icon-checked-border-active);
+
+      &::before {
+        background-color: var(--dx-check-box-icon-checked-bg-active);
+      }
+    }
+
+    &.dx-invalid {
+      .dx-checkbox-icon {
+        border-color: var(--dx-check-box-invalid-border-active);
+
+        &::before {
+          background-color: var(--dx-check-box-invalid-mark-bg-active);
         }
       }
     }
