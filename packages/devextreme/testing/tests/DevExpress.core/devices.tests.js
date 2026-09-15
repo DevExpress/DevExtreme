@@ -2,7 +2,7 @@ import '../../helpers/includeThemesLinks.js';
 import 'ui/button';
 
 import $ from 'jquery';
-import domAdapter from '__internal/core/m_dom_adapter';
+import domAdapter from '__internal/core/dom_adapter';
 import themes from 'ui/themes';
 import devices from '__internal/core/m_devices';
 import viewPort from 'core/utils/view_port';
