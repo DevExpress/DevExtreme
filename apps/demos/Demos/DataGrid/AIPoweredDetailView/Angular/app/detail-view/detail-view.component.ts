@@ -95,11 +95,15 @@ export class DetailViewComponent {
       this.responseValue = '';
       this.isError = true;
     } finally {
+      const wasAborted = this.abortController?.signal.aborted;
       this.abortController = null;
       this.isLoading = false;
       this.submitButtonText = 'Resubmit';
-      this.changeDetectorRef.detectChanges();
-      (event?.target as HTMLElement)?.focus();
+
+      if (!wasAborted) {
+        this.changeDetectorRef.detectChanges();
+        (event?.target as HTMLElement)?.focus();
+      }
     }
   }
 
