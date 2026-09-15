@@ -619,17 +619,6 @@
   ],
   "contrast": [
     {
-      "selector": ".dx-field-value.dx-attention::before",
-      "fgRole": "color-content-static-dark",
-      "bgRole": "color-bg-danger-shared",
-      "contrast": {
-        "light": 6.07,
-        "dark": 3.68
-      },
-      "decision": "graphic-ok",
-      "why": "the attention mark is a glyph on the invalid disc: 3.68 clears 3:1. Same reason to keep it listed"
-    },
-    {
       "selector": ".dx-messagelist-context-menu-content .dx-menu-item:has(.dx-icon-trash).dx-state-focused",
       "fgRole": "color-content-danger",
       "bgRole": "color-bg-hovered",
@@ -1012,8 +1001,8 @@
       "roles": [
         "color-bg-danger-shared",
         "color-content-danger-shared",
-        "color-bg-danger-subtler",
         "color-bg-danger",
+        "color-bg-danger-subtler",
         "color-border-danger"
       ],
       "families": [
@@ -1032,7 +1021,7 @@
         },
         {
           "folder": "common",
-          "role": "color-bg-danger-shared"
+          "role": "color-bg-danger"
         },
         {
           "folder": "gridBase",
@@ -1171,8 +1160,8 @@
           "role": "color-content-danger"
         }
       ],
-      "decision": "design",
-      "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+      "decision": "answered",
+      "why": "Answered 15.09: content-danger for the three that paint TEXT - fieldset, fileUploader and stepper - and the danger FILL family for common, which is not the same element at all. The common member is $invalid-badge-content, the white exclamation mark inside the invalid badge; it sits on a red disc, not on the page, so content-danger would be red on red. What the answer settles is the disc: $invalid-badge-bg moves from bg-danger-shared to bg-danger. The badge is a fixed error marker whose mark is mode-static (content-static-dark is #ffffff in both modes), so the disc must not lighten in dark either - the shared stem took it to #e4554f and the white mark dropped to 3.68 against 6.07 in light. On bg-danger it is #c50f1f and 6.07 in both. Same matched pair as the gallery disc in Д1. The group itself is two different elements under one name: invalid text on a surface, and a mark on a danger disc. Both roles are right for what they paint"
     },
     {
       "concept": "inverted content rest",
@@ -1716,10 +1705,10 @@
       "Д12": "base bg rest - закрыт 15.09 валидацией: три верных роли, слово base у них означает разное",
       "Д13": "base content rest - закрыт 15.09 валидацией: обе роли верны, расходится оттенок",
       "Д26": "radio-focus-rung-and-family - принято 15.09 первым вариантом: радиокнопка берёт решения чекбокса. Кольцо на border-primary-shared-hovered, точка на bg-primary-shared-hovered, фокус отделён от нажатия. Тёмный 1.98 -> 5.79; мёртвая $radio-button-icon-bg-focused удалена",
-      "Д21": "radio-invalid-vs-checkbox-invalid - принято 15.09 первым вариантом: форма чекбокса везде. Пакет назвал анатомию сам - radio-button.color.checked даёт bg=none, border=border-primary-shared, icon=content-primary-shared, - поэтому у каждого кольца теперь своё имя на border-роли, а у каждой точки своё на content-роли. База получила два необязательных параметра"
+      "Д21": "radio-invalid-vs-checkbox-invalid - принято 15.09 первым вариантом: форма чекбокса везде. Пакет назвал анатомию сам - radio-button.color.checked даёт bg=none, border=border-primary-shared, icon=content-primary-shared, - поэтому у каждого кольца теперь своё имя на border-роли, а у каждой точки своё на content-роли. База получила два необязательных параметра",
+      "Д14": "invalid content rest - закрыт 15.09 ответом «для common bg-danger, для остальных content-danger». Три текстовых участника уже на content-danger; у common участник группы это белый знак на красном диске, поэтому перевод коснулся диска: invalid-badge-bg с bg-danger-shared на bg-danger, и знак держит 6.07 в обоих режимах вместо 6.07/3.68"
     },
     "map": {
-      "concept:invalid content rest": "Д14",
       "statePairGroup:outlined-button-label": "Д17",
       "sweep:tier-bypassed-by-neighbours": "Д23",
       "sweep:tree-focus-on-disabled-node": "Д25",
@@ -2236,6 +2225,11 @@
         "what": "slider handle ring and dot split (Д21)",
         "change": "$slider-accent-content-focused -> $slider-accent-border-focused (border-primary-shared-active) + $slider-accent-bg-focused (content-primary-shared-active); $slider-invalid-content-focused -> $slider-invalid-border-focused (border-danger, unchanged) + $slider-invalid-bg-focused (content-danger)",
         "effect": "the handle is a ring plus a mark and now reads one role for each. The accent ring had no border role at the active rung - the flat border-primary family has only a rest value - so it takes the shared stem, which every sibling control has already taken for the same reason: light stays #003c70, dark goes #003c70 -> #005397. The invalid mark moves #ee726a -> #c50f1f in light and does not move in dark"
+      },
+      {
+        "what": "invalid-badge-bg (Д14)",
+        "change": "bg-danger-shared -> bg-danger",
+        "effect": "light identical (#c50f1f both roles), dark #e4554f -> #c50f1f. The badge is a fixed error marker with a white exclamation mark on it, and the mark is mode-static by role - content-static-dark is #ffffff in both modes - so a disc that lightens in dark breaks the pair: the mark read 3.68 there against 6.07 in light, and now reads 6.07 in both. The matched-pair reasoning is the one Д1 used for the gallery disc"
       }
     ]
   },
@@ -2254,7 +2248,8 @@
       "deferred-to ушёл 15.09 вслед за graphic-ok-rest-only: обе группы, которые он помечал,",
       "закрылись сами - чекбокс и радиокнопка сошлись на одном стеме, а treeView перестал",
       "красить чекбокс. Класс остался без строк, и проверка это поймала.",
-      "ring-and-fill ушёл 15.09: Д21 развёл кольцо и метку по отдельным именам, и все три строки, которые классом помечались, вышли из списка. Класс остался без записей - гейт это и поймал."
+      "ring-and-fill ушёл 15.09: Д21 развёл кольцо и метку по отдельным именам, и все три строки, которые классом помечались, вышли из списка. Класс остался без записей - гейт это и поймал.",
+      "graphic-ok ушёл 15.09: единственной его строкой был белый знак на диске невалидного бейджа, и после перевода диска на bg-danger (Д14) пара вышла из списка контраста вовсе - 6.07 в обоих режимах."
     ],
     "classes": {
       "design": {
@@ -2288,10 +2283,6 @@
       "shade": {
         "section": "Е",
         "ru": "то же семейство, другой оттенок - расхождение, которое компоненты вправе иметь"
-      },
-      "graphic-ok": {
-        "section": "Е",
-        "ru": "глиф, порог 3:1 взят"
       },
       "bridge": {
         "section": "Е",
