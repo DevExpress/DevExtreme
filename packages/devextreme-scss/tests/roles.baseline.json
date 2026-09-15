@@ -623,17 +623,6 @@
   ],
   "contrast": [
     {
-      "selector": ".dx-checkbox-checked .dx-checkbox-icon",
-      "fgRole": "color-content-inverted",
-      "bgRole": "color-bg-primary",
-      "contrast": {
-        "light": 5.38,
-        "dark": 3.36
-      },
-      "decision": "graphic-ok-rest-only",
-      "why": "WRONG, corrected 09.09. The 3.36 is the rest state and nothing else, because the pass that produced it can only measure a foreground and a background written in one rule. One keystroke away the same element reads 1.62: the focused and active rules repaint the fill and leave the checkmark to the rest rule, so the pair is split across rules and was invisible. See statePairs and the group checkbox-focused-fill. Kept listed so the rest state is still watched, but the graphic-ok verdict now belongs to the rest state only."
-    },
-    {
       "selector": ".dx-field-value.dx-attention::before",
       "fgRole": "color-content-static-dark",
       "bgRole": "color-bg-danger-shared",
@@ -757,6 +746,72 @@
       ],
       "decision": "design",
       "why": "the components disagree on the colour, not only on the name: one concept painted from different families with different values. A design call"
+    },
+    {
+      "concept": "checked bg active",
+      "roles": [
+        "color-bg-primary-shared-active",
+        "color-bg-primary-active"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared-active"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-bg-primary-active"
+        }
+      ],
+      "decision": "deferred-to",
+      "why": "Appeared 15.09 the moment the checkbox fill took the shared stem, and it is the same defect one control over rather than a new one. The radio dot still reads the plain bg-primary family, which does not invert for dark: #0f6cbd in both modes at rest and #003c70 under a press. Against the page that is 2.88 at rest and 1.39 pressed, where a filled graphic wants 3.0; the shared stem gives 4.65 and 1.98, with light identical at every rung. Filed as sweep:radio-checked-fill-stem rather than decided here - it is the user call the checkbox just got, on the control next to it."
+    },
+    {
+      "concept": "checked bg hovered",
+      "roles": [
+        "color-bg-primary-shared-hovered",
+        "color-bg-primary-hovered"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-bg-primary-hovered"
+        }
+      ],
+      "decision": "deferred-to",
+      "why": "Appeared 15.09 the moment the checkbox fill took the shared stem, and it is the same defect one control over rather than a new one. The radio dot still reads the plain bg-primary family, which does not invert for dark: #0f6cbd in both modes at rest and #003c70 under a press. Against the page that is 2.88 at rest and 1.39 pressed, where a filled graphic wants 3.0; the shared stem gives 4.65 and 1.98, with light identical at every rung. Filed as sweep:radio-checked-fill-stem rather than decided here - it is the user call the checkbox just got, on the control next to it."
+    },
+    {
+      "concept": "checked bg rest",
+      "roles": [
+        "color-bg-primary-shared",
+        "color-bg-primary"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-bg-primary"
+        }
+      ],
+      "decision": "deferred-to",
+      "why": "Appeared 15.09 the moment the checkbox fill took the shared stem, and it is the same defect one control over rather than a new one. The radio dot still reads the plain bg-primary family, which does not invert for dark: #0f6cbd in both modes at rest and #003c70 under a press. Against the page that is 2.88 at rest and 1.39 pressed, where a filled graphic wants 3.0; the shared stem gives 4.65 and 1.98, with light identical at every rung. Filed as sweep:radio-checked-fill-stem rather than decided here - it is the user call the checkbox just got, on the control next to it."
     },
     {
       "concept": "checked border focused",
@@ -1373,7 +1428,6 @@
       "color-bg-on-color-alpha-active",
       "color-bg-on-color-alpha-disabled",
       "color-bg-on-color-alpha-hovered",
-      "color-bg-primary-shared-hovered",
       "color-bg-static-dark-active",
       "color-bg-static-dark-hovered",
       "color-bg-static-dark-selected",
@@ -1650,7 +1704,7 @@
       "В closed перечислено, что было под освободившимися номерами - чтобы ссылка из переписки или",
       "из старой копии страницы находила ответ, а не чужой вопрос."
     ],
-    "next": 24,
+    "next": 25,
     "closed": {
       "Д3": "switch-on-border-focused — принято, переведён на border-primary-shared-active",
       "Д4": "tree-view-checkbox-border-disabled — снято: treeView больше не стилизует чекбокс",
@@ -1676,7 +1730,8 @@
       "sweep:scheduler-form-icon-on-bg-role": "Д20",
       "sweep:radio-invalid-vs-checkbox-invalid": "Д21",
       "sweep:tree-view-checkbox-focus-still-unique": "Д22",
-      "sweep:tier-bypassed-by-neighbours": "Д23"
+      "sweep:tier-bypassed-by-neighbours": "Д23",
+      "sweep:radio-checked-fill-stem": "Д24"
     }
   },
   "statePairs": {
@@ -1692,10 +1747,10 @@
         "bg": "--dx-check-box-icon-checked-bg-active",
         "fg": "--dx-check-box-icon-bg",
         "fgRole": "color-content-inverted",
-        "bgRole": "color-bg-primary-active",
+        "bgRole": "color-bg-primary-shared-active",
         "contrast": {
           "light": 11.17,
-          "dark": 1.62
+          "dark": 2.31
         },
         "selector": ".dx-checkbox-checked.dx-state-active .dx-checkbox-icon",
         "group": "checkbox-focused-fill",
@@ -1921,36 +1976,12 @@
         "selector": ".dx-step.dx-state-hover.dx-step-completed .dx-step-indicator",
         "group": "contained-button-label",
         "decision": "design"
-      },
-      {
-        "bg": "--dx-check-box-icon-checked-bg-hovered",
-        "fg": "--dx-check-box-icon-bg",
-        "fgRole": "color-content-inverted",
-        "bgRole": "color-bg-primary-hovered",
-        "contrast": {
-          "light": 7.82,
-          "dark": 4.3
-        },
-        "selector": ".dx-checkbox-checked.dx-state-hover .dx-checkbox-icon",
-        "decision": "graphic-ok"
-      },
-      {
-        "bg": "--dx-check-box-icon-checked-bg-focused",
-        "fg": "--dx-check-box-icon-bg",
-        "fgRole": "color-content-inverted",
-        "bgRole": "color-bg-primary-hovered",
-        "contrast": {
-          "light": 7.82,
-          "dark": 4.3
-        },
-        "selector": ".dx-checkbox-checked.dx-state-active .dx-checkbox-icon",
-        "decision": "graphic-ok"
       }
     ],
     "groups": {
       "checkbox-focused-fill": {
         "decision": "design",
-        "why": "Resolved in part on 15.09, when the designer produced the package tokens for checkbox/color/checked. Three slots, not one: border, bg and icon each have their own token, and our theme painted the border from the BG variable. Figma and Blazor agree that the border is border-primary-shared*, so that half was not a judgement call and is applied - three new names, light pixel-identical (primary-100/120/140 exactly as before), dark better at every rung: the box outline against the page goes 2.88 -> 4.65 at rest, 3.69 -> 5.79 hovered, 1.39 -> 1.98 pressed.\nWHAT REMAINS. The fill. Figma says bg-primary*, Blazor implements content-primary-shared*, and the two are identical in light and differ in dark - which is exactly what decides this row. On Figma's fill the mark reads 3.36 at rest and 1.62 pressed; on Blazor's, 5.42 and 2.31. Neither clears 3.0 in the pressed state, because no primary family inverts its active rung for dark - the same package defect П2 records for danger.\nAND A THIRD THING THE TOKENS SETTLE. The package state list is rest / hovered / active / read-only / disabled - there is no focused. Our theme paints .dx-state-focused AND .dx-state-active from one variable, so a keyboard user SITS at the value the package intends for a transient press. The button already separates them (bg-focused reads bg-primary-hovered). Splitting focus from active would leave the 1.62 where the package put it - under a finger, for the length of a click - and take the keyboard user to 4.30.\nRE-CHECKED 15.09 against a freshly pulled Blazor, and the stem argument above was WRONG. Blazor's checked fills are content-primary-shared for primary but bg-success-shared and bg-danger-shared for the other two - I had read the INDETERMINATE variables, where the dash is a content-coloured mark, as the checked fills. So primary is the outlier inside Blazor, our bg family agrees with their success and danger, and our invalid MARK on content-danger-shared agrees with their indeterminate mark. There was no internal inconsistency.\nWHICH LEAVES A CANDIDATE THAT SATISFIES BOTH SOURCES: bg-primary-shared*. The whole *-shared family is one value across bg, border and content, so it measures exactly like Blazor's content-primary-shared - mark 5.42 at rest and box 4.65 in dark against 3.36 and 2.88 today - while staying in the bg family Figma names, on the stem Blazor itself uses for success and danger. Light is identical to what ships now. The pressed rung still fails (2.31 / 1.98): no primary family inverts its active step for dark, which is П2's defect again.\nRESOLVED 15.09, option 1. Focus now takes the HOVERED rung and the press keeps the package's active one, which is the shape the contained button already had (bg-focused reads bg-primary-hovered, bg-active reads bg-primary-active). The package state list justifies it: there is no focused state in it at all, so painting focus with the value meant for a click was never what the tokens asked for.\nFour variables: -bg-focused and -border-focused moved down a rung, and -bg-active and -border-active were added to hold what the package assigns. The row that measured 1.62 split in two - the press keeps 1.62 on a state that lasts as long as a finger is down, and the focus a keyboard user SITS in went to 4.30, over the 3:1 a glyph needs. Light moves one step on focus, #003c70 -> #005397. Cascade verified on eight combinations: checked rest, hover, focus and press, the invalid pair, and the indeterminate pair including its ::before dash.\nThe fill STEM question is untouched and still open: bg-primary* as it ships, against bg-primary-shared* which reads 5.42 / 4.65 in dark where today it is 3.36 / 2.88."
+        "why": "Resolved in part on 15.09, when the designer produced the package tokens for checkbox/color/checked. Three slots, not one: border, bg and icon each have their own token, and our theme painted the border from the BG variable. Figma and Blazor agree that the border is border-primary-shared*, so that half was not a judgement call and is applied - three new names, light pixel-identical (primary-100/120/140 exactly as before), dark better at every rung: the box outline against the page goes 2.88 -> 4.65 at rest, 3.69 -> 5.79 hovered, 1.39 -> 1.98 pressed.\nWHAT REMAINS. The fill. Figma says bg-primary*, Blazor implements content-primary-shared*, and the two are identical in light and differ in dark - which is exactly what decides this row. On Figma's fill the mark reads 3.36 at rest and 1.62 pressed; on Blazor's, 5.42 and 2.31. Neither clears 3.0 in the pressed state, because no primary family inverts its active rung for dark - the same package defect П2 records for danger.\nAND A THIRD THING THE TOKENS SETTLE. The package state list is rest / hovered / active / read-only / disabled - there is no focused. Our theme paints .dx-state-focused AND .dx-state-active from one variable, so a keyboard user SITS at the value the package intends for a transient press. The button already separates them (bg-focused reads bg-primary-hovered). Splitting focus from active would leave the 1.62 where the package put it - under a finger, for the length of a click - and take the keyboard user to 4.30.\nRE-CHECKED 15.09 against a freshly pulled Blazor, and the stem argument above was WRONG. Blazor's checked fills are content-primary-shared for primary but bg-success-shared and bg-danger-shared for the other two - I had read the INDETERMINATE variables, where the dash is a content-coloured mark, as the checked fills. So primary is the outlier inside Blazor, our bg family agrees with their success and danger, and our invalid MARK on content-danger-shared agrees with their indeterminate mark. There was no internal inconsistency.\nWHICH LEAVES A CANDIDATE THAT SATISFIES BOTH SOURCES: bg-primary-shared*. The whole *-shared family is one value across bg, border and content, so it measures exactly like Blazor's content-primary-shared - mark 5.42 at rest and box 4.65 in dark against 3.36 and 2.88 today - while staying in the bg family Figma names, on the stem Blazor itself uses for success and danger. Light is identical to what ships now. The pressed rung still fails (2.31 / 1.98): no primary family inverts its active step for dark, which is П2's defect again.\nRESOLVED 15.09, option 1. Focus now takes the HOVERED rung and the press keeps the package's active one, which is the shape the contained button already had (bg-focused reads bg-primary-hovered, bg-active reads bg-primary-active). The package state list justifies it: there is no focused state in it at all, so painting focus with the value meant for a click was never what the tokens asked for.\nFour variables: -bg-focused and -border-focused moved down a rung, and -bg-active and -border-active were added to hold what the package assigns. The row that measured 1.62 split in two - the press keeps 1.62 on a state that lasts as long as a finger is down, and the focus a keyboard user SITS in went to 4.30, over the 3:1 a glyph needs. Light moves one step on focus, #003c70 -> #005397. Cascade verified on eight combinations: checked rest, hover, focus and press, the invalid pair, and the indeterminate pair including its ::before dash.\nThe fill STEM question is untouched and still open: bg-primary* as it ships, against bg-primary-shared* which reads 5.42 / 4.65 in dark where today it is 3.36 / 2.88.\nSTEM ACCEPTED 15.09. The checked fill moved from the plain bg-primary family to bg-primary-shared*. Light is pixel-identical at every rung - primary-100, 120, 120, 140 exactly as before - because the plain and shared families coincide in light. Dark improves everywhere: rest primary-100 -> 80, hovered and focused 90 -> 70, press 140 -> 120. The rest row left the contrast list (3.36 -> 5.42), hovered and focused left the state-pair list (4.30 -> 6.75), and the press went 1.62 -> 2.31 - still under 3, because the package gives no primary family an inverted active rung, which is П2 again.\nWhy the stem matters at all: the plain family does not know the mode. bg-primary is #0f6cbd in BOTH modes and bg-primary-active #003c70 in both, while the mark on them, content-inverted, does flip - to #161616 in dark. A fixed fill under a flipping mark is what produced 3.36 and 1.62. Every rung of the shared family flips."
       },
       "outlined-button-label": {
         "decision": "design",
@@ -2001,6 +2032,12 @@
         "decision": "design",
         "title": "Соседний виджет красит чужой контрол мимо тира - и перебивает его публичное имя",
         "why": "Found 15.09 while answering what role the checkbox uses on hover. The checkbox itself moves only its border - border-contrast to border-contrast-hovered, the fill untouched - which is the same shape the tile uses and corroborates the Д6 answer. But the list repaints the same checkbox on ITEM hover, and it does it by importing the checkbox theme variable directly (list/_index.scss reads checkBoxColors.$check-box-icon-checked-bg-hovered), not through a name of its own. The variable holds ds.$color-bg-primary-hovered, so the compiled rule paints from var(--dxds-color-bg-primary-hovered) - the design-system name - with no component-tier name in between.\nTHE CONSEQUENCE IS DEMONSTRABLE, not theoretical. Checked with a cascade harness on the real bundle: a checked checkbox on its own resolves to var(--dx-check-box-icon-checked-bg-hovered), and the same checkbox inside a list with a selection decorator resolves to var(--dxds-color-bg-primary-hovered), because the list selector carries six classes against three. So overriding the checkbox's public name changes the control everywhere EXCEPT inside a list - the one place a consumer is least likely to test.\nHOW WIDE. 230 colour declarations in the bundle paint straight from --dxds- with no tier name: color 32, background-color and the border colours the rest, concentrated in toolbar-menu-section (40), dataGrid (20), treeList (16), popup-content (10), menu-item (5), list (4). Sizes and typography do the same 510 more times, but that is by design - the tier is colour-first and the sizes sit on the scales on purpose. The colour half is not by design.\nThirteen theme files import a neighbour colour module inside _index.scss and paint with it directly; the same import inside a _colors.scss is harmless, because there it becomes the value of the widget's OWN tier name.\nOptions: (1) give every such paint a tier name of its own, valued from the neighbour as chat/_colors.scss already does - the widest fix, and it grows the tier; (2) fix only the cases where the borrowed paint collides with an existing public name, which is the demonstrable bug - list and scheduler over checkBox and radioButton; (3) record the 230 as deliberate and say in the docs that colour outside a tier name is not overridable. Recommendation: (2) now, (1) as a wave before the tier ships, because after release each missing name is a customisation that cannot be written."
+      },
+      {
+        "key": "radio-checked-fill-stem",
+        "decision": "design",
+        "title": "Точка радиокнопки осталась на семействе, которое не знает про режим",
+        "why": "The checkbox fill moved to bg-primary-shared* and the radio dot did not, so three concept groups opened the same day - checked bg rest, hovered and active, each with checkBox on the shared stem and radioButton on the plain one. This is not new damage: the radio has always read the plain family, which is mode-static, and the dot measures 2.88 against the page at rest in dark and 1.39 under a press, where a filled graphic wants 3.0. The shared stem gives 4.65 and 1.98 with light identical at every rung, exactly as it did for the checkbox. Options: (1) move radio-button-checked-bg* to bg-primary-shared* - the same move, the same cost, and the two controls stop disagreeing; (2) leave it and record the divergence, which means a form shows two sibling controls answering the same question differently. Recommendation: (1)."
       }
     ],
     "confirmed": {
@@ -2149,6 +2186,11 @@
         "what": "checked checkbox: focus and press separated (Д16, option 1)",
         "change": "-bg-focused bg-primary-active -> bg-primary-hovered and -border-focused border-primary-shared-active -> -hovered; new -bg-active and -border-active hold the values the package assigns to active",
         "effect": "the 1.62 in dark stays only where the package put it - under a finger for the length of a click - and the state a keyboard user sits in reads 4.30. Light moves one rung on focus, #003c70 -> #005397. Four variables, nothing else; cascade verified on eight combinations"
+      },
+      {
+        "what": "checked checkbox fill: the shared stem (Д16)",
+        "change": "bg-primary* -> bg-primary-shared* on all four rungs",
+        "effect": "light identical at every rung, since the two families coincide there. Dark: the rest row leaves the contrast list at 5.42 against 3.36, hovered and focused leave the state-pair list at 6.75 against 4.30, the press improves 1.62 -> 2.31. The plain family is mode-static - bg-primary is #0f6cbd in both modes - while the mark on it flips to near-black in dark, and that mismatch was the whole defect"
       }
     ]
   },
@@ -2160,7 +2202,10 @@
       "никуда вовсе. Гейт держит равенство в обе стороны: вердикт без класса и класс без строк роняют",
       "проверку, и сумма по секциям обязана сойтись с числом разобранных строк.",
       "Класс заводится только когда строка с таким вердиктом есть в данных: пустой класс роняет гейт так",
-      "же, как неотнесённый вердикт. Поэтому spelling здесь нет - все три строки отвечены (answered)."
+      "же, как неотнесённый вердикт. Поэтому spelling здесь нет - все три строки отвечены (answered).",
+      "graphic-ok-rest-only отсюда ушёл 15.09: он помечал строку, где покой брал порог, а состояние",
+      "нет. После перевода заливки на стем shared покой дошёл до 5.42, строка вышла из списка",
+      "контраста, и класс остался без единой записи - гейт это и поймал."
     ],
     "classes": {
       "design": {
@@ -2198,10 +2243,6 @@
       "graphic-ok": {
         "section": "Е",
         "ru": "глиф, порог 3:1 взят"
-      },
-      "graphic-ok-rest-only": {
-        "section": "Е",
-        "ru": "покой глифа порог берёт, а состояние - нет; состояние вынесено отдельным вопросом"
       },
       "bridge": {
         "section": "Е",
