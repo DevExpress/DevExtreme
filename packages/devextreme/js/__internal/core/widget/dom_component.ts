@@ -15,6 +15,7 @@ import { addShadowDomStyles } from '@js/core/utils/shadow_dom';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
+import type { CreateElement } from '@ts/core/template_manager';
 import TemplateManagerModule from '@ts/core/template_manager';
 import { uiLayerInitialized } from '@ts/core/utils/m_common';
 import type { ComponentProperties, DefaultActionArgs, DefaultActionConfig } from '@ts/core/widget/component';
@@ -541,9 +542,8 @@ class DOMComponent<
     }
   }
 
-  _getAnonymousTemplateName(): void {
-    // eslint-disable-next-line no-void
-    return void 0;
+  _getAnonymousTemplateName(): string | undefined {
+    return undefined;
   }
 
   _initTemplateManager(): undefined {
@@ -554,7 +554,7 @@ class DOMComponent<
     const { createTemplate } = integrationOptions;
 
     this._templateManager = new TemplateManagerModule.TemplateManager(
-      createTemplate,
+      createTemplate as CreateElement | undefined,
       this._getAnonymousTemplateName(),
     );
     this._initTemplates();

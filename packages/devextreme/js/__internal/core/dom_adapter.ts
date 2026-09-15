@@ -1,6 +1,7 @@
 /* global document */
 import { noop } from '@js/core/utils/common';
 import { getShadowElementsFromPoint } from '@js/core/utils/shadow_dom';
+import type { Injectable } from '@ts/core/utils/dependency_injector';
 import { injector } from '@ts/core/utils/dependency_injector';
 
 const ELEMENT_NODE = 1;
@@ -8,92 +9,118 @@ const TEXT_NODE = 3;
 const DOCUMENT_NODE = 9;
 const DOCUMENT_FRAGMENT_NODE = 11;
 
-export interface DomAdapter {
-  querySelectorAll: (element, selector) => any;
-  elementMatches: (element, selector) => boolean;
-  getActiveElement: (element?: HTMLElement | null) => HTMLElement;
-  getDocument: () => Document;
-  getDocumentElement: () => HTMLDocument & {
-    scrollLeft: number;
-    scrollTop: number;
-    clientWidth: number;
-    scrollHeight: number;
-    offsetHeight: number;
-    clientHeight: number;
-  };
-  getHead: () => any;
-  listen: (element, event, callback, options?) => any;
-  getReadyState: () => DocumentReadyState;
-  isNode: (node: unknown) => node is Node;
-  isDocument: (element: any) => boolean;
-  isDocumentFragment: (element: any) => boolean;
-  getBody: () => HTMLBodyElement;
-  getRootNode: (element: HTMLElement) => Document | DocumentFragment;
-  getAttribute: (element, name) => any;
-  setAttribute: (element, name, value) => void;
-  createAttribute: (text: string, context?: Document) => Attr;
-  removeAttribute: (element, name) => void;
-  isElementNode: (element: any) => boolean;
-  createElement: (tagName: string, context?: Document) => HTMLElement;
-  createDocumentFragment: () => DocumentFragment;
-  createTextNode: (text: any, context?: any) => any;
-  setClass: (element: HTMLElement, className: string, isAdd: boolean) => void;
-  setText: (element, text) => void;
-  setProperty: (element, name, value) => void;
-  removeElement: (element: HTMLElement) => void;
-  inject: (obj: Record<string, unknown>) => void;
-  setStyle: (element: HTMLElement, name: string, value: string) => void;
-  insertElement: (parentElement: HTMLElement, newElement: HTMLElement, nextSiblingElement?: HTMLElement) => void;
+type ListenOptions = boolean | AddEventListenerOptions;
+
+type ListenCallback = EventListenerOrEventListenerObject | ((...args: never[]) => unknown);
+
+type RootNode = Document | DocumentFragment;
+
+type ActiveElementHolder = Document | ShadowRoot;
+
+type MatchesFn = (this: Element, selector: string) => boolean;
+
+interface LegacyMatchesElement extends Element {
+  matchesSelector?: MatchesFn;
+  mozMatchesSelector?: MatchesFn;
+  msMatchesSelector?: MatchesFn;
+  oMatchesSelector?: MatchesFn;
+  document?: Document;
 }
 
-const nativeDOMAdapterStrategy: DomAdapter = {
+interface DomAdapterStrategy {
+  querySelectorAll: (element: ParentNode, selector: string) => NodeListOf<Element>;
+  elementMatches: (element: Element, selector: string) => boolean;
+  getActiveElement: (element?: HTMLElement | null) => HTMLElement;
+  getDocument: () => Document;
+  getDocumentElement: () => HTMLElement;
+  getHead: () => HTMLHeadElement;
+  listen: (
+    element: EventTarget | null | undefined,
+    event: string,
+    callback: ListenCallback,
+    options?: ListenOptions,
+  ) => () => void;
+  getReadyState: () => DocumentReadyState;
+  isNode: (node: unknown) => node is Node;
+  isElementNode: (element: unknown) => boolean;
+  isTextNode: (element: unknown) => boolean;
+  isDocument: (element: unknown) => boolean;
+  isDocumentFragment: (element: unknown) => boolean;
+  getBody: () => HTMLBodyElement;
+  getLocation: () => Location;
+  getSelection: () => unknown;
+  hasDocumentProperty: (property: string) => boolean;
+  getRootNode: (element?: HTMLElement | null) => RootNode;
+  getAttribute: (element: Element, name: string) => string | null;
+  setAttribute: (element: Element, name: string, value: string) => void;
+  createAttribute: (text: string, context?: Document) => Attr;
+  removeAttribute: (element: Element, name: string) => void;
+  createElement: (tagName: string, context?: Document) => HTMLElement;
+  createElementNS: (ns: string, tagName: string, context?: Document) => Element;
+  createDocumentFragment: () => DocumentFragment;
+  createTextNode: (text: string, context?: Document) => Text;
+  setClass: (element: Element, className: string, isAdd: boolean) => void;
+  setText: (element: Node | null | undefined, text: string | null) => void;
+  setProperty: (element: Element, name: string, value: unknown) => void;
+  removeElement: (element: Node | null | undefined) => void;
+  setStyle: (element: HTMLElement, name: string, value: string) => void;
+  insertElement: (parentElement: Node, newElement: Node, nextSiblingElement?: Node | null) => void;
+  elementsFromPoint: (x: number, y: number, element?: HTMLElement | null) => Element[];
+  _document: Document;
+}
+
+export type DomAdapter = Injectable<DomAdapterStrategy>;
+
+const nativeDOMAdapterStrategy: DomAdapterStrategy = {
   querySelectorAll(element, selector) {
     return element.querySelectorAll(selector);
   },
 
-  elementMatches(element, selector) {
-    const matches = element.matches || element.matchesSelector || element.mozMatchesSelector
-            || element.msMatchesSelector || element.oMatchesSelector || element.webkitMatchesSelector
-            // @ts-expect-error not all code paths return value
-            || ((selector) => {
-              const doc = element.document || element.ownerDocument;
+  elementMatches(this: DomAdapterStrategy, element, selector) {
+    const legacyElement = element as LegacyMatchesElement;
+    const matches: MatchesFn = legacyElement.matches || legacyElement.matchesSelector
+            || legacyElement.mozMatchesSelector || legacyElement.msMatchesSelector
+            || legacyElement.oMatchesSelector || legacyElement.webkitMatchesSelector
+            || ((candidate: string): boolean => {
+              const doc = legacyElement.document ?? legacyElement.ownerDocument;
 
               if (!doc) {
                 return false;
               }
 
-              const items = this.querySelectorAll(doc, selector);
+              const items = this.querySelectorAll(doc, candidate);
+              const { length } = items;
 
-              for (let i = 0; i < items.length; i++) {
+              for (let i = 0; i < length; i += 1) {
                 if (items[i] === element) {
                   return true;
                 }
               }
+
+              return false;
             });
 
     return matches.call(element, selector);
   },
 
-  createElement(tagName, context) {
-    context = context ?? this._document;
-    return context!.createElement(tagName);
+  createElement(this: DomAdapterStrategy, tagName, context) {
+    const doc = context ?? this._document;
+    return doc.createElement(tagName);
   },
 
-  createElementNS(ns, tagName, context) {
-    context = context || this._document;
-    return context.createElementNS(ns, tagName);
+  createElementNS(this: DomAdapterStrategy, ns, tagName, context) {
+    const doc = context ?? this._document;
+    return doc.createElementNS(ns, tagName);
   },
 
-  createTextNode(text, context) {
-    context = context || this._document;
-    return context.createTextNode(text);
+  createTextNode(this: DomAdapterStrategy, text, context) {
+    const doc = context ?? this._document;
+    return doc.createTextNode(text);
   },
 
-  createAttribute(text: string, context?: Document) {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    context = context || this._document;
-    // @ts-expect-error
-    return context.createAttribute(text);
+  createAttribute(this: DomAdapterStrategy, text: string, context?: Document) {
+    const doc = context ?? this._document;
+    return doc.createAttribute(text);
   },
 
   isNode(element: unknown): element is Node {
@@ -101,23 +128,23 @@ const nativeDOMAdapterStrategy: DomAdapter = {
   },
 
   isElementNode(element) {
-    return !!element && element.nodeType === ELEMENT_NODE;
+    return !!element && (element as Node).nodeType === ELEMENT_NODE;
   },
 
   isTextNode(element) {
-    return element && element.nodeType === TEXT_NODE;
+    return !!element && (element as Node).nodeType === TEXT_NODE;
   },
 
   isDocument(element) {
-    return element && element.nodeType === DOCUMENT_NODE;
+    return !!element && (element as Node).nodeType === DOCUMENT_NODE;
   },
 
   isDocumentFragment(element) {
-    return element && element.nodeType === DOCUMENT_FRAGMENT_NODE;
+    return !!element && (element as Node).nodeType === DOCUMENT_FRAGMENT_NODE;
   },
 
   removeElement(element) {
-    const parentNode = element && element.parentNode;
+    const parentNode = element?.parentNode;
     if (parentNode) {
       parentNode.removeChild(element);
     }
@@ -139,7 +166,7 @@ const nativeDOMAdapterStrategy: DomAdapter = {
 
   setAttribute(element, name, value) {
     if (name === 'style') {
-      element.style.cssText = value;
+      (element as HTMLElement).style.cssText = value;
     } else {
       element.setAttribute(name, value);
     }
@@ -150,7 +177,7 @@ const nativeDOMAdapterStrategy: DomAdapter = {
   },
 
   setProperty(element, name, value) {
-    element[name] = value;
+    (element as unknown as Record<string, unknown>)[name] = value;
   },
 
   setText(element, text) {
@@ -161,61 +188,63 @@ const nativeDOMAdapterStrategy: DomAdapter = {
 
   setClass(element, className, isAdd) {
     if (element.nodeType === 1 && className) {
-      isAdd
-        ? element.classList.add(className)
-        : element.classList.remove(className);
+      if (isAdd) {
+        element.classList.add(className);
+      } else {
+        element.classList.remove(className);
+      }
     }
   },
 
   setStyle(element, name, value) {
-    element.style[name] = value || '';
+    (element.style as unknown as Record<string, string>)[name] = value || '';
   },
 
-  _document: typeof document === 'undefined' ? undefined : document,
+  _document: (typeof document === 'undefined' ? undefined : document) as Document,
 
-  getDocument() {
+  getDocument(this: DomAdapterStrategy) {
     return this._document;
   },
 
-  getActiveElement(element) {
+  getActiveElement(this: DomAdapterStrategy, element) {
     const activeElementHolder = this.getRootNode(element);
 
-    return activeElementHolder.activeElement;
-  },
-  // @ts-expect-error return type is not assignable
-  getRootNode(element) {
-    return element?.getRootNode?.() ?? this._document;
+    return (activeElementHolder as ActiveElementHolder).activeElement as HTMLElement;
   },
 
-  getBody() {
-    return this._document.body;
+  getRootNode(this: DomAdapterStrategy, element) {
+    return (element?.getRootNode?.() ?? this._document) as RootNode;
   },
 
-  createDocumentFragment() {
+  getBody(this: DomAdapterStrategy) {
+    return this._document.body as HTMLBodyElement;
+  },
+
+  createDocumentFragment(this: DomAdapterStrategy) {
     return this._document.createDocumentFragment();
   },
 
-  getDocumentElement() {
+  getDocumentElement(this: DomAdapterStrategy) {
     return this._document.documentElement;
   },
 
-  getLocation() {
+  getLocation(this: DomAdapterStrategy) {
     return this._document.location;
   },
 
-  getSelection() {
-    return this._document.selection;
+  getSelection(this: DomAdapterStrategy) {
+    return (this._document as Document & { selection?: unknown }).selection;
   },
 
-  getReadyState(): DocumentReadyState {
+  getReadyState(this: DomAdapterStrategy): DocumentReadyState {
     return this._document.readyState;
   },
 
-  getHead() {
+  getHead(this: DomAdapterStrategy) {
     return this._document.head;
   },
 
-  hasDocumentProperty(property) {
+  hasDocumentProperty(this: DomAdapterStrategy, property) {
     return property in this._document;
   },
 
@@ -224,21 +253,21 @@ const nativeDOMAdapterStrategy: DomAdapter = {
       return noop;
     }
 
-    element.addEventListener(event, callback, options);
+    element.addEventListener(event, callback as EventListenerOrEventListenerObject, options);
 
     return () => {
-      element.removeEventListener(event, callback);
+      element.removeEventListener(event, callback as EventListenerOrEventListenerObject);
     };
   },
 
-  elementsFromPoint(x, y, element) {
+  elementsFromPoint(this: DomAdapterStrategy, x, y, element) {
     const activeElementHolder = this.getRootNode(element);
 
-    if (activeElementHolder.host) {
-      return getShadowElementsFromPoint(x, y, activeElementHolder);
+    if ((activeElementHolder as ShadowRoot).host) {
+      return getShadowElementsFromPoint(x, y, activeElementHolder) as Element[];
     }
 
-    return activeElementHolder.elementsFromPoint(x, y);
+    return (activeElementHolder as Document).elementsFromPoint(x, y);
   },
 };
 
