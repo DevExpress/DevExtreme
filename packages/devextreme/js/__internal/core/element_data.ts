@@ -9,7 +9,7 @@ type ElementData = Record<DataKey, unknown>;
 
 type DataArgs = [element?: Node | null, key?: DataKey, value?: unknown];
 
-type NodeCollection = ArrayLike<Node> & Iterable<Node>;
+type NodeCollection = ArrayLike<Node>;
 
 type CleanDataHook = (nodes: ArrayLike<Node>) => void;
 
@@ -66,7 +66,8 @@ const defaultStrategy: DataStrategy = {
   },
 
   cleanData: function (elements: NodeCollection): void {
-    for (const element of elements) {
+    // Angular SSR (Domino) HTMLCollection is array-like but not iterable.
+    for (const element of Array.from(elements)) {
       eventsEngine.off(element);
       dataMap.delete(element);
     }
