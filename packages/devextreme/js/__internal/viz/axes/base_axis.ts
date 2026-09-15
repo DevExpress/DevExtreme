@@ -31,7 +31,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { adjust } from '@js/core/utils/math';
 import {
-  isDefined, isFunction, isPlainObject, type,
+  isDate, isDefined, isFunction, isPlainObject, type,
 } from '@js/core/utils/type';
 import formatHelper from '@js/format_helper';
 import constants from '@ts/viz/axes/axes_constants';
@@ -69,6 +69,9 @@ const _isArray = Array.isArray;
 
 const DEFAULT_AXIS_LABEL_SPACING = 5;
 const MAX_GRID_BORDER_ADHENSION = 4;
+
+const PANNING_CORRECTION_ITERATION_COUNT = 5;
+const PANNING_CORRECTION_PRECISION = 1e-4;
 
 const TOP = constants.top;
 const BOTTOM = constants.bottom;
@@ -1294,6 +1297,142 @@ Axis.prototype = {
     return length;
   },
 
+  _getTickIntervalValue() {
+    const tickInterval = this.getTickInterval();
+
+    if (!isDefined(tickInterval)) {
+      return 0;
+    }
+
+    return this._options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval;
+  },
+
+  // breaks of the whole range, for consumers that show the whole range at once - the scroll
+  // bar - so that they measure the rendered content and not the calendar time. Their widths
+  // are the ones that end up rendered, the same the visible length is measured with.
+  getWholeRangeBreaks() {
+    const businessRange = this._translator.getBusinessRange();
+
+    if (!isDefined(businessRange.min) || !isDefined(businessRange.max)) {
+      return [];
+    }
+
+    const interval = this._getTickIntervalValue();
+
+    return this._getBreaksForRange(businessRange.min, businessRange.max)
+      .map((scaleBreak) => {
+        const hidden = this._getHiddenDuration(scaleBreak, interval);
+
+        if (!hidden) {
+          return null;
+        }
+        if (scaleBreak.gapSize) {
+          return scaleBreak;
+        }
+
+        const shift = ((scaleBreak.to - scaleBreak.from) - hidden) / 2;
+
+        return extend({}, scaleBreak, {
+          from: this._addToValue(scaleBreak.from, shift),
+          to: this._addToValue(scaleBreak.to, -shift),
+        });
+      })
+      .filter((scaleBreak) => !!scaleBreak);
+  },
+
+  _getBreaksForRange(minVisible, maxVisible) {
+    const viewport = { minVisible, maxVisible };
+    const breaks = this._getScaleBreaks(this._options, viewport, this._series, this.isArgumentAxis);
+
+    return this._filterBreaks(breaks, viewport, this._options.breakStyle);
+  },
+
+  _getHiddenDuration(scaleBreak, tickInterval) {
+    const duration = scaleBreak.to - scaleBreak.from;
+
+    return scaleBreak.gapSize ? duration : Math.max(duration - tickInterval, 0);
+  },
+
+  getVisibleRangeLength(range) {
+    const businessRange = range || this._translator.getBusinessRange();
+    const length = this.getVisualRangeLength(businessRange);
+    const options = this._options;
+
+    if (options.type === constants.discrete || options.type === constants.logarithmic
+      || !isDefined(businessRange.minVisible) || !isDefined(businessRange.maxVisible)) {
+      return length;
+    }
+
+    const interval = this._getTickIntervalValue();
+
+    return this._getBreaksForRange(businessRange.minVisible, businessRange.maxVisible)
+      .reduce((result, scaleBreak) => result - this._getHiddenDuration(scaleBreak, interval), length);
+  },
+
+  _addToValue(value, diff) {
+    return isDate(value) ? new Date(value.valueOf() + diff) : value + diff;
+  },
+
+  // anchor tells which edge is known and must be kept: 'start' when the range comes from the
+  // scroll bar thumb, otherwise the edge the gesture moves towards
+  adjustPannedRange(range, anchor?) {
+    const that = this;
+    const storedParams = that._storedZoomEndParams;
+    const { type } = that._options;
+
+    if (!storedParams || type === constants.discrete || type === constants.logarithmic
+      || !this._getBreaksForRange(range.startValue, range.endValue).length) {
+      return range;
+    }
+
+    const { startRange } = storedParams;
+    const targetLength = that.getVisibleRangeLength({
+      minVisible: startRange.startValue,
+      maxVisible: startRange.endValue,
+    });
+
+    if (!targetLength) {
+      return range;
+    }
+
+    const tolerance = targetLength * PANNING_CORRECTION_PRECISION;
+    const bounds = that.getZoomBounds();
+    const keepsEndValue = anchor
+      ? anchor === 'end'
+      : range.startValue > startRange.startValue || range.endValue > startRange.endValue;
+    let result = range;
+    let current = range;
+    let bestDeviation = Infinity;
+
+    for (let i = 0; i < PANNING_CORRECTION_ITERATION_COUNT; i += 1) {
+      const delta = that.getVisibleRangeLength({
+        minVisible: current.startValue,
+        maxVisible: current.endValue,
+      }) - targetLength;
+      const deviation = Math.abs(delta);
+
+      if (deviation < bestDeviation) {
+        bestDeviation = deviation;
+        result = current;
+      }
+
+      if (deviation <= tolerance) {
+        break;
+      }
+
+      current = keepsEndValue
+        ? { startValue: that._addToValue(current.startValue, delta), endValue: current.endValue }
+        : { startValue: current.startValue, endValue: that._addToValue(current.endValue, -delta) };
+
+      if (current.startValue >= current.endValue
+        || current.startValue < bounds.startValue || current.endValue > bounds.endValue) {
+        break;
+      }
+    }
+
+    return result;
+  },
+
   getVisualRangeCenter(range, useMerge) {
     const translator = this.getTranslator();
     const businessRange = translator.getBusinessRange();
@@ -2470,7 +2609,7 @@ Axis.prototype = {
       const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange, false)) : NaN;
       const zoomFactor = typeIsNotChanged
       // @ts-expect-error
-        ? +`${Math.round(`${that.getVisualRangeLength(previousBusinessRange) / (that.getVisualRangeLength() || 1)}e+2`)}e-2` : NaN;
+        ? +`${Math.round(`${that.getVisibleRangeLength(previousBusinessRange) / (that.getVisibleRangeLength() || 1)}e+2`)}e-2` : NaN;
       const zoomEndEvent = that._getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
       zoomEndEvent.cancel = that.checkZoomingLowerLimitOvercome(zoomFactor === 1 ? 'pan' : 'zoom', zoomFactor).stopInteraction;

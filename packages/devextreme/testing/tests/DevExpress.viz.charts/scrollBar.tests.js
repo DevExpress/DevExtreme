@@ -568,7 +568,8 @@ QUnit.test('init scrollBar', function(assert) {
         userBreaks: null
     }, canvas, {
         isHorizontal: true,
-        stick: false
+        stick: false,
+        breaksSize: 0
     }]
     );
 });
@@ -598,7 +599,8 @@ QUnit.test('init scrollBar. Rotated', function(assert) {
         userBreaks: null
     }, canvas, {
         isHorizontal: false,
-        stick: false
+        stick: false,
+        breaksSize: 0
     }]
     );
 });
@@ -647,7 +649,8 @@ QUnit.test('init scrollBar. Remove min and max ', function(assert) {
         axisType: 'discrete'
     }, canvas, {
         isHorizontal: true,
-        stick: false
+        stick: false,
+        breaksSize: 0
     }]);
 });
 

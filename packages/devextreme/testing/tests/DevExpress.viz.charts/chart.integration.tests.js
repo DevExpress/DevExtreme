@@ -5182,16 +5182,24 @@ QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
         return moduleSetup.createChart.call(this, $.extend(true, {}, this.options, options));
     },
     setVisualRange(chart, firstDay) {
-        chart.getArgumentAxis().visualRange({
+        const axis = chart.getArgumentAxis();
+
+        axis.visualRange({
             startValue: new Date(1994, 2, firstDay),
             endValue: new Date(1994, 2, firstDay + 9)
         });
 
         const $thumb = this.$container.find('.dxc-scroll-bar rect');
+        const barArea = chart._scrollBar._translator.getCanvasVisibleArea();
+        const wholeRange = axis.getTranslator().getBusinessRange();
 
         return {
             position: parseFloat($thumb.attr('y')),
-            size: parseFloat($thumb.attr('height'))
+            // the thumb measures the rendered content, so its share of the bar must match the
+            // share of the rendered content the visual range covers
+            barShare: parseFloat($thumb.attr('height')) / (barArea.max - barArea.min),
+            contentShare: axis.getVisibleRangeLength()
+                / axis.getVisibleRangeLength({ minVisible: wholeRange.min, maxVisible: wholeRange.max })
         };
     },
     checkThumbSlidesSmoothly(assert, chart) {
@@ -5202,10 +5210,15 @@ QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
         }
 
         for(let i = 1; i < thumbs.length; i++) {
-            assert.ok(thumbs[i].position > thumbs[i - 1].position,
-                `thumb moves forward on March ${i + 1} (${thumbs[i - 1].position} -> ${thumbs[i].position})`);
-            assert.roughEqual(thumbs[i].size, thumbs[0].size, 2, `thumb keeps its size on March ${i + 1}`);
+            // a range that starts on a non-working day renders the same content as the one that
+            // starts on the weekend before it, so the thumb may stand still - but never go back
+            assert.ok(thumbs[i].position >= thumbs[i - 1].position,
+                `thumb never moves back on March ${i + 1} (${thumbs[i - 1].position} -> ${thumbs[i].position})`);
+            assert.roughEqual(thumbs[i].barShare, thumbs[i].contentShare, 0.02,
+                `thumb size matches the rendered content on March ${i + 1}`);
         }
+
+        assert.ok(thumbs[thumbs.length - 1].position > thumbs[0].position, 'the thumb did move');
     }
 }), () => {
     QUnit.test('Thumb must not jump when the visual range starts inside a weekend break', function(assert) {
@@ -5216,7 +5229,8 @@ QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
 
         assert.ok(insideBreak.position > beforeBreak.position,
             `thumb moves forward instead of jumping to the beginning of the scroll bar (${beforeBreak.position} -> ${insideBreak.position})`);
-        assert.roughEqual(insideBreak.size, beforeBreak.size, 2, 'thumb keeps its size');
+        assert.roughEqual(insideBreak.barShare, insideBreak.contentShare, 0.02,
+            'thumb size matches the rendered content');
     });
 
     QUnit.test('Thumb must slide smoothly over weekend breaks (workdaysOnly)', function(assert) {
