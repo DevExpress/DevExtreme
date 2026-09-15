@@ -159,6 +159,12 @@ const OVERRIDES = {
      * from that editor's min-height.
      */
     list: ['check-box', 'radio-button', 'text-editor'],
+    /*
+     * A tree node in showCheckBoxesMode renders a real CheckBox, and the select-all row IS one. The
+     * node takes focus, the check box inside it does not, so the tree has to paint the focused state
+     * itself - with the check box's own decisions, exactly as the list does.
+     */
+    treeView: ['check-box'],
     // the colour box's drop-down content IS a ColorView
     colorBox: ['color-view'],
     // the field chooser's tree is a TreeView

@@ -10,10 +10,36 @@
   $treeview-searchbox-margin-bottom: var(--dx-tree-view-search-box-margin-block-end),
 );
 @use "../../base/icon_fonts" as *;
+@use "../checkBox/colors" as checkBoxColors;
 
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
   @include dx-icon-sizing($global-icon-size);
+}
+
+/* Фокус в дереве ходит по узлу: класс dx-state-focused получает узел, а чекбокс внутри его
+   не получает, поэтому собственные фокусные правила чекбокса здесь не срабатывают и индикацию
+   рисует дерево. Значения берём у чекбокса - своих ролей дерево не заводит. Так же устроен
+   dxList с включёнными декораторами выбора.
+   :not() нужен, чтобы ветка не перебивала собственное disabled-правило чекбокса длиной селектора. */
+.dx-treeview-item-with-checkbox.dx-state-focused > .dx-treeview-item {
+  .dx-checkbox:not(.dx-state-disabled) {
+    .dx-checkbox-icon {
+      border-color: checkBoxColors.$check-box-icon-checked-border-focused;
+    }
+
+    &.dx-checkbox-checked {
+      .dx-checkbox-icon {
+        background-color: checkBoxColors.$check-box-icon-checked-bg-focused;
+      }
+    }
+
+    &.dx-checkbox-indeterminate {
+      .dx-checkbox-icon::before {
+        background-color: checkBoxColors.$check-box-icon-checked-bg-focused;
+      }
+    }
+  }
 }
 
 .dx-treeview-item-content.dx-state-disabled {

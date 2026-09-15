@@ -1588,7 +1588,7 @@
       "Д24": "radio-checked-fill-stem - принято, точка переведена на bg-primary-shared* вслед за чекбоксом",
       "Д20": "scheduler-form-icon-on-bg-role - закрыт 15.09 снятием исключения: иконка Subject перестала переопределяться и встала в общий ряд формы на scheduler-form-icon",
       "Д16": "checkbox-focused-fill - закрыт 15.09 целиком: контур получил свою роль border-primary-shared*, фокус развели с нажатием, заливка ушла на стем shared. Осталась одна ступень ниже порога - нажатие, 2.31 в тёмном, - и это дефект пакета из П2, а не выбор темы",
-      "Д22": "tree-view-checkbox-focus-still-unique - закрыт 15.09 первым вариантом: блок фокуса снят, четыре переменные удалены, чекбокс внутри дерева берёт все решения чекбокса",
+      "Д22": "tree-view-checkbox-focus-still-unique - закрыт 15.09: четыре переменные дерева удалены, чекбокс внутри дерева берёт все решения чекбокса. Первая редакция снимала блок целиком; проверка с клавиатуры показала, что тогда у дерева с чекбоксами не остаётся индикации фокуса вообще - базовый миксин красит фокусный фон только у .dx-treeview-item-without-checkbox. Блок вернули, но он читает фокусные имена самого чекбокса, как dxList с декораторами выбора",
       "Д10": "accent border rest - закрыт 15.09 валидацией: группа ложная, у диаграммы это дуга спиннера, и роль content-primary у неё верна",
       "Д12": "base bg rest - закрыт 15.09 валидацией: три верных роли, слово base у них означает разное",
       "Д13": "base content rest - закрыт 15.09 валидацией: обе роли верны, расходится оттенок"
@@ -2075,8 +2075,8 @@
       },
       {
         "what": "treeView stops styling the checkbox (Д22)",
-        "change": "both focus blocks removed along with $tree-view-checkbox-border-focused, -bg-focused, -accent-content-focused and -checked-border-focused",
-        "effect": "the checkbox inside a focused tree item stops being painted as focused, which it never was - the item was. It now reads the checkbox own names in every scenario, verified on six. Pixels move: the checked box goes from bg-primary-hovered to the checkbox rest fill and the unchecked one from bg-low to content-inverted, so etalons re-shoot. The fourth variable was dead - it fed a base mixin parameter the base never reads"
+        "change": "$tree-view-checkbox-border-focused, -bg-focused, -accent-content-focused and -checked-border-focused removed; the select-all block removed; the node block now reads checkBox $check-box-icon-checked-border-focused / -bg-focused",
+        "effect": "the tree stops holding its own focus roles for the checkbox and reads the checkbox own decisions, as dxList does with selection decorators. The select-all item needs no rule at all - it IS the checkbox element and gets dx-state-focused itself. The node block has to stay: the node takes focus, the checkbox inside it does not, and the base mixin paints a focused background only for .dx-treeview-item-without-checkbox, so removing it left a tree with checkboxes with no focus indication at all - каждая другая тема (generic, material, legacy fluent) красит здесь именно чекбокс. Pixels move: focus now paints border-primary-shared-hovered instead of the tree own color-border / bg-low pair, so etalons re-shoot. The fourth variable was dead - it fed a base mixin parameter the base never reads"
       }
     ]
   },
@@ -2545,7 +2545,7 @@
     "retiredOn": "2026-09-15",
     "unblocked": [
       "Д20 - иконка формы встречи: раньше «легаси делает так же, поэтому отчёт, а не правка». Теперь вариант с content-primary открыт",
-      "Д22 - блок фокуса treeView: раньше «снятие не равнозначно, легаси несёт тот же блок». Теперь остаётся только цена пересъёмки эталонов",
+      "Д22 - фокусный блок treeView: раньше «снятие не равнозначно, легаси несёт тот же блок». Легаси перестало быть доводом, но блок остался - не ради легаси, а потому что без него у дерева с чекбоксами нет индикации фокуса. Изменились только значения: имена чекбокса вместо собственных ролей дерева",
       "Т-вопросы типографики: font-weight 500 и ступени 11/18/22/26/36px держались ровно тем, что легаси их использует. Выбор «ступень сетки против значения легаси» теперь решается в сторону сетки"
     ]
   },

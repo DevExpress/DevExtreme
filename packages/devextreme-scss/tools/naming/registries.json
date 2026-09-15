@@ -920,6 +920,9 @@
       "radio-button",
       "text-editor"
     ],
+    "treeView": [
+      "check-box"
+    ],
     "colorBox": [
       "color-view"
     ],
