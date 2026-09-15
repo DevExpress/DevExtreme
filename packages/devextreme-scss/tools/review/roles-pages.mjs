@@ -45,8 +45,11 @@ const roleList = (rs) => rs.map((r) => code(r.replace(/^color-/, ''))).join(' ·
 const CSS = `
 :root { color-scheme: light dark; --fg:#161616; --bg:#fff; --muted:#616161; --line:#e1e1e1;
         --accent:#0f6cbd; --warn:#c50f1f; --panel:#f8f8f8; }
-@media (prefers-color-scheme: dark) { :root { --fg:#f5f5f5; --bg:#242424; --muted:#a1a1a1;
-        --line:#4c4c4c; --accent:#4b90d9; --warn:#e4554f; --panel:#1d1d1d; } }
+@media (prefers-color-scheme: dark) { :root:not([data-mode]) { --fg:#f5f5f5; --bg:#242424;
+        --muted:#a1a1a1; --line:#4c4c4c; --accent:#4b90d9; --warn:#e4554f; --panel:#1d1d1d; } }
+:root[data-mode="dark"] { color-scheme: dark; --fg:#f5f5f5; --bg:#242424; --muted:#a1a1a1;
+        --line:#4c4c4c; --accent:#4b90d9; --warn:#e4554f; --panel:#1d1d1d; }
+:root[data-mode="light"] { color-scheme: light; }
 * { box-sizing: border-box; }
 body { margin:0; padding:2.5rem 1.5rem 6rem; background:var(--bg); color:var(--fg);
        font:15px/1.6 "Segoe UI", system-ui, sans-serif; }
@@ -75,25 +78,193 @@ code { font:.88em ui-monospace, "Cascadia Code", Menlo, monospace;
 .none { color:var(--muted); font-style:italic; }
 footer { margin-top:4rem; padding-top:1rem; border-top:1px solid var(--line);
      color:var(--muted); font-size:.85em; }
+
+/* --- переключатель режима ---------------------------------------------------------------- */
+.modebar { position:sticky; top:0; z-index:9; display:flex; gap:.5rem; align-items:center;
+     justify-content:flex-end; padding:.5rem 0 .6rem; margin:-1rem 0 1rem;
+     background:var(--bg); border-bottom:1px solid var(--line); }
+.modebar span { color:var(--muted); font-size:.85em; margin-right:auto; }
+.modebar button { font:inherit; font-size:.85em; padding:.3em .9em; cursor:pointer;
+     border:1px solid var(--line); background:var(--panel); color:var(--fg); border-radius:4px; }
+.modebar button[aria-pressed="true"] { border-color:var(--accent); color:var(--accent); font-weight:600; }
+
+/* --- образцы: каждый узел несёт оба значения, режим выбирает ------------------------------ */
+.sp { margin:.8rem 0 .3rem; }
+.sp-row { display:flex; flex-wrap:wrap; gap:.7rem; align-items:flex-start; }
+.sp-tile { flex:0 0 auto; text-align:center; font-size:.78em; color:var(--muted); max-width:11rem; }
+.sp-stage { display:flex; align-items:center; justify-content:center; width:9.5rem; height:4.6rem;
+     border:1px solid var(--line); border-radius:4px; overflow:hidden; margin-bottom:.3rem; }
+.sp-cap { line-height:1.35; }
+.sp-cap b { color:var(--fg); font-weight:600; display:block; }
+.sp-num { font:.95em ui-monospace, Menlo, monospace; }
+.sp-num.bad { color:var(--warn); font-weight:600; }
+.v { background:var(--l-bg, transparent); color:var(--l-fg, inherit);
+     border-color:var(--l-bd, transparent); }
+:root[data-mode="dark"] .v { background:var(--d-bg, transparent); color:var(--d-fg, inherit);
+     border-color:var(--d-bd, transparent); }
+.only-light { display:inline; } .only-dark { display:none; }
+:root[data-mode="dark"] .only-light { display:none; }
+:root[data-mode="dark"] .only-dark { display:inline; }
+.sp-chip { min-width:5.2rem; padding:.4em .8em; border:1px solid; border-radius:4px;
+     font-size:.95em; white-space:nowrap; }
+.sp-box { width:1.35rem; height:1.35rem; border:1.5px solid; border-radius:3px;
+     display:flex; align-items:center; justify-content:center; font-size:.95rem; line-height:1; }
+.sp-ring { width:1.35rem; height:1.35rem; border:1.5px solid; border-radius:50%;
+     display:flex; align-items:center; justify-content:center; }
+.sp-dot { width:.6rem; height:.6rem; border-radius:50%; }
+.sp-disc { width:2.2rem; height:2.2rem; border-radius:50%; display:flex; align-items:center;
+     justify-content:center; font-size:1.05rem; }
+.sp-bar { width:.55rem; height:100%; display:flex; align-items:center; justify-content:center; }
+.sp-grip { width:.18rem; height:1.1rem; border-radius:1rem; }
+.sp-pane { flex:1; height:100%; }
+.sp-sheet { width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+     gap:.4rem; font-size:.9em; }
+.sp-line { width:100%; height:1px; }
+.sp-glyph { font-size:1.3rem; line-height:1; }
+/* Символ галочки в части шрифтов подхватывается как эмодзи и рисуется своим цветом - образец
+   тогда врёт ровно про то, ради чего он нарисован. Рисуем фигурой от currentColor. */
+.sp-tick { width:.32rem; height:.62rem; border:solid currentColor; border-width:0 2px 2px 0;
+     transform:rotate(45deg); margin-top:-.16rem; }
+.sp-dash { width:.62rem; height:2px; background:currentColor; }
 `;
 
 const page = (title, bodyHtml) => `<!doctype html>
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title><style>${CSS}</style></head>
-<body><main>${bodyHtml}
+<body><main>
+<div class="modebar"><span>Образцы нарисованы значениями темы. Переключатель меняет и страницу, и их.</span>
+<button type="button" data-set="light" aria-pressed="false">Светлый</button>
+<button type="button" data-set="dark" aria-pressed="false">Тёмный</button>
+<button type="button" data-set="" aria-pressed="false">Как в системе</button></div>
+${bodyHtml}
 <footer>Сгенерировано <code>node tools/review/roles-pages.mjs</code> ·
 пакет <code>@devexpress/design-tokens-internal@${data.summary.tokensVersion}</code> ·
 данные: <code>tools/review/roles.mjs</code> + <code>tests/roles.baseline.json</code> ·
 править руками не нужно, перегенерируйте.</footer>
-</main></body></html>
+</main>
+<script>
+(() => {
+  const root = document.documentElement;
+  const KEY = 'fluent-next-roles-mode';
+  const apply = (mode) => {
+    if (mode) root.setAttribute('data-mode', mode); else root.removeAttribute('data-mode');
+    for (const b of document.querySelectorAll('.modebar button')) {
+      b.setAttribute('aria-pressed', String((b.dataset.set || '') === (mode || '')));
+    }
+  };
+  let saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) { saved = null; }
+  apply(saved || '');
+  for (const b of document.querySelectorAll('.modebar button')) {
+    b.addEventListener('click', () => {
+      const mode = b.dataset.set || '';
+      apply(mode);
+      try { localStorage.setItem(KEY, mode); } catch (e) { /* приватное окно - переживём */ }
+    });
+  }
+})();
+</script>
+</body></html>
 `;
 
-const q = (id, title, bodyHtml) => `<div class="q"><span class="id">${esc(id)}</span>
-<div class="t">${title}</div>${bodyHtml}</div>`;
+/* Вопрос рисуется вместе со своим образцом: SPECIMEN ниже заведён по постоянному номеру,
+ * так что закрытие вопроса уносит образец само, без отдельной уборки. */
+const drawn = new Set();
+const q = (id, title, bodyHtml) => {
+  const specimen = SPECIMEN[id];
+  if (specimen) drawn.add(id);
+  return `<div class="q"><span class="id">${esc(id)}</span>
+<div class="t">${title}</div>${bodyHtml}${specimen ? specimen() : ''}</div>`;
+};
 
 const swatch = (hex) => (/^#[0-9a-f]{3,8}$/i.test(hex ?? '') ? `<span class="swatch" style="background:${hex}"></span>` : '');
 const pair = (light, dark) => `${swatch(light)}${code(light ?? '?')} / ${swatch(dark)}${code(dark ?? '?')}`;
+
+/* ------------------------------------------------------------------------------------------
+ * Образцы.
+ *
+ * Рисуются настоящими значениями темы: hex берётся из палитры, которую печатает
+ * tools/review/roles.mjs, поэтому картинка и число под ней разойтись не могут. Оба режима
+ * лежат в разметке одновременно (--l-* и --d-*), переключатель меняет только data-mode на
+ * корне - страница остаётся одним файлом и работает без сети.
+ * ---------------------------------------------------------------------------------------- */
+/* Восемь знаков - это альфа-роль: значение вида #rrggbbaa. Мерить её как есть нельзя, она
+ * ничего не значит без того, что под ней, поэтому сначала накладываем на поверхность. */
+const hexOf = (value, under = null) => {
+  const m = /^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.exec(String(value ?? '').trim());
+  if (!m) return null;
+  const body = m[1].length === 3 ? [...m[1]].map((c) => c + c).join('') : m[1];
+  const rgb = [0, 2, 4].map((i) => parseInt(body.slice(i, i + 2), 16));
+  if (body.length !== 8) return rgb;
+  const alpha = parseInt(body.slice(6, 8), 16) / 255;
+  if (!under) return null;
+  return rgb.map((channel, i) => Math.round(alpha * channel + (1 - alpha) * under[i]));
+};
+const lum = (rgb) => {
+  const [r, g, b] = rgb.map((ch) => {
+    const c = ch / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+const ratio = (a, b) => {
+  const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m);
+  return Math.round(((x + 0.05) / (y + 0.05)) * 100) / 100;
+};
+/* Роль -> значение. Литерал, начинающийся с #, и transparent проходят как есть: образцам
+ * нужны и цвета, которых у пакета нет ролью. Неизвестная роль роняет генерацию, а не
+ * рисуется пустотой - молчаливо белый образец хуже отсутствующего. */
+const val = (role, mode) => {
+  if (!role) return null;
+  if (String(role).startsWith('#') || role === 'transparent') return role;
+  const found = data.palette?.[role]?.[mode];
+  if (!found) throw new Error(`нет значения роли "${role}" в режиме ${mode} - проверьте палитру`);
+  return found;
+};
+const vars = ({ bg, fg, bd }) => ['l', 'd'].flatMap((k) => {
+  const mode = k === 'l' ? 'light' : 'dark';
+  return [
+    bg ? `--${k}-bg:${val(bg, mode)}` : '',
+    fg ? `--${k}-fg:${val(fg, mode)}` : '',
+    bd ? `--${k}-bd:${val(bd, mode)}` : '',
+  ].filter(Boolean);
+}).join(';');
+
+/* Контраст пары ролей, отдельно в каждом режиме: видно то число, которое относится к тому,
+ * что сейчас на экране. Порог печатается рядом, чтобы читателю не приходилось его помнить. */
+const ratios = (fg, bg, floor, surface = 'color-bg') => ['light', 'dark'].map((mode) => {
+  const under = hexOf(val(surface, mode));
+  const b = hexOf(val(bg, mode), under);
+  const a = hexOf(val(fg, mode), b ?? under);
+  if (!a || !b) return '';
+  const r = ratio(a, b);
+  const bad = floor && r < floor;
+  return `<span class="only-${mode} sp-num${bad ? ' bad' : ''}">${r}${floor ? ` / ${floor}` : ''}</span>`;
+}).join('');
+
+const tile = (caption, stageHtml, note = '', surface = 'color-bg') => `<div class="sp-tile">`
+  + `<div class="sp-stage v" style="${vars({ bg: surface })}">${stageHtml}</div>`
+  + `<div class="sp-cap"><b>${caption}</b>${note}</div></div>`;
+const row = (tiles) => `<div class="sp"><div class="sp-row">${tiles.join('')}</div></div>`;
+
+const chip = (o) => `<span class="sp-chip v" style="${vars(o)}">${esc(o.text ?? 'Кнопка')}</span>`;
+const MARK = { tick: '<span class="sp-tick"></span>', dash: '<span class="sp-dash"></span>' };
+const box = (o) => `<span class="sp-box v" style="${vars(o)}">${MARK[o.mark] ?? o.mark ?? ''}</span>`;
+const ring = (o) => `<span class="sp-ring v" style="${vars({ bd: o.bd })}">`
+  + `<span class="sp-dot v" style="${vars({ bg: o.fill })}"></span></span>`;
+const disc = (o) => `<span class="sp-disc v" style="${vars(o)}">${o.mark ?? '›'}</span>`;
+const glyph = (o) => `<span class="sp-glyph v" style="${vars({ fg: o.fg })}">${o.mark ?? '◈'}</span>`;
+const splitter = (o) => `<span class="sp-pane v" style="${vars({ bg: o.pane })}"></span>`
+  + `<span class="sp-bar v" style="${vars({ bg: o.bar })}">`
+  + (o.grip ? `<span class="sp-grip v" style="${vars({ bg: o.grip })}"></span>` : '')
+  + '</span>'
+  + `<span class="sp-pane v" style="${vars({ bg: o.pane })}"></span>`;
+const sheet = (o) => `<span class="sp-sheet v" style="${vars({ bg: o.bg, fg: o.fg })}">${esc(o.text ?? 'Текст')}</span>`;
+const gridLines = (o) => '<span style="width:72%">'
+  + `<span class="sp-line v" style="${vars({ bg: o.weak })};display:block;margin:.4rem 0"></span>`
+  + `<span class="sp-line v" style="${vars({ bg: o.strong })};display:block;height:2px;margin:.4rem 0"></span>`
+  + `<span class="sp-line v" style="${vars({ bg: o.weak })};display:block;margin:.4rem 0"></span></span>`;
 
 
 // ---------------------------------------------------------------------------------------------
@@ -145,6 +316,143 @@ const ruText = (key) => {
  * следующие, и ссылка «Д8 — вариант 1» через день указывала на другой вопрос. Новая запись без
  * номера роняет генерацию, а не получает чужой.
  */
+
+/* ------------------------------------------------------------------------------------------
+ * Образец на каждый открытый вопрос.
+ *
+ * Ключ - постоянный номер вопроса, а не позиция: вопрос закрывается, номер уходит в closed,
+ * и образец уходит вместе с ним. Незнакомый ключ роняет генерацию - образец без вопроса
+ * так же бесполезен, как вопрос без образца.
+ * ---------------------------------------------------------------------------------------- */
+const SPECIMEN = {
+  'Д6': () => row([
+    tile('покой', box({ bg: 'color-bg', bd: 'color-border-subtle' }),
+      '<br>фон <code>bg</code> · край <code>border-subtle</code>'),
+    tile('наведение', box({ bg: 'color-bg', bd: 'color-border-primary' }),
+      '<br>фон <b>тот же</b> · край <code>border-primary</code>'),
+    tile('нажатие', box({ bg: 'color-bg-alpha-active', bd: 'transparent' }),
+      '<br>фон <code>bg-alpha-active</code> · края нет'),
+  ]) + '<p class="meta">Сигнал наведения даёт край, а не фон. Плоская ступень фона - намеренная.</p>',
+
+  'Д7': () => row([
+    tile('покой', splitter({ pane: 'color-bg', bar: 'color-border', grip: 'color-content-subtle' }),
+      `<br>полоса к панели ${ratios('color-border', 'color-bg', 3)}`),
+    tile('наведение', splitter({ pane: 'color-bg', bar: 'color-border-hovered', grip: 'color-content-subtle' }),
+      `<br>полоса к панели ${ratios('color-border-hovered', 'color-bg', 3)}`),
+    tile('фокус', splitter({ pane: 'color-bg', bar: 'color-bg-primary', grip: 'color-content-subtle' }),
+      `<br>полоса к панели ${ratios('color-bg-primary', 'color-bg', 3)}`),
+  ]) + '<p class="meta">Грип внутри полосы - второй вопрос; первый в том, видно ли саму полосу.</p>',
+
+  'Д10': () => row([
+    tile('diagram, обводка иконки', glyph({ fg: 'color-content-primary', mark: '◈' }),
+      '<br><code>content-primary</code>'),
+    tile('gantt, граница', box({ bg: 'transparent', bd: 'color-border-primary' }),
+      '<br><code>border-primary</code>'),
+    tile('scheduler, граница недели', gridLines({ weak: 'color-border', strong: 'color-border' }),
+      '<br><code>border</code>'),
+  ]),
+
+  'Д12': () => row([
+    tile('list, разделитель', gridLines({ weak: 'color-border-subtle', strong: 'color-border-subtle' }),
+      '<br><code>border-subtle</code>'),
+    tile('stepper, фон', sheet({ bg: 'color-bg', fg: 'color-content', text: 'Шаг' }),
+      '<br><code>bg</code>'),
+  ]),
+
+  'Д13': () => row([
+    tile('diagram, база иконки', glyph({ fg: 'color-content-subtle', mark: '◈' }),
+      '<br><code>content-subtle</code>'),
+    tile('scheduler, заливка встречи', sheet({ bg: 'color-bg-primary-subtle', fg: 'color-content', text: 'Встреча' }),
+      '<br><code>bg-primary-subtle</code>'),
+    tile('stepper, подпись', sheet({ bg: 'color-bg', fg: 'color-content', text: 'Шаг' }),
+      '<br><code>content</code>'),
+  ]),
+
+  'Д14': () => row([
+    tile('бейдж', chip({ bg: 'color-bg-danger-shared', fg: 'color-content-static-dark', text: '!' }),
+      `<br><code>content-static-dark</code> ${ratios('color-content-static-dark', 'color-bg-danger-shared', 4.5)}`),
+    tile('fieldset', sheet({ bg: 'color-bg', fg: 'color-content-danger', text: 'Неверно' }),
+      `<br><code>content-danger</code> ${ratios('color-content-danger', 'color-bg', 4.5)}`),
+    tile('fileUploader', sheet({ bg: 'color-bg', fg: 'color-bg-danger', text: 'Ошибка' }),
+      `<br><code>bg-danger</code> ${ratios('color-bg-danger', 'color-bg', 4.5)}`),
+    tile('stepper', sheet({ bg: 'color-bg', fg: 'color-content-danger', text: 'Шаг' }),
+      `<br><code>content-danger</code> ${ratios('color-content-danger', 'color-bg', 4.5)}`),
+  ]),
+
+  'Д16': () => row([
+    tile('покой', box({ bg: 'color-bg-primary', bd: 'color-bg-primary', fg: 'color-content-inverted', mark: 'tick' }),
+      `<br>галка на заливке ${ratios('color-content-inverted', 'color-bg-primary', 3)}`),
+    tile('наведение', box({ bg: 'color-bg-primary-hovered', bd: 'color-bg-primary-hovered', fg: 'color-content-inverted', mark: 'tick' }),
+      `<br>${ratios('color-content-inverted', 'color-bg-primary-hovered', 3)}`),
+    tile('фокус сейчас', box({ bg: 'color-bg-primary-active', bd: 'color-bg-primary-active', fg: 'color-content-inverted', mark: 'tick' }),
+      `<br><code>bg-primary-active</code><br>${ratios('color-content-inverted', 'color-bg-primary-active', 3)}`),
+    tile('фокус, вариант ①', box({ bg: 'color-bg-primary-hovered', bd: 'color-bg-primary-hovered', fg: 'color-content-inverted', mark: 'tick' }),
+      `<br><code>bg-primary-hovered</code><br>${ratios('color-content-inverted', 'color-bg-primary-hovered', 3)}`),
+    tile('фокус, вариант ②', box({ bg: 'color-bg-primary-shared-active', bd: 'color-bg-primary-shared-active', fg: 'color-content-inverted', mark: 'tick' }),
+      `<br><code>bg-primary-shared-active</code><br>${ratios('color-content-inverted', 'color-bg-primary-shared-active', 3)}`),
+  ]),
+
+  'Д17': () => ['primary', 'success', 'danger'].map((hue) => {
+    const c = hue === 'primary' ? 'primary' : hue;
+    return row([
+      tile('покой', chip({ bg: `color-bg-${c}-subtler`, fg: `color-content-${c}`, bd: `color-border-${c}`, text: 'Кнопка' }),
+        `<br>${ratios(`color-content-${c}`, `color-bg-${c}-subtler`, 4.5)}`),
+      tile('наведение', chip({ bg: `color-bg-${c}-subtler-hovered`, fg: `color-content-${c}`, bd: `color-border-${c}`, text: 'Кнопка' }),
+        `<br>${ratios(`color-content-${c}`, `color-bg-${c}-subtler-hovered`, 4.5)}`),
+      tile('наведение, вариант ①', chip({ bg: `color-bg-${c}-subtler-hovered`, fg: `color-content-${c}-hovered`, bd: `color-border-${c}`, text: 'Кнопка' }),
+        `<br>подпись тоже едет<br>${ratios(`color-content-${c}-hovered`, `color-bg-${c}-subtler-hovered`, 4.5)}`),
+      tile('нажатие', chip({ bg: `color-bg-${c}-subtler-active`, fg: `color-content-${c}`, bd: `color-border-${c}`, text: 'Кнопка' }),
+        `<br>${ratios(`color-content-${c}`, `color-bg-${c}-subtler-active`, 4.5)}`),
+      tile('вариант ③', chip({ bg: `color-bg-${c}-subtler-active`, fg: 'color-content-on-subtle-primary', bd: `color-border-${c}`, text: 'Кнопка' }),
+        `<br><code>content-on-subtle-primary</code><br>${ratios('color-content-on-subtle-primary', `color-bg-${c}-subtler-active`, 4.5)}`),
+    ]);
+  }).join(''),
+
+  'Д18': () => row([
+    tile('покой', chip({ bg: 'color-bg-primary', fg: 'color-content-static-dark', text: 'Кнопка' }),
+      `<br>${ratios('color-content-static-dark', 'color-bg-primary', 4.5)}`),
+    tile('наведение', chip({ bg: 'color-bg-primary-hovered', fg: 'color-content-static-dark', text: 'Кнопка' }),
+      `<br>${ratios('color-content-static-dark', 'color-bg-primary-hovered', 4.5)}`),
+    tile('success, покой', chip({ bg: 'color-bg-success', fg: 'color-content-static-dark', text: 'Кнопка' }),
+      `<br>${ratios('color-content-static-dark', 'color-bg-success', 4.5)}`),
+    tile('success, наведение', chip({ bg: 'color-bg-success-hovered', fg: 'color-content-static-dark', text: 'Кнопка' }),
+      `<br>${ratios('color-content-static-dark', 'color-bg-success-hovered', 4.5)}`),
+  ]),
+
+  'Д20': () => row([
+    tile('сейчас', glyph({ fg: 'color-bg-primary-subtle', mark: '◈' }),
+      `<br><code>bg-primary-subtle</code><br>${ratios('color-bg-primary-subtle', 'color-bg', 3)}`),
+    tile('вариант ②', glyph({ fg: 'color-content-primary', mark: '◈' }),
+      `<br><code>content-primary</code><br>${ratios('color-content-primary', 'color-bg', 3)}`),
+    tile('для сравнения: заливка встречи', sheet({ bg: 'color-bg-primary-subtle', fg: 'color-content', text: 'Встреча' }),
+      '<br>та же роль на своём месте'),
+  ]),
+
+  'Д21': () => row([
+    tile('checkBox, невалидный', box({ bg: 'color-bg', bd: 'color-border-danger-shared', fg: 'color-content-danger-shared', mark: 'tick' }),
+      '<br>две переменные:<br><code>border</code> + <code>content</code>'),
+    tile('radioButton, невалидный', ring({ bd: 'color-border-danger-shared', fill: 'color-border-danger-shared' }),
+      '<br>одна: <code>border</code>,<br>имя говорит <code>bg</code>'),
+    tile('radioButton, read-only', ring({ bd: 'color-content-disabled', fill: 'color-content-disabled' }),
+      '<br>одна: <code>content</code>,<br>текста нет'),
+    tile('slider, фокус', ring({ bd: 'color-bg-primary-active', fill: 'color-bg-primary-active' }),
+      '<br>одна: <code>bg</code>'),
+    tile('slider, невалидный', ring({ bd: 'color-border-danger', fill: 'color-border-danger' }),
+      '<br>одна: <code>border</code>'),
+  ]),
+
+  'Д22': () => row([
+    tile('чекбокс сам по себе, фокус', box({ bg: 'color-bg-primary-active', bd: 'color-bg-primary-active', fg: 'color-content-inverted', mark: 'tick' }),
+      '<br><code>bg-primary-active</code>'),
+    tile('он же внутри treeView', box({ bg: 'color-bg-primary-hovered', bd: 'color-bg-primary-hovered', fg: 'color-content-inverted', mark: 'tick' }),
+      '<br><code>bg-primary-hovered</code>'),
+    tile('неотмеченный, сам', box({ bg: 'color-content-inverted', bd: 'color-bg-primary-active' }),
+      '<br>край <code>bg-primary-active</code>'),
+    tile('неотмеченный, в treeView', box({ bg: 'color-bg-low', bd: 'color-border' }),
+      '<br><code>bg-low</code> + <code>border</code>'),
+  ]),
+};
+
 const idOf = (key) => {
   const id = base.questionIds?.map?.[key];
   if (!id) {
@@ -433,6 +741,20 @@ const plural = (n, one, few, many) => {
   return many;
 };
 
+/*
+ * Образцы и вопросы обязаны совпадать список в список. Образец, переживший свой вопрос, рисует
+ * то, чего уже нет; вопрос без образца - то, ради чего эту страницу и открывают.
+ */
+const expectSpecimens = () => {
+  const open = new Set(Object.values(base.questionIds.map));
+  const orphan = [...Object.keys(SPECIMEN)].filter((id) => !open.has(id));
+  if (orphan.length) throw new Error(`образцы без открытого вопроса: ${orphan.join(', ')}`);
+  const bare = [...open].filter((id) => !SPECIMEN[id]);
+  if (bare.length) throw new Error(`вопросы без образца: ${bare.join(', ')} - добавьте в SPECIMEN`);
+  const missed = [...open].filter((id) => !drawn.has(id));
+  if (missed.length) throw new Error(`образец заведён, но не отрисован: ${missed.join(', ')}`);
+};
+
 const questionsPage = page('Fluent-next: открытые вопросы по ролям', `
 <h1>Fluent-next: открытые вопросы по ролям</h1>
 <p class="lede">Всё, что аудит нашёл и не стал решать сам. Ответы можно давать номерами: «Д3 — второй вариант».<br>
@@ -648,6 +970,8 @@ const onGridQ = q(num('Т'), `Роль существует, а тема чит�
     + `<td>${t.roles.map(code).join(' · ')}</td>`
     + `<td>${t.marker ? code(t.marker) : '<span class="warn">нет</span>'}</td></tr>`).join('')
   + '</table>');
+
+expectSpecimens();
 
 const typoPage = page('Fluent-next: типографика вне ролевой сетки', `
 <h1>Fluent-next: типографика вне ролевой сетки</h1>

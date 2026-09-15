@@ -4,8 +4,11 @@
 <title>Fluent-next: типографика вне ролевой сетки</title><style>
 :root { color-scheme: light dark; --fg:#161616; --bg:#fff; --muted:#616161; --line:#e1e1e1;
         --accent:#0f6cbd; --warn:#c50f1f; --panel:#f8f8f8; }
-@media (prefers-color-scheme: dark) { :root { --fg:#f5f5f5; --bg:#242424; --muted:#a1a1a1;
-        --line:#4c4c4c; --accent:#4b90d9; --warn:#e4554f; --panel:#1d1d1d; } }
+@media (prefers-color-scheme: dark) { :root:not([data-mode]) { --fg:#f5f5f5; --bg:#242424;
+        --muted:#a1a1a1; --line:#4c4c4c; --accent:#4b90d9; --warn:#e4554f; --panel:#1d1d1d; } }
+:root[data-mode="dark"] { color-scheme: dark; --fg:#f5f5f5; --bg:#242424; --muted:#a1a1a1;
+        --line:#4c4c4c; --accent:#4b90d9; --warn:#e4554f; --panel:#1d1d1d; }
+:root[data-mode="light"] { color-scheme: light; }
 * { box-sizing: border-box; }
 body { margin:0; padding:2.5rem 1.5rem 6rem; background:var(--bg); color:var(--fg);
        font:15px/1.6 "Segoe UI", system-ui, sans-serif; }
@@ -34,8 +37,61 @@ code { font:.88em ui-monospace, "Cascadia Code", Menlo, monospace;
 .none { color:var(--muted); font-style:italic; }
 footer { margin-top:4rem; padding-top:1rem; border-top:1px solid var(--line);
      color:var(--muted); font-size:.85em; }
+
+/* --- переключатель режима ---------------------------------------------------------------- */
+.modebar { position:sticky; top:0; z-index:9; display:flex; gap:.5rem; align-items:center;
+     justify-content:flex-end; padding:.5rem 0 .6rem; margin:-1rem 0 1rem;
+     background:var(--bg); border-bottom:1px solid var(--line); }
+.modebar span { color:var(--muted); font-size:.85em; margin-right:auto; }
+.modebar button { font:inherit; font-size:.85em; padding:.3em .9em; cursor:pointer;
+     border:1px solid var(--line); background:var(--panel); color:var(--fg); border-radius:4px; }
+.modebar button[aria-pressed="true"] { border-color:var(--accent); color:var(--accent); font-weight:600; }
+
+/* --- образцы: каждый узел несёт оба значения, режим выбирает ------------------------------ */
+.sp { margin:.8rem 0 .3rem; }
+.sp-row { display:flex; flex-wrap:wrap; gap:.7rem; align-items:flex-start; }
+.sp-tile { flex:0 0 auto; text-align:center; font-size:.78em; color:var(--muted); max-width:11rem; }
+.sp-stage { display:flex; align-items:center; justify-content:center; width:9.5rem; height:4.6rem;
+     border:1px solid var(--line); border-radius:4px; overflow:hidden; margin-bottom:.3rem; }
+.sp-cap { line-height:1.35; }
+.sp-cap b { color:var(--fg); font-weight:600; display:block; }
+.sp-num { font:.95em ui-monospace, Menlo, monospace; }
+.sp-num.bad { color:var(--warn); font-weight:600; }
+.v { background:var(--l-bg, transparent); color:var(--l-fg, inherit);
+     border-color:var(--l-bd, transparent); }
+:root[data-mode="dark"] .v { background:var(--d-bg, transparent); color:var(--d-fg, inherit);
+     border-color:var(--d-bd, transparent); }
+.only-light { display:inline; } .only-dark { display:none; }
+:root[data-mode="dark"] .only-light { display:none; }
+:root[data-mode="dark"] .only-dark { display:inline; }
+.sp-chip { min-width:5.2rem; padding:.4em .8em; border:1px solid; border-radius:4px;
+     font-size:.95em; white-space:nowrap; }
+.sp-box { width:1.35rem; height:1.35rem; border:1.5px solid; border-radius:3px;
+     display:flex; align-items:center; justify-content:center; font-size:.95rem; line-height:1; }
+.sp-ring { width:1.35rem; height:1.35rem; border:1.5px solid; border-radius:50%;
+     display:flex; align-items:center; justify-content:center; }
+.sp-dot { width:.6rem; height:.6rem; border-radius:50%; }
+.sp-disc { width:2.2rem; height:2.2rem; border-radius:50%; display:flex; align-items:center;
+     justify-content:center; font-size:1.05rem; }
+.sp-bar { width:.55rem; height:100%; display:flex; align-items:center; justify-content:center; }
+.sp-grip { width:.18rem; height:1.1rem; border-radius:1rem; }
+.sp-pane { flex:1; height:100%; }
+.sp-sheet { width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+     gap:.4rem; font-size:.9em; }
+.sp-line { width:100%; height:1px; }
+.sp-glyph { font-size:1.3rem; line-height:1; }
+/* Символ галочки в части шрифтов подхватывается как эмодзи и рисуется своим цветом - образец
+   тогда врёт ровно про то, ради чего он нарисован. Рисуем фигурой от currentColor. */
+.sp-tick { width:.32rem; height:.62rem; border:solid currentColor; border-width:0 2px 2px 0;
+     transform:rotate(45deg); margin-top:-.16rem; }
+.sp-dash { width:.62rem; height:2px; background:currentColor; }
 </style></head>
 <body><main>
+<div class="modebar"><span>Образцы нарисованы значениями темы. Переключатель меняет и страницу, и их.</span>
+<button type="button" data-set="light" aria-pressed="false">Светлый</button>
+<button type="button" data-set="dark" aria-pressed="false">Тёмный</button>
+<button type="button" data-set="" aria-pressed="false">Как в системе</button></div>
+
 <h1>Fluent-next: типографика вне ролевой сетки</h1>
 <p class="lede">Материал к <a href="https://github.com/DevExpress/design/issues/1555">design#1555</a>.
 16 мест вне сетки и ещё 31, где роль есть, а тема читает ступень.<br>
@@ -72,4 +128,27 @@ footer { margin-top:4rem; padding-top:1rem; border-top:1px solid var(--line);
 пакет <code>@devexpress/design-tokens-internal@262.16.0</code> ·
 данные: <code>tools/review/roles.mjs</code> + <code>tests/roles.baseline.json</code> ·
 править руками не нужно, перегенерируйте.</footer>
-</main></body></html>
+</main>
+<script>
+(() => {
+  const root = document.documentElement;
+  const KEY = 'fluent-next-roles-mode';
+  const apply = (mode) => {
+    if (mode) root.setAttribute('data-mode', mode); else root.removeAttribute('data-mode');
+    for (const b of document.querySelectorAll('.modebar button')) {
+      b.setAttribute('aria-pressed', String((b.dataset.set || '') === (mode || '')));
+    }
+  };
+  let saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) { saved = null; }
+  apply(saved || '');
+  for (const b of document.querySelectorAll('.modebar button')) {
+    b.addEventListener('click', () => {
+      const mode = b.dataset.set || '';
+      apply(mode);
+      try { localStorage.setItem(KEY, mode); } catch (e) { /* приватное окно - переживём */ }
+    });
+  }
+})();
+</script>
+</body></html>

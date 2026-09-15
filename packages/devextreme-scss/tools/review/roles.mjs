@@ -222,6 +222,14 @@ const resolveRole = (role, mode, depth = 0) => {
   const raw = valueIndex[mode].get(key) ?? valueIndex[mode].get(role);
   if (raw === undefined) return null;
   if (typeof raw !== 'string' || !raw.startsWith('{') || depth > 12) return String(raw).toLowerCase();
+  /* The alpha roles are written as a reference with a hex alpha glued on - "{neutral.270}0A".
+   * Resolving the reference alone loses the transparency and resolving the whole string finds
+   * nothing, which is why these came back null and every alpha role looked absent. */
+  const alpha = /^\{([^}]+)\}([0-9a-f]{2})$/i.exec(raw);
+  if (alpha) {
+    const base = resolveRole(alpha[1], mode, depth + 1);
+    return base && /^#[0-9a-f]{6}$/i.test(base) ? `${base}${alpha[2]}`.toLowerCase() : base;
+  }
   return resolveRole(raw.replace(/[{}]/g, ''), mode, depth + 1);
 };
 const sameValue = (a, b) => MODES.every((mode) => {
@@ -1107,7 +1115,13 @@ const md = () => {
  * resolver and from drifting away from the numbers printed beside the picture.
  */
 const palette = {};
-for (const role of [...new Set(declarations.flatMap((d) => d.roles))].sort()) {
+const roleNames = new Set([...declarations.flatMap((d) => d.roles), ...offeredRoles.keys()]);
+// плюс всё, что семантический слой вообще объявляет: страница рисует и те роли, которые
+// предлагаются как замена, а их тема по определению ещё не читает
+for (const key of valueIndex.light.keys()) {
+  if (key.startsWith('color.')) roleNames.add(key.replace(/^color\./, 'color-'));
+}
+for (const role of [...roleNames].sort()) {
   const entry = {};
   for (const mode of MODES) {
     const value = resolveRole(role, mode);
