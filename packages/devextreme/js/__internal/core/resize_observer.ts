@@ -4,16 +4,18 @@ import windowUtils from './utils/m_window';
 
 const window = windowUtils.getWindow();
 
+type ResizeCallback = (entry: ResizeObserverEntry) => void;
+
 const ResizeObserverMock = {
   observe: noop,
   unobserve: noop,
   disconnect: noop,
-};
+} as unknown as ResizeObserverSingleton;
 
 class ResizeObserverSingleton {
-  _callbacksMap?: any;
+  _callbacksMap!: Map<Element, ResizeCallback>;
 
-  _observer?: any;
+  _observer!: ResizeObserver;
 
   constructor() {
     // we need to make our own for extensions like this
@@ -30,17 +32,17 @@ class ResizeObserverSingleton {
     });
   }
 
-  observe(element, callback) {
+  observe(element: Element, callback: ResizeCallback): void {
     this._callbacksMap.set(element, callback);
     this._observer.observe(element);
   }
 
-  unobserve(element) {
+  unobserve(element: Element): void {
     this._callbacksMap.delete(element);
     this._observer.unobserve(element);
   }
 
-  disconnect() {
+  disconnect(): void {
     this._callbacksMap.clear();
     this._observer.disconnect();
   }

@@ -5,7 +5,7 @@
 import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
-import { infernoRenderer } from '@ts/core/m_inferno_renderer';
+import { infernoRenderer } from '@ts/core/inferno_renderer';
 import type { Signal } from '@ts/core/state_manager/index';
 import { signal } from '@ts/core/state_manager/index';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';

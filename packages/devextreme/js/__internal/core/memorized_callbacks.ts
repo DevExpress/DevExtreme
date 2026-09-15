@@ -3,8 +3,12 @@ import { each } from '@js/core/utils/iterator';
 
 import type { CallbackInterface } from './utils/m_callbacks';
 
+type MemorizedHandler = Parameters<CallbackInterface['add']>[0];
+
+type MemorizedInvoke = (this: unknown, ...args: unknown[]) => void;
+
 class MemorizedCallbacks {
-  memory: any[];
+  memory: unknown[][];
 
   callbacks: CallbackInterface;
 
@@ -13,18 +17,18 @@ class MemorizedCallbacks {
     this.callbacks = Callbacks();
   }
 
-  add(fn) {
-    each(this.memory, (_, item) => fn.apply(fn, item));
+  add(fn: MemorizedHandler): void {
+    each(this.memory, (_, item) => (fn as MemorizedInvoke).apply(fn, item));
     this.callbacks.add(fn);
   }
 
-  remove(fn) {
+  remove(fn: MemorizedHandler): void {
     this.callbacks.remove(fn);
   }
 
-  fire(...args) {
+  fire(...args: unknown[]): void {
     this.memory.push(args);
-    this.callbacks.fire.apply(this.callbacks, args);
+    this.callbacks.fire(...args);
   }
 }
 
