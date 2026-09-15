@@ -24,7 +24,7 @@ import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { spyVisibilityEvent } from '../../helpers/visibilityChangeMock.js';
-import domAdapter from '__internal/core/m_dom_adapter';
+import domAdapter from '__internal/core/dom_adapter';
 import {
     TEMPLATE_WRAPPER_CLASS,
     POPUP_CONTENT_SCROLLABLE_CLASS,
