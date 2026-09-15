@@ -22,11 +22,11 @@ export class AIColumnController extends Controller {
 
   private aiColumnIntegrationController!: AIColumnIntegrationController;
 
-  private dataSourceChangedHandler!: (e?: ChangedEvent) => void;
+  private adapterDataChangedHandler!: (e?: ChangedEvent) => void;
 
   private adapterChangedHandler!: () => void;
 
-  private dataSourceReadyHandler!: () => void;
+  private dataSourceChangedHandler!: () => void;
 
   private subscribedDataSourceAdapter: DataSourceAdapter | null = null;
 
@@ -81,38 +81,43 @@ export class AIColumnController extends Controller {
     });
   }
 
-  private subscribeToDataSourceChanged(): void {
-    this.dataSourceChangedHandler = this.dataSourceChangedHandler
-      ?? this.handleDataSourceChanged.bind(this);
+  private getDataSourceAdapter(): DataSourceAdapter | null {
+    return (this.dataController.dataSource() ?? null) as DataSourceAdapter | null;
+  }
 
-    const dataSourceAdapter = (this.dataController.dataSource() ?? null) as DataSourceAdapter | null;
+  private subscribeToAdapterDataChanged(): void {
+    this.adapterDataChangedHandler = this.adapterDataChangedHandler
+      ?? this.handleAdapterDataChanged.bind(this);
 
-    if (dataSourceAdapter === this.subscribedDataSourceAdapter) {
-      return;
-    }
+    const dataSourceAdapter = this.getDataSourceAdapter();
 
-    this.unsubscribeFromDataSourceChanged();
-
-    dataSourceAdapter?.changed.add(this.dataSourceChangedHandler);
+    dataSourceAdapter?.changed.add(this.adapterDataChangedHandler);
     this.subscribedDataSourceAdapter = dataSourceAdapter;
   }
 
-  private unsubscribeFromDataSourceChanged(): void {
-    if (!this.dataSourceChangedHandler) {
+  private unsubscribeFromAdapterDataChanged(): void {
+    if (!this.adapterDataChangedHandler) {
       return;
     }
 
-    this.subscribedDataSourceAdapter?.changed.remove(this.dataSourceChangedHandler);
+    this.subscribedDataSourceAdapter?.changed.remove(this.adapterDataChangedHandler);
     this.subscribedDataSourceAdapter = null;
   }
 
-  // The adapter handler is not attached here: it would run ahead of the data controller's own,
-  // leaving `sendRequests` on the previous rows. `dataSourceChanged` attaches it instead.
   private handleAdapterChanged(): void {
-    this.unsubscribeFromDataSourceChanged();
+    this.unsubscribeFromAdapterDataChanged();
 
     this.unsubscribeFromStoreEvents();
     this.subscribeToStoreEvents();
+  }
+
+  private handleDataSourceChanged(): void {
+    if (this.getDataSourceAdapter() === this.subscribedDataSourceAdapter) {
+      return;
+    }
+
+    this.unsubscribeFromAdapterDataChanged();
+    this.subscribeToAdapterDataChanged();
   }
 
   private unsubscribeFromDataControllerChanged(): void {
@@ -232,7 +237,7 @@ export class AIColumnController extends Controller {
     }
   }
 
-  private handleDataSourceChanged(e?: ChangedEvent): void {
+  private handleAdapterDataChanged(e?: ChangedEvent): void {
     if (e?.changeType === 'loadError') {
       return;
     }
@@ -257,11 +262,10 @@ export class AIColumnController extends Controller {
     this.adapterChangedHandler = this.handleAdapterChanged.bind(this);
     this.dataController.adapterChanged.add(this.adapterChangedHandler);
 
-    // Fires inside the adapter's `changed` pass, so a handler attached there still runs for it.
-    this.dataSourceReadyHandler = this.subscribeToDataSourceChanged.bind(this);
-    this.dataController.dataSourceChanged.add(this.dataSourceReadyHandler);
+    this.dataSourceChangedHandler = this.handleDataSourceChanged.bind(this);
+    this.dataController.dataSourceChanged.add(this.dataSourceChangedHandler);
 
-    this.subscribeToDataSourceChanged();
+    this.subscribeToAdapterDataChanged();
 
     this.unsubscribeFromStoreEvents();
     this.subscribeToStoreEvents();
@@ -377,8 +381,8 @@ export class AIColumnController extends Controller {
   public dispose(): void {
     super.dispose();
     this.dataController.adapterChanged.remove(this.adapterChangedHandler);
-    this.dataController.dataSourceChanged.remove(this.dataSourceReadyHandler);
-    this.unsubscribeFromDataSourceChanged();
+    this.dataController.dataSourceChanged.remove(this.dataSourceChangedHandler);
+    this.unsubscribeFromAdapterDataChanged();
     this.unsubscribeFromStoreEvents();
     this.unsubscribeFromDataControllerChanged();
   }
