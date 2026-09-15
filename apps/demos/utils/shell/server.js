@@ -90,11 +90,11 @@ const demoIndexHandler = async (request, response) => {
     try {
       result = await ensureBundleFresh(widget, name, approach);
     } catch (err) {
-      response.status(500).send(`Demo build failed: ${err.message}`);
+      response.status(500).type('text/plain').send(`Demo build failed: ${err.message}`);
       return;
     }
     if (!result.ok) {
-      response.status(500).send(`Demo build failed: ${result.reason}`);
+      response.status(500).type('text/plain').send(`Demo build failed: ${result.reason}`);
       return;
     }
   }
