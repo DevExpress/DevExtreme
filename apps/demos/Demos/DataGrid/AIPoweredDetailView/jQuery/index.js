@@ -30,14 +30,18 @@ $(() => {
     .addClass(`category-${CategoryID}__bg-color`)
     .text(CategoryName);
 
-  function toggleLoadingState(isLoading, event, controls) {
+  function setMessage($outputArea, $newMessage) {
+    const $oldMessage = $outputArea.find('.output-initial-message, .output-error-message');
+    $oldMessage.remove();
+    if ($newMessage) $outputArea.append($newMessage);
+  }
+
+  function toggleLoadingState(isLoading, event, controls, $outputArea) {
     const {
       responseEditor,
       promptEditor,
       suggestions,
       submitButton,
-      $emptyMessage,
-      $errorMessage,
       loadPanel
     } = controls;
 
@@ -49,8 +53,7 @@ $(() => {
     submitButton.option('disabled', isLoading);
 
     if (isLoading) {
-      $emptyMessage.hide();
-      $errorMessage.hide();
+      setMessage($outputArea, null);
       loadPanel.show();
       event?.target?.blur();
     } else {
@@ -59,14 +62,14 @@ $(() => {
     }
   }
 
-  async function handleSubmit(event, rowData, controls) {
-    const { promptEditor, responseEditor, submitButton, $errorMessage } = controls;
+  async function handleSubmit(event, rowData, controls, $outputArea) {
+    const { promptEditor, responseEditor, submitButton } = controls;
     const userPrompt = promptEditor.option('value');
     if (userPrompt === '') return;
 
     abortController = new AbortController();
 
-    toggleLoadingState(true, event, controls);
+    toggleLoadingState(true, event, controls, $outputArea);
 
     try {
       const messages = [
@@ -80,11 +83,11 @@ $(() => {
       responseEditor.option('value', aiResponse);
     } catch {
       responseEditor.option('value', '');
-      $errorMessage.show();
+      setMessage($outputArea, createErrorMessage());
     } finally {
       abortController = null;
       submitButton.option('text', 'Resubmit');
-      toggleLoadingState(false, event, controls);
+      toggleLoadingState(false, event, controls, $outputArea);
     }
   }
 
@@ -198,7 +201,7 @@ $(() => {
     }).dxLoadPanel('instance');
   }
 
-  function createEmptyMessage() {
+  function createInitialMessage() {
     return $('<div>')
       .addClass('output-initial-message')
       .text('AI Assistant is ready to answer your questions about this record.');
@@ -210,21 +213,20 @@ $(() => {
       .append(
         $('<span>').addClass('dx-icon-warning'),
         'An unexpected error occurred. Please try again.',
-      )
-      .hide();
+      );
   }
 
   function createOutputArea() {
     const responseEditor = createResponseEditor();
     const loadPanel = createLoadPanel();
-    const $emptyMessage = createEmptyMessage();
-    const $errorMessage = createErrorMessage();
 
     const $outputArea = $('<div>')
       .addClass('output-container')
-      .append(loadPanel.element(), responseEditor.element(), $emptyMessage, $errorMessage);
+      .append(loadPanel.element(), responseEditor.element());
 
-    return { $outputArea, responseEditor, loadPanel, $emptyMessage, $errorMessage };
+    setMessage($outputArea, createInitialMessage());
+
+    return { $outputArea, responseEditor, loadPanel };
   }
 
   $('#gridContainer').dxDataGrid({
@@ -277,7 +279,7 @@ $(() => {
         const { $inputArea, ...input } = createInputArea(data);
         const { $outputArea, ...output } = createOutputArea();
         const controls = { ...input, ...output };
-        const onSubmit = ({ event }) => handleSubmit(event, data, controls);
+        const onSubmit = ({ event }) => handleSubmit(event, data, controls, $outputArea);
 
         input.promptEditor.option('onEnterKey', onSubmit);
         input.submitButton.option('onClick', onSubmit);
