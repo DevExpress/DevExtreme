@@ -1791,51 +1791,25 @@
     "rows": [
       {
         "bg": "--dx-button-danger-outlined-bg-active",
-        "fg": "--dx-button-danger-outlined-content",
-        "fgRole": "color-content-danger",
+        "fg": "--dx-button-danger-outlined-content-active",
+        "fgRole": "color-content-danger-active",
         "bgRole": "color-bg-danger-subtler-active",
         "contrast": {
-          "light": 3.18,
-          "dark": 5.01
+          "light": 6.2,
+          "dark": 2.14
         },
         "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-active",
         "decision": "design",
         "group": "outlined-button-label"
       },
       {
-        "bg": "--dx-button-danger-outlined-bg-focused",
-        "fg": "--dx-button-danger-outlined-content",
-        "fgRole": "color-content-danger",
-        "bgRole": "color-bg-danger-subtler-hovered",
-        "contrast": {
-          "light": 4.43,
-          "dark": 3.92
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-focused",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
-      {
-        "bg": "--dx-button-danger-outlined-bg-hovered",
-        "fg": "--dx-button-danger-outlined-content",
-        "fgRole": "color-content-danger",
-        "bgRole": "color-bg-danger-subtler-hovered",
-        "contrast": {
-          "light": 4.43,
-          "dark": 3.92
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-hover",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
-      {
         "bg": "--dx-button-danger-outlined-bg-selected",
-        "fg": "--dx-button-danger-outlined-content",
-        "fgRole": "color-content-danger",
+        "fg": "--dx-button-danger-outlined-content-selected",
+        "fgRole": "color-content-danger-hovered",
         "bgRole": "color-bg-danger-subtler-selected",
         "contrast": {
-          "light": 3.78,
-          "dark": 3.22
+          "light": 5.36,
+          "dark": 4.08
         },
         "selector": ".dx-button-mode-outlined.dx-button-danger.dx-state-selected",
         "decision": "design",
@@ -1869,12 +1843,12 @@
       },
       {
         "bg": "--dx-button-default-outlined-bg-active",
-        "fg": "--dx-button-default-outlined-content",
-        "fgRole": "color-content-primary",
+        "fg": "--dx-button-default-outlined-content-active",
+        "fgRole": "color-content-primary-active",
         "bgRole": "color-bg-primary-subtler-active",
         "contrast": {
-          "light": 2.94,
-          "dark": 4.79
+          "light": 6.1,
+          "dark": 2.05
         },
         "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-active",
         "decision": "design",
@@ -1894,65 +1868,13 @@
         "why": "пара стала измеримой только после Д23: раньше одна сторона приходила ролью дизайн-системы и сканер не мог её атрибутировать. Значения не двигались, элемент - подпись кнопки на собственной заливке"
       },
       {
-        "bg": "--dx-button-default-outlined-bg-focused",
-        "fg": "--dx-button-default-outlined-content",
-        "fgRole": "color-content-primary",
-        "bgRole": "color-bg-primary-subtler-hovered",
-        "contrast": {
-          "light": 4.02,
-          "dark": 4.11
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-focused",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
-      {
-        "bg": "--dx-button-default-outlined-bg-focused",
-        "fg": "--dx-button-default-text-content",
-        "fgRole": "color-content-primary",
-        "bgRole": "color-bg-primary-subtler-hovered",
-        "contrast": {
-          "light": 4.02,
-          "dark": 4.11
-        },
-        "selector": ".dx-popup-content .dx-scheduler-dropdown-appointment-buttons-block .dx-button.dx-state-foc",
-        "decision": "graphic-ok",
-        "why": "пара стала измеримой только после Д23: раньше одна сторона приходила ролью дизайн-системы и сканер не мог её атрибутировать. Значения не двигались, элемент - подпись кнопки на собственной заливке"
-      },
-      {
-        "bg": "--dx-button-default-outlined-bg-hovered",
-        "fg": "--dx-button-default-outlined-content",
-        "fgRole": "color-content-primary",
-        "bgRole": "color-bg-primary-subtler-hovered",
-        "contrast": {
-          "light": 4.02,
-          "dark": 4.11
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-hover",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
-      {
-        "bg": "--dx-button-default-outlined-bg-hovered",
-        "fg": "--dx-button-default-text-content",
-        "fgRole": "color-content-primary",
-        "bgRole": "color-bg-primary-subtler-hovered",
-        "contrast": {
-          "light": 4.02,
-          "dark": 4.11
-        },
-        "selector": ".dx-popup-content .dx-scheduler-dropdown-appointment-buttons-block .dx-button.dx-state-hov",
-        "decision": "graphic-ok",
-        "why": "пара стала измеримой только после Д23: раньше одна сторона приходила ролью дизайн-системы и сканер не мог её атрибутировать. Значения не двигались, элемент - подпись кнопки на собственной заливке"
-      },
-      {
         "bg": "--dx-button-default-outlined-bg-selected",
-        "fg": "--dx-button-default-outlined-content",
-        "fgRole": "color-content-primary",
+        "fg": "--dx-button-default-outlined-content-selected",
+        "fgRole": "color-content-primary-hovered",
         "bgRole": "color-bg-primary-subtler-selected",
         "contrast": {
-          "light": 3.45,
-          "dark": 3.35
+          "light": 5.02,
+          "dark": 4.17
         },
         "selector": ".dx-button-mode-outlined.dx-button-default.dx-state-selected",
         "decision": "design",
@@ -1986,51 +1908,25 @@
       },
       {
         "bg": "--dx-button-success-outlined-bg-active",
-        "fg": "--dx-button-success-outlined-content",
-        "fgRole": "color-content-success",
+        "fg": "--dx-button-success-outlined-content-active",
+        "fgRole": "color-content-success-active",
         "bgRole": "color-bg-success-subtler-active",
         "contrast": {
-          "light": 3.02,
-          "dark": 4.75
+          "light": 5.95,
+          "dark": 2.07
         },
         "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-active",
         "decision": "design",
         "group": "outlined-button-label"
       },
       {
-        "bg": "--dx-button-success-outlined-bg-focused",
-        "fg": "--dx-button-success-outlined-content",
-        "fgRole": "color-content-success",
-        "bgRole": "color-bg-success-subtler-hovered",
-        "contrast": {
-          "light": 4.04,
-          "dark": 4.03
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-focused",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
-      {
-        "bg": "--dx-button-success-outlined-bg-hovered",
-        "fg": "--dx-button-success-outlined-content",
-        "fgRole": "color-content-success",
-        "bgRole": "color-bg-success-subtler-hovered",
-        "contrast": {
-          "light": 4.04,
-          "dark": 4.03
-        },
-        "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-hover",
-        "decision": "design",
-        "group": "outlined-button-label"
-      },
-      {
         "bg": "--dx-button-success-outlined-bg-selected",
-        "fg": "--dx-button-success-outlined-content",
-        "fgRole": "color-content-success",
+        "fg": "--dx-button-success-outlined-content-selected",
+        "fgRole": "color-content-success-hovered",
         "bgRole": "color-bg-success-subtler-selected",
         "contrast": {
-          "light": 3.51,
-          "dark": 3.23
+          "light": 4.92,
+          "dark": 4.06
         },
         "selector": ".dx-button-mode-outlined.dx-button-success.dx-state-selected",
         "decision": "design",
@@ -2083,7 +1979,7 @@
       },
       "outlined-button-label": {
         "decision": "design",
-        "why": "The outlined buttons - default, success, danger - hold their label on content-<hue> while the fill climbs bg-<hue>-subtler through hovered, focused, selected and active. The label is text, so the floor is 4.5, and no state after rest reaches it: hover and focus 4.02-4.43, selected 3.22-3.78, active 2.94-3.18 in light. Blazor climbs both sides - outline-primary-hover-color is content-primary-hovered and -active-color is content-primary-active - and measuring its pairing answers the question unevenly: content-primary-hovered on bg-primary-subtler-hovered gives 5.85 light / 5.11 dark, which clears AA in both and is a straight improvement on our 4.02 / 4.11; but content-primary-active on bg-primary-subtler-active gives 6.10 light / 2.05 dark, trading one mode for the other, and content-primary-selected does not exist at all. So: (1) adopt Blazor's hovered and focused rungs - provable, both modes, three roles; (2) for selected and active there is no shipped pair that passes, so either hold the fill still in those states or ask the package; (3) content-on-subtle-primary, which the package ships for exactly this surface and we never read, clears everything by a mile (10.82 / 16) but is neutral, not blue - it would stop the label being an accent. Recommendation: (1) now, (3) only if design wants a neutral label."
+        "why": "REMEASURED 15.09, and the earlier numbers were wrong - the tool's own bug, fixed the same day. The cross-state pass paired a state's BACKGROUND with the element's REST foreground, because the theme sets the two in separate rules; it never noticed that the theme also moves the LABEL with the state. So it reported hover and focus at 4.02-4.43 where the button actually renders 5.67-6.28. The pass now prefers a foreground carrying the same state class, and the group went from 12 rows to 6, matching what a real .dx-button element measures in the browser.\nWhat is actually wrong, and only in dark: the PRESS reads 2.05-2.14 and SELECTED 4.06-4.17 against the 4.5 a label needs. Rest, hover and focus pass in both modes (light 5.14-6.28, dark 4.58-5.11). The cause is the one this audit keeps meeting: the -active rung does not invert, and here BOTH sides darken at once - the label goes content-<hue>-active while the fill goes bg-<hue>-subtler-active.\nNo coloured label passes both modes inside this model - measured for primary: keeping the hovered label on the pressed fill gives 4.28 light / 5.97 dark, the rest label 2.94 / 4.79, and for selected the rest label 3.45 / 3.35. The ramp simply has no pair that works.\nThe package does not build the button this way at all. core and vnext give button.color.outline.<hue>: content.rest = color.content, border.* = color.border / -hovered / -active, bg.* = color.bg-alpha / -hovered / -active. The outlined button is NEUTRAL by default there and takes the hue only on hover and press, and only for danger. That model measures 13.45-16.6.\nOPTIONS. (1) adopt the package model outright - neutral label, neutral border, neutral alpha fill: fixes everything, and changes the look most, since the button stops being tinted at rest. (2) keep the tinted border and fill and move only the LABEL to content-on-subtle-<hue> - a role the package ships for exactly this surface and which the theme reads nowhere: #0a0a0a light / #ffffff dark, measuring 10.82-16 on every one of our fills in both modes. The button keeps its colour identity in the border and the fill, the label goes neutral. (3) leave it and record the press at 2.05 and selected at 4.06 in dark. Recommendation: (2) - it closes both failures with a role the package already assigns to a tinted surface, and keeps the widget recognisable; (1) if the product wants to match the kit exactly."
       },
       "contained-button-label": {
         "decision": "answered",

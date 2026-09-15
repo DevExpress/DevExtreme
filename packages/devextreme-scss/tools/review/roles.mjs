@@ -754,9 +754,22 @@ if (existsSync(bundlePath)) {
   }
   // The rest-state foreground of each element: the last rule that sets `color` without a state.
   for (const rule of rules) if (rule.fg && !rule.stated) foregroundOf.set(rule.key, rule);
+  /*
+   * A theme may move the label WITH the state, in a rule of its own: the outlined button sets the
+   * background in one rule and the label colour in another, both carrying the same state class.
+   * Pairing such a background with the REST label measures a pair that never renders - it reported
+   * the outlined button at 4.02 where the button actually renders 5.85. So the state's own
+   * foreground wins when there is one, and the rest foreground is the fallback it always was.
+   */
+  const statedForegroundOf = new Map();
+  const stateKey = (selector) => {
+    STATE_CLASS.lastIndex = 0;
+    return `${elementKey(selector)}\u0000${(selector.match(STATE_CLASS) ?? []).sort().join('')}`;
+  };
+  for (const rule of rules) if (rule.fg && rule.stated) statedForegroundOf.set(stateKey(rule.selector), rule);
   for (const rule of rules) {
     if (!rule.stated || !rule.bg || rule.fg) continue;
-    const rest = foregroundOf.get(rule.key);
+    const rest = statedForegroundOf.get(stateKey(rule.selector)) ?? foregroundOf.get(rule.key);
     if (!rest) continue;
     const fgRole = roleOfTierName.get(rest.fg);
     const bgRole = roleOfTierName.get(rule.bg);
