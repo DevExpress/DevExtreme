@@ -8,6 +8,7 @@ AspNetWebStack (Microsoft.AspNet.Mvc, Microsoft.AspNet.WebApi.Core) (Open Source
 Copyright (c) .NET Foundation. All rights reserved.
 https://github.com/aspnet/AspNetWebStack/blob/main/LICENSE.txt
 
+
 autoprefixer (Open Source - MIT License)
 Copyright (c) 2013 Andrey Sitnik (andrey@sitnik.es)
 https://github.com/postcss/autoprefixer/blob/main/LICENSE
