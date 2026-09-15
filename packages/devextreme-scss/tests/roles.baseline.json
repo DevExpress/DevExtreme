@@ -1916,7 +1916,7 @@
     "groups": {
       "checkbox-focused-fill": {
         "decision": "design",
-        "why": "Resolved in part on 15.09, when the designer produced the package tokens for checkbox/color/checked. Three slots, not one: border, bg and icon each have their own token, and our theme painted the border from the BG variable. Figma and Blazor agree that the border is border-primary-shared*, so that half was not a judgement call and is applied - three new names, light pixel-identical (primary-100/120/140 exactly as before), dark better at every rung: the box outline against the page goes 2.88 -> 4.65 at rest, 3.69 -> 5.79 hovered, 1.39 -> 1.98 pressed.\nWHAT REMAINS. The fill. Figma says bg-primary*, Blazor implements content-primary-shared*, and the two are identical in light and differ in dark - which is exactly what decides this row. On Figma's fill the mark reads 3.36 at rest and 1.62 pressed; on Blazor's, 5.42 and 2.31. Neither clears 3.0 in the pressed state, because no primary family inverts its active rung for dark - the same package defect П2 records for danger.\nAND A THIRD THING THE TOKENS SETTLE. The package state list is rest / hovered / active / read-only / disabled - there is no focused. Our theme paints .dx-state-focused AND .dx-state-active from one variable, so a keyboard user SITS at the value the package intends for a transient press. The button already separates them (bg-focused reads bg-primary-hovered). Splitting focus from active would leave the 1.62 where the package put it - under a finger, for the length of a click - and take the keyboard user to 4.30."
+        "why": "Resolved in part on 15.09, when the designer produced the package tokens for checkbox/color/checked. Three slots, not one: border, bg and icon each have their own token, and our theme painted the border from the BG variable. Figma and Blazor agree that the border is border-primary-shared*, so that half was not a judgement call and is applied - three new names, light pixel-identical (primary-100/120/140 exactly as before), dark better at every rung: the box outline against the page goes 2.88 -> 4.65 at rest, 3.69 -> 5.79 hovered, 1.39 -> 1.98 pressed.\nWHAT REMAINS. The fill. Figma says bg-primary*, Blazor implements content-primary-shared*, and the two are identical in light and differ in dark - which is exactly what decides this row. On Figma's fill the mark reads 3.36 at rest and 1.62 pressed; on Blazor's, 5.42 and 2.31. Neither clears 3.0 in the pressed state, because no primary family inverts its active rung for dark - the same package defect П2 records for danger.\nAND A THIRD THING THE TOKENS SETTLE. The package state list is rest / hovered / active / read-only / disabled - there is no focused. Our theme paints .dx-state-focused AND .dx-state-active from one variable, so a keyboard user SITS at the value the package intends for a transient press. The button already separates them (bg-focused reads bg-primary-hovered). Splitting focus from active would leave the 1.62 where the package put it - under a finger, for the length of a click - and take the keyboard user to 4.30.\nRE-CHECKED 15.09 against a freshly pulled Blazor, and the stem argument above was WRONG. Blazor's checked fills are content-primary-shared for primary but bg-success-shared and bg-danger-shared for the other two - I had read the INDETERMINATE variables, where the dash is a content-coloured mark, as the checked fills. So primary is the outlier inside Blazor, our bg family agrees with their success and danger, and our invalid MARK on content-danger-shared agrees with their indeterminate mark. There was no internal inconsistency.\nWHICH LEAVES A CANDIDATE THAT SATISFIES BOTH SOURCES: bg-primary-shared*. The whole *-shared family is one value across bg, border and content, so it measures exactly like Blazor's content-primary-shared - mark 5.42 at rest and box 4.65 in dark against 3.36 and 2.88 today - while staying in the bg family Figma names, on the stem Blazor itself uses for success and danger. Light is identical to what ships now. The pressed rung still fails (2.31 / 1.98): no primary family inverts its active step for dark, which is П2's defect again."
       },
       "outlined-button-label": {
         "decision": "design",
@@ -2526,5 +2526,40 @@
       "gantt-accent-border"
     ],
     "note": "Разделение почти складывается: на shared сидят контуры САМОГО контрола, на плоской - призраки перетаскивания, плейсхолдеры и декоративные линии. Почти - потому что четыре контура взаимодействия остались на плоской: grid-border-focused, file-manager-file-item-border-focused, tag-box-tag-border-focused и pivot-grid-accent-outline. cardView держит обе роли сразу и разводит их осмысленно: контур фокуса - shared, статичный край выбранной карточки - плоская. Это следующий кандидат на волну, отдельно от Д6."
+  },
+  "blazorRecheck": {
+    "comment": [
+      "Пересверка с dxvcs после git pull 15.09.2026. Было fc8efae7251e (07.09), стало 5e34279a0835.",
+      "263 коммита, из них 5 трогают тему Fluent - и один из них, #45507, переименовал роли целиком.",
+      "Поэтому пересверено всё, на чём стояли выводы, а не только то, что выглядело подозрительным."
+    ],
+    "pulledOn": "2026-09-15",
+    "from": "fc8efae7251e",
+    "to": "5e34279a0835",
+    "branches": "Отдельной ветки, где ведут обновление пакета токенов, нет. Коммиты по теме новее main есть только в feature/blazor/appbar и feature/blazor/grid-alternate-rows - это фичи, не токены. feature/component-level-tokens и -stage-material существуют, но последний раз трогали тему 02.07 и 08.07. Работа по токенам (#45507) уже в main.",
+    "confirmed": [
+      "Д7 сплиттер - совпало дословно со ВСЕМИ четырьмя значениями, которые мы применили: resize-handle-color content-subtle, resize-handle-hover-color content-primary-hovered, separator-bg bg-canvas, separator-hover-bg bg-low-hovered",
+      "Д17 обведённая кнопка - outline-primary-hover-color = content-primary-hovered, без изменений",
+      "Д6 правило - bg-alpha по-прежнему в 19 местах, у аккордеона 10 из них",
+      "loading-panel indicator = content-primary, scheduler default-appointment-background = bg-primary-subtle, menu-bg и context-menu-bg = color-bg - всё без изменений"
+    ],
+    "corrected": [
+      {
+        "what": "Д16, довод про стем",
+        "was": "у Blazor все три оттенка чекбокса на content-<оттенок>-shared, значит наша тройка непоследовательна",
+        "now": "НЕВЕРНО. Заливки отмеченного чекбокса у Blazor: primary = content-primary-shared, success = bg-success-shared, danger = bg-danger-shared. Я прочитал переменные INDETERMINATE (danger-indeterminate-check-element-bg и т.п.) как заливки отмеченного. Неопределённое состояние рисует чёрточку - она content, - а отмеченное рисует заливку, и она bg. Значит primary у Blazor выбивается из самого Blazor, а наше семейство bg совпадает с их success и danger. И наша невалидная метка на content-danger-shared совпадает с их неопределённой меткой - непоследовательности, о которой я писал, нет."
+      },
+      {
+        "what": "Д1/Д2, диск галереи",
+        "was": "у Blazor диска нет вовсе, carousel-button-border-width это border-width-0",
+        "now": "Диск есть: carousel-button-background = color-opacity(color-bg, opacity-85), стрелка content, на наведении content-primary-hovered. Я прочитал отсутствие РАМКИ как отсутствие диска. Д1/Д2 уже закрыты на bg-static-dark - это расхождение, а не ошибка: их диск переворачивается вместе с темой, наш статичен и не зависит от картинки под ним."
+      },
+      {
+        "what": "контур неотмеченного чекбокса",
+        "was": "наш border-contrast подтверждён Blazor дословно",
+        "now": "Подтверждения нет: два файла Blazor расходятся. variables/_checkbox.scss даёт border-contrast, а variables/_checkbox-base.scss - color-border, и в компонентный тир (components/checkbox/variables.scss:28) идёт именно base. Как оракул для этого слота Blazor не годится."
+      }
+    ],
+    "weAreAhead": "Коммит #45507 у Blazor заменил роли, которых семантический слой больше не объявляет: content-subtle-hovered/-active/-disabled на content и content-disabled, bg-none и border-none на none. Наша тема этих ролей не читает вовсе, а color-none читает уже сейчас (scrollable, switch). То есть Blazor догонял нас, а не наоборот."
   }
 }
