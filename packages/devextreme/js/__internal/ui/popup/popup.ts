@@ -515,7 +515,7 @@ class Popup<
       return;
     }
 
-    const contentElement = this._$content?.get(0);
+    const contentElement = this._$content?.get(0) as Element;
 
     if (shouldObserve) {
       resizeObserverSingleton.observe(contentElement, (

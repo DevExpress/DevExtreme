@@ -7,7 +7,7 @@ import { injector } from '@ts/core/utils/dependency_injector';
 import { render } from 'inferno';
 import { createElement } from 'inferno-create-element';
 
-const remove = (element) => {
+const remove = (element): void => {
   keyboard.disposeProcessorsForSubtree(element);
 
   const { parentNode } = element;
@@ -47,7 +47,9 @@ const infernoRenderer = injector({
       const mountNode = domAdapter.createDocumentFragment().appendChild(rootNode);
       const vNodeAlreadyExists = !!container.$V;
 
-      vNodeAlreadyExists && remove(container);
+      if (vNodeAlreadyExists) {
+        remove(container);
+      }
 
       hydrate(
         createElement(component, props),
