@@ -15,7 +15,7 @@ import { addShadowDomStyles } from '@js/core/utils/shadow_dom';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
-import TemplateManagerModule from '@ts/core/m_template_manager';
+import TemplateManagerModule from '@ts/core/template_manager';
 import { uiLayerInitialized } from '@ts/core/utils/m_common';
 import type { ComponentProperties, DefaultActionArgs, DefaultActionConfig } from '@ts/core/widget/component';
 import { Component } from '@ts/core/widget/component';
