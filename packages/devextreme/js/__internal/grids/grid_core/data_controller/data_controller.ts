@@ -89,7 +89,7 @@ export class DataController extends modules.Controller {
 
   private _needApplyFilter?: boolean;
 
-  private _isDataSourceApplying?: boolean;
+  private isDataSourceAdapterApplying?: boolean;
 
   private _isAllDataTypesDefined?: boolean;
 
@@ -319,7 +319,7 @@ export class DataController extends modules.Controller {
 
     let combined: DataFilter = filter ?? dataSourceAdapter.filter();
 
-    const isColumnsTypesDefined = this._columnsController.isDataSourceApplied()
+    const isColumnsTypesDefined = this._columnsController.isDataSourceAdapterApplied()
       || this._columnsController.isAllDataTypesDefined();
 
     if (isColumnsTypesDefined) {
@@ -392,7 +392,7 @@ export class DataController extends modules.Controller {
       e.extra.totalCount = 0;
     }
 
-    if (!columnsController.isDataSourceApplied()) {
+    if (!columnsController.isDataSourceAdapterApplied()) {
       columnsController.updateColumnDataTypes(dataSourceAdapter);
     }
     this._columnsUpdating = true;
@@ -519,25 +519,25 @@ export class DataController extends modules.Controller {
    */
   protected dataChangedHandler(e?: ChangedEvent): void {
     const dataSourceAdapter = this.dataSourceController.getAdapter();
-    let isAsyncDataSourceApplying = false;
+    let isAsyncApplying = false;
 
     this._useSortingGroupingFromColumns = false;
 
-    if (dataSourceAdapter && !this._isDataSourceApplying) {
-      this._isDataSourceApplying = true;
+    if (dataSourceAdapter && !this.isDataSourceAdapterApplying) {
+      this.isDataSourceAdapterApplying = true;
 
-      when(this._columnsController.applyDataSource(dataSourceAdapter)).done(() => {
+      when(this._columnsController.applyDataSourceAdapter(dataSourceAdapter)).done(() => {
         if (this._isLoading) {
           this.loadingChangedHandler(false);
         }
 
         // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
-        if (isAsyncDataSourceApplying && e?.isDelayed) {
+        if (isAsyncApplying && e?.isDelayed) {
           // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
           e.isDelayed = false;
         }
 
-        this._isDataSourceApplying = false;
+        this.isDataSourceAdapterApplying = false;
 
         const hasAdditionalFilter = (): boolean => {
           const additionalFilter = this.filterController.getAdditionalFilter();
@@ -564,15 +564,15 @@ export class DataController extends modules.Controller {
           this.updateItems(change, true);
         }
       }).fail(() => {
-        this._isDataSourceApplying = false;
+        this.isDataSourceAdapterApplying = false;
       });
 
-      if (this._isDataSourceApplying) {
-        isAsyncDataSourceApplying = true;
+      if (this.isDataSourceAdapterApplying) {
+        isAsyncApplying = true;
         this.loadingChangedHandler(true);
       }
 
-      this._needApplyFilter = !this._columnsController.isDataSourceApplied();
+      this._needApplyFilter = !this._columnsController.isDataSourceAdapterApplied();
       this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
     }
   }

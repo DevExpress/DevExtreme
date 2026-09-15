@@ -99,13 +99,13 @@ export class ColumnsController extends modules.Controller {
 
   public _columnsUserState: any;
 
-  private _dataSourceApplied: any;
+  private dataSourceAdapterApplied?: boolean;
 
   private appliedDataSourceAdapter?: DataSourceAdapter | null;
 
   public _ignoreColumnOptionNames: any;
 
-  private _dataSourceColumnsCount: any;
+  private generatedColumnsCount?: number | undefined;
 
   private _visibleColumns: any;
 
@@ -173,8 +173,8 @@ export class ColumnsController extends modules.Controller {
 
     addExpandColumn(this);
 
-    if (this._dataSourceApplied) {
-      this.applyDataSource(this.appliedDataSourceAdapter, true, isApplyingUserState);
+    if (this.dataSourceAdapterApplied) {
+      this.applyDataSourceAdapter(this.appliedDataSourceAdapter, true, isApplyingUserState);
     } else {
       updateIndexes(this);
     }
@@ -338,7 +338,7 @@ export class ColumnsController extends modules.Controller {
     return ['addColumn', 'deleteColumn', 'columnOption', 'columnCount', 'clearSorting', 'clearGrouping', 'getVisibleColumns', 'getVisibleColumnIndex', 'getColumns'];
   }
 
-  public applyDataSource(
+  public applyDataSourceAdapter(
     dataSourceAdapter,
     forceApplying?,
     isApplyingUserState?,
@@ -348,19 +348,19 @@ export class ColumnsController extends modules.Controller {
 
     that.appliedDataSourceAdapter = dataSourceAdapter;
 
-    if (!that._dataSourceApplied || that._dataSourceColumnsCount === 0 || forceApplying || that.option('regenerateColumnsByVisibleItems')) {
+    if (!that.dataSourceAdapterApplied || that.generatedColumnsCount === 0 || forceApplying || that.option('regenerateColumnsByVisibleItems')) {
       if (isDataSourceAdapterLoaded) {
         if (!that._isColumnsFromOptions) {
           const columnsFromDataSourceAdapter = createColumnsFromDataSourceAdapter(that, dataSourceAdapter);
           if (columnsFromDataSourceAdapter.length) {
             assignColumns(that, columnsFromDataSourceAdapter);
-            that._dataSourceColumnsCount = that._columns.length;
+            that.generatedColumnsCount = that._columns.length;
             applyUserState(that);
           }
         }
         return that.updateColumns(dataSourceAdapter, forceApplying, isApplyingUserState);
       }
-      that._dataSourceApplied = false;
+      that.dataSourceAdapterApplied = false;
       updateIndexes(that);
     } else if (isDataSourceAdapterLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSourceAdapter)) {
       updateColumnChanges(that, 'columns');
@@ -372,8 +372,8 @@ export class ColumnsController extends modules.Controller {
 
   public reset() {
     this.appliedDataSourceAdapter = null;
-    this._dataSourceApplied = false;
-    this._dataSourceColumnsCount = undefined;
+    this.dataSourceAdapterApplied = false;
+    this.generatedColumnsCount = undefined;
     this.reinit();
   }
 
@@ -403,8 +403,8 @@ export class ColumnsController extends modules.Controller {
     return !!this._columns.length || !!this.option('columns');
   }
 
-  public isDataSourceApplied() {
-    return this._dataSourceApplied;
+  public isDataSourceAdapterApplied(): boolean | undefined {
+    return this.dataSourceAdapterApplied;
   }
 
   public getCommonSettings(column?) {
@@ -1322,7 +1322,7 @@ export class ColumnsController extends modules.Controller {
 
     if (dataSourceAdapter) {
       this.updateColumnDataTypes(dataSourceAdapter);
-      this._dataSourceApplied = true;
+      this.dataSourceAdapterApplied = true;
     }
 
     if (!gridCoreUtils.equalSortParameters(parameters.sorting, this.getSortDataSourceParameters())) {
