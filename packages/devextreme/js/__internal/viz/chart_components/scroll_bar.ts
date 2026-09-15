@@ -137,6 +137,8 @@ ScrollBar.prototype = {
       minVisible: null,
       maxVisible: null,
       visibleCategories: null,
+      breaks: null,
+      userBreaks: null,
     }, isDiscrete && {
       min: null,
       max: null,
