@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/prefer-for-of */
-
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { isFunction, isPlainObject } from '@js/core/utils/type';
@@ -18,42 +17,72 @@ export type ActionArguments<
   validatingTargetName?: string;
 };
 
+interface ActionEvent {
+  action: unknown;
+  args: unknown[];
+  context: unknown;
+  component: unknown;
+  validatingTargetName: string | undefined;
+  cancel: boolean;
+  handled: boolean;
+  result?: unknown;
+}
+
+type ActionCallback = (this: unknown, e: ActionEvent) => void;
+
+interface ActionOptions {
+  context?: unknown;
+  beforeExecute?: ActionCallback;
+  afterExecute?: ActionCallback;
+  component?: unknown;
+  validatingTargetName?: string;
+  excludeValidators?: string[];
+}
+
+interface ActionExecutor {
+  validate?: (e: ActionEvent) => void;
+  execute?: (e: ActionEvent) => void;
+}
+
+type TargetCondition = ($target: dxElementWrapper) => boolean;
+
 class Action {
-  _action: any;
+  _action: unknown;
 
-  _context: any;
+  _context: unknown;
 
-  _beforeExecute: any;
+  _beforeExecute: ActionCallback | undefined;
 
-  _afterExecute: any;
+  _afterExecute: ActionCallback | undefined;
 
-  _component: any;
+  _component: unknown;
 
-  _validatingTargetName: any;
+  _validatingTargetName: string | undefined;
 
-  _excludeValidators: any;
+  _excludeValidators: Record<string, boolean>;
 
-  static executors: any;
+  static executors: Record<string, ActionExecutor>;
 
-  constructor(action, config?) {
-    config = config || {};
+  constructor(action?: unknown, config?: ActionOptions) {
+    const options = config || {};
     this._action = action;
-    this._context = config.context || getWindow();
-    this._beforeExecute = config.beforeExecute;
-    this._afterExecute = config.afterExecute;
-    this._component = config.component;
-    this._validatingTargetName = config.validatingTargetName;
-    const excludeValidators = this._excludeValidators = {};
+    this._context = options.context || getWindow();
+    this._beforeExecute = options.beforeExecute;
+    this._afterExecute = options.afterExecute;
+    this._component = options.component;
+    this._validatingTargetName = options.validatingTargetName;
+    const excludeValidators: Record<string, boolean> = {};
+    this._excludeValidators = excludeValidators;
 
-    if (config.excludeValidators) {
-      for (let i = 0; i < config.excludeValidators.length; i++) {
-        excludeValidators[config.excludeValidators[i]] = true;
+    if (options.excludeValidators) {
+      for (const validator of options.excludeValidators) {
+        excludeValidators[validator] = true;
       }
     }
   }
 
-  execute(...args) {
-    const e = {
+  execute(...args: unknown[]): unknown {
+    const e: ActionEvent = {
       action: this._action,
       args: Array.prototype.slice.call(args),
       context: this._context,
@@ -66,22 +95,22 @@ class Action {
     const beforeExecute = this._beforeExecute;
     const afterExecute = this._afterExecute;
 
-    const argsBag = e.args[0] || {};
+    const argsBag = (e.args[0] || {}) as { cancel?: boolean };
 
     if (!this._validateAction(e)) {
-      return;
+      return undefined;
     }
 
     beforeExecute?.call(this._context, e);
 
     if (e.cancel) {
-      return;
+      return undefined;
     }
 
     const result = this._executeAction(e);
 
     if (argsBag.cancel) {
-      return;
+      return undefined;
     }
 
     afterExecute?.call(this._context, e);
@@ -89,11 +118,11 @@ class Action {
     return result;
   }
 
-  _validateAction(e) {
+  _validateAction(e: ActionEvent): boolean {
     const excludeValidators = this._excludeValidators;
     const { executors } = Action;
 
-    for (const name in executors) {
+    for (const name of Object.keys(executors)) {
       if (!excludeValidators[name]) {
         const executor = executors[name];
         executor.validate?.(e);
@@ -107,54 +136,57 @@ class Action {
     return true;
   }
 
-  _executeAction(e) {
-    let result;
+  _executeAction(e: ActionEvent): unknown {
     const { executors } = Action;
 
-    for (const name in executors) {
+    for (const name of Object.keys(executors)) {
       const executor = executors[name];
       executor.execute?.(e);
 
       if (e.handled) {
-        result = e.result;
-        break;
+        return e.result;
       }
     }
 
-    return result;
+    return undefined;
   }
 
-  static registerExecutor(name, executor) {
+  static registerExecutor(name: string, executor: ActionExecutor): void;
+  static registerExecutor(executors: Record<string, ActionExecutor>): void;
+  static registerExecutor(
+    name: string | Record<string, ActionExecutor>,
+    executor?: ActionExecutor,
+  ): void {
     if (isPlainObject(name)) {
       each(name, Action.registerExecutor);
       return;
     }
-    Action.executors[name] = executor;
+    Action.executors[name] = executor as ActionExecutor;
   }
 
-  static unregisterExecutor(...args) {
-    each(args, function () {
+  static unregisterExecutor(...names: string[]): void {
+    names.forEach((name) => {
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete Action.executors[this];
+      delete Action.executors[name];
     });
   }
 }
 
 Action.executors = {};
 
-const createValidatorByTargetElement = (condition) => (e) => {
+const createValidatorByTargetElement = (condition: TargetCondition) => (e: ActionEvent): void => {
   if (!e.args.length) {
     return;
   }
 
-  const args = e.args[0];
-  const element = args[e.validatingTargetName] || args.element;
+  const args = e.args[0] as Record<string, unknown>;
+  const element = args[e.validatingTargetName as string] || args.element;
 
-  if (element && condition($(element))) {
+  if (element && condition($(element as Element))) {
     e.cancel = true;
   }
 };
-// @ts-expect-error expect name and executor
+
 Action.registerExecutor({
   disabled: {
     validate: createValidatorByTargetElement(($target) => $target.is('.dx-state-disabled, .dx-state-disabled *')),
