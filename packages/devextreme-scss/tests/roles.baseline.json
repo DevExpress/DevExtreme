@@ -1454,7 +1454,8 @@
       "Counted from the package inward: roles the four component sets assign that the theme reads",
       "nowhere. capability - the role exists in the semantic layer and we simply never reached for it;",
       "stale - the neighbours reference a name no layer declares, which is their drift, not our gap.",
-      "Exact equality: a role leaving this list means the theme started using it, which is a decision."
+      "Exact equality: a role leaving this list means the theme started using it, which is a decision.",
+      "262.23.0 убрал две роли, которые сам же объявлял и никто не читал - color-border-contrast-disabled и color-content-active. Список просел на две записи не потому, что тема начала их читать, а потому, что их больше нет в пакете. Замечено при ребейзе на базу с этим бампом 15.09."
     ],
     "capability": [
       "color-bg-high",
@@ -1542,9 +1543,7 @@
     ],
     "stale": [
       "color-bg-none",
-      "color-border-contrast-disabled",
       "color-border-none",
-      "color-content-active",
       "color-content-none",
       "color-content-static-dark-active",
       "color-content-subtle-active",
