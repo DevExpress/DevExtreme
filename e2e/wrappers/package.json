@@ -75,7 +75,7 @@
     "karma-coverage": "2.2.1",
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.1.0",
-    "typescript": "5.8.3",
+    "typescript": "catalog:angular",
     "vite": "8.0.16"
   },
   "main": "index.js",
