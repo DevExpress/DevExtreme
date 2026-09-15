@@ -1570,7 +1570,7 @@
       "В closed перечислено, что было под освободившимися номерами - чтобы ссылка из переписки или",
       "из старой копии страницы находила ответ, а не чужой вопрос."
     ],
-    "next": 25,
+    "next": 27,
     "closed": {
       "Д3": "switch-on-border-focused — принято, переведён на border-primary-shared-active",
       "Д4": "tree-view-checkbox-border-disabled — снято: treeView больше не стилизует чекбокс",
@@ -1597,7 +1597,9 @@
       "concept:invalid content rest": "Д14",
       "statePairGroup:outlined-button-label": "Д17",
       "sweep:radio-invalid-vs-checkbox-invalid": "Д21",
-      "sweep:tier-bypassed-by-neighbours": "Д23"
+      "sweep:tier-bypassed-by-neighbours": "Д23",
+      "sweep:tree-focus-on-disabled-node": "Д25",
+      "sweep:radio-focus-rung-and-family": "Д26"
     }
   },
   "statePairs": {
@@ -1904,6 +1906,18 @@
         "decision": "answered",
         "title": "Точка радиокнопки осталась на семействе, которое не знает про режим",
         "why": "The checkbox fill moved to bg-primary-shared* and the radio dot did not, so three concept groups opened the same day - checked bg rest, hovered and active, each with checkBox on the shared stem and radioButton on the plain one. This is not new damage: the radio has always read the plain family, which is mode-static, and the dot measures 2.88 against the page at rest in dark and 1.39 under a press, where a filled graphic wants 3.0. The shared stem gives 4.65 and 1.98 with light identical at every rung, exactly as it did for the checkbox. Options: (1) move radio-button-checked-bg* to bg-primary-shared* - the same move, the same cost, and the two controls stop disagreeing; (2) leave it and record the divergence, which means a form shows two sibling controls answering the same question differently. Recommendation: (1).\nACCEPTED 15.09, option 1. Applied."
+      },
+      {
+        "key": "tree-focus-on-disabled-node",
+        "decision": "design",
+        "title": "treeView: фокус доходит до неактивного узла, а индикации нет",
+        "why": "Found 15.09 by keyboard, not by reading: arrow keys walk onto a disabled node - the tree does not skip it, aria-disabled is on the li and the node still takes dx-state-focused. In a tree WITH check boxes nothing is painted there. The focused-node rule excludes a disabled check box on purpose (its disabled paint must win), and the base mixin paints a focused background only for .dx-treeview-item-without-checkbox, so the row has nothing either. Measured on the built bundle: enabled node focused = check box border #005397 / #67a2e1; disabled node focused = #d7d7d7 / #4c4c4c, byte-identical to the same node unfocused. The variant WITHOUT check boxes does indicate it - the row takes bg-hovered #f5f5f5 / #3b3b3b, disabled or not. So one widget carries two different focus contracts and one of them has a hole. This is WCAG 2.4.7: the focus indicator disappears mid-list.\nThe package has no role for this and does not need one: there is no focus+disabled combination anywhere in the token set (global.color.focus / -inverted / -static / -static-inverted and global.border-width.focus, nothing state-crossed), because the design system marks focus with a separate OUTLINE rather than by recolouring the control. Blazor implements exactly that: treeview/layout.scss draws outline: var(--dxbl-treeview-item-focus-outline-width) solid var(--dxbl-treeview-item-focus-outline-color) on .dxbl-treeview-item-container:focus-visible, the colour being ds.$color-border-focus, and the same file explicitly zeroes the check box's own focus outline inside a tree (--dxbl-checkbox-focused-check-element-frame-outline-color: transparent). generic, material and legacy fluent all paint the check box instead, without a :not(disabled) guard, so they do show something - by painting a disabled control as if it were active.\nOptions: (1) give the with-checkbox variant the same focused row background the without-checkbox variant already gets (--dx-tree-view-bg-focused, bg-hovered) - one rule, no new role, closes the hole for every node and keeps the check box paint as an extra affordance for enabled ones; (2) move the tree onto the system focus rect (--dx-focus-rect-outline, already used by toolbar, dropDownMenu and pivotGrid) - Blazor's model exactly, but our rect is class-driven, so it would also show on a mouse click, where those three widgets gate it behind :focus-visible; (3) drop the :not(.dx-state-disabled) guard and paint the disabled check box, as the other three themes do - cheapest, and the reason it was added on 09.09 was precisely that it lies about a disabled control. Recommendation: (1) now, and (2) as part of the standing focus-ring question, which is where the package's four unused focus roles belong."
+      },
+      {
+        "key": "radio-focus-rung-and-family",
+        "decision": "design",
+        "title": "radioButton: фокус берёт ступень active и bg-роль для рамки - иначе, чем чекбокс",
+        "why": "Raised 15.09 from the running widget: a focused radio looks darkened. Measured, it is. The ring and the dot both read --dx-radio-button-checked-bg-active = bg-primary-shared-active: #003c70 light, #005397 dark. The check box reads the hovered rung after Д16 - border-primary-shared-hovered for the ring, bg-primary-shared-hovered for the fill: #005397 light, #67a2e1 dark. Two controls of the same family, two different rungs for the same state.\nThe dark mode is the defect. The primary ramp does not invert its active rung: bg-primary-shared goes #0f6cbd -> #4b90d9 between modes, hovered #005397 -> #67a2e1, but active only #003c70 -> #005397. So in dark the focused dot is #005397 on the #242424 surface = 1.98:1, below the 3:1 a non-text indicator needs, and WORSE than the same radio at rest (4.65) or hovered (5.79). Focusing makes the control harder to see - the same failure the tree's unchecked box had before 15.09. In light it goes the other way and is merely very dark: 11.17:1.\nTwo more findings in the same block. (a) Family: the ring is a border painted from a bg role. The check box was moved onto border-* for its border by Д16; the radio was not. (b) Dead declaration: $radio-button-icon-bg-focused (bg-alpha-hovered) is passed into the base mixin as the ripple colour, and fluent-next then kills the ripple - .dx-radiobutton-icon::after carries both content: \"\" and content: none in one rule, with width and height 0. The role is read, the reachability gate sees the read, and it paints nothing. The same call passes icon-border-read-only, hover and active into the ripple branch, where the @else that would have used them is not emitted at all.\nBlazor answers the whole block the same way as the tree: focus there is an outline around the check element - checkbox-base.$focused-check-element-frame-outline-color = ds.$color-border-focus, width border-width-20, offset border-width-10 - and the control's own colours do not change on focus at all. Its rest and hover borders match ours exactly (color-border-contrast / -hovered), so the divergence is focus only.\nOptions: (1) the radio takes the check box's decisions - ring on border-primary-shared-hovered, dot on bg-primary-shared-hovered - which fixes dark to 5.79, fixes the family, and makes the two controls agree; (2) keep the active rung and accept 1.98 in dark, which needs a reason, since the same rung on the check box was rejected in Д16; (3) move both controls to a focus outline in the package's border-focus role, Blazor's model - the honest answer, and the one the standing focus-ring question already asks. The dead $radio-button-icon-bg-focused goes away under any of the three. Recommendation: (1) now, (3) with the focus-ring decision."
       }
     ],
     "confirmed": {
