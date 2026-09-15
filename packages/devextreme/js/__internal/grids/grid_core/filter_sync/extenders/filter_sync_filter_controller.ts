@@ -1,11 +1,14 @@
 import { isDefined } from '@js/core/utils/type';
-import { getFilterExpression } from '@ts/filter_builder/m_utils';
+import {
+  getFilterExpression,
+  removeFieldConditionsFromFilter,
+} from '@ts/filter_builder/m_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
-import { excludeColumnFromFilterValue } from '@ts/grids/grid_core/filter_sync/utils';
+import { getColumnIdentifier } from '@ts/grids/grid_core/filter_sync/utils';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 export const filterSyncFilterControllerExtender = (
@@ -35,11 +38,11 @@ export const filterSyncFilterControllerExtender = (
     }
 
     const filters = [super.getAdditionalFilter(excludedColumn)];
-    const filterValue = excludeColumnFromFilterValue(
-      this.option('filterValue'),
-      excludedColumn ?? null,
-      !!this.isFilterSyncActive(),
-    );
+    const currentFilterValue = this.option('filterValue');
+    const shouldExcludeColumn = this.isFilterSyncActive() && isDefined(excludedColumn);
+    const filterValue = shouldExcludeColumn
+      ? removeFieldConditionsFromFilter(currentFilterValue, getColumnIdentifier(excludedColumn))
+      : currentFilterValue;
 
     const customOperations = this.filterSyncController.getCustomFilterOperations();
     const calculatedFilterValue: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');

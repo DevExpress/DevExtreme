@@ -1,7 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type {
-  FilterValue,
   FilterValueCondition,
   FilterValueOperand,
 } from '@ts/grids/grid_core/filter/types';
@@ -9,7 +7,6 @@ import type {
 import type { FilterSyncColumn } from '../types';
 import {
   checkForErrors,
-  excludeColumnFromFilterValue,
   getColumnIdentifier,
   getConditionFromFilterRow,
   getConditionFromHeaderFilter,
@@ -449,36 +446,5 @@ describe('getFilterRowOptionsFromCondition', () => {
         bufferedFilterValue: undefined,
         bufferedSelectedFilterOperation: undefined,
       });
-  });
-});
-
-describe('excludeColumnFromFilterValue', () => {
-  const FILTER_VALUE: FilterValue = [['name', '=', 'Alex'], 'and', ['age', '=', 15]];
-  const EXCLUDED_COLUMN = { dataField: 'name', index: 0 } as Column;
-
-  describe('when filter sync is active and a column is excluded', () => {
-    it('should drop the conditions of that column', () => {
-      expect(excludeColumnFromFilterValue(FILTER_VALUE, EXCLUDED_COLUMN, true))
-        .toEqual(['age', '=', 15]);
-    });
-  });
-
-  describe('when filter sync is not active', () => {
-    it('should keep the filter value as is', () => {
-      expect(excludeColumnFromFilterValue(FILTER_VALUE, EXCLUDED_COLUMN, false))
-        .toBe(FILTER_VALUE);
-    });
-  });
-
-  describe('when no column is excluded', () => {
-    it('should keep the filter value as is', () => {
-      expect(excludeColumnFromFilterValue(FILTER_VALUE, null, true)).toBe(FILTER_VALUE);
-    });
-  });
-
-  describe('when there is no filter value', () => {
-    it.each([undefined, null])('should return %p as is', (filterValue) => {
-      expect(excludeColumnFromFilterValue(filterValue, EXCLUDED_COLUMN, true)).toBe(filterValue);
-    });
   });
 });

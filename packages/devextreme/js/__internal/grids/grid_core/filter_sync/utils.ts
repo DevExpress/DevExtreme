@@ -201,18 +201,3 @@ export const getFilterValueWithHeaderFilter = (
 
   return removeFieldConditionsFromFilter(filterValue, getColumnIdentifier(column)) as FilterValue;
 };
-
-export const excludeColumnFromFilterValue = (
-  filterValue: FilterValue,
-  excludedColumn: Column | null,
-  filterSyncActive: boolean,
-): FilterValue => {
-  if (!filterSyncActive || !isDefined(excludedColumn) || !filterValue) {
-    return filterValue;
-  }
-
-  return removeFieldConditionsFromFilter(
-    filterValue,
-    getColumnIdentifier(excludedColumn),
-  ) as FilterValue;
-};
