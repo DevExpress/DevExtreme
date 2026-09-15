@@ -1,6 +1,8 @@
 $(() => {
   let abortController = null;
 
+  const { formatMessage } = DevExpress.localization;
+
   const CLASS = {
     categoryWrapper: 'category__wrapper',
     promptEditor: 'prompt-editor',
@@ -307,6 +309,14 @@ $(() => {
         } else {
           e.component.expandRow(e.key);
         }
+      }
+    },
+    onCellPrepared(e) {
+      if (e.rowType === 'data' && e.column.type === 'detailExpand') {
+        const ariaLabelCollapse = formatMessage('dxDataGrid-ariaCollapse');
+        const ariaLabelExpand = formatMessage('dxDataGrid-ariaExpand');
+        const ariaLabel = e.row.isExpanded ? ariaLabelCollapse : ariaLabelExpand;
+        e.cellElement.attr('aria-label', ariaLabel);
       }
     },
   });

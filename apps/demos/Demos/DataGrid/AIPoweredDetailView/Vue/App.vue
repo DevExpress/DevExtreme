@@ -6,6 +6,7 @@
     :height="500"
     @row-expanding="onRowExpanding"
     @cell-click="onCellClick"
+    @cell-prepared="onCellPrepared"
   >
     <DxPaging :page-size="10"/>
 
@@ -58,6 +59,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { formatMessage } from 'devextreme/localization';
 import { DxDataGrid, DxColumn, DxPaging, DxMasterDetail, type DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { vehicles, type Vehicle } from './data.ts';
 import Category from './Category.vue';
@@ -78,6 +80,15 @@ function onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickE
     } else {
       component.expandRow(key);
     }
+  }
+}
+
+function onCellPrepared({ rowType, column, cellElement, row }: DxDataGridTypes.CellPreparedEvent) {
+  if (rowType === 'data' && column.type === 'detailExpand') {
+    const ariaLabelCollapse = formatMessage('dxDataGrid-ariaCollapse');
+    const ariaLabelExpand = formatMessage('dxDataGrid-ariaExpand');
+    const ariaLabel = row.isExpanded ? ariaLabelCollapse : ariaLabelExpand;
+    cellElement.setAttribute('aria-label', ariaLabel);
   }
 }
 

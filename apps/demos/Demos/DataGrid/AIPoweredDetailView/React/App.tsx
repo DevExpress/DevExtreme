@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 
+import { formatMessage } from 'devextreme/localization';
 import {
   DataGrid,
   Column,
@@ -39,6 +40,15 @@ export default function App() {
     }
   }, []);
 
+  const onCellPrepared = useCallback(({ rowType, column, cellElement, row }: DataGridTypes.CellPreparedEvent) => {
+    if (rowType === 'data' && column.type === 'detailExpand') {
+      const ariaLabelCollapse = formatMessage('dxDataGrid-ariaCollapse');
+      const ariaLabelExpand = formatMessage('dxDataGrid-ariaExpand');
+      const ariaLabel = row.isExpanded ? ariaLabelCollapse : ariaLabelExpand;
+      cellElement.setAttribute('aria-label', ariaLabel);
+    }
+  }, []);
+
   const renderSparkleIcon = useCallback(() => <div className="dx-icon-sparkle" />, []);
 
   const calculateModel = useCallback((data: Vehicle) => `${data.TrademarkName} ${data.Name}`, []);
@@ -51,6 +61,7 @@ export default function App() {
       height={500}
       onRowExpanding={onRowExpanding}
       onCellClick={onCellClick}
+      onCellPrepared={onCellPrepared}
     >
       <Paging pageSize={10} />
 

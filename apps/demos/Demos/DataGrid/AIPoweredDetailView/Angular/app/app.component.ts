@@ -1,5 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { formatMessage } from 'devextreme/localization';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, type Vehicle } from './app.service';
 import { Category } from './category/category.component';
@@ -46,6 +47,15 @@ export class AppComponent {
       } else {
         component.expandRow(key);
       }
+    }
+  }
+ 
+  onCellPrepared({ rowType, column, cellElement, row }: DxDataGridTypes.CellPreparedEvent) {
+    if (rowType === 'data' && column.type === 'detailExpand') {
+      const ariaLabelCollapse = formatMessage('dxDataGrid-ariaCollapse');
+      const ariaLabelExpand = formatMessage('dxDataGrid-ariaExpand');
+      const ariaLabel = row.isExpanded ? ariaLabelCollapse : ariaLabelExpand;
+      cellElement.setAttribute('aria-label', ariaLabel);
     }
   }
 }

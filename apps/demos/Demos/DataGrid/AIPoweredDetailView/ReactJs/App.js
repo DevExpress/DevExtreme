@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from 'react';
 import {
   DataGrid, Column, Paging, MasterDetail,
 } from 'devextreme-react/data-grid';
+import { formatMessage } from 'devextreme/localization';
 import Category from './Category.js';
 import DetailView from './DetailView.js';
 import { vehicles } from './data.js';
@@ -36,6 +37,16 @@ export default function App() {
       }
     }
   }, []);
+  const onCellPrepared = useCallback(({
+    rowType, column, cellElement, row,
+  }) => {
+    if (rowType === 'data' && column.type === 'detailExpand') {
+      const ariaLabelCollapse = formatMessage('dxDataGrid-ariaCollapse');
+      const ariaLabelExpand = formatMessage('dxDataGrid-ariaExpand');
+      const ariaLabel = row.isExpanded ? ariaLabelCollapse : ariaLabelExpand;
+      cellElement.setAttribute('aria-label', ariaLabel);
+    }
+  }, []);
   const renderSparkleIcon = useCallback(() => <div className="dx-icon-sparkle" />, []);
   const calculateModel = useCallback((data) => `${data.TrademarkName} ${data.Name}`, []);
   return (
@@ -46,6 +57,7 @@ export default function App() {
       height={500}
       onRowExpanding={onRowExpanding}
       onCellClick={onCellClick}
+      onCellPrepared={onCellPrepared}
     >
       <Paging pageSize={10} />
 
