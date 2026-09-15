@@ -563,7 +563,9 @@ QUnit.test('init scrollBar', function(assert) {
         maxVisible: null,
         min: 10,
         minVisible: null,
-        visibleCategories: null
+        visibleCategories: null,
+        breaks: null,
+        userBreaks: null
     }, canvas, {
         isHorizontal: true,
         stick: false
@@ -591,12 +593,32 @@ QUnit.test('init scrollBar. Rotated', function(assert) {
         maxVisible: null,
         min: 10,
         minVisible: null,
-        visibleCategories: null
+        visibleCategories: null,
+        breaks: null,
+        userBreaks: null
     }, canvas, {
         isHorizontal: false,
         stick: false
     }]
     );
+});
+
+QUnit.test('init scrollBar. Remove scale breaks', function(assert) {
+    const group = new Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
+    const rangeWithBreaks = $.extend({}, range, {
+        breaks: [{ from: 40, to: 50, cumulativeWidth: 0 }],
+        userBreaks: [{ from: 40, to: 50 }]
+    });
+    scrollBar.update(this.options).updateSize(canvas);
+
+    scrollBar.init(rangeWithBreaks, false);
+
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const { breaks, userBreaks } = scrollTranslator.update.lastCall.args[0];
+
+    assert.strictEqual(breaks, null, 'breaks are calculated for the visual range only and must not be applied to the whole-range translator');
+    assert.strictEqual(userBreaks, null, 'userBreaks are calculated for the visual range only and must not be applied to the whole-range translator');
 });
 
 QUnit.test('init scrollBar. Remove min and max ', function(assert) {
@@ -620,6 +642,8 @@ QUnit.test('init scrollBar. Remove min and max ', function(assert) {
         min: null,
         minVisible: null,
         visibleCategories: null,
+        breaks: null,
+        userBreaks: null,
         axisType: 'discrete'
     }, canvas, {
         isHorizontal: true,
