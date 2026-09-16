@@ -1,25 +1,11 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
-/* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
-/* eslint-disable operator-assignment */
-
 // PLUGINS_SECTION
 import componentRegistrator from '@js/core/component_registrator';
-import { isDefined as _isDefined } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import { validateData } from '@ts/viz/components/data_validator';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { plugin } from '@ts/viz/core/data_source';
-import { map as _map, normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
+import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import { map, normalizeEnum } from '@ts/viz/core/utils';
 import { Series } from '@ts/viz/series/base_series';
 import BaseSparkline from '@ts/viz/sparklines/base_sparkline';
 
@@ -32,7 +18,7 @@ const DEFAULT_CANVAS_HEIGHT = 30;
 
 const DEFAULT_POINT_BORDER = 2;
 
-const ALLOWED_TYPES = {
+const ALLOWED_TYPES: Record<string, boolean> = {
   line: true,
   spline: true,
   stepline: true,
@@ -43,28 +29,30 @@ const ALLOWED_TYPES = {
   winloss: true,
 };
 
-const _math = Math;
-const _abs = _math.abs;
-const _round = _math.round;
-const _max = _math.max;
-const _min = _math.min;
-const _isFinite = isFinite;
-const _Number = Number;
-const _String = String;
+type DataItem = Record<string, ThemeValue>;
 
-function findMinMax(data, valField) {
+interface MinMaxIndexes {
+  minIndexes: number[];
+  maxIndexes: number[];
+}
+
+interface PointIndexes {
+  first?: number;
+  last?: number;
+  min?: number[];
+  max?: number[];
+}
+
+function findMinMax(data: DataItem[], valField: string): MinMaxIndexes {
   const firstItem = data[0] || {};
   const firstValue = firstItem[valField] || 0;
   let min = firstValue;
   let max = firstValue;
   let minIndexes = [0];
   let maxIndexes = [0];
-  const dataLength = data.length;
-  let value;
-  let i;
 
-  for (i = 1; i < dataLength; i++) {
-    value = data[i][valField];
+  for (let i = 1; i < data.length; i += 1) {
+    const value = data[i][valField];
     if (value < min) {
       min = value;
       minIndexes = [i];
@@ -80,43 +68,54 @@ function findMinMax(data, valField) {
   }
 
   if (max === min) {
-    minIndexes = maxIndexes = [];
+    minIndexes = [];
+    maxIndexes = [];
   }
   return { minIndexes, maxIndexes };
 }
 
-function parseNumericDataSource(data, argField, valField, ignoreEmptyPoints) {
-  return _map(data, (dataItem, index) => {
-    let item = null;
-    let isDataNumber;
-    let value;
-
-    if (dataItem !== undefined) {
-      // @ts-expect-error
-      item = {};
-      isDataNumber = _isFinite(dataItem);
-      // @ts-expect-error
-      item[argField] = isDataNumber ? _String(index) : dataItem[argField];
-      value = isDataNumber ? dataItem : dataItem[valField];
-      // @ts-expect-error
-      item[valField] = value === null ? ignoreEmptyPoints ? undefined : value : _Number(value);
-      // @ts-expect-error
-      item = item[argField] !== undefined && item[valField] !== undefined ? item : null;
-    }
-    return item;
-  });
+function parseNumericValue(value: ThemeValue, ignoreEmptyPoints: boolean): ThemeValue {
+  if (value === null) {
+    return ignoreEmptyPoints ? undefined : value;
+  }
+  return Number(value);
 }
 
-function parseWinlossDataSource(data, argField, valField, target) {
+function parseNumericDataSource(
+  data: ThemeValue[],
+  argField: string,
+  valField: string,
+  ignoreEmptyPoints: boolean,
+): DataItem[] {
+  const result: DataItem[] = map(data, (dataItem, index) => {
+    if (dataItem === undefined) {
+      return null;
+    }
+    const isDataNumber = isFinite(dataItem);
+    const item: DataItem = {};
+    item[argField] = isDataNumber ? String(index) : dataItem[argField];
+    const value = isDataNumber ? dataItem : dataItem[valField];
+    item[valField] = parseNumericValue(value, ignoreEmptyPoints);
+    return item[argField] !== undefined && item[valField] !== undefined ? item : null;
+  });
+  return result;
+}
+
+function parseWinlossDataSource(
+  data: DataItem[],
+  argField: string,
+  valField: string,
+  target: number,
+): DataItem[] {
   const lowBarValue = -1;
   const zeroBarValue = 0;
   const highBarValue = 1;
   const delta = 0.0001;
 
-  return _map(data, (dataItem) => {
-    const item = {};
+  const result: DataItem[] = map(data, (dataItem) => {
+    const item: DataItem = {};
     item[argField] = dataItem[argField];
-    if (_abs(dataItem[valField] - target) < delta) {
+    if (Math.abs(dataItem[valField] - target) < delta) {
       item[valField] = zeroBarValue;
     } else if (dataItem[valField] > target) {
       item[valField] = highBarValue;
@@ -125,78 +124,102 @@ function parseWinlossDataSource(data, argField, valField, target) {
     }
     return item;
   });
+  return result;
 }
 
-function selectPointColor(color, options, index, pointIndexes) {
-  if ((index === pointIndexes.first) || (index === pointIndexes.last)) {
-    color = options.firstLastColor;
+function selectPointColor(
+  color: ThemeValue,
+  options: ThemeValue,
+  index: number,
+  pointIndexes: PointIndexes,
+): ThemeValue {
+  let result = color;
+  if (index === pointIndexes.first || index === pointIndexes.last) {
+    result = options.firstLastColor;
   }
-  if ((pointIndexes.min || []).indexOf(index) >= 0) {
-    color = options.minColor;
+  if ((pointIndexes.min || []).includes(index)) {
+    result = options.minColor;
   }
-  if ((pointIndexes.max || []).indexOf(index) >= 0) {
-    color = options.maxColor;
+  if ((pointIndexes.max || []).includes(index)) {
+    result = options.maxColor;
   }
-  return color;
+  return result;
 }
 
-function createLineCustomizeFunction(pointIndexes, options) {
-  return function () {
+function createLineCustomizeFunction(
+  pointIndexes: PointIndexes,
+  options: ThemeValue,
+): (this: ThemeValue) => ThemeValue {
+  return function customizeLinePoint(this: ThemeValue): ThemeValue {
     const color = selectPointColor(undefined, options, this.index, pointIndexes);
 
     return color ? { visible: true, border: { color } } : {};
   };
 }
 
-function createBarCustomizeFunction(pointIndexes, options, winlossData) {
-  return function () {
-    const index = this.index;
+function createBarCustomizeFunction(
+  pointIndexes: PointIndexes,
+  options: ThemeValue,
+  winlossData: ThemeValue,
+): (this: ThemeValue) => ThemeValue {
+  return function customizeBarPoint(this: ThemeValue): ThemeValue {
+    const { index } = this;
     const isWinloss = options.type === 'winloss';
     const target = isWinloss ? options.winlossThreshold : 0;
     const value = isWinloss ? winlossData[index][options.valueField] : this.value;
     const positiveColor = isWinloss ? options.winColor : options.barPositiveColor;
     const negativeColor = isWinloss ? options.lossColor : options.barNegativeColor;
 
-    return { color: selectPointColor(value >= target ? positiveColor : negativeColor, options, index, pointIndexes) };
+    return {
+      color: selectPointColor(
+        value >= target ? positiveColor : negativeColor,
+        options,
+        index,
+        pointIndexes,
+      ),
+    };
   };
 }
 
-const dxSparkline = BaseSparkline.inherit({
-  _rootClassPrefix: 'dxsl',
+class Sparkline extends BaseSparkline {
+  _series;
 
-  _rootClass: 'dxsl-sparkline',
+  _seriesGroup;
 
-  _themeSection: 'sparkline',
+  _seriesLabelGroup;
 
-  _defaultSize: {
-    width: DEFAULT_CANVAS_WIDTH,
-    height: DEFAULT_CANVAS_HEIGHT,
-  },
+  _simpleDataSource!: DataItem[];
 
-  _initCore() {
-    this.callBase();
+  _winlossDataSource?: DataItem[] | null;
+
+  _minMaxIndexes!: MinMaxIndexes;
+
+  _groupsDataCategories: ThemeValue;
+
+  _initCore(): void {
+    super._initCore();
     this._createSeries();
-  },
+  }
 
-  _initialChanges: ['DATA_SOURCE'],
-
-  _dataSourceChangedHandler() {
+  _dataSourceChangedHandler(): void {
     this._requestChange(['UPDATE']);
-  },
+  }
 
-  _updateWidgetElements() {
+  _updateWidgetElements(): void {
     this._updateSeries();
-    this.callBase();
-  },
+    super._updateWidgetElements();
+  }
 
-  _disposeWidgetElements() {
-    const that = this;
+  _disposeWidgetElements(): void {
+    if (this._series) {
+      this._series.dispose();
+    }
+    this._series = null;
+    this._seriesGroup = null;
+    this._seriesLabelGroup = null;
+  }
 
-    that._series && that._series.dispose();
-    that._series = that._seriesGroup = that._seriesLabelGroup = null;
-  },
-
-  _cleanWidgetElements() {
+  _cleanWidgetElements(): void {
     this._seriesGroup.remove();
     this._seriesLabelGroup.remove();
     this._seriesGroup.clear();
@@ -205,20 +228,21 @@ const dxSparkline = BaseSparkline.inherit({
     this._series.removeGraphicElements();
     this._series.removePointElements();
     this._series.removeBordersGroup();
-  },
+  }
 
-  _drawWidgetElements() {
+  _drawWidgetElements(): void {
     if (this._dataIsLoaded()) {
       this._drawSeries();
       this._drawn();
     }
-  },
+  }
 
-  _getCorrectCanvas() {
+  _getCorrectCanvas(): ThemeValue {
     const options = this._allOptions;
     const canvas = this._canvas;
-    const halfPointSize = options.pointSize && Math.ceil(options.pointSize / 2) + DEFAULT_POINT_BORDER;
-    const type = options.type;
+    const halfPointSize = options.pointSize
+      && Math.ceil(options.pointSize / 2) + DEFAULT_POINT_BORDER;
+    const { type } = options;
     if (type !== 'bar' && type !== 'winloss' && (options.showFirstLast || options.showMinMax)) {
       return {
         width: canvas.width,
@@ -230,25 +254,23 @@ const dxSparkline = BaseSparkline.inherit({
       };
     }
     return canvas;
-  },
+  }
 
-  _prepareOptions() {
-    const that = this;
+  _prepareOptions(): void {
+    this._allOptions = super._prepareOptions();
 
-    that._allOptions = that.callBase();
-
-    that._allOptions.type = _normalizeEnum(that._allOptions.type);
-    if (!ALLOWED_TYPES[that._allOptions.type]) {
-      that._allOptions.type = 'line';
+    this._allOptions.type = normalizeEnum(this._allOptions.type);
+    if (!ALLOWED_TYPES[this._allOptions.type]) {
+      this._allOptions.type = 'line';
     }
-  },
+  }
 
-  _createHtmlElements() {
+  _createHtmlElements(): void {
     this._seriesGroup = this._renderer.g().attr({ class: 'dxsl-series' });
     this._seriesLabelGroup = this._renderer.g().attr({ class: 'dxsl-series-labels' });
-  },
+  }
 
-  _createSeries() {
+  _createSeries(): void {
     this._series = new Series({
       renderer: this._renderer,
       seriesGroup: this._seriesGroup,
@@ -261,70 +283,74 @@ const dxSparkline = BaseSparkline.inherit({
       widgetType: 'chart',
       type: 'line',
     });
-  },
+  }
 
   /// #DEBUG
-  getSeriesOptions() {
+  getSeriesOptions(): ThemeValue {
     return this._series.getOptions();
-  },
+  }
   /// #ENDDEBUG
 
-  _updateSeries() {
-    const that = this;
-    const singleSeries = that._series;
+  _updateSeries(): void {
+    const singleSeries = this._series;
 
-    that._prepareDataSource();
-    const seriesOptions = that._prepareSeriesOptions();
+    this._prepareDataSource();
+    const seriesOptions = this._prepareSeriesOptions();
     singleSeries.updateOptions(seriesOptions);
 
-    const groupsData = { groups: [{ series: [singleSeries] }] };
-    // @ts-expect-error
+    const groupsData: ThemeValue = { groups: [{ series: [singleSeries] }] };
     groupsData.argumentOptions = {
       type: seriesOptions.type === 'bar' ? 'discrete' : undefined,
     };
 
-    that._simpleDataSource = validateData(that._simpleDataSource, groupsData, that._incidentOccurred, {
-      checkTypeForAllData: false,
-      convertToAxisDataType: true,
-      sortingMethod: true,
-    })[singleSeries.getArgumentField()];
+    this._simpleDataSource = validateData(
+      this._simpleDataSource,
+      groupsData,
+      this._incidentOccurred,
+      {
+        checkTypeForAllData: false,
+        convertToAxisDataType: true,
+        sortingMethod: true,
+      },
+    )[singleSeries.getArgumentField()];
 
-    seriesOptions.customizePoint = that._getCustomizeFunction();
-    singleSeries.updateData(that._simpleDataSource);
+    seriesOptions.customizePoint = this._getCustomizeFunction();
+    singleSeries.updateData(this._simpleDataSource);
     singleSeries.createPoints();
-    // @ts-expect-error
-    that._groupsDataCategories = groupsData.categories;
-  },
+    this._groupsDataCategories = groupsData.categories;
+  }
 
-  _optionChangesMap: {
-    dataSource: 'DATA_SOURCE',
-  },
-
-  _optionChangesOrder: ['DATA_SOURCE'],
-
-  _change_DATA_SOURCE() {
+  _change_DATA_SOURCE(): void {
     this._updateDataSource();
-  },
+  }
 
-  _prepareDataSource() {
-    const that = this;
-    const options = that._allOptions;
+  _prepareDataSource(): void {
+    const options = this._allOptions;
     const argField = options.argumentField;
     const valField = options.valueField;
-    const dataSource = that._dataSourceItems() || [];
-    const data = parseNumericDataSource(dataSource, argField, valField, that.option('ignoreEmptyPoints'));
+    const dataSource = this._dataSourceItems() || [];
+    const data = parseNumericDataSource(
+      dataSource,
+      argField,
+      valField,
+      this.option('ignoreEmptyPoints'),
+    );
 
     if (options.type === 'winloss') {
-      that._winlossDataSource = data;
-      that._simpleDataSource = parseWinlossDataSource(data, argField, valField, options.winlossThreshold);
+      this._winlossDataSource = data;
+      this._simpleDataSource = parseWinlossDataSource(
+        data,
+        argField,
+        valField,
+        options.winlossThreshold,
+      );
     } else {
-      that._simpleDataSource = data;
+      this._simpleDataSource = data;
     }
-  },
+  }
 
-  _prepareSeriesOptions() {
-    const that = this;
-    const options = that._allOptions;
+  _prepareSeriesOptions(): ThemeValue {
+    const options = this._allOptions;
     const type = options.type === 'winloss' ? 'bar' : options.type;
 
     return {
@@ -336,7 +362,7 @@ const dxSparkline = BaseSparkline.inherit({
       widgetType: 'chart',
       name: '',
       type,
-      opacity: type.indexOf('area') !== -1 ? that._allOptions.areaOpacity : undefined,
+      opacity: type.indexOf('area') !== -1 ? this._allOptions.areaOpacity : undefined,
       point: {
         size: options.pointSize,
         symbol: options.pointSymbol,
@@ -359,57 +385,47 @@ const dxSparkline = BaseSparkline.inherit({
         visible: type !== 'bar',
       },
     };
-  },
+  }
 
-  _getCustomizeFunction() {
-    const that = this;
-    const options = that._allOptions;
-    const dataSource = that._winlossDataSource || that._simpleDataSource;
-    const drawnPointIndexes = that._getExtremumPointsIndexes(dataSource);
-    let customizeFunction;
+  _getCustomizeFunction(): (this: ThemeValue) => ThemeValue {
+    const options = this._allOptions;
+    const dataSource = this._winlossDataSource || this._simpleDataSource;
+    const drawnPointIndexes = this._getExtremumPointsIndexes(dataSource);
 
-    if ((options.type === 'winloss') || (options.type === 'bar')) {
-      customizeFunction = createBarCustomizeFunction(drawnPointIndexes, options, that._winlossDataSource);
-    } else {
-      customizeFunction = createLineCustomizeFunction(drawnPointIndexes, options);
+    if (options.type === 'winloss' || options.type === 'bar') {
+      return createBarCustomizeFunction(drawnPointIndexes, options, this._winlossDataSource);
     }
-    return customizeFunction;
-  },
+    return createLineCustomizeFunction(drawnPointIndexes, options);
+  }
 
-  _getExtremumPointsIndexes(data) {
-    const that = this;
-    const options = that._allOptions;
+  _getExtremumPointsIndexes(data: DataItem[]): PointIndexes {
+    const options = this._allOptions;
     const lastIndex = data.length - 1;
-    const indexes = {};
+    const indexes: PointIndexes = {};
 
-    that._minMaxIndexes = findMinMax(data, options.valueField);
+    this._minMaxIndexes = findMinMax(data, options.valueField);
 
     if (options.showFirstLast) {
-      // @ts-expect-error
       indexes.first = 0;
-      // @ts-expect-error
       indexes.last = lastIndex;
     }
     if (options.showMinMax) {
-      // @ts-expect-error
-      indexes.min = that._minMaxIndexes.minIndexes;
-      // @ts-expect-error
-      indexes.max = that._minMaxIndexes.maxIndexes;
+      indexes.min = this._minMaxIndexes.minIndexes;
+      indexes.max = this._minMaxIndexes.maxIndexes;
     }
 
     return indexes;
-  },
+  }
 
-  _getStick() {
+  _getStick(): { stick: boolean } {
     return {
       stick: this._series.type !== 'bar',
     };
-  },
+  }
 
-  _updateRange() {
-    const that = this;
-    const series = that._series;
-    const type = series.type;
+  _updateRange(): void {
+    const series = this._series;
+    const { type } = series;
     const isBarType = type === 'bar';
     const isWinlossType = type === 'winloss';
 
@@ -419,11 +435,10 @@ const dxSparkline = BaseSparkline.inherit({
     const WINLOSS_MIN_RANGE = -1;
 
     const rangeData = series.getRangeData();
-    const minValue = that._allOptions.minValue;
-    const hasMinY = _isDefined(minValue) && _isFinite(minValue);
-    const maxValue = that._allOptions.maxValue;
-    const hasMaxY = _isDefined(maxValue) && _isFinite(maxValue);
-    let argCoef;
+    const { minValue } = this._allOptions;
+    const hasMinY = isDefined(minValue) && isFinite(minValue);
+    const { maxValue } = this._allOptions;
+    const hasMaxY = isDefined(maxValue) && isFinite(maxValue);
 
     const valCoef = (rangeData.val.max - rangeData.val.min) * DEFAULT_VALUE_RANGE_MARGIN;
     if (isBarType || isWinlossType || type === 'area') {
@@ -440,37 +455,40 @@ const dxSparkline = BaseSparkline.inherit({
 
     if (hasMinY || hasMaxY) {
       if (hasMinY && hasMaxY) {
-        rangeData.val.minVisible = _min(minValue, maxValue);
-        rangeData.val.maxVisible = _max(minValue, maxValue);
+        rangeData.val.minVisible = Math.min(minValue, maxValue);
+        rangeData.val.maxVisible = Math.max(minValue, maxValue);
       } else {
-        rangeData.val.minVisible = hasMinY ? _Number(minValue) : undefined;
-        rangeData.val.maxVisible = hasMaxY ? _Number(maxValue) : undefined;
+        rangeData.val.minVisible = hasMinY ? Number(minValue) : undefined;
+        rangeData.val.maxVisible = hasMaxY ? Number(maxValue) : undefined;
       }
 
       if (isWinlossType) {
-        rangeData.val.minVisible = hasMinY ? _max(rangeData.val.minVisible, WINLOSS_MIN_RANGE) : undefined;
-        rangeData.val.maxVisible = hasMaxY ? _min(rangeData.val.maxVisible, WINLOSS_MAX_RANGE) : undefined;
+        rangeData.val.minVisible = hasMinY
+          ? Math.max(rangeData.val.minVisible, WINLOSS_MIN_RANGE)
+          : undefined;
+        rangeData.val.maxVisible = hasMaxY
+          ? Math.min(rangeData.val.maxVisible, WINLOSS_MAX_RANGE)
+          : undefined;
       }
     }
 
     if (series.getPoints().length > 1) {
       if (isBarType) {
-        argCoef = (rangeData.arg.max - rangeData.arg.min) * DEFAULT_ARGUMENT_RANGE_MARGIN;
-        rangeData.arg.min = rangeData.arg.min - argCoef;
-        rangeData.arg.max = rangeData.arg.max + argCoef;
+        const argCoef = (rangeData.arg.max - rangeData.arg.min) * DEFAULT_ARGUMENT_RANGE_MARGIN;
+        rangeData.arg.min -= argCoef;
+        rangeData.arg.max += argCoef;
       }
     }
 
-    rangeData.arg.categories = that._groupsDataCategories;
-    that._ranges = rangeData;
-  },
+    rangeData.arg.categories = this._groupsDataCategories;
+    this._ranges = rangeData;
+  }
 
-  _getBarWidth(pointsCount) {
-    const that = this;
-    const canvas = that._canvas;
+  _getBarWidth(pointsCount: number): number {
+    const canvas = this._canvas;
     const intervalWidth = pointsCount * DEFAULT_BAR_INTERVAL;
     const rangeWidth = canvas.width - canvas.left - canvas.right - intervalWidth;
-    let width = _round(rangeWidth / pointsCount);
+    let width = Math.round(rangeWidth / pointsCount);
 
     if (width < MIN_BAR_WIDTH) {
       width = MIN_BAR_WIDTH;
@@ -479,59 +497,57 @@ const dxSparkline = BaseSparkline.inherit({
       width = MAX_BAR_WIDTH;
     }
     return width;
-  },
+  }
 
-  _correctPoints() {
-    const that = this;
-    const seriesType = that._allOptions.type;
-    const seriesPoints = that._series.getPoints();
+  _correctPoints(): void {
+    const seriesType = this._allOptions.type;
+    const seriesPoints = this._series.getPoints();
     const pointsLength = seriesPoints.length;
-    let barWidth;
-    let i;
 
     if (seriesType === 'bar' || seriesType === 'winloss') {
-      barWidth = that._getBarWidth(pointsLength);
-      for (i = 0; i < pointsLength; i++) {
+      const barWidth = this._getBarWidth(pointsLength);
+      for (let i = 0; i < pointsLength; i += 1) {
         seriesPoints[i].correctCoordinates({ width: barWidth, offset: 0 });
       }
     }
-  },
+  }
 
-  _drawSeries() {
-    const that = this;
-
-    if (that._simpleDataSource.length > 0) {
-      that._correctPoints();
-      that._series.draw();
-      that._seriesGroup.append(that._renderer.root);
+  _drawSeries(): void {
+    if (this._simpleDataSource.length > 0) {
+      this._correctPoints();
+      this._series.draw();
+      this._seriesGroup.append(this._renderer.root);
     }
-  },
+  }
 
-  _isTooltipEnabled() {
+  _isTooltipEnabled(): boolean {
     return !!this._simpleDataSource.length;
-  },
+  }
 
-  _getTooltipData() {
-    const that = this;
-    const options = that._allOptions;
-    const dataSource = that._winlossDataSource || that._simpleDataSource;
-    const tooltip = that._tooltip;
+  _getTooltipData(): ThemeValue {
+    const options = this._allOptions;
+    const dataSource = this._winlossDataSource || this._simpleDataSource;
+    const tooltip = this._tooltip;
 
     if (dataSource.length === 0) {
       return {};
     }
 
-    const minMax = that._minMaxIndexes;
-    const valueField = options.valueField;
+    const minMax = this._minMaxIndexes;
+    const { valueField } = options;
     const first = dataSource[0][valueField];
     const last = dataSource[dataSource.length - 1][valueField];
-    const min = _isDefined(minMax.minIndexes[0]) ? dataSource[minMax.minIndexes[0]][valueField] : first;
-    const max = _isDefined(minMax.maxIndexes[0]) ? dataSource[minMax.maxIndexes[0]][valueField] : first;
+    const min = isDefined(minMax.minIndexes[0])
+      ? dataSource[minMax.minIndexes[0]][valueField]
+      : first;
+    const max = isDefined(minMax.maxIndexes[0])
+      ? dataSource[minMax.maxIndexes[0]][valueField]
+      : first;
     const formattedFirst = tooltip.formatValue(first);
     const formattedLast = tooltip.formatValue(last);
     const formattedMin = tooltip.formatValue(min);
     const formattedMax = tooltip.formatValue(max);
-    const customizeObject = {
+    const customizeObject: ThemeValue = {
       firstValue: formattedFirst,
       lastValue: formattedLast,
       minValue: formattedMin,
@@ -540,29 +556,45 @@ const dxSparkline = BaseSparkline.inherit({
       originalLastValue: last,
       originalMinValue: min,
       originalMaxValue: max,
-      valueText: ['Start:', formattedFirst, 'End:', formattedLast, 'Min:', formattedMin, 'Max:', formattedMax],
+      valueText: [
+        'Start:', formattedFirst, 'End:', formattedLast, 'Min:', formattedMin, 'Max:', formattedMax,
+      ],
     };
 
     if (options.type === 'winloss') {
-      // @ts-expect-error
       customizeObject.originalThresholdValue = options.winlossThreshold;
-      // @ts-expect-error
       customizeObject.thresholdValue = tooltip.formatValue(options.winlossThreshold);
     }
 
     return customizeObject;
+  }
+}
+
+setupWidgetPrototype(Sparkline, {
+  _rootClassPrefix: 'dxsl',
+  _rootClass: 'dxsl-sparkline',
+  _themeSection: 'sparkline',
+  _defaultSize: {
+    width: DEFAULT_CANVAS_WIDTH,
+    height: DEFAULT_CANVAS_HEIGHT,
   },
+  _initialChanges: ['DATA_SOURCE'],
+  _optionChangesMap: {
+    dataSource: 'DATA_SOURCE',
+  },
+  _optionChangesOrder: ['DATA_SOURCE'],
 });
 
-_map(['lossColor', 'lineColor', 'lineWidth', 'areaOpacity', 'minColor', 'maxColor', 'barPositiveColor', 'barNegativeColor',
-  'winColor', 'lessColor', 'firstLastColor', 'pointSymbol', 'pointColor', 'pointSize',
+[
+  'lossColor', 'lineColor', 'lineWidth', 'areaOpacity', 'minColor', 'maxColor', 'barPositiveColor',
+  'barNegativeColor', 'winColor', 'lessColor', 'firstLastColor', 'pointSymbol', 'pointColor', 'pointSize',
   'type', 'argumentField', 'valueField', 'winlossThreshold', 'showFirstLast', 'showMinMax',
   'ignoreEmptyPoints', 'minValue', 'maxValue',
-], (name) => {
-  dxSparkline.prototype._optionChangesMap[name] = 'OPTIONS';
+].forEach((name) => {
+  Sparkline.prototype._optionChangesMap[name] = 'OPTIONS';
 });
-componentRegistrator('dxSparkline', dxSparkline);
+componentRegistrator('dxSparkline', Sparkline);
 
-export default dxSparkline;
+Sparkline.addPlugin(plugin);
 
-dxSparkline.addPlugin(plugin);
+export default Sparkline;
