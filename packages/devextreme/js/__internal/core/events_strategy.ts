@@ -8,7 +8,6 @@ type EventHandlers = Record<string, EventHandler | undefined>;
 
 interface EventCallbacks {
   add: (fn?: EventHandler) => void;
-  originalAdd?: (fn?: EventHandler) => void;
   remove: (fn?: EventHandler) => void;
   has: () => boolean;
   empty: () => void;
@@ -78,8 +77,7 @@ export class EventsStrategy implements EventsStrategyInterface {
         this._events[eventName] = callbacks;
       }
 
-      const addFn = callbacks.originalAdd || callbacks.add;
-      addFn.call(callbacks, eventHandler);
+      callbacks.add(eventHandler);
     }
   }
 
