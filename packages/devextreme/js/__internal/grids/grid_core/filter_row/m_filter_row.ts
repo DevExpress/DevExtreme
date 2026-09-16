@@ -19,7 +19,7 @@ import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_r
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type {
-  DataFilter, FilterSource, FilterSourceContext,
+  DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import modules from '@ts/grids/grid_core/m_modules';
@@ -819,7 +819,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-export class ApplyFilterViewController extends modules.ViewController implements FilterSource {
+export class ApplyFilterViewController extends modules.ViewController {
   private _headerPanel: any;
 
   private _columnsController!: ColumnsController;

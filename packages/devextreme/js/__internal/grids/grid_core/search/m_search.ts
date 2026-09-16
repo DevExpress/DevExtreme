@@ -11,7 +11,7 @@ import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import type { DataController } from '../data_controller/data_controller';
 import type { UserState } from '../data_controller/types';
-import type { DataFilter, FilterSource, FilterSourceContext } from '../filter/types';
+import type { DataFilter, FilterSourceContext } from '../filter/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType, OptionChanged } from '../m_types';
@@ -58,7 +58,7 @@ const dataController = (
 
 type SearchDataControllerExtender = InstanceType<ReturnType<typeof dataController>>;
 
-export class SearchPanelViewController extends modules.ViewController implements FilterSource {
+export class SearchPanelViewController extends modules.ViewController {
   private headerPanel?: HeaderPanel;
 
   private dataController?: SearchDataControllerExtender;

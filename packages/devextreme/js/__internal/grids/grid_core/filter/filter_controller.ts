@@ -8,7 +8,7 @@ import modules from '@ts/grids/grid_core/m_modules';
 import type { Controllers } from '@ts/grids/grid_core/m_types';
 
 import { SOURCE_ORDER } from './const';
-import type { FilterSource, FilterSourceContext, FilterSourceName } from './types';
+import type { FilterSourceContext, FilterSourceName } from './types';
 import { combineFilters } from './utils';
 
 type TaggedFilter = unknown[] & {
@@ -51,7 +51,7 @@ export class FilterController extends modules.Controller {
     const context = this.createSourceContext(excludedColumn);
 
     return SOURCE_ORDER.reduce<DataFilter>((filter, sourceName) => {
-      const source = this.getFilterSource(sourceName);
+      const source = this.getController(sourceName);
 
       if (!source || this.needToSkipFilter(sourceName)) {
         return filter;
@@ -92,10 +92,6 @@ export class FilterController extends modules.Controller {
       filterSyncActive: this.isFilterSyncActive(),
       columnsController: this.columnsController,
     };
-  }
-
-  private getFilterSource(sourceName: FilterSourceName): FilterSource | undefined {
-    return this.getController(sourceName) as FilterSource | undefined;
   }
 
   private getLangParams(): LangParams | undefined {

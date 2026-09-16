@@ -14,7 +14,7 @@ import type {
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
 import type {
-  DataFilter, FilterSource, FilterSourceContext, FilterValue, FilterValueCondition,
+  DataFilter, FilterSourceContext, FilterValue, FilterValueCondition,
 } from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 
@@ -30,7 +30,7 @@ import {
   getHeaderFilterFromCondition,
 } from './utils';
 
-export class FilterSyncController extends modules.Controller implements FilterSource {
+export class FilterSyncController extends modules.Controller {
   private skipSyncColumnOptions = false;
 
   private dataController!: DataController;

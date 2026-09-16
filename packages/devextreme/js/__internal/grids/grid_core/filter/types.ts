@@ -60,8 +60,4 @@ export interface FilterSourceContext {
   readonly columnsController: Controllers['columns'];
 }
 
-export interface FilterSource {
-  getFilterExpressions: (context: FilterSourceContext) => DataFilter[];
-}
-
 export type FilterSourceName = typeof SOURCE_ORDER[number];

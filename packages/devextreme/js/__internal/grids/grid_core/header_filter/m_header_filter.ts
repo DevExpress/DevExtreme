@@ -17,7 +17,7 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type {
-  DataFilter, FilterSource, FilterSourceContext,
+  DataFilter, FilterSourceContext,
 } from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import Modules from '@ts/grids/grid_core/m_modules';
@@ -118,7 +118,7 @@ export const getFormatOptions = function (value, column, currentLevel) {
   return result;
 };
 
-export class HeaderFilterController extends Modules.ViewController implements FilterSource {
+export class HeaderFilterController extends Modules.ViewController {
   private _columnsController!: ColumnsController;
 
   private _dataController!: DataController;
