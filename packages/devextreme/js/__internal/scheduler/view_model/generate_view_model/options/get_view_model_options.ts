@@ -1,5 +1,6 @@
 import type { Orientation } from '@js/common';
 import type { SnapToCellsMode } from '@js/ui/scheduler';
+import { themeLength } from '@ts/core/utils/theme_length';
 import type Scheduler from '@ts/scheduler/scheduler';
 
 import type { ViewType } from '../../../types';
@@ -56,6 +57,8 @@ export interface ViewModelOptions {
   isAdaptivityEnabled: boolean;
   cellDurationMinutes: number;
   isVirtualScrolling: boolean;
+  // Declared by the theme on the scheduler root; undefined when the theme declares nothing
+  appointmentMinHeight?: number;
 }
 
 export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions => {
@@ -81,6 +84,7 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
   const snapToCellsMode = schedulerStore.getViewOption('snapToCellsMode');
   const showAllDayPanel = schedulerStore.getViewOption('showAllDayPanel');
   const isVirtualScrolling = schedulerStore.isVirtualScrolling();
+  const appointmentMinHeight = themeLength(schedulerStore.$element(), '--dx-scheduler-appointment-min-height');
 
   return {
     type,
@@ -98,5 +102,6 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
     cellDurationMinutes,
     hasAllDayPanel: showAllDayPanel && allDayPanelMode !== 'hidden' && viewOrientation === 'vertical',
     isVirtualScrolling,
+    appointmentMinHeight,
   };
 };

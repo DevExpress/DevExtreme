@@ -17,6 +17,7 @@ import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
 import { current, isCompact, isMaterial } from '@js/ui/themes';
+import { themeLength } from '@ts/core/utils/theme_length';
 import BaseDialog from '@ts/ui/html_editor/ui/m_baseDialog';
 import type {
   AICommandExecutor,
@@ -61,10 +62,6 @@ export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
 export const ACTION_BUTTON_WIDTH = 110;
 export const COMPACT_ACTION_BUTTON_WIDTH = 100;
-
-function getActionButtonWidth(): number {
-  return isCompact(current()) ? COMPACT_ACTION_BUTTON_WIDTH : ACTION_BUTTON_WIDTH;
-}
 
 enum DialogState {
   Initial = 'initial',
@@ -425,8 +422,13 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
+  protected _getActionButtonWidth(): number {
+    return themeLength(this._$container, '--dx-html-editor-ai-dialog-button-width')
+      ?? (isCompact(current()) ? COMPACT_ACTION_BUTTON_WIDTH : ACTION_BUTTON_WIDTH);
+  }
+
   protected _getGenerateButtonItem(): NamedToolbarItem {
-    const width = getActionButtonWidth();
+    const width = this._getActionButtonWidth();
     const promptTextArea = this._promptTextArea;
     const disabled = !promptTextArea.option('value');
 
@@ -448,7 +450,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   protected _getCancelButtonItem(): NamedToolbarItem {
-    const width = getActionButtonWidth();
+    const width = this._getActionButtonWidth();
     return {
       name: 'cancel',
       toolbar: 'bottom',
