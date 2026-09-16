@@ -81,7 +81,7 @@ const App = () => (
       <Column dataField="City" />
       <Column dataField="State" groupIndex={0} />
       <Column dataField="Phone" format={phoneNumberFormat} />
-      <Column dataField="Website" alignment="center" width={100} cellRender={(e: DataGridTypes.ColumnCellTemplateData) => renderGridCell(e)} />
+      <Column dataField="Website" alignment="center" width={100} cellRender={renderGridCell} />
 
       <Summary>
         <TotalItem

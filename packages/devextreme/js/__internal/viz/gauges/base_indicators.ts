@@ -1,247 +1,368 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable max-depth */
-/* eslint-disable no-bitwise */
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
+/* eslint-disable max-classes-per-file */
 
-import Class from '@js/core/class';
-import { noop } from '@js/core/utils/common';
+import type { Font } from '@js/common/charts';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { extractColor, patchFontOptions as _patchFontOptions } from '@ts/viz/core/utils';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import { extractColor, patchFontOptions } from '@ts/viz/core/utils';
 import { formatValue, getSampleText } from '@ts/viz/gauges/base_gauge';
 
-const _isFinite = isFinite;
-const _Number = Number;
-const _round = Math.round;
-const _formatValue = formatValue;
-const _getSampleText = getSampleText;
+export interface IndicatorLayout {
+  x?: number;
+  y?: number;
+  radius?: number;
+}
 
-export const BaseElement = Class.inherit({
-  ctor(parameters) {
-    const that = this;
+export interface IndicatorMeasure {
+  min?: number;
+  max?: number;
+  indent?: number;
+  horizontalOffset?: number;
+  verticalOffset?: number;
+  inverseHorizontalOffset?: number;
+  inverseVerticalOffset?: number;
+}
+
+export interface TooltipParameters {
+  x: number;
+  y: number;
+  value: ThemeValue;
+  color: ThemeValue;
+  offset?: number;
+}
+
+export interface TrackerSettings {
+  points: number[];
+}
+
+export interface TextCloudOptions {
+  x: number;
+  y: number;
+  type: string;
+}
+
+export interface TextCloudInfo {
+  cx: number;
+  cy: number;
+  points: number[];
+}
+
+interface IndicatorAnimation {
+  step: (pos: number) => void;
+  duration: number;
+  easing: ThemeValue;
+  start?: number;
+  delta?: number;
+}
+
+export interface Point {
+  x: number;
+  y: number;
+}
+
+export interface Size {
+  width: number;
+  height: number;
+}
+
+export abstract class BaseElement {
+  _renderer;
+
+  _translator;
+
+  _options: ThemeValue;
+
+  constructor(parameters: Record<string, unknown>) {
     each(parameters, (name, value) => {
-      that[`_${name}`] = value;
+      this[`_${name}`] = value;
     });
-    that._init();
-  },
+    this._init();
+  }
 
-  dispose() {
-    const that = this;
-    that._dispose();
-    each(that, (name) => {
-      that[name] = null;
+  abstract _init(): void;
+
+  abstract _dispose(): void;
+
+  dispose(): this {
+    this._dispose();
+    each(this, (name) => {
+      this[name] = null;
     });
-    return that;
-  },
+    return this;
+  }
 
-  getOffset() {
-    return _Number(this._options.offset) || 0;
-  },
-});
+  getOffset(): number {
+    return Number(this._options.offset) || 0;
+  }
+}
 
-export const BaseIndicator = BaseElement.inherit({
-  _init() {
-    const that = this;
-    that._rootElement = that._createRoot().linkOn(that._owner, { name: 'value-indicator', after: 'core' });
-    that._trackerElement = that._createTracker();
-  },
+export abstract class BaseIndicator extends BaseElement {
+  _owner;
 
-  _dispose() {
+  _tracker;
+
+  _className;
+
+  _rootElement;
+
+  _trackerElement;
+
+  _trackerInfo;
+
+  _animation?: IndicatorAnimation | null;
+
+  _actualValue!: number;
+
+  _actualPosition!: number;
+
+  _currentValue?: number | null;
+
+  type?: string;
+
+  enabled?: boolean | null;
+
+  visible?: boolean;
+
+  _init(): void {
+    this._rootElement = this._createRoot()
+      .linkOn(this._owner, { name: 'value-indicator', after: 'core' });
+    this._trackerElement = this._createTracker();
+  }
+
+  _dispose(): void {
     this._rootElement.linkOff();
-  },
+  }
 
-  _setupAnimation() {
-    const that = this;
-    if (that._options.animation) {
-      that._animation = {
-        step(pos) {
-          that._actualValue = that._animation.start + that._animation.delta * pos;
-          that._actualPosition = that._translator.translate(that._actualValue);
-          that._move();
+  _setupAnimation(): void {
+    if (this._options.animation) {
+      this._animation = {
+        step: (pos: number): void => {
+          const animation = this._animation as IndicatorAnimation;
+          this._actualValue = (animation.start as number) + (animation.delta as number) * pos;
+          this._actualPosition = this._translator.translate(this._actualValue);
+          this._move();
         },
-        duration: that._options.animation.duration > 0 ? _Number(that._options.animation.duration) : 0,
-        easing: that._options.animation.easing,
+        duration: this._options.animation.duration > 0
+          ? Number(this._options.animation.duration)
+          : 0,
+        easing: this._options.animation.easing,
       };
     }
-  },
+  }
 
-  _runAnimation(value) {
-    const that = this;
-    const animation = that._animation;
-    animation.start = that._actualValue;
-    animation.delta = value - that._actualValue;
-    that._rootElement.animate({ _: 0 }, { step: animation.step, duration: animation.duration, easing: animation.easing });
-  },
+  _runAnimation(value: number): void {
+    const animation = this._animation as IndicatorAnimation;
+    animation.start = this._actualValue;
+    animation.delta = value - this._actualValue;
+    this._rootElement.animate({ _: 0 }, {
+      step: animation.step,
+      duration: animation.duration,
+      easing: animation.easing,
+    });
+  }
 
-  _createRoot() {
+  _createRoot(): ThemeValue {
     return this._renderer.g().attr({ class: this._className });
-  },
+  }
 
-  _createTracker() {
+  _createTracker(): ThemeValue {
     return this._renderer.path([], 'area');
-  },
+  }
 
-  _getTrackerSettings: noop,
+  _getTrackerSettings(): TrackerSettings | undefined {
+    return undefined;
+  }
 
-  clean() {
-    const that = this;
-    that._animation && that._rootElement.stopAnimation();
-    that._rootElement.linkRemove().clear();
-    that._clear();
-    that._tracker.detach(that._trackerElement);
-    that._options = that.enabled = that._animation = null;
-    return that;
-  },
-
-  render(options) {
-    const that = this;
-    that.type = options.type;
-    that._options = options;
-    that._actualValue = that._currentValue = that._translator.adjust(that._options.currentValue);
-    that.enabled = that._isEnabled();
-    if (that.enabled) {
-      that._setupAnimation();
-      that._rootElement.attr({ fill: extractColor(that._options.color) }).linkAppend();
-      that._tracker.attach(that._trackerElement, that, that._trackerInfo);
+  clean(): this {
+    if (this._animation) {
+      this._rootElement.stopAnimation();
     }
-    return that;
-  },
+    this._rootElement.linkRemove().clear();
+    this._clear();
+    this._tracker.detach(this._trackerElement);
+    this._animation = null;
+    this.enabled = null;
+    this._options = null;
+    return this;
+  }
 
-  resize(layout) {
-    const that = this;
-    that._rootElement.clear();
-    that._clear();
-    that.visible = that._isVisible(layout);
-    if (that.visible) {
-      extend(that._options, layout);
-      that._actualPosition = that._translator.translate(that._actualValue);
-      that._render();
-      that._trackerElement.attr(that._getTrackerSettings());
-      that._move();
+  render(options: ThemeValue): this {
+    this.type = options.type;
+    this._options = options;
+    const currentValue = this._translator.adjust(this._options.currentValue);
+    this._currentValue = currentValue;
+    this._actualValue = currentValue;
+    this.enabled = this._isEnabled();
+    if (this.enabled) {
+      this._setupAnimation();
+      this._rootElement.attr({ fill: extractColor(this._options.color) }).linkAppend();
+      this._tracker.attach(this._trackerElement, this, this._trackerInfo);
     }
-    return that;
-  },
+    return this;
+  }
 
-  value(arg, _noAnimation) {
-    const that = this;
-    let val;
+  resize(layout?: IndicatorLayout): this {
+    this._rootElement.clear();
+    this._clear();
+    this.visible = this._isVisible(layout);
+    if (this.visible) {
+      extend(this._options, layout);
+      this._actualPosition = this._translator.translate(this._actualValue);
+      this._render();
+      this._trackerElement.attr(this._getTrackerSettings());
+      this._move();
+    }
+    return this;
+  }
+
+  value(arg?: number | null, noAnimation?: boolean): this | number | null | undefined {
     const rootElement = this._rootElement;
-    let visibility = null;
+    let visibility: string | null = null;
 
     if (arg === undefined) {
-      return that._currentValue;
+      return this._currentValue;
     }
 
     if (arg === null) {
-      // @ts-expect-error
       visibility = 'hidden';
-      that._currentValue = arg;
+      this._currentValue = arg;
     } else {
-      val = that._translator.adjust(arg);
-      if (that._currentValue !== val && _isFinite(val)) {
-        that._currentValue = val;
-        if (that.visible) {
-          if (that._animation && !_noAnimation) {
-            that._runAnimation(val);
-          } else {
-            that._actualValue = val;
-            that._actualPosition = that._translator.translate(val);
-            that._move();
-          }
+      const val = this._translator.adjust(arg);
+      if (this._currentValue !== val && Number.isFinite(val)) {
+        this._currentValue = val;
+        if (this.visible) {
+          this._applyValue(val, noAnimation);
         }
       }
     }
 
     rootElement.attr({ visibility });
-    return that;
-  },
+    return this;
+  }
 
-  _isEnabled: null,
+  _applyValue(value: number, noAnimation?: boolean): void {
+    if (this._animation && !noAnimation) {
+      this._runAnimation(value);
+    } else {
+      this._actualValue = value;
+      this._actualPosition = this._translator.translate(value);
+      this._move();
+    }
+  }
 
-  _isVisible: null,
+  abstract _isEnabled(): boolean;
 
-  _render: null,
+  abstract _isVisible(layout?: IndicatorLayout): boolean;
 
-  _clear: null,
+  abstract _render(): void;
 
-  _move: null,
-});
+  abstract _clear(): void;
+
+  abstract _move(): void;
+}
 
 // The following is from baseMarker.js
 
-const COEFFICIENTS_MAP = {};
-// @ts-expect-error
-COEFFICIENTS_MAP['right-bottom'] = COEFFICIENTS_MAP.rb = [0, -1, -1, 0, 0, 1, 1, 0];
-// @ts-expect-error
-COEFFICIENTS_MAP['bottom-right'] = COEFFICIENTS_MAP.br = [-1, 0, 0, -1, 1, 0, 0, 1];
-// @ts-expect-error
-COEFFICIENTS_MAP['left-bottom'] = COEFFICIENTS_MAP.lb = [0, -1, 1, 0, 0, 1, -1, 0];
-// @ts-expect-error
-COEFFICIENTS_MAP['bottom-left'] = COEFFICIENTS_MAP.bl = [1, 0, 0, -1, -1, 0, 0, 1];
-// @ts-expect-error
-COEFFICIENTS_MAP['left-top'] = COEFFICIENTS_MAP.lt = [0, 1, 1, 0, 0, -1, -1, 0];
-// @ts-expect-error
-COEFFICIENTS_MAP['top-left'] = COEFFICIENTS_MAP.tl = [1, 0, 0, 1, -1, 0, 0, -1];
-// @ts-expect-error
-COEFFICIENTS_MAP['right-top'] = COEFFICIENTS_MAP.rt = [0, 1, -1, 0, 0, -1, 1, 0];
-// @ts-expect-error
-COEFFICIENTS_MAP['top-right'] = COEFFICIENTS_MAP.tr = [-1, 0, 0, 1, 1, 0, 0, -1];
+const RIGHT_BOTTOM = [0, -1, -1, 0, 0, 1, 1, 0];
+const BOTTOM_RIGHT = [-1, 0, 0, -1, 1, 0, 0, 1];
+const LEFT_BOTTOM = [0, -1, 1, 0, 0, 1, -1, 0];
+const BOTTOM_LEFT = [1, 0, 0, -1, -1, 0, 0, 1];
+const LEFT_TOP = [0, 1, 1, 0, 0, -1, -1, 0];
+const TOP_LEFT = [1, 0, 0, 1, -1, 0, 0, -1];
+const RIGHT_TOP = [0, 1, -1, 0, 0, -1, 1, 0];
+const TOP_RIGHT = [-1, 0, 0, 1, 1, 0, 0, -1];
 
-function getTextCloudInfo(options) {
-  let x = options.x;
-  let y = options.y;
+const COEFFICIENTS_MAP: Record<string, number[]> = {
+  'right-bottom': RIGHT_BOTTOM,
+  rb: RIGHT_BOTTOM,
+  'bottom-right': BOTTOM_RIGHT,
+  br: BOTTOM_RIGHT,
+  'left-bottom': LEFT_BOTTOM,
+  lb: LEFT_BOTTOM,
+  'bottom-left': BOTTOM_LEFT,
+  bl: BOTTOM_LEFT,
+  'left-top': LEFT_TOP,
+  lt: LEFT_TOP,
+  'top-left': TOP_LEFT,
+  tl: TOP_LEFT,
+  'right-top': RIGHT_TOP,
+  rt: RIGHT_TOP,
+  'top-right': TOP_RIGHT,
+  tr: TOP_RIGHT,
+};
+
+interface TextCloudGeometry {
+  x: number;
+  y: number;
+  type: string;
+  cloudWidth: number;
+  cloudHeight: number;
+  tailLength: number;
+}
+
+function getTextCloudInfo(options: TextCloudGeometry): TextCloudInfo {
+  let { x, y } = options;
   const type = COEFFICIENTS_MAP[options.type];
-  const cloudWidth = options.cloudWidth;
-  const cloudHeight = options.cloudHeight;
-  let tailWidth;
-  let tailHeight;
+  const { cloudWidth, cloudHeight } = options;
+  let tailWidth = options.tailLength;
+  let tailHeight = options.tailLength;
   const cx = x;
   const cy = y;
 
-  tailWidth = tailHeight = options.tailLength;
-  if (type[0] & 1) {
+  if (type[0] !== 0) {
     tailHeight = Math.min(tailHeight, cloudHeight / 3);
   } else {
     tailWidth = Math.min(tailWidth, cloudWidth / 3);
   }
 
+  const points = [Math.round(x), Math.round(y)];
+  x += type[0] * (cloudWidth + tailWidth);
+  y += type[1] * (cloudHeight + tailHeight);
+  points.push(Math.round(x), Math.round(y));
+  x += type[2] * cloudWidth;
+  y += type[3] * cloudHeight;
+  points.push(Math.round(x), Math.round(y));
+  x += type[4] * cloudWidth;
+  y += type[5] * cloudHeight;
+  points.push(Math.round(x), Math.round(y));
+  x += type[6] * (cloudWidth - tailWidth);
+  y += type[7] * (cloudHeight - tailHeight);
+  points.push(Math.round(x), Math.round(y));
+
   return {
-    cx: _round(cx + type[0] * tailWidth + (type[0] + type[2]) * cloudWidth / 2),
-    cy: _round(cy + type[1] * tailHeight + (type[1] + type[3]) * cloudHeight / 2),
-    points: [
-      _round(x), _round(y),
-      _round(x += type[0] * (cloudWidth + tailWidth)), _round(y += type[1] * (cloudHeight + tailHeight)),
-      _round(x += type[2] * cloudWidth), _round(y += type[3] * cloudHeight),
-      _round(x += type[4] * cloudWidth), _round(y += type[5] * cloudHeight),
-      _round(x += type[6] * (cloudWidth - tailWidth)), _round(y += type[7] * (cloudHeight - tailHeight)),
-    ],
+    cx: Math.round(cx + type[0] * tailWidth + ((type[0] + type[2]) * cloudWidth) / 2),
+    cy: Math.round(cy + type[1] * tailHeight + ((type[1] + type[3]) * cloudHeight) / 2),
+    points,
   };
 }
 
-export const BaseTextCloudMarker = BaseIndicator.inherit({
-  _move() {
-    const that = this;
-    const options = that._options;
-    const textCloudOptions = that._getTextCloudOptions();
-    // @ts-expect-error
-    const text = _formatValue(that._actualValue, options.text);
-    that._text.attr({ text });
-    const bBox = that._text.getBBox();
-    const x = textCloudOptions.x;
-    const y = textCloudOptions.y;
-    const cloudWidth = (bBox.width || text.length * that._textUnitWidth) + 2 * options.horizontalOffset;
-    const cloudHeight = (bBox.height || that._textHeight) + 2 * options.verticalOffset;
+export abstract class BaseTextCloudMarker extends BaseIndicator {
+  _text;
+
+  _cloud;
+
+  _textVerticalOffset!: number;
+
+  _textWidth!: number;
+
+  _textHeight!: number;
+
+  _textUnitWidth!: number;
+
+  _textFullWidth!: number;
+
+  _textFullHeight!: number;
+
+  _move(): void {
+    const options = this._options;
+    const textCloudOptions = this._getTextCloudOptions();
+    const text = formatValue(this._actualValue, options.text);
+    this._text.attr({ text });
+    const bBox = this._text.getBBox();
+    const { x, y } = textCloudOptions;
+    const cloudWidth = (bBox.width || text.length * this._textUnitWidth)
+      + 2 * options.horizontalOffset;
+    const cloudHeight = (bBox.height || this._textHeight) + 2 * options.verticalOffset;
 
     const info = getTextCloudInfo({
       x,
@@ -249,219 +370,272 @@ export const BaseTextCloudMarker = BaseIndicator.inherit({
       cloudWidth,
       cloudHeight,
       tailLength: options.arrowLength,
-      type: that._correctCloudType(textCloudOptions.type, { x, y }, { width: cloudWidth, height: cloudHeight }),
+      type: this._correctCloudType(
+        textCloudOptions.type,
+        { x, y },
+        { width: cloudWidth, height: cloudHeight },
+      ),
     });
-    that._text.attr({ x: info.cx, y: info.cy + that._textVerticalOffset });
-    that._cloud.attr({ points: info.points });
-    that._trackerElement && that._trackerElement.attr({ points: info.points });
-  },
-
-  _measureText() {
-    const that = this;
-    let root;
-    let text;
-    let bBox;
-    let sampleText;
-
-    if (!that._textVerticalOffset) {
-      root = that._createRoot().append(that._owner);
-      sampleText = _getSampleText(that._translator, that._options.text);
-      text = that._renderer.text(sampleText, 0, 0).attr({ align: 'center' }).css(_patchFontOptions(that._options.text.font)).append(root);
-      bBox = text.getBBox();
-      root.remove();
-      that._textVerticalOffset = -bBox.y - bBox.height / 2;
-      that._textWidth = bBox.width;
-      that._textHeight = bBox.height;
-      that._textUnitWidth = that._textWidth / sampleText.length;
-      that._textFullWidth = that._textWidth + 2 * that._options.horizontalOffset;
-      that._textFullHeight = that._textHeight + 2 * that._options.verticalOffset;
+    this._text.attr({ x: info.cx, y: info.cy + this._textVerticalOffset });
+    this._cloud.attr({ points: info.points });
+    if (this._trackerElement) {
+      this._trackerElement.attr({ points: info.points });
     }
-  },
+  }
 
-  _render() {
-    const that = this;
+  _measureText(): void {
+    if (!this._textVerticalOffset) {
+      const root = this._createRoot().append(this._owner);
+      const sampleText = getSampleText(this._translator, this._options.text);
+      const text = this._renderer.text(sampleText, 0, 0)
+        .attr({ align: 'center' })
+        .css(patchFontOptions(this._options.text.font))
+        .append(root);
+      const bBox = text.getBBox();
+      root.remove();
+      this._textVerticalOffset = -bBox.y - bBox.height / 2;
+      this._textWidth = bBox.width;
+      this._textHeight = bBox.height;
+      this._textUnitWidth = this._textWidth / sampleText.length;
+      this._textFullWidth = this._textWidth + 2 * this._options.horizontalOffset;
+      this._textFullHeight = this._textHeight + 2 * this._options.verticalOffset;
+    }
+  }
 
-    that._measureText();
-    that._cloud = that._cloud || that._renderer.path([], 'area').append(that._rootElement);
-    that._text = that._text || that._renderer.text().append(that._rootElement);
-    that._text.attr({ align: 'center' }).css(_patchFontOptions(that._options.text.font));
-  },
+  _render(): void {
+    this._measureText();
+    this._cloud = this._cloud || this._renderer.path([], 'area').append(this._rootElement);
+    this._text = this._text || this._renderer.text().append(this._rootElement);
+    this._text.attr({ align: 'center' }).css(patchFontOptions(this._options.text.font));
+  }
 
-  _clear() {
+  _clear(): void {
     delete this._cloud;
     delete this._text;
-  },
+  }
 
-  getTooltipParameters() {
+  getTooltipParameters(): TooltipParameters {
     const position = this._getTextCloudOptions();
     return {
       x: position.x, y: position.y, value: this._currentValue, color: this._options.color,
     };
-  },
+  }
 
-  _correctCloudType(type) {
-    return type;
-  },
-});
+  abstract _correctCloudType(type: string, position: Point, size: Size): string;
+
+  abstract _getTextCloudOptions(): TextCloudOptions;
+}
 
 // The following is from baseRangeBar.js
 
-export const BaseRangeBar = BaseIndicator.inherit({
-  _measureText() {
-    const that = this;
-    let root;
-    let text;
-    let bBox;
+export interface RangeBarPositions {
+  start: number;
+  end: number;
+  main1: number;
+  main2: number;
+  back1: number;
+  back2: number;
+}
 
-    that._hasText = that._isTextVisible();
-    if (that._hasText && !that._textVerticalOffset) {
-      root = that._createRoot().append(that._owner);
-      text = that._renderer.text(_getSampleText(that._translator, that._options.text), 0, 0).attr({ class: 'dxg-text', align: 'center' }).css(_patchFontOptions(that._options.text.font)).append(root);
-      bBox = text.getBBox();
+export abstract class BaseRangeBar extends BaseIndicator {
+  _text;
+
+  _line;
+
+  _backItem1;
+
+  _backItem2;
+
+  _spaceItem1;
+
+  _spaceItem2;
+
+  _mainItem;
+
+  _hasText?: boolean;
+
+  _textVerticalOffset!: number;
+
+  _textWidth!: number;
+
+  _textHeight!: number;
+
+  _startPosition!: number;
+
+  _endPosition!: number;
+
+  _basePosition!: number;
+
+  _space!: number;
+
+  _measureText(): void {
+    this._hasText = this._isTextVisible();
+    if (this._hasText && !this._textVerticalOffset) {
+      const root = this._createRoot().append(this._owner);
+      const text = this._renderer.text(getSampleText(this._translator, this._options.text), 0, 0)
+        .attr({ class: 'dxg-text', align: 'center' })
+        .css(patchFontOptions(this._options.text.font))
+        .append(root);
+      const bBox = text.getBBox();
       root.remove();
-      that._textVerticalOffset = -bBox.y - bBox.height / 2;
-      that._textWidth = bBox.width;
-      that._textHeight = bBox.height;
+      this._textVerticalOffset = -bBox.y - bBox.height / 2;
+      this._textWidth = bBox.width;
+      this._textHeight = bBox.height;
     }
-  },
+  }
 
-  _move() {
-    const that = this;
-    that._updateBarItemsPositions();
-    if (that._hasText) {
-      // @ts-expect-error
-      that._text.attr({ text: _formatValue(that._actualValue, that._options.text) });
-      that._updateTextPosition();
-      that._updateLinePosition();
+  _move(): void {
+    this._updateBarItemsPositions();
+    if (this._hasText) {
+      this._text.attr({ text: formatValue(this._actualValue, this._options.text) });
+      this._updateTextPosition();
+      this._updateLinePosition();
     }
-  },
+  }
 
-  _updateBarItems() {
-    const that = this;
-    const options = that._options;
-    let spaceColor;
-    const translator = that._translator;
+  _updateBarItems(): void {
+    const options = this._options;
+    const translator = this._translator;
 
-    that._setBarSides();
-    that._startPosition = translator.translate(translator.getDomainStart());
-    that._endPosition = translator.translate(translator.getDomainEnd());
-    that._basePosition = translator.translate(options.baseValue);
-    that._space = that._getSpace();
+    this._setBarSides();
+    this._startPosition = translator.translate(translator.getDomainStart());
+    this._endPosition = translator.translate(translator.getDomainEnd());
+    this._basePosition = translator.translate(options.baseValue);
+    this._space = this._getSpace();
 
     const backgroundColor = options.backgroundColor || 'none';
-    if (backgroundColor !== 'none' && that._space > 0) {
-      spaceColor = options.containerBackgroundColor || 'none';
-    } else {
-      that._space = 0;
-      spaceColor = 'none';
+    const hasSpace = backgroundColor !== 'none' && this._space > 0;
+    if (!hasSpace) {
+      this._space = 0;
     }
+    const spaceColor = hasSpace ? options.containerBackgroundColor || 'none' : 'none';
 
-    that._backItem1.attr({ fill: backgroundColor });
-    that._backItem2.attr({ fill: backgroundColor });
-    that._spaceItem1.attr({ fill: spaceColor });
-    that._spaceItem2.attr({ fill: spaceColor });
-  },
+    this._backItem1.attr({ fill: backgroundColor });
+    this._backItem2.attr({ fill: backgroundColor });
+    this._spaceItem1.attr({ fill: spaceColor });
+    this._spaceItem2.attr({ fill: spaceColor });
+  }
 
-  _getSpace() {
+  _getSpace(): number {
     return 0;
-  },
+  }
 
-  _updateTextItems() {
-    const that = this;
-    if (that._hasText) {
-      that._line = that._line || that._renderer.path([], 'line').attr({ class: 'dxg-main-bar', 'stroke-linecap': 'square' }).append(that._rootElement);
-      that._text = that._text || that._renderer.text('', 0, 0).attr({ class: 'dxg-text' }).append(that._rootElement);
-      that._text.attr({ align: that._getTextAlign() }).css(that._getFontOptions());
-      that._setTextItemsSides();
+  _updateTextItems(): void {
+    if (this._hasText) {
+      this._line = this._line || this._renderer.path([], 'line')
+        .attr({ class: 'dxg-main-bar', 'stroke-linecap': 'square' })
+        .append(this._rootElement);
+      this._text = this._text || this._renderer.text('', 0, 0)
+        .attr({ class: 'dxg-text' })
+        .append(this._rootElement);
+      this._text.attr({ align: this._getTextAlign() }).css(this._getFontOptions());
+      this._setTextItemsSides();
     } else {
-      if (that._line) {
-        that._line.remove();
-        delete that._line;
+      if (this._line) {
+        this._line.remove();
+        delete this._line;
       }
-      if (that._text) {
-        that._text.remove();
-        delete that._text;
+      if (this._text) {
+        this._text.remove();
+        delete this._text;
       }
     }
-  },
+  }
 
-  _isTextVisible() {
+  _isTextVisible(): boolean {
     return false;
-  },
+  }
 
-  _getTextAlign() {
+  _getTextAlign(): string {
     return 'center';
-  },
+  }
 
-  _getFontOptions() {
+  _getFontOptions(): ThemeValue {
     const options = this._options;
-    let font = options.text.font;
+    let { font }: { font: Font } = options.text;
     if (!font || !font.color) {
       font = extend({}, font, { color: options.color });
     }
-    return _patchFontOptions(font);
-  },
+    return patchFontOptions(font);
+  }
 
-  _updateBarItemsPositions() {
-    const that = this;
-    const positions = that._getPositions();
+  _updateBarItemsPositions(): void {
+    const positions = this._getPositions();
 
-    that._backItem1.attr(that._buildItemSettings(positions.start, positions.back1));
-    that._backItem2.attr(that._buildItemSettings(positions.back2, positions.end));
-    that._spaceItem1.attr(that._buildItemSettings(positions.back1, positions.main1));
-    that._spaceItem2.attr(that._buildItemSettings(positions.main2, positions.back2));
-    that._mainItem.attr(that._buildItemSettings(positions.main1, positions.main2));
-    that._trackerElement && that._trackerElement.attr(that._buildItemSettings(positions.main1, positions.main2));
-  },
-
-  _render() {
-    const that = this;
-
-    that._measureText();
-    if (!that._backItem1) {
-      that._backItem1 = that._createBarItem();
-      that._backItem1.attr({ class: 'dxg-back-bar' });
+    this._backItem1.attr(this._buildItemSettings(positions.start, positions.back1));
+    this._backItem2.attr(this._buildItemSettings(positions.back2, positions.end));
+    this._spaceItem1.attr(this._buildItemSettings(positions.back1, positions.main1));
+    this._spaceItem2.attr(this._buildItemSettings(positions.main2, positions.back2));
+    this._mainItem.attr(this._buildItemSettings(positions.main1, positions.main2));
+    if (this._trackerElement) {
+      this._trackerElement.attr(this._buildItemSettings(positions.main1, positions.main2));
     }
-    if (!that._backItem2) {
-      that._backItem2 = that._createBarItem();
-      that._backItem2.attr({ class: 'dxg-back-bar' });
-    }
-    if (!that._spaceItem1) {
-      that._spaceItem1 = that._createBarItem();
-      that._spaceItem1.attr({ class: 'dxg-space-bar' });
-    }
-    if (!that._spaceItem2) {
-      that._spaceItem2 = that._createBarItem();
-      that._spaceItem2.attr({ class: 'dxg-space-bar' });
-    }
-    if (!that._mainItem) {
-      that._mainItem = that._createBarItem();
-      that._mainItem.attr({ class: 'dxg-main-bar' });
-    }
-    that._updateBarItems();
-    that._updateTextItems();
-  },
+  }
 
-  _clear() {
-    const that = this;
+  _render(): void {
+    this._measureText();
+    if (!this._backItem1) {
+      this._backItem1 = this._createBarItem();
+      this._backItem1.attr({ class: 'dxg-back-bar' });
+    }
+    if (!this._backItem2) {
+      this._backItem2 = this._createBarItem();
+      this._backItem2.attr({ class: 'dxg-back-bar' });
+    }
+    if (!this._spaceItem1) {
+      this._spaceItem1 = this._createBarItem();
+      this._spaceItem1.attr({ class: 'dxg-space-bar' });
+    }
+    if (!this._spaceItem2) {
+      this._spaceItem2 = this._createBarItem();
+      this._spaceItem2.attr({ class: 'dxg-space-bar' });
+    }
+    if (!this._mainItem) {
+      this._mainItem = this._createBarItem();
+      this._mainItem.attr({ class: 'dxg-main-bar' });
+    }
+    this._updateBarItems();
+    this._updateTextItems();
+  }
 
-    delete that._backItem1;
-    delete that._backItem2;
-    delete that._spaceItem1;
-    delete that._spaceItem2;
-    delete that._mainItem;
-    delete that._hasText;
-    delete that._line;
-    delete that._text;
-  },
+  _clear(): void {
+    delete this._backItem1;
+    delete this._backItem2;
+    delete this._spaceItem1;
+    delete this._spaceItem2;
+    delete this._mainItem;
+    delete this._hasText;
+    delete this._line;
+    delete this._text;
+  }
 
-  getTooltipParameters() {
+  getTooltipParameters(): TooltipParameters {
     const position = this._getTooltipPosition();
     return {
-      x: position.x, y: position.y, value: this._currentValue, color: this._options.color, offset: 0,
+      x: position.x,
+      y: position.y,
+      value: this._currentValue,
+      color: this._options.color,
+      offset: 0,
     };
-  },
-});
+  }
+
+  abstract _createBarItem(): ThemeValue;
+
+  abstract _setBarSides(): void;
+
+  abstract _setTextItemsSides(): void;
+
+  abstract _getPositions(): RangeBarPositions;
+
+  abstract _buildItemSettings(from: number, to: number): ThemeValue;
+
+  abstract _updateTextPosition(): void;
+
+  abstract _updateLinePosition(): void;
+
+  abstract _getTooltipPosition(): Point;
+}
 
 /// #DEBUG
 export { getTextCloudInfo };
