@@ -6,7 +6,7 @@ import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import $ from 'jquery';
 import ArrayStore from 'common/data/array_store';
 import ODataStore from 'common/data/odata/store';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { DataSource } from 'common/data/data_source/data_source';
 import { isFunction } from 'core/utils/type';
 import { invertFilterExpression } from '__internal/grids/grid_core/header_filter/utils';

@@ -1,7 +1,7 @@
 
 import $ from 'jquery';
 import { Component } from 'core/component';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import fx from 'common/core/animation/fx';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';

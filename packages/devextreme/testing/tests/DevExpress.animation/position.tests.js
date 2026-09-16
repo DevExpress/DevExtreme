@@ -3,7 +3,7 @@ import positionUtils from 'common/core/animation/position';
 import translator from '__internal/common/core/animation/translatorModule';
 import { stubSeam } from '../../helpers/moduleSeam.js';
 import browser from 'core/utils/browser';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fixtures from '../../helpers/positionFixtures.js';
 import { implementationsMap } from 'core/utils/size';
 import { getWindow } from 'core/utils/window.js';

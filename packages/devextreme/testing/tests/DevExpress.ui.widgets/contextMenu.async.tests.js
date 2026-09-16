@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import ContextMenu from 'ui/context_menu';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { SCROLLABLE_CONTAINER_CLASS } from '__internal/ui/scroll_view/consts';
 
 import 'ui/button';
