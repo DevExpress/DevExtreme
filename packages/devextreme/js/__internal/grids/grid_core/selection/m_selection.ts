@@ -159,7 +159,7 @@ export class SelectionController extends modules.Controller {
 
     if (!this._dataPushedHandler) {
       this._dataPushedHandler = this._handleDataPushed.bind(this);
-      this._dataController.pushed.add(this._dataPushedHandler);
+      this.dataSourceController.pushed.add(this._dataPushedHandler);
     }
   }
 
@@ -263,7 +263,7 @@ export class SelectionController extends modules.Controller {
       filter() {
         return dataController.getCombinedFilter(deferred);
       },
-      totalCount: () => dataController.totalCount(),
+      totalCount: () => dataSourceController.totalCount(),
       getLoadOptions(loadItemIndex, focusedItemIndex, shiftItemIndex) {
         const { sort, filter } = dataSourceController.lastLoadOptions();
         let minIndex = Math.min(loadItemIndex, focusedItemIndex);

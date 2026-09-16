@@ -718,7 +718,7 @@ QUnit.module('Filter Panel', {
         assert.notOk(this.filterPanelView.element().hasClass(FILTER_PANEL_CLASS));
 
         // act
-        this.dataController.setDataSource(new DataSource([]));
+        this.dataController.initDataSourceAdapter(new DataSource([]));
         this.dataController.dataSourceChanged.fire();
 
         // assert

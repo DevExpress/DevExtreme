@@ -427,7 +427,7 @@ QUnit.module('Headers', {
 
         const dataSource = new DataSource([]);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         // act
         this.columnHeadersView.render(testElement);

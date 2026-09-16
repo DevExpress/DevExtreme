@@ -1,13 +1,9 @@
 import $ from 'jquery';
-import testing from './utils.js';
+import { LOCATIONS, MARKERS, ROUTES } from './utils.js';
 import Map from 'ui/map';
 import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import Color from 'color';
 import ajaxMock from '../../../helpers/ajaxMock.js';
-
-const LOCATIONS = testing.LOCATIONS;
-const MARKERS = testing.MARKERS;
-const ROUTES = testing.ROUTES;
 
 const MAP_CONTAINER_CLASS = 'dx-map-container';
 

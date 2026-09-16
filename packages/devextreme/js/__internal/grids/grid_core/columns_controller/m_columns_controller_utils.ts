@@ -1097,4 +1097,8 @@ export const isColumnNameRequired = function ({ type = '' }: Column): boolean {
   return COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(type);
 };
 
+export const columnHasValue = (column: Column): boolean => (
+  !column.command || column.type === AI_COLUMN_NAME
+);
+
 export const getColumnHeaderCellSelector = (visibleIndex: number): string => `.dx-header-row td[aria-colindex="${visibleIndex + 1}"]`;

@@ -1,4 +1,4 @@
-const Color = require('color');
+import Color from 'color';
 
 QUnit.module('Colors parsing', {
     beforeEach: function() {

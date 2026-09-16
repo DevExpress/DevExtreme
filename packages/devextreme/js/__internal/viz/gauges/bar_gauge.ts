@@ -603,7 +603,6 @@ export const dxBarGauge = BaseGauge.inherit({
         color: b.getColor(),
         index: b.index,
       },
-      // @ts-expect-error
       text: _formatValue(b.getValue(), formatOptions),
       visible: true,
       states: { normal: { fill: b.getColor() } },

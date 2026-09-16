@@ -1,4 +1,4 @@
-import { afterCleanData, cleanData, strategyChanging } from '@ts/core/m_element_data';
+import { afterCleanData, cleanData, strategyChanging } from '@ts/core/element_data';
 import { compare as compareVersion } from '@ts/core/utils/m_version';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';
@@ -13,7 +13,7 @@ interface CleanedNode extends Node {
 if (ko) {
   const originalKOCleanExternalData = ko.utils.domNodeDisposal.cleanExternalData;
   const patchCleanData = (): void => {
-    afterCleanData((nodes: CleanedNode[]) => {
+    afterCleanData((nodes: ArrayLike<CleanedNode>) => {
       // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < nodes.length; i += 1) {
         nodes[i].cleanedByJquery = true;

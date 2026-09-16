@@ -9,6 +9,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type {
   DataChange, ItemProcessingOptions, LoadAllItemsDeferred, ProcessedItem,
 } from '@ts/grids/grid_core/data_controller/types';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
@@ -30,7 +31,7 @@ import { getSummaryItemIndex } from '../utils/get_summary_item_index';
 export const summaryDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class SummaryDataControllerExtender extends Base {
-  public declare _dataSource?: SummaryDataSourceAdapter | null;
+  protected declare dataSourceController: DataSourceController<SummaryDataSourceAdapter>;
 
   private _footerItems!: FooterItem[];
 
@@ -49,7 +50,7 @@ export const summaryDataControllerExtender = (
 
   public getTotalSummaryValue(summaryItemName?: string | number | null): unknown {
     const summaryItemIndex = getSummaryItemIndex(this.option('summary.totalItems'), summaryItemName);
-    const aggregates = this._dataSource?.totalAggregates() ?? [];
+    const aggregates = this.dataSourceController.getAdapter()?.totalAggregates() ?? [];
 
     if (aggregates.length && summaryItemIndex > -1) {
       return aggregates[summaryItemIndex];
@@ -312,14 +313,14 @@ export const summaryDataControllerExtender = (
   }
 
   protected _updateItemsCore(change: DataChange): void {
-    const dataSource = this._dataSource;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     const summaryTotalItems = this.option('summary.totalItems');
     const oldSummaryCells = this._footerItems?.[0]?.summaryCells;
 
     this._footerItems = [];
 
-    if (dataSource && summaryTotalItems?.length) {
-      const totalAggregates = dataSource.totalAggregates();
+    if (dataSourceAdapter && summaryTotalItems?.length) {
+      const totalAggregates = dataSourceAdapter.totalAggregates();
       const summaryCells = this._getSummaryCells(summaryTotalItems, totalAggregates);
 
       if (change?.repaintChangesOnly && oldSummaryCells) {

@@ -24,12 +24,13 @@ import rangeModule from 'viz/translators/range';
 import translator1DModule from 'viz/translators/translator1d';
 import rendererModule from 'viz/core/renderers/renderer_default';
 import themeManagerModule from '__internal/viz/gauges/theme_manager';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const stubRange = stubClass(rangeModule.Range);
 
 $('<div id="test-container">').appendTo('#qunit-fixture');
 
-sinon.stub(rangeModule, 'Range').callsFake(function(parameters) {
+stubSeam(rangeModule, 'Range', 'DEBUG_set_Range').callsFake(function(parameters) {
     return new stubRange(parameters);
 });
 
@@ -80,11 +81,11 @@ const factory = dxTestGauge.prototype._factory = objectUtils.clone(dxGauge.proto
 registerComponent('dxTestGauge', dxTestGauge);
 
 const StubTooltip = Tooltip;
-tooltipModule.Tooltip = function(parameters) {
+tooltipModule.DEBUG_set_tooltip(function(parameters) {
     return new StubTooltip(parameters);
-};
+});
 
-sinon.stub(axisModule, 'Axis').callsFake(function(parameters) {
+stubSeam(axisModule, 'Axis', 'DEBUG_set_Axis').callsFake(function(parameters) {
     return new Axis(parameters);
 });
 
@@ -181,7 +182,7 @@ loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
     return new LoadingIndicator(parameters);
 });
 
-sinon.stub(rendererModule, 'Renderer').callsFake(function() {
+stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(function() {
     return currentTest().renderer;
 });
 

@@ -538,7 +538,7 @@ export class RowsView extends ColumnsView {
       $cell = that._createCell({
         column: columns[i], rowType: 'freeSpace', columnIndex: i, columns,
       });
-      isNumeric(height) && $cell.css('height', height);
+      isNumeric(height) && setHeight($cell, height);
 
       $row.append($cell);
     }
@@ -1004,7 +1004,7 @@ export class RowsView extends ColumnsView {
     const contentElement = this._findContentElement();
     const freeSpaceRowElements = this._getFreeSpaceRowElements($table);
 
-    if (freeSpaceRowElements && contentElement && dataController.totalCount() >= 0) {
+    if (freeSpaceRowElements && contentElement && this.dataSourceController.totalCount() >= 0) {
       let isFreeSpaceRowVisible = false;
 
       if (itemCount > 0) {
@@ -1012,7 +1012,7 @@ export class RowsView extends ColumnsView {
           const freeSpaceRowCount = dataController.pageSize() - itemCount;
           const scrollingMode = this.option('scrolling.mode');
 
-          if (freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
+          if (freeSpaceRowCount > 0 && this.dataSourceController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
             setHeight(freeSpaceRowElements, freeSpaceRowCount * this._rowHeight);
             isFreeSpaceRowVisible = true;
           }
@@ -1037,7 +1037,7 @@ export class RowsView extends ColumnsView {
 
             if (showFreeSpaceRow) {
               deferRender(() => {
-                freeSpaceRowElements.css('height', resultHeight);
+                setHeight(freeSpaceRowElements, resultHeight);
                 isFreeSpaceRowVisible = true;
                 freeSpaceRowElements.show();
               });
@@ -1046,7 +1046,7 @@ export class RowsView extends ColumnsView {
           });
         }
       } else {
-        freeSpaceRowElements.css('height', 0);
+        setHeight(freeSpaceRowElements, 0);
         freeSpaceRowElements.show();
         this._updateLastRowBorder(true);
       }

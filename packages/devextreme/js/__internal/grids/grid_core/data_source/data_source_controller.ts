@@ -1,6 +1,8 @@
 import { DataSource as DataSourceClass } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
+import type { Callback } from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
+import type { StoreChange } from '@js/data/store';
 import type Store from '@ts/data/abstract_store';
 import type { StoreKey } from '@ts/data/abstract_store';
 import type { DataSource } from '@ts/data/data_source/data_source';
@@ -20,6 +22,12 @@ export class DataSourceController<
 
   private isShared = false;
 
+  public pushed!: Callback<[StoreChange[]]>;
+
+  public adapterChanged!: Callback<[]>;
+
+  private readonly dataPushedHandlerProxy = this.dataPushedHandler.bind(this);
+
   /**
    * @extended: DataGrid's and TreeList's data_source_controller
    */
@@ -27,8 +35,12 @@ export class DataSourceController<
     throw new Error('Method not implemented.');
   }
 
+  protected callbackNames(): string[] {
+    return ['pushed', 'adapterChanged'];
+  }
+
   public publicMethods(): string[] {
-    return ['getDataSource', 'keyOf'];
+    return ['getDataSource', 'keyOf', 'pageCount', 'totalCount'];
   }
 
   /**
@@ -77,7 +89,12 @@ export class DataSourceController<
     const adapter = this.getAdapterProvider().create(this.component);
 
     adapter.init(dataSource);
+
     this.adapter = adapter;
+
+    adapter.pushed.add(this.dataPushedHandlerProxy);
+
+    this.adapterChanged.fire();
 
     return adapter;
   }
@@ -91,12 +108,30 @@ export class DataSourceController<
   }
 
   public disposeAdapter(): void {
+    const hadAdapter = this.adapter !== null;
+
+    this.adapter?.pushed.remove(this.dataPushedHandlerProxy);
     this.adapter?.dispose(this.isShared);
     this.adapter = null;
+
+    if (hadAdapter) {
+      this.adapterChanged.fire();
+    }
+  }
+
+  /**
+   * @extended: focus
+   */
+  protected dataPushedHandler(changes: StoreChange[]): void {
+    this.pushed.fire(changes);
   }
 
   public store(): Store | undefined {
     return this.adapter?.store();
+  }
+
+  public push(changes: StoreChange[], fromStore = false): void {
+    this.adapter?.push(changes, fromStore);
   }
 
   /**
@@ -132,6 +167,10 @@ export class DataSourceController<
     return this.adapter?.loadingOperationTypes() ?? {};
   }
 
+  public isLoaded(): boolean {
+    return this.adapter ? this.adapter.isLoaded() : true;
+  }
+
   public isLoading(): boolean {
     return this.adapter?.isLoading() ?? false;
   }
@@ -146,5 +185,21 @@ export class DataSourceController<
 
   public getCachedStoreData(): RawItemData[] | undefined {
     return this.adapter?.getCachedStoreData();
+  }
+
+  public hasKnownLastPage(): boolean {
+    return this.adapter ? this.adapter.hasKnownLastPage() : true;
+  }
+
+  public totalItemsCount(): number {
+    return this.adapter ? this.adapter.totalItemsCount() : 0;
+  }
+
+  public totalCount(): number {
+    return this.adapter ? this.adapter.totalCount() : 0;
+  }
+
+  public pageCount(): number {
+    return this.adapter ? this.adapter.pageCount() : 1;
   }
 }

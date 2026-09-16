@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import animationFrame from '__internal/common/core/animation/frameModule';
+import { stubSeam } from '../../../helpers/moduleSeam.js';
 import Scrollbar from '__internal/ui/scroll_view/scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 
@@ -34,7 +35,7 @@ const moduleConfig = {
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
-        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
+        this.requestAnimationFrameStub = stubSeam(animationFrame, 'requestAnimationFrame', 'DEBUG_set_requestAnimationFrame').callsFake((callback) => {
             callback();
         });
     },

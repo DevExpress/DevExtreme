@@ -44,7 +44,14 @@ const initMasterDetail = function (that) {
   that._isExpandAll = that.option('masterDetail.autoExpandAll');
 };
 
-export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) => class DataMasterDetailExtender extends Base {
+export interface MasterDetailDataControllerExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  getRowIndicesForExpand(key: RowKey): number[];
+}
+
+export const dataMasterDetailExtenderMixin = (
+  Base: ModuleType<DataController>,
+): ModuleType<DataController & MasterDetailDataControllerExtension> => class DataMasterDetailExtender extends Base {
   private _isExpandAll: any;
 
   private _expandedItems: any;
@@ -98,7 +105,7 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return !!(that._isExpandAll ^ (expandIndex >= 0 && that._expandedItems[expandIndex].visible));
   }
 
-  protected getRowIndicesForExpand(key: RowKey): number[] {
+  public getRowIndicesForExpand(key: RowKey): number[] {
     const rowIndex = this.getRowIndexByKey(key);
 
     return [rowIndex, rowIndex + 1];

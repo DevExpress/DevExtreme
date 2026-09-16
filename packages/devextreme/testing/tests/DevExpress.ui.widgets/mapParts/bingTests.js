@@ -2,16 +2,12 @@
 
 import $ from 'jquery';
 import errorsLogger from 'core/errors';
-import testing from './utils.js';
+import { LOCATIONS, MARKERS, ROUTES } from './utils.js';
 import BingProvider from '__internal/ui/map/provider.dynamic.bing';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 import errors from 'ui/widget/ui.errors';
 
 import 'ui/map';
-
-const LOCATIONS = testing.LOCATIONS;
-const MARKERS = testing.MARKERS;
-const ROUTES = testing.ROUTES;
 
 const prepareTestingBingProvider = function(abortDirectionsUpdate) {
     window.geocodedLocation = new Microsoft.Maps.Location(-1.12345, -1.12345);

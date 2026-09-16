@@ -55,11 +55,26 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             loadingOperationTypes: function() {
                 return undefined;
             },
+            hasKnownLastPage: function() {
+                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
+            },
+            totalItemsCount: function() {
+                return options.totalItemsCount;
+            },
+            totalCount: function() {
+                return options.totalCount || 0;
+            },
+            pageCount: function() {
+                return options.pageCount;
+            },
             dispose: function() {
             },
             store: function() {
                 return options.store;
             },
+            push: function() {
+            },
+            pushed: $.Callbacks(),
             load: function(loadOptions) {
                 return itemsStore().load(loadOptions);
             },
@@ -127,21 +142,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return typeUtils.isDefined(options.pageSizes) ? options.pageSizes : [];
             },
 
-            hasKnownLastPage: function() {
-                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
-            },
-
             updatePagesCount: function(count) {
                 options.pageCount = count;
                 this.changed.fire();
-            },
-
-            pageCount: function() {
-                return options.pageCount;
-            },
-
-            totalCount: function() {
-                return options.totalCount || 0;
             },
 
             pageIndex: function(index) {
@@ -224,10 +227,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return options.itemsCount;
             },
 
-            totalItemsCount: function() {
-                return options.totalItemsCount;
-            },
-
             isLoading: function() {
                 return false;
             },
@@ -300,7 +299,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             dataErrorOccurred: $.Callbacks('stopOnFalse'),
             pageChanged: $.Callbacks(),
             dataSourceChanged: $.Callbacks(),
-            pushed: $.Callbacks(),
             rowIndicesChanged: $.Callbacks(),
             fireError: function() { },
             loadViewport: commonUtils.noop,
@@ -1233,8 +1231,29 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         };
 
 
+        // processModules() bound the widget's public methods to the controllers it built. A
+        // `controllers` override swaps those out afterwards, leaving the widget calling into an
+        // orphan that never gets init()ed. Re-point each public method the replacement implements.
+        const replacedControllers = [];
+        options && options.controllers && $.each(options.controllers, function(name, replacement) {
+            const original = that._controllers[name];
+            if(original && replacement && original !== replacement && original.publicMethods) {
+                replacedControllers.push({ original: original, replacement: replacement });
+            }
+        });
+
         options && options.controllers && $.extend(that._controllers, options.controllers);
         options && options.views && $.extend(that._views, options.views);
+
+        $.each(replacedControllers, function(_, pair) {
+            $.each(pair.original.publicMethods(), function(__, methodName) {
+                if(typeof pair.replacement[methodName] === 'function') {
+                    that[methodName] = function() {
+                        return pair.replacement[methodName].apply(pair.replacement, arguments);
+                    };
+                }
+            });
+        });
 
         const mockedDataController = options && options.controllers && options.controllers.data;
         if(mockedDataController && mockedDataController.mockOptions && that._controllers.dataSource) {

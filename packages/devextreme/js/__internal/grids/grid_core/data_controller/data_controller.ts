@@ -4,7 +4,6 @@ import { logger } from '@js/core/utils/console';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
-import type { StoreChange } from '@js/data/store';
 import errors from '@js/ui/widget/ui.errors';
 import { findChanges } from '@ts/core/utils/m_array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
@@ -26,9 +25,12 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { CustomLoadResult } from '../data_source_adapter/custom_loader';
 import type {
   BinaryDataFilterExpression,
+  DataFilter,
+} from '../filter/types';
+import { combineFilters, equalFilterParameters } from '../filter/utils';
+import type {
   CallbackFlags,
   DataChange,
-  DataFilter,
   GeneratedItem,
   GetUpdatedColumnIndices,
   ItemChange,
@@ -48,7 +50,7 @@ import type {
   UpdateItemChange,
   UserState,
 } from './types';
-import { resolvePaginate, syncPaging } from './utils/paging';
+import { syncPaging } from './utils/paging';
 import { getRefreshOptions } from './utils/refresh';
 import {
   attachChangedItems,
@@ -66,8 +68,6 @@ import {
 import { generateRowValues } from './utils/row_values';
 
 export class DataController extends modules.Controller {
-  protected _dataSource?: DataSourceAdapter | null;
-
   protected _items!: ProcessedItem[];
 
   private _cachedProcessedItems!: ProcessedItem[] | null;
@@ -110,8 +110,6 @@ export class DataController extends modules.Controller {
 
   public pageChanged!: Callback<[number?]>;
 
-  public pushed!: Callback<[StoreChange[]]>;
-
   public changed!: Callback<[DataChange]>;
 
   public loadingChanged!: Callback<[boolean, string?]>;
@@ -129,8 +127,6 @@ export class DataController extends modules.Controller {
 
   private loadErrorHandlerProxy!: (e: Error | string) => void;
 
-  private dataPushedHandlerProxy!: (changes: StoreChange[]) => void;
-
   private dataChangedHandlerProxy!: (e?: ChangedEvent) => void;
 
   public init(): void {
@@ -144,7 +140,6 @@ export class DataController extends modules.Controller {
     this._currentOperationTypes = null;
     this.dataChangedHandlerProxy = this.dataChangedHandler.bind(this);
     this.loadErrorHandlerProxy = this.loadErrorHandler.bind(this);
-    this.dataPushedHandlerProxy = this.dataPushedHandler.bind(this);
 
     this._columnsController.columnsChanged.add(this.columnsChangedHandler.bind(this));
 
@@ -161,27 +156,15 @@ export class DataController extends modules.Controller {
   }
 
   /**
-   * TODO: Define this method only in masterDetail.
-   * Remove the override from adaptive behavior
-   * and move the implementation to masterDetail.
-   *
-   * @extended: adaptivity, master_detail
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getRowIndicesForExpand(key: RowKey): number[] {
-    return [];
-  }
-
-  /**
    * @extended: virtual_scrolling
    */
   protected _getPagingOptionValue(optionName: PagingOptionName): number {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this._dataSource![optionName]();
+    return this.dataSourceController.getAdapter()![optionName]();
   }
 
   protected callbackNames(): string[] {
-    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed', 'rowIndicesChanged'];
+    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'rowIndicesChanged'];
   }
 
   protected callbackFlags(name?: string): CallbackFlags | undefined {
@@ -194,7 +177,6 @@ export class DataController extends modules.Controller {
 
   public publicMethods(): string[] {
     return [
-      '_disposeDataSource',
       'beginCustomLoading',
       'byKey',
       'clearFilter',
@@ -204,12 +186,10 @@ export class DataController extends modules.Controller {
       'getKeyByRowIndex',
       'getRowIndexByKey',
       'getVisibleRows',
-      'pageCount',
       'pageIndex',
       'pageSize',
       'refresh',
       'repaintRows',
-      'totalCount',
     ];
   }
 
@@ -275,7 +255,6 @@ export class DataController extends modules.Controller {
       case 'remoteOperations':
       case 'keyExpr':
       case 'dataSource':
-      case 'scrolling':
         args.handled = true;
         this.reset();
         break;
@@ -335,11 +314,13 @@ export class DataController extends modules.Controller {
     returnDataField?: boolean,
     excludedColumn: Column | null = null,
   ): DataFilter {
-    if (!this._dataSource) {
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+
+    if (!dataSourceAdapter) {
       return filter;
     }
 
-    let combined: DataFilter = filter ?? this._dataSource.filter();
+    let combined: DataFilter = filter ?? dataSourceAdapter.filter();
 
     const isColumnsTypesDefined = this._columnsController.isDataSourceApplied()
       || this._columnsController.isAllDataTypesDefined();
@@ -348,13 +329,13 @@ export class DataController extends modules.Controller {
       const additionalFilter = this.filterController.getAdditionalFilter(excludedColumn);
 
       combined = additionalFilter
-        ? gridCoreUtils.combineFilters([additionalFilter, combined])
+        ? combineFilters([additionalFilter, combined])
         : combined;
     }
 
-    const isRemoteFiltering = this._dataSource.remoteOperations().filtering || returnDataField;
+    const isRemoteFiltering = dataSourceAdapter.remoteOperations().filtering || returnDataField;
 
-    combined = this._columnsController.updateFilter(combined, isRemoteFiltering);
+    combined = this.filterController.normalizeFilterSelectors(combined, isRemoteFiltering);
 
     return combined;
   }
@@ -394,8 +375,8 @@ export class DataController extends modules.Controller {
   // Handlers
   private readonly customizeStoreLoadOptionsHandler = (e: LoadOperation): void => {
     const columnsController = this._columnsController;
-    const dataSource = this._dataSource;
-    if (!dataSource) {
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+    if (!dataSourceAdapter) {
       return;
     }
     const { storeLoadOptions } = e;
@@ -415,25 +396,26 @@ export class DataController extends modules.Controller {
     }
 
     if (!columnsController.isDataSourceApplied()) {
-      columnsController.updateColumnDataTypes(dataSource);
+      columnsController.updateColumnDataTypes(dataSourceAdapter);
     }
     this._columnsUpdating = true;
     try {
-      columnsController.updateSortingGrouping(dataSource, !this._useSortingGroupingFromColumns);
+      columnsController
+        .updateSortingGrouping(dataSourceAdapter, !this._useSortingGroupingFromColumns);
     } finally {
       this._columnsUpdating = false;
     }
 
     storeLoadOptions.sort = columnsController.getSortDataSourceParameters();
     storeLoadOptions.group = columnsController.getGroupDataSourceParameters();
-    dataSource.sort(storeLoadOptions.sort);
-    dataSource.group(storeLoadOptions.group);
+    dataSourceAdapter.sort(storeLoadOptions.sort);
+    dataSourceAdapter.group(storeLoadOptions.group);
 
     storeLoadOptions.sort = columnsController
-      .getSortDataSourceParameters(!dataSource.remoteOperations().sorting);
+      .getSortDataSourceParameters(!dataSourceAdapter.remoteOperations().sorting);
 
     e.group = columnsController
-      .getGroupDataSourceParameters(!dataSource.remoteOperations().grouping);
+      .getGroupDataSourceParameters(!dataSourceAdapter.remoteOperations().grouping);
   };
 
   private updateItemsAfterColumnsChanged(): void {
@@ -502,9 +484,11 @@ export class DataController extends modules.Controller {
     let filterApplied = false;
 
     if (changeTypes.sorting || changeTypes.grouping) {
-      if (this._dataSource && !this._columnsUpdating) {
-        this._dataSource.group(this._columnsController.getGroupDataSourceParameters());
-        this._dataSource.sort(this._columnsController.getSortDataSourceParameters());
+      const dataSourceAdapter = this.dataSourceController.getAdapter();
+
+      if (dataSourceAdapter && !this._columnsUpdating) {
+        dataSourceAdapter.group(this._columnsController.getGroupDataSourceParameters());
+        dataSourceAdapter.sort(this._columnsController.getSortDataSourceParameters());
         this.reload();
       }
     } else if (changeTypes.columns) {
@@ -537,15 +521,15 @@ export class DataController extends modules.Controller {
    * @extended: selection
    */
   protected dataChangedHandler(e?: ChangedEvent): void {
-    const dataSource = this._dataSource;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     let isAsyncDataSourceApplying = false;
 
     this._useSortingGroupingFromColumns = false;
 
-    if (dataSource && !this._isDataSourceApplying) {
+    if (dataSourceAdapter && !this._isDataSourceApplying) {
       this._isDataSourceApplying = true;
 
-      when(this._columnsController.applyDataSource(dataSource)).done(() => {
+      when(this._columnsController.applyDataSource(dataSourceAdapter)).done(() => {
         if (this._isLoading) {
           this.loadingChangedHandler(false);
         }
@@ -570,7 +554,7 @@ export class DataController extends modules.Controller {
           errors.log('W1005', this.component.NAME);
           this.applyFilter();
         } else {
-          this._currentOperationTypes = dataSource.operationTypes();
+          this._currentOperationTypes = dataSourceAdapter.operationTypes();
 
           const change: DataChange = isDefined(e)
             ? {
@@ -608,42 +592,50 @@ export class DataController extends modules.Controller {
     this.dataErrorOccurred.fire(e);
   }
 
-  protected dataPushedHandler(changes: StoreChange[]): void {
-    this.pushed.fire(changes);
-  }
-
   public fireError(...args: unknown[]): void {
     this.dataErrorOccurred.fire(errors.Error(...args));
   }
 
   private applyPagingOptions(dataSource: PagingDataSource): PagingChanges {
-    const { scrolling, paging } = this.option();
+    const { paging } = this.option();
 
-    // Not paging state to reconcile, but a per-load request flag: infinite
-    // scrolling detects the last page locally and needs no grand total.
-    dataSource.requireTotalCount(scrolling?.mode !== 'infinite');
+    dataSource.requireTotalCount(this.requiresTotalCount());
 
     return syncPaging(dataSource, {
-      paginate: resolvePaginate(paging?.enabled, scrolling?.mode),
+      paginate: this.resolvePaginate(paging?.enabled),
       pageSize: paging?.pageSize,
       pageIndex: paging?.pageIndex,
     });
   }
 
   /**
+   * @extended: virtual_scrolling
+   */
+  protected resolvePaginate(enabled: boolean | undefined): boolean | undefined {
+    return enabled;
+  }
+
+  /**
+   * @extended: virtual_scrolling
+   */
+  protected requiresTotalCount(): boolean {
+    return true;
+  }
+
+  /**
    * @extended: state_storing, virtual_scrolling
    */
   protected resetDataSource(): DeferredObj<unknown> | undefined {
-    this._initDataSource();
-    this._loadDataSource();
+    this.rebuildDataSource();
+    this.loadDataSourceAdapter();
 
     return undefined;
   }
 
-  protected _initDataSource(): void {
-    const hadDataSource = !!this._dataSource;
+  protected rebuildDataSource(): void {
+    const hadDataSourceAdapter = this.dataSourceController.hasAdapter();
 
-    this._disposeDataSource();
+    this.disposeDataSourceAdapter();
 
     const dataSource = this.dataSourceController.createDataSource();
     this._useSortingGroupingFromColumns = true;
@@ -653,8 +645,8 @@ export class DataController extends modules.Controller {
       const { isPageIndexChanged } = this.applyPagingOptions(dataSource);
 
       this._isPaging = isPageIndexChanged;
-      this.setDataSource(dataSource);
-    } else if (hadDataSource) {
+      this.initDataSourceAdapter(dataSource);
+    } else if (hadDataSourceAdapter) {
       this.updateItems();
     }
   }
@@ -662,13 +654,13 @@ export class DataController extends modules.Controller {
   /**
    * @extended: selection, virtual_scrolling
    */
-  protected _loadDataSource(): DeferredObj<unknown> {
-    const dataSource = this._dataSource;
+  protected loadDataSourceAdapter(): DeferredObj<unknown> {
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     const result: DeferredObj<unknown> = Deferred();
 
     when(this._columnsController.refresh(true)).always(() => {
-      if (dataSource) {
-        dataSource.load().done((...args: unknown[]) => {
+      if (dataSourceAdapter) {
+        dataSourceAdapter.load().done((...args: unknown[]) => {
           this._isPaging = false;
           result.resolve(...args);
         }).fail((...args: unknown[]) => { result.reject(...args); });
@@ -1063,7 +1055,7 @@ export class DataController extends modules.Controller {
     change.operationTypes ??= this._currentOperationTypes;
     this._currentOperationTypes = null;
 
-    if (!this._dataSource) {
+    if (!this.dataSourceController.hasAdapter()) {
       this._items = [];
       return;
     }
@@ -1094,7 +1086,8 @@ export class DataController extends modules.Controller {
     // change.items at this stage is defined only if virtualScrolling
     // + legacyScrollingMode enabled
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const items = (change.items ?? this._dataSource!.items()) as RawItemData[];
+    const adapterItems = this.dataSourceController.getAdapter()!.items();
+    const items = (change.items ?? adapterItems) as RawItemData[];
     const dataItems = this._beforeProcessItems(items);
     const processedItems = this._processItems(dataItems, change);
 
@@ -1200,10 +1193,10 @@ export class DataController extends modules.Controller {
    * @extended: filter_sync, virtual_scrolling
    */
   protected applyFilter(): DeferredObj<unknown> {
-    const dataSource = this._dataSource;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-    if (dataSource) {
-      dataSource.pageIndex(0);
+    if (dataSourceAdapter) {
+      dataSourceAdapter.pageIndex(0);
       if (this.option('paging.pageIndex')) {
         this._silentOption('paging.pageIndex', 0);
       }
@@ -1227,8 +1220,9 @@ export class DataController extends modules.Controller {
   private filter(filterExpr: DataFilter): void;
   private filter(...binaryFilterExpr: BinaryDataFilterExpression): void;
   private filter(...filterArgs: [] | [DataFilter] | BinaryDataFilterExpression): DataFilter | void {
-    const filter: DataFilter = this._dataSource?.filter();
-    const langParams = this._dataSource?.loadOptions?.()?.langParams;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+    const filter: DataFilter = dataSourceAdapter?.filter();
+    const langParams = dataSourceAdapter?.loadOptions?.()?.langParams;
 
     if (filterArgs.length === 0) {
       return filter;
@@ -1236,11 +1230,11 @@ export class DataController extends modules.Controller {
 
     const filterExpr: DataFilter = filterArgs.length === 1 ? filterArgs[0] : filterArgs;
 
-    if (gridCoreUtils.equalFilterParameters(filter, filterExpr, langParams)) {
+    if (equalFilterParameters(filter, filterExpr, langParams)) {
       return undefined;
     }
 
-    this._dataSource?.filter(filterExpr);
+    dataSourceAdapter?.filter(filterExpr);
     this.applyFilter();
 
     return undefined;
@@ -1296,35 +1290,31 @@ export class DataController extends modules.Controller {
     this.dataSourceChanged.fire();
   };
 
-  private subscribeToDataSource(dataSourceAdapter: DataSourceAdapter): void {
+  private subscribeToDataSourceAdapter(dataSourceAdapter: DataSourceAdapter): void {
     dataSourceAdapter.changed.add(this.dataChangedHandlerProxy);
     dataSourceAdapter.loadingChanged.add(this.loadingChangedHandler);
     dataSourceAdapter.loadError.add(this.loadErrorHandlerProxy);
     dataSourceAdapter.customizeStoreLoadOptions.add(this.customizeStoreLoadOptionsHandler);
     dataSourceAdapter.changing.add(this.changingHandler);
-    dataSourceAdapter.pushed.add(this.dataPushedHandlerProxy);
   }
 
-  private unsubscribeFromDataSource(dataSourceAdapter: DataSourceAdapter): void {
+  private unsubscribeFromDataSourceAdapter(dataSourceAdapter: DataSourceAdapter): void {
     dataSourceAdapter.changed.remove(this.dataChangedHandlerProxy);
     dataSourceAdapter.loadingChanged.remove(this.loadingChangedHandler);
     dataSourceAdapter.loadError.remove(this.loadErrorHandlerProxy);
     dataSourceAdapter.customizeStoreLoadOptions.remove(this.customizeStoreLoadOptionsHandler);
     dataSourceAdapter.changing.remove(this.changingHandler);
-    dataSourceAdapter.pushed.remove(this.dataPushedHandlerProxy);
   }
 
-  private setDataSource(dataSource: DataSource): void {
+  private initDataSourceAdapter(dataSource: DataSource): void {
     const dataSourceAdapter = this.dataSourceController.createAdapter(dataSource);
-
-    this._dataSource = dataSourceAdapter;
 
     this._isLoading = !dataSourceAdapter.isLoaded();
     this._needApplyFilter = true;
     this._isAllDataTypesDefined = this._columnsController.isAllDataTypesDefined();
 
     this.changed.add(this.fireDataSourceChanged);
-    this.subscribeToDataSource(dataSourceAdapter);
+    this.subscribeToDataSourceAdapter(dataSourceAdapter);
   }
 
   /**
@@ -1342,18 +1332,14 @@ export class DataController extends modules.Controller {
     return !this.items().length;
   }
 
-  public pageCount(): number {
-    return this._dataSource ? this._dataSource.pageCount() : 1;
-  }
-
   public loadAllItems(
     data?: RawItemData[],
     skipFilter = false,
   ): LoadAllItemsDeferred {
     const d = Deferred<ProcessedItem[]>() as LoadAllItemsDeferred;
-    const dataSource = this._dataSource;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-    if (!dataSource) {
+    if (!dataSourceAdapter) {
       d.resolve([]);
       return d;
     }
@@ -1363,15 +1349,15 @@ export class DataController extends modules.Controller {
     };
 
     if (data) {
-      dataSource.customLoader.processLoadedData(data, {
+      dataSourceAdapter.customLoader.processLoadedData(data, {
         filter: skipFilter ? null : this.getCombinedFilter(),
-        group: dataSource.group(),
-        sort: dataSource.sort(),
+        group: dataSourceAdapter.group(),
+        sort: dataSourceAdapter.sort(),
       })
         .done(resolveLoaded)
         .fail(d.reject as (...args: unknown[]) => void);
-    } else if (!dataSource.isLoading()) {
-      dataSource.customLoader.loadAll()
+    } else if (!dataSourceAdapter.isLoading()) {
+      dataSourceAdapter.customLoader.loadAll()
         .done(resolveLoaded)
         .fail(d.reject as (...args: unknown[]) => void);
     } else {
@@ -1445,16 +1431,16 @@ export class DataController extends modules.Controller {
   }
 
   private changePaging(optionName: PagingOptionName, value?: number): PagingResult {
-    const dataSource = this._dataSource;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-    if (!dataSource) {
+    if (!dataSourceAdapter) {
       return optionName === 'pageIndex' && value !== undefined
         ? Deferred().resolve().promise()
         : 0;
     }
 
     if (value === undefined) {
-      return dataSource[optionName]();
+      return dataSourceAdapter[optionName]();
     }
 
     const oldValue = this._getPagingOptionValue(optionName);
@@ -1465,19 +1451,19 @@ export class DataController extends modules.Controller {
     this._skipProcessingPagingChange = true;
     try {
       if (optionName === 'pageSize' && value === 0) {
-        dataSource.pageIndex(0);
+        dataSourceAdapter.pageIndex(0);
         this.option('paging.pageIndex', 0);
       }
-      dataSource[optionName](value);
+      dataSourceAdapter[optionName](value);
       this.option(`paging.${optionName}`, value);
     } finally {
       this._skipProcessingPagingChange = false;
     }
 
-    const pageIndex = dataSource.pageIndex();
+    const pageIndex = dataSourceAdapter.pageIndex();
     this._isPaging = optionName === 'pageIndex';
 
-    const loadResult: DeferredObj<unknown> = dataSource[optionName === 'pageIndex' ? 'load' : 'reload']();
+    const loadResult: DeferredObj<unknown> = dataSourceAdapter[optionName === 'pageIndex' ? 'load' : 'reload']();
 
     return loadResult.done(() => {
       this._isPaging = false;
@@ -1501,7 +1487,9 @@ export class DataController extends modules.Controller {
   }
 
   public isCustomLoading(): boolean {
-    return this._isCustomLoading || !!this._dataSource?.customLoader.isLoading();
+    const customLoader = this.dataSourceController.getAdapter()?.customLoader;
+
+    return this._isCustomLoading || !!customLoader?.isLoading();
   }
 
   public beginCustomLoading(messageText?: string): void {
@@ -1557,21 +1545,20 @@ export class DataController extends modules.Controller {
     return this.items();
   }
 
-  protected _disposeDataSource(): void {
-    const oldDataSource = this._dataSource;
+  protected disposeDataSourceAdapter(): void {
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
-    if (oldDataSource) {
+    if (dataSourceAdapter) {
       // Before unsubscribing: cancelling in-flight loads still notifies this controller.
-      oldDataSource.cancelAll();
-      this.unsubscribeFromDataSource(oldDataSource);
+      dataSourceAdapter.cancelAll();
+      this.unsubscribeFromDataSourceAdapter(dataSourceAdapter);
     }
 
-    this._dataSource = null;
     this.dataSourceController.disposeAdapter();
   }
 
   public dispose(): void {
-    this._disposeDataSource();
+    this.disposeDataSourceAdapter();
     super.dispose();
   }
 
@@ -1612,12 +1599,12 @@ export class DataController extends modules.Controller {
    */
   public isLastPageLoaded(): boolean {
     const pageIndex = this.pageIndex();
-    const pageCount = this.pageCount();
+    const pageCount = this.dataSourceController.pageCount();
     return pageIndex === (pageCount - 1);
   }
 
   public load(): DeferredObj<unknown> {
-    return this._dataSource?.load() as DeferredObj<unknown>;
+    return this.dataSourceController.getAdapter()?.load() as DeferredObj<unknown>;
   }
 
   /**
@@ -1625,38 +1612,19 @@ export class DataController extends modules.Controller {
    */
 
   public reload(reload?: boolean, changesOnly?: boolean): DeferredObj<unknown> {
-    return this._dataSource?.reload(reload, changesOnly) as DeferredObj<unknown>;
-  }
-
-  public push(changes: StoreChange[], fromStore = false): void {
-    this._dataSource?.push(changes, fromStore);
-  }
-
-  private itemsCount(): number {
-    return (this._dataSource ? this._dataSource.itemsCount() : 0);
-  }
-
-  public totalItemsCount(): number {
-    return (this._dataSource ? this._dataSource.totalItemsCount() : 0);
-  }
-
-  public hasKnownLastPage(): boolean {
-    return (this._dataSource ? this._dataSource.hasKnownLastPage() : true);
+    return this.dataSourceController.getAdapter()
+      ?.reload(reload, changesOnly) as DeferredObj<unknown>;
   }
 
   /**
    * @extended: state_storing
    */
   public isLoaded(): boolean {
-    return (this._dataSource ? this._dataSource.isLoaded() : true);
-  }
-
-  public totalCount(): number {
-    return (this._dataSource ? this._dataSource.totalCount() : 0);
+    return this.dataSourceController.isLoaded();
   }
 
   public hasLoadOperation(): boolean {
-    const operationTypes = this._dataSource?.operationTypes() ?? {};
+    const operationTypes = this.dataSourceController.operationTypes() ?? {};
 
     return Object.keys(operationTypes).some((type) => operationTypes[type]);
   }

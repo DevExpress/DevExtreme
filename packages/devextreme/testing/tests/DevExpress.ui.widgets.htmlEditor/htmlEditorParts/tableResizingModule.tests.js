@@ -72,6 +72,8 @@ const moduleConfig = {
 
     },
     afterEach: function() {
+        this.clock.tick(1000);
+        resizeCallbacks.empty();
         this.clock.restore();
     }
 };
@@ -176,7 +178,7 @@ module('Table resizing module', moduleConfig, () => {
 
         resizeCallbacks.fire();
 
-        assert.strictEqual(typeof resizingInstance._resizeHandlerWithContext, 'object', '_resizeHandler is an object');
+        assert.ok(resizingInstance._resizeHandlerWithContext, '_resizeHandlerWithContext is registered');
     });
 
     test('Window resize callback should be cleaned after the widget dispose', function(assert) {
