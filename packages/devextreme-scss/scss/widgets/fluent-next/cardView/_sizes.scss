@@ -190,8 +190,6 @@ $card-view-column-chooser-select-all-item-horizontal-padding: null !default;
   $card-view-card-content-cell-padding-block: ds.$spacing-60 !default;
   $card-view-card-content-cell-padding-inline: ds.$spacing-120 !default;
 
-  // Card - selected
-
   // Header
   $card-view-header-gap: 0 !default;
 
@@ -205,10 +203,6 @@ $card-view-column-chooser-select-all-item-horizontal-padding: null !default;
   $card-view-header-item-padding-inline-start: ds.$spacing-60 !default;
   $card-view-header-item-padding-inline-end: ds.$spacing-20 !default;
 
-  // Header panel item - hovered
-
-  // Header panel item - disabled
-
   // Header panel item - dragged
   $card-view-header-item-sort-indicator-border-width: ds.$border-width-20 !default;
   $card-view-header-item-sort-indicator-border-radius: ds.$border-radius-80 !default;
@@ -218,14 +212,10 @@ $card-view-column-chooser-select-all-item-horizontal-padding: null !default;
   $card-view-header-panel-dropzone-inset-block-start: ds.$spacing-minus-60  !default;
   $card-view-header-panel-dropzone-border-radius: ds.$border-radius-80 !default;
 
-  // Filter panel
-
   // Empty view
   $card-view-nodata-view-icon-container-size: ds.$spacing-640 !default;
   $card-view-nodata-view-icon-container-margin: ds.$spacing-120 !default;
   $card-view-nodata-view-icon-size: ds.$spacing-400 !default;
-
-  // Search highlight
 
   // Column chooser
   $card-view-column-chooser-empty-message-horizontal-padding: ds.$spacing-240 !default;
@@ -251,8 +241,6 @@ $card-view-column-chooser-select-all-item-horizontal-padding: null !default;
   $card-view-card-content-cell-padding-block: ds.$spacing-40 !default;
   $card-view-card-content-cell-padding-inline: ds.$spacing-80 !default;
 
-  // Card - selected
-
   // Header
   $card-view-header-gap: ds.$spacing-40 !default;
 
@@ -266,10 +254,6 @@ $card-view-column-chooser-select-all-item-horizontal-padding: null !default;
   $card-view-header-item-padding-inline-start: ds.$spacing-30 !default;
   $card-view-header-item-padding-inline-end: ds.$spacing-10 !default;
 
-  // Header panel item - hovered
-
-  // Header panel item - disabled
-
   // Header panel item - dragged
   $card-view-header-item-sort-indicator-border-width: ds.$border-width-10 !default;
   $card-view-header-item-sort-indicator-border-radius: ds.$border-radius-40 !default;
@@ -279,14 +263,10 @@ $card-view-column-chooser-select-all-item-horizontal-padding: null !default;
   $card-view-header-panel-dropzone-inset-block-start: ds.$spacing-minus-40  !default;
   $card-view-header-panel-dropzone-border-radius: ds.$border-radius-60 !default;
 
-  // Filter panel
-
   // Empty view
   $card-view-nodata-view-icon-container-size: ds.$spacing-480 !default;
   $card-view-nodata-view-icon-container-margin: ds.$spacing-80 !default;
   $card-view-nodata-view-icon-size: ds.$spacing-320 !default;
-
-  // Search highlight
 
   // Column chooser
   $card-view-column-chooser-empty-message-horizontal-padding: ds.$spacing-160 !default;
