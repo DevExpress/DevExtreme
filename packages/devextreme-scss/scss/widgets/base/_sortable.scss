@@ -4,6 +4,16 @@
 
 $sortable-clone-shadow-color-first: rgba(0, 0, 0, 0.1) !default;
 $sortable-clone-shadow-color-second: rgba(0, 0, 0, 0.2) !default;
+
+/*
+ * dx-shadow-geometry: the whole shadow, so a theme can hand over a design-system role instead of
+ * two colours for a geometry frozen here. The default keeps the two-layer lift the older themes
+ * were built on.
+ */
+$sortable-clone-shadow:
+  0 1px 3px $sortable-clone-shadow-color-first,
+  0 6px 8px $sortable-clone-shadow-color-second !default;
+
 $sortable-clone-opacity: 0.9 !default;
 $sortable-source-opacity: 0.5 !default;
 
@@ -58,5 +68,5 @@ $sortable-placeholder-inside-border-width: 2px !default;
 
 .dx-sortable-dragging > * {
   border-color: if(meta.type-of($base-accent) == color, color.change($base-accent, $alpha: 0.5), rgb(from #{$base-accent} r g b / 0.5));
-  box-shadow: 0 1px 3px $sortable-clone-shadow-color-first, 0 6px 8px $sortable-clone-shadow-color-second; // dx-shadow-geometry: the theme already takes both colours from roles; whether a whole shadow role replaces this two-layer geometry is design's call
+  box-shadow: $sortable-clone-shadow;
 }

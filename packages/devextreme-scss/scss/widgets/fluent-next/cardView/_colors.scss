@@ -123,7 +123,7 @@ $card-view-header-panel-item-dragged-allowance-icon: var(--dx-card-view-text-con
 
 $card-view-header-panel-item-dragged-prohibition-icon: ds.$color-content-danger !default;
 
-$card-view-header-panel-item-dragged-shadow: ds.$color-shadow-key !default;
+$card-view-header-panel-item-dragged-shadow: ds.$box-shadow-md !default;
 
 // #endregion
 
@@ -169,7 +169,7 @@ $card-view-card-content-field-value-highlighted-bg: ds.$color-bg-highlight !defa
 
 $card-view-card-content-field-value-highlighted-content: ds.$color-content-on-highlight !default;
 
-$card-view-card-content-field-value-highlighted-shadow: ds.$color-shadow-key !default;
+$card-view-card-content-field-value-highlighted-shadow: ds.$box-shadow-xs !default;
 
 // #endregion
 
@@ -229,7 +229,7 @@ $cardview-header-panel__item--dragged-border-color: var(--dx-card-view-header-pa
 $cardview-header-panel__item--dragged-text-color: var(--dx-card-view-header-panel-item-dragged-content) !default;
 $cardview-header-panel__item--dragged__allowance-icon-color: var(--dx-card-view-header-panel-item-dragged-allowance-icon) !default;
 $cardview-header-panel__item--dragged__prohibition-icon-color: var(--dx-card-view-header-panel-item-dragged-prohibition-icon) !default;
-$cardview-header-panel__item--dragged-box-shadow-color: var(--dx-card-view-header-panel-item-dragged-shadow) !default;
+$cardview-header-panel__item--dragged-box-shadow: var(--dx-card-view-header-panel-item-dragged-shadow) !default;
 
 $cardview-header-panel__dropzone-bg-color: var(--dx-card-view-header-panel-dropzone-bg) !default;
 $cardview-header-panel__dropzone-border-color: var(--dx-card-view-header-panel-dropzone-border) !default;
@@ -248,7 +248,7 @@ $cardview-nodata-view__icon-bg-color: var(--dx-card-view-nodata-view-icon-bg) !d
 
 $cardview-card__content__field-value--highlighted-bg-color: var(--dx-card-view-card-content-field-value-highlighted-bg) !default;
 $cardview-card__content__field-value--highlighted-text-color: var(--dx-card-view-card-content-field-value-highlighted-content) !default;
-$cardview-card__content__field-value--highlighted-box-shadow: 0 1px 3px var(--dx-card-view-card-content-field-value-highlighted-shadow) !default; // dx-shadow-geometry: 0 1px 3px
+$cardview-card__content__field-value--highlighted-box-shadow: var(--dx-card-view-card-content-field-value-highlighted-shadow) !default;
 
 $cardview-columnchooser--empty__message-color: var(--dx-card-view-column-chooser-empty-message-content) !default;
 
