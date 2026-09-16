@@ -8,6 +8,7 @@ import {
   beforeTest,
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
+import { HIDDEN_COLUMNS_WIDTH } from '../../adaptivity/const';
 
 describe('getFilteringColumns', () => {
   beforeEach(beforeTest);
@@ -136,6 +137,155 @@ describe('Bugs', () => {
 
       expect(headerCellsArray.length).toBe(1);
       expect(dataCellsArray.length).toBe(1);
+    });
+  });
+
+  describe('T1329677 - DataGrid - Column width changes are not applied immediately', () => {
+    it('should invalidate calculated widths when a column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
+        columns: ['field1', 'field2', 'field3'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 100);
+      columnsController.columnOption(1, 'visibleWidth', 110);
+      columnsController.columnOption(2, 'visibleWidth', 120);
+
+      instance.columnOption(1, 'width', 150);
+
+      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
+        null, null, null,
+      ]);
+    });
+
+    it('should preserve an adaptive-hidden marker when a column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1' }],
+        columns: ['field1'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', HIDDEN_COLUMNS_WIDTH);
+
+      instance.columnOption(0, 'width', 150);
+
+      expect(columnsController.columnOption(0, 'visibleWidth')).toBe(HIDDEN_COLUMNS_WIDTH);
+    });
+
+    it('should invalidate an auto visible width when a column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1' }],
+        columns: ['field1'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 'auto');
+
+      instance.columnOption(0, 'width', 150);
+
+      expect(columnsController.columnOption(0, 'visibleWidth')).toBeNull();
+    });
+
+    it('should invalidate calculated widths of command columns when another column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1' }],
+        columns: ['field1'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.addCommandColumn({ command: 'test', width: 'auto' });
+      columnsController.columnOption('command:test', 'visibleWidth', 100);
+
+      instance.columnOption('field1', 'width', 150);
+
+      expect(columnsController.columnOption('command:test', 'visibleWidth')).toBeNull();
+    });
+
+    it('should preserve calculated widths of unrelated columns when applying resolved dimensions', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
+        columns: ['field1', 'field2', 'field3'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 100);
+      columnsController.columnOption(1, 'visibleWidth', 110);
+      columnsController.columnOption(2, 'visibleWidth', 120);
+
+      columnsController.updateColumnDimensions([{
+        columnIndex: 1,
+        visibleWidth: null,
+        width: 150,
+      }]);
+
+      expect(columnsController.columnOption(1, 'width')).toBe(150);
+      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
+        100, null, 120,
+      ]);
+    });
+
+    it('should invalidate a stale visible width when another option changed the same column in the batch', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
+        columns: ['field1', 'field2', 'field3'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 100);
+      columnsController.columnOption(1, 'visibleWidth', 110);
+      columnsController.columnOption(2, 'visibleWidth', 120);
+
+      columnsController.beginUpdate();
+      columnsController.columnOption(1, 'caption', 'Updated field 2');
+      columnsController.columnOption(0, 'visibleWidth', 105);
+      columnsController.columnOption(1, 'width', 150);
+      columnsController.endUpdate();
+
+      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
+        105, null, null,
+      ]);
+    });
+
+    it('should preserve visible widths that are pending for their respective columns', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
+        columns: ['field1', 'field2', 'field3'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 100);
+      columnsController.columnOption(1, 'visibleWidth', 110);
+      columnsController.columnOption(2, 'visibleWidth', 120);
+
+      columnsController.beginUpdate();
+      columnsController.columnOption(0, 'visibleWidth', 105);
+      columnsController.columnOption(1, 'visibleWidth', 115);
+      columnsController.columnOption(1, 'width', 150);
+      columnsController.endUpdate();
+
+      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
+        105, 115, null,
+      ]);
+    });
+
+    it('should clear pending visible widths after the update batch completes', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
+        columns: ['field1', 'field2', 'field3'],
+      });
+      const columnsController = instance.getController('columns');
+
+      columnsController.columnOption(0, 'visibleWidth', 100);
+
+      columnsController.beginUpdate();
+      columnsController.columnOption(0, 'visibleWidth', 105);
+      columnsController.columnOption(0, 'width', 150);
+      columnsController.endUpdate();
+
+      columnsController.columnOption(0, 'width', 160);
+
+      expect(columnsController.columnOption(0, 'visibleWidth')).toBeNull();
     });
   });
 });
