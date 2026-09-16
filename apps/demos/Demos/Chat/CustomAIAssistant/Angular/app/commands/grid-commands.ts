@@ -1,4 +1,4 @@
-import type { DxDataGridComponent } from 'devextreme-angular/ui/data-grid';
+import type { DxDataGridComponent, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import type {
   ColumnLookup,
   CommandResult,
@@ -260,7 +260,7 @@ ${commandDescriptions}`;
 }
 
 export function getGridColumnNames(gridInstance: DxDataGridComponent): string[] {
-  return (gridInstance.instance.option('columns') ?? []).map((col) => col.dataField ?? '');
+  return (gridInstance.instance.option('columns') as DxDataGridTypes.Column[]).map((column) => String(column.dataField));
 }
 
 export function applyGridActions(
