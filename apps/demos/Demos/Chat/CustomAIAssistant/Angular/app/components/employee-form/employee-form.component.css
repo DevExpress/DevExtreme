@@ -1,10 +1,15 @@
+:host-context(.dx-color-scheme-blue-light) {
+  --form-background-color: #fff;
+}
+
+:host-context(.dx-color-scheme-dark) {
+  --form-background-color: var(--dx-component-color-bg);
+}
+
 ::ng-deep #form-container {
   border: 1px solid #e0e0e0;
   padding: 16px;
-}
-
-::ng-deep .dx-color-scheme-blue-light #form-container {
-  background-color: #fff;
+  background-color: var(--form-background-color);
 }
 
 ::ng-deep .dx-layout-manager .dx-field-item.save-button {

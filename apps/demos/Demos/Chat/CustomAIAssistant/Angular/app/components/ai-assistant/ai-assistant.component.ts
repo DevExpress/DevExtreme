@@ -1,8 +1,8 @@
 import {
-  Component, EventEmitter, Input, Output, ViewChild,
+  ChangeDetectorRef, Component, EventEmitter, Input, Output,
 } from '@angular/core';
-import { DxPopupModule, DxPopupComponent } from 'devextreme-angular/ui/popup';
-import { DxChatModule, DxChatComponent } from 'devextreme-angular/ui/chat';
+import { DxPopupModule } from 'devextreme-angular/ui/popup';
+import { DxChatModule } from 'devextreme-angular/ui/chat';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DxSpeedDialActionModule } from 'devextreme-angular/ui/speed-dial-action';
 import { ArrayStore, DataSource } from 'devextreme-angular/common/data';
@@ -32,10 +32,6 @@ export class AiAssistantComponent {
 
   @Output() messageSubmitted = new EventEmitter<DxChatTypes.TextMessage>();
 
-  @ViewChild(DxPopupComponent) private dxPopup!: DxPopupComponent;
-
-  @ViewChild(DxChatComponent) private dxChat!: DxChatComponent;
-
   readonly CLASSES = CLASSES;
 
   readonly emptyViewMessage = EMPTY_VIEW_MESSAGE;
@@ -56,6 +52,8 @@ export class AiAssistantComponent {
   fabVisible = true;
 
   isClearDisabled = true;
+
+  constructor(private readonly cdr: ChangeDetectorRef) {}
 
   private readonly store = new ArrayStore({ key: 'id' });
 
@@ -84,7 +82,7 @@ export class AiAssistantComponent {
 
   setDisabled(value: boolean): void {
     this.disabled = value;
-    this.dxChat.instance.option('disabled', value);
+    this.cdr.detectChanges();
     if (!value) {
       this.updateClearButtonState();
     }
