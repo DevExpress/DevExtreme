@@ -1,17 +1,205 @@
-import domAdapter from '@js/core/dom_adapter';
 import { cleanDataRecursive, data as elementData, removeData } from '@js/core/element_data';
+import type { Coordinates } from '@js/core/renderer';
 import { isTablePart, parseHTML } from '@js/core/utils/html_parser';
 import { getOffset, getWindowByElement } from '@js/core/utils/size';
 import { normalizeStyleProp, styleProp } from '@js/core/utils/style';
 import {
-  isDefined, isFunction, isNumeric, isObject, isPlainObject, isString, isWindow, type,
+  isDefined, isFunction, isNumeric, isObject, isPlainObject, isString, isWindow,
 } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import domAdapter from '@ts/core/dom_adapter';
+
+export interface RendererElement extends HTMLElement {
+  host?: RendererElement;
+  select?: () => void;
+  tBodies?: HTMLCollectionOf<HTMLTableSectionElement>;
+}
+
+export type AttributeValue = string | number | boolean | null | undefined;
+
+export type Attributes = Record<string, AttributeValue>;
+
+export type StyleValue = string | number | null | undefined;
+
+export type TextContent = string | number | boolean | null | undefined;
+
+export type TextValue = TextContent | (() => TextContent);
+
+interface ArrayConvertible {
+  toArray: () => (Node | Window)[];
+}
+
+export type RendererSelector = string | Node | Window | (Node | Window)[] | ArrayConvertible
+  | null | undefined;
+
+export type ElementCallback = (
+  this: RendererElement,
+  index: number,
+  element: RendererElement,
+) => unknown;
+
+export type RendererFilter = string | Node | Window | ElementCallback | ArrayLike<Node | Window>
+  | null | undefined;
+
+export type FindSelector = string | Node | ArrayLike<Node> | null | undefined;
+
+export type WrapTarget = string | Node | Renderer;
+
+type AppendItem = Node | ArrayLike<Node>;
+
+export type AppendSource = string | number | Node | ArrayLike<AppendItem> | null | undefined;
+
+export interface Renderer {
+  [index: number]: RendererElement;
+  length: number;
+  dxRenderer: boolean;
+
+  show: (this: Renderer) => Renderer;
+  hide: (this: Renderer) => Renderer;
+  toggle: (this: Renderer, value?: boolean | string) => Renderer;
+  attr: {
+    (this: Renderer, attrName: string): string | undefined;
+    (this: Renderer, attrName: string | Attributes, value?: AttributeValue): Renderer;
+  };
+  removeAttr: (this: Renderer, attrName: string) => Renderer;
+  prop: {
+    (this: Renderer, propName: string): unknown;
+    (this: Renderer, propName: string | Record<string, unknown>, value?: unknown): Renderer;
+  };
+  addClass: (this: Renderer, className: string) => Renderer;
+  removeClass: (this: Renderer, className: string) => Renderer;
+  hasClass: (this: Renderer, className: string) => boolean;
+  toggleClass: (this: Renderer, className: string, value?: boolean) => Renderer;
+  html: {
+    (this: Renderer): string;
+    (this: Renderer, value: string | number): Renderer;
+  };
+  css: {
+    (this: Renderer, name: string): string | undefined;
+    (this: Renderer, name: string | Record<string, StyleValue>, value?: StyleValue): Renderer;
+  };
+  prepend: (this: Renderer, ...elements: AppendSource[]) => Renderer;
+  append: (this: Renderer, ...elements: AppendSource[]) => Renderer;
+  prependTo: (this: Renderer, element: RendererSelector) => Renderer;
+  appendTo: (this: Renderer, element: RendererSelector) => Renderer;
+  insertBefore: (this: Renderer, element: ArrayLike<Node> | null | undefined) => Renderer;
+  insertAfter: (this: Renderer, element: ArrayLike<Node> | null | undefined) => Renderer;
+  before: (this: Renderer, element: ArrayLike<Node>) => Renderer;
+  after: (this: Renderer, element: ArrayLike<Node>) => Renderer;
+  wrap: (this: Renderer, wrapper: WrapTarget) => Renderer;
+  wrapInner: (this: Renderer, wrapper: WrapTarget) => Renderer;
+  replaceWith: (this: Renderer, element: Renderer | null | undefined) => Renderer | undefined;
+  remove: (this: Renderer) => Renderer;
+  detach: (this: Renderer) => Renderer;
+  empty: (this: Renderer) => Renderer;
+  clone: (this: Renderer) => Renderer;
+  text: {
+    (this: Renderer): string;
+    (this: Renderer, value: TextValue): Renderer;
+  };
+  val: {
+    (this: Renderer): unknown;
+    (this: Renderer, value: unknown): Renderer;
+  };
+  contents: (this: Renderer) => Renderer;
+  find: (this: Renderer, selector: FindSelector) => Renderer;
+  filter: (this: Renderer, selector: RendererFilter) => Renderer;
+  not: (this: Renderer, selector: RendererFilter) => Renderer;
+  is: (this: Renderer, selector: RendererFilter) => boolean;
+  children: (this: Renderer, selector?: RendererFilter) => Renderer;
+  siblings: (this: Renderer) => Renderer;
+  each: (this: Renderer, callback: ElementCallback) => void;
+  index: (this: Renderer, element?: RendererSelector) => number;
+  get: (this: Renderer, index: number) => RendererElement;
+  eq: (this: Renderer, index: number) => Renderer;
+  first: (this: Renderer) => Renderer;
+  last: (this: Renderer) => Renderer;
+  select: (this: Renderer) => Renderer;
+  parent: (this: Renderer, selector?: RendererFilter) => Renderer;
+  parents: (this: Renderer, selector?: RendererFilter) => Renderer;
+  closest: (this: Renderer, selector: RendererFilter) => Renderer;
+  next: (this: Renderer, selector?: RendererFilter) => Renderer;
+  prev: (this: Renderer) => Renderer;
+  add: (this: Renderer, selector: RendererSelector) => Renderer;
+  splice: (this: Renderer, start: number, deleteCount?: number) => Renderer;
+  slice: (this: Renderer, start?: number, end?: number) => Renderer;
+  toArray: (this: Renderer) => RendererElement[];
+  offset: (this: Renderer) => Coordinates | undefined;
+  offsetParent: (this: Renderer) => Renderer;
+  position: (this: Renderer) => Coordinates | undefined;
+  scrollLeft: {
+    (this: Renderer): number | undefined;
+    (this: Renderer, value: number): Renderer | undefined;
+  };
+  scrollTop: {
+    (this: Renderer): number | undefined;
+    (this: Renderer, value: number): Renderer | undefined;
+  };
+  data: {
+    (this: Renderer, key?: string): unknown;
+    (this: Renderer, key: string, value: unknown): Renderer | undefined;
+  };
+  removeData: (this: Renderer, key?: string) => Renderer;
+}
+
+export interface RendererFactory {
+  (selector?: RendererSelector, context?: Document): Renderer;
+  fn: Renderer;
+}
+
+interface RendererConstructor {
+  prototype: Renderer;
+  (this: Renderer, selector?: RendererSelector, context?: Document): Renderer;
+  new (selector?: RendererSelector, context?: Document): Renderer;
+}
+
+type RepeatableMethod = 'attr' | 'toggleClass' | 'appendTo' | 'remove' | 'detach' | 'empty';
+
+interface ScrollStrategy {
+  propName: 'scrollLeft' | 'scrollTop';
+  offsetProp: 'pageXOffset' | 'pageYOffset';
+  scrollWindow: (win: Window, value: number) => void;
+}
 
 const window = getWindow();
 
-let renderer;
-const initRender = function (selector, context) {
+const fillFromList = (target: Renderer, items: ArrayLike<Node | Window>): void => {
+  const { length } = items;
+  for (let i = 0; i < length; i += 1) {
+    target[i] = items[i] as RendererElement;
+  }
+  target.length = length;
+};
+
+const pushAll = (target: Node[], items: ArrayLike<Node>): void => {
+  const { length } = items;
+  for (let i = 0; i < length; i += 1) {
+    target.push(items[i]);
+  }
+};
+
+const pushMatches = (
+  target: RendererElement[],
+  list: ArrayLike<unknown>,
+  item: RendererElement,
+): void => {
+  const { length } = list;
+  for (let i = 0; i < length; i += 1) {
+    if (list[i] === item) {
+      target.push(item);
+    }
+  }
+};
+
+const isArrayConvertible = (value: object): value is ArrayConvertible => (
+  isFunction((value as Partial<ArrayConvertible>).toArray)
+);
+
+const InitRender = function (
+  this: Renderer,
+  selector?: RendererSelector,
+  context?: Document,
+): Renderer {
   if (!selector) {
     this.length = 0;
     return this;
@@ -24,61 +212,65 @@ const initRender = function (selector, context) {
       return this;
     }
 
-    context = context || domAdapter.getDocument();
+    const rootContext = context ?? domAdapter.getDocument();
     if (selector.startsWith('<')) {
-      this[0] = domAdapter.createElement(selector.slice(1, -1), context);
+      this[0] = domAdapter.createElement(selector.slice(1, -1), rootContext);
       this.length = 1;
       return this;
     }
 
-    [].push.apply(this, domAdapter.querySelectorAll(context, selector));
+    fillFromList(this, domAdapter.querySelectorAll(rootContext, selector));
     return this;
   } if (domAdapter.isNode(selector) || isWindow(selector)) {
-    this[0] = selector;
+    this[0] = selector as RendererElement;
     this.length = 1;
     return this;
   } if (Array.isArray(selector)) {
-    // @ts-expect-error
-    [].push.apply(this, selector);
+    fillFromList(this, selector);
     return this;
   }
 
-  return renderer(selector.toArray ? selector.toArray() : [selector]);
-};
+  return new InitRender(isArrayConvertible(selector) ? selector.toArray() : [selector]);
+} as RendererConstructor;
 
-renderer = function (selector, context) {
-  // @ts-expect-error void constructor
-  // eslint-disable-next-line new-cap
-  return new initRender(selector, context);
-};
-renderer.fn = { dxRenderer: true };
-initRender.prototype = renderer.fn;
+let renderer: RendererFactory = function (
+  selector?: RendererSelector,
+  context?: Document,
+): Renderer {
+  return new InitRender(selector, context);
+} as RendererFactory;
+renderer.fn = { dxRenderer: true } as Renderer;
+InitRender.prototype = renderer.fn;
 
-const repeatMethod = function (methodName, args) {
-  for (let i = 0; i < this.length; i++) {
+const repeatMethod = function <K extends RepeatableMethod>(
+  this: Renderer,
+  methodName: K,
+  args: Parameters<Renderer[K]>,
+): Renderer {
+  for (let i = 0; i < this.length; i += 1) {
     const item = renderer(this[i]);
-    item[methodName].apply(item, args);
+    (item[methodName] as (...methodArgs: Parameters<Renderer[K]>) => unknown)(...args);
   }
   return this;
 };
 
-const setAttributeValue = function (element, attrName, value) {
+const setAttributeValue = (element: Element, attrName: string, value: AttributeValue): void => {
   if (value !== undefined && value !== null && value !== false) {
-    domAdapter.setAttribute(element, attrName, value);
+    domAdapter.setAttribute(element, attrName, String(value));
   } else {
     domAdapter.removeAttribute(element, attrName);
   }
 };
 
-initRender.prototype.show = function () {
+InitRender.prototype.show = function (this: Renderer): Renderer {
   return this.toggle(true);
 };
 
-initRender.prototype.hide = function () {
+InitRender.prototype.hide = function (this: Renderer): Renderer {
   return this.toggle(false);
 };
 
-initRender.prototype.toggle = function (value) {
+InitRender.prototype.toggle = function (this: Renderer, value?: boolean | string): Renderer {
   if (this[0]) {
     this.toggleClass('dx-state-invisible', !value);
   }
@@ -86,8 +278,14 @@ initRender.prototype.toggle = function (value) {
   return this;
 };
 
-initRender.prototype.attr = function (attrName, value) {
-  if (this.length > 1 && arguments.length > 1) return repeatMethod.call(this, 'attr', arguments);
+function attr(this: Renderer, attrName: string): string | undefined;
+function attr(this: Renderer, attrName: string | Attributes, value?: AttributeValue): Renderer;
+function attr(
+  this: Renderer,
+  ...args: [attrName: string | Attributes, value?: AttributeValue]
+): Renderer | string | undefined {
+  const [attrName, value] = args;
+  if (this.length > 1 && args.length > 1) return repeatMethod.call(this, 'attr', args);
   if (!this[0]) {
     if (isObject(attrName) || value !== undefined) {
       return this;
@@ -97,232 +295,281 @@ initRender.prototype.attr = function (attrName, value) {
   if (!this[0].getAttribute) {
     return this.prop(attrName, value);
   }
-  if (typeof attrName === 'string' && arguments.length === 1) {
+  if (typeof attrName === 'string' && args.length === 1) {
     const result = this[0].getAttribute(attrName);
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return result == null ? undefined : result;
+    return result ?? undefined;
   } if (isPlainObject(attrName)) {
-    for (const key in attrName) {
+    Object.keys(attrName).forEach((key) => {
       this.attr(key, attrName[key]);
-    }
+    });
   } else {
     setAttributeValue(this[0], attrName, value);
   }
   return this;
-};
+}
+InitRender.prototype.attr = attr;
 
-initRender.prototype.removeAttr = function (attrName) {
-  this.each(function (_, element) {
+InitRender.prototype.removeAttr = function (this: Renderer, attrName: string): Renderer {
+  this.each((_, element) => {
     domAdapter.removeAttribute(element, attrName);
   });
 
   return this;
 };
 
-initRender.prototype.prop = function (propName, value) {
+function prop(this: Renderer, propName: string): unknown;
+function prop(
+  this: Renderer,
+  propName: string | Record<string, unknown>,
+  value?: unknown,
+): Renderer;
+function prop(
+  this: Renderer,
+  ...args: [propName: string | Record<string, unknown>, value?: unknown]
+): unknown {
+  const [propName, value] = args;
   if (!this[0]) return this;
-  if (typeof propName === 'string' && arguments.length === 1) {
-    return this[0][propName];
+  if (typeof propName === 'string' && args.length === 1) {
+    const propValue: unknown = this[0][propName];
+    return propValue;
   } if (isPlainObject(propName)) {
-    for (const key in propName) {
+    Object.keys(propName).forEach((key) => {
       this.prop(key, propName[key]);
-    }
+    });
   } else {
     domAdapter.setProperty(this[0], propName, value);
   }
 
   return this;
-};
+}
+InitRender.prototype.prop = prop;
 
-initRender.prototype.addClass = function (className) {
+InitRender.prototype.addClass = function (this: Renderer, className: string): Renderer {
   return this.toggleClass(className, true);
 };
 
-initRender.prototype.removeClass = function (className) {
+InitRender.prototype.removeClass = function (this: Renderer, className: string): Renderer {
   return this.toggleClass(className, false);
 };
 
-initRender.prototype.hasClass = function (className: string) {
+InitRender.prototype.hasClass = function (this: Renderer, className: string): boolean {
   const classNames = className.split(' ');
 
-  for (let i = 0; i < this.length; i++) {
-    if (!this[i] || !this[i].className) continue;
-
-    for (let j = 0; j < classNames.length; j++) {
-      if (this[i].classList.contains(classNames[j])) return true;
+  for (let i = 0; i < this.length; i += 1) {
+    if (this[i]?.className && classNames.some((name) => this[i].classList.contains(name))) {
+      return true;
     }
   }
 
   return false;
 };
 
-initRender.prototype.toggleClass = function (className, value) {
+InitRender.prototype.toggleClass = function (
+  this: Renderer,
+  ...args: [className: string, value?: boolean]
+): Renderer {
+  const [className, value] = args;
   if (this.length > 1) {
-    return repeatMethod.call(this, 'toggleClass', arguments);
+    return repeatMethod.call(this, 'toggleClass', args);
   }
 
   if (!this[0] || !className) return this;
-  value = value === undefined ? !this.hasClass(className) : value;
+  const isAdd = value === undefined ? !this.hasClass(className) : value;
 
   const classNames = className.split(' ');
-  for (let i = 0; i < classNames.length; i++) {
-    domAdapter.setClass(this[0], classNames[i], value);
+  for (const name of classNames) {
+    domAdapter.setClass(this[0], name, isAdd);
   }
   return this;
 };
 
-initRender.prototype.html = function (value) {
-  if (!arguments.length) {
+function html(this: Renderer): string;
+function html(this: Renderer, value: string | number): Renderer;
+function html(this: Renderer, ...args: [value?: string | number]): Renderer | string {
+  if (!args.length) {
     return this[0].innerHTML;
   }
 
+  const [value] = args;
   this.empty();
 
-  if (typeof value === 'string' && !isTablePart(value) || typeof value === 'number') {
-    this[0].innerHTML = value;
+  if ((typeof value === 'string' && !isTablePart(value)) || typeof value === 'number') {
+    this[0].innerHTML = String(value);
 
     return this;
   }
 
   return this.append(parseHTML(value));
+}
+InitRender.prototype.html = html;
+
+const toAppendItems = (source: NonNullable<AppendSource>): ArrayLike<AppendItem> => {
+  if (typeof source === 'string') {
+    return parseHTML(source) ?? [];
+  }
+  if (domAdapter.isNode(source)) {
+    return [source];
+  }
+  if (isNumeric(source)) {
+    return [domAdapter.createTextNode(String(source))];
+  }
+  return source;
 };
 
-const appendElements = function (element, nextSibling) {
-  if (!this[0] || !element) return;
+const appendElements = function (
+  this: Renderer,
+  source: AppendSource,
+  nextSibling?: Node | null,
+): void {
+  if (!this[0] || !source) return;
 
-  if (typeof element === 'string') {
-    element = parseHTML(element);
-  } else if (element.nodeType) {
-    element = [element];
-  } else if (isNumeric(element)) {
-    element = [domAdapter.createTextNode(element)];
-  }
+  const items = toAppendItems(source);
+  const { length } = items;
 
-  for (let i = 0; i < element.length; i++) {
-    const item = element[i];
-    let container = this[0];
-    const wrapTR = container.tagName === 'TABLE' && item.tagName === 'TR';
+  for (let i = 0; i < length; i += 1) {
+    const item = items[i];
+    const container = this[0];
+    const wrapTR = container.tagName === 'TABLE' && domAdapter.isNode(item) && item.nodeName === 'TR';
+    const target = wrapTR && container.tBodies?.length ? container.tBodies[0] : container;
 
-    if (wrapTR && container.tBodies && container.tBodies.length) {
-      // HTML collection, not an array
-      // eslint-disable-next-line prefer-destructuring
-      container = container.tBodies[0];
-    }
-    domAdapter.insertElement(container, item.nodeType ? item : item[0], nextSibling);
+    domAdapter.insertElement(target, domAdapter.isNode(item) ? item : item[0], nextSibling);
   }
 };
 
-const setCss = function (name, value) {
-  if (!this[0] || !this[0].style) return;
+const setCss = function (this: Renderer, name: string, value: StyleValue): void {
+  if (!this[0]?.style) return;
 
   if (value === null || (typeof value === 'number' && isNaN(value))) {
     return;
   }
 
-  name = styleProp(name);
-  for (let i = 0; i < this.length; i++) {
-    this[i].style[name] = normalizeStyleProp(name, value);
+  const styleName: string = styleProp(name);
+  for (let i = 0; i < this.length; i += 1) {
+    this[i].style[styleName] = normalizeStyleProp(styleName, value);
   }
 };
 
-initRender.prototype.css = function (name, value) {
+function css(this: Renderer, name: string): string | undefined;
+function css(
+  this: Renderer,
+  name: string | Record<string, StyleValue>,
+  value?: StyleValue,
+): Renderer;
+function css(
+  this: Renderer,
+  ...args: [name: string | Record<string, StyleValue>, value?: StyleValue]
+): Renderer | string | undefined {
+  const [name, value] = args;
   if (isString(name)) {
-    if (arguments.length === 2) {
+    if (args.length === 2) {
       setCss.call(this, name, value);
     } else {
-      if (!this[0]) return;
+      if (!this[0]) return undefined;
 
-      name = styleProp(name);
+      const styleName: string = styleProp(name);
 
-      const result = window.getComputedStyle(this[0])[name] || this[0].style[name];
+      const result: string | number | undefined = window.getComputedStyle(this[0])[styleName]
+        || this[0].style[styleName];
       return isNumeric(result) ? result.toString() : result;
     }
   } else if (isPlainObject(name)) {
-    for (const key in name) {
+    Object.keys(name).forEach((key) => {
       setCss.call(this, key, name[key]);
-    }
+    });
   }
 
   return this;
-};
+}
+InitRender.prototype.css = css;
 
-initRender.prototype.prepend = function (element) {
-  if (arguments.length > 1) {
-    for (let i = 0; i < arguments.length; i++) {
-      this.prepend(arguments[i]);
-    }
-    return this;
-  }
-  appendElements.apply(this, [element, this[0].firstChild]);
-  return this;
-};
-
-initRender.prototype.append = function (element) {
-  if (arguments.length > 1) {
-    for (let i = 0; i < arguments.length; i++) {
-      this.append(arguments[i]);
+InitRender.prototype.prepend = function (this: Renderer, ...elements: AppendSource[]): Renderer {
+  if (elements.length > 1) {
+    for (const element of elements) {
+      this.prepend(element);
     }
     return this;
   }
-  // @ts-expect-error
-  appendElements.apply(this, [element]);
+  const [element] = elements;
+  appendElements.call(this, element, this[0].firstChild);
   return this;
 };
 
-initRender.prototype.prependTo = function (element) {
+InitRender.prototype.append = function (this: Renderer, ...elements: AppendSource[]): Renderer {
+  if (elements.length > 1) {
+    for (const element of elements) {
+      this.append(element);
+    }
+    return this;
+  }
+  const [element] = elements;
+  appendElements.call(this, element);
+  return this;
+};
+
+InitRender.prototype.prependTo = function (this: Renderer, element: RendererSelector): Renderer {
   if (this.length > 1) {
-    for (let i = this.length - 1; i >= 0; i--) {
+    for (let i = this.length - 1; i >= 0; i -= 1) {
       renderer(this[i]).prependTo(element);
     }
     return this;
   }
 
-  element = renderer(element);
-  if (element[0]) {
-    domAdapter.insertElement(element[0], this[0], element[0].firstChild);
+  const $element = renderer(element);
+  if ($element[0]) {
+    domAdapter.insertElement($element[0], this[0], $element[0].firstChild);
   }
 
   return this;
 };
 
-initRender.prototype.appendTo = function (element) {
+InitRender.prototype.appendTo = function (
+  this: Renderer,
+  ...args: [element: RendererSelector]
+): Renderer {
   if (this.length > 1) {
-    return repeatMethod.call(this, 'appendTo', arguments);
+    return repeatMethod.call(this, 'appendTo', args);
   }
 
+  const [element] = args;
   domAdapter.insertElement(renderer(element)[0], this[0]);
   return this;
 };
 
-initRender.prototype.insertBefore = function (element) {
-  if (element && element[0]) {
+InitRender.prototype.insertBefore = function (
+  this: Renderer,
+  element: ArrayLike<Node> | null | undefined,
+): Renderer {
+  if (element?.[0]) {
     domAdapter.insertElement(element[0].parentNode, this[0], element[0]);
   }
   return this;
 };
 
-initRender.prototype.insertAfter = function (element) {
-  if (element && element[0]) {
+InitRender.prototype.insertAfter = function (
+  this: Renderer,
+  element: ArrayLike<Node> | null | undefined,
+): Renderer {
+  if (element?.[0]) {
     domAdapter.insertElement(element[0].parentNode, this[0], element[0].nextSibling);
   }
   return this;
 };
 
-initRender.prototype.before = function (element) {
+InitRender.prototype.before = function (this: Renderer, element: ArrayLike<Node>): Renderer {
   if (this[0]) {
     domAdapter.insertElement(this[0].parentNode, element[0], this[0]);
   }
   return this;
 };
 
-initRender.prototype.after = function (element) {
+InitRender.prototype.after = function (this: Renderer, element: ArrayLike<Node>): Renderer {
   if (this[0]) {
     domAdapter.insertElement(this[0].parentNode, element[0], this[0].nextSibling);
   }
   return this;
 };
 
-initRender.prototype.wrap = function (wrapper) {
+InitRender.prototype.wrap = function (this: Renderer, wrapper: WrapTarget): Renderer {
   if (this[0]) {
     const wrap = renderer(wrapper);
 
@@ -333,7 +580,7 @@ initRender.prototype.wrap = function (wrapper) {
   return this;
 };
 
-initRender.prototype.wrapInner = function (wrapper) {
+InitRender.prototype.wrapInner = function (this: Renderer, wrapper: WrapTarget): Renderer {
   const contents = this.contents();
 
   if (contents.length) {
@@ -345,8 +592,11 @@ initRender.prototype.wrapInner = function (wrapper) {
   return this;
 };
 
-initRender.prototype.replaceWith = function (element) {
-  if (!(element && element[0])) return;
+InitRender.prototype.replaceWith = function (
+  this: Renderer,
+  element: Renderer | null | undefined,
+): Renderer | undefined {
+  if (!element?.[0]) return undefined;
   if (element.is(this)) return this;
 
   element.insertBefore(this);
@@ -355,9 +605,9 @@ initRender.prototype.replaceWith = function (element) {
   return element;
 };
 
-initRender.prototype.remove = function () {
+InitRender.prototype.remove = function (this: Renderer, ...args: []): Renderer {
   if (this.length > 1) {
-    return repeatMethod.call(this, 'remove', arguments);
+    return repeatMethod.call(this, 'remove', args);
   }
 
   cleanDataRecursive(this[0], true);
@@ -366,9 +616,9 @@ initRender.prototype.remove = function () {
   return this;
 };
 
-initRender.prototype.detach = function () {
+InitRender.prototype.detach = function (this: Renderer, ...args: []): Renderer {
   if (this.length > 1) {
-    return repeatMethod.call(this, 'detach', arguments);
+    return repeatMethod.call(this, 'detach', args);
   }
 
   domAdapter.removeElement(this[0]);
@@ -376,9 +626,9 @@ initRender.prototype.detach = function () {
   return this;
 };
 
-initRender.prototype.empty = function () {
+InitRender.prototype.empty = function (this: Renderer, ...args: []): Renderer {
   if (this.length > 1) {
-    return repeatMethod.call(this, 'empty', arguments);
+    return repeatMethod.call(this, 'empty', args);
   }
 
   cleanDataRecursive(this[0]);
@@ -387,83 +637,94 @@ initRender.prototype.empty = function () {
   return this;
 };
 
-initRender.prototype.clone = function () {
-  const result: any[] = [];
-  for (let i = 0; i < this.length; i++) {
+InitRender.prototype.clone = function (this: Renderer): Renderer {
+  const result: Node[] = [];
+  for (let i = 0; i < this.length; i += 1) {
     result.push(this[i].cloneNode(true));
   }
   return renderer(result);
 };
 
-initRender.prototype.text = function (value) {
-  if (!arguments.length) {
+function text(this: Renderer): string;
+function text(this: Renderer, value: TextValue): Renderer;
+function text(this: Renderer, ...args: [value?: TextValue]): Renderer | string {
+  if (!args.length) {
     let result = '';
 
-    for (let i = 0; i < this.length; i++) {
-      result += this[i] && this[i].textContent || '';
+    for (let i = 0; i < this.length; i += 1) {
+      result += this[i]?.textContent || '';
     }
     return result;
   }
 
-  const text = isFunction(value) ? value() : value;
+  const [value] = args;
+  const textValue = isFunction(value) ? value() : value;
 
   cleanDataRecursive(this[0], false);
-  domAdapter.setText(this[0], isDefined(text) ? text : '');
+  domAdapter.setText(this[0], isDefined(textValue) ? String(textValue) : '');
 
   return this;
-};
+}
+InitRender.prototype.text = text;
 
-initRender.prototype.val = function (value) {
-  if (arguments.length === 1) {
+function val(this: Renderer): unknown;
+function val(this: Renderer, value: unknown): Renderer;
+function val(this: Renderer, ...args: [value?: unknown]): unknown {
+  if (args.length === 1) {
+    const [value] = args;
     return this.prop('value', isDefined(value) ? value : '');
   }
 
   return this.prop('value');
-};
+}
+InitRender.prototype.val = val;
 
-initRender.prototype.contents = function () {
+InitRender.prototype.contents = function (this: Renderer): Renderer {
   if (!this[0]) return renderer();
 
-  const result = [];
-  result.push.apply(result, this[0].childNodes);
+  const result: Node[] = [];
+  pushAll(result, this[0].childNodes);
   return renderer(result);
 };
 
-initRender.prototype.find = function (selector) {
+const findInElement = (element: RendererElement, selector: string, nodes: Node[]): void => {
+  const elementId = element.getAttribute('id');
+  let queryId = elementId || 'dx-query-children';
+
+  if (!elementId) {
+    setAttributeValue(element, 'id', queryId);
+  }
+  queryId = `[id='${queryId}'] `;
+
+  const querySelector = queryId + selector.replace(/([^\\])(,)/g, `$1, ${queryId}`);
+  pushAll(nodes, domAdapter.querySelectorAll(element, querySelector));
+  setAttributeValue(element, 'id', elementId);
+};
+
+InitRender.prototype.find = function (this: Renderer, selector: FindSelector): Renderer {
   const result = renderer();
   if (!selector) {
     return result;
   }
 
-  const nodes: any = [];
-  let i;
+  const nodes: Node[] = [];
 
   if (typeof selector === 'string') {
-    selector = selector.trim();
+    const trimmedSelector = selector.trim();
 
-    for (i = 0; i < this.length; i++) {
+    for (let i = 0; i < this.length; i += 1) {
       const element = this[i];
       if (domAdapter.isElementNode(element)) {
-        const elementId = element.getAttribute('id');
-        let queryId = elementId || 'dx-query-children';
-
-        if (!elementId) {
-          setAttributeValue(element, 'id', queryId);
-        }
-        queryId = `[id='${queryId}'] `;
-
-        const querySelector = queryId + selector.replace(/([^\\])(,)/g, `$1, ${queryId}`);
-        nodes.push.apply(nodes, domAdapter.querySelectorAll(element, querySelector));
-        setAttributeValue(element, 'id', elementId);
+        findInElement(element, trimmedSelector, nodes);
       } else if (domAdapter.isDocument(element) || domAdapter.isDocumentFragment(element)) {
-        nodes.push.apply(nodes, domAdapter.querySelectorAll(element, selector));
+        pushAll(nodes, domAdapter.querySelectorAll(element, trimmedSelector));
       }
     }
   } else {
-    for (i = 0; i < this.length; i++) {
-      selector = domAdapter.isNode(selector) ? selector : selector[0];
-      if (this[i] !== selector && this[i].contains(selector)) {
-        nodes.push(selector);
+    const node = domAdapter.isNode(selector) ? selector : selector[0];
+    for (let i = 0; i < this.length; i += 1) {
+      if (this[i] !== node && this[i].contains(node)) {
+        nodes.push(node);
       }
     }
   }
@@ -471,49 +732,51 @@ initRender.prototype.find = function (selector) {
   return result.add(nodes);
 };
 
-const isVisible = function (_, element) {
-  element = element.host ?? element;
+const isVisible = (_: number, element: RendererElement): boolean => {
+  const target = element.host ?? element;
 
-  if (!element.nodeType) return true;
-  return !!(element.offsetWidth || element.offsetHeight || element.getClientRects?.().length);
+  if (!target.nodeType) return true;
+  return !!(target.offsetWidth || target.offsetHeight || target.getClientRects?.().length);
 };
 
-initRender.prototype.filter = function (selector) {
+InitRender.prototype.filter = function (this: Renderer, selector: RendererFilter): Renderer {
   if (!selector) return renderer();
 
   if (selector === ':visible') {
     return this.filter(isVisible);
   } if (selector === ':hidden') {
-    return this.filter(function (_, element) {
-      return !isVisible(_, element);
-    });
+    return this.filter((_, element) => !isVisible(_, element));
   }
 
-  const result: any[] = [];
-  for (let i = 0; i < this.length; i++) {
+  const result: RendererElement[] = [];
+  for (let i = 0; i < this.length; i += 1) {
     const item = this[i];
-    if (domAdapter.isElementNode(item) && type(selector) === 'string') {
-      domAdapter.elementMatches(item, selector) && result.push(item);
-    } else if (domAdapter.isNode(selector) || isWindow(selector)) {
-      selector === item && result.push(item);
-    } else if (isFunction(selector)) {
-      selector.call(item, i, item) && result.push(item);
-    } else {
-      for (let j = 0; j < selector.length; j++) {
-        selector[j] === item && result.push(item);
+    if (domAdapter.isElementNode(item) && isString(selector)) {
+      if (domAdapter.elementMatches(item, selector)) {
+        result.push(item);
       }
+    } else if (domAdapter.isNode(selector) || isWindow(selector)) {
+      if (selector === item) {
+        result.push(item);
+      }
+    } else if (isFunction(selector)) {
+      if (selector.call(item, i, item)) {
+        result.push(item);
+      }
+    } else {
+      pushMatches(result, selector, item);
     }
   }
 
   return renderer(result);
 };
 
-initRender.prototype.not = function (selector) {
-  const result: any[] = [];
+InitRender.prototype.not = function (this: Renderer, selector: RendererFilter): Renderer {
+  const result: RendererElement[] = [];
   const nodes = this.filter(selector).toArray();
 
-  for (let i = 0; i < this.length; i++) {
-    if (nodes.indexOf(this[i]) === -1) {
+  for (let i = 0; i < this.length; i += 1) {
+    if (!nodes.includes(this[i])) {
       result.push(this[i]);
     }
   }
@@ -521,36 +784,38 @@ initRender.prototype.not = function (selector) {
   return renderer(result);
 };
 
-initRender.prototype.is = function (selector) {
+InitRender.prototype.is = function (this: Renderer, selector: RendererFilter): boolean {
   return !!this.filter(selector).length;
 };
 
-initRender.prototype.children = function (selector) {
-  let result: any[] = [];
-  for (let i = 0; i < this.length; i++) {
-    const nodes = this[i] ? this[i].childNodes : [];
-    for (let j = 0; j < nodes.length; j++) {
+InitRender.prototype.children = function (this: Renderer, selector?: RendererFilter): Renderer {
+  const result: Node[] = [];
+  for (let i = 0; i < this.length; i += 1) {
+    const nodes: ArrayLike<Node> = this[i] ? this[i].childNodes : [];
+    const { length } = nodes;
+    for (let j = 0; j < length; j += 1) {
       if (domAdapter.isElementNode(nodes[j])) {
         result.push(nodes[j]);
       }
     }
   }
 
-  result = renderer(result);
+  const $result = renderer(result);
 
-  return selector ? result.filter(selector) : result;
+  return selector ? $result.filter(selector) : $result;
 };
 
-initRender.prototype.siblings = function () {
+InitRender.prototype.siblings = function (this: Renderer): Renderer {
   const element = this[0];
-  if (!element || !element.parentNode) {
+  if (!element?.parentNode) {
     return renderer();
   }
 
-  const result: any[] = [];
-  const parentChildNodes = element.parentNode.childNodes || [];
+  const result: Node[] = [];
+  const parentChildNodes: ArrayLike<Node> = element.parentNode.childNodes || [];
+  const { length } = parentChildNodes;
 
-  for (let i = 0; i < parentChildNodes.length; i++) {
+  for (let i = 0; i < length; i += 1) {
     const node = parentChildNodes[i];
     if (domAdapter.isElementNode(node) && node !== element) {
       result.push(node);
@@ -560,59 +825,59 @@ initRender.prototype.siblings = function () {
   return renderer(result);
 };
 
-initRender.prototype.each = function (callback) {
-  for (let i = 0; i < this.length; i++) {
+InitRender.prototype.each = function (this: Renderer, callback: ElementCallback): void {
+  for (let i = 0; i < this.length; i += 1) {
     if (callback.call(this[i], i, this[i]) === false) {
       break;
     }
   }
 };
 
-initRender.prototype.index = function (element) {
+InitRender.prototype.index = function (this: Renderer, element?: RendererSelector): number {
   if (!element) {
     return this.parent().children().index(this);
   }
 
-  element = renderer(element);
-  return this.toArray().indexOf(element[0]);
+  const $element = renderer(element);
+  return this.toArray().indexOf($element[0]);
 };
 
-initRender.prototype.get = function (index) {
+InitRender.prototype.get = function (this: Renderer, index: number): RendererElement {
   return this[index < 0 ? this.length + index : index];
 };
 
-initRender.prototype.eq = function (index) {
-  index = index < 0 ? this.length + index : index;
-  return renderer(this[index]);
+InitRender.prototype.eq = function (this: Renderer, index: number): Renderer {
+  const normalizedIndex = index < 0 ? this.length + index : index;
+  return renderer(this[normalizedIndex]);
 };
 
-initRender.prototype.first = function () {
+InitRender.prototype.first = function (this: Renderer): Renderer {
   return this.eq(0);
 };
 
-initRender.prototype.last = function () {
+InitRender.prototype.last = function (this: Renderer): Renderer {
   return this.eq(-1);
 };
 
-initRender.prototype.select = function () {
+InitRender.prototype.select = function (this: Renderer): Renderer {
   for (let i = 0; i < this.length; i += 1) {
-    this[i].select && this[i].select();
+    this[i].select?.();
   }
 
   return this;
 };
 
-initRender.prototype.parent = function (selector) {
+InitRender.prototype.parent = function (this: Renderer, selector?: RendererFilter): Renderer {
   if (!this[0]) return renderer();
   const result = renderer(this[0].parentNode);
   return !selector || result.is(selector) ? result : renderer();
 };
 
-initRender.prototype.parents = function (selector) {
-  const result: any[] = [];
+InitRender.prototype.parents = function (this: Renderer, selector?: RendererFilter): Renderer {
+  const result: Node[] = [];
   let parent = this.parent();
 
-  while (parent && parent[0] && !domAdapter.isDocument(parent[0])) {
+  while (parent?.[0] && !domAdapter.isDocument(parent[0])) {
     if (domAdapter.isElementNode(parent[0])) {
       if (!selector || parent.is(selector)) {
         result.push(parent.get(0));
@@ -623,13 +888,13 @@ initRender.prototype.parents = function (selector) {
   return renderer(result);
 };
 
-initRender.prototype.closest = function (selector) {
+InitRender.prototype.closest = function (this: Renderer, selector: RendererFilter): Renderer {
   if (this.is(selector)) {
     return this;
   }
 
   let parent = this.parent();
-  while (parent && parent.length) {
+  while (parent?.length) {
     if (parent.is(selector)) {
       return parent;
     }
@@ -639,31 +904,36 @@ initRender.prototype.closest = function (selector) {
   return renderer();
 };
 
-initRender.prototype.next = function (selector) {
+InitRender.prototype.next = function (
+  this: Renderer,
+  ...args: [selector?: RendererFilter]
+): Renderer {
   if (!this[0]) return renderer();
   let next = renderer(this[0].nextSibling);
-  if (!arguments.length) {
+  if (!args.length) {
     return next;
   }
-  while (next && next.length) {
+  const [selector] = args;
+  while (next?.length) {
     if (next.is(selector)) return next;
     next = next.next();
   }
   return renderer();
 };
 
-initRender.prototype.prev = function () {
+InitRender.prototype.prev = function (this: Renderer): Renderer {
   if (!this[0]) return renderer();
   return renderer(this[0].previousSibling);
 };
 
-initRender.prototype.add = function (selector) {
+InitRender.prototype.add = function (this: Renderer, selector: RendererSelector): Renderer {
   const targets = renderer(selector);
   const result = this.toArray();
+  const { length } = targets;
 
-  for (let i = 0; i < targets.length; i++) {
+  for (let i = 0; i < length; i += 1) {
     const target = targets[i];
-    if (result.indexOf(target) === -1) {
+    if (!result.includes(target)) {
       result.push(target);
     }
   }
@@ -671,28 +941,36 @@ initRender.prototype.add = function (selector) {
   return renderer(result);
 };
 
-const emptyArray: any[] = [];
-initRender.prototype.splice = function () {
-  // @ts-expect-error get rid of arguments
-  // eslint-disable-next-line prefer-rest-params
-  return renderer(emptyArray.splice.apply(this, arguments));
+const emptyArray: RendererElement[] = [];
+const arraySplice: (
+  this: ArrayLike<RendererElement>,
+  start: number,
+  deleteCount?: number,
+) => RendererElement[] = emptyArray.splice;
+InitRender.prototype.splice = function (
+  this: Renderer,
+  ...args: [start: number, deleteCount?: number]
+): Renderer {
+  return renderer(arraySplice.apply(this, args));
 };
-initRender.prototype.slice = function () {
-  // @ts-expect-error get rid of arguments
-  // eslint-disable-next-line prefer-rest-params
-  return renderer(emptyArray.slice.apply(this, arguments));
+InitRender.prototype.slice = function (
+  this: Renderer,
+  ...args: [start?: number, end?: number]
+): Renderer {
+  return renderer(emptyArray.slice.apply(this, args));
 };
-initRender.prototype.toArray = function () {
+InitRender.prototype.toArray = function (this: Renderer): RendererElement[] {
   return emptyArray.slice.call(this);
 };
 
-initRender.prototype.offset = function () {
-  if (!this[0]) return;
+InitRender.prototype.offset = function (this: Renderer): Coordinates | undefined {
+  if (!this[0]) return undefined;
 
-  return getOffset(this[0]);
+  const offset: Coordinates = getOffset(this[0]);
+  return offset;
 };
 
-initRender.prototype.offsetParent = function () {
+InitRender.prototype.offsetParent = function (this: Renderer): Renderer {
   if (!this[0]) return renderer();
 
   let offsetParent = renderer(this[0].offsetParent);
@@ -706,37 +984,39 @@ initRender.prototype.offsetParent = function () {
   return offsetParent;
 };
 
-initRender.prototype.position = function () {
-  if (!this[0]) return;
+const parseCssValue = (value: string | undefined): number => parseFloat(value ?? '');
 
-  let offset;
-  const marginTop = parseFloat(this.css('marginTop'));
-  const marginLeft = parseFloat(this.css('marginLeft'));
+InitRender.prototype.position = function (this: Renderer): Coordinates | undefined {
+  if (!this[0]) return undefined;
+
+  const marginTop = parseCssValue(this.css('marginTop'));
+  const marginLeft = parseCssValue(this.css('marginLeft'));
 
   if (this.css('position') === 'fixed') {
-    offset = this[0].getBoundingClientRect();
+    const rect = this[0].getBoundingClientRect();
 
     return {
-      top: offset.top - marginTop,
-      left: offset.left - marginLeft,
+      top: rect.top - marginTop,
+      left: rect.left - marginLeft,
     };
   }
 
-  offset = this.offset();
+  const offset = this.offset();
+  if (!offset) return undefined;
 
   const offsetParent = this.offsetParent();
-  let parentOffset = {
+  let parentOffset: Coordinates = {
     top: 0,
     left: 0,
   };
 
   if (offsetParent[0].nodeName !== 'HTML') {
-    parentOffset = offsetParent.offset();
+    parentOffset = offsetParent.offset() ?? parentOffset;
   }
 
   parentOffset = {
-    top: parentOffset.top + parseFloat(offsetParent.css('borderTopWidth')),
-    left: parentOffset.left + parseFloat(offsetParent.css('borderLeftWidth')),
+    top: parentOffset.top + parseCssValue(offsetParent.css('borderTopWidth')),
+    left: parentOffset.left + parseCssValue(offsetParent.css('borderLeftWidth')),
   };
 
   return {
@@ -745,79 +1025,103 @@ initRender.prototype.position = function () {
   };
 };
 
-[{
-  name: 'scrollLeft',
+const SCROLL_LEFT_STRATEGY: ScrollStrategy = {
+  propName: 'scrollLeft',
   offsetProp: 'pageXOffset',
-  scrollWindow: function (win, value) {
+  scrollWindow(win, value) {
     win.scrollTo(value, win.pageYOffset);
   },
-}, {
-  name: 'scrollTop',
+};
+
+const SCROLL_TOP_STRATEGY: ScrollStrategy = {
+  propName: 'scrollTop',
   offsetProp: 'pageYOffset',
-  scrollWindow: function (win, value) {
+  scrollWindow(win, value) {
     win.scrollTo(win.pageXOffset, value);
   },
-}].forEach(function (directionStrategy) {
-  const propName = directionStrategy.name;
+};
 
-  initRender.prototype[propName] = function (value) {
-    if (!this[0]) {
-      return;
-    }
+const scroll = function (
+  this: Renderer,
+  strategy: ScrollStrategy,
+  value?: number,
+): Renderer | number | undefined {
+  if (!this[0]) {
+    return undefined;
+  }
 
-    const window = getWindowByElement(this[0]);
+  const elementWindow: Window | undefined = getWindowByElement(this[0]);
 
-    if (value === undefined) {
-      return window ? window[directionStrategy.offsetProp] : this[0][propName];
-    }
+  if (value === undefined) {
+    return elementWindow ? elementWindow[strategy.offsetProp] : this[0][strategy.propName];
+  }
 
-    if (window) {
-      directionStrategy.scrollWindow(window, value);
-    } else {
-      this[0][propName] = value;
-    }
-    return this;
-  };
-});
+  if (elementWindow) {
+    strategy.scrollWindow(elementWindow, value);
+  } else {
+    this[0][strategy.propName] = value;
+  }
+  return this;
+};
 
-initRender.prototype.data = function (key, value) {
-  if (!this[0]) return;
+function scrollLeft(this: Renderer): number | undefined;
+function scrollLeft(this: Renderer, value: number): Renderer | undefined;
+function scrollLeft(this: Renderer, value?: number): Renderer | number | undefined {
+  return scroll.call(this, SCROLL_LEFT_STRATEGY, value);
+}
+InitRender.prototype.scrollLeft = scrollLeft;
 
-  if (arguments.length < 2) {
+function scrollTop(this: Renderer): number | undefined;
+function scrollTop(this: Renderer, value: number): Renderer | undefined;
+function scrollTop(this: Renderer, value?: number): Renderer | number | undefined {
+  return scroll.call(this, SCROLL_TOP_STRATEGY, value);
+}
+InitRender.prototype.scrollTop = scrollTop;
+
+function data(this: Renderer, key?: string): unknown;
+function data(this: Renderer, key: string, value: unknown): Renderer | undefined;
+function data(this: Renderer, ...args: [key?: string, value?: unknown]): unknown {
+  if (!this[0]) return undefined;
+
+  const [key, value] = args;
+  if (args.length < 2) {
     return elementData.call(renderer, this[0], key);
   }
   elementData.call(renderer, this[0], key, value);
   return this;
-};
+}
+InitRender.prototype.data = data;
 
-initRender.prototype.removeData = function (key) {
-  this[0] && removeData(this[0], key);
+InitRender.prototype.removeData = function (this: Renderer, key?: string): Renderer {
+  if (this[0]) {
+    removeData(this[0], key);
+  }
 
   return this;
 };
 
-const rendererWrapper = function () {
-  return renderer.apply(this, arguments);
-};
+const rendererWrapper = function (this: unknown, ...args: Parameters<RendererFactory>): Renderer {
+  return renderer.apply(this, args);
+} as RendererFactory;
 
 Object.defineProperty(rendererWrapper, 'fn', {
   enumerable: true,
   configurable: true,
 
-  get: function () {
+  get(): Renderer {
     return renderer.fn;
   },
 
-  set: function (value) {
+  set(value: Renderer): void {
     renderer.fn = value;
   },
 });
 
 export default {
-  set: function (strategy) {
+  set(strategy: RendererFactory): void {
     renderer = strategy;
   },
-  get: function () {
+  get(): RendererFactory {
     return rendererWrapper;
   },
 };

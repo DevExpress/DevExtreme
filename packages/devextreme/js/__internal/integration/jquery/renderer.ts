@@ -7,5 +7,6 @@ import useJQueryFn from './use_jquery';
 const useJQuery = useJQueryFn();
 
 if (useJQuery) {
+  // @ts-expect-error
   rendererBase.set(jQuery);
 }
