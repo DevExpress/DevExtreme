@@ -104,7 +104,7 @@ const calculateItemsCount = function (that, items, groupsCount) {
 };
 
 export class GroupingHelper {
-  public readonly _dataSource: GroupingDataSourceAdapter;
+  public readonly dataSourceAdapter: GroupingDataSourceAdapter;
 
   private _groupsInfo: any;
 
@@ -113,7 +113,7 @@ export class GroupingHelper {
   protected _group: any;
 
   constructor(dataSourceAdapter: GroupingDataSourceAdapter) {
-    this._dataSource = dataSourceAdapter;
+    this.dataSourceAdapter = dataSourceAdapter;
     this.reset();
   }
 
@@ -135,14 +135,13 @@ export class GroupingHelper {
   }
 
   public _isVirtualPaging() {
-    const scrollingMode = this._dataSource.option('scrolling.mode');
+    const scrollingMode = this.dataSourceAdapter.option('scrolling.mode');
 
     return scrollingMode === 'virtual' || scrollingMode === 'infinite';
   }
 
   private itemsCount() {
-    const dataSourceAdapter = this._dataSource;
-    const dataSource = dataSourceAdapter._dataSource;
+    const dataSource = this.dataSourceAdapter._dataSource;
     const groupCount = gridCore.normalizeSortingInfo(dataSource.group() || []).length;
     const itemsCount = calculateItemsCount(this, dataSource.items(), groupCount);
 
