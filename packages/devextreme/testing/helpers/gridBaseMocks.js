@@ -688,7 +688,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return visibleGroupColumns;
             },
 
-            isDataSourceApplied: function() {
+            isDataSourceAdapterApplied: function() {
                 return true;
             },
 

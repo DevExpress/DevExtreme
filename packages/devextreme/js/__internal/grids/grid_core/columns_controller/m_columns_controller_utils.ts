@@ -336,8 +336,8 @@ export const getCustomizeTextByDataType = function (dataType): any {
   }
 };
 
-export const createColumnsFromDataSource = function (that: ColumnsController, dataSource) {
-  const firstItems = that._getFirstItems(dataSource);
+export const createColumnsFromDataSourceAdapter = function (that: ColumnsController, dataSourceAdapter) {
+  const firstItems = that._getFirstItems(dataSourceAdapter);
   let fieldName;
   const processedFields = {};
   const result: any = [];
