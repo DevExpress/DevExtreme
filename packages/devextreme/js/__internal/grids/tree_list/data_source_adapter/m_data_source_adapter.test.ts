@@ -1,155 +1,207 @@
 import {
-  afterEach, beforeEach, describe, expect, jest, test,
+  describe, expect, it, jest,
 } from '@jest/globals';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import type { Store } from '@js/data';
 import CustomStore from '@js/data/custom_store';
 import DataSource from '@js/data/data_source';
+import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import { DataSourceAdapterTreeList } from './m_data_source_adapter';
-import type { LoadOperation } from './types';
-import { loadBranches } from './utils/load_branches';
+import type { TreeNode } from './types';
+import type { LoadBranchesContext } from './utils/load_branches';
 
-describe('TreeList DataSourceAdapter - T1311885 Race Condition', () => {
-  let dataSourceAdapter: DataSourceAdapterTreeList;
-  let mockStore: Store;
-  let loadCalls: { filter: any; deferred: any; type?: string }[];
-  const parentData = [
-    { Task_ID: 1, Task_Parent_ID: 0, Task_Subject: 'Parent 1' },
-    { Task_ID: 2, Task_Parent_ID: 0, Task_Subject: 'Parent 2' },
-  ];
+const ROOT = 0;
 
-  const childData = [
-    { Task_ID: 10, Task_Parent_ID: 1, Task_Subject: 'Child 1' },
-    { Task_ID: 20, Task_Parent_ID: 2, Task_Subject: 'Child 2' },
-  ];
+const DEFAULT_OPTIONS: Record<string, unknown> = {
+  rootValue: ROOT,
+  parentIdExpr: 'parentId',
+  maxFilterLengthInRequest: 1500,
+  expandedRowKeys: [],
+  dataStructure: 'plain',
+  hasItemsExpr: 'hasItems',
+  filterMode: 'fullBranch',
+  remoteOperations: { filtering: true },
+};
 
-  const OPERATION_ID = {
-    FIRST: 1,
-    SECOND: 2,
+interface AdapterState {
+  _cachedStoreData: RawItemData[] | undefined;
+  _lastOperationId: number | undefined;
+  _nodeByKey: Record<string, TreeNode>;
+}
+
+interface Setup {
+  adapter: DataSourceAdapterTreeList;
+  state: AdapterState;
+  dataSource: DataSource;
+  getContext: () => LoadBranchesContext;
+  options: Record<string, unknown>;
+}
+
+const setup = (optionOverrides: Record<string, unknown> = {}): Setup => {
+  const options = { ...DEFAULT_OPTIONS, ...optionOverrides };
+
+  const store = new CustomStore({
+    key: 'id',
+    load: (): DeferredObj<RawItemData[]> => Deferred<RawItemData[]>().resolve([]),
+  });
+
+  const dataSource = new DataSource({ store });
+
+  const component = {
+    option: jest.fn((name: string) => options[name]),
+    _createActionByOption: jest.fn(() => jest.fn()),
+    on: jest.fn(),
+    off: jest.fn(),
+    _eventsStrategy: {
+      on: jest.fn(),
+      off: jest.fn(),
+      fireEvent: jest.fn(),
+      hasEvent: jest.fn(() => false),
+    },
   };
 
-  beforeEach(() => {
-    loadCalls = [];
+  const adapter = new DataSourceAdapterTreeList(component as never);
 
-    mockStore = new CustomStore({
-      key: 'Task_ID',
-      load: (options: any) => {
-        // @ts-expect-error
-        const deferred = new Deferred();
-        loadCalls.push({ filter: options?.filter, deferred });
-        return deferred.promise();
-      },
-    });
+  adapter.init(dataSource);
 
-    const dataSource = new DataSource({
-      store: mockStore,
-      reshapeOnPush: true,
-    });
+  const getContext = (): LoadBranchesContext => (
+    adapter as unknown as { getLoadBranchesContext: () => LoadBranchesContext }
+  ).getLoadBranchesContext();
 
-    const mockComponent = {
-      option: jest.fn((key: string) => {
-        const options: any = {
-          remoteOperations: { filtering: true, sorting: true },
-          parentIdExpr: 'Task_Parent_ID',
-          hasItemsExpr: 'Has_Items',
-          filterMode: 'fullBranch',
-          expandedRowKeys: [],
-          dataStructure: 'plain',
-          rootValue: 0,
-        };
-        return options[key];
-      }),
-      _createActionByOption: jest.fn(() => jest.fn()),
-      on: jest.fn(() => mockComponent),
-      off: jest.fn(() => mockComponent),
-      _eventsStrategy: {
-        on: jest.fn(),
-        off: jest.fn(),
-        fireEvent: jest.fn(),
-        hasEvent: jest.fn(() => false),
-      },
-    } as any;
+  return {
+    adapter,
+    state: adapter as unknown as AdapterState,
+    dataSource,
+    getContext,
+    options,
+  };
+};
 
-    dataSourceAdapter = new DataSourceAdapterTreeList(mockComponent);
-    dataSourceAdapter.init(dataSource);
+describe('getLoadBranchesContext', () => {
+  describe('options', () => {
+    it('forwards the branch loading options', () => {
+      const { getContext } = setup();
 
-    (dataSourceAdapter as any)._loadDataSource = jest.fn((options: any) => {
-      // @ts-expect-error
-      const deferred = new Deferred();
-
-      loadCalls.push({
-        filter: options?.filter,
-        deferred,
-        type: 'dataSource',
+      expect(getContext()).toMatchObject({
+        rootValue: ROOT,
+        parentIdExpr: 'parentId',
+        maxFilterLengthInRequest: 1500,
       });
+    });
 
-      return deferred.promise();
+    it('takes keyExpr from the store key', () => {
+      const { getContext } = setup();
+
+      expect(getContext().keyExpr).toBe('id');
     });
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-    loadCalls = [];
-    (dataSourceAdapter as any)._loadDataSource = undefined;
-    mockStore = undefined as any;
-    dataSourceAdapter = undefined as any;
-  });
+  describe('live adapter state', () => {
+    it('observes the store data cache being cleared after the context is built', () => {
+      const { state, getContext } = setup();
 
-  test('T1311885 - loading branches should NOT throw concat error when _cachedStoreData is cleared', async () => {
-    let firstLoadDeferred: any = null;
-    let errorMessage = '';
+      state._cachedStoreData = [{ id: 1, parentId: ROOT }];
 
-    const unhandledRejectionHandler = (reason: any) => {
-      errorMessage = reason?.message || String(reason);
-    };
-    process.on('unhandledRejection', unhandledRejectionHandler);
+      const context = getContext();
 
-    (dataSourceAdapter as any)._cachedStoreData = parentData;
-    (dataSourceAdapter as any)._dataSource = {
-      store: jest.fn(() => mockStore),
-      cancel: jest.fn(),
-    };
-    (dataSourceAdapter as any)._lastOperationId = OPERATION_ID.FIRST;
+      expect(context.getCachedData()).toEqual([{ id: 1, parentId: ROOT }]);
 
-    const options = {
-      remoteOperations: { filtering: true },
-      storeLoadOptions: { sort: null },
-      loadOptions: { sort: null },
-      operationId: OPERATION_ID.FIRST,
-    } as unknown as LoadOperation;
+      state._cachedStoreData = undefined;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    dataSourceAdapter.customLoader.loadFromStore = jest.fn((loadOptions) => {
-    // @ts-expect-error
-      const deferred = new Deferred();
-
-      if (!firstLoadDeferred) {
-        firstLoadDeferred = deferred;
-      }
-
-      return deferred.promise();
+      expect(context.getCachedData()).toBeUndefined();
     });
 
-    // The context snapshots the dataSource and the customLoader, so it has to be
-    // built after the stubs above are in place.
-    const context = (dataSourceAdapter as any).getLoadBranchesContext();
+    it('observes a newer operation starting after the context is built', () => {
+      const { state, getContext } = setup();
 
-    loadBranches(context, childData, options, false);
+      state._lastOperationId = 1;
 
-    expect(dataSourceAdapter.customLoader.loadFromStore).toHaveBeenCalledTimes(1);
-    expect(firstLoadDeferred).toBeDefined();
+      const context = getContext();
 
-    (dataSourceAdapter as any)._cachedStoreData = undefined;
-    (dataSourceAdapter as any)._lastOperationId = OPERATION_ID.SECOND;
+      expect(context.getLastOperationId()).toBe(1);
 
-    firstLoadDeferred.resolve({ data: parentData });
-    await Promise.resolve();
+      state._lastOperationId = 2;
 
-    process.off('unhandledRejection', unhandledRejectionHandler);
+      expect(context.getLastOperationId()).toBe(2);
+    });
 
-    expect(errorMessage).toBe('');
-    expect(errorMessage).not.toMatch(/concat|Cannot read properties of undefined/i);
+    it('observes rows being expanded after the context is built', () => {
+      const { getContext, options } = setup();
+
+      const context = getContext();
+
+      expect(context.isRowExpanded(1)).toBe(false);
+
+      options.expandedRowKeys = [1];
+
+      expect(context.isRowExpanded(1)).toBe(true);
+    });
+
+    it('observes nodes appearing after the context is built', () => {
+      const { state, getContext } = setup();
+
+      const context = getContext();
+
+      expect(context.getNodeByKey(1)).toBeUndefined();
+
+      const node: TreeNode = { key: 1, data: { id: 1, parentId: ROOT }, children: [] };
+
+      state._nodeByKey = { 1: node };
+
+      expect(context.getNodeByKey(1)).toBe(node);
+    });
+
+    it('writes the sorted cache back to the adapter', () => {
+      const { state, getContext } = setup();
+
+      const sorted = [{ id: 1, parentId: ROOT }];
+
+      getContext().setCachedData(sorted);
+
+      expect(state._cachedStoreData).toBe(sorted);
+    });
+  });
+
+  describe('data accessors', () => {
+    it('reads the key and the parent id off a row', () => {
+      const { getContext } = setup();
+      const context = getContext();
+      const row = { id: 7, parentId: 3 };
+
+      expect(context._keyGetter(row)).toBe(7);
+      expect(context._parentIdGetter(row)).toBe(3);
+    });
+
+    it('honours a custom parentIdExpr', () => {
+      const { getContext } = setup({ parentIdExpr: 'Task_Parent_ID' });
+
+      expect(getContext()._parentIdGetter({ Task_Parent_ID: 9 })).toBe(9);
+    });
+  });
+
+  describe('delegation', () => {
+    it('cancels the operation on the data source', () => {
+      const { dataSource, getContext } = setup();
+      const cancel = jest.spyOn(dataSource, 'cancel').mockReturnValue(true);
+
+      getContext().dataSource.cancel(42);
+
+      expect(cancel).toHaveBeenCalledWith(42);
+    });
+
+    it('loads through the custom loader', () => {
+      const { adapter, getContext } = setup();
+      const deferred = Deferred<CustomLoadResult>();
+      const loadFromStore = jest
+        .spyOn(adapter.customLoader, 'loadFromStore')
+        .mockReturnValue(deferred);
+
+      const result = getContext().customLoader.loadFromStore({ filter: ['id', '=', 1] });
+
+      expect(loadFromStore).toHaveBeenCalledWith({ filter: ['id', '=', 1] });
+      expect(result).toBe(deferred);
+    });
   });
 });

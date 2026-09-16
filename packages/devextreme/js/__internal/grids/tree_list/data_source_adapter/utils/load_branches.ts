@@ -6,9 +6,9 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { StoreLoadOptions } from '@ts/data/data_source/types';
-import type { DataFilter, DataFilterPredicate } from '@ts/grids/grid_core/data_controller/types';
 import type { CustomLoader, CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/custom_loader';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import type { DataFilter, DataFilterPredicate } from '@ts/grids/grid_core/filter/types';
 
 import type { LoadOperation, TreeNode } from '../types';
 import { createIdFilter } from './create_id_filter';
@@ -115,10 +115,11 @@ const loadParentsOrChildren = (
 
   const concatLoadedData = (loadedData: RawItemData[]): RawItemData[] => {
     if (isRemoteFiltering) {
-      const cachedData = context.getCachedData() as RawItemData[];
-      const sortedData = applySorting(cachedData.concat(loadedData), sort);
+      const cachedData = context.getCachedData();
 
-      context.setCachedData(sortedData);
+      if (cachedData) {
+        context.setCachedData(applySorting(cachedData.concat(loadedData), sort));
+      }
     }
 
     return applySorting(data.concat(loadedData), sort);
