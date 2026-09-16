@@ -3,6 +3,7 @@ import {
 } from '@angular/core';
 import { DxPopupModule } from 'devextreme-angular/ui/popup';
 import { DxChatModule } from 'devextreme-angular/ui/chat';
+import { DxButtonComponent, type DxButtonTypes } from 'devextreme-angular/ui/button';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DxSpeedDialActionModule } from 'devextreme-angular/ui/speed-dial-action';
 import { ArrayStore, DataSource } from 'devextreme-angular/common/data';
@@ -62,7 +63,7 @@ export class AiAssistantComponent {
     paginate: false,
   });
 
-  private clearButtonInstance?: { option: (name: string, value: unknown) => void };
+  private clearButtonInstance?: DxButtonTypes.InitializedEvent['component'];
 
   get clearButtonOptions(): Record<string, unknown> {
     return {
@@ -70,7 +71,7 @@ export class AiAssistantComponent {
       disabled: this.isClearDisabled,
       hint: 'Clear chat',
       onClick: () => this.clearChat(),
-      onInitialized: (e: { component: { option: (name: string, value: unknown) => void } }) => {
+      onInitialized: (e: DxButtonTypes.InitializedEvent) => {
         this.clearButtonInstance = e.component;
       },
     };

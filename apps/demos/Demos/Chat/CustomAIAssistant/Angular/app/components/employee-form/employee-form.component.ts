@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, ViewChild } from '@angular/core';
-import { DxFormModule, DxFormComponent } from 'devextreme-angular/ui/form';
+import { DxFormModule, DxFormComponent, DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxToastModule, DxToastComponent } from 'devextreme-angular/ui/toast';
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import { employee, formFieldsConfig } from '../../data/data';
@@ -50,7 +50,7 @@ export class EmployeeFormComponent {
     return this.dxForm;
   }
 
-  onOptionChanged(e: { name: string; value: unknown }): void {
+  onOptionChanged(e: DxFormTypes.OptionChangedEvent): void {
     if (e.name === 'isDirty') {
       this.dxForm.instance.getButton('Save')?.option('disabled', !e.value);
     }

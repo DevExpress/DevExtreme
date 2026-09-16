@@ -1,5 +1,4 @@
-import { AzureOpenAI } from 'openai';
-import type { OpenAI } from 'openai';
+import { AzureOpenAI, type OpenAI } from 'openai';
 import notify from 'devextreme/ui/notify';
 import { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import type { RequestParams, AIResponse } from 'devextreme-angular/common/ai-integration';
@@ -79,7 +78,7 @@ export function createAiIntegration(): AIIntegration {
 
       const aiPrompt: OpenAI.ChatCompletionMessageParam[] = [
         { role: 'system', content: system },
-        { role: 'user', content: prompt.user },
+        { role: 'user', content: prompt.user ?? '' },
       ];
       const promise = getAIResponseRecursive(aiService, aiPrompt, signal);
 
