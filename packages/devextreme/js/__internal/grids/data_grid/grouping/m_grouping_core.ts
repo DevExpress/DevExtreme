@@ -1,6 +1,7 @@
 import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import gridCore from '../m_core';
@@ -33,13 +34,13 @@ export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
         }
       }
     }
-    filter.push(gridCore.combineFilters(filterElement));
+    filter.push(combineFilters(filterElement));
   }
 
   // @ts-expect-error
-  filter = gridCore.combineFilters(filter, 'or');
+  filter = combineFilters(filter, 'or');
 
-  return gridCore.combineFilters([filter, storeLoadOptions.filter]);
+  return combineFilters([filter, storeLoadOptions.filter]);
 }
 
 const findGroupInfoByKey = function (groupsInfo, key) {

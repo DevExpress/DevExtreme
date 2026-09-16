@@ -16,10 +16,11 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -836,7 +837,7 @@ const filterController = (
       ...createFilterRowExpressions(columns, excludedColumn ?? null),
     ];
 
-    return gridCoreUtils.combineFilters(filters);
+    return combineFilters(filters);
   }
 };
 

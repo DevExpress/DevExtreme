@@ -371,7 +371,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         } catch(err) {
             assert.ok(false, 'the error is thrown');
         } finally {
-            assert.equal(calculateFilterExpressionCallCount, 3, 'calculateFilterExpression call count');
+            assert.equal(calculateFilterExpressionCallCount, 2, 'calculateFilterExpression call count');
         }
     });
 
@@ -399,9 +399,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }]
         });
 
-        assert.equal(calculateFilterExpressionCallCount, 3, 'calculateFilterExpression call count');
+        assert.equal(calculateFilterExpressionCallCount, 2, 'calculateFilterExpression call count');
         assert.ok(grid.getCombinedFilter(), 'combined filter');
-        assert.equal(calculateFilterExpressionCallCount, 4, 'calculateFilterExpression call count');
+        assert.equal(calculateFilterExpressionCallCount, 3, 'calculateFilterExpression call count');
     });
 
     function createRemoteDataSourceWithGroupPaging(arrayStore, key) {

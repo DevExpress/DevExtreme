@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-import { strategyChanging } from '@ts/core/m_element_data';
+import { strategyChanging } from '@ts/core/element_data';
 import { compare as compareVersion } from '@ts/core/utils/m_version';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';

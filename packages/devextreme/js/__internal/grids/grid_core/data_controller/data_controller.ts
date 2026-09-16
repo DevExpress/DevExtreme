@@ -25,9 +25,12 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { CustomLoadResult } from '../data_source_adapter/custom_loader';
 import type {
   BinaryDataFilterExpression,
+  DataFilter,
+} from '../filter/types';
+import { combineFilters, equalFilterParameters } from '../filter/utils';
+import type {
   CallbackFlags,
   DataChange,
-  DataFilter,
   GeneratedItem,
   GetUpdatedColumnIndices,
   ItemChange,
@@ -326,7 +329,7 @@ export class DataController extends modules.Controller {
       const additionalFilter = this.filterController.getAdditionalFilter(excludedColumn);
 
       combined = additionalFilter
-        ? gridCoreUtils.combineFilters([additionalFilter, combined])
+        ? combineFilters([additionalFilter, combined])
         : combined;
     }
 
@@ -476,6 +479,24 @@ export class DataController extends modules.Controller {
     return hasFilterValue;
   }
 
+  private isFilterOutdated({ changeTypes, appliedFilters }: ColumnsChanges): boolean {
+    if (changeTypes.filtering) {
+      return true;
+    }
+
+    if (!appliedFilters?.length) {
+      return false;
+    }
+
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+    const langParams = dataSourceAdapter?.loadOptions?.()?.langParams;
+    const combinedFilter = this.getCombinedFilter();
+
+    return appliedFilters.some(
+      (filter) => !equalFilterParameters(filter, combinedFilter, langParams),
+    );
+  }
+
   private columnsChangedHandler(e: ColumnsChanges): void {
     const { changeTypes, optionNames } = e;
     let filterApplied = false;
@@ -509,7 +530,7 @@ export class DataController extends modules.Controller {
       }
     }
 
-    if (!filterApplied && changeTypes.filtering && !this._needApplyFilter) {
+    if (!filterApplied && !this._needApplyFilter && this.isFilterOutdated(e)) {
       this.reload();
     }
   }
@@ -1227,7 +1248,7 @@ export class DataController extends modules.Controller {
 
     const filterExpr: DataFilter = filterArgs.length === 1 ? filterArgs[0] : filterArgs;
 
-    if (gridCoreUtils.equalFilterParameters(filter, filterExpr, langParams)) {
+    if (equalFilterParameters(filter, filterExpr, langParams)) {
       return undefined;
     }
 

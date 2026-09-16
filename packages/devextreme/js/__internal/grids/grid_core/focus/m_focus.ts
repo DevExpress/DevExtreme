@@ -12,6 +12,7 @@ import type { DataController } from '../data_controller/data_controller';
 import type { EditingController } from '../editing/m_editing';
 import { isNewRowTempKey } from '../editing/m_editing_utils';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
+import { combineFilters } from '../filter/utils';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import core from '../m_modules';
 import type { ModuleType } from '../m_types';
@@ -775,7 +776,7 @@ export const focusDataControllerExtender = (
 
   protected _concatWithCombinedFilter(filter, groupFilter?) {
     const combinedFilter = this.getCombinedFilter();
-    return gridCoreUtils.combineFilters([filter, combinedFilter, groupFilter]);
+    return combineFilters([filter, combinedFilter, groupFilter]);
   }
 
   private _generateBooleanFilter(selector, value, sortInfo) {

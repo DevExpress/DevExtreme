@@ -4,7 +4,7 @@ import renderers from 'viz/core/renderers/renderer_default';
 import {
     stubClass
 } from '../../helpers/vizMocks.js';
-import domAdapter from '__internal/core/m_dom_adapter';
+import domAdapter from '__internal/core/dom_adapter';
 import utils from 'viz/core/utils_default';
 
 $('<div>')
