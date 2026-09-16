@@ -8,6 +8,13 @@
  * gives the record teeth: a retired name must not come back. That forbids the tempting fix — an
  * alias in _public-links.scss that keeps the old name alive next to the new one, leaving two names
  * for one role and no way to tell which is real.
+ *
+ * The fluent-next bundles are the whole scope, as in public-surface.test.ts. The older themes
+ * declare a small core vocabulary of their own that overlaps this surface by inheritance —
+ * dx.light.css keeps declaring --dx-color-primary whatever fluent-next does with the name — so
+ * reading them here would say nothing about fluent-next's tier and would make a retirement
+ * unshippable: public-surface.test.ts demands a journal entry for the removal, and that entry is
+ * what the cross-theme scan would then fail on.
  */
 
 import { readFileSync, readdirSync, existsSync } from 'fs';
@@ -26,20 +33,18 @@ const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
 const journalPath = join(packageRoot, 'tools', 'naming', 'public-renames.json');
 
 const bundleNames = existsSync(artifactsCss)
-  ? readdirSync(artifactsCss).filter((name) => /^dx\..*\.css$/.test(name)).sort()
+  ? readdirSync(artifactsCss).filter((name) => /^dx\.fluent-next\..*\.css$/.test(name)).sort()
   : [];
 
 if (!bundleNames.length) {
-  throw new Error(`no dx.*.css bundles found in ${artifactsCss} — the gate needs the built themes; `
-    + 'run `pnpm nx run devextreme-scss:build:themes`');
+  throw new Error(`no dx.fluent-next.*.css bundles found in ${artifactsCss} — the gate needs the `
+    + 'built themes; run `pnpm nx run devextreme-scss:build:themes`');
 }
 
 const bundles = bundleNames.map((name) => ({
   name,
   css: readFileSync(join(artifactsCss, name), 'utf8'),
 }));
-
-const fluentNext = bundles.filter(({ name }) => name.startsWith('dx.fluent-next.'));
 
 const journal: { retired: Entry[] } = JSON.parse(readFileSync(journalPath, 'utf8'));
 const { retired } = journal;
@@ -64,8 +69,8 @@ const occurrences = (
  * This pins a name that does ship, so "no retired name found" means the bundles were read.
  */
 test('the bundle scan finds a name that ships', () => {
-  expect(occurrences(fluentNext, '--dx-button-border-radius'))
-    .toEqual(fluentNext.map(({ name }) => name));
+  expect(occurrences(bundles, '--dx-button-border-radius'))
+    .toEqual(bundles.map(({ name }) => name));
 });
 
 test('every journal entry is complete', () => {
@@ -84,11 +89,7 @@ test('the journal lists each name once', () => {
   expect(names.filter((name, index) => names.indexOf(name) !== index)).toEqual([]);
 });
 
-/*
- * Every theme, not just fluent-next: a retired name that reappears elsewhere means one spelling now
- * carries two roles, which is the ambiguity the journal exists to prevent.
- */
-test('no retired name ships in any bundle', () => {
+test('no retired name ships in any fluent-next bundle', () => {
   const found = retired.flatMap(({ name }) => occurrences(bundles, name)
     .map((bundle) => `${bundle}: ${name}`));
 
@@ -102,7 +103,7 @@ test('no retired name ships in any bundle', () => {
 test('every replacement ships', () => {
   const missing = retired
     .flatMap(({ name, replacement }) => (replacement === null ? [] : [{ name, replacement }]))
-    .filter(({ replacement }) => occurrences(fluentNext, replacement).length === 0)
+    .filter(({ replacement }) => occurrences(bundles, replacement).length === 0)
     .map(({ name, replacement }) => `${name} -> ${replacement}`);
 
   expect(missing).toEqual([]);

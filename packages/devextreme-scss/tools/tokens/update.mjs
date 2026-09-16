@@ -93,9 +93,17 @@ const readConsumed = () => {
 /*
  * Markdown when the output is going somewhere — a file, a pipe, a pull request — and the terminal
  * view when a person is watching. NO_COLOR is the usual opt-out.
+ *
+ * stdout carries the report and nothing else. Everything a bump says while it works — the command
+ * banners, what the child processes print, the preamble, the closing next steps — goes to stderr,
+ * so `> report.md` gets the markdown even when the run is a bump rather than a report.
  */
+const plain = Boolean(process.env.NO_COLOR);
 const interactive = process.stdout.isTTY === true;
-const color = interactive && !process.env.NO_COLOR;
+const color = interactive && !plain;
+
+/* The preamble is written to stderr, so whether it is coloured follows that stream, not stdout's. */
+const progressColor = process.stderr.isTTY === true && !plain;
 
 const show = (report) => {
   process.stdout.write(interactive
@@ -104,10 +112,11 @@ const show = (report) => {
 };
 
 const run = (command, args, cwd) => {
-  process.stdout.write(`\n$ ${command} ${args.join(' ')}\n`);
+  process.stderr.write(`\n$ ${command} ${args.join(' ')}\n`);
 
   try {
-    execFileSync(command, args, { cwd, stdio: 'inherit' });
+    /* The child writes to fd 2 as well: install and build chatter is progress, not the report. */
+    execFileSync(command, args, { cwd, stdio: ['inherit', 2, 'inherit'] });
 
     return true;
   } catch {
@@ -176,7 +185,7 @@ if (!reportOnly) {
    * Said before the rebuild, because the rebuild is what stops on a missing name — and it stops at
    * the first one, having never looked for the others.
    */
-  process.stdout.write(`\n${renderPreamble(summary, { color })}\n`);
+  process.stderr.write(`\n${renderPreamble(summary, { color: progressColor })}\n`);
 
   const rebuilt = run('node', ['build/tokens/build-tokens.mjs'], packageRoot)
     && run('node', ['tools/naming/derive-registries.mjs'], packageRoot);
@@ -191,7 +200,7 @@ const report = { ...summary, output: diffGenerated(before.generated, readGenerat
 show(report);
 
 if (!reportOnly) {
-  process.stdout.write('\nThis rebuilt the token layer, not the themes — '
+  process.stderr.write('\nThis rebuilt the token layer, not the themes — '
     + 'packages/devextreme/artifacts/css still holds the previous bundles.\n'
     + 'Next: pnpm nx build:themes devextreme-scss, then the etalons if any value moved.\n'
     + `\nCheck \`git diff pnpm-lock.yaml\`: anything in it beyond ${PACKAGE} is pnpm normalising `

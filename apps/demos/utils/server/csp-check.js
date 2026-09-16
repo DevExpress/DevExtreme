@@ -6,6 +6,7 @@ const {
 } = require('fs');
 const http = require('http');
 const { readShardConfig, applyShard: applyShardGeneric } = require('./shard');
+const { canaryProblem } = require('./csp-canary-guard');
 
 const DEMO_ROOT = join(__dirname, '..', '..');
 const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
@@ -365,11 +366,13 @@ const CANARY_PROBES = [
   },
 ];
 
-function httpHeaders(url) {
+/* A GET whose body is thrown away: what is wanted is the status and the headers, and a server
+ * that answers HEAD differently from GET would answer the wrong question. */
+function httpMeta(url) {
   return new Promise((resolve, reject) => {
     const req = http.request(url, { method: 'GET' }, (res) => {
       res.resume();
-      res.on('end', () => resolve(res.headers));
+      res.on('end', () => resolve({ statusCode: res.statusCode, headers: res.headers }));
     });
     req.on('error', reject);
     req.end();
@@ -382,16 +385,11 @@ function httpHeaders(url) {
  * never really checked.
  */
 async function verifyCanary() {
-  const headers = await httpHeaders(CANARY_URL);
-  const policy = headers['content-security-policy-report-only']
-    || headers['content-security-policy'];
+  const { statusCode, headers } = await httpMeta(CANARY_URL);
+  const problem = canaryProblem(statusCode, headers);
 
-  if (!policy) {
-    throw new Error('the server served the canary page without a policy header');
-  }
-
-  if (!policy.includes('style-src')) {
-    throw new Error(`the policy carries no style-src directive: ${policy}`);
+  if (problem) {
+    throw new Error(problem);
   }
 
   const violations = await visitPage(CANARY_URL);

@@ -152,8 +152,8 @@ export const renderReport = (report: Report): string => {
 /*
  * The same report for a person watching it happen. Markdown belongs in a pull request; in a
  * terminal its pipes and its four `_none_` sections are noise, so this view drops what did not
- * happen, groups the values by file, and caps the long lists. update.mjs picks by `isTTY`, which
- * keeps `> report.md` markdown.
+ * happen, groups the values by file, and caps the long lists. update.mjs picks by `isTTY` and
+ * writes whichever view to stdout alone, which keeps `> report.md` markdown.
  */
 
 export type TerminalOptions = {
@@ -172,6 +172,7 @@ const dim = (text: string, color: boolean): string => paint('2', text, color);
 const red = (text: string, color: boolean): string => paint('31', text, color);
 const yellow = (text: string, color: boolean): string => paint('33', text, color);
 
+/* For a flat list, where one line is one entry. Grouped sections take groupCapped below. */
 const capped = (lines: string[], limit: number): string[] => (lines.length > limit
   ? [...lines.slice(0, limit), `    … and ${lines.length - limit} more`]
   : lines);
@@ -191,6 +192,39 @@ const groupByFile = <T extends DeclarationRef>(
 
     return [`  ${file}`, ...inFile.map((entry) => line(entry, width))];
   });
+};
+
+/*
+ * The cap is on entries, and it has to be taken before the grouping rather than after it. Capping
+ * the grouped lines spent part of the budget on file headers, counted those headers as omitted
+ * entries — so the tally read one too high per file — and could cut a header away from the
+ * entries under it, leaving names with no file to attribute them to. One file hid all three:
+ * its single header shifts both sides of the subtraction by one.
+ *
+ * The tally sits at the file indent rather than the entry one, because what it leaves out is
+ * rarely the last file's alone — with the budget spent, whole files further down never appear in
+ * the section at all, and a line indented under the last one printed would read as that file's
+ * remainder. Those absent files are counted too: the entry tally alone cannot say whether the
+ * section is a long file cut short or several files that were never reached.
+ */
+const groupCapped = <T extends DeclarationRef>(
+  entries: T[],
+  limit: number,
+  line: (entry: T, width: number) => string,
+): string[] => {
+  const shown = entries.slice(0, limit);
+  const omitted = entries.slice(limit);
+  const seen = new Set(shown.map(({ file }) => file));
+  const unseen = new Set(
+    omitted.filter(({ file }) => !seen.has(file)).map(({ file }) => file),
+  ).size;
+
+  return [
+    ...groupByFile(shown, line),
+    ...(omitted.length
+      ? [`  … and ${omitted.length} more${unseen ? `, ${unseen} file(s) not shown` : ''}`]
+      : []),
+  ];
 };
 
 /*
@@ -231,23 +265,21 @@ export const renderTerminal = (report: Report, options: TerminalOptions = {}): s
 
   if (output.changed.length) {
     lines.push(`values that moved (${output.changed.length})`);
-    lines.push(...capped(
-      groupByFile(
-        output.changed,
-        ({ name, was, now }, width) => `    ${pad(name, width)}  ${was} → ${bold(now, color)}`,
-      ),
+    lines.push(...groupCapped(
+      output.changed,
       limit,
+      ({ name, was, now }, width) => `    ${pad(name, width)}  ${was} → ${bold(now, color)}`,
     ), '');
   }
 
   if (output.gone.length) {
     lines.push(`gone from the generated output (${output.gone.length})`);
-    lines.push(...capped(groupByFile(output.gone, ({ name }) => `    ${name}`), limit), '');
+    lines.push(...groupCapped(output.gone, limit, ({ name }) => `    ${name}`), '');
   }
 
   if (output.appeared.length) {
     lines.push(`new in the generated output (${output.appeared.length})`);
-    lines.push(...capped(groupByFile(output.appeared, ({ name }) => `    ${name}`), limit), '');
+    lines.push(...groupCapped(output.appeared, limit, ({ name }) => `    ${name}`), '');
   }
 
   if (output.changed.length || output.gone.length) {

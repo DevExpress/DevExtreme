@@ -18,6 +18,53 @@ const generated = (files: Record<string, Record<string, string>>): GeneratedOutp
   Object.entries(files).map(([file, entries]) => [file, declarations(entries)]),
 );
 
+const refs = (file: string, count: number): { file: string; name: string }[] => Array.from(
+  { length: count },
+  (_, index) => ({ file, name: `--dxds-${file.replace('.scss', '')}-${index}` }),
+);
+
+/*
+ * One section of the terminal view as data. The layout is spelled out here and nowhere else, so an
+ * expectation can be about what the section says rather than about how many spaces a line starts
+ * with — and it still fails when the layout moves, because a tally printed at the entry indent
+ * parses as the last file's entry and leaves `omitted` at zero.
+ */
+const grouped = (rendered: string, heading: string): {
+  files: { file: string; names: string[] }[];
+  omitted: number;
+  filesNotShown: number;
+} => {
+  const lines = rendered.split('\n');
+  const start = lines.indexOf(heading);
+
+  if (start === -1) {
+    throw new Error(`no section headed ${heading}`);
+  }
+
+  const files: { file: string; names: string[] }[] = [];
+  let omitted = 0;
+  let filesNotShown = 0;
+
+  lines.slice(start + 1, lines.indexOf('', start + 1)).forEach((line) => {
+    const tally = line.match(/^ {2}… and (\d+) more(?:, (\d+) file\(s\) not shown)?$/);
+    const current = files.at(-1);
+
+    if (tally) {
+      omitted = Number(tally[1]);
+      filesNotShown = Number(tally[2] ?? 0);
+    } else if (!line.startsWith('    ')) {
+      files.push({ file: line.trim(), names: [] });
+    } else if (current) {
+      /* An entry line carries the name first; a value change pads it out to the column width. */
+      current.names.push(line.trim().split(/\s{2,}/)[0]);
+    } else {
+      throw new Error(`entry with no file above it: ${line}`);
+    }
+  });
+
+  return { files, omitted, filesNotShown };
+};
+
 const report = (overrides: Partial<Report> = {}): Report => ({
   package: '@devexpress/design-tokens-internal',
   versionBefore: '262.23.0',
@@ -234,16 +281,66 @@ describe('renderTerminal', () => {
   /* A bump can add thousands of names; the terminal is not where that list belongs. */
   it('caps a long section and says how much it left out', () => {
     const rendered = renderTerminal(report({
+      output: { changed: [], gone: [], appeared: refs('base.scss', 9) },
+    }), { limit: 4 });
+
+    expect(grouped(rendered, 'new in the generated output (9)')).toEqual({
+      files: [{
+        file: 'base.scss',
+        names: ['--dxds-base-0', '--dxds-base-1', '--dxds-base-2', '--dxds-base-3'],
+      }],
+      omitted: 5,
+      filesNotShown: 0,
+    });
+  });
+
+  /*
+   * Several files is what tells the two readings of the limit apart. One file hides the difference:
+   * its header shifts what is shown and what is counted by the same one, so a cap taken on the
+   * printed lines comes out right by accident. Here the budget is four entries, the second file
+   * has to keep the header that carries them, and five entries are left over — not seven lines.
+   */
+  it('caps entries rather than the lines they are printed as', () => {
+    const rendered = renderTerminal(report({
       output: {
         changed: [],
         gone: [],
-        appeared: Array.from({ length: 9 }, (_, index) => ({ file: 'base.scss', name: `--dxds-${index}` })),
+        appeared: [...refs('base.scss', 3), ...refs('light.scss', 6)],
       },
     }), { limit: 4 });
 
-    expect(rendered).toContain('new in the generated output (9)');
-    expect(rendered).toContain('… and 6 more');
-    expect(rendered).not.toContain('--dxds-8');
+    expect(grouped(rendered, 'new in the generated output (9)')).toEqual({
+      files: [
+        { file: 'base.scss', names: ['--dxds-base-0', '--dxds-base-1', '--dxds-base-2'] },
+        { file: 'light.scss', names: ['--dxds-light-0'] },
+      ],
+      omitted: 5,
+      filesNotShown: 0,
+    });
+  });
+
+  /*
+   * The budget can run out before a file is reached at all. The tally is then not the last printed
+   * file's remainder, and saying so is the difference between "one long file was cut short" and
+   * "there is another file here you cannot see".
+   */
+  it('says when the cap left whole files out of the section', () => {
+    const rendered = renderTerminal(report({
+      output: {
+        changed: [],
+        gone: [],
+        appeared: [...refs('base.scss', 3), ...refs('light.scss', 1), ...refs('dark.scss', 5)],
+      },
+    }), { limit: 4 });
+
+    expect(grouped(rendered, 'new in the generated output (9)')).toEqual({
+      files: [
+        { file: 'base.scss', names: ['--dxds-base-0', '--dxds-base-1', '--dxds-base-2'] },
+        { file: 'light.scss', names: ['--dxds-light-0'] },
+      ],
+      omitted: 5,
+      filesNotShown: 1,
+    });
   });
 
   it('puts a lost token first and says what it will cost', () => {
