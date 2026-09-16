@@ -1,7 +1,7 @@
 import { formFieldOptions } from '../data/data.js';
 
 const SMART_PASTE_TIMEOUT_MS = 30000;
-export function getFormFieldOptions(_form) {
+export function getFormFieldOptions() {
   return formFieldOptions;
 }
 export function applyFormClearAction(form, formAction) {
@@ -20,15 +20,15 @@ export function applyFormClearAction(form, formAction) {
   if (!fieldName) {
     return { status: 'failure', message: "I couldn't find a field to clear." };
   }
-  const isKnownField = getFormFieldOptions(form).some((field) => field.dataField === fieldName);
+  const isKnownField = getFormFieldOptions().some((field) => field.dataField === fieldName);
   if (!isKnownField) {
     return { status: 'failure', message: `I couldn't find a field named '${fieldName}' to clear.` };
   }
   form.updateData(fieldName, null);
   return { status: 'success', message: `Cleared ${fieldName}.` };
 }
-export function formatAiResultDetails(form, aiResult) {
-  const labelByField = new Map(getFormFieldOptions(form).map((field) => [field.dataField, field.label]));
+export function formatAiResultDetails(aiResult) {
+  const labelByField = new Map(getFormFieldOptions().map((field) => [field.dataField, field.label]));
   return Object.keys(aiResult)
     .map((field) => labelByField.get(field) ?? field)
     .join(', ');
@@ -50,7 +50,7 @@ export function applyFormSmartPaste(form, text) {
       const aiResult = (event.aiResult ?? {});
       const fieldCount = Object.keys(aiResult).length;
       finish(fieldCount > 0
-        ? { status: 'success', message: `Updated the form (${formatAiResultDetails(form, aiResult)}).` }
+        ? { status: 'success', message: `Updated the form (${formatAiResultDetails(aiResult)}).` }
         : { status: 'failure', message: "I couldn't find any Form fields matching the request." });
     };
     timeoutId = window.setTimeout(() => {

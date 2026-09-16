@@ -1,5 +1,7 @@
 import { applyFormClearAction, applyFormSmartPaste, getFormFieldOptions } from '../commands/form-commands.js';
-import { applyGridActions, buildGridPromptSection, buildGridResponseSchema, getGridColumnNames } from '../commands/grid-commands.js';
+import {
+  applyGridActions, buildGridPromptSection, buildGridResponseSchema, getGridColumnNames,
+} from '../commands/grid-commands.js';
 import { FORM_ACTION_TYPES, ROUTER_TARGETS } from '../types/types.js';
 
 const MAX_USER_MESSAGE_LENGTH = 2000;
@@ -33,7 +35,7 @@ export function executeAiCommand(text, aiIntegration) {
     });
   });
 }
-export async function classifyRequest(text, aiIntegration, form) {
+export async function classifyRequest(text, aiIntegration) {
   if (!aiIntegration) {
     return { target: 'mixed', formAction: null };
   }
@@ -48,7 +50,7 @@ Rules:
 - Use 'none' when the request is unrelated to both areas.
 If you are not confident, return mixed.
 
-${buildFormActionPromptSection(form)}
+${buildFormActionPromptSection()}
 
 User request: '${text}'`,
   ].join('\n');
@@ -74,8 +76,8 @@ User request: '${text}'`,
     return { target: 'mixed', formAction: null };
   }
 }
-export function buildFormActionPromptSection(form) {
-  const fieldList = getFormFieldOptions(form)
+export function buildFormActionPromptSection() {
+  const fieldList = getFormFieldOptions()
     .map((field) => `${field.dataField} (${field.label})`)
     .join(', ');
   return `Form fields (dataField and label): ${fieldList}.
@@ -148,7 +150,7 @@ export async function runCommand(text, { form, gridInstance, aiIntegration }) {
   if (text.length > MAX_USER_MESSAGE_LENGTH) {
     throw new ChatCommandError('❌ This message is too long for me to process. Please shorten it and try again.');
   }
-  const { target, formAction } = await classifyRequest(text, aiIntegration, form);
+  const { target, formAction } = await classifyRequest(text, aiIntegration);
   if (target === 'none') {
     throw new ChatCommandError("❌ This request doesn't appear to be related to Form or DataGrid. Please try rephrasing it.");
   }
@@ -164,7 +166,8 @@ export async function runCommand(text, { form, gridInstance, aiIntegration }) {
     buildFormResultsPromise(form, formAction, text),
     buildGridResultsPromise(gridInstance, aiIntegration, text),
   ]);
-  return joinSucceededOrThrow([...formResult.results, ...gridResult.results], gridResult.error instanceof Error ? gridResult.error : formResult.error instanceof Error ? formResult.error : null);
+  const errors = [gridResult.error, formResult.error].filter((error) => error instanceof Error);
+  return joinSucceededOrThrow([...formResult.results, ...gridResult.results], errors[0] ?? null);
 }
 export function reportAiResult(promise, pushMessage) {
   return promise

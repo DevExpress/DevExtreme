@@ -21,13 +21,13 @@ export default function TaskGrid({ onInitialized }) {
   }, [onInitialized]);
   return (<div id="grid-container">
     <DataGrid dataSource={tasks} keyExpr="ID" height={360} showBorders={true} filterSyncEnabled={true} onInitialized={onGridInitialized}>
-      <FilterRow visible={true}/>
-      <HeaderFilter visible={true}/>
-      <Column dataField="Subject" width={250}/>
-      <Column dataField="StartDate" dataType="date"/>
-      <Column dataField="DueDate" dataType="date"/>
-      <Column dataField="Priority" caption="Priority" cellRender={renderPriorityCell}/>
-      <Column dataField="Completion" caption="Completed" alignment="center" dataType="boolean" calculateCellValue={calculateCompletion} calculateFilterExpression={calculateFilterExpression}/>
+      <FilterRow visible={true} />
+      <HeaderFilter visible={true} />
+      <Column dataField="Subject" width={250} />
+      <Column dataField="StartDate" dataType="date" />
+      <Column dataField="DueDate" dataType="date" />
+      <Column dataField="Priority" caption="Priority" cellRender={renderPriorityCell} />
+      <Column dataField="Completion" caption="Completed" alignment="center" dataType="boolean" calculateCellValue={calculateCompletion} calculateFilterExpression={calculateFilterExpression} />
     </DataGrid>
   </div>);
 }

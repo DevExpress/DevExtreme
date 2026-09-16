@@ -27,7 +27,7 @@ const emptyViewMessage = 'How can I help with this page?';
 const emptyViewPrompt = 'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
 const emptyViewHtml = { __html: emptyViewPrompt };
 
-function EmptyView(_data: ChatTypes.EmptyViewTemplateData): React.JSX.Element {
+function EmptyView(): React.JSX.Element {
   return (
     <>
       <div className="dx-chat-messagelist-empty-image dx-ai-chat__empty-image" />
@@ -38,7 +38,7 @@ function EmptyView(_data: ChatTypes.EmptyViewTemplateData): React.JSX.Element {
 }
 
 export default function AiAssistant({ form, grid, aiIntegration }: AiAssistantProps) {
-  const clearButtonInstance = useRef<ReturnType<ButtonRef['instance']> | null>(undefined!);
+  const clearButtonInstance = useRef<ReturnType<ButtonRef['instance']> | null>(null);
   const [visible, setVisible] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
@@ -55,7 +55,7 @@ export default function AiAssistant({ form, grid, aiIntegration }: AiAssistantPr
   const handleUserMessage = useCallback((message: ChatTypes.Message): void => {
     setDisabled(true);
     if (form && grid) {
-      void routeMessage(String(message.text), { form, gridInstance: grid, aiIntegration, pushMessage }).finally(() => {
+      routeMessage(String(message.text), { form, gridInstance: grid, aiIntegration, pushMessage }).finally(() => {
         setDisabled(false);
         updateClearButtonState();
       });

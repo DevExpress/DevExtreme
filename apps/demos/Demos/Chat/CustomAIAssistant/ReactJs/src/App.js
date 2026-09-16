@@ -8,6 +8,7 @@ import { createAiIntegration } from './services/ai-service.js';
 
 loadMessages({ en: { 'dxChat-textareaPlaceholder': 'Enter a prompt...' } });
 config({
+  editorStylingMode: 'filled',
   floatingActionButtonConfig: {
     position: {
       my: 'right bottom',
@@ -38,8 +39,8 @@ export default function App() {
     };
   }, [form, grid]);
   return (<>
-    <EmployeeForm aiIntegration={aiIntegration} onInitialized={onFormInitialized}/>
-    <TaskGrid onInitialized={onGridInitialized}/>
-    <AiAssistant form={form} grid={grid} aiIntegration={aiIntegration}/>
+    <EmployeeForm aiIntegration={aiIntegration} onInitialized={onFormInitialized} />
+    <TaskGrid onInitialized={onGridInitialized} />
+    <AiAssistant form={form} grid={grid} aiIntegration={aiIntegration} />
   </>);
 }

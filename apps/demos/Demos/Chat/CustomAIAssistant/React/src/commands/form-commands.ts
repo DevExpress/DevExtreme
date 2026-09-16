@@ -4,7 +4,7 @@ import type { AIResult, CommandResult, EmployeeForm, FormAction, FormFieldOption
 
 const SMART_PASTE_TIMEOUT_MS = 30000;
 
-export function getFormFieldOptions(_form: EmployeeForm): FormFieldOption[] {
+export function getFormFieldOptions(): FormFieldOption[] {
   return formFieldOptions;
 }
 
@@ -27,7 +27,7 @@ export function applyFormClearAction(form: EmployeeForm, formAction: FormAction 
     return { status: 'failure', message: "I couldn't find a field to clear." };
   }
 
-  const isKnownField = getFormFieldOptions(form).some((field) => field.dataField === fieldName);
+  const isKnownField = getFormFieldOptions().some((field) => field.dataField === fieldName);
   if (!isKnownField) {
     return { status: 'failure', message: `I couldn't find a field named '${fieldName}' to clear.` };
   }
@@ -36,8 +36,8 @@ export function applyFormClearAction(form: EmployeeForm, formAction: FormAction 
   return { status: 'success', message: `Cleared ${fieldName}.` };
 }
 
-export function formatAiResultDetails(form: EmployeeForm, aiResult: AIResult): string {
-  const labelByField = new Map(getFormFieldOptions(form).map((field) => [field.dataField, field.label]));
+export function formatAiResultDetails(aiResult: AIResult): string {
+  const labelByField = new Map(getFormFieldOptions().map((field) => [field.dataField, field.label]));
 
   return Object.keys(aiResult)
     .map((field) => labelByField.get(field) ?? field)
@@ -66,7 +66,7 @@ export function applyFormSmartPaste(form: EmployeeForm, text: string): Promise<C
 
       finish(
         fieldCount > 0
-          ? { status: 'success', message: `Updated the form (${formatAiResultDetails(form, aiResult)}).` }
+          ? { status: 'success', message: `Updated the form (${formatAiResultDetails(aiResult)}).` }
           : { status: 'failure', message: "I couldn't find any Form fields matching the request." },
       );
     };

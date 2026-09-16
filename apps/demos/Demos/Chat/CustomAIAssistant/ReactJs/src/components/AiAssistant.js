@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback, useMemo, useRef, useState,
+} from 'react';
 import Chat from 'devextreme-react/chat';
 import Popup from 'devextreme-react/popup';
 import SpeedDialAction from 'devextreme-react/speed-dial-action';
@@ -22,15 +24,15 @@ const clearButtonOptions = { icon: 'clearhistory', hint: 'Clear chat' };
 const emptyViewMessage = 'How can I help with this page?';
 const emptyViewPrompt = 'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
 const emptyViewHtml = { __html: emptyViewPrompt };
-function EmptyView(_data) {
+function EmptyView() {
   return (<>
-    <div className="dx-chat-messagelist-empty-image dx-ai-chat__empty-image"/>
+    <div className="dx-chat-messagelist-empty-image dx-ai-chat__empty-image" />
     <div className="ai-chat-empty-message">{emptyViewMessage}</div>
-    <div className="ai-chat-empty-prompt" dangerouslySetInnerHTML={emptyViewHtml}/>
+    <div className="ai-chat-empty-prompt" dangerouslySetInnerHTML={emptyViewHtml} />
   </>);
 }
 export default function AiAssistant({ form, grid, aiIntegration }) {
-  const clearButtonInstance = useRef(undefined);
+  const clearButtonInstance = useRef(null);
   const [visible, setVisible] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const updateClearButtonState = useCallback(() => {
@@ -44,7 +46,9 @@ export default function AiAssistant({ form, grid, aiIntegration }) {
   const handleUserMessage = useCallback((message) => {
     setDisabled(true);
     if (form && grid) {
-      void routeMessage(String(message.text), { form, gridInstance: grid, aiIntegration, pushMessage }).finally(() => {
+      routeMessage(String(message.text), {
+        form, gridInstance: grid, aiIntegration, pushMessage,
+      }).finally(() => {
         setDisabled(false);
         updateClearButtonState();
       });
@@ -96,9 +100,9 @@ export default function AiAssistant({ form, grid, aiIntegration }) {
     disabled,
   }), [disabled, onSuggestionItemClick]);
   return (<>
-    <SpeedDialAction icon="sparkle" label="AI Assistant" visible={!visible} onClick={onPopupShowing}/>
+    <SpeedDialAction icon="sparkle" label="AI Assistant" visible={!visible} onClick={onPopupShowing} />
     <Popup title="AI Assistant" visible={visible} width={400} height="90%" dragEnabled={true} resizeEnabled={true} showCloseButton={true} shading={false} position={popupPosition} onShowing={onPopupShowing} onHiding={onPopupHiding} toolbarItems={toolbarItems}>
-      <Chat height="100%" showAvatar={false} user={chatUser} showUserName={false} speechToTextEnabled={true} reloadOnChange={true} dataSource={chatDataSource} disabled={disabled} suggestions={suggestions} emptyViewRender={EmptyView} onMessageEntered={onMessageEntered}/>
+      <Chat height="100%" showAvatar={false} user={chatUser} showUserName={false} speechToTextEnabled={true} reloadOnChange={true} dataSource={chatDataSource} disabled={disabled} suggestions={suggestions} emptyViewRender={EmptyView} onMessageEntered={onMessageEntered} />
     </Popup>
   </>);
 }

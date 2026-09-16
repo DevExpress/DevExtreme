@@ -71,7 +71,7 @@ To filter a date column by a year and/or month, use operator "anyof" with value 
       }
 
       try {
-        const newCondition: FilterCondition = [columnName, args.operator ?? '=', value as FilterCondition[2]];
+        const newCondition: FilterCondition = [columnName, args.operator ?? '=', value ?? ''];
         const nextValue = combineFilterConditions(grid.option('filterValue'), newCondition);
         grid.option('filterValue', nextValue as never);
 

@@ -1,7 +1,11 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback, useMemo, useRef, useState,
+} from 'react';
 import { Form, Item, ButtonItem } from 'devextreme-react/form';
 import { Toast } from 'devextreme-react/toast';
-import { employee, positions, states, titles } from '../data/data.js';
+import {
+  employee, positions, states, titles,
+} from '../data/data.js';
 
 const saveButtonOptions = {
   text: 'Save',
@@ -48,14 +52,14 @@ export default function EmployeeForm({ aiIntegration, onInitialized }) {
   const buttonOptions = useMemo(() => ({ ...saveButtonOptions, onClick: onSave }), [onSave]);
   return (<div id="form-container">
     <Form ref={formRef} formData={employee} colCount={3} labelLocation="top" aiIntegration={aiIntegration} onOptionChanged={onOptionChanged} onInitialized={onFormInitialized}>
-      <Item dataField="Prefix" label={titleLabel} editorType="dxSelectBox" editorOptions={prefixEditorOptions} aiOptions={prefixAIOptions}/>
-      <Item dataField="FirstName" label={firstNameLabel} aiOptions={firstNameAIOptions}/>
-      <Item dataField="LastName" label={lastNameLabel} aiOptions={lastNameAIOptions}/>
-      <Item dataField="Position" editorType="dxSelectBox" editorOptions={positionEditorOptions} aiOptions={positionAIOptions}/>
-      <Item dataField="State" editorType="dxSelectBox" editorOptions={stateEditorOptions} aiOptions={stateAIOptions}/>
-      <Item dataField="BirthDate" editorType="dxDateBox" editorOptions={birthDateEditorOptions} aiOptions={birthDateAIOptions}/>
-      <ButtonItem name="Save" colSpan={3} cssClass="save-button" buttonOptions={buttonOptions}/>
+      <Item dataField="Prefix" label={titleLabel} editorType="dxSelectBox" editorOptions={prefixEditorOptions} aiOptions={prefixAIOptions} />
+      <Item dataField="FirstName" label={firstNameLabel} aiOptions={firstNameAIOptions} />
+      <Item dataField="LastName" label={lastNameLabel} aiOptions={lastNameAIOptions} />
+      <Item dataField="Position" editorType="dxSelectBox" editorOptions={positionEditorOptions} aiOptions={positionAIOptions} />
+      <Item dataField="State" editorType="dxSelectBox" editorOptions={stateEditorOptions} aiOptions={stateAIOptions} />
+      <Item dataField="BirthDate" editorType="dxDateBox" editorOptions={birthDateEditorOptions} aiOptions={birthDateAIOptions} />
+      <ButtonItem name="Save" colSpan={3} cssClass="save-button" buttonOptions={buttonOptions} />
     </Form>
-    <Toast visible={toastVisible} message="Form data is saved." type="success" displayTime={600} closeOnClick={true} position={toastPosition} onHiding={onToastHiding}/>
+    <Toast visible={toastVisible} message="Form data is saved." type="success" displayTime={600} closeOnClick={true} position={toastPosition} onHiding={onToastHiding} />
   </div>);
 }

@@ -55,7 +55,6 @@ export function executeAiCommand(text: string, aiIntegration: AIIntegration): Pr
 export async function classifyRequest(
   text: string,
   aiIntegration: AIIntegration,
-  form: EmployeeForm,
 ): Promise<ClassificationResult> {
   if (!aiIntegration) {
     return { target: 'mixed', formAction: null };
@@ -72,7 +71,7 @@ Rules:
 - Use 'none' when the request is unrelated to both areas.
 If you are not confident, return mixed.
 
-${buildFormActionPromptSection(form)}
+${buildFormActionPromptSection()}
 
 User request: '${text}'`,
   ].join('\n');
@@ -102,8 +101,8 @@ User request: '${text}'`,
   }
 }
 
-export function buildFormActionPromptSection(form: EmployeeForm): string {
-  const fieldList = getFormFieldOptions(form)
+export function buildFormActionPromptSection(): string {
+  const fieldList = getFormFieldOptions()
     .map((field) => `${field.dataField} (${field.label})`)
     .join(', ');
 
@@ -199,7 +198,7 @@ export async function runCommand(text: string, { form, gridInstance, aiIntegrati
     throw new ChatCommandError('❌ This message is too long for me to process. Please shorten it and try again.');
   }
 
-  const { target, formAction } = await classifyRequest(text, aiIntegration, form);
+  const { target, formAction } = await classifyRequest(text, aiIntegration);
 
   if (target === 'none') {
     throw new ChatCommandError("❌ This request doesn't appear to be related to Form or DataGrid. Please try rephrasing it.");
@@ -219,11 +218,9 @@ export async function runCommand(text: string, { form, gridInstance, aiIntegrati
     buildFormResultsPromise(form, formAction, text),
     buildGridResultsPromise(gridInstance, aiIntegration, text),
   ]);
+  const errors = [gridResult.error, formResult.error].filter((error): error is Error => error instanceof Error);
 
-  return joinSucceededOrThrow(
-    [...formResult.results, ...gridResult.results],
-    gridResult.error instanceof Error ? gridResult.error : formResult.error instanceof Error ? formResult.error : null,
-  );
+  return joinSucceededOrThrow([...formResult.results, ...gridResult.results], errors[0] ?? null);
 }
 
 export function reportAiResult(promise: Promise<string>, pushMessage: PushMessage): Promise<void> {

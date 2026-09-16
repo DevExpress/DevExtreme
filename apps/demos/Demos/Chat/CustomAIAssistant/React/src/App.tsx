@@ -22,6 +22,7 @@ declare global {
 
 loadMessages({ en: { 'dxChat-textareaPlaceholder': 'Enter a prompt...' } });
 config({
+  editorStylingMode: 'filled',
   floatingActionButtonConfig: {
     position: {
       my: 'right bottom',
