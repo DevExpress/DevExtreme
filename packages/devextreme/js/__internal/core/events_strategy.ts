@@ -2,9 +2,9 @@ import { each } from '@js/core/utils/iterator';
 import { isFunction, isPlainObject } from '@js/core/utils/type';
 import { Callbacks } from '@ts/core/utils/m_callbacks';
 
-type EventHandler = Function;
+export type EventHandler = Function;
 
-type EventHandlers = Record<string, EventHandler | undefined>;
+export type EventHandlers = Record<string, EventHandler | undefined>;
 
 interface EventCallbacks {
   add: (fn?: EventHandler) => void;
