@@ -1,6 +1,4 @@
 $(() => {
-  let activeAbortController = null;
-
   const { formatMessage } = DevExpress.localization;
 
   const CLASS = {
@@ -21,6 +19,8 @@ $(() => {
   };
 
   const aiService = new AzureOpenAI(AzureOpenAIConfig);
+
+  let activeAbortController = null;
 
   async function getAIResponse(messages, signal) {
     const params = {
@@ -278,7 +278,7 @@ $(() => {
     ],
     masterDetail: {
       enabled: true,
-      template: (container, { data }) => {
+      template: ($detailView, { data }) => {
         const inputArea = createInputArea();
         const outputArea = createOutputArea();
         const controls = { inputArea, outputArea };
@@ -292,11 +292,15 @@ $(() => {
           handleSubmit(event, data, controls);
         });
 
-        container.append(inputArea.$container, outputArea.$container);
+        $detailView.append(inputArea.$container, outputArea.$container);
+
+        DevExpress.events.one($detailView, 'dxremove', () => {
+          activeAbortController?.abort();
+          activeAbortController = null;
+        });
       },
     },
     onRowExpanding(e) {
-      activeAbortController?.abort();
       e.component.collapseAll(-1);
     },
     onRowCollapsing() {

@@ -38,6 +38,10 @@
   ></dxo-data-grid-master-detail>
 
   <div *dxTemplate="let masterDetailItem of 'masterDetail'">
-    <detail-view #detailView [rowData]="masterDetailItem.data"></detail-view>
+    <detail-view
+      [rowData]="masterDetailItem.data"
+      [registerAbortRequest]="registerAbortRequest"
+      [unregisterAbortRequest]="unregisterAbortRequest"
+    ></detail-view>
   </div>
 </dx-data-grid>

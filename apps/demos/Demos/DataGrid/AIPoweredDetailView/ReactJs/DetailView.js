@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useRef, useState,
+} from 'react';
 import { TextBox } from 'devextreme-react/text-box';
 import { ButtonGroup } from 'devextreme-react/button-group';
 import { Button } from 'devextreme-react/button';
@@ -28,7 +30,8 @@ const suggestions = [
     prompt: 'List 2-3 models that directly compete with this vehicle.',
   },
 ];
-const DetailView = ({ data: templateData, onRequestStart, onRequestEnd }) => {
+const DetailView = ({ data: templateData, registerAbortRequest, unregisterAbortRequest }) => {
+  const abortControllerRef = useRef(null);
   const [promptValue, setPromptValue] = useState('');
   const [responseValue, setResponseValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -56,11 +59,21 @@ const DetailView = ({ data: templateData, onRequestStart, onRequestEnd }) => {
   const handlePromptChange = useCallback((value) => {
     setPromptValue(value);
   }, []);
+  const abortRequest = useCallback(() => {
+    abortControllerRef.current?.abort();
+  }, []);
+  useEffect(() => {
+    registerAbortRequest(abortRequest);
+    return () => {
+      abortRequest();
+      unregisterAbortRequest(abortRequest);
+    };
+  }, [abortRequest, registerAbortRequest, unregisterAbortRequest]);
   const handleSubmit = useCallback(
     async (event, prompt) => {
       if (!prompt) return;
       const controller = new AbortController();
-      onRequestStart(controller);
+      abortControllerRef.current = controller;
       setIsError(false);
       setIsLoading(true);
       event?.target?.blur();
@@ -77,13 +90,13 @@ const DetailView = ({ data: templateData, onRequestStart, onRequestEnd }) => {
         setResponseValue('');
         setIsError(true);
       } finally {
-        onRequestEnd(controller);
+        abortControllerRef.current = null;
         setSubmitButtonText('Resubmit');
         setIsLoading(false);
         event?.target?.focus();
       }
     },
-    [templateData.data, onRequestStart, onRequestEnd],
+    [templateData.data],
   );
   const onSubmit = useCallback(
     (e) => {

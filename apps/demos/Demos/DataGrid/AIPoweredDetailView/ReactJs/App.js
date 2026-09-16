@@ -8,31 +8,30 @@ import DetailView from './DetailView.js';
 import { vehicles } from './data.js';
 
 export default function App() {
-  const activeAbortController = useRef(null);
-  const onRequestStart = useCallback((controller) => {
-    activeAbortController.current = controller;
+  const activeAbortRequest = useRef(null);
+  const registerAbortRequest = useCallback((abortRequest) => {
+    activeAbortRequest.current = abortRequest;
   }, []);
-  const onRequestEnd = useCallback((controller) => {
-    if (activeAbortController.current === controller) {
-      activeAbortController.current = null;
+  const unregisterAbortRequest = useCallback((abortRequest) => {
+    if (activeAbortRequest.current === abortRequest) {
+      activeAbortRequest.current = null;
     }
   }, []);
   const renderDetailView = useCallback(
     (templateData) => (
       <DetailView
         {...templateData}
-        onRequestStart={onRequestStart}
-        onRequestEnd={onRequestEnd}
+        registerAbortRequest={registerAbortRequest}
+        unregisterAbortRequest={unregisterAbortRequest}
       />
     ),
-    [onRequestStart, onRequestEnd],
+    [registerAbortRequest, unregisterAbortRequest],
   );
   const onRowExpanding = useCallback(({ component }) => {
-    activeAbortController.current?.abort();
     component.collapseAll(-1);
   }, []);
   const onRowCollapsing = useCallback(() => {
-    activeAbortController.current?.abort();
+    activeAbortRequest.current?.();
   }, []);
   const onCellClick = useCallback(({
     column, row, component, key,

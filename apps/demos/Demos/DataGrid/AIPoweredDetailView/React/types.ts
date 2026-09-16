@@ -34,6 +34,6 @@ export type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatComp
 };
 
 export type DetailViewProps = DataGridTypes.MasterDetailTemplateData & {
-  onRequestStart: (controller: AbortController) => void;
-  onRequestEnd: (controller: AbortController) => void;
+  registerAbortRequest: (abortRequest: () => void) => void;
+  unregisterAbortRequest: (abortRequest: () => void) => void;
 };

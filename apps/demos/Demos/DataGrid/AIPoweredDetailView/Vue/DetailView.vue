@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onUnmounted, ref } from 'vue';
 import { DxTextBox, type DxTextBoxTypes } from 'devextreme-vue/text-box';
 import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
@@ -87,14 +87,21 @@ import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT, type AIMessage } from './service.ts';
 import { type Vehicle } from './data.ts';
 
-export interface DetailViewRef { abortRequest: () => void; }
-
-const { rowData } = defineProps<{ rowData: Vehicle }>();
+const { rowData, registerAbortRequest, unregisterAbortRequest } = defineProps<{
+  rowData: Vehicle;
+  registerAbortRequest: (abortRequest: () => void) => void;
+  unregisterAbortRequest: (abortRequest: () => void) => void;
+}>();
 
 const abortController = ref<AbortController | null>(null);
 
-defineExpose<DetailViewRef>({
-  abortRequest: () => abortController.value?.abort(),
+const abortRequest = () => abortController.value?.abort();
+
+registerAbortRequest(abortRequest);
+
+onUnmounted(() => {
+  abortRequest();
+  unregisterAbortRequest(abortRequest);
 });
 
 const promptElementAttr = { class: 'prompt-editor' };

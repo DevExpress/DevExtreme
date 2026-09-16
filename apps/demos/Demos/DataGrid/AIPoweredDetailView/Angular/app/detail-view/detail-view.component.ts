@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DxTextBoxModule, DxButtonGroupModule, DxButtonModule, DxTextAreaModule, DxLoadPanelModule } from 'devextreme-angular';
 import { type DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
@@ -22,8 +22,12 @@ import { AiService, type AIMessage } from '../ai/ai.service';
     DxLoadPanelModule,
   ],
 })
-export class DetailViewComponent {
+export class DetailViewComponent implements OnInit, OnDestroy {
   @Input() rowData!: Vehicle;
+
+  @Input() registerAbortRequest?: (abortRequest: () => void) => void;
+
+  @Input() unregisterAbortRequest?: (abortRequest: () => void) => void;
 
   promptValue: string = '';
 
@@ -40,6 +44,8 @@ export class DetailViewComponent {
   outputAreaMaxHeight: number;
 
   abortController: AbortController | null = null;
+
+  readonly abortRequest = () => this.abortController?.abort();
 
   suggestions = [
     { type: 'default', text: '✨ Summary', prompt: 'Display general information about this vehicle and its features.' },
@@ -64,6 +70,15 @@ export class DetailViewComponent {
     }
   }
 
+  ngOnInit() {
+    this.registerAbortRequest?.(this.abortRequest);
+  }
+
+  ngOnDestroy() {
+    this.abortRequest();
+    this.unregisterAbortRequest?.(this.abortRequest);
+  }
+
   onSubmit({ event }: DxTextBoxTypes.EnterKeyEvent | DxButtonTypes.ClickEvent) {
     this.handleSubmit(event);
   }
@@ -76,7 +91,8 @@ export class DetailViewComponent {
   async handleSubmit(event?: DxEvent) {
     if (!this.promptValue) return;
 
-    this.abortController = new AbortController();
+    const controller = new AbortController();
+    this.abortController = controller;
     this.isError = false;
     this.isLoading = true;
     (event?.target as HTMLElement)?.blur();
@@ -87,7 +103,7 @@ export class DetailViewComponent {
         { role: 'user', content: `User prompt: ${this.promptValue}\nRow data: ${JSON.stringify(this.rowData)}` },
       ];
 
-      const aiResponse = await this.aiService.getAIResponse(messages, this.abortController.signal);
+      const aiResponse = await this.aiService.getAIResponse(messages, controller.signal);
 
       if (aiResponse === '') throw new Error('AI response is empty');
       this.responseValue = aiResponse;
@@ -95,19 +111,12 @@ export class DetailViewComponent {
       this.responseValue = '';
       this.isError = true;
     } finally {
-      const wasAborted = this.abortController?.signal.aborted;
       this.abortController = null;
       this.isLoading = false;
       this.submitButtonText = 'Resubmit';
-
-      if (!wasAborted) {
-        this.changeDetectorRef.detectChanges();
-        (event?.target as HTMLElement)?.focus();
-      }
+      this.changeDetectorRef.detectChanges();
+      (event?.target as HTMLElement)?.focus();
     }
   }
 
-  abortRequest() {
-    this.abortController?.abort();
-  }
 }

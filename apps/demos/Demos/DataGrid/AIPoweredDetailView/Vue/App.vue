@@ -51,8 +51,9 @@
     />
     <template #master-detail="{ data: { data: vehicle } }">
       <DetailView
-        ref="detailViewRef"
         :row-data="vehicle"
+        :register-abort-request="registerAbortRequest"
+        :unregister-abort-request="unregisterAbortRequest"
       />
     </template>
   </DxDataGrid>
@@ -64,17 +65,26 @@ import { formatMessage } from 'devextreme/localization';
 import { DxDataGrid, DxColumn, DxPaging, DxMasterDetail, type DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { vehicles, type Vehicle } from './data.ts';
 import Category from './Category.vue';
-import DetailView, { type DetailViewRef } from './DetailView.vue';
+import DetailView from './DetailView.vue';
 
-const detailViewRef = ref<DetailViewRef | null>(null);
+const activeAbortRequest = ref<(() => void) | null>(null);
+
+function registerAbortRequest(abortRequest: () => void) {
+  activeAbortRequest.value = abortRequest;
+}
+
+function unregisterAbortRequest(abortRequest: () => void) {
+  if (activeAbortRequest.value === abortRequest) {
+    activeAbortRequest.value = null;
+  }
+}
 
 function onRowExpanding({ component }: DxDataGridTypes.RowExpandingEvent) {
-  detailViewRef.value?.abortRequest();
   component.collapseAll(-1);
 }
 
 function onRowCollapsing() {
-  detailViewRef.value?.abortRequest();
+  activeAbortRequest.value?.();
 }
 
 function onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickEvent) {

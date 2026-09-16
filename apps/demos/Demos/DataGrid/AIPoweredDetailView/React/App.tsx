@@ -14,29 +14,32 @@ import { vehicles } from './data.ts';
 import { type Vehicle } from './types.ts';
 
 export default function App() {
-  const activeAbortController = useRef<AbortController | null>(null);
+  const activeAbortRequest = useRef<(() => void) | null>(null);
 
-  const onRequestStart = useCallback((controller: AbortController) => {
-    activeAbortController.current = controller;
+  const registerAbortRequest = useCallback((abortRequest: () => void) => {
+    activeAbortRequest.current = abortRequest;
   }, []);
 
-  const onRequestEnd = useCallback((controller: AbortController) => {
-    if (activeAbortController.current === controller) {
-      activeAbortController.current = null;
+  const unregisterAbortRequest = useCallback((abortRequest: () => void) => {
+    if (activeAbortRequest.current === abortRequest) {
+      activeAbortRequest.current = null;
     }
   }, []);
 
   const renderDetailView = useCallback((templateData: DataGridTypes.MasterDetailTemplateData) => (
-    <DetailView {...templateData} onRequestStart={onRequestStart} onRequestEnd={onRequestEnd} />
-  ), [onRequestStart, onRequestEnd]);
+    <DetailView
+      {...templateData}
+      registerAbortRequest={registerAbortRequest}
+      unregisterAbortRequest={unregisterAbortRequest}
+    />
+  ), [registerAbortRequest, unregisterAbortRequest]);
 
   const onRowExpanding = useCallback(({ component }: DataGridTypes.RowExpandingEvent) => {
-    activeAbortController.current?.abort();
     component.collapseAll(-1);
   }, []);
 
   const onRowCollapsing = useCallback(() => {
-    activeAbortController.current?.abort();
+    activeAbortRequest.current?.();
   }, []);
 
   const onCellClick = useCallback(({ column, row, component, key }: DataGridTypes.CellClickEvent) => {

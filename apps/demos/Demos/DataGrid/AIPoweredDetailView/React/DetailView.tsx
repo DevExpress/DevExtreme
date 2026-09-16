@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { TextBox, type TextBoxTypes } from 'devextreme-react/text-box';
 import { ButtonGroup, type ButtonGroupTypes } from 'devextreme-react/button-group';
@@ -21,7 +21,8 @@ const suggestions = [
   { type: 'default', text: '🏎️ Competitors', prompt: 'List 2-3 models that directly compete with this vehicle.' },
 ];
 
-const DetailView = ({ data: templateData, onRequestStart, onRequestEnd }: DetailViewProps) => {
+const DetailView = ({ data: templateData, registerAbortRequest, unregisterAbortRequest }: DetailViewProps) => {
+  const abortControllerRef = useRef<AbortController | null>(null);
   const [promptValue, setPromptValue] = useState('');
   const [responseValue, setResponseValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -60,11 +61,24 @@ const DetailView = ({ data: templateData, onRequestStart, onRequestEnd }: Detail
     setPromptValue(value);
   }, []);
 
+  const abortRequest = useCallback(() => {
+    abortControllerRef.current?.abort();
+  }, []);
+
+  useEffect(() => {
+    registerAbortRequest(abortRequest);
+
+    return () => {
+      abortRequest();
+      unregisterAbortRequest(abortRequest);
+    };
+  }, [abortRequest, registerAbortRequest, unregisterAbortRequest]);
+
   const handleSubmit = useCallback(async (event?: DxEvent, prompt?: string) => {
     if (!prompt) return;
 
     const controller = new AbortController();
-    onRequestStart(controller);
+    abortControllerRef.current = controller;
 
     setIsError(false);
     setIsLoading(true);
@@ -85,13 +99,12 @@ const DetailView = ({ data: templateData, onRequestStart, onRequestEnd }: Detail
       setResponseValue('');
       setIsError(true);
     } finally {
-      onRequestEnd(controller);
-
+      abortControllerRef.current = null;
       setSubmitButtonText('Resubmit');
       setIsLoading(false);
       (event?.target as HTMLElement)?.focus();
     }
-  }, [templateData.data, onRequestStart, onRequestEnd]);
+  }, [templateData.data]);
 
   const onSubmit = useCallback((e: TextBoxTypes.EnterKeyEvent | ButtonTypes.ClickEvent) => {
     handleSubmit(e.event, promptValue);

@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { formatMessage } from 'devextreme/localization';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, type Vehicle } from './app.service';
@@ -22,7 +22,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DetailViewComponent) detailView?: DetailViewComponent;
+  activeAbortRequest?: () => void;
 
   vehicles: Vehicle[];
 
@@ -34,13 +34,22 @@ export class AppComponent {
     return `${data.TrademarkName} ${data.Name}`;
   }
 
+  registerAbortRequest = (abortRequest: () => void) => {
+    this.activeAbortRequest = abortRequest;
+  };
+
+  unregisterAbortRequest = (abortRequest: () => void) => {
+    if (this.activeAbortRequest === abortRequest) {
+      this.activeAbortRequest = undefined;
+    }
+  };
+
   onRowExpanding({ component }: DxDataGridTypes.RowExpandingEvent) {
-    this.detailView?.abortRequest();
     component.collapseAll(-1);
   }
 
   onRowCollapsing() {
-    this.detailView?.abortRequest();
+    this.activeAbortRequest?.();
   }
 
   onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickEvent) {
