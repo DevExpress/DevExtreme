@@ -16,13 +16,18 @@
   text-align: center;
 }
 
+.dx-color-scheme-blue-light {
+  --form-background-color: #fff;
+}
+
+.dx-color-scheme-dark {
+  --form-background-color: var(--dx-component-color-bg);
+}
+ 
 #form-container {
   border: 1px solid #e0e0e0;
   padding: 16px;
-}
-
-.dx-color-scheme-blue-light #form-container {
-  background-color: #fff;
+  background-color: var(--form-background-color);
 }
 
 .demo-container {
