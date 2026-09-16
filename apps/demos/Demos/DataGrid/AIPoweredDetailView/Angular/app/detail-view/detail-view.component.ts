@@ -114,7 +114,7 @@ export class DetailViewComponent implements OnInit, OnDestroy {
       this.abortController = null;
       this.isLoading = false;
       this.submitButtonText = 'Resubmit';
-      this.changeDetectorRef.detectChanges();
+      if (!controller.signal.aborted) this.changeDetectorRef.detectChanges();
       (event?.target as HTMLElement)?.focus();
     }
   }
