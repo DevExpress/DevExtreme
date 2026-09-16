@@ -95,7 +95,7 @@ export class AIAssistantView extends View {
             popupOptions: {
               elementAttr: { class: this.addWidgetPrefix(CLASSES.aiAssistantConfirmDialog) },
             },
-          });
+          }, this.element());
 
           // @ts-expect-error
           confirmDialog.show().done((confirmResult) => {

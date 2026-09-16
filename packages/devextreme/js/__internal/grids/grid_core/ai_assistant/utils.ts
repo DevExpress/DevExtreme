@@ -1,10 +1,12 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { ResponseStatus } from '@js/common/grids';
+import type { dxElementWrapper } from '@js/core/renderer';
 import { isObject } from '@js/core/utils/type';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { Message } from '@js/ui/chat';
 import { custom } from '@js/ui/dialog';
 import { current, isCompact, isFluent } from '@js/ui/themes';
+import { themeLength } from '@ts/core/utils/theme_length';
 import type { BaseDialog, DialogParams } from '@ts/ui/dialog';
 
 import {
@@ -287,7 +289,12 @@ const getCancelButtonConfig = (): ButtonProperties => {
   return {};
 };
 
-const getConfirmDialogWidth = (): number => {
+const getConfirmDialogWidth = (gridElement?: Element | dxElementWrapper): number => {
+  const fromTheme = gridElement && themeLength(gridElement, '--dx-grid-ai-confirm-dialog-width');
+
+  if (fromTheme !== undefined) {
+    return fromTheme;
+  }
   if (isCompact(current())) {
     return AI_ASSISTANT_CONFIRM_DIALOG_COMPACT_WIDTH;
   }
@@ -295,11 +302,14 @@ const getConfirmDialogWidth = (): number => {
   return AI_ASSISTANT_CONFIRM_DIALOG_WIDTH;
 };
 
-export const createConfirmDialog = (options?: DialogParams): BaseDialog => custom({
+export const createConfirmDialog = (
+  options?: DialogParams,
+  gridElement?: Element | dxElementWrapper,
+): BaseDialog => custom({
   messageHtml: messageLocalization.format('dxDataGrid-aiAssistantAbortConfirmText'),
   showTitle: false,
   dragEnabled: false,
-  width: getConfirmDialogWidth(),
+  width: getConfirmDialogWidth(gridElement),
   buttons: [
     {
       text: messageLocalization.format('No'),
