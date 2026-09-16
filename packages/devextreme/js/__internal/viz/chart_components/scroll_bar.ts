@@ -100,6 +100,10 @@ ScrollBar.prototype = {
     };
   },
 
+  _getBoundaryDirection() {
+    return this._translateWithOffset || (this._hasBreaks ? 1 : 0);
+  },
+
   _getRangeAtPosition(position) {
     const translator = this._translator;
     const length = this._thumbLength;
@@ -112,10 +116,15 @@ ScrollBar.prototype = {
     const lastPosition = _max(visibleArea.max - length, visibleArea.min);
     const start = _min(_max(position, visibleArea.min), lastPosition);
 
-    return {
-      startValue: translator.from(start),
-      endValue: translator.from(start + length),
-    };
+    // the inverse of setPosition: the same boundary directions, or the end coordinate of a
+    // discrete thumb would resolve to the next category and every drag would widen the range
+    const direction = this._getBoundaryDirection();
+    const from = translator.from(start, -direction);
+    const to = translator.from(start + length, direction);
+
+    return translator.isInverted()
+      ? { startValue: to, endValue: from }
+      : { startValue: from, endValue: to };
   },
 
   update(options) {
@@ -239,7 +248,7 @@ ScrollBar.prototype = {
   setPosition(min, max) {
     const that = this;
     const translator = that._translator;
-    const direction = that._translateWithOffset || (that._hasBreaks ? 1 : 0);
+    const direction = that._getBoundaryDirection();
     const minPoint = isDefined(min) ? translator.translate(min, -direction) : translator.translate('canvas_position_start');
     const maxPoint = isDefined(max) ? translator.translate(max, direction) : translator.translate('canvas_position_end');
 

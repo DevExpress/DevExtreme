@@ -2077,6 +2077,61 @@ QUnit.test('Scrollbar does not pan argument axis if it can not be panned', funct
     assert.deepEqual(scrollBarElement.offset(), scrollBarOffset);
 });
 
+QUnit.test('Scrollbar drag keeps the number of visible categories on a discrete axis', function(assert) {
+    const chart = this.createChart({
+        scrollBar: {
+            visible: true
+        },
+        argumentAxis: {
+            type: 'discrete',
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'pan'
+        },
+        series: [{ type: 'bar' }]
+    });
+    const countBefore = chart.getArgumentAxis().visualRange().categories.length;
+
+    pointerMock(chart._scrollBar._scroll.element).start({ x: 0, y: 0 }).dragStart().drag(60).dragEnd();
+
+    const rangeAfter = chart.getArgumentAxis().visualRange();
+
+    assert.equal(rangeAfter.categories.length, countBefore, 'the range keeps its size: ' + JSON.stringify(rangeAfter.categories));
+    assert.notEqual(rangeAfter.startValue, 3, 'the range really moved');
+});
+
+QUnit.test('Scrollbar drag does not pan the argument axis if it can not be panned', function(assert) {
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        scrollBar: {
+            visible: true
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    pointerMock(chart._scrollBar._scroll.element).start({ x: 0, y: 0 }).dragStart().drag(200).dragEnd();
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 3, endValue: 7 }, 'the visual range is not panned');
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+});
+
 QUnit.module('Check visualRange changing strategy choosing', environment);
 
 QUnit.test('Drag. Small chart rendering time on start and big time in the middle', function(assert) {
@@ -3639,12 +3694,11 @@ QUnit.module('Panning over scale breaks', $.extend({}, environment, {
     panForward() {
         this.pointer.start({ x: 100, y: 300 }).dragStart().drag(-300).dragEnd();
     },
+    // the real ScrollBar has to run the gesture: it is the one that reports where its thumb
+    // points, and a hand-made event pair would silently exercise the fallback path instead
     scrollForward(chart) {
-        const $root = $(chart._renderer.root.element);
-
-        $root.trigger($.Event('dxc-scroll-start', { pageX: 100, pointers: [{ pageX: 100, pageY: 100 }] }));
-        $root.trigger($.Event('dxc-scroll-move', { offset: { x: -200, y: 0 }, pointers: [{ pageX: 100, pageY: 100 }] }));
-        $root.trigger($.Event('dxc-scroll-end', { offset: { x: -200, y: 0 } }));
+        pointerMock(chart._scrollBar._scroll.element)
+            .start({ x: 0, y: 0 }).dragStart().drag(200).dragEnd();
     }
 }), () => {
     QUnit.test('Panning over weekend breaks must not change the chart scale (workdaysOnly)', function(assert) {
@@ -3704,6 +3758,97 @@ QUnit.module('Panning over scale breaks', $.extend({}, environment, {
         }
 
         assert.ok(chart.getArgumentAxis().visualRange().startValue > new Date(1994, 2, 9), 'the range really moved forward');
+    });
+
+    QUnit.test('Panning over weekend breaks must not change the chart scale on an inverted axis', function(assert) {
+        const chart = this.createDateChart({ workdaysOnly: true, inverted: true });
+        const scaleBefore = this.getScale(chart);
+
+        for(let i = 1; i <= 5; i++) {
+            this.panForward();
+            assert.roughEqual(this.getScale(chart), scaleBefore, 2, `chart keeps its scale after pan ${i}`);
+        }
+    });
+
+    // the correction must keep running after the break has left the range, otherwise the span
+    // stays as the break made it and the chart rescales
+    QUnit.test('Panning past a scale break must not change the chart scale once the break is gone', function(assert) {
+        const chart = this.createDateChart({
+            breaks: [{
+                startValue: new Date(1994, 2, 12),
+                endValue: new Date(1994, 2, 16)
+            }]
+        });
+        const scaleBefore = this.getScale(chart);
+
+        for(let i = 1; i <= 5; i++) {
+            this.panForward();
+            assert.roughEqual(this.getScale(chart), scaleBefore, 2, `chart keeps its scale after pan ${i}`);
+        }
+
+        assert.ok(!this.hasScaleBreaks(chart), 'the break really left the visual range');
+    });
+
+    QUnit.test('Panning over weekend breaks must not change the chart scale on a rotated chart', function(assert) {
+        const chart = this.createDateChart({ workdaysOnly: true }, { rotated: true });
+        const scaleBefore = this.getScale(chart);
+
+        for(let i = 1; i <= 5; i++) {
+            this.pointer.start({ x: 300, y: 100 }).dragStart().drag(0, -300).dragEnd();
+            assert.roughEqual(this.getScale(chart), scaleBefore, 2, `chart keeps its scale after pan ${i}`);
+        }
+    });
+
+    QUnit.test('Dragging the scroll bar over weekend breaks must not change the chart scale on an inverted axis', function(assert) {
+        const chart = this.createDateChart({ workdaysOnly: true, inverted: true }, {
+            scrollBar: { visible: true },
+            zoomAndPan: { argumentAxis: 'both' }
+        });
+        const scaleBefore = this.getScale(chart);
+
+        for(let i = 1; i <= 5; i++) {
+            this.scrollForward(chart);
+            assert.roughEqual(this.getScale(chart), scaleBefore, 2, `chart keeps its scale after scroll ${i}`);
+        }
+
+        assert.notDeepEqual(chart.getArgumentAxis().visualRange(), {
+            startValue: new Date(1994, 2, 9),
+            endValue: new Date(1994, 2, 18)
+        }, 'the range really moved');
+    });
+
+    // the scrollbar drag path was only covered with workdaysOnly, whose breaks carry a gapSize
+    // and are never reshaped by the tick generator
+    QUnit.test('Dragging the scroll bar over a user-defined scale break must not change the chart scale', function(assert) {
+        const chart = this.createDateChart({
+            breaks: [12, 19, 26].map((day) => ({
+                startValue: new Date(1994, 2, day),
+                endValue: new Date(1994, 2, day + 2)
+            }))
+        }, {
+            scrollBar: { visible: true },
+            zoomAndPan: { argumentAxis: 'both' }
+        });
+        const scaleBefore = this.getScale(chart);
+
+        for(let i = 1; i <= 3; i++) {
+            this.scrollForward(chart);
+            assert.roughEqual(this.getScale(chart), scaleBefore, 2, `chart keeps its scale after scroll ${i}`);
+        }
+
+        assert.ok(this.hasScaleBreaks(chart), 'the scale breaks really apply to the visual range');
+    });
+
+    QUnit.test('A click on the scroll bar thumb must not move the visual range', function(assert) {
+        const chart = this.createDateChart({ workdaysOnly: true }, {
+            scrollBar: { visible: true },
+            zoomAndPan: { argumentAxis: 'both' }
+        });
+        const rangeBefore = chart.getArgumentAxis().visualRange();
+
+        pointerMock(chart._scrollBar._scroll.element).start({ x: 0, y: 0 }).dragStart().dragEnd();
+
+        assert.deepEqual(chart.getArgumentAxis().visualRange(), rangeBefore, 'the range is left as it was');
     });
 
     QUnit.test('Panning an axis without scale breaks is not affected', function(assert) {

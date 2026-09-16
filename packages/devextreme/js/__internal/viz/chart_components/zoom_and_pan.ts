@@ -270,9 +270,11 @@ export default {
 
     function panArgumentAxisToThumb(e, scrollRange) {
       const axes = getFilteredAxes(chart._argumentAxes);
-      // the thumb defines the start of the range, the axis derives the end from it
       const getRange = (axis) => axis.adjustRange(
-        axis.adjustPannedRange(getVizRangeObject([scrollRange.startValue, scrollRange.endValue]), 'start'),
+        axis.adjustPannedRange(
+          getVizRangeObject([scrollRange.startValue, scrollRange.endValue]),
+          axis.getTranslator().isInverted() ? 'end' : 'start',
+        ),
       );
 
       axes.forEach((axis) => axisZoom(axis, null, getRange, () => ({ start: true, end: true }), 'pan', 1, e));
@@ -628,7 +630,7 @@ export default {
           })
           .on(SCROLL_BAR_MOVE_EVENT_NAME, (e) => {
             preventDefaults(e);
-            if (e.scrollRange) {
+            if (e.scrollRange && options.argumentAxis.pan) {
               panArgumentAxisToThumb(e, e.scrollRange);
             } else {
               axesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag, (e) => e.offset);
@@ -636,7 +638,7 @@ export default {
           })
           .on(SCROLL_BAR_END_EVENT_NAME, (e) => {
             preventDefaults(e);
-            if (e.scrollRange) {
+            if (e.scrollRange && options.argumentAxis.pan && (e.offset.x || e.offset.y)) {
               panArgumentAxisToThumb(e, e.scrollRange);
             }
             finishAxesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag);

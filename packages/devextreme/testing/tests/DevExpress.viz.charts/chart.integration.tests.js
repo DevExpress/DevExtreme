@@ -5210,7 +5210,7 @@ QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
         for(let i = 1; i < thumbs.length; i++) {
             assert.ok(thumbs[i].position >= thumbs[i - 1].position,
                 `thumb never moves back on March ${i + 1} (${thumbs[i - 1].position} -> ${thumbs[i].position})`);
-            assert.roughEqual(thumbs[i].barShare, thumbs[i].contentShare, 0.02,
+            assert.roughEqual(thumbs[i].barShare, thumbs[i].contentShare, 0.005,
                 `thumb size matches the rendered content on March ${i + 1}`);
         }
 
@@ -5225,7 +5225,7 @@ QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
 
         assert.ok(insideBreak.position > beforeBreak.position,
             `thumb moves forward instead of jumping to the beginning of the scroll bar (${beforeBreak.position} -> ${insideBreak.position})`);
-        assert.roughEqual(insideBreak.barShare, insideBreak.contentShare, 0.02,
+        assert.roughEqual(insideBreak.barShare, insideBreak.contentShare, 0.005,
             'thumb size matches the rendered content');
     });
 

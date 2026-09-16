@@ -70,7 +70,7 @@ const _isArray = Array.isArray;
 const DEFAULT_AXIS_LABEL_SPACING = 5;
 const MAX_GRID_BORDER_ADHENSION = 4;
 
-const PANNING_CORRECTION_ITERATION_COUNT = 3;
+const PANNING_CORRECTION_ITERATION_COUNT = 5;
 const PANNING_CORRECTION_PRECISION = 1e-4;
 
 const TOP = constants.top;
@@ -1309,8 +1309,10 @@ Axis.prototype = {
 
   getWholeRangeBreaks() {
     const businessRange = this._translator.getBusinessRange();
+    const { type } = this._options;
 
-    if (!isDefined(businessRange.min) || !isDefined(businessRange.max)) {
+    if (type === constants.discrete || type === constants.logarithmic
+      || !isDefined(businessRange.min) || !isDefined(businessRange.max)) {
       return [];
     }
 
@@ -1319,18 +1321,20 @@ Axis.prototype = {
     return this._getBreaksForRange(businessRange.min, businessRange.max)
       .reduce((result, scaleBreak) => {
         const hidden = this._getHiddenDuration(scaleBreak, interval);
-        // a gap is hidden whole, so its shift is zero and it is taken as is
         const shift = ((scaleBreak.to - scaleBreak.from) - hidden) / 2;
 
-        return hidden ? result.concat(shift ? extend({}, scaleBreak, {
+        return hidden ? result.concat(extend({}, scaleBreak, {
           from: this._addToValue(scaleBreak.from, shift),
           to: this._addToValue(scaleBreak.to, -shift),
-        }) : scaleBreak) : result;
+          cumulativeWidth: 0,
+        })) : result;
       }, []);
   },
 
   _getBreaksForRange(minVisible, maxVisible) {
-    const viewport = { minVisible, maxVisible };
+    const viewport = minVisible > maxVisible
+      ? { minVisible: maxVisible, maxVisible: minVisible }
+      : { minVisible, maxVisible };
     const breaks = this._getScaleBreaks(this._options, viewport, this._series, this.isArgumentAxis);
 
     return this._filterBreaks(breaks, viewport, this._options.breakStyle);
@@ -1367,12 +1371,25 @@ Axis.prototype = {
     const storedParams = that._storedZoomEndParams;
     const { type } = that._options;
 
-    if (!storedParams || type === constants.discrete || type === constants.logarithmic
-      || !this._getBreaksForRange(range.startValue, range.endValue).length) {
+    if (!storedParams || type === constants.discrete || type === constants.logarithmic) {
       return range;
     }
 
     const { startRange } = storedParams;
+
+    if (!this._getBreaksForRange(range.startValue, range.endValue).length
+      && !this._getBreaksForRange(startRange.startValue, startRange.endValue).length) {
+      return range;
+    }
+
+    const isReversed = range.startValue > range.endValue;
+
+    if (isReversed) {
+      const reordered = that.adjustPannedRange({ startValue: range.endValue, endValue: range.startValue }, anchor);
+
+      return { startValue: reordered.endValue, endValue: reordered.startValue };
+    }
+
     const targetLength = that.getVisibleRangeLength({
       minVisible: startRange.startValue,
       maxVisible: startRange.endValue,
