@@ -67,6 +67,7 @@ describe('GridCommands', () => {
 
       await gridCommands.executeCommands([{ name: 'test', args: {} }]);
 
+      // @ts-expect-error
       expect(executeSpy).toHaveBeenCalledWith(
         component,
         expect.objectContaining({

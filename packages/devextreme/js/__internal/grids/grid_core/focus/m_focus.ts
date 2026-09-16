@@ -12,6 +12,7 @@ import type { DataController } from '../data_controller/data_controller';
 import type { EditingController } from '../editing/m_editing';
 import { isNewRowTempKey } from '../editing/m_editing_utils';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
+import { combineFilters } from '../filter/utils';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import core from '../m_modules';
 import type { ModuleType } from '../m_types';
@@ -605,7 +606,7 @@ export const focusDataControllerExtender = (
 
     const forceUpdateFocusedRow = this.dataSourceController.consumeDataPushed();
 
-    if (this.option('focusedRowEnabled') && this._dataSource) {
+    if (this.option('focusedRowEnabled') && this.dataSourceController.hasAdapter()) {
       const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
       const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
       const isRefreshWithItems = e.changeType === 'refresh' && !!e.items.length;
@@ -722,7 +723,7 @@ export const focusDataControllerExtender = (
   }
 
   private getGlobalRowIndexByKey(key) {
-    if (this._dataSource!.group()) {
+    if (this.dataSourceController.getAdapter()!.group()) {
       // @ts-expect-error
       return this._calculateGlobalRowIndexByGroupedData(key);
     }
@@ -733,7 +734,7 @@ export const focusDataControllerExtender = (
   protected _calculateGlobalRowIndexByFlatData(key, groupFilter, useGroup) {
     // @ts-expect-error
     const deferred = new Deferred();
-    const dataSource = this._dataSource!;
+    const dataSourceAdapter = this.dataSourceController.getAdapter()!;
 
     if (Array.isArray(key) || isNewRowTempKey(key)) {
       return deferred.resolve(-1).promise();
@@ -741,25 +742,25 @@ export const focusDataControllerExtender = (
 
     let filter = this._generateFilterByKey(key);
 
-    dataSource.customLoader.load({
+    dataSourceAdapter.customLoader.load({
       filter: this._concatWithCombinedFilter(filter),
       skip: 0,
       take: 1,
     }).done(({ data }) => {
-      if (this._dataSource !== dataSource) {
+      if (this.dataSourceController.getAdapter() !== dataSourceAdapter) {
         deferred.resolve(-1);
         return;
       }
       if (data.length > 0) {
         filter = this._generateOperationFilterByKey(key, data[0], useGroup);
 
-        dataSource.customLoader.load({
+        dataSourceAdapter.customLoader.load({
           filter: this._concatWithCombinedFilter(filter, groupFilter),
           skip: 0,
           take: 1,
           requireTotalCount: true,
         }).done(({ extra }) => {
-          if (this._dataSource !== dataSource) {
+          if (this.dataSourceController.getAdapter() !== dataSourceAdapter) {
             deferred.resolve(-1);
             return;
           }
@@ -775,7 +776,7 @@ export const focusDataControllerExtender = (
 
   protected _concatWithCombinedFilter(filter, groupFilter?) {
     const combinedFilter = this.getCombinedFilter();
-    return gridCoreUtils.combineFilters([filter, combinedFilter, groupFilter]);
+    return combineFilters([filter, combinedFilter, groupFilter]);
   }
 
   private _generateBooleanFilter(selector, value, sortInfo) {
@@ -797,17 +798,17 @@ export const focusDataControllerExtender = (
   // TODO Vinogradov: Move this method implementation to the UiGridCoreFocusUtils
   // and cover with unit tests.
   private _generateOperationFilterByKey(key, rowData, useGroup) {
-    const that = this;
-    const dateSerializationFormat = that.option('dateSerializationFormat');
-    const isRemoteFiltering = that._dataSource!.remoteOperations().filtering;
-    const isRemoteSorting = that._dataSource!.remoteOperations().sorting;
+    const dateSerializationFormat = this.option('dateSerializationFormat');
+    const remoteOperations = this.dataSourceController.remoteOperations();
+    const isRemoteFiltering = remoteOperations.filtering;
+    const isRemoteSorting = remoteOperations.sorting;
 
-    let filter = that._generateFilterByKey(key, '<');
+    let filter = this._generateFilterByKey(key, '<');
     // @ts-expect-error
-    let sort = that._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
+    let sort = this._columnsController.getSortDataSourceParameters(!isRemoteFiltering, true);
 
     if (useGroup) {
-      const group = that._columnsController.getGroupDataSourceParameters(!isRemoteFiltering);
+      const group = this._columnsController.getGroupDataSourceParameters(!isRemoteFiltering);
       if (group) {
         sort = sort ? group.concat(sort) : group;
       }
@@ -822,14 +823,14 @@ export const focusDataControllerExtender = (
           {
             isRemoteFiltering,
             dateSerializationFormat,
-            getSelector: (selector) => that._columnsController.columnOption(selector, 'selector'),
+            getSelector: (selector) => this._columnsController.columnOption(selector, 'selector'),
           },
         );
 
         filter = [[selector, '=', safeValue], 'and', filter];
 
         if (rawValue === null || isBoolean(rawValue)) {
-          const booleanFilter = that._generateBooleanFilter(selector, safeValue, desc);
+          const booleanFilter = this._generateBooleanFilter(selector, safeValue, desc);
 
           if (booleanFilter) {
             filter = [booleanFilter, 'or', filter];
@@ -861,7 +862,7 @@ export const focusDataControllerExtender = (
   }
 
   protected _generateFilterByKey(key, operation?) {
-    const dataSourceKey = this._dataSource!.key();
+    const dataSourceKey = this.dataSourceController.getAdapter()!.key();
     let filter: any = [];
 
     if (!operation) {

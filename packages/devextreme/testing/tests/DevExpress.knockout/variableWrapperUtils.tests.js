@@ -1,8 +1,8 @@
-const ko = require('knockout');
-const variableWrapper = require('core/utils/variable_wrapper');
-const { logger } = require('core/utils/console');
+import ko from 'knockout';
+import variableWrapper from 'core/utils/variable_wrapper';
+import { logger } from 'core/utils/console';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 if(QUnit.urlParams['nocsp']) {
     QUnit.module('variableWrapperUtils');

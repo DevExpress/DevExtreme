@@ -65,7 +65,8 @@ function getEngine(engine) {
   return (engine instanceof Engine && engine) || projection.get(engine) || projection(engine) || projection.get(DEFAULT_ENGINE_NAME);
 }
 
-export const Projection = function (parameters) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Projection = function (parameters) {
   const that = this;
   that._initEvents();
   that._params = parameters;
@@ -552,4 +553,10 @@ function createProjectUnprojectMethods(project, unproject, p1, p2, delta) {
 
 /// #DEBUG
 export { Engine as _TESTS_Engine };
+/// #ENDDEBUG
+
+/// #DEBUG
+export function DEBUG_set_Projection(value: typeof Projection): void {
+  Projection = value;
+}
 /// #ENDDEBUG

@@ -16,6 +16,7 @@ import type { CustomLoadResult } from '@ts/grids/grid_core/data_source_adapter/c
 import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import { createDataSourceAdapterProvider } from '@ts/grids/grid_core/data_source_adapter/provider';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import treeListCore from '../m_core';
@@ -199,7 +200,7 @@ export class DataSourceAdapterTreeList extends DataSourceAdapter {
     for (let i = 0; i < keys.length; i++) {
       parentIdFilters.push([field, '=', keys[i]]);
     }
-    return gridCoreUtils.combineFilters(parentIdFilters, 'or');
+    return combineFilters(parentIdFilters, 'or');
   }
 
   protected override _calculateOperationTypes(loadOptions, lastLoadOptions, isFullReload?: boolean) {

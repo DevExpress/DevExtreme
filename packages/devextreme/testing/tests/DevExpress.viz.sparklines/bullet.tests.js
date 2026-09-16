@@ -20,9 +20,9 @@ QUnit.begin(function() {
         getCanvasVisibleArea: function() { return {}; }
     });
 
-    translator2DModule.Translator2D = sinon.spy(function() {
+    translator2DModule.DEBUG_set_Translator2D(sinon.spy(function() {
         return currentTest().translators.pop();
-    });
+    }));
 });
 
 QUnit.testStart(function() {
@@ -34,10 +34,10 @@ QUnit.testStart(function() {
     translator2DModule.Translator2D.resetHistory();
 });
 
-rendererModule.Renderer = sinon.spy(function(parameters) {
+rendererModule.DEBUG_set_Renderer(sinon.spy(function(parameters) {
     currentTest().renderer = new Renderer(parameters);
     return currentTest().renderer;
-});
+}));
 
 tooltipModule.DEBUG_set_tooltip(sinon.spy(function() {
     return currentTest().tooltip;

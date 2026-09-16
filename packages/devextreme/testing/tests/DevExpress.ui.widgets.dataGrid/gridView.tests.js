@@ -1,5 +1,5 @@
 import devices from '__internal/core/m_devices';
-import visibilityChange from 'common/core/events/visibility_change';
+import * as visibilityChange from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid';
@@ -913,23 +913,29 @@ QUnit.module('Grid view', {
 
         this.createGridView(this.defaultOptions);
 
-        visibilityChange.triggerShownEvent = function() {
+        const triggerShownEventInitial = visibilityChange.triggerShownEvent;
+
+        visibilityChange.DEBUG_set_triggerShownEvent(function() {
             isShownEventTriggered = true;
-        };
+        });
 
         this.resizingController.component._fireContentReadyAction = function() {
             isContentReadyCalled = true;
         };
 
-        // act
-        this.resizingController._initPostRenderHandlers();
-        this.resizingController._refreshSizesHandler({
-            changeType: 'updateSelection',
-        });
+        try {
+            // act
+            this.resizingController._initPostRenderHandlers();
+            this.resizingController._refreshSizesHandler({
+                changeType: 'updateSelection',
+            });
 
-        // assert
-        assert.ok(!isShownEventTriggered, 'shown event');
-        assert.ok(!isContentReadyCalled, 'content ready');
+            // assert
+            assert.ok(!isShownEventTriggered, 'shown event');
+            assert.ok(!isContentReadyCalled, 'content ready');
+        } finally {
+            visibilityChange.DEBUG_set_triggerShownEvent(triggerShownEventInitial);
+        }
     });
 
     QUnit.test('Render scrollable when there is max height (T427967)', function(assert) {

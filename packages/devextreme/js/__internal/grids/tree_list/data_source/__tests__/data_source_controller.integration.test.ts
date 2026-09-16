@@ -2,7 +2,6 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import errors from '@js/ui/widget/ui.errors';
-import { getMirroredAdapter } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 
 import {
   afterTest,
@@ -35,12 +34,12 @@ describe('TreeList dataSource controller', () => {
     expect('forEachNode' in (adapter as object)).toBe(true);
   });
 
-  it('holds the same adapter object as DataController', async () => {
+  it('holds the TreeList adapter once a data source is set', async () => {
     const { instance } = await createTreeList({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
 
     expect(dataSourceController.hasAdapter()).toBe(true);
-    expect(dataSourceController.getAdapter()).toBe(getMirroredAdapter(instance));
+    expect(dataSourceController.key()).toBe('id');
   });
 
   it('does not warn W1011, because the override does not apply to TreeList', async () => {
