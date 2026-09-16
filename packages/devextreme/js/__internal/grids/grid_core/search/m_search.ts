@@ -1,12 +1,10 @@
 /* eslint-disable max-classes-per-file */
 
 import messageLocalization from '@js/common/core/localization/message';
-import type { LangParams } from '@js/common/data';
-import dataQuery from '@js/common/data/query';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { compileGetter, toComparable } from '@js/core/utils/data';
+import { toComparable } from '@js/core/utils/data';
 import type TextBox from '@js/ui/text_box';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
@@ -21,30 +19,13 @@ import modules from '../m_modules';
 import type { ModuleType, OptionChanged } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
+import { allowSearch, createSearchExpression, parseValue } from './utils';
 
 const SEARCH_PANEL_CLASS = 'search-panel';
 const SEARCH_TEXT_CLASS = 'search-text';
 const HEADER_PANEL_CLASS = 'header-panel';
 const FILTERING_TIMEOUT = 700;
 const SEARCH_PANEL_ITEM_NAME = 'searchPanel';
-
-function allowSearch(column: Column): boolean {
-  return !!(column.allowSearch ?? column.allowFiltering);
-}
-
-function parseValue(column: Column, text: string): unknown {
-  const { lookup } = column;
-
-  if (!column.parseValue) {
-    return text;
-  }
-
-  if (lookup) {
-    return column.parseValue.call(lookup, text);
-  }
-
-  return column.parseValue(text);
-}
 
 const dataController = (
   base: ModuleType<DataController>,
@@ -82,7 +63,8 @@ const filterController = (
 ) => class FilterControllerSearchExtender extends base {
   public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
     const filter = super.getAdditionalFilter(excludedColumn);
-    const searchFilter = this.calculateSearchFilter(
+    const searchFilter = createSearchExpression(
+      this.getColumnsToSearch(),
       this.option('searchPanel.text'),
       this.getLangParams(),
     );
@@ -90,62 +72,12 @@ const filterController = (
     return combineFilters([filter, searchFilter]);
   }
 
-  private calculateSearchFilter(text: string | undefined, langParams?: LangParams): DataFilter {
-    let column;
-    const columns = this.columnsController.getColumns();
+  private getColumnsToSearch(): Column[] {
     const searchVisibleColumnsOnly = this.option('searchPanel.searchVisibleColumnsOnly');
-    let lookup;
-    const filters: any[] = [];
 
-    if (!text) return null;
-
-    function onQueryDone(items): void {
-      const valueGetter = compileGetter(lookup.valueExpr);
-
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
-      for (let i = 0; i < items.length; i++) {
-        // @ts-expect-error
-        const value = valueGetter(items[i]);
-        filters.push(column.createFilterExpression(value, null, 'search'));
-      }
-    }
-
-    for (let i = 0; i < columns.length; i++) {
-      column = columns[i];
-
-      if (searchVisibleColumnsOnly && !column.visible) continue;
-
-      if (allowSearch(column) && column.calculateFilterExpression) {
-        lookup = column.lookup;
-        const filterValue = parseValue(column, text);
-
-        if (lookup?.items) {
-          dataQuery(lookup.items, { langParams })
-            .filter(
-              column.createFilterExpression.call(
-                {
-                  dataField: lookup.displayExpr,
-                  dataType: lookup.dataType,
-                  calculateFilterExpression: column.calculateFilterExpression,
-                },
-                filterValue,
-                null,
-                'search',
-              ),
-            )
-            .enumerate()
-            .done(onQueryDone);
-        } else if (filterValue !== undefined) {
-          filters.push(column.createFilterExpression(filterValue, null, 'search'));
-        }
-      }
-    }
-
-    if (filters.length === 0) {
-      return ['!'];
-    }
-
-    return combineFilters(filters, 'or');
+    return this.columnsController
+      .getColumns()
+      .filter((column: Column) => !searchVisibleColumnsOnly || !!column.visible);
   }
 };
 
