@@ -481,6 +481,24 @@ export class DataController extends modules.Controller {
     return hasFilterValue;
   }
 
+  private isFilterOutdated({ changeTypes, appliedFilters }: ColumnsChanges): boolean {
+    if (changeTypes.filtering) {
+      return true;
+    }
+
+    if (!appliedFilters?.length) {
+      return false;
+    }
+
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+    const langParams = dataSourceAdapter?.loadOptions?.()?.langParams;
+    const combinedFilter = this.getCombinedFilter();
+
+    return appliedFilters.some(
+      (filter) => !equalFilterParameters(filter, combinedFilter, langParams),
+    );
+  }
+
   private columnsChangedHandler(e: ColumnsChanges): void {
     const { changeTypes, optionNames } = e;
     let filterApplied = false;
@@ -514,7 +532,7 @@ export class DataController extends modules.Controller {
       }
     }
 
-    if (!filterApplied && changeTypes.filtering && !this._needApplyFilter) {
+    if (!filterApplied && !this._needApplyFilter && this.isFilterOutdated(e)) {
       this.reload();
     }
   }
