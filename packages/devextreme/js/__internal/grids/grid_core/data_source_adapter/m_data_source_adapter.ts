@@ -234,7 +234,7 @@ export default class DataSourceAdapter extends modules.Controller {
   }
 
   public cancelAll(): void {
-    (this._dataSource as unknown as { cancelAll: () => void }).cancelAll();
+    this._dataSource.cancelAll();
   }
 
   public remoteOperations(): RemoteOperationsOptions {
