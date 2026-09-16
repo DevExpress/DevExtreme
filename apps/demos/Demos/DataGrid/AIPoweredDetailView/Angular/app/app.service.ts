@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+export type AbortRequest = () => void;
+
 export interface Vehicle {
   ID: number;
   TrademarkName: string;

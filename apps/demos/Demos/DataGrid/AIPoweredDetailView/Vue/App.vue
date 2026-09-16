@@ -63,17 +63,18 @@
 import { ref } from 'vue';
 import { formatMessage } from 'devextreme/localization';
 import { DxDataGrid, DxColumn, DxPaging, DxMasterDetail, type DxDataGridTypes } from 'devextreme-vue/data-grid';
-import { vehicles, type Vehicle } from './data.ts';
+import { vehicles } from './data.ts';
+import type { AbortRequest, Vehicle } from './types.ts';
 import Category from './Category.vue';
 import DetailView from './DetailView.vue';
 
-const activeAbortRequest = ref<(() => void) | null>(null);
+const activeAbortRequest = ref<AbortRequest | null>(null);
 
-function registerAbortRequest(abortRequest: () => void) {
+function registerAbortRequest(abortRequest: AbortRequest) {
   activeAbortRequest.value = abortRequest;
 }
 
-function unregisterAbortRequest(abortRequest: () => void) {
+function unregisterAbortRequest(abortRequest: AbortRequest) {
   if (activeAbortRequest.value === abortRequest) {
     activeAbortRequest.value = null;
   }

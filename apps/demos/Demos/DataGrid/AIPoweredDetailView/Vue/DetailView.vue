@@ -85,13 +85,9 @@ import { DxLoadPanel, DxPosition } from 'devextreme-vue/load-panel';
 import { type DxEvent } from 'devextreme/events';
 import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT, type AIMessage } from './service.ts';
-import { type Vehicle } from './data.ts';
+import type { DetailViewProps } from './types.ts';
 
-const { rowData, registerAbortRequest, unregisterAbortRequest } = defineProps<{
-  rowData: Vehicle;
-  registerAbortRequest: (abortRequest: () => void) => void;
-  unregisterAbortRequest: (abortRequest: () => void) => void;
-}>();
+const { rowData, registerAbortRequest, unregisterAbortRequest } = defineProps<DetailViewProps>();
 
 const abortController = ref<AbortController | null>(null);
 

@@ -6,7 +6,7 @@ import { type DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
 import { type DxButtonTypes } from 'devextreme-angular/ui/button';
 import { type DxEvent } from 'devextreme/events';
 import themes from 'devextreme/ui/themes';
-import { type Vehicle } from '../app.service';
+import { type Vehicle, type AbortRequest } from '../app.service';
 import { AiService, type AIMessage } from '../ai/ai.service';
 
 @Component({
@@ -25,9 +25,9 @@ import { AiService, type AIMessage } from '../ai/ai.service';
 export class DetailViewComponent implements OnInit, OnDestroy {
   @Input() rowData!: Vehicle;
 
-  @Input() registerAbortRequest?: (abortRequest: () => void) => void;
+  @Input() registerAbortRequest?: (abortRequest: AbortRequest) => void;
 
-  @Input() unregisterAbortRequest?: (abortRequest: () => void) => void;
+  @Input() unregisterAbortRequest?: (abortRequest: AbortRequest) => void;
 
   promptValue: string = '';
 

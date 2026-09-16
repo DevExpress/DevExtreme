@@ -2,7 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { formatMessage } from 'devextreme/localization';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { Service, type Vehicle } from './app.service';
+import { Service, type Vehicle, type AbortRequest } from './app.service';
 import { Category } from './category/category.component';
 import { DetailViewComponent } from './detail-view/detail-view.component';
 
@@ -22,7 +22,7 @@ if (!/localhost/.test(document.location.host)) {
   ],
 })
 export class AppComponent {
-  activeAbortRequest?: () => void;
+  activeAbortRequest?: AbortRequest;
 
   vehicles: Vehicle[];
 
@@ -34,11 +34,11 @@ export class AppComponent {
     return `${data.TrademarkName} ${data.Name}`;
   }
 
-  registerAbortRequest = (abortRequest: () => void) => {
+  registerAbortRequest = (abortRequest: AbortRequest) => {
     this.activeAbortRequest = abortRequest;
   };
 
-  unregisterAbortRequest = (abortRequest: () => void) => {
+  unregisterAbortRequest = (abortRequest: AbortRequest) => {
     if (this.activeAbortRequest === abortRequest) {
       this.activeAbortRequest = undefined;
     }

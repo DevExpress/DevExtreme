@@ -11,16 +11,16 @@ import {
 import Category from './Category.tsx';
 import DetailView from './DetailView.tsx';
 import { vehicles } from './data.ts';
-import { type Vehicle } from './types.ts';
+import type { Vehicle, AbortRequest } from './types.ts';
 
 export default function App() {
-  const activeAbortRequest = useRef<(() => void) | null>(null);
+  const activeAbortRequest = useRef<AbortRequest | null>(null);
 
-  const registerAbortRequest = useCallback((abortRequest: () => void) => {
+  const registerAbortRequest = useCallback((abortRequest: AbortRequest) => {
     activeAbortRequest.current = abortRequest;
   }, []);
 
-  const unregisterAbortRequest = useCallback((abortRequest: () => void) => {
+  const unregisterAbortRequest = useCallback((abortRequest: AbortRequest) => {
     if (activeAbortRequest.current === abortRequest) {
       activeAbortRequest.current = null;
     }
