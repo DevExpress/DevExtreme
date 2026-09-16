@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import localization from 'localization';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import themes from 'ui/themes';
 import domAdapter from '__internal/core/dom_adapter';
 import AIDialog, {

@@ -2,7 +2,7 @@
 import $ from 'jquery';
 import SpeechToText from 'ui/speech_to_text';
 import Button from 'ui/button';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import themes from 'ui/themes';
 
 import 'fluent_blue_light.css!';

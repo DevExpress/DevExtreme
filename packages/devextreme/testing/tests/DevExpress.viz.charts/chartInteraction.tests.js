@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { DataSource } from 'common/data/data_source/data_source';
 
 import 'viz/chart';

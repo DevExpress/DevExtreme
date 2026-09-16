@@ -3,7 +3,7 @@ import '../../helpers/noIntl.js';
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import support from '__internal/core/utils/m_support';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import uiDateUtils from '__internal/ui/date_box/date_utils';
 import dateLocalization from 'common/core/localization/date';
 import ko from 'knockout';

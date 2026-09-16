@@ -9,7 +9,7 @@ import {
 import pointerMock from '../../helpers/pointerMock.js';
 import eventsEngine from 'common/core/events/core/events_engine';
 import { getDocument } from 'core/dom_adapter';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 import 'viz/chart';
 import 'viz/polar_chart';

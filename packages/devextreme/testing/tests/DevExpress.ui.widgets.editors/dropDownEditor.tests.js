@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import eventsEngine from 'common/core/events/core/events_engine';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';

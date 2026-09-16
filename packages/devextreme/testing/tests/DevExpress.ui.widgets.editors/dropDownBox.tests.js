@@ -5,7 +5,7 @@ import fx from 'common/core/animation/fx';
 import DropDownBox from 'ui/drop_down_box';
 import { isRenderer, isFunction } from 'core/utils/type';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';

@@ -3,7 +3,7 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { isMouseEvent } from '@js/common/core/events/utils/index';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import { contains } from '@js/core/utils/dom';
-import devices from '@ts/core/m_devices';
+import devices from '@ts/core/devices';
 import type { EmitterConfigData, EmitterEvent } from '@ts/events/core/emitter';
 import Emitter from '@ts/events/core/emitter';
 import registerEmitter from '@ts/events/core/emitter_registrator';

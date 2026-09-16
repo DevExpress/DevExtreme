@@ -10,7 +10,7 @@ import { Template } from '__internal/core/templates/m_template';
 import { TemplateBase } from '__internal/core/templates/m_template_base';
 import { EmptyTemplate } from '__internal/core/templates/m_empty_template';
 import { ChildDefaultTemplate } from '__internal/core/templates/m_child_default_template';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { getPublicElement } from '__internal/core/element';
 import $ from 'jquery';
 

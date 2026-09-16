@@ -4,7 +4,7 @@ import positionUtils from 'common/core/animation/position';
 import { locate } from 'common/core/animation/translator';
 import 'fluent_blue_light.css!';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { Template } from 'core/templates/template';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
