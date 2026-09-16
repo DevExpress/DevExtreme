@@ -87,7 +87,8 @@ import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT, type AIMessage } from './service.ts';
 import type { DetailViewProps } from './types.ts';
 
-const { rowData, registerAbortRequest, unregisterAbortRequest } = defineProps<DetailViewProps>();
+const props = defineProps<DetailViewProps>();
+const { rowData, registerAbortRequest, unregisterAbortRequest } = props;
 
 const abortController = ref<AbortController | null>(null);
 

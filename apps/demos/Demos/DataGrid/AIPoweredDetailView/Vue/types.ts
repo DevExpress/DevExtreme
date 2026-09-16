@@ -32,4 +32,4 @@ export type DetailViewProps = {
   rowData: Vehicle;
   registerAbortRequest: (abortRequest: AbortRequest) => void;
   unregisterAbortRequest: (abortRequest: AbortRequest) => void;
-}
+};
