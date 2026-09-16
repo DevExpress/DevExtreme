@@ -11,8 +11,8 @@ import { AiService, type AIMessage } from '../ai/ai.service';
 
 @Component({
   selector: 'detail-view',
-  templateUrl: './detail-view/detail-view.component.html',
-  styleUrls: ['./detail-view/detail-view.component.css'],
+  templateUrl: 'app/detail-view/detail-view.component.html',
+  styleUrls: ['app/detail-view/detail-view.component.css'],
   imports: [
     CommonModule,
     DxTextBoxModule,
