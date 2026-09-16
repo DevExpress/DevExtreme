@@ -51,3 +51,18 @@ QUnit.test('cleanData', function(assert) {
     data = dataUtils.data(element);
     assert.deepEqual(data, {});
 });
+
+QUnit.test('cleanData with an array-like collection', function(assert) {
+    const element = document.createElement('div');
+    const testData = 'testData';
+    const key = 'testKey';
+
+    dataUtils.data(element, key, testData);
+    dataUtils.cleanData({ 0: element, length: 1 });
+
+    let data = dataUtils.data(element, key);
+    assert.equal(data, undefined);
+
+    data = dataUtils.data(element);
+    assert.deepEqual(data, {});
+});

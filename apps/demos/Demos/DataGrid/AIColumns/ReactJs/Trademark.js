@@ -10,6 +10,7 @@ export default function Trademark({ vehicle, onShowInfo }) {
     },
     [onShowInfo, vehicle],
   );
+  const onClick = useCallback(() => onShowInfo(vehicle), [onShowInfo, vehicle]);
   return (
     <div className="trademark__wrapper">
       <div className="trademark__img-wrapper">
@@ -18,7 +19,7 @@ export default function Trademark({ vehicle, onShowInfo }) {
           src={`../../../../images/vehicles/image_${ID}.png`}
           alt={`${TrademarkName} ${Name}`}
           tabIndex={0}
-          onClick={() => onShowInfo(vehicle)}
+          onClick={onClick}
           role="button"
           onKeyDown={onKeyDown}
           aria-haspopup="dialog"

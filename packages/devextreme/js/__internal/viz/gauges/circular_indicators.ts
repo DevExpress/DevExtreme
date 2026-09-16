@@ -1,327 +1,396 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
+/* eslint-disable max-classes-per-file */
 
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { convertAngleToRendererSpace, getCosAndSin, normalizeAngle } from '@ts/viz/core/utils';
+import type {
+  IndicatorMeasure,
+  Point,
+  RangeBarPositions,
+  TextCloudOptions,
+  TooltipParameters,
+  TrackerSettings,
+} from '@ts/viz/gauges/base_indicators';
 import { BaseIndicator, BaseRangeBar, BaseTextCloudMarker } from '@ts/viz/gauges/base_indicators';
 
-const _Number = Number;
-const _getCosAndSin = getCosAndSin;
-const _convertAngleToRendererSpace = convertAngleToRendererSpace;
+export interface CircularLayout {
+  x: number;
+  y: number;
+  radius: number;
+}
 
-function correctRadius(layout, size) {
+function correctRadius(
+  layout: CircularLayout | undefined,
+  size: number,
+): CircularLayout | undefined {
   if (layout && layout.radius - size <= 0) {
     layout.radius = size + 1;
   }
   return layout;
 }
 
-const SimpleIndicator = BaseIndicator.inherit({
-  _move() {
-    const that = this;
-    const options = that._options;
-    const angle = _convertAngleToRendererSpace(that._actualPosition);
-    that._rootElement.rotate(angle, options.x, options.y);
-    that._trackerElement && that._trackerElement.rotate(angle, options.x, options.y);
-  },
+function getTextCloudType(angle: number): string {
+  if (angle > 270) {
+    return 'left-top';
+  }
+  if (angle > 180) {
+    return 'top-right';
+  }
+  if (angle > 90) {
+    return 'right-bottom';
+  }
+  return 'bottom-left';
+}
 
-  _isEnabled() {
+//  B253863
+function getTwoColorBounds(
+  fraction: number,
+  y1: number,
+  y4: number,
+  space: number,
+): [number, number] {
+  if (fraction >= 1) {
+    return [y1, y1];
+  }
+  if (fraction <= 0) {
+    return [y4, y4];
+  }
+  const y3 = y4 + (y1 - y4) * fraction;
+  return [y3 + space, y3];
+}
+
+function getLineSides(x: number, basePosition: number, actualPosition: number): [number, number] {
+  if (basePosition > actualPosition) {
+    return [x - 2, x];
+  }
+  if (basePosition < actualPosition) {
+    return [x, x + 2];
+  }
+  return [x - 1, x + 1];
+}
+
+abstract class SimpleIndicator extends BaseIndicator {
+  _element;
+
+  _move(): void {
+    const options = this._options;
+    const angle = convertAngleToRendererSpace(this._actualPosition);
+    this._rootElement.rotate(angle, options.x, options.y);
+    if (this._trackerElement) {
+      this._trackerElement.rotate(angle, options.x, options.y);
+    }
+  }
+
+  _isEnabled(): boolean {
     return this._options.width > 0;
-  },
+  }
 
-  _isVisible(layout) {
-    return layout.radius - _Number(this._options.indentFromCenter) > 0;
-  },
+  _isVisible(layout: CircularLayout): boolean {
+    return layout.radius - Number(this._options.indentFromCenter) > 0;
+  }
 
-  _getTrackerSettings() {
+  _getTrackerSettings(): TrackerSettings {
     const options = this._options;
     const radius = this._getRadius();
     const indentFromCenter = this._getIndentFromCenter();
-    const x = options.x;
+    const { x } = options;
     const y = options.y - (radius + indentFromCenter) / 2;
     let width = options.width / 2;
     let length = (radius - indentFromCenter) / 2;
-    width > 10 || (width = 10);
-    length > 10 || (length = 10);
-    return { points: [x - width, y - length, x - width, y + length, x + width, y + length, x + width, y - length] };
-  },
+    if (!(width > 10)) {
+      width = 10;
+    }
+    if (!(length > 10)) {
+      length = 10;
+    }
+    return {
+      points: [
+        x - width, y - length, x - width, y + length, x + width, y + length, x + width, y - length,
+      ],
+    };
+  }
 
-  _render() {
-    const that = this;
-    that._renderPointer();
-  },
-
-  _clearPointer() {
+  _clearPointer(): void {
     delete this._element;
-  },
+  }
 
-  _clear() {
+  _clear(): void {
     this._clearPointer();
-  },
+  }
 
-  _getIndentFromCenter(radius) {
+  _getIndentFromCenter(): number {
     return Number(this._options.indentFromCenter) || 0;
-  },
+  }
 
-  _getRadius() {
+  _getRadius(): number {
     return 0;
-  },
+  }
 
-  measure(layout) {
-    const result = { max: layout.radius };
+  measure(layout: CircularLayout): IndicatorMeasure {
+    const result: IndicatorMeasure = { max: layout.radius };
     if (this._options.indentFromCenter < 0) {
-      // @ts-expect-error
-      result.inverseHorizontalOffset = result.inverseVerticalOffset = -_Number(this._options.indentFromCenter);
+      result.inverseVerticalOffset = -Number(this._options.indentFromCenter);
+      result.inverseHorizontalOffset = result.inverseVerticalOffset;
     }
     return result;
-  },
+  }
 
-  getTooltipParameters() {
+  getTooltipParameters(): TooltipParameters {
     const options = this._options;
-    const cosSin = _getCosAndSin(this._actualPosition);
+    const cosSin = getCosAndSin(this._actualPosition);
     const r = (this._getRadius() + this._getIndentFromCenter()) / 2;
     return {
-      x: options.x + cosSin.cos * r, y: options.y - cosSin.sin * r, value: this._currentValue, color: options.color, offset: options.width / 2,
+      x: options.x + cosSin.cos * r,
+      y: options.y - cosSin.sin * r,
+      value: this._currentValue,
+      color: options.color,
+      offset: options.width / 2,
     };
-  },
-});
+  }
+}
 
-const NeedleIndicator = SimpleIndicator.inherit({
-  _isVisible(layout) {
-    const indentFromCenter = this._adjustOffset(Number(this._options.indentFromCenter), layout.radius);
+abstract class NeedleIndicator extends SimpleIndicator {
+  _spindleOuter;
+
+  _spindleInner;
+
+  _isVisible(layout: CircularLayout): boolean {
+    const indentFromCenter = this._adjustOffset(
+      Number(this._options.indentFromCenter),
+      layout.radius,
+    );
     const offset = this._adjustOffset(Number(this._options.offset), layout.radius);
 
     return layout.radius - indentFromCenter - offset > 0;
-  },
+  }
 
-  getOffset() {
+  getOffset(): number {
     return 0;
-  },
+  }
 
-  _adjustOffset(value, radius) {
+  _adjustOffset(value: number, radius: number): number {
     const minRadius = Number(this._options.beginAdaptingAtRadius);
     const diff = radius / minRadius;
+    let result = value;
 
     if (diff < 1) {
-      value = Math.floor(value * diff);
+      result = Math.floor(value * diff);
     }
 
-    return value || 0;
-  },
+    return result || 0;
+  }
 
-  _getIndentFromCenter(radius) {
+  _getIndentFromCenter(): number {
     return this._adjustOffset(Number(this._options.indentFromCenter), this._options.radius);
-  },
+  }
 
-  _getRadius() {
+  _getRadius(): number {
     const options = this._options;
     return options.radius - this._adjustOffset(Number(options.offset), options.radius);
-  },
+  }
 
-  _renderSpindle() {
-    const that = this;
-    const options = that._options;
-    const radius = options.radius;
-    const spindleSize = this._adjustOffset(_Number(options.spindleSize) / 2, radius) * 2;
-    let gapSize = this._adjustOffset(_Number(options.spindleGapSize) / 2, radius) * 2 || 0;
+  _renderSpindle(): void {
+    const options = this._options;
+    const { radius } = options;
+    const spindleSize = this._adjustOffset(Number(options.spindleSize) / 2, radius) * 2;
+    let gapSize = this._adjustOffset(Number(options.spindleGapSize) / 2, radius) * 2 || 0;
     if (gapSize > 0) {
       gapSize = gapSize <= spindleSize ? gapSize : spindleSize;
     }
 
     if (spindleSize > 0) {
-      that._spindleOuter = that._spindleOuter || that._renderer.circle().append(that._rootElement);
-      that._spindleInner = that._spindleInner || that._renderer.circle().append(that._rootElement);
-      that._spindleOuter.attr({
+      this._spindleOuter = this._spindleOuter || this._renderer.circle().append(this._rootElement);
+      this._spindleInner = this._spindleInner || this._renderer.circle().append(this._rootElement);
+      this._spindleOuter.attr({
         class: 'dxg-spindle-border', cx: options.x, cy: options.y, r: spindleSize / 2,
       });
-      that._spindleInner.attr({
-        class: 'dxg-spindle-hole', cx: options.x, cy: options.y, r: gapSize / 2, fill: options.containerBackgroundColor,
+      this._spindleInner.attr({
+        class: 'dxg-spindle-hole',
+        cx: options.x,
+        cy: options.y,
+        r: gapSize / 2,
+        fill: options.containerBackgroundColor,
       });
     }
-  },
+  }
 
-  _render() {
-    const that = this;
-    that.callBase();
-    that._renderSpindle();
-  },
+  _render(): void {
+    this._renderPointer();
+    this._renderSpindle();
+  }
 
-  _clear() {
-    this.callBase();
+  _clear(): void {
+    super._clear();
     delete this._spindleOuter;
     delete this._spindleInner;
-  },
-});
+  }
 
-const rectangleNeedle = NeedleIndicator.inherit({
-  _renderPointer() {
-    const that = this;
-    const options = that._options;
+  abstract _renderPointer(): void;
+}
+
+class RectangleNeedle extends NeedleIndicator {
+  _renderPointer(): void {
+    const options = this._options;
     const y2 = options.y - this._getRadius();
     const y1 = options.y - this._getIndentFromCenter();
     const x1 = options.x - options.width / 2;
-    const x2 = x1 + _Number(options.width);
+    const x2 = x1 + Number(options.width);
 
-    that._element = that._element || that._renderer.path([], 'area').append(that._rootElement);
-    that._element.attr({ points: [x1, y1, x1, y2, x2, y2, x2, y1] });
-  },
-});
+    this._element = this._element || this._renderer.path([], 'area').append(this._rootElement);
+    this._element.attr({ points: [x1, y1, x1, y2, x2, y2, x2, y1] });
+  }
+}
 
-const triangleNeedle = NeedleIndicator.inherit({
-  _renderPointer() {
-    const that = this;
-    const options = that._options;
+class TriangleNeedle extends NeedleIndicator {
+  _renderPointer(): void {
+    const options = this._options;
     const y2 = options.y - this._getRadius();
     const y1 = options.y - this._getIndentFromCenter();
     const x1 = options.x - options.width / 2;
     const x2 = options.x + options.width / 2;
 
-    that._element = that._element || that._renderer.path([], 'area').append(that._rootElement);
-    that._element.attr({ points: [x1, y1, options.x, y2, x2, y1] });
-  },
-});
+    this._element = this._element || this._renderer.path([], 'area').append(this._rootElement);
+    this._element.attr({ points: [x1, y1, options.x, y2, x2, y1] });
+  }
+}
 
-const twoColorNeedle = NeedleIndicator.inherit({
-  _renderPointer() {
-    const that = this;
-    const options = that._options;
+class TwoColorNeedle extends NeedleIndicator {
+  _firstElement;
+
+  _spaceElement;
+
+  _secondElement;
+
+  _renderPointer(): void {
+    const options = this._options;
     const x1 = options.x - options.width / 2;
     const x2 = options.x + options.width / 2;
     const y4 = options.y - this._getRadius();
     const y1 = options.y - this._getIndentFromCenter();
-    const fraction = _Number(options.secondFraction) || 0;
-    let y2;
-    let y3;
-    //  B253863
-    if (fraction >= 1) {
-      y2 = y3 = y1;
-    } else if (fraction <= 0) {
-      y2 = y3 = y4;
-    } else {
-      y3 = y4 + (y1 - y4) * fraction;
-      y2 = y3 + _Number(options.space);
-    }
-    that._firstElement = that._firstElement || that._renderer.path([], 'area').append(that._rootElement);
-    that._spaceElement = that._spaceElement || that._renderer.path([], 'area').append(that._rootElement);
-    that._secondElement = that._secondElement || that._renderer.path([], 'area').append(that._rootElement);
-    that._firstElement.attr({ points: [x1, y1, x1, y2, x2, y2, x2, y1] });
-    that._spaceElement.attr({ points: [x1, y2, x1, y3, x2, y3, x2, y2], class: 'dxg-hole', fill: options.containerBackgroundColor });
-    that._secondElement.attr({ points: [x1, y3, x1, y4, x2, y4, x2, y3], class: 'dxg-part', fill: options.secondColor });
-  },
+    const fraction = Number(options.secondFraction) || 0;
+    const [y2, y3] = getTwoColorBounds(fraction, y1, y4, Number(options.space));
+    this._firstElement = this._firstElement || this._renderer.path([], 'area').append(this._rootElement);
+    this._spaceElement = this._spaceElement || this._renderer.path([], 'area').append(this._rootElement);
+    this._secondElement = this._secondElement || this._renderer.path([], 'area').append(this._rootElement);
+    this._firstElement.attr({ points: [x1, y1, x1, y2, x2, y2, x2, y1] });
+    this._spaceElement.attr({
+      points: [x1, y2, x1, y3, x2, y3, x2, y2], class: 'dxg-hole', fill: options.containerBackgroundColor,
+    });
+    this._secondElement.attr({
+      points: [x1, y3, x1, y4, x2, y4, x2, y3], class: 'dxg-part', fill: options.secondColor,
+    });
+  }
 
-  _clearPointer() {
+  _clearPointer(): void {
     delete this._firstElement;
     delete this._secondElement;
     delete this._spaceElement;
-  },
-});
+  }
+}
 
 // The following is from circularMarker.js
 
-const triangleMarker = SimpleIndicator.inherit({
-  _isEnabled() {
+class TriangleMarker extends SimpleIndicator {
+  _isEnabled(): boolean {
     return this._options.length > 0 && this._options.width > 0;
-  },
+  }
 
-  _isVisible(layout) {
+  _isVisible(): boolean {
     return true;
-  },
+  }
 
-  resize(layout) {
-    return this.callBase(correctRadius(layout, 0));
-  },
+  resize(layout?: CircularLayout): this {
+    return super.resize(correctRadius(layout, 0));
+  }
 
-  _render() {
-    const that = this;
-    const options = that._options;
-    const x = options.x;
+  _render(): void {
+    const options = this._options;
+    const { x } = options;
     const y1 = options.y - options.radius;
     const dx = options.width / 2 || 0;
-    const y2 = y1 - _Number(options.length);
-    that._element = that._element || that._renderer.path([], 'area').append(that._rootElement);
-    const settings = {
+    const y2 = y1 - Number(options.length);
+    this._element = this._element || this._renderer.path([], 'area').append(this._rootElement);
+    const settings: ThemeValue = {
       points: [x, y1, x - dx, y2, x + dx, y2], stroke: 'none', 'stroke-width': 0, 'stroke-linecap': 'square',
     };
     if (options.space > 0) {
       settings['stroke-width'] = Math.min(options.space, options.width / 4) || 0;
       settings.stroke = settings['stroke-width'] > 0 ? options.containerBackgroundColor || 'none' : 'none';
     }
-    that._element.attr(settings).sharp();
-  },
+    this._element.attr(settings).sharp();
+  }
 
-  _clear() {
+  _clear(): void {
     delete this._element;
-  },
+  }
 
-  _getTrackerSettings() {
+  _getTrackerSettings(): TrackerSettings {
     const options = this._options;
-    const x = options.x;
+    const { x } = options;
     const y = options.y - options.radius - options.length / 2;
     let width = options.width / 2;
     let length = options.length / 2;
-    width > 10 || (width = 10);
-    length > 10 || (length = 10);
-    return { points: [x - width, y - length, x - width, y + length, x + width, y + length, x + width, y - length] };
-  },
+    if (!(width > 10)) {
+      width = 10;
+    }
+    if (!(length > 10)) {
+      length = 10;
+    }
+    return {
+      points: [
+        x - width, y - length, x - width, y + length, x + width, y + length, x + width, y - length,
+      ],
+    };
+  }
 
-  measure(layout) {
-    return { min: layout.radius, max: layout.radius + _Number(this._options.length) };
-  },
+  measure(layout: CircularLayout): IndicatorMeasure {
+    return { min: layout.radius, max: layout.radius + Number(this._options.length) };
+  }
 
-  getTooltipParameters() {
+  getTooltipParameters(): TooltipParameters {
     const options = this._options;
-    const cosSin = _getCosAndSin(this._actualPosition);
+    const cosSin = getCosAndSin(this._actualPosition);
     const r = options.radius + options.length / 2;
-    const parameters = this.callBase();
+    const parameters = super.getTooltipParameters();
     parameters.x = options.x + cosSin.cos * r;
     parameters.y = options.y - cosSin.sin * r;
     parameters.offset = options.length / 2;
     return parameters;
-  },
-});
+  }
+}
 
-const textCloud = BaseTextCloudMarker.inherit({
-  _isEnabled() {
+class TextCloud extends BaseTextCloudMarker {
+  _isEnabled(): boolean {
     return true;
-  },
+  }
 
-  _isVisible(layout) {
+  _isVisible(): boolean {
     return true;
-  },
+  }
 
-  resize(layout) {
-    return this.callBase(correctRadius(layout, 0));
-  },
+  resize(layout?: CircularLayout): this {
+    return super.resize(correctRadius(layout, 0));
+  }
 
-  _getTextCloudOptions() {
-    const that = this;
-    const cosSin = _getCosAndSin(that._actualPosition);
-    const nAngle = normalizeAngle(that._actualPosition);
+  _getTextCloudOptions(): TextCloudOptions {
+    const cosSin = getCosAndSin(this._actualPosition);
+    const nAngle = normalizeAngle(this._actualPosition);
     return {
-      x: that._options.x + cosSin.cos * that._options.radius,
-      y: that._options.y - cosSin.sin * that._options.radius,
-      type: nAngle > 270 ? 'left-top' : nAngle > 180 ? 'top-right' : nAngle > 90 ? 'right-bottom' : 'bottom-left',
+      x: this._options.x + cosSin.cos * this._options.radius,
+      y: this._options.y - cosSin.sin * this._options.radius,
+      type: getTextCloudType(nAngle),
     };
-  },
+  }
 
-  measure(layout) {
-    const that = this;
-    const arrowLength = _Number(that._options.arrowLength) || 0;
+  _correctCloudType(type: string): string {
+    return type;
+  }
 
-    that._measureText();
-    const verticalOffset = that._textFullHeight + arrowLength;
-    const horizontalOffset = that._textFullWidth + arrowLength;
+  measure(layout: CircularLayout): IndicatorMeasure {
+    const arrowLength = Number(this._options.arrowLength) || 0;
+
+    this._measureText();
+    const verticalOffset = this._textFullHeight + arrowLength;
+    const horizontalOffset = this._textFullWidth + arrowLength;
 
     return {
       min: layout.radius,
@@ -331,151 +400,141 @@ const textCloud = BaseTextCloudMarker.inherit({
       inverseHorizontalOffset: horizontalOffset,
       inverseVerticalOffset: verticalOffset,
     };
-  },
-});
+  }
+}
 
 // The following is from circularRangeBar.js
 
-const rangeBar = BaseRangeBar.inherit({
-  _isEnabled() {
+class RangeBar extends BaseRangeBar {
+  _maxSide!: number;
+
+  _minSide!: number;
+
+  _lineFrom!: number;
+
+  _lineTo!: number;
+
+  _textRadius!: number;
+
+  _isEnabled(): boolean {
     return this._options.size > 0;
-  },
+  }
 
-  _isVisible(layout) {
+  _isVisible(): boolean {
     return true;
-  },
+  }
 
-  resize(layout) {
-    return this.callBase(correctRadius(layout, _Number(this._options.size)));
-  },
+  resize(layout?: CircularLayout): this {
+    return super.resize(correctRadius(layout, Number(this._options.size)));
+  }
 
-  _createBarItem() {
+  _createBarItem(): ThemeValue {
     return this._renderer.arc().attr({ 'stroke-linejoin': 'round' }).append(this._rootElement);
-  },
+  }
 
-  _createTracker() {
+  _createTracker(): ThemeValue {
     return this._renderer.arc().attr({ 'stroke-linejoin': 'round' });
-  },
+  }
 
-  _setBarSides() {
-    const that = this;
-    that._maxSide = that._options.radius;
-    that._minSide = that._maxSide - _Number(that._options.size);
-  },
+  _setBarSides(): void {
+    this._maxSide = this._options.radius;
+    this._minSide = this._maxSide - Number(this._options.size);
+  }
 
-  _getSpace() {
+  _getSpace(): number {
     const options = this._options;
-    return options.space > 0 ? options.space * 180 / options.radius / Math.PI : 0;
-  },
+    return options.space > 0 ? (options.space * 180) / options.radius / Math.PI : 0;
+  }
 
-  _isTextVisible() {
+  _isTextVisible(): boolean {
     const options = this._options.text || {};
     return options.indent > 0;
-  },
+  }
 
-  _setTextItemsSides() {
-    const that = this;
-    const options = that._options;
-    const indent = _Number(options.text.indent);
-    that._lineFrom = options.y - options.radius;
-    that._lineTo = that._lineFrom - indent;
-    that._textRadius = options.radius + indent;
-  },
+  _setTextItemsSides(): void {
+    const options = this._options;
+    const indent = Number(options.text.indent);
+    this._lineFrom = options.y - options.radius;
+    this._lineTo = this._lineFrom - indent;
+    this._textRadius = options.radius + indent;
+  }
 
-  _getPositions() {
-    const that = this;
-    const basePosition = that._basePosition;
-    const actualPosition = that._actualPosition;
-    let mainPosition1;
-    let mainPosition2;
-    if (basePosition >= actualPosition) {
-      mainPosition1 = basePosition;
-      mainPosition2 = actualPosition;
-    } else {
-      mainPosition1 = actualPosition;
-      mainPosition2 = basePosition;
-    }
+  _getPositions(): RangeBarPositions {
+    const basePosition = this._basePosition;
+    const actualPosition = this._actualPosition;
+    const [mainPosition1, mainPosition2] = basePosition >= actualPosition
+      ? [basePosition, actualPosition]
+      : [actualPosition, basePosition];
     return {
-      start: that._startPosition,
-      end: that._endPosition,
+      start: this._startPosition,
+      end: this._endPosition,
       main1: mainPosition1,
       main2: mainPosition2,
-      back1: Math.min(mainPosition1 + that._space, that._startPosition),
-      back2: Math.max(mainPosition2 - that._space, that._endPosition),
+      back1: Math.min(mainPosition1 + this._space, this._startPosition),
+      back2: Math.max(mainPosition2 - this._space, this._endPosition),
     };
-  },
+  }
 
-  _buildItemSettings(from, to) {
-    const that = this;
+  _buildItemSettings(from: number, to: number): ThemeValue {
     return {
-      x: that._options.x, y: that._options.y, innerRadius: that._minSide, outerRadius: that._maxSide, startAngle: to, endAngle: from,
+      x: this._options.x,
+      y: this._options.y,
+      innerRadius: this._minSide,
+      outerRadius: this._maxSide,
+      startAngle: to,
+      endAngle: from,
     };
-  },
+  }
 
-  _updateTextPosition() {
-    const that = this;
-    const cosSin = _getCosAndSin(that._actualPosition);
-    let x = that._options.x + that._textRadius * cosSin.cos;
-    let y = that._options.y - that._textRadius * cosSin.sin;
-    x += cosSin.cos * that._textWidth * 0.6;
-    y -= cosSin.sin * that._textHeight * 0.6;
-    that._text.attr({ x, y: y + that._textVerticalOffset });
-  },
+  _updateTextPosition(): void {
+    const cosSin = getCosAndSin(this._actualPosition);
+    let x = this._options.x + this._textRadius * cosSin.cos;
+    let y = this._options.y - this._textRadius * cosSin.sin;
+    x += cosSin.cos * this._textWidth * 0.6;
+    y -= cosSin.sin * this._textHeight * 0.6;
+    this._text.attr({ x, y: y + this._textVerticalOffset });
+  }
 
-  _updateLinePosition() {
-    const that = this;
-    const x = that._options.x;
-    let x1;
-    let x2;
-    if (that._basePosition > that._actualPosition) {
-      x1 = x - 2;
-      x2 = x;
-    } else if (that._basePosition < that._actualPosition) {
-      x1 = x;
-      x2 = x + 2;
-    } else {
-      x1 = x - 1;
-      x2 = x + 1;
-    }
-    that._line.attr({ points: [x1, that._lineFrom, x1, that._lineTo, x2, that._lineTo, x2, that._lineFrom] })
-      .rotate(_convertAngleToRendererSpace(that._actualPosition), x, that._options.y)
+  _updateLinePosition(): void {
+    const { x } = this._options;
+    const [x1, x2] = getLineSides(x, this._basePosition, this._actualPosition);
+    const points = [x1, this._lineFrom, x1, this._lineTo, x2, this._lineTo, x2, this._lineFrom];
+    this._line
+      .attr({ points })
+      .rotate(convertAngleToRendererSpace(this._actualPosition), x, this._options.y)
       .sharp();
-  },
+  }
 
-  _getTooltipPosition() {
-    const that = this;
-    const cosSin = _getCosAndSin((that._basePosition + that._actualPosition) / 2);
-    const r = (that._minSide + that._maxSide) / 2;
-    return { x: that._options.x + cosSin.cos * r, y: that._options.y - cosSin.sin * r };
-  },
+  _getTooltipPosition(): Point {
+    const cosSin = getCosAndSin((this._basePosition + this._actualPosition) / 2);
+    const r = (this._minSide + this._maxSide) / 2;
+    return { x: this._options.x + cosSin.cos * r, y: this._options.y - cosSin.sin * r };
+  }
 
-  measure(layout) {
-    const that = this;
-    const result = {
-      min: layout.radius - _Number(that._options.size),
+  measure(layout: CircularLayout): IndicatorMeasure {
+    const result: IndicatorMeasure = {
+      min: layout.radius - Number(this._options.size),
       max: layout.radius,
     };
 
-    that._measureText();
-    if (that._hasText) {
-      result.max += _Number(that._options.text.indent);
-      // @ts-expect-error
-      result.horizontalOffset = that._textWidth;
-      // @ts-expect-error
-      result.verticalOffset = that._textHeight;
+    this._measureText();
+    if (this._hasText) {
+      result.max = (result.max as number) + Number(this._options.text.indent);
+      result.horizontalOffset = this._textWidth;
+      result.verticalOffset = this._textHeight;
     }
     return result;
-  },
-});
+  }
+}
 
 /* eslint-disable spellcheck/spell-checker */
 
 export {
-  rectangleNeedle as _default,
-  rangeBar as rangebar,
-  rectangleNeedle as rectangleneedle,
-  textCloud as textcloud,
-  triangleMarker as trianglemarker,
-  triangleNeedle as triangleneedle,
-  twoColorNeedle as twocolorneedle,
+  RectangleNeedle as _default,
+  RangeBar as rangebar,
+  RectangleNeedle as rectangleneedle,
+  TextCloud as textcloud,
+  TriangleMarker as trianglemarker,
+  TriangleNeedle as triangleneedle,
+  TwoColorNeedle as twocolorneedle,
 };

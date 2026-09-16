@@ -32,6 +32,25 @@ function App() {
     setProduct(newProduct);
   }, []);
   const getAltText = useCallback((text) => `${text}. Picture`, []);
+  const itemRender = useCallback(
+    (data) => (
+      <Item
+        data={data}
+        getAltText={getAltText}
+      />
+    ),
+    [getAltText],
+  );
+  const tagRender = useCallback(
+    (data) => (
+      <Tag
+        product={data}
+        onMouseEnter={onMouseEnter}
+        getAltText={getAltText}
+      />
+    ),
+    [onMouseEnter, getAltText],
+  );
   return (
     <>
       <div className="dx-fieldset">
@@ -137,19 +156,8 @@ function App() {
               inputAttr={productLabel}
               displayExpr="Name"
               valueExpr="Id"
-              itemRender={(data) => (
-                <Item
-                  data={data}
-                  getAltText={getAltText}
-                />
-              )}
-              tagRender={(data) => (
-                <Tag
-                  product={data}
-                  onMouseEnter={onMouseEnter}
-                  getAltText={getAltText}
-                />
-              )}
+              itemRender={itemRender}
+              tagRender={tagRender}
             />
 
             <Popover
