@@ -16,6 +16,7 @@ import {
     restoreIncidentOccurredCreation,
 } from '../../helpers/vizMocks.js';
 import { dxGauge } from '__internal/viz/gauges/common';
+import { setupWidgetPrototype } from '__internal/viz/core/helpers';
 import { createPalette } from 'viz/palette';
 import axisModule from 'viz/axes/base_axis';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
@@ -34,46 +35,53 @@ stubSeam(rangeModule, 'Range', 'DEBUG_set_Range').callsFake(function(parameters)
     return new stubRange(parameters);
 });
 
-const dxTestGauge = dxGauge.inherit({
+class dxTestGauge extends dxGauge {
+    _getDefaultSize() {
+        return { width: 101, height: 202 };
+    }
+
+    _updateScaleTickIndent() { }
+
+    _setupCodomain() {
+        this._area = { startCoord: 1, endCoord: 2 };
+        this.position = 0;
+        this._translator.setCodomain(1000, 2000);
+    }
+
+    _getTicksOrientation() {
+        return 'center';
+    }
+
+    _getTicksCoefficients() {
+        return { inner: 0, outer: 1 };
+    }
+
+    _getElementLayout(offset) {
+        return { position: Math.round(offset + this.position) };
+    }
+
+    _applyMainLayout() {
+        this._area.startCoord = 1000;
+        this._area.endCoord = 2000;
+        this.position = 400;
+    }
+
+    _getApproximateScreenRange() {
+        return this.option('approximateScreenRange') || 0;
+    }
+}
+
+setupWidgetPrototype(dxTestGauge, {
     NAME: 'dxTestGauge',
     _scaleTypes: {
         type: 'testAxes',
         drawingType: 'testDrawing'
     },
-
-    _getDefaultSize: function() {
-        return { width: 101, height: 202 };
-    },
-    _updateScaleTickIndent: function() { },
-    _setupCodomain: function() {
-        this._area = { startCoord: 1, endCoord: 2 };
-        this.position = 0;
-        this._translator.setCodomain(1000, 2000);
-    },
     _gridSpacingFactor: 0,
     _setOrientation: noop,
     _shiftScale: noop,
-    _getTicksOrientation: function() {
-        return 'center';
-    },
     _getScaleLayoutValue: noop,
-    _getTicksCoefficients: function() {
-        return { inner: 0, outer: 1 };
-    },
-    _correctScaleIndents: noop,
-    _getElementLayout: function(offset) {
-        return { position: Math.round(offset + this.position) };
-    },
-
-    _applyMainLayout: function() {
-        this._area.startCoord = 1000;
-        this._area.endCoord = 2000;
-        this.position = 400;
-    },
-
-    _getApproximateScreenRange: function() {
-        return this.option('approximateScreenRange') || 0;
-    }
+    _correctScaleIndents: noop
 });
 
 const factory = dxTestGauge.prototype._factory = objectUtils.clone(dxGauge.prototype._factory);

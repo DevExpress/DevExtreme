@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-shadow */
@@ -22,7 +21,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import {
-  isDefined, isFunction, isNumeric, isObject as _isObject, type,
+  isDefined, isNumeric, isObject as _isObject, type,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import warnings from '@js/viz/core/errors_warnings';
@@ -34,7 +33,7 @@ import {
   createEventTrigger,
   createIncidentOccurred, createResizeHandler,
 } from '@ts/viz/core/base_widget.utils';
-import { changes, replaceInherit } from '@ts/viz/core/helpers';
+import { changes, isDisabledOnServer, replaceInherit } from '@ts/viz/core/helpers';
 import _Layout from '@ts/viz/core/layout';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
 import { parseScalar as _parseScalar } from '@ts/viz/core/utils';
@@ -106,7 +105,7 @@ const getEmptyComponent = function () {
 
   EmptyComponent.inherit = function (config) {
     Object.keys(config).forEach((field) => {
-      if (isFunction(config[field]) && field.substr(0, 1) !== '_' && field !== 'option' || field === '_dispose' || field === '_optionChanged') {
+      if (isDisabledOnServer(field, config[field])) {
         config[field] = noop;
       }
     });
