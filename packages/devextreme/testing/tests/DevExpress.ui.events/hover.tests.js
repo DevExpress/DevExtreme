@@ -1,6 +1,6 @@
-const $ = require('jquery');
-const devices = require('core/devices');
-const hoverEvents = require('common/core/events/hover');
+import $ from 'jquery';
+import devices from 'core/devices';
+import * as hoverEvents from 'common/core/events/hover';
 
 QUnit.testStart(function() {
     const markup =

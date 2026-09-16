@@ -7,6 +7,7 @@ import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator, MockAxis } from '../../helpers/chartMocks.js';
 import tooltipModule from 'viz/core/tooltip';
+import { spySeam } from '../../helpers/moduleSeam.js';
 
 const originalLabel = labelModule.Label;
 
@@ -71,12 +72,13 @@ const environment = {
                 attributes: {}
             }
         };
-        this.labelFactory = labelModule.Label = sinon.spy(function() {
+        this.labelFactory = sinon.spy(function() {
             const label = sinon.createStubInstance(originalLabel);
             label.getLayoutOptions.returns(that.options.label);
             label.getBoundingRect.returns({ height: 10, width: 20 });
             return label;
         });
+        labelModule.DEBUG_set_Label(this.labelFactory);
         this.series = {
             name: 'series',
             _labelsGroup: {},
@@ -92,7 +94,7 @@ const environment = {
         };
     },
     afterEach: function() {
-        labelModule.Label = originalLabel;
+        labelModule.DEBUG_set_Label(originalLabel);
     }
 };
 
@@ -2129,7 +2131,7 @@ QUnit.module('API', {
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         };
-        sinon.spy(labelModule, 'Label');
+        spySeam(labelModule, 'Label', 'DEBUG_set_Label');
 
         this.translators = {
             arg: new MockTranslator({

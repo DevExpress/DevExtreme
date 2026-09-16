@@ -1,10 +1,7 @@
-define(function(require) {
-    const $ = require('jquery');
+import $ from 'jquery';
+import selectors from '__internal/core/utils/m_selectors';
 
-    if(QUnit.urlParams['nojquery']) {
-        return;
-    }
-
+if(!QUnit.urlParams['nojquery']) {
     QUnit.testStart(function() {
         const markup =
             `<div class="focusable tabbable" tabindex="0"></div>
@@ -49,8 +46,6 @@ define(function(require) {
         $('#qunit-fixture').html(markup);
     });
 
-    const selectors = require('__internal/core/utils/m_selectors');
-
     QUnit.test('focusable', function(assert) {
         const focusableContainer = $('.focusable');
         focusableContainer.each(function(index, item) {
@@ -78,4 +73,4 @@ define(function(require) {
             assert.ok(!$(item).is(selectors.tabbable));
         });
     });
-});
+}

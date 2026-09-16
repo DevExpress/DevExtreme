@@ -1,3 +1,3 @@
 // deprecated
-import { domAdapter } from '../__internal/core/m_dom_adapter';
+import { domAdapter } from '../__internal/core/dom_adapter';
 export default domAdapter;

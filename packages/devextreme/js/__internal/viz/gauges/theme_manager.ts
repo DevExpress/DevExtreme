@@ -1,29 +1,26 @@
-/* eslint-disable prefer-rest-params */
-/* eslint-disable prefer-spread */
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { extend } from '@js/core/utils/extend';
+import type { BaseThemeManagerOptions } from '@ts/viz/core/base_theme_manager';
 import { BaseThemeManager } from '@ts/viz/core/base_theme_manager';
 
-const _extend = extend;
+export interface GaugeThemeManagerOptions extends BaseThemeManagerOptions {
+  subTheme?: string;
+}
 
-const ThemeManager = BaseThemeManager.inherit({
-  ctor(options) {
-    this.callBase.apply(this, arguments);
+class ThemeManager extends BaseThemeManager {
+  _subTheme?: string;
+
+  constructor(options: GaugeThemeManagerOptions) {
+    super(options);
     this._subTheme = options.subTheme;
-  },
+  }
 
-  _initializeTheme() {
-    const that = this;
-    let subTheme;
-    if (that._subTheme) {
-      subTheme = _extend(true, {}, that._theme[that._subTheme], that._theme);
-      _extend(true, that._theme, subTheme);
+  _initializeTheme(): void {
+    if (this._subTheme) {
+      const subTheme = extend(true, {}, this._theme[this._subTheme], this._theme);
+      extend(true, this._theme, subTheme);
     }
-    that.callBase.apply(that, arguments);
-  },
-});
+    super._initializeTheme();
+  }
+}
 
 export default { ThemeManager };
