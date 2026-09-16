@@ -4,7 +4,7 @@ import 'ui/button';
 import $ from 'jquery';
 import domAdapter from '__internal/core/dom_adapter';
 import themes from 'ui/themes';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import viewPort from 'core/utils/view_port';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import readyCallbacks from 'core/utils/ready_callbacks';

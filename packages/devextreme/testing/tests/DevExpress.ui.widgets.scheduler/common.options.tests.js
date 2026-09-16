@@ -1,5 +1,5 @@
 import { getOuterHeight } from 'core/utils/size';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
