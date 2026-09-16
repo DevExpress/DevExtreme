@@ -828,6 +828,10 @@ export class ApplyFilterViewController extends modules.ViewController {
     this._columnsController = this.getController('columns');
   }
 
+  public isFilterSourceActive({ columnSourcesActive }: FilterSourceContext): boolean {
+    return columnSourcesActive;
+  }
+
   public getFilterExpressions({
     excludedColumn,
     columnsController,

@@ -57,6 +57,7 @@ export interface FilterSourceContext {
   readonly langParams: LangParams | undefined;
   readonly excludedColumn: Column | null;
   readonly filterSyncActive: boolean;
+  readonly columnSourcesActive: boolean;
   readonly columnsController: Controllers['columns'];
 }
 

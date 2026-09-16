@@ -134,6 +134,10 @@ export class HeaderFilterController extends Modules.ViewController {
     this._headerFilterView = this.getView('headerFilterView');
   }
 
+  public isFilterSourceActive({ columnSourcesActive }: FilterSourceContext): boolean {
+    return columnSourcesActive;
+  }
+
   public getFilterExpressions({
     excludedColumn,
     columnsController,

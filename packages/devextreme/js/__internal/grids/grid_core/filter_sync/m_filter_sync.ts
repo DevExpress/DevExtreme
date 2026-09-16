@@ -72,6 +72,11 @@ export class FilterSyncController extends modules.Controller {
     }
   }
 
+  public isFilterSourceActive({ columnsController }: FilterSourceContext): boolean {
+    return !!columnsController.getFilteringColumns()?.length
+      && this.option('filterPanel.filterEnabled') !== false;
+  }
+
   public getFilterExpressions(
     {
       excludedColumn,

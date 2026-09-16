@@ -8,7 +8,7 @@ import modules from '@ts/grids/grid_core/m_modules';
 import type { Controllers } from '@ts/grids/grid_core/m_types';
 
 import { SOURCE_ORDER } from './const';
-import type { FilterSourceContext, FilterSourceName } from './types';
+import type { FilterSourceContext } from './types';
 import { combineFilters } from './utils';
 
 type TaggedFilter = unknown[] & {
@@ -53,7 +53,7 @@ export class FilterController extends modules.Controller {
     return SOURCE_ORDER.reduce<DataFilter>((filter, sourceName) => {
       const source = this.getController(sourceName);
 
-      if (!source || this.needToSkipFilter(sourceName)) {
+      if (!source?.isFilterSourceActive(context)) {
         return filter;
       }
 
@@ -70,26 +70,15 @@ export class FilterController extends modules.Controller {
     return this.normalizeNode(filter, remoteFiltering, columnIndex, filterValue) as DataFilter;
   }
 
-  private needToSkipFilter(sourceName: FilterSourceName): boolean {
-    switch (sourceName) {
-      case 'searchPanel':
-        return false;
-      case 'filterSync': {
-        const columns = this.columnsController.getFilteringColumns();
-
-        return !columns?.length || this.option('filterPanel.filterEnabled') === false;
-      }
-      default:
-        return this.isFilterSyncActive()
-          && (isDefined(this.option('filterValue')) || this.columnSourcesSuspended);
-    }
-  }
-
   private createSourceContext(excludedColumn?: Column | null): FilterSourceContext {
+    const filterSyncActive = this.isFilterSyncActive();
+
     return {
       langParams: this.getLangParams(),
       excludedColumn: excludedColumn ?? null,
-      filterSyncActive: this.isFilterSyncActive(),
+      filterSyncActive,
+      columnSourcesActive: !filterSyncActive
+        || (!isDefined(this.option('filterValue')) && !this.columnSourcesSuspended),
       columnsController: this.columnsController,
     };
   }

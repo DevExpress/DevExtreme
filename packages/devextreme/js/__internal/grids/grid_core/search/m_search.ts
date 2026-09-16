@@ -76,6 +76,10 @@ export class SearchPanelViewController extends modules.ViewController {
     }
   }
 
+  public isFilterSourceActive(): boolean {
+    return true;
+  }
+
   public getFilterExpressions({ langParams, columnsController }: FilterSourceContext): DataFilter[] {
     const columns = this.getColumnsToSearch(columnsController);
     const searchFilter = createSearchExpression(columns, this.option('searchPanel.text'), langParams);
