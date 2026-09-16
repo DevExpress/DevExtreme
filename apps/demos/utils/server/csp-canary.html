@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CSP canary</title>
+
+    <!--
+      Three deliberate violations of the policy every demo page is served with. The check loads this
+      page through the same pipeline as a demo and requires all three to come back: a run that finds
+      nothing on the demos must mean the detector looked, not that it stopped working. Nothing here
+      needs a script — the policy forbids inline ones, and the probes are declarative anyway.
+    -->
+
+    <!-- 1. An inline style element: style-src-elem, without a nonce. -->
+    <style>
+      .csp-canary-inline-style {
+        color: rgb(1, 2, 3);
+      }
+    </style>
+
+    <!-- 2. A stylesheet from an origin the policy does not list. The host does not resolve, which is
+         the point: the violation is reported before anything is fetched. -->
+    <link rel="stylesheet" href="https://csp-canary.invalid/probe.css" />
+  </head>
+  <body>
+    <!-- 3. A style attribute: style-src-attr. The class is what the check waits for, the same
+         selector a rendered demo is recognised by. -->
+    <div class="dx-widget" style="color: rgb(4, 5, 6)">CSP canary</div>
+  </body>
+</html>

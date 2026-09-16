@@ -8,6 +8,9 @@ import StyleDictionary from 'style-dictionary';
 import { fileHeader, formattedVariables } from 'style-dictionary/utils';
 import { registerTransforms } from './transforms.mjs';
 import {
+  THEME_NAME, THEME_FOLDER, getBridgeFiles, getModeFiles,
+} from './sources.mjs';
+import {
   buildAvailableNames,
   collectCustomPropertyReferences,
   collectTokenReferences,
@@ -175,8 +178,6 @@ const require = createRequire(import.meta.url);
 const tokensDir = path.dirname(require.resolve('@devexpress/design-tokens-internal/package.json'));
 const buildPath = `${path.resolve(dirname, '../../scss/_design-system')}/`;
 
-const THEME_NAME = 'fluent';
-const THEME_FOLDER = 'fluent-next';
 
 // Kept in step with the @includes in widgets/fluent-next/_design-system.scss.
 const MODE_ROLES_MIXIN = 'roles';
@@ -205,40 +206,6 @@ const FLUENT_MODES = [
   'light',
 ];
 
-const getThemeCommonFiles = () => [
-  'base/borders',
-  'base/opacity',
-  'base/spacing',
-  'base/typography/font-family',
-  'base/typography/font-weight',
-  'base/typography/font-size',
-  'base/typography/letter-spacing',
-  'base/typography/line-height',
-  'base/typography/text-case',
-  'base/typography/text-decoration',
-  `base/colors/utility/${THEME_NAME}`,
-  `semantic/box-shadow/${THEME_NAME}`,
-  `semantic/typography/${THEME_NAME}/font-family`,
-  `semantic/typography/${THEME_NAME}/font-size`,
-  `semantic/typography/${THEME_NAME}/font-weight`,
-  `semantic/typography/${THEME_NAME}/letter-spacing`,
-  `semantic/typography/${THEME_NAME}/line-height`,
-  `global/${THEME_NAME}`,
-  `figma-utils/box-shadow/semantic/${THEME_NAME}`,
-  `figma-utils/icon/set/${THEME_NAME}`,
-];
-
-const getModeFiles = (mode) => [
-  ...getThemeCommonFiles(),
-  `base/colors/icons/${THEME_NAME}/${mode}`,
-  `base/colors/palettes/${THEME_NAME}/blue`,
-  `semantic/colors/${THEME_NAME}/${mode}`,
-];
-
-// Source files behind the SCSS bridge. The component tier is absent on purpose: its tokens only
-// alias the semantic roles the theme already reads, so emitting them added unreferenced custom
-// properties. Absent from the bridge, `ds.$button-color-bg-rest` is now a Sass error.
-const getBridgeFiles = () => getModeFiles('light');
 
 /*
  * A bundle needs the mode-dependent declarations under three selectors, and a `:root` block cannot
