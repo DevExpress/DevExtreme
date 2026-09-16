@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { DxPopupModule } from 'devextreme-angular/ui/popup';
 import { DxChatModule } from 'devextreme-angular/ui/chat';
-import { DxButtonComponent, type DxButtonTypes } from 'devextreme-angular/ui/button';
+import { type DxButtonTypes } from 'devextreme-angular/ui/button';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DxSpeedDialActionModule } from 'devextreme-angular/ui/speed-dial-action';
 import { ArrayStore, DataSource } from 'devextreme-angular/common/data';
