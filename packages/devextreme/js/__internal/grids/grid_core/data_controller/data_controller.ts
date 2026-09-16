@@ -122,6 +122,8 @@ export class DataController extends modules.Controller {
 
   public dataSourceChanged!: Callback<[]>;
 
+  public adapterChanged!: Callback<[]>;
+
   public rowIndicesChanged!: Callback<[RowIndexCorrection]>;
 
   protected _lastRenderingPageIndex?: number;
@@ -193,7 +195,7 @@ export class DataController extends modules.Controller {
   }
 
   protected callbackNames(): string[] {
-    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed', 'rowIndicesChanged'];
+    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'adapterChanged', 'pushed', 'rowIndicesChanged'];
   }
 
   protected callbackFlags(name?: string): CallbackFlags | undefined {
@@ -1461,6 +1463,10 @@ export class DataController extends modules.Controller {
 
       this.changed.add(this.fireDataSourceChanged);
       this.subscribeToDataSource(dataSourceAdapter);
+    }
+
+    if (oldDataSource || dataSourceAdapter) {
+      this.adapterChanged.fire();
     }
   }
 
