@@ -118,5 +118,4 @@ export class DetailViewComponent implements OnInit, OnDestroy {
       (event?.target as HTMLElement)?.focus();
     }
   }
-
 }
