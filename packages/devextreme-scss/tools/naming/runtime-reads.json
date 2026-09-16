@@ -1,0 +1,40 @@
+{
+  "comment": "The CSS -> JS contract, the mirror of runtime-contract.json: --dx-* names the fluent-next tier declares for the runtime to read back with getComputedStyle. No stylesheet reads them, so reachability.mjs counts them live from this file instead of pinning them as dead API, and tests/runtime-reads.test.ts holds both ends - the tier still declares each name, and the file named in readBy still reads it. Every value is a <length>; the runtime falls back to its legacy literals when the theme declares nothing.",
+  "variables": [
+    {
+      "name": "--dx-speed-dial-action-fa-button-offset",
+      "readBy": "packages/devextreme/js/__internal/ui/speed_dial_action/speed_dial_main_item.ts",
+      "meaning": "distance from the main button to the first action button"
+    },
+    {
+      "name": "--dx-speed-dial-action-fa-button-spacing",
+      "readBy": "packages/devextreme/js/__internal/ui/speed_dial_action/speed_dial_main_item.ts",
+      "meaning": "distance between two neighbouring action buttons"
+    },
+    {
+      "name": "--dx-speed-dial-action-fa-button-with-label-inset-inline",
+      "readBy": "packages/devextreme/js/__internal/ui/speed_dial_action/speed_dial_main_item.ts",
+      "meaning": "horizontal shift of a labelled action button when the main button has no label"
+    },
+    {
+      "name": "--dx-html-editor-ai-dialog-button-width",
+      "readBy": "packages/devextreme/js/__internal/ui/html_editor/ui/aiDialog.ts",
+      "meaning": "width of the Generate and Cancel buttons of the AI dialog"
+    },
+    {
+      "name": "--dx-file-manager-toolbar-viewmode-popup-width",
+      "readBy": "packages/devextreme/js/__internal/ui/file_manager/ui.file_manager.toolbar.ts",
+      "meaning": "width of the view-mode switcher popup"
+    },
+    {
+      "name": "--dx-grid-ai-confirm-dialog-width",
+      "readBy": "packages/devextreme/js/__internal/grids/grid_core/ai_assistant/utils.ts",
+      "meaning": "width of the dialog that confirms aborting an AI request"
+    },
+    {
+      "name": "--dx-scheduler-appointment-min-height",
+      "readBy": "packages/devextreme/js/__internal/scheduler/view_model/generate_view_model/options/get_view_model_options.ts",
+      "meaning": "minimum height of an appointment in the month and all-day layouts"
+    }
+  ]
+}

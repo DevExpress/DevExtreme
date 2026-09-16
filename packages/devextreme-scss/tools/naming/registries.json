@@ -1588,7 +1588,8 @@
       "blockquote",
       "cell",
       "resizer",
-      "highlight"
+      "highlight",
+      "button"
     ],
     "pivot-grid": [
       "area",

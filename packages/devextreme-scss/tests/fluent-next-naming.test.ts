@@ -176,6 +176,18 @@ const RUNTIME_CONTRACT = new Set<string>(
 );
 
 /*
+ * The mirror contract: tier names the runtime READS back with getComputedStyle (the speed dial's
+ * action distances, a dialog's width, the scheduler's smallest appointment). They are declared by
+ * the component tier alone, so the legacy-surface checks below would call them undeclared; the
+ * list and its reader files live in tools/naming/runtime-reads.json, held by tests/runtime-reads.test.ts.
+ */
+const RUNTIME_READS = new Set<string>(
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  (require('../tools/naming/runtime-reads.json') as { variables: { name: string }[] }).variables
+    .map(({ name }) => name),
+);
+
+/*
  * The application -> CSS contract of the custom accent, the second category outside the component
  * tier: one colour written by the application and the scale fluent-next derives from it. The names,
  * the reasons and the step set live in tools/naming/accent-contract.json, next to the runtime
@@ -480,7 +492,7 @@ const findings = {
     if (consumers === null) return [];
     return [...consumers]
       .filter((name) => !declared.has(name) && !RUNTIME_CONTRACT.has(name)
-        && !ACCENT_CONTRACT.has(name))
+        && !RUNTIME_READS.has(name) && !ACCENT_CONTRACT.has(name))
       .sort();
   })(),
 
@@ -987,6 +999,7 @@ test('component tier: every --dx-… read in the theme resolves to a declared na
   const declared = new Set([
     ...[...tierDeclared.keys()].map((variable) => `--dx-${variable.slice(1)}`),
     ...RUNTIME_CONTRACT,
+    ...RUNTIME_READS,
     ...ACCENT_CONTRACT,
     ...findings.publicTierManualDeclarations.map((entry) => entry.slice(entry.indexOf(': ') + 2)),
   ]);
