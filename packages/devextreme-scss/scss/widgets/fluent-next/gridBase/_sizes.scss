@@ -46,6 +46,7 @@ $grid-command-ai-icon-size: null !default;
 $grid-command-ai-content-padding-inline-start: null !default;
 $grid-command-ai-button-max-width: null !default;
 $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
+$grid-ai-confirm-dialog-width: null !default;
 
 @if $size == "default" {
   $grid-cell-height: ds.$spacing-480 !default;
@@ -77,6 +78,7 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-command-ai-icon-size: ds.$spacing-200 !default;
   $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + #{ds.$spacing-80}) !default;
   $grid-command-ai-button-max-width: ds.$spacing-80 !default;
+  $grid-ai-confirm-dialog-width: 425px !default; // dx-offscale: 425px
 }
 
 @else if $size == "compact" {
@@ -109,6 +111,7 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-command-ai-icon-size: ds.$spacing-160 !default;
   $grid-command-ai-content-padding-inline-start: calc(#{$grid-command-ai-icon-size} + #{ds.$spacing-60}) !default;
   $grid-command-ai-button-max-width: ds.$spacing-60 !default;
+  $grid-ai-confirm-dialog-width: 360px !default; // dx-offscale: 360px
 }
 
 // Values hoisted from style-file literals (tokenized)

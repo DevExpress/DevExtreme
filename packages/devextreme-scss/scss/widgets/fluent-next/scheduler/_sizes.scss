@@ -34,6 +34,7 @@ $scheduler-appointment-popup-item-padding-inline: null !default;
 $scheduler-appointment-popup-all-day-item-height: null !default;
 $scheduler-appointment-popup-days-of-week-buttons-gap: null !default;
 $scheduler-appointment-popup-repeat-end-item-height: null !default;
+$scheduler-appointment-min-height: null !default;
 
 $scheduler-appointment-short-content-padding: 0 ds.$spacing-80 0 ds.$spacing-120 !default;
 $scheduler-appointment-15min-height: 17px !default; // dx-literal-required: used in @container conditions, var() is invalid there
@@ -129,6 +130,8 @@ $scheduler-header-panel-time-cell-padding: null !default;
 
   $scheduler-appointment-20min-icon-inset-inline-end: ds.$spacing-20 !default;
   $scheduler-appointment-20min-recurrence-padding-inline-end: ds.$spacing-180 !default;
+
+  $scheduler-appointment-min-height: ds.$spacing-200 !default;
 }
 
 @else if $size == "compact" {
@@ -177,6 +180,8 @@ $scheduler-header-panel-time-cell-padding: null !default;
 
   $scheduler-appointment-20min-recurrence-padding-inline-end: ds.$spacing-200 !default;
   $scheduler-appointment-20min-icon-inset-inline-end: ds.$spacing-50 !default;
+
+  $scheduler-appointment-min-height: ds.$spacing-180 !default;
 }
 
 // Values hoisted from style-file literals (tokenized)

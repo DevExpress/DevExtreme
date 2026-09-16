@@ -1168,4 +1168,36 @@ QUnit.module('direction: auto', {
 
         actions.forEach((action) => action.dispose());
     });
+
+    QUnit.test('actions take their distances from the theme when it declares them', function(assert) {
+        const $style = $('<style>').text(`.dx-fa-button {
+            --dx-speed-dial-action-fa-button-offset: 70px;
+            --dx-speed-dial-action-fa-button-spacing: 30px;
+        }`).appendTo('head');
+
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: 'right bottom',
+                    my: 'right bottom',
+                    offset: '-16 -16',
+                    of: '#fab-container'
+                }
+            }
+        });
+
+        try {
+            const actions = createActions();
+
+            const mainContentTop = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content').offset().top;
+            const $fabContent = $(FAB_SELECTOR).find('.dx-overlay-content');
+
+            assert.strictEqual($fabContent.eq(1).offset().top, mainContentTop - 70, 'the first action sits one theme offset above the main button');
+            assert.strictEqual($fabContent.eq(2).offset().top, mainContentTop - 100, 'the second action sits one theme spacing further');
+
+            actions.forEach((action) => action.dispose());
+        } finally {
+            $style.remove();
+        }
+    });
 });
