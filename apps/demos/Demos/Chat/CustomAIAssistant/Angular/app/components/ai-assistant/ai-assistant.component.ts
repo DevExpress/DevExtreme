@@ -53,7 +53,7 @@ export class AiAssistantComponent {
 
   isClearDisabled = true;
 
-  constructor(private readonly cdr: ChangeDetectorRef) {}
+  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   private readonly store = new ArrayStore({ key: 'id' });
 
@@ -82,7 +82,7 @@ export class AiAssistantComponent {
 
   setDisabled(value: boolean): void {
     this.disabled = value;
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
     if (!value) {
       this.updateClearButtonState();
     }
