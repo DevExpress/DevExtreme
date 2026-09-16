@@ -126,4 +126,8 @@ export default errorUtils({
   W0023: 'DevExtreme: the following \'devextreme\' package version does not match versions of other DevExpress products used in this application:\n\n'
         + '{0}\n\n'
         + 'Interoperability between different versions of the products listed herein cannot be guaranteed.\n\n',
+
+  W0024: 'Invalid accent color: \'{0}\'. The accent color is left unchanged.',
+
+  W0025: 'The \'{0}\' theme does not support a custom accent color. Use a fluent-next theme.',
 });
