@@ -52,7 +52,7 @@ export class AppComponent {
       }
     }
   }
- 
+
   onCellPrepared({ rowType, column, cellElement, row }: DxDataGridTypes.CellPreparedEvent) {
     if (rowType === 'data' && column.type === 'detailExpand') {
       const ariaLabelCollapse = formatMessage('dxDataGrid-ariaCollapse');

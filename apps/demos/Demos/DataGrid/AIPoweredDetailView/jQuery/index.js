@@ -73,7 +73,7 @@ $(() => {
     const { inputArea, outputArea } = controls;
     const { promptEditor, submitButton } = inputArea;
     const { responseEditor, $container } = outputArea;
-    
+
     const userPrompt = promptEditor.option('value');
     if (!userPrompt) return;
 
@@ -299,7 +299,7 @@ $(() => {
       activeAbortController?.abort();
       e.component.collapseAll(-1);
     },
-    onRowCollapsing(e) {
+    onRowCollapsing() {
       activeAbortController?.abort();
     },
     onCellClick(e) {

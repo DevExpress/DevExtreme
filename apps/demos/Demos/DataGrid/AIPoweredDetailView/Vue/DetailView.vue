@@ -87,11 +87,13 @@ import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT, type AIMessage } from './service.ts';
 import { type Vehicle } from './data.ts';
 
+export interface DetailViewRef { abortRequest: () => void; }
+
 const { rowData } = defineProps<{ rowData: Vehicle }>();
 
 const abortController = ref<AbortController | null>(null);
 
-defineExpose({
+defineExpose<DetailViewRef>({
   abortRequest: () => abortController.value?.abort(),
 });
 

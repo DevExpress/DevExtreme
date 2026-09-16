@@ -64,9 +64,9 @@ import { formatMessage } from 'devextreme/localization';
 import { DxDataGrid, DxColumn, DxPaging, DxMasterDetail, type DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { vehicles, type Vehicle } from './data.ts';
 import Category from './Category.vue';
-import DetailView from './DetailView.vue';
+import DetailView, { type DetailViewRef } from './DetailView.vue';
 
-const detailViewRef = ref<{ abortRequest: () => void } | null>(null);
+const detailViewRef = ref<DetailViewRef | null>(null);
 
 function onRowExpanding({ component }: DxDataGridTypes.RowExpandingEvent) {
   detailViewRef.value?.abortRequest();

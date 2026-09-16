@@ -100,7 +100,7 @@ const DetailView = ({ data: templateData, onRequestStart, onRequestEnd }: Detail
   const onSuggestionClick = useCallback((e: ButtonGroupTypes.ItemClickEvent) => {
     const { itemData: suggestion, event } = e;
     setPromptValue(suggestion.prompt);
-    handleSubmit(event, suggestion.prompt)
+    handleSubmit(event, suggestion.prompt);
   }, [handleSubmit]);
 
   return (<>
