@@ -11,7 +11,6 @@
 @mixin dx-group-panel-item() {
   display: inline-block;
   min-width: 30px;
-  margin-right: 10px;
   white-space: nowrap;
 
   .dx-sort {
@@ -23,7 +22,6 @@
   display: flex;
   white-space: nowrap;
   width: 100%;
-  touch-action: pinch-zoom;
 
   .dx-group-panel-message {
     @include dx-overflow();
@@ -75,7 +73,6 @@
     .dx-group-panel-item,
     .dx-block-separator {
       margin-right: 0;
-      margin-left: 10px;
     }
 
     .dx-sort {
