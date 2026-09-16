@@ -1,10 +1,9 @@
 {
-  "$comment": "Journal of retired component-tier names — the `--dx-*` custom properties the theme publishes. A published name is the one thing a user can rely on without rebuilding the SCSS, so removing or renaming one is a public change, and this file is where that change is recorded. Add the entry in the SAME pull request that retires the name; tests/public-renames.test.ts then enforces that the name never appears in a built fluent-next bundle again, which is what forbids a quiet compatibility alias in _public-links.scss.",
+  "$comment": "Journal of retired component-tier names — the `--dx-*` custom properties the theme publishes. A published name is the one thing a user can rely on without rebuilding the SCSS, so removing or renaming one is a public change, and this file is where that change is recorded. Add the entry in the SAME change that retires the name — which change that was is a question for `git log -- tools/naming/public-renames.json`, so the journal does not repeat it; tests/public-renames.test.ts then enforces that the name never appears in a built fluent-next bundle again, which is what forbids a quiet compatibility alias in _public-links.scss.",
   "fields": {
     "name": "The retired name, exactly as it shipped.",
     "replacement": "The name that takes over the role, or null when the role itself disappeared.",
     "release": "The release the removal ships in.",
-    "pr": "The pull request that retired it.",
     "note": "One sentence for the release notes: who this reaches and what they see. Written from the user's side, not ours."
   },
   "retired": [
