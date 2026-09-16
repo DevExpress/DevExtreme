@@ -152,6 +152,12 @@ const readsAllowedFor = (folder: string): Set<string> => {
 
 const RUNTIME_CONTRACT = new Set<string>(runtimeContract.variables.map(({ name }) => name));
 
+const RUNTIME_READS = new Set<string>(
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  (require('../tools/naming/runtime-reads.json') as { variables: { name: string }[] }).variables
+    .map(({ name }) => name),
+);
+
 const isAccentContractFile = (file: string): boolean => file.endsWith(
   join(...accentContract.declaredIn.split('/')),
 );
@@ -372,7 +378,7 @@ const findings = {
     if (consumers === null) return [];
     return [...consumers]
       .filter((name) => !declared.has(name) && !RUNTIME_CONTRACT.has(name)
-        && !ACCENT_CONTRACT.has(name) && !VIZ_CONTRACT.has(name))
+        && !RUNTIME_READS.has(name) && !ACCENT_CONTRACT.has(name) && !VIZ_CONTRACT.has(name))
       .sort();
   })(),
 
@@ -779,6 +785,7 @@ test('component tier: every --dx-… read in the theme resolves to a declared na
   const declared = new Set([
     ...[...tierDeclared.keys()].map((variable) => `--dx-${variable.slice(1)}`),
     ...RUNTIME_CONTRACT,
+    ...RUNTIME_READS,
     ...ACCENT_CONTRACT,
     ...findings.publicTierManualDeclarations.map((entry) => entry.slice(entry.indexOf(': ') + 2)),
   ]);

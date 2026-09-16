@@ -238,6 +238,15 @@ root.walkDecls((decl) => {
  */
 const STYLE_QUERY_READ = /style\(\s*(--dx-[a-z0-9-]+)/g;
 
+/*
+ * The other reader outside the stylesheet: the runtime asks getComputedStyle for the sizes it has
+ * to know before it can position anything (the speed dial's action buttons, a dialog's width, the
+ * scheduler's smallest appointment). tools/naming/runtime-reads.json names them and the file that
+ * reads each one; tests/runtime-reads.test.ts keeps the file honest.
+ */
+const runtimeReads = JSON.parse(readFileSync(join(packageRoot, 'tools', 'naming', 'runtime-reads.json'), 'utf8'))
+  .variables.map(({ name }) => name);
+
 const live = new Set();
 const frontier = [];
 const wake = (name) => {
@@ -253,6 +262,7 @@ root.walkAtRules('container', (rule) => {
   [...rule.params.matchAll(STYLE_QUERY_READ)]
     .map(([, name]) => name).filter(isTierName).forEach(wake);
 });
+runtimeReads.forEach(wake);
 while (frontier.length) {
   (declaredValues.get(frontier.pop()) ?? []).forEach((value) => readsOf(value).forEach(wake));
 }
