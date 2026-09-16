@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { locate } from 'common/core/animation/translator';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import dataUtils from 'core/element_data';
 import Color from 'color';

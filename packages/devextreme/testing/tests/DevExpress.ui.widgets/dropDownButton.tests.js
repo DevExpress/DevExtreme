@@ -9,7 +9,7 @@ import ArrayStore from 'common/data/array_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import { extend } from 'core/utils/extend';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 
 import 'fluent_blue_light.css!';
 

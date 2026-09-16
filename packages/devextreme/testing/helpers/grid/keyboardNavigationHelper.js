@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { addNamespace, createEvent } from 'common/core/events/utils/index';
 import {
     setupDataGridModules,

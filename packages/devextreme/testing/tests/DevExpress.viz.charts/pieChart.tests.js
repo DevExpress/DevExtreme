@@ -34,7 +34,7 @@ import {
 import TemplateManagerModule from '__internal/core/template_manager';
 import graphicObjects from '__internal/common/charts';
 import eventsEngine from 'common/core/events/core/events_engine';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const LabelCtor = new ObjectPool(labelModule.Label);
