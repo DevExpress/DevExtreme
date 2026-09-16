@@ -27,9 +27,3 @@ export interface Vehicle {
 }
 
 export type AbortRequest = () => void;
-
-export type DetailViewProps = {
-  rowData: Vehicle;
-  registerAbortRequest: (abortRequest: AbortRequest) => void;
-  unregisterAbortRequest: (abortRequest: AbortRequest) => void;
-};
