@@ -94,7 +94,7 @@ type DetailViewProps = {
 };
 
 const props = defineProps<DetailViewProps>();
-  
+
 const { rowData, registerAbortRequest, unregisterAbortRequest } = props;
 
 const abortController = ref<AbortController | null>(null);
