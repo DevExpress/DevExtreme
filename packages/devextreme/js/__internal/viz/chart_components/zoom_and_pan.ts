@@ -270,15 +270,12 @@ export default {
 
     function panArgumentAxisToThumb(e, scrollRange) {
       const axes = getFilteredAxes(chart._argumentAxes);
+      // the thumb defines the start of the range, the axis derives the end from it
+      const getRange = (axis) => axis.adjustRange(
+        axis.adjustPannedRange(getVizRangeObject([scrollRange.startValue, scrollRange.endValue]), 'start'),
+      );
 
-      axes.forEach((axis) => {
-        const range = axis.adjustRange(
-          axis.adjustPannedRange(getVizRangeObject([scrollRange.startValue, scrollRange.endValue]), 'start'),
-        );
-        const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome('pan', 1, range);
-
-        axis.handleZooming(stopInteraction ? null : correctedRange, { start: true, end: true }, e, 'pan');
-      });
+      axes.forEach((axis) => axisZoom(axis, null, getRange, () => ({ start: true, end: true }), 'pan', 1, e));
 
       axes.length && chart._requestChange(['VISUAL_RANGE']);
     }

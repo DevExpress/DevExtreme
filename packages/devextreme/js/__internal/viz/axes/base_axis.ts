@@ -70,7 +70,7 @@ const _isArray = Array.isArray;
 const DEFAULT_AXIS_LABEL_SPACING = 5;
 const MAX_GRID_BORDER_ADHENSION = 4;
 
-const PANNING_CORRECTION_ITERATION_COUNT = 5;
+const PANNING_CORRECTION_ITERATION_COUNT = 3;
 const PANNING_CORRECTION_PRECISION = 1e-4;
 
 const TOP = constants.top;
@@ -1317,24 +1317,16 @@ Axis.prototype = {
     const interval = this._getTickIntervalValue();
 
     return this._getBreaksForRange(businessRange.min, businessRange.max)
-      .map((scaleBreak) => {
+      .reduce((result, scaleBreak) => {
         const hidden = this._getHiddenDuration(scaleBreak, interval);
-
-        if (!hidden) {
-          return null;
-        }
-        if (scaleBreak.gapSize) {
-          return scaleBreak;
-        }
-
+        // a gap is hidden whole, so its shift is zero and it is taken as is
         const shift = ((scaleBreak.to - scaleBreak.from) - hidden) / 2;
 
-        return extend({}, scaleBreak, {
+        return hidden ? result.concat(shift ? extend({}, scaleBreak, {
           from: this._addToValue(scaleBreak.from, shift),
           to: this._addToValue(scaleBreak.to, -shift),
-        });
-      })
-      .filter((scaleBreak) => !!scaleBreak);
+        }) : scaleBreak) : result;
+      }, []);
   },
 
   _getBreaksForRange(minVisible, maxVisible) {
@@ -1367,10 +1359,10 @@ Axis.prototype = {
   },
 
   _addToValue(value, diff) {
-    return isDate(value) ? new Date(value.valueOf() + diff) : value + diff;
+    return isDate(value) ? new Date(value.getTime() + diff) : value + diff;
   },
 
-  adjustPannedRange(range, anchor?) {
+  adjustPannedRange(range, anchor?: 'start' | 'end') {
     const that = this;
     const storedParams = that._storedZoomEndParams;
     const { type } = that._options;

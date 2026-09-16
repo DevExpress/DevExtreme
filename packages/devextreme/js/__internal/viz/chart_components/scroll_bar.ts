@@ -70,40 +70,14 @@ ScrollBar.prototype = {
     });
 
     eventsEngine.on(scrollElement, dragEventMove, (e) => {
-      const dX = -e.offset.x * this._scale;
-      const dY = -e.offset.y * this._scale;
-      const lx = this._getDragPosition(e);
-      this._applyPosition(lx, lx + this._translator.canvasLength / this._scale);
+      const position = this._getDragPosition(e);
+      this._applyPosition(position, position + this._thumbLength);
 
-      fireEvent({
-        type: 'dxc-scroll-move',
-        originalEvent: e,
-        target: scrollElement,
-        // @ts-expect-error
-        offset: {
-          x: dX,
-          y: dY,
-        },
-        scrollRange: this._getRangeAtPosition(lx),
-      });
+      fireEvent(this._getDragEvent('dxc-scroll-move', e, scrollElement, position));
     });
 
     eventsEngine.on(scrollElement, dragEventEnd, (e) => {
-      const dX = -e.offset.x * this._scale;
-      const dY = -e.offset.y * this._scale;
-      const lx = this._getDragPosition(e);
-
-      fireEvent({
-        type: 'dxc-scroll-end',
-        originalEvent: e,
-        target: scrollElement,
-        // @ts-expect-error
-        offset: {
-          x: dX,
-          y: dY,
-        },
-        scrollRange: this._getRangeAtPosition(lx),
-      });
+      fireEvent(this._getDragEvent('dxc-scroll-end', e, scrollElement, this._getDragPosition(e)));
     });
   },
 
@@ -113,9 +87,22 @@ ScrollBar.prototype = {
     return (this._dragStartOffset ?? this._offset) + offset;
   },
 
+  _getDragEvent(type, e, target, position) {
+    return {
+      type,
+      originalEvent: e,
+      target,
+      offset: {
+        x: -e.offset.x * this._scale,
+        y: -e.offset.y * this._scale,
+      },
+      scrollRange: this._getRangeAtPosition(position),
+    };
+  },
+
   _getRangeAtPosition(position) {
     const translator = this._translator;
-    const length = translator.canvasLength / this._scale;
+    const length = this._thumbLength;
 
     if (!isFinite(position) || !isFinite(length)) {
       return undefined;
@@ -256,11 +243,11 @@ ScrollBar.prototype = {
     const minPoint = isDefined(min) ? translator.translate(min, -direction) : translator.translate('canvas_position_start');
     const maxPoint = isDefined(max) ? translator.translate(max, direction) : translator.translate('canvas_position_end');
 
-    const thumbLength = Math.abs(maxPoint - minPoint);
-
     that._offset = _min(minPoint, maxPoint);
-    that._scale = thumbLength
-      ? translator.canvasLength / thumbLength
+    that._thumbLength = Math.abs(maxPoint - minPoint);
+    // taking the scale from the values instead would ignore the scale breaks the bar accounts for
+    that._scale = that._thumbLength
+      ? translator.canvasLength / that._thumbLength
       : translator.getScale(min, max);
 
     that._applyPosition(_min(minPoint, maxPoint), _max(minPoint, maxPoint));
