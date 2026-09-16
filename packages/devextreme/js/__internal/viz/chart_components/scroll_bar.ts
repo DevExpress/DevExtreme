@@ -60,6 +60,8 @@ ScrollBar.prototype = {
     const scrollElement = this._scroll.element;
 
     eventsEngine.on(scrollElement, dragEventStart, (e) => {
+      this._dragStartOffset = this._offset;
+
       fireEvent({
         type: 'dxc-scroll-start',
         originalEvent: e,
@@ -70,7 +72,7 @@ ScrollBar.prototype = {
     eventsEngine.on(scrollElement, dragEventMove, (e) => {
       const dX = -e.offset.x * this._scale;
       const dY = -e.offset.y * this._scale;
-      const lx = this._offset - (this._layoutOptions.vertical ? dY : dX) / this._scale;
+      const lx = this._getDragPosition(e);
       this._applyPosition(lx, lx + this._translator.canvasLength / this._scale);
 
       fireEvent({
@@ -82,21 +84,51 @@ ScrollBar.prototype = {
           x: dX,
           y: dY,
         },
+        scrollRange: this._getRangeAtPosition(lx),
       });
     });
 
     eventsEngine.on(scrollElement, dragEventEnd, (e) => {
+      const dX = -e.offset.x * this._scale;
+      const dY = -e.offset.y * this._scale;
+      const lx = this._getDragPosition(e);
+
       fireEvent({
         type: 'dxc-scroll-end',
         originalEvent: e,
         target: scrollElement,
         // @ts-expect-error
         offset: {
-          x: -e.offset.x * this._scale,
-          y: -e.offset.y * this._scale,
+          x: dX,
+          y: dY,
         },
+        scrollRange: this._getRangeAtPosition(lx),
       });
     });
+  },
+
+  _getDragPosition(e) {
+    const offset = this._layoutOptions.vertical ? e.offset.y : e.offset.x;
+
+    return (this._dragStartOffset ?? this._offset) + offset;
+  },
+
+  _getRangeAtPosition(position) {
+    const translator = this._translator;
+    const length = translator.canvasLength / this._scale;
+
+    if (!isFinite(position) || !isFinite(length)) {
+      return undefined;
+    }
+
+    const visibleArea = translator.getCanvasVisibleArea();
+    const lastPosition = _max(visibleArea.max - length, visibleArea.min);
+    const start = _min(_max(position, visibleArea.min), lastPosition);
+
+    return {
+      startValue: translator.from(start),
+      endValue: translator.from(start + length),
+    };
   },
 
   update(options) {
@@ -129,18 +161,21 @@ ScrollBar.prototype = {
     return that;
   },
 
-  init(range, stick) {
+  init(range, stick, wholeRangeBreaks) {
     const that = this;
     const isDiscrete = range.axisType === 'discrete';
     that._translateWithOffset = (isDiscrete && !stick && 1) || 0;
+    that._hasBreaks = !!wholeRangeBreaks?.length;
     that._translator.update(extend({}, range, {
       minVisible: null,
       maxVisible: null,
       visibleCategories: null,
+      breaks: wholeRangeBreaks?.length ? wholeRangeBreaks : null,
+      userBreaks: null,
     }, isDiscrete && {
       min: null,
       max: null,
-    } || {}), that._canvas, { isHorizontal: !that._layoutOptions.vertical, stick });
+    } || {}), that._canvas, { isHorizontal: !that._layoutOptions.vertical, stick, breaksSize: 0 });
     return that;
   },
 
@@ -217,11 +252,16 @@ ScrollBar.prototype = {
   setPosition(min, max) {
     const that = this;
     const translator = that._translator;
-    const minPoint = isDefined(min) ? translator.translate(min, -that._translateWithOffset) : translator.translate('canvas_position_start');
-    const maxPoint = isDefined(max) ? translator.translate(max, that._translateWithOffset) : translator.translate('canvas_position_end');
+    const direction = that._translateWithOffset || (that._hasBreaks ? 1 : 0);
+    const minPoint = isDefined(min) ? translator.translate(min, -direction) : translator.translate('canvas_position_start');
+    const maxPoint = isDefined(max) ? translator.translate(max, direction) : translator.translate('canvas_position_end');
+
+    const thumbLength = Math.abs(maxPoint - minPoint);
 
     that._offset = _min(minPoint, maxPoint);
-    that._scale = translator.getScale(min, max);
+    that._scale = thumbLength
+      ? translator.canvasLength / thumbLength
+      : translator.getScale(min, max);
 
     that._applyPosition(_min(minPoint, maxPoint), _max(minPoint, maxPoint));
   },
