@@ -3604,3 +3604,129 @@ QUnit.test('Axes zooming - pinch', function(assert) {
     assert.roughEqual(argumentAxis.getAxisPosition(), 300, 2.01, 'argument axis moved - zoom out');
     assert.roughEqual(valueAxis.getAxisPosition(), 400, 2.01, 'value axis moved - zoom out');
 });
+
+const workdaysDataSource = (() => {
+    const arr = [];
+    for(let day = 1; day <= 31; day++) {
+        const date = new Date(1994, 2, day);
+        if(date.getDay() !== 0 && date.getDay() !== 6) {
+            arr.push({ arg: date, val: day });
+        }
+    }
+    return arr;
+})();
+
+QUnit.module('Panning over scale breaks', $.extend({}, environment, {
+    createDateChart(argumentAxisOptions, chartOptions) {
+        return this.createChart($.extend(true, {
+            dataSource: workdaysDataSource,
+            zoomAndPan: { argumentAxis: 'pan' },
+            argumentAxis: $.extend({
+                argumentType: 'datetime',
+                visualRange: {
+                    startValue: new Date(1994, 2, 9),
+                    endValue: new Date(1994, 2, 18)
+                }
+            }, argumentAxisOptions)
+        }, chartOptions));
+    },
+    getScale(chart) {
+        return chart.getArgumentAxis().getTranslator().getInterval(24 * 60 * 60 * 1000);
+    },
+    hasScaleBreaks(chart) {
+        return (chart.getArgumentAxis().getTranslator().getBusinessRange().breaks || []).length > 0;
+    },
+    panForward() {
+        this.pointer.start({ x: 100, y: 300 }).dragStart().drag(-300).dragEnd();
+    },
+    scrollForward(chart) {
+        const $root = $(chart._renderer.root.element);
+
+        $root.trigger($.Event('dxc-scroll-start', { pageX: 100, pointers: [{ pageX: 100, pageY: 100 }] }));
+        $root.trigger($.Event('dxc-scroll-move', { offset: { x: -200, y: 0 }, pointers: [{ pageX: 100, pageY: 100 }] }));
+        $root.trigger($.Event('dxc-scroll-end', { offset: { x: -200, y: 0 } }));
+    }
+}), () => {
+    QUnit.test('Panning over weekend breaks must not change the chart scale (workdaysOnly)', function(assert) {
+        const chart = this.createDateChart({ workdaysOnly: true });
+        const scaleBefore = this.getScale(chart);
+
+        for(let i = 1; i <= 5; i++) {
+            this.panForward();
+            assert.roughEqual(this.getScale(chart), scaleBefore, 2, `chart keeps its scale after pan ${i}`);
+        }
+    });
+
+    QUnit.test('Panning over user-defined scale breaks must not change the chart scale', function(assert) {
+        const chart = this.createDateChart({
+            breaks: [12, 19, 26].map((day) => ({
+                startValue: new Date(1994, 2, day),
+                endValue: new Date(1994, 2, day + 2)
+            }))
+        });
+        const scaleBefore = this.getScale(chart);
+
+        for(let i = 1; i <= 5; i++) {
+            this.panForward();
+            assert.roughEqual(this.getScale(chart), scaleBefore, 2, `chart keeps its scale after pan ${i}`);
+        }
+
+        assert.ok(this.hasScaleBreaks(chart), 'the scale breaks really apply to the visual range');
+    });
+
+    QUnit.test('Panning over weekend breaks must be reported as a pan, not as a zoom', function(assert) {
+        const onZoomEnd = sinon.spy();
+        const chart = this.createDateChart({ workdaysOnly: true }, { onZoomEnd: onZoomEnd });
+
+        for(let i = 1; i <= 5; i++) {
+            this.panForward();
+        }
+
+        assert.strictEqual(onZoomEnd.callCount, 5, 'every gesture reported');
+        onZoomEnd.getCalls().forEach((call, i) => {
+            assert.strictEqual(call.args[0].actionType, 'pan', `gesture ${i + 1} is a pan`);
+            assert.strictEqual(call.args[0].zoomFactor, 1, `gesture ${i + 1} did not change the zoom factor`);
+        });
+
+        assert.ok(chart.getArgumentAxis().visualRange().startValue > new Date(1994, 2, 9), 'the range really moved forward');
+    });
+
+    QUnit.test('Dragging the scroll bar over weekend breaks must not change the chart scale', function(assert) {
+        const chart = this.createDateChart({ workdaysOnly: true }, {
+            scrollBar: { visible: true },
+            zoomAndPan: { argumentAxis: 'both' }
+        });
+        const scaleBefore = this.getScale(chart);
+
+        for(let i = 1; i <= 5; i++) {
+            this.scrollForward(chart);
+            assert.roughEqual(this.getScale(chart), scaleBefore, 2, `chart keeps its scale after scroll ${i}`);
+        }
+
+        assert.ok(chart.getArgumentAxis().visualRange().startValue > new Date(1994, 2, 9), 'the range really moved forward');
+    });
+
+    QUnit.test('Panning an axis without scale breaks is not affected', function(assert) {
+        const chart = this.createDateChart({});
+        const scaleBefore = this.getScale(chart);
+
+        for(let i = 1; i <= 5; i++) {
+            this.panForward();
+            assert.roughEqual(this.getScale(chart), scaleBefore, 2, `chart keeps its scale after pan ${i}`);
+        }
+    });
+
+    QUnit.test('Panning to the end of the whole range stops at the bound and keeps the scale', function(assert) {
+        const chart = this.createDateChart({ workdaysOnly: true });
+        const scaleBefore = this.getScale(chart);
+        const argumentAxis = chart.getArgumentAxis();
+
+        for(let i = 0; i < 30; i++) {
+            this.panForward();
+        }
+
+        assert.roughEqual(this.getScale(chart), scaleBefore, 2, 'chart keeps its scale at the bound');
+        assert.deepEqual(argumentAxis.visualRange().endValue, argumentAxis.getZoomBounds().endValue,
+            'the range stopped at the end of the data');
+    });
+});
