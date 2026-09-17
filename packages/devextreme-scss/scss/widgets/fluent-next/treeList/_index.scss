@@ -4,7 +4,6 @@
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../gridBase" as *;
-@use "../gridBase/colors" as gridBaseColors;
 @use "../gridBase/sizes" as gridBaseSizes;
 @use "../../base/treeList" as baseTreeList with (
   $treelist-draggable-column-opacity: var(--dx-grid-draggable-column-opacity),
@@ -18,18 +17,18 @@
   $treelist-error-message-margin-bottom: var(--dx-tree-list-error-message-margin-block-end),
   $treelist-button-margin-right: var(--dx-tree-list-form-buttons-rtl-margin-inline-start),
   $datagrid-border: gridBaseSizes.$grid-border-width solid,
-  $datagrid-drag-header-border-color: gridBaseColors.$grid-drag-header-border,
-  $datagrid-row-error-bg: gridBaseColors.$grid-row-error-bg,
-  $datagrid-base-color: gridBaseColors.$grid-content,
-  $datagrid-base-background-color: gridBaseColors.$grid-bg,
-  $datagrid-border-color: gridBaseColors.$grid-border,
-  $datagrid-focused-border-color: gridBaseColors.$grid-border-focused,
+  $datagrid-drag-header-border-color: var(--dx-grid-drag-header-border),
+  $datagrid-row-error-bg: var(--dx-grid-row-error-bg),
+  $datagrid-base-color: var(--dx-grid-content),
+  $datagrid-base-background-color: var(--dx-grid-bg),
+  $datagrid-border-color: var(--dx-grid-border),
+  $datagrid-focused-border-color: var(--dx-grid-border-focused),
   $datagrid-text-stub-mask-image: data-uri("images/widgets/fluent-next/grid/text-stub.png"),
-  $datagrid-text-stub-bg: gridBaseColors.$grid-text-stub-bg,
-  $datagrid-row-error-color: gridBaseColors.$grid-row-error-content,
-  $header-filter-color: gridBaseColors.$grid-content,
-  $header-filter-color-empty: gridBaseColors.$grid-content,
-  $base-focus-color: gridBaseColors.$grid-content-focused,
+  $datagrid-text-stub-bg: var(--dx-grid-text-stub-bg),
+  $datagrid-row-error-color: var(--dx-grid-row-error-content),
+  $header-filter-color: var(--dx-grid-content),
+  $header-filter-color-empty: var(--dx-grid-content),
+  $base-focus-color: var(--dx-grid-content-focused),
 );
 @use "layout/cell";
 @include grid-base(treelist);

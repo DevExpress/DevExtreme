@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
   <title>fluent-next: runtime reachability audit of the --dx-* tier</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link id="theme" rel="stylesheet" type="text/css" href="../artifacts/css/dx.fluent-next.blue.light.css">
@@ -129,7 +130,9 @@
     widget('dxColorView', { value: '#0f6cbd', editAlphaChannel: true });
     widget('dxStepper', { items: [{ text: 'one' }, { text: 'two' }] });
     widget('dxDrawer', { opened: true, height: 80 });
-    widget('dxRecurrenceEditor', { value: 'FREQ=WEEKLY;BYDAY=MO' });
+    /* dxRecurrenceEditor is not registered as a plugin of its own - it warned and built nothing
+       here for as long as this line existed. The scheduler's appointment form builds it, and the
+       popup below passes a recurrenceRule so that it does. */
     widget('dxChat', { user: { id: 'me' }, items: [
       { id: 1, timestamp: Date.now(), text: 'hi', author: { id: 'a', name: 'A' } },
       { id: 2, timestamp: Date.now(), text: 'yo', author: { id: 'me', name: 'Me' } },
@@ -172,12 +175,23 @@
 
     // wave H satellites: popups that would otherwise never be built (rootsEmpty reports the remainder)
     try { $('#w-dxcardview').dxCardView('instance').showColumnChooser(); } catch (e) { console.warn('cardView chooser', e.message); }
-    try { $('#w-dxscheduler').dxScheduler('instance').showAppointmentPopup({ startDate: new Date(2026, 7, 14, 9), endDate: new Date(2026, 7, 14, 10), text: 'appt' }); } catch (e) { console.warn('scheduler popup', e.message); }
+    /* Twice on purpose: the popup does not build at all when the first call already carries a
+       recurrenceRule, and the recurrence form only appears when one is there. Plain first to build
+       it, then the rule to fill it. */
+    try {
+      const sch = $('#w-dxscheduler').dxScheduler('instance');
+      const appt = { startDate: new Date(2026, 7, 14, 9), endDate: new Date(2026, 7, 14, 10), text: 'appt' };
+      sch.showAppointmentPopup(appt);
+      setTimeout(() => {
+        try { sch.showAppointmentPopup({ ...appt, recurrenceRule: 'FREQ=MONTHLY;INTERVAL=2;COUNT=5' }, false); } catch (e) { console.warn('recurrence form', e.message); }
+      }, 400);
+    } catch (e) { console.warn('scheduler popup', e.message); }
     try { $('#w-dxfilterbuilder .dx-filterbuilder-item-field').first().trigger('dxclick'); } catch (e) {}
     try { $('#w-dxfilterbuilder .dx-filterbuilder-item-operation').first().trigger('dxclick'); } catch (e) {}
     try { $('#w-dxlist').dxList('instance').option('menuItems', [{ text: 'Delete' }]); } catch (e) {}
+    openTheRest();
     addPortals();
-    await new Promise((r) => setTimeout(r, 700));
+    await new Promise((r) => setTimeout(r, 1600));
   }
 
   /*
@@ -191,6 +205,55 @@
    *                                m_sortable/_getPlaceholderElement (container = the viewport)
    *   .dx-ai-chat .dx-aidialog  — grid_core/ai_chat: the wrapperAttr of the Popup
    */
+/*
+ * Roots the gallery declared but never built. Each one used to be checked over an empty set, which
+ * reads as a pass: the audit's own second illness, and the half of G2 that the skip rule does not
+ * reach. Opened with the widget's own API wherever there is one, so the markup comes from the
+ * product rather than from this file.
+ */
+  function openTheRest() {
+    const g = document.getElementById('gallery');
+    const add = (id, html) => { const d = document.createElement('div'); d.id = id; if (html) d.innerHTML = html; g.appendChild(d); return d; };
+    const open = (id, widget) => { try { $(id)[widget]('instance').open(); } catch (e) { console.warn(id, e.message); } };
+    open('#w-dxcolorbox', 'dxColorBox');              // .dx-colorbox-overlay
+    open('#w-dxtagbox', 'dxTagBox');                  // .dx-tagbox-popup-wrapper
+    try { $('#w-dxdropdownbutton').dxDropDownButton('instance').toggle(true); } catch (e) { console.warn('dropDownButton', e.message); }
+    try { $('#w-dxtreelist').dxTreeList('instance').showColumnChooser(); } catch (e) { console.warn('treeList chooser', e.message); }
+    try { $('#w-dxscheduler .dx-scheduler-appointment').first().trigger('dxclick'); } catch (e) {}
+    // an action sheet in popover mode carries a wrapper of its own
+    const asTarget = add('m-as-target', '<span>as</span>');
+    try { $(add('w-actionsheet-popover')).dxActionSheet({ items: [{ text: 'Do' }], usePopover: true, target: asTarget, visible: true }); } catch (e) { console.warn('actionSheet popover', e.message); }
+    try { $(add('w-validationsummary')).dxValidationSummary({}); } catch (e) { console.warn('validationSummary', e.message); }
+    /*
+     * The appointment tooltip has an API and no gesture: a click on an appointment is unreliable
+     * here because a 250px day view collapses them into a collector. It needs a scheduler OF ITS
+     * OWN - a scheduler shows one overlay at a time, so opening the tooltip on the first one closes
+     * the appointment popup and takes 2200 checks with it.
+     */
+    const s2 = add('w-dxscheduler-tooltip');
+    try {
+      $(s2).dxScheduler({
+        height: 200, views: ['day'], currentView: 'day', currentDate: new Date(2026, 7, 14),
+        dataSource: [{ text: 'appt', startDate: new Date(2026, 7, 14, 9), endDate: new Date(2026, 7, 14, 10) }],
+      });
+      $(s2).dxScheduler('instance').showAppointmentTooltip(
+        { text: 'appt', startDate: new Date(2026, 7, 14, 9), endDate: new Date(2026, 7, 14, 10) },
+        s2.querySelector('.dx-scheduler-date-table-cell'),
+      );
+    } catch (e) { console.warn('appointment tooltip', e.message); }
+    /*
+     * Six roots stay empty on purpose, and not because the gallery is short of a widget:
+     * .dx-recurrence-button-group, -datebox-until-date, -numberbox-interval-wrapper,
+     * -numberbox-repeat-count, -radiogroup-repeat-type and -repeat-on are emitted by NO JS in the
+     * product - neither the sources nor the built bundle contains those strings - while base,
+     * fluent and fluent-next all still style them. The scheduler's recurrence form builds
+     * dx-scheduler-form-recurrence-* instead. Dead across every theme, so removing them is a job of
+     * its own rather than something to fake here.
+     */
+    // the three mode classes the theme switches on - nothing in a gallery carries them by itself
+    add('m-modes', '<div class="dx-theme-mode-light"></div><div class="dx-theme-mode-dark"></div><div class="dx-theme-mode-inverted"></div>');
+  }
+
   function addPortals() {
     const viewport = document.querySelector('.dx-viewport') || document.body;
     const portal = document.createElement('div');
@@ -279,15 +342,67 @@
       <div class="dx-overlay-content dx-list-context-menucontent"><div class="dx-list-items"></div></div>
       <div class="dx-cardview-column-chooser-list"><div class="dx-empty-message">empty</div></div>
       <div class="dx-cardview-column-chooser-plain"><div class="dx-treeview"><div class="dx-treeview-select-all-item"></div></div></div>
-      <div class="dx-datagrid"><table><tr><td class="dx-command-ai-header-button"><div class="dx-button dx-state-focused">AI</div></td></tr></table></div>`;
+      <div class="dx-datagrid"><table><tr><td class="dx-command-ai-header-button"><div class="dx-button dx-state-focused">AI</div></td></tr></table></div>
+      <div class="dx-overlay-wrapper dx-popup-wrapper dx-datagrid-ai-assistant-confirm-dialog">
+        <div class="dx-overlay-content"><div class="dx-popup-content">confirm?</div></div>
+      </div>
+      <div class="dx-overlay-wrapper dx-popup-wrapper dx-treelist-ai-assistant-confirm-dialog">
+        <div class="dx-overlay-content"><div class="dx-popup-content">confirm?</div></div>
+      </div>
+      <div class="dx-overlay-wrapper dx-diagram-contextmenu">
+        <div class="dx-overlay-content"><div class="dx-menu-item">item</div></div>
+      </div>
+      <div class="dx-overlay-wrapper dx-popup-wrapper dx-diagram-toolbox-popup dx-diagram-mobile-popup">
+        <div class="dx-overlay-content"><div class="dx-popup-content">toolbox</div></div>
+      </div>
+      <div class="dx-overlay-wrapper dx-popup-wrapper dx-diagram-context-toolbox">
+        <div class="dx-overlay-content"><div class="dx-popup-content">context toolbox</div></div>
+      </div>
+      <div class="dx-toast-stack"><div class="dx-toast dx-toast-info"><div class="dx-toast-icon"></div><div class="dx-toast-message">stacked</div></div></div>
+      <div class="dx-toolbar dx-toolbar-background"><div class="dx-toolbar-items-container"></div></div>`;
     viewport.appendChild(portal);
   }
 
+  /*
+   * The gallery builds every widget at rest, so selectors carrying .dx-state-disabled match almost
+   * nothing and are skipped in silence. The class is dropped from the probe instead: no rule in the
+   * bundle declares a --dx-* inside a disabled scope, so dropping it cannot change which
+   * declarations reach an element. A compound left empty becomes `*`, keeping the ancestor.
+   */
+  const STATE_CLASS = '.dx-state-disabled';
+  const probeSelector = (selectorText) => selectorText
+    .split(',')
+    .map((one) => one
+      .replace(/::?[a-z-]+(\([^)]*\))?/g, '')
+      .split(/(\s*[>+~]\s*|\s+)/)
+      .map((part, index) => (index % 2 || !part.includes(STATE_CLASS)
+        ? part
+        : part.split(STATE_CLASS).join('') || '*'))
+      .join('')
+      .trim())
+    .filter(Boolean)
+    .join(',');
+
   function audit() {
     const failures = new Map();
+    /*
+     * A skipped check used to be a single counter, and a counter cannot tell the difference between
+     * a name that is verified twenty times elsewhere and one that is never verified at all. The
+     * second is the blind spot: every element carrying it was a closed overlay, so nothing about
+     * that name has ever been checked. Counted per name, with the selectors that were skipped.
+     */
+    const seenPerName = new Map();   // name -> { ok, skipped, where:Set }
+    const note = (name, key, field) => {
+      if (!seenPerName.has(name)) seenPerName.set(name, { ok: 0, skipped: 0, where: new Set() });
+      const row = seenPerName.get(name);
+      row[field] += 1;
+      if (field === 'skipped' && row.where.size < 4) row.where.add(key);
+    };
+    const failures2 = failures;
     let rulesChecked = 0;
     let readsChecked = 0;
     let notRendered = 0;
+    let stateProbed = 0;
     for (const sheet of document.styleSheets) {
       let rules;
       try { rules = sheet.cssRules; } catch (e) { continue; }
@@ -302,21 +417,41 @@
           const RUNTIME_CONTRACT = ['--dx-cardview-cardsperrow', '--dx-cardview-card-min-width',
             '--dx-cardview-card-max-width', '--dx-cardview-card-cover-ratio',
             '--dx-cardview-card-cover-max-height', '--dx-scheduler-animation-top'];
+          /* The accent ramp is derived from --dx-accent-color, which the HOST page sets: the blue
+             bundle ships the derivation and no source, so empty here is the contract, not a hole. */
+          const isAccent = (n) => n.startsWith('--dx-accent-');
           const reads = [...rule.cssText.matchAll(/var\(\s*(--dx-[a-z0-9-]+)/g)]
             .map((m) => m[1])
-            .filter((n) => !n.startsWith('--dxds-') && !RUNTIME_CONTRACT.includes(n));
+            .filter((n) => !n.startsWith('--dxds-') && !RUNTIME_CONTRACT.includes(n) && !isAccent(n));
           if (!reads.length) continue;
           rulesChecked += 1;
           let matched;
-          try { matched = document.querySelectorAll(rule.selectorText.replace(/::?[a-z-]+(\([^)]*\))?/g, '') || rule.selectorText); } catch (e) { continue; }
+          if (rule.selectorText.includes(STATE_CLASS)) stateProbed += 1;
+          try { matched = document.querySelectorAll(probeSelector(rule.selectorText) || rule.selectorText); } catch (e) { continue; }
           for (const el of matched) {
-            /* A closed overlay keeps its content inline (in the source element) and moves it into
-               .dx-*-wrapper only when shown. Such an element paints nothing, so an empty variable on
-               it is not a hole; counted separately so the skip stays visible. */
-            if (!el.getClientRects().length) { notRendered += 1; continue; }
+            /*
+             * Only ONE kind of invisible element cannot be judged: the content of an overlay that
+             * has never been shown. It still sits inline in the widget, OUTSIDE the wrapper that
+             * carries the component root, so the variable legitimately does not reach it THERE and
+             * would reach it once the overlay opens.
+             *
+             * Everything else that is merely invisible - a display:none pull-down, an empty grid's
+             * no-data panel, the off label of a switch that is on - is already in its final place in
+             * the tree, and a custom property resolves on it whether or not it paints. Skipping
+             * those was the blind spot (G2): 1590 of the 2152 skips were of that kind, and checking
+             * them finds zero holes, which is the point - they were never in doubt, they were
+             * simply never asked.
+             */
+            const inOverlay = el.closest('.dx-overlay-content');
+            if (!el.getClientRects().length && inOverlay && !inOverlay.closest('.dx-overlay-wrapper')) {
+              notRendered += 1;
+              for (const name of reads) note(name, rule.selectorText.slice(0, 70), 'skipped');
+              continue;
+            }
             const cs = getComputedStyle(el);
             for (const name of reads) {
               readsChecked += 1;
+              note(name, rule.selectorText.slice(0, 70), 'ok');
               if (cs.getPropertyValue(name).trim() === '') {
                 const key = `${name} @ ${rule.selectorText.slice(0, 90)}`;
                 if (!failures.has(key)) failures.set(key, el.className.toString().slice(0, 80));
@@ -347,8 +482,13 @@
         }
       }
     }
-    return { rulesChecked, readsChecked, notRendered, rootsEmpty: [...new Set(rootsEmpty)].sort(),
-      failures: [...failures.entries()] };
+    /* The names nothing ever checked: every element that could have carried them was unbuilt. */
+    const unchecked = [...seenPerName]
+      .filter(([, row]) => row.ok === 0 && row.skipped > 0)
+      .map(([name, row]) => ({ name, skipped: row.skipped, where: [...row.where] }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    return { rulesChecked, readsChecked, notRendered, stateProbed, unchecked,
+      rootsEmpty: [...new Set(rootsEmpty)].sort(), failures: [...failures.entries()] };
   }
 
   (async () => {
@@ -356,7 +496,11 @@
     const result = audit();
     window.__auditResult = result;
     const el = document.getElementById('report');
-    el.innerHTML = `rules reading the tier: ${result.rulesChecked}; checks (element × name): ${result.readsChecked}; \nnot rendered (closed overlays, not judged): ${result.notRendered}\n`
+    el.innerHTML = `rules reading the tier: ${result.rulesChecked}; checks (element × name): ${result.readsChecked}; \nnot rendered (closed overlays, not judged): ${result.notRendered}\nprobed with ${STATE_CLASS} dropped: ${result.stateProbed}\n`
+      + (result.unchecked.length
+        ? `<span class="fail">NEVER CHECKED: ${result.unchecked.length} name(s)</span> — every element that reads them was unbuilt:\n`
+          + result.unchecked.map((u) => `  · ${u.name} (×${u.skipped})  ${u.where[0] ?? ''}`).join('\n') + '\n'
+        : '✔ every name the tier reads was checked on at least one built element\n')
       + (result.rootsEmpty.length
         ? `<span class="fail">ROOTS WITH NO ELEMENT: ${result.rootsEmpty.length}</span> — the gallery never builds them, so they are checked over an empty set:\n`
           + result.rootsEmpty.map((s) => `  · ${s}`).join('\n') + '\n'

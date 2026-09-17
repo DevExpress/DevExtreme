@@ -77,6 +77,49 @@ root.walkDecls((decl) => {
   declaredAt.set(decl.prop, known);
 });
 
+/* --- 0. gate: read and never declared ---------------------------------------------------------
+ * A var(--dx-…) whose name nothing declares. The value never arrives, the declaration is invalid
+ * and simply disappears, and what the user sees is a plausible-looking default - a black glyph, a
+ * missing background - so it reads as a design choice rather than a break.
+ *
+ * Every other pass here silently skipped the class: each of them filters reads down to names that
+ * ARE declared somewhere, because that is how it knows which scope to compare against. A name
+ * declared nowhere has no scope, fell out of the filter, and was never looked at again.
+ *
+ * Allowed only for a name some other layer sets at runtime: the CardView writes its card metrics
+ * onto the element from JS, the scheduler animates the appointment form the same way, and the
+ * accent hook is documented for the user to set. Those are pinned by name, so a sixth one cannot
+ * join them by accident.
+ */
+const SET_ELSEWHERE = new Set([
+  // packages/devextreme/js/__internal/grids/new/card_view/content_view/content/content.tsx
+  '--dx-cardview-card-max-width',
+  '--dx-cardview-card-min-width',
+  '--dx-cardview-card-cover-ratio',
+  '--dx-cardview-cardsperrow',
+  // packages/devextreme/js/__internal/scheduler/appointment_popup/form.ts
+  '--dx-scheduler-animation-top',
+  // the custom-accent hook: undefined until the user sets it, and every read carries a fallback
+  '--dx-accent-color',
+]);
+const undeclared = new Map();
+root.walkRules((rule) => {
+  if (!rule.selectors) return;
+  rule.walkDecls((decl) => {
+    for (const name of readsOf(decl.value)) {
+      if (declaredAt.has(name) || SET_ELSEWHERE.has(name)) continue;
+      if (!undeclared.has(name)) undeclared.set(name, new Set());
+      rule.selectors.forEach((sel) => undeclared.get(name).add(sel.trim()));
+    }
+  });
+});
+undeclared.forEach((where, name) => {
+  process.stdout.write(`\u2718 read and never declared: ${name}\n`);
+  process.stdout.write(`     read at ${[...where].sort().slice(0, 3).join(', ')}\n`);
+  process.stdout.write('     cure: publish the name on the scope that reads it, or read the name that scope does have.\n');
+  process.stdout.write('     If another layer sets it at runtime, add it to SET_ELSEWHERE with the file that does.\n');
+});
+
 /* --- 1. gate: cross-scope duplicate ---------------------------------------------------------- */
 const copies = new Map();
 root.walkRules((rule) => {
@@ -309,6 +352,7 @@ crossScope.forEach(([key, list]) => {
 
 process.stdout.write(`${orphans.size} read(s) outside the root text in ${seenScopes.size} scope(s) `
   + `(${unreviewed.length} unreviewed), ${crossScope.length} cross-scope duplicate(s), `
-  + `${unread.length} name(s) declared and never read (${appeared.length} new)\n`);
+  + `${unread.length} name(s) declared and never read (${appeared.length} new), `
+  + `${undeclared.size} read and never declared\n`);
 process.exit(crossScope.length || unreviewed.length || portals.length
-  || appeared.length || revived.length ? 1 : 0);
+  || appeared.length || revived.length || undeclared.size ? 1 : 0);

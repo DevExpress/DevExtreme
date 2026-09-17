@@ -1,16 +1,16 @@
 @use "colors" as *;
-@use "../menu/colors" as menuColors;
 @use "../menu/sizes" as menuSizes;
 @use "../../base/icon_fonts" as *;
 @use "../../base/mixins" as *;
 @use "../../base/menuBase";
 @use "../button/sizes" as buttonSizes;
+@use "../menu/colors" as menuColors;
 
 .dx-menu-item {
   color: menuColors.$menu-content;
 
   a {
-    color: menuColors.$menu-item-link-content;
+    color: var(--dx-menu-item-link-content);
   }
 
   &.dx-state-disabled {
@@ -26,7 +26,7 @@
   }
 
   &.dx-state-active {
-    background-color: menuColors.$menu-item-bg-active;
+    background-color: var(--dx-menu-item-bg-active);
   }
 
   .dx-item-url {
@@ -42,11 +42,11 @@
 }
 
 .dx-menu-item-selected {
-  background-color: menuColors.$menu-item-bg-selected;
-  color: menuColors.$menu-item-content-selected;
+  background-color: var(--dx-menu-item-bg-selected);
+  color: var(--dx-menu-item-content-selected);
 
   &.dx-state-focused {
-    background-color: menuColors.$menu-item-bg-selected-focused;
+    background-color: var(--dx-menu-item-bg-selected-focused);
   }
 }
 
@@ -54,7 +54,7 @@
 .dx-menu-item-expanded.dx-state-hover,
 .dx-menu-item-expanded.dx-state-focused {
   color: menuColors.$menu-content;
-  background-color: menuColors.$menu-item-bg-selected;
+  background-color: var(--dx-menu-item-bg-selected);
 }
 
 .dx-menu-base {

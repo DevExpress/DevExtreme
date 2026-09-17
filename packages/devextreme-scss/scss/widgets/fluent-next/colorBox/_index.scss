@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "colors" as *;
 @use "sizes" as *;
-@use "../colorView/colors" as colorViewColors;
 @use "../../base/colorBox" with (
   $colorbox-input-left-padding: var(--dx-color-box-input-min-width),
   $colorbox-texteditor-input-container-width: var(--dx-color-box-input-container-width),
@@ -13,6 +12,7 @@
 @use "../../base/colorBox/mixins" as *;
 @use "../colorView";
 @use "../dropDownEditor";
+@use "../colorView/colors" as colorViewColors;
 
 .dx-colorbox {
   .dx-colorbox-input-container {

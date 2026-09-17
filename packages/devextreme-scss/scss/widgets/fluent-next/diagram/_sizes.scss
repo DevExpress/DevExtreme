@@ -90,8 +90,8 @@ $diagram-toolbox-input-margin: ds.$spacing-20 !default;
 }
 
 // Values hoisted from style-file literals (tokenized)
-$diagram-popup-close-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
-$diagram-popup-close-icon-line-height: ds.$line-height-120 !default; // dx-icon-glyph-size: text roles not applicable
+$diagram-popup-close-icon-font-size: ds.$spacing-120 !default;
+$diagram-popup-close-icon-line-height: ds.$spacing-120 !default;
 $diagram-toolbar-colorbutton-border-width: ds.$border-width-30 !default;
 $diagram-floating-toolbar-container-padding: ds.$spacing-40 !default;
 $diagram-button-margin: ds.$spacing-20 !default;

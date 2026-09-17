@@ -41,7 +41,7 @@ $chat-suggestions-gap: ds.$spacing-120 !default;
 
 $chat-message-editing-preview-content-row-gap: null !default;
 $chat-message-editing-preview-content-padding-inline: null !default;
-$chat-message-editing-preview-border-width: ds.$border-width-30 !default;
+$chat-message-editing-preview-accent-width: ds.$border-width-30 !default;
 
 $chat-message-list-empty-icon-box-size: null !default;
 $chat-message-list-empty-icon-size: null !default;
@@ -109,7 +109,7 @@ $chat-bubble-gap: ds.$spacing-80 !default;
 
   $chat-confirmation-popup-toolbar-gap: ds.$spacing-80 !default;
 
-  $chat-file-icon-font-size: ds.$font-size-200 !default; // dx-icon-glyph-size: text roles not applicable
+  $chat-file-icon-font-size: ds.$spacing-200 !default;
 }
 
 @else if $size == "compact" {
@@ -145,7 +145,7 @@ $chat-bubble-gap: ds.$spacing-80 !default;
 
   $chat-confirmation-popup-toolbar-gap: ds.$spacing-40 !default;
 
-  $chat-file-icon-font-size: ds.$font-size-160 !default; // dx-icon-glyph-size: text roles not applicable
+  $chat-file-icon-font-size: ds.$spacing-160 !default;
 }
 
 // Base-layer sizing injected with design tokens (wave B3)

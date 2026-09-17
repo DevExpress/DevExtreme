@@ -1,6 +1,5 @@
 @use "sass:math";
 @use "../textEditor/sizes" as textEditorSizes;
-@use "../textEditor/colors" as textEditorColors;
 @use "../dateBox/mixins" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
@@ -77,7 +76,7 @@
       }
 
       > .dx-dropdowneditor-button:last-child {
-        margin-inline-end: textEditorSizes.$text-editor-spin-button-padding-inline;
+        margin-inline-end: textEditorSizes.$text-editor-spin-button-margin-inline-end;
       }
 
       > .dx-clear-button-area:last-child,
@@ -102,7 +101,7 @@
 
 .dx-daterangebox-separator {
   padding-left: textEditorSizes.$text-editor-input-filled-padding-inline;
-  color: textEditorColors.$text-editor-content-disabled;
+  color: var(--dx-date-range-box-separator-content);
 
   .dx-icon {
     @include dx-icon-sizing($global-icon-size);

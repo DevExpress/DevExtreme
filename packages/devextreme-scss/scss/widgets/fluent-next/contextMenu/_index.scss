@@ -3,7 +3,6 @@
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../menu/sizes" as menuSizes;
-@use "../menu/colors" as menuColors;
 @use "../button/sizes" as buttonSizes;
 @use "../../base/contextMenu" with (
   $contextmenu-menu-items-container-padding: false,
@@ -12,6 +11,7 @@
 );
 @use "../overlay";
 @use "../menuBase" as *;
+@use "../menu/colors" as menuColors;
 
 .dx-context-menu {
   color: menuColors.$menu-content;
@@ -72,13 +72,13 @@
   }
 
   .dx-submenu {
-    background-color: menuColors.$menu-popup-bg;
+    background-color: var(--dx-menu-popup-bg);
     border-radius: var(--dx-context-menu-border-radius);
     box-shadow: var(--dx-context-menu-shadow);
   }
 
   .dx-menu-separator {
-    background-color: menuColors.$menu-separator-bg;
+    background-color: var(--dx-menu-separator-bg);
 
     .dx-state-disabled & {
       background-color: var(--dx-menu-separator-bg-disabled);

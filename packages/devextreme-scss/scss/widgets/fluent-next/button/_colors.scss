@@ -70,8 +70,8 @@ $button-danger-contained-bg-selected: ds.$color-bg-danger-selected !default;
 $button-danger-outlined-content: ds.$color-content-danger !default;
 $button-danger-outlined-border: ds.$color-border-danger !default;
 $button-danger-outlined-content-hovered: ds.$color-content-danger-hovered !default;
-$button-danger-outlined-content-active: ds.$color-content-danger-active !default;
-$button-danger-outlined-content-selected: ds.$color-content-danger-hovered !default;
+$button-danger-outlined-content-active: ds.$color-content-on-subtle-danger !default;
+$button-danger-outlined-content-selected: ds.$color-content-on-subtle-danger !default;
 $button-danger-outlined-bg: transparent !default;
 $button-danger-outlined-bg-hovered: ds.$color-bg-danger-subtler-hovered !default;
 $button-danger-outlined-bg-focused: ds.$color-bg-danger-subtler-hovered !default;
@@ -95,8 +95,8 @@ $button-success-contained-bg-selected: ds.$color-bg-success-selected !default;
 $button-success-outlined-content: ds.$color-content-success !default;
 $button-success-outlined-border: ds.$color-border-success !default;
 $button-success-outlined-content-hovered: ds.$color-content-success-hovered !default;
-$button-success-outlined-content-active: ds.$color-content-success-active !default;
-$button-success-outlined-content-selected: ds.$color-content-success-hovered !default;
+$button-success-outlined-content-active: ds.$color-content-on-subtle-success !default;
+$button-success-outlined-content-selected: ds.$color-content-on-subtle-success !default;
 $button-success-outlined-bg: transparent !default;
 $button-success-outlined-bg-hovered: ds.$color-bg-success-subtler-hovered !default;
 $button-success-outlined-bg-focused: ds.$color-bg-success-subtler-hovered !default;
@@ -107,9 +107,9 @@ $button-content-disabled: ds.$color-content-disabled !default;
 
 $button-default-outlined-content-hovered: ds.$color-content-primary-hovered !default;
 
-$button-default-outlined-content-active: ds.$color-content-primary-active !default;
+$button-default-outlined-content-active: ds.$color-content-on-subtle-primary !default;
 
-$button-default-outlined-content-selected: ds.$color-content-primary-hovered !default;
+$button-default-outlined-content-selected: ds.$color-content-on-subtle-primary !default;
 
 $button-default-text-content-hovered: ds.$color-content-primary-hovered !default;
 

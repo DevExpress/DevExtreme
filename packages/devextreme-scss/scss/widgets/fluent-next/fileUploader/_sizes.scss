@@ -9,7 +9,7 @@ $file-uploader-file-container-button-size: null !default;
 
 $file-uploader-padding-block: ds.$spacing-70 !default;
 $file-uploader-files-container-padding: ds.$spacing-120 ds.$spacing-40 0 !default;
-$file-uploader-file-size-margin: null !default;
+$file-uploader-file-size-padding: null !default;
 $file-uploader-file-icon-font-size: null !default;
 $file-uploader-files-container-border-radius: ds.$border-radius-40 !default;
 
@@ -18,8 +18,8 @@ $file-uploader-files-container-border-radius: ds.$border-radius-40 !default;
   $file-uploader-file-container-text-margin: ds.$spacing-150 !default;
   $file-uploader-file-container-button-margin: ds.$spacing-80 !default;
   $file-uploader-file-container-button-size: ds.$spacing-320 !default;
-  $file-uploader-file-size-margin: 0 0 0 ds.$spacing-40 !default;
-  $file-uploader-file-icon-font-size: ds.$font-size-200 !default; // dx-icon-glyph-size: text roles not applicable
+  $file-uploader-file-size-padding: 0 0 0 ds.$spacing-40 !default;
+  $file-uploader-file-icon-font-size: ds.$spacing-200 !default;
 }
 
 @else if $size == "compact" {
@@ -27,8 +27,8 @@ $file-uploader-files-container-border-radius: ds.$border-radius-40 !default;
   $file-uploader-file-container-text-margin: ds.$spacing-60 !default;
   $file-uploader-file-container-button-margin: ds.$spacing-20 !default;
   $file-uploader-file-container-button-size: ds.$spacing-280 !default;
-  $file-uploader-file-size-margin: 0 0 ds.$spacing-40 !default;
-  $file-uploader-file-icon-font-size: ds.$font-size-160 !default; // dx-icon-glyph-size: text roles not applicable
+  $file-uploader-file-size-padding: 0 0 ds.$spacing-40 !default;
+  $file-uploader-file-icon-font-size: ds.$spacing-160 !default;
 }
 
 // Values hoisted from style-file literals (tokenized)

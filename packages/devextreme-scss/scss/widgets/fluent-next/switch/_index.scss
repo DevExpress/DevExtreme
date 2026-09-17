@@ -40,6 +40,15 @@
   var(--dx-switch-border-disabled),
 
   $disabled-opacity-reset: null,
+  $trigger-off-bg: var(--dx-switch-handle-off-bg),
+  $trigger-off-bg-hover: var(--dx-switch-handle-off-bg-hovered),
+  $trigger-off-bg-active: var(--dx-switch-handle-off-bg-active),
+  $switch-on-bg-hover: var(--dx-switch-on-bg-hovered),
+  $switch-on-bg-active: var(--dx-switch-on-bg-focused),
+  $switch-on-disabled-border: var(--dx-switch-on-border-disabled),
+  $switch-invalid-bg: var(--dx-switch-invalid-bg),
+  $switch-invalid-bg-hover: var(--dx-switch-invalid-bg-hovered),
+  $switch-invalid-bg-active: var(--dx-switch-invalid-bg-focused),
 );
 @include dx-switch-rtl(
   calc(var(--dx-switch-handle-height) - var(--dx-switch-handle-margin)),
@@ -58,7 +67,7 @@
   }
 
   &.dx-switch-on-value .dx-switch-container::before {
-    border-color: var(--dx-switch-on-bg-disabled);
+    border-color: var(--dx-switch-on-border-disabled);
     background-color: var(--dx-switch-on-bg-disabled);
   }
 }
