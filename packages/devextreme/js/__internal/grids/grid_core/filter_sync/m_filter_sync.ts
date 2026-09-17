@@ -1,11 +1,8 @@
 import { isDefined } from '@js/core/utils/type';
-import type { CustomOperation } from '@js/ui/filter_builder';
 import {
   addItem,
-  getFilterExpression,
   getMatchedConditions,
   getNormalizedFilter,
-  removeFieldConditionsFromFilter,
 } from '@ts/filter_builder/m_utils';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type {
@@ -14,11 +11,10 @@ import type {
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
 import type {
-  DataFilter, FilterSourceContext, FilterValue, FilterValueCondition,
+  FilterValue, FilterValueCondition,
 } from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 
-import { anyOf, noneOf } from './m_filter_custom_operations';
 import {
   checkForErrors,
   getColumnIdentifier,
@@ -53,10 +49,6 @@ export class FilterSyncController extends modules.Controller {
     }
   }
 
-  public publicMethods(): string[] {
-    return ['getCustomFilterOperations'];
-  }
-
   public isSyncingColumnOptions(): boolean {
     return this.skipSyncColumnOptions;
   }
@@ -70,30 +62,6 @@ export class FilterSyncController extends modules.Controller {
     } finally {
       this.skipSyncColumnOptions = wasSyncing;
     }
-  }
-
-  public isFilterSourceActive({ columnsController }: FilterSourceContext): boolean {
-    return !!columnsController.getFilteringColumns()?.length
-      && this.option('filterPanel.filterEnabled') !== false;
-  }
-
-  public getFilterExpressions(
-    {
-      excludedColumn,
-      columnsController,
-      filterSyncActive,
-    }: FilterSourceContext,
-  ): DataFilter[] {
-    const currentFilterValue = this.option('filterValue');
-    const shouldExcludeColumn = filterSyncActive && isDefined(excludedColumn);
-    const filterValue = shouldExcludeColumn
-      ? removeFieldConditionsFromFilter(currentFilterValue, getColumnIdentifier(excludedColumn))
-      : currentFilterValue;
-    const columns = columnsController.getFilteringColumns();
-    const customOperations = this.getCustomFilterOperations();
-    const filterExpression: DataFilter = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
-
-    return filterExpression ? [filterExpression] : [];
   }
 
   public syncFilterValue(): void {
@@ -196,16 +164,5 @@ export class FilterSyncController extends modules.Controller {
     const syncedFilterValue = getFilterValueWithHeaderFilter(filterValue, column);
 
     this.option('filterValue', syncedFilterValue);
-  }
-
-  // Override in the private API WA [T1232532]
-  public getCustomFilterOperations(): CustomOperation[] {
-    const filterBuilderCustomOperations = this.option('filterBuilder.customOperations') ?? [];
-
-    return [
-      anyOf(this.component),
-      noneOf(this.component),
-      ...filterBuilderCustomOperations,
-    ];
   }
 }
