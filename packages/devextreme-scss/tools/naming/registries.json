@@ -920,6 +920,9 @@
       "radio-button",
       "text-editor"
     ],
+    "treeView": [
+      "check-box"
+    ],
     "colorBox": [
       "color-view"
     ],
@@ -1909,7 +1912,8 @@
     "date-range-box": [
       "active-bar",
       "custom-button",
-      "input"
+      "input",
+      "separator"
     ],
     "select-box": [
       "list"

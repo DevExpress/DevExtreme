@@ -11,7 +11,7 @@ $calendar-legacy-height: null !default;
 $calendar-footer-button-height: null !default;
 $calendar-cell-font-size: null !default;
 
-$calendar-element-padding: ds.$spacing-80 !default;
+$calendar-element-gap: ds.$spacing-80 !default;
 
 @if $size == "default" {
   $calendar-legacy-width: 272px !default; // dx-offscale: 272px

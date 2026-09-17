@@ -36,7 +36,7 @@ $tabs-badge-min-size: null !default;
   $tabs-item-padding-inline: ds.$spacing-100 !default;
   $tabs-tab-nav-button-icon-width: ds.$spacing-200 !default;
   $tabs-tab-nav-button-icon-height: ds.$spacing-200 !default;
-  $tabs-tab-nav-button-icon-font-size: ds.$font-size-200 !default; // dx-icon-glyph-size: text roles not applicable
+  $tabs-tab-nav-button-icon-font-size: ds.$spacing-200 !default;
   $tabs-badge-min-size: ds.$spacing-200 !default;
 }
 
@@ -45,7 +45,7 @@ $tabs-badge-min-size: null !default;
   $tabs-item-padding-inline: ds.$spacing-80 !default;
   $tabs-tab-nav-button-icon-width: ds.$spacing-160 !default;
   $tabs-tab-nav-button-icon-height: ds.$spacing-160 !default;
-  $tabs-tab-nav-button-icon-font-size: ds.$font-size-160 !default; // dx-icon-glyph-size: text roles not applicable
+  $tabs-tab-nav-button-icon-font-size: ds.$spacing-160 !default;
   $tabs-badge-min-size: ds.$spacing-160 !default;
 }
 

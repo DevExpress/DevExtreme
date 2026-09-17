@@ -197,7 +197,26 @@
   $switch-invalid-color-hover,
   $switch-invalid-color-focused,
   $base-disabled-border-color,
-  $disabled-opacity-reset: 1,) {
+  $disabled-opacity-reset: 1,
+  $trigger-off-bg: null,
+  $trigger-off-bg-hover: null,
+  $trigger-off-bg-active: null,
+  $switch-on-bg-hover: null,
+  $switch-on-bg-active: null,
+  $switch-on-disabled-border: null,
+  $switch-invalid-bg: null,
+  $switch-invalid-bg-hover: null,
+  $switch-invalid-bg-active: null,) {
+  $trigger-off: if($trigger-off-bg, $trigger-off-bg, $switch-off-border-color);
+  $trigger-off-hovered: if($trigger-off-bg-hover, $trigger-off-bg-hover, $switch-off-border-color-hover);
+  $trigger-off-pressed: if($trigger-off-bg-active, $trigger-off-bg-active, $switch-off-border-color-active);
+  $on-bg-hovered: if($switch-on-bg-hover, $switch-on-bg-hover, $switch-accent-hover);
+  $on-bg-pressed: if($switch-on-bg-active, $switch-on-bg-active, $switch-accent-active);
+  $on-border-disabled: if($switch-on-disabled-border, $switch-on-disabled-border, $switch-on-disabled-bg);
+  $invalid-bg: if($switch-invalid-bg, $switch-invalid-bg, $switch-invalid-color);
+  $invalid-bg-hovered: if($switch-invalid-bg-hover, $switch-invalid-bg-hover, $switch-invalid-color-hover);
+  $invalid-bg-pressed: if($switch-invalid-bg-active, $switch-invalid-bg-active, $switch-invalid-color-focused);
+
   .dx-switch-container {
     &::before {
       background-color: $switch-bg;
@@ -216,7 +235,7 @@
 
   .dx-switch {
     .dx-switch-handle::before {
-      background-color: $switch-off-border-color;
+      background-color: $trigger-off;
     }
 
     &.dx-state-hover {
@@ -280,14 +299,14 @@
   .dx-switch:not(.dx-switch-on-value):not(.dx-state-readonly) {
     &.dx-state-hover {
       .dx-switch-handle::before {
-        background-color: $switch-off-border-color-hover;
+        background-color: $trigger-off-hovered;
       }
     }
 
     &.dx-state-active,
     &.dx-state-focused {
       .dx-switch-handle::before {
-        background-color: $switch-off-border-color-active;
+        background-color: $trigger-off-pressed;
       }
     }
   }
@@ -305,12 +324,12 @@
     &.dx-state-hover {
       .dx-switch-container::before {
         border-color: $switch-accent-hover;
-        background-color: $switch-accent-hover;
+        background-color: $on-bg-hovered;
       }
 
       &.dx-invalid:not(.dx-state-readonly) {
         .dx-switch-container::before {
-          background-color: $switch-invalid-color-hover;
+          background-color: $invalid-bg-hovered;
         }
       }
     }
@@ -319,26 +338,26 @@
     &.dx-state-focused {
       .dx-switch-container::before {
         border-color: $switch-accent-active;
-        background-color: $switch-accent-active;
+        background-color: $on-bg-pressed;
       }
 
       &.dx-invalid:not(.dx-state-readonly) {
         .dx-switch-container::before {
-          background-color: $switch-invalid-color-focused;
+          background-color: $invalid-bg-pressed;
         }
       }
     }
 
     &.dx-invalid {
       .dx-switch-container::before {
-        background-color: $switch-invalid-color;
+        background-color: $invalid-bg;
       }
     }
 
     &.dx-state-disabled,
     &.dx-state-readonly {
       .dx-switch-container::before {
-        border-color: $switch-on-disabled-bg;
+        border-color: $on-border-disabled;
         background-color: $switch-on-disabled-bg;
       }
     }

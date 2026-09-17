@@ -90,3 +90,16 @@ only in the wpf token set and covers the frame, not the glyph.
 `$gantt-task-bg` is `ds.$color-bg-primary-shared` - primary-90 in light, primary-70 in dark. It is
 the only surface role with that pair, so the design-review decision (a lighter blue on dark) holds
 without freezing a literal. Referenced from `gantt/_colors.scss`.
+
+### gantt time-interval band
+
+`$gantt-ti-bg` is `ds.$color-bg-primary-alpha-hovered` - the hovered rung of the translucent accent
+ramp, alpha 0.20 - on an element that is always at rest. Kept deliberately, measured 17.09: the
+resting rung of the same ramp is alpha 0.11, legacy fluent drew this band at 0.15, and against the
+canvas the band would go from 1.33 to 1.16 - fainter than what it replaced, and no rung of the ramp
+carries the legacy density.
+
+The same ramp is read off-rung in two more places, in opposite directions: `$html-editor-variable-bg`
+is another resting element on the hovered rung, and `$scheduler-workspace-cell-bg-focused` is a
+focused element on the resting rung. Whether the ramp needs a fourth step or the three places need
+to agree is a question for the ramp, not for this band.
