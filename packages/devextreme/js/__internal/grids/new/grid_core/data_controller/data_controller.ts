@@ -12,7 +12,7 @@ import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
 import type { StoreLoadOptions } from '@ts/data/abstract_store';
 
-import gridCoreUtils from '../../../grid_core/m_utils';
+import { combineFilters } from '../../../grid_core/filter/utils';
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { ErrorController } from '../error_controller/error_controller';
 import { FilterController } from '../filtering/filter_controller';
@@ -321,7 +321,7 @@ export class DataController {
   }
 
   private combineFilterWithDisplayFilter(filter: FilterDescriptor): FilterDescriptor {
-    return gridCoreUtils.combineFilters([
+    return combineFilters([
       filter,
       this.normalizedDisplayFilter.peek(),
     ]);

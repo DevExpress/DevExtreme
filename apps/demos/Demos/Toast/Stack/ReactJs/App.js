@@ -29,6 +29,12 @@ function App() {
     right: undefined,
   });
   const [direction, setDirection] = useState('up-push');
+  const onPredefinedChanged = useCallback((value) => setIsPredefined(value === 'predefined'), []);
+  const onPredefinedPositionChanged = useCallback(
+    ({ selectedItem }) => setPredefinedPosition(selectedItem),
+    [],
+  );
+  const onDirectionChanged = useCallback(({ selectedItem }) => setDirection(selectedItem), []);
   const topNumberBoxValueChanged = useCallback(
     (top) => setCoordinatePosition({ ...coordinatePosition, top }),
     [coordinatePosition],
@@ -80,13 +86,13 @@ function App() {
           layout="horizontal"
           defaultValue="predefined"
           items={radioGroupItems}
-          onValueChange={(value) => setIsPredefined(value === 'predefined')}
+          onValueChange={onPredefinedChanged}
         />
         <SelectBox
           items={positions}
           value={predefinedPosition}
           inputAttr={positionLabel}
-          onSelectionChanged={({ selectedItem }) => setPredefinedPosition(selectedItem)}
+          onSelectionChanged={onPredefinedPositionChanged}
           visible={isPredefined}
         />
         <div className="section">
@@ -134,7 +140,7 @@ function App() {
           items={directions}
           inputAttr={directionLabel}
           value={direction}
-          onSelectionChanged={({ selectedItem }) => setDirection(selectedItem)}
+          onSelectionChanged={onDirectionChanged}
         />
         <div className="section">
           <Button
@@ -145,7 +151,7 @@ function App() {
           <Button
             text="Hide all"
             width="48%"
-            onClick={() => HideToasts()}
+            onClick={HideToasts}
           />
         </div>
       </div>

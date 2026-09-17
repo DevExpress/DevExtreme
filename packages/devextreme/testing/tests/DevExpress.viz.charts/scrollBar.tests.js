@@ -8,6 +8,7 @@ import { ScrollBar } from 'viz/chart_components/scroll_bar';
 import translator2DModule from 'viz/translators/translator2d';
 import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'common/core/events/drag';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 const Translator = stubClass(translator2DModule.Translator2D);
 
@@ -34,7 +35,7 @@ const environment = {
 
         this.group = this.renderer.g();
 
-        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
+        stubSeam(translator2DModule, 'Translator2D', 'DEBUG_set_Translator2D').callsFake(function() {
             const stub = new Translator();
             stub.getScale = sinon.stub().returns(1);
             stub.stub('getCanvasVisibleArea');

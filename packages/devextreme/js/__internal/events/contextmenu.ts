@@ -3,7 +3,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import { addNamespace, fireEvent, isMouseEvent } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
-import devices from '@ts/core/m_devices';
+import devices from '@ts/core/devices';
 import supportUtils from '@ts/core/utils/m_support';
 import type { EmitterEvent } from '@ts/events/core/emitter';
 

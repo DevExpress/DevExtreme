@@ -688,7 +688,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return visibleGroupColumns;
             },
 
-            isDataSourceApplied: function() {
+            isDataSourceAdapterApplied: function() {
                 return true;
             },
 
@@ -1231,8 +1231,29 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         };
 
 
+        // processModules() bound the widget's public methods to the controllers it built. A
+        // `controllers` override swaps those out afterwards, leaving the widget calling into an
+        // orphan that never gets init()ed. Re-point each public method the replacement implements.
+        const replacedControllers = [];
+        options && options.controllers && $.each(options.controllers, function(name, replacement) {
+            const original = that._controllers[name];
+            if(original && replacement && original !== replacement && original.publicMethods) {
+                replacedControllers.push({ original: original, replacement: replacement });
+            }
+        });
+
         options && options.controllers && $.extend(that._controllers, options.controllers);
         options && options.views && $.extend(that._views, options.views);
+
+        $.each(replacedControllers, function(_, pair) {
+            $.each(pair.original.publicMethods(), function(__, methodName) {
+                if(typeof pair.replacement[methodName] === 'function') {
+                    that[methodName] = function() {
+                        return pair.replacement[methodName].apply(pair.replacement, arguments);
+                    };
+                }
+            });
+        });
 
         const mockedDataController = options && options.controllers && options.controllers.data;
         if(mockedDataController && mockedDataController.mockOptions && that._controllers.dataSource) {

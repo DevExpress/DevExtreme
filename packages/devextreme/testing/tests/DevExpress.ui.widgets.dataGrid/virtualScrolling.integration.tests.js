@@ -1,5 +1,5 @@
 import { getHeight, getWidth } from 'core/utils/size';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import commonUtils from 'core/utils/common';
 import ArrayStore from 'common/data/array_store';
 import { DataSource } from 'common/data/data_source/data_source';

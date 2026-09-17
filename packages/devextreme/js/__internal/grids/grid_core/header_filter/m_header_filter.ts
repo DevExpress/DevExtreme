@@ -9,7 +9,6 @@ import storeHelper from '@js/common/data/store_helper';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
@@ -17,9 +16,10 @@ import filterUtils from '@js/ui/shared/filtering';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { DataFilter } from '@ts/grids/grid_core/data_controller/types';
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -27,11 +27,11 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import gridCoreUtils from '../m_utils';
 import {
-  allowHeaderFiltering,
   headerFilterMixin,
   HeaderFilterView,
   updateHeaderFilterItemSelectionState,
 } from './m_header_filter_core';
+import { allowHeaderFiltering, createHeaderFilterExpressions } from './utils';
 
 const DATE_INTERVAL_FORMATS = {
   year(value) {
@@ -493,10 +493,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelHeaderFi
   }
 };
 
-export function invertFilterExpression(filter) {
-  return ['!', filter];
-}
-
 const filterController = (
   Base: ModuleType<FilterController>,
 ) => class FilterControllerHeaderFilterExtender extends Base {
@@ -509,42 +505,13 @@ const filterController = (
       return super.getAdditionalFilter(excludedColumn);
     }
 
-    const filters = [super.getAdditionalFilter(excludedColumn)];
-    const columns = this.columnsController.getVisibleColumns(null, true);
+    const columns: Column[] = this.columnsController.getVisibleColumns(null, true);
+    const filters = [
+      super.getAdditionalFilter(excludedColumn),
+      ...createHeaderFilterExpressions(columns, excludedColumn ?? null),
+    ];
 
-    each(columns, (_, column) => {
-      let filter;
-
-      if (excludedColumn && excludedColumn.index === column.index) {
-        return;
-      }
-
-      if (allowHeaderFiltering(column) && column.calculateFilterExpression && Array.isArray(column.filterValues) && column.filterValues.length) {
-        let filterValues: any = [];
-
-        each(column.filterValues, (_, filterValue) => {
-          if (Array.isArray(filterValue)) {
-            filter = filterValue;
-          } else {
-            if (column.deserializeValue && !gridCoreUtils.isDateType(column.dataType) && column.dataType !== 'number') {
-              filterValue = column.deserializeValue(filterValue);
-            }
-
-            filter = column.createFilterExpression(filterValue, '=', 'headerFilter');
-          }
-          if (filter) {
-            filter.columnIndex = column.index;
-          }
-          filterValues.push(filter);
-        });
-
-        filterValues = gridCoreUtils.combineFilters(filterValues, 'or');
-
-        filters.push(column.filterType === 'exclude' ? ['!', filterValues] : filterValues);
-      }
-    });
-
-    return gridCoreUtils.combineFilters(filters);
+    return combineFilters(filters);
   }
 };
 

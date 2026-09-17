@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { navigationModes, orientations } from './data.js';
 import Steppers from './Steppers.js';
 import Options from './Options.js';
@@ -8,18 +8,18 @@ export default function App() {
   const [navigationMode, setNavigationMode] = useState(navigationModes[0].value);
   const [selectOnFocus, setSelectOnFocus] = useState(true);
   const [rtlMode, setRtlMode] = useState(false);
-  const onOrientationClick = (e) => {
+  const onOrientationClick = useCallback((e) => {
     setOrientation(e.itemData.value);
-  };
-  const onNavigationModeClick = (e) => {
+  }, []);
+  const onNavigationModeClick = useCallback((e) => {
     setNavigationMode(e.itemData.value);
-  };
-  const onSelectOnFocusChanged = (e) => {
+  }, []);
+  const onSelectOnFocusChanged = useCallback((e) => {
     setSelectOnFocus(e.value);
-  };
-  const onRtlModeChanged = (e) => {
+  }, []);
+  const onRtlModeChanged = useCallback((e) => {
     setRtlMode(e.value);
-  };
+  }, []);
   const widgetWrapperOrientationClass = `widget-wrapper-${orientation}`;
   return (
     <div className="stepper-demo">

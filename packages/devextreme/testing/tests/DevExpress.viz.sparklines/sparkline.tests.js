@@ -16,6 +16,7 @@ import translator2DModule from 'viz/translators/translator2d';
 import seriesModule from 'viz/series/base_series';
 import { DataSource } from 'common/data/data_source/data_source';
 import 'viz/sparkline';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 
 $('<div>')
     .attr('id', 'container')
@@ -30,17 +31,17 @@ QUnit.begin(function() {
     const StubSeries = Series;
     const StubTooltip = Tooltip;
 
-    rendererModule.Renderer = sinon.spy(function() {
+    rendererModule.DEBUG_set_Renderer(sinon.spy(function() {
         return currentTest().renderer;
-    });
+    }));
 
-    translator2DModule.Translator2D = sinon.spy(function() {
+    translator2DModule.DEBUG_set_Translator2D(sinon.spy(function() {
         return new FakeTranslator();
-    });
+    }));
 
-    seriesModule.Series = sinon.spy(function() {
+    seriesModule.DEBUG_set_Series(sinon.spy(function() {
         return currentTest().series;
-    });
+    }));
 
     tooltipModule.DEBUG_set_tooltip(sinon.spy(function() {
         return currentTest().tooltip;
@@ -95,7 +96,7 @@ QUnit.begin(function() {
         return $.extend({}, environment, {
             beforeEach: function() {
                 environment.beforeEach.apply(this, arguments);
-                this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function() {
+                this.validateData = stubSeam(dataValidatorModule, 'validateData', 'DEBUG_set_validateData').callsFake(function() {
                     return {
                         arg: [{
                             argument: 1,

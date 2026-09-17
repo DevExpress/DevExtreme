@@ -18,9 +18,9 @@ $('<div>')
     .appendTo(fixture);
 
 QUnit.begin(function() {
-    rendererModule.Renderer = function() {
+    rendererModule.DEBUG_set_Renderer(function() {
         return new Renderer();
-    };
+    });
 });
 
 const environment = (widget) => ({

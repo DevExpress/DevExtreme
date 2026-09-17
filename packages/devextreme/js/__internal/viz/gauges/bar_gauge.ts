@@ -1,169 +1,540 @@
-/* eslint-disable import/no-import-module-exports */
-/* eslint-disable prefer-rest-params */
-/* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable prefer-spread */
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
-/* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable consistent-return */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable no-else-return */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
+/* eslint-disable max-classes-per-file */
 
 import registerComponent from '@js/core/component_registrator';
-import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { roundFloatPart } from '@js/core/utils/math';
 import { clone } from '@js/core/utils/object';
 import { overlapping } from '@ts/viz/chart_components/base_chart';
 import { plugin as pluginLegend } from '@ts/viz/components/legend';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import { plugins as centerTemplatePlugins } from '@ts/viz/core/center_template';
+import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import {
-  convertAngleToRendererSpace, getCosAndSin, getVerticallyShiftedAngularCoords, normalizeAngle, normalizeArcParams, normalizeEnum as _normalizeEnum, patchFontOptions,
+  convertAngleToRendererSpace,
+  getCosAndSin,
+  getVerticallyShiftedAngularCoords,
+  normalizeAngle,
+  normalizeArcParams,
+  normalizeEnum,
+  patchFontOptions,
 } from '@ts/viz/core/utils';
+import type { GaugeFormatOptions } from '@ts/viz/gauges/base_gauge';
 import {
   BaseGauge, compareArrays, formatValue, getSampleText,
 } from '@ts/viz/gauges/base_gauge';
-import dxCircularGauge from '@ts/viz/gauges/circular_gauge';
+import type { CircularArea, CircularLayoutMeasurements } from '@ts/viz/gauges/circular_gauge';
+import { applyCircularMainLayout, setupCircularCodomain } from '@ts/viz/gauges/circular_gauge';
 
 const PI_DIV_180 = Math.PI / 180;
-const _abs = Math.abs;
-const _round = Math.round;
-const _floor = Math.floor;
-const _min = Math.min;
-const _max = Math.max;
-
-const _getSampleText = getSampleText;
-const _formatValue = formatValue;
-const _compareArrays = compareArrays;
-const _isArray = Array.isArray;
-const _convertAngleToRendererSpace = convertAngleToRendererSpace;
-const _getCosAndSin = getCosAndSin;
-const _patchFontOptions = patchFontOptions;
-const _Number = Number;
-const _isFinite = isFinite;
-const _noop = noop;
-const _extend = extend;
-
 const ARC_COORD_PREC = 5;
 const OPTION_VALUES = 'values';
-let BarWrapper;
 
-export const dxBarGauge = BaseGauge.inherit({
-  _rootClass: 'dxbg-bar-gauge',
+interface Point {
+  x: number;
+  y: number;
+}
 
-  _themeSection: 'barGauge',
+interface BarTranslator {
+  translate: (value: number) => number;
+  adjust: (value: number) => number;
+}
 
-  _fontFields: ['label.font', 'legend.font', 'legend.title.font', 'legend.title.subtitle.font'],
+interface BarContext {
+  renderer: ThemeValue;
+  translator: BarTranslator;
+  tracker: ThemeValue;
+  group: ThemeValue;
+  textEnabled: boolean;
+  fontStyles: ThemeValue;
+  formatOptions: GaugeFormatOptions;
+  textOptions: ThemeValue;
+  lineWidth: number;
+  lineColor: string | null;
+  textY: number;
+  textWidth: number;
+  textHeight: number;
+  backgroundColor: string;
+  x: number;
+  y: number;
+  startAngle: number;
+  endAngle: number;
+  baseAngle: number;
+  barSize: number;
+  textRadius: number;
+  textIndent: number;
+}
 
-  _initCore() {
-    const that = this;
-    that.callBase.apply(that, arguments);
-    that._barsGroup = that._renderer.g().attr({ class: 'dxbg-bars' }).linkOn(that._renderer.root, 'bars');
-    that._values = [];
-    that._context = {
-      renderer: that._renderer,
-      translator: that._translator,
-      tracker: that._tracker,
-      group: that._barsGroup,
-    };
-    that._animateStep = function (pos) {
-      const bars = that._bars;
-      let i;
-      let ii;
-      for (i = 0, ii = bars.length; i < ii; ++i) {
-        bars[i].animate(pos);
-      }
-    };
-    that._animateComplete = function () {
-      that._bars.forEach((bar) => bar.endAnimation());
-      that._checkOverlap();
-    };
-  },
+interface BarArrangeOptions {
+  radius: number;
+  color: string;
+}
 
-  _disposeCore() {
-    const that = this;
-    that._barsGroup.linkOff();
-    that._barsGroup = that._values = that._context = that._animateStep = that._animateComplete = null;
-    that.callBase.apply(that, arguments);
-  },
+interface BarTooltipParameters {
+  x: number;
+  y: number;
+  offset: number;
+  color: string;
+  value: number;
+}
 
-  _setupDomainCore() {
-    const that = this;
-    let startValue = that.option('startValue');
-    let endValue = that.option('endValue');
-    _isFinite(startValue) || (startValue = 0);
-    _isFinite(endValue) || (endValue = 100);
-    that._translator.setDomain(startValue, endValue);
-    that._baseValue = that._translator.adjust(that.option('baseValue'));
-    _isFinite(that._baseValue) || (that._baseValue = startValue < endValue ? startValue : endValue);
-  },
+interface LabelCoords {
+  topLeft: Point;
+  bottomRight: Point;
+}
 
-  _getDefaultSize() {
-    return { width: 300, height: 300 };
-  },
+interface StackedBars {
+  left: ThemeValue[];
+  right: ThemeValue[];
+}
 
-  _setupCodomain: dxCircularGauge.prototype._setupCodomain,
+function setAngles(target: ThemeValue, angle1: number, angle2: number): void {
+  target.startAngle = angle1 < angle2 ? angle1 : angle2;
+  target.endAngle = angle1 < angle2 ? angle2 : angle1;
+}
 
-  _getApproximateScreenRange() {
-    const that = this;
-    const sides = that._area.sides;
-    const width = that._canvas.width / (sides.right - sides.left);
-    const height = that._canvas.height / (sides.down - sides.up);
-    const r = width < height ? width : height;
-    return -that._translator.getCodomainRange() * r * PI_DIV_180;
-  },
+function compareFloats(value1: number, value2: number): boolean {
+  return Math.abs(value1 - value2) < 0.0001;
+}
 
-  _setupAnimationSettings() {
-    const that = this;
-    that.callBase.apply(that, arguments);
-    if (that._animationSettings) {
-      that._animationSettings.step = that._animateStep;
-      that._animationSettings.complete = that._animateComplete;
+function getStartCoordsArc(
+  x: number,
+  y: number,
+  outerR: number,
+  startAngleCos: number,
+  startAngleSin: number,
+): Point {
+  return {
+    x: Number((x + outerR * startAngleCos).toFixed(ARC_COORD_PREC)),
+    y: Number((y - outerR * startAngleSin).toFixed(ARC_COORD_PREC)),
+  };
+}
+
+class BarWrapper {
+  index: number;
+
+  _context: BarContext;
+
+  _tracker: ThemeValue;
+
+  _settings: ThemeValue;
+
+  _background: ThemeValue;
+
+  _bar: ThemeValue;
+
+  _line: ThemeValue;
+
+  _text: ThemeValue;
+
+  _visible?: boolean;
+
+  _angle!: number;
+
+  _color!: string;
+
+  _value!: number;
+
+  _start?: number;
+
+  _delta?: number;
+
+  _isLabelShifted?: boolean;
+
+  constructor(index: number, context: BarContext) {
+    this._context = context;
+    this._tracker = context.renderer.arc().attr({ 'stroke-linejoin': 'round' });
+    this.index = index;
+  }
+
+  dispose(): this {
+    this._background.dispose();
+    this._bar.dispose();
+    if (this._context.textEnabled) {
+      this._line.dispose();
+      this._text.dispose();
     }
-  },
+    this._context.tracker.detach(this._tracker);
+    Object.assign(this, {
+      _context: null,
+      _settings: null,
+      _background: null,
+      _bar: null,
+      _line: null,
+      _text: null,
+      _tracker: null,
+    });
+    return this;
+  }
 
-  _cleanContent() {
-    const that = this;
+  arrange(options: BarArrangeOptions): this {
+    const context = this._context;
 
-    that._barsGroup.linkRemove();
-    that._animationSettings && that._barsGroup.stopAnimation();
-    that._barsGroup.clear();
-  },
+    this._visible = true;
+    context.tracker.attach(this._tracker, this, { index: this.index });
 
-  _renderContent() {
-    const that = this;
-    let labelOptions = that.option('label');
-    const context = that._context;
+    this._background = context.renderer.arc()
+      .attr({ 'stroke-linejoin': 'round', fill: context.backgroundColor })
+      .append(context.group);
+    this._settings = this._settings || {
+      x: context.x, y: context.y, startAngle: context.baseAngle, endAngle: context.baseAngle,
+    };
 
-    that._barsGroup.linkAppend();
-    context.textEnabled = labelOptions === undefined || (labelOptions && (!('visible' in labelOptions) || labelOptions.visible));
+    this._bar = context.renderer.arc()
+      .attr(extend({ 'stroke-linejoin': 'round' }, this._settings))
+      .append(context.group);
+    if (context.textEnabled) {
+      this._line = context.renderer.path([], 'line')
+        .attr({ 'stroke-width': context.lineWidth })
+        .append(context.group);
+      this._text = context.renderer.text()
+        .css(context.fontStyles)
+        .attr(context.textOptions)
+        .append(context.group);
+    }
+
+    this._angle = isFinite(this._angle) ? this._angle : context.baseAngle;
+
+    this._settings.outerRadius = options.radius;
+    this._settings.innerRadius = options.radius - context.barSize;
+    this._settings.x = context.x;
+    this._settings.y = context.y;
+
+    this._background.attr(extend({}, this._settings, {
+      startAngle: context.endAngle,
+      endAngle: context.startAngle,
+      fill: this._context.backgroundColor,
+    }));
+    this._bar.attr({
+      x: context.x,
+      y: context.y,
+      outerRadius: this._settings.outerRadius,
+      innerRadius: this._settings.innerRadius,
+      fill: this._color,
+    });
+    this._tracker.attr(this._settings);
+    if (context.textEnabled) {
+      this._line.attr({
+        points: [
+          context.x,
+          context.y - this._settings.innerRadius,
+          context.x,
+          context.y - context.textRadius - context.textIndent,
+        ],
+        stroke: context.lineColor || this._color,
+      }).sharp();
+      this._text.css({ fill: context.fontStyles.fill || this._color });
+    }
+    return this;
+  }
+
+  getTooltipParameters(): BarTooltipParameters {
+    const cosSin = getCosAndSin((this._angle + this._context.baseAngle) / 2);
+    const middleRadius = (this._settings.outerRadius + this._settings.innerRadius) / 2;
+    return {
+      x: Math.round(this._context.x + middleRadius * cosSin.cos),
+      y: Math.round(this._context.y - middleRadius * cosSin.sin),
+      offset: 0,
+      color: this._color,
+      value: this._value,
+    };
+  }
+
+  setAngle(angle: number): this {
+    const context = this._context;
+    const settings = this._settings;
+
+    this._angle = angle;
+    setAngles(settings, context.baseAngle, angle);
+    this._bar.attr(settings);
+    this._tracker.attr(settings);
+    if (context.textEnabled) {
+      const cosSin = getCosAndSin(angle);
+      const indent = context.textIndent;
+      const radius = context.textRadius + indent;
+      let x = context.x + radius * cosSin.cos;
+      let y = context.y - radius * cosSin.sin;
+      const halfWidth = context.textWidth * 0.5;
+      const { textHeight, textY } = context;
+
+      if (Math.abs(x - context.x) > indent) {
+        x += x < context.x ? -halfWidth : halfWidth;
+      }
+      if (Math.abs(y - context.y) <= indent) {
+        y -= textY + textHeight * 0.5;
+      } else {
+        y -= y < context.y ? textY + textHeight : textY;
+      }
+
+      const text = formatValue(this._value, context.formatOptions, { index: this.index });
+      const visibility = text === '' ? 'hidden' : null;
+      this._text.attr({
+        text,
+        x,
+        y,
+        visibility,
+      });
+
+      this._line.attr({ visibility });
+      this._line.rotate(convertAngleToRendererSpace(angle), context.x, context.y);
+    }
+    return this;
+  }
+
+  hideLabel(): void {
+    this._text.attr({ visibility: 'hidden' });
+    this._line.attr({ visibility: 'hidden' });
+  }
+
+  checkIntersect(anotherBar: BarWrapper): boolean {
+    const coords = this.calculateLabelCoords();
+    const anotherCoords = anotherBar.calculateLabelCoords();
+
+    if (!coords || !anotherCoords) {
+      return false;
+    }
+
+    const width = Math.max(
+      0,
+      Math.min(coords.bottomRight.x, anotherCoords.bottomRight.x)
+        - Math.max(coords.topLeft.x, anotherCoords.topLeft.x),
+    );
+    const height = Math.max(
+      0,
+      Math.min(coords.bottomRight.y, anotherCoords.bottomRight.y)
+        - Math.max(coords.topLeft.y, anotherCoords.topLeft.y),
+    );
+
+    return (width * height) !== 0;
+  }
+
+  calculateLabelCoords(): LabelCoords | undefined {
+    if (!this._text) {
+      return undefined;
+    }
+
+    const box = this._text.getBBox();
+    return {
+      topLeft: {
+        x: box.x,
+        y: box.y,
+      },
+      bottomRight: {
+        x: box.x + box.width,
+        y: box.y + box.height,
+      },
+    };
+  }
+
+  _processValue(value: number): number {
+    return this._context.translator.translate(this._context.translator.adjust(value));
+  }
+
+  applyValue(): this {
+    if (!this._visible) {
+      return this;
+    }
+    return this.setAngle(this._processValue(this.getValue()));
+  }
+
+  update({ color, value }: { color: string; value: number }): void {
+    this._color = color;
+    this._value = value;
+  }
+
+  hide(): void {
+    this._visible = false;
+  }
+
+  getColor(): string {
+    return this._color;
+  }
+
+  getValue(): number {
+    return this._value;
+  }
+
+  beginAnimation(): void {
+    if (!this._visible) {
+      return;
+    }
+    const angle = this._processValue(this.getValue());
+    if (!compareFloats(this._angle, angle)) {
+      this._start = this._angle;
+      this._delta = angle - this._angle;
+      this._tracker.attr({ visibility: 'hidden' });
+      if (this._context.textEnabled) {
+        this._line.attr({ visibility: 'hidden' });
+        this._text.attr({ visibility: 'hidden' });
+      }
+    } else {
+      this.setAngle(this._angle);
+    }
+  }
+
+  animate(pos: number): void {
+    if (!this._visible || this._start === undefined || this._delta === undefined) {
+      return;
+    }
+    this._angle = this._start + this._delta * pos;
+    setAngles(this._settings, this._context.baseAngle, this._angle);
+    this._bar.attr(this._settings);
+  }
+
+  endAnimation(): void {
+    if (this._delta !== undefined && this._start !== undefined) {
+      if (compareFloats(this._angle, this._start + this._delta)) {
+        this._tracker.attr({ visibility: null });
+        this.setAngle(this._angle);
+      }
+    }
+    delete this._start;
+    delete this._delta;
+  }
+}
+
+let BarWrapperClass = BarWrapper;
+
+class BarGauge extends BaseGauge {
+  _barsGroup;
+
+  _values!: number[];
+
+  _context!: BarContext;
+
+  _animateStep!: (pos: number) => void;
+
+  _animateComplete!: () => void;
+
+  _baseValue!: number;
+
+  _area!: CircularArea;
+
+  _bars!: BarWrapper[];
+
+  _palette;
+
+  _textIndent!: number;
+
+  _outerRadius!: number;
+
+  _innerRadius!: number;
+
+  _barSpacing!: number;
+
+  _dummyBackground;
+
+  _initCore(): void {
+    super._initCore();
+    this._barsGroup = this._renderer.g()
+      .attr({ class: 'dxbg-bars' })
+      .linkOn(this._renderer.root, 'bars');
+    this._values = [];
+    this._context = {
+      renderer: this._renderer,
+      translator: this._translator,
+      tracker: this._tracker,
+      group: this._barsGroup,
+    } as BarContext;
+    this._animateStep = (pos: number): void => {
+      this._bars.forEach((bar) => bar.animate(pos));
+    };
+    this._animateComplete = (): void => {
+      this._bars.forEach((bar) => bar.endAnimation());
+      this._checkOverlap();
+    };
+  }
+
+  _disposeCore(): void {
+    this._barsGroup.linkOff();
+    Object.assign(this, {
+      _barsGroup: null,
+      _values: null,
+      _context: null,
+      _animateStep: null,
+      _animateComplete: null,
+    });
+    super._disposeCore();
+  }
+
+  _setupDomainCore(): void {
+    const startOption = this.option('startValue');
+    const endOption = this.option('endValue');
+    const startValue = isFinite(startOption) ? startOption : 0;
+    const endValue = isFinite(endOption) ? endOption : 100;
+    this._translator.setDomain(startValue, endValue);
+    const baseValue = this._translator.adjust(this.option('baseValue'));
+    const domainMin = startValue < endValue ? startValue : endValue;
+    this._baseValue = isFinite(baseValue) ? baseValue : domainMin;
+  }
+
+  _getDefaultSize(): { width: number; height: number } {
+    return { width: 300, height: 300 };
+  }
+
+  _setupCodomain(): void {
+    setupCircularCodomain(this);
+  }
+
+  _getApproximateScreenRange(): number {
+    const { sides } = this._area;
+    const width = this._canvas.width / (sides.right - sides.left);
+    const height = this._canvas.height / (sides.down - sides.up);
+    const r = width < height ? width : height;
+    return -this._translator.getCodomainRange() * r * PI_DIV_180;
+  }
+
+  _setupAnimationSettings(): void {
+    super._setupAnimationSettings();
+    if (this._animationSettings) {
+      this._animationSettings.step = this._animateStep;
+      this._animationSettings.complete = this._animateComplete;
+    }
+  }
+
+  _cleanContent(): void {
+    this._barsGroup.linkRemove();
+    if (this._animationSettings) {
+      this._barsGroup.stopAnimation();
+    }
+    this._barsGroup.clear();
+  }
+
+  _renderContent(): void {
+    const labelOptions = this.option('label');
+    const context = this._context;
+
+    this._barsGroup.linkAppend();
+    context.textEnabled = labelOptions === undefined
+      || (labelOptions && (!('visible' in labelOptions) || labelOptions.visible));
 
     if (context.textEnabled) {
-      context.fontStyles = _patchFontOptions(_extend({}, that._themeManager.theme().label.font, labelOptions?.font, { color: labelOptions?.font?.color || null }));
+      context.fontStyles = patchFontOptions(extend(
+        {},
+        this._themeManager.theme().label.font,
+        labelOptions?.font,
+        { color: labelOptions?.font?.color || null },
+      ));
 
-      labelOptions = _extend(true, {}, that._themeManager.theme().label, labelOptions);
+      const mergedLabelOptions = extend(true, {}, this._themeManager.theme().label, labelOptions);
       context.formatOptions = {
-        format: labelOptions.format !== undefined ? labelOptions.format : that._defaultFormatOptions,
-        customizeText: labelOptions.customizeText,
+        format: mergedLabelOptions.format !== undefined
+          ? mergedLabelOptions.format
+          : this._defaultFormatOptions,
+        customizeText: mergedLabelOptions.customizeText,
       };
       context.textOptions = { align: 'center' };
 
-      that._textIndent = labelOptions.indent > 0 ? _Number(labelOptions.indent) : 0;
-      context.lineWidth = labelOptions.connectorWidth > 0 ? _Number(labelOptions.connectorWidth) : 0;
-      context.lineColor = labelOptions.connectorColor || null;
+      this._textIndent = mergedLabelOptions.indent > 0 ? Number(mergedLabelOptions.indent) : 0;
+      context.lineWidth = mergedLabelOptions.connectorWidth > 0
+        ? Number(mergedLabelOptions.connectorWidth)
+        : 0;
+      context.lineColor = mergedLabelOptions.connectorColor || null;
 
-      const text = that._renderer.text(_getSampleText(that._translator, context.formatOptions), 0, 0).attr(context.textOptions).css(context.fontStyles).append(that._barsGroup);
+      const text = this._renderer
+        .text(getSampleText(this._translator, context.formatOptions), 0, 0)
+        .attr(context.textOptions)
+        .css(context.fontStyles)
+        .append(this._barsGroup);
       const bBox = text.getBBox();
       text.remove();
 
@@ -172,151 +543,161 @@ export const dxBarGauge = BaseGauge.inherit({
       context.textHeight = bBox.height;
     }
 
-    dxCircularGauge.prototype._applyMainLayout.call(that);
-    that._renderBars();
-  },
+    applyCircularMainLayout(this, this._measureMainElements());
+    this._renderBars();
+  }
 
-  _measureMainElements() {
-    const result = { maxRadius: this._area.radius };
+  _measureMainElements(): CircularLayoutMeasurements {
+    const result: CircularLayoutMeasurements = { maxRadius: this._area.radius };
     if (this._context.textEnabled) {
-      // @ts-expect-error
       result.horizontalMargin = this._context.textWidth;
-      // @ts-expect-error
       result.verticalMargin = this._context.textHeight;
-      // @ts-expect-error
       result.inverseHorizontalMargin = this._context.textWidth / 2;
-      // @ts-expect-error
       result.inverseVerticalMargin = this._context.textHeight / 2;
     }
     return result;
-  },
+  }
 
-  _renderBars() {
-    const that = this;
-    const options = _extend({}, that._themeManager.theme(), that.option());
-    let radius;
-    const area = that._area;
+  _renderBars(): void {
+    const options = extend({}, this._themeManager.theme(), this.option());
+    const area = this._area;
 
-    const relativeInnerRadius = options.relativeInnerRadius > 0 && options.relativeInnerRadius < 1 ? _Number(options.relativeInnerRadius) : 0.1;
-    radius = area.radius;
-    if (that._context.textEnabled) { //  B253614
-      that._textIndent = _round(_min(that._textIndent, radius / 2));
-      radius -= that._textIndent;
+    const relativeInnerRadius = options.relativeInnerRadius > 0 && options.relativeInnerRadius < 1
+      ? Number(options.relativeInnerRadius)
+      : 0.1;
+    let { radius } = area;
+    if (this._context.textEnabled) { //  B253614
+      this._textIndent = Math.round(Math.min(this._textIndent, radius / 2));
+      radius -= this._textIndent;
     }
-    that._outerRadius = _floor(radius);
-    that._innerRadius = _floor(radius * relativeInnerRadius);
-    that._barSpacing = options.barSpacing > 0 ? _Number(options.barSpacing) : 0;
-    _extend(that._context, {
+    this._outerRadius = Math.floor(radius);
+    this._innerRadius = Math.floor(radius * relativeInnerRadius);
+    this._barSpacing = options.barSpacing > 0 ? Number(options.barSpacing) : 0;
+    extend(this._context, {
       backgroundColor: options.backgroundColor,
       x: area.x,
       y: area.y,
       startAngle: area.startCoord,
       endAngle: area.endCoord,
-      baseAngle: that._translator.translate(that._baseValue),
+      baseAngle: this._translator.translate(this._baseValue),
     });
 
-    that._arrangeBars();
-  },
+    this._arrangeBars();
+  }
 
-  _arrangeBars() {
-    const that = this;
-    let radius = that._outerRadius - that._innerRadius;
-    const context = that._context;
-    let i;
+  _arrangeBars(): void {
+    const availableRadius = this._outerRadius - this._innerRadius;
+    const context = this._context;
+    const count = this._bars.length;
 
-    const count = that._bars.length;
-
-    that._beginValueChanging();
-    context.barSize = count > 0 ? _max((radius - (count - 1) * that._barSpacing) / count, 1) : 0;
-    const spacing = count > 1 ? _max(_min((radius - count * context.barSize) / (count - 1), that._barSpacing), 0) : 0;
-    const _count = _min(_floor((radius + spacing) / context.barSize), count);
-    that._setBarsCount(count);
-    radius = that._outerRadius;
-    context.textRadius = radius;
-    context.textIndent = that._textIndent;
-    that._palette.reset();
+    this._beginValueChanging();
+    context.barSize = count > 0
+      ? Math.max((availableRadius - (count - 1) * this._barSpacing) / count, 1)
+      : 0;
+    const spacing = count > 1
+      ? Math.max(
+        Math.min((availableRadius - count * context.barSize) / (count - 1), this._barSpacing),
+        0,
+      )
+      : 0;
+    const visibleCount = Math.min(
+      Math.floor((availableRadius + spacing) / context.barSize),
+      count,
+    );
+    this._setBarsCount();
+    context.textRadius = this._outerRadius;
+    context.textIndent = this._textIndent;
+    this._palette.reset();
     const unitOffset = context.barSize + spacing;
-    const colors = that._palette.generateColors(_count);
-    for (i = 0; i < _count; ++i, radius -= unitOffset) {
-      that._bars[i].arrange({
+    const colors = this._palette.generateColors(visibleCount);
+    let radius = this._outerRadius;
+    for (let i = 0; i < visibleCount; i += 1) {
+      this._bars[i].arrange({
         radius,
         color: colors[i],
       });
+      radius -= unitOffset;
     }
 
-    for (let i = _count; i < count; i++) {
-      that._bars[i].hide();
+    for (let i = visibleCount; i < count; i += 1) {
+      this._bars[i].hide();
     }
 
-    if (that._animationSettings && !that._noAnimation) {
-      that._animateBars();
+    if (this._animationSettings && !this._noAnimation) {
+      this._animateBars();
     } else {
-      that._updateBars();
+      this._updateBars();
     }
-    that._endValueChanging();
-  },
+    this._endValueChanging();
+  }
 
-  _setBarsCount() {
-    const that = this;
-
-    if (that._bars.length > 0) {
-      if (that._dummyBackground) {
-        that._dummyBackground.dispose();
-        that._dummyBackground = null;
+  _setBarsCount(): void {
+    if (this._bars.length > 0) {
+      if (this._dummyBackground) {
+        this._dummyBackground.dispose();
+        this._dummyBackground = null;
       }
     } else {
-      if (!that._dummyBackground) {
-        that._dummyBackground = that._renderer.arc().attr({ 'stroke-linejoin': 'round' });
+      if (!this._dummyBackground) {
+        this._dummyBackground = this._renderer.arc().attr({ 'stroke-linejoin': 'round' });
       }
-      that._dummyBackground.attr({ //  Because of vizMocks
-        x: that._context.x,
-        y: that._context.y,
-        outerRadius: that._outerRadius,
-        innerRadius: that._innerRadius,
-        startAngle: that._context.endAngle,
-        endAngle: that._context.startAngle,
-        fill: that._context.backgroundColor,
-      }).append(that._barsGroup);
+      this._dummyBackground.attr({ //  Because of vizMocks
+        x: this._context.x,
+        y: this._context.y,
+        outerRadius: this._outerRadius,
+        innerRadius: this._innerRadius,
+        startAngle: this._context.endAngle,
+        endAngle: this._context.startAngle,
+        fill: this._context.backgroundColor,
+      }).append(this._barsGroup);
     }
-  },
+  }
 
-  _getCenter() {
+  _getCenter(): Point {
     return { x: this._context.x, y: this._context.y };
-  },
+  }
 
-  _updateBars() {
+  _updateBars(): void {
     this._bars.forEach((bar) => bar.applyValue());
     this._checkOverlap();
-  },
+  }
 
-  _checkOverlap() {
-    const that = this;
-    const overlapStrategy = _normalizeEnum(that._getOption('resolveLabelOverlapping', true));
-
-    function shiftFunction(box, length) {
-      return getVerticallyShiftedAngularCoords(box, -length, that._context);
-    }
+  _checkOverlap(): void {
+    const overlapStrategy = normalizeEnum(this._getOption('resolveLabelOverlapping', true));
+    const shiftFunction = (box: ThemeValue, length: number): ThemeValue => (
+      getVerticallyShiftedAngularCoords(box, -length, this._context)
+    );
 
     if (overlapStrategy === 'none') {
       return;
     }
     if (overlapStrategy === 'shift') {
-      const newBars = that._dividePoints();
-      overlapping.resolveLabelOverlappingInOneDirection(newBars.left, that._canvas, false, false, shiftFunction);
-      overlapping.resolveLabelOverlappingInOneDirection(newBars.right, that._canvas, false, false, shiftFunction);
-      that._clearLabelsCrossTitle();
-      that._drawConnector();
+      const newBars = this._dividePoints();
+      overlapping.resolveLabelOverlappingInOneDirection(
+        newBars.left,
+        this._canvas,
+        false,
+        false,
+        shiftFunction,
+      );
+      overlapping.resolveLabelOverlappingInOneDirection(
+        newBars.right,
+        this._canvas,
+        false,
+        false,
+        shiftFunction,
+      );
+      this._clearLabelsCrossTitle();
+      this._drawConnector();
     } else {
-      that._clearOverlappingLabels();
+      this._clearOverlappingLabels();
     }
-  },
+  }
 
-  _drawConnector() {
-    const that = this;
-    const bars = that._bars;
-    const { connectorWidth } = that._getOption('label');
+  _drawConnector(): void {
+    const { connectorWidth } = this._getOption('label');
 
-    bars.forEach((bar) => {
+    this._bars.forEach((bar) => {
       if (!bar._isLabelShifted) {
         return;
       }
@@ -327,15 +708,27 @@ export const dxBarGauge = BaseGauge.inherit({
       const outerRadius = bar._bar.attr('outerRadius');
       const startAngle = bar._bar.attr('startAngle');
       const endAngle = bar._bar.attr('endAngle');
-      // @ts-expect-error
-      const coordStart = getStartCoordsArc.apply(null, normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle));
-      const { cos, sin } = _getCosAndSin(bar._angle);
-      const xStart = coordStart.x - (sin * connectorWidth / 2) - cos;
-      // @ts-expect-error
-      const yStart = coordStart.y - (cos * connectorWidth / 2) + sin;
+      const [arcX, arcY, , arcOuterRadius, startAngleCos, startAngleSin] = normalizeArcParams(
+        x,
+        y,
+        innerRadius,
+        outerRadius,
+        startAngle,
+        endAngle,
+      );
+      const coordStart = getStartCoordsArc(
+        arcX,
+        arcY,
+        arcOuterRadius,
+        startAngleCos,
+        startAngleSin,
+      );
+      const { cos, sin } = getCosAndSin(bar._angle);
+      const xStart = coordStart.x - (sin * connectorWidth) / 2 - cos;
+      const yStart = coordStart.y - (cos * connectorWidth) / 2 + sin;
       const box = bar._text.getBBox();
       const lastCoords = bar._text._lastCoords;
-      const indentFromLabel = that._context.textWidth / 2;
+      const indentFromLabel = this._context.textWidth / 2;
       const originalXLabelCoord = box.x + box.width / 2 + lastCoords.x;
       const originalPoints = [
         xStart,
@@ -372,12 +765,11 @@ export const dxBarGauge = BaseGauge.inherit({
       bar._line.rotate(0);
       bar._isLabelShifted = false;
     });
-  },
+  }
 
-  _dividePoints() {
-    const that = this;
-    const bars = that._bars;
-    return bars.reduce((stackBars, bar) => {
+  _dividePoints(): StackedBars {
+    const stackedBars: StackedBars = { left: [], right: [] };
+    return this._bars.reduce((stackBars, bar) => {
       const angle = normalizeAngle(bar._angle);
       const isRightSide = angle <= 90 || angle >= 270;
       bar._text._lastCoords = { x: 0, y: 0 };
@@ -386,12 +778,12 @@ export const dxBarGauge = BaseGauge.inherit({
       barToExtend
         .push({
           series: {
-            isStackedSeries: () => false,
-            isFullStackedSeries: () => false,
+            isStackedSeries: (): boolean => false,
+            isFullStackedSeries: (): boolean => false,
           },
-          getLabels: () => [{
-            isVisible: () => true,
-            getBoundingRect: () => {
+          getLabels: (): ThemeValue[] => [{
+            isVisible: (): boolean => true,
+            getBoundingRect: (): ThemeValue => {
               const {
                 height, width, x, y,
               } = bar._text.getBBox();
@@ -404,28 +796,26 @@ export const dxBarGauge = BaseGauge.inherit({
                 height,
               };
             },
-            shift: (x, y) => {
+            shift: (x: number, y: number): void => {
               const box = bar._text.getBBox();
 
               bar._text._lastCoords = { x: x - box.x, y: y - box.y };
               bar._text.attr({ translateX: x - box.x, translateY: y - box.y });
               bar._isLabelShifted = true;
             },
-            draw: () => bar.hideLabel(),
-            getData: () => ({ value: bar.getValue() }),
-            hideInsideLabel: () => false,
+            draw: (): void => bar.hideLabel(),
+            getData: (): { value: number } => ({ value: bar.getValue() }),
+            hideInsideLabel: (): boolean => false,
           }],
         });
       return stackBars;
-    }, { left: [], right: [] });
-  },
+    }, stackedBars);
+  }
 
-  _clearOverlappingLabels() {
-    const that = this;
-    const bars = that._bars;
+  _clearOverlappingLabels(): void {
     let currentIndex = 0;
     let nextIndex = 1;
-    const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
+    const sortedBars = this._bars.concat().sort((a, b) => a.getValue() - b.getValue());
 
     while (currentIndex < sortedBars.length && nextIndex < sortedBars.length) {
       const current = sortedBars[currentIndex];
@@ -433,23 +823,21 @@ export const dxBarGauge = BaseGauge.inherit({
 
       if (current.checkIntersect(next)) {
         next.hideLabel();
-        nextIndex++;
+        nextIndex += 1;
       } else {
         currentIndex = nextIndex;
         nextIndex = currentIndex + 1;
       }
     }
-  },
+  }
 
-  _clearLabelsCrossTitle() {
-    const that = this;
-    const bars = that._bars;
-    const titleCoords = that._title.getLayoutOptions() || {
+  _clearLabelsCrossTitle(): void {
+    const titleCoords = this._title.getLayoutOptions() || {
       x: 0, y: 0, height: 0, width: 0,
     };
     const minY = titleCoords.y + titleCoords.height;
 
-    bars.forEach((bar) => {
+    this._bars.forEach((bar) => {
       const box = bar._text.getBBox();
       const lastCoords = bar._text._lastCoords;
 
@@ -457,91 +845,131 @@ export const dxBarGauge = BaseGauge.inherit({
         bar.hideLabel();
       }
     });
-  },
+  }
 
-  _animateBars() {
-    const that = this;
-    let i;
-    const ii = that._bars.length;
-    if (ii > 0) {
-      for (i = 0; i < ii; ++i) {
-        that._bars[i].beginAnimation();
-      }
-      that._barsGroup.animate({ _: 0 }, that._animationSettings);
+  _animateBars(): void {
+    if (this._bars.length > 0) {
+      this._bars.forEach((bar) => bar.beginAnimation());
+      this._barsGroup.animate({ _: 0 }, this._animationSettings);
     }
-  },
+  }
 
-  _buildNodes() {
-    const that = this;
-    const options = that._options.silent();
+  _buildNodes(): void {
+    const options = this._options.silent();
 
-    const legendOptions = that._themeManager.theme('legend');
-    legendOptions._incidentOccurred = that._incidentOccurred;
+    const legendOptions = this._themeManager.theme('legend');
+    legendOptions._incidentOccurred = this._incidentOccurred;
 
-    that._palette = that._themeManager.createPalette(options.palette, {
+    this._palette = this._themeManager.createPalette(options.palette, {
       useHighlight: true,
       extensionMode: options.paletteExtensionMode,
     });
 
-    that._palette.reset();
+    this._palette.reset();
 
-    that._bars = that._bars || [];
+    this._bars = this._bars || [];
 
-    that._animationSettings && that._barsGroup.stopAnimation();
+    if (this._animationSettings) {
+      this._barsGroup.stopAnimation();
+    }
 
-    const barValues = that._values.filter(_isFinite);
+    const barValues = this._values.filter(isFinite);
     const count = barValues.length;
 
-    if (that._bars.length > count) {
-      const ii = that._bars.length;
-      for (let i = count; i < ii; ++i) {
-        that._bars[i].dispose();
+    if (this._bars.length > count) {
+      const ii = this._bars.length;
+      for (let i = count; i < ii; i += 1) {
+        this._bars[i].dispose();
       }
-      that._bars.splice(count, ii - count);
-    } else if (that._bars.length < count) {
-      for (let i = that._bars.length; i < count; ++i) {
-        that._bars.push(new BarWrapper(i, that._context));
+      this._bars.splice(count, ii - count);
+    } else if (this._bars.length < count) {
+      for (let i = this._bars.length; i < count; i += 1) {
+        this._bars.push(new BarWrapperClass(i, this._context));
       }
     }
 
-    that._bars.forEach((bar, index) => {
+    this._bars.forEach((bar, index) => {
       bar.update({
-        color: that._palette.getNextColor(count),
+        color: this._palette.getNextColor(count),
         value: barValues[index],
       });
     });
-  },
+  }
 
-  _updateValues(values) {
-    const that = this;
-    const list = (_isArray(values) && values) || (_isFinite(values) && [values]) || [];
-    let i;
+  _updateValues(values: ThemeValue): void {
+    const list: ThemeValue[] = (Array.isArray(values) && values)
+      || (isFinite(values) && [values])
+      || [];
     const ii = list.length;
-    let value;
-    that._values.length = ii;
-    for (i = 0; i < ii; ++i) {
-      value = list[i];
-      that._values[i] = _Number(_isFinite(value) ? value : that._values[i]);
+    this._values.length = ii;
+    for (let i = 0; i < ii; i += 1) {
+      const value = list[i];
+      this._values[i] = Number(isFinite(value) ? value : this._values[i]);
     }
 
-    if (!that._resizing) {
-      if (!_compareArrays(that._values, that.option(OPTION_VALUES))) {
-        that.option(OPTION_VALUES, that._values.slice());
+    if (!this._resizing) {
+      if (!compareArrays(this._values, this.option(OPTION_VALUES))) {
+        this.option(OPTION_VALUES, this._values.slice());
       }
     }
 
     this._change(['NODES']);
-  },
+  }
 
-  values(arg) {
+  values(arg?: ThemeValue): this | number[] {
     if (arg !== undefined) {
       this._updateValues(arg);
       return this;
-    } else {
-      return this._values.slice(0);
     }
-  },
+    return this._values.slice(0);
+  }
 
+  _change_VALUES(): void {
+    this._updateValues(this.option(OPTION_VALUES));
+  }
+
+  _getChangesRequireCoreUpdate(): string[] {
+    return [
+      ...super._getChangesRequireCoreUpdate(),
+      'LEGEND',
+    ];
+  }
+
+  _change_NODES(): void {
+    this._buildNodes();
+  }
+
+  _change_MOSTLY_TOTAL(): void {
+    this._change(['NODES']);
+    super._change_MOSTLY_TOTAL();
+  }
+
+  _getLegendData(): ThemeValue[] {
+    const options = this._options.silent();
+    const labelFormatOptions = (options.label || {}).format;
+    const legendFormatOptions = (options.legend || {}).itemTextFormat;
+    const formatOptions: GaugeFormatOptions = {
+      format: legendFormatOptions || labelFormatOptions || this._defaultFormatOptions,
+    };
+
+    return (this._bars || []).map((bar) => ({
+      id: bar.index,
+      item: {
+        value: bar.getValue(),
+        color: bar.getColor(),
+        index: bar.index,
+      },
+      text: formatValue(bar.getValue(), formatOptions),
+      visible: true,
+      states: { normal: { fill: bar.getColor() } },
+    }));
+  }
+}
+
+setupWidgetPrototype(BarGauge, {
+  _rootClass: 'dxbg-bar-gauge',
+  _themeSection: 'barGauge',
+  _fontFields: ['label.font', 'legend.font', 'legend.title.font', 'legend.title.subtitle.font'],
   _optionChangesMap: {
     backgroundColor: 'MOSTLY_TOTAL',
     relativeInnerRadius: 'MOSTLY_TOTAL',
@@ -552,320 +980,27 @@ export const dxBarGauge = BaseGauge.inherit({
     paletteExtensionMode: 'MOSTLY_TOTAL',
     values: 'VALUES',
   },
-
-  _change_VALUES() {
-    this._updateValues(this.option(OPTION_VALUES));
-  },
-
   _factory: clone(BaseGauge.prototype._factory),
-
   _optionChangesOrder: ['VALUES', 'NODES'],
-
   _initialChanges: ['VALUES'],
-
-  _getChangesRequireCoreUpdate() {
-    return [
-      ...this.callBase(),
-      'LEGEND',
-    ];
-  },
-
-  _change_NODES() {
-    this._buildNodes();
-  },
-
-  _change_MOSTLY_TOTAL() {
-    this._change(['NODES']);
-    this.callBase();
-  },
-
   _proxyData: [],
-
-  _getLegendData() {
-    const that = this;
-    const formatOptions = {};
-    const options = that._options.silent();
-    const labelFormatOptions = (options.label || {}).format;
-    const legendFormatOptions = (options.legend || {}).itemTextFormat;
-
-    if (legendFormatOptions) {
-      // @ts-expect-error
-      formatOptions.format = legendFormatOptions;
-    } else {
-      // @ts-expect-error
-      formatOptions.format = labelFormatOptions || that._defaultFormatOptions;
-    }
-
-    return (this._bars || []).map((b) => ({
-      id: b.index,
-      item: {
-        value: b.getValue(),
-        color: b.getColor(),
-        index: b.index,
-      },
-      // @ts-expect-error
-      text: _formatValue(b.getValue(), formatOptions),
-      visible: true,
-      states: { normal: { fill: b.getColor() } },
-    }));
-  },
 });
 
-BarWrapper = function (index, context) {
-  const that = this;
-  that._context = context;
-  that._tracker = context.renderer.arc().attr({ 'stroke-linejoin': 'round' });
-  that.index = index;
-};
+registerComponent('dxBarGauge', BarGauge);
 
-_extend(BarWrapper.prototype, {
-  dispose() {
-    const that = this;
-    that._background.dispose();
-    that._bar.dispose();
-    if (that._context.textEnabled) {
-      that._line.dispose();
-      that._text.dispose();
-    }
-    that._context.tracker.detach(that._tracker);
-    that._context = that._settings = that._background = that._bar = that._line = that._text = that._tracker = null;
-    return that;
-  },
+BarGauge.addPlugin(pluginLegend);
+BarGauge.addPlugin(centerTemplatePlugins.gauge);
 
-  arrange(options) {
-    const that = this;
-    const context = that._context;
-
-    this._visible = true;
-    context.tracker.attach(that._tracker, that, { index: that.index });
-
-    that._background = context.renderer.arc().attr({ 'stroke-linejoin': 'round', fill: context.backgroundColor }).append(context.group);
-    that._settings = that._settings || {
-      x: context.x, y: context.y, startAngle: context.baseAngle, endAngle: context.baseAngle,
-    };
-
-    that._bar = context.renderer.arc().attr(_extend({ 'stroke-linejoin': 'round' }, that._settings)).append(context.group);
-    if (context.textEnabled) {
-      that._line = context.renderer.path([], 'line').attr({ 'stroke-width': context.lineWidth }).append(context.group);
-      that._text = context.renderer.text().css(context.fontStyles).attr(context.textOptions).append(context.group);
-    }
-
-    that._angle = isFinite(that._angle) ? that._angle : context.baseAngle;
-
-    that._settings.outerRadius = options.radius;
-    that._settings.innerRadius = options.radius - context.barSize;
-    that._settings.x = context.x;
-    that._settings.y = context.y;
-
-    that._background.attr(_extend({}, that._settings, { startAngle: context.endAngle, endAngle: context.startAngle, fill: that._context.backgroundColor }));
-    that._bar.attr({
-      x: context.x, y: context.y, outerRadius: that._settings.outerRadius, innerRadius: that._settings.innerRadius, fill: that._color,
-    });
-    that._tracker.attr(that._settings);
-    if (context.textEnabled) {
-      that._line.attr({ points: [context.x, context.y - that._settings.innerRadius, context.x, context.y - context.textRadius - context.textIndent], stroke: context.lineColor || that._color }).sharp();
-      that._text.css({ fill: context.fontStyles.fill || that._color });
-    }
-    return that;
-  },
-
-  getTooltipParameters() {
-    const that = this;
-    const cosSin = _getCosAndSin((that._angle + that._context.baseAngle) / 2);
-    return {
-      x: _round(that._context.x + (that._settings.outerRadius + that._settings.innerRadius) / 2 * cosSin.cos),
-      y: _round(that._context.y - (that._settings.outerRadius + that._settings.innerRadius) / 2 * cosSin.sin),
-      offset: 0,
-      color: that._color,
-      value: that._value,
-    };
-  },
-
-  setAngle(angle) {
-    const that = this;
-    const context = that._context;
-    const settings = that._settings;
-    let cosSin;
-
-    that._angle = angle;
-    setAngles(settings, context.baseAngle, angle);
-    that._bar.attr(settings);
-    that._tracker.attr(settings);
-    if (context.textEnabled) {
-      cosSin = _getCosAndSin(angle);
-      const indent = context.textIndent;
-      const radius = context.textRadius + indent;
-      let x = context.x + radius * cosSin.cos;
-      let y = context.y - radius * cosSin.sin;
-      const halfWidth = context.textWidth * 0.5;
-      const textHeight = context.textHeight;
-      const textY = context.textY;
-
-      if (_abs(x - context.x) > indent) {
-        x += x < context.x ? -halfWidth : halfWidth;
-      }
-      if (_abs(y - context.y) <= indent) {
-        y -= textY + textHeight * 0.5;
-      } else {
-        y -= y < context.y ? textY + textHeight : textY;
-      }
-
-      const text = _formatValue(that._value, context.formatOptions, { index: that.index });
-      const visibility = text === '' ? 'hidden' : null;
-      that._text.attr({
-        text,
-        x,
-        y,
-        visibility,
-      });
-
-      that._line.attr({ visibility });
-      that._line.rotate(_convertAngleToRendererSpace(angle), context.x, context.y);
-    }
-    return that;
-  },
-
-  hideLabel() {
-    this._text.attr({ visibility: 'hidden' });
-    this._line.attr({ visibility: 'hidden' });
-  },
-
-  checkIntersect(anotherBar) {
-    const coords = this.calculateLabelCoords();
-    const anotherCoords = anotherBar.calculateLabelCoords();
-
-    if (!coords || !anotherCoords) {
-      return false;
-    }
-
-    const width = Math.max(0, Math.min(coords.bottomRight.x, anotherCoords.bottomRight.x) - Math.max(coords.topLeft.x, anotherCoords.topLeft.x));
-    const height = Math.max(0, Math.min(coords.bottomRight.y, anotherCoords.bottomRight.y) - Math.max(coords.topLeft.y, anotherCoords.topLeft.y));
-
-    return (width * height) !== 0;
-  },
-
-  calculateLabelCoords() {
-    if (!this._text) {
-      return;
-    }
-
-    const box = this._text.getBBox();
-    return {
-      topLeft: {
-        x: box.x,
-        y: box.y,
-      },
-      bottomRight: {
-        x: box.x + box.width,
-        y: box.y + box.height,
-      },
-    };
-  },
-
-  _processValue(value) {
-    return this._context.translator.translate(this._context.translator.adjust(value));
-  },
-
-  applyValue() {
-    if (!this._visible) {
-      return this;
-    }
-    return this.setAngle(this._processValue(this.getValue()));
-  },
-
-  update({ color, value }) {
-    this._color = color;
-    this._value = value;
-  },
-
-  hide() {
-    this._visible = false;
-  },
-
-  getColor() {
-    return this._color;
-  },
-
-  getValue() {
-    return this._value;
-  },
-
-  beginAnimation() {
-    if (!this._visible) {
-      return this;
-    }
-    const that = this;
-    const angle = this._processValue(this.getValue());
-    if (!compareFloats(that._angle, angle)) {
-      that._start = that._angle;
-      that._delta = angle - that._angle;
-      that._tracker.attr({ visibility: 'hidden' });
-      if (that._context.textEnabled) {
-        that._line.attr({ visibility: 'hidden' });
-        that._text.attr({ visibility: 'hidden' });
-      }
-    } else {
-      that.animate = _noop;
-      that.setAngle(that._angle);
-    }
-  },
-
-  animate(pos) {
-    if (!this._visible) {
-      return this;
-    }
-    const that = this;
-    that._angle = that._start + that._delta * pos;
-    setAngles(that._settings, that._context.baseAngle, that._angle);
-    that._bar.attr(that._settings);
-  },
-
-  endAnimation() {
-    const that = this;
-    if (that._delta !== undefined) {
-      if (compareFloats(that._angle, that._start + that._delta)) {
-        that._tracker.attr({ visibility: null });
-        that.setAngle(that._angle);
-      }
-    } else {
-      delete that.animate;
-    }
-    delete that._start;
-    delete that._delta;
-  },
-});
-
-function setAngles(target, angle1, angle2) {
-  target.startAngle = angle1 < angle2 ? angle1 : angle2;
-  target.endAngle = angle1 < angle2 ? angle2 : angle1;
-}
-
-function compareFloats(value1, value2) {
-  return _abs(value1 - value2) < 0.0001;
-}
-
-function getStartCoordsArc(x, y, innerR, outerR, startAngleCos, startAngleSin) {
-  return {
-    x: (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC),
-    y: (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC),
-  };
-}
-
-registerComponent('dxBarGauge', dxBarGauge);
-
-dxBarGauge.addPlugin(pluginLegend);
-dxBarGauge.addPlugin(centerTemplatePlugins.gauge);
+export { BarGauge as dxBarGauge };
 
 /// #DEBUG
-const __BarWrapper = BarWrapper;
+export { BarWrapper };
 
-export { __BarWrapper as BarWrapper };
+export function stubBarWrapper(barWrapperStub: typeof BarWrapper): void {
+  BarWrapperClass = barWrapperStub;
+}
 
-exports.stubBarWrapper = function (barWrapperType) {
-  BarWrapper = barWrapperType;
-};
-
-exports.restoreBarWrapper = function () {
-  BarWrapper = __BarWrapper;
-};
+export function restoreBarWrapper(): void {
+  BarWrapperClass = BarWrapper;
+}
 /// #ENDDEBUG

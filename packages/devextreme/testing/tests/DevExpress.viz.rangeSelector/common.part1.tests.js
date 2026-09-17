@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import trackerModule from 'viz/range_selector/tracker';
+import { spySeam } from '../../helpers/moduleSeam.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import seriesDataSourceModule from 'viz/range_selector/series_data_source';
 import {
@@ -196,7 +197,7 @@ QUnit.test('correct sliders place holder size by values', function(assert) {
 });
 
 QUnit.test('Tracker creation', function(assert) {
-    const spy = sinon.spy(trackerModule, 'Tracker');
+    const spy = spySeam(trackerModule, 'Tracker', 'DEBUG_set_Tracker');
     this.createWidget();
 
     assert.deepEqual(spy.lastCall.args, [{ renderer: this.renderer, controller: this.slidersController }]);
@@ -261,7 +262,7 @@ QUnit.test('dataSource is loaded', function(assert) {
 });
 
 QUnit.test('Update axis canvas before create series dataSorce', function(assert) {
-    const spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
+    const spy = spySeam(seriesDataSourceModule, 'SeriesDataSource', 'DEBUG_set_SeriesDataSource');
     this.seriesDataSource.stub('getBoundRange').returns({
         arg: new StubRange(),
         val: new StubRange()
@@ -379,7 +380,7 @@ QUnit.test('scale. not valid logarithmBase, string', function(assert) {
 });
 
 QUnit.test('valueAxis. logarithmic type', function(assert) {
-    const spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
+    const spy = spySeam(seriesDataSourceModule, 'SeriesDataSource', 'DEBUG_set_SeriesDataSource');
     this.seriesDataSource.stub('getBoundRange').returns({
         arg: new StubRange(),
         val: new StubRange()
@@ -400,7 +401,7 @@ QUnit.test('valueAxis. logarithmic type', function(assert) {
 });
 
 QUnit.test('valueAxis. not valid logarithmBase', function(assert) {
-    const spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
+    const spy = spySeam(seriesDataSourceModule, 'SeriesDataSource', 'DEBUG_set_SeriesDataSource');
     this.seriesDataSource.stub('isShowChart').returns(true);
     this.seriesDataSource.stub('getBoundRange').returns({
         arg: new StubRange(),

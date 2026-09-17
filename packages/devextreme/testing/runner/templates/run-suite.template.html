@@ -99,9 +99,9 @@
 
     <script src="{{JQUERY_JS_URL}}"></script>
 
-    <script src="{{SINON_JS_URL}}"></script>
+    <script src="{{KNOCKOUT_JS_URL}}"></script>
 
-    <script src="{{SYSTEM_JS_URL}}"></script>
+    <script src="{{SINON_JS_URL}}"></script>
 
     <script nonce="IpCks6">
         (function() {
@@ -110,55 +110,108 @@
             window.process.env.NODE_ENV = 'test';
 
             jQuery.noConflict();
-
-            var cacheBuster = {{{CACHE_BUSTER_JSON}}};
-            if(cacheBuster.length) {
-                var systemLocate = SystemJS.locate;
-                SystemJS.locate = function(load) {
-                    return Promise.resolve(systemLocate.call(this, load)).then(function(address) {
-                        return address + ( address.indexOf('?') === -1 ? '?' : '&') + cacheBuster;
-                    });
-                }
-            }
-
-            SystemJS.config({{{SYSTEM_CONFIG_JSON}}});
         })();
     </script>
+
+    {{{IMPORT_MAP_SCRIPT}}}
 </head>
+<body>
 <a class="up" href="/"></a>
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
 
-<script nonce="Z27qXj">
+<script type="module" nonce="Z27qXj">
     (function() {
         var integrationImportPaths = {{{INTEGRATION_IMPORT_PATHS_JSON}}};
+        var themeCssImportPaths = {{{THEME_CSS_IMPORT_PATHS_JSON}}};
+        var testUrl = {{{TEST_URL_JSON}}};
+        var isServerSideTest = {{{IS_SERVER_SIDE_TEST_JSON}}};
 
-        var imports = integrationImportPaths.map(function(importPath) {
-            return SystemJS.import(importPath);
-        });
-
-        imports.push(new Promise(function(resolve) {
-            jQuery(resolve);
-        }));
-
-        Promise.all(imports)
-        .then(function() {
-            var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0;
-
-            if({{{IS_SERVER_SIDE_TEST_JSON}}} && isNotWebkitBrowser) {
-                return;
-            }
-
-            return SystemJS.import({{{TEST_URL_JSON}}});
-        })
-        .then(function() {
+        function startQUnit() {
             QUnit.start();
-        })
-        .catch(function (err) {
+        }
+
+        function failLoad(err) {
             QUnit.start();
             QUnit.test("load failed", function(assert) {
-                throw err;
+                var detail = err;
+                if(err && err.cause) {
+                    detail = err.message + "\nCaused by: " + err.cause
+                        + (err.cause.stack ? "\n" + err.cause.stack : "");
+                }
+                throw detail;
             });
+        }
+
+        function afterReady(loadTest) {
+            var ready = new Promise(function(resolve) {
+                // Prefer jQuery ready when the classic script left a working
+                // global; fall back for nojquery / if a module cleared it.
+                if(typeof jQuery === 'function') {
+                    jQuery(resolve);
+                    return;
+                }
+                if(document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', resolve, { once: true });
+                    return;
+                }
+                resolve();
+            });
+
+            return ready.then(function() {
+                var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0;
+
+                if(isServerSideTest && isNotWebkitBrowser) {
+                    return;
+                }
+
+                return loadTest();
+            });
+        }
+
+        // Sibling ESM imports load in parallel, so theme CSS must be applied
+        // before modules that snapshot themes.current() / isMaterialBased()
+        // at import time.
+        function preloadThemeCss() {
+            if(!themeCssImportPaths || !themeCssImportPaths.length) {
+                return Promise.resolve();
+            }
+
+            return Promise.all(themeCssImportPaths.map(function(specifier) {
+                return import(specifier);
+            })).then(function() {
+                return new Promise(function(resolve) {
+                    var started = Date.now();
+                    (function check() {
+                        var el = document.createElement('div');
+                        el.className = 'dx-theme-marker';
+                        document.documentElement.appendChild(el);
+                        var family = window.getComputedStyle(el).fontFamily || '';
+                        el.remove();
+                        if(family.indexOf('dx.') !== -1 || Date.now() - started > 2000) {
+                            resolve();
+                            return;
+                        }
+                        setTimeout(check, 10);
+                    })();
+                });
+            });
+        }
+
+        var imports = integrationImportPaths.map(function(importPath) {
+            return import(importPath);
         });
+
+        Promise.all(imports)
+            .then(function() {
+                return afterReady(function() {
+                    return preloadThemeCss().then(function() {
+                        return import(testUrl);
+                    });
+                });
+            })
+            .then(startQUnit)
+            .catch(failLoad);
     })();
 </script>
+</body>

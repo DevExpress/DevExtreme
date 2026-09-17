@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Button } from 'devextreme-react/button';
 import { PivotGrid, FieldChooser } from 'devextreme-react/pivot-grid';
 import { PivotGridFieldChooser, Texts } from 'devextreme-react/pivot-grid-field-chooser';
@@ -14,6 +14,11 @@ const App = () => {
   const [applyChangesMode, setApplyChangesMode] = useState('instantly');
   const [layout, setLayout] = useState(0);
   const fieldChooserRef = useRef(null);
+  const onApplyChanges = useCallback(() => fieldChooserRef.current?.instance().applyChanges(), []);
+  const onCancelChanges = useCallback(
+    () => fieldChooserRef.current?.instance().cancelChanges(),
+    [],
+  );
   return (
     <>
       <PivotGrid
@@ -48,11 +53,11 @@ const App = () => {
             <Button
               text="Apply"
               type="default"
-              onClick={() => fieldChooserRef.current?.instance().applyChanges()}
+              onClick={onApplyChanges}
             ></Button>
             <Button
               text="Cancel"
-              onClick={() => fieldChooserRef.current?.instance().cancelChanges()}
+              onClick={onCancelChanges}
             ></Button>
           </div>
         )}

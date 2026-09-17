@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Gantt, {
   Tasks,
   Dependencies,
@@ -39,19 +39,40 @@ const initialGanttConfig = {
 };
 function App() {
   const [ganttConfig, setGanttConfig] = useState(initialGanttConfig);
-  const updateGanttConfig = (value) =>
-    setGanttConfig({
-      ...ganttConfig,
+  const updateGanttConfig = useCallback((value) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       ...value,
-    });
-  const onScaleTypeChanged = ({ value }) => updateGanttConfig({ scaleType: value });
-  const onTaskTitlePositionChanged = ({ value }) => updateGanttConfig({ taskTitlePosition: value });
-  const onShowResourcesChanged = ({ value }) => updateGanttConfig({ showResources: value });
-  const onShowDependenciesChanged = ({ value }) => updateGanttConfig({ showDependencies: value });
-  const onShowCustomTaskTooltip = ({ value }) =>
-    updateGanttConfig({ showCustomTaskTooltip: value });
-  const onStartDateValueChanged = ({ value }) => updateGanttConfig({ startDateRange: value });
-  const onEndDateValueChanged = ({ value }) => updateGanttConfig({ endDateRange: value });
+    }));
+  }, []);
+  const onScaleTypeChanged = useCallback(
+    ({ value }) => updateGanttConfig({ scaleType: value }),
+    [updateGanttConfig],
+  );
+  const onTaskTitlePositionChanged = useCallback(
+    ({ value }) => updateGanttConfig({ taskTitlePosition: value }),
+    [updateGanttConfig],
+  );
+  const onShowResourcesChanged = useCallback(
+    ({ value }) => updateGanttConfig({ showResources: value }),
+    [updateGanttConfig],
+  );
+  const onShowDependenciesChanged = useCallback(
+    ({ value }) => updateGanttConfig({ showDependencies: value }),
+    [updateGanttConfig],
+  );
+  const onShowCustomTaskTooltip = useCallback(
+    ({ value }) => updateGanttConfig({ showCustomTaskTooltip: value }),
+    [updateGanttConfig],
+  );
+  const onStartDateValueChanged = useCallback(
+    ({ value }) => updateGanttConfig({ startDateRange: value }),
+    [updateGanttConfig],
+  );
+  const onEndDateValueChanged = useCallback(
+    ({ value }) => updateGanttConfig({ endDateRange: value }),
+    [updateGanttConfig],
+  );
   return (
     <div id="form-demo">
       <div className="options">

@@ -10,8 +10,8 @@ import type {
   Column, ColumnUserState, FilterField,
 } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/data_controller/types';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 
 import { anyOf, noneOf } from './m_filter_custom_operations';
