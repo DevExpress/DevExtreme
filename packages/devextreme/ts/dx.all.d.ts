@@ -5008,11 +5008,6 @@ declare module DevExpress.common.grids {
    */
   export type ColumnChooser = {
     /**
-     * [descr:ColumnChooser.allowSearch]
-     * @deprecated [depNote:ColumnChooser.allowSearch]
-     */
-    allowSearch?: boolean;
-    /**
      * [descr:ColumnChooser.container]
      */
     container?: string | DevExpress.core.UserDefinedElement | undefined;
@@ -5040,11 +5035,6 @@ declare module DevExpress.common.grids {
      * [descr:ColumnChooser.search]
      */
     search?: ColumnChooserSearchConfig;
-    /**
-     * [descr:ColumnChooser.searchTimeout]
-     * @deprecated [depNote:ColumnChooser.searchTimeout]
-     */
-    searchTimeout?: number;
     /**
      * [descr:ColumnChooser.selection]
      */

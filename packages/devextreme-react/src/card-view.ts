@@ -737,7 +737,6 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 // owners:
 // CardView
 type IColumnChooserProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   container?: any | string | undefined;
   emptyPanelText?: string;
   enabled?: boolean;
@@ -745,7 +744,6 @@ type IColumnChooserProps = React.PropsWithChildren<{
   mode?: ColumnChooserMode;
   position?: PositionConfig | undefined;
   search?: ColumnChooserSearchConfig;
-  searchTimeout?: number;
   selection?: ColumnChooserSelectionConfig;
   sortOrder?: SortOrder | undefined;
   title?: string;
