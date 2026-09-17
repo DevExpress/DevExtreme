@@ -24,8 +24,10 @@
         "{projectRoot}/helpers/**/*",
         "{projectRoot}/models/**/*",
         "{projectRoot}/tests/**/*",
+        "{projectRoot}/fixtures.ts",
         "{projectRoot}/playwright.config.ts",
         "{projectRoot}/runner.mjs",
+        "{projectRoot}/serve.mjs",
         "{projectRoot}/tsconfig.json"
       ]
     }

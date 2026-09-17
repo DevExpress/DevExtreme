@@ -58,10 +58,7 @@ export const removeClassAttribute = async (
   value: string,
 ): Promise<void> => page.evaluate(
   ({ elementSelector, className }) => {
-    const element = document.querySelector(elementSelector);
-    const classes = element?.getAttribute('class') ?? '';
-
-    element?.setAttribute('class', classes.replace(className, ''));
+    document.querySelector(elementSelector)?.classList.remove(className);
   },
   { elementSelector: selector, className: value },
 );
