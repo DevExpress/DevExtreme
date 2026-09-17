@@ -19,7 +19,7 @@
       <div class="dx-icon-sparkle"/>
     </template>
     <DxColumn
-      data-field="Model"
+      caption="Model"
       :calculate-cell-value="calculateModel"
     />
     <DxColumn

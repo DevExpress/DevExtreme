@@ -74,7 +74,7 @@ export default function App() {
         cellRender={renderSparkleIcon}
       />
       <Column
-        dataField="Model"
+        caption="Model"
         calculateCellValue={calculateModel}
       />
       <Column
