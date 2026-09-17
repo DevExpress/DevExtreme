@@ -1,4 +1,4 @@
-The DevExtreme Scheduler supports multilevel resource grouping to organize appointments as a hierarchy. in In this demo, the Scheduler groups employees by room, so you can view each employee's schedule based on their assigned room.
+The DevExtreme Scheduler supports multilevel resource grouping to organize appointments as a hierarchy. In this demo, the Scheduler groups employees by room, so you can view each employee's schedule based on their assigned room.
 
 Switch between **Vertical Grouping** and **Horizontal Grouping** to change the layout. Each view sets the [groupOrientation](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#groupOrientation) property to control the layout.
 <!--split-->
