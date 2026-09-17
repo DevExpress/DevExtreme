@@ -270,6 +270,35 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         });
     });
 
+    QUnit.test('pixel pane sizes should not be squeezed by another pane maxSize on initial render', function(assert) {
+        this.reinit({
+            width: 982,
+            height: 408,
+            dataSource: [{ size: '140px', minSize: '70px' }, { maxSize: '75%' }, { size: '140px', resizable: false }],
+            orientation: 'horizontal',
+        });
+
+        this.checkItemSizes([140, 692, 140]);
+        this.assertLayout(['14.4033', '71.1934', '14.4033']);
+    });
+
+    QUnit.test('pixel pane sizes should be preserved when splitter is repainted after its container was resized', function(assert) {
+        $('#splitterParentContainer').css('width', 1018);
+        this.reinit({
+            height: 408,
+            dataSource: [{ size: '140px', minSize: '70px' }, { }, { size: '140px', resizable: false }],
+            orientation: 'horizontal',
+        }, '#splitterInContainer');
+
+        this.checkItemSizes([140, 728, 140]);
+
+        $('#splitterParentContainer').css('width', 982);
+        this.instance.repaint();
+
+        this.checkItemSizes([140, 692, 140]);
+        this.assertLayout(['14.4033', '71.1934', '14.4033']);
+    });
+
     [{
         resizeDistance: 100,
         dataSource: [{ size: '50%', minSize: '30%' }, { }],
