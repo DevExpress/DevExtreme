@@ -349,7 +349,7 @@ importers:
         version: 21.2.24(2740fd385b37379c6657ad935ad7d380)
       '@angular/cli':
         specifier: catalog:angular
-        version: 21.2.24(@types/node@20.11.17)(chokidar@5.0.0)
+        version: 21.2.24(@types/node@20.11.17)(chokidar@5.0.0)(supports-color@7.2.0)
       '@types/jasmine':
         specifier: 5.1.4
         version: 5.1.4
@@ -810,13 +810,13 @@ importers:
         version: 3.3.4(webpack@5.105.4)
       ts-loader:
         specifier: 9.5.4
-        version: 9.5.4(typescript@4.9.5)(webpack@5.105.4)
+        version: 9.5.4(typescript@5.9.3)(webpack@5.105.4)
       tsconfig-paths-webpack-plugin:
         specifier: 4.1.0
         version: 4.1.0
       typescript:
-        specifier: 4.9.5
-        version: 4.9.5
+        specifier: catalog:tools
+        version: 5.9.3
       webpack:
         specifier: 5.105.4
         version: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(webpack-cli@5.1.4)
@@ -16497,10 +16497,6 @@ packages:
   undici-types@8.3.0:
     resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
-  undici@7.29.0:
-    resolution: {integrity: sha512-IDxfleLmmbSskfWSUATiN1nfn2rDuvnMOqb5CWR92iIfojA0Ud+ulOAAEQ57LPr9rWmsreUyf5lwyao+7GNNVw==}
-    engines: {node: '>=20.18.1'}
-
   undici@7.29.1:
     resolution: {integrity: sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q==}
     engines: {node: '>=20.18.1'}
@@ -18104,14 +18100,14 @@ snapshots:
       - tsx
       - yaml
 
-  '@angular/cli@21.2.24(@types/node@20.11.17)(chokidar@5.0.0)':
+  '@angular/cli@21.2.24(@types/node@20.11.17)(chokidar@5.0.0)(supports-color@7.2.0)':
     dependencies:
       '@angular-devkit/architect': 0.2102.24(chokidar@5.0.0)
       '@angular-devkit/core': 21.2.24(chokidar@5.0.0)
       '@angular-devkit/schematics': 21.2.24(chokidar@5.0.0)
       '@inquirer/prompts': 7.10.1(@types/node@20.11.17)
       '@listr2/prompt-adapter-inquirer': 3.0.5(@inquirer/prompts@7.10.1(@types/node@20.11.17))(@types/node@20.11.17)(listr2@9.0.5)
-      '@modelcontextprotocol/sdk': 1.30.0(zod@4.3.6)
+      '@modelcontextprotocol/sdk': 1.30.0(supports-color@7.2.0)(zod@4.3.6)
       '@schematics/angular': 21.2.24(chokidar@5.0.0)
       '@yarnpkg/lockfile': 1.1.0
       algoliasearch: 5.48.1
@@ -18119,7 +18115,7 @@ snapshots:
       jsonc-parser: 3.3.1
       listr2: 9.0.5
       npm-package-arg: 13.0.2
-      pacote: 21.5.1
+      pacote: 21.5.1(supports-color@7.2.0)
       parse5-html-rewriting-stream: 8.0.0
       semver: 7.7.4
       yargs: 18.0.0
@@ -18137,7 +18133,7 @@ snapshots:
       '@angular-devkit/schematics': 21.2.24(chokidar@5.0.0)
       '@inquirer/prompts': 7.10.1(@types/node@20.19.37)
       '@listr2/prompt-adapter-inquirer': 3.0.5(@inquirer/prompts@7.10.1(@types/node@20.19.37))(@types/node@20.19.37)(listr2@9.0.5)
-      '@modelcontextprotocol/sdk': 1.30.0(zod@4.3.6)
+      '@modelcontextprotocol/sdk': 1.30.0(supports-color@7.2.0)(zod@4.3.6)
       '@schematics/angular': 21.2.24(chokidar@5.0.0)
       '@yarnpkg/lockfile': 1.1.0
       algoliasearch: 5.48.1
@@ -18145,7 +18141,7 @@ snapshots:
       jsonc-parser: 3.3.1
       listr2: 9.0.5
       npm-package-arg: 13.0.2
-      pacote: 21.5.1
+      pacote: 21.5.1(supports-color@7.2.0)
       parse5-html-rewriting-stream: 8.0.0
       semver: 7.7.4
       yargs: 18.0.0
@@ -18163,7 +18159,7 @@ snapshots:
       '@angular-devkit/schematics': 21.2.24(chokidar@5.0.0)
       '@inquirer/prompts': 7.10.1(@types/node@26.1.1)
       '@listr2/prompt-adapter-inquirer': 3.0.5(@inquirer/prompts@7.10.1(@types/node@26.1.1))(@types/node@26.1.1)(listr2@9.0.5)
-      '@modelcontextprotocol/sdk': 1.30.0(zod@4.3.6)
+      '@modelcontextprotocol/sdk': 1.30.0(supports-color@7.2.0)(zod@4.3.6)
       '@schematics/angular': 21.2.24(chokidar@5.0.0)
       '@yarnpkg/lockfile': 1.1.0
       algoliasearch: 5.48.1
@@ -18171,7 +18167,7 @@ snapshots:
       jsonc-parser: 3.3.1
       listr2: 9.0.5
       npm-package-arg: 13.0.2
-      pacote: 21.5.1
+      pacote: 21.5.1(supports-color@7.2.0)
       parse5-html-rewriting-stream: 8.0.0
       semver: 7.7.4
       yargs: 18.0.0
@@ -22279,7 +22275,7 @@ snapshots:
       '@lezer/lr': 1.4.10
       json5: 2.2.3
 
-  '@modelcontextprotocol/sdk@1.30.0(zod@4.3.6)':
+  '@modelcontextprotocol/sdk@1.30.0(supports-color@7.2.0)(zod@4.3.6)':
     dependencies:
       '@hono/node-server': 2.0.12(hono@4.13.7)
       ajv: 8.20.0
@@ -22289,7 +22285,7 @@ snapshots:
       cross-spawn: 7.0.6
       eventsource: 3.0.7
       eventsource-parser: 3.0.8
-      express: 5.2.1
+      express: 5.2.1(supports-color@7.2.0)
       express-rate-limit: 8.3.2(express@5.2.1)
       hono: 4.13.7
       jose: 6.2.2
@@ -22311,7 +22307,7 @@ snapshots:
       cross-spawn: 7.0.6
       eventsource: 3.0.7
       eventsource-parser: 3.0.8
-      express: 5.2.1
+      express: 5.2.1(supports-color@7.2.0)
       express-rate-limit: 8.3.2(express@5.2.1)
       hono: 4.13.7
       jose: 6.2.2
@@ -23960,10 +23956,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@sigstore/tuf@4.0.2':
+  '@sigstore/tuf@4.0.2(supports-color@7.2.0)':
     dependencies:
       '@sigstore/protobuf-specs': 0.5.1
-      tuf-js: 4.1.0
+      tuf-js: 4.1.0(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -26565,7 +26561,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  body-parser@2.3.0:
+  body-parser@2.3.0(supports-color@7.2.0):
     dependencies:
       bytes: 3.1.2
       content-type: 2.0.0
@@ -26921,7 +26917,7 @@ snapshots:
       parse5: 7.3.0
       parse5-htmlparser2-tree-adapter: 7.1.0
       parse5-parser-stream: 7.1.2
-      undici: 7.29.0
+      undici: 7.29.1
       whatwg-mimetype: 4.0.0
     optional: true
 
@@ -29177,7 +29173,7 @@ snapshots:
 
   express-rate-limit@8.3.2(express@5.2.1):
     dependencies:
-      express: 5.2.1
+      express: 5.2.1(supports-color@7.2.0)
       ip-address: 10.4.0
 
   express@4.22.1:
@@ -29216,10 +29212,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  express@5.2.1:
+  express@5.2.1(supports-color@7.2.0):
     dependencies:
       accepts: 2.0.0
-      body-parser: 2.3.0
+      body-parser: 2.3.0(supports-color@7.2.0)
       content-disposition: 1.1.0
       content-type: 1.0.5
       cookie: 0.7.2
@@ -29229,7 +29225,7 @@ snapshots:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
-      finalhandler: 2.1.1
+      finalhandler: 2.1.1(supports-color@7.2.0)
       fresh: 2.0.0
       http-errors: 2.0.1
       merge-descriptors: 2.0.0
@@ -29240,8 +29236,8 @@ snapshots:
       proxy-addr: 2.0.7
       qs: 6.16.0
       range-parser: 1.3.0
-      router: 2.2.0
-      send: 1.2.1
+      router: 2.2.0(supports-color@7.2.0)
+      send: 1.2.1(supports-color@7.2.0)
       serve-static: 2.2.1
       statuses: 2.0.2
       type-is: 2.1.0
@@ -29397,7 +29393,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  finalhandler@2.1.1:
+  finalhandler@2.1.1(supports-color@7.2.0):
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       encodeurl: 2.0.0
@@ -33694,7 +33690,7 @@ snapshots:
 
   package-json-from-dist@1.0.1: {}
 
-  pacote@21.5.1:
+  pacote@21.5.1(supports-color@7.2.0):
     dependencies:
       '@gar/promise-retry': 1.0.3
       '@npmcli/git': 7.0.2
@@ -33710,7 +33706,7 @@ snapshots:
       npm-pick-manifest: 11.0.3
       npm-registry-fetch: 19.1.1
       proc-log: 6.1.0
-      sigstore: 4.1.1
+      sigstore: 4.1.1(supports-color@7.2.0)
       ssri: 13.0.1
       tar: 7.5.21
     transitivePeerDependencies:
@@ -34848,7 +34844,7 @@ snapshots:
       '@rollup/rollup-win32-x64-msvc': 4.59.0
       fsevents: 2.3.3
 
-  router@2.2.0:
+  router@2.2.0(supports-color@7.2.0):
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       depd: 2.0.0
@@ -35152,7 +35148,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  send@1.2.1:
+  send@1.2.1(supports-color@7.2.0):
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       encodeurl: 2.0.0
@@ -35196,7 +35192,7 @@ snapshots:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       parseurl: 1.3.3
-      send: 1.2.1
+      send: 1.2.1(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -35308,13 +35304,13 @@ snapshots:
     dependencies:
       jquery: 4.0.0
 
-  sigstore@4.1.1:
+  sigstore@4.1.1(supports-color@7.2.0):
     dependencies:
       '@sigstore/bundle': 4.0.0
       '@sigstore/core': 3.2.1
       '@sigstore/protobuf-specs': 0.5.1
       '@sigstore/sign': 4.1.1
-      '@sigstore/tuf': 4.0.2
+      '@sigstore/tuf': 4.0.2(supports-color@7.2.0)
       '@sigstore/verify': 3.1.1
     transitivePeerDependencies:
       - supports-color
@@ -36619,6 +36615,16 @@ snapshots:
       typescript: 4.9.5
       webpack: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(webpack-cli@5.1.4)
 
+  ts-loader@9.5.4(typescript@5.9.3)(webpack@5.105.4):
+    dependencies:
+      chalk: 4.1.2
+      enhanced-resolve: 5.20.1
+      micromatch: 4.0.8
+      semver: 7.7.4
+      source-map: 0.7.6
+      typescript: 5.9.3
+      webpack: 5.105.4(@swc/core@1.15.30(@swc/helpers@0.5.21))(webpack-cli@5.1.4)
+
   ts-morph@21.0.1:
     dependencies:
       '@ts-morph/common': 0.22.0
@@ -36775,7 +36781,7 @@ snapshots:
 
   tty-browserify@0.0.1: {}
 
-  tuf-js@4.1.0:
+  tuf-js@4.1.0(supports-color@7.2.0):
     dependencies:
       '@tufjs/models': 4.1.0
       debug: 4.4.3(supports-color@7.2.0)
@@ -36888,9 +36894,6 @@ snapshots:
   undici-types@6.21.0: {}
 
   undici-types@8.3.0:
-    optional: true
-
-  undici@7.29.0:
     optional: true
 
   undici@7.29.1: {}
