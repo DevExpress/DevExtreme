@@ -4,16 +4,6 @@ import { pathToFileURL } from 'url';
 import postcss, { Declaration, Rule } from 'postcss';
 import { compileStringAsync, SassString, Value } from 'sass-embedded';
 
-/*
- * A declaration nobody ever sees: the same property is declared again later for every selector
- * of its rule, in the same at-rule context, so the cascade always picks the later one. Base and
- * theme layers grow these when a theme repaints what base already set, and the two layers meet
- * only in a compiled bundle - hence real bundles, not files.
- *
- * A source position is reported only when every one of its emissions, in every bundle, is dead.
- * A mixin repainted at one of its call sites is fine.
- */
-
 jest.setTimeout(300000);
 
 const packageRoot = path.resolve(__dirname, '..');
@@ -177,8 +167,14 @@ describe('declarations the cascade never renders', () => {
     expect(bundles).toBe(getThemes().length);
   });
 
+  test('every baseline entry carries a reason', () => {
+    const unexplained = baseline.filter((entry) => !entry.reason || !entry.reason.trim());
+
+    expect(unexplained.map(signature)).toEqual([]);
+  });
+
   test('every dead declaration is removed or listed in the baseline with a reason', () => {
-    const known = new Set(baseline.map(signature));
+    const known = new Set(baseline.filter((entry) => entry.reason && entry.reason.trim()).map(signature));
     const unexpected = dead.filter((position) => !known.has(signature(position)));
 
     const report = unexpected.map((position) => [
