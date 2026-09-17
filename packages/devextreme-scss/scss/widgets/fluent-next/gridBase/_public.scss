@@ -8,6 +8,8 @@
 @mixin publish {
   --dx-grid-adaptive-column-height: #{$grid-adaptive-column-height};
   --dx-grid-after-inset-inline-end: #{$grid-after-inset-inline-end};
+  --dx-grid-ai-chat-empty-icon-bg: #{$grid-ai-chat-empty-icon-bg};
+  --dx-grid-ai-chat-empty-icon-content: #{$grid-ai-chat-empty-icon-content};
   --dx-grid-ai-chat-message-border: #{$grid-ai-chat-message-border};
   --dx-grid-ai-chat-message-content-gap: #{$grid-ai-chat-message-content-gap};
   --dx-grid-ai-chat-message-error-content: #{$grid-ai-chat-message-error-content};

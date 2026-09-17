@@ -7,9 +7,9 @@
   $gantt-view-min-width: var(--dx-gantt-view-min-width),
 );
 @use "../../base/gantt/mixins" as *;
-@use "../gridBase/colors" as gridBaseColors;
 @use "../form/sizes" as formSizes;
 @use "../splitterBar";
+@use "../gridBase/colors" as gridBaseColors;
 
 .dx-gantt {
   border: var(--dx-gantt-border-width) solid;

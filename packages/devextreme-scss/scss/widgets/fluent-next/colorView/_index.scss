@@ -26,7 +26,7 @@
   $color-view-alpha-cell-margin-block: var(--dx-color-view-alpha-cell-margin-block),
   $color-view-apply-button-margin-inline-end: var(--dx-color-view-apply-button-margin-inline-end),
 );
-@include dx-base-colorview-styles(var(--dx-color-view-handle-content), var(--dx-color-view-handle-border));
+@include dx-base-colorview-styles(var(--dx-color-view-handle-bg), var(--dx-color-view-handle-border));
 
 .dx-colorview-container {
   label {

@@ -5,7 +5,6 @@
 @use "../../base/icon_fonts" as *;
 @use "../list/sizes" as listSizes;
 @use "../button/mixins" as *;
-@use "../button/colors" as buttonColors;
 @use "mixins" as *;
 @use "../button/sizes" as buttonSizes;
 @use "../../base/toolbar/mixins" as *;
@@ -106,49 +105,57 @@
   .dx-toolbar-hidden-button {
     .dx-button-normal {
       @include dx-button-flat-color-styling(
-        buttonColors.$button-normal-contained-content,
-        buttonColors.$button-normal-contained-content,
-        buttonColors.$button-normal-contained-content,
-        buttonColors.$button-normal-text-bg,
-        buttonColors.$button-normal-contained-bg-hovered,
-        buttonColors.$button-normal-contained-bg-focused,
-        buttonColors.$button-normal-contained-bg-active
+        var(--dx-button-normal-contained-content),
+        var(--dx-button-normal-contained-content),
+        var(--dx-button-normal-contained-content),
+        var(--dx-button-normal-text-bg),
+        var(--dx-button-normal-text-bg-hovered),
+        var(--dx-button-normal-text-bg-focused),
+        var(--dx-button-normal-text-bg-active),
+        var(--dx-button-normal-text-bg-selected),
+        var(--dx-button-normal-contained-content-selected)
       );
     }
 
     .dx-button-default {
       @include dx-button-flat-color-styling(
-        buttonColors.$button-default-text-content,
-        buttonColors.$button-default-text-content-hovered,
-        buttonColors.$button-default-outlined-content-active,
-        buttonColors.$button-default-text-bg,
-        buttonColors.$button-default-outlined-bg-hovered,
-        buttonColors.$button-default-outlined-bg-focused,
-        buttonColors.$button-default-outlined-bg-active
+        var(--dx-button-default-text-content),
+        var(--dx-button-default-text-content-hovered),
+        var(--dx-button-default-text-content-active),
+        var(--dx-button-default-text-bg),
+        var(--dx-button-default-text-bg-hovered),
+        var(--dx-button-default-text-bg-focused),
+        var(--dx-button-default-text-bg-active),
+        var(--dx-button-default-text-bg-selected),
+        var(--dx-button-default-text-content-selected)
       );
     }
 
     .dx-button-danger {
       @include dx-button-flat-color-styling(
-        buttonColors.$button-danger-contained-bg,
-        buttonColors.$button-danger-contained-bg,
-        buttonColors.$button-danger-contained-bg,
-        buttonColors.$button-danger-text-bg,
-        buttonColors.$button-danger-outlined-bg-hovered,
-        buttonColors.$button-danger-outlined-bg-focused,
-        buttonColors.$button-danger-outlined-bg-active
+        var(--dx-button-danger-text-content),
+        var(--dx-button-danger-text-content-hovered),
+        var(--dx-button-danger-text-content-active),
+        var(--dx-button-danger-text-bg),
+        var(--dx-button-danger-text-bg-hovered),
+        var(--dx-button-danger-text-bg-focused),
+        var(--dx-button-danger-text-bg-active),
+        var(--dx-button-danger-text-bg-selected),
+        var(--dx-button-danger-text-content-selected)
       );
     }
 
     .dx-button-success {
       @include dx-button-flat-color-styling(
-        buttonColors.$button-success-contained-bg,
-        buttonColors.$button-success-contained-bg,
-        buttonColors.$button-success-contained-bg,
-        buttonColors.$button-success-text-bg,
-        buttonColors.$button-success-outlined-bg-hovered,
-        buttonColors.$button-success-outlined-bg-hovered,
-        buttonColors.$button-success-outlined-bg-active
+        var(--dx-button-success-text-content),
+        var(--dx-button-success-text-content-hovered),
+        var(--dx-button-success-text-content-active),
+        var(--dx-button-success-text-bg),
+        var(--dx-button-success-text-bg-hovered),
+        var(--dx-button-success-text-bg-focused),
+        var(--dx-button-success-text-bg-active),
+        var(--dx-button-success-text-bg-selected),
+        var(--dx-button-success-text-content-selected)
       );
     }
 

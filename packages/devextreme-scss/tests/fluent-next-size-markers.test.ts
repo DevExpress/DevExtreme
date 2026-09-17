@@ -97,3 +97,29 @@ test('no marker name is a substring of a custom property name used in the theme'
     .map((name) => `marker "${marker}" is contained in --${name}: rename the marker`));
   expect(collisions).toEqual([]);
 });
+
+/*
+ * A glyph is sized from the spacing scale, not from a typography one.
+ *
+ * Measured on the package at 262.23.0: every icon size core, vnext, blazor and wpf declare comes
+ * from spacing (icon.size = {spacing.120} / {spacing.160} / {spacing.200}), at every density, and
+ * not one from font-size. The theme read font-size in fifteen places until they were moved, and the
+ * move cost nothing because font-size-N and spacing-N resolve to the same rem at every step - which
+ * is exactly why the two are easy to confuse again. A `font-size` that happens to be right is the
+ * failure mode this catches.
+ *
+ * Deliberately narrow: it matches a variable whose own name says it sizes a glyph. The rest of
+ * tools/review/sizes.mjs stays a report - see the note in its header for why a step cannot be
+ * gated the way a colour family can.
+ */
+test('glyph sizes read the spacing scale, not a typography one', () => {
+  const TYPOGRAPHY = /ds\.\$(font-size|line-height|font-weight)-/;
+  const GLYPH = /^\$[a-z0-9-]*(icon|glyph|chevron|arrow)[a-z0-9-]*\s*:/;
+  const offenders = walk(themeRoot)
+    .filter((file) => basename(file) === '_sizes.scss')
+    .flatMap((file) => readFileSync(file, 'utf8').split('\n')
+      .map((line, index) => ({ file, line, number: index + 1 }))
+      .filter(({ line }) => GLYPH.test(line.trim()) && TYPOGRAPHY.test(line))
+      .map(({ file: f, number }) => `${f.replace(`${packageRoot}/`, '')}:${number}`));
+  expect(offenders).toEqual([]);
+});

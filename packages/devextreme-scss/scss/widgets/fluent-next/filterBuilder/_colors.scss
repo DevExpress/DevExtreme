@@ -4,7 +4,7 @@ $filter-builder-bg: ds.$color-bg !default;
 
 $filter-builder-content: ds.$color-content !default;
 
-$filter-builder-text-content-focused: ds.$color-content-static-dark !default;
+$filter-builder-text-content-focused: ds.$color-content !default;
 
 $filter-builder-plus-icon-content-disabled: ds.$color-content-disabled !default;
 $filter-builder-plus-icon: ds.$color-content-success !default;
@@ -16,23 +16,23 @@ $filter-builder-remove-icon: ds.$color-content-danger !default;
 $filter-builder-remove-icon-content-hovered: ds.$color-content-danger-hovered !default;
 $filter-builder-remove-icon-content-focused: ds.$color-content-danger-active !default;
 
-$filter-builder-group-operation-content-disabled: ds.$color-bg-disabled !default;
-$filter-builder-item-field-content-disabled: ds.$color-bg-disabled !default;
-$filter-builder-group-operation-content: ds.$color-bg-danger-subtle !default;
-$filter-builder-group-operation-content-hovered: ds.$color-bg-danger-subtle-hovered !default;
-$filter-builder-group-operation-content-focused: ds.$color-bg-danger !default;
+$filter-builder-group-operation-bg-disabled: ds.$color-bg-disabled !default;
+$filter-builder-item-field-bg-disabled: ds.$color-bg-disabled !default;
+$filter-builder-group-operation-bg: ds.$color-bg-primary-subtle !default;
+$filter-builder-group-operation-bg-hovered: ds.$color-bg-primary-subtle-hovered !default;
+$filter-builder-group-operation-bg-focused: ds.$color-bg-primary-subtle-active !default;
 
-$filter-builder-item-field-content: ds.$color-bg-primary-subtle !default;
-$filter-builder-item-field-content-hovered: ds.$color-bg-primary-subtle-hovered !default;
-$filter-builder-item-field-content-focused: ds.$color-bg-primary !default;
+$filter-builder-item-field-bg: ds.$color-bg-warning-subtle !default;
+$filter-builder-item-field-bg-hovered: ds.$color-bg-warning-subtle-hovered !default;
+$filter-builder-item-field-bg-focused: ds.$color-bg-warning-subtle-active !default;
 
-$filter-builder-item-operator-content: ds.$color-bg-success-subtle !default;
-$filter-builder-item-operator-content-hovered: ds.$color-bg-success-subtle-hovered !default;
-$filter-builder-item-operator-content-focused: ds.$color-bg-success !default;
+$filter-builder-item-operator-bg: ds.$color-bg-info-subtle !default;
+$filter-builder-item-operator-bg-hovered: ds.$color-bg-info-subtle-hovered !default;
+$filter-builder-item-operator-bg-focused: ds.$color-bg-info-subtle-active !default;
 
-$filter-builder-item-value-content: ds.$color-bg-secondary-selected !default;
-$filter-builder-item-value-content-hovered: ds.$color-bg-alpha-hovered !default;
-$filter-builder-item-value-content-focused: ds.$color-bg-alpha-active !default;
+$filter-builder-item-value-bg: ds.$color-bg-success-subtle !default;
+$filter-builder-item-value-bg-hovered: ds.$color-bg-success-subtle-hovered !default;
+$filter-builder-item-value-bg-focused: ds.$color-bg-success-subtle-active !default;
 $filter-builder-menu-icon: ds.$color-content !default;
 
 // Base-layer values injected with design tokens (wave B1)

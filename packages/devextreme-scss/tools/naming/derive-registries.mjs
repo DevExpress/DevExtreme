@@ -159,6 +159,12 @@ const OVERRIDES = {
      * from that editor's min-height.
      */
     list: ['check-box', 'radio-button', 'text-editor'],
+    /*
+     * A tree node in showCheckBoxesMode renders a real CheckBox, and the select-all row IS one. The
+     * node takes focus, the check box inside it does not, so the tree has to paint the focused state
+     * itself - with the check box's own decisions, exactly as the list does.
+     */
+    treeView: ['check-box'],
     // the colour box's drop-down content IS a ColorView
     colorBox: ['color-view'],
     // the field chooser's tree is a TreeView
@@ -1060,7 +1066,7 @@ const OVERRIDES = {
       'overlay', 'item', 'popup', 'content', 'title', 'container', 'cell', 'button',
       'apply-button', 'input',
     ],
-    'date-range-box': ['active-bar', 'custom-button', 'input'],
+    'date-range-box': ['active-bar', 'custom-button', 'input', 'separator'],
     'select-box': ['list'],
     lookup: ['field', 'search', 'arrow', 'popup', 'content'],
     'tag-box': ['tag', 'content', 'container', 'remove-button', 'select-all', 'list'],
