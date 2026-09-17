@@ -1,7 +1,7 @@
 import type { CompatibilityColumnsController } from './columns_controller/compatibility';
 import type { CompatibilityDataController } from './data_controller';
 import type { CompatibilityDataSourceController } from './data_source/compatibility';
-import type { CompatibilityFilterSyncController } from './filtering/filter_sync/compatibility';
+import type { CompatibilityFilterBuilderController } from './filtering/filter_builder/compatibility';
 import type { CompatibilityHeaderFilterController } from './filtering/header_filter/compatibility';
 import type { GridCoreNewBase } from './widget';
 
@@ -13,7 +13,7 @@ export class WidgetMock {
     dataSource: this.dataSource,
     columns: this.columns,
     headerFilter: this.headerFilter,
-    filterSync: this.filterSync,
+    filterBuilder: this.filterBuilder,
   };
 
   constructor(
@@ -23,7 +23,7 @@ export class WidgetMock {
     private readonly dataSource: CompatibilityDataSourceController,
     private readonly columns: CompatibilityColumnsController,
     private readonly headerFilter: CompatibilityHeaderFilterController,
-    private readonly filterSync: CompatibilityFilterSyncController,
+    private readonly filterBuilder: CompatibilityFilterBuilderController,
   ) {}
 
   public option(...args: unknown[]): unknown {

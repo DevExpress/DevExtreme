@@ -8,8 +8,6 @@ import  dxTreeList from "devextreme/ui/tree_list";
 import  dxOverlay from "devextreme/ui/overlay";
 import  DOMComponent from "devextreme/core/dom_component";
 import  dxPopup from "devextreme/ui/popup";
-import  dxSortable from "devextreme/ui/sortable";
-import  dxDraggable from "devextreme/ui/draggable";
 import {
  AIAssistant,
  ColumnChooser,
@@ -46,7 +44,6 @@ import {
  EnterKeyAction,
  EnterKeyDirection,
  PagerPageSize,
- GridBase,
  DataRenderMode,
  StateStoreType,
 } from "devextreme/common/grids";
@@ -106,6 +103,13 @@ import {
  dxTreeListColumnButton,
  TreeListCommandColumnType,
  TreeListPredefinedToolbarItem,
+ RowDraggingAddEvent,
+ RowDraggingChangeEvent,
+ RowDraggingEndEvent,
+ RowDraggingMoveEvent,
+ RowDraggingStartEvent,
+ RowDraggingRemoveEvent,
+ RowDraggingReorderEvent,
  dxTreeListToolbarItem,
 } from "devextreme/ui/tree_list";
 import {
@@ -1260,7 +1264,6 @@ const DxColumnChooserConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:container": null,
     "update:emptyPanelText": null,
     "update:enabled": null,
@@ -1268,14 +1271,12 @@ const DxColumnChooserConfig = {
     "update:mode": null,
     "update:position": null,
     "update:search": null,
-    "update:searchTimeout": null,
     "update:selection": null,
     "update:sortOrder": null,
     "update:title": null,
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     container: {},
     emptyPanelText: String,
     enabled: Boolean,
@@ -1283,7 +1284,6 @@ const DxColumnChooserConfig = {
     mode: String as PropType<ColumnChooserMode>,
     position: Object as PropType<PositionConfig | Record<string, any>>,
     search: Object as PropType<ColumnChooserSearchConfig | Record<string, any>>,
-    searchTimeout: Number,
     selection: Object as PropType<ColumnChooserSelectionConfig | Record<string, any>>,
     sortOrder: String as PropType<SortOrder>,
     title: String,
@@ -1401,7 +1401,6 @@ const DxColumnHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
@@ -1411,7 +1410,6 @@ const DxColumnHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
@@ -2579,7 +2577,6 @@ const DxHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
@@ -2592,7 +2589,6 @@ const DxHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
@@ -3444,13 +3440,13 @@ const DxRowDraggingConfig = {
     filter: String,
     group: String,
     handle: String,
-    onAdd: Function as PropType<((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onDragChange: Function as PropType<((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onDragEnd: Function as PropType<((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onDragMove: Function as PropType<((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onDragStart: Function as PropType<((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void)>,
-    onRemove: Function as PropType<((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onReorder: Function as PropType<((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
+    onAdd: Function as PropType<((e: RowDraggingAddEvent) => void)>,
+    onDragChange: Function as PropType<((e: RowDraggingChangeEvent) => void)>,
+    onDragEnd: Function as PropType<((e: RowDraggingEndEvent) => void)>,
+    onDragMove: Function as PropType<((e: RowDraggingMoveEvent) => void)>,
+    onDragStart: Function as PropType<((e: RowDraggingStartEvent) => void)>,
+    onRemove: Function as PropType<((e: RowDraggingRemoveEvent) => void)>,
+    onReorder: Function as PropType<((e: RowDraggingReorderEvent) => void)>,
     scrollSensitivity: Number,
     scrollSpeed: Number,
     showDragIcons: Boolean
@@ -4142,7 +4138,6 @@ const DxTreeListHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
@@ -4152,7 +4147,6 @@ const DxTreeListHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: [Number, String],
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,

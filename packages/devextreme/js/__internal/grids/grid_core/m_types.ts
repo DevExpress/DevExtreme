@@ -212,6 +212,7 @@ export interface Controllers {
   export: import('../data_grid/export/m_export').ExportController;
   filter: import('./filter/filter_controller').FilterController;
   filterSync: import('./filter_sync/m_filter_sync').FilterSyncController;
+  filterBuilder: import('./filter_builder/m_filter_builder').FilterBuilderController;
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;

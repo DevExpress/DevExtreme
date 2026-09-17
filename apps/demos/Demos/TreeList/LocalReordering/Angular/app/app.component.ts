@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
-import { DxTreeListModule, DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
-import { Service, Employee } from './app.service';
+import { DxTreeListModule, type DxTreeListTypes } from 'devextreme-angular/ui/tree-list';
+import { Service, type Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

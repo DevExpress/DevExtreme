@@ -403,7 +403,7 @@ QUnit.module('getCombinedFilter', {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
             this.options = options;
-            setupDataGridModules(this, ['columns', 'data', 'headerFilter', 'filterRow', 'filterSync'], {
+            setupDataGridModules(this, ['columns', 'data', 'headerFilter', 'filterRow', 'filterSync', 'filterBuilder'], {
                 initViews: false
             });
         };

@@ -1,5 +1,4 @@
 import { isDefined } from '@js/core/utils/type';
-import type { CustomOperation } from '@js/ui/filter_builder';
 import {
   addItem,
   getMatchedConditions,
@@ -11,10 +10,11 @@ import type {
 } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
-import type { FilterValue, FilterValueCondition } from '@ts/grids/grid_core/filter/types';
+import type {
+  FilterValue, FilterValueCondition,
+} from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 
-import { anyOf, noneOf } from './m_filter_custom_operations';
 import {
   checkForErrors,
   getColumnIdentifier,
@@ -49,20 +49,18 @@ export class FilterSyncController extends modules.Controller {
     }
   }
 
-  public publicMethods(): string[] {
-    return ['getCustomFilterOperations'];
-  }
-
   public isSyncingColumnOptions(): boolean {
     return this.skipSyncColumnOptions;
   }
 
   public withColumnOptionsSync<T>(sync: () => T): T {
+    const wasSyncing = this.skipSyncColumnOptions;
+
     this.skipSyncColumnOptions = true;
     try {
-      return sync();
+      return this.filterController.suspendColumnSources(sync);
     } finally {
-      this.skipSyncColumnOptions = false;
+      this.skipSyncColumnOptions = wasSyncing;
     }
   }
 
@@ -166,16 +164,5 @@ export class FilterSyncController extends modules.Controller {
     const syncedFilterValue = getFilterValueWithHeaderFilter(filterValue, column);
 
     this.option('filterValue', syncedFilterValue);
-  }
-
-  // Override in the private API WA [T1232532]
-  public getCustomFilterOperations(): CustomOperation[] {
-    const filterBuilderCustomOperations = this.option('filterBuilder.customOperations') ?? [];
-
-    return [
-      anyOf(this.component),
-      noneOf(this.component),
-      ...filterBuilderCustomOperations,
-    ];
   }
 }

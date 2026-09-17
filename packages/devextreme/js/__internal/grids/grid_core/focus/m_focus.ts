@@ -9,6 +9,7 @@ import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/data_controller';
+import type { DataChange } from '../data_controller/types';
 import type { EditingController } from '../editing/m_editing';
 import { isNewRowTempKey } from '../editing/m_editing_utils';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
@@ -27,6 +28,12 @@ const FOCUSED_ROW_SELECTOR = `.dx-row.${ROW_FOCUSED_CLASS}`;
 const TABLE_POSTFIX_CLASS = 'table';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 
+type FocusDataController = DataController
+& Partial<VirtualScrollingDataControllerExtension>
+& FocusDataControllerExtension;
+
+type FocusDataSourceController = DataSourceController & FocusDataSourceControllerExtension;
+
 export class FocusController extends core.ViewController {
   // TODO getController
   //  This controller's method used in the data_controler (and maybe others) init methods
@@ -36,17 +43,61 @@ export class FocusController extends core.ViewController {
     return this.getController('keyboardNavigation');
   }
 
-  private getDataController(): DataController
-  & Partial<VirtualScrollingDataControllerExtension> {
+  private getDataController(): FocusDataController {
+    // @ts-expect-error
     return this.getController('data');
   }
 
-  private getDataSourceController(): DataSourceController {
+  private getDataSourceController(): FocusDataSourceController {
+    // @ts-expect-error
     return this.getController('dataSource');
   }
 
   public init() {
     this.component._optionsByReference.focusedRowKey = true;
+  }
+
+  public handleDataChanged(e): void {
+    const dataController = this.getDataController();
+    const dataSourceController = this.getDataSourceController();
+    const forceUpdateFocusedRow = dataSourceController.consumeDataPushed();
+
+    if (!this.option('focusedRowEnabled') || !dataSourceController.hasAdapter()) {
+      return;
+    }
+
+    const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
+    const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
+    const isRefreshWithItems = e.changeType === 'refresh' && !!e.items.length;
+    const isAppendOrPrepend = e.changeType === 'append' || e.changeType === 'prepend';
+
+    if (forceUpdateFocusedRow && dataController.isEmpty()) {
+      this._resetFocusedRow();
+    } else if (isRefreshWithItems || isPartialUpdateWithDeleting) {
+      dataController._updatePageIndexes();
+      dataController._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
+    } else if (isAppendOrPrepend) {
+      dataController._updatePageIndexes();
+    } else if (isPartialUpdate) {
+      dataController._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
+      this.resetStaleFocusedRowAfterPartialUpdate(e);
+    }
+  }
+
+  private resetStaleFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
+    const focusedRowKey = this.option('focusedRowKey');
+
+    if (!isDefined(focusedRowKey)) {
+      return;
+    }
+
+    const focusedRowIndex = this.getDataController().getRowIndexByKey(focusedRowKey);
+    const isFocusedRowVisible = focusedRowIndex >= 0;
+    const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
+
+    if (isFocusedRowVisible && isFocusedRowInChange) {
+      this.updateFocusedRow({ focusedRowKey, preventScroll: true });
+    }
   }
 
   public optionChanged(args) {
@@ -574,12 +625,14 @@ export const columns = (Base: ModuleType<ColumnsController>) => class FocusColum
   }
 };
 
+export interface FocusDataControllerExtension {
+  _updatePageIndexes: () => void;
+  _updateFocusedRowIfNeeded: (e: DataChange, forceUpdate?: boolean) => void;
+}
+
 export const focusDataControllerExtender = (
   Base: ModuleType<DataController & Partial<VirtualScrollingDataControllerExtension>>,
 ) => class FocusDataControllerExtender extends Base {
-  protected declare dataSourceController: DataSourceController
-  & FocusDataSourceControllerExtension;
-
   private _lastRenderingPageIndex?: number;
 
   private _isPagingByRendering?: boolean;
@@ -601,50 +654,12 @@ export const focusDataControllerExtender = (
     return super._applyChange.apply(this, arguments);
   }
 
-  protected _fireChanged(e) {
+  protected _fireChanged(e: DataChange): void {
     super._fireChanged(e);
-
-    const forceUpdateFocusedRow = this.dataSourceController.consumeDataPushed();
-
-    if (this.option('focusedRowEnabled') && this.dataSourceController.hasAdapter()) {
-      const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
-      const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
-      const isRefreshWithItems = e.changeType === 'refresh' && !!e.items.length;
-      const isAppendOrPrepend = e.changeType === 'append' || e.changeType === 'prepend';
-
-      if (forceUpdateFocusedRow && this.isEmpty()) {
-        this._focusController._resetFocusedRow();
-      } else if (isRefreshWithItems || isPartialUpdateWithDeleting) {
-        this._updatePageIndexes();
-        this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
-      } else if (isAppendOrPrepend) {
-        this._updatePageIndexes();
-      } else if (isPartialUpdate) {
-        this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
-        // on a partial render the previously focused row may not be re-rendered, so its
-        // focused class survives and two rows look focused; reset the focused row to drop it
-        this._resetStaleFocusedRowAfterPartialUpdate(e);
-      }
-    }
+    this._focusController.handleDataChanged(e);
   }
 
-  private _resetStaleFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
-    const focusedRowKey = this.option('focusedRowKey');
-
-    if (!isDefined(focusedRowKey)) {
-      return;
-    }
-
-    const focusedRowIndex = this.getRowIndexByKey(focusedRowKey);
-    const isFocusedRowVisible = focusedRowIndex >= 0;
-    const isFocusedRowInChange = !!e.rowIndices?.includes(focusedRowIndex);
-
-    if (isFocusedRowVisible && isFocusedRowInChange) {
-      this._focusController.updateFocusedRow({ focusedRowKey, preventScroll: true });
-    }
-  }
-
-  private _updatePageIndexes() {
+  public _updatePageIndexes() {
     const prevRenderingPageIndex = this._lastRenderingPageIndex || 0;
     const renderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0;
 
@@ -656,7 +671,7 @@ export const focusDataControllerExtender = (
     return this._isPagingByRendering;
   }
 
-  private _updateFocusedRowIfNeeded(e, forceUpdate = false) {
+  public _updateFocusedRowIfNeeded(e, forceUpdate = false) {
     const operationTypes = e.operationTypes || {};
     const {
       reload, fullReload, pageIndex, paging,

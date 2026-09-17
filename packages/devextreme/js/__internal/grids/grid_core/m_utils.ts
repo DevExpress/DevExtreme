@@ -721,10 +721,6 @@ export default {
     const since = '23.1';
     const logWarning = component._logDeprecatedOptionWarning.bind(component);
 
-    if (isDefined(component.option('headerFilter.allowSearch'))) {
-      logWarning('headerFilter.allowSearch', { since, alias: 'headerFilter.search.enabled' });
-    }
-
     if (isDefined(component.option('headerFilter.searchTimeout'))) {
       logWarning('headerFilter.searchTimeout', { since, alias: 'headerFilter.search.timeout' });
     }
@@ -739,10 +735,6 @@ export default {
     const logSpecificDeprecatedWarningIfNeed = (columns) => {
       columns.forEach((column) => {
         const headerFilter = column.headerFilter || {};
-
-        if (isDefined(headerFilter.allowSearch)) {
-          logWarning(`${specificName}[].headerFilter.allowSearch`, { since, alias: `${specificName}[].headerFilter.search.enabled` });
-        }
 
         if (isDefined(headerFilter.searchMode)) {
           logWarning(`${specificName}[].headerFilter.searchMode`, { since, alias: `${specificName}[].headerFilter.search.mode` });
