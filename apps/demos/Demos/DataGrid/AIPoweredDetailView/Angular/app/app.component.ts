@@ -50,6 +50,7 @@ export class AppComponent {
 
   onRowCollapsing() {
     this.activeAbortRequest?.();
+    this.activeAbortRequest = undefined;
   }
 
   onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickEvent) {

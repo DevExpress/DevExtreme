@@ -40,6 +40,7 @@ export default function App() {
 
   const onRowCollapsing = useCallback(() => {
     activeAbortRequest.current?.();
+    activeAbortRequest.current = null;
   }, []);
 
   const onCellClick = useCallback(({ column, row, component, key }: DataGridTypes.CellClickEvent) => {

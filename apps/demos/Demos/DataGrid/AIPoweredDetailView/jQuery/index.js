@@ -305,6 +305,7 @@ $(() => {
     },
     onRowCollapsing() {
       activeAbortController?.abort();
+      activeAbortController = null;
     },
     onCellClick(e) {
       if (e.column.type === 'detailExpand' && e.rowType === 'data') {

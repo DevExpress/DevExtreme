@@ -86,6 +86,7 @@ function onRowExpanding({ component }: DxDataGridTypes.RowExpandingEvent) {
 
 function onRowCollapsing() {
   activeAbortRequest.value?.();
+  activeAbortRequest.value = null;
 }
 
 function onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickEvent) {
