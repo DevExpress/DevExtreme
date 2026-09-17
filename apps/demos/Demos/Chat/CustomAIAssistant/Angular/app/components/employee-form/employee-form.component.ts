@@ -52,7 +52,7 @@ export class EmployeeFormComponent {
 
   onOptionChanged(e: DxFormTypes.OptionChangedEvent): void {
     if (e.name === 'isDirty') {
-      this.dxForm.instance.getButton('Save')?.option('disabled', !e.value);
+      e.component.getButton('Save')?.option('disabled', !e.value);
     }
   }
 }

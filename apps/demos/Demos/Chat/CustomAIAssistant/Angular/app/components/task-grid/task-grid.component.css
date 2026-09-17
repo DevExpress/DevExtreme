@@ -1,4 +1,4 @@
-::ng-deep #grid-container {
+#grid-container {
   margin-top: 20px;
   min-height: 360px;
 }

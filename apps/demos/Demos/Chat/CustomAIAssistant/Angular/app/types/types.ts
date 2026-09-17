@@ -117,6 +117,5 @@ export class ChatCommandError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'ChatCommandError';
-    Object.setPrototypeOf(this, ChatCommandError.prototype);
   }
 }
