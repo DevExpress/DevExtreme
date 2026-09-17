@@ -31,10 +31,33 @@ function isPathWithin(parentDir, candidatePath) {
   return rel !== '' && !rel.startsWith('..') && !isAbsolute(rel);
 }
 
+function subdirectoryNames(dir) {
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+}
+
+// Route params are matched against real directory names so the path is built
+// from the listing rather than from the request.
+function resolveDemoSegments(widget, name, approach) {
+  const widgetNames = subdirectoryNames(demosRoot);
+  if (!widgetNames.includes(widget)) return null;
+  const widgetDir = widgetNames.find((entry) => entry === widget);
+
+  const demoNames = subdirectoryNames(join(demosRoot, widgetDir));
+  if (!demoNames.includes(name)) return null;
+  const demoDir = demoNames.find((entry) => entry === name);
+
+  const approachNames = subdirectoryNames(join(demosRoot, widgetDir, demoDir));
+  if (!approachNames.includes(approach)) return null;
+  const approachDir = approachNames.find((entry) => entry === approach);
+
+  return { widget: widgetDir, name: demoDir, approach: approachDir };
+}
+
 // Rebuilds on-demand, only for the demo actually being viewed, rather than
 // watching all ~2,500 demos.
 const BUNDLED_APPROACHES = new Set(['React', 'ReactJs', 'Vue', 'Angular']);
-const SAFE_SEGMENT = /^[A-Za-z0-9_-]+$/;
 const GENERATED_ENTRY_NAMES = new Set([
   'bundle.js', 'bundle.css', indexFileName, 'tsconfig.json', 'description.md', '_chunks',
 ]);
@@ -87,14 +110,15 @@ const demoIndexHandler = async (request, response) => {
   const { widget, name, approach } = request.params;
 
   if (widget && name && approach) {
-    if (!SAFE_SEGMENT.test(widget) || !SAFE_SEGMENT.test(name) || !SAFE_SEGMENT.test(approach)) {
-      response.status(400).type('text/plain').send('Invalid demo path');
+    const demo = resolveDemoSegments(widget, name, approach);
+    if (!demo) {
+      response.status(404).type('text/plain').send('Unknown demo');
       return;
     }
 
     let result;
     try {
-      result = await ensureBundleFresh(widget, name, approach);
+      result = await ensureBundleFresh(demo.widget, demo.name, demo.approach);
     } catch (err) {
       console.error(`demo build failed for ${widget}/${name}/${approach}:`, err);
       response.status(500).type('text/plain').send('Demo build failed — see the server console.');
