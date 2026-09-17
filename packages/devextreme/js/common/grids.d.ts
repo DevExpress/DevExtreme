@@ -1047,12 +1047,6 @@ export type ColumnFixingIcons = {
 export type ColumnHeaderFilter = {
   /**
    * @docid
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
-  /**
-   * @docid
    * @default true
    */
   allowSelectAll?: boolean;
@@ -1622,12 +1616,6 @@ export type FilterType = 'exclude' | 'include';
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilter = {
-  /**
-   * @docid
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
   /**
    * @docid
    * @default true

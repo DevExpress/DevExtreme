@@ -206,7 +206,6 @@ const FieldPanelTexts = Object.assign<typeof _componentFieldPanelTexts, NestedCo
 // owners:
 // PivotGrid
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number;
   search?: HeaderFilterSearchConfig;

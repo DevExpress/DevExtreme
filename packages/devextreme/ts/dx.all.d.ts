@@ -5175,11 +5175,6 @@ declare module DevExpress.common.grids {
    */
   export type ColumnHeaderFilter = {
     /**
-     * [descr:ColumnHeaderFilter.allowSearch]
-     * @deprecated [depNote:ColumnHeaderFilter.allowSearch]
-     */
-    allowSearch?: boolean;
-    /**
      * [descr:ColumnHeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
@@ -6369,11 +6364,6 @@ declare module DevExpress.common.grids {
    * [descr:HeaderFilter]
    */
   export type HeaderFilter = {
-    /**
-     * [descr:HeaderFilter.allowSearch]
-     * @deprecated [depNote:HeaderFilter.allowSearch]
-     */
-    allowSearch?: boolean;
     /**
      * [descr:HeaderFilter.allowSelectAll]
      */
@@ -8036,7 +8026,6 @@ declare module DevExpress.data {
      * [descr:PivotGridDataSourceOptions.fields.headerFilter]
      */
     headerFilter?: {
-      allowSearch?: boolean;
       /**
        * [descr:PivotGridDataSourceOptions.fields.headerFilter.allowSelectAll]
        */
@@ -21151,11 +21140,6 @@ declare module DevExpress.ui {
    */
   export interface dxGanttHeaderFilter {
     /**
-     * [descr:dxGanttHeaderFilter.allowSearch]
-     * @deprecated [depNote:dxGanttHeaderFilter.allowSearch]
-     */
-    allowSearch?: boolean;
-    /**
      * [descr:dxGanttHeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
@@ -24946,11 +24930,6 @@ declare module DevExpress.ui {
      */
     headerFilter?: {
       /**
-       * [descr:dxPivotGridFieldChooserOptions.headerFilter.allowSearch]
-       * @deprecated [depNote:dxPivotGridFieldChooserOptions.headerFilter.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.allowSelectAll]
        */
       allowSelectAll?: boolean;
@@ -25206,11 +25185,6 @@ declare module DevExpress.ui {
      * [descr:dxPivotGridOptions.headerFilter]
      */
     headerFilter?: {
-      /**
-       * [descr:dxPivotGridOptions.headerFilter.allowSearch]
-       * @deprecated [depNote:dxPivotGridOptions.headerFilter.allowSearch]
-       */
-      allowSearch?: boolean;
       /**
        * [descr:dxPivotGridOptions.headerFilter.allowSelectAll]
        */

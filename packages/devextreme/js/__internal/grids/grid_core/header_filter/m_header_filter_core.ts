@@ -492,14 +492,12 @@ export class HeaderFilterView extends Modules.View {
 
     const generalDeprecated = {
       search: {
-        enabled: generalHeaderFilter.allowSearch,
         timeout: generalHeaderFilter.searchTimeout,
       },
     };
 
     const specificDeprecated = {
       search: {
-        enabled: specificHeaderFilter.allowSearch,
         mode: specificHeaderFilter.searchMode,
         timeout: specificHeaderFilter.searchTimeout,
       },

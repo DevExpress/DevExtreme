@@ -238,7 +238,6 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 // owners:
 // Column
 type IColumnHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
@@ -486,7 +485,6 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // owners:
 // Gantt
 type IGanttHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number;
   search?: HeaderFilterSearchConfig;
@@ -538,7 +536,6 @@ const GanttHeaderFilterSearch = Object.assign<typeof _componentGanttHeaderFilter
 // Column
 // Gantt
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;

@@ -462,7 +462,6 @@ const CardHeaderItem = Object.assign<typeof _componentCardHeaderItem, NestedComp
 // owners:
 // CardView
 type ICardViewHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number | string;
   search?: HeaderFilterSearchConfig;
@@ -815,7 +814,6 @@ const ColumnChooserSelection = Object.assign<typeof _componentColumnChooserSelec
 // owners:
 // Column
 type IColumnHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
@@ -1559,7 +1557,6 @@ const GroupOperationDescriptions = Object.assign<typeof _componentGroupOperation
 // Column
 // CardView
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;

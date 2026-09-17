@@ -123,12 +123,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     headerFilter?: {
       /**
        * @docid
-       * @default false
-       * @deprecated
-       */
-      allowSearch?: boolean;
-      /**
-       * @docid
        * @default true
        */
       allowSelectAll?: boolean;
