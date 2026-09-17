@@ -6,12 +6,12 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import devices from '@ts/core/m_devices';
+import devices from '@ts/core/devices';
 
 import { createDraggable, disposeDraggable, fire } from './utils';
 
-jest.mock('@ts/core/m_devices', () => {
-  const originalModule: any = jest.requireActual('@ts/core/m_devices');
+jest.mock('@ts/core/devices', () => {
+  const originalModule: any = jest.requireActual('@ts/core/devices');
   const device = { mac: false, deviceType: 'desktop', platform: 'generic' };
 
   return {

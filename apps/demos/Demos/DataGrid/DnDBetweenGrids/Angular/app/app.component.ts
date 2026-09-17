@@ -2,7 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DataSourceOptions } from 'devextreme-angular/common/data';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Priority, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -47,7 +47,7 @@ export class AppComponent {
     };
   }
 
-  onAdd = (e: Parameters<DxDataGridTypes.RowDragging['onAdd']>[0]) => {
+  onAdd = (e: DxDataGridTypes.RowDraggingAddEvent) => {
     const key = e.itemData.ID;
     const values = { Status: e.toData };
 

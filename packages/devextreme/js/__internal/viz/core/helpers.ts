@@ -12,6 +12,7 @@
 
 import { noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
+import { isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 
 const isServerSide = !hasWindow();
@@ -197,3 +198,60 @@ export const replaceInherit = isServerSide
 export function changes() {
   return new Flags();
 }
+
+export function isDisabledOnServer(name: string, value: unknown): boolean {
+  return (isFunction(value) && name.substr(0, 1) !== '_' && name !== 'option')
+    || name === '_dispose'
+    || name === '_optionChanged';
+}
+
+const INHERITED_LISTS = [
+  '_plugins',
+  '_eventsMap',
+  '_initialChanges',
+  '_themeDependentChanges',
+  '_optionChangesMap',
+  '_optionChangesOrder',
+  '_layoutChangesOrder',
+  '_customChangesOrder',
+  '_totalChangesOrder',
+];
+
+export const setupWidgetPrototype = isServerSide
+  ? function (Widget, members?) {
+    const proto = Widget.prototype;
+    if (members) {
+      Object.assign(proto, members);
+    }
+    Object.getOwnPropertyNames(proto).forEach((name) => {
+      const descriptor = Object.getOwnPropertyDescriptor(proto, name);
+      if (name !== 'constructor' && descriptor && 'value' in descriptor
+        && isDisabledOnServer(name, descriptor.value)) {
+        proto[name] = noop;
+      }
+    });
+    INHERITED_LISTS.forEach((key) => {
+      proto[key] = {};
+    });
+    Widget.addPlugin = noop;
+  }
+  : function (Widget, members?) {
+    const proto = Widget.prototype;
+    const baseProto = Object.getPrototypeOf(proto);
+    if (members) {
+      Object.assign(proto, members);
+    }
+    proto._plugins = combineLists(baseProto._plugins, proto._plugins);
+    proto._fontFields = combineLists(baseProto._fontFields, proto._fontFields);
+    proto._eventsMap = combineMaps(baseProto._eventsMap, proto._eventsMap);
+    proto._initialChanges = combineLists(baseProto._initialChanges, proto._initialChanges);
+    proto._themeDependentChanges = combineLists(baseProto._themeDependentChanges, proto._themeDependentChanges);
+    proto._optionChangesMap = combineMaps(baseProto._optionChangesMap, proto._optionChangesMap);
+    proto._partialOptionChangesMap = combineMaps(baseProto._partialOptionChangesMap, proto._partialOptionChangesMap);
+    proto._partialOptionChangesPath = combineMaps(baseProto._partialOptionChangesPath, proto._partialOptionChangesPath);
+    proto._optionChangesOrder = combineLists(baseProto._optionChangesOrder, proto._optionChangesOrder);
+    proto._layoutChangesOrder = combineLists(baseProto._layoutChangesOrder, proto._layoutChangesOrder);
+    proto._customChangesOrder = combineLists(baseProto._customChangesOrder, proto._customChangesOrder);
+    buildTotalChanges(proto);
+    Widget.addPlugin = addPlugin;
+  };

@@ -1,7 +1,7 @@
 import animationFrame from '__internal/common/core/animation/frameModule';
 import { stubSeam } from '../../../helpers/moduleSeam.js';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import domUtils from '__internal/core/utils/m_dom';
 import styleUtils from 'core/utils/style';
 import support from '__internal/core/utils/m_support';

@@ -8,7 +8,7 @@ import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import es from 'localization/messages/es.json!';
 
 const { test, module } = QUnit;

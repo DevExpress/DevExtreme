@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -35,11 +35,11 @@ export class AppComponent {
     },
   });
 
-  onReorder = (e: Parameters<DxDataGridTypes.RowDragging['onReorder']>[0]) => {
+  onReorder = (e: DxDataGridTypes.RowDraggingReorderEvent) => {
     e.promise = this.processReorder(e);
   };
 
-  async processReorder(e: Parameters<DxDataGridTypes.RowDragging['onReorder']>[0]) {
+  async processReorder(e: DxDataGridTypes.RowDraggingReorderEvent) {
     const visibleRows = e.component.getVisibleRows();
     const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 

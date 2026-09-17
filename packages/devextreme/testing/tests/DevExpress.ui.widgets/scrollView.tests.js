@@ -4,7 +4,7 @@ import { noop } from 'core/utils/common';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import animationFrame from '__internal/common/core/animation/frameModule';
 import { stubSeam } from '../../helpers/moduleSeam.js';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import eventsEngine from 'common/core/events/core/events_engine';
 import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';

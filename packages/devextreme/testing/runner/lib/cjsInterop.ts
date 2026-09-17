@@ -353,8 +353,12 @@ function rewriteBundleTemplateModuleExports(source: string): string {
   );
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function isLocallyDeclaredBinding(source: string, name: string): boolean {
-  const escaped = name.replace(/\$/g, '\\$');
+  const escaped = escapeRegExp(name);
   const directRe = new RegExp(
     `(?:^|[\\s;{}])(?:(?:const|let|var)\\s+${escaped}\\b|function\\s+${escaped}\\b|class\\s+${escaped}\\b)`,
   );

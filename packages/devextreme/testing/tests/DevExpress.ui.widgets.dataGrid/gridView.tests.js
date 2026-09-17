@@ -1,4 +1,4 @@
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import * as visibilityChange from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';

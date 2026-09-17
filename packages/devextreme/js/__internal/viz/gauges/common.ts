@@ -1,41 +1,15 @@
-/* eslint-disable prefer-rest-params */
-/* eslint-disable no-bitwise */
-/* eslint-disable prefer-spread */
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
-/* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable consistent-return */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable no-else-return */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
 
-import { noop as _noop } from '@js/core/utils/common';
+import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { isDefined as _isDefined, isNumeric as _isNumber } from '@js/core/utils/type';
+import { isDefined, isNumeric } from '@js/core/utils/type';
 import { Axis } from '@ts/viz/axes/base_axis';
-import { map as _map, normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
-import { BaseGauge, compareArrays as _compareArrays } from '@ts/viz/gauges/base_gauge';
-
-const _isArray = Array.isArray;
-
-const _isFinite = isFinite;
-const _Number = Number;
-const _min = Math.min;
-const _max = Math.max;
-
-const _extend = extend;
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import { setupWidgetPrototype } from '@ts/viz/core/helpers';
+import { map, normalizeEnum } from '@ts/viz/core/utils';
+import { BaseGauge, compareArrays } from '@ts/viz/gauges/base_gauge';
 
 const SHIFT_ANGLE = 90;
 
@@ -44,184 +18,242 @@ const OPTION_SUBVALUES = 'subvalues';
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 5;
 const DEFAULT_NUMBER_MULTIPLIERS = [1, 2, 5];
 
-function processValue(value, fallbackValue) {
+export interface ScaleTypes {
+  type: string;
+  drawingType: string;
+}
+
+export interface ScaleMeasure {
+  min?: number;
+  max?: number;
+  indent?: number;
+  horizontalOffset?: number;
+  verticalOffset?: number;
+  inverseHorizontalOffset?: number;
+  inverseVerticalOffset?: number;
+}
+
+export interface TicksCoefficients {
+  inner: number;
+  outer: number;
+}
+
+function processValue(value: ThemeValue, fallbackValue: ThemeValue): ThemeValue {
   if (value === null) {
     return value;
   }
-  return _isFinite(value) ? _Number(value) : fallbackValue;
+  return isFinite(value) ? Number(value) : fallbackValue;
 }
 
-function parseArrayOfNumbers(arg) {
-  return _isArray(arg) ? arg : _isNumber(arg) ? [arg] : null;
+function parseArrayOfNumbers(arg: ThemeValue): ThemeValue[] | null {
+  if (Array.isArray(arg)) {
+    return arg;
+  }
+  return isNumeric(arg) ? [arg] : null;
 }
 
-export const dxGauge = BaseGauge.inherit({
-  _initCore() {
-    const that = this;
-    const renderer = that._renderer;
+function pickDomainValue(value: ThemeValue, scaleValue: ThemeValue, defaultValue: number): number {
+  if (isNumeric(value)) {
+    return Number(value);
+  }
+  return isNumeric(scaleValue) ? Number(scaleValue) : defaultValue;
+}
 
-    that._setupValue(that.option(OPTION_VALUE));
-    that.__subvalues = parseArrayOfNumbers(that.option(OPTION_SUBVALUES));
-    that._setupSubvalues(that.__subvalues);
+abstract class Gauge extends BaseGauge {
+  __value: ThemeValue;
 
-    selectMode(that);
-    that.callBase.apply(that, arguments);
+  __subvalues!: ThemeValue[] | null;
 
-    that._rangeContainer = new that._factory.RangeContainer({
+  _rangeContainer;
+
+  _subvalueIndicatorContainer;
+
+  _scaleGroup;
+
+  _labelsAxesGroup;
+
+  _scale;
+
+  _valueIndicator;
+
+  _subvalueIndicatorsSet;
+
+  _baseValue!: number;
+
+  _scaleTypes!: ScaleTypes;
+
+  _gridSpacingFactor!: number;
+
+  _initCore(): void {
+    const renderer = this._renderer;
+
+    this._setupValue(this.option(OPTION_VALUE));
+    this.__subvalues = parseArrayOfNumbers(this.option(OPTION_SUBVALUES));
+    this._setupSubvalues(this.__subvalues);
+
+    selectMode(this);
+    super._initCore();
+
+    this._rangeContainer = new this._factory.RangeContainer({
       renderer,
       container: renderer.root,
-      translator: that._translator,
-      themeManager: that._themeManager,
+      translator: this._translator,
+      themeManager: this._themeManager,
     });
-    that._initScale();
-    that._subvalueIndicatorContainer = that._renderer.g().attr({ class: 'dxg-subvalue-indicators' })
-      .linkOn(that._renderer.root, 'valueIndicator').enableLinks();
-  },
+    this._initScale();
+    this._subvalueIndicatorContainer = this._renderer.g().attr({ class: 'dxg-subvalue-indicators' })
+      .linkOn(this._renderer.root, 'valueIndicator').enableLinks();
+  }
 
-  _fontFields: [
-    'scale.label.font', 'valueIndicators.rangebar.text.font', 'valueIndicators.textcloud.text.font', 'indicator.text.font',
-  ],
-
-  _initScale() {
-    const that = this;
-
-    that._scaleGroup = that._renderer.g().attr({ class: 'dxg-scale' }).linkOn(that._renderer.root, 'scale');
-    that._labelsAxesGroup = that._renderer.g().attr({ class: 'dxg-scale-elements' }).linkOn(that._renderer.root, 'scale-elements');
-    that._scale = new Axis({
-      incidentOccurred: that._incidentOccurred,
-      renderer: that._renderer,
-      axesContainerGroup: that._scaleGroup,
-      labelsAxesGroup: that._labelsAxesGroup,
-      axisType: that._scaleTypes.type,
-      drawingType: that._scaleTypes.drawingType,
+  _initScale(): void {
+    this._scaleGroup = this._renderer.g().attr({ class: 'dxg-scale' }).linkOn(this._renderer.root, 'scale');
+    this._labelsAxesGroup = this._renderer.g().attr({ class: 'dxg-scale-elements' })
+      .linkOn(this._renderer.root, 'scale-elements');
+    this._scale = new Axis({
+      incidentOccurred: this._incidentOccurred,
+      renderer: this._renderer,
+      axesContainerGroup: this._scaleGroup,
+      labelsAxesGroup: this._labelsAxesGroup,
+      axisType: this._scaleTypes.type,
+      drawingType: this._scaleTypes.drawingType,
       widgetClass: 'dxg',
-      getTemplate() {},
+      getTemplate(): void {},
     });
-  },
+  }
 
-  _disposeCore() {
-    const that = this;
-    that.callBase.apply(that, arguments);
+  _disposeCore(): void {
+    super._disposeCore();
 
-    that._scale.dispose();
-    that._scaleGroup.linkOff();
-    that._labelsAxesGroup.linkOff();
+    this._scale.dispose();
+    this._scaleGroup.linkOff();
+    this._labelsAxesGroup.linkOff();
 
-    that._rangeContainer.dispose();
-    that._disposeValueIndicators();
-    that._subvalueIndicatorContainer.linkOff();
+    this._rangeContainer.dispose();
+    this._disposeValueIndicators();
+    this._subvalueIndicatorContainer.linkOff();
 
-    that._scale = that._scaleGroup = that._labelsAxesGroup = that._rangeContainer = null;
-  },
+    this._rangeContainer = null;
+    this._labelsAxesGroup = null;
+    this._scaleGroup = null;
+    this._scale = null;
+  }
 
-  _disposeValueIndicators() {
-    const that = this;
-    that._valueIndicator && that._valueIndicator.dispose();
-    that._subvalueIndicatorsSet && that._subvalueIndicatorsSet.dispose();
-    that._valueIndicator = that._subvalueIndicatorsSet = null;
-  },
+  _disposeValueIndicators(): void {
+    if (this._valueIndicator) {
+      this._valueIndicator.dispose();
+    }
+    if (this._subvalueIndicatorsSet) {
+      this._subvalueIndicatorsSet.dispose();
+    }
+    this._subvalueIndicatorsSet = null;
+    this._valueIndicator = null;
+  }
 
-  _setupDomainCore() {
-    const that = this;
-    const scaleOption = that.option('scale') || {};
-    let startValue = that.option('startValue');
-    let endValue = that.option('endValue');
+  _setupDomainCore(): void {
+    const scaleOption = this.option('scale') || {};
+    const startValue = pickDomainValue(this.option('startValue'), scaleOption.startValue, 0);
+    const endValue = pickDomainValue(this.option('endValue'), scaleOption.endValue, 100);
 
-    startValue = _isNumber(startValue) ? _Number(startValue) : _isNumber(scaleOption.startValue) ? _Number(scaleOption.startValue) : 0;
-    endValue = _isNumber(endValue) ? _Number(endValue) : _isNumber(scaleOption.endValue) ? _Number(scaleOption.endValue) : 100;
-    that._baseValue = startValue < endValue ? startValue : endValue;
-    that._translator.setDomain(startValue, endValue);
-  },
+    this._baseValue = startValue < endValue ? startValue : endValue;
+    this._translator.setDomain(startValue, endValue);
+  }
 
-  _cleanContent() {
-    const that = this;
-    that._rangeContainer.clean();
-    that._cleanValueIndicators();
-  },
+  _cleanContent(): void {
+    this._rangeContainer.clean();
+    this._cleanValueIndicators();
+  }
 
-  _measureScale(scaleOptions) {
-    const that = this;
+  _measureScale(scaleOptions: ThemeValue): ScaleMeasure {
     const majorTick = scaleOptions.tick;
     const majorTickEnabled = majorTick.visible && majorTick.length > 0 && majorTick.width > 0;
-    const minorTick = scaleOptions.minorTick;
+    const { minorTick } = scaleOptions;
     const minorTickEnabled = minorTick.visible && minorTick.length > 0 && minorTick.width > 0;
-    const label = scaleOptions.label;
+    const { label } = scaleOptions;
     const indentFromTick = Number(label.indentFromTick);
 
     if (!majorTickEnabled && !minorTickEnabled && !label.visible) { return {}; }
 
-    const textParams = that._scale.measureLabels(extend({}, that._canvas));
-    const layoutValue = that._getScaleLayoutValue();
-    const result = { min: layoutValue, max: layoutValue };
-    const coefs = that._getTicksCoefficients(scaleOptions);
+    const textParams = this._scale.measureLabels(extend({}, this._canvas));
+    const layoutValue = this._getScaleLayoutValue();
+    const result: ScaleMeasure = { min: layoutValue, max: layoutValue };
+    const coefs = this._getTicksCoefficients(scaleOptions);
     const innerCoef = coefs.inner;
     const outerCoef = coefs.outer;
 
     if (majorTickEnabled) {
-      result.min = _min(result.min, layoutValue - innerCoef * majorTick.length);
-      result.max = _max(result.max, layoutValue + outerCoef * majorTick.length);
+      result.min = Math.min(result.min as number, layoutValue - innerCoef * majorTick.length);
+      result.max = Math.max(result.max as number, layoutValue + outerCoef * majorTick.length);
     }
     if (minorTickEnabled) {
-      result.min = _min(result.min, layoutValue - innerCoef * minorTick.length);
-      result.max = _max(result.max, layoutValue + outerCoef * minorTick.length);
+      result.min = Math.min(result.min as number, layoutValue - innerCoef * minorTick.length);
+      result.max = Math.max(result.max as number, layoutValue + outerCoef * minorTick.length);
     }
-    label.visible && that._correctScaleIndents(result, indentFromTick, textParams);
+    if (label.visible) {
+      this._correctScaleIndents(result, indentFromTick, textParams);
+    }
 
     return result;
-  },
+  }
 
-  _renderContent() {
-    const that = this;
-    const scaleOptions = that._prepareScaleSettings();
+  _renderContent(): void {
+    const scaleOptions = this._prepareScaleSettings();
 
-    that._rangeContainer.render(_extend(that._getOption('rangeContainer'), { vertical: that._area.vertical }));
-    that._renderScale(scaleOptions);
-    that._subvalueIndicatorContainer.linkAppend();
+    this._rangeContainer.render(extend(this._getOption('rangeContainer'), { vertical: this._area.vertical }));
+    this._renderScale(scaleOptions);
+    this._subvalueIndicatorContainer.linkAppend();
 
-    const elements = _map([that._rangeContainer].concat(that._prepareValueIndicators()), (element) => (element && element.enabled ? element : null));
+    const elements: ThemeValue[] = map(
+      [this._rangeContainer].concat(this._prepareValueIndicators()),
+      (element) => (element && element.enabled ? element : null),
+    );
 
-    that._applyMainLayout(elements, that._measureScale(scaleOptions));
-    // @ts-expect-error
-    elements.forEach((element) => element.resize(that._getElementLayout(element.getOffset())));
-    that._shiftScale(that._getElementLayout(0), scaleOptions);
+    this._applyMainLayout(elements, this._measureScale(scaleOptions));
+    elements.forEach((element) => element.resize(this._getElementLayout(element.getOffset())));
+    this._shiftScale(this._getElementLayout(0), scaleOptions);
 
-    that._beginValueChanging();
-    that._updateActiveElements();
-    that._endValueChanging();
-  },
+    this._beginValueChanging();
+    this._updateActiveElements();
+    this._endValueChanging();
+  }
 
-  _prepareScaleSettings() {
-    const that = this;
-    const userOptions = that.option('scale');
-    const scaleOptions = extend(true, {}, that._themeManager.theme('scale'), userOptions);
+  _prepareScaleSettings(): ThemeValue {
+    const userOptions = this.option('scale');
+    const scaleOptions = extend(true, {}, this._themeManager.theme('scale'), userOptions);
 
     scaleOptions.label.indentFromAxis = 0;
-    scaleOptions.isHorizontal = !that._area.vertical;
-    // @ts-expect-error
-    scaleOptions.forceUserTickInterval |= _isDefined(userOptions) && _isDefined(userOptions.tickInterval) && !_isDefined(userOptions.scaleDivisionFactor);
-    scaleOptions.axisDivisionFactor = scaleOptions.scaleDivisionFactor || that._gridSpacingFactor;
-    scaleOptions.minorAxisDivisionFactor = scaleOptions.minorScaleDivisionFactor || DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
+    scaleOptions.isHorizontal = !this._area.vertical;
+    // eslint-disable-next-line no-bitwise
+    scaleOptions.forceUserTickInterval |= Number(
+      isDefined(userOptions)
+      && isDefined(userOptions.tickInterval)
+      && !isDefined(userOptions.scaleDivisionFactor),
+    );
+    scaleOptions.axisDivisionFactor = scaleOptions.scaleDivisionFactor || this._gridSpacingFactor;
+    scaleOptions.minorAxisDivisionFactor = scaleOptions.minorScaleDivisionFactor
+      || DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
     scaleOptions.numberMultipliers = DEFAULT_NUMBER_MULTIPLIERS;
-    scaleOptions.tickOrientation = that._getTicksOrientation(scaleOptions);
+    scaleOptions.tickOrientation = this._getTicksOrientation(scaleOptions);
     if (scaleOptions.label.useRangeColors) {
-      scaleOptions.label.customizeColor = function () {
-        return that._rangeContainer.getColorForValue(this.value);
+      const getColorForValue = (value: number): ThemeValue => this._rangeContainer
+        .getColorForValue(value);
+      scaleOptions.label.customizeColor = function customizeColor(
+        this: { value: number },
+      ): ThemeValue {
+        return getColorForValue(this.value);
       };
     }
 
     return scaleOptions;
-  },
+  }
 
-  _renderScale(scaleOptions) {
-    const that = this;
-    const bounds = that._translator.getDomain();
+  _renderScale(scaleOptions: ThemeValue): void {
+    const bounds = this._translator.getDomain();
     const startValue = bounds[0];
     const endValue = bounds[1];
-    const angles = that._translator.getCodomain();
-    // @ts-expect-error
-    const invert = !!((startValue > endValue) ^ scaleOptions.inverted);
-    const min = _min(startValue, endValue);
-    const max = _max(startValue, endValue);
+    const angles = this._translator.getCodomain();
+    const invert = (startValue > endValue) !== Boolean(scaleOptions.inverted);
+    const min = Math.min(startValue, endValue);
+    const max = Math.max(startValue, endValue);
 
     scaleOptions.min = min;
     scaleOptions.max = max;
@@ -229,145 +261,147 @@ export const dxGauge = BaseGauge.inherit({
     scaleOptions.endAngle = SHIFT_ANGLE - angles[1];
     scaleOptions.skipViewportExtending = true;
     scaleOptions.inverted = invert;
-    that._scale.updateOptions(scaleOptions);
-    that._scale.setBusinessRange({
+    this._scale.updateOptions(scaleOptions);
+    this._scale.setBusinessRange({
       axisType: 'continuous',
       dataType: 'numeric',
       min,
       max,
       invert,
     });
-    that._updateScaleTickIndent(scaleOptions);
+    this._updateScaleTickIndent(scaleOptions);
 
-    that._scaleGroup.linkAppend();
-    that._labelsAxesGroup.linkAppend();
-    that._scale.draw(extend({}, that._canvas));
-  },
+    this._scaleGroup.linkAppend();
+    this._labelsAxesGroup.linkAppend();
+    this._scale.draw(extend({}, this._canvas));
+  }
 
-  _updateIndicatorSettings(settings) {
-    const that = this;
-    settings.currentValue = settings.baseValue = _isFinite(that._translator.translate(settings.baseValue)) ? _Number(settings.baseValue) : that._baseValue;
-    settings.vertical = that._area.vertical;
+  _updateIndicatorSettings(settings: ThemeValue): void {
+    settings.baseValue = isFinite(this._translator.translate(settings.baseValue))
+      ? Number(settings.baseValue)
+      : this._baseValue;
+    settings.currentValue = settings.baseValue;
+    settings.vertical = this._area.vertical;
     if (settings.text && !settings.text.format) {
-      settings.text.format = that._defaultFormatOptions;
+      settings.text.format = this._defaultFormatOptions;
     }
-  },
+  }
 
-  _prepareIndicatorSettings(options, defaultTypeField) {
-    const that = this;
-    const theme = that._themeManager.theme('valueIndicators');
-    const type = _normalizeEnum(options.type || that._themeManager.theme(defaultTypeField));
-    const settings = _extend(true, {}, theme._default, theme[type], options);
+  _prepareIndicatorSettings(options: ThemeValue, defaultTypeField: string): ThemeValue {
+    const theme = this._themeManager.theme('valueIndicators');
+    const type = normalizeEnum(options.type || this._themeManager.theme(defaultTypeField));
+    const settings = extend(true, {}, theme._default, theme[type], options);
     settings.type = type;
-    settings.animation = that._animationSettings;
-    settings.containerBackgroundColor = that._containerBackgroundColor;
-    that._updateIndicatorSettings(settings);
+    settings.animation = this._animationSettings;
+    settings.containerBackgroundColor = this._containerBackgroundColor;
+    this._updateIndicatorSettings(settings);
     return settings;
-  },
+  }
 
-  _cleanValueIndicators() {
-    this._valueIndicator && this._valueIndicator.clean();
-    this._subvalueIndicatorsSet && this._subvalueIndicatorsSet.clean();
-  },
+  _cleanValueIndicators(): void {
+    if (this._valueIndicator) {
+      this._valueIndicator.clean();
+    }
+    if (this._subvalueIndicatorsSet) {
+      this._subvalueIndicatorsSet.clean();
+    }
+  }
 
-  _prepareValueIndicators() {
-    const that = this;
-    that._prepareValueIndicator();
-    that.__subvalues !== null && that._prepareSubvalueIndicators();
-    return [that._valueIndicator, that._subvalueIndicatorsSet];
-  },
+  _prepareValueIndicators(): ThemeValue[] {
+    this._prepareValueIndicator();
+    if (this.__subvalues !== null) {
+      this._prepareSubvalueIndicators();
+    }
+    return [this._valueIndicator, this._subvalueIndicatorsSet];
+  }
 
-  _updateActiveElements() {
+  _updateActiveElements(): void {
     this._updateValueIndicator();
     this._updateSubvalueIndicators();
-  },
+  }
 
-  _prepareValueIndicator() {
-    const that = this;
-    let target = that._valueIndicator;
-    const settings = that._prepareIndicatorSettings(that.option('valueIndicator') || {}, 'valueIndicatorType');
+  _prepareValueIndicator(): void {
+    let target = this._valueIndicator;
+    const settings = this._prepareIndicatorSettings(this.option('valueIndicator') || {}, 'valueIndicatorType');
     if (target && target.type !== settings.type) {
       target.dispose();
       target = null;
     }
     if (!target) {
-      target = that._valueIndicator = that._createIndicator(settings.type, that._renderer.root, 'dxg-value-indicator', 'value-indicator');
+      this._valueIndicator = this._createIndicator(settings.type, this._renderer.root, 'dxg-value-indicator', 'value-indicator');
+      target = this._valueIndicator;
     }
     target.render(settings);
-  },
+  }
 
-  _createSubvalueIndicatorsSet() {
-    const that = this;
-    const root = that._subvalueIndicatorContainer;
+  _createSubvalueIndicatorsSet(): ValueIndicatorsSet {
+    const root = this._subvalueIndicatorContainer;
     return new ValueIndicatorsSet({
-      createIndicator(type, i) {
-        return that._createIndicator(type, root, 'dxg-subvalue-indicator', 'subvalue-indicator', i);
-      },
-      createPalette(palette) {
-        return that._themeManager.createPalette(palette);
-      },
+      createIndicator: (type: string, i?: number): ThemeValue => this._createIndicator(type, root, 'dxg-subvalue-indicator', 'subvalue-indicator', i),
+      createPalette: (palette: ThemeValue): ThemeValue => this._themeManager.createPalette(palette),
     });
-  },
+  }
 
-  _prepareSubvalueIndicators() {
-    const that = this;
-    let target = that._subvalueIndicatorsSet;
-    const settings = that._prepareIndicatorSettings(that.option('subvalueIndicator') || {}, 'subvalueIndicatorType');
+  _prepareSubvalueIndicators(): void {
+    let target = this._subvalueIndicatorsSet;
+    const settings = this._prepareIndicatorSettings(this.option('subvalueIndicator') || {}, 'subvalueIndicatorType');
     if (!target) {
-      target = that._subvalueIndicatorsSet = that._createSubvalueIndicatorsSet();
+      this._subvalueIndicatorsSet = this._createSubvalueIndicatorsSet();
+      target = this._subvalueIndicatorsSet;
     }
     const isRecreate = settings.type !== target.type;
     target.type = settings.type;
-    const dummy = that._createIndicator(settings.type, that._renderer.root);
+    const dummy = this._createIndicator(settings.type, this._renderer.root);
     if (dummy) {
       dummy.dispose();
       target.render(settings, isRecreate);
     }
-  },
+  }
 
-  _setupValue(value) {
+  _setupValue(value: ThemeValue): void {
     this.__value = processValue(value, this.__value);
-  },
+  }
 
-  _setupSubvalues(subvalues) {
+  _setupSubvalues(subvalues?: ThemeValue): void {
     const vals = subvalues === undefined ? this.__subvalues : parseArrayOfNumbers(subvalues);
-    let i;
-    let ii;
-    let list;
     if (vals === null) return;
-    for (i = 0, ii = vals.length, list = []; i < ii; ++i) {
-      list.push(processValue(vals[i], this.__subvalues[i]));
+    const current = this.__subvalues as ThemeValue[];
+    const list: ThemeValue[] = [];
+    for (let i = 0; i < vals.length; i += 1) {
+      list.push(processValue(vals[i], current[i]));
     }
     this.__subvalues = list;
-  },
+  }
 
-  _updateValueIndicator() {
-    const that = this;
-    that._valueIndicator && that._valueIndicator.value(that.__value, that._noAnimation);
-  },
+  _updateValueIndicator(): void {
+    if (this._valueIndicator) {
+      this._valueIndicator.value(this.__value, this._noAnimation);
+    }
+  }
 
-  _updateSubvalueIndicators() {
-    const that = this;
-    that._subvalueIndicatorsSet && that._subvalueIndicatorsSet.values(that.__subvalues, that._noAnimation);
-  },
+  _updateSubvalueIndicators(): void {
+    if (this._subvalueIndicatorsSet) {
+      this._subvalueIndicatorsSet.values(this.__subvalues, this._noAnimation);
+    }
+  }
 
-  value(arg) {
+  value(arg?: ThemeValue): this | ThemeValue {
     if (arg !== undefined) {
       this._changeValue(arg);
       return this;
     }
     return this.__value;
-  },
+  }
 
-  subvalues(arg) {
+  subvalues(arg?: ThemeValue): this | ThemeValue[] | undefined {
     if (arg !== undefined) {
       this._changeSubvalues(arg);
       return this;
     }
     return this.__subvalues !== null ? this.__subvalues.slice() : undefined;
-  },
+  }
 
-  _changeValue(value) {
+  _changeValue(value: ThemeValue): void {
     this._setupValue(value);
     this._beginValueChanging();
     this._updateValueIndicator();
@@ -376,9 +410,9 @@ export const dxGauge = BaseGauge.inherit({
       this.option(OPTION_VALUE, this.__value);
     }
     this._endValueChanging();
-  },
+  }
 
-  _changeSubvalues(subvalues) {
+  _changeSubvalues(subvalues: ThemeValue): void {
     if (this.__subvalues !== null) {
       this._setupSubvalues(subvalues);
       this._beginValueChanging();
@@ -391,11 +425,69 @@ export const dxGauge = BaseGauge.inherit({
       this._renderContent();
     }
 
-    if (!_compareArrays(this.__subvalues, this.option(OPTION_SUBVALUES))) {
+    if (!compareArrays(this.__subvalues, this.option(OPTION_SUBVALUES))) {
       this.option(OPTION_SUBVALUES, this.__subvalues);
     }
-  },
+  }
 
+  _change_VALUE(): void {
+    this._changeValue(this.option(OPTION_VALUE));
+  }
+
+  _change_SUBVALUES(): void {
+    this._changeSubvalues(this.option(OPTION_SUBVALUES));
+  }
+
+  _createIndicator(
+    type: string,
+    owner: ThemeValue,
+    className?: string,
+    trackerType?: string,
+    trackerIndex?: number,
+    strict?: boolean,
+  ): ThemeValue {
+    const indicator = this._factory.createIndicator({
+      renderer: this._renderer,
+      translator: this._translator,
+      owner,
+      tracker: this._tracker,
+      className,
+    }, type, strict);
+    if (indicator) {
+      indicator.type = type;
+      indicator._trackerInfo = { type: trackerType, index: trackerIndex };
+    }
+    return indicator;
+  }
+
+  abstract _updateScaleTickIndent(scaleOptions: ThemeValue): void;
+
+  abstract _shiftScale(layout: ThemeValue, scaleOptions: ThemeValue): void;
+
+  abstract _getScaleLayoutValue(): number;
+
+  abstract _getTicksOrientation(scaleOptions: ThemeValue): string;
+
+  abstract _getTicksCoefficients(scaleOptions: ThemeValue): TicksCoefficients;
+
+  abstract _correctScaleIndents(
+    result: ScaleMeasure,
+    indentFromTick: number,
+    textParams: ThemeValue,
+  ): void;
+
+  abstract _applyMainLayout(elements: ThemeValue[], scaleMeasurement: ScaleMeasure): void;
+
+  abstract _getElementLayout(offset?: number): ThemeValue;
+}
+
+setupWidgetPrototype(Gauge, {
+  _fontFields: [
+    'scale.label.font',
+    'valueIndicators.rangebar.text.font',
+    'valueIndicators.textcloud.text.font',
+    'indicator.text.font',
+  ],
   _optionChangesMap: {
     scale: 'DOMAIN',
     rangeContainer: 'MOSTLY_TOTAL',
@@ -406,54 +498,24 @@ export const dxGauge = BaseGauge.inherit({
     subvalues: 'SUBVALUES',
     valueIndicators: 'MOSTLY_TOTAL',
   },
-
   _customChangesOrder: ['VALUE', 'SUBVALUES'],
-
-  _change_VALUE() {
-    this._changeValue(this.option(OPTION_VALUE));
-  },
-
-  _change_SUBVALUES() {
-    this._changeSubvalues(this.option(OPTION_SUBVALUES));
-  },
-
-  _applyMainLayout: null,
-
-  _getElementLayout: null,
-
-  _createIndicator(type, owner, className, trackerType, trackerIndex, _strict) {
-    const that = this;
-    const indicator = that._factory.createIndicator({
-      renderer: that._renderer, translator: that._translator, owner, tracker: that._tracker, className,
-    }, type, _strict);
-    if (indicator) {
-      indicator.type = type;
-      indicator._trackerInfo = { type: trackerType, index: trackerIndex };
-    }
-    return indicator;
-  },
-
-  _getApproximateScreenRange: null,
 });
 
-function valueGetter(arg) {
+function valueGetter(arg: ThemeValue): ThemeValue {
   return arg ? arg.value : null;
 }
 
-function setupValues(that, fieldName, optionItems) {
+function setupValues(that: ThemeValue, fieldName: string, optionItems: ThemeValue): void {
   const currentValues = that[fieldName];
-  const newValues = _isArray(optionItems) ? _map(optionItems, valueGetter) : [];
-  let i = 0;
-  const ii = newValues.length;
-  const list = [];
-  for (; i < ii; ++i) {
-    // @ts-expect-error
+  const newValues: ThemeValue[] = Array.isArray(optionItems) ? map(optionItems, valueGetter) : [];
+  const list: ThemeValue[] = [];
+  for (let i = 0; i < newValues.length; i += 1) {
     list.push(processValue(newValues[i], currentValues[i]));
   }
   that[fieldName] = list;
 }
 
-function selectMode(gauge) {
+function selectMode(gauge: ThemeValue): void {
   if (gauge.option(OPTION_VALUE) === undefined && gauge.option(OPTION_SUBVALUES) === undefined) {
     if (gauge.option('valueIndicators') !== undefined) {
       disableDefaultMode(gauge);
@@ -462,222 +524,257 @@ function selectMode(gauge) {
   }
 }
 
-function disableDefaultMode(that) {
-  that.value = that.subvalues = _noop;
-  that._setupValue = that._setupSubvalues = that._updateValueIndicator = that._updateSubvalueIndicators = null;
+function disableDefaultMode(that: ThemeValue): void {
+  that.subvalues = noop;
+  that.value = noop;
+  that._updateSubvalueIndicators = null;
+  that._updateValueIndicator = null;
+  that._setupSubvalues = null;
+  that._setupValue = null;
 }
 
-function selectHardMode(that) {
+function selectHardMode(that: ThemeValue): void {
   that._indicatorValues = [];
   setupValues(that, '_indicatorValues', that.option('valueIndicators'));
   that._valueIndicators = [];
-  const _applyMostlyTotalChange = that._applyMostlyTotalChange;
-  that._applyMostlyTotalChange = function () {
+  const applyMostlyTotalChange = that._applyMostlyTotalChange;
+  that._applyMostlyTotalChange = function applyMostlyTotalChangeHardMode(this: ThemeValue): void {
     setupValues(this, '_indicatorValues', this.option('valueIndicators'));
-    _applyMostlyTotalChange.call(this);
+    applyMostlyTotalChange.call(this);
   };
-  that._updateActiveElements = updateActiveElements_hardMode;
-  that._prepareValueIndicators = prepareValueIndicators_hardMode;
-  that._disposeValueIndicators = disposeValueIndicators_hardMode;
-  that._cleanValueIndicators = cleanValueIndicators_hardMode;
-  that.indicatorValue = indicatorValue_hardMode;
+  that._updateActiveElements = updateActiveElementsHardMode;
+  that._prepareValueIndicators = prepareValueIndicatorsHardMode;
+  that._disposeValueIndicators = disposeValueIndicatorsHardMode;
+  that._cleanValueIndicators = cleanValueIndicatorsHardMode;
+  that.indicatorValue = indicatorValueHardMode;
 }
 
-function updateActiveElements_hardMode() {
-  const that = this;
-  that._valueIndicators.forEach((valueIndicator) => {
-    valueIndicator.value(that._indicatorValues[valueIndicator.index], that._noAnimation);
+function updateActiveElementsHardMode(this: ThemeValue): void {
+  this._valueIndicators.forEach((valueIndicator) => {
+    valueIndicator.value(this._indicatorValues[valueIndicator.index], this._noAnimation);
   });
 }
 
-function prepareValueIndicators_hardMode() {
-  const that = this;
-  const valueIndicators = that._valueIndicators || [];
-  const userOptions = that.option('valueIndicators');
-  const optionList = [];
+function prepareValueIndicatorsHardMode(this: ThemeValue): ThemeValue[] {
+  const valueIndicators = this._valueIndicators || [];
+  const userOptions = this.option('valueIndicators');
+  const optionList: ThemeValue[] = [];
   let i = 0;
-  let ii;
-  for (ii = _isArray(userOptions) ? userOptions.length : 0; i < ii; ++i) {
-    // @ts-expect-error
+  for (const ii = Array.isArray(userOptions) ? userOptions.length : 0; i < ii; i += 1) {
     optionList.push(userOptions[i]);
   }
-  for (ii = valueIndicators.length; i < ii; ++i) {
-    // @ts-expect-error
+  for (const ii = valueIndicators.length; i < ii; i += 1) {
     optionList.push(null);
   }
-  const newValueIndicators = [];
-  optionList.forEach((userSettings, i) => {
-    let valueIndicator = valueIndicators[i];
+  const newValueIndicators: ThemeValue[] = [];
+  optionList.forEach((userSettings, index) => {
+    let valueIndicator = valueIndicators[index];
     if (!userSettings) {
-      valueIndicator && valueIndicator.dispose();
+      if (valueIndicator) {
+        valueIndicator.dispose();
+      }
       return;
     }
-    const settings = that._prepareIndicatorSettings(userSettings, 'valueIndicatorType');
+    const settings = this._prepareIndicatorSettings(userSettings, 'valueIndicatorType');
     if (valueIndicator && valueIndicator.type !== settings.type) {
       valueIndicator.dispose();
       valueIndicator = null;
     }
     if (!valueIndicator) {
-      valueIndicator = that._createIndicator(settings.type, that._renderer.root, 'dxg-value-indicator', 'value-indicator', i, true);
+      valueIndicator = this._createIndicator(settings.type, this._renderer.root, 'dxg-value-indicator', 'value-indicator', index, true);
     }
     if (valueIndicator) {
-      valueIndicator.index = i;
+      valueIndicator.index = index;
       valueIndicator.render(settings);
-      // @ts-expect-error
       newValueIndicators.push(valueIndicator);
     }
   });
-  that._valueIndicators = newValueIndicators;
-  return that._valueIndicators;
+  this._valueIndicators = newValueIndicators;
+  return this._valueIndicators;
 }
 
-function disposeValueIndicators_hardMode() {
+function disposeValueIndicatorsHardMode(this: ThemeValue): void {
   this._valueIndicators.forEach((valueIndicator) => valueIndicator.dispose());
   this._valueIndicators = null;
 }
 
-function cleanValueIndicators_hardMode() {
+function cleanValueIndicatorsHardMode(this: ThemeValue): void {
   this._valueIndicators.forEach((valueIndicator) => valueIndicator.clean());
 }
 
-function indicatorValue_hardMode(index, value) {
+function indicatorValueHardMode(this: ThemeValue, index: number, value?: ThemeValue): ThemeValue {
   return accessPointerValue(this, this._valueIndicators, this._indicatorValues, index, value);
 }
 
-function accessPointerValue(that, pointers, values, index, value) {
+function accessPointerValue(
+  that: ThemeValue,
+  pointers: ThemeValue[],
+  values: ThemeValue[],
+  index: number,
+  value?: ThemeValue,
+): ThemeValue {
   if (value !== undefined) {
     if (values[index] !== undefined) {
       values[index] = processValue(value, values[index]);
-      pointers[index] && pointers[index].value(values[index]);
+      if (pointers[index]) {
+        pointers[index].value(values[index]);
+      }
     }
     return that;
-  } else {
-    return values[index];
   }
+  return values[index];
 }
 
-function ValueIndicatorsSet(parameters) {
-  this._parameters = parameters;
-  this._indicators = [];
+interface ValueIndicatorsSetParameters {
+  createIndicator: (type: string, index?: number) => ThemeValue;
+  createPalette: (palette: ThemeValue) => ThemeValue;
 }
 
-ValueIndicatorsSet.prototype = {
-  constructor: ValueIndicatorsSet,
+class ValueIndicatorsSet {
+  _parameters: ValueIndicatorsSetParameters;
 
-  dispose() {
-    const that = this;
-    that._indicators.forEach((indicator) => indicator.dispose());
-    that._parameters = that._options = that._indicators = that._colorPalette = that._palette = null;
-    return that;
-  },
+  _indicators: ThemeValue[];
 
-  clean() {
-    const that = this;
-    that._sample && that._sample.clean().dispose();
-    that._indicators.forEach((indicator) => indicator.clean());
-    that._sample = that._options = that._palette = null;
-    return that;
-  },
+  _options: ThemeValue;
 
-  render(options, isRecreate) {
-    const that = this;
-    that._options = options;
-    that._sample = that._parameters.createIndicator(that.type);
-    that._sample.render(options);
-    that.enabled = that._sample.enabled;
-    that._palette = _isDefined(options.palette) ? that._parameters.createPalette(options.palette) : null;
-    if (that.enabled) {
-      that._generatePalette(that._indicators.length);
-      that._indicators = _map(that._indicators, (indicator, i) => {
+  _sample: ThemeValue;
+
+  _palette: ThemeValue;
+
+  _colorPalette: ThemeValue;
+
+  _layout: ThemeValue;
+
+  type?: string;
+
+  enabled?: boolean;
+
+  constructor(parameters: ValueIndicatorsSetParameters) {
+    this._parameters = parameters;
+    this._indicators = [];
+  }
+
+  dispose(): this {
+    this._indicators.forEach((indicator) => indicator.dispose());
+    Object.assign(this, {
+      _palette: null, _colorPalette: null, _indicators: null, _options: null, _parameters: null,
+    });
+    return this;
+  }
+
+  clean(): this {
+    if (this._sample) {
+      this._sample.clean().dispose();
+    }
+    this._indicators.forEach((indicator) => indicator.clean());
+    this._palette = null;
+    this._options = null;
+    this._sample = null;
+    return this;
+  }
+
+  render(options: ThemeValue, isRecreate?: boolean): this {
+    this._options = options;
+    this._sample = this._parameters.createIndicator(this.type as string);
+    this._sample.render(options);
+    this.enabled = this._sample.enabled;
+    this._palette = isDefined(options.palette)
+      ? this._parameters.createPalette(options.palette)
+      : null;
+    if (this.enabled) {
+      this._generatePalette(this._indicators.length);
+      this._indicators = map(this._indicators, (indicator, i) => {
+        let current = indicator;
         if (isRecreate) {
-          indicator.dispose();
-          indicator = that._parameters.createIndicator(that.type, i);
+          current.dispose();
+          current = this._parameters.createIndicator(this.type as string, i);
         }
-        indicator.render(that._getIndicatorOptions(i));
-        return indicator;
+        current.render(this._getIndicatorOptions(i));
+        return current;
       });
     }
-    return that;
-  },
+    return this;
+  }
 
-  getOffset() {
+  getOffset(): number {
     return this._sample.getOffset();
-  },
+  }
 
-  resize(layout) {
-    const that = this;
-    that._layout = layout;
-    that._indicators.forEach((indicator) => indicator.resize(layout));
-    return that;
-  },
+  resize(layout: ThemeValue): this {
+    this._layout = layout;
+    this._indicators.forEach((indicator) => indicator.resize(layout));
+    return this;
+  }
 
-  measure(layout) {
+  measure(layout: ThemeValue): ThemeValue {
     return this._sample.measure(layout);
-  },
+  }
 
-  _getIndicatorOptions(index) {
+  _getIndicatorOptions(index: number): ThemeValue {
     let result = this._options;
     if (this._colorPalette) {
-      result = _extend({}, result, { color: this._colorPalette[index] });
+      result = extend({}, result, { color: this._colorPalette[index] });
     }
     return result;
-  },
+  }
 
-  _generatePalette(count) {
-    const that = this;
+  _generatePalette(count: number): void {
     let colors = null;
-    if (that._palette) {
-      that._palette.reset();
-      colors = that._palette.generateColors(count, { repeat: true });
+    if (this._palette) {
+      this._palette.reset();
+      colors = this._palette.generateColors(count, { repeat: true });
     }
-    that._colorPalette = colors;
-  },
+    this._colorPalette = colors;
+  }
 
-  _adjustIndicatorsCount(count) {
-    const that = this;
-    const indicators = that._indicators;
-    let i;
-    let ii;
-    let indicator;
+  _adjustIndicatorsCount(count: number): void {
+    const indicators = this._indicators;
     const indicatorsLen = indicators.length;
 
     if (indicatorsLen > count) {
-      for (i = count, ii = indicatorsLen; i < ii; ++i) {
+      for (let i = count; i < indicatorsLen; i += 1) {
         indicators[i].clean().dispose();
       }
-      that._indicators = indicators.slice(0, count);
-      that._generatePalette(indicators.length);
+      this._indicators = indicators.slice(0, count);
+      this._generatePalette(indicators.length);
     } else if (indicatorsLen < count) {
-      that._generatePalette(count);
-      for (i = indicatorsLen, ii = count; i < ii; ++i) {
-        indicator = that._parameters.createIndicator(that.type, i);
-        indicator.render(that._getIndicatorOptions(i)).resize(that._layout);
+      this._generatePalette(count);
+      for (let i = indicatorsLen; i < count; i += 1) {
+        const indicator = this._parameters.createIndicator(this.type as string, i);
+        indicator.render(this._getIndicatorOptions(i)).resize(this._layout);
         indicators.push(indicator);
       }
     }
-  },
+  }
 
-  values(arg, _noAnimation) {
-    const that = this;
-    if (!that.enabled) return;
+  values(arg?: ThemeValue, noAnimation?: boolean): this | ThemeValue[] | undefined {
+    if (!this.enabled) return undefined;
     if (arg !== undefined) {
-      if (!_isArray(arg)) {
-        arg = _isFinite(arg) ? [Number(arg)] : null;
+      let values = arg;
+      if (!Array.isArray(values)) {
+        values = isFinite(values) ? [Number(values)] : null;
       }
-      if (arg) {
-        that._adjustIndicatorsCount(arg.length);
-        that._indicators.forEach((indicator, i) => indicator.value(arg[i], _noAnimation));
+      if (values) {
+        this._adjustIndicatorsCount(values.length);
+        this._indicators.forEach((indicator, i) => indicator.value(values[i], noAnimation));
       }
-      return that;
+      return this;
     }
-    return _map(that._indicators, (indicator) => indicator.value());
-  },
-};
+    return map(this._indicators, (indicator) => indicator.value());
+  }
+}
 
-export function createIndicatorCreator(indicators) {
-  return function (parameters, type, _strict) {
-    const indicatorType = indicators[_normalizeEnum(type)] || (!_strict && indicators._default);
-    // eslint-disable-next-line new-cap
-    return indicatorType ? new indicatorType(parameters) : null;
+export function createIndicatorCreator(
+  indicators: Record<string, ThemeValue>,
+): (parameters: ThemeValue, type: string, strict?: boolean) => ThemeValue {
+  return function createIndicator(
+    parameters: ThemeValue,
+    type: string,
+    strict?: boolean,
+  ): ThemeValue {
+    const IndicatorType = indicators[normalizeEnum(type)] || (!strict && indicators._default);
+    return IndicatorType ? new IndicatorType(parameters) : null;
   };
 }
+
+export { Gauge as dxGauge };
