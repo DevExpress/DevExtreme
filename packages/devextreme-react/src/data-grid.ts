@@ -757,7 +757,6 @@ const ColumnButton = Object.assign<typeof _componentColumnButton, NestedComponen
 // owners:
 // DataGrid
 type IColumnChooserProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   container?: any | string | undefined;
   emptyPanelText?: string;
   enabled?: boolean;
@@ -765,7 +764,6 @@ type IColumnChooserProps = React.PropsWithChildren<{
   mode?: ColumnChooserMode;
   position?: PositionConfig | undefined;
   search?: ColumnChooserSearchConfig;
-  searchTimeout?: number;
   selection?: ColumnChooserSelectionConfig;
   sortOrder?: SortOrder | undefined;
   title?: string;
@@ -893,7 +891,6 @@ const ColumnFixingTexts = Object.assign<typeof _componentColumnFixingTexts, Nest
 // owners:
 // Column
 type IColumnHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
@@ -1074,7 +1071,6 @@ const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMet
 // owners:
 // DataGrid
 type IDataGridHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number | string;
   search?: HeaderFilterSearchConfig;
@@ -2255,7 +2251,6 @@ const GroupPanel = Object.assign<typeof _componentGroupPanel, NestedComponentMet
 // Column
 // DataGrid
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;

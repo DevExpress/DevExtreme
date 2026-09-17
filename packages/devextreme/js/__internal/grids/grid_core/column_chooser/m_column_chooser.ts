@@ -230,9 +230,6 @@ export class ColumnChooserView extends ColumnsView {
     const columnChooser = this.option('columnChooser')!;
     const isSelectMode = this.isSelectMode();
 
-    const searchEnabled = isDefined(columnChooser.allowSearch) ? columnChooser.allowSearch : columnChooser.search?.enabled;
-    const searchTimeout = isDefined(columnChooser.searchTimeout) ? columnChooser.searchTimeout : columnChooser.search?.timeout;
-
     const treeViewConfig: any = {
       dataStructure: 'plain',
       activeStateEnabled: true,
@@ -241,8 +238,8 @@ export class ColumnChooserView extends ColumnsView {
       itemTemplate: 'item',
       showCheckBoxesMode: 'none',
       rootValue: null,
-      searchEnabled,
-      searchTimeout,
+      searchEnabled: columnChooser.search?.enabled,
+      searchTimeout: columnChooser.search?.timeout,
       searchEditorOptions: columnChooser.search?.editorOptions,
     };
 

@@ -820,12 +820,6 @@ export interface ColumnButtonBase {
  */
 export type ColumnChooser = {
   /**
-   * @docid
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
-  /**
      * @docid
      * @default undefined
      * @public
@@ -860,12 +854,6 @@ export type ColumnChooser = {
    * @docid
    */
   search?: ColumnChooserSearchConfig;
-  /**
-   * @docid
-   * @default 500
-   * @deprecated
-   */
-  searchTimeout?: number;
   /**
    * @docid
    */
@@ -1045,12 +1033,6 @@ export type ColumnFixingIcons = {
  * @namespace DevExpress.common.grids
  */
 export type ColumnHeaderFilter = {
-  /**
-   * @docid
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
   /**
    * @docid
    * @default true
@@ -1622,12 +1604,6 @@ export type FilterType = 'exclude' | 'include';
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilter = {
-  /**
-   * @docid
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
   /**
    * @docid
    * @default true

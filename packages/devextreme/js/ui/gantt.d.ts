@@ -1591,12 +1591,6 @@ export interface dxGanttFilterRowOperationDescriptions {
 export interface dxGanttHeaderFilter {
     /**
      * @docid
-     * @default false
-     * @deprecated
-     */
-    allowSearch?: boolean;
-    /**
-     * @docid
      * @default true
      */
     allowSelectAll?: boolean;
