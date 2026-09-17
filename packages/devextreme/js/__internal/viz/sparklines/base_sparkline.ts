@@ -1,26 +1,18 @@
-/* eslint-disable prefer-rest-params */
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import { noop as _noop } from '@js/core/utils/common';
+import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { isFunction } from '@js/core/utils/type';
+import type DOMComponent from '@ts/core/widget/dom_component';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
 // T422022
 import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin } from '@ts/viz/core/export';
+import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 // PLUGINS_SECTION
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
 import { pointInCanvas } from '@ts/viz/core/utils';
@@ -32,10 +24,39 @@ const TOOLTIP_TABLE_KEY_VALUE_SPACE = 15;
 const EVENT_NS = 'sparkline-tooltip';
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
 
-const _extend = extend;
-const _floor = Math.floor;
+const { _initTooltip: initTooltip } = tooltipPlugin.members;
 
-function inCanvas({ width, height }, x, y) {
+export interface SparklineSize {
+  width: number;
+  height: number;
+  left?: number;
+  right?: number;
+  top?: number;
+  bottom?: number;
+}
+
+export interface SparklineAxis {
+  getTranslator: () => ThemeValue;
+  update: (range: ThemeValue, canvas: ThemeValue, options?: ThemeValue) => void;
+  getVisibleArea: () => number[];
+  visualRange: () => void;
+  calculateInterval: () => void;
+  getMarginOptions: () => ThemeValue;
+  aggregatedPointBetweenTicks: () => boolean;
+}
+
+interface TooltipCoords {
+  x: number;
+  y: number;
+}
+
+interface PointerEventData {
+  pageX: number;
+  pageY: number;
+}
+
+function inCanvas({ width, height }: SparklineSize, x: number, y: number): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return pointInCanvas({
     left: 0,
     top: 0,
@@ -46,17 +67,20 @@ function inCanvas({ width, height }, x, y) {
   }, x, y);
 }
 
-function pointerHandler({ data }) {
-  const that = data.widget;
+function pointerHandler({ data }: { data: { widget: BaseSparkline } }): void {
+  const { widget } = data;
 
-  that._enableOutHandler();
-  that._showTooltip();
+  widget._enableOutHandler();
+  widget._showTooltip();
 }
 
-function getDefaultTemplate({ lineSpacing, size }, textAlign) {
+function getDefaultTemplate(
+  { lineSpacing, size }: ThemeValue,
+  textAlign: string,
+): (formatObject: ThemeValue, container: ThemeValue) => void {
   const lineHeight = `${(lineSpacing ?? DEFAULT_LINE_SPACING) + size}px`;
 
-  return function ({ valueText }, container) {
+  return function defaultTemplate({ valueText }: ThemeValue, container: ThemeValue): void {
     const table = $('<table>').css({
       borderSpacing: TOOLTIP_TABLE_BORDER_SPACING,
       lineHeight,
@@ -84,239 +108,283 @@ function getDefaultTemplate({ lineSpacing, size }, textAlign) {
   };
 }
 
-function createAxis(isHorizontal?) {
-  const translator = new Translator2D({}, {}, { shiftZeroValue: !isHorizontal, isHorizontal: !!isHorizontal });
+function createAxis(isHorizontal?: boolean): SparklineAxis {
+  const translator = new Translator2D({}, {}, {
+    shiftZeroValue: !isHorizontal,
+    isHorizontal: !!isHorizontal,
+  });
 
   return {
-    getTranslator() {
+    getTranslator(): ThemeValue {
       return translator;
     },
-    update(range, canvas, options) {
+    update(range: ThemeValue, canvas: ThemeValue, options?: ThemeValue): void {
       translator.update(range, canvas, options);
     },
-    getVisibleArea() {
-      const visibleArea = translator.getCanvasVisibleArea();
+    getVisibleArea(): number[] {
+      const visibleArea: { min: number; max: number } = translator.getCanvasVisibleArea();
       return [visibleArea.min, visibleArea.max];
     },
-    visualRange: _noop,
-    calculateInterval: _noop,
-    getMarginOptions() {
+    visualRange: noop,
+    calculateInterval: noop,
+    getMarginOptions(): ThemeValue {
       return {};
     },
-    aggregatedPointBetweenTicks() {
+    aggregatedPointBetweenTicks(): boolean {
       return false;
     },
   };
 }
 
-let _initTooltip;
+abstract class BaseSparkline extends BaseWidget {
+  static addPlugin: (plugin: ThemeValue) => void;
 
-const BaseSparkline = BaseWidget.inherit({
-  _getLayoutItems: _noop,
-  _useLinks: false,
+  static getInstance: typeof DOMComponent.getInstance;
 
-  _themeDependentChanges: ['OPTIONS'],
+  _tooltipTracker;
 
-  _initCore() {
-    const that = this;
-    that._tooltipTracker = that._renderer.root;
-    that._tooltipTracker.attr({ 'pointer-events': 'visible' });
-    that._createHtmlElements();
-    that._initTooltipEvents();
+  _argumentAxis!: SparklineAxis;
 
-    that._argumentAxis = createAxis(true);
-    that._valueAxis = createAxis();
-  },
+  _valueAxis!: SparklineAxis;
 
-  _getDefaultSize() {
+  _ranges: ThemeValue;
+
+  _allOptions: ThemeValue;
+
+  _defaultSize!: SparklineSize;
+
+  _tooltipShown?: boolean;
+
+  _outHandler?: ((event: PointerEventData) => void) | null;
+
+  _tooltipRendererOptions: ThemeValue;
+
+  _initCore(): void {
+    this._tooltipTracker = this._renderer.root;
+    this._tooltipTracker.attr({ 'pointer-events': 'visible' });
+    this._createHtmlElements();
+    this._initTooltipEvents();
+
+    this._argumentAxis = createAxis(true);
+    this._valueAxis = createAxis();
+  }
+
+  _getDefaultSize(): SparklineSize {
     return this._defaultSize;
-  },
+  }
 
-  _disposeCore() {
+  _disposeCore(): void {
     this._disposeWidgetElements();
     this._disposeTooltipEvents();
     this._ranges = null;
-  },
+  }
 
-  _optionChangesOrder: ['OPTIONS'],
-
-  _change_OPTIONS() {
+  _change_OPTIONS(): void {
     this._prepareOptions();
     this._change(['UPDATE']);
-  },
+  }
 
-  _customChangesOrder: ['UPDATE'],
-
-  _change_UPDATE() {
+  _change_UPDATE(): void {
     this._update();
-  },
+  }
 
-  _update() {
-    const that = this;
-    if (that._tooltipShown) {
-      that._tooltipShown = false;
-      that._tooltip.hide();
+  _update(): void {
+    if (this._tooltipShown) {
+      this._tooltipShown = false;
+      this._tooltip.hide();
     }
-    that._cleanWidgetElements();
-    that._updateWidgetElements();
-    that._drawWidgetElements();
-  },
+    this._cleanWidgetElements();
+    this._updateWidgetElements();
+    this._drawWidgetElements();
+  }
 
-  _updateWidgetElements() {
+  _updateWidgetElements(): void {
     const canvas = this._getCorrectCanvas();
     this._updateRange();
 
     this._argumentAxis.update(this._ranges.arg, canvas, this._getStick());
     this._valueAxis.update(this._ranges.val, canvas);
-  },
+  }
 
-  _getStick() { },
+  _getStick(): { stick: boolean } | undefined {
+    return undefined;
+  }
 
-  _applySize(rect) {
+  _applySize(rect: number[]): void {
     this._allOptions.size = { width: rect[2] - rect[0], height: rect[3] - rect[1] };
     this._change(['UPDATE']);
-  },
+  }
 
-  _setupResizeHandler: _noop,
+  _prepareOptions(): ThemeValue {
+    return extend(true, {}, this._themeManager.theme(), this.option());
+  }
 
-  _prepareOptions() {
-    return _extend(true, {}, this._themeManager.theme(), this.option());
-  },
-
-  _getTooltipCoords() {
+  _getTooltipCoords(): TooltipCoords {
     const canvas = this._canvas;
     const rootOffset = this._renderer.getRootOffset();
     return {
       x: (canvas.width / 2) + rootOffset.left,
       y: (canvas.height / 2) + rootOffset.top,
     };
-  },
+  }
 
-  _initTooltipEvents() {
+  _initTooltipEvents(): void {
     const data = { widget: this };
 
     this._renderer.root.off(`.${EVENT_NS}`)
       .on(POINTER_ACTION, data, pointerHandler);
-  },
+  }
 
-  _showTooltip() {
-    const that = this;
-    let tooltip;
-
-    if (!that._tooltipShown) {
-      that._tooltipShown = true;
-      tooltip = that._getTooltip();
-      tooltip.isEnabled() && that._tooltip.show(that._getTooltipData(), that._getTooltipCoords(), {});
+  _showTooltip(): void {
+    if (!this._tooltipShown) {
+      this._tooltipShown = true;
+      const tooltip = this._getTooltip();
+      if (tooltip.isEnabled()) {
+        this._tooltip.show(this._getTooltipData(), this._getTooltipCoords(), {});
+      }
     }
-  },
+  }
 
-  _hideTooltip() {
+  _hideTooltip(): void {
     if (this._tooltipShown) {
       this._tooltipShown = false;
       this._tooltip.hide();
     }
-  },
+  }
 
-  _stopCurrentHandling() {
+  _stopCurrentHandling(): void {
     this._hideTooltip();
-  },
+  }
 
-  _enableOutHandler() {
-    const that = this;
-    if (that._outHandler) {
+  _enableOutHandler(): void {
+    if (this._outHandler) {
       return;
     }
 
-    const handler = ({ pageX, pageY }) => {
-      const { left, top } = that._renderer.getRootOffset();
-      const x = _floor(pageX - left);
-      const y = _floor(pageY - top);
+    const handler = ({ pageX, pageY }: PointerEventData): void => {
+      const { left, top } = this._renderer.getRootOffset();
+      const x = Math.floor(pageX - left);
+      const y = Math.floor(pageY - top);
 
-      if (!inCanvas(that._canvas, x, y)) {
-        that._hideTooltip();
-        that._disableOutHandler();
+      if (!inCanvas(this._canvas, x, y)) {
+        this._hideTooltip();
+        this._disableOutHandler();
       }
     };
 
     eventsEngine.on(domAdapter.getDocument(), POINTER_ACTION, handler);
     this._outHandler = handler;
-  },
+  }
 
-  _disableOutHandler() {
-    this._outHandler && eventsEngine.off(domAdapter.getDocument(), POINTER_ACTION, this._outHandler);
+  _disableOutHandler(): void {
+    if (this._outHandler) {
+      eventsEngine.off(domAdapter.getDocument(), POINTER_ACTION, this._outHandler);
+    }
     this._outHandler = null;
-  },
+  }
 
-  _disposeTooltipEvents() {
+  _disposeTooltipEvents(): void {
     this._tooltipTracker.off();
     this._disableOutHandler();
     this._renderer.root.off(`.${EVENT_NS}`);
-  },
+  }
 
-  _getTooltip() {
-    const that = this;
-    if (!that._tooltip) {
-      _initTooltip.apply(this, arguments);
-      that._setTooltipRendererOptions(that._tooltipRendererOptions);
-      that._tooltipRendererOptions = null;
-      that._setTooltipOptions();
+  _getTooltip(): ThemeValue {
+    if (!this._tooltip) {
+      initTooltip.call(this);
+      this._setTooltipRendererOptions(this._tooltipRendererOptions);
+      this._tooltipRendererOptions = null;
+      this._setTooltipOptions();
     }
-    return that._tooltip;
-  },
+    return this._tooltip;
+  }
+
+  _getDefaultTooltipTemplate(options: ThemeValue): ThemeValue {
+    let defaultTemplateNeeded = true;
+    const textAlign = this.option('rtlEnabled') ? 'left' : 'right';
+
+    if (isFunction(options.customizeTooltip)) {
+      this._tooltip.update(options);
+
+      const formatObject = this._getTooltipData();
+      const customizeResult = options.customizeTooltip.call(formatObject, formatObject) ?? {};
+
+      defaultTemplateNeeded = !('html' in customizeResult) && !('text' in customizeResult);
+    }
+
+    return defaultTemplateNeeded && getDefaultTemplate(options.font, textAlign);
+  }
+
+  abstract _createHtmlElements(): void;
+
+  abstract _disposeWidgetElements(): void;
+
+  abstract _cleanWidgetElements(): void;
+
+  abstract _drawWidgetElements(): void;
+
+  abstract _updateRange(): void;
+
+  abstract _getCorrectCanvas(): ThemeValue;
+
+  abstract _getTooltipData(): ThemeValue;
+
+  abstract _isTooltipEnabled(): boolean;
+}
+
+setupWidgetPrototype(BaseSparkline, {
+  _getLayoutItems: noop,
+  _useLinks: false,
+  _themeDependentChanges: ['OPTIONS'],
+  _optionChangesOrder: ['OPTIONS'],
+  _customChangesOrder: ['UPDATE'],
+  _setupResizeHandler: noop,
 });
 
-export default BaseSparkline;
 BaseSparkline.addPlugin(tooltipPlugin);
 
-// These are sparklines specifics on using tooltip - they cannot be omitted because of tooltip laziness.
-_initTooltip = BaseSparkline.prototype._initTooltip;
-BaseSparkline.prototype._initTooltip = _noop;
-const _disposeTooltip = BaseSparkline.prototype._disposeTooltip;
-BaseSparkline.prototype._disposeTooltip = function () {
+// These are sparklines specifics on using tooltip - they cannot be omitted because of
+// tooltip laziness.
+const { _disposeTooltip: disposeTooltip } = BaseSparkline.prototype;
+
+function disposeLazyTooltip(this: BaseSparkline, ...args: unknown[]): void {
   if (this._tooltip) {
-    _disposeTooltip.apply(this, arguments);
+    disposeTooltip.apply(this, args);
     this._tooltipShown = false;
   }
-};
-BaseSparkline.prototype._setTooltipRendererOptions = function () {
+}
+
+function setLazyTooltipRendererOptions(this: BaseSparkline): void {
   const options = this._getRendererOptions();
   if (this._tooltip) {
     this._tooltip.setRendererOptions(options);
   } else {
     this._tooltipRendererOptions = options;
   }
-};
-BaseSparkline.prototype._setTooltipOptions = function () {
+}
+
+function setLazyTooltipOptions(this: BaseSparkline): void {
   if (this._tooltip) {
     const options = this._getOption('tooltip');
     const defaultContentTemplate = this._getDefaultTooltipTemplate(options);
-    const contentTemplateOptions = defaultContentTemplate ? { contentTemplate: defaultContentTemplate } : {};
-    const optionsToUpdate = _extend(contentTemplateOptions, options, {
+    const contentTemplateOptions = defaultContentTemplate
+      ? { contentTemplate: defaultContentTemplate }
+      : {};
+    const optionsToUpdate = extend(contentTemplateOptions, options, {
       enabled: options.enabled && this._isTooltipEnabled(),
     });
     this._tooltip.update(optionsToUpdate);
   }
-};
+}
 
-BaseSparkline.prototype._getDefaultTooltipTemplate = function (options) {
-  let defaultTemplateNeeded = true;
-  const textAlign = this.option('rtlEnabled') ? 'left' : 'right';
-
-  if (isFunction(options.customizeTooltip)) {
-    this._tooltip.update(options);
-
-    const formatObject = this._getTooltipData();
-    const customizeResult = options.customizeTooltip.call(formatObject, formatObject) ?? {};
-
-    defaultTemplateNeeded = !('html' in customizeResult) && !('text' in customizeResult);
-  }
-
-  return defaultTemplateNeeded && getDefaultTemplate(options.font, textAlign);
-};
+BaseSparkline.prototype._initTooltip = noop;
+BaseSparkline.prototype._disposeTooltip = disposeLazyTooltip;
+BaseSparkline.prototype._setTooltipRendererOptions = setLazyTooltipRendererOptions;
+BaseSparkline.prototype._setTooltipOptions = setLazyTooltipOptions;
 
 const exportPlugin = extend(true, {}, plugin, {
-  init: _noop,
-  dispose: _noop,
+  init: noop,
+  dispose: noop,
   customize: null,
   members: {
     _getExportMenuOptions: null,
@@ -324,3 +392,5 @@ const exportPlugin = extend(true, {}, plugin, {
 });
 
 BaseSparkline.addPlugin(exportPlugin);
+
+export default BaseSparkline;
