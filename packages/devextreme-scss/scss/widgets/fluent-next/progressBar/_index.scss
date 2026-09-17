@@ -68,7 +68,7 @@
 }
 
 .dx-progressbar-status {
-  padding-top: var(--dx-progress-bar-status-margin-block-start);
+  padding-top: var(--dx-progress-bar-status-padding-block-start);
   color: var(--dx-progress-bar-label-content);
 
   .dx-progressbar .dx-position-right & {

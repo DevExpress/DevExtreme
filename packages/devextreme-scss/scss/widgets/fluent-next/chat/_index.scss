@@ -58,7 +58,7 @@
   var(--dx-chat-message-box-files-container-padding),
   var(--dx-chat-message-box-files-container-padding-block-start),
   var(--dx-chat-message-box-file-bg),
-  var(--dx-chat-message-box-file-cancel-button-secondary-content),
+  var(--dx-chat-message-box-file-cancel-button-bg-hovered),
   var(--dx-chat-file-container-box-shadow),
 );
 @include chat-messagebubble(
@@ -133,7 +133,7 @@
   var(--dx-chat-message-editing-preview-accent-content),
   var(--dx-chat-message-editing-preview-caption-font-size),
   var(--dx-chat-message-box-padding),
-  var(--dx-chat-message-editing-preview-border-width),
+  var(--dx-chat-message-editing-preview-accent-width),
   var(--dx-chat-message-editing-preview-cancel-button-content),
 );
 @include chat-confirmation-popup(

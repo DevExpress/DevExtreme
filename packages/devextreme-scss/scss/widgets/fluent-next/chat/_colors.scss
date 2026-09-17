@@ -6,8 +6,8 @@ $chat-bg: ds.$color-bg !default;
 
 $chat-border: ds.$color-border !default;
 $chat-message-box-file-bg: buttonColors.$button-normal-contained-bg-hovered !default;
-$chat-message-box-file-cancel-button-secondary-content: buttonColors.$button-normal-contained-bg-selected !default;
-$chat-message-editing-preview-accent-content: ds.$color-bg-primary !default;
+$chat-message-box-file-cancel-button-bg-hovered: ds.$color-bg-alpha-selected !default;
+$chat-message-editing-preview-accent-content: ds.$color-content-primary !default;
 $chat-message-editing-preview-cancel-button-content: textEditorColors.$text-editor-placeholder !default;
 
 $chat-avatar-content: ds.$color-content !default;
@@ -20,7 +20,7 @@ $chat-bubble-primary-bg: ds.$color-bg-primary-subtler !default;
 
 $chat-bubble-secondary-content: ds.$color-content !default;
 
-$chat-bubble-secondary-bg: ds.$color-bg-low !default;
+$chat-bubble-secondary-bg: ds.$color-bg-high !default;
 
 $chat-information-author-name-content: ds.$color-content-subtle !default;
 

@@ -16,7 +16,8 @@ $grid-selection-bg: ds.$color-bg-primary-subtler !default;
 $grid-row-content-focused: ds.$color-content !default;
 
 $grid-row-bg-focused: ds.$color-bg-primary-subtle !default;
-$grid-row-bg-hovered: ds.$color-bg-hovered !default;
+
+$grid-row-bg-hovered: ds.$color-bg-alpha-hovered !default;
 $grid-row-content-hovered: ds.$color-content !default;
 
 $grid-cell-modified-bg: ds.$color-bg-success-subtler !default;
@@ -74,6 +75,8 @@ $grid-draggable-column-content: ds.$color-content !default;
 }
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
+$grid-ai-chat-empty-icon-bg: ds.$color-bg-primary-subtler !default;
+$grid-ai-chat-empty-icon-content: ds.$color-content-primary !default;
 $grid-ai-chat-message-pending-content: ds.$color-content-primary !default;
 $grid-ai-chat-message-border: ds.$color-border !default;
 $grid-ai-chat-message-error-content: ds.$color-content-danger !default;

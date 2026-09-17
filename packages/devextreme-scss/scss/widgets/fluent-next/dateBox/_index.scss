@@ -138,7 +138,7 @@
 .dx-texteditor {
   &.dx-datebox-native {
     .dx-texteditor-input {
-      padding-right: textEditorSizes.$text-editor-spin-button-padding-inline;
+      padding-right: textEditorSizes.$text-editor-spin-button-margin-inline-end;
     }
   }
 }

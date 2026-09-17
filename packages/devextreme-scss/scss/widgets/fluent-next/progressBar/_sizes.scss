@@ -3,17 +3,17 @@
 
 $progress-bar-height: null !default;
 $progress-bar-border-radius: $global-border-radius !default;
-$progress-bar-status-margin-block-start: null !default;
+$progress-bar-status-padding-block-start: null !default;
 $progress-bar-indeterminate-width: 90% !default;
 
 @if $size == "default" {
   $progress-bar-height: ds.$spacing-40 !default;
-  $progress-bar-status-margin-block-start: ds.$spacing-120 !default;
+  $progress-bar-status-padding-block-start: ds.$spacing-120 !default;
 }
 
 @else if $size == "compact" {
   $progress-bar-height: ds.$spacing-20 !default;
-  $progress-bar-status-margin-block-start: ds.$spacing-80 !default;
+  $progress-bar-status-padding-block-start: ds.$spacing-80 !default;
 }
 
 // Base-layer values injected with design tokens (wave B1)

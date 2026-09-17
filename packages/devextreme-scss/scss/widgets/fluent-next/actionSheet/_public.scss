@@ -5,5 +5,5 @@
 @mixin publish {
   --dx-action-sheet-content-disabled: #{$action-sheet-content-disabled};
   --dx-action-sheet-item-margin: #{$action-sheet-item-margin};
-  --dx-action-sheet-item-margin-block-end: #{$action-sheet-item-margin-block-end};
+  --dx-action-sheet-item-margin-block-start: #{$action-sheet-item-margin-block-start};
 }

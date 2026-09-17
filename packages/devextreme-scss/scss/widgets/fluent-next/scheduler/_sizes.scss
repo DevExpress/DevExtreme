@@ -42,12 +42,12 @@ $scheduler-appointment-25min-height: 32px !default; // dx-literal-required: used
 $scheduler-appointment-10min-recurrence-padding-inline-end: ds.$spacing-140 !default;
 $scheduler-appointment-10min-title-font-size: ds.$spacing-80 !default; // dx-foreign-scale: 8px, below the whole font-size scale (it starts at 10px)
 $scheduler-appointment-10min-title-line-height: ds.$line-height-120 !default; // dx-no-semantic-role: 120 is off the line-height-role scale
-$scheduler-appointment-10min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+$scheduler-appointment-10min-icon-font-size: ds.$spacing-120 !default;
 $scheduler-appointment-10min-icon-inset-inline-end: ds.$spacing-20 !default;
 $scheduler-appointment-15min-recurrence-padding-inline-end: null !default;
 $scheduler-appointment-15min-title-font-size: ds.$font-size-base-sm !default;
 $scheduler-appointment-15min-title-line-height: null !default;
-$scheduler-appointment-15min-icon-font-size: ds.$font-size-120 !default; // dx-icon-glyph-size: text roles not applicable
+$scheduler-appointment-15min-icon-font-size: ds.$spacing-120 !default;
 $scheduler-appointment-15min-icon-inset-inline-end: null !default;
 $scheduler-appointment-20min-recurrence-padding-inline-end: null !default;
 $scheduler-appointment-20min-icon-inset-inline-end: null !default;
@@ -226,7 +226,7 @@ $scheduler-appointment-strip-border-end-start-radius: ds.$border-radius-60 !defa
 // Base-layer values injected with design tokens (wave B1)
 $scheduler-agenda-title-font-weight: ds.$font-weight-base-stronger !default;
 $scheduler-agenda-details-font-size: ds.$font-size-caption-md !default;
-$scheduler-appointment-icon-font-size: ds.$font-size-180 !default; // dx-icon-glyph-size: text roles not applicable
+$scheduler-appointment-icon-font-size: ds.$spacing-180 !default;
 
 // Base-layer sizing injected with design tokens (wave B2 — scheduler/views)
 $scheduler-views-header-border: ds.$border-width-20 solid !default;

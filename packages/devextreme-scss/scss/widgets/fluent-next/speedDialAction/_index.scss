@@ -4,7 +4,6 @@
 @use "../../base/speedDialAction" as baseSpeedDialAction with (
   $speeddialaction-fa-button-label-border-radius: var(--dx-speed-dial-action-fa-button-label-border-radius),
 );
-@use "../button/colors" as buttonColors;
 @use "../overlay";
 @include baseSpeedDialAction.dx-fa-button-mixin(
   var(--dx-speed-dial-action-main-fa-button-size),
@@ -21,7 +20,7 @@
   var(--dx-speed-dial-action-bg-active),
   var(--dx-speed-dial-action-label-shadow),
   var(--dx-speed-dial-action-main-bg),
-  buttonColors.$button-default-contained-content,
+  var(--dx-speed-dial-action-main-content),
   var(--dx-speed-dial-action-main-bg-hovered),
   var(--dx-speed-dial-action-main-bg-active)
 );

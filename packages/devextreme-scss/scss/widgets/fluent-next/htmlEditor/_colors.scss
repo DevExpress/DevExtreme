@@ -15,5 +15,5 @@ $html-editor-uploader-cover-bg: rgb(from #{ds.$color-border} r g b / 0.8) !defau
 $html-editor-highlighted-row-bg: ds.$color-bg-primary-alpha-active !default;
 
 // Base-layer values injected with design tokens (wave B1)
-$html-editor-code-block-bg: rgb(from #{ds.$color-content-subtle} r g b / 0.15) !default;
+$html-editor-code-block-bg: ds.$color-bg-active !default;
 $html-editor-placeholder-content: ds.$color-content-subtler !default;

@@ -6,9 +6,7 @@
 @mixin publish {
   --dx-list-base-select-all-separator-bg: #{$list-base-select-all-separator-bg};
   --dx-list-border: #{$list-border};
-  --dx-list-border-disabled: #{$list-border-disabled};
   --dx-list-border-width: #{$list-border-width};
-  --dx-list-bottom-padding: #{$list-bottom-padding};
   --dx-list-content-disabled: #{$list-content-disabled};
   --dx-list-context-menu-content-border: #{$list-context-menu-content-border};
   --dx-list-delete-button-static-padding: #{$list-delete-button-static-padding};
@@ -42,6 +40,7 @@
   --dx-list-item-padding-block: #{$list-item-padding-block};
   --dx-list-item-padding-inline: #{$list-item-padding-inline};
   --dx-list-items-row-gap: #{$list-items-row-gap};
+  --dx-list-margin-block-end: #{$list-margin-block-end};
   --dx-list-menu-button-default-bg: #{$list-menu-button-default-bg};
   --dx-list-menu-button-default-content: #{$list-menu-button-default-content};
   --dx-list-menu-button-delete-bg: #{$list-menu-button-delete-bg};
