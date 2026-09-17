@@ -490,7 +490,11 @@ export class HeaderFilterView extends Modules.View {
     const generalHeaderFilter = this.option('headerFilter') || {};
     const specificHeaderFilter = options.headerFilter || {};
 
-    return extend(true, { search: {} }, generalHeaderFilter, specificHeaderFilter);
+    const headerFilterOptions = extend(true, {}, generalHeaderFilter, specificHeaderFilter);
+
+    headerFilterOptions.search ??= {};
+
+    return headerFilterOptions;
   }
 
   protected _renderCore() {
