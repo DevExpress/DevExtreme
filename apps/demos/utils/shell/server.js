@@ -37,8 +37,6 @@ function subdirectoryNames(dir) {
     .map((entry) => entry.name);
 }
 
-// Route params are matched against real directory names so the path is built
-// from the listing rather than from the request.
 function resolveDemoSegments(widget, name, approach) {
   const widgetNames = subdirectoryNames(demosRoot);
   if (!widgetNames.includes(widget)) return null;
@@ -120,7 +118,7 @@ const demoIndexHandler = async (request, response) => {
     try {
       result = await ensureBundleFresh(demo.widget, demo.name, demo.approach);
     } catch (err) {
-      console.error(`demo build failed for ${widget}/${name}/${approach}:`, err);
+      console.error(`demo build failed for ${demo.widget}/${demo.name}/${demo.approach}:`, err);
       response.status(500).type('text/plain').send('Demo build failed — see the server console.');
       return;
     }
