@@ -2060,7 +2060,9 @@ QUnit.module('Base Field chooser', {
 
         this.setup(dataSourceOptions, {
             headerFilter: {
-                allowSearch: true
+                search: {
+                    enabled: true,
+                }
             }
         });
 

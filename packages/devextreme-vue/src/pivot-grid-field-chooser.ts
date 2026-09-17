@@ -137,7 +137,6 @@ const DxHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
@@ -147,7 +146,6 @@ const DxHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: Number,
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,

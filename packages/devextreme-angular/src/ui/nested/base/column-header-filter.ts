@@ -15,13 +15,6 @@ import type { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
     template: ''
 })
 export abstract class DxoColumnHeaderFilter extends NestedOption {
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
     }

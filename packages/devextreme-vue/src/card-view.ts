@@ -799,7 +799,6 @@ const DxCardViewHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
@@ -809,7 +808,6 @@ const DxCardViewHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: [Number, String],
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
@@ -1079,7 +1077,6 @@ const DxColumnChooserConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:container": null,
     "update:emptyPanelText": null,
     "update:enabled": null,
@@ -1087,14 +1084,12 @@ const DxColumnChooserConfig = {
     "update:mode": null,
     "update:position": null,
     "update:search": null,
-    "update:searchTimeout": null,
     "update:selection": null,
     "update:sortOrder": null,
     "update:title": null,
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     container: {},
     emptyPanelText: String,
     enabled: Boolean,
@@ -1102,7 +1097,6 @@ const DxColumnChooserConfig = {
     mode: String as PropType<ColumnChooserMode>,
     position: Object as PropType<PositionConfig | Record<string, any>>,
     search: Object as PropType<ColumnChooserSearchConfig | Record<string, any>>,
-    searchTimeout: Number,
     selection: Object as PropType<ColumnChooserSelectionConfig | Record<string, any>>,
     sortOrder: String as PropType<SortOrder>,
     title: String,
@@ -1169,7 +1163,6 @@ const DxColumnHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
@@ -1179,7 +1172,6 @@ const DxColumnHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
@@ -1979,7 +1971,6 @@ const DxHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
@@ -1992,7 +1983,6 @@ const DxHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,

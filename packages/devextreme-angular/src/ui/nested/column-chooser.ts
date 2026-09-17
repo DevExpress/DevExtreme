@@ -29,7 +29,6 @@ import { DxoColumnChooser } from './base/column-chooser';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
-        'allowSearch',
         'container',
         'emptyPanelText',
         'enabled',
@@ -37,7 +36,6 @@ import { DxoColumnChooser } from './base/column-chooser';
         'mode',
         'position',
         'search',
-        'searchTimeout',
         'selection',
         'sortOrder',
         'title',
