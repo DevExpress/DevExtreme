@@ -2,7 +2,6 @@
 @use "colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../scrollable/colors" as scrollableColors;
 @use "../scrollable";
 @use "../../base/scrollView" with (
   $scrollview-top-pocket-width: var(--dx-scroll-view-top-pocket-width),
