@@ -64,7 +64,11 @@ interface DomAdapterStrategy {
   setProperty: (element: Element, name: string, value: unknown) => void;
   removeElement: (element: Node | null | undefined) => void;
   setStyle: (element: HTMLElement, name: string, value: string) => void;
-  insertElement: (parentElement: Node, newElement: Node, nextSiblingElement?: Node | null) => void;
+  insertElement: (
+    parentElement: Node | null | undefined,
+    newElement: Node | null | undefined,
+    nextSiblingElement?: Node | null,
+  ) => void;
   elementsFromPoint: (x: number, y: number, element?: HTMLElement | null) => Element[];
   _document: Document;
 }
