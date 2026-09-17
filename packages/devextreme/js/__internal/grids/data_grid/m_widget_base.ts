@@ -18,7 +18,6 @@ import { extend } from '@js/core/utils/extend';
 import { isString } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 
 import gridCore from './m_core';
@@ -131,8 +130,6 @@ class DataGrid extends GridCoreWidget<Properties> {
     const that = this;
 
     super._init();
-
-    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(that);
 
     // @ts-expect-error
     gridCore.processModules(that, gridCore as any);

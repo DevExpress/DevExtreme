@@ -57,14 +57,6 @@ export class DxoGanttGanttHeaderFilterComponent extends NestedOption implements 
     }
 
     @Input()
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
-    }
-
-    @Input()
     get texts(): dxGanttHeaderFilterTexts {
         return this._getOption('texts');
     }

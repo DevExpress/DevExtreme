@@ -56,14 +56,6 @@ export class DxoPivotGridHeaderFilterComponent extends NestedOption implements O
     }
 
     @Input()
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
-    }
-
-    @Input()
     get showRelevantValues(): boolean {
         return this._getOption('showRelevantValues');
     }
