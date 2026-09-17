@@ -1,11 +1,15 @@
 import type { LangParams } from '@js/common/data';
 import config from '@js/core/config';
 import { extend } from '@js/core/utils/extend';
-import { isFunction, isString } from '@js/core/utils/type';
+import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataFilter } from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 import type { Controllers } from '@ts/grids/grid_core/m_types';
+
+import { SOURCE_ORDER } from './const';
+import type { FilterSourceContext } from './types';
+import { combineFilters } from './utils';
 
 type TaggedFilter = unknown[] & {
   columnIndex?: number;
@@ -18,27 +22,43 @@ export class FilterController extends modules.Controller {
 
   protected dataSourceController!: Controllers['dataSource'];
 
+  private columnSourcesSuspended = false;
+
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataSourceController = this.getController('dataSource');
   }
 
-  public isFilterSyncActive(): boolean | undefined {
+  public isFilterSyncActive(): boolean {
     const filterSyncEnabled = this.option('filterSyncEnabled');
 
-    return filterSyncEnabled === 'auto' ? this.option('filterPanel.visible') : filterSyncEnabled;
+    return filterSyncEnabled === 'auto' ? !!this.option('filterPanel.visible') : !!filterSyncEnabled;
   }
 
-  protected getLangParams(): LangParams | undefined {
-    return this.dataSourceController.getDataSource()?.loadOptions?.()?.langParams;
+  public suspendColumnSources<T>(callback: () => T): T {
+    const wasSuspended = this.columnSourcesSuspended;
+
+    this.columnSourcesSuspended = true;
+
+    try {
+      return callback();
+    } finally {
+      this.columnSourcesSuspended = wasSuspended;
+    }
   }
 
-  /**
-   * @extended: filter_row, filter_sync, header_filter, search
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
-    return null;
+    const context = this.createSourceContext(excludedColumn);
+
+    return SOURCE_ORDER.reduce<DataFilter>((filter, sourceName) => {
+      const source = this.getController(sourceName);
+
+      if (!source?.isFilterSourceActive(context)) {
+        return filter;
+      }
+
+      return combineFilters([filter, ...source.getFilterExpressions(context)]);
+    }, null);
   }
 
   public normalizeFilterSelectors(
@@ -48,6 +68,23 @@ export class FilterController extends modules.Controller {
     filterValue?: unknown,
   ): DataFilter {
     return this.normalizeNode(filter, remoteFiltering, columnIndex, filterValue) as DataFilter;
+  }
+
+  private createSourceContext(excludedColumn?: Column | null): FilterSourceContext {
+    const filterSyncActive = this.isFilterSyncActive();
+
+    return {
+      langParams: this.getLangParams(),
+      excludedColumn: excludedColumn ?? null,
+      filterSyncActive,
+      columnSourcesActive: !filterSyncActive
+        || (!isDefined(this.option('filterValue')) && !this.columnSourcesSuspended),
+      columnsController: this.columnsController,
+    };
+  }
+
+  private getLangParams(): LangParams | undefined {
+    return this.dataSourceController?.getDataSource()?.loadOptions?.()?.langParams;
   }
 
   private normalizeNode(

@@ -11,9 +11,7 @@ import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 
 import type { DataController } from '../data_controller/data_controller';
 import type { UserState } from '../data_controller/types';
-import type { FilterController } from '../filter/filter_controller';
-import type { DataFilter } from '../filter/types';
-import { combineFilters } from '../filter/utils';
+import type { DataFilter, FilterSourceContext } from '../filter/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType, OptionChanged } from '../m_types';
@@ -58,29 +56,6 @@ const dataController = (
   }
 };
 
-const filterController = (
-  base: ModuleType<FilterController>,
-) => class FilterControllerSearchExtender extends base {
-  public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
-    const filter = super.getAdditionalFilter(excludedColumn);
-    const searchFilter = createSearchExpression(
-      this.getColumnsToSearch(),
-      this.option('searchPanel.text'),
-      this.getLangParams(),
-    );
-
-    return combineFilters([filter, searchFilter]);
-  }
-
-  private getColumnsToSearch(): Column[] {
-    const searchVisibleColumnsOnly = this.option('searchPanel.searchVisibleColumnsOnly');
-
-    return this.columnsController
-      .getColumns()
-      .filter((column: Column) => !searchVisibleColumnsOnly || !!column.visible);
-  }
-};
-
 type SearchDataControllerExtender = InstanceType<ReturnType<typeof dataController>>;
 
 export class SearchPanelViewController extends modules.ViewController {
@@ -99,6 +74,27 @@ export class SearchPanelViewController extends modules.ViewController {
 
       this.headerPanel?.registerToolbarItem(SEARCH_PANEL_ITEM_NAME, searchPanelToolbarItem);
     }
+  }
+
+  public isFilterSourceActive(): boolean {
+    return true;
+  }
+
+  public getFilterExpressions({ langParams, columnsController }: FilterSourceContext): DataFilter[] {
+    const columns = this.getColumnsToSearch(columnsController);
+    const searchFilter = createSearchExpression(columns, this.option('searchPanel.text'), langParams);
+
+    return searchFilter ? [searchFilter] : [];
+  }
+
+  private getColumnsToSearch(
+    columnsController: FilterSourceContext['columnsController'],
+  ): Column[] {
+    const searchVisibleColumnsOnly = this.option('searchPanel.searchVisibleColumnsOnly');
+
+    return columnsController
+      ?.getColumns()
+      ?.filter((column: Column) => !searchVisibleColumnsOnly || !!column.visible) ?? [];
   }
 
   public optionChanged(args: OptionChanged): void {
@@ -365,7 +361,6 @@ export const searchModule = {
   extenders: {
     controllers: {
       data: dataController,
-      filter: filterController,
     },
     views: {
       rowsView,
