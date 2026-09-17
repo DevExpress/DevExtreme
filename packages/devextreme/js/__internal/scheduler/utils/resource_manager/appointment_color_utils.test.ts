@@ -9,7 +9,7 @@ import {
   resourceItemsByIdMock,
 } from '@ts/scheduler/__mock__/resource_manager.mock';
 
-import { getAppointmentColor, getPaintedResource } from './appointment_color_utils';
+import { getAppointmentColor, getContrastTextColor, getPaintedResource } from './appointment_color_utils';
 
 const ownerFirstColor = '#cb2824';
 const ownerSecondColor = '#cb7d7b';
@@ -327,5 +327,31 @@ describe('appointment color utils', () => {
         ),
       ).toEqual(dataSource[2].color);
     });
+  });
+});
+
+describe('getContrastTextColor', () => {
+  it('should return the light text color for dark backgrounds', () => {
+    const results = ['#1564C0', '#2E7D32', 'rgb(85, 26, 139)', 'darkred'].map(getContrastTextColor);
+
+    expect(results).toEqual(['#fff', '#fff', '#fff', '#fff']);
+  });
+
+  it('should return the dark text color for light backgrounds', () => {
+    const results = ['#A7E3A5', '#F9E2AE', 'rgb(255, 255, 255)', 'lightblue'].map(getContrastTextColor);
+
+    expect(results).toEqual(['#000', '#000', '#000', '#000']);
+  });
+
+  it('should reach the AA contrast ratio on both sides of the threshold', () => {
+    const results = ['#757575', '#767676'].map(getContrastTextColor);
+
+    expect(results).toEqual(['#fff', '#000']);
+  });
+
+  it('should return undefined for an unparsable color', () => {
+    const results = ['', 'not a color'].map(getContrastTextColor);
+
+    expect(results).toEqual([undefined, undefined]);
   });
 });
