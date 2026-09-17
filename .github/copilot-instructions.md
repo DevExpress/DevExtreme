@@ -168,8 +168,7 @@ pnpm nx run-many -t lint                  # all packages
 pnpm run lint                             # devextreme package: js, ts, dts, texts
 pnpm run lint-js -- --fix                 # auto-fix JS
 
-# Regenerate (after changes to generators, TS declarations, or devextreme-internal-tools)
-pnpm run regenerate-all
+# Regenerate TS reexports and bundle (after changes to public .d.ts)
 pnpm run update-ts-reexports              # from packages/devextreme
 pnpm run update-ts-bundle                 # from packages/devextreme
 

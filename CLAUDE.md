@@ -186,11 +186,11 @@ Files under `**/localization/messages/**/*.json` are managed by a dedicated team
 | `default_workflow.yml` | `nx run-many -t lint,test` on most packages                           |
 | `lint.yml`             | TS, JS, .d.ts, text linting; checks generated reexports are up-to-date |
 | `build_all.yml`        | Full production build (requires .NET 8.0.x) — CI only                |
-| `wrapper_tests.yml`    | Angular/React/Vue wrapper tests + regeneration check                  |
+| `wrapper_tests.yml`    | Angular/React/Vue wrapper tests                                      |
 | `qunit_tests.yml`      | Legacy QUnit tests                                                    |
 | `testcafe_tests.yml`   | E2E accessibility and component tests                                 |
 
 **Common CI failure fixes:**
-- *"Generated code is outdated"* → run `pnpm run regenerate-all` from repo root
+- *"dx.all.d.ts is outdated"* → run `pnpm run regenerate` from `packages/devextreme`
 - *"Reexports outdated"* → run `pnpm run update-ts-reexports` from `packages/devextreme`
 - *Lint errors* → run `pnpm run lint-js -- --fix` or `pnpm run lint-ts -- --fix`
