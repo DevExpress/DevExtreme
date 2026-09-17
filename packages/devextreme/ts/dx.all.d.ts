@@ -34111,6 +34111,14 @@ declare module DevExpress.ui {
      * [descr:ui.themes.refreshMode()]
      */
     static refreshMode(): void;
+    /**
+     * [descr:ui.themes.customAccentColor()]
+     */
+    static customAccentColor(): string;
+    /**
+     * [descr:ui.themes.customAccentColor(color)]
+     */
+    static customAccentColor(color: string | null): void;
   }
   /**
    * [descr:Widget]

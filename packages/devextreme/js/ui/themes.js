@@ -16,6 +16,7 @@ export const {
     isMaterialBased,
     mode,
     refreshMode,
+    customAccentColor,
     detachCssClasses,
     attachCssClasses,
     current,
