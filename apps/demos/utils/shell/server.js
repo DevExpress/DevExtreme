@@ -31,10 +31,31 @@ function isPathWithin(parentDir, candidatePath) {
   return rel !== '' && !rel.startsWith('..') && !isAbsolute(rel);
 }
 
+function subdirectoryNames(dir) {
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+}
+
+function resolveDemoSegments(widget, name, approach) {
+  const widgetNames = subdirectoryNames(demosRoot);
+  if (!widgetNames.includes(widget)) return null;
+  const widgetDir = widgetNames.find((entry) => entry === widget);
+
+  const demoNames = subdirectoryNames(join(demosRoot, widgetDir));
+  if (!demoNames.includes(name)) return null;
+  const demoDir = demoNames.find((entry) => entry === name);
+
+  const approachNames = subdirectoryNames(join(demosRoot, widgetDir, demoDir));
+  if (!approachNames.includes(approach)) return null;
+  const approachDir = approachNames.find((entry) => entry === approach);
+
+  return { widget: widgetDir, name: demoDir, approach: approachDir };
+}
+
 // Rebuilds on-demand, only for the demo actually being viewed, rather than
 // watching all ~2,500 demos.
 const BUNDLED_APPROACHES = new Set(['React', 'ReactJs', 'Vue', 'Angular']);
-const SAFE_SEGMENT = /^[A-Za-z0-9_-]+$/;
 const GENERATED_ENTRY_NAMES = new Set([
   'bundle.js', 'bundle.css', indexFileName, 'tsconfig.json', 'description.md', '_chunks',
 ]);
@@ -87,16 +108,18 @@ const demoIndexHandler = async (request, response) => {
   const { widget, name, approach } = request.params;
 
   if (widget && name && approach) {
-    if (![widget, name, approach].every((segment) => SAFE_SEGMENT.test(segment))) {
-      response.status(400).type('text/plain').send('Invalid demo path');
+    const demo = resolveDemoSegments(widget, name, approach);
+    if (!demo) {
+      response.status(404).type('text/plain').send('Unknown demo');
       return;
     }
 
     let result;
     try {
-      result = await ensureBundleFresh(widget, name, approach);
+      result = await ensureBundleFresh(demo.widget, demo.name, demo.approach);
     } catch (err) {
-      response.status(500).type('text/plain').send(`Demo build failed: ${err.message}`);
+      console.error(`demo build failed for ${demo.widget}/${demo.name}/${demo.approach}:`, err);
+      response.status(500).type('text/plain').send('Demo build failed — see the server console.');
       return;
     }
     if (!result.ok) {
