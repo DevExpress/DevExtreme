@@ -73,7 +73,7 @@ import {
 } from './data.ts';
 
 interface AiAssistantProps { disabled: boolean }
-interface AiAssistantEmits { (e: 'message-submitted', message: DxChatTypes.TextMessage) }
+interface AiAssistantEmits { (e: 'message-submitted', message: DxChatTypes.TextMessage): void }
 
 const props = defineProps<AiAssistantProps>();
 const emit = defineEmits<AiAssistantEmits>();
