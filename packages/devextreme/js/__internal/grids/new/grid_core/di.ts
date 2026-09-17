@@ -11,6 +11,7 @@ import { ConfirmController } from './editing/confirm_controller';
 import { EditingController } from './editing/controller';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
+import { CompatibilityFilterBuilderController } from './filtering/filter_builder/index';
 import * as FilterSyncModule from './filtering/filter_sync/index';
 import {
   CompatibilityHeaderFilterController,
@@ -52,7 +53,7 @@ export function register(diContext: DIContext): void {
   diContext.register(HeaderFilterController);
   diContext.register(HeaderFilterPopupView);
   diContext.register(FilterSyncModule.FilterSyncController);
-  diContext.register(FilterSyncModule.CompatibilityFilterSyncController);
+  diContext.register(CompatibilityFilterBuilderController);
   diContext.register(CompatibilityHeaderFilterController);
   diContext.register(ErrorController);
   diContext.register(EditingController);

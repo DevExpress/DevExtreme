@@ -37,10 +37,10 @@ const isFilterSourceActive = (instance: DataGridInstance): boolean => {
     columnsController: instance.getController('columns'),
   };
 
-  return instance.getController('filterSync').isFilterSourceActive(context);
+  return instance.getController('filterBuilder').isFilterSourceActive(context);
 };
 
-describe('FilterSyncController.isFilterSourceActive', () => {
+describe('FilterBuilderController.isFilterSourceActive', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
