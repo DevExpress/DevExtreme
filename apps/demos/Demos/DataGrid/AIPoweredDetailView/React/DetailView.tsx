@@ -5,7 +5,7 @@ import { ButtonGroup, type ButtonGroupTypes } from 'devextreme-react/button-grou
 import { Button, type ButtonTypes } from 'devextreme-react/button';
 import { TextArea } from 'devextreme-react/text-area';
 import { LoadPanel, Position } from 'devextreme-react/load-panel';
-import { type DxEvent } from 'devextreme/events';
+import { type EventObject } from 'devextreme-react/common/core/events';
 import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT } from './service.ts';
 import { type AIMessage, type DetailViewProps } from './types.ts';
@@ -74,7 +74,7 @@ const DetailView = ({ data: templateData, registerAbortRequest, unregisterAbortR
     };
   }, [abortRequest, registerAbortRequest, unregisterAbortRequest]);
 
-  const handleSubmit = useCallback(async (event?: DxEvent, prompt?: string) => {
+  const handleSubmit = useCallback(async (event?: EventObject, prompt?: string) => {
     if (!prompt) return;
 
     const controller = new AbortController();

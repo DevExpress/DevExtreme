@@ -4,7 +4,7 @@ import { DxTextBoxModule, DxButtonGroupModule, DxButtonModule, DxTextAreaModule,
 import { type DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
 import { type DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
 import { type DxButtonTypes } from 'devextreme-angular/ui/button';
-import { type DxEvent } from 'devextreme/events';
+import { type EventObject } from 'devextreme-angular/common/core/events';
 import themes from 'devextreme/ui/themes';
 import { type Vehicle, type AbortRequest } from '../app.service';
 import { AiService, type AIMessage } from '../ai/ai.service';
@@ -88,7 +88,7 @@ export class DetailViewComponent implements OnInit, OnDestroy {
     this.handleSubmit(event);
   }
 
-  async handleSubmit(event?: DxEvent) {
+  async handleSubmit(event?: EventObject) {
     if (!this.promptValue) return;
 
     const controller = new AbortController();

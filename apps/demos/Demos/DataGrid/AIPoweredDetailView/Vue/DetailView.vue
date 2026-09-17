@@ -82,7 +82,7 @@ import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-gr
 import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
 import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxLoadPanel, DxPosition } from 'devextreme-vue/load-panel';
-import { type DxEvent } from 'devextreme/events';
+import { type EventObject } from 'devextreme-vue/common/core/events';
 import themes from 'devextreme/ui/themes';
 import { getAIResponse, SYSTEM_PROMPT, type AIMessage } from './service.ts';
 import type { Vehicle, AbortRequest } from './types.ts';
@@ -153,7 +153,7 @@ const isLoading = ref(false);
 const isError = ref(false);
 const submitButtonText = ref('Submit');
 
-async function handleSubmit(event?: DxEvent) {
+async function handleSubmit(event?: EventObject) {
   if (!promptValue.value) return;
 
   const controller = new AbortController();
