@@ -147,6 +147,7 @@ class DataGrid extends GridCoreWidget<Properties> {
   }
 
   protected _setDeprecatedOptions() {
+    // @ts-expect-error
     super._setDeprecatedOptions();
 
     // @ts-expect-error

@@ -715,7 +715,6 @@ const ColumnButton = Object.assign<typeof _componentColumnButton, NestedComponen
 // owners:
 // TreeList
 type IColumnChooserProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   container?: any | string | undefined;
   emptyPanelText?: string;
   enabled?: boolean;
@@ -723,7 +722,6 @@ type IColumnChooserProps = React.PropsWithChildren<{
   mode?: ColumnChooserMode;
   position?: PositionConfig | undefined;
   search?: ColumnChooserSearchConfig;
-  searchTimeout?: number;
   selection?: ColumnChooserSelectionConfig;
   sortOrder?: SortOrder | undefined;
   title?: string;

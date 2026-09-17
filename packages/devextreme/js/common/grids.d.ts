@@ -820,12 +820,6 @@ export interface ColumnButtonBase {
  */
 export type ColumnChooser = {
   /**
-   * @docid
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
-  /**
      * @docid
      * @default undefined
      * @public
@@ -860,12 +854,6 @@ export type ColumnChooser = {
    * @docid
    */
   search?: ColumnChooserSearchConfig;
-  /**
-   * @docid
-   * @default 500
-   * @deprecated
-   */
-  searchTimeout?: number;
   /**
    * @docid
    */
