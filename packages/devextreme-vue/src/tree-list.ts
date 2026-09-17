@@ -1401,7 +1401,6 @@ const DxColumnHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
@@ -1411,7 +1410,6 @@ const DxColumnHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
@@ -2579,7 +2577,6 @@ const DxHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
@@ -2592,7 +2589,6 @@ const DxHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
@@ -4142,7 +4138,6 @@ const DxTreeListHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
@@ -4152,7 +4147,6 @@ const DxTreeListHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: [Number, String],
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
