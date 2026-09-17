@@ -3,7 +3,8 @@
   "version": "26.2.0",
   "scripts": {
     "test": "node ./runner.mjs",
-    "lint": "eslint"
+    "lint": "eslint",
+    "type-check": "tsc --noEmit -p tsconfig.json"
   },
   "devDependencies": {
     "@playwright/test": "catalog:",

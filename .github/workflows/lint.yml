@@ -121,6 +121,10 @@ jobs:
         DEBUG: eslint:cli-engine
       run: pnpm exec nx lint
 
+    - name: Type-check Playwright tests
+      working-directory: ./e2e/playwright
+      run: pnpm exec nx type-check
+
   JS:
     runs-on: devextreme-shr2
     timeout-minutes: 60

@@ -4,7 +4,7 @@ export const DEFAULT_THEME = 'fluent.blue.light';
 
 export const DEFAULT_SELECTOR = '#container';
 
-export const SERVER_PORT = 8080;
+export const SERVER_PORT = 20070;
 
 export const TEST_PAGE_URL = '/e2e/playwright/tests/container.html';
 

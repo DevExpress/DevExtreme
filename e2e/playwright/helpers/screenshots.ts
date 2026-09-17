@@ -1,7 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
-import { getFullThemeName, getThemePostfix } from './themeUtils';
-import { changeTheme } from './testPageUtils';
+import { getThemePostfix } from './themeUtils';
+import { changeTheme, getCurrentTheme } from './testPageUtils';
 
 export interface ScreenshotOptions {
   element?: Locator | string | null;
@@ -115,6 +115,11 @@ export async function testScreenshot(
     themeChanged,
   } = options ?? {};
 
+  // The page carries the theme the fixture actually applied, which is the one the test asked for.
+  // An environment variable only names the theme of the whole run and disagrees with a test that
+  // chose its own.
+  const activeTheme = await getCurrentTheme(page);
+
   if (theme) {
     await changeTheme(page, theme);
     await themeChanged?.();
@@ -123,12 +128,12 @@ export async function testScreenshot(
   // No element means the whole viewport, the way the TestCafe comparer read a missing element.
   const target = resolveLocator(page, element);
 
-  await expectScreenshot(page, target, getScreenshotName(screenshotName, theme));
+  await expectScreenshot(page, target, getScreenshotName(screenshotName, theme ?? activeTheme));
 
   if (shouldTestInCompact) {
     // The theme of a "- compact" job already ends with the suffix; appending it twice would ask
     // for a theme that does not exist.
-    const compactTheme = `${(theme ?? getFullThemeName()).replace(/\.compact$/, '')}.compact`;
+    const compactTheme = `${(theme ?? activeTheme).replace(/\.compact$/, '')}.compact`;
 
     await changeTheme(page, compactTheme);
     await compactCallBack?.();
@@ -137,6 +142,6 @@ export async function testScreenshot(
   }
 
   if (theme || shouldTestInCompact) {
-    await changeTheme(page, getFullThemeName());
+    await changeTheme(page, activeTheme);
   }
 }

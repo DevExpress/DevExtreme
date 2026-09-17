@@ -26,7 +26,7 @@ const { values } = parseArgs({
 const port = Number(values.port);
 
 if(!Number.isInteger(port) || port <= 0) {
-    console.error(`❌ Invalid port: ${values.port}. Pass a positive integer, for example --port=8080.`);
+    console.error(`❌ Invalid port: ${values.port}. Pass a positive integer, for example --port=20070.`);
     process.exit(1);
 }
 
