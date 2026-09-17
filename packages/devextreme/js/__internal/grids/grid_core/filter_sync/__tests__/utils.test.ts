@@ -12,6 +12,7 @@ import {
   getConditionFromHeaderFilter,
   getFilterRowOptionsFromCondition,
   getHeaderFilterFromCondition,
+  parseColumnPropertyName,
 } from '../utils';
 
 const condition = (
@@ -52,6 +53,20 @@ describe('getColumnIdentifier', () => {
 
   it('returns undefined when the name is an empty string and there is no data field', () => {
     expect(getColumnIdentifier({ name: '' })).toBeUndefined();
+  });
+});
+
+describe('parseColumnPropertyName', () => {
+  it('returns the property name of a column option', () => {
+    expect(parseColumnPropertyName('columns[0].filterValue')).toBe('filterValue');
+  });
+
+  it('returns the last property name of a nested column option', () => {
+    expect(parseColumnPropertyName('columns[0].headerFilter.dataSource')).toBe('dataSource');
+  });
+
+  it('returns null when the option name has no property', () => {
+    expect(parseColumnPropertyName('columns')).toBeNull();
   });
 });
 
