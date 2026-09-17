@@ -1,8 +1,6 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import { FILTER_TYPES_EXCLUDE } from '@ts/grids/grid_core/filter_sync/const';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
 import type { ModuleType, OptionChanged } from '@ts/grids/grid_core/m_types';
 
@@ -30,62 +28,8 @@ export const filterSyncDataControllerExtender = (
       case 'filterSyncEnabled':
         args.handled = true;
         break;
-      case 'columns':
-        if (this.filterController.isFilterSyncActive()) {
-          const column: Column = this._columnsController.getColumnByPath(args.fullName);
-
-          if (column && !this.filterSyncController.isSyncingColumnOptions()) {
-            this.filterController.suspendColumnSources(() => {
-              this.syncColumnOption(
-                column,
-                this.parseColumnPropertyName(args.fullName),
-                args.value,
-                args.previousValue,
-              );
-            });
-          }
-        }
-        super.optionChanged(args);
-        break;
       default:
         super.optionChanged(args);
-    }
-  }
-
-  private parseColumnPropertyName(fullName: string): string | null {
-    const matched = /.*\.(.*)/.exec(fullName);
-
-    if (matched) {
-      return matched[1];
-    }
-
-    return null;
-  }
-
-  private syncColumnOption(
-    column: Column,
-    propertyName: string | null,
-    // `OptionChanged` is discriminated on `name`, and its key list cannot enumerate array
-    // indices, so `columns[N].<prop>` has no union member and falls back to the `columns`
-    // array type. `unknown` is the honest type for the leaf value.
-    value: unknown,
-    previousValue: unknown,
-  ): void {
-    const hasExcludeFilterType = value === FILTER_TYPES_EXCLUDE
-      || previousValue === FILTER_TYPES_EXCLUDE;
-    const isExcludeFilterTypeToggled = propertyName === 'filterType' && hasExcludeFilterType;
-    const needSyncHeaderFilter = isExcludeFilterTypeToggled || propertyName === 'filterValues';
-    const needSyncFilterRow = propertyName === 'filterValue'
-      || propertyName === 'selectedFilterOperation';
-
-    if (needSyncHeaderFilter) {
-      this.filterSyncController.syncHeaderFilter(column);
-
-      return;
-    }
-
-    if (needSyncFilterRow) {
-      this.filterSyncController.syncFilterRow(column);
     }
   }
 
