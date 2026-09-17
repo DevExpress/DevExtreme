@@ -11,8 +11,7 @@ import { compileStringAsync, SassString, Value } from 'sass-embedded';
  * only in a compiled bundle - hence real bundles, not files.
  *
  * A source position is reported only when every one of its emissions, in every bundle, is dead.
- * A mixin repainted at one of its call sites is fine. Consecutive duplicates inside one block are
- * parse-time fallbacks and stay out of scope.
+ * A mixin repainted at one of its call sites is fine.
  */
 
 jest.setTimeout(300000);
@@ -139,7 +138,6 @@ const collectDeadPositions = async (): Promise<{ positions: Position[]; bundles:
 
     emissions.forEach((emission) => {
       const loses = emission.keys.every((key) => winners.get(key) !== emission);
-      const sameBlock = loses && emission.keys.some((key) => winners.get(key)!.rule === emission.rule);
       const origin = originOf(emission.decl);
       const id = `${origin.file}:${origin.line}:${emission.decl.prop}`;
       const position = positions.get(id) ?? {
@@ -151,7 +149,7 @@ const collectDeadPositions = async (): Promise<{ positions: Position[]; bundles:
         winners: new Set<string>(),
       };
       position.total += 1;
-      if (loses && !sameBlock) {
+      if (loses) {
         position.dead += 1;
         const winner = originOf(winners.get(emission.keys[0])!.decl);
         position.winners.add(`${winner.file}:${winner.line}`);

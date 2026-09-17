@@ -20,7 +20,6 @@
 
   .dx-label-h-align {
     &.dx-flex-layout {
-      display: -webkit-box; // stylelint-disable-line value-no-vendor-prefix
       display: flex;
 
       .dx-field-item-label {
