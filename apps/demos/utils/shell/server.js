@@ -87,7 +87,7 @@ const demoIndexHandler = async (request, response) => {
   const { widget, name, approach } = request.params;
 
   if (widget && name && approach) {
-    if (![widget, name, approach].every((segment) => SAFE_SEGMENT.test(segment))) {
+    if (!SAFE_SEGMENT.test(widget) || !SAFE_SEGMENT.test(name) || !SAFE_SEGMENT.test(approach)) {
       response.status(400).type('text/plain').send('Invalid demo path');
       return;
     }
@@ -96,7 +96,8 @@ const demoIndexHandler = async (request, response) => {
     try {
       result = await ensureBundleFresh(widget, name, approach);
     } catch (err) {
-      response.status(500).type('text/plain').send(`Demo build failed: ${err.message}`);
+      console.error(`demo build failed for ${widget}/${name}/${approach}:`, err);
+      response.status(500).type('text/plain').send('Demo build failed — see the server console.');
       return;
     }
     if (!result.ok) {
