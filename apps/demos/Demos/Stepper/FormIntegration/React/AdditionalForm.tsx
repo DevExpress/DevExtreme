@@ -5,6 +5,12 @@ import { Form, SimpleItem } from 'devextreme-react/form';
 
 import type { FormProps } from './types.ts';
 
+const editorOptions = {
+  height: 160,
+  elementAttr: { id: 'additionalRequest' },
+};
+const label = { visible: false };
+
 const AdditionalForm: FC<FormProps> = memo(({ formData }: FormProps) => (
   <>
     <div>
@@ -14,11 +20,8 @@ const AdditionalForm: FC<FormProps> = memo(({ formData }: FormProps) => (
       <SimpleItem
         dataField='additionalRequest'
         editorType='dxTextArea'
-        editorOptions={{
-          height: 160,
-          elementAttr: { id: 'additionalRequest' },
-        }}
-        label={{ visible: false }}
+        editorOptions={editorOptions}
+        label={label}
       ></SimpleItem>
     </Form>
   </>

@@ -7,7 +7,7 @@ import { isFunction } from '@js/core/utils/type';
 import type { EventInfo, NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { TextBoxInstance } from '@js/ui/text_box';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { TextBoxProperties } from '@ts/ui/text_box/text_box';
 
 import type { Column } from '../columns_controller/types';
@@ -110,7 +110,7 @@ export const calculateSearchFilter = (
     return ['!'];
   }
 
-  return gridCoreUtils.combineFilters(filters, 'or');
+  return combineFilters(filters, 'or');
 };
 
 // eslint-disable-next-line @typescript-eslint/init-declarations

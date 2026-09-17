@@ -34,7 +34,6 @@ import {
   VIRTUAL_ROW_CLASS,
 } from './const';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
-import type { GroupCountableDataSource } from './utils/items';
 import { isItemCountableByDataSource } from './utils/items';
 import { isInfiniteMode, isVirtualMode, isVirtualPaging } from './utils/scrolling_mode';
 
@@ -734,7 +733,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
           itemSize = 0;
         }
         lastLoadIndex = currentItem.loadIndex;
-      } else if (isItemCountableByDataSource(currentItem, dataSourceAdapter as unknown as GroupCountableDataSource)) {
+      } else if (isItemCountableByDataSource(currentItem, dataSourceAdapter)) {
         if (firstCountableItem) {
           firstCountableItem = false;
         } else {
@@ -830,19 +829,18 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     }
   }
 
-  private _updateBottomLoading() {
-    const that = this;
-    const virtualMode = isVirtualMode(this);
-    const infiniteMode = isInfiniteMode(this);
-    const showBottomLoading = !that._dataController.hasKnownLastPage() && that._dataController.isLoaded() && (virtualMode || infiniteMode);
-    const $contentElement = that._findContentElement();
-    const bottomLoadPanelElement = that._findBottomLoadPanel($contentElement);
+  private _updateBottomLoading(): void {
+    const showBottomLoading = !this.dataSourceController.hasKnownLastPage()
+      && this._dataController.isLoaded()
+      && isVirtualPaging(this);
+    const $contentElement = this._findContentElement();
+    const bottomLoadPanelElement = this._findBottomLoadPanel($contentElement);
 
     if (showBottomLoading) {
       if (!bottomLoadPanelElement) {
         $('<div>')
-          .addClass(that.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS))
-          .append(that._createComponent($('<div>'), LoadIndicator, {
+          .addClass(this.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS))
+          .append(this._createComponent($('<div>'), LoadIndicator, {
             elementAttr: {
               role: null,
               'aria-label': null,

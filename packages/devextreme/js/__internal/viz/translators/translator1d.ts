@@ -9,9 +9,10 @@
 
 const _Number = Number;
 
-export function Translator1D() {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Translator1D = function () {
   this.setDomain(arguments[0], arguments[1]).setCodomain(arguments[2], arguments[3]).setInverted(false);
-}
+};
 
 Translator1D.prototype = {
   constructor: Translator1D,
@@ -87,3 +88,9 @@ Translator1D.prototype = {
     return result;
   },
 };
+
+/// #DEBUG
+export function DEBUG_set_Translator1D(value: typeof Translator1D): void {
+  Translator1D = value;
+}
+/// #ENDDEBUG

@@ -5,7 +5,7 @@ import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import type { DxEvent } from '@js/events';
 import type { Item } from '@js/ui/toolbar';
-import { getPublicElement } from '@ts/core/m_element';
+import { getPublicElement } from '@ts/core/element';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { ItemRenderInfo, ItemTemplate } from '@ts/ui/collection/collection_widget.base';

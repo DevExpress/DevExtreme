@@ -1,4 +1,4 @@
-/* global $ */
+import $ from 'jquery';
 
 const RealXMLHttpRequest = window.XMLHttpRequest;
 

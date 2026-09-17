@@ -13,7 +13,6 @@ import {
   beforeTest,
   createDataGrid,
   flushAsync,
-  getMirroredAdapter,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
 import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 
@@ -57,6 +56,22 @@ describe('dataSource module registration', () => {
       .toBe(instance.getController('dataSource').keyOf(DATA[1]));
   });
 
+  it('owns the totalCount widget method', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA });
+
+    expect(instance.totalCount()).toBe(DATA.length);
+    expect(instance.totalCount())
+      .toBe(instance.getController('dataSource').totalCount());
+  });
+
+  it('owns the pageCount widget method', async () => {
+    const { instance } = await createDataGrid({ dataSource: DATA, paging: { pageSize: 1 } });
+
+    expect(instance.pageCount()).toBe(DATA.length);
+    expect(instance.pageCount())
+      .toBe(instance.getController('dataSource').pageCount());
+  });
+
   it('sits at the bottom of the controller order', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
 
@@ -68,14 +83,13 @@ describe('dataSource controller holds the adapter', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
-  it('holds the same adapter object as DataController', async () => {
+  it('holds an adapter once a data source is set', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
-    const adapter = getMirroredAdapter(instance);
 
-    expect(adapter).toBeTruthy();
     expect(dataSourceController.hasAdapter()).toBe(true);
-    expect(dataSourceController.getAdapter()).toBe(adapter);
+    expect(dataSourceController.getAdapter()).toBeTruthy();
+    expect(dataSourceController.store()).toBeTruthy();
   });
 
   it('follows the rebuilt adapter when the dataSource option changes', async () => {
@@ -87,7 +101,7 @@ describe('dataSource controller holds the adapter', () => {
     await flushAsync();
 
     expect(dataSourceController.getAdapter()).not.toBe(firstAdapter);
-    expect(dataSourceController.getAdapter()).toBe(getMirroredAdapter(instance));
+    expect(instance.getVisibleRows()).toHaveLength(OTHER_DATA.length);
   });
 
   it('releases the adapter when the dataSource option is cleared', async () => {
@@ -99,7 +113,6 @@ describe('dataSource controller holds the adapter', () => {
 
     expect(dataSourceController.hasAdapter()).toBe(false);
     expect(dataSourceController.getAdapter()).toBeNull();
-    expect(getMirroredAdapter(instance)).toBeNull();
     expect(dataSourceController.getDataSource()).toBeNull();
     expect(dataSourceController.store()).toBeUndefined();
   });
@@ -114,19 +127,20 @@ describe('dataSource controller holds the adapter', () => {
     await flushAsync();
 
     expect(dataSourceController.hasAdapter()).toBe(true);
-    expect(dataSourceController.getAdapter()).toBe(getMirroredAdapter(instance));
+    expect(instance.getVisibleRows()).toHaveLength(OTHER_DATA.length);
   });
 
   it('still holds the same adapter after a refresh', async () => {
     const { instance } = await createDataGrid({ dataSource: DATA });
     const dataSourceController = instance.getController('dataSource');
+    const adapterBefore = dataSourceController.getAdapter();
 
     const refreshed = instance.refresh();
     await flushAsync();
     await refreshed;
 
     expect(dataSourceController.hasAdapter()).toBe(true);
-    expect(dataSourceController.getAdapter()).toBe(getMirroredAdapter(instance));
+    expect(dataSourceController.getAdapter()).toBe(adapterBefore);
   });
 
   it('releases the adapter on dispose', async () => {
@@ -136,8 +150,8 @@ describe('dataSource controller holds the adapter', () => {
     instance.dispose();
     $container.remove();
 
-    expect(getMirroredAdapter(instance)).toBeNull();
     expect(dataSourceController.hasAdapter()).toBe(false);
+    expect(dataSourceController.getAdapter()).toBeNull();
   });
 });
 

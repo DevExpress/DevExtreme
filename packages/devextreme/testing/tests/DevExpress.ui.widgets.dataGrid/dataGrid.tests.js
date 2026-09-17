@@ -1520,14 +1520,14 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             dataSource: dataSource
         });
 
-        const dataSourceInstance = dataGrid.getController('data')._dataSource;
+        const dataSourceInstance = dataGrid.getController('dataSource').getAdapter();
 
         // act
         dataSource.push({ id: 2 });
         dataGrid.option('dataSource', dataSource);
 
         // assert
-        assert.strictEqual(dataSourceInstance, dataGrid.getController('data')._dataSource, 'dataSource is not recreated');
+        assert.strictEqual(dataSourceInstance, dataGrid.getController('dataSource').getAdapter(), 'dataSource is not recreated');
         assert.strictEqual(dataGrid.getController('data').items().length, 2, 'data is updated');
     });
 
@@ -1579,7 +1579,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.ok(dataGrid.getController('data').isEmpty(), 'no data');
         assert.ok(!dataGrid.getController('dataSource').getAdapter(), 'no dataSource');
         assert.strictEqual(dataGrid.getController('data')._cachedProcessedItems, null, 'cached processed items are cleared'); // T1045202
-        assert.strictEqual(dataGrid.getController('columns')._dataSource, null, 'no dataSource inside columnsController'); // T1045202
+        assert.strictEqual(dataGrid.getController('columns').appliedDataSourceAdapter, null, 'no dataSourceAdapter inside columnsController'); // T1045202
         assert.equal(dataGrid.getController('data').items().length, 0, 'items count');
         assert.equal(contentReadyCount, 1, 'contentReady call count');
         assert.equal($(dataGrid.$element()).find('.dx-data-row').length, 0, 'data row count');
@@ -1702,7 +1702,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
                 store: [{ id: 1111 }]
             }
         });
-        assert.equal(dataGrid.getController('data')._dataSource.pageSize(), 20);
+        assert.equal(dataGrid.getController('dataSource').getAdapter().pageSize(), 20);
 
         // act
         dataGrid.option('dataSource', {
@@ -1711,7 +1711,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         });
 
         // assert
-        assert.equal(dataGrid.getController('data')._dataSource.pageSize(), 50);
+        assert.equal(dataGrid.getController('dataSource').getAdapter().pageSize(), 50);
     });
 
     QUnit.test('columns change', function(assert) {
@@ -1963,7 +1963,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         });
         dataGrid.selectRows({ a: 1111, b: 222 });
 
-        assert.deepEqual(dataGrid.getController('data').pageCount(), 2, 'pages count');
+        assert.deepEqual(dataGrid.getController('dataSource').pageCount(), 2, 'pages count');
         assert.deepEqual(dataGrid.getController('data').items().length, 3, 'items count');
         assert.ok(dataGrid.getView('pagerView').isVisible(), 'pager visibility');
 
@@ -1971,7 +1971,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('paging.enabled', false);
 
         // assert
-        assert.deepEqual(dataGrid.getController('data').pageCount(), 1, 'pages count when paging disabled');
+        assert.deepEqual(dataGrid.getController('dataSource').pageCount(), 1, 'pages count when paging disabled');
         assert.deepEqual(dataGrid.getController('data').items().length, 5, 'items count when paging disabled');
         assert.ok(!dataGrid.getView('pagerView').isVisible(), 'pager visibility when paging disabled');
     });

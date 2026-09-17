@@ -4,6 +4,7 @@ import type { Properties } from '@js/ui/data_grid';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { ItemProcessingOptions, ProcessedItem } from '@ts/grids/grid_core/data_controller/types';
 import { countRowsBefore } from '@ts/grids/grid_core/data_controller/utils/row_changes';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 import type {
   ModuleType,
@@ -23,7 +24,7 @@ import {
 export const groupingDataControllerExtender = (
   Base: ModuleType<DataController>,
 ): ModuleType<DataController> => class GroupingDataControllerExtender extends Base {
-  public declare _dataSource?: GroupingDataSourceAdapter | null;
+  protected declare dataSourceController: DataSourceController<GroupingDataSourceAdapter>;
 
   public init(): void {
     super.init();
@@ -170,18 +171,18 @@ export const groupingDataControllerExtender = (
   }
 
   private collapseAll(groupIndex: number): void {
-    const dataSource = this._dataSource;
-    if (dataSource?.collapseAll(groupIndex)) {
-      dataSource?.pageIndex(0);
-      dataSource?.reload();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+    if (dataSourceAdapter?.collapseAll(groupIndex)) {
+      dataSourceAdapter.pageIndex(0);
+      dataSourceAdapter.reload();
     }
   }
 
   private expandAll(groupIndex: number): void {
-    const dataSource = this._dataSource;
-    if (dataSource?.expandAll(groupIndex)) {
-      dataSource?.pageIndex(0);
-      dataSource?.reload();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+    if (dataSourceAdapter?.expandAll(groupIndex)) {
+      dataSourceAdapter.pageIndex(0);
+      dataSourceAdapter.reload();
     }
   }
 
@@ -205,13 +206,13 @@ export const groupingDataControllerExtender = (
   }
 
   protected changeRowExpandCore(key: RowKey): DeferredObj<unknown> {
-    const dataSource = this._dataSource;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     const d = Deferred();
-    if (!dataSource) {
+    if (!dataSourceAdapter) {
       d.resolve();
     } else {
-      when(dataSource.changeRowExpand(key)).done(() => {
+      when(dataSourceAdapter.changeRowExpand(key)).done(() => {
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         this.load().done(d.resolve).fail(d.reject);
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -222,7 +223,7 @@ export const groupingDataControllerExtender = (
   }
 
   private isRowExpanded(key: RowKey): boolean {
-    return !!this._dataSource?.isRowExpanded(key);
+    return !!this.dataSourceController.getAdapter()?.isRowExpanded(key);
   }
 
   private expandRow(key: RowKey): DeferredObj<unknown> {

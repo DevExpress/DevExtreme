@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets.editors/calendarView.markup.tests.js');
+import '../DevExpress.ui.widgets.editors/calendarView.markup.tests.js';

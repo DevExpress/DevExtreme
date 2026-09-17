@@ -4,7 +4,7 @@ import Box from 'ui/box';
 import DateBox from 'ui/date_box';
 import dateLocalization from 'common/core/localization/date';
 import dateUtils from 'core/utils/date';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { getActiveElement } from '../../helpers/shadowDom.js';

@@ -9,7 +9,7 @@ import dateLocalization from 'common/core/localization/date';
 import messageLocalization from 'common/core/localization/message';
 import { DataSource } from 'common/data/data_source/data_source';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import dataUtils from 'core/element_data';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
