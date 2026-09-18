@@ -2,7 +2,7 @@
   <DxPopup
     v-model:visible="popupVisible"
     title="AI Assistant"
-    :wrapperAttr="{ class: 'chat-popup' }"
+    :wrapperAttr="popupClass"
     :width="400"
     height="90%"
     :dragEnabled="true"
@@ -82,6 +82,7 @@ const emptyViewMessage = EMPTY_VIEW_MESSAGE;
 const emptyViewPromptHtml = EMPTY_VIEW_PROMPT;
 const suggestions = chatSuggestions;
 const chatUser = { id: 'user' };
+const popupClass = { class: 'chat-popup' };
 
 const popupPosition = {
   my: 'right top',
