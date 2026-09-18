@@ -164,9 +164,12 @@ function onMessageEntered(e: DxChatTypes.MessageEnteredEvent) {
 }
 
 watch(() => props.disabled, (disabled) => {
-  if (!disabled) {
-    updateClearButtonState();
+  if (disabled) {
+    clearButtonInstance.value?.option('disabled', true);
+    return;
   }
+
+  updateClearButtonState();
 });
 
 defineExpose({ pushMessage });
