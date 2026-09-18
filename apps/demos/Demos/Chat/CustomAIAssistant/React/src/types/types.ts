@@ -3,6 +3,7 @@ import type { DataGridTypes, DataGridRef } from 'devextreme-react/data-grid';
 import type { FormRef } from 'devextreme-react/form';
 
 import type { AIIntegration } from 'devextreme-react/common/ai-integration';
+import type { OpenAI } from 'openai';
 
 export type TaskPriority = 'High' | 'Normal' | 'Low';
 export type RouterTarget = 'form' | 'grid' | 'mixed' | 'none';
@@ -13,6 +14,7 @@ export type TaskGrid = ReturnType<DataGridRef['instance']>;
 export type EmployeeForm = ReturnType<FormRef['instance']>;
 
 export type ChatMessage = ChatTypes.Message;
+export type AIMessage = OpenAI.ChatCompletionMessageParam;
 
 export interface Task {
   ID: number;
@@ -44,6 +46,12 @@ export interface CommandResult {
   status: 'success' | 'failure';
   message: string;
 }
+
+export type GridCommand = {
+  description: string;
+  schema: Record<string, unknown>;
+  execute: (grid: TaskGrid, args: GridCommandArgs, rawText?: string) => CommandResult;
+};
 
 export interface GridCommandArgs {
   column?: string;
@@ -91,6 +99,21 @@ export interface RouterContext {
 
 export interface RouteMessageContext extends RouterContext {
   pushMessage: PushMessage;
+}
+
+export interface AiAssistantProps {
+  form: EmployeeForm | null;
+  grid: TaskGrid | null;
+  aiIntegration: AIIntegration;
+}
+
+export interface EmployeeFormProps {
+  aiIntegration: AIIntegration;
+  onInitialized: (form: EmployeeForm) => void;
+}
+
+export interface TaskGridProps {
+  onInitialized: (grid: TaskGrid) => void;
 }
 
 export type AIResult = Record<string, unknown>;

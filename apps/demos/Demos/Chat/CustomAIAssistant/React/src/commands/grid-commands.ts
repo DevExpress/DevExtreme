@@ -4,16 +4,10 @@ import type {
   CommandResult,
   ExecuteGridAssistantAction,
   FilterCondition,
-  GridCommandArgs,
+  GridCommand,
   GridFilterValue,
   TaskGrid,
 } from '../types/types.ts';
-
-type GridCommand = {
-  description: string;
-  schema: Record<string, unknown>;
-  execute: (grid: TaskGrid, args: GridCommandArgs, rawText?: string) => CommandResult;
-};
 
 const fail = (message: string): CommandResult => ({ status: 'failure', message });
 
@@ -171,8 +165,6 @@ To filter a date column by a year and/or month, use operator "anyof" with value 
     },
   },
 };
-
-export type GridCommandName = keyof typeof gridCommands;
 
 export function getFilterConditions(filterValue: unknown): FilterCondition[] {
   if (!Array.isArray(filterValue)) {

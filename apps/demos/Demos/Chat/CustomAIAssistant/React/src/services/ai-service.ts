@@ -1,10 +1,7 @@
-import { AzureOpenAI, type OpenAI } from 'openai';
+import { AzureOpenAI } from 'openai';
 import { AIIntegration, type RequestParams, type Response } from 'devextreme-react/common/ai-integration';
-
-const deployment = 'demo-mini';
-const endpoint = 'https://public-api.devexpress.com/demo-openai';
-const apiVersion = '2024-02-01';
-const apiKey = 'DEMO';
+import { apiKey, apiVersion, deployment, endpoint } from '../data/data.ts';
+import type { AIMessage } from '../types/types.ts';
 
 const aiService = new AzureOpenAI({
   dangerouslyAllowBrowser: true,
@@ -13,8 +10,6 @@ const aiService = new AzureOpenAI({
   apiVersion,
   apiKey,
 });
-
-type AIMessage = OpenAI.ChatCompletionMessageParam;
 
 async function getAIResponse(messages: AIMessage[], signal: AbortSignal): Promise<string> {
   const response = await aiService.chat.completions.create(

@@ -1,4 +1,4 @@
-import type { Employee, FormFieldOption, FormActionType, RouterTarget, Task, TaskPriority } from '../types/types.ts';
+import type { Employee, FormFieldOption, Task, TaskPriority } from '../types/types.ts';
 
 export const titles = ['Mr.', 'Mrs.', 'Ms.'];
 export const states = ['California', 'New York', 'Texas'];
@@ -8,6 +8,15 @@ export const colors: Record<TaskPriority, string> = {
   Normal: '#F9E2AE',
   Low: '#9FD89F',
 };
+
+export const deployment = 'demo-mini';
+export const endpoint = 'https://public-api.devexpress.com/demo-openai';
+export const apiVersion = '2024-02-01';
+export const apiKey = 'DEMO';
+
+export const emptyViewMessage = 'How can I help with this page?';
+export const emptyViewPrompt = 'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
+export const clearButtonOptions = { icon: 'clearhistory', hint: 'Clear chat' } as const;
 
 export const employee: Employee = {
   ID: 1,
@@ -81,5 +90,11 @@ export const formFieldOptions: FormFieldOption[] = [
   { dataField: 'BirthDate', label: 'Birth Date' },
 ];
 
-export const ROUTER_TARGETS = new Set<RouterTarget>(['form', 'grid', 'mixed', 'none']);
-export const FORM_ACTION_TYPES = new Set<FormActionType>(['clear_field', 'clear_all', 'smart_paste']);
+export const formFieldsConfig = [
+  { dataField: 'Prefix', label: { text: 'Title' }, editorType: 'dxSelectBox', editorOptions: { items: titles, searchEnabled: true }, aiOptions: { instruction: 'Only fill this field with one of the allowed values (Mr., Mrs., Ms.) if a title is explicitly mentioned in the text. Never use this field for any part of a person\'s name.' } },
+  { dataField: 'FirstName', label: { text: 'First Name' }, aiOptions: { instruction: "Only fill this field if the text clearly refers to a person's given name. Never use grid/task-related words like Subject, Priority, Status, Due Date, Completion, or generic verbs like sort/filter/show as a name." } },
+  { dataField: 'LastName', label: { text: 'Last Name' }, aiOptions: { instruction: "If the text gives a full person name (e.g. 'customer name', 'employee name') without separately labeled first/last names, use only the first word as First Name and the rest of the name as Last Name." } },
+  { dataField: 'Position', editorType: 'dxSelectBox', editorOptions: { items: positions, searchEnabled: true }, aiOptions: { instruction: "Only fill this field with one of the allowed job position values if the text explicitly refers to the employee's own job title/role." } },
+  { dataField: 'State', editorType: 'dxSelectBox', editorOptions: { items: states, searchEnabled: true }, aiOptions: { instruction: "Only fill this field with one of the allowed US state values if the text explicitly refers to the employee's home/office state." } },
+  { dataField: 'BirthDate', editorType: 'dxDateBox', editorOptions: { displayFormat: 'M/d/yyyy' }, aiOptions: { instruction: "Only fill this field if the text explicitly refers to the employee's own birth date or date of birth." } },
+] as const;

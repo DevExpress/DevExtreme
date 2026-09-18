@@ -4,11 +4,10 @@ import Popup, { type PopupTypes } from 'devextreme-react/popup';
 import SpeedDialAction from 'devextreme-react/speed-dial-action';
 import type { ButtonRef, ButtonTypes } from 'devextreme-react/button';
 import { ArrayStore, DataSource } from 'devextreme-react/common/data';
-import type { AIIntegration } from 'devextreme-react/common/ai-integration';
 import { routeMessage } from '../routing/chat-router.ts';
-import type { EmployeeForm, PushMessage, TaskGrid } from '../types/types.ts';
+import type { AiAssistantProps, PushMessage } from '../types/types.ts';
+import { clearButtonOptions, emptyViewMessage, emptyViewPrompt } from '../data/data.ts';
 
-interface AiAssistantProps { form: EmployeeForm | null; grid: TaskGrid | null; aiIntegration: AIIntegration; }
 const chatStore = new ArrayStore<ChatTypes.Message, number>({ key: 'id' });
 const chatDataSource = new DataSource({ store: chatStore, paginate: false });
 const chatSuggestionItems = [
@@ -22,9 +21,6 @@ const popupPosition: PopupTypes.Properties['position'] = {
   of: '.demo-container',
   offset: '-20 20',
 };
-const clearButtonOptions: ButtonTypes.Properties = { icon: 'clearhistory', hint: 'Clear chat' };
-const emptyViewMessage = 'How can I help with this page?';
-const emptyViewPrompt = 'Update employee <b>Form</b> fields.\nFilter or sort tasks, display or hide <b>DataGrid</b> columns, or clear all filters and sorting.';
 const emptyViewHtml = { __html: emptyViewPrompt };
 
 function EmptyView(): React.JSX.Element {
@@ -90,7 +86,7 @@ export default function AiAssistant({ form, grid, aiIntegration }: AiAssistantPr
   const onPopupShowing = useCallback((): void => setVisible(true), []);
   const onPopupHiding = useCallback((): void => setVisible(false), []);
 
-  const onClearButtonInitialized = useCallback((event: { component?: ReturnType<ButtonRef['instance']> }): void => {
+  const onClearButtonInitialized = useCallback((event: ButtonTypes.InitializedEvent): void => {
     if (event.component) {
       clearButtonInstance.current = event.component;
       updateClearButtonState();

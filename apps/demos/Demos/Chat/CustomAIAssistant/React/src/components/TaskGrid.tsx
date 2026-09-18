@@ -1,12 +1,8 @@
 import React, { useCallback } from 'react';
 import DataGrid, { Column, FilterRow, HeaderFilter } from 'devextreme-react/data-grid';
 import type { DataGridTypes } from 'devextreme-react/data-grid';
-import type { TaskGrid } from '../types/types.ts';
+import type { TaskGridProps } from '../types/types.ts';
 import { colors, tasks } from '../data/data.ts';
-
-interface TaskGridProps {
-  onInitialized: (grid: TaskGrid) => void;
-}
 
 const priorityClassNames = Object.fromEntries(
   Object.keys(colors).map((priority) => [priority, `priority-badge--${priority.toLowerCase()}`]),
