@@ -162,7 +162,11 @@ export default {
           const translate = -offsetCalc(e, actionData, coordField, scale);
           zoom = extend(true, zoom, axis.getTranslator().zoom(translate, scale, axis.getZoomBounds()));
           // @ts-expect-error
-          const range = axis.adjustRange(getVizRangeObject([zoom.min, zoom.max]));
+          let pannedRange = getVizRangeObject([zoom.min, zoom.max]);
+          if (actionField === 'pan' && scale === 1) {
+            pannedRange = axis.adjustPannedRange(pannedRange);
+          }
+          const range = axis.adjustRange(pannedRange);
           const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome(actionField, scale, range);
 
           if (!isDefined(viewport)
@@ -231,7 +235,9 @@ export default {
         const scale = e.scale || 1;
         const getRange = (axis) => {
           const zoom = axis.getTranslator().zoom(-offsetCalc(e, actionData, coordField, scale), scale, axis.getZoomBounds());
-          return { startValue: zoom.min, endValue: zoom.max };
+          const range = { startValue: zoom.min, endValue: zoom.max };
+
+          return actionField === 'pan' && scale === 1 ? axis.adjustPannedRange(range) : range;
         };
         const getParameters = (silent) => ({ start: true, end: silent });
         getFilteredAxes(axes).forEach((axis) => {
@@ -260,6 +266,20 @@ export default {
         zoomStarted = axes.length;
       }
       zoomStarted && chart._requestChange(['VISUAL_RANGE']);
+    }
+
+    function panArgumentAxisToThumb(e, scrollRange) {
+      const axes = getFilteredAxes(chart._argumentAxes);
+      const getRange = (axis) => axis.adjustRange(
+        axis.adjustPannedRange(
+          getVizRangeObject([scrollRange.startValue, scrollRange.endValue]),
+          axis.getTranslator().isInverted() ? 'end' : 'start',
+        ),
+      );
+
+      axes.forEach((axis) => axisZoom(axis, null, getRange, () => ({ start: true, end: true }), 'pan', 1, e));
+
+      axes.length && chart._requestChange(['VISUAL_RANGE']);
     }
 
     function prepareActionData(coords, action) {
@@ -610,10 +630,17 @@ export default {
           })
           .on(SCROLL_BAR_MOVE_EVENT_NAME, (e) => {
             preventDefaults(e);
-            axesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag, (e) => e.offset);
+            if (e.scrollRange && options.argumentAxis.pan) {
+              panArgumentAxisToThumb(e, e.scrollRange);
+            } else {
+              axesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag, (e) => e.offset);
+            }
           })
           .on(SCROLL_BAR_END_EVENT_NAME, (e) => {
             preventDefaults(e);
+            if (e.scrollRange && options.argumentAxis.pan && (e.offset.x || e.offset.y)) {
+              panArgumentAxisToThumb(e, e.scrollRange);
+            }
             finishAxesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag);
             // @ts-expect-error
             zoomAndPan.actionData = null;
