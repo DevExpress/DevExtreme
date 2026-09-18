@@ -20,7 +20,7 @@ $list-header-indicator-content: ds.$color-content-subtle !default;
 
 $list-item-bg-active: ds.$color-bg-active !default;
 $list-hold-menu-bg: ds.$color-bg !default;
-$list-hold-menu-shadow: ds.$color-shadow-ambient !default;
+$list-hold-menu-shadow: ds.$box-shadow-sm !default;
 $list-menu-button-default-content: buttonColors.$button-default-contained-content !default;
 $list-menu-button-default-bg: buttonColors.$button-default-contained-bg !default;
 $list-menu-button-delete-bg: ds.$color-bg-danger !default;

@@ -1190,6 +1190,18 @@
       "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
     },
     {
+      "stem": "popup-content-box-shadow",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "box-shadow-2xl"
+      ],
+      "decision": "design",
+      "why": "Both states were hand-built from spacing steps and differed only in the ambient layer - 12px of blur against 8px, with the key layer identical. Tokenising put each on the step its geometry already matched, 2xl, and the difference vanished: the focused popup now carries no elevation of its own and the focus outline is what marks the state. Left open on purpose rather than deleting the -focused name: the designers see both on the screenshots of this wave, and either they want a distinct step for focus or the name goes."
+    },
+    {
       "stem": "radio-button-border",
       "states": [
         "disabled",
@@ -1963,8 +1975,8 @@
     {
       "concept": "menu shadow rest",
       "roles": [
-        "box-shadow-md",
-        "color-shadow-ambient"
+        "box-shadow-lg",
+        "box-shadow-sm"
       ],
       "families": [
         "shadow"
@@ -1972,15 +1984,15 @@
       "members": [
         {
           "folder": "contextMenu",
-          "role": "box-shadow-md"
+          "role": "box-shadow-lg"
         },
         {
           "folder": "list",
-          "role": "color-shadow-ambient"
+          "role": "box-shadow-sm"
         }
       ],
       "decision": "shade",
-      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident. Narrowed on 17.09: the list side used to read a colour role (color-shadow-ambient) against contextMenu's whole shadow role, which was a mismatch of kind, not of shade. Both now read a step of box-shadow - the hold menu sits in the flow and the submenu floats over it, so sm against lg is the difference being recorded."
     },
     {
       "concept": "success content rest",

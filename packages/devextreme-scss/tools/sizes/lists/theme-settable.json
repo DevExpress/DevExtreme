@@ -1797,7 +1797,7 @@
     },
     {
       "file": "scss/widgets/base/_sortable.scss",
-      "line": 13,
+      "line": 23,
       "widget": "sortable",
       "literals": [
         "1px"
@@ -1813,7 +1813,7 @@
     },
     {
       "file": "scss/widgets/base/_sortable.scss",
-      "line": 14,
+      "line": 24,
       "widget": "sortable",
       "literals": [
         "2px"

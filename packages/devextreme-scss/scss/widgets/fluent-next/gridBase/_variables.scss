@@ -10,11 +10,4 @@ $grid-command-select-column-width: calc(#{$grid-checkbox-size} + 2 * #{$grid-cel
 $grid-context-menu-icon-size: calc(#{$grid-menu-item-icon-size} - #{ds.$spacing-40}) !default;
 $grid-master-detail-padding: ds.$spacing-160 !default;
 
-/*
- * The two layers of one drop shadow, kept as a single value: `ambient, key` is the only way they
- * are ever used, and splitting them needs a per-layer name in the slot position, which the
- * grammar reserves for a CSS property (NAMING.md, size slots).
- */
-$grid-drag-header-box-shadow:
-  0 0 1px $grid-drag-header-shadow-ambient, // dx-shadow-geometry: 0 0 1px, the ambient layer
-  0 1px 3px $grid-drag-header-shadow-key; // dx-shadow-geometry: 0 1px 3px, the key layer
+$grid-drag-header-box-shadow: ds.$box-shadow-xs !default;
