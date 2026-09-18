@@ -3,7 +3,6 @@
 
 .dx-popup-title {
   padding: 10px;
-  min-height: 19px;
   -webkit-user-drag: none;
 
   @include user-select(none);
@@ -72,12 +71,7 @@
 }
 
 .dx-popup-content {
-  padding: 10px;
   -webkit-user-drag: none;
-
-  &.dx-dialog-content {
-    padding: 0;
-  }
 
   .dx-popup-inherit-height & {
     @include dx-popup-content-auto-resizing();
@@ -100,10 +94,6 @@
   .dx-overlay-shader {
     background-color: #444;
   }
-}
-
-.dx-dialog-message {
-  padding: 10px 10px 5px 10px;
 }
 
 .dx-prevent-safari-scrolling {

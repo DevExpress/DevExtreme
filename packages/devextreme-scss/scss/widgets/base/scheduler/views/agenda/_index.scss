@@ -5,7 +5,6 @@ $scheduler-workspace-info-font-size: null !default;
 $scheduler-other-month-cell-opacity: null !default;
 
 $scheduler-agenda-left-column-width: 70px !default;
-$scheduler-group-header-agenda-font-size: 18px !default;
 
 .dx-scheduler-agenda {
   .dx-scheduler-date-table-scrollable {
@@ -58,11 +57,9 @@ $scheduler-group-header-agenda-font-size: 18px !default;
 
   .dx-scheduler-group-header {
     vertical-align: top;
-    width: $scheduler-group-header-table-cell-width;
     border-top: none;
     border-left: none;
     border-right: none;
-    font-size: $scheduler-group-header-agenda-font-size;
     font-weight: bold;
     padding: 0;
 

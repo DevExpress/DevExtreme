@@ -132,8 +132,6 @@ $list-searchbox-margin-bottom: 5px !default;
   .dx-list-reorder-handle {
     cursor: move;
     background-repeat: no-repeat;
-    background-size: 75% 75%;
-    background-position: center;
     touch-action: manipulation;
 
     .dx-state-disabled & {
@@ -232,8 +230,6 @@ $list-searchbox-margin-bottom: 5px !default;
 }
 
 .dx-list-static-delete-button {
-  padding: 0 5px;
-
   .dx-button-content {
     overflow: visible;
   }
