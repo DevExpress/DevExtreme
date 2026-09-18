@@ -3,8 +3,11 @@ import $ from 'jquery';
 import OsmProvider from '__internal/ui/map/provider.dynamic.osm';
 import { setRegisteredMapEngine } from '__internal/ui/map/provider.dynamic.osm.engine';
 import { createOpenLayersEngine } from '__internal/ui/map/provider.dynamic.osm.openlayers';
+import coreErrors from 'core/errors';
 import resizeObserverSingleton from 'core/resize_observer';
 import localization from 'localization';
+import Popover from 'ui/popover';
+import SelectBox from 'ui/select_box';
 import errors from 'ui/widget/ui.errors';
 
 import 'ui/map';
@@ -1443,6 +1446,8 @@ QUnit.module('OSM: markers', moduleConfig, () => {
                 const element = openLayersMock.addedOverlays[0].options.element;
                 assert.strictEqual(element.getAttribute('role'), 'button', 'wrapper has button semantics');
                 assert.strictEqual(element.getAttribute('tabindex'), '0', 'wrapper is keyboard-focusable');
+                element.dispatchEvent(new KeyboardEvent('keyup', { key: ' ', bubbles: true }));
+                assert.ok(onClick.notCalled, 'Space release without a preceding keydown does not activate the marker');
                 element.dispatchEvent(new KeyboardEvent('keydown', {
                     key: ' ',
                     bubbles: true,
@@ -1454,6 +1459,10 @@ QUnit.module('OSM: markers', moduleConfig, () => {
                     bubbles: true
                 }));
                 assert.ok(onClick.calledOnce, 'HTML marker can be activated from the keyboard');
+                element.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+                element.dispatchEvent(new FocusEvent('blur'));
+                element.dispatchEvent(new KeyboardEvent('keyup', { key: ' ', bubbles: true }));
+                assert.ok(onClick.calledOnce, 'losing focus cancels the pending Space activation');
                 done();
             }
         });
@@ -1904,6 +1913,534 @@ QUnit.module('OSM: markers', moduleConfig, () => {
         });
     });
 });
+QUnit.module('OSM: marker tooltips', moduleConfig, () => {
+    const location = { lat: 40.74, lng: -73.98 };
+    const createMap = (options = {}) => new Promise(resolve => {
+        $('#map').dxMap({
+            provider: 'osm',
+            autoAdjust: false,
+            width: 600,
+            height: 400,
+            providerConfig: {
+                tileServer: { url: 'https://tiles.example.com/{z}/{x}/{y}.png', attribution: 'Example' }
+            },
+            ...options,
+            onReady: ({ component }) => resolve(component)
+        });
+    });
+    const getPopovers = (root = document) => Array.from(root.querySelectorAll('.dx-map-marker-popover.dx-popover'))
+        .map(element => Popover.getInstance(element));
+    const getTooltip = () => getPopovers()[0];
+    const getContent = popover => $(popover.content())[0];
+    const getMarker = () => openLayersMock.addedOverlays[0].options.element;
+    const positionMarker = (marker = getMarker(), top = 200) => $(marker).css({ position: 'absolute', left: 300, top });
+
+    QUnit.test('tooltips use the standard Popover without a title, Close button or custom styles', async function(assert) {
+        const map = await createMap({ markers: [{ location, tooltip: 'First' }] });
+        await map.addMarker({ location, tooltip: 'Second' });
+        assert.strictEqual(getPopovers().length, 2, 'initial and added markers have popovers');
+        getPopovers().forEach(popover => {
+            assert.strictEqual(popover.constructor, Popover, 'no subclass');
+            assert.notOk(popover.option('showTitle'), 'no title');
+            assert.notOk(popover.option('showCloseButton'), 'no Close button');
+            assert.notOk(getContent(popover).querySelector('.dx-button'), 'no custom Close button');
+            assert.strictEqual(popover.option('wrapperAttr').class, 'dx-map-marker-popover', 'customization hook');
+        });
+    });
+
+    QUnit.test('tooltip creation does not use deprecated options', async function(assert) {
+        const log = sinon.stub(coreErrors, 'log');
+        try {
+            await createMap({ markers: [{ location, tooltip: 'Start' }] });
+            assert.ok(log.withArgs('W0001').notCalled, 'no deprecated option warning');
+        } finally {
+            log.restore();
+        }
+    });
+
+    QUnit.test('disposing the map in the marker callback does not show its removed popover', async function(assert) {
+        const map = await createMap({ markers: [{ location, tooltip: 'Start', onClick: () => map.dispose() }] });
+        const show = sinon.spy(getTooltip(), 'show');
+        getMarker().click();
+        assert.notOk(show.called, 'disposed popover is not shown');
+        assert.strictEqual(getPopovers().length, 0, 'popover is removed');
+    });
+
+    QUnit.test('a string tooltip opens without a marker callback and describes its marker', async function(assert) {
+        const onClick = sinon.spy();
+        await createMap({ markers: [{ location, tooltip: 'Start' }], onClick });
+        positionMarker();
+        const marker = getMarker();
+        const tooltip = getTooltip();
+        assert.notOk(tooltip.option('visible'), 'initially hidden');
+        marker.click();
+        const popup = getContent(tooltip).parentElement;
+        assert.ok(tooltip.option('visible'), 'click opens the tooltip');
+        assert.strictEqual(popup.getAttribute('role'), 'tooltip', 'uses native semantics');
+        assert.strictEqual(marker.getAttribute('aria-describedby'), popup.id, 'native description');
+        assert.strictEqual(tooltip.option('target'), marker, 'focusable marker is the target');
+        assert.strictEqual(tooltip.option('position').of, marker.firstElementChild, 'arrow targets the visible icon');
+        assert.ok(onClick.notCalled, 'marker click is not a map click');
+    });
+
+    [false, true].forEach(rtlEnabled => {
+        QUnit.test(`initial visibility preserves HTML and focus (RTL: ${rtlEnabled})`, async function(assert) {
+            const activeElement = document.activeElement;
+            await createMap({ rtlEnabled, markers: [{ location, tooltip: { text: '<b>Start</b>', isShown: true } }] });
+            const tooltip = getTooltip();
+            assert.ok(tooltip.option('visible'), 'isShown is respected');
+            assert.strictEqual(tooltip.option('rtlEnabled'), rtlEnabled, 'direction is inherited');
+            assert.strictEqual(getContent(tooltip).querySelector('b').textContent, 'Start', 'HTML is preserved');
+            assert.strictEqual(document.activeElement, activeElement, 'no focus is stolen');
+        });
+    });
+
+    ['Enter', ' '].forEach(key => {
+        QUnit.test(`keyboard activation (${key}) keeps focus on the marker and supports Escape`, async function(assert) {
+            await createMap({ markers: [{ location, tooltip: 'Start' }] });
+            positionMarker();
+            const marker = getMarker();
+            marker.focus();
+            marker.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+            marker.dispatchEvent(new KeyboardEvent('keyup', { key, bubbles: true, cancelable: true }));
+            assert.ok(getTooltip().option('visible'), 'keyboard opens the tooltip');
+            assert.strictEqual(document.activeElement, marker, 'focus remains on the marker');
+            marker.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+            assert.notOk(getTooltip().option('visible'), 'native Popover handles Escape');
+        });
+    });
+
+    QUnit.test('marker callback receives coordinates and can customize the popover before its first showing', async function(assert) {
+        const onClick = sinon.spy(({ location: coordinates }) => {
+            assert.deepEqual(coordinates, location, 'resolved coordinates are passed');
+            assert.notOk(getTooltip().option('visible'), 'callback runs before showing');
+            getTooltip().option({ showTitle: true, title: 'Details', showCloseButton: true });
+        });
+        await createMap({ markers: [{ location, tooltip: 'Start', onClick }] });
+        positionMarker();
+        getMarker().click();
+        assert.ok(onClick.calledOnce, 'one callback');
+        assert.ok(getTooltip().option('visible'), 'popover is shown');
+        assert.ok(getContent(getTooltip()).parentElement.querySelector('.dx-closebutton'), 'public options add Close');
+    });
+
+    [false, true].forEach(focusStateEnabled => {
+        QUnit.test(`dialog focus is consistent on first and repeated showing (focusStateEnabled: ${focusStateEnabled})`, async function(assert) {
+            await createMap({
+                focusStateEnabled,
+                markers: [{
+                    location,
+                    tooltip: 'Start',
+                    onClick: () => getTooltip().option({ title: 'Details', showTitle: true, showCloseButton: true })
+                }]
+            });
+            positionMarker();
+            const input = $('<input>').appendTo('#qunit-fixture')[0];
+            const tooltip = getTooltip();
+            for(let attempt = 0; attempt < 2; attempt++) {
+                input.focus();
+                getMarker().click();
+                const popup = getContent(tooltip).parentElement;
+                const close = popup.querySelector('.dx-closebutton');
+                assert.notOk(popup.inert, 'the visible popup is not inert');
+                assert.strictEqual(document.activeElement, focusStateEnabled ? close : input, 'native autofocus respects the map');
+                assert.strictEqual(tooltip.option('tabFocusLoopEnabled'), focusStateEnabled, 'the focus loop respects the map');
+                await tooltip.hide();
+                assert.strictEqual(document.activeElement, focusStateEnabled ? getMarker() : input, 'hiding respects the map focus setting');
+            }
+        });
+    });
+
+    [false, true].forEach(focusStateEnabled => {
+        [
+            { name: 'title and Close button', options: { title: 'Details', showTitle: true, showCloseButton: true } },
+            { name: 'toolbar items', options: { toolbarItems: [{ widget: 'dxButton', options: { text: 'Details' } }] } }
+        ].forEach(({ name, options }) => {
+            QUnit.test(`customizing an open tooltip with ${name} respects focusStateEnabled: ${focusStateEnabled}`, async function(assert) {
+                await createMap({ focusStateEnabled, markers: [{ location, tooltip: 'Start' }] });
+                positionMarker();
+                getMarker().click();
+                const tooltip = getTooltip();
+                tooltip.option(options);
+
+                assert.ok(tooltip.option('visible'), 'the tooltip remains open');
+                assert.strictEqual(tooltip.option('focusStateEnabled'), focusStateEnabled, 'native focus respects the map');
+                assert.strictEqual(tooltip.option('tabFocusLoopEnabled'), focusStateEnabled, 'the focus loop respects the map');
+                await Promise.resolve();
+                const button = getContent(tooltip).parentElement.querySelector('.dx-button');
+                assert.strictEqual(button.tabIndex, focusStateEnabled ? 0 : -1, 'the new button respects tab navigation');
+            });
+        });
+    });
+
+    QUnit.test('dialog keyboard access is restored after changing focusStateEnabled', async function(assert) {
+        const map = await createMap({ focusStateEnabled: false, markers: [{ location, tooltip: 'Start' }] });
+        positionMarker();
+        const tooltip = getTooltip();
+        tooltip.option({ title: 'Details', showTitle: true, showCloseButton: true });
+        getMarker().click();
+        const close = getContent(tooltip).parentElement.querySelector('.dx-closebutton');
+        assert.strictEqual(close.tabIndex, -1, 'Close is excluded from tab navigation');
+        map.option('focusStateEnabled', true);
+        await map._lastAsyncAction;
+        assert.strictEqual(close.tabIndex, 0, 'Close is restored to tab navigation');
+        assert.ok(tooltip.option('focusStateEnabled'), 'native focus is enabled');
+        assert.ok(tooltip.option('tabFocusLoopEnabled'), 'native focus loop is enabled');
+        await tooltip.hide();
+        getMarker().click();
+        assert.strictEqual(document.activeElement, close, 'native autofocus works after enabling');
+    });
+
+    ['focusStateEnabled', 'disabled'].forEach(optionName => {
+        QUnit.test(`an open dialog follows runtime changes of ${optionName}`, async function(assert) {
+            const map = await createMap({ focusStateEnabled: true, markers: [{ location, tooltip: 'Start' }] });
+            positionMarker();
+            const tooltip = getTooltip();
+            tooltip.option({ title: 'Details', showTitle: true, showCloseButton: true });
+            getMarker().click();
+            const enabledValue = optionName === 'focusStateEnabled';
+
+            map.option(optionName, !enabledValue);
+            await map._lastAsyncAction;
+            tooltip.option('toolbarItems', [{ widget: 'dxButton', options: { text: 'Details' } }]);
+            assert.notOk(tooltip.option('focusStateEnabled'), 'native focus stays disabled after customization');
+            assert.notOk(tooltip.option('tabFocusLoopEnabled'), 'the focus loop stays disabled after customization');
+
+            map.option(optionName, enabledValue);
+            await map._lastAsyncAction;
+            assert.ok(tooltip.option('focusStateEnabled'), 'native focus is restored');
+            assert.ok(tooltip.option('tabFocusLoopEnabled'), 'the focus loop is restored');
+            await tooltip.hide();
+            getMarker().click();
+            const button = getContent(tooltip).parentElement.querySelector('.dx-button');
+            assert.strictEqual(document.activeElement, button, 'native autofocus works after restoring focus');
+            await tooltip.hide();
+            assert.strictEqual(document.activeElement, getMarker(), 'native focus restoration works');
+        });
+    });
+
+    QUnit.test('tooltip describes the focusable children of an HTML marker', async function(assert) {
+        await createMap({ markers: [{
+            location,
+            html: '<button aria-describedby="existing-description">First</button><button>Second</button>',
+            tooltip: 'Details'
+        }] });
+        positionMarker();
+        const marker = getMarker();
+        const buttons = marker.querySelectorAll('button');
+        buttons[0].click();
+        const popup = getContent(getTooltip()).parentElement;
+        assert.strictEqual(buttons[0].getAttribute('aria-describedby'), `existing-description ${popup.id}`, 'first button keeps its existing description');
+        assert.strictEqual(buttons[1].getAttribute('aria-describedby'), popup.id, 'second button is also described');
+        assert.notOk(marker.hasAttribute('aria-describedby'), 'the non-focusable wrapper is not described');
+        assert.strictEqual(getTooltip().option('position').of, marker, 'position remains relative to the entire marker');
+    });
+
+    QUnit.test('Escape closes a nested SelectBox before its marker tooltip', async function(assert) {
+        await createMap({ markers: [{ location, tooltip: '<div class="nested-select-box"></div>' }] });
+        positionMarker();
+        getMarker().click();
+        const tooltip = getTooltip();
+        const selectBox = new SelectBox(getContent(tooltip).querySelector('.nested-select-box'), {
+            items: ['First', 'Second'],
+            value: 'First',
+            dropDownOptions: { animation: undefined }
+        });
+        try {
+            selectBox.focus();
+            selectBox.open();
+            const input = getContent(tooltip).querySelector('.dx-texteditor-input');
+            assert.ok(selectBox.option('opened'), 'the nested list is open');
+            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+            assert.notOk(selectBox.option('opened'), 'the first Escape closes the nested list');
+            assert.ok(tooltip.option('visible'), 'the tooltip remains open');
+            assert.strictEqual(document.activeElement, input, 'the editor retains focus');
+            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+            assert.notOk(tooltip.option('visible'), 'the next Escape closes the tooltip');
+        } finally {
+            selectBox.dispose();
+        }
+    });
+
+    QUnit.test('onShowing can cancel showing without changing the marker click location', async function(assert) {
+        let clickLocation;
+        await createMap({ markers: [{
+            location,
+            tooltip: 'Start',
+            onClick: (event) => {
+                clickLocation = event.location;
+                getTooltip().option('onShowing', e => { e.cancel = true; });
+            }
+        }] });
+        positionMarker();
+        getMarker().click();
+        assert.deepEqual(clickLocation, location, 'sidebar can use the coordinates');
+        assert.notOk(getTooltip().option('visible'), 'onShowing cancels the popup');
+    });
+
+    QUnit.test('public contentTemplate and hide support a user-provided Close button', async function(assert) {
+        await createMap({ markers: [{ location, tooltip: 'Start' }] });
+        positionMarker();
+        const tooltip = getTooltip();
+        tooltip.option('contentTemplate', () => $('<button>').text('Close details').on('click', () => tooltip.hide()));
+        getMarker().click();
+        const button = getContent(tooltip).querySelector('button');
+        assert.ok(button, 'custom content is rendered');
+        button.click();
+        assert.notOk(tooltip.option('visible'), 'public hide closes the popover');
+    });
+
+    QUnit.test('popover flips and keeps its size on move, first show and public repaint near the boundary', async function(assert) {
+        await createMap({ markers: [{ location, tooltip: '<div>First line</div><div>Second line</div>' }] });
+        positionMarker();
+        const marker = getMarker();
+        const tooltip = getTooltip();
+        marker.click();
+        const popup = getContent(tooltip).parentElement;
+        const initial = popup.getBoundingClientRect();
+        $(marker).css('top', 0);
+        openLayersMock.mapInstance.trigger('postrender');
+        assert.ok(popup.getBoundingClientRect().top >= marker.firstElementChild.getBoundingClientRect().bottom, 'flips down');
+        $(marker).css('top', -90);
+        openLayersMock.mapInstance.trigger('postrender');
+        assert.strictEqual(popup.getBoundingClientRect().height, initial.height, 'move does not shrink content');
+        assert.ok(popup.getBoundingClientRect().top < getOpenLayersMapTarget().getBoundingClientRect().top, 'can leave the map');
+        tooltip.repaint();
+        await Promise.resolve();
+        assert.strictEqual(popup.getBoundingClientRect().height, initial.height, 'public repaint preserves size');
+        await tooltip.hide();
+        marker.click();
+        await Promise.resolve();
+        assert.strictEqual(popup.getBoundingClientRect().height, initial.height, 'opening at the edge preserves size');
+        assert.strictEqual(popup.getBoundingClientRect().width, initial.width, 'width is preserved');
+    });
+
+    [false, true].forEach(shownBefore => {
+        QUnit.test(`postrender skips DOM work for a hidden tooltip (shown before: ${shownBefore})`, async function(assert) {
+            await createMap({ markers: [{ location, tooltip: '<button>Details</button>' }] });
+            positionMarker();
+            const marker = getMarker();
+            const tooltip = getTooltip();
+            if(shownBefore) {
+                marker.click();
+                await Promise.resolve();
+                await tooltip.hide();
+            }
+            const popup = getContent(tooltip).parentElement;
+            const position = sinon.spy(tooltip, '_renderPosition');
+            const boundaryRect = sinon.spy(getOpenLayersMapTarget(), 'getBoundingClientRect');
+            const markerRect = sinon.spy(marker, 'getBoundingClientRect');
+            const popupRect = sinon.spy(popup, 'getBoundingClientRect');
+            const focusTargets = sinon.spy(popup, 'querySelectorAll');
+
+            openLayersMock.mapInstance.trigger('postrender');
+
+            assert.notOk(tooltip.option('visible'), 'tooltip remains hidden');
+            assert.ok(position.notCalled, 'position is not recalculated');
+            assert.ok(boundaryRect.notCalled, 'map bounds are not measured');
+            assert.ok(markerRect.notCalled, 'marker bounds are not measured');
+            assert.ok(popupRect.notCalled, 'popup bounds are not measured');
+            assert.ok(focusTargets.notCalled, 'focusable content is not queried');
+        });
+    });
+
+    QUnit.test('postrender updates the position without repainting or recalculating dimensions', async function(assert) {
+        await createMap({ markers: [{ location, tooltip: { text: 'Start', isShown: true } }] });
+        const tooltip = getTooltip();
+        const position = sinon.spy(tooltip, '_renderPosition');
+        const dimensions = sinon.spy(tooltip, '_renderDimensions');
+        const repaint = sinon.spy(tooltip, 'repaint');
+        openLayersMock.mapInstance.trigger('postrender');
+        assert.ok(position.calledOnceWithExactly(false), 'position only');
+        assert.ok(dimensions.notCalled, 'dimensions are not recomputed');
+        assert.ok(repaint.notCalled, 'no full repaint');
+    });
+
+    QUnit.test('tooltip position follows a resized image marker', async function(assert) {
+        await createMap({ markers: [{
+            location,
+            iconSrc: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+            tooltip: 'Start'
+        }] });
+        positionMarker();
+        const marker = getMarker();
+        $(marker).css({ width: 25, height: 40, transform: 'translateY(-100%)' });
+        marker.click();
+        const tooltip = getTooltip();
+        const popup = getContent(tooltip).parentElement;
+        const initialTop = popup.getBoundingClientRect().top;
+        $(marker).css('height', 70);
+        triggerResize(marker);
+        assert.strictEqual(popup.getBoundingClientRect().top, initialTop - 30, 'popup follows the changed image bounds');
+        assert.strictEqual(tooltip.option('position').of, marker, 'the image remains the position target');
+    });
+
+    QUnit.test('tooltip positioning follows its marker into a wrapped world', async function(assert) {
+        await createMap({ markers: [{ location, tooltip: 'Start' }] });
+        positionMarker();
+        getMarker().click();
+        const tooltip = getTooltip();
+        const position = sinon.spy(tooltip, '_renderPosition');
+        openLayersMock.viewExtent = [285900, 40600, 286200, 40900];
+        openLayersMock.mapInstance.getView().setCenter([286020, 40740]);
+        assert.deepEqual(openLayersMock.addedOverlays[0].options.position, [286020, 40740], 'marker moves to the adjacent world');
+        assert.ok(position.calledWithExactly(false), 'popup position is updated without resizing');
+        assert.strictEqual(tooltip.option('target'), getMarker(), 'the same marker remains the target');
+    });
+
+    QUnit.test('an open offscreen popover stays open but its controls cannot scroll the map on focus', async function(assert) {
+        await createMap({ markers: [{ location, tooltip: '<button>Details</button>' }] });
+        positionMarker();
+        getMarker().click();
+        const tooltip = getTooltip();
+        const popup = getContent(tooltip).parentElement;
+        const button = popup.querySelector('button');
+        button.focus();
+        $(getMarker()).css('top', -1000);
+        openLayersMock.mapInstance.trigger('postrender');
+        assert.ok(tooltip.option('visible'), 'remains logically open');
+        assert.ok(popup.inert, 'offscreen popup is inert');
+        assert.strictEqual(document.activeElement, getOpenLayersMapTarget(), 'focus moves to the map without scrolling');
+        positionMarker();
+        openLayersMock.mapInstance.trigger('postrender');
+        assert.notOk(popup.inert, 'returning content can receive focus');
+    });
+
+    QUnit.test('a marker with a closed offscreen tooltip becomes interactive after returning to the viewport', async function(assert) {
+        await createMap({ markers: [{ location, tooltip: '<button>Details</button>' }] });
+        positionMarker();
+        const marker = getMarker();
+        const tooltip = getTooltip();
+        marker.click();
+        await Promise.resolve();
+        positionMarker(marker, -1000);
+        openLayersMock.mapInstance.trigger('postrender');
+        assert.ok(marker.inert, 'offscreen marker cannot receive focus');
+        await tooltip.hide();
+
+        positionMarker();
+        openLayersMock.mapInstance.trigger('postrender');
+        openLayersMock.mapInstance.trigger('moveend');
+
+        assert.notOk(tooltip.option('visible'), 'moving the map does not reopen the tooltip');
+        assert.notOk(marker.inert, 'marker accessibility is restored at the end of movement');
+        assert.strictEqual(marker.tabIndex, 0, 'marker returns to the tab order');
+        marker.focus();
+        assert.strictEqual(document.activeElement, marker, 'marker can receive focus');
+        marker.click();
+        assert.ok(tooltip.option('visible'), 'tooltip can be reopened');
+        assert.notOk(getContent(tooltip).parentElement.inert, 'reopened content is interactive');
+    });
+
+    QUnit.test('disabled and focusStateEnabled cover content added with public options', async function(assert) {
+        const map = await createMap({ markers: [{ location, tooltip: 'Start' }] });
+        positionMarker();
+        const tooltip = getTooltip();
+        tooltip.option('contentTemplate', () => $('<button>').text('Details'));
+        getMarker().click();
+        const button = getContent(tooltip).querySelector('button');
+        map.option('disabled', true);
+        await map._lastAsyncAction;
+        assert.ok(getOpenLayersMapTarget().inert, 'map is inert');
+        assert.ok(button.closest('[inert]'), 'custom content cannot receive focus while the map is inert');
+        map.option({ disabled: false, focusStateEnabled: false });
+        await map._lastAsyncAction;
+        assert.strictEqual(button.tabIndex, -1, 'focusStateEnabled also applies');
+        map.option('focusStateEnabled', true);
+        await map._lastAsyncAction;
+        assert.strictEqual(button.tabIndex, 0, 'natural tab order is restored');
+    });
+
+    QUnit.test('disabled markers do not open their tooltips', async function(assert) {
+        const map = await createMap({ markers: [{ location, tooltip: 'Start' }] });
+        map.option('disabled', true);
+        await map._lastAsyncAction;
+        getMarker().click();
+        assert.notOk(getTooltip().option('visible'), 'disabled activation is ignored');
+    });
+
+    QUnit.test('popup events do not activate the map, but wheel events can reach it', async function(assert) {
+        const onClick = sinon.spy();
+        await createMap({ markers: [{ location, tooltip: '<button>Details</button>' }], onClick });
+        positionMarker();
+        getMarker().click();
+        const popup = getContent(getTooltip()).parentElement;
+        const mapTarget = getOpenLayersMapTarget();
+        const wheel = sinon.spy();
+        const click = sinon.spy();
+        mapTarget.addEventListener('wheel', wheel);
+        mapTarget.addEventListener('click', click);
+        popup.querySelector('button').click();
+        popup.dispatchEvent(new WheelEvent('wheel', { bubbles: true }));
+        openLayersMock.mapInstance.trigger('click', { coordinate: [-73980, 40740], originalEvent: { target: popup } });
+        assert.ok(onClick.notCalled, 'engine event is filtered');
+        assert.ok(click.notCalled, 'DOM click is stopped');
+        assert.ok(wheel.calledOnce, 'wheel reaches the map');
+        mapTarget.removeEventListener('wheel', wheel);
+        mapTarget.removeEventListener('click', click);
+    });
+
+    [false, true].forEach(rtlEnabled => {
+        QUnit.test(`tooltip keyboard activation and cleanup work in Shadow DOM (RTL: ${rtlEnabled})`, function(assert) {
+            const host = document.createElement('div');
+            document.getElementById('qunit-fixture').appendChild(host);
+            const shadow = host.attachShadow({ mode: 'open' });
+            const container = document.createElement('div');
+            Object.assign(container.style, { width: '600px', height: '400px' });
+            container.tabIndex = 0;
+            shadow.appendChild(container);
+            const engine = createOpenLayersEngine(openLayersMock);
+            const engineMap = engine.createMap(container, { center: location, zoom: 12 });
+            try {
+                const marker = engineMap.addMarker({ location, tooltip: { text: 'Start', visible: false }, rtlEnabled });
+                const element = marker.originalMarker.options.element;
+                positionMarker(element);
+                element.focus();
+                element.click();
+                const [tooltip] = getPopovers(shadow);
+                assert.ok(tooltip.option('visible'), 'popover opens');
+                assert.strictEqual(shadow.activeElement, element, 'focus stays on the marker');
+                assert.strictEqual(tooltip.option('rtlEnabled'), rtlEnabled, 'direction is forwarded');
+                element.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, composed: true }));
+                assert.notOk(tooltip.option('visible'), 'Escape reaches the stock component');
+                marker.dispose();
+                assert.strictEqual(getPopovers(shadow).length, 0, 'removal cleans up the widget');
+            } finally {
+                engineMap.dispose();
+                host.remove();
+            }
+        });
+    });
+
+    QUnit.test('removing a focused tooltip focuses the map and detaches render synchronization', async function(assert) {
+        const options = { location, tooltip: '<button>Details</button>' };
+        const map = await createMap({ markers: [options] });
+        positionMarker();
+        getMarker().click();
+        const tooltip = getTooltip();
+        getContent(tooltip).querySelector('button').focus();
+        const position = sinon.spy(tooltip, '_renderPosition');
+        await map.removeMarker(options);
+        position.resetHistory();
+        openLayersMock.mapInstance.trigger('postrender');
+        assert.strictEqual(document.activeElement, getOpenLayersMapTarget(), 'removal restores focus');
+        assert.ok(position.notCalled, 'render subscription is removed');
+        assert.strictEqual(getPopovers().length, 0, 'widget host is removed');
+    });
+
+    QUnit.test('runtime tooltip updates and map disposal do not retain old popovers', async function(assert) {
+        const map = await createMap({ markers: [{ location, tooltip: 'Old' }] });
+        const dispose = sinon.spy(getTooltip(), 'dispose');
+        map.option('markers[0].tooltip', { text: 'New', isShown: true });
+        await map._lastAsyncAction;
+        assert.ok(dispose.calledOnce, 'old component is disposed');
+        assert.strictEqual(getPopovers().length, 1, 'one current component');
+        assert.strictEqual(getContent(getTooltip()).textContent, 'New', 'new content is rendered');
+        map.dispose();
+        assert.strictEqual(getPopovers().length, 0, 'no popover remains after disposal');
+    });
+});
+
 QUnit.module('OSM: routes', moduleConfig, () => {
     const tileServer = {
         url: 'https://tiles.example.com/{z}/{x}/{y}.png',
