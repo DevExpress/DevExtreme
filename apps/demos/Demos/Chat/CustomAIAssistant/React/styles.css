@@ -1,0 +1,60 @@
+.dx-chat {
+  max-width: 900px;
+  border-radius: 0;
+  min-height: 20em;
+}
+
+#grid-container {
+  margin-top: 20px;
+  min-height: 360px;
+}
+
+.priority-badge {
+  border-radius: 24px;
+  padding: 2px 8px;
+  display: inline-block;
+  text-align: center;
+}
+
+.priority-badge--high {
+  background: #f1bbbc;
+}
+
+.priority-badge--normal {
+  background: #f9e2ae;
+}
+
+.priority-badge--low {
+  background: #9fd89f;
+}
+
+.dx-color-scheme-blue-light {
+  --form-background-color: #fff;
+}
+
+.dx-color-scheme-dark {
+  --form-background-color: var(--dx-component-color-bg);
+}
+
+#form-container {
+  border: 1px solid #e0e0e0;
+  padding: 16px;
+  background-color: var(--form-background-color);
+}
+
+.demo-container {
+  margin: 20px;
+  height: 556px;
+}
+
+.dx-popup-content {
+  padding: 0;
+}
+
+.dx-chat-messagebox {
+  border-top-color: transparent;
+}
+
+.dx-layout-manager .dx-field-item.save-button {
+  padding-bottom: 0;
+}
