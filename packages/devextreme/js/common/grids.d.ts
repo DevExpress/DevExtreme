@@ -1061,12 +1061,6 @@ export type ColumnHeaderFilter = {
   search?: ColumnHeaderFilterSearchConfig;
   /**
    * @docid
-   * @default 'contains'
-   * @deprecated
-   */
-  searchMode?: SearchMode;
-  /**
-   * @docid
    * @default undefined
    */
   width?: number | string | undefined;
@@ -1620,12 +1614,6 @@ export type HeaderFilter = {
    * @docid
    */
   search?: HeaderFilterSearchConfig;
-  /**
-   * @docid
-   * @default 500
-   * @deprecated
-   */
-  searchTimeout?: number;
   /**
    * @docid
    */

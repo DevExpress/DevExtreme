@@ -446,7 +446,6 @@ const DxColumnHeaderFilterConfig = {
     "update:groupInterval": null,
     "update:height": null,
     "update:search": null,
-    "update:searchMode": null,
     "update:width": null,
   },
   props: {
@@ -455,7 +454,6 @@ const DxColumnHeaderFilterConfig = {
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
     height: [Number, String],
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
-    searchMode: String as PropType<SearchMode>,
     width: [Number, String]
   }
 };
@@ -722,7 +720,6 @@ const DxGanttHeaderFilterConfig = {
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
-    "update:searchTimeout": null,
     "update:texts": null,
     "update:visible": null,
     "update:width": null,
@@ -731,7 +728,6 @@ const DxGanttHeaderFilterConfig = {
     allowSelectAll: Boolean,
     height: Number,
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
-    searchTimeout: Number,
     texts: Object as PropType<dxGanttHeaderFilterTexts | Record<string, any>>,
     visible: Boolean,
     width: Number
@@ -781,8 +777,6 @@ const DxHeaderFilterConfig = {
     "update:groupInterval": null,
     "update:height": null,
     "update:search": null,
-    "update:searchMode": null,
-    "update:searchTimeout": null,
     "update:texts": null,
     "update:visible": null,
     "update:width": null,
@@ -793,8 +787,6 @@ const DxHeaderFilterConfig = {
     groupInterval: [Array, String, Number] as PropType<(Array<number | string>) | HeaderFilterGroupInterval | number>,
     height: [Number, String],
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
-    searchMode: String as PropType<SearchMode>,
-    searchTimeout: Number,
     texts: Object as PropType<dxGanttHeaderFilterTexts | Record<string, any>>,
     visible: Boolean,
     width: [Number, String]
