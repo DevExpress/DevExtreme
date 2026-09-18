@@ -2164,6 +2164,35 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
         assert.strictEqual(popup.getBoundingClientRect().width, initial.width, 'width is preserved');
     });
 
+    [false, true].forEach(shownBefore => {
+        QUnit.test(`postrender skips DOM work for a hidden tooltip (shown before: ${shownBefore})`, async function(assert) {
+            await createMap({ markers: [{ location, tooltip: '<button>Details</button>' }] });
+            positionMarker();
+            const marker = getMarker();
+            const tooltip = getTooltip();
+            if(shownBefore) {
+                marker.click();
+                await Promise.resolve();
+                await tooltip.hide();
+            }
+            const popup = getContent(tooltip).parentElement;
+            const position = sinon.spy(tooltip, '_renderPosition');
+            const boundaryRect = sinon.spy(getOpenLayersMapTarget(), 'getBoundingClientRect');
+            const markerRect = sinon.spy(marker, 'getBoundingClientRect');
+            const popupRect = sinon.spy(popup, 'getBoundingClientRect');
+            const focusTargets = sinon.spy(popup, 'querySelectorAll');
+
+            openLayersMock.mapInstance.trigger('postrender');
+
+            assert.notOk(tooltip.option('visible'), 'tooltip remains hidden');
+            assert.ok(position.notCalled, 'position is not recalculated');
+            assert.ok(boundaryRect.notCalled, 'map bounds are not measured');
+            assert.ok(markerRect.notCalled, 'marker bounds are not measured');
+            assert.ok(popupRect.notCalled, 'popup bounds are not measured');
+            assert.ok(focusTargets.notCalled, 'focusable content is not queried');
+        });
+    });
+
     QUnit.test('postrender updates the position without repainting or recalculating dimensions', async function(assert) {
         await createMap({ markers: [{ location, tooltip: { text: 'Start', isShown: true } }] });
         const tooltip = getTooltip();
@@ -2224,6 +2253,32 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
         positionMarker();
         openLayersMock.mapInstance.trigger('postrender');
         assert.notOk(popup.inert, 'returning content can receive focus');
+    });
+
+    QUnit.test('a marker with a closed offscreen tooltip becomes interactive after returning to the viewport', async function(assert) {
+        await createMap({ markers: [{ location, tooltip: '<button>Details</button>' }] });
+        positionMarker();
+        const marker = getMarker();
+        const tooltip = getTooltip();
+        marker.click();
+        await Promise.resolve();
+        positionMarker(marker, -1000);
+        openLayersMock.mapInstance.trigger('postrender');
+        assert.ok(marker.inert, 'offscreen marker cannot receive focus');
+        await tooltip.hide();
+
+        positionMarker();
+        openLayersMock.mapInstance.trigger('postrender');
+        openLayersMock.mapInstance.trigger('moveend');
+
+        assert.notOk(tooltip.option('visible'), 'moving the map does not reopen the tooltip');
+        assert.notOk(marker.inert, 'marker accessibility is restored at the end of movement');
+        assert.strictEqual(marker.tabIndex, 0, 'marker returns to the tab order');
+        marker.focus();
+        assert.strictEqual(document.activeElement, marker, 'marker can receive focus');
+        marker.click();
+        assert.ok(tooltip.option('visible'), 'tooltip can be reopened');
+        assert.notOk(getContent(tooltip).parentElement.inert, 'reopened content is interactive');
     });
 
     QUnit.test('disabled and focusStateEnabled cover content added with public options', async function(assert) {

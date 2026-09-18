@@ -135,13 +135,15 @@ export class OpenLayersMarkerTooltip {
   };
 
   readonly syncPosition = (): void => {
-    if (this._popover.option('visible')) {
-      this._positioning = true;
-      try {
-        this._popover._renderPosition(false);
-      } finally {
-        this._positioning = false;
-      }
+    if (!this._popover.option('visible')) {
+      return;
+    }
+
+    this._positioning = true;
+    try {
+      this._popover._renderPosition(false);
+    } finally {
+      this._positioning = false;
     }
     this._syncFocusState();
   };
