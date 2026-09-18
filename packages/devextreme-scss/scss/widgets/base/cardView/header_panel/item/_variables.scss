@@ -41,3 +41,11 @@ $cardview-header-panel__item--dragged-text-weight: null !default;
 $cardview-header-panel__item--dragged__allowance-icon-color: null !default;
 $cardview-header-panel__item--dragged__prohibition-icon-color: null !default;
 $cardview-header-panel__item--dragged-box-shadow-color: null !default;
+
+/*
+ * The whole shadow, for a theme that hands over a design-system role instead of a colour for the
+ * geometry frozen below. Left null so the fallback composes at use time: this file is evaluated
+ * before a theme assigns anything, so a composed default here would freeze the colour as null and
+ * make the theme's own !default a no-op.
+ */
+$cardview-header-panel__item--dragged-box-shadow: null !default;

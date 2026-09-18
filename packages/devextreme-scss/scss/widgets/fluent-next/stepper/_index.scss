@@ -78,5 +78,5 @@
 
 .dx-stepper.dx-state-disabled .dx-step.dx-step-selected .dx-step-indicator,
 .dx-state-disabled .dx-stepper .dx-step.dx-step-selected .dx-step-indicator {
-  box-shadow: 0 0 0 2px var(--dx-stepper-step-shadow), 0 0 0 4px var(--dx-stepper-step-bg-selected-disabled), 0 0 0 8px var(--dx-stepper-step-shadow); // dx-shadow-geometry: 2px/4px/8px, the ring radii of the enabled rule
+  box-shadow: 0 0 0 2px var(--dx-stepper-step-shadow), 0 0 0 4px var(--dx-stepper-step-bg-selected-disabled), 0 0 0 8px var(--dx-stepper-step-shadow); // dx-shadow-geometry: rings drawn with spread; every step of the scale has spread 0, so no role fits
 }

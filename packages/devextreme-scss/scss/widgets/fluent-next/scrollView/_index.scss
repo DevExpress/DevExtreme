@@ -42,7 +42,7 @@
 
 .dx-scrollable-native.dx-scrollable-native-android .dx-scrollview-pull-down {
   background-color: var(--dx-scrollable-bg);
-  box-shadow: 0 1px 4px 0 var(--dx-scroll-view-shadow); // dx-shadow-geometry: 0 1px 4px
+  box-shadow: var(--dx-scroll-view-shadow);
 }
 
 .dx-scrollview-scrollbottom-loading {
@@ -62,7 +62,7 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 1px 3px 1px var(--dx-scroll-view-shadow); // dx-shadow-geometry: 0 1px 3px 1px
+  box-shadow: var(--dx-scroll-view-shadow);
 
   > .dx-loadindicator {
     height: var(--dx-scroll-view-scroll-bottom-image-height);

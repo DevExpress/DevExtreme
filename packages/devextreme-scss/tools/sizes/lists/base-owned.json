@@ -8,8 +8,8 @@
   "summary": {
     "occurrences": 217,
     "byCategory": {
-      "inline": 88,
-      "geometry": 69,
+      "inline": 92,
+      "geometry": 65,
       "local-var": 35,
       "calc": 9,
       "structural": 8,
@@ -391,18 +391,29 @@
     },
     {
       "file": "scss/widgets/base/_sortable.scss",
-      "line": 61,
+      "line": 14,
       "widget": "sortable",
       "literals": [
         "1px",
-        "3px",
+        "3px"
+      ],
+      "occurrences": 2,
+      "marker": "dx-shadow-geometry",
+      "text": "0 1px 3px $sortable-clone-shadow-color-first,",
+      "category": "inline"
+    },
+    {
+      "file": "scss/widgets/base/_sortable.scss",
+      "line": 15,
+      "widget": "sortable",
+      "literals": [
         "6px",
         "8px"
       ],
-      "occurrences": 4,
+      "occurrences": 2,
       "marker": "dx-shadow-geometry",
-      "text": "box-shadow: 0 1px 3px $sortable-clone-shadow-color-first, 0 6px 8px $sortable-clone-shadow-color-second; // dx-shadow-geometry: the theme already takes both colours from roles; whether a whole shadow role replaces this two-layer geometry is design's call",
-      "category": "geometry"
+      "text": "0 6px 8px $sortable-clone-shadow-color-second !default;",
+      "category": "inline"
     },
     {
       "file": "scss/widgets/base/_tagBox.scss",
@@ -658,7 +669,7 @@
     },
     {
       "file": "scss/widgets/base/cardView/header_panel/item/_index.scss",
-      "line": 89,
+      "line": 92,
       "widget": "cardView",
       "literals": [
         "1px",
@@ -671,7 +682,7 @@
     },
     {
       "file": "scss/widgets/base/cardView/header_panel/item/_index.scss",
-      "line": 90,
+      "line": 93,
       "widget": "cardView",
       "literals": [
         "6px",
@@ -679,7 +690,7 @@
       ],
       "occurrences": 2,
       "marker": "dx-shadow-geometry",
-      "text": "0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;",
+      "text": "0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color",
       "category": "inline"
     },
     {

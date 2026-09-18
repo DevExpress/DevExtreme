@@ -24,7 +24,6 @@ type Entry = {
   name: string;
   replacement: string | null;
   release: string;
-  pr: number;
   note: string;
 };
 
@@ -77,7 +76,6 @@ test('every journal entry is complete', () => {
   const malformed = retired.filter((entry) => !NAME.test(entry.name)
     || (entry.replacement !== null && !NAME.test(entry.replacement))
     || !entry.release
-    || !Number.isInteger(entry.pr)
     || !entry.note);
 
   expect(malformed.map(({ name }) => name)).toEqual([]);

@@ -1,4 +1,3 @@
-@use "../common/colors" as *;
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
@@ -8,7 +7,7 @@ $tooltip-border-radius: $global-border-radius !default;
 $tooltip-padding: null !default;
 $tooltip-font-size: ds.$font-size-caption-md !default;
 $tooltip-arrow-border-radius: ds.$border-radius-20 !default;
-$tooltip-box-shadow: 0 0 ds.$spacing-20 0 $global-dropdown-shadow-ambient !default; // dx-shadow-geometry: blur off the spacing scale
+$tooltip-box-shadow: ds.$box-shadow-md !default;
 
 @if $size == "default" {
   $tooltip-padding: ds.$spacing-70 ds.$spacing-110 !default;

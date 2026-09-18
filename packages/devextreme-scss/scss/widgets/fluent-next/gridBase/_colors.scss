@@ -8,8 +8,6 @@ $grid-bg: ds.$color-bg !default;
 $grid-border: ds.$color-border !default;
 
 $grid-drag-header-border: rgb(from #{ds.$color-border-primary} r g b / 0.5) !default;
-$grid-drag-header-shadow-ambient: ds.$color-shadow-ambient !default;
-$grid-drag-header-shadow-key: ds.$color-shadow-key !default;
 
 $grid-selection-bg: ds.$color-bg-primary-subtler !default;
 

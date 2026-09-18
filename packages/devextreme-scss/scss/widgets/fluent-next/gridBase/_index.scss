@@ -590,7 +590,7 @@
           font-size: var(--dx-grid-header-cell-font-size);
           padding: var(--dx-grid-cell-padding-block);
           line-height: var(--dx-grid-header-line-height);
-          box-shadow: $grid-drag-header-box-shadow;
+          box-shadow: var(--dx-grid-drag-header-box-shadow);
         }
       }
     }
@@ -598,7 +598,7 @@
 
   .dx-#{$widget-name}-drag-header {
     border-color: var(--dx-grid-drag-header-border);
-    box-shadow: $grid-drag-header-box-shadow;
+    box-shadow: var(--dx-grid-drag-header-box-shadow);
     color: var(--dx-grid-column-chooser-item-content);
     font-weight: var(--dx-grid-column-chooser-font-weight);
     padding: var(--dx-grid-header-cell-padding-block);
@@ -728,7 +728,7 @@
     .dx-overlay-content {
       overflow: inherit;
       background-color: var(--dx-grid-filter-row-bg);
-      box-shadow: $grid-drag-header-box-shadow;
+      box-shadow: var(--dx-grid-drag-header-box-shadow);
 
       .dx-texteditor {
         &.dx-state-focused::after,

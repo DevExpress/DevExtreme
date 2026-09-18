@@ -4,8 +4,7 @@
 
 @mixin publish {
   --dx-sortable-clone-opacity: #{$sortable-clone-opacity};
-  --dx-sortable-clone-shadow-ambient: #{$sortable-clone-shadow-ambient};
-  --dx-sortable-clone-shadow-key: #{$sortable-clone-shadow-key};
+  --dx-sortable-clone-shadow: #{$sortable-clone-shadow};
   --dx-sortable-placeholder-border: #{$sortable-placeholder-border};
   --dx-sortable-placeholder-border-width: #{$sortable-placeholder-border-width};
   --dx-sortable-placeholder-inside-border-width: #{$sortable-placeholder-inside-border-width};
