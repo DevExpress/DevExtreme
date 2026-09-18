@@ -34,6 +34,7 @@ import {
   isDate, isDefined, isFunction, isPlainObject, type,
 } from '@js/core/utils/type';
 import formatHelper from '@js/format_helper';
+import { multiplyInExponentialForm } from '@ts/core/utils/m_math';
 import constants from '@ts/viz/axes/axes_constants';
 import { calculateCanvasMargins, measureLabels } from '@ts/viz/axes/axes_utils';
 import createConstantLine from '@ts/viz/axes/constant_line';
@@ -72,6 +73,9 @@ const MAX_GRID_BORDER_ADHENSION = 4;
 
 const PANNING_CORRECTION_ITERATION_COUNT = 5;
 const PANNING_CORRECTION_PRECISION = 1e-4;
+
+const ZOOM_FACTOR_PRECISION = 2;
+const ZOOM_FACTOR_MULTIPLIER = 10 ** ZOOM_FACTOR_PRECISION;
 
 const TOP = constants.top;
 const BOTTOM = constants.bottom;
@@ -1346,7 +1350,7 @@ Axis.prototype = {
     return scaleBreak.gapSize ? duration : Math.max(duration - tickInterval, 0);
   },
 
-  getVisibleRangeLength(range) {
+  getVisualRangeLengthWithoutBreaks(range) {
     const businessRange = range || this._translator.getBusinessRange();
     const length = this.getVisualRangeLength(businessRange);
     const options = this._options;
@@ -1390,7 +1394,7 @@ Axis.prototype = {
       return { startValue: reordered.endValue, endValue: reordered.startValue };
     }
 
-    const targetLength = that.getVisibleRangeLength({
+    const targetLength = that.getVisualRangeLengthWithoutBreaks({
       minVisible: startRange.startValue,
       maxVisible: startRange.endValue,
     });
@@ -1409,7 +1413,7 @@ Axis.prototype = {
     let bestDeviation = Infinity;
 
     for (let i = 0; i < PANNING_CORRECTION_ITERATION_COUNT; i += 1) {
-      const delta = that.getVisibleRangeLength({
+      const delta = that.getVisualRangeLengthWithoutBreaks({
         minVisible: current.startValue,
         maxVisible: current.endValue,
       }) - targetLength;
@@ -2611,10 +2615,16 @@ Axis.prototype = {
       };
       const typeIsNotChanged = that.getOptions().type === that._storedZoomEndParams.type;
       const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange, false)) : NaN;
-      const calcZoomFactor = (): number => (action === 'pan'
-        ? 1
-        // @ts-expect-error
-        : +`${Math.round(`${that.getVisualRangeLength(previousBusinessRange) / (that.getVisualRangeLength() || 1)}e+2`)}e-2`);
+      const calcZoomFactor = (): number => {
+        if (action === 'pan') {
+          return 1;
+        }
+
+        const currentLength = that.getVisualRangeLength() || 1;
+        const ratio = that.getVisualRangeLength(previousBusinessRange) / currentLength;
+
+        return Math.round(multiplyInExponentialForm(ratio, ZOOM_FACTOR_PRECISION)) / ZOOM_FACTOR_MULTIPLIER;
+      };
       const zoomFactor = typeIsNotChanged ? calcZoomFactor() : NaN;
       const zoomEndEvent = that._getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 

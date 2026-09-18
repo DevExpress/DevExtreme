@@ -5196,8 +5196,8 @@ QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
         return {
             position: parseFloat($thumb.attr('y')),
             barShare: parseFloat($thumb.attr('height')) / (barArea.max - barArea.min),
-            contentShare: axis.getVisibleRangeLength()
-                / axis.getVisibleRangeLength({ minVisible: wholeRange.min, maxVisible: wholeRange.max })
+            contentShare: axis.getVisualRangeLengthWithoutBreaks()
+                / axis.getVisualRangeLengthWithoutBreaks({ minVisible: wholeRange.min, maxVisible: wholeRange.max })
         };
     },
     checkThumbSlidesSmoothly(assert, chart) {

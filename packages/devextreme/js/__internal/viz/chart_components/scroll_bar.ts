@@ -246,20 +246,18 @@ ScrollBar.prototype = {
   // Axis like functions
 
   setPosition(min, max) {
-    const that = this;
-    const translator = that._translator;
-    const direction = that._getBoundaryDirection();
+    const translator = this._translator;
+    const direction = this._getBoundaryDirection();
     const minPoint = isDefined(min) ? translator.translate(min, -direction) : translator.translate('canvas_position_start');
     const maxPoint = isDefined(max) ? translator.translate(max, direction) : translator.translate('canvas_position_end');
 
-    that._offset = _min(minPoint, maxPoint);
-    that._thumbLength = Math.abs(maxPoint - minPoint);
-    // taking the scale from the values instead would ignore the scale breaks the bar accounts for
-    that._scale = that._thumbLength
-      ? translator.canvasLength / that._thumbLength
+    this._offset = _min(minPoint, maxPoint);
+    this._thumbLength = Math.abs(maxPoint - minPoint);
+    this._scale = this._thumbLength
+      ? translator.canvasLength / this._thumbLength
       : translator.getScale(min, max);
 
-    that._applyPosition(_min(minPoint, maxPoint), _max(minPoint, maxPoint));
+    this._applyPosition(_min(minPoint, maxPoint), _max(minPoint, maxPoint));
   },
 
   customPositionIsAvailable() {
