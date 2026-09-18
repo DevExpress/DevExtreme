@@ -2611,9 +2611,11 @@ Axis.prototype = {
       };
       const typeIsNotChanged = that.getOptions().type === that._storedZoomEndParams.type;
       const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange, false)) : NaN;
-      const zoomFactor = typeIsNotChanged
-      // @ts-expect-error
-        ? +`${Math.round(`${that.getVisibleRangeLength(previousBusinessRange) / (that.getVisibleRangeLength() || 1)}e+2`)}e-2` : NaN;
+      const calcZoomFactor = (): number => (action === 'pan'
+        ? 1
+        // @ts-expect-error
+        : +`${Math.round(`${that.getVisualRangeLength(previousBusinessRange) / (that.getVisualRangeLength() || 1)}e+2`)}e-2`);
+      const zoomFactor = typeIsNotChanged ? calcZoomFactor() : NaN;
       const zoomEndEvent = that._getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
       zoomEndEvent.cancel = that.checkZoomingLowerLimitOvercome(zoomFactor === 1 ? 'pan' : 'zoom', zoomFactor).stopInteraction;
