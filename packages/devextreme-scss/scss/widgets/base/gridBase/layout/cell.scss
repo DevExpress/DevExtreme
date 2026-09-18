@@ -247,8 +247,8 @@
 
   // (0,3,1)
   .dx-#{$widget-name}-total-footer > .dx-#{$widget-name}-content .dx-row > td {
-    padding-top: $grid-total-footer-paddings * 2;
-    padding-bottom: $grid-total-footer-paddings * 2;
+    padding-top: $grid-total-footer-padding-block;
+    padding-bottom: $grid-total-footer-padding-block;
   }
 
   // (0,4,0)

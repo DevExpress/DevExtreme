@@ -1,0 +1,9 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$drop-down-menu-section-margin-inline: ds.$spacing-40 !default;
+$drop-down-menu-section-row-gap: ds.$spacing-20 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$drop-down-menu-list-min-width: ds.$spacing-1000 !default;
+$drop-down-menu-list-border-radius: ds.$border-radius-80 !default;
+$drop-down-menu-popup-content-padding: ds.$spacing-10 !default;

@@ -7,7 +7,7 @@
 
     <script type="text/javascript">
         const storedThemeId = localStorage.getItem("currentThemeId");
-        const safeThemeId = (storedThemeId && /^[a-z0-9.]+$/.test(storedThemeId)) ? storedThemeId : "light";
+        const safeThemeId = (storedThemeId && /^[a-z0-9.-]+$/.test(storedThemeId)) ? storedThemeId : "light";
 
         const link = document.createElement("link");
         link.href = `../artifacts/css/dx.${encodeURIComponent(safeThemeId)}.css`;

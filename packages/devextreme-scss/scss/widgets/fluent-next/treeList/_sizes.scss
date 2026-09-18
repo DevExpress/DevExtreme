@@ -1,0 +1,34 @@
+@use "sass:math";
+@use "../sizes" as *;
+@use "../../base/treeList/variables" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$tree-list-expand-icon-size: null !default;
+
+@if $size == "default" {
+  $tree-list-expand-icon-size: ds.$spacing-200 !default;
+}
+
+@else if $size == "compact" {
+  $tree-list-expand-icon-size: ds.$spacing-160 !default;
+}
+
+$treelist-expand-icon-size: $tree-list-expand-icon-size !default;
+$treelist-expand-icon-name-expanded: chevrondown !default;
+$treelist-expand-icon-name-collapsed: chevronright !default;
+$treelist-expand-icon-right-gap: ds.$spacing-40 !default;
+$treelist-expand-checkbox-size: ds.$spacing-160 !default;
+$treelist-expand-checkbox-right-gap: ds.$spacing-80 !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$tree-list-outline-offset-focused: ds.$spacing-20 !default;
+$tree-list-form-buttons-margin-inline-start: ds.$spacing-100 !default;
+$tree-list-form-buttons-margin-block-start: ds.$spacing-100 !default;
+$tree-list-error-message-margin-block-end: ds.$spacing-200 !default;
+$tree-list-form-buttons-rtl-margin-inline-start: ds.$spacing-100 !default;
+
+$tree-list-sticky-column-border: ds.$border-width-20 solid !default;
+$tree-list-cell-outline-focused: ds.$spacing-20 solid !default;
+
+// Base submodule sizing injected with design tokens (B2 tail)
+$tree-list-empty-space-height: ds.$spacing-10 !default;

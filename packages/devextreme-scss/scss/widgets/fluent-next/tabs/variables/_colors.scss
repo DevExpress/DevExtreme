@@ -1,0 +1,33 @@
+@use "../../../../_design-system/variables/ds" as ds;
+
+$tabs-tab-content: ds.$color-content !default;
+
+$tabs-tab-content-selected: ds.$color-content !default;
+
+$tabs-tab-content-disabled: ds.$color-content-disabled !default;
+
+$tabs-tab-basic-selector-selected: ds.$color-border-primary-shared !default;
+$tabs-tab-selector-selected-active: ds.$color-border-primary-shared-active !default;
+$tabs-tab-selector-selected-hovered: ds.$color-border-primary-shared-hovered !default;
+$tabs-tab-selector-selected-focused: ds.$color-border-primary-shared !default;
+$tabs-tab-selector-active: ds.$color-border-active !default;
+$tabs-tab-selector-hovered: ds.$color-border-hovered !default;
+
+$tabs-tab-selector-disabled: ds.$color-content-disabled !default;
+
+$tabs-tab-bg: transparent !default;
+
+$tabs-tab-icon-content-selected: ds.$color-content !default;
+
+$tabs-tab-icon-content-disabled: ds.$color-content-disabled !default;
+
+$tabs-tab-bg-hovered: transparent !default;
+
+$tabs-tab-bg-focused: ds.$color-bg-hovered !default;
+$tabs-tab-primary-bg-hovered: ds.$color-bg-hovered !default;
+$tabs-tab-primary-bg-focused: ds.$color-bg-hovered !default;
+$tabs-tab-primary-bg-active: ds.$color-bg-active !default;
+
+$tabs-tab-bg-active: ds.$color-bg !default;
+$tabs-nav-button-bg: transparent !default;
+$tabs-nav-button-content-disabled: ds.$color-content-disabled !default;

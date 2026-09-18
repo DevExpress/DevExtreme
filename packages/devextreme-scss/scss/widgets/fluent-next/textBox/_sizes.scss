@@ -1,0 +1,15 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$text-box-search-icon-size: null !default;
+
+@if $size == "default" {
+  $text-box-search-icon-size: ds.$spacing-320 !default;
+}
+
+@else if $size == "compact" {
+  $text-box-search-icon-size: ds.$spacing-240 !default;
+}
+
+// Values hoisted from style-file literals (tokenized)
+$text-box-search-bar-padding-block-end: ds.$spacing-50 !default;

@@ -17,29 +17,17 @@
 
 ::ng-deep #gridContainer tr.notes-row td {
   height: 70px;
-  color: #999;
-}
-
-::ng-deep .dark #gridContainer tr.notes-row td {
-  color: #777;
+  color: var(--dxds-color-content-subtler, #999);
 }
 
 ::ng-deep #gridContainer tbody.dx-state-hover {
-  background-color: #ebebeb;
-}
-
-::ng-deep .dark #gridContainer tbody.dx-state-hover {
-  background-color: #484848;
+  background-color: var(--dxds-color-bg-hovered, #ebebeb);
 }
 
 ::ng-deep #gridContainer tbody.dx-state-hover tr.main-row td {
-  color: #000;
-}
-
-::ng-deep .dark #gridContainer tbody.dx-state-hover tr.main-row td {
-  color: #ccc;
+  color: var(--dxds-color-content, #000);
 }
 
 ::ng-deep #gridContainer tbody.dx-state-hover tr.notes-row td {
-  color: #888;
+  color: var(--dxds-color-content-subtler, #888);
 }

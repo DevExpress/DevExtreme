@@ -1,0 +1,37 @@
+@use "colors" as *;
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+@use "../button/sizes" as buttonSizes;
+
+$stepper-padding: null !default;
+$stepper-step-min-size: null !default;
+$stepper-step-indicator-size: null !default;
+$stepper-step-content-row-gap: null !default;
+$stepper-step-content-column-gap: null !default;
+$stepper-step-icon-size: buttonSizes.$button-icon-size !default;
+
+$stepper-step-font-weight-selected: ds.$font-weight-base-strong !default;
+$stepper-step-transition-duration: 0.4s !default;
+
+@if $size == "default" {
+  $stepper-padding: ds.$spacing-120 !default;
+  $stepper-step-min-size: ds.$spacing-480 !default;
+  $stepper-step-indicator-size: ds.$spacing-320 !default;
+  $stepper-step-content-row-gap: ds.$spacing-80 !default;
+  $stepper-step-content-column-gap: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $stepper-padding: ds.$spacing-80 !default;
+  $stepper-step-min-size: ds.$spacing-400 !default;
+  $stepper-step-indicator-size: ds.$spacing-240 !default;
+  $stepper-step-content-row-gap: ds.$spacing-60 !default;
+  $stepper-step-content-column-gap: ds.$spacing-80 !default;
+}
+
+$stepper-connector-thickness: ds.$spacing-20 !default;
+
+// Base-layer sizing injected with design tokens (wave B3)
+$stepper-step-indicator-ring-inset: ds.$spacing-20 !default;
+$stepper-step-indicator-ring-size: ds.$spacing-40 !default;
+$stepper-step-indicator-halo-size: ds.$spacing-80 !default;

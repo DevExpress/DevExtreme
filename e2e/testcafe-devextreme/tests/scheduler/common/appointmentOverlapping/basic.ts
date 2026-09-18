@@ -2,6 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { Themes } from '../../../../helpers/themes';
+import { getThemeName } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointment overlapping in Scheduler`
   .page(url(__dirname, '../../../container.html'));
@@ -93,7 +94,9 @@ test('Simple appointment should not overlap allDay appointment when specific wid
 
   await t
     .expect(scheduler.collectors.count).eql(1)
-    .expect(await element.getBoundingClientRectProperty('top')).eql(138.828125);
+    // fluent-next raised the header by 2px (46 -> 48); the other themes were not touched
+    .expect(await element.getBoundingClientRectProperty('top'))
+    .eql(getThemeName() === 'fluent-next' ? 140.828125 : 138.828125);
 }).before(async () => createWidget('dxScheduler', {
   ...SCHEDULER_DEFAULT_OPTIONS,
   dataSource: ALL_DAY_DATA,

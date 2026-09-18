@@ -1,0 +1,7 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// Values hoisted from style-file literals (tokenized)
+$tile-view-tile-border: ds.$border-width-10 solid !default;
+
+// Base-layer sizing injected with design tokens (wave B2)
+$tile-view-wrapper-height: ds.$spacing-10 !default;

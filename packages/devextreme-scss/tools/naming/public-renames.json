@@ -1,0 +1,410 @@
+{
+  "$comment": "Journal of retired component-tier names — the `--dx-*` custom properties the theme publishes. A published name is the one thing a user can rely on without rebuilding the SCSS, so removing or renaming one is a public change, and this file is where that change is recorded. Add the entry in the SAME change that retires the name — which change that was is a question for `git log -- tools/naming/public-renames.json`, so the journal does not repeat it; tests/public-renames.test.ts then enforces that the name never appears in a built fluent-next bundle again, which is what forbids a quiet compatibility alias in _public-links.scss.",
+  "fields": {
+    "name": "The retired name, exactly as it shipped.",
+    "replacement": "The name that takes over the role, or null when the role itself disappeared.",
+    "release": "The release the removal ships in.",
+    "note": "One sentence for the release notes: who this reaches and what they see. Written from the user's side, not ours."
+  },
+  "retired": [
+    {
+      "name": "--dx-color-view-handle-content",
+      "replacement": "--dx-color-view-handle-bg",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The colour-view handle is a filled marker, not text; the slot word now matches the property it paints."
+    },
+    {
+      "name": "--dx-date-view-roller-bottom-shadow",
+      "replacement": "--dx-date-view-roller-bottom-bg",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The roller fade is a gradient background, not a shadow."
+    },
+    {
+      "name": "--dx-date-view-roller-top-shadow",
+      "replacement": "--dx-date-view-roller-top-bg",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The roller fade is a gradient background, not a shadow."
+    },
+    {
+      "name": "--dx-filter-builder-group-operation-content",
+      "replacement": "--dx-filter-builder-group-operation-bg",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-group-operation-content-disabled",
+      "replacement": "--dx-filter-builder-group-operation-bg-disabled",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-group-operation-content-focused",
+      "replacement": "--dx-filter-builder-group-operation-bg-focused",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-group-operation-content-hovered",
+      "replacement": "--dx-filter-builder-group-operation-bg-hovered",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-item-field-content",
+      "replacement": "--dx-filter-builder-item-field-bg",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-item-field-content-disabled",
+      "replacement": "--dx-filter-builder-item-field-bg-disabled",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-item-field-content-focused",
+      "replacement": "--dx-filter-builder-item-field-bg-focused",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-item-field-content-hovered",
+      "replacement": "--dx-filter-builder-item-field-bg-hovered",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-item-operator-content",
+      "replacement": "--dx-filter-builder-item-operator-bg",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-item-operator-content-focused",
+      "replacement": "--dx-filter-builder-item-operator-bg-focused",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-item-operator-content-hovered",
+      "replacement": "--dx-filter-builder-item-operator-bg-hovered",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-item-value-content",
+      "replacement": "--dx-filter-builder-item-value-bg",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-item-value-content-focused",
+      "replacement": "--dx-filter-builder-item-value-bg-focused",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-filter-builder-item-value-content-hovered",
+      "replacement": "--dx-filter-builder-item-value-bg-hovered",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The filter chips are backgrounds; the name said content and had never painted text."
+    },
+    {
+      "name": "--dx-list-border-disabled",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The disabled list border is painted by the shared disabled border name; the list no longer carries one of its own."
+    },
+    {
+      "name": "--dx-pivot-grid-accent-content",
+      "replacement": "--dx-pivot-grid-accent-outline",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The pivot grid accent paints an outline, not content."
+    },
+    {
+      "name": "--dx-pivot-grid-grand-total-content",
+      "replacement": "--dx-pivot-grid-grand-total-bg",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "Grand totals are a row background, not text."
+    },
+    {
+      "name": "--dx-pivot-grid-total-content",
+      "replacement": "--dx-pivot-grid-total-bg",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "Totals are a row background, not text."
+    },
+    {
+      "name": "--dx-radio-button-content-read-only",
+      "replacement": "--dx-radio-button-bg-read-only",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The read-only dot is drawn with background-color; the pair is now split into the dot and the ring."
+    },
+    {
+      "name": "--dx-radio-button-icon-bg-focused",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "Fed the ripple, which this theme switches off - the name painted nothing."
+    },
+    {
+      "name": "--dx-radio-button-icon-border-read-only",
+      "replacement": "--dx-radio-button-border-read-only",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The read-only ring keeps its own name after the dot and the ring were separated."
+    },
+    {
+      "name": "--dx-scheduler-appointment-base-content",
+      "replacement": "--dx-scheduler-appointment-base-bg",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The appointment base colour is its fill."
+    },
+    {
+      "name": "--dx-scheduler-appointment-content-active",
+      "replacement": "--dx-scheduler-appointment-bg-active",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The pressed appointment changes its fill."
+    },
+    {
+      "name": "--dx-scheduler-appointment-start-content",
+      "replacement": "--dx-scheduler-appointment-start-shadow",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The start marker is a shadow, not content."
+    },
+    {
+      "name": "--dx-scheduler-workspace-cell-content-focused",
+      "replacement": "--dx-scheduler-workspace-cell-bg-focused",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "A focused cell changes its background."
+    },
+    {
+      "name": "--dx-slider-accent-content-focused",
+      "replacement": "--dx-slider-accent-bg-focused",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The handle is a ring plus a mark: the mark keeps a bg name and the ring gained --dx-slider-accent-border-focused."
+    },
+    {
+      "name": "--dx-slider-invalid-content-focused",
+      "replacement": "--dx-slider-invalid-bg-focused",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The same split in the danger hue; the ring is --dx-slider-invalid-border-focused."
+    },
+    {
+      "name": "--dx-splitter-resize-handle-content-hovered",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "Was read and never declared, so the hover rule was invalid and the grip kept its rest colour. The rule now reads the rest name."
+    },
+    {
+      "name": "--dx-tabs-tab-basic-border-selected",
+      "replacement": "--dx-tabs-tab-basic-selector-selected",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tab marker is a selector bar, which is what the package calls it; it was named as a border."
+    },
+    {
+      "name": "--dx-tabs-tab-border-active",
+      "replacement": "--dx-tabs-tab-selector-active",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tab marker is a selector bar, which is what the package calls it; it was named as a border."
+    },
+    {
+      "name": "--dx-tabs-tab-border-disabled",
+      "replacement": "--dx-tabs-tab-selector-disabled",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tab marker is a selector bar, which is what the package calls it; it was named as a border."
+    },
+    {
+      "name": "--dx-tabs-tab-border-hovered",
+      "replacement": "--dx-tabs-tab-selector-hovered",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tab marker is a selector bar, which is what the package calls it; it was named as a border."
+    },
+    {
+      "name": "--dx-tabs-tab-border-selected-active",
+      "replacement": "--dx-tabs-tab-selector-selected-active",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tab marker is a selector bar, which is what the package calls it; it was named as a border."
+    },
+    {
+      "name": "--dx-tabs-tab-border-selected-focused",
+      "replacement": "--dx-tabs-tab-selector-selected-focused",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tab marker is a selector bar, which is what the package calls it; it was named as a border."
+    },
+    {
+      "name": "--dx-tabs-tab-border-selected-hovered",
+      "replacement": "--dx-tabs-tab-selector-selected-hovered",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tab marker is a selector bar, which is what the package calls it; it was named as a border."
+    },
+    {
+      "name": "--dx-tile-view-bg-hovered",
+      "replacement": "--dx-tile-view-border-hovered",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "A hovered tile is marked by its edge; the fill does not move."
+    },
+    {
+      "name": "--dx-tree-view-checkbox-accent-content-focused",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
+    },
+    {
+      "name": "--dx-tree-view-checkbox-bg-disabled",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
+    },
+    {
+      "name": "--dx-tree-view-checkbox-bg-focused",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
+    },
+    {
+      "name": "--dx-tree-view-checkbox-border-disabled",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
+    },
+    {
+      "name": "--dx-tree-view-checkbox-border-focused",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
+    },
+    {
+      "name": "--dx-tree-view-checkbox-checked-border-focused",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
+    },
+    {
+      "name": "--dx-tree-view-checkbox-icon-disabled",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
+    },
+    {
+      "name": "--dx-tree-view-checkbox-indeterminate-bg-disabled",
+      "replacement": null,
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
+    },
+    {
+      "name": "--dx-chat-message-box-file-cancel-button-secondary-content",
+      "replacement": "--dx-chat-message-box-file-cancel-button-bg-hovered",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The name said content and the property is background-color: it fills the cancel button on a file chip while the pointer is on it. The new name says what it paints and when."
+    },
+    {
+      "name": "--dx-action-sheet-item-margin-block-end",
+      "replacement": "--dx-action-sheet-item-margin-block-start",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The gap it sets is above the cancel button, not below it: the rule writes margin-top."
+    },
+    {
+      "name": "--dx-calendar-element-padding",
+      "replacement": "--dx-calendar-element-gap",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "It is the gap between the calendar’s parts - the rule writes gap - not padding inside anything."
+    },
+    {
+      "name": "--dx-chat-message-editing-preview-border-width",
+      "replacement": "--dx-chat-message-editing-preview-accent-width",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "There is no border: the accent stripe is a drawn pseudo-element and this is its width. Its colour is already published as -accent-content."
+    },
+    {
+      "name": "--dx-file-uploader-file-size-margin",
+      "replacement": "--dx-file-uploader-file-size-padding",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The shorthand it carries is written to padding, and the file size already publishes its inline paddings under -padding-inline-start and -end."
+    },
+    {
+      "name": "--dx-list-bottom-padding",
+      "replacement": "--dx-list-margin-block-end",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "It is the margin below the last item of the last group, not padding on the list."
+    },
+    {
+      "name": "--dx-pivot-grid-button-top-padding",
+      "replacement": "--dx-pivot-grid-button-margin-block-start",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The rule writes margin-top on the toolbar button."
+    },
+    {
+      "name": "--dx-progress-bar-status-margin-block-start",
+      "replacement": "--dx-progress-bar-status-padding-block-start",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The rule writes padding-top on the status line."
+    },
+    {
+      "name": "--dx-text-editor-spin-button-padding-inline",
+      "replacement": "--dx-text-editor-spin-button-margin-inline-end",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "The rule writes margin-inline-end between the editor’s buttons."
+    },
+    {
+      "name": "--dx-scheduler-workspace-cell-content-active",
+      "replacement": "--dx-scheduler-workspace-cell-bg-active",
+      "release": "26.2",
+      "pr": 35107,
+      "note": "It fills a pressed cell - the rule writes background-color - and the name said content while aliasing a border name."
+    }
+  ]
+}

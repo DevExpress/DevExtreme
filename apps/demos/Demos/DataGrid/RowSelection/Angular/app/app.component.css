@@ -8,7 +8,3 @@
   padding-top: 20px;
   text-align: justify;
 }
-
-::ng-deep .dark #employeeInfo .employeeNotes {
-  color: rgb(181, 181, 181);
-}

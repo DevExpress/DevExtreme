@@ -1,0 +1,24 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/radioGroup/mixins" as *;
+@use "../../base/radioGroup" with (
+  /*
+   * base paints `.dx-radio-value-container` without a widget scope, and this theme paints the same
+   * element again from radioButton. A `.dx-radiogroup`-scoped name would resolve to nothing on a
+   * standalone radio button, so both copies read the radioButton name — the element exists only
+   * inside `.dx-radiobutton` (reachability gate, wave F15 class).
+   */
+  $radiogroup-radio-value-container-padding-inline-end: var(--dx-radio-button-value-container-padding-inline-end),
+  $radiogroup-collection-column-gap: var(--dx-radio-group-collection-horizontal-column-gap),
+);
+@use "../radioButton";
+@include dx-radiogroup-mixin(
+  var(--dx-radio-group-radio-button-margin-block),
+  0,
+);
+
+.dx-radiogroup-horizontal {
+  .dx-collection {
+    column-gap: var(--dx-radio-group-collection-column-gap);
+  }
+}

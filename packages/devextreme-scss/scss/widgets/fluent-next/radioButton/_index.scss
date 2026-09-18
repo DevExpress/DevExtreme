@@ -1,0 +1,166 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/radioButton/mixins" as *;
+@use "../../base/radioButton";
+@include dx-radiobutton-icon-mixin(
+  $radio-button-size,
+  $radio-button-border-width,
+  $radio-button-dot-size,
+  true,
+);
+@include dx-radiobutton-states-mixin(
+  var(--dx-radio-button-icon-bg),
+  var(--dx-radio-button-icon-border),
+  var(--dx-radio-button-border-read-only),
+  null,
+  null,
+  null,
+  var(--dx-radio-button-checked-bg),
+  var(--dx-radio-button-invalid-bg),
+  null,
+  null,
+  null,
+  true,
+  $checked-border-color: var(--dx-radio-button-checked-border),
+  $invalid-border-color: var(--dx-radio-button-invalid-border),
+);
+
+.dx-radiobutton-icon {
+  &::after {
+    content: none;
+  }
+}
+
+.dx-radio-value-container {
+  padding-inline-end: var(--dx-radio-button-value-container-padding-inline-end);
+}
+
+.dx-state-readonly {
+  .dx-radiobutton-icon-dot {
+    background-color: var(--dx-radio-button-bg-read-only);
+  }
+
+  .dx-radiobutton-checked {
+    &.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-active {
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-bg-read-only);
+      }
+    }
+  }
+}
+
+.dx-radiobutton {
+  &.dx-state-hover {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-icon-border-hovered);
+    }
+  }
+
+  &.dx-state-active {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-icon-border-active);
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-checked-border-focused);
+    }
+  }
+}
+
+.dx-radiobutton-checked {
+  &.dx-state-hover {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-checked-border-hovered);
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: var(--dx-radio-button-checked-bg-hovered);
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-checked-border-focused);
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: var(--dx-radio-button-checked-bg-focused);
+    }
+  }
+
+  &.dx-state-active {
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-checked-border-active);
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: var(--dx-radio-button-checked-bg-active);
+    }
+  }
+}
+
+.dx-invalid {
+  .dx-state-hover {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: var(--dx-radio-button-invalid-border-hovered);
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-invalid-bg-hovered);
+      }
+    }
+  }
+
+  .dx-state-focused {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: var(--dx-radio-button-invalid-border-focused);
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-invalid-bg-focused);
+      }
+    }
+  }
+
+  .dx-state-active {
+    &.dx-radiobutton {
+      .dx-radiobutton-icon {
+        border-color: var(--dx-radio-button-invalid-border-active);
+      }
+
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-invalid-bg-active);
+      }
+    }
+  }
+
+  &.dx-state-readonly {
+    .dx-radiobutton {
+      .dx-radiobutton-icon-dot {
+        background-color: var(--dx-radio-button-bg-read-only);
+      }
+    }
+  }
+}
+
+.dx-state-disabled {
+  &.dx-radiobutton,
+  .dx-radiobutton {
+    color: var(--dx-radio-button-content-disabled);
+
+    .dx-radiobutton-icon {
+      border-color: var(--dx-radio-button-border-disabled);
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: var(--dx-radio-button-content-disabled);
+    }
+  }
+}

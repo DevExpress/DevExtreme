@@ -1,0 +1,5 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+// Values hoisted from style-file literals (tokenized)
+$popover-popup-title-border-start-start-radius: ds.$border-radius-60 !default;
+$popover-popup-title-border-start-end-radius: ds.$border-radius-60 !default;

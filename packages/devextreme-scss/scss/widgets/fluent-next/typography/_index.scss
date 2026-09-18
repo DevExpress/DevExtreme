@@ -1,0 +1,65 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../common/mixins" as *;
+@use "mixins" as *;
+
+.dx-theme-fluent-next-typography {
+  background-color: var(--dx-typography-bg);
+
+  @include dx-base-typography();
+
+  h1 {
+    font-weight: var(--dx-typography-heading-1-font-weight);
+    font-size: var(--dx-typography-heading-1-font-size);
+  }
+
+  h2 {
+    font-weight: var(--dx-typography-heading-2-font-weight);
+    font-size: var(--dx-typography-heading-2-font-size);
+  }
+
+  h3 {
+    font-weight: var(--dx-typography-heading-3-font-weight);
+    font-size: var(--dx-typography-heading-3-font-size);
+  }
+
+  h4 {
+    font-weight: var(--dx-typography-heading-4-font-weight);
+    font-size: var(--dx-typography-heading-4-font-size);
+  }
+
+  h5 {
+    font-weight: var(--dx-typography-heading-5-font-weight);
+    font-size: var(--dx-typography-heading-5-font-size);
+  }
+
+  h6 {
+    font-weight: var(--dx-typography-heading-6-font-weight);
+    font-size: var(--dx-typography-heading-6-font-size);
+  }
+
+  .dx-font-xl {
+    font-size: var(--dx-typography-xl-font-size);
+  }
+
+  .dx-font-l {
+    font-size: var(--dx-typography-l-font-size);
+  }
+
+  .dx-font-m {
+    font-size: var(--dx-typography-m-font-size);
+  }
+
+  .dx-font-s {
+    @include dx-s-font-mixin();
+  }
+
+  small,
+  .dx-font-xs {
+    font-size: var(--dx-typography-xs-font-size);
+  }
+
+  a {
+    color: var(--dx-typography-link-content);
+  }
+}

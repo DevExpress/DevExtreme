@@ -1,0 +1,24 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$context-menu-padding-inline: null !default;
+$context-menu-border-radius: $global-border-radius !default;
+$context-menu-items-container-padding: ds.$spacing-40 !default;
+$context-menu-items-container-gap: ds.$spacing-20 !default;
+$context-menu-item-border-radius: $global-border-radius !default;
+$context-menu-item-content-gap: null !default;
+$context-menu-item-text-padding-inline: ds.$spacing-20 !default;
+
+@if $size == "default" {
+  $context-menu-padding-inline: ds.$spacing-60 !default;
+  $context-menu-item-content-gap: ds.$spacing-60 !default;
+}
+
+@else if $size == "compact" {
+  $context-menu-padding-inline: ds.$spacing-40 !default;
+  $context-menu-item-content-gap: ds.$spacing-40 !default;
+}
+
+// Base-layer sizing injected with design tokens (wave B2)
+$context-menu-separator-height: ds.$spacing-10 !default;
+$context-menu-separator-margin: ds.$spacing-50 0 !default;

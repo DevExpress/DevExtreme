@@ -1,0 +1,34 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/validation" as baseValidation;
+@use "../textEditor/sizes" as textEditorSizes;
+@use "../overlay";
+@include baseValidation.dx-base-validation(
+  var(--dx-validation-summary-content),
+  var(--dx-validation-message-content),
+  var(--dx-validation-message-bg),
+  var(--dx-validation-overlay-border-radius)
+);
+@include baseValidation.dx-modern-styles-validation(
+  var(--dx-validation-message-font-size),
+  var(--dx-validation-message-line-height),
+  textEditorSizes.$text-editor-input-filled-padding-inline,
+  var(--dx-validation-summary-item-margin),
+  var(--dx-validation-message-padding-block),
+  var(--dx-validation-message-padding-inline),
+);
+
+.dx-state-disabled .dx-invalid-message .dx-overlay-content,
+.dx-state-disabled.dx-invalid-message .dx-overlay-content {
+  background-color: var(--dx-validation-message-bg-disabled);
+  color: var(--dx-validation-message-content-disabled);
+}
+
+.dx-state-disabled .dx-invalid-message .dx-overlay-content *,
+.dx-state-disabled.dx-invalid-message .dx-overlay-content * {
+  color: var(--dx-validation-message-content-disabled);
+}
+
+.dx-state-disabled .dx-validationsummary-item {
+  color: var(--dx-validation-summary-content-disabled);
+}

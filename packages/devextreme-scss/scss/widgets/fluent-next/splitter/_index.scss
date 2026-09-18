@@ -1,0 +1,38 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/icon_fonts" as *;
+@use "../../base/splitter" with (
+  $splitter-resize-handle-gap: var(--dx-splitter-resize-handle-gap),
+);
+@use "../../base/splitter/mixins" as *;
+
+.dx-splitter {
+  @include resize-handle-states(
+    var(--dx-splitter-resize-handle-content),
+    var(--dx-splitter-resize-handle-bg),
+    /* The grip does not change on hover. The name this argument used to carry was read and
+       never declared, so the declaration was invalid and the browser kept the rest colour;
+       reading the rest name renders the same and stops the dangling read. The package does
+       assign one (resize-handler.color.content.hovered = content-primary-hovered), but on our
+       hovered bar it measures 1.17 in dark, so adopting it is a design decision, not a fix. */
+    var(--dx-splitter-resize-handle-content),
+    var(--dx-splitter-resize-handle-bg-hovered),
+    var(--dx-splitter-resize-handle-content-focused),
+    var(--dx-splitter-resize-handle-bg-focused),
+  );
+}
+
+.dx-resize-handle {
+  .dx-icon {
+    @include dx-icon-sizing(var(--dx-splitter-resize-handle-icon-size));
+  }
+}
+
+.dx-splitter.dx-state-disabled .dx-resize-handle,
+.dx-state-disabled .dx-splitter .dx-resize-handle {
+  background-color: var(--dx-splitter-resize-handle-bg-disabled);
+
+  .dx-resize-handle-icon {
+    color: var(--dx-splitter-resize-handle-content-disabled);
+  }
+}

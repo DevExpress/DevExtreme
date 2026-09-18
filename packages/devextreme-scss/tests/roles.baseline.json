@@ -1,0 +1,2735 @@
+{
+  "comment": [
+    "Every role the package disagrees with, and what was decided about it.",
+    "",
+    "Exact equality, not a ratchet down: a new disagreement and a resolved one both fail, because both",
+    "are a decision somebody has to record. Re-bank deliberately with UPDATE_ROLES_BASELINE=1 pnpm test,",
+    "and fill in the decision - a banked entry without one fails too.",
+    "",
+    "verdict   cross-family   - the package uses this role, but only for a slot of another kind",
+    "          family-conflict - the package paints this slot from another family entirely",
+    "decision  confirmed   - the package assigns this very role here; only our slot word differs",
+    "          naming      - the role is right for what the property paints; the slot word is not",
+    "          rule-5      - one value in two roles, named after the dominant one (DIVERGENCES)",
+    "          bridge      - built with rgb(from role / a); the foundation names no role for it",
+    "          package-gap - no role of the right family exists; a request, not a swap",
+    "          design      - a correction would move a pixel, so it is not ours to make",
+    "",
+    "typographyUnmarked - typography step reads that carry no marker at all. The px gate only looks at",
+    "literals, so a step read slipped past it; these are banked until each one is routed to a role or",
+    "marked with a reason.",
+    "",
+    "slotLies - the slot word contradicts the CSS property the bundle shows it painting. Same rules as",
+    "above: banked with a decision, exact equality. hairline and rule-5 are deliberate and stay; naming",
+    "is a rename wave waiting for a changelog, not a role defect.",
+    "",
+    "ladders - a slot whose states resolve to one role. `focused` reusing `hovered` is accepted",
+    "convention and never listed. decision no-rung means the system has no role for the second state",
+    "either; design means it does and we skip it.",
+    "",
+    "contrast - foreground and background the bundle puts in ONE rule, resolved per mode. Alpha-bridge",
+    "values and disabled selectors are excluded: the first renders as a tint over an unknown surface,",
+    "the second is exempt from WCAG 1.4.3 and gated by disabled-paint.test.ts. decision graphic-ok means",
+    "the pair is a glyph and clears 3:1; design means it misses the threshold that applies to it.",
+    "",
+    "concepts - one anatomical concept (modifiers + slot + state, sub-elements dropped) painted with",
+    "several roles across components. This is the only check that asks the question the task is named",
+    "after; every other one reads a single declaration. decision spelling means the roles resolve to one",
+    "colour and differ only in family, shade means same family different value, design means the",
+    "components disagree about the colour itself."
+  ],
+  "open": [
+    {
+      "name": "check-box-invalid-mark-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
+      "name": "check-box-invalid-mark-bg-active",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-active"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
+      "name": "check-box-invalid-mark-bg-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
+      "name": "check-box-invalid-mark-bg-hovered",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+    },
+    {
+      "name": "load-indicator-segment-inner-border",
+      "verdict": "family-conflict",
+      "roles": [
+        "color-bg-primary-subtle"
+      ],
+      "slot": "border",
+      "decision": "package-gap",
+      "why": "border-color: from color-bg-primary-subtle because color-border-primary-subtle does not exist. Nothing to swap to - a role request"
+    },
+    {
+      "name": "radio-button-bg-read-only",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "read-only paints the dot, which is the radio's mark - content-disabled, exactly as the package writes radio-button.color.checked.icon.read-only. The ring beside it reads border-read-only on border-disabled, which is checked.border.read-only. The -bg slot word again comes from the property. Banked by D21"
+    },
+    {
+      "name": "radio-button-checked-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-primary-shared"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the dot is the radio's MARK, the way the tick is the check box's, and the package models it as an icon: radio-button.color.checked.icon.* = content-primary-shared*, while radio-button.color.checked.bg.rest is color.none - the disc has no fill at all. NAMING decides the SLOT WORD from the property, so the name keeps -bg (it paints background-color) and only the role family follows what the element is. Same judgment call, and the same wording, as check-box-invalid-mark-bg. Value-neutral: primary-shared is one value across bg, border and content. Banked by D21"
+    },
+    {
+      "name": "radio-button-checked-bg-active",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-primary-shared-active"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the dot is the radio's MARK, the way the tick is the check box's, and the package models it as an icon: radio-button.color.checked.icon.* = content-primary-shared*, while radio-button.color.checked.bg.rest is color.none - the disc has no fill at all. NAMING decides the SLOT WORD from the property, so the name keeps -bg (it paints background-color) and only the role family follows what the element is. Same judgment call, and the same wording, as check-box-invalid-mark-bg. Value-neutral: primary-shared is one value across bg, border and content. Banked by D21"
+    },
+    {
+      "name": "radio-button-checked-bg-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-primary-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the dot is the radio's MARK, the way the tick is the check box's, and the package models it as an icon: radio-button.color.checked.icon.* = content-primary-shared*, while radio-button.color.checked.bg.rest is color.none - the disc has no fill at all. NAMING decides the SLOT WORD from the property, so the name keeps -bg (it paints background-color) and only the role family follows what the element is. Same judgment call, and the same wording, as check-box-invalid-mark-bg. Value-neutral: primary-shared is one value across bg, border and content. Banked by D21"
+    },
+    {
+      "name": "radio-button-checked-bg-hovered",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-primary-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the dot is the radio's MARK, the way the tick is the check box's, and the package models it as an icon: radio-button.color.checked.icon.* = content-primary-shared*, while radio-button.color.checked.bg.rest is color.none - the disc has no fill at all. NAMING decides the SLOT WORD from the property, so the name keeps -bg (it paints background-color) and only the role family follows what the element is. Same judgment call, and the same wording, as check-box-invalid-mark-bg. Value-neutral: primary-shared is one value across bg, border and content. Banked by D21"
+    },
+    {
+      "name": "radio-button-invalid-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared"
+      ],
+      "slot": "bg",
+      "decision": "rule-5",
+      "why": "the ring's border-color and the dot's background-color travel as one value - recorded in DIVERGENCES as a rule-5 pair, accepted by review round 2"
+    },
+    {
+      "name": "radio-button-invalid-bg-active",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-active"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the invalid radio dot is its MARK, the way the tick is the check box's: the package models it as an icon (radio.root.color.checked.invalid.icon = content-danger-shared in blazor). The slot word in the name follows the property - the dot paints background-color - and the role family follows what the element IS. Same call as check-box-invalid-mark-bg and as the plain dot. Values coincide: *-danger-shared is one colour across bg, border and content"
+    },
+    {
+      "name": "radio-button-invalid-bg-focused",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "rule-5",
+      "why": "see radio-button-invalid-bg"
+    },
+    {
+      "name": "radio-button-invalid-bg-hovered",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-danger-shared-hovered"
+      ],
+      "slot": "bg",
+      "decision": "rule-5",
+      "why": "see radio-button-invalid-bg"
+    },
+    {
+      "name": "switch-handle-bg-disabled",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "see switch-handle-off-bg"
+    },
+    {
+      "name": "switch-handle-off-bg",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-subtle"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the package paints the switch knob (its `trigger` slot) from exactly this role. Our role is right; only the slot word differs, because the property is background-color"
+    },
+    {
+      "name": "switch-handle-off-bg-active",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the handle is the switch's TRIGGER - the package names it as its own slot and gives it content roles: switch.color.unchecked.trigger.rest = content-subtle, .hovered and .active = content. The name keeps the -bg slot word because it paints background-color (NAMING M3) and only the family follows what the element is, the same judgment call as the radio dot and check-box-invalid-mark-bg. Before 15.09 these two did not exist and the handle was painted from the TRACK BORDER colour, one variable across two elements - D21"
+    },
+    {
+      "name": "switch-handle-off-bg-hovered",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content"
+      ],
+      "slot": "bg",
+      "decision": "confirmed",
+      "why": "the handle is the switch's TRIGGER - the package names it as its own slot and gives it content roles: switch.color.unchecked.trigger.rest = content-subtle, .hovered and .active = content. The name keeps the -bg slot word because it paints background-color (NAMING M3) and only the family follows what the element is, the same judgment call as the radio dot and check-box-invalid-mark-bg. Before 15.09 these two did not exist and the handle was painted from the TRACK BORDER colour, one variable across two elements - D21"
+    },
+    {
+      "name": "switch-handle-on-box-shadow",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-inverted"
+      ],
+      "slot": "shadow",
+      "decision": "bridge",
+      "why": "The composite half of `switch-handle-on-shadow`, which is banked a few rows up as a bridge: `0 0 0 <blur> <colour>` with the blur at 0, so the \"shadow\" is a ring drawn around the handle rather than a drop shadow, and its colour is the bridged content-inverted at 10%. Visible only since 17.09, when the pass started reading declarations outside the `_colors.scss` files - this one lives in `switch/_sizes.scss`, because it carries geometry as well as a colour."
+    },
+    {
+      "name": "switch-handle-on-shadow",
+      "verdict": "cross-family",
+      "roles": [
+        "color-content-inverted"
+      ],
+      "slot": "shadow",
+      "decision": "bridge",
+      "why": "rgb(from color-content-inverted / .1) - the foundation names no switch shadow role, recorded in DIVERGENCES and inventoried in BRIDGES.md"
+    }
+  ],
+  "typographyUnmarked": [
+    {
+      "variable": "card-view-card-header-font-size",
+      "reads": "font-size-140",
+      "roleExists": true
+    },
+    {
+      "variable": "card-view-card-header-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "grid-column-chooser-title-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-appointment-month-font-size",
+      "reads": "font-size-120",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-appointment-month-text-font-size",
+      "reads": "font-size-120",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-month-date-text-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-small-font-size",
+      "reads": "font-size-140",
+      "roleExists": true
+    },
+    {
+      "variable": "scheduler-workspace-info-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-l-font-size",
+      "reads": "font-size-200",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-l-font-size",
+      "reads": "font-size-280",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-m-font-size",
+      "reads": "font-size-160",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-m-font-size",
+      "reads": "font-size-200",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-s-font-size",
+      "reads": "font-size-140",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-s-font-size",
+      "reads": "font-size-180",
+      "roleExists": false
+    },
+    {
+      "variable": "typography-xl-font-size",
+      "reads": "font-size-240",
+      "roleExists": true
+    },
+    {
+      "variable": "typography-xs-font-size",
+      "reads": "font-size-120",
+      "roleExists": true
+    }
+  ],
+  "slotLies": [
+    {
+      "name": "color-view-border",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "box-shadow"
+      ],
+      "decision": "hairline",
+      "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
+    },
+    {
+      "name": "color-view-border-disabled",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "box-shadow"
+      ],
+      "decision": "hairline",
+      "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
+    },
+    {
+      "name": "diagram-selection-bg",
+      "slot": "bg",
+      "slotSays": "bg",
+      "paints": [
+        "fill"
+      ],
+      "decision": "known",
+      "why": "The name is right - fill on an SVG rect IS a background - and the role divergence is already recorded in DIVERGENCES.md. Re-checked 09.09."
+    },
+    {
+      "name": "gantt-content",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "background-color",
+        "border-color",
+        "border-left-color",
+        "border-top-color"
+      ],
+      "decision": "drawn-mark",
+      "why": "Re-classified 09.09, and this one turned out to be correct. Every use is a drawn foreground mark, not a container: the milestone diamond as a box background, the dependency lines as 1px hairlines, the arrowhead as a border triangle. content is the right role for a mark and the right word for the name; the four CSS properties are just how CSS draws marks. This was sitting under rule-5, which claimed the name picked the dominant of two painted families - it does not, and it does not need to."
+    },
+    {
+      "name": "grid-content-focused",
+      "slot": "content",
+      "slotSays": "content",
+      "paints": [
+        "outline-color"
+      ],
+      "decision": "drawn-mark",
+      "why": "the focused cell's inner ring is drawn with outline-color in content-inverted - a white hairline inside the blue frame. The slot word follows the property, the role follows what the element is. It became visible to the scan only when D23 gave the paint a tier name; no pixel moved"
+    },
+    {
+      "name": "splitter-bar-border",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
+    },
+    {
+      "name": "splitter-bar-border-disabled",
+      "slot": "border",
+      "slotSays": "border",
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "A border role drawn with background-color or box-shadow because the line is a 1px pseudo-element, not a real border. Name and role both say border; only the CSS property differs, and the package agrees (a separator is border-subtle). Re-checked 09.09."
+    }
+  ],
+  "familyMismatches": [
+    {
+      "name": "chat-typing-indicator-circle-bg",
+      "slot": "bg",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "A typing dot is a drawn mark, not a surface: the package assigns this very role for this slot, so the family table is what misreads the element here (ai-chat)."
+    },
+    {
+      "name": "chat-typing-indicator-circle-center-bg",
+      "slot": "bg",
+      "roles": [
+        "color-content-subtle"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "The same dot one shade up: the package assigns this very role for this slot, so the family table is what misreads the element here (ai-chat)."
+    },
+    {
+      "name": "check-box-icon-bg",
+      "slot": "bg",
+      "roles": [
+        "color-content-inverted"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "The tick is the control's mark and the package models it as an icon (checkbox.color.*.icon). The repo rule puts the slot word on the painted property, which is background-color, so the two point opposite ways and the colour is the same either way. Recorded as a judgment call when D21 split the mark from the fill."
+    },
+    {
+      "name": "check-box-icon-bg-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "background-color",
+        "color"
+      ],
+      "decision": "package-confirms",
+      "why": "Same pair, disabled rung: checkbox.color.disabled.icon = content-disabled."
+    },
+    {
+      "name": "date-view-item-content-selected",
+      "slot": "content",
+      "roles": [
+        "color-bg-primary"
+      ],
+      "paints": [
+        "color"
+      ],
+      "decision": "design",
+      "why": "Text colour painted from color-bg-primary while color-content-primary exists. Blazor has no selected-item colour in its rollers to compare against, but every text slot it does declare there is content-family (roller-title-color = content-subtle, rollers-footer-color = content), and so is every other selected label in our own theme. Out of step with both, but moving it changes a pixel in the date roller and no package set models a roller at all."
+    },
+    {
+      "name": "diagram-connection-border",
+      "slot": "border",
+      "roles": [
+        "color-bg-success"
+      ],
+      "paints": [
+        "fill",
+        "stroke"
+      ],
+      "decision": "design",
+      "why": "SVG: the value reaches fill and stroke. Stroke is the border of a vector shape, so the slot word holds, but the role is from the bg family. No diagram exists in any package set, so nothing can say whether border-success was meant."
+    },
+    {
+      "name": "diagram-connector-border",
+      "slot": "border",
+      "roles": [
+        "color-bg-primary"
+      ],
+      "paints": [
+        "border-color",
+        "fill",
+        "stroke"
+      ],
+      "decision": "design",
+      "why": "Same shape, and this one reaches border-color as well as fill and stroke - one value on three properties, so it is a rule-5 case on top of the family question."
+    },
+    {
+      "name": "diagram-geometry-mark-border",
+      "slot": "border",
+      "roles": [
+        "color-bg-danger"
+      ],
+      "paints": [
+        "stroke"
+      ],
+      "decision": "design",
+      "why": "A stroke painted from color-bg-danger where color-border-danger exists."
+    },
+    {
+      "name": "diagram-image-icon-accent-border",
+      "slot": "border",
+      "roles": [
+        "color-content-primary"
+      ],
+      "paints": [
+        "stroke"
+      ],
+      "decision": "design",
+      "why": "A stroke painted from a content role. For a glyph that may well be right - a drawn mark keeps its content role - but nothing in the package models a diagram icon."
+    },
+    {
+      "name": "diagram-selection-mark-content",
+      "slot": "content",
+      "roles": [
+        "color-border-contrast"
+      ],
+      "paints": [
+        "fill",
+        "stroke"
+      ],
+      "decision": "design",
+      "why": "fill and stroke from color-border-contrast. The selection handle is a filled square with an edge, so one of the two properties is reading the wrong family whichever way it is named."
+    },
+    {
+      "name": "file-manager-editor-bg-active",
+      "slot": "bg",
+      "roles": [
+        "color-content"
+      ],
+      "paints": [
+        "background"
+      ],
+      "decision": "design",
+      "why": "rgb(from color-content r g b / 0.1) used as a pressed background, where color-bg-alpha-active is the role the foundation ships for exactly this. A bridge that predates the alpha family."
+    },
+    {
+      "name": "gallery-indicator-border-selected",
+      "slot": "border",
+      "roles": [
+        "color-bg"
+      ],
+      "paints": [
+        "border-color"
+      ],
+      "decision": "bridge",
+      "why": "rgb(from color-bg r g b / 0.8) - a translucent ring over a photograph. The foundation names no border role with alpha, so the value is bridged from the surface role it sits on."
+    },
+    {
+      "name": "gallery-indicator-item-bg-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "drawn-mark",
+      "why": "An indicator pip is a drawn mark, so it keeps a content role even though background-color paints it. Blazor confirms the family for the same element - its carousel reads content for the pip at rest - and the selected-disabled sibling next to it already read content-disabled, which the package confirmed. Until 17.09 this one read border-disabled and was the odd one out of its own pair."
+    },
+    {
+      "name": "gallery-indicator-item-bg-selected-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "An indicator pip is a drawn mark; the package reads content-disabled for it."
+    },
+    {
+      "name": "html-editor-uploader-cover-bg",
+      "slot": "bg",
+      "roles": [
+        "color-border"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "design",
+      "why": "A cover background painted from color-border."
+    },
+    {
+      "name": "list-base-select-all-separator-bg",
+      "slot": "bg",
+      "roles": [
+        "color-border-subtle"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "A separator drawn with background-color keeps its border role - the hairline idiom, and the package's own separator component confirms it."
+    },
+    {
+      "name": "load-indicator-segment-border",
+      "slot": "border",
+      "roles": [
+        "color-content-primary"
+      ],
+      "paints": [
+        "border-color"
+      ],
+      "decision": "package-confirms",
+      "why": "The spinner arc is drawn as a border but it IS the indicator, not an edge: spinner.color.indicator = content-primary."
+    },
+    {
+      "name": "load-indicator-segment-border-disabled",
+      "slot": "border",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "border-color"
+      ],
+      "decision": "package-confirms",
+      "why": "Same arc, disabled rung."
+    },
+    {
+      "name": "menu-separator-bg",
+      "slot": "bg",
+      "roles": [
+        "color-border-subtle"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "Hairline idiom, confirmed by the package's separator component."
+    },
+    {
+      "name": "menu-separator-bg-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-border-disabled"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "A separator line drawn with background-color keeps its border role; the rest rung of the same name is confirmed by the package."
+    },
+    {
+      "name": "pivot-grid-position-indicator-bg",
+      "slot": "bg",
+      "roles": [
+        "color-border-contrast"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "The drop-position indicator is a line drawn with background-color."
+    },
+    {
+      "name": "progress-bar-bg",
+      "slot": "bg",
+      "roles": [
+        "color-border"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "The track is a line: progress-bar.progress-line.color.track.rest = color.border. Ours reads the same family."
+    },
+    {
+      "name": "progress-bar-container-bg-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-border-disabled"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "progress-bar.progress-line.color.track.disabled = color.border-disabled."
+    },
+    {
+      "name": "progress-bar-indeterminate-bg",
+      "slot": "bg",
+      "roles": [
+        "color-content-primary"
+      ],
+      "paints": [
+        "background-image"
+      ],
+      "decision": "drawn-mark",
+      "why": "The indeterminate stripe is a gradient built from the range colour, and the range IS the indicator - the package puts progress-line.color.indicator on color-content-primary, so the gradient inherits a content role on a bg slot. The same drawn-indicator idiom as the progress track and the slider mark. Visible only since 17.09: the value names no role of its own, it reads the sibling that does."
+    },
+    {
+      "name": "progress-bar-indeterminate-bg-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "background-image"
+      ],
+      "decision": "drawn-mark",
+      "why": "The disabled rung of the same gradient."
+    },
+    {
+      "name": "progress-bar-range-bg",
+      "slot": "bg",
+      "roles": [
+        "color-content-primary"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "The filled range is the indicator, not a surface: progress-bar.progress-line.color.indicator.rest = color.content-primary."
+    },
+    {
+      "name": "progress-bar-range-bg-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "progress-bar.progress-line.color.indicator.disabled = color.content-disabled."
+    },
+    {
+      "name": "progress-bar-range-indeterminate-bg",
+      "slot": "bg",
+      "roles": [
+        "color-content-primary"
+      ],
+      "paints": [],
+      "decision": "package-confirms",
+      "why": "indeterminate-gradient-center = color.content-primary, the same role the determinate indicator reads."
+    },
+    {
+      "name": "scheduler-time-indicator-bg",
+      "slot": "bg",
+      "roles": [
+        "color-content"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "design",
+      "why": "The name says the indicator background; it paints .dx-scheduler-date-time-shader, the veil over past time - a different element, so the element word is wrong before the slot word is. rgb(from color-content r g b / 0.03) where the foundation ships a scrim family. Blazor cannot adjudicate: it has no shader at all, the feature is ours. Renaming changes a published tier name."
+    },
+    {
+      "name": "scheduler-time-indicator-content",
+      "slot": "content",
+      "roles": [
+        "color-bg-danger"
+      ],
+      "paints": [
+        "background-color",
+        "color"
+      ],
+      "decision": "design",
+      "why": "The name says content; it paints background-color on .dx-scheduler-date-time-indicator, the current-time LINE. Blazor paints the same element the same way - .dxbl-sc-time-indicator-line takes background-color from --dxbl-scheduler-primary-color = color-bg-primary - so a line drawn with background-color reading a bg role is the shared idiom and the family is NOT the defect here. What is left is the slot word: -content on something that has never painted text. The hue differs from Blazor (danger against its accent) and that is a product decision, not a role one: the red current-time marker predates the design system. Renaming changes a published tier name."
+    },
+    {
+      "name": "scrollable-scroll-bg",
+      "slot": "bg",
+      "roles": [
+        "color-content-subtle"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "scroll-bar.color.thumb.rest = color.content-subtle, exactly."
+    },
+    {
+      "name": "scrollable-scroll-bg-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "The same thumb, disabled rung."
+    },
+    {
+      "name": "slider-accent-bg-focused",
+      "slot": "bg",
+      "roles": [
+        "color-content-primary-shared-active"
+      ],
+      "paints": [
+        "background"
+      ],
+      "decision": "drawn-mark",
+      "why": "The mark inside the handle is the control's indicator, painted with background-color; the radio dot was split the same way in D21."
+    },
+    {
+      "name": "slider-bar-bg",
+      "slot": "bg",
+      "roles": [
+        "color-border-contrast"
+      ],
+      "paints": [
+        "background"
+      ],
+      "decision": "hairline",
+      "why": "The track is a line drawn with background-color, and the package reads color.border for the progress bar's track - the same element one widget over."
+    },
+    {
+      "name": "slider-bg-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "background"
+      ],
+      "decision": "package-confirms",
+      "why": "The handle mark and the filled range are the indicator; the progress bar reads content-disabled for the same thing. bg-disabled would merge them with the track."
+    },
+    {
+      "name": "slider-handle-invalid-bg",
+      "slot": "bg",
+      "roles": [
+        "color-border-danger"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "design",
+      "why": "The handle ring in the danger hue reads color-border-danger through a name whose slot says bg. D21 split the ring from the mark for the normal family and gave each its own name; the invalid family was not split with it."
+    },
+    {
+      "name": "slider-invalid-bg",
+      "slot": "bg",
+      "roles": [
+        "color-border-danger"
+      ],
+      "paints": [
+        "background-color",
+        "border-color"
+      ],
+      "decision": "design",
+      "why": "Reaches background-color AND border-color - the unsplit invalid pair, same as above."
+    },
+    {
+      "name": "slider-invalid-bg-focused",
+      "slot": "bg",
+      "roles": [
+        "color-content-danger"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "The same indicator in the danger hue; kin of what the progress bar reads."
+    },
+    {
+      "name": "slider-invalid-bg-hovered",
+      "slot": "bg",
+      "roles": [
+        "color-border-danger"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "design",
+      "why": "The hovered rung of the same unsplit pair."
+    },
+    {
+      "name": "splitter-resize-handle-bg",
+      "slot": "bg",
+      "roles": [
+        "color-border"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "The resize bar is a line drawn with background-color, so it keeps its border role - the same idiom as the menu separator and the progress bar track, which the package confirms (progress-line.color.track = color.border). D7 had moved it onto bg-canvas to follow the package gutter model; that made the bar 1.04 against the page and design reversed it."
+    },
+    {
+      "name": "splitter-resize-handle-bg-hovered",
+      "slot": "bg",
+      "roles": [
+        "color-border"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "The hovered rung of the same line, and after D32 it reads the same role as the rest rung: the bar does not change on hover."
+    },
+    {
+      "name": "stepper-connector-bg",
+      "slot": "bg",
+      "roles": [
+        "color-border-subtle"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "hairline",
+      "why": "The connector between steps is a line drawn with background-color."
+    },
+    {
+      "name": "stepper-connector-value-bg-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "design",
+      "why": "The filled part of a connector painted from content-disabled. Consistent with the progress bar's indicator, but the stepper is in no package set, so it is a decision rather than a confirmation."
+    },
+    {
+      "name": "stepper-step-bg-selected-disabled",
+      "slot": "bg",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "paints": [
+        "background-color",
+        "border-color",
+        "box-shadow"
+      ],
+      "decision": "design",
+      "why": "One value reaching background-color, border-color and box-shadow at once - three families from one content role."
+    },
+    {
+      "name": "stepper-step-invalid-bg-selected",
+      "slot": "bg",
+      "roles": [
+        "color-content-danger"
+      ],
+      "paints": [
+        "background-color",
+        "border-color",
+        "box-shadow"
+      ],
+      "decision": "design",
+      "why": "The same three-property value in the danger hue."
+    },
+    {
+      "name": "stepper-step-shadow",
+      "slot": "shadow",
+      "roles": [
+        "color-bg"
+      ],
+      "paints": [
+        "box-shadow"
+      ],
+      "decision": "naming",
+      "why": "Not a shadow. The rule is box-shadow: 0 0 0 2px <this>, 0 0 0 4px <selected>, 0 0 0 8px <this> - zero offset, zero blur, so these are solid RINGS, and this one is the page-coloured gap that separates the step from the outer ring. color-bg is the right role for a gap the colour of the page; the slot word -shadow is what misdescribes it. A rename, not a repaint, and it changes a published tier name."
+    },
+    {
+      "name": "switch-handle-on-bg",
+      "slot": "bg",
+      "roles": [
+        "color-content-inverted"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "package-confirms",
+      "why": "The thumb is a content role by the package's own anatomy: switch.color.checked.trigger.rest = content-inverted (D21)."
+    },
+    {
+      "name": "text-editor-line",
+      "slot": "border",
+      "roles": [
+        "color-content-subtle"
+      ],
+      "paints": [
+        "border-bottom-color"
+      ],
+      "decision": "package-confirms",
+      "why": "The underline is drawn with border-bottom-color but it is the editor's mark, and the package reads a content role for it."
+    },
+    {
+      "name": "text-editor-line-focused",
+      "slot": "border",
+      "roles": [
+        "color-content"
+      ],
+      "paints": [
+        "border-bottom-color"
+      ],
+      "decision": "package-confirms",
+      "why": "Same underline, focused rung."
+    },
+    {
+      "name": "text-editor-line-hovered",
+      "slot": "border",
+      "roles": [
+        "color-content"
+      ],
+      "paints": [
+        "border-bottom-color"
+      ],
+      "decision": "package-confirms",
+      "why": "Same underline, hovered rung."
+    }
+  ],
+  "ladders": [
+    {
+      "stem": "button-danger-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content-static-dark"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-danger-outlined-content",
+      "states": [
+        "active",
+        "selected"
+      ],
+      "role": [
+        "color-content-on-subtle-danger"
+      ],
+      "decision": "no-rung",
+      "why": "After D17 was answered on 17.09 the pressed and selected label read one role, content-on-subtle-<hue>: both are states where the tinted fill inverts for dark, and the neutral label is what clears AA on either side of that inversion. The design system ships no second rung of this role, so the two states cannot differ here."
+    },
+    {
+      "stem": "button-default-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content-static-dark"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-default-outlined-content",
+      "states": [
+        "active",
+        "selected"
+      ],
+      "role": [
+        "color-content-on-subtle-primary"
+      ],
+      "decision": "no-rung",
+      "why": "After D17 was answered on 17.09 the pressed and selected label read one role, content-on-subtle-<hue>: both are states where the tinted fill inverts for dark, and the neutral label is what clears AA on either side of that inversion. The design system ships no second rung of this role, so the two states cannot differ here."
+    },
+    {
+      "stem": "button-default-text-content",
+      "states": [
+        "hovered",
+        "selected"
+      ],
+      "role": [
+        "color-content-primary-hovered"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-normal-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-success-contained-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content-static-dark"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "button-success-outlined-content",
+      "states": [
+        "active",
+        "selected"
+      ],
+      "role": [
+        "color-content-on-subtle-success"
+      ],
+      "decision": "no-rung",
+      "why": "After D17 was answered on 17.09 the pressed and selected label read one role, content-on-subtle-<hue>: both are states where the tinted fill inverts for dark, and the neutral label is what clears AA on either side of that inversion. The design system ships no second rung of this role, so the two states cannot differ here."
+    },
+    {
+      "stem": "calendar-invalid-border",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-border-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "chat-message-list-context-menu-delete-button-content",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-content-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "check-box-border",
+      "states": [
+        "disabled",
+        "read-only"
+      ],
+      "role": [
+        "color-border-disabled"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "file-manager-file-item-select-bg",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-bg-primary"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "file-manager-file-item-select-content",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-content-inverted"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "gallery-indicator-item-bg",
+      "states": [
+        "disabled",
+        "selected-disabled"
+      ],
+      "role": [
+        "color-content-disabled"
+      ],
+      "decision": "answered",
+      "why": "The disabled pip and the selected-disabled pip now read the same role, which is the point: they are the same mark in the same state, and one of them used to read the border family by mistake."
+    },
+    {
+      "stem": "list-item-bg",
+      "states": [
+        "active",
+        "selected-focused"
+      ],
+      "role": [
+        "color-bg-active"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "popup-content-box-shadow",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "box-shadow-2xl"
+      ],
+      "decision": "design",
+      "why": "Both states were hand-built from spacing steps and differed only in the ambient layer - 12px of blur against 8px, with the key layer identical. Tokenising put each on the step its geometry already matched, 2xl, and the difference vanished: the focused popup now carries no elevation of its own and the focus outline is what marks the state. Left open on purpose rather than deleting the -focused name: the designers see both on the screenshots of this wave, and either they want a distinct step for focus or the name goes."
+    },
+    {
+      "stem": "radio-button-border",
+      "states": [
+        "disabled",
+        "read-only"
+      ],
+      "role": [
+        "color-border-disabled"
+      ],
+      "decision": "answered",
+      "why": "read-only and disabled resolve to one role, border-disabled, and that is what the package assigns: radio-button.color.checked.border.read-only and .disabled are both {color.border-disabled}. The stem replaced radio-button-content, which held the same pair before D21 split ring from mark - same collapse, now on the family that actually paints the ring"
+    },
+    {
+      "stem": "slider-invalid-bg",
+      "states": [
+        "hovered",
+        "rest"
+      ],
+      "role": [
+        "color-border-danger"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "splitter-resize-handle-bg",
+      "states": [
+        "hovered",
+        "rest"
+      ],
+      "role": [
+        "color-border"
+      ],
+      "decision": "answered",
+      "why": "The bar no longer changes on hover, by design decision 16.09 (D32). color-border-hovered inverts to a light grey in dark (#ababab), and the grip glyph on it read 2.30 even after the glyph moved to color-content - worse than the same splitter at rest. Keeping the rest role on the hovered rung puts both states at 11.15 light / 4.54 dark. The hover affordance is the cursor, which the resize handle changes anyway; in light the two roles differed by 1.62 against 1.82 on the page, so nothing visible is lost there either."
+    },
+    {
+      "stem": "switch-handle-off-bg",
+      "states": [
+        "active",
+        "hovered"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "answered",
+      "why": "hovered and active resolve to one role because the package assigns one: switch.color.unchecked.trigger.hovered and .active are both {color.content}. The stem is new - before D21 the handle had no state names of its own at all, it followed the track border"
+    },
+    {
+      "stem": "tabs-tab-content",
+      "states": [
+        "rest",
+        "selected"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "tag-box-tag-content",
+      "states": [
+        "active",
+        "rest"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "text-editor-border",
+      "states": [
+        "disabled",
+        "read-only"
+      ],
+      "role": [
+        "color-border-disabled"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    },
+    {
+      "stem": "tree-view-content",
+      "states": [
+        "focused",
+        "rest"
+      ],
+      "role": [
+        "color-content"
+      ],
+      "decision": "no-rung",
+      "why": "the design system ships no role for the second state either, so the collapse mirrors it rather than skipping a rung"
+    }
+  ],
+  "contrast": [
+    {
+      "selector": ".dx-datagrid-group-panel .dx-block-separator",
+      "fgRole": "color-content",
+      "bgRole": "color-bg-primary",
+      "contrast": {
+        "light": 3.36,
+        "dark": 5.38
+      },
+      "decision": "graphic-ok",
+      "why": "the drop separator of the group panel: a 2px bar in bg-primary, a graphic with a 3:1 floor, and 3.36 clears it. The panel's caption sits beside the bar, not on it. Surfaced by D23, not moved by it"
+    },
+    {
+      "selector": ".dx-messagelist-context-menu-content .dx-menu-item:has(.dx-icon-trash).dx-state-focused",
+      "fgRole": "color-content-danger",
+      "bgRole": "color-bg-hovered",
+      "contrast": {
+        "light": 5.56,
+        "dark": 3.05
+      },
+      "decision": "package-gap",
+      "why": "Widened 09.09 after asking whether danger passes anywhere else. It does not, and the reason is that the role is tuned to one surface. In dark content-danger is danger-80 #e4554f, and it measures 4.58 on the page canvas (bg-canvas #1d1d1d), 4.22 on an ordinary surface (bg #242424) and 3.05 on a hovered one (bg-hovered #3b3b3b). So it clears AA on the canvas by 0.08 and fails everywhere below it. Eleven theme variables put real text on this role - the outlined danger button label, the chat alert list, the chat delete item, the fieldset invalid value, the grid AI error, the informer error, two stepper invalid labels, the text editor invalid message, the validation message and the validation summary - and every one of them sits at 4.22 wherever its widget has its own background. Three more read the role for a glyph (diagram, filterBuilder, cardView), where 4.22 clears the 3:1 that applies. The request splits in two: on an ordinary surface the miss is 0.28 and one ramp step fixes it - danger-70 #ee726a gives 5.36 - so ask the package to move content-danger in dark; on a hovered surface nothing in the family clears AA, danger-70 reaching only 3.87, so that half is a genuine gap. Light is fine throughout (6.07 on the canvas, 5.56 hovered). Why the audit saw one row and not twelve: the rule-local pass needs both colours in one rule, and a validation message takes its background from an ancestor. Third instance of that blind spot in one day."
+    }
+  ],
+  "concepts": [
+    {
+      "concept": "accent border rest",
+      "roles": [
+        "color-content-primary",
+        "color-border-primary",
+        "color-border"
+      ],
+      "families": [
+        "content",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "diagram",
+          "role": "color-content-primary"
+        },
+        {
+          "folder": "gantt",
+          "role": "color-border-primary"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-border"
+        }
+      ],
+      "decision": "false-group",
+      "why": "Answered 15.09 by validation, and the answer went against the guess. The three members are three unrelated things sharing the word accent: diagram paints stroke on .dxdi-spinner path - a SPINNER ARC; gantt paints border-color on a real border; scheduler paints the week-boundary grid line, which D19 already accepted as deliberately equal to the ordinary line.\nThe diagram member keeps content-primary, and that is not a preference: our own loadIndicator spinner sits on the identical role, and Blazor confirms it (loading-panel-indicator-no-area-indicator-color = content-primary). Moving it to border-primary, as the group name suggests, would drop the arc from 5.38 to 2.68 in light - under the 3:1 a graphic needs - because border-primary is the pale primary-70 outlier of its family. Same verdict as gantt-content: a drawn mark, painted by whatever property draws it, with a content role that is right."
+    },
+    {
+      "concept": "base bg rest",
+      "roles": [
+        "color-border-subtle",
+        "color-bg-primary-subtle",
+        "color-bg"
+      ],
+      "families": [
+        "border",
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "list",
+          "role": "color-border-subtle"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-bg-primary-subtle"
+        },
+        {
+          "folder": "stepper",
+          "role": "color-bg"
+        }
+      ],
+      "decision": "false-group",
+      "why": "Answered 15.09 by validation, confirmed as the reading proposed. Three members, three correct roles: list-base-select-all-separator-bg paints background-color with border-subtle, which is the hairline idiom and exactly what the package calls separator.color; scheduler-appointment-base-bg is the appointment fill on bg-primary-subtle, the role Blazor gives the same element; stepper-step-base-bg is a plain surface on bg. The word base means a different thing in each, which is what made them one group. Nothing to change."
+    },
+    {
+      "concept": "base content rest",
+      "roles": [
+        "color-content-subtle",
+        "color-content"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "diagram",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "stepper",
+          "role": "color-content"
+        }
+      ],
+      "decision": "shade",
+      "why": "Answered 15.09 by validation, confirmed. After the scheduler member was renamed to -base-bg and left for the bg group, two remain: diagram-image-icon-base-content on content-subtle and stepper-step-base-content on content. Both are content roles on content slots painting color:, and they differ by shade - which is a divergence components are entitled to. The naming point this group carried belonged to the scheduler member and is fixed."
+    },
+    {
+      "concept": "checked bg active",
+      "roles": [
+        "color-bg-primary-shared-active",
+        "color-content-primary-shared-active"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared-active"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-primary-shared-active"
+        }
+      ],
+      "decision": "false-group",
+      "why": "grouped by the slot word, not by the element: the check box's -checked-bg IS a fill (checkbox.color.checked.default.bg.* = bg-primary*) and the radio's -checked-bg is the DOT, which the package models as an icon (radio-button.color.checked.icon.* = content-primary-shared*, with checked.bg.rest = color.none). Two families here is the anatomy being right, not a disagreement - and the values coincide anyway, primary-shared being one colour across families. Opened by D21"
+    },
+    {
+      "concept": "checked bg focused",
+      "roles": [
+        "color-bg-primary-shared-hovered",
+        "color-content-primary-shared-hovered"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-primary-shared-hovered"
+        }
+      ],
+      "decision": "false-group",
+      "why": "grouped by the slot word, not by the element: the check box's -checked-bg IS a fill (checkbox.color.checked.default.bg.* = bg-primary*) and the radio's -checked-bg is the DOT, which the package models as an icon (radio-button.color.checked.icon.* = content-primary-shared*, with checked.bg.rest = color.none). Two families here is the anatomy being right, not a disagreement - and the values coincide anyway, primary-shared being one colour across families. Opened by D21"
+    },
+    {
+      "concept": "checked bg hovered",
+      "roles": [
+        "color-bg-primary-shared-hovered",
+        "color-content-primary-shared-hovered"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-primary-shared-hovered"
+        }
+      ],
+      "decision": "false-group",
+      "why": "grouped by the slot word, not by the element: the check box's -checked-bg IS a fill (checkbox.color.checked.default.bg.* = bg-primary*) and the radio's -checked-bg is the DOT, which the package models as an icon (radio-button.color.checked.icon.* = content-primary-shared*, with checked.bg.rest = color.none). Two families here is the anatomy being right, not a disagreement - and the values coincide anyway, primary-shared being one colour across families. Opened by D21"
+    },
+    {
+      "concept": "checked bg rest",
+      "roles": [
+        "color-bg-primary-shared",
+        "color-content-primary-shared"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-primary-shared"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-primary-shared"
+        }
+      ],
+      "decision": "false-group",
+      "why": "grouped by the slot word, not by the element: the check box's -checked-bg IS a fill (checkbox.color.checked.default.bg.* = bg-primary*) and the radio's -checked-bg is the DOT, which the package models as an icon (radio-button.color.checked.icon.* = content-primary-shared*, with checked.bg.rest = color.none). Two families here is the anatomy being right, not a disagreement - and the values coincide anyway, primary-shared being one colour across families. Opened by D21"
+    },
+    {
+      "concept": "empty bg rest",
+      "roles": [
+        "color-bg-canvas",
+        "color-bg-primary-subtler"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "chat",
+          "role": "color-bg-canvas"
+        },
+        {
+          "folder": "gridBase",
+          "role": "color-bg-primary-subtler"
+        }
+      ],
+      "decision": "answered",
+      "why": "ANSWERED 17.09, both halves. The question was whether these are one concept: they are not. The chat paints an empty PANEL with the canvas role, and the grid AI chat paints the DISC behind the sparkle glyph, a tinted badge; the anatomy parser grouped them because both names end in \"empty bg rest\", not because the elements match. The contrast half was applied on 17.09: the glyph moved to color-content-primary under a name of its own instead of borrowing the button colours module, which took dark from 2.55 to 4.11 and left light untouched at #0f6cbd. What remains of the disc - a resting element painted from a hover rung - is not this question and is carried by D35."
+    },
+    {
+      "concept": "empty content rest",
+      "roles": [
+        "color-content-subtle",
+        "color-content",
+        "color-content-primary"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "cardView",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "chat",
+          "role": "color-content"
+        },
+        {
+          "folder": "chat",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "gridBase",
+          "role": "color-content-primary"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident On 17.09 the grid AI chat joined this group: its sparkle glyph stopped borrowing the button colours module and took its own name on color-content-primary, which is the role Blazor gives the same glyph."
+    },
+    {
+      "concept": "error bg rest",
+      "roles": [
+        "color-bg-danger",
+        "color-bg-danger-subtler"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "gridBase",
+          "role": "color-bg-danger"
+        },
+        {
+          "folder": "informer",
+          "role": "color-bg-danger-subtler"
+        },
+        {
+          "folder": "toast",
+          "role": "color-bg-danger"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "error content rest",
+      "roles": [
+        "color-content-static-dark",
+        "color-content-danger"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "gridBase",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "gridBase",
+          "role": "color-content-danger"
+        },
+        {
+          "folder": "informer",
+          "role": "color-content-danger"
+        },
+        {
+          "folder": "toast",
+          "role": "color-content-static-dark"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "highlighted bg rest",
+      "roles": [
+        "color-bg-highlight",
+        "color-bg-primary-alpha-active"
+      ],
+      "families": [
+        "bg"
+      ],
+      "members": [
+        {
+          "folder": "cardView",
+          "role": "color-bg-highlight"
+        },
+        {
+          "folder": "htmlEditor",
+          "role": "color-bg-primary-alpha-active"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "info content rest",
+      "roles": [
+        "color-content",
+        "color-content-subtle"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "informer",
+          "role": "color-content"
+        },
+        {
+          "folder": "pagination",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "toast",
+          "role": "color-content"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid bg active",
+      "roles": [
+        "color-bg-danger-shared-active",
+        "color-content-danger-shared-active"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared-active"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared-active"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-danger-shared-active"
+        }
+      ],
+      "decision": "false-group",
+      "why": "grouped by the word in the names: for the check box this is the box fill, for the radio the dot-mark, which the package models as an icon. Both roles are right for what they paint, and the values coincide - *-danger-shared is one colour across all three families. Opened by D21"
+    },
+    {
+      "concept": "invalid bg focused",
+      "roles": [
+        "color-bg-danger-shared-hovered",
+        "color-content-danger-shared-hovered",
+        "color-content-danger",
+        "color-bg-danger-shared-active"
+      ],
+      "families": [
+        "bg",
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared-hovered"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-danger-shared-hovered"
+        },
+        {
+          "folder": "slider",
+          "role": "color-content-danger"
+        },
+        {
+          "folder": "switch",
+          "role": "color-bg-danger-shared-active"
+        }
+      ],
+      "decision": "answered",
+      "why": "Answered 09.09, and the answer is not to unify. Measured: the whole *-danger-shared family resolves to ONE value across bg, border and content in both modes - that is what shared means in this set. So the family segment carries no colour information here; it records which property paints the value. The canonical spelling is therefore already decided by the theme's own slot rule (NAMING M3, family follows the painted property), and unifying the three would throw away the only information the segment carries. If the package ever diverges the three, each element will then correctly follow its own family - which is the outcome the original worry asked for. Every member of the cluster already obeys the rule: checkBox border paints border-color, checkBox fill paints background-color, checkBox mark is a glyph, common badge is a fill. The one exception is radioButton, which paints a border AND a fill from a single variable - that is not a spelling choice, it is the anatomy question filed as sweep:radio-invalid-vs-checkbox-invalid. All three roles here resolve to one colour (#76000b light / #9d0013 dark), so this row is a pure spelling cluster and nothing else."
+    },
+    {
+      "concept": "invalid bg hovered",
+      "roles": [
+        "color-bg-danger-shared-hovered",
+        "color-content-danger-shared-hovered",
+        "color-border-danger"
+      ],
+      "families": [
+        "bg",
+        "content",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared-hovered"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-danger-shared-hovered"
+        },
+        {
+          "folder": "slider",
+          "role": "color-border-danger"
+        },
+        {
+          "folder": "switch",
+          "role": "color-bg-danger-shared-hovered"
+        }
+      ],
+      "decision": "answered",
+      "why": "Answered 09.09, and the answer is not to unify. Measured: the whole *-danger-shared family resolves to ONE value across bg, border and content in both modes - that is what shared means in this set. So the family segment carries no colour information here; it records which property paints the value. The canonical spelling is therefore already decided by the theme's own slot rule (NAMING M3, family follows the painted property), and unifying the three would throw away the only information the segment carries. If the package ever diverges the three, each element will then correctly follow its own family - which is the outcome the original worry asked for. Every member of the cluster already obeys the rule: checkBox border paints border-color, checkBox fill paints background-color, checkBox mark is a glyph, common badge is a fill. The one exception is radioButton, which paints a border AND a fill from a single variable - that is not a spelling choice, it is the anatomy question filed as sweep:radio-invalid-vs-checkbox-invalid. Note the row is NOT one colour: beside the shared cluster (#9d0013 / #ee726a) it holds slider on border-danger, a different shade. That member is a shade divergence, not a spelling one, and the page used to claim the whole row was free to change."
+    },
+    {
+      "concept": "invalid bg rest",
+      "roles": [
+        "color-bg-danger-shared",
+        "color-content-danger-shared",
+        "color-bg-danger",
+        "color-bg-danger-subtler",
+        "color-border-danger"
+      ],
+      "families": [
+        "bg",
+        "content",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "checkBox",
+          "role": "color-bg-danger-shared"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-content-danger-shared"
+        },
+        {
+          "folder": "common",
+          "role": "color-bg-danger"
+        },
+        {
+          "folder": "gridBase",
+          "role": "color-bg-danger-subtler"
+        },
+        {
+          "folder": "progressBar",
+          "role": "color-bg-danger"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-content-danger-shared"
+        },
+        {
+          "folder": "slider",
+          "role": "color-border-danger"
+        },
+        {
+          "folder": "switch",
+          "role": "color-bg-danger-shared"
+        }
+      ],
+      "decision": "answered",
+      "why": "Answered 09.09, and the answer is not to unify. Measured: the whole *-danger-shared family resolves to ONE value across bg, border and content in both modes - that is what shared means in this set. So the family segment carries no colour information here; it records which property paints the value. The canonical spelling is therefore already decided by the theme's own slot rule (NAMING M3, family follows the painted property), and unifying the three would throw away the only information the segment carries. If the package ever diverges the three, each element will then correctly follow its own family - which is the outcome the original worry asked for. Every member of the cluster already obeys the rule: checkBox border paints border-color, checkBox fill paints background-color, checkBox mark is a glyph, common badge is a fill. The one exception is radioButton, which paints a border AND a fill from a single variable - that is not a spelling choice, it is the anatomy question filed as sweep:radio-invalid-vs-checkbox-invalid. Note the row is NOT one colour: beside the shared cluster (#c50f1f / #e4554f) it holds gridBase on bg-danger-subtler, progressBar on bg-danger and slider on border-danger - three different shades. Same correction as the hovered row."
+    },
+    {
+      "concept": "invalid border focused",
+      "roles": [
+        "color-border-danger",
+        "color-border-danger-shared-hovered",
+        "color-border-danger-shared-active"
+      ],
+      "families": [
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "calendar",
+          "role": "color-border-danger"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-border-danger-shared-hovered"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-border-danger-shared-hovered"
+        },
+        {
+          "folder": "slider",
+          "role": "color-border-danger"
+        },
+        {
+          "folder": "switch",
+          "role": "color-border-danger-shared-active"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid border rest",
+      "roles": [
+        "color-border-danger",
+        "color-border-danger-shared"
+      ],
+      "families": [
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "calendar",
+          "role": "color-border-danger"
+        },
+        {
+          "folder": "checkBox",
+          "role": "color-border-danger-shared"
+        },
+        {
+          "folder": "radioButton",
+          "role": "color-border-danger-shared"
+        },
+        {
+          "folder": "switch",
+          "role": "color-border-danger-shared"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "invalid content rest",
+      "roles": [
+        "color-content-static-dark",
+        "color-content-danger"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "common",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "fieldset",
+          "role": "color-content-danger"
+        },
+        {
+          "folder": "fileUploader",
+          "role": "color-content-danger"
+        },
+        {
+          "folder": "stepper",
+          "role": "color-content-danger"
+        }
+      ],
+      "decision": "answered",
+      "why": "Answered 15.09: content-danger for the three that paint TEXT - fieldset, fileUploader and stepper - and the danger FILL family for common, which is not the same element at all. The common member is $invalid-badge-content, the white exclamation mark inside the invalid badge; it sits on a red disc, not on the page, so content-danger would be red on red. What the answer settles is the disc: $invalid-badge-bg moves from bg-danger-shared to bg-danger. The badge is a fixed error marker whose mark is mode-static (content-static-dark is #ffffff in both modes), so the disc must not lighten in dark either - the shared stem took it to #e4554f and the white mark dropped to 3.68 against 6.07 in light. On bg-danger it is #c50f1f and 6.07 in both. Same matched pair as the gallery disc in D1. The group itself is two different elements under one name: invalid text on a surface, and a mark on a danger disc. Both roles are right for what they paint"
+    },
+    {
+      "concept": "inverted content rest",
+      "roles": [
+        "color-content-static-dark",
+        "color-content-inverted"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "fileManager",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "list",
+          "role": "color-content-static-dark"
+        },
+        {
+          "folder": "scheduler",
+          "role": "color-content-inverted"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "menu bg rest",
+      "roles": [
+        "color-bg",
+        "color-border-subtle"
+      ],
+      "families": [
+        "bg",
+        "border"
+      ],
+      "members": [
+        {
+          "folder": "list",
+          "role": "color-bg"
+        },
+        {
+          "folder": "menu",
+          "role": "color-bg"
+        },
+        {
+          "folder": "menu",
+          "role": "color-border-subtle"
+        }
+      ],
+      "decision": "shade",
+      "why": "Dissolved 09.09. Blazor sets menu-bg and context-menu-bg to color-bg, which is what our menu and list already read. The third member is $menu-separator-bg, and the package names separator.color = border-subtle for exactly that element. Three members, two elements, no disagreement."
+    },
+    {
+      "concept": "menu icon rest",
+      "roles": [
+        "color-content-subtle",
+        "color-content"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "contextMenu",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "filterBuilder",
+          "role": "color-content"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "menu shadow rest",
+      "roles": [
+        "box-shadow-lg",
+        "box-shadow-sm"
+      ],
+      "families": [
+        "shadow"
+      ],
+      "members": [
+        {
+          "folder": "contextMenu",
+          "role": "box-shadow-lg"
+        },
+        {
+          "folder": "list",
+          "role": "box-shadow-sm"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident. Narrowed on 17.09: the list side used to read a colour role (color-shadow-ambient) against contextMenu's whole shadow role, which was a mismatch of kind, not of shade. Both now read a step of box-shadow - the hold menu sits in the flow and the submenu floats over it, so sm against lg is the difference being recorded."
+    },
+    {
+      "concept": "success content rest",
+      "roles": [
+        "color-content-success",
+        "color-content-static-dark"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "gridBase",
+          "role": "color-content-success"
+        },
+        {
+          "folder": "toast",
+          "role": "color-content-static-dark"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    },
+    {
+      "concept": "text content focused",
+      "roles": [
+        "color-content",
+        "color-content-primary"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "filterBuilder",
+          "role": "color-content"
+        },
+        {
+          "folder": "textEditor",
+          "role": "color-content-primary"
+        }
+      ],
+      "decision": "shade",
+      "why": "The same family, a different shade. The filterBuilder chip no longer switches its label to the static white on focus - after the chips moved onto the package model the label keeps color-content across every rung, which is what lets the background stay inside its own -subtle ladder. The text editor still lifts its focused label to the accent, which is a different job: it marks the field the caret is in."
+    },
+    {
+      "concept": "text content rest",
+      "roles": [
+        "color-content",
+        "color-content-subtle"
+      ],
+      "families": [
+        "content"
+      ],
+      "members": [
+        {
+          "folder": "cardView",
+          "role": "color-content"
+        },
+        {
+          "folder": "diagram",
+          "role": "color-content-subtle"
+        },
+        {
+          "folder": "textEditor",
+          "role": "color-content"
+        }
+      ],
+      "decision": "shade",
+      "why": "the same family, a different shade - a difference two components can honestly have; listed so it is a choice rather than an accident"
+    }
+  ],
+  "unusedRoles": {
+    "comment": [
+      "Counted from the package inward: roles the four component sets assign that the theme reads",
+      "nowhere. capability - the role exists in the semantic layer and we simply never reached for it;",
+      "stale - the neighbours reference a name no layer declares, which is their drift, not our gap.",
+      "Exact equality: a role leaving this list means the theme started using it, which is a decision.",
+      "262.23.0 dropped two roles it used to declare and nobody read - color-border-contrast-disabled and color-content-active. The list is two shorter not because the theme started reading them but because they are gone from the package. Noticed while rebasing onto the base carrying that bump, 15.09."
+    ],
+    "capability": [
+      "color-bg-info",
+      "color-bg-info-active",
+      "color-bg-info-hovered",
+      "color-bg-info-selected",
+      "color-bg-info-subtler",
+      "color-bg-info-subtler-active",
+      "color-bg-info-subtler-hovered",
+      "color-bg-info-subtler-selected",
+      "color-bg-inverted-active",
+      "color-bg-inverted-disabled",
+      "color-bg-inverted-hovered",
+      "color-bg-inverted-selected",
+      "color-bg-low-active",
+      "color-bg-on-color",
+      "color-bg-on-color-alpha",
+      "color-bg-on-color-alpha-active",
+      "color-bg-on-color-alpha-disabled",
+      "color-bg-on-color-alpha-hovered",
+      "color-bg-static-dark-selected",
+      "color-bg-static-light-active",
+      "color-bg-static-light-disabled",
+      "color-bg-static-light-hovered",
+      "color-bg-static-light-selected",
+      "color-bg-success-shared",
+      "color-bg-success-shared-active",
+      "color-bg-success-shared-hovered",
+      "color-bg-warning-active",
+      "color-bg-warning-hovered",
+      "color-bg-warning-selected",
+      "color-bg-warning-subtler",
+      "color-bg-warning-subtler-active",
+      "color-bg-warning-subtler-hovered",
+      "color-bg-warning-subtler-selected",
+      "color-border-info",
+      "color-border-inverted",
+      "color-border-inverted-active",
+      "color-border-inverted-disabled",
+      "color-border-inverted-hovered",
+      "color-border-on-color-shared",
+      "color-border-on-color-shared-disabled",
+      "color-border-static-dark",
+      "color-border-static-dark-active",
+      "color-border-static-dark-disabled",
+      "color-border-static-dark-hovered",
+      "color-border-static-light",
+      "color-border-static-light-active",
+      "color-border-static-light-disabled",
+      "color-border-static-light-hovered",
+      "color-border-success-shared",
+      "color-border-success-shared-active",
+      "color-border-success-shared-hovered",
+      "color-border-warning",
+      "color-content-info",
+      "color-content-info-active",
+      "color-content-info-hovered",
+      "color-content-inverted-disabled",
+      "color-content-on-color",
+      "color-content-on-color-disabled",
+      "color-content-on-color-shared",
+      "color-content-on-color-shared-disabled",
+      "color-content-on-color-subtler",
+      "color-content-primary-active",
+      "color-content-static-light-disabled",
+      "color-content-success-shared",
+      "color-content-success-shared-active",
+      "color-content-success-shared-hovered",
+      "color-content-warning-active",
+      "color-content-warning-hovered",
+      "color-focus",
+      "color-focus-inverted",
+      "color-focus-static",
+      "color-focus-static-inverted"
+    ],
+    "stale": [
+      "color-bg-canvas-hovered",
+      "color-bg-none",
+      "color-border-none",
+      "color-content-none",
+      "color-content-static-dark-active",
+      "color-content-subtle-active",
+      "color-content-subtle-disabled",
+      "color-content-subtle-hovered",
+      "color-content-subtle-selected",
+      "color-content-subtler-disabled"
+    ]
+  },
+  "statePairs": {
+    "comment": [
+      "Contrast measured across a state change - added 09.09.2026, and it is what the rest of this file",
+      "could not see. The rule-local pass needs a foreground and a background in one rule; a state",
+      "ladder never writes them together, so the states where a value actually moves were exactly the",
+      "blind spot. Exact equality: a row leaving or entering this list is a decision, not a ratchet.",
+      "threshold: 4.5 where the foreground is a label, 3 where it is a glyph or a boundary (WCAG 1.4.11)."
+    ],
+    "rows": [
+      {
+        "bg": "--dx-button-default-contained-bg-focused",
+        "fg": "--dx-button-default-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-primary-hovered",
+        "contrast": {
+          "light": 7.82,
+          "dark": 4.21
+        },
+        "selector": ".dx-button.dx-button-default.dx-state-focused",
+        "decision": "answered",
+        "group": "contained-button-label"
+      },
+      {
+        "bg": "--dx-button-default-contained-bg-hovered",
+        "fg": "--dx-button-default-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-primary-hovered",
+        "contrast": {
+          "light": 7.82,
+          "dark": 4.21
+        },
+        "selector": ".dx-button.dx-button-default.dx-state-hover",
+        "decision": "answered",
+        "group": "contained-button-label"
+      },
+      {
+        "bg": "--dx-button-default-outlined-bg-active",
+        "fg": "--dx-button-default-text-content",
+        "fgRole": "color-content-primary",
+        "bgRole": "color-bg-primary-subtler-active",
+        "contrast": {
+          "light": 2.94,
+          "dark": 4.79
+        },
+        "selector": ".dx-popup-content .dx-scheduler-dropdown-appointment-buttons-block .dx-button.dx-state-sel",
+        "decision": "graphic-ok"
+      },
+      {
+        "bg": "--dx-button-success-contained-bg-focused",
+        "fg": "--dx-button-success-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-success-hovered",
+        "contrast": {
+          "light": 7.53,
+          "dark": 4.18
+        },
+        "selector": ".dx-button.dx-button-success.dx-state-focused",
+        "decision": "answered",
+        "group": "contained-button-label"
+      },
+      {
+        "bg": "--dx-button-success-contained-bg-hovered",
+        "fg": "--dx-button-success-contained-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-success-hovered",
+        "contrast": {
+          "light": 7.53,
+          "dark": 4.18
+        },
+        "selector": ".dx-button.dx-button-success.dx-state-hover",
+        "decision": "answered",
+        "group": "contained-button-label"
+      },
+      {
+        "bg": "--dx-check-box-icon-checked-bg-active",
+        "fg": "--dx-check-box-mark-content",
+        "fgRole": "color-content-inverted",
+        "bgRole": "color-bg-primary-shared-active",
+        "contrast": {
+          "light": 11.17,
+          "dark": 2.31
+        },
+        "selector": ".dx-checkbox-checked.dx-state-active .dx-checkbox-icon",
+        "decision": "answered",
+        "group": "checkbox-focused-fill"
+      },
+      {
+        "bg": "--dx-speed-dial-action-main-bg-hovered",
+        "fg": "--dx-speed-dial-action-main-content",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-primary-hovered",
+        "contrast": {
+          "light": 7.82,
+          "dark": 4.21
+        },
+        "selector": ".dx-fa-button.dx-fa-button-main .dx-overlay-content.dx-state-hover",
+        "decision": "graphic-ok"
+      },
+      {
+        "bg": "--dx-stepper-step-bg-selected-hovered",
+        "fg": "--dx-stepper-step-content-selected",
+        "fgRole": "color-content-static-dark",
+        "bgRole": "color-bg-primary-hovered",
+        "contrast": {
+          "light": 7.82,
+          "dark": 4.21
+        },
+        "selector": ".dx-step.dx-state-hover.dx-step-completed .dx-step-indicator",
+        "decision": "answered",
+        "group": "contained-button-label"
+      }
+    ],
+    "groups": {
+      "checkbox-focused-fill": {
+        "decision": "answered",
+        "why": "Resolved in part on 15.09, when the designer produced the package tokens for checkbox/color/checked. Three slots, not one: border, bg and icon each have their own token, and our theme painted the border from the BG variable. Figma and Blazor agree that the border is border-primary-shared*, so that half was not a judgement call and is applied - three new names, light pixel-identical (primary-100/120/140 exactly as before), dark better at every rung: the box outline against the page goes 2.88 -> 4.65 at rest, 3.69 -> 5.79 hovered, 1.39 -> 1.98 pressed.\nWHAT REMAINS. The fill. Figma says bg-primary*, Blazor implements content-primary-shared*, and the two are identical in light and differ in dark - which is exactly what decides this row. On Figma's fill the mark reads 3.36 at rest and 1.62 pressed; on Blazor's, 5.42 and 2.31. Neither clears 3.0 in the pressed state, because no primary family inverts its active rung for dark - the same package defect P2 records for danger.\nAND A THIRD THING THE TOKENS SETTLE. The package state list is rest / hovered / active / read-only / disabled - there is no focused. Our theme paints .dx-state-focused AND .dx-state-active from one variable, so a keyboard user SITS at the value the package intends for a transient press. The button already separates them (bg-focused reads bg-primary-hovered). Splitting focus from active would leave the 1.62 where the package put it - under a finger, for the length of a click - and take the keyboard user to 4.30.\nRE-CHECKED 15.09 against a freshly pulled Blazor, and the stem argument above was WRONG. Blazor's checked fills are content-primary-shared for primary but bg-success-shared and bg-danger-shared for the other two - I had read the INDETERMINATE variables, where the dash is a content-coloured mark, as the checked fills. So primary is the outlier inside Blazor, our bg family agrees with their success and danger, and our invalid MARK on content-danger-shared agrees with their indeterminate mark. There was no internal inconsistency.\nWHICH LEAVES A CANDIDATE THAT SATISFIES BOTH SOURCES: bg-primary-shared*. The whole *-shared family is one value across bg, border and content, so it measures exactly like Blazor's content-primary-shared - mark 5.42 at rest and box 4.65 in dark against 3.36 and 2.88 today - while staying in the bg family Figma names, on the stem Blazor itself uses for success and danger. Light is identical to what ships now. The pressed rung still fails (2.31 / 1.98): no primary family inverts its active step for dark, which is P2's defect again.\nRESOLVED 15.09, option 1. Focus now takes the HOVERED rung and the press keeps the package's active one, which is the shape the contained button already had (bg-focused reads bg-primary-hovered, bg-active reads bg-primary-active). The package state list justifies it: there is no focused state in it at all, so painting focus with the value meant for a click was never what the tokens asked for.\nFour variables: -bg-focused and -border-focused moved down a rung, and -bg-active and -border-active were added to hold what the package assigns. The row that measured 1.62 split in two - the press keeps 1.62 on a state that lasts as long as a finger is down, and the focus a keyboard user SITS in went to 4.30, over the 3:1 a glyph needs. Light moves one step on focus, #003c70 -> #005397. Cascade verified on eight combinations: checked rest, hover, focus and press, the invalid pair, and the indeterminate pair including its ::before dash.\nThe fill STEM question is untouched and still open: bg-primary* as it ships, against bg-primary-shared* which reads 5.42 / 4.65 in dark where today it is 3.36 / 2.88.\nSTEM ACCEPTED 15.09. The checked fill moved from the plain bg-primary family to bg-primary-shared*. Light is pixel-identical at every rung - primary-100, 120, 120, 140 exactly as before - because the plain and shared families coincide in light. Dark improves everywhere: rest primary-100 -> 80, hovered and focused 90 -> 70, press 140 -> 120. The rest row left the contrast list (3.36 -> 5.42), hovered and focused left the state-pair list (4.30 -> 6.75), and the press went 1.62 -> 2.31 - still under 3, because the package gives no primary family an inverted active rung, which is P2 again.\nWhy the stem matters at all: the plain family does not know the mode. bg-primary is #0f6cbd in BOTH modes and bg-primary-active #003c70 in both, while the mark on them, content-inverted, does flip - to #161616 in dark. A fixed fill under a flipping mark is what produced 3.36 and 1.62. Every rung of the shared family flips.\nCLOSED 15.09. All three parts are applied - the outline has its own role, focus is separated from the press, and the fill is on the shared stem. What is left below the floor is the press at 2.31 in dark, and no shipped role fixes it: every primary family keeps its active rung un-inverted for dark. That is the same package defect P2 files for danger, so it leaves the theme as a report rather than a question."
+      },
+      "contained-button-label": {
+        "decision": "answered",
+        "why": "The filled default and success buttons, and the completed stepper indicator, put a white label on bg-<hue>-hovered and land at 4.18-4.21 in dark against the 4.5 a label needs. Light is 7.5-7.8, so this is dark-only. The foreground is content-static-dark, which is #ffffff in both modes by design, so the whole movement is in the fill: bg-primary in dark is #0f6cbd giving 5.38, and its hovered rung lightens to #2b7ecf giving 4.21. A hover that lightens is correct for dark; it is the amount that overshoots. Nothing in the theme can fix this - the pair is two package roles used exactly as intended - so this is a report to the design system, alongside the danger-content row already filed. Listed as a question only to confirm we file it rather than swap a role.\nCLOSED 15.09: handed to the designers and left as it is. Nothing in the theme can move it - the pair is two package roles used exactly as intended - so the theme carries it as a known report rather than an open question."
+      }
+    },
+    "measuredOn": "2026-09-09"
+  },
+  "bundleFreshness": {
+    "comment": [
+      "How many tier declarations are missing from the built bundle. Must be 0.",
+      "Not a metric but a guard: every check that looks at a painted property GOES SILENT when the",
+      "bundle is older than the sources - a renamed variable is simply not found, it has no property,",
+      "and it can no longer contradict its slot. The 23-name rename on 09.09 hid 24 declarations that",
+      "way, and the slot check looked like it had passed. Now a stale bundle moves the number",
+      "instead of removing findings."
+    ],
+    "declarationsMissingFromBundle": 0
+  },
+  "rungs": [
+    {
+      "name": "button-danger-outlined-content",
+      "state": "rest",
+      "roles": [
+        "color-content-danger"
+      ],
+      "oursAt": [
+        "selected"
+      ],
+      "want": [
+        "color-content",
+        "color-content-inverted",
+        "color-content-static-dark",
+        "color-content-static-light",
+        "color-content-subtle"
+      ],
+      "decision": "answered",
+      "why": "The outlined and text buttons keep the hue on the label at rest; the package puts a neutral `content` there and brings the hue in only when the button is selected. Opened as D17 and answered by the designer on 16.09: keep the tinted look, move only the two rungs that failed contrast. So the rung difference is the decision, not a defect."
+    },
+    {
+      "name": "button-default-outlined-content",
+      "state": "rest",
+      "roles": [
+        "color-content-primary"
+      ],
+      "oursAt": [
+        "selected"
+      ],
+      "want": [
+        "color-content",
+        "color-content-inverted",
+        "color-content-static-dark",
+        "color-content-static-light",
+        "color-content-subtle"
+      ],
+      "decision": "answered",
+      "why": "The outlined and text buttons keep the hue on the label at rest; the package puts a neutral `content` there and brings the hue in only when the button is selected. Opened as D17 and answered by the designer on 16.09: keep the tinted look, move only the two rungs that failed contrast. So the rung difference is the decision, not a defect."
+    },
+    {
+      "name": "button-default-text-content",
+      "state": "rest",
+      "roles": [
+        "color-content-primary"
+      ],
+      "oursAt": [
+        "selected"
+      ],
+      "want": [
+        "color-content",
+        "color-content-inverted",
+        "color-content-static-dark",
+        "color-content-static-light",
+        "color-content-subtle"
+      ],
+      "decision": "answered",
+      "why": "The outlined and text buttons keep the hue on the label at rest; the package puts a neutral `content` there and brings the hue in only when the button is selected. Opened as D17 and answered by the designer on 16.09: keep the tinted look, move only the two rungs that failed contrast. So the rung difference is the decision, not a defect."
+    },
+    {
+      "name": "button-default-text-content-selected",
+      "state": "selected",
+      "roles": [
+        "color-content-primary-hovered"
+      ],
+      "oursAt": [
+        "hovered"
+      ],
+      "want": [
+        "color-content-danger",
+        "color-content-info",
+        "color-content-primary",
+        "color-content-static-dark",
+        "color-content-subtle-selected",
+        "color-content-success",
+        "color-content-warning"
+      ],
+      "decision": "answered",
+      "why": "The outlined and text buttons keep the hue on the label at rest; the package puts a neutral `content` there and brings the hue in only when the button is selected. Opened as D17 and answered by the designer on 16.09: keep the tinted look, move only the two rungs that failed contrast. So the rung difference is the decision, not a defect. The selected rung of the text button reads the hovered colour of the same ramp, which is inside that decision."
+    },
+    {
+      "name": "button-normal-contained-content-selected",
+      "state": "selected",
+      "roles": [
+        "color-content"
+      ],
+      "oursAt": [
+        "active",
+        "hovered",
+        "rest"
+      ],
+      "want": [
+        "color-content-danger",
+        "color-content-info",
+        "color-content-primary",
+        "color-content-static-dark",
+        "color-content-subtle-selected",
+        "color-content-success",
+        "color-content-warning"
+      ],
+      "decision": "answered",
+      "why": "The outlined and text buttons keep the hue on the label at rest; the package puts a neutral `content` there and brings the hue in only when the button is selected. Opened as D17 and answered by the designer on 16.09: keep the tinted look, move only the two rungs that failed contrast. So the rung difference is the decision, not a defect. This row is the same group seen from the neutral button: its label stays `content` when selected, where the package colours it by hue."
+    },
+    {
+      "name": "button-success-outlined-content",
+      "state": "rest",
+      "roles": [
+        "color-content-success"
+      ],
+      "oursAt": [
+        "selected"
+      ],
+      "want": [
+        "color-content",
+        "color-content-inverted",
+        "color-content-static-dark",
+        "color-content-static-light",
+        "color-content-subtle"
+      ],
+      "decision": "answered",
+      "why": "The outlined and text buttons keep the hue on the label at rest; the package puts a neutral `content` there and brings the hue in only when the button is selected. Opened as D17 and answered by the designer on 16.09: keep the tinted look, move only the two rungs that failed contrast. So the rung difference is the decision, not a defect."
+    },
+    {
+      "name": "card-view-card-bg-selected",
+      "state": "selected",
+      "roles": [
+        "color-bg-primary-subtler-selected"
+      ],
+      "oursAt": [
+        "rest"
+      ],
+      "want": [
+        "color-bg-info-subtler",
+        "color-bg-primary-alpha",
+        "color-bg-primary-subtler",
+        "color-bg-selected",
+        "color-bg-success-subtler",
+        "color-bg-warning-subtler"
+      ],
+      "decision": "confirmed",
+      "why": "The package assigns exactly this role to exactly this thing; only the rung word differs, because it names the card's own `selected` state where we name the element `card-bg-selected`. Nothing to reconcile."
+    },
+    {
+      "name": "chat-avatar-bg",
+      "state": "rest",
+      "roles": [
+        "color-bg-active"
+      ],
+      "oursAt": [
+        "active"
+      ],
+      "want": [
+        "color-bg",
+        "color-bg-canvas",
+        "color-bg-danger-subtler",
+        "color-bg-high",
+        "color-bg-primary-subtler",
+        "color-content-disabled"
+      ],
+      "decision": "package-gap",
+      "why": "Measured before deciding: against the chat surface every neutral RESTING fill the system offers reads 1.04-1.09 - bg 1.00, bg-canvas 1.04, bg-low and bg-high 1.09 - because in light they are all #f5f5f5-#fafafa on #ffffff. The only neutral fills a disc is visible on are the state rungs: bg-selected 1.21 and bg-active 1.31, which is what the avatar reads today. So this is not a rung chosen carelessly but a role the design system does not ship: a resting neutral disc. Kept, and raised as a request to the package team."
+    },
+    {
+      "name": "check-box-icon-bg-disabled",
+      "state": "disabled",
+      "roles": [
+        "color-content-disabled"
+      ],
+      "oursAt": [
+        "read-only"
+      ],
+      "want": [
+        "color-none"
+      ],
+      "decision": "anatomy",
+      "why": "The package paints `color-none` on a disabled box - it leaves it unfilled and lets the border carry the state - and uses content-disabled at read-only instead. We fill it. A different anatomy, not a different role: the disabled paint has its own gate here (tests/disabled-paint.test.ts)."
+    },
+    {
+      "name": "gantt-selection-bg",
+      "state": "rest",
+      "roles": [
+        "color-bg-primary-subtler"
+      ],
+      "oursAt": [
+        "selected"
+      ],
+      "want": [
+        "color-bg",
+        "color-bg-alpha",
+        "color-bg-danger-subtler",
+        "color-bg-info-subtler-hovered",
+        "color-bg-info-subtler-selected",
+        "color-bg-low",
+        "color-bg-primary-alpha",
+        "color-bg-primary-subtle",
+        "color-bg-primary-subtler-selected",
+        "color-bg-selected",
+        "color-bg-success-subtler-selected",
+        "color-bg-warning-subtler-selected",
+        "color-none"
+      ],
+      "decision": "confirmed",
+      "why": "Our element IS the selection, so its name carries no `-selected` suffix; the package reaches the same paint as the `selected` rung of a row. Same role, same paint, different spelling."
+    },
+    {
+      "name": "gantt-ti-bg",
+      "state": "rest",
+      "roles": [
+        "color-bg-primary-alpha-hovered"
+      ],
+      "oursAt": [
+        "hovered"
+      ],
+      "want": [
+        "color-bg",
+        "color-bg-alpha",
+        "color-bg-danger-subtler",
+        "color-bg-info-subtler-hovered",
+        "color-bg-info-subtler-selected",
+        "color-bg-low",
+        "color-bg-primary-alpha",
+        "color-bg-primary-subtle",
+        "color-bg-primary-subtler-selected",
+        "color-bg-selected",
+        "color-bg-success-subtler-selected",
+        "color-bg-warning-subtler-selected",
+        "color-none"
+      ],
+      "decision": "known",
+      "why": "The band marking a time interval reads bg-primary-alpha-hovered, alpha 0.20. The resting rung of the same ramp is 0.11 and legacy fluent drew this band at 0.15, so neither rung is the legacy density and the rest rung is the fainter of the two: against the canvas the band goes from 1.33 to 1.16. Kept at the stronger rung and recorded in DIVERGENCES.md. Noted while measuring: the same ramp is read off-rung in two more places and in both directions - htmlEditor's variable chip is another resting element on the hovered rung, and the scheduler's FOCUSED cell reads the resting rung. That is a ramp-wide question, not this row."
+    },
+    {
+      "name": "grid-ai-chat-empty-icon-bg",
+      "state": "rest",
+      "roles": [
+        "color-bg-primary-subtler"
+      ],
+      "oursAt": [
+        "selected"
+      ],
+      "want": [
+        "color-bg",
+        "color-bg-alpha",
+        "color-bg-danger-subtler",
+        "color-bg-info-subtler-hovered",
+        "color-bg-info-subtler-selected",
+        "color-bg-low",
+        "color-bg-primary-alpha",
+        "color-bg-primary-subtle",
+        "color-bg-primary-subtler-selected",
+        "color-bg-selected",
+        "color-bg-success-subtler-selected",
+        "color-bg-warning-subtler-selected",
+        "color-none"
+      ],
+      "decision": "anatomy",
+      "why": "Answered 17.09 by moving the disc to the rest rung of its own ramp, bg-primary-subtler: the glyph on it goes from 4.02 to 4.64 in light and 4.11 to 4.79 in dark, so the pair leaves the contrast list altogether. The row stays here because the package's grid names that role for a SELECTED row and has no empty-state badge at all - a difference of anatomy, with no rung of theirs left to agree with."
+    },
+    {
+      "name": "grid-cell-modified-bg",
+      "state": "rest",
+      "roles": [
+        "color-bg-success-subtler"
+      ],
+      "oursAt": [
+        "selected"
+      ],
+      "want": [
+        "color-bg",
+        "color-bg-alpha",
+        "color-bg-danger-subtler",
+        "color-bg-info-subtler-hovered",
+        "color-bg-info-subtler-selected",
+        "color-bg-low",
+        "color-bg-primary-alpha",
+        "color-bg-primary-subtle",
+        "color-bg-primary-subtler-selected",
+        "color-bg-selected",
+        "color-bg-success-subtler-selected",
+        "color-bg-warning-subtler-selected",
+        "color-none"
+      ],
+      "decision": "anatomy",
+      "why": "A modified-cell tint is ours alone; the package has no such element and uses that role for a selected row. There is no rung of theirs to agree with."
+    },
+    {
+      "name": "grid-selection-bg",
+      "state": "rest",
+      "roles": [
+        "color-bg-primary-subtler"
+      ],
+      "oursAt": [
+        "selected"
+      ],
+      "want": [
+        "color-bg",
+        "color-bg-alpha",
+        "color-bg-danger-subtler",
+        "color-bg-info-subtler-hovered",
+        "color-bg-info-subtler-selected",
+        "color-bg-low",
+        "color-bg-primary-alpha",
+        "color-bg-primary-subtle",
+        "color-bg-primary-subtler-selected",
+        "color-bg-selected",
+        "color-bg-success-subtler-selected",
+        "color-bg-warning-subtler-selected",
+        "color-none"
+      ],
+      "decision": "confirmed",
+      "why": "See gantt-selection-bg - the selected row of a grid, named as a thing rather than as a state."
+    },
+    {
+      "name": "scrollable-bg",
+      "state": "rest",
+      "roles": [
+        "color-bg"
+      ],
+      "oursAt": [
+        "hovered"
+      ],
+      "want": [
+        "color-none"
+      ],
+      "decision": "anatomy",
+      "why": "The package leaves its scroll surface unpainted at rest (`color-none`) and gives it a background only on hover. Ours is an opaque surface under the content, which is a different element rather than a different rung."
+    },
+    {
+      "name": "slider-element-bg",
+      "state": "rest",
+      "roles": [
+        "color-bg"
+      ],
+      "oursAt": [
+        "hovered"
+      ],
+      "want": [
+        "color-none"
+      ],
+      "decision": "anatomy",
+      "why": "Same as scrollable-bg: the package paints nothing at rest."
+    },
+    {
+      "name": "slider-tooltip-content",
+      "state": "rest",
+      "roles": [
+        "color-content"
+      ],
+      "oursAt": [
+        "hovered"
+      ],
+      "want": [
+        "color-content-danger",
+        "color-content-primary",
+        "color-content-subtle",
+        "color-content-success",
+        "color-content-warning"
+      ],
+      "decision": "anatomy",
+      "why": "The package tints the slider tooltip label by hue and keeps neutral `content` for the hovered rung; our tooltip is one neutral label in every state, which is the tooltip we ship, not a rung of theirs."
+    },
+    {
+      "name": "tabs-tab-content-selected",
+      "state": "selected",
+      "roles": [
+        "color-content"
+      ],
+      "oursAt": [
+        "rest"
+      ],
+      "want": [
+        "color-content-primary-shared"
+      ],
+      "decision": "answered",
+      "why": "Answered 17.09 as D37, option (2). A selected tab used to underline itself in the accent, colour its icon in the accent and leave its label neutral - the two halves of one element disagreeing. The icon joins the label on `content`, so the accent now marks a selected tab in exactly one place, the underline, and both rows sit here for the same reason: the package colours label and icon with content-primary-shared at that rung and we mark the tab by its selector instead. Values: the icon moves #0f6cbd to #161616 in light and #4b90d9 to #ffffff in dark; the underline is untouched."
+    },
+    {
+      "name": "tabs-tab-icon-content-selected",
+      "state": "selected",
+      "roles": [
+        "color-content"
+      ],
+      "oursAt": [
+        "rest"
+      ],
+      "want": [
+        "color-content-primary-shared"
+      ],
+      "decision": "answered",
+      "why": "Answered 17.09 as D37, option (2). A selected tab used to underline itself in the accent, colour its icon in the accent and leave its label neutral - the two halves of one element disagreeing. The icon joins the label on `content`, so the accent now marks a selected tab in exactly one place, the underline, and both rows sit here for the same reason: the package colours label and icon with content-primary-shared at that rung and we mark the tab by its selector instead. Values: the icon moves #0f6cbd to #161616 in light and #4b90d9 to #ffffff in dark; the underline is untouched."
+    },
+    {
+      "name": "text-editor-border-focused",
+      "state": "focused",
+      "roles": [
+        "color-border-active"
+      ],
+      "oursAt": [
+        "active"
+      ],
+      "want": [
+        "color-content-primary"
+      ],
+      "decision": "anatomy",
+      "why": "Measured in the bundle: the accent line the package calls `text-input.line.focused = content-primary` is our `$text-editor-indicator`, which reads exactly `content-primary`. What our `-border-focused` and `-line-focused` paint is the box's own edge underneath that indicator. The role is right; the slot word `line` means a different line on each side."
+    },
+    {
+      "name": "text-editor-line-focused",
+      "state": "focused",
+      "roles": [
+        "color-content"
+      ],
+      "oursAt": [
+        "hovered"
+      ],
+      "want": [
+        "color-content-primary"
+      ],
+      "decision": "anatomy",
+      "why": "See text-editor-border-focused - the same pair of lines, and the accent one already carries the package's role."
+    },
+    {
+      "name": "tree-view-content",
+      "state": "rest",
+      "roles": [
+        "color-content"
+      ],
+      "oursAt": [
+        "active",
+        "hovered"
+      ],
+      "want": [
+        "color-content-subtle"
+      ],
+      "decision": "anatomy",
+      "why": "The package's tree item is `content-subtle` at rest and darkens to `content` on hover; ours is full `content` throughout. A deliberate contrast-positive difference, and moving to their ladder would lower the resting contrast of every tree label."
+    }
+  ]
+}
