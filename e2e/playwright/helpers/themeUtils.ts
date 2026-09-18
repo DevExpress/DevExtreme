@@ -1,15 +1,14 @@
-import { DEFAULT_THEME, readEnv } from './const';
+// The theme travels one way: the THEME variable names the default of a run, the config turns it
+// into the "theme" option, the fixture applies it to the page. These helpers are handed the theme
+// that is in effect — reading the environment here would be a second source that can disagree.
+export const getThemeName = (theme: string): string => theme.split('.')[0];
 
-export const getFullThemeName = (): string => readEnv(process.env.THEME, DEFAULT_THEME);
+export const getDarkThemeName = (theme: string): string => theme.replace('light', 'dark');
 
-export const getThemeName = (): string => getFullThemeName().split('.')[0];
+export const isMaterial = (theme: string): boolean => theme.startsWith('material');
 
-export const getDarkThemeName = (): string => getFullThemeName().replace('light', 'dark');
+export const isFluent = (theme: string): boolean => theme.startsWith('fluent');
 
-export const isMaterial = (): boolean => getFullThemeName().startsWith('material');
+export const isMaterialBased = (theme: string): boolean => isMaterial(theme) || isFluent(theme);
 
-export const isFluent = (): boolean => getFullThemeName().startsWith('fluent');
-
-export const isMaterialBased = (): boolean => isMaterial() || isFluent();
-
-export const getThemePostfix = (theme?: string): string => ` (${theme ?? getFullThemeName()})`;
+export const getThemePostfix = (theme: string): string => ` (${theme})`;

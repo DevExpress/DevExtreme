@@ -13,7 +13,7 @@ export interface ScreenshotOptions {
 
 // The etalons carry the theme in their file name — the same convention the TestCafe run uses,
 // so the existing "<name> (fluent.blue.light).png" files are reused as is.
-const getScreenshotName = (baseName: string, theme?: string): string => {
+const getScreenshotName = (baseName: string, theme: string): string => {
   const themePostfix = getThemePostfix(theme);
 
   return baseName.endsWith('.png')
