@@ -2046,7 +2046,30 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
                 assert.strictEqual(document.activeElement, focusStateEnabled ? close : input, 'native autofocus respects the map');
                 assert.strictEqual(tooltip.option('tabFocusLoopEnabled'), focusStateEnabled, 'the focus loop respects the map');
                 await tooltip.hide();
+                assert.strictEqual(document.activeElement, focusStateEnabled ? getMarker() : input, 'hiding respects the map focus setting');
             }
+        });
+    });
+
+    [false, true].forEach(focusStateEnabled => {
+        [
+            { name: 'title and Close button', options: { title: 'Details', showTitle: true, showCloseButton: true } },
+            { name: 'toolbar items', options: { toolbarItems: [{ widget: 'dxButton', options: { text: 'Details' } }] } }
+        ].forEach(({ name, options }) => {
+            QUnit.test(`customizing an open tooltip with ${name} respects focusStateEnabled: ${focusStateEnabled}`, async function(assert) {
+                await createMap({ focusStateEnabled, markers: [{ location, tooltip: 'Start' }] });
+                positionMarker();
+                getMarker().click();
+                const tooltip = getTooltip();
+                tooltip.option(options);
+
+                assert.ok(tooltip.option('visible'), 'the tooltip remains open');
+                assert.strictEqual(tooltip.option('focusStateEnabled'), focusStateEnabled, 'native focus respects the map');
+                assert.strictEqual(tooltip.option('tabFocusLoopEnabled'), focusStateEnabled, 'the focus loop respects the map');
+                await Promise.resolve();
+                const button = getContent(tooltip).parentElement.querySelector('.dx-button');
+                assert.strictEqual(button.tabIndex, focusStateEnabled ? 0 : -1, 'the new button respects tab navigation');
+            });
         });
     });
 
@@ -2066,6 +2089,34 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
         await tooltip.hide();
         getMarker().click();
         assert.strictEqual(document.activeElement, close, 'native autofocus works after enabling');
+    });
+
+    ['focusStateEnabled', 'disabled'].forEach(optionName => {
+        QUnit.test(`an open dialog follows runtime changes of ${optionName}`, async function(assert) {
+            const map = await createMap({ focusStateEnabled: true, markers: [{ location, tooltip: 'Start' }] });
+            positionMarker();
+            const tooltip = getTooltip();
+            tooltip.option({ title: 'Details', showTitle: true, showCloseButton: true });
+            getMarker().click();
+            const enabledValue = optionName === 'focusStateEnabled';
+
+            map.option(optionName, !enabledValue);
+            await map._lastAsyncAction;
+            tooltip.option('toolbarItems', [{ widget: 'dxButton', options: { text: 'Details' } }]);
+            assert.notOk(tooltip.option('focusStateEnabled'), 'native focus stays disabled after customization');
+            assert.notOk(tooltip.option('tabFocusLoopEnabled'), 'the focus loop stays disabled after customization');
+
+            map.option(optionName, enabledValue);
+            await map._lastAsyncAction;
+            assert.ok(tooltip.option('focusStateEnabled'), 'native focus is restored');
+            assert.ok(tooltip.option('tabFocusLoopEnabled'), 'the focus loop is restored');
+            await tooltip.hide();
+            getMarker().click();
+            const button = getContent(tooltip).parentElement.querySelector('.dx-button');
+            assert.strictEqual(document.activeElement, button, 'native autofocus works after restoring focus');
+            await tooltip.hide();
+            assert.strictEqual(document.activeElement, getMarker(), 'native focus restoration works');
+        });
     });
 
     QUnit.test('tooltip describes the focusable children of an HTML marker', async function(assert) {

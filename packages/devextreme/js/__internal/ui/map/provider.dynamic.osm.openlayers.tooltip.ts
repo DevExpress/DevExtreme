@@ -79,7 +79,7 @@ export class OpenLayersMarkerTooltip {
       wrapperAttr: { class: POPOVER_CLASS },
     }) as MarkerPopover;
     this.element = $(this._popover.content()).parent().get(0) as HTMLElement;
-    this._popover.on('showing', this._prepareShowing);
+    this._popover.on('showing', this._syncFocusState);
     this._popover.on('positioned', this._restoreContentSize);
     this._popover.on('positioned', this._syncFocusState);
     this._popover.on('shown', this._syncFocusState);
@@ -100,6 +100,7 @@ export class OpenLayersMarkerTooltip {
   setFocusEnabled(enabled: boolean): void {
     if (enabled !== this._focusEnabled) {
       this._focusEnabled = enabled;
+      this._popover.option('_preventDialogContainerFocus', !enabled);
       const focusEnabled = enabled && this.element.getAttribute('role') === 'dialog';
       this._popover.option({
         focusStateEnabled: focusEnabled,
@@ -108,13 +109,6 @@ export class OpenLayersMarkerTooltip {
     }
     this._syncFocusState();
   }
-
-  private readonly _prepareShowing = (): void => {
-    if (!this._focusEnabled) {
-      this._popover.option({ focusStateEnabled: false, tabFocusLoopEnabled: false });
-    }
-    this._syncFocusState();
-  };
 
   private readonly _restoreContentSize = (): Promise<void> | undefined => {
     if (this._positioning || this._positionUpdatePending) {
