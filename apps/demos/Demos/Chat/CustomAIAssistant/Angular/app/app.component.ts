@@ -9,8 +9,8 @@ import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { AiAssistantComponent } from './components/ai-assistant/ai-assistant.component';
 import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
 import { TaskGridComponent } from './components/task-grid/task-grid.component';
-import { createAiIntegration } from './services/ai-service';
-import { routeMessage } from './routing/chat-router';
+import { AiService } from './ai/ai.service';
+import { routeMessage } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -47,6 +47,7 @@ loadMessages({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  providers: [AiService],
   imports: [
     AiAssistantComponent,
     EmployeeFormComponent,
@@ -60,15 +61,19 @@ export class AppComponent {
 
   @ViewChild(AiAssistantComponent) private aiAssistant!: AiAssistantComponent;
 
-  readonly aiIntegration: AIIntegration = createAiIntegration();
+  readonly aiIntegration: AIIntegration;
+
+  constructor(aiService: AiService) {
+    this.aiIntegration = aiService.getAiIntegration();
+  }
 
   async onMessageSubmitted(message: DxChatTypes.TextMessage): Promise<void> {
     this.aiAssistant.setDisabled(true);
 
     try {
       await routeMessage(message.text ?? '', {
-        form: this.employeeForm.instance,
-        gridInstance: this.taskGrid.instance,
+        form: this.employeeForm.formComponent,
+        gridInstance: this.taskGrid.gridComponent,
         aiIntegration: this.aiIntegration,
         pushMessage: (message) => this.aiAssistant.pushMessage(message),
       });

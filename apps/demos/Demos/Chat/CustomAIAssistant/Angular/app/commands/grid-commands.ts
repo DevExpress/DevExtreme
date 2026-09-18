@@ -7,7 +7,7 @@ import type {
   GridCommand,
   GridCommandArgs,
   GridFilterValue,
-} from '../types/types';
+} from '../data';
 
 export function getFilterConditions(filterValue: unknown): FilterCondition[] {
   if (!Array.isArray(filterValue)) return [];

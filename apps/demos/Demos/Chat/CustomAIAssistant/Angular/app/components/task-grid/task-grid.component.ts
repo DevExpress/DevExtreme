@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { DxDataGridModule, DxDataGridComponent } from 'devextreme-angular/ui/data-grid';
-import { colors, tasks } from '../../data/data';
-import type { ColumnFilterExpression, Task } from '../../types/types';
+import {
+  colors, tasks, type ColumnFilterExpression, type Task,
+} from '../../data';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -11,7 +12,6 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'app-task-grid',
-  standalone: true,
   imports: [DxDataGridModule],
   templateUrl: `.${modulePrefix}/components/task-grid/task-grid.component.html`,
   styleUrls: [`.${modulePrefix}/components/task-grid/task-grid.component.css`],
@@ -27,7 +27,7 @@ export class TaskGridComponent {
     elementAttr: { 'aria-label': 'Completed' },
   };
 
-  get instance(): DxDataGridComponent {
+  get gridComponent(): DxDataGridComponent {
     return this.dxDataGrid;
   }
 

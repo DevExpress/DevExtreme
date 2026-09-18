@@ -1,24 +1,22 @@
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
 import type { DxDataGridComponent } from 'devextreme-angular/ui/data-grid';
 import type { DxFormComponent } from 'devextreme-angular/ui/form';
-import type {
-  ClassificationResult,
-  CommandResult,
-  ExecuteGridAssistantAction,
-  FormAction,
-  OperationOutcome,
-  PushMessage,
-  RouteMessageContext,
-  RouterContext,
-} from '../types/types';
-import { ChatCommandError } from '../types/types';
 import {
+  ChatCommandError,
   FIELD_OR_VALUE_NOT_FOUND_MESSAGE, FORM_ACTION_TYPES, MAX_USER_MESSAGE_LENGTH, ROUTER_TARGETS,
-} from '../data/data';
-import { applyFormClearAction, applyFormSmartPaste, getFormFieldOptions } from '../commands/form-commands';
+  type ClassificationResult,
+  type CommandResult,
+  type ExecuteGridAssistantAction,
+  type FormAction,
+  type OperationOutcome,
+  type PushMessage,
+  type RouteMessageContext,
+  type RouterContext,
+} from './data';
+import { applyFormClearAction, applyFormSmartPaste, getFormFieldOptions } from './commands/form-commands';
 import {
   applyGridActions, buildGridPromptSection, buildGridResponseSchema, getGridColumnNames,
-} from '../commands/grid-commands';
+} from './commands/grid-commands';
 
 export function extractJson(text: string): unknown {
   const match = text.match(/\{[\s\S]*\}/);

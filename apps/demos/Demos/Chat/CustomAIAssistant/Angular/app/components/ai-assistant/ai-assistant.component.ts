@@ -9,7 +9,7 @@ import { DxSpeedDialActionModule } from 'devextreme-angular/ui/speed-dial-action
 import { ArrayStore, DataSource } from 'devextreme-angular/common/data';
 import {
   CLASSES, chatSuggestions, EMPTY_VIEW_MESSAGE, EMPTY_VIEW_PROMPT,
-} from '../../data/data';
+} from '../../data';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -19,7 +19,6 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'app-ai-assistant',
-  standalone: true,
   imports: [
     DxPopupModule,
     DxChatModule,
@@ -52,8 +51,6 @@ export class AiAssistantComponent {
 
   fabVisible = true;
 
-  isClearDisabled = true;
-
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {}
 
   private readonly store = new ArrayStore({ key: 'id' });
@@ -65,22 +62,24 @@ export class AiAssistantComponent {
 
   private clearButtonInstance?: DxButtonTypes.InitializedEvent['component'];
 
-  get clearButtonOptions(): Record<string, unknown> {
-    return {
-      icon: 'clearhistory',
-      disabled: this.isClearDisabled,
-      hint: 'Clear chat',
-      onClick: () => this.clearChat(),
-      onInitialized: (e: DxButtonTypes.InitializedEvent) => {
-        this.clearButtonInstance = e.component;
-      },
-    };
-  }
+  readonly clearButtonOptions: DxButtonTypes.Properties = {
+    icon: 'clearhistory',
+    disabled: true,
+    hint: 'Clear chat',
+    onClick: () => this.clearChat(),
+    onInitialized: (e: DxButtonTypes.InitializedEvent) => {
+      this.clearButtonInstance = e.component;
+    },
+  };
 
   toggle(): void {
     this.popupVisible = !this.popupVisible;
   }
 
+  // Tried a plain [disabled] input bound to `AppComponent.isAssistantBusy` instead of this imperative
+  // setter, but change detection didn't reliably pick up the reset once a chat-driven request touched
+  // the DataGrid (repro: click a suggestion that runs a grid action) - the chat stayed disabled.
+  // detectChanges() here is what makes the reset trigger consistently.
   setDisabled(value: boolean): void {
     this.disabled = value;
     this.changeDetectorRef.detectChanges();
@@ -135,7 +134,6 @@ export class AiAssistantComponent {
   }
 
   private updateClearButtonState(): void {
-    this.isClearDisabled = this.dataSource.items().length === 0;
-    this.clearButtonInstance?.option('disabled', this.isClearDisabled);
+    this.clearButtonInstance?.option('disabled', this.dataSource.items().length === 0);
   }
 }

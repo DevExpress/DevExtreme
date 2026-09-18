@@ -1,8 +1,8 @@
 import type { DxFormComponent, DxFormTypes } from 'devextreme-angular/ui/form';
-import type {
-  AIResult, CommandResult, FormAction, FormFieldOption,
-} from '../types/types';
-import { SMART_PASTE_TIMEOUT_MS } from '../data/data';
+import {
+  SMART_PASTE_TIMEOUT_MS,
+  type AIResult, type CommandResult, type FormAction, type FormFieldOption,
+} from '../data';
 
 export function getFormFieldOptions(form: DxFormComponent): FormFieldOption[] {
   return ((form.instance.option('items') as { dataField?: string; label?: { text?: string } }[]) ?? [])

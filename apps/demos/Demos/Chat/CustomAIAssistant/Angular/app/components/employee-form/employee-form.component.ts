@@ -3,8 +3,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { DxFormModule, DxFormComponent, DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxToastModule, DxToastComponent } from 'devextreme-angular/ui/toast';
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
-import { employee, formFieldsConfig } from '../../data/data';
-import type { Employee } from '../../types/types';
+import { employee, formFieldsConfig, type Employee } from '../../data';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -14,7 +13,6 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'app-employee-form',
-  standalone: true,
   imports: [CommonModule, DxFormModule, DxToastModule],
   templateUrl: `.${modulePrefix}/components/employee-form/employee-form.component.html`,
   styleUrls: [`.${modulePrefix}/components/employee-form/employee-form.component.css`],
@@ -46,7 +44,7 @@ export class EmployeeFormComponent {
     onClick: () => this.dxToast.instance.show(),
   };
 
-  get instance(): DxFormComponent {
+  get formComponent(): DxFormComponent {
     return this.dxForm;
   }
 
