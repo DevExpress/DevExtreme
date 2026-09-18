@@ -9,26 +9,19 @@
         "command": "pnpm install --frozen-lockfile"
       }
     },
-    "build": {
-      "executor": "nx:run-commands",
-      "dependsOn": ["install-dependencies"],
-      "options": {
-        "cwd": "{projectRoot}",
-        "parallel": false,
-        "commands": [
-          "rm -rf dist/",
-          "pnpm dx-make-sbom ../../ dist/ devextreme,devextreme-react,devextreme-angular,devextreme-vue,devextreme-themebuilder",
-          "cp dist/devextreme.cdx.json dist/devextreme-dist.cdx.json"
-        ]
-      }
-    },
     "make": {
       "executor": "nx:run-commands",
       "dependsOn": ["install-dependencies"],
       "options": {
         "cwd": "{projectRoot}",
         "parallel": false,
-        "commands": ["pnpm dx-make-sbom ../../ dist/"]
+        "forwardAllArgs": false,
+        "packages": "devextreme,devextreme-react,devextreme-angular,devextreme-vue,devextreme-themebuilder",
+        "commands": [
+          "rm -rf dist/",
+          "pnpm dx-make-sbom ../../ dist/ \"{args.packages}\"",
+          "test -f dist/devextreme.cdx.json && cp dist/devextreme.cdx.json dist/devextreme-dist.cdx.json || true"
+        ]
       }
     }
   }
