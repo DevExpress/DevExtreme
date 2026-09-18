@@ -37,9 +37,6 @@ const serializeOptions = (options: unknown): string => JSON.stringify(
 export const createWidget = async <TWidgetName extends WidgetName>(
   page: Page,
   widgetName: TWidgetName,
-  // A factory is accepted the way the TestCafe helper accepts one, so a configuration that has to
-  // reach for something on the page ports over unchanged. It returns the options themselves: the
-  // page calls it and hands the result straight to the widget, with nothing awaiting a promise.
   widgetOptions: TWidgetName extends keyof WidgetOptions
     ? WidgetOptions[TWidgetName] | (() => WidgetOptions[TWidgetName])
     : unknown,

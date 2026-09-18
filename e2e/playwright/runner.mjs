@@ -78,9 +78,6 @@ const { status } = spawnSync(
     {
         stdio: 'inherit',
         shell: process.platform === 'win32',
-        // Only a "--theme" of this run names the theme. Without one the environment is passed
-        // through untouched, so an exported THEME survives and the config falls back to its
-        // own default — the single place that literal lives.
         env: values.theme ? { ...process.env, THEME: values.theme } : process.env,
     },
 );

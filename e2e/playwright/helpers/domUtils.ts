@@ -112,8 +112,6 @@ export const insertStylesheetRulesToPage = async (
       document.head.appendChild(style);
     }
 
-    // Appended as text rather than through "insertRule": callers migrated from TestCafe pass a
-    // block of several rules, which "insertRule" rejects — it takes exactly one.
     style.appendChild(document.createTextNode(cssRules));
   },
   { stylesheetId: STYLESHEET_RULES_ID, cssRules: rules },

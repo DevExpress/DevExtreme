@@ -115,9 +115,6 @@ export async function testScreenshot(
     themeChanged,
   } = options ?? {};
 
-  // The page carries the theme the fixture actually applied, which is the one the test asked for.
-  // An environment variable only names the theme of the whole run and disagrees with a test that
-  // chose its own.
   const activeTheme = await getCurrentTheme(page);
 
   if (theme) {
