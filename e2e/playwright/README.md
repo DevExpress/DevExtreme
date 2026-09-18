@@ -46,6 +46,16 @@ docker/run.sh                       # verify
 docker/run.sh --update-snapshots    # rewrite the etalons of the tests that ran
 ```
 
+### Etalons of a migrated test
+
+The etalons here are recorded anew, not copied from `e2e/testcafe-devextreme`: the two runners
+crop and render differently, so a TestCafe image is not a valid reference for this suite.
+
+Migrating a test means, in one PR: port the test, record its etalon here, and delete the TestCafe
+test together with its etalon. The two sets must never cover the same case at once — a stale pair
+left behind gets updated by whoever touches the component next and starts asserting a render
+nobody checks.
+
 ## Themes
 
 A test runs in the default theme unless it says otherwise. The jobs that run the whole suite in
@@ -57,6 +67,22 @@ test('PivotGrid renders its areas', { tag: ['@generic.light'] }, async ({ page }
 ```
 
 Tag a test when its result does not depend on the theme, or when it has an etalon for that theme.
+
+A tag opts a test into a themed job; it does not change the theme of a run. To pin the theme of one
+test or one file, set the fixture option — the same way the browser size is set:
+
+```ts
+test.use({ theme: 'material.blue.light' });          // this file runs in Material
+test.use({ browserSize: [900, 600] });               // and in a 900x600 window
+
+test.describe('narrow layout', () => {
+  test.use({ browserSize: [400, 800] });             // only this block
+});
+```
+
+The options default to `fluent.blue.light` and `1200x800`, and `--theme` sets the default of the
+whole run. An etalon is named after the theme in effect, so a test that pins its own theme keeps
+its own etalons.
 
 ## Run in the CI environment
 
