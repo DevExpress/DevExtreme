@@ -19,6 +19,30 @@ wrapper change is required and what the reviewer checks.
   ("old nesteds"). This folder is **deprecated and being removed in a parallel PR**. Do not
   add, edit, or reference files here, even when a nested/collection option changes.
 
+## Adding a new component
+
+Fastest path: **clone the closest existing wrapper and rename**, rather than writing a file
+from scratch. For a plain Widget-based component copy `ui/load-indicator/index.ts`; for one
+with many options/events copy `ui/button/index.ts`; for a container with nested options copy
+`ui/sortable/` (the component plus its `nested/` folder).
+
+Files to create and register (keep every list alphabetical):
+
+- `packages/devextreme-angular/src/ui/<name>/index.ts` — the component (see anatomy below).
+- `packages/devextreme-angular/src/ui/<name>/ng-package.json` —
+  `{ "lib": { "entryFile": "index.ts" } }`.
+- `packages/devextreme-angular/src/index.ts` — add
+  `export { Dx<Name>Component, Dx<Name>Module } from 'devextreme-angular/ui/<name>';`.
+- `packages/devextreme-angular/src/ui/all.ts` — add the `import` **and** add `Dx<Name>Module`
+  to **both** the declarations and exports arrays (the two arrays are identical; anchor on the
+  neighboring entries to place it in each).
+- For a component with nested/object options, also create the `ui/<name>/nested/` folder
+  (cloning `ui/sortable/nested/` is the fastest way) and wire its module into the component's
+  `@NgModule` plus `export * from 'devextreme-angular/ui/<name>/nested';`.
+
+Do **not** create anything under `src/metadata/generated/**` — it is gitignored generated
+output, not source.
+
 ## Component file anatomy (`ui/<component>/index.ts`)
 
 Use the widget's options interface (e.g. `dxButtonOptions` and its `WidgetOptions` base) as

@@ -16,6 +16,19 @@ wrapper change is required and what the reviewer checks.
   (`prepareComponentConfig`, `prepareConfigurationComponentConfig`, component/config
   helpers). Never change these for a single component.
 
+## Adding a new component
+
+Fastest path: **clone the closest existing wrapper and rename**, rather than writing a file
+from scratch. For a plain Widget-based component copy `load-indicator.ts`; for one with a
+`template` copy `button.ts`; for a container with nested options copy `data-grid.ts` (it
+contains the configuration-component pattern).
+
+Files to create and register (keep every list alphabetical):
+
+- `packages/devextreme-vue/src/<name>.ts` — the component (see anatomy below), including any
+  configuration components in the same file.
+- `packages/devextreme-vue/src/index.ts` — add `export { Dx<Name> } from "./<name>";`.
+
 ## Component file anatomy (`<component>.ts`)
 
 The widget's `Properties` type (alias of `dx<Widget>Options`) is the source of truth.

@@ -16,6 +16,19 @@ wrapper change is required and what the reviewer checks.
   (`Component as BaseComponent`, `NestedOption`, `NestedComponentMeta`, `IHtmlOptions`,
   `ComponentRef`). Never change these for a single component.
 
+## Adding a new component
+
+Fastest path: **clone the closest existing wrapper and rename**, rather than writing a file
+from scratch. For a plain Widget-based component copy `load-indicator.ts`; for one with a
+`template` copy `button.ts`; for a container with nested options copy `data-grid.ts` (it
+contains the nested config-component pattern).
+
+Files to create and register (keep every list alphabetical):
+
+- `packages/devextreme-react/src/<name>.ts` — the component (see anatomy below), including any
+  nested config components in the same file.
+- `packages/devextreme-react/src/index.ts` — add `export { <Name> } from "./<name>";`.
+
 ## Component file anatomy (`<component>.ts`)
 
 The widget's `Properties` type (alias of `dx<Widget>Options`) is the source of truth.
