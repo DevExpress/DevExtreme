@@ -1,232 +1,220 @@
 import { normalizeKeyName } from '@js/common/core/events/utils';
-import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
-import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
-import Button from '@js/ui/button';
 import type { Properties } from '@js/ui/popover';
-import type Popover from '@js/ui/popover';
-import type { OverlayProperties } from '@ts/ui/overlay/overlay';
-import type { PopoverProperties } from '@ts/ui/popover/popover';
+import Popover from '@js/ui/popover';
+import { ALL_FOCUSABLE_ELEMENTS_SELECTOR } from '@ts/core/utils/m_selectors';
+import type InternalPopover from '@ts/ui/popover/popover';
 
 import { DEFAULT_MARKER_CLASS } from './provider.dynamic.osm.openlayers.marker';
-import MarkerPopover from './provider.dynamic.osm.openlayers.popover';
 import type { MapLike } from './provider.dynamic.osm.openlayers.utils';
 
-const TOOLTIP_CLASS = 'dx-map-marker-tooltip';
-const TOOLTIP_CLOSE_CLASS = `${TOOLTIP_CLASS}-close`;
 const POPOVER_CLASS = 'dx-map-marker-popover';
-const POPOVER_CONTENT_CLASS = `${POPOVER_CLASS}-content`;
-const CLOSE_BUTTON_SIZE = 28;
 const TOOLTIP_MAX_WIDTH = 280;
-const TOOLTIP_MAX_HEIGHT = 240;
 
-type MarkerPopoverOptions = Properties & Pick<PopoverProperties & OverlayProperties,
-  '_preventDialogContainerFocus' | '_popoverContentRole' | '_fixWrapperPosition'
-  | 'enableBodyScroll'>;
+type MarkerPopover = Popover & Pick<InternalPopover,
+  '_renderDimensions' | '_setContentHeight' | '_renderPosition'>;
 
 export class OpenLayersMarkerTooltip {
   readonly element: HTMLElement;
 
   private readonly _host: HTMLElement;
 
-  private readonly _content: HTMLElement;
+  private readonly _popover: MarkerPopover;
 
-  private readonly _popover: Popover;
+  private readonly _inertElements = new Set<HTMLElement>();
 
-  private readonly _closeButton: Button;
+  private readonly _tabIndexes = new Map<HTMLElement, string | null>();
 
-  private readonly _closeElement: HTMLElement;
+  private _focusEnabled = true;
 
-  private _triggers: HTMLElement[] = [];
+  private _positioning = false;
 
-  private _focusTarget?: HTMLElement;
+  private _positionUpdatePending = false;
 
-  private _focusRequested = false;
-
-  private _restoreFocus = false;
+  private _disposed = false;
 
   constructor(
     private readonly _map: MapLike,
     private readonly _container: Element,
     private readonly _marker: HTMLElement,
     text: string,
-    private readonly _rtlEnabled: boolean,
+    rtlEnabled: boolean,
   ) {
     const { ownerDocument } = _container;
     const host = ownerDocument.createElement('div');
+    Object.assign(host.style, { position: 'absolute', inset: '0', contain: 'layout paint' });
     _map.getOverlayContainer().appendChild(host);
     this._host = host;
+    const element = ownerDocument.createElement('div');
+    host.appendChild(element);
     const content = ownerDocument.createElement('div');
-    content.className = TOOLTIP_CLASS;
-    content.id = `dx-map-tooltip-${new Guid()}`;
     content.innerHTML = text;
-    this._content = content;
-    const layout = ownerDocument.createElement('div');
-    layout.className = POPOVER_CONTENT_CLASS;
-    const close = ownerDocument.createElement('div');
-    close.className = TOOLTIP_CLOSE_CLASS;
-    this._closeElement = close;
-    this._closeButton = new Button(close, {
-      icon: 'close',
-      stylingMode: 'text',
-      width: CLOSE_BUTTON_SIZE,
-      height: CLOSE_BUTTON_SIZE,
-      elementAttr: { 'aria-label': messageLocalization.format('Close') },
-      onClick: (): void => this._hide(),
-    });
-    layout.append(content, close);
-    this._popover = new MarkerPopover(host, this._getPopoverOptions(layout));
-    this.element = $(this._popover.content()).parent().get(0) as HTMLElement;
-    this.element.id = `${content.id}-dialog`;
-    this._setAccessibleName();
-    this.element.addEventListener('click', this._stopPropagation);
-    this.element.addEventListener('dblclick', this._stopPropagation);
-    this.element.addEventListener('pointerdown', this._stopPropagation);
-    this.element.addEventListener('keydown', this._escapeKeyHandler);
-    this.element.addEventListener('keydown', this._stopPropagation);
-    _marker.addEventListener('keydown', this._escapeKeyHandler);
-    _map.on('postrender', this.syncPosition);
-  }
+    const target = _marker.classList.contains(DEFAULT_MARKER_CLASS)
+      ? _marker.firstElementChild ?? _marker
+      : _marker;
+    const focusTargets = _marker.querySelectorAll<HTMLElement>(ALL_FOCUSABLE_ELEMENTS_SELECTOR);
 
-  private _getPopoverOptions(layout: HTMLElement): MarkerPopoverOptions {
-    const target = this._marker.classList.contains(DEFAULT_MARKER_CLASS)
-      ? this._marker.firstElementChild ?? this._marker
-      : this._marker;
-
-    return {
-      container: this._map.getOverlayContainer(),
-      target,
+    this._popover = new Popover<Properties>(element, {
+      container: host,
+      // @ts-expect-error Popover also supports renderer collections as targets.
+      target: focusTargets.length ? $(Array.from(focusTargets)) : _marker,
       position: {
+        of: target,
         my: { x: 'center', y: 'bottom' },
         at: { x: 'center', y: 'top' },
         collision: 'flip',
-        boundary: this._container,
+        boundary: _container,
       },
       animation: undefined,
       deferRendering: false,
-      contentTemplate: (): HTMLElement => layout,
+      contentTemplate: (): HTMLElement => content,
       maxWidth: TOOLTIP_MAX_WIDTH,
-      maxHeight: TOOLTIP_MAX_HEIGHT,
       showTitle: false,
       showCloseButton: false,
       hideOnOutsideClick: false,
       hideOnParentScroll: false,
-      focusStateEnabled: false,
-      tabFocusLoopEnabled: false,
-      _preventDialogContainerFocus: true,
-      _popoverContentRole: 'dialog',
-      _fixWrapperPosition: false,
-      enableBodyScroll: true,
-      rtlEnabled: this._rtlEnabled,
+      rtlEnabled,
+      elementAttr: { class: POPOVER_CLASS },
       wrapperAttr: { class: POPOVER_CLASS },
-      onShown: this._onShown,
-      onHiding: this._onHiding,
-      onHidden: this._onHidden,
-    };
+    }) as MarkerPopover;
+    this.element = $(this._popover.content()).parent().get(0) as HTMLElement;
+    this._popover.on('showing', this._prepareShowing);
+    this._popover.on('positioned', this._restoreContentSize);
+    this._popover.on('positioned', this._syncFocusState);
+    this._popover.on('shown', this._syncFocusState);
+    this._popover.on('hidden', this._syncFocusState);
+    this.element.addEventListener('click', this._stopPropagation);
+    this.element.addEventListener('dblclick', this._stopPropagation);
+    this.element.addEventListener('pointerdown', this._stopPropagation);
+    this.element.addEventListener('keydown', this._stopMapKeyPropagation);
+    _map.on('postrender', this.syncPosition);
   }
 
-  private readonly _onShown = (): void => {
-    this._setExpanded(true);
-    this._setAccessibleName();
-    if (this._focusRequested) {
-      this._closeElement.focus({ preventScroll: true });
+  show(): void {
+    if (!this._disposed) {
+      this._popover.option('visible', true);
     }
-    this._focusRequested = false;
+  }
+
+  setFocusEnabled(enabled: boolean): void {
+    if (enabled !== this._focusEnabled) {
+      this._focusEnabled = enabled;
+      const focusEnabled = enabled && this.element.getAttribute('role') === 'dialog';
+      this._popover.option({
+        focusStateEnabled: focusEnabled,
+        tabFocusLoopEnabled: focusEnabled,
+      });
+    }
+    this._syncFocusState();
+  }
+
+  private readonly _prepareShowing = (): void => {
+    if (!this._focusEnabled) {
+      this._popover.option({ focusStateEnabled: false, tabFocusLoopEnabled: false });
+    }
+    this._syncFocusState();
   };
 
-  private readonly _onHiding = (): void => {
-    this._restoreFocus = this.element.contains(domAdapter.getActiveElement(this.element));
-  };
-
-  private readonly _onHidden = (): void => {
-    this._setExpanded(false);
-    if (!this._restoreFocus) {
-      return;
+  private readonly _restoreContentSize = (): Promise<void> | undefined => {
+    if (this._positioning || this._positionUpdatePending) {
+      return undefined;
     }
 
-    if (this._focusTarget?.getAttribute('tabindex') === '-1') {
-      (this._container as HTMLElement).focus({ preventScroll: true });
-    } else {
-      this._focusTarget?.focus({ preventScroll: true });
-    }
-  };
-
-  private _setAccessibleName(): void {
-    if (this._content.textContent?.trim()) {
-      this.element.setAttribute('aria-labelledby', this._content.id);
-    } else {
-      this.element.setAttribute('aria-label', messageLocalization.format('dxMap-markerAriaLabel'));
-    }
-  }
-
-  setTriggers(triggers: HTMLElement[]): void {
-    this._triggers = triggers;
-    triggers.forEach((element) => {
-      element.setAttribute('aria-controls', this.element.id);
-      element.setAttribute('aria-haspopup', 'dialog');
-      element.setAttribute('aria-expanded', 'false');
-    });
-  }
-
-  private _setExpanded(expanded: boolean): void {
-    this._triggers.forEach((element) => element.setAttribute('aria-expanded', String(expanded)));
-  }
-
-  show(focus = false): void {
-    const activeElement = domAdapter.getActiveElement(this._marker);
-    this._focusTarget = this._triggers.find((element) => element === activeElement)
-      ?? this._triggers[0];
-    this._focusRequested = focus;
-    const wasVisible = this._popover.option('visible');
-    this._popover.option('visible', true);
-    if (wasVisible) {
-      this.syncPosition();
-      if (focus) {
-        this._closeElement.focus({ preventScroll: true });
-        this._focusRequested = false;
+    this._positionUpdatePending = true;
+    return Promise.resolve().then(() => {
+      this._positionUpdatePending = false;
+      if (this._disposed) {
+        return;
       }
-    }
-  }
 
-  private _hide(): void {
-    this._focusRequested = false;
-    this._popover.option('visible', false);
-  }
+      this._popover._renderDimensions();
+      this._popover._setContentHeight(true);
+      this.syncPosition();
+    });
+  };
 
   readonly syncPosition = (): void => {
     if (this._popover.option('visible')) {
-      this._popover.repaint();
+      this._positioning = true;
+      try {
+        this._popover._renderPosition(false);
+      } finally {
+        this._positioning = false;
+      }
     }
+    this._syncFocusState();
   };
 
   private readonly _stopPropagation = (event: Event): void => event.stopPropagation();
 
-  private readonly _escapeKeyHandler = (event: KeyboardEvent): void => {
-    if (!event.defaultPrevented
-      && normalizeKeyName(event) === 'escape'
-      && this._popover.option('visible')) {
-      event.preventDefault();
+  private readonly _stopMapKeyPropagation = (event: KeyboardEvent): void => {
+    const key = normalizeKeyName(event);
+    if (event.defaultPrevented || (key !== 'escape' && key !== 'tab')) {
       event.stopPropagation();
-      this._hide();
     }
   };
 
+  private readonly _syncFocusState = (): void => {
+    this._inertElements.forEach((element) => { element.inert = false; });
+    this._inertElements.clear();
+    if (this._focusEnabled) {
+      this._tabIndexes.forEach((tabIndex, element) => {
+        if (tabIndex === null) {
+          element.removeAttribute('tabindex');
+        } else {
+          element.setAttribute('tabindex', tabIndex);
+        }
+      });
+      this._tabIndexes.clear();
+    }
+    const focusTargets = this.element
+      .querySelectorAll<HTMLElement>(ALL_FOCUSABLE_ELEMENTS_SELECTOR);
+    if (!this._focusEnabled) {
+      focusTargets.forEach((element) => {
+        if (!this._tabIndexes.has(element)) {
+          this._tabIndexes.set(element, element.getAttribute('tabindex'));
+        }
+        element.setAttribute('tabindex', '-1');
+      });
+    }
+    const boundary = this._container.getBoundingClientRect();
+    const activeElement = domAdapter.getActiveElement(this.element);
+    const elements = this._popover.option('visible') && this.element.getClientRects().length
+      ? [this._marker, this.element, ...focusTargets]
+      : [this._marker];
+
+    elements.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      const outside = element === this.element
+        ? rect.bottom <= boundary.top || rect.top >= boundary.bottom
+          || rect.right <= boundary.left || rect.left >= boundary.right
+        : rect.top < boundary.top || rect.bottom > boundary.bottom
+          || rect.left < boundary.left || rect.right > boundary.right;
+
+      if (outside) {
+        if (element.contains(activeElement)) {
+          (this._container as HTMLElement).focus({ preventScroll: true });
+        }
+        if (!element.inert) {
+          element.inert = true;
+          this._inertElements.add(element);
+        }
+      }
+    });
+  };
+
   dispose(): void {
+    this._disposed = true;
     this._map.un('postrender', this.syncPosition);
     this.element.removeEventListener('click', this._stopPropagation);
     this.element.removeEventListener('dblclick', this._stopPropagation);
     this.element.removeEventListener('pointerdown', this._stopPropagation);
-    this.element.removeEventListener('keydown', this._escapeKeyHandler);
-    this.element.removeEventListener('keydown', this._stopPropagation);
-    this._marker.removeEventListener('keydown', this._escapeKeyHandler);
-    this._triggers.forEach((element) => {
-      element.removeAttribute('aria-controls');
-      element.removeAttribute('aria-haspopup');
-      element.removeAttribute('aria-expanded');
-    });
-    this._closeButton.dispose();
+    this.element.removeEventListener('keydown', this._stopMapKeyPropagation);
     this._popover.dispose();
     this._host.remove();
+    this._inertElements.forEach((element) => { element.inert = false; });
+    this._inertElements.clear();
+    this._tabIndexes.clear();
   }
 }

@@ -220,7 +220,9 @@ class OpenLayersMap implements MapEngineMap {
     const blurHandler = (): void => { spacePressed = false; };
     const keydownHandler: EventListener | undefined = focusTargets.length
       ? (event): void => {
-        event.stopPropagation();
+        if ((event as KeyboardEvent).key !== 'Escape' || event.defaultPrevented) {
+          event.stopPropagation();
+        }
 
         if (!keyboardInteractive) {
           return;
@@ -330,9 +332,9 @@ class OpenLayersMap implements MapEngineMap {
       ? this._createMarkerTooltip(markerElement, options.tooltip.text, Boolean(options.rtlEnabled))
       : undefined;
     const onClick = options.onClick || tooltip
-      ? (event: MouseEvent): void => {
-        tooltip?.show(event.detail === 0 && this._focusEnabled);
+      ? (): void => {
         options.onClick?.();
+        tooltip?.show();
       }
       : undefined;
     const markerElementBinding = this._attachMarkerElementHandlers(
@@ -340,17 +342,12 @@ class OpenLayersMap implements MapEngineMap {
       onClick,
       () => tooltip?.syncPosition(),
     );
-    tooltip?.setTriggers(markerElementBinding.focusTargets.map((target) => target.element));
-    const tooltipFocusTargets = tooltip
-      ? Array.from(tooltip.element.querySelectorAll<HTMLElement>(ALL_FOCUSABLE_ELEMENTS_SELECTOR))
-        .map((target) => ({ element: target, tabIndex: target.getAttribute('tabindex') }))
-      : [];
     this._markerSizeRefitEnabled = true;
 
     let disposed = false;
     const handle: OpenLayersMarker = {
       element,
-      focusTargets: [...markerElementBinding.focusTargets, ...tooltipFocusTargets],
+      focusTargets: markerElementBinding.focusTargets,
       kind,
       location: { ...options.location },
       offset,
@@ -459,6 +456,7 @@ class OpenLayersMap implements MapEngineMap {
   }
 
   private _syncMarkerTabIndex(marker: OpenLayersMarker, viewExtent?: Extent): void {
+    marker.tooltip?.setFocusEnabled(this._focusEnabled && !this._disabled);
     const extent = viewExtent ?? this.originalMap.getView().calculateExtent();
     const isVisible = this._isMarkerVisible(marker.overlay, extent);
 
