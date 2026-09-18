@@ -106,9 +106,9 @@ packages/
     js/data/            # Public entry points for data layer
     js/__internal/      # All implementation code lives here
       grids/            # Grid components (DataGrid, TreeList, etc.)
-  devextreme-angular/   # Angular wrapper (GENERATED — do not edit src/)
-  devextreme-react/     # React wrapper (GENERATED — do not edit src/)
-  devextreme-vue/       # Vue wrapper (GENERATED — do not edit src/)
+  devextreme-angular/   # Angular wrapper (hand/AI-maintained — do not edit src/core/)
+  devextreme-react/     # React wrapper (hand/AI-maintained — do not edit src/core/)
+  devextreme-vue/       # Vue wrapper (hand/AI-maintained — do not edit src/core/)
   devextreme-scss/      # SCSS themes
   devextreme-metadata/  # Metadata that drives wrapper generation
   testcafe-models/      # TestCafe page object models
@@ -124,21 +124,20 @@ The folders under `js/` (except `__internal/`) contain only the public API surfa
 
 ### Framework Wrappers
 
-Framework wrappers (`devextreme-angular/src/`, `devextreme-react/src/`, `devextreme-vue/src/`) are **entirely generated** — do not edit `src/` directly.
+Framework wrappers (`devextreme-angular/src/`, `devextreme-react/src/`, `devextreme-vue/src/`) are **maintained by hand** (with the help of local AI agents) — they are no longer regenerated from `devextreme-metadata` / `devextreme-internal-tools`.
 
-When updating public API in `js/ui/*.d.ts`, regenerate afterward:
+When updating public API in `js/{ui,viz}/**/*.d.ts`, apply the same change to all three wrappers in the same PR, then validate:
 ```bash
-pnpm run regenerate-all          # from repo root — requires .NET SDK 8.0.x
 cd packages/devextreme
-pnpm run update-ts-reexports
-pnpm run update-ts-bundle
+pnpm run update-ts-reexports   # if reexports changed
 pnpm run lint-dts
 ```
+Follow the per-framework anatomy and rules in `.github/instructions/wrapper-{angular,react,vue}.instructions.md`, and the propagation/breaking-change checklist in `.github/instructions/public-api-wrappers.instructions.md`. The reusable workflow lives in `.github/prompts/update-wrappers.prompt.md`.
 
 Do not edit directly:
-- `packages/devextreme-angular/src/**/*` (except templates)
-- `packages/devextreme-react/src/**/*` (except templates)
-- `packages/devextreme-vue/src/**/*` (except templates)
+- `packages/devextreme-angular/src/core/**`
+- `packages/devextreme-react/src/core/**`
+- `packages/devextreme-vue/src/core/**`
 - `packages/devextreme/js/__internal/core/localization/default_messages.ts`
 - `packages/devextreme/js/__internal/core/localization/cldr-data/**/*`
 
@@ -187,11 +186,11 @@ Files under `**/localization/messages/**/*.json` are managed by a dedicated team
 | `default_workflow.yml` | `nx run-many -t lint,test` on most packages                           |
 | `lint.yml`             | TS, JS, .d.ts, text linting; checks generated reexports are up-to-date |
 | `build_all.yml`        | Full production build (requires .NET 8.0.x) — CI only                |
-| `wrapper_tests.yml`    | Angular/React/Vue wrapper tests + regeneration check                  |
+| `wrapper_tests.yml`    | Angular/React/Vue wrapper tests                                      |
 | `qunit_tests.yml`      | Legacy QUnit tests                                                    |
 | `testcafe_tests.yml`   | E2E accessibility and component tests                                 |
 
 **Common CI failure fixes:**
-- *"Generated code is outdated"* → run `pnpm run regenerate-all` from repo root
+- *"dx.all.d.ts is outdated"* → run `pnpm run regenerate` from `packages/devextreme`
 - *"Reexports outdated"* → run `pnpm run update-ts-reexports` from `packages/devextreme`
 - *Lint errors* → run `pnpm run lint-js -- --fix` or `pnpm run lint-ts -- --fix`

@@ -168,8 +168,7 @@ pnpm nx run-many -t lint                  # all packages
 pnpm run lint                             # devextreme package: js, ts, dts, texts
 pnpm run lint-js -- --fix                 # auto-fix JS
 
-# Regenerate (after changes to generators, TS declarations, or devextreme-internal-tools)
-pnpm run regenerate-all
+# Regenerate TS reexports and bundle (after changes to public .d.ts)
 pnpm run update-ts-reexports              # from packages/devextreme
 pnpm run update-ts-bundle                 # from packages/devextreme
 
@@ -183,7 +182,7 @@ pnpm nx clean:artifacts devextreme        # build artifacts only
 ```
 packages/
   devextreme/                       # core library: ui/, viz/, core/, data/, __internal/
-  devextreme-{angular,react,vue}/   # framework wrappers (generated)
+  devextreme-{angular,react,vue}/   # framework wrappers (hand/AI-maintained)
   devextreme-scss/                  # SCSS themes
   devextreme-themebuilder/          # theme builder
   devextreme-metadata/              # metadata for wrapper generation
@@ -209,14 +208,14 @@ clean (`devextreme-nx-infra-plugin:clean` preserving CSS and npm metadata) → l
 
 - Use `pnpm nx <target> <project>` rather than raw npm scripts so Nx caching and the dependency graph stay correct.
 - Build before testing: `pnpm nx build:dev devextreme`; QUnit and TestCafe both require an up-to-date build.
-- Run `pnpm run regenerate-all` after editing wrapper generators, TypeScript declarations, or `devextreme-internal-tools`.
-- Edit source files only under `packages/devextreme/js/**`, `packages/devextreme-scss/scss/**`, and `packages/devextreme-metadata/**`.
+- The Angular/React/Vue wrappers are maintained by hand (with AI agents), not regenerated from metadata. When public API in `packages/devextreme/js/{ui,viz}/**/*.d.ts` changes, update all three wrappers in the same PR following `.github/instructions/wrapper-{angular,react,vue}.instructions.md` and `.github/instructions/public-api-wrappers.instructions.md`.
+- Edit source files under `packages/devextreme/js/**`, `packages/devextreme-scss/scss/**`, `packages/devextreme-metadata/**`, and the wrapper `packages/devextreme-{angular,react,vue}/src/**` (except each package's `src/core/**`).
 - Match the Node and pnpm versions declared in `package.json` (`engines`, `packageManager`); mismatched versions cause CI failure.
 - Set `DEVEXTREME_TEST_CI=true` for test-mode builds and `BUILD_TEST_INTERNAL_PACKAGE=true` for wrapper test prep.
 
 ## Constraints
 
-- NEVER edit generated wrappers under `packages/devextreme-{angular,react,vue}/src/` (templates excepted); update the generators and run `pnpm run regenerate-all` instead.
+- The wrappers under `packages/devextreme-{angular,react,vue}/src/` are maintained by hand — keep them in sync with the public API per the wrapper instructions; NEVER edit each package's `src/core/**` (hand-written base classes) to accommodate a single component.
 - NEVER hand-edit `packages/devextreme/js/__internal/core/localization/{default_messages.ts,cldr-data/**}`; regenerate via the localization executor.
 - NEVER run `pnpm install` without `--frozen-lockfile`; use `pnpm install --frozen-lockfile` to match CI.
 
@@ -224,7 +223,7 @@ clean (`devextreme-nx-infra-plugin:clean` preserving CSS and npm metadata) → l
 
 - Always install with `pnpm install --frozen-lockfile`; never plain `pnpm install`.
 - Build before test: `pnpm nx build:dev devextreme`.
-- Generated wrappers under `packages/devextreme-{angular,react,vue}/src/` are read-only — modify generators and run `pnpm run regenerate-all`.
+- Wrappers under `packages/devextreme-{angular,react,vue}/src/` are hand/AI-maintained — update them per the wrapper instructions when public API changes; leave each `src/core/**` alone.
 - Prefer `pnpm nx <target>` over direct npm scripts for caching.
 - Consult @.github/instructions/ for file-specific coding rules before editing.
 
