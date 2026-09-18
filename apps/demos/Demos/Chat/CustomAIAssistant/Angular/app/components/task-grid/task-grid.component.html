@@ -1,0 +1,43 @@
+<dx-data-grid
+  id="grid-container"
+  [dataSource]="tasks"
+  keyExpr="ID"
+  [showBorders]="true"
+  [filterSyncEnabled]="true"
+>
+  <dxo-data-grid-filter-row [visible]="true"></dxo-data-grid-filter-row>
+  <dxo-data-grid-header-filter [visible]="true"></dxo-data-grid-header-filter>
+
+  <dxi-data-grid-column
+    dataField="Subject"
+    [width]="250"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="StartDate"
+    dataType="date"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="DueDate"
+    dataType="date"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Priority"
+    caption="Priority"
+    cellTemplate="priorityTemplate"
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
+    dataField="Completion"
+    caption="Completed"
+    alignment="center"
+    dataType="boolean"
+    [editorOptions]="completionEditorOptions"
+    [calculateCellValue]="calculateCompletionCellValue"
+    [calculateFilterExpression]="calculateCompletionFilterExpression"
+  ></dxi-data-grid-column>
+
+  <div *dxTemplate="let data of 'priorityTemplate'">
+    <div class="priority-badge" [style.background]="colors[data.value]">{{
+      data.value
+    }}</div>
+  </div>
+</dx-data-grid>
