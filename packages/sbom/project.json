@@ -19,7 +19,7 @@
         "packages": "devextreme,devextreme-react,devextreme-angular,devextreme-vue,devextreme-themebuilder",
         "commands": [
           "rm -rf dist/",
-          "pnpm dx-make-sbom ../../ dist/ \"{args.packages}\"",
+          "pnpm dx-make-sbom ../../ dist/ \"{args.packages}\" --extra-sbom=\"devextreme:packages/sbom/devextreme-extra-deps\"",
           "test -f dist/devextreme.cdx.json && cp dist/devextreme.cdx.json dist/devextreme-dist.cdx.json || true"
         ]
       }
