@@ -5,6 +5,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/data_co
 import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FocusDataSourceControllerExtension } from '@ts/grids/grid_core/focus/extenders/focus_data_source_controller';
 import { focusModule } from '@ts/grids/grid_core/focus/focus_module';
+import type { KeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import type { GroupingDataControllerExtension, GroupingDataSourceAdapter } from '../grouping/m_grouping';
@@ -28,6 +29,13 @@ DataController
 const data = (Base: DataControllerBase) => class FocusDataControllerExtender extends focusModule.extenders.controllers.data(Base) {
   protected declare dataSourceController: DataSourceController<GroupingDataSourceAdapter>
   & FocusDataSourceControllerExtension;
+
+  protected keyboardNavigationController!: KeyboardNavigationController;
+
+  public init(): void {
+    this.keyboardNavigationController = this.getController('keyboardNavigation');
+    super.init();
+  }
 
   private changeRowExpand(path, isRowClick) {
     // @ts-expect-error
