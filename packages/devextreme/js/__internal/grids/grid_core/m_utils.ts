@@ -717,38 +717,6 @@ export default {
     return lookupDataSource;
   },
 
-  logHeaderFilterDeprecatedWarningIfNeed(component) {
-    const since = '23.1';
-    const logWarning = component._logDeprecatedOptionWarning.bind(component);
-
-    if (isDefined(component.option('headerFilter.searchTimeout'))) {
-      logWarning('headerFilter.searchTimeout', { since, alias: 'headerFilter.search.timeout' });
-    }
-
-    const specificName = component.NAME === 'dxPivotGrid' ? 'dataSource.fields' : 'columns';
-    const columns = component.option(specificName);
-
-    if (!Array.isArray(columns)) {
-      return;
-    }
-
-    const logSpecificDeprecatedWarningIfNeed = (columns) => {
-      columns.forEach((column) => {
-        const headerFilter = column.headerFilter || {};
-
-        if (isDefined(headerFilter.searchMode)) {
-          logWarning(`${specificName}[].headerFilter.searchMode`, { since, alias: `${specificName}[].headerFilter.search.mode` });
-        }
-
-        if (column.columns?.length) {
-          logSpecificDeprecatedWarningIfNeed(column.columns);
-        }
-      });
-    };
-
-    logSpecificDeprecatedWarningIfNeed(columns);
-  },
-
   getComponentBorderWidth(that, $rowsViewElement) {
     const borderWidth = that.option('showBorders')
       ? Math.ceil(getOuterWidth($rowsViewElement) - getInnerWidth($rowsViewElement))
