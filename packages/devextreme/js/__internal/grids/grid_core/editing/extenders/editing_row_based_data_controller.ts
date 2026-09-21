@@ -14,7 +14,7 @@ export const editingRowBasedDataControllerExtender = (
     super.init();
   }
 
-  protected _getChangedColumnIndices(
+  protected getChangedColumnIndices(
     oldItem: ProcessedItem,
     newItem: ProcessedItem,
     visibleRowIndex: number,
@@ -24,6 +24,6 @@ export const editingRowBasedDataControllerExtender = (
       return undefined;
     }
 
-    return super._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+    return super.getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
   }
 };

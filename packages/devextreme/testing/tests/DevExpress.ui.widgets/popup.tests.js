@@ -9,7 +9,7 @@ import {
 } from 'core/utils/size';
 
 import $ from 'jquery';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -23,8 +23,8 @@ import windowUtils from '__internal/core/utils/m_window';
 import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import visibilityChangeUtils from 'common/core/events/visibility_change';
-import domAdapter from '__internal/core/m_dom_adapter';
+import { spyVisibilityEvent } from '../../helpers/visibilityChangeMock.js';
+import domAdapter from '__internal/core/dom_adapter';
 import {
     TEMPLATE_WRAPPER_CLASS,
     POPUP_CONTENT_SCROLLABLE_CLASS,
@@ -33,6 +33,8 @@ import { BUTTON_CLASS } from '__internal/ui/button/button';
 
 import 'fluent_blue_light.css!';
 import 'ui/popup';
+import 'ui/tooltip';
+import 'ui/load_panel';
 import 'ui/tab_panel';
 import 'ui/scroll_view';
 import 'ui/date_box';
@@ -1532,7 +1534,7 @@ QUnit.module('options changed callbacks', {
 
     QUnit.module('T934380, T1245421', {
         beforeEach() {
-            this.resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+            this.resizeEventSpy = spyVisibilityEvent('triggerResizeEvent');
         },
         afterEach() {
             this.resizeEventSpy.restore();
@@ -1676,7 +1678,7 @@ QUnit.module('options changed callbacks', {
     QUnit.test('titleTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
         this.instance.option('visible', true);
 
-        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+        const resizeEventSpy = spyVisibilityEvent('triggerResizeEvent');
 
         try {
             this.instance.option({
@@ -1691,7 +1693,7 @@ QUnit.module('options changed callbacks', {
 
     QUnit.test('bottomTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
         this.instance.option('visible', true);
-        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+        const resizeEventSpy = spyVisibilityEvent('triggerResizeEvent');
 
         try {
             this.instance.option({
@@ -2773,6 +2775,41 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('esc');
 
         assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible when _ignoreCloseOnChildEscape is true');
+    });
+
+    QUnit.test('should remain visible when child element presses escape and a tooltip is shown above it (T1334708)', function(assert) {
+        this.init({ dragEnabled: false });
+
+        const $input = $('<input>').appendTo(this.popup.$content());
+        const tooltip = $('<div>')
+            .appendTo('#qunit-fixture')
+            .dxTooltip({ target: $input, visible: true, animation: null })
+            .dxTooltip('instance');
+
+        assert.strictEqual(tooltip.option('visible'), true, 'tooltip is shown');
+
+        keyboardMock($input).keyDown('esc');
+
+        assert.strictEqual(tooltip.option('visible'), false, 'tooltip is hidden');
+        assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible');
+
+        tooltip.dispose();
+    });
+
+    QUnit.test('should be closed on child element escape key press when an overlay that ignores escape is shown above it', function(assert) {
+        this.init({ dragEnabled: false });
+
+        const $input = $('<input>').appendTo(this.popup.$content());
+        const loadPanel = $('<div>')
+            .appendTo('#qunit-fixture')
+            .dxLoadPanel({ visible: true, animation: null })
+            .dxLoadPanel('instance');
+
+        keyboardMock($input).keyDown('esc');
+
+        assert.strictEqual(this.popup.option('visible'), false, 'popup is closed');
+
+        loadPanel.dispose();
     });
 });
 

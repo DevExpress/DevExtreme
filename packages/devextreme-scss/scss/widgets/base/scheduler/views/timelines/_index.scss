@@ -6,7 +6,7 @@ $scheduler-base-border: null !default;
 $scheduler-base-border-color: null !default;
 $scheduler-accent-border-color: null !default;
 
-$scheduler-timeline-min-height: 100px;
+$scheduler-timeline-min-height: 100px !default;
 
 .dx-scheduler-timeline-week,
 .dx-scheduler-timeline-work-week,

@@ -90,7 +90,7 @@ function contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
   logItems.value = logItems.value.concat([logEntry]);
 }
 </script>
-<style scoped>
+<style>
 .form {
   display: flex;
 }

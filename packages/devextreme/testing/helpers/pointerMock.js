@@ -1,17 +1,9 @@
-(function(root, factory) {
-    /* global jQuery */
-    if(typeof define === 'function' && define.amd) {
-        define(function(require, exports, module) {
-            root.pointerMock = module.exports = factory(
-                require('jquery'),
-                require('inferno'),
-                require('common/core/events/gesture/emitter.gesture'),
-                require('common/core/events/click'));
-        });
-    } else {
-        root.pointerMock = factory(jQuery, DevExpress.events.GestureEmitter, DevExpress.events.click);
-    }
-}(window, function($, inferno, GestureEmitter, clickEvent) {
+import $ from 'jquery';
+import * as inferno from 'inferno';
+import GestureEmitter from 'common/core/events/gesture/emitter.gesture';
+import * as clickEvent from 'common/core/events/click';
+
+const pointerMock = (function($, inferno, GestureEmitter, clickEvent) {
 
     GestureEmitter.touchBoundary(0);
 
@@ -236,4 +228,6 @@
             }
         };
     };
-}));
+})($, inferno, GestureEmitter, clickEvent);
+
+export default pointerMock;

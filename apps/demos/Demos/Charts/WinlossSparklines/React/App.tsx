@@ -3,6 +3,7 @@ import React from 'react';
 import RowTemplate from './RowTemplate.tsx';
 
 const years = ['2021', '2022', '2023'];
+const tableStyle = { border: 1 };
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
       <div id="chart-demo">
         <table
           className="demo-table"
-          style={{ border: 1 }}
+          style={tableStyle}
         >
           <tbody>
             <tr>

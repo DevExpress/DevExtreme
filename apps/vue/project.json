@@ -16,7 +16,6 @@
         "{projectRoot}/*.ts",
         "{projectRoot}/*.vue",
         "{projectRoot}/*.js",
-        "!{projectRoot}/test.js",
         "{projectRoot}/tsconfig.json"
       ],
       "outputs": [

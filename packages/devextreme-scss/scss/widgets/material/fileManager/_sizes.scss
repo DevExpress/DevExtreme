@@ -15,7 +15,7 @@ $filemanager-large-icon-size: null !default;
 $filemanager-progress-panel-title-padding: null !default;
 $filemanager-progress-box-button-close-margin-top: null !default;
 
-$filemanager-toolbar-height: $material-toolbar-height;
+$filemanager-toolbar-height: $material-toolbar-height !default;
 
 @if $size == "default" {
   $filemanager-toolbar-separator-height: 36px !default;

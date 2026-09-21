@@ -93,7 +93,7 @@ import {
   DxRangeContainer, DxValueIndicator,
 } from 'devextreme-vue/circular-gauge';
 </script>
-<style scoped>
+<style>
 #gauge {
   height: 440px;
   width: 100%;

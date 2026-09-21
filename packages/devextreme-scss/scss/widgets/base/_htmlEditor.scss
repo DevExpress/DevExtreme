@@ -2,17 +2,17 @@
 @use "sass:math";
 @use "sass:selector";
 
-$list-style: decimal lower-alpha lower-roman;
-$list-style-width: 1.2em;
-$list-style-margin: 0.3em;
-$list-style-outer-width: $list-style-margin + $list-style-width;
-$max-indent: 9;
-$resize-handle-size: 11px;
-$touch-resize-handle-size: 15px;
-$half-resize-handle-size: math.div($resize-handle-size, 2);
-$half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2);
+$list-style: decimal lower-alpha lower-roman !default;
+$list-style-width: 1.2em !default;
+$list-style-margin: 0.3em !default;
+$list-style-outer-width: $list-style-margin + $list-style-width !default;
+$max-indent: 9 !default;
+$resize-handle-size: 11px !default;
+$touch-resize-handle-size: 15px !default;
+$half-resize-handle-size: math.div($resize-handle-size, 2) !default;
+$half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2) !default;
 
-$transparent-border: 1px solid transparent;
+$transparent-border: 1px solid transparent !default;
 
 @function add-counter-reset($counter, $start: 1) {
   @if $counter > $start {

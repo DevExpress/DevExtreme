@@ -336,8 +336,8 @@ export const getCustomizeTextByDataType = function (dataType): any {
   }
 };
 
-export const createColumnsFromDataSource = function (that: ColumnsController, dataSource) {
-  const firstItems = that._getFirstItems(dataSource);
+export const createColumnsFromDataSourceAdapter = function (that: ColumnsController, dataSourceAdapter) {
+  const firstItems = that._getFirstItems(dataSourceAdapter);
   let fieldName;
   const processedFields = {};
   const result: any = [];
@@ -1096,5 +1096,9 @@ export const isFirstOrLastColumn = function (
 export const isColumnNameRequired = function ({ type = '' }: Column): boolean {
   return COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(type);
 };
+
+export const columnHasValue = (column: Column): boolean => (
+  !column.command || column.type === AI_COLUMN_NAME
+);
 
 export const getColumnHeaderCellSelector = (visibleIndex: number): string => `.dx-header-row td[aria-colindex="${visibleIndex + 1}"]`;

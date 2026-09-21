@@ -48,6 +48,7 @@ type AccessibleOptions = Pick<Properties,
   "centerTemplate" |
   "disabled" |
   "elementAttr" |
+  "encodeHtml" |
   "endValue" |
   "export" |
   "geometry" |
@@ -93,6 +94,7 @@ const componentConfig = {
     centerTemplate: {},
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
+    encodeHtml: Boolean,
     endValue: Number,
     export: Object as PropType<Record<string, any>>,
     geometry: Object as PropType<Record<string, any>>,
@@ -134,6 +136,7 @@ const componentConfig = {
     "update:centerTemplate": null,
     "update:disabled": null,
     "update:elementAttr": null,
+    "update:encodeHtml": null,
     "update:endValue": null,
     "update:export": null,
     "update:geometry": null,

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { EdmLiteral } from 'common/data/odata/utils';
 import commonUtils from 'core/utils/common';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import ArrayStore from 'common/data/array_store';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import fx from 'common/core/animation/fx';
@@ -371,7 +371,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         } catch(err) {
             assert.ok(false, 'the error is thrown');
         } finally {
-            assert.equal(calculateFilterExpressionCallCount, 3, 'calculateFilterExpression call count');
+            assert.equal(calculateFilterExpressionCallCount, 2, 'calculateFilterExpression call count');
         }
     });
 
@@ -399,9 +399,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }]
         });
 
-        assert.equal(calculateFilterExpressionCallCount, 3, 'calculateFilterExpression call count');
+        assert.equal(calculateFilterExpressionCallCount, 2, 'calculateFilterExpression call count');
         assert.ok(grid.getCombinedFilter(), 'combined filter');
-        assert.equal(calculateFilterExpressionCallCount, 4, 'calculateFilterExpression call count');
+        assert.equal(calculateFilterExpressionCallCount, 3, 'calculateFilterExpression call count');
     });
 
     function createRemoteDataSourceWithGroupPaging(arrayStore, key) {

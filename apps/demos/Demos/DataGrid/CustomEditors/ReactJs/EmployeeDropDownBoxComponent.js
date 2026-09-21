@@ -6,10 +6,11 @@ import DropDownBox from 'devextreme-react/drop-down-box';
 
 const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
-const EmployeeDropDownBoxComponent = (props) => {
-  const {
-    data: { value: dataValue },
-  } = props;
+const clearContextMenu = (event) => {
+  event.items = [];
+};
+const EmployeeDropDownBoxComponent = ({ data }) => {
+  const { value: dataValue } = data;
   const initialSelectedRowKeys = dataValue !== null && dataValue !== undefined ? [dataValue] : [];
   const [selectedRowKeys, setSelectedRowKeys] = useState(initialSelectedRowKeys);
   const [isDropDownOpened, setDropDownOpened] = useState(false);
@@ -18,23 +19,23 @@ const EmployeeDropDownBoxComponent = (props) => {
       setDropDownOpened(e.value);
     }
   }, []);
-  const contentRender = useCallback(() => {
-    const onContextMenuPreparing = (event) => {
-      event.items = [];
-    };
-    const onSelectionChanged = (args) => {
+  const onSelectionChanged = useCallback(
+    (args) => {
       setSelectedRowKeys(args.selectedRowKeys);
       setDropDownOpened(false);
-      props.data.setValue(args.selectedRowKeys[0]);
-    };
-    return (
+      data.setValue(args.selectedRowKeys[0]);
+    },
+    [data],
+  );
+  const contentRender = useCallback(
+    () => (
       <DataGrid
-        dataSource={props.data.column.lookup.dataSource}
+        dataSource={data.column.lookup.dataSource}
         remoteOperations={true}
         height={250}
         selectedRowKeys={selectedRowKeys}
         hoverStateEnabled={true}
-        onContextMenuPreparing={onContextMenuPreparing}
+        onContextMenuPreparing={clearContextMenu}
         onSelectionChanged={onSelectionChanged}
         focusedRowEnabled={true}
         defaultFocusedRowKey={selectedRowKeys[0]}
@@ -49,14 +50,15 @@ const EmployeeDropDownBoxComponent = (props) => {
         <Scrolling mode="virtual" />
         <Selection mode="single" />
       </DataGrid>
-    );
-  }, [props.data, selectedRowKeys]);
+    ),
+    [data, onSelectionChanged, selectedRowKeys],
+  );
   return (
     <DropDownBox
       onOptionChanged={boxOptionChanged}
       opened={isDropDownOpened}
       dropDownOptions={dropDownOptions}
-      dataSource={props.data.column.lookup.dataSource}
+      dataSource={data.column.lookup.dataSource}
       value={selectedRowKeys[0]}
       displayExpr="FullName"
       valueExpr="ID"

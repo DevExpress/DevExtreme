@@ -30,7 +30,7 @@ import { products } from './data.ts';
 const options: SearchMode[] = ['contains', 'startswith', 'equals'];
 const searchMode = ref(options[0]);
 </script>
-<style scoped>
+<style>
 #treeview {
   height: 400px;
 }

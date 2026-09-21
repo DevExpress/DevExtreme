@@ -1,12 +1,13 @@
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
-import { isDefined } from '@js/core/utils/type';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
-import { focusModule } from '@ts/grids/grid_core/focus/m_focus';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
+import type { FocusDataSourceControllerExtension } from '@ts/grids/grid_core/focus/extenders/focus_data_source_controller';
+import { focusModule } from '@ts/grids/grid_core/focus/focus_module';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
-import type { GroupingDataControllerExtension } from '../grouping/m_grouping';
+import type { GroupingDataControllerExtension, GroupingDataSourceAdapter } from '../grouping/m_grouping';
 import gridCore from '../m_core';
 import { createGroupFilter } from '../m_utils';
 
@@ -25,6 +26,9 @@ DataController
 & GroupingDataControllerExtension>;
 
 const data = (Base: DataControllerBase) => class FocusDataControllerExtender extends focusModule.extenders.controllers.data(Base) {
+  protected declare dataSourceController: DataSourceController<GroupingDataSourceAdapter>
+  & FocusDataSourceControllerExtension;
+
   private changeRowExpand(path, isRowClick) {
     // @ts-expect-error
     if (this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {
@@ -88,46 +92,47 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
   }
 
   private _calculateGlobalRowIndexByGroupedData(key) {
-    const dataSource = this._dataSource;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     const filter = this._generateFilterByKey(key);
     // @ts-expect-error
     const deferred = new Deferred();
     const isGroupKey = Array.isArray(key);
-    const group = dataSource.group();
 
-    if (isGroupKey) {
+    if (isGroupKey || !dataSourceAdapter) {
       return deferred.resolve(-1).promise();
     }
 
-    if (!dataSource._grouping._updatePagingOptions) {
+    const group = dataSourceAdapter.group();
+
+    if (!dataSourceAdapter._grouping._updatePagingOptions) {
       this._calculateGlobalRowIndexByFlatData(key, null, true)
         .done(deferred.resolve)
         .fail(deferred.reject);
       return deferred;
     }
 
-    dataSource.load({
+    dataSourceAdapter.customLoader.load({
       filter: this._concatWithCombinedFilter(filter),
       group,
-    }).done((data) => {
-      const hasData = isDefined(data) && data.length > 0;
+    }).done(({ data }) => {
+      const hasData = Array.isArray(data) && data.length > 0;
 
-      if (this._dataSource !== dataSource || !hasData) {
+      if (this.dataSourceController.getAdapter() !== dataSourceAdapter || !hasData) {
         return deferred.resolve(-1).promise();
       }
 
-      const groupPath = this._getGroupPath(data, group.length);
+      const groupPath = this._getGroupPath(data, gridCore.normalizeSortingInfo(group).length);
 
       this._expandGroupByPath(this, groupPath, 0).done(() => {
-        this._calculateExpandedRowGlobalIndex(deferred, key, groupPath, group, dataSource);
+        this._calculateExpandedRowGlobalIndex(deferred, key, groupPath, group, dataSourceAdapter);
       }).fail(deferred.reject);
     }).fail(deferred.reject);
 
     return deferred.promise();
   }
 
-  private _calculateExpandedRowGlobalIndex(deferred, key, groupPath, group, dataSource) {
-    if (this._dataSource !== dataSource) {
+  private _calculateExpandedRowGlobalIndex(deferred, key, groupPath, group, dataSourceAdapter) {
+    if (this.dataSourceController.getAdapter() !== dataSourceAdapter) {
       deferred.resolve(-1);
       return;
     }
@@ -135,10 +140,10 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     const groupFilter = createGroupFilter(groupPath, { group });
     const scrollingMode = this.option('scrolling.mode');
     const isVirtualScrolling = scrollingMode === 'virtual' || scrollingMode === 'infinite';
-    const pageSize = dataSource.pageSize();
+    const pageSize = dataSourceAdapter.pageSize();
     let groupOffset;
 
-    dataSource._grouping._updatePagingOptions({ skip: 0, take: MAX_SAFE_INTEGER }, (groupInfo, totalOffset) => {
+    dataSourceAdapter._grouping._updatePagingOptions({ skip: 0, take: MAX_SAFE_INTEGER }, (groupInfo, totalOffset) => {
       if (equalByValue(groupInfo.path, groupPath)) {
         groupOffset = totalOffset;
       }

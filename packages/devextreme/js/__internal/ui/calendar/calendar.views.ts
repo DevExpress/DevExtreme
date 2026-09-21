@@ -8,6 +8,7 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import type {
   CalendarSelectionMode, DayOfWeek, WeekNumberRule,
 } from '@js/ui/calendar';
+import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 
 import type { BaseViewProperties } from './calendar.base_view';
 import BaseView from './calendar.base_view';
@@ -17,8 +18,6 @@ const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 const CALENDAR_WEEK_NUMBER_HEADER_CELL_CLASS = 'dx-week-number-header';
 const CALENDAR_WEEK_SELECTION_CLASS = 'dx-calendar-week-selection';
-
-const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 
 const WEEK_NUMBER_TEXT = 'WeekNumber';
 

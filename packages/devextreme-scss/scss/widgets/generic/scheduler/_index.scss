@@ -52,21 +52,21 @@
 @use "../recurrenceEditor" as *;
 @use "../scrollable";
 
-$generic-scheduler-appointment-reduced-content-padding: 40px;
-$generic-scheduler-appointment-empty-transparent-border: 1px solid transparent;
+$generic-scheduler-appointment-reduced-content-padding: 40px !default;
+$generic-scheduler-appointment-empty-transparent-border: 1px solid transparent !default;
 
-$generic-scheduler-all-day-table-cell-height: $generic-scheduler-workspace-date-table-cell-height * 1.5;
-$generic-scheduler-collapsed-all-day-table-cell-height: $generic-scheduler-workspace-date-table-cell-height * 0.5;
-$generic-scheduler-header-panel-table-cell-height: $generic-scheduler-workspace-date-table-cell-height;
+$generic-scheduler-all-day-table-cell-height: $generic-scheduler-workspace-date-table-cell-height * 1.5 !default;
+$generic-scheduler-collapsed-all-day-table-cell-height: $generic-scheduler-workspace-date-table-cell-height * 0.5 !default;
+$generic-scheduler-header-panel-table-cell-height: $generic-scheduler-workspace-date-table-cell-height !default;
 
-$generic-scheduler-current-time-cell-border-size: 2px;
+$generic-scheduler-current-time-cell-border-size: 2px !default;
 
-$generic-scheduler-month-date-text-size: $generic-h5-font-size;
+$generic-scheduler-month-date-text-size: $generic-h5-font-size !default;
 
-$scheduler-first-of-month-border: 1px solid;
+$scheduler-first-of-month-border: 1px solid !default;
 
-$generic-scheduler-agenda-time-cell-padding: 10px;
-$generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-cell-padding 0 0 10px;
+$generic-scheduler-agenda-time-cell-padding: 10px !default;
+$generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-cell-padding 0 0 10px !default;
 
 @include baseScheduler.scheduler-mixin();
 

@@ -1,17 +1,17 @@
 @use "../mixins" as *;
 
-$color-view-container-width: 450px;
-$color-view-palette-width: 288px;
-$color-view-palette-height: 299px;
-$color-view-alpha-width: 292px;
-$color-view-hue-scale-width: 18px;
-$color-view-hue-scale-height: $color-view-palette-height;
+$color-view-container-width: 450px !default;
+$color-view-palette-width: 288px !default;
+$color-view-palette-height: 299px !default;
+$color-view-alpha-width: 292px !default;
+$color-view-hue-scale-width: 18px !default;
+$color-view-hue-scale-height: $color-view-palette-height !default;
 
-$colorview-palette-handle-size: 28px;
-$colorview-transparent-background-color: #ccc;
+$colorview-palette-handle-size: 28px !default;
+$colorview-transparent-background-color: #ccc !default;
 
-$colorview-handle-first-side-size: 36px;
-$colorview-handle-second-side-size: 17px;
+$colorview-handle-first-side-size: 36px !default;
+$colorview-handle-second-side-size: 17px !default;
 
 .dx-colorview-container {
   width: $color-view-container-width;

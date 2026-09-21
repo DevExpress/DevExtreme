@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Gantt, {
   Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Sorting,
 } from 'devextreme-react/gantt';
@@ -19,20 +19,20 @@ function App() {
     showSortIndexes: false,
     showSortIndexesDisabled: true,
   });
-  const onSortingModeChanged: ISelectBoxOptions['onValueChanged'] = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+  const onSortingModeChanged: ISelectBoxOptions['onValueChanged'] = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       sortingMode: value,
       showSortIndexesDisabled: value !== 'multiple',
-    });
-  };
+    }));
+  }, []);
 
-  const onShowSortIndexesChanged: ICheckBoxOptions['onValueChanged'] = ({ value }) => {
-    setGanttConfig({
-      ...ganttConfig,
+  const onShowSortIndexesChanged: ICheckBoxOptions['onValueChanged'] = useCallback(({ value }) => {
+    setGanttConfig((prevConfig) => ({
+      ...prevConfig,
       showSortIndexes: value,
-    });
-  };
+    }));
+  }, []);
 
   return (
     <div id="form-demo">

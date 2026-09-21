@@ -187,7 +187,7 @@ function onNextButtonClick() {
 }
 </script>
 
-<style scoped>
+<style>
 .demo-container {
   min-height: 580px;
 }

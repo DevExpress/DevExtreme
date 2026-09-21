@@ -1,7 +1,7 @@
 @use "../sizes" as *;
 
 $fluent-tagbox-tag-content-padding-left: null !default;
-$fluent-tagbox-tag-content-padding-right: null !default;
+$fluent-tagbox-tag-content-padding-right: 20px !default;
 $fluent-tagbox-tag-content-vertical-padding: null !default;
 $fluent-tagbox-tag-content-font-size: null !default;
 $fluent-tagbox-tag-container-padding-left: null !default;
@@ -17,7 +17,6 @@ $fluent-tagbox-tag-container-gap: null !default;
 
 @if $size == "default" {
   $fluent-tagbox-tag-content-padding-left: 6px !default;
-  $fluent-tagbox-tag-content-padding-right: 20px !default;
   $fluent-tagbox-tag-content-vertical-padding: 2px !default;
   $fluent-tagbox-tag-content-font-size: 12px !default;
   $fluent-tagbox-tag-container-padding-left: 12px !default;
@@ -31,7 +30,6 @@ $fluent-tagbox-tag-container-gap: null !default;
 
 @else if $size == "compact" {
   $fluent-tagbox-tag-content-padding-left: 4px !default;
-  $fluent-tagbox-tag-content-padding-right: 20px !default;
   $fluent-tagbox-tag-content-vertical-padding: 0 !default;
   $fluent-tagbox-tag-content-font-size: 10px !default;
   $fluent-tagbox-tag-container-padding-left: 8px !default;

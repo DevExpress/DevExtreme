@@ -29,7 +29,7 @@ import type { ItemClickEvent, SelectionChangedEvent as ListSelectionChangedEvent
 import type { Properties } from '@js/ui/tag_box';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { ItemCache } from '@ts/ui/drop_down_editor/drop_down_list';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';

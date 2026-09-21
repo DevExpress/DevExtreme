@@ -31,20 +31,12 @@
     }
 
     .dx-tab-text .dx-tab-text-span {
-      visibility: visible;
-
-      .dx-tab-text-span-pseudo {
-        visibility: hidden;
-      }
+      font-weight: $fluent-tab-font-weight-accent;
     }
   }
 
   &.dx-state-disabled {
     color: $tabs-tab-disabled-color;
-
-    .dx-tab-text .dx-tab-text-span-pseudo {
-      color: $tabs-tab-disabled-color;
-    }
 
     .dx-icon {
       color: $tabs-tab-icon-disabled-color;
@@ -61,22 +53,16 @@
     line-height: $fluent-line-height;
 
     .dx-tab-text-span {
-      position: relative;
       display: block;
-      font-weight: $fluent-tab-font-weight-accent;
-      visibility: hidden;
+      font-weight: $fluent-tab-font-weight-basic;
     }
 
     .dx-tab-text-span-pseudo {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      display: block;
+      height: 0;
       pointer-events: none;
-      color: $tabs-tab-color;
-      font-weight: $fluent-tab-font-weight-basic;
-      visibility: visible;
+      font-weight: $fluent-tab-font-weight-accent;
+      visibility: hidden;
     }
   }
 

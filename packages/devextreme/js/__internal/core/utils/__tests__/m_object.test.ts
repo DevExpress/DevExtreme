@@ -26,5 +26,27 @@ describe('Object utils', () => {
       expect(target.Tasks[0]).not.toBe(tasks[0]);
       expect(target.Tasks).toEqual(tasks);
     });
+
+    it('should assign a Set by reference instead of producing a broken clone', () => {
+      const target = { ID: 1, Set: new Set(['Test']) };
+      const newSet = new Set(['TEST']);
+
+      deepExtendArraySafe(target, { Set: newSet }, true, false, true, true);
+
+      expect(target.Set).toBe(newSet);
+      expect(target.Set.size).toBe(1);
+      expect(target.Set.has('TEST')).toBe(true);
+    });
+
+    it('should assign a Map by reference instead of producing a broken clone', () => {
+      const target = { ID: 1, Map: new Map([['a', 1]]) };
+      const newMap = new Map([['b', 2]]);
+
+      deepExtendArraySafe(target, { Map: newMap }, true, false, true, true);
+
+      expect(target.Map).toBe(newMap);
+      expect(target.Map.size).toBe(1);
+      expect(target.Map.get('b')).toBe(2);
+    });
   });
 });

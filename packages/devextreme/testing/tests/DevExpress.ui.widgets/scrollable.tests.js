@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { value as viewPort } from 'core/utils/view_port';
 
 viewPort($('#qunit-fixture').addClass('dx-viewport'));

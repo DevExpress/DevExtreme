@@ -44,7 +44,14 @@ const initMasterDetail = function (that) {
   that._isExpandAll = that.option('masterDetail.autoExpandAll');
 };
 
-export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) => class DataMasterDetailExtender extends Base {
+export interface MasterDetailDataControllerExtension {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  getRowIndicesForExpand(key: RowKey): number[];
+}
+
+export const dataMasterDetailExtenderMixin = (
+  Base: ModuleType<DataController>,
+): ModuleType<DataController & MasterDetailDataControllerExtension> => class DataMasterDetailExtender extends Base {
   private _isExpandAll: any;
 
   private _expandedItems: any;
@@ -98,19 +105,19 @@ export const dataMasterDetailExtenderMixin = (Base: ModuleType<DataController>) 
     return !!(that._isExpandAll ^ (expandIndex >= 0 && that._expandedItems[expandIndex].visible));
   }
 
-  protected getRowIndicesForExpand(key: RowKey): number[] {
+  public getRowIndicesForExpand(key: RowKey): number[] {
     const rowIndex = this.getRowIndexByKey(key);
 
     return [rowIndex, rowIndex + 1];
   }
 
-  private _changeRowExpandCore(key) {
+  private changeRowExpandCore(key) {
     const that = this;
 
     let result;
     if (Array.isArray(key)) {
       // @ts-expect-error
-      result = super._changeRowExpandCore.apply(that, arguments);
+      result = super.changeRowExpandCore.apply(that, arguments);
     } else {
       const expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
       if (expandIndex >= 0) {

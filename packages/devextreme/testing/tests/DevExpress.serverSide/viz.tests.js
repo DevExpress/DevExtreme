@@ -1,4 +1,4 @@
-import BaseWidget from '__internal/viz/core/m_base_widget';
+import BaseWidget from '__internal/viz/core/base_widget';
 
 QUnit.module('Viz', {
     beforeEach: function() {

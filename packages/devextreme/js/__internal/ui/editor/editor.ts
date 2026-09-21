@@ -92,15 +92,10 @@ class Editor<
     return instance instanceof Editor;
   }
 
-  ctor(element: Element, options: TProperties): void {
-    this.showValidationMessageTimeout = undefined;
-    this.validationRequest = Callbacks();
-
-    super.ctor(element, options);
-  }
-
   _createElement(element: Element): void {
     super._createElement(element);
+    this.showValidationMessageTimeout = undefined;
+    this.validationRequest = Callbacks();
     const $element = this.$element();
     if ($element) {
       data($element[0], VALIDATION_TARGET, this);

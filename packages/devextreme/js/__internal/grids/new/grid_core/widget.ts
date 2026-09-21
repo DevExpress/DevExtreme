@@ -5,7 +5,7 @@
 import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
-import { infernoRenderer } from '@ts/core/m_inferno_renderer';
+import { infernoRenderer } from '@ts/core/inferno_renderer';
 import type { Signal } from '@ts/core/state_manager/index';
 import { signal } from '@ts/core/state_manager/index';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
@@ -16,11 +16,13 @@ import * as ColumnChooserModule from './column_chooser/index';
 import { CompatibilityColumnsController } from './columns_controller/compatibility';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
+import { CompatibilityDataSourceController } from './data_source/compatibility';
 import * as di from './di';
 import * as EditingModule from './editing/index';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
-import { CompatibilityFilterSyncController, FilterSyncController } from './filtering/filter_sync/index';
+import { CompatibilityFilterBuilderController } from './filtering/filter_builder/index';
+import { FilterSyncController } from './filtering/filter_sync/index';
 import { CompatibilityHeaderFilterController, HeaderFilterController } from './filtering/header_filter/index';
 import { HeaderFilterViewController } from './filtering/header_filter/view_controller';
 import * as FilterControllerModule from './filtering/index';
@@ -100,9 +102,10 @@ export class GridCoreNewBase<
     this.diContext.registerInstance(WidgetMock, new WidgetMock(
       this,
       this.diContext.get(DataControllerModule.CompatibilityDataController),
+      this.diContext.get(CompatibilityDataSourceController),
       this.diContext.get(CompatibilityColumnsController),
       this.diContext.get(CompatibilityHeaderFilterController),
-      this.diContext.get(CompatibilityFilterSyncController),
+      this.diContext.get(CompatibilityFilterBuilderController),
     ));
   }
 

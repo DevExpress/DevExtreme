@@ -72,7 +72,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // assert
-        assert.notOk(this.dataController.dataSource().paginate(), 'paginate is disabled');
+        assert.notOk(this.dataSourceController.getAdapter().paginate(), 'paginate is disabled');
     });
 
     QUnit.test('Paginate should be enabled when virtual scrolling is enabled', function(assert) {
@@ -85,7 +85,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // assert
-        assert.ok(this.dataController.dataSource().paginate(), 'paginate is enabled');
+        assert.ok(this.dataSourceController.getAdapter().paginate(), 'paginate is enabled');
     });
 
     QUnit.test('Initialize from dataSource with plain structure', function(assert) {
@@ -97,7 +97,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         const dataSource = createDataSource(array);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         // act
         dataSource.load();
@@ -147,7 +147,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         const dataSource = createDataSource(array);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         // act
         dataSource.load();
@@ -175,7 +175,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             onNodesInitialized: nodesInitialized
         });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         dataSource.load();
         const rootNode = this.getRootNode();
@@ -198,7 +198,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         const dataSource = createDataSource(array);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         dataSource.load();
 
@@ -240,7 +240,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             onNodesInitialized: nodesInitialized
         });
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         dataSource.load();
         const rootNode = this.getRootNode();
@@ -269,7 +269,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             itemsExpr: 'items',
             dataStructure: 'tree'
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         // act
         dataSource.load();
@@ -316,7 +316,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             dataStructure: 'tree',
             keyExpr: 'key'
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         // act
         dataSource.load();
@@ -357,7 +357,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         const dataSource = createDataSource(array, { key: 'id' });
 
         this.applyOptions({ keyExpr: null });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         // act
         dataSource.load();
@@ -410,7 +410,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // act, assert
         try {
-            this.dataController.setDataSource(dataSource);
+            this.dataController.initDataSourceAdapter(dataSource);
             assert.ok(false, 'exception should be rised');
         } catch(e) {
             assert.ok(e.message.indexOf('E1044') >= 0, 'name of error');
@@ -430,7 +430,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.applyOptions({
             keyExpr: 'key'
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         this.dataController.dataErrorOccurred.add(function(e) {
             dataErrors.push(e);
         });
@@ -452,7 +452,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         ];
         const dataSource = createDataSource(array);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         this.expandRow(2); // TODO: remove when implemented expandAllEnabled
 
@@ -486,7 +486,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 4, 'totalItemsCount');
+        assert.equal(this.dataSourceController.totalItemsCount(), 4, 'totalItemsCount');
         const items = this.dataController.items();
         assert.equal(items.length, 3, 'count items');
 
@@ -517,7 +517,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         });
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 5, 'totalItemsCount');
+        assert.equal(this.dataSourceController.totalItemsCount(), 5, 'totalItemsCount');
         assert.equal(this.getVisibleRows().length, 2, 'row count');
         assert.strictEqual(this.getVisibleRows()[0].node, this.getNodeByKey(1), 'first node instance is correct');
     });
@@ -545,7 +545,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.expandRow(2);
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 5, 'totalItemsCount');
+        assert.equal(this.dataSourceController.totalItemsCount(), 5, 'totalItemsCount');
         const items = this.dataController.items();
         assert.equal(items.length, 3, 'count items');
 
@@ -568,8 +568,8 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         this.dataController.load();
 
         // assert
-        assert.equal(this.dataController.totalItemsCount(), 1, 'count visible items');
-        assert.equal(this.dataController.totalCount(), 3, 'count all items');
+        assert.equal(this.dataSourceController.totalItemsCount(), 1, 'count visible items');
+        assert.equal(this.dataSourceController.totalCount(), 3, 'count all items');
     });
 
     QUnit.test('Getting key when there are keyExpr and store hasn\'t key', function(assert) {
@@ -707,7 +707,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
     QUnit.test('There are no exceptions on getting node when hasn\'t datasource', function(assert) {
     // arrange
-        this.dataController.setDataSource(undefined);
+        this.dataController.disposeDataSourceAdapter();
 
         // act, assert
         assert.equal(this.getNodeByKey(1), undefined, 'no exceptions');
@@ -723,7 +723,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         const dataSource = createDataSource(array);
         const spy = sinon.spy();
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rootNode = this.dataController.getRootNode();
 
@@ -747,7 +747,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         const dataSource = createDataSource(array);
         const spy = sinon.spy();
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         const rootNode = this.dataController.getRootNode();
 
@@ -772,7 +772,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         const dataSource = createDataSource(array);
         const spy = sinon.spy();
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -804,7 +804,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             parentIdExpr: 'parentId',
             expandedRowKeys: ['key2']
         });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
 
         // act
         dataSource.load();
@@ -928,7 +928,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
         ];
         const dataSource = createDataSource(array);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // assert
@@ -953,7 +953,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
         ];
         const dataSource = createDataSource(array);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         this.expandRow(1);
@@ -977,7 +977,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
         ];
         const dataSource = createDataSource(array);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // assert
@@ -1011,7 +1011,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
         const dataSource = createDataSource(array);
 
         this.applyOptions({ expandedRowKeys: [1] });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // assert
@@ -1031,7 +1031,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
         const dataSource = createDataSource(array);
 
         this.applyOptions({ expandedRowKeys: [2] });
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // assert
@@ -1056,7 +1056,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
         ];
         const dataSource = createDataSource(array);
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         let expandedRowKeys = this.dataController.option('expandedRowKeys');
@@ -1097,7 +1097,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
             };
         });
         that.applyOptions(options);
-        that.dataController.setDataSource(dataSource);
+        that.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -1140,7 +1140,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
                 e.cancel = true;
             }
         });
-        that.dataController.setDataSource(dataSource);
+        that.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
 
         // act
@@ -1165,7 +1165,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
                 e.cancel = true;
             }
         });
-        that.dataController.setDataSource(dataSource);
+        that.dataController.initDataSourceAdapter(dataSource);
         dataSource.load();
         that.expandRow(1);
 

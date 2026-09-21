@@ -12,10 +12,10 @@ import type {
   RequestCallbacks,
   Response as SendRequestResult,
 } from '@js/common/ai-integration';
+import CustomStore from '@js/data/custom_store';
 import type { Message } from '@js/ui/chat';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
-import CustomStore from '@ts/data/m_custom_store';
 import {
   afterTest,
   beforeTest,

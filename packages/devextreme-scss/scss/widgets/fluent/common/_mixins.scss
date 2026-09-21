@@ -7,7 +7,7 @@
 @use "../../base/validation" as *;
 @use "../list/sizes" as *;
 
-$badge-invalid-bg: $base-invalid-color;
+$badge-invalid-bg: $base-invalid-color !default;
 
 @mixin dx-base-typography() {
   @include dx-base-typography-mixin(

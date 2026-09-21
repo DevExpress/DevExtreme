@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const ko = require('knockout');
-const browser = require('core/utils/browser');
-const devices = require('core/devices');
+import $ from 'jquery';
+import ko from 'knockout';
+import browser from 'core/utils/browser';
+import devices from 'core/devices';
 
-require('fluent_blue_light.css!');
-require('../../helpers/executeAsyncMock.js');
-require('integration/knockout');
-require('bundles/modules/parts/widgets-web');
+import 'fluent_blue_light.css!';
+import '../../helpers/executeAsyncMock.js';
+import 'integration/knockout';
+import 'bundles/modules/parts/widgets-web';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

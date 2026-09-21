@@ -59,7 +59,6 @@ $chat-messagelist-day-header-first-padding-top: 20px !default;
 $chat-messagelist-day-header-font-size: 12px !default;
 
 $chat-typingindicator-template: $chat-messagegroup-alignment-start-template !default;
-$chat-typingindicator-padding: null !default;
 $chat-typingindicator-row-gap: $chat-messagegroup-gap !default;
 $chat-typingindicator-font-size: $chat-information-font-size !default;
 $chat-typingindicator-bubble-padding-block: null !default;
@@ -119,7 +118,6 @@ $chat-bubble-gap: 8px !default;
   $chat-typingindicator-circle-size-center: math.div(12, 14) * 1em !default;
   $chat-typingindicator-bubble-padding-block: 12px !default;
   $chat-typingindicator-bubble-padding-inline: 20px !default;
-  $chat-typingindicator-padding: $chat-messagegroup-padding !default;
 
   $chat-confirmation-popup-content-padding: 0 !default;
   $chat-confirmation-popup-toolbar-gap: 8px !default;
@@ -160,10 +158,11 @@ $chat-bubble-gap: 8px !default;
   $chat-typingindicator-circle-size-center: math.div(12, 12) * 1em !default;
   $chat-typingindicator-bubble-padding-block: 8px !default;
   $chat-typingindicator-bubble-padding-inline: 12px !default;
-  $chat-typingindicator-padding: $chat-messagegroup-padding !default;
 
   $chat-confirmation-popup-content-padding: $generic-popup-content-padding !default;
   $chat-confirmation-popup-toolbar-gap: 4px !default;
 
   $chat-file-icon-font-size: 14 !default;
 }
+
+$chat-typingindicator-padding: $chat-messagegroup-padding !default;

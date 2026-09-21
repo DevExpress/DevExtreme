@@ -42,7 +42,7 @@ const currentDate = new Date(2021, 3, 21);
 const dataSource = data;
 </script>
 
-<style scoped>
+<style>
 .dx-scheduler-cell-sizes-horizontal {
   width: 100px;
 }

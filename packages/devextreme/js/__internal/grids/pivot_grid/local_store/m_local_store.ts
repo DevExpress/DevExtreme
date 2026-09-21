@@ -424,7 +424,6 @@ const LocalStore = Class.inherit((function () {
 
     if (dataSource.store() instanceof CustomStore && filter) {
       filter = processFilter(filter, fieldSelectors);
-      // @ts-expect-error
       return dataQuery(dataSource.items()).filter(filter).toArray();
     }
 

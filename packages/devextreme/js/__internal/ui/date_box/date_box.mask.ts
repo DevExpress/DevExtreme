@@ -15,7 +15,7 @@ import type dxDateBox from '@js/ui/date_box';
 import type { DateLike } from '@js/ui/date_box';
 import dateLocalization from '@ts/core/localization/date';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { DateBoxBaseProperties } from '@ts/ui/date_box/date_box.base';
 import DateBoxBase from '@ts/ui/date_box/date_box.base';
 import { getDatePartIndexByPosition, renderDateParts } from '@ts/ui/date_box/date_box.mask.parts';
@@ -273,7 +273,7 @@ class DateBoxMask<
     this._caret(this._getActivePartProp('caret'));
   }
 
-  _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
+  _keyPressHandler(e: DxEvent<InputEvent>): void {
     const { originalEvent: event } = e;
 
     const isBackwardDeletion = event?.inputType === 'deleteContentBackward';
@@ -836,6 +836,7 @@ class DateBoxMask<
     const { text } = this.option();
 
     if (this._useMaskBehavior()) {
+      this._committedText = text;
       this._saveValueChangeEvent(e);
       if (!text) {
         this._maskValue = null;

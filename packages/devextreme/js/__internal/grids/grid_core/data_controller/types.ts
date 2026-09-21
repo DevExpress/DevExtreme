@@ -1,7 +1,4 @@
-import type { SearchOperation } from '@js/common/data.types';
-import type { ScalarFilterValue } from '@js/common/grids';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import type { DataSource } from '@ts/data/data_source/types';
 
 import type { Column } from '../columns_controller/types';
 import type { ChangedEvent, OperationTypes, RawItemData } from '../data_source_adapter/types';
@@ -19,9 +16,9 @@ export interface RefreshOptions {
 }
 
 export interface UserState {
-  searchText: string | undefined;
   pageIndex: number;
   pageSize: number;
+  searchText?: string;
   expandedRowKeys?: unknown[];
 }
 
@@ -74,6 +71,13 @@ export interface ProcessedItem extends GeneratedItem {
   watch?: RowWatch;
 }
 
+type LoadAllItemsCallback = (items: ProcessedItem[], totalAggregates?: unknown[]) => void;
+
+export type LoadAllItemsDeferred = Omit<DeferredObj<ProcessedItem[]>, 'done' | 'resolve'> & {
+  done: (callback: LoadAllItemsCallback) => LoadAllItemsDeferred;
+  resolve: LoadAllItemsCallback;
+};
+
 /** changes */
 
 export type RowChangeType = 'update' | 'insert' | 'remove';
@@ -123,15 +127,28 @@ export type DataChange = | UpdateChange
   | (DataChangeBase & { changeType: 'refresh', event: unknown; virtualColumnsScrolling: boolean })
   | (DataChangeBase & { changeType: 'refresh', useProcessedItemsCache: boolean; cancelEmptyChanges: boolean });
 
-export type ChangedRows = Required<
-  Pick<UpdateChange, 'items' | 'rowIndices' | 'changeTypes' | 'columnIndices'>
->;
-
-export interface UpdateRowChange {
+export interface UpdateItemChange {
   changeType: RowChangeType;
   rowIndex: number;
   item?: ProcessedItem;
   columnIndices?: number[];
+}
+
+export type GetUpdatedColumnIndices = (
+  oldItem: ProcessedItem,
+  newItem: ProcessedItem,
+  visibleRowIndex: number,
+  isLiveUpdate?: boolean,
+) => number[] | undefined;
+
+export interface ItemChangeOptions {
+  rowIndexDelta: number;
+  isPartialUpdate: boolean;
+  isLiveUpdate?: boolean;
+}
+
+export interface ItemOperationOptions extends ItemChangeOptions {
+  newItems: ProcessedItem[];
 }
 
 export type RowIndexByKey = Record<string, number | undefined>;
@@ -140,13 +157,9 @@ export type RowIndexCorrection = (rowIndex: number) => number;
 
 export type ItemChange = | { type: 'insert'; index: number; data: ProcessedItem }
   | { type: 'update'; index: number; data: ProcessedItem; oldItem: ProcessedItem }
-  | { type: 'remove'; index: number; oldItem: ProcessedItem };
-
-/** data source */
-
-export interface DataSourceAdapterLike {
-  _dataSource: DataSource;
-}
+  | { type: 'remove'; index: number; oldItem: ProcessedItem }
+  | { type: 'replace'; index: number; data: ProcessedItem }
+  | { type: 'updateVisibility'; index: number; data: ProcessedItem };
 
 /** callbacks */
 
@@ -184,37 +197,3 @@ export interface PagingDataSource {
 export type PagingOptionName = 'pageIndex' | 'pageSize';
 
 export type PagingResult = number | DeferredObj<unknown> | Promise<unknown>;
-
-/** filter */
-
-export type FilterCombiner = 'and' | 'or';
-
-/**
- * The operator may be omitted — `=` is implied. Only data layer operations
- * are allowed here: column operations such as `between` or `anyof` belong to
- * `filterValue` and are expanded into these before they reach the store.
- */
-export type BinaryDataFilterExpression = [string, ScalarFilterValue]
-  | [string, SearchOperation, ScalarFilterValue];
-
-/**
- * A binary expression, a negation, or a group of expressions.
- * The combiner between neighbors may be omitted — `and` is implied.
- */
-export type DataFilterExpression = BinaryDataFilterExpression
-  | ['!', DataFilterExpression]
-  | [DataFilterExpression, ...(FilterCombiner | DataFilterExpression)[]];
-
-export type DataFilterPredicate = (data: RawItemData) => boolean;
-
-/**
- * The grid-internal "match nothing" filter. Not a data layer filter expression:
- * the data controller intercepts it and resolves the load with an empty result.
- */
-export type MatchNothingFilter = ['!'];
-
-export type DataFilter = DataFilterExpression
-  | DataFilterPredicate
-  | MatchNothingFilter
-  | null
-  | undefined;

@@ -31,6 +31,7 @@ type AccessibleOptions = Pick<Properties,
   "color" |
   "disabled" |
   "elementAttr" |
+  "encodeHtml" |
   "endScaleValue" |
   "margin" |
   "onDisposing" |
@@ -66,6 +67,7 @@ const componentConfig = {
     color: String,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
+    encodeHtml: Boolean,
     endScaleValue: Number,
     margin: Object as PropType<Record<string, any>>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
@@ -97,6 +99,7 @@ const componentConfig = {
     "update:color": null,
     "update:disabled": null,
     "update:elementAttr": null,
+    "update:encodeHtml": null,
     "update:endScaleValue": null,
     "update:margin": null,
     "update:onDisposing": null,

@@ -15,10 +15,10 @@
 @use "../fieldset/sizes" as *;
 @use "../menu/colors" as *;
 
-$material-diagram-toolbar-icon-size: $material-base-icon-size;
-$diagram-toolbar-colorbutton-border-width: 3px;
+$material-diagram-toolbar-icon-size: $material-base-icon-size !default;
+$diagram-toolbar-colorbutton-border-width: 3px !default;
 
-$diagram-toolbox-title-size: 18px;
+$diagram-toolbox-title-size: 18px !default;
 
 .dx-diagram {
   border-color: $diagram-border-color;

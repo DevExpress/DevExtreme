@@ -12,11 +12,11 @@ import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
-import { getImageContainer } from '@js/core/utils/icon';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Item, Properties } from '@js/ui/tab_panel';
 import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/themes';
+import { getImageAriaLabel, getImageContainer } from '@ts/core/utils/m_icon';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { MultiViewProperties } from '@ts/ui/multi_view/multi_view';
@@ -388,6 +388,13 @@ class TabPanel extends MultiView<TabPanelProperties> {
       iconPosition,
       stylingMode,
       _itemAttributes: { class: TABPANEL_TABS_ITEM_CLASS },
+      _itemAriaLabelExpr: (data: Item): string | undefined => {
+        if (data?.title || !data?.icon) {
+          return undefined;
+        }
+
+        return getImageAriaLabel(data.icon);
+      },
       _indicatorPosition: tabsIndicatorPosition,
     };
   }

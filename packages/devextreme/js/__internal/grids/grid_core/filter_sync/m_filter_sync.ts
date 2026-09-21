@@ -1,0 +1,168 @@
+import { isDefined } from '@js/core/utils/type';
+import {
+  addItem,
+  getMatchedConditions,
+  getNormalizedFilter,
+} from '@ts/filter_builder/m_utils';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type {
+  Column, ColumnUserState, FilterField,
+} from '@ts/grids/grid_core/columns_controller/types';
+import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type {
+  FilterValue, FilterValueCondition,
+} from '@ts/grids/grid_core/filter/types';
+import modules from '@ts/grids/grid_core/m_modules';
+
+import {
+  checkForErrors,
+  getColumnIdentifier,
+  getConditionFromFilterRow,
+  getConditionFromHeaderFilter,
+  getFilterRowOptionsFromCondition,
+  getFilterValueWithFilterRow,
+  getFilterValueWithHeaderFilter,
+  getHeaderFilterFromCondition,
+} from './utils';
+
+export class FilterSyncController extends modules.Controller {
+  private skipSyncColumnOptions = false;
+
+  private dataController!: DataController;
+
+  private columnsController!: ColumnsController;
+
+  private filterController!: FilterController;
+
+  public init(): void {
+    this.dataController = this.getController('data');
+    this.columnsController = this.getController('columns');
+    this.filterController = this.getController('filter');
+
+    if (this.filterController.isFilterSyncActive()) {
+      if (this.columnsController.isAllDataTypesDefined()) {
+        this.initSync();
+      } else {
+        this.dataController.dataSourceChanged.add(() => this.initSync());
+      }
+    }
+  }
+
+  public isSyncingColumnOptions(): boolean {
+    return this.skipSyncColumnOptions;
+  }
+
+  public withColumnOptionsSync<T>(sync: () => T): T {
+    const wasSyncing = this.skipSyncColumnOptions;
+
+    this.skipSyncColumnOptions = true;
+    try {
+      return this.filterController.suspendColumnSources(sync);
+    } finally {
+      this.skipSyncColumnOptions = wasSyncing;
+    }
+  }
+
+  public syncFilterValue(): void {
+    const columns = this.columnsController.getFilteringColumns();
+    const filterValue = this.option('filterValue') ?? null;
+
+    this.withColumnOptionsSync(() => {
+      columns.forEach((column) => {
+        const filterConditions = getMatchedConditions(
+          filterValue,
+          getColumnIdentifier(column),
+        ) as FilterValueCondition[];
+
+        if (filterConditions.length === 1) {
+          const filterCondition = filterConditions[0];
+
+          this.updateHeaderFilterCondition(column, filterCondition);
+          this.updateFilterRowCondition(column, filterCondition);
+        } else {
+          if (isDefined(column.filterValues)) {
+            this.updateHeaderFilterCondition(column, null);
+          }
+
+          if (isDefined(column.filterValue)) {
+            this.updateFilterRowCondition(column, null);
+          }
+        }
+      });
+    });
+  }
+
+  private updateHeaderFilterCondition(
+    column: FilterField,
+    headerFilterCondition: FilterValueCondition | null,
+  ): void {
+    const headerFilter = getHeaderFilterFromCondition(headerFilterCondition, column);
+
+    this.columnsController.columnOption(getColumnIdentifier(column), headerFilter);
+  }
+
+  private updateFilterRowCondition(
+    column: FilterField,
+    condition: FilterValueCondition | null,
+  ): void {
+    const filterRowOptions = getFilterRowOptionsFromCondition(condition, column);
+
+    this.columnsController.columnOption(getColumnIdentifier(column), filterRowOptions);
+  }
+
+  private initSync(): void {
+    const columns = this.columnsController.getColumns();
+    const pageIndex = this.dataController.pageIndex();
+
+    checkForErrors(columns);
+
+    if (!this.option('filterValue')) {
+      const filteringColumns = this.columnsController.getFilteringColumns();
+      const filterValue = this.getFilterValueFromColumns(filteringColumns);
+      this._silentOption('filterValue', filterValue);
+    }
+
+    this.syncFilterValue();
+
+    this.dataController.pageIndex(pageIndex);
+  }
+
+  public getFilterValueFromColumns(
+    columns: ColumnUserState[] | undefined,
+  ): FilterValue {
+    if (!this.filterController.isFilterSyncActive()) {
+      return null;
+    }
+
+    const filterValue = ['and'];
+
+    columns?.forEach((column) => {
+      const headerFilter = getConditionFromHeaderFilter(column);
+      if (headerFilter) {
+        addItem(headerFilter, filterValue);
+      }
+
+      const filterRow = getConditionFromFilterRow(column);
+      if (filterRow) {
+        addItem(filterRow, filterValue);
+      }
+    });
+
+    return getNormalizedFilter(filterValue) as FilterValue;
+  }
+
+  public syncFilterRow(column: Column): void {
+    const filterValue = this.option('filterValue');
+    const syncedFilterValue = getFilterValueWithFilterRow(filterValue, column);
+
+    this.option('filterValue', syncedFilterValue);
+  }
+
+  public syncHeaderFilter(column: Column): void {
+    const filterValue = this.option('filterValue');
+    const syncedFilterValue = getFilterValueWithHeaderFilter(filterValue, column);
+
+    this.option('filterValue', syncedFilterValue);
+  }
+}

@@ -165,7 +165,7 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 </script>
-<style scoped>
+<style>
 .long-title h2 {
   font-family:
     "Segoe UI Light",

@@ -6,7 +6,7 @@ import './module_not_extended/state_storing';
 import './module_not_extended/ai_column';
 import './module_not_extended/selection';
 import './module_not_extended/column_chooser';
-import './grouping/m_grouping';
+import './grouping/grouping_module';
 import './module_not_extended/master_detail';
 import './m_editing';
 import './module_not_extended/editing_row_based';

@@ -4,6 +4,7 @@ import { CheckBox } from 'devextreme-react/check-box';
 import { LoadPanel } from 'devextreme-react/load-panel';
 import { employee } from './data.js';
 
+const loadPanelPosition = { of: '#employee' };
 export default function App() {
   const [employeeInfo, setEmployeeInfo] = useState(null);
   const [loadPanelVisible, setLoadPanelVisible] = useState(false);
@@ -62,7 +63,7 @@ export default function App() {
       </div>
       <LoadPanel
         shadingColor="rgba(0, 0, 0, 0.4)"
-        position={{ of: '#employee' }}
+        position={loadPanelPosition}
         onHiding={hideLoadPanel}
         visible={loadPanelVisible}
         showIndicator={showIndicator}

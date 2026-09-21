@@ -5,6 +5,13 @@ import { Form, SimpleItem } from 'devextreme-react/form';
 
 import type { FormProps } from './types.ts';
 
+const editorOptions = {
+  startDatePlaceholder: 'Check-in',
+  endDatePlaceholder: 'Check-out',
+  elementAttr: { id: 'datesPicker' },
+};
+const label = { visible: false };
+
 const DatesForm: FC<FormProps> = memo(({ formData, validationGroup }: FormProps) => (
   <>
     <p>
@@ -15,12 +22,8 @@ const DatesForm: FC<FormProps> = memo(({ formData, validationGroup }: FormProps)
         isRequired
         dataField='dates'
         editorType='dxDateRangeBox'
-        editorOptions={{
-          startDatePlaceholder: 'Check-in',
-          endDatePlaceholder: 'Check-out',
-          elementAttr: { id: 'datesPicker' },
-        }}
-        label={{ visible: false }}
+        editorOptions={editorOptions}
+        label={label}
       />
     </Form>
   </>

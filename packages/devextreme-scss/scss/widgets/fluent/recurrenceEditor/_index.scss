@@ -4,9 +4,9 @@
 @use "../scheduler/sizes" as *;
 @use "../../base/recurrenceEditor" as *;
 
-$fluent-recurrence-number-box-margin: 11px;
-$fluent-recurrence-button-group-padding: 6px;
-$fluent-recurrence-radio-group-margin: 15px;
+$fluent-recurrence-number-box-margin: 11px !default;
+$fluent-recurrence-button-group-padding: 6px !default;
+$fluent-recurrence-radio-group-margin: 15px !default;
 
 .dx-recurrence-numberbox-interval {
   margin-right: $fluent-recurrence-number-box-margin;

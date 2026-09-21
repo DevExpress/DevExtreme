@@ -39,6 +39,7 @@ import type {
 } from '@js/events';
 import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import uiErrors from '@js/ui/widget/ui.errors';
+import documentSizeCallbacks from '@ts/core/utils/document_size_callbacks';
 import domUtils from '@ts/core/utils/m_dom';
 import selectors from '@ts/core/utils/m_selectors';
 import windowUtils from '@ts/core/utils/m_window';
@@ -262,6 +263,8 @@ class Overlay<
 
   _hideTopOverlayHandler!: () => void;
 
+  _documentSizeChangedHandler?: () => void;
+
   _hideAnimationProcessing?: boolean;
 
   _showAnimationProcessing?: boolean;
@@ -380,13 +383,11 @@ class Overlay<
     return this._$content;
   }
 
-  ctor(element: Element, options: TProperties): void {
-    super.ctor(element, options);
+  _initOptions(options: TProperties): void {
+    super._initOptions(options);
 
-    if (options) {
-      if ('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
-        this._logDeprecatedPreventScrollEventsInfo();
-      }
+    if ('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
+      this._logDeprecatedPreventScrollEventsInfo();
     }
   }
 
@@ -567,19 +568,37 @@ class Overlay<
     super._initTemplates();
   }
 
-  _isTopOverlay(): boolean {
+  _isTopFocusableOverlay(): boolean {
     const overlayStack = this._overlayStack();
 
     for (let i = overlayStack.length - 1; i >= 0; i -= 1) {
       const tabbableElements = overlayStack[i]._findTabbableBounds();
 
       if (tabbableElements.$first || tabbableElements.$last) {
-        // @ts-ignore expected: types Overlay<OverlayProperties> and this have no overlap
         return overlayStack[i] === this;
       }
     }
 
     return false;
+  }
+
+  _isLastInOverlayStack(): boolean {
+    const overlayStack = this._overlayStack();
+
+    return overlayStack[overlayStack.length - 1] === this;
+  }
+
+  _handlesDocumentEscapeKey(): boolean {
+    return false;
+  }
+
+  _isEscapeHandledByOverlayAbove(): boolean {
+    const overlayStack = this._overlayStack();
+    const index = overlayStack.indexOf(this);
+
+    return overlayStack
+      .slice(index + 1)
+      .some((overlay) => overlay._handlesDocumentEscapeKey());
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1054,7 +1073,7 @@ class Overlay<
   }
 
   _tabKeyHandler(e: KeyboardEvent): void {
-    if (normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
+    if (normalizeKeyName(e) !== TAB_KEY || !this._isTopFocusableOverlay()) {
       return;
     }
 
@@ -1088,6 +1107,19 @@ class Overlay<
     if (windowUtils.hasWindow()) {
       this._toggleHideTopOverlayCallback(enabled);
       this._toggleHideOnParentsScrollSubscription(enabled);
+      this._toggleDocumentSizeSubscription(enabled);
+    }
+  }
+
+  _toggleDocumentSizeSubscription(subscribe: boolean): void {
+    this._documentSizeChangedHandler ??= (): void => {
+      this._dimensionChanged();
+    };
+
+    if (subscribe) {
+      documentSizeCallbacks.add(this._documentSizeChangedHandler);
+    } else {
+      documentSizeCallbacks.remove(this._documentSizeChangedHandler);
     }
   }
 

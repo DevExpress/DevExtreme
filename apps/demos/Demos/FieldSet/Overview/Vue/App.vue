@@ -53,7 +53,7 @@ import DxTextArea from 'devextreme-vue/text-area';
 
 const text = 'Kevin is our hard-working shipping manager and has been helping that department work like clockwork for 18 months. When not in the office, he is usually on the basketball court playing pick-up games.';
 </script>
-<style scoped>
+<style>
 .dx-fieldset:first-child > h4:first-child {
   margin-top: 0;
 }

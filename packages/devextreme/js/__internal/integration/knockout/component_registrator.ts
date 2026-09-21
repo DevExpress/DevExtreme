@@ -3,8 +3,8 @@ import $ from '@js/core/renderer';
 import Widget from '@js/ui/widget/ui.widget';
 import {
   componentRegistratorCallbacks as registerComponentCallbacks,
-} from '@ts/core/m_component_registrator_callbacks';
-import config from '@ts/core/m_config';
+} from '@ts/core/component_registrator_callbacks';
+import config from '@ts/core/config';
 import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
 import Callbacks from '@ts/core/utils/m_callbacks';
 import { Locker } from '@ts/core/utils/m_locker';
@@ -12,7 +12,7 @@ import { isPlainObject } from '@ts/core/utils/m_type';
 import Draggable from '@ts/m_draggable';
 import Editor from '@ts/ui/editor/editor';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
-import VizWidget from '@ts/viz/core/m_base_widget';
+import VizWidget from '@ts/viz/core/base_widget';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';
 

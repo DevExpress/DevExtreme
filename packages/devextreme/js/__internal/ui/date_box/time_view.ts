@@ -3,14 +3,14 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/keyboard_processor';
 import type { BoxItemData } from '@ts/ui/box';
 import Box from '@ts/ui/box';
 import dateUtils from '@ts/ui/date_box/date_utils';
 import type { EditorProperties } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
-import NumberBox from '@ts/ui/number_box/m_number_box';
-import type { NumberBoxMaskProperties } from '@ts/ui/number_box/m_number_box.mask';
+import NumberBox from '@ts/ui/number_box/number_box';
+import type { NumberBoxMaskProperties } from '@ts/ui/number_box/number_box.mask';
 import SelectBox from '@ts/ui/select_box';
 
 const TIMEVIEW_CLASS = 'dx-timeview';

@@ -23,7 +23,6 @@ $tagbox-tag-button-remove-bg: null !default;
 $tagbox-tag-button-remove-active-bg: null !default;
 $tagbox-tag-focused-bg: null !default;
 $tagbox-tag-focused-color: null !default;
-$tagbox-tag-focused-button-remove-bg: null !default;
 $tagbox-select-all-border-color: $base-border-color !default;
 
 @if $color == "carmine" {
@@ -33,7 +32,6 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: 20%, $space: hsl) !default;
   $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
-  $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "contrast" {
@@ -43,7 +41,6 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: 20%, $space: hsl) !default;
   $tagbox-tag-focused-bg: $base-focus-color !default;
   $tagbox-tag-focused-color: $base-text-color !default;
-  $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "dark" {
@@ -53,7 +50,6 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: -20%, $space: hsl) !default;
   $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7.3%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
-  $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "darkmoon" {
@@ -63,7 +59,6 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: -20%, $space: hsl) !default;
   $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7.3%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
-  $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "darkviolet" {
@@ -73,7 +68,6 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: -20%, $space: hsl) !default;
   $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7.3%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
-  $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "greenmist" {
@@ -83,7 +77,6 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: 20%, $space: hsl) !default;
   $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
-  $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "light" {
@@ -93,7 +86,6 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: 20%, $space: hsl) !default;
   $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
-  $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
 
 @if $color == "softblue" {
@@ -103,5 +95,6 @@ $tagbox-select-all-border-color: $base-border-color !default;
   $tagbox-tag-button-remove-active-bg: color.adjust($tagbox-tag-button-remove-bg, $lightness: 20%, $space: hsl) !default;
   $tagbox-tag-focused-bg: color.adjust($tagbox-tag-bg, $lightness: -7%, $space: hsl) !default;
   $tagbox-tag-focused-color: $tagbox-tag-color !default;
-  $tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;
 }
+
+$tagbox-tag-focused-button-remove-bg: $tagbox-tag-button-remove-bg !default;

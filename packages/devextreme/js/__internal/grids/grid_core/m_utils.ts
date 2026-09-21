@@ -7,7 +7,6 @@ import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
-import { toComparable } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -27,6 +26,8 @@ import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
 import { AI_COLUMN_NAME } from './ai_column/const';
+import type DataSourceAdapter from './data_source_adapter/m_data_source_adapter';
+import { combineFilters } from './filter/utils';
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
 
 const BASE_LOAD_PANEL_Z_INDEX = 1000;
@@ -152,26 +153,6 @@ const getWidgetInstance = function ($element) {
   const widgetName = dxComponents?.[0];
 
   return widgetName && editorData[widgetName];
-};
-
-const equalFilterParameters = function (filter1, filter2, langParams?) {
-  if (Array.isArray(filter1) && Array.isArray(filter2)) {
-    if (filter1.length !== filter2.length) {
-      return false;
-    }
-    for (let i = 0; i < filter1.length; i++) {
-      if (!equalFilterParameters(filter1[i], filter2[i], langParams)) {
-        return false;
-      }
-    }
-
-    return true;
-  } if (isFunction(filter1) && filter1.columnIndex >= 0 && isFunction(filter2) && filter2.columnIndex >= 0) {
-    return filter1.columnIndex === filter2.columnIndex
-      && toComparable(filter1.filterValue, undefined, langParams) === toComparable(filter2.filterValue, undefined, langParams)
-      && toComparable(filter1.selectedFilterOperation, undefined, langParams) === toComparable(filter2.selectedFilterOperation, undefined, langParams);
-  }
-  return toComparable(filter1, undefined, langParams) == toComparable(filter2, undefined, langParams); // eslint-disable-line eqeqeq
 };
 
 const createPoint = <T extends ColumnPoint>(options: T): ColumnPoint => ({
@@ -304,38 +285,6 @@ export default {
     return index;
   },
 
-  combineFilters(filters, operation?): any {
-    let resultFilter: any[] = [];
-
-    operation = operation || 'and';
-
-    for (let i = 0; i < filters.length; i++) {
-      if (!filters[i]) {
-        continue;
-      }
-      if (filters[i]?.length === 1 && filters[i][0] === '!') {
-        if (operation === 'and') {
-          return ['!'];
-        } if (operation === 'or') {
-          continue;
-        }
-      }
-      if (resultFilter.length) {
-        resultFilter.push(operation);
-      }
-      resultFilter.push(filters[i]);
-    }
-    if (resultFilter.length === 1) {
-      // eslint-disable-next-line prefer-destructuring
-      resultFilter = resultFilter[0];
-    }
-    if (resultFilter.length) {
-      return resultFilter;
-    }
-
-    return undefined;
-  },
-
   checkChanges(changes, changeNames) {
     let changesWithChangeNamesCount = 0;
 
@@ -346,17 +295,6 @@ export default {
     }
 
     return changes.length && changes.length === changesWithChangeNamesCount;
-  },
-
-  equalFilterParameters,
-
-  proxyMethod(instance, methodName, defaultResult?) {
-    if (!instance[methodName]) {
-      instance[methodName] = function () {
-        const dataSource = this._dataSource;
-        return dataSource ? dataSource[methodName].apply(dataSource, arguments) : defaultResult;
-      };
-    }
   },
 
   formatValue,
@@ -428,6 +366,7 @@ export default {
           selector: dataField,
           groupInterval: interval,
           isExpanded: index < groupInterval.length - 1,
+          // @ts-ignore
         } : getIntervalSelector.bind(column, interval));
       });
 
@@ -671,12 +610,11 @@ export default {
         lookupDataSourceOptions = lookupDataSourceOptions({});
       }
     }
-    // @ts-expect-error
     return normalizeDataSourceOptions(lookupDataSourceOptions);
   },
 
-  getWrappedLookupDataSource(column, dataSource, filter) {
-    if (!dataSource) {
+  getWrappedLookupDataSource(column, dataSourceAdapter: DataSourceAdapter | null | undefined, filter) {
+    if (!dataSourceAdapter) {
       return [];
     }
 
@@ -686,7 +624,7 @@ export default {
       return lookupDataSourceOptions;
     }
 
-    const hasGroupPaging = dataSource.remoteOperations().groupPaging;
+    const hasGroupPaging = dataSourceAdapter.remoteOperations().groupPaging;
     const hasLookupOptimization = column.displayField && isString(column.displayField);
 
     let cachedUniqueRelevantItems;
@@ -716,14 +654,14 @@ export default {
       } else {
         previousSkip = loadOptions.skip;
         previousTake = loadOptions.take;
-        dataSource.load({
+        dataSourceAdapter.customLoader.load({
           filter,
           group,
           take: hasGroupPaging ? loadOptions.take : undefined,
           skip: hasGroupPaging ? loadOptions.skip : undefined,
-        }).done((items) => {
-          cachedUniqueRelevantItems = items;
-          d.resolve(hasGroupPaging ? items : sliceItems(items, loadOptions));
+        }).done(({ data }) => {
+          cachedUniqueRelevantItems = data;
+          d.resolve(hasGroupPaging ? data : sliceItems(data, loadOptions));
         }).fail(d.fail);
       }
 
@@ -742,7 +680,7 @@ export default {
             return;
           }
 
-          const filter = this.combineFilters(
+          const filter = combineFilters(
             items.flatMap((data) => data.key).map((key) => [
               column.lookup.valueExpr, key,
             ]),
@@ -752,7 +690,7 @@ export default {
           const newDataSource = new DataSource({
             ...lookupDataSourceOptions,
             ...loadOptions,
-            filter: this.combineFilters([filter, loadOptions.filter], 'and'),
+            filter: combineFilters([filter, loadOptions.filter], 'and'),
             paginate: false, // pagination is included to filter
           });
 
@@ -783,10 +721,6 @@ export default {
     const since = '23.1';
     const logWarning = component._logDeprecatedOptionWarning.bind(component);
 
-    if (isDefined(component.option('headerFilter.allowSearch'))) {
-      logWarning('headerFilter.allowSearch', { since, alias: 'headerFilter.search.enabled' });
-    }
-
     if (isDefined(component.option('headerFilter.searchTimeout'))) {
       logWarning('headerFilter.searchTimeout', { since, alias: 'headerFilter.search.timeout' });
     }
@@ -801,10 +735,6 @@ export default {
     const logSpecificDeprecatedWarningIfNeed = (columns) => {
       columns.forEach((column) => {
         const headerFilter = column.headerFilter || {};
-
-        if (isDefined(headerFilter.allowSearch)) {
-          logWarning(`${specificName}[].headerFilter.allowSearch`, { since, alias: `${specificName}[].headerFilter.search.enabled` });
-        }
 
         if (isDefined(headerFilter.searchMode)) {
           logWarning(`${specificName}[].headerFilter.searchMode`, { since, alias: `${specificName}[].headerFilter.search.mode` });

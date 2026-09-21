@@ -615,7 +615,7 @@
 
 ## viz
 /packages/devextreme/js/viz/**                                 @DevExpress/devextreme-components
-/packages/devextreme/js/__internal/common/m_charts.ts          @DevExpress/devextreme-components
+/packages/devextreme/js/__internal/common/charts.ts          @DevExpress/devextreme-components
 /packages/devextreme/js/__internal/viz/**                      @DevExpress/devextreme-components
 
 /apps/demos/Demos/Charts/**                                    @DevExpress/devextreme-components

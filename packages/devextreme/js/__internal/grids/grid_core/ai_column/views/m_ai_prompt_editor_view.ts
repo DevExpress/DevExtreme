@@ -1,5 +1,5 @@
 import $ from '@js/core/renderer';
-import domAdapter from '@ts/core/m_dom_adapter';
+import domAdapter from '@ts/core/dom_adapter';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import { AIPromptEditor } from '../../ai_prompt_editor/ai_prompt_editor';

@@ -3,16 +3,10 @@ import {
   DxProgressBarModule,
 } from 'devextreme-angular';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'progress-bar',
-  templateUrl: `.${modulePrefix}/progress-bar/progress-bar.component.html`,
-  styleUrls: [`.${modulePrefix}/progress-bar/progress-bar.component.css`],
+  templateUrl: './progress-bar.component.html',
+  styleUrls: ['./progress-bar.component.css'],
   imports: [
     DxProgressBarModule,
   ],

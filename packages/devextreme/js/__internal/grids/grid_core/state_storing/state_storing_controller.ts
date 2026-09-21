@@ -2,6 +2,7 @@ import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import { isDefined } from '@js/core/utils/type';
 import { extend } from '@ts/core/utils/m_extend';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
 import type { InternalGridOptions } from '@ts/grids/grid_core/m_types';
 
 import type { StateStoringDataControllerExtension } from './extenders/state_storing_data_controller';
@@ -70,7 +71,8 @@ const processLoadState = (that): void => {
 
 const getFilterValue = (that, state: GridState): InternalGridOptions['filterValue'] => {
   // TODO: getController
-  const filterSyncController = that.getController('filterSync');
+  const filterSyncController: FilterSyncController | undefined = that.getController('filterSync');
+
   if (!filterSyncController) {
     return null;
   }
@@ -79,13 +81,14 @@ const getFilterValue = (that, state: GridState): InternalGridOptions['filterValu
     return state.filterValue;
   }
 
-  const filterValueFromColumns = filterSyncController.getFilterValueFromColumns?.(state.columns);
-  if (filterValueFromColumns?.length > 0) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  const filterValueFromColumns = filterSyncController.getFilterValueFromColumns(state.columns);
+
+  if (filterValueFromColumns?.length) {
     return filterValueFromColumns;
   }
 
   const columns = that.getController('columns').getColumns();
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return that._initialFilterValue ?? filterSyncController.getFilterValueFromColumns(columns);
 };

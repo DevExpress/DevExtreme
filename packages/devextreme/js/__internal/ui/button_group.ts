@@ -46,6 +46,10 @@ export interface ButtonCollectionProperties extends CollectionWidgetEditProperti
 }
 
 class ButtonCollection extends CollectionWidgetEdit<ButtonCollectionProperties> {
+  _needsDisabledStateOnRoot(): boolean {
+    return false;
+  }
+
   _initTemplates(): void {
     super._initTemplates();
 

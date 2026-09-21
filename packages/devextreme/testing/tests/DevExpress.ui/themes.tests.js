@@ -770,7 +770,7 @@ QUnit.module('initialized method', (hooks) => {
 
     test('initialized fires for ordinary link (init before link addition - should wait theme loading)', function(assert) {
         const done = assert.async();
-        const url = ROOT_URL + 'packages/devextreme/testing' + '/helpers/themeMarker.css'; // WA for systemjs builder
+        const url = ROOT_URL + 'packages/devextreme/testing' + '/helpers/themeMarker.css';
         const $frame = createFrame();
 
         themes.setDefaultTimeout(30000);

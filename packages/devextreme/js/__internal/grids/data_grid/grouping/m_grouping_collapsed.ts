@@ -3,6 +3,9 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import errors from '@js/ui/widget/ui.errors';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 import dataGridCore from '../m_core';
 import { createGroupFilter } from '../m_utils';
@@ -196,7 +199,7 @@ function makeDataDeferred(options) {
   }
 }
 
-function loadGroupItems(that, options, loadedGroupCount, expandedInfo, groupLevel, data) {
+function loadGroupItems(that: GroupingHelper, options, loadedGroupCount, expandedInfo, groupLevel, data) {
   if (!options.isCustomLoading) {
     expandedInfo = {};
 
@@ -218,7 +221,7 @@ function loadGroupItems(that, options, loadedGroupCount, expandedInfo, groupLeve
   }
 }
 
-function loadExpandedGroups(that, options, expandedInfo, loadedGroupCount, groupLevel, data) {
+function loadExpandedGroups(that: GroupingHelper, options, expandedInfo, loadedGroupCount, groupLevel, data) {
   const groups = options.group || [];
   const currentGroup = groups[groupLevel + 1];
   const deferreds: any[] = [];
@@ -245,17 +248,20 @@ function loadExpandedGroups(that, options, expandedInfo, loadedGroupCount, group
       loadOptions.take = expandedInfo.take;
     }
 
-    const loadResult = loadOptions.take === 0 ? [] : that._dataSource.loadFromStore(loadOptions);
+    const loadDeferred = loadOptions.take === 0
+      ? { data: [] as RawItemData[] }
+      : that.dataSourceAdapter.customLoader.loadFromStore(loadOptions);
 
-    when(loadResult).done((data) => {
-      const item = expandedInfo.items[expandedItemIndex];
+    when(loadDeferred)
+      .done((loadResult) => {
+        const item = expandedInfo.items[expandedItemIndex];
 
-      applyContinuationToGroupItem(options, expandedInfo, groupLevel, expandedItemIndex);
+        applyContinuationToGroupItem(options, expandedInfo, groupLevel, expandedItemIndex);
 
-      item.items = data;
-    });
+        item.items = loadResult.data;
+      });
 
-    deferreds.push(loadResult);
+    deferreds.push(loadDeferred);
   });
 
   when.apply(null, deferreds).done(() => {
@@ -265,7 +271,7 @@ function loadExpandedGroups(that, options, expandedInfo, loadedGroupCount, group
   });
 }
 
-function loadLastLevelGroupItems(that, options, expandedInfo, data) {
+function loadLastLevelGroupItems(that: GroupingHelper, options, expandedInfo, data) {
   const expandedFilters: any[] = [];
   const groups = options.group || [];
 
@@ -278,7 +284,7 @@ function loadLastLevelGroupItems(that, options, expandedInfo, data) {
   let { filter } = options.storeLoadOptions;
 
   if (!options.storeLoadOptions.isLoadingAll) {
-    filter = dataGridCore.combineFilters([filter, dataGridCore.combineFilters(expandedFilters, 'or')]);
+    filter = combineFilters([filter, combineFilters(expandedFilters, 'or')]);
   }
 
   const loadOptions = extend({}, options.storeLoadOptions, {
@@ -289,16 +295,24 @@ function loadLastLevelGroupItems(that, options, expandedInfo, data) {
     filter,
   });
 
-  const isPagingLocal = that._dataSource.isLastLevelGroupItemsPagingLocal();
+  // @ts-expect-error badly typed GroupingHelper.dataSourceAdapter
+  const isPagingLocal = that.dataSourceAdapter.isLastLevelGroupItemsPagingLocal();
 
   if (!isPagingLocal) {
     loadOptions.skip = expandedInfo.skip;
     loadOptions.take = expandedInfo.take;
   }
 
-  when(expandedInfo.take === 0 ? [] : that._dataSource.loadFromStore(loadOptions)).done((items) => {
+  const loadDeferred = expandedInfo.take === 0
+    ? { data: [] as RawItemData[] }
+    : that.dataSourceAdapter.customLoader.loadFromStore(loadOptions);
+
+  when(loadDeferred).done((loadResult) => {
+    let items = loadResult.data;
+
     if (isPagingLocal) {
-      items = that._dataSource.sortLastLevelGroupItems(items, groups, expandedInfo.paths);
+      // @ts-expect-error badly typed GroupingHelper.dataSourceAdapter
+      items = that.dataSourceAdapter.sortLastLevelGroupItems(items, groups, expandedInfo.paths);
       items = expandedInfo.skip ? items.slice(expandedInfo.skip) : items;
       items = expandedInfo.take ? items.slice(0, expandedInfo.take) : items;
     }
@@ -313,7 +327,7 @@ function loadLastLevelGroupItems(that, options, expandedInfo, data) {
   }).fail(options.data.reject);
 }
 
-const loadGroupTotalCount = function (dataSource, options) {
+const loadGroupTotalCount = function (dataSourceAdapter: DataSourceAdapter, options) {
   // @ts-expect-error
   const d = new Deferred();
   const isGrouping = !!(options.group && options.group.length);
@@ -321,10 +335,10 @@ const loadGroupTotalCount = function (dataSource, options) {
     skip: 0, take: 1, requireGroupCount: isGrouping, requireTotalCount: !isGrouping,
   }, options, { group: isGrouping ? options.group : null });
 
-  dataSource.load(loadOptions).done((data, extra) => {
-    const count = extra && (isGrouping ? extra.groupCount : extra.totalCount);
+  dataSourceAdapter.customLoader.load(loadOptions).done(({ extra }) => {
+    const count: number | undefined = extra && (isGrouping ? extra.groupCount : extra.totalCount);
 
-    if (!isFinite(count)) {
+    if (count === undefined || !isFinite(count)) {
       d.reject(dataErrors.Error(isGrouping ? 'E4022' : 'E4021'));
       return;
     }
@@ -338,7 +352,7 @@ export class GroupingHelper extends GroupingHelperCore {
     let totalItemsCount = 0;
     const totalCount = options.extra && options.extra.totalCount || 0;
     const groupCount = options.extra && options.extra.groupCount || 0;
-    const pageSize = this._dataSource.pageSize();
+    const pageSize = this.dataSourceAdapter.pageSize();
     const isVirtualPaging = this._isVirtualPaging();
 
     foreachExpandedGroups(this, (groupInfo) => {
@@ -362,14 +376,14 @@ export class GroupingHelper extends GroupingHelperCore {
   }
 
   private _isGroupExpanded(groupIndex) {
-    const groups = this._dataSource.group();
+    const groups = this.dataSourceAdapter.group();
     return isGroupExpanded(groups, groupIndex);
   }
 
   private _updatePagingOptions(options, callback?) {
     const that = this;
     const isVirtualPaging = that._isVirtualPaging();
-    const pageSize = that._dataSource.pageSize();
+    const pageSize = that.dataSourceAdapter.pageSize();
     const skips: any[] = [];
     const takes: any[] = [];
     let skipChildrenTotalCount = 0;
@@ -446,21 +460,21 @@ export class GroupingHelper extends GroupingHelperCore {
   private changeRowExpand(path) {
     const that = this;
     const groupInfo = that.findGroupInfo(path);
-    const dataSource = that._dataSource;
-    const remoteGroupPaging = dataSource.remoteOperations().groupPaging;
-    const groups = dataGridCore.normalizeSortingInfo(dataSource.group());
+    const { dataSourceAdapter } = that;
+    const remoteGroupPaging = dataSourceAdapter.remoteOperations().groupPaging;
+    const groups = dataGridCore.normalizeSortingInfo(dataSourceAdapter.group());
 
     if (groupInfo) {
       groupInfo.isExpanded = !groupInfo.isExpanded;
 
       if (remoteGroupPaging && groupInfo.isExpanded && path.length < groups.length) {
-        return loadGroupTotalCount(dataSource, {
+        return loadGroupTotalCount(dataSourceAdapter, {
           filter: createGroupFilter(path, {
-            filter: dataSource.lastLoadOptions().filter,
-            group: dataSource.group(),
+            filter: dataSourceAdapter.lastLoadOptions().filter,
+            group: dataSourceAdapter.group(),
           }),
           group: [groups[path.length]],
-          select: dataSource.select(),
+          select: dataSourceAdapter.select(),
         }).done((groupCount) => {
           groupInfo.count = groupCount;
         });
@@ -482,7 +496,7 @@ export class GroupingHelper extends GroupingHelperCore {
     }
 
     if (options.remoteOperations.grouping) {
-      const remotePaging = that._dataSource.remoteOperations().paging;
+      const remotePaging = that.dataSourceAdapter.remoteOperations().paging;
 
       storeLoadOptions.group = dataGridCore.normalizeSortingInfo(storeLoadOptions.group);
       storeLoadOptions.group.forEach((group, index) => {
@@ -623,7 +637,7 @@ export class GroupingHelper extends GroupingHelperCore {
 
   protected refresh(options, operationTypes?) {
     const that = this;
-    const dataSource = that._dataSource;
+    const { dataSourceAdapter } = that;
     const { storeLoadOptions } = options;
     const group = options.group || options.storeLoadOptions.group;
     const oldGroups = dataGridCore.normalizeSortingInfo(that._group);
@@ -648,7 +662,7 @@ export class GroupingHelper extends GroupingHelperCore {
 
     if (group && options.remoteOperations.paging && operationTypes.reload) {
       return foreachExpandedGroups(that, (groupInfo) => {
-        const groupCountQuery = loadGroupTotalCount(dataSource, {
+        const groupCountQuery = loadGroupTotalCount(dataSourceAdapter, {
           filter: createGroupFilter(groupInfo.path, {
             filter: storeLoadOptions.filter,
             group,
@@ -656,7 +670,7 @@ export class GroupingHelper extends GroupingHelperCore {
           group: group.slice(groupInfo.path.length),
           select: storeLoadOptions.select,
         });
-        const groupOffsetQuery = loadGroupTotalCount(dataSource, {
+        const groupOffsetQuery = loadGroupTotalCount(dataSourceAdapter, {
           filter: createOffsetFilter(groupInfo.path, {
             filter: storeLoadOptions.filter,
             group,

@@ -15,7 +15,6 @@
         "!{projectRoot}/public/js/app/bundle*",
         "{projectRoot}/*.tsx",
         "{projectRoot}/*.js",
-        "!{projectRoot}/test.js",
         "{projectRoot}/tsconfig.json",
         "{workspaceRoot}/tsconfig.json"
       ],

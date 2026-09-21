@@ -1,6 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { domAdapter } from '@ts/core/m_dom_adapter';
+import { domAdapter } from '@ts/core/dom_adapter';
 import { TemplateBase } from '@ts/core/templates/m_template_base';
 import { normalizeTemplateElement } from '@ts/core/utils/m_dom';
 import { isDefined } from '@ts/core/utils/m_type';
@@ -76,7 +76,6 @@ export const KoTemplate = class extends TemplateBase {
     let $result;
     ko.renderTemplate(this._template.get(0), model, {
       afterRender(nodes) {
-        // @ts-expect-error
         $result = $(nodes);
       },
     }, $placeholder.get(0), 'replaceNode');

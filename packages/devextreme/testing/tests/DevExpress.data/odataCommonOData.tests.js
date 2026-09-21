@@ -1,8 +1,9 @@
-const $ = require('jquery');
-const converters = require('common/data/odata/utils').keyConverters;
-const interpretJsonFormat = require('common/data/odata/utils').OData__internals.interpretJsonFormat;
-const Guid = require('core/guid');
-const typeUtils = require('core/utils/type');
+import $ from 'jquery';
+import { keyConverters as converters, OData__internals } from 'common/data/odata/utils';
+import Guid from 'core/guid';
+import { isNumeric } from 'core/utils/type';
+
+const interpretJsonFormat = OData__internals.interpretJsonFormat;
 
 QUnit.module('OData 2');
 QUnit.test('key converters', function(assert) {
@@ -83,10 +84,10 @@ QUnit.test('count', function(assert) {
     const t4 = interpretJsonFormat(a4, 'success');
 
     assert.equal(t1.count, 3);
-    assert.ok(typeUtils.isNumeric(t1.count));
+    assert.ok(isNumeric(t1.count));
 
     assert.equal(t2.count, 3);
-    assert.ok(typeUtils.isNumeric(t2.count));
+    assert.ok(isNumeric(t2.count));
 
     assert.ok(!t3.count);
     assert.ok(!t4.count);
@@ -173,10 +174,10 @@ QUnit.test('count', function(assert) {
     const t4 = interpretJsonFormat(a4, 'success');
 
     assert.equal(t1.count, 3);
-    assert.ok(typeUtils.isNumeric(t1.count));
+    assert.ok(isNumeric(t1.count));
 
     assert.equal(t2.count, 3);
-    assert.ok(typeUtils.isNumeric(t2.count));
+    assert.ok(isNumeric(t2.count));
 
     assert.ok(!t3.count);
     assert.ok(!t4.count);

@@ -1,8 +1,8 @@
 @use "sass:math";
 @use "../../base/mixins" as *;
 
-$scheduler-appointment-collector-margin: 3px;
-$scheduler-appointment-collector-height: 22px;
+$scheduler-appointment-collector-margin: 3px !default;
+$scheduler-appointment-collector-height: 22px !default;
 
 .dx-scheduler {
   .dx-empty-message {

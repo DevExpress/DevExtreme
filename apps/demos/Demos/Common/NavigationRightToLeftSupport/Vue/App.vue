@@ -83,7 +83,7 @@ function selectLanguage(e: DxSelectBoxTypes.ValueChangedEvent) {
   rtlEnabled.value = e.value === languages[0];
 }
 </script>
-<style scoped>
+<style>
   sup {
     font-size: 0.8em;
     vertical-align: super;

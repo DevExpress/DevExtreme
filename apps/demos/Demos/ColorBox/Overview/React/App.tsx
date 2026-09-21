@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import ColorBox from 'devextreme-react/color-box';
 import type { ColorBoxTypes } from 'devextreme-react/color-box';
 
@@ -11,6 +11,7 @@ const eventHandlingLabel = { 'aria-label': 'Event Handling' };
 
 function App() {
   const [color, setColor] = useState<string>('#f05b41');
+  const brushStyle = useMemo(() => ({ color }), [color]);
 
   const handleColorChange = useCallback(({ value }: ColorBoxTypes.ValueChangedEvent): void => {
     setColor(value);
@@ -74,7 +75,7 @@ function App() {
         <div className="dx-fieldset-header">Event Handling</div>
         <div className="hero-block">
           <div className="color-block">
-            <svg className="brush" width="360" height="254" style={{ color }}>
+            <svg className="brush" width="360" height="254" style={brushStyle}>
               <use href="../../../../images/Brush.svg#brush"></use>
             </svg>
             <svg className="superhero dx-color-icon" width="360" height="254">

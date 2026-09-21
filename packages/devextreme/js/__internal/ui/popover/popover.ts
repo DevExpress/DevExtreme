@@ -225,17 +225,17 @@ class Popover<
 
   _initEscapeKeyHandler(): void {
     this._documentEscapeKeyHandler = (e: KeyboardEvent): void => {
-      const { visible } = this.option();
-
-      const overlayStack = this._overlayStack();
-      // @ts-ignore expected: types Overlay<OverlayProperties> and this have no overlap
-      const isTopOverlay = overlayStack[overlayStack.length - 1] === this;
-
-      if (normalizeKeyName(e) === ESC_KEY_NAME && visible && isTopOverlay) {
+      if (normalizeKeyName(e) === ESC_KEY_NAME && this._handlesDocumentEscapeKey()) {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.hide();
       }
     };
+  }
+
+  _handlesDocumentEscapeKey(): boolean {
+    const { visible } = this.option();
+
+    return Boolean(visible) && this._isLastInOverlayStack();
   }
 
   _attachEscapeKeyHandler(): void {

@@ -193,6 +193,31 @@ prepareComponentConfig(componentConfig);
 const DxPivotGrid = defineComponent(componentConfig);
 
 
+const DxEmbeddedFieldChooserTextsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allFields": null,
+    "update:columnFields": null,
+    "update:dataFields": null,
+    "update:filterFields": null,
+    "update:rowFields": null,
+  },
+  props: {
+    allFields: String,
+    columnFields: String,
+    dataFields: String,
+    filterFields: String,
+    rowFields: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxEmbeddedFieldChooserTextsConfig);
+
+const DxEmbeddedFieldChooserTexts = defineComponent(DxEmbeddedFieldChooserTextsConfig);
+
+(DxEmbeddedFieldChooserTexts as any).$_optionName = "texts";
+
 const DxExportConfig = {
   emits: {
     "update:isActive": null,
@@ -243,34 +268,9 @@ const DxFieldChooser = defineComponent(DxFieldChooserConfig);
 
 (DxFieldChooser as any).$_optionName = "fieldChooser";
 (DxFieldChooser as any).$_expectedChildren = {
-  fieldChooserTexts: { isCollectionItem: false, optionName: "texts" },
+  embeddedFieldChooserTexts: { isCollectionItem: false, optionName: "texts" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
-
-const DxFieldChooserTextsConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:allFields": null,
-    "update:columnFields": null,
-    "update:dataFields": null,
-    "update:filterFields": null,
-    "update:rowFields": null,
-  },
-  props: {
-    allFields: String,
-    columnFields: String,
-    dataFields: String,
-    filterFields: String,
-    rowFields: String
-  }
-};
-
-prepareConfigurationComponentConfig(DxFieldChooserTextsConfig);
-
-const DxFieldChooserTexts = defineComponent(DxFieldChooserTextsConfig);
-
-(DxFieldChooserTexts as any).$_optionName = "texts";
 
 const DxFieldPanelConfig = {
   emits: {
@@ -332,7 +332,6 @@ const DxHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
@@ -342,7 +341,6 @@ const DxHeaderFilterConfig = {
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: Number,
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
@@ -588,9 +586,9 @@ const DxTexts = defineComponent(DxTextsConfig);
 export default DxPivotGrid;
 export {
   DxPivotGrid,
+  DxEmbeddedFieldChooserTexts,
   DxExport,
   DxFieldChooser,
-  DxFieldChooserTexts,
   DxFieldPanel,
   DxFieldPanelTexts,
   DxHeaderFilter,

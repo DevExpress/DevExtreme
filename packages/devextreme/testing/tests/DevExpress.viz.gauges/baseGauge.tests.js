@@ -20,7 +20,7 @@ import tooltipModule from 'viz/core/tooltip';
 import translator1DModule from 'viz/translators/translator1d';
 import themeManagerModule from '__internal/viz/gauges/theme_manager';
 import Tracker from '__internal/viz/gauges/tracker';
-import graphicObjects from '__internal/common/m_charts';
+import graphicObjects from '__internal/common/charts';
 
 registerComponent('BaseGauge', BaseGauge);
 
@@ -52,9 +52,9 @@ $.each(ABSTRACT_METHODS, function(_, name) {
     BaseGauge.prototype[name] = sinon.stub();
 });
 
-rendererModule.Renderer = sinon.spy(function() {
+rendererModule.DEBUG_set_Renderer(sinon.spy(function() {
     return currentTest().renderer;
-});
+}));
 
 themeManagerModule.ThemeManager = sinon.spy(function() {
     return currentTest().themeManager;

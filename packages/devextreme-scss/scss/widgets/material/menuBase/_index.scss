@@ -8,7 +8,7 @@
 @use "../../base/mixins" as *;
 @use "../../base/menuBase";
 
-$material-menu-arrow-image-size: 7px;
+$material-menu-arrow-image-size: 7px !default;
 
 .dx-menu-item {
   color: $menu-color;

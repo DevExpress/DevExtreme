@@ -1,7 +1,7 @@
 @use "../mixins" as *;
 @use "../button/mixins" as *;
 
-$list-searchbox-margin-bottom: 5px;
+$list-searchbox-margin-bottom: 5px !default;
 
 .dx-list {
   margin: 0;

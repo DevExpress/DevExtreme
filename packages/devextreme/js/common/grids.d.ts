@@ -820,12 +820,6 @@ export interface ColumnButtonBase {
  */
 export type ColumnChooser = {
   /**
-   * @docid
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
-  /**
      * @docid
      * @default undefined
      * @public
@@ -860,12 +854,6 @@ export type ColumnChooser = {
    * @docid
    */
   search?: ColumnChooserSearchConfig;
-  /**
-   * @docid
-   * @default 500
-   * @deprecated
-   */
-  searchTimeout?: number;
   /**
    * @docid
    */
@@ -1047,12 +1035,6 @@ export type ColumnFixingIcons = {
 export type ColumnHeaderFilter = {
   /**
    * @docid
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
-  /**
-   * @docid
    * @default true
    */
   allowSelectAll?: boolean;
@@ -1213,27 +1195,43 @@ export type DataErrorOccurredInfo = {
 export type DataRenderMode = 'standard' | 'virtual';
 
 /**
+ * @docid
+ * @public
  * @namespace DevExpress.common.grids
  */
 export type DragDropInfo = {
+  /** @docid */
   readonly dropInsideItem: boolean;
 };
 
 /**
+ * @docid
+ * @public
  * @namespace DevExpress.common.grids
  */
 export type DragReorderInfo = {
+  /** @docid */
   readonly dropInsideItem: boolean;
+  /**
+   * @docid
+   * @type Promise<void>
+   */
   promise?: PromiseLike<void>;
 };
 
 /**
+ * @docid
+ * @public
  * @namespace DevExpress.common.grids
  */
 export interface DragStartEventInfo<TRowData = any> {
+  /** @docid */
   itemData?: TRowData;
+  /** @docid */
   readonly itemElement: DxElement;
+  /** @docid */
   readonly fromIndex: number;
+  /** @docid */
   readonly fromData?: any;
 }
 
@@ -1606,12 +1604,6 @@ export type FilterType = 'exclude' | 'include';
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilter = {
-  /**
-   * @docid
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
   /**
    * @docid
    * @default true
@@ -3101,16 +3093,26 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
 };
 
 /**
+ * @docid
+ * @public
  * @namespace DevExpress.common.grids
  */
 export interface RowDraggingEventInfo<TRowData = any> {
+  /** @docid */
   readonly itemData?: TRowData;
+  /** @docid */
   readonly itemElement: DxElement;
+  /** @docid */
   readonly fromIndex: number;
+  /** @docid */
   readonly toIndex: number;
+  /** @docid */
   readonly fromComponent: Sortable | Draggable;
+  /** @docid */
   readonly toComponent: Sortable | Draggable;
+  /** @docid */
   readonly fromData?: any;
+  /** @docid */
   readonly toData?: any;
 }
 

@@ -57,7 +57,11 @@
   >
     <template #item="{ data }">
       <div>
-        <i :class="'dx-icon dx-icon-' + data.icon"/>
+        <i
+          :class="'dx-icon dx-icon-' + data.icon"
+          role="img"
+          :aria-label="data.label"
+        />
       </div>
     </template>
   </DxStepper>
@@ -68,7 +72,7 @@ import DxStepper from 'devextreme-vue/stepper';
 import { steps } from './data.ts';
 </script>
 
-<style scoped>
+<style>
 #app {
   display: flex;
   flex-direction: column;

@@ -2,7 +2,7 @@ import fx from 'common/core/animation/fx';
 import translator from 'common/core/animation/translator';
 import 'fluent_blue_light.css!';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { isRenderer } from 'core/utils/type';
 import Swipeable from 'common/core/events/gesture/swipeable';
 import { triggerShownEvent } from 'common/core/events/visibility_change';

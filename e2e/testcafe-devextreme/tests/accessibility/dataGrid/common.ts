@@ -196,9 +196,10 @@ test('Filter row - filter menu', async (t) => {
 
   await a11yCheck(t, {
     ...a11yCheckConfig,
-    runOnly: '',
     rules: {
       'aria-command-name': { enabled: true },
+      // The filter menu is portalled into body, outside the role="main" landmark
+      region: { enabled: false },
     },
   });
 }).before(async () => createWidget('dxDataGrid', {
@@ -298,10 +299,7 @@ test('Filter panel - popup with filter builder', async (t) => {
     .expect(filterPanel.isOpened)
     .ok();
 
-  await a11yCheck(t, {
-    ...a11yCheckConfig,
-    runOnly: '',
-  });
+  await a11yCheck(t, a11yCheckConfig);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -347,10 +345,7 @@ test('Search panel - highlight', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await a11yCheck(t, {
-    ...a11yCheckConfig,
-    runOnly: '',
-  }, DATA_GRID_SELECTOR);
+  await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -517,7 +512,6 @@ test('Column chooser with the \'select\' mode', async (t) => {
 
   await a11yCheck(t, {
     ...a11yCheckConfig,
-    runOnly: '',
     rules: {
       'scrollable-region-focusable': { enabled: false },
     },
@@ -563,7 +557,6 @@ test('Empty column chooser', async (t) => {
 
   await a11yCheck(t, {
     ...a11yCheckConfig,
-    runOnly: '',
     rules: {
       'aria-required-children': { enabled: false },
     },
@@ -657,10 +650,7 @@ test('Row editing mode - confirm delete message', async (t) => {
     .expect(isDialogOpened)
     .ok();
 
-  await a11yCheck(t, {
-    ...a11yCheckConfig,
-    runOnly: '',
-  });
+  await a11yCheck(t, a11yCheckConfig);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -967,10 +957,7 @@ test('Export', async (t) => {
     .expect(exportButton.isOpened)
     .ok();
 
-  await a11yCheck(t, {
-    ...a11yCheckConfig,
-    runOnly: '',
-  });
+  await a11yCheck(t, a11yCheckConfig);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -998,7 +985,6 @@ test('Context menu', async (t) => {
 
   await a11yCheck(t, {
     ...a11yCheckConfig,
-    runOnly: '',
     rules: {
       region: { enabled: false },
     },

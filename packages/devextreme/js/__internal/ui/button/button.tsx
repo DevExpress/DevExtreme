@@ -1,10 +1,8 @@
 import { click } from '@js/common/core/events/short';
-import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { convertRulesToOptions, createDefaultOptionRules } from '@js/core/options/utils';
-import { getImageSourceType } from '@js/core/utils/icon';
-import { camelize } from '@js/core/utils/inflector';
+import type { DxEvent } from '@js/events';
 import type { Properties as ButtonProperties, TemplateData } from '@js/ui/button.d';
 import { current, isMaterial } from '@js/ui/themes';
 import type { BaseWidgetProps } from '@ts/core/r1/base_props';
@@ -15,6 +13,7 @@ import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import { Widget } from '@ts/core/r1/widget';
 import { combineClasses } from '@ts/core/utils/combine_classes';
+import { getImageAriaLabel } from '@ts/core/utils/m_icon';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import { Icon } from './icon';
@@ -92,7 +91,7 @@ const omit = <T extends Record<string, unknown>, K extends keyof T>(
 
 export type ButtonProps = Record<string, unknown> & BaseWidgetProps & ButtonProperties & {
   iconPosition?: string;
-  onSubmit?: (e: { event: Event; submitInput: HTMLInputElement | null }) => void;
+  onSubmit?: (e: { event: DxEvent; submitInput: HTMLInputElement | null }) => void;
   pressed?: boolean;
   template?: TemplateComponent;
   iconTemplate?: TemplateComponent;
@@ -170,7 +169,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     if (useSubmitBehavior && onSubmit) {
       click.on(
         submitInput,
-        (event: Event) => onSubmit({ event, submitInput }),
+        (event: DxEvent) => onSubmit({ event, submitInput }),
         { namespace },
       );
 
@@ -228,34 +227,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
 
   get aria(): Record<string, string> {
     const { icon, text } = this.props;
-    let label = text ?? '';
-
-    if (!text && icon) {
-      const iconSource = getImageSourceType(icon);
-
-      switch (iconSource) {
-        case 'image':
-        {
-          const notURLRegexp = /^(?!(?:https?:\/\/)|(?:ftp:\/\/)|(?:www\.))[^\s]+$/;
-          const isPathToImage = !icon.includes('base64') && notURLRegexp.test(icon);
-          label = isPathToImage ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : '';
-          break;
-        }
-        case 'dxIcon':
-          label = messageLocalization.format(camelize(icon, true)) || icon;
-          break;
-        case 'fontIcon':
-          label = icon;
-          break;
-        case 'svg': {
-          const titleRegexp = /<title>(.*?)<\/title>/;
-          label = titleRegexp.exec(icon)?.[1] ?? '';
-          break;
-        }
-        default:
-          break;
-      }
-    }
+    const label = !text && icon ? getImageAriaLabel(icon) : text;
 
     return {
       role: 'button',

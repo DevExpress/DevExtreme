@@ -1080,8 +1080,8 @@ QUnit.test('search API, default impl, complex selector', function(assert) {
 
 QUnit.test('search API, custom impl', function(assert) {
     class MyStore extends Store {
-        ctor(o) {
-            super.ctor(o);
+        constructor(o) {
+            super(o);
             this._useDefaultSearch = false;
         }
 

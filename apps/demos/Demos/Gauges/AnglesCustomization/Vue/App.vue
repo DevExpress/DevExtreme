@@ -70,7 +70,7 @@
 <script setup lang="ts">
 import { DxCircularGauge, DxScale, DxGeometry } from 'devextreme-vue/circular-gauge';
 </script>
-<style scoped>
+<style>
 #gauge-demo {
   height: 440px;
   width: 100%;

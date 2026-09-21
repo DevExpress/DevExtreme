@@ -1,7 +1,16 @@
-const { getOuterHeight } = require('core/utils/size');
-const $ = require('jquery');
-const { createWrapper } = require('../../helpers/scheduler/helpers.js');
-const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
+import { getOuterHeight } from 'core/utils/size';
+import $ from 'jquery';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+
+import 'fluent_blue_light.css!';
+
+import { noop } from 'core/utils/common';
+import errors from 'ui/widget/ui.errors';
+import config from 'core/config';
+
+import '__internal/scheduler/scheduler';
+import 'ui/drop_down_button';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -9,15 +18,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require('fluent_blue_light.css!');
-
-const noop = require('core/utils/common').noop;
-const errors = require('ui/widget/ui.errors');
-const config = require('core/config');
-
-require('__internal/scheduler/scheduler');
-require('ui/drop_down_button');
 
 QUnit.module('Integration: Base', {
     beforeEach: function() {

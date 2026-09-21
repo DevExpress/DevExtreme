@@ -1,5 +1,5 @@
 import resizeCallbacks from '__internal/core/utils/m_resize_callbacks';
-import domAdapter from '__internal/core/m_dom_adapter';
+import domAdapter from '__internal/core/dom_adapter';
 import windowUtils from '__internal/core/utils/m_window';
 
 QUnit.module('resizeCallbacks', {
