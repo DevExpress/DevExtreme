@@ -146,8 +146,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     const startViewDate = this.getStartViewDate();
     const dayLightOffset = timezoneUtils.getDaylightOffsetInMs(startViewDate, today);
+    const hasFallBackCells = this.getFallBackExtraCellCounts().some((count) => count > 0);
 
-    if (dayLightOffset) {
+    // NOTE: A spring-forward is skipped so the indicator stays on the wall clock.
+    // A fall-back must keep the extra elapsed hour, otherwise the second
+    // occurrence of the repeated hour collapses onto the first one.
+    if (dayLightOffset > 0 || (dayLightOffset && !hasFallBackCells)) {
       today = new Date(today.getTime() + dayLightOffset);
     }
 
@@ -155,6 +159,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected calculateDurationInCells(timeDiff: number): number {
+    if (this.getFallBackExtraCellCounts().some((count) => count > 0)) {
+      return this.getElapsedLayoutDuration(this.getStartViewDate(), this.getToday())
+        / this.getCellDuration();
+    }
+
     const today = this.getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
     const skippedDaysCount = this.getSkippedDaysCount(
@@ -172,12 +181,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     const visibleDaysCount = Math.max(0, differenceInDays - skippedDaysCount);
-    // NOTE: Days with a fall-back DST transition contain additional cells.
-    const extraCellCount = this.getFallBackExtraCellCounts()
-      .slice(0, visibleDaysCount)
-      .reduce((total, count) => total + count, 0);
 
-    return visibleDaysCount * this.getCellCountInDay() + extraCellCount + duration;
+    return visibleDaysCount * this.getCellCountInDay() + duration;
   }
 
   getIndicationWidth(): number {
@@ -197,6 +202,23 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override isCurrentTimeHeaderCell(): boolean {
     return false;
+  }
+
+  override isIndicatorVisible(): boolean {
+    if (super.isIndicatorVisible()) {
+      return true;
+    }
+
+    if (!this.getFallBackExtraCellCounts().some((count) => count > 0)) {
+      return false;
+    }
+
+    const today = this.getToday();
+    const firstViewDate = new Date(this.getStartViewDate());
+    firstViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+    const nextDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+    return today.getTime() >= firstViewDate.getTime() && today.getTime() < nextDay.getTime();
   }
 
   protected override setTableSizes(): void {
@@ -252,6 +274,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getIntervalBetween(currentDate: Date, allDay?: boolean): number {
+    if (!allDay && this.getFallBackExtraCellCounts().some((count) => count > 0)) {
+      return this.getElapsedLayoutDuration(this.getStartViewDate(), currentDate);
+    }
+
     const { startDayHour, endDayHour } = this.option();
     const firstViewDate = this.getStartViewDate();
     const firstViewDateTime = firstViewDate.getTime();
@@ -264,7 +290,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     let tailDelta = 0;
     const skippedDaysCount = this.getSkippedDaysCount(firstViewDate, fullDays);
     const visibleDaysCount = Math.max(0, fullDays - skippedDaysCount);
-    // NOTE: Days with a fall-back DST transition contain additional cells.
     const extraCellCount = this.getFallBackExtraCellCounts()
       .slice(0, visibleDaysCount)
       .reduce((total, count) => total + count, 0);
@@ -296,6 +321,48 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     return result;
+  }
+
+  private getElapsedLayoutDuration(fromDate: Date, toDate: Date): number {
+    const extras = this.getFallBackExtraCellCounts();
+    const { startDayHour, endDayHour, skippedDays = [] } = this.option();
+    const cellDuration = this.getCellDuration();
+    const cellsPerDay = this.getCellCountInDay();
+    const hiddenInterval = (24 - endDayHour + startDayHour) * toMs('hour');
+    let remaining = toDate.getTime() - fromDate.getTime();
+    const timeZoneOffset = dateUtils.getTimezonesDifference(fromDate, toDate);
+
+    // NOTE: Restore the skipped hour of a spring-forward so later days stay
+    // on the wall clock. A fall-back is already represented by extra cells.
+    if (timeZoneOffset < 0) {
+      remaining -= timeZoneOffset;
+    }
+
+    let result = 0;
+    const date = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
+    let visibleIndex = 0;
+
+    while (remaining > 0 && visibleIndex < extras.length) {
+      if (skippedDays.includes(date.getDay())) {
+        const nextDate = new Date(date);
+        nextDate.setDate(nextDate.getDate() + 1);
+        remaining -= nextDate.getTime() - date.getTime();
+        date.setDate(date.getDate() + 1);
+      } else {
+        const visibleMs = (cellsPerDay + extras[visibleIndex]) * cellDuration;
+        if (remaining <= visibleMs) {
+          result += remaining;
+          break;
+        }
+
+        result += visibleMs;
+        remaining -= visibleMs + hiddenInterval;
+        visibleIndex += 1;
+        date.setDate(date.getDate() + 1);
+      }
+    }
+
+    return Math.max(0, result);
   }
 
   getAllDayContainer(): null {

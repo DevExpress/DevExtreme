@@ -769,11 +769,28 @@ export class ViewDataGenerator {
     const daylightShift = timezoneUtils.getDaylightOffsetInMs(startDate, endDate);
     // NOTE: Cells of a fall-back DST transition represent the elapsed time,
     // so the repeated hour is not skipped.
-    if (isFallBackStretchedView(this.viewType) && daylightShift < 0) {
-      return endDate;
-    }
+    const result = isFallBackStretchedView(this.viewType) && daylightShift < 0
+      ? endDate
+      : timezoneUtils.addOffsetsWithoutDST(startDate, Math.round(interval));
 
-    return timezoneUtils.addOffsetsWithoutDST(startDate, Math.round(interval));
+    return isFallBackStretchedView(this.viewType)
+      ? this.clampToNextDayStart(startDate, result)
+      : result;
+  }
+
+  private clampToNextDayStart(startDate: Date, endDate: Date): Date {
+    const nextDayStart = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth(),
+      startDate.getDate() + 1,
+    );
+
+    const startsBeforeNextDay = startDate.getTime() < nextDayStart.getTime();
+    const endsAfterNextDay = endDate.getTime() > nextDayStart.getTime();
+
+    return startsBeforeNextDay && endsAfterNextDay
+      ? nextDayStart
+      : endDate;
   }
 
   protected calculateCellIndex(

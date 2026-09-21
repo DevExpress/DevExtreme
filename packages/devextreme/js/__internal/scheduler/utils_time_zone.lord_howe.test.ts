@@ -26,4 +26,11 @@ describe('half an hour fall-back DST', () => {
     expect(timeZoneUtils.getFallBackExtraCellCounts(new Date(2026, 3, 5), 1, 1, 0, 24))
       .toEqual([1]);
   });
+
+  it('should keep a 30-minute fall-back from being cancelled by the next spring-forward', () => {
+    expect(timeZoneUtils.getLocalFallBackShiftMs(
+      new Date(2026, 0, 1),
+      new Date(2026, 11, 1),
+    )).toBe(30 * MINUTE_MS);
+  });
 });

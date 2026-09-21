@@ -72,6 +72,11 @@ describe('getWeekIntervals', () => {
       });
 
       expect(intervals.cells).toHaveLength(cellCount);
+      intervals.cells.forEach((cell, index) => {
+        if (index > 0) {
+          expect(cell.min).toBeGreaterThanOrEqual(intervals.cells[index - 1].max);
+        }
+      });
     });
   });
 });

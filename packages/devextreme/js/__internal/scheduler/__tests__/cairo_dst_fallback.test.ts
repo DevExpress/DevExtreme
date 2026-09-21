@@ -165,6 +165,45 @@ describe('T1335525 Egypt fall-back DST', () => {
     expect(indicator?.style.left).toBe(`${(100 + 48) * DEFAULT_CELL_WIDTH}px`);
   });
 
+  it('should keep the current time indicator in the second occurrence of the repeated hour', async () => {
+    const { container } = await createScheduler({
+      ...baseConfig,
+      dataSource: [],
+      views: [{ type: 'timelineDay', intervalCount: 2 }],
+      currentView: 'timelineDay',
+      startDayHour: 0,
+      endDayHour: 24,
+      height: 440,
+      showCurrentTimeIndicator: true,
+      indicatorTime: new Date('2026-10-29T23:30:00+02:00'),
+      indicatorUpdateInterval: 0,
+      shadeUntilCurrentTime: false,
+    });
+
+    const indicator = container.querySelector<HTMLElement>('.dx-scheduler-date-time-indicator');
+    expect(indicator?.style.left).toBe(`${98 * DEFAULT_CELL_WIDTH}px`);
+  });
+
+  it('should not let the last fall-back cell overlap the next day', async () => {
+    const { container, scheduler } = await createScheduler({
+      ...baseConfig,
+      dataSource: [],
+      views: [{ type: 'timelineDay', intervalCount: 2 }],
+      currentView: 'timelineDay',
+      startDayHour: 0,
+      endDayHour: 24,
+      cellDuration: 45,
+    });
+
+    const cells = container.querySelectorAll('.dx-scheduler-date-table-cell');
+    const workSpace = scheduler.getWorkSpace();
+    const lastFallBackCell = workSpace.getCellData($(cells[33]));
+    const firstNextDayCell = workSpace.getCellData($(cells[34]));
+
+    expect(lastFallBackCell.endDate.getTime())
+      .toBeLessThanOrEqual(firstNextDayCell.startDate.getTime());
+  });
+
   it('should not add cells to the views with day long cells', async () => {
     const { container, scheduler } = await createScheduler({
       ...baseConfig,

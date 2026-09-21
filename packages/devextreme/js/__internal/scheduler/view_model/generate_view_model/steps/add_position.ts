@@ -10,20 +10,40 @@ import { binarySearchCellIndex } from './binary_search_cell_index';
 // repeated fall-back hour collapse to the same value. source.startDate is the
 // real instant and is used to shift post-transition appointments onto the
 // extra cells that represent that hour.
+const getCroppedSourceDate = (
+  dateUTC: number,
+  sourceDate: number | undefined,
+): number | undefined => {
+  if (sourceDate === undefined) {
+    return undefined;
+  }
+
+  const originalEncoded = timeZoneUtils.createUTCDateWithLocalOffset(new Date(sourceDate));
+  if (!originalEncoded) {
+    return sourceDate;
+  }
+
+  // NOTE: splitByParts crops startDateUTC/endDateUTC but keeps the original
+  // source endpoints. Map the cropped wall-clock time back to a real instant
+  // so a tail part after the transition is shifted on its own.
+  return sourceDate + (dateUTC - originalEncoded.getTime());
+};
+
 const getPositionTimestamp = (
   dateUTC: number,
   sourceDate: number | undefined,
   cells: CellInterval[],
   fallBackShiftMs: number,
 ): number => {
-  if (fallBackShiftMs <= 0 || sourceDate === undefined || cells.length === 0) {
+  const croppedSourceDate = getCroppedSourceDate(dateUTC, sourceDate);
+  if (fallBackShiftMs <= 0 || croppedSourceDate === undefined || cells.length === 0) {
     return dateUTC;
   }
 
   const viewStart = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(cells[0].min));
   const appointmentShiftMs = timeZoneUtils.getLocalFallBackShiftMs(
     viewStart,
-    new Date(sourceDate),
+    new Date(croppedSourceDate),
   );
 
   return dateUTC + Math.min(appointmentShiftMs, fallBackShiftMs);

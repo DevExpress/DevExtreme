@@ -74,6 +74,13 @@ export const getMinutesCellIntervals = ({
           max = date.getTime();
         }
 
+        // NOTE: A fall-back that is not divisible by the cell duration would
+        // otherwise let the last cell of the day overlap the next day's first cell.
+        if (max > dayMax) {
+          max = dayMax;
+          date.setTime(dayMax);
+        }
+
         result.push({
           min,
           max,

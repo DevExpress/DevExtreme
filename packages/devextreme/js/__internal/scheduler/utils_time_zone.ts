@@ -401,14 +401,60 @@ const getFallBackExtraCellCounts = (
   return result;
 };
 
+const getLocalFallBackInstant = (dayStart: Date): number | undefined => {
+  const nextDay = new Date(dayStart);
+  nextDay.setDate(nextDay.getDate() + 1);
+  if (nextDay.getTime() - dayStart.getTime() <= toMs('day')) {
+    return undefined;
+  }
+
+  const startOffset = dayStart.getTimezoneOffset();
+  let low = dayStart.getTime();
+  let high = nextDay.getTime();
+
+  while (high - low > 1) {
+    const mid = Math.floor((low + high) / 2);
+    if (new Date(mid).getTimezoneOffset() > startOffset) {
+      high = mid;
+    } else {
+      low = mid;
+    }
+  }
+
+  return high;
+};
+
 /**
  * Returns the time an appointment should be shifted by to get into the additional cells
  * that represent the repeated hour of a fall-back DST transition.
+ * Spring-forward transitions do not cancel earlier fall-backs, because the grid
+ * keeps the extra cells of every fall-back day.
  */
-const getLocalFallBackShiftMs = (fromDate: Date, toDate: Date): number => Math.max(
-  0,
-  (toDate.getTimezoneOffset() - fromDate.getTimezoneOffset()) * toMs('minute'),
-);
+const getLocalFallBackShiftMs = (fromDate: Date, toDate: Date): number => {
+  if (toDate.getTime() <= fromDate.getTime()) {
+    return 0;
+  }
+
+  let total = 0;
+  const date = getLocalDayStart(fromDate);
+  const lastDay = getLocalDayStart(toDate);
+
+  while (date.getTime() <= lastDay.getTime()) {
+    const instant = getLocalFallBackInstant(date);
+    if (
+      instant !== undefined
+      && fromDate.getTime() < instant
+      && toDate.getTime() >= instant
+    ) {
+      const nextDay = new Date(date);
+      nextDay.setDate(nextDay.getDate() + 1);
+      total += nextDay.getTime() - date.getTime() - toMs('day');
+    }
+    date.setDate(date.getDate() + 1);
+  }
+
+  return total;
+};
 
 const utils = {
   getDaylightOffset,

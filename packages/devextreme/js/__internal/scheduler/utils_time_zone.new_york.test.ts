@@ -75,4 +75,18 @@ describe('getLocalFallBackShiftMs', () => {
       new Date(2026, 2, 8, 12),
     )).toBe(0);
   });
+
+  it('should keep fall-backs that a later spring-forward would cancel in the net offset', () => {
+    expect(timeZoneUtils.getLocalFallBackShiftMs(
+      new Date(2026, 0, 1),
+      new Date(2026, 10, 15),
+    )).toBe(HOUR_MS);
+  });
+
+  it('should not count a fall-back that is already behind the range start', () => {
+    expect(timeZoneUtils.getLocalFallBackShiftMs(
+      new Date(2026, 10, 2),
+      new Date(2026, 10, 15),
+    )).toBe(0);
+  });
 });
