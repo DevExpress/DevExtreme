@@ -231,6 +231,15 @@ fixture`Custom accent color`
   }, `#${ACCENT_GRID}`);
 });
 
+(isFluentNext() ? test : test.skip)('a translucent accent still gives an opaque palette', async (t) => {
+  const translucentAccent = '#a703ff80';
+  const { measured } = await measurePalette(translucentAccent, STEPS);
+
+  await t
+    .expect(measured.filter((entry) => entry.resolved.includes('/')).map((entry) => entry.step))
+    .eql([], 'no step may inherit the alpha of the accent');
+});
+
 (isFluentNext() ? test : test.skip)('themes.customAccentColor sets, keeps and clears the accent', async (t) => {
   const designedAccent = '#0f6cbd';
   const arbitraryAccent = '#a703ff';

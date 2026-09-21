@@ -28,6 +28,7 @@
     "prefix": "--dx-accent-color-",
     "values": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180],
     "readIn": "_design-system/fluent/accents/*.scss",
+    "alpha": "every step ends in `/ 1`: relative colour syntax hands the alpha of the origin colour down, so an accent written with one would otherwise fade the whole scale",
     "fallback": "the designed value of the step, so an unset accent leaves the theme exactly as drawn"
   }
 }
