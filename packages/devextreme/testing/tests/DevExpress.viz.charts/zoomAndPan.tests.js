@@ -3685,8 +3685,29 @@ QUnit.module('Panning over scale breaks', $.extend({}, environment, {
             }, argumentAxisOptions)
         }, chartOptions));
     },
+    createLogChart(argumentAxisOptions, chartOptions) {
+        const points = [];
+
+        for(let i = 0; i <= 80; i++) {
+            points.push({ arg: Math.pow(10, i / 10), val: i });
+        }
+
+        return this.createChart($.extend(true, {
+            dataSource: points,
+            series: [{ argumentField: 'arg', valueField: 'val' }],
+            zoomAndPan: { argumentAxis: 'pan' },
+            argumentAxis: $.extend({
+                type: 'logarithmic',
+                logarithmBase: 10,
+                visualRange: { startValue: 1, endValue: 10000 }
+            }, argumentAxisOptions)
+        }, chartOptions));
+    },
     getScale(chart) {
         return chart.getArgumentAxis().getTranslator().getInterval(24 * 60 * 60 * 1000);
+    },
+    getDecadeScale(chart) {
+        return chart.getArgumentAxis().getTranslator().getInterval(1);
     },
     hasScaleBreaks(chart) {
         return (chart.getArgumentAxis().getTranslator().getBusinessRange().breaks || []).length > 0;
@@ -3694,8 +3715,6 @@ QUnit.module('Panning over scale breaks', $.extend({}, environment, {
     panForward() {
         this.pointer.start({ x: 100, y: 300 }).dragStart().drag(-300).dragEnd();
     },
-    // the real ScrollBar has to run the gesture: it is the one that reports where its thumb
-    // points, and a hand-made event pair would silently exercise the fallback path instead
     scrollForward(chart) {
         pointerMock(chart._scrollBar._scroll.element)
             .start({ x: 0, y: 0 }).dragStart().drag(200).dragEnd();
@@ -3770,8 +3789,6 @@ QUnit.module('Panning over scale breaks', $.extend({}, environment, {
         }
     });
 
-    // the correction must keep running after the break has left the range, otherwise the span
-    // stays as the break made it and the chart rescales
     QUnit.test('Panning past a scale break must not change the chart scale once the break is gone', function(assert) {
         const chart = this.createDateChart({
             breaks: [{
@@ -3873,5 +3890,45 @@ QUnit.module('Panning over scale breaks', $.extend({}, environment, {
         assert.roughEqual(this.getScale(chart), scaleBefore, 2, 'chart keeps its scale at the bound');
         assert.deepEqual(argumentAxis.visualRange().endValue, argumentAxis.getZoomBounds().endValue,
             'the range stopped at the end of the data');
+    });
+
+    QUnit.test('Panning over a scale break must not change the chart scale on a logarithmic axis', function(assert) {
+        const chart = this.createLogChart({
+            breaks: [{ startValue: 100, endValue: 100000 }]
+        });
+        const scaleBefore = this.getDecadeScale(chart);
+
+        // the tolerance covers the break glyph itself: once the break leaves the window its drawn
+        // width returns to the plot, which spreads the same three decades over a slightly wider
+        // canvas - measured as 265 px per decade with the break and 267 px without it
+        for(let i = 1; i <= 5; i++) {
+            this.panForward();
+            assert.roughEqual(this.getDecadeScale(chart), scaleBefore, 3, `chart keeps its scale after pan ${i}`);
+        }
+
+        assert.ok(chart.getArgumentAxis().visualRange().startValue > 1, 'the range really moved forward');
+    });
+
+    // the window holds the whole break: where a window edge cuts a break the axis hides less than
+    // the scroll bar does, because the bar is built on the breaks of the whole range on purpose
+    QUnit.test('Scroll bar must account for scale breaks on a logarithmic axis', function(assert) {
+        const chart = this.createLogChart({
+            breaks: [{ startValue: 100, endValue: 100000 }],
+            visualRange: { startValue: 1, endValue: 1000000 }
+        }, {
+            scrollBar: { visible: true },
+            zoomAndPan: { argumentAxis: 'both' }
+        });
+        const axis = chart.getArgumentAxis();
+        const wholeRange = axis.getTranslator().getBusinessRange();
+        const barArea = chart._scrollBar._translator.getCanvasVisibleArea();
+        const $thumb = $('#chart').find('.dxc-scroll-bar rect');
+
+        const barShare = parseFloat($thumb.attr('height')) / (barArea.max - barArea.min);
+        const contentShare = axis.getVisualRangeLengthWithoutBreaks()
+            / axis.getVisualRangeLengthWithoutBreaks({ minVisible: wholeRange.min, maxVisible: wholeRange.max });
+
+        assert.ok(this.hasScaleBreaks(chart), 'the scale break really applies to the visual range');
+        assert.roughEqual(barShare, contentShare, 0.005, 'thumb size matches the rendered content');
     });
 });

@@ -1315,7 +1315,7 @@ Axis.prototype = {
     const businessRange = this._translator.getBusinessRange();
     const { type } = this._options;
 
-    if (type === constants.discrete || type === constants.logarithmic
+    if (type === constants.discrete
       || !isDefined(businessRange.min) || !isDefined(businessRange.max)) {
       return [];
     }
@@ -1325,7 +1325,7 @@ Axis.prototype = {
     return this._getBreaksForRange(businessRange.min, businessRange.max)
       .reduce((result, scaleBreak) => {
         const hidden = this._getHiddenDuration(scaleBreak, interval);
-        const shift = ((scaleBreak.to - scaleBreak.from) - hidden) / 2;
+        const shift = (this.calculateInterval(scaleBreak.to, scaleBreak.from) - hidden) / 2;
 
         return hidden ? result.concat(extend({}, scaleBreak, {
           from: this._addToValue(scaleBreak.from, shift),
@@ -1345,7 +1345,7 @@ Axis.prototype = {
   },
 
   _getHiddenDuration(scaleBreak, tickInterval) {
-    const duration = scaleBreak.to - scaleBreak.from;
+    const duration = this.calculateInterval(scaleBreak.to, scaleBreak.from);
 
     return scaleBreak.gapSize ? duration : Math.max(duration - tickInterval, 0);
   },
@@ -1355,7 +1355,7 @@ Axis.prototype = {
     const length = this.getVisualRangeLength(businessRange);
     const options = this._options;
 
-    if (options.type === constants.discrete || options.type === constants.logarithmic
+    if (options.type === constants.discrete
       || !isDefined(businessRange.minVisible) || !isDefined(businessRange.maxVisible)) {
       return length;
     }
@@ -1367,6 +1367,12 @@ Axis.prototype = {
   },
 
   _addToValue(value, diff) {
+    if (this._options.type === constants.logarithmic) {
+      const translator = this.getTranslator();
+
+      return translator.toValue(translator.fromValue(value) + diff);
+    }
+
     return isDate(value) ? new Date(value.getTime() + diff) : value + diff;
   },
 
@@ -1375,7 +1381,7 @@ Axis.prototype = {
     const storedParams = that._storedZoomEndParams;
     const { type } = that._options;
 
-    if (!storedParams || type === constants.discrete || type === constants.logarithmic) {
+    if (!storedParams || type === constants.discrete) {
       return range;
     }
 
@@ -1428,12 +1434,19 @@ Axis.prototype = {
         break;
       }
 
-      current = keepsEndValue
+      const shifted = keepsEndValue
         ? { startValue: that._addToValue(current.startValue, delta), endValue: current.endValue }
         : { startValue: current.startValue, endValue: that._addToValue(current.endValue, -delta) };
 
-      if (current.startValue >= current.endValue
-        || current.startValue < bounds.startValue || current.endValue > bounds.endValue) {
+      // a step that runs past the data is clamped, not dropped: at the bound the best achievable
+      // range is the bound itself. Clamping also absorbs the rounding of a logarithmic shift,
+      // which can land a hair outside a bound it was meant to hit exactly
+      current = {
+        startValue: shifted.startValue < bounds.startValue ? bounds.startValue : shifted.startValue,
+        endValue: shifted.endValue > bounds.endValue ? bounds.endValue : shifted.endValue,
+      };
+
+      if (current.startValue >= current.endValue) {
         break;
       }
     }
