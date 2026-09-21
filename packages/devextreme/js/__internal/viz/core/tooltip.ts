@@ -28,6 +28,7 @@ import { normalizeStyleProp } from '@js/core/utils/style';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
+import swatchContainer from '@ts/core/utils/swatch_container';
 
 import { Plaque } from './plaque';
 import { Renderer } from './renderers/renderer';
@@ -109,7 +110,13 @@ Tooltip.prototype = {
     if (container.length === 0) {
       container = $(options.container);
     }
-    return (container.length ? container : $('body')).get(0);
+    if (container.length) {
+      return container.get(0);
+    }
+
+    const scope = swatchContainer.getSwatchContainer(this._widgetRoot);
+
+    return (scope?.length ? scope : $('body')).get(0);
   },
 
   setTemplate(contentTemplate) {

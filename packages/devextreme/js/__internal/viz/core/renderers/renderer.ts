@@ -43,6 +43,7 @@ import callOnce from '@js/core/utils/call_once';
 import { getSvgMarkup } from '@js/core/utils/svg';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import { isCssVariableReference } from '@ts/core/utils/css_variables';
 import { AnimationController } from '@ts/viz/core/renderers/animation';
 import {
   getNextDefsSvgId,
@@ -434,6 +435,13 @@ function fixFuncIri(wrapper, attribute) {
   }
 }
 
+function releaseStyleWrittenKey(that, key) {
+  if (that._styleWrittenKeys?.has(key)) {
+    that._styleWrittenKeys.delete(key);
+    that.element.style.removeProperty(key);
+  }
+}
+
 function baseAttr(that, attrs) {
   attrs = attrs || {};
   const settings = that._settings;
@@ -487,7 +495,14 @@ function baseAttr(that, attrs) {
     }
     if (value === null) {
       elem.removeAttribute(key);
+      releaseStyleWrittenKey(that, key);
+    } else if (isCssVariableReference(value)) {
+      elem.removeAttribute(key);
+      elem.style.setProperty(key, value);
+      that._styleWrittenKeys = that._styleWrittenKeys ?? new Set();
+      that._styleWrittenKeys.add(key);
     } else {
+      releaseStyleWrittenKey(that, key);
       elem.setAttribute(key, value);
     }
   }

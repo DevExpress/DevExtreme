@@ -1,79 +1,267 @@
-import { extend } from '@js/core/utils/extend';
-import { getAccentColorScheme } from '@ts/viz/core/themes/shared/accent_color_scheme';
+const FONT_FAMILY = '\'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif';
 
-// --dxds-font-family-sans-serif
-const FONT_FAMILY = '\'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'helvetica neue\', helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif';
+const VIZ_BG = '--dx-viz-bg';
+const VIZ_BG_ACTIVE = '--dx-viz-bg-active';
+const VIZ_BG_HOVERED = '--dx-viz-bg-hovered';
+const VIZ_BLUE = '--dx-viz-blue';
+const VIZ_BORDER = '--dx-viz-border';
+const VIZ_BORDER_ACTIVE = '--dx-viz-border-active';
+const VIZ_BORDER_HOVERED = '--dx-viz-border-hovered';
+const VIZ_CONTENT = '--dx-viz-content';
+const VIZ_CONTENT_SUBTLE = '--dx-viz-content-subtle';
+const VIZ_FONT_FAMILY = '--dx-viz-font-family';
+const VIZ_GRID = '--dx-viz-grid';
+const VIZ_PRIMARY = '--dx-viz-primary';
+const VIZ_TOOLTIP_BG = '--dx-viz-tooltip-bg';
+const VIZ_TOOLTIP_CONTENT = '--dx-viz-tooltip-content';
 
-// --dxds-color-bg, --dxds-color-bg-hovered, --dxds-color-bg-active (dark)
-const DARK_BACKGROUND_COLOR = '#242424';
-const DARK_HOVERED_BACKGROUND_COLOR = '#3b3b3b';
-const DARK_ACTIVE_BACKGROUND_COLOR = '#1d1d1d';
+const LIGHT = {
+  [VIZ_BG]: '#ffffff',
+  [VIZ_BG_ACTIVE]: '#e1e1e1',
+  [VIZ_BG_HOVERED]: '#f5f5f5',
+  [VIZ_BLUE]: '#0078d4',
+  [VIZ_BORDER]: '#cbcbcb',
+  [VIZ_BORDER_ACTIVE]: '#b6b6b6',
+  [VIZ_BORDER_HOVERED]: '#c0c0c0',
+  [VIZ_CONTENT]: '#161616',
+  [VIZ_CONTENT_SUBTLE]: '#444444',
+  [VIZ_FONT_FAMILY]: FONT_FAMILY,
+  [VIZ_GRID]: '#e1e1e1',
+  [VIZ_PRIMARY]: '#0f6cbd',
+  [VIZ_TOOLTIP_BG]: '#242424',
+  [VIZ_TOOLTIP_CONTENT]: '#ffffff',
+};
 
-const font = {
-  font: {
-    family: FONT_FAMILY,
-  },
-  title: {
+type PublishedName = keyof typeof LIGHT;
+
+const DARK: Record<PublishedName, string> = {
+  ...LIGHT,
+  [VIZ_BG]: '#242424',
+  [VIZ_BG_ACTIVE]: '#1d1d1d',
+  [VIZ_BG_HOVERED]: '#3b3b3b',
+  [VIZ_BORDER]: '#767676',
+  [VIZ_BORDER_ACTIVE]: '#656565',
+  [VIZ_BORDER_HOVERED]: '#ababab',
+  [VIZ_CONTENT]: '#ffffff',
+  [VIZ_CONTENT_SUBTLE]: '#cbcbcb',
+  [VIZ_GRID]: '#4c4c4c',
+  [VIZ_TOOLTIP_BG]: '#ffffff',
+  [VIZ_TOOLTIP_CONTENT]: '#161616',
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- description theme option tree
+function buildTheme(name: string, fallback: Record<PublishedName, string>): any {
+  const paint = (published: PublishedName): string => `var(${published}, ${fallback[published]})`;
+
+  return {
+    name,
+    defaultPalette: 'Fluent Next',
     font: {
-      family: FONT_FAMILY,
+      family: paint(VIZ_FONT_FAMILY),
+      color: paint(VIZ_CONTENT_SUBTLE),
     },
-  },
-};
-
-const darkBackground = {
-  backgroundColor: DARK_BACKGROUND_COLOR,
-  export: {
-    backgroundColor: DARK_BACKGROUND_COLOR,
-    button: {
-      default: {
-        backgroundColor: DARK_BACKGROUND_COLOR,
-      },
-      hover: {
-        backgroundColor: DARK_HOVERED_BACKGROUND_COLOR,
-      },
-      focus: {
-        backgroundColor: DARK_ACTIVE_BACKGROUND_COLOR,
-      },
-      active: {
-        backgroundColor: DARK_ACTIVE_BACKGROUND_COLOR,
-      },
-    },
-  },
-  rangeSelector: {
-    sliderMarker: {
+    title: {
       font: {
-        color: DARK_BACKGROUND_COLOR,
+        family: paint(VIZ_FONT_FAMILY),
       },
     },
-  },
-  map: {
-    'layer:area': {
-      borderColor: DARK_BACKGROUND_COLOR,
+    backgroundColor: paint(VIZ_BG),
+    primaryTitleColor: paint(VIZ_CONTENT),
+    secondaryTitleColor: paint(VIZ_CONTENT_SUBTLE),
+    axisColor: paint(VIZ_CONTENT_SUBTLE),
+    gridColor: paint(VIZ_GRID),
+    tooltip: {
+      color: paint(VIZ_TOOLTIP_BG),
+      font: {
+        color: paint(VIZ_TOOLTIP_CONTENT),
+      },
     },
-    controlBar: {
-      color: DARK_BACKGROUND_COLOR,
+    export: {
+      backgroundColor: paint(VIZ_BG),
+      font: {
+        color: paint(VIZ_CONTENT),
+      },
+      button: {
+        default: {
+          backgroundColor: paint(VIZ_BG),
+          borderColor: paint(VIZ_BORDER),
+          color: paint(VIZ_CONTENT),
+        },
+        hover: {
+          backgroundColor: paint(VIZ_BG_HOVERED),
+          borderColor: paint(VIZ_BORDER_HOVERED),
+          color: paint(VIZ_CONTENT),
+        },
+        focus: {
+          backgroundColor: paint(VIZ_BG_ACTIVE),
+          borderColor: paint(VIZ_BORDER_ACTIVE),
+          color: paint(VIZ_CONTENT),
+        },
+        active: {
+          backgroundColor: paint(VIZ_BG_ACTIVE),
+          borderColor: paint(VIZ_BORDER_ACTIVE),
+          color: paint(VIZ_CONTENT),
+        },
+      },
     },
-  },
-  sparkline: {
-    pointColor: DARK_BACKGROUND_COLOR,
-  },
-  funnel: {
-    item: {
+    'chart:common': {
+      commonSeriesSettings: {
+        label: {
+          border: {
+            color: paint(VIZ_BORDER),
+          },
+        },
+        valueErrorBar: {
+          color: paint(VIZ_CONTENT),
+        },
+      },
+    },
+    'chart:common:axis': {
+      constantLineStyle: {
+        color: paint(VIZ_CONTENT),
+      },
+      breakStyle: {
+        color: paint(VIZ_BORDER),
+      },
+    },
+    'chart:common:annotation': {
+      color: paint(VIZ_TOOLTIP_BG),
       border: {
-        color: DARK_BACKGROUND_COLOR,
+        color: paint(VIZ_TOOLTIP_BG),
+      },
+      font: {
+        color: paint(VIZ_TOOLTIP_CONTENT),
       },
     },
-  },
-};
+    chart: {
+      commonPaneSettings: {
+        border: {
+          color: paint(VIZ_BORDER),
+        },
+      },
+      scrollBar: {
+        color: paint(VIZ_BORDER),
+      },
+      zoomAndPan: {
+        dragBoxStyle: {
+          color: paint(VIZ_CONTENT),
+        },
+      },
+    },
+    gauge: {
+      rangeContainer: {
+        backgroundColor: paint(VIZ_BORDER),
+      },
+      valueIndicators: {
+        rangebar: {
+          color: paint(VIZ_BLUE),
+        },
+        // eslint-disable-next-line spellcheck/spell-checker
+        textcloud: {
+          color: paint(VIZ_BLUE),
+        },
+      },
+    },
+    barGauge: {
+      backgroundColor: paint(VIZ_BG_HOVERED),
+    },
+    bullet: {
+      color: paint(VIZ_BLUE),
+    },
+    sankey: {
+      label: {
+        font: {
+          color: paint(VIZ_CONTENT),
+        },
+      },
+    },
+    treeMap: {
+      group: {
+        color: paint(VIZ_BG_HOVERED),
+        label: {
+          font: {
+            color: paint(VIZ_CONTENT_SUBTLE),
+          },
+        },
+      },
+    },
+    rangeSelector: {
+      selectedRangeColor: paint(VIZ_PRIMARY),
+      sliderMarker: {
+        color: paint(VIZ_PRIMARY),
+        font: {
+          color: paint(VIZ_BG),
+        },
+      },
+      sliderHandle: {
+        color: paint(VIZ_PRIMARY),
+      },
+      scale: {
+        tick: {
+          color: paint(VIZ_CONTENT),
+        },
+        minorTick: {
+          color: paint(VIZ_CONTENT),
+        },
+        breakStyle: {
+          color: paint(VIZ_BORDER),
+        },
+      },
+    },
+    map: {
+      layer: {
+        label: {
+          stroke: paint(VIZ_BG),
+          font: {
+            color: paint(VIZ_CONTENT),
+          },
+        },
+      },
+      'layer:area': {
+        borderColor: paint(VIZ_BG),
+        hoveredBorderColor: paint(VIZ_CONTENT),
+        selectedBorderColor: paint(VIZ_CONTENT),
+      },
+      'layer:marker:dot': {
+        color: paint(VIZ_BLUE),
+      },
+      'layer:marker:bubble': {
+        color: paint(VIZ_BLUE),
+        hoveredBorderColor: paint(VIZ_CONTENT),
+        selectedBorderColor: paint(VIZ_CONTENT),
+      },
+      'layer:marker:pie': {
+        hoveredBorderColor: paint(VIZ_CONTENT),
+        selectedBorderColor: paint(VIZ_CONTENT),
+      },
+      legend: {
+        markerColor: paint(VIZ_BLUE),
+      },
+      background: {
+        borderColor: paint(VIZ_BORDER),
+      },
+      controlBar: {
+        color: paint(VIZ_BG),
+        borderColor: paint(VIZ_CONTENT_SUBTLE),
+      },
+    },
+    sparkline: {
+      pointColor: paint(VIZ_BG),
+    },
+    funnel: {
+      item: {
+        border: {
+          color: paint(VIZ_BG),
+        },
+      },
+    },
+  };
+}
 
 const themes = [
   {
     baseThemeName: 'fluent.blue.light',
-    theme: {
-      name: 'fluent-next.blue.light',
-      defaultPalette: 'Fluent Next',
-      ...font,
-    },
+    theme: buildTheme('fluent-next.blue.light', LIGHT),
   },
   {
     baseThemeName: 'fluent-next.blue.light',
@@ -83,10 +271,7 @@ const themes = [
   },
   {
     baseThemeName: 'fluent.blue.dark',
-    theme: extend(true, {
-      name: 'fluent-next.blue.dark',
-      defaultPalette: 'Fluent Next',
-    }, font, darkBackground, getAccentColorScheme('#4B90D9')),
+    theme: buildTheme('fluent-next.blue.dark', DARK),
   },
   {
     baseThemeName: 'fluent-next.blue.dark',
