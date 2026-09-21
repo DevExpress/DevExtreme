@@ -423,7 +423,7 @@ export function customAccentColor(color?: string | null): string | undefined {
     return window.getComputedStyle(root).getPropertyValue(ACCENT_COLOR_PROPERTY).trim();
   }
 
-  if (color === null) {
+  if (color === null || color === '') {
     root.style.removeProperty(ACCENT_COLOR_PROPERTY);
 
     return undefined;

@@ -188,14 +188,23 @@ describe('themes.customAccentColor', () => {
     expect(log).toHaveBeenCalledWith('W0024', 'foo');
   });
 
-  it('leaves the accent color alone and warns when the value is empty', () => {
+  it('brings back the palette of the theme when passed an empty string', () => {
     const log = jest.spyOn(errors, 'log').mockImplementation(() => {});
+    useTheme('fluent-next.blue.light', ':root { --dx-accent-color: #0f6cbd; }');
     customAccentColor('#a703ff');
 
     customAccentColor('');
 
-    expect(declaredAccentColor()).toBe('#a703ff');
-    expect(log).toHaveBeenCalledWith('W0024', '');
+    expect(declaredAccentColor()).toBe('#0f6cbd');
+    expect(log).not.toHaveBeenCalled();
+  });
+
+  it('takes back whatever the getter hands out while no accent color is declared', () => {
+    const log = jest.spyOn(errors, 'log').mockImplementation(() => {});
+
+    customAccentColor(customAccentColor());
+
+    expect(log).not.toHaveBeenCalled();
   });
 
   it('refuses a value that points at another color instead of naming one', () => {
