@@ -270,12 +270,19 @@ export default {
 
     function panArgumentAxisToThumb(e, scrollRange) {
       const axes = getFilteredAxes(chart._argumentAxes);
-      const getRange = (axis) => axis.adjustRange(
-        axis.adjustPannedRange(
-          getVizRangeObject([scrollRange.startValue, scrollRange.endValue]),
-          axis.getTranslator().isInverted() ? 'end' : 'start',
-        ),
-      );
+      const getRange = (axis) => {
+        const range = getVizRangeObject([scrollRange.startValue, scrollRange.endValue]);
+        const bounds = axis.getZoomBounds();
+        let anchor = axis.getTranslator().isInverted() ? 'end' : 'start';
+
+        if (range.endValue >= bounds.endValue) {
+          anchor = 'end';
+        } else if (range.startValue <= bounds.startValue) {
+          anchor = 'start';
+        }
+
+        return axis.adjustRange(axis.adjustPannedRange(range, anchor));
+      };
 
       axes.forEach((axis) => axisZoom(axis, null, getRange, () => ({ start: true, end: true }), 'pan', 1, e));
 

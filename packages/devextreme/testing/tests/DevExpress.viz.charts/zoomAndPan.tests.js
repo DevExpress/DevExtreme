@@ -3904,6 +3904,48 @@ QUnit.module('Panning over scale breaks', $.extend({}, environment, {
         assert.ok(chart.getArgumentAxis().visualRange().startValue > 1, 'the range really moved forward');
     });
 
+    QUnit.test('Dragging the scroll bar to the end must reach the last window', function(assert) {
+        const chart = this.createDateChart({ workdaysOnly: true }, {
+            scrollBar: { visible: true },
+            zoomAndPan: { argumentAxis: 'both' }
+        });
+        const axis = chart.getArgumentAxis();
+
+        pointerMock(chart._scrollBar._scroll.element).start({ x: 0, y: 0 }).dragStart().drag(2000).dragEnd();
+
+        assert.deepEqual(axis.visualRange().endValue, axis.getZoomBounds().endValue,
+            'the range reaches the end of the data');
+    });
+
+    QUnit.test('Dragging the scroll bar to the end must reach the last window after zooming', function(assert) {
+        const chart = this.createDateChart({ workdaysOnly: true }, {
+            scrollBar: { visible: true },
+            zoomAndPan: { argumentAxis: 'both', allowMouseWheel: true }
+        });
+        const axis = chart.getArgumentAxis();
+
+        this.pointer.start({ x: 400, y: 300 }).wheel(10);
+
+        pointerMock(chart._scrollBar._scroll.element).start({ x: 0, y: 0 }).dragStart().drag(2000).dragEnd();
+
+        assert.deepEqual(axis.visualRange().endValue, axis.getZoomBounds().endValue,
+            `the range reaches the end of the data, got ${axis.visualRange().endValue}`);
+    });
+
+    QUnit.test('Dragging the scroll bar back to the start must reach the first window', function(assert) {
+        const chart = this.createDateChart({ workdaysOnly: true }, {
+            scrollBar: { visible: true },
+            zoomAndPan: { argumentAxis: 'both' }
+        });
+        const axis = chart.getArgumentAxis();
+
+        pointerMock(chart._scrollBar._scroll.element).start({ x: 0, y: 0 }).dragStart().drag(2000).dragEnd();
+        pointerMock(chart._scrollBar._scroll.element).start({ x: 0, y: 0 }).dragStart().drag(-2000).dragEnd();
+
+        assert.deepEqual(axis.visualRange().startValue, axis.getZoomBounds().startValue,
+            'the range reaches the beginning of the data');
+    });
+
     QUnit.test('Scroll bar must account for scale breaks on a logarithmic axis', function(assert) {
         const chart = this.createLogChart({
             breaks: [{ startValue: 100, endValue: 100000 }],
