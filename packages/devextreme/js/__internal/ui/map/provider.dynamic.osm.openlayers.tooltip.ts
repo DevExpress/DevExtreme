@@ -91,6 +91,10 @@ export class OpenLayersMarkerTooltip {
     _map.on('postrender', this.syncPosition);
   }
 
+  get popover(): Popover {
+    return this._popover;
+  }
+
   show(): void {
     if (!this._disposed) {
       this._popover.option('visible', true);

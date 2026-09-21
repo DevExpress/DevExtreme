@@ -333,7 +333,7 @@ class OpenLayersMap implements MapEngineMap {
       : undefined;
     const onClick = options.onClick || tooltip
       ? (): void => {
-        options.onClick?.();
+        options.onClick?.(tooltip?.popover);
         tooltip?.show();
       }
       : undefined;

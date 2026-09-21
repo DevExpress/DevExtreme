@@ -449,7 +449,7 @@ class OsmProvider extends DynamicProvider<MapLocation | undefined> {
         iconSrc,
         location,
         onClick: markerClickAction
-          ? (): void => markerClickAction({ location })
+          ? (tooltip): void => markerClickAction({ location, ...(tooltip && { tooltip }) })
           : undefined,
         rtlEnabled: Boolean(this._option('rtlEnabled')),
         tooltip: options.tooltip ? this._parseTooltipOptions(options.tooltip) : undefined,

@@ -1405,6 +1405,7 @@ QUnit.module('OSM: markers', moduleConfig, () => {
                 assert.strictEqual(overlayOptions.stopEvent, false, 'map wheel and drag interactions remain available over a clickable marker');
                 element.click();
                 assert.ok(onClick.calledOnce, 'marker click action is fired');
+                assert.strictEqual(onClick.firstCall.args[0].tooltip, undefined, 'a marker without a tooltip has no tooltip instance');
                 assert.ok(parentClick.notCalled, 'marker click does not bubble to the map container');
                 assert.deepEqual(onClick.firstCall.args[0].location, {
                     lat: 40.74,
@@ -1997,13 +1998,16 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
 
     ['Enter', ' '].forEach(key => {
         QUnit.test(`keyboard activation (${key}) keeps focus on the marker and supports Escape`, async function(assert) {
-            await createMap({ markers: [{ location, tooltip: 'Start' }] });
+            const onClick = sinon.spy();
+            await createMap({ markers: [{ location, tooltip: 'Start', onClick }] });
             positionMarker();
             const marker = getMarker();
             marker.focus();
             marker.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
             marker.dispatchEvent(new KeyboardEvent('keyup', { key, bubbles: true, cancelable: true }));
             assert.ok(getTooltip().option('visible'), 'keyboard opens the tooltip');
+            assert.ok(onClick.calledOnce, 'keyboard activation calls the marker handler once');
+            assert.strictEqual(onClick.firstCall.args[0].tooltip, getTooltip(), 'keyboard activation exposes the same Popover');
             assert.strictEqual(document.activeElement, marker, 'focus remains on the marker');
             marker.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
             assert.notOk(getTooltip().option('visible'), 'native Popover handles Escape');
@@ -2011,10 +2015,11 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
     });
 
     QUnit.test('marker callback receives coordinates and can customize the popover before its first showing', async function(assert) {
-        const onClick = sinon.spy(({ location: coordinates }) => {
+        const onClick = sinon.spy(({ location: coordinates, tooltip }) => {
             assert.deepEqual(coordinates, location, 'resolved coordinates are passed');
-            assert.notOk(getTooltip().option('visible'), 'callback runs before showing');
-            getTooltip().option({ showTitle: true, title: 'Details', showCloseButton: true });
+            assert.strictEqual(tooltip, getTooltip(), 'the actual Popover instance is passed');
+            assert.notOk(tooltip.option('visible'), 'callback runs before showing');
+            tooltip.option({ showTitle: true, title: 'Details', showCloseButton: true });
         });
         await createMap({ markers: [{ location, tooltip: 'Start', onClick }] });
         positionMarker();
@@ -2022,6 +2027,17 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
         assert.ok(onClick.calledOnce, 'one callback');
         assert.ok(getTooltip().option('visible'), 'popover is shown');
         assert.ok(getContent(getTooltip()).parentElement.querySelector('.dx-closebutton'), 'public options add Close');
+    });
+
+    QUnit.test('isShown opens the tooltip without calling the marker click handler', async function(assert) {
+        const onClick = sinon.spy();
+        await createMap({ markers: [{ location, tooltip: { text: 'Start', isShown: true }, onClick }] });
+
+        assert.ok(getTooltip().option('visible'), 'initial showing does not wait for a click');
+        assert.ok(onClick.notCalled, 'onClick is not an initialization callback');
+        getMarker().click();
+        assert.ok(onClick.calledOnce, 'the actual click calls the handler');
+        assert.strictEqual(onClick.firstCall.args[0].tooltip, getTooltip(), 'the handler receives the already shown Popover');
     });
 
     [false, true].forEach(focusStateEnabled => {
@@ -2169,7 +2185,7 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
             tooltip: 'Start',
             onClick: (event) => {
                 clickLocation = event.location;
-                getTooltip().option('onShowing', e => { e.cancel = true; });
+                event.tooltip.option('onShowing', e => { e.cancel = true; });
             }
         }] });
         positionMarker();
