@@ -40,6 +40,34 @@ if (getThemeName() === 'fluent-next') {
     }
   });
 
+  const CHART = {
+    dataSource: [{ month: 'a', sales: 1 }, { month: 'b', sales: 2 }],
+    series: [{ type: 'bar', argumentField: 'month', valueField: 'sales' }],
+    legend: { visible: false },
+    animation: { enabled: false },
+    size: { width: 220, height: 160 },
+  };
+
+  const writeRootProperty = ClientFunction((name: string, value: string) => {
+    const root = document.documentElement;
+
+    if (value) {
+      root.style.setProperty(name, value);
+    } else {
+      root.style.removeProperty(name);
+    }
+  });
+
+  const exportedFrom = ClientFunction((selector: string) => {
+    const markup = (window as any).DevExpress.viz.getMarkup([($(selector) as any).dxChart('instance')]);
+    const text = new DOMParser().parseFromString(markup, 'image/svg+xml').querySelector('text');
+
+    return {
+      references: (markup.match(/var\(--dx-/g) ?? []).length,
+      painted: text?.getAttribute('style') ?? '',
+    };
+  });
+
   test('a named mode class re-resolves the roles under it', async (t) => {
     await render(`
       <div id="plain"></div>
@@ -149,6 +177,54 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(await painted())
       .eql(await valueAt('#owner', '--dxds-color-bg'), 'and matches its owner again');
   });
+
+  const twoChartsInTwoModes = async (): Promise<void> => {
+    await render(`
+      <div class="dx-theme-mode-light"><div id="light-chart"></div></div>
+      <div class="dx-theme-mode-dark"><div id="dark-chart"></div></div>
+    `);
+
+    await createWidget('dxChart', CHART, '#light-chart');
+    await createWidget('dxChart', CHART, '#dark-chart');
+  };
+
+  test('a chart takes its chrome from the scope and its data from the palette', async (t) => {
+    await t.expect(await valueAt('#light-chart .dxc-arg-elements text', 'fill'))
+      .notEql(await valueAt('#dark-chart .dxc-arg-elements text', 'fill'), 'the axis reads against the surface under it');
+    await t.expect(await valueAt('#light-chart .dxc-val-grid path', 'stroke'))
+      .notEql(await valueAt('#dark-chart .dxc-val-grid path', 'stroke'), 'and so does the grid');
+    await t.expect(await valueAt('#light-chart .dxc-series rect', 'fill'))
+      .eql(await valueAt('#dark-chart .dxc-series rect', 'fill'), 'a blue series stays the same blue in both modes');
+  }).before(twoChartsInTwoModes);
+
+  test('a chart repaints the moment a published name changes, with nothing asked of the widget', async (t) => {
+    const asPainted = await valueAt('#chart .dxc-series rect', 'fill');
+
+    await writeRootProperty('--dx-viz-blue', 'rgb(1, 2, 3)');
+
+    const asWritten = await valueAt('#chart .dxc-series rect', 'fill');
+
+    await writeRootProperty('--dx-viz-blue', '');
+
+    const asRestored = await valueAt('#chart .dxc-series rect', 'fill');
+
+    await t.expect(asWritten).eql('rgb(1, 2, 3)', 'the cascade repainted the series, no call was made');
+    await t.expect(asWritten).notEql(asPainted);
+    await t.expect(asRestored).eql(asPainted, 'and the theme is back once the page stops writing it');
+  }).before(async () => {
+    await render('<div id="chart"></div>');
+    await createWidget('dxChart', CHART, '#chart');
+  });
+
+  test('a chart exports the colors it was painted in, not the ones written beside them', async (t) => {
+    const light = await exportedFrom('#light-chart');
+    const dark = await exportedFrom('#dark-chart');
+
+    await t.expect(light.references).eql(0, 'nothing resolves a reference once the markup is out of the document');
+    await t.expect(dark.references).eql(0);
+    await t.expect(light.painted).notEql('', 'the exported text carries the colour it was painted with');
+    await t.expect(dark.painted).notEql(light.painted, 'each chart exports in the mode of its own scope');
+  }).before(twoChartsInTwoModes);
 
   test('an open overlay keeps its mode until the application says so', async (t) => {
     await render(`<div id="scope" class="dx-theme-mode-${oppositeMode}"><div id="owner"></div></div>`);
