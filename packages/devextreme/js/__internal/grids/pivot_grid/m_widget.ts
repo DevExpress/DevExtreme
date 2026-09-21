@@ -400,8 +400,6 @@ class PivotGrid extends Widget {
     super._init();
     that._initDataController();
 
-    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
-
     that._scrollLeft = that._scrollTop = null;
     that._initActions();
   }

@@ -17,7 +17,6 @@ import {
 import type { DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig } from 'devextreme/common/grids';
-import type { SearchMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -72,14 +71,6 @@ export class DxoDataGridColumnHeaderFilterComponent extends NestedOption impleme
     }
     set search(value: ColumnHeaderFilterSearchConfig) {
         this._setOption('search', value);
-    }
-
-    @Input()
-    get searchMode(): SearchMode {
-        return this._getOption('searchMode');
-    }
-    set searchMode(value: SearchMode) {
-        this._setOption('searchMode', value);
     }
 
     @Input()
