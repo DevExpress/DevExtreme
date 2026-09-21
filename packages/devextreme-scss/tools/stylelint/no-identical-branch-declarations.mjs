@@ -80,7 +80,8 @@ const identicalDeclarations = (branches) => {
   for (const [name, decl] of first) {
     const declarations = [decl, ...rest.map((byName) => byName.get(name))];
     const value = normalise(decl.value);
-    if (declarations.every((other) => other && normalise(other.value) === value)) identical.set(name, declarations);
+    const sameEverywhere = declarations.every((other) => other && normalise(other.value) === value);
+    if (sameEverywhere) identical.set(name, declarations);
   }
   return identical;
 };
@@ -111,7 +112,8 @@ const planMoves = (branches, identical) => {
     }
   };
   const readByStaying = (name) => walkFinds(branches, (decl, branch) => (
-    !(movable.has(decl.prop) && decl.parent === branch) && localReferences(decl.value).includes(name)
+    !(movable.has(decl.prop) && decl.parent === branch)
+      && localReferences(decl.value).includes(name)
   ));
 
   for (let changed = true; changed;) {
@@ -189,7 +191,9 @@ const ruleFunction = (primary) => (root, result) => {
       const earlier = earlierDeclaration(parent, ifRule, name);
       const overridden = earlier !== undefined && !isNull(earlier.value);
       const fixable = trailersAgree(declarations)
-        && (overridden ? declarations.every((decl) => hasDefaultFlag(decl.value)) : movable.has(name));
+        && (overridden
+          ? declarations.every((decl) => hasDefaultFlag(decl.value))
+          : movable.has(name));
 
       const fix = () => {
         const live = branches.filter((branch) => branch.parent);
@@ -237,7 +241,8 @@ const ruleFunction = (primary) => (root, result) => {
           const anchor = lastHoisted.get(ifRule) ?? live[live.length - 1];
           relocate((node, previous) => parent.insertAfter(previous ?? anchor, node), lastHoisted.has(ifRule) ? '\n' : '\n\n');
           lastHoisted.set(ifRule, hoisted);
-        } else if (earlier && !references.some((ref) => declaredBetween(parent, earlier, ifRule, ref))) {
+        } else if (earlier
+          && !references.some((ref) => declaredBetween(parent, earlier, ifRule, ref))) {
           hoisted.raws.before = earlier.raws.before;
           earlier.replaceWith(hoisted);
           if (trailer) parent.insertAfter(hoisted, trailer);

@@ -1,5 +1,6 @@
 /*
- * Proposes mapping entries for one folder, so a batch is reviewed as a diff instead of typed by hand.
+ * Proposes mapping entries for one folder, so a batch is reviewed as a diff instead of typed by
+ * hand.
  *
  *   node tools/naming/propose.mjs --folder=treeView            # report
  *   node tools/naming/propose.mjs --folder=treeView --json     # paste-ready mapping fragment
@@ -12,15 +13,20 @@
  * sub-element of this component or a lie about the selector is a question only reading the CSS
  * answers, and that is exactly what the per-batch review is for.
  *
- * So the output is split in two: names whose proposal already satisfies the grammar (mechanical, and
- * still to be eyeballed for meaning), and names the grammar rejects, each with the reason — those
- * need a human and a look at the selector.
+ * So the output is split in two: names whose proposal already satisfies the grammar (mechanical,
+ * and still to be eyeballed for meaning), and names the grammar rejects, each with the reason —
+ * those need a human and a look at the selector.
  *
- * Deliberately not proposed: theme identity, base-parameter mirrors (their spelling belongs to base)
- * and anything already inside its component's namespace.
+ * Deliberately not proposed: theme identity, base-parameter mirrors (their spelling belongs to
+ * base) and anything already inside its component's namespace.
  */
 
-import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
+import {
+  readFileSync,
+  readdirSync,
+  statSync,
+  existsSync,
+} from 'fs';
 import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -60,7 +66,9 @@ const withRanges = (content) => {
   return ranges;
 };
 
-/** `@mixin x(…)` / `@function x(…)` argument lists: `$a: $b` there is a parameter, not a variable. */
+/**
+ * `@mixin x(…)` / `@function x(…)` argument lists: `$a: $b` there is a parameter, not a variable.
+ */
 const signatureRanges = (content) => {
   const ranges = [];
   const opener = /@(?:mixin|function)\s+[\w-]+\s*\(/g;
@@ -114,7 +122,8 @@ const grammarViolation = (name, component, isColors) => {
   const slot = longestFirst(slots)
     .find((candidate) => rest === candidate || rest.endsWith(`-${candidate}`));
   if (!slot) {
-    // The reason travels as an Error so --anatomy can group by the unresolved fragment, not by prose.
+    // The reason travels as an Error so --anatomy can group by the unresolved fragment, not by
+    // prose.
     const problem = new Error(`no ${isColors ? 'part' : 'size slot'} found in "${rest || '(empty)'}"`);
     problem.slot = rest;
     return problem;
@@ -124,14 +133,15 @@ const grammarViolation = (name, component, isColors) => {
   const middleWords = longestFirst([...(registries.subElements[component] ?? []), ...modifiers]);
   let middle = rest;
   while (middle) {
-    const word = middleWords.find((candidate) => middle === candidate
-      || middle.startsWith(`${candidate}-`));
+    const head = middle;
+    const word = middleWords.find((candidate) => head === candidate
+      || head.startsWith(`${candidate}-`));
     if (!word) {
-      const problem = new Error(`"${middle}" is neither a sub-element of ${component} nor a modifier`);
-      problem.middle = middle;
+      const problem = new Error(`"${head}" is neither a sub-element of ${component} nor a modifier`);
+      problem.middle = head;
       return problem;
     }
-    middle = middle.slice(word.length).replace(/^-/, '');
+    middle = head.slice(word.length).replace(/^-/, '');
   }
   return null;
 };
@@ -142,10 +152,10 @@ const grammarViolation = (name, component, isColors) => {
 
 /*
  * The standard's rule for the 491 legacy `-color` names is "the CSS property decides, not the old
- * name" (NAMING.md, PARTS). That is mechanical as long as the variable is read by exactly one family
- * of properties, so the reads are collected once and the answer looked up per name. A variable read
- * by two families is a two-role variable — the dominant role wins, and that is a judgment call the
- * review has to make, so it is reported instead of guessed.
+ * name" (NAMING.md, PARTS). That is mechanical as long as the variable is read by exactly one
+ * family of properties, so the reads are collected once and the answer looked up per name. A
+ * variable read by two families is a two-role variable — the dominant role wins, and that is a
+ * judgment call the review has to make, so it is reported instead of guessed.
  */
 const PROPERTY_PARTS = [
   [/^background(-color)?$/, 'bg'],
@@ -225,17 +235,18 @@ const propose = (name, component, isColors) => {
   });
 
   /*
-   * 3. a bare `color` segment names no part; the property it is assigned to does. Qualified forms
-   * (`background-color`, `border-color`, …) are already in `rejected.parts` and are left to step 4 —
-   * touching them here would produce `bg-bg`.
+   * 3. a bare `color` segment names no part; the property it is assigned to does. Qualified
+   * forms (`background-color`, `border-color`, …) are already in `rejected.parts` and are left to
+   * step 4 — touching them here would produce `bg-bg`.
    */
   if (isColors) {
     /*
      * When the reads do not settle it — because the variable is only ever handed to a base mixin,
      * which renames it — the legacy convention decides: in these themes a bare `-color` on a widget
-     * or a sub-element IS the text colour, and the background has always been spelled `-bg`. Verified
-     * on the mixins that consume them: $calendar-color arrives as $cell-text-color and lands in
-     * `color:`, $speed-dial-action-color likewise. Qualified forms never reach this branch.
+     * or a sub-element IS the text colour, and the background has always been spelled `-bg`.
+     * Verified on the mixins that consume them: $calendar-color arrives as $cell-text-color and
+     * lands in `color:`, $speed-dial-action-color likewise. Qualified forms never reach this
+     * branch.
      */
     const part = partOf(name) ?? 'content';
     const QUALIFIED = /(background|border|outline|text|icon|glyph|shadow|caret|fill|stroke)$/;
@@ -248,9 +259,9 @@ const propose = (name, component, isColors) => {
   }
 
   /*
-   * 4a. a physical word in the SLOT position is the CSS property; the same word earlier in the name is
-   * a variant, so only the tail is rewritten. Longest match first, so `border-top-left-radius` wins
-   * over `border-top`.
+   * 4a. a physical word in the SLOT position is the CSS property; the same word earlier in the name
+   * is a variant, so only the tail is rewritten. Longest match first, so `border-top-left-radius`
+   * wins over `border-top`.
    */
   let canonicalTail = null;
   Object.entries(registries.rejectedTrailing ?? {})
@@ -273,7 +284,8 @@ const propose = (name, component, isColors) => {
   let head = tail ? bare.slice(0, bare.length - tail.length).replace(/-$/, '') : bare;
   head = replaceSegments(head, registries.rejected.modifiers ?? {});
   head = replaceSegments(head, registries.rejected.states);
-  head = replaceSegments(head, isColors ? registries.rejected.parts : registries.rejected.properties);
+  const rejected = isColors ? registries.rejected.parts : registries.rejected.properties;
+  head = replaceSegments(head, rejected);
   bare = tail ? `${head}${head ? '-' : ''}${tail}` : head;
   // a squashed sub-element (`grouppanel`) only reads as one once it is hyphenated
   (registries.subElements[component] ?? []).forEach((sub) => {
@@ -313,10 +325,10 @@ const propose = (name, component, isColors) => {
 const identity = new Set(registries.themeIdentity);
 /*
  * A name that base also declares is only untouchable when the WIRING is a star import: there the
- * theme's top-level `$x: … !default` sets base's variable, so the spelling belongs to base. When the
- * wiring is `with($x: $value)`, the KEY belongs to base but the theme's own variable on the right is
- * free — and 45 colour names across pivotGrid, filterBuilder and scheduler sat unmigrated for months
- * because this exclusion did not make that distinction.
+ * theme's top-level `$x: … !default` sets base's variable, so the spelling belongs to base. When
+ * the wiring is `with($x: $value)`, the KEY belongs to base but the theme's own variable on the
+ * right is free — and 45 colour names across pivotGrid, filterBuilder and scheduler sat unmigrated
+ * for months because this exclusion did not make that distinction.
  */
 const baseNames = new Set(walk(baseRoot).flatMap((file) => [...declaredIn(file)]));
 
@@ -356,14 +368,18 @@ const report = (folder) => {
       const bare = name.slice(1);
       if (identity.has(name) || alreadyMapped.has(name)) return;
       if (baseNames.has(name) && wiredByStarImport.has(name)) return;
-      // Being inside the right namespace is not the same as being grammatical: `$accordion-title-bg-hover`
+      // Being inside the right namespace is not the same as being grammatical:
+      // `$accordion-title-bg-hover`
       // needs a rename too, and skipping it would leave the folder unable to enter `migrated`.
       const inNamespace = bare === component || bare.startsWith(`${component}-`);
       if (inNamespace && !grammarViolation(name, component, isColors)) return;
       const to = propose(name, component, isColors);
       if (to === name) return;
       rows.push({
-        file: file.slice(themeRoot.length + 1), name, to, why: grammarViolation(to, component, isColors),
+        file: file.slice(themeRoot.length + 1),
+        name,
+        to,
+        why: grammarViolation(to, component, isColors),
       });
     });
   });
@@ -395,13 +411,15 @@ if (process.argv.includes('--all')) {
   } else {
     process.stdout.write(`${target} -> ${component}, ${rows.length} имя(ён)\n\n`);
     rows.filter(({ why }) => !why).forEach(({ name, to }) => process.stdout.write(`  OK      ${name}\n          -> ${to}\n`));
-    rows.filter(({ why }) => why).forEach(({ file, name, to, why }) => process.stdout.write(`  ВРУЧНУЮ ${name}  (${file})\n          -> ${to}: ${why.message ?? why}\n`));
+    rows.filter(({ why }) => why).forEach(({
+      file, name, to, why,
+    }) => process.stdout.write(`  ВРУЧНУЮ ${name}  (${file})\n          -> ${to}: ${why.message ?? why}\n`));
   }
 } else if (process.argv.includes('--anatomy')) {
   /*
    * What actually blocks a folder is almost never spelling — it is that nobody has written down its
-   * DOM anatomy yet. This prints the unresolved middles, most frequent first, so one review pass over
-   * a folder produces its sub-element list, after which the whole folder becomes mechanical.
+   * DOM anatomy yet. This prints the unresolved middles, most frequent first, so one review pass
+   * over a folder produces its sub-element list, after which the whole folder becomes mechanical.
    */
   folders.forEach((folder) => {
     const { rows } = report(folder);

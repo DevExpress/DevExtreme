@@ -2,14 +2,14 @@
  * A published name has to describe the CSS property it is assigned to.
  *
  * The naming enforcer checks the SHAPE of a name - component, element, part, state - and the colour
- * audit checks that a colour slot reads the right role. Neither asks whether `-height` is written to
- * a height or `-gap` to a gap, and `--dx-list-bottom-padding` fed a margin for a year without a
+ * audit checks that a colour slot reads the right role. Neither asks whether `-height` is written
+ * to a height or `-gap` to a gap, and `--dx-list-bottom-padding` fed a margin for a year without a
  * single check going red.
  *
- * Measured from the built bundle by tools/review/name-truth.mjs, so the question is what the browser
- * does with the name, not what the SCSS looks like. Only DIRECT assignments are judged: a name
- * inside a calc() is a quantity another property is computed from, and naming it after that property
- * would be the lie.
+ * Measured from the built bundle by tools/review/name-truth.mjs, so the question is what the
+ * browser does with the name, not what the SCSS looks like. Only DIRECT assignments are judged: a
+ * name inside a calc() is a quantity another property is computed from, and naming it after that
+ * property would be the lie.
  */
 
 import { execFileSync } from 'child_process';
@@ -20,7 +20,7 @@ const packageRoot = process.cwd();
 const tool = join(packageRoot, 'tools', 'review', 'name-truth.mjs');
 const reviewed = JSON.parse(readFileSync(join(packageRoot, 'tools', 'review', 'name-truth.json'), 'utf8'));
 
-type Row = { name: string; says: string; paints: string[]; decision?: string; why?: string };
+interface Row { name: string; says: string; paints: string[]; decision?: string; why?: string }
 
 const actual: {
   summary: Record<string, number>;

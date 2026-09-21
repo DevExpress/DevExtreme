@@ -15,10 +15,15 @@
  * and runtime-contract.json, and tests/fluent-next-naming.test.ts holds them.
  */
 
-import { readFileSync, readdirSync, existsSync, writeFileSync } from 'fs';
+import {
+  readFileSync,
+  readdirSync,
+  existsSync,
+  writeFileSync,
+} from 'fs';
 import { join } from 'path';
 
-type Entry = { name: string };
+interface Entry { name: string }
 
 const packageRoot = process.cwd();
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
@@ -81,7 +86,7 @@ test('every fluent-next bundle publishes the same names', () => {
  * Runs in update mode as well: regenerating the baseline is how a reviewed removal is recorded, not
  * how it is hidden.
  */
-const undocumented = () => (THEME_IS_PUBLISHED
+const undocumented = (): string[] => (THEME_IS_PUBLISHED
   ? removed.filter((name) => !retired.has(name))
   : []);
 

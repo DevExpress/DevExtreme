@@ -39,27 +39,19 @@ const ROOTS = {
 
 const walk = (node, trail = []) => {
   const out = [];
-  for (const [key, value] of Object.entries(node ?? {})) {
-    if (key.startsWith('$')) continue;
+  Object.entries(node ?? {}).forEach(([key, value]) => {
+    if (key.startsWith('$')) return;
     if (value && typeof value === 'object' && '$value' in value) out.push([[...trail, key].join('.'), value.$value]);
     else if (value && typeof value === 'object') out.push(...walk(value, [...trail, key]));
-  }
+  });
   return out;
 };
 
 const roleOf = (raw) => String(raw).replace(/[{}]/g, '').replace(/^color\./, '');
 
-const readRules = (css) => {
-  const rules = [];
-  const re = /([^{}]+)\{([^{}]*)\}/g;
-  let match;
-  while ((match = re.exec(css))) {
-    const selector = match[1].trim().replace(/\s+/g, ' ');
-    if (selector.startsWith('@')) continue;
-    rules.push({ selector, body: match[2] });
-  }
-  return rules;
-};
+const readRules = (css) => [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+  .map((match) => ({ selector: match[1].trim().replace(/\s+/g, ' '), body: match[2] }))
+  .filter(({ selector }) => !selector.startsWith('@'));
 
 const tokens = JSON.parse(readFileSync(path.join(tokensDir, 'tokens/components/core/theme/fluent.json'), 'utf8'));
 const css = readFileSync(bundle, 'utf8');
@@ -74,20 +66,22 @@ for (const [, , name, value] of css.matchAll(/(^|;|\{)\s*(--dx-[a-z0-9-]+)\s*:\s
 }
 
 const report = [];
-for (const [component, entries] of Object.entries(tokens)) {
+Object.entries(tokens).forEach(([component, entries]) => {
   const declared = walk(entries).filter(([p]) => /disabled/i.test(p));
-  if (!declared.length) continue;
+  if (!declared.length) return;
 
   const roots = ROOTS[component] ?? [];
   const ours = [];
-  for (const rule of rules) {
-    if (!roots.some((root) => rule.selector.includes(`.${root}`))) continue;
-    for (const [, , prop, value] of rule.body.matchAll(/(^|;)\s*([a-z-]+)\s*:\s*([^;]+)/g)) {
-      if (!/color|fill|stroke|opacity|shadow/.test(prop)) continue;
-      const name = /var\(\s*(--dx-[a-z0-9-]+)/.exec(value)?.[1];
-      ours.push({ prop, value: value.trim(), role: name ? varRole.get(name) ?? null : null });
-    }
-  }
+  rules
+    .filter((rule) => roots.some((root) => rule.selector.includes(`.${root}`)))
+    .forEach((rule) => {
+      [...rule.body.matchAll(/(^|;)\s*([a-z-]+)\s*:\s*([^;]+)/g)]
+        .filter(([, , prop]) => /color|fill|stroke|opacity|shadow/.test(prop))
+        .forEach(([, , prop, value]) => {
+          const name = /var\(\s*(--dx-[a-z0-9-]+)/.exec(value)?.[1];
+          ours.push({ prop, value: value.trim(), role: name ? varRole.get(name) ?? null : null });
+        });
+    });
 
   report.push({
     component,
@@ -95,7 +89,7 @@ for (const [component, entries] of Object.entries(tokens)) {
     theme: ours,
     verdict: ours.length === 0 ? 'MISSING - the theme paints nothing here' : 'present',
   });
-}
+});
 
 if (process.argv.includes('--json')) {
   console.log(JSON.stringify(report, null, 2));

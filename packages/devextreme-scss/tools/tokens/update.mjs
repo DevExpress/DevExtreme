@@ -5,18 +5,19 @@
  *   pnpm run tokens:update            # report the installed package, change nothing
  *
  * The four manual steps — edit the dependency, reinstall, rebuild the tokens, regenerate the
- * registries — are the cheap part. It stops there: the themes are not rebuilt, so the CSS bundles on
- * disk still come from the previous package until `nx build:themes` runs. The expensive part is knowing what the new package did, and that
- * is what the report is for: names the theme reads and the package no longer has (the build refuses
- * those), and every generated value that moved. The second list is the one that costs etalon
- * screenshots, so it is printed per file with old and new side by side.
+ * registries — are the cheap part. It stops there: the themes are not rebuilt, so the CSS bundles
+ * on disk still come from the previous package until `nx build:themes` runs. The expensive part is
+ * knowing what the new package did, and that is what the report is for: names the theme reads and
+ * the package no longer has (the build refuses those), and every generated value that moved. The
+ * second list is the one that costs etalon screenshots, so it is printed per file with old and new
+ * side by side.
  *
  * What stays manual on purpose: approving the Renovate pull request, and re-recording the etalons.
  * A bot can do neither — our etalons are pixels, and a value change has to be looked at.
  *
- * The install runs with --no-frozen-lockfile, which is the only way to move a pinned dependency, and
- * pnpm takes the opportunity to normalise the rest of the lockfile. Read that diff before committing
- * it: everything beyond this package is pnpm's housekeeping, not part of the bump.
+ * The install runs with --no-frozen-lockfile, which is the only way to move a pinned dependency,
+ * and pnpm takes the opportunity to normalise the rest of the lockfile. Read that diff before
+ * committing it: everything beyond this package is pnpm's housekeeping, not part of the bump.
  *
  * Everything here is file system and process; the diffing and the markdown live in report.ts, where
  * tests/tokens-report.test.ts can reach them.
@@ -102,7 +103,9 @@ const plain = Boolean(process.env.NO_COLOR);
 const interactive = process.stdout.isTTY === true;
 const color = interactive && !plain;
 
-/* The preamble is written to stderr, so whether it is coloured follows that stream, not stdout's. */
+/*
+ * The preamble is written to stderr, so whether it is coloured follows that stream, not stdout's.
+ */
 const progressColor = process.stderr.isTTY === true && !plain;
 
 const show = (report) => {

@@ -20,12 +20,12 @@
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 
-type Entry = {
+interface Entry {
   name: string;
   replacement: string | null;
   release: string;
   note: string;
-};
+}
 
 const packageRoot = process.cwd();
 const artifactsCss = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');

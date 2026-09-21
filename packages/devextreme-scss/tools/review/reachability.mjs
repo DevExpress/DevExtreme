@@ -8,18 +8,19 @@
  *      other widget its variable is empty, the whole declaration is invalid and the property simply
  *      disappears. In the legacy themes such duplicates are harmless (the literals match), the tier
  *      splits them across roots. Found by the screenshots of PR #34774: base/dataGrid and
- *      base/treeList draw the same UNSCOPED
- *      `.dx-command-ai-header-button .dx-button.dx-state-focused`, and the focus ring of the AI
- *      column button vanished in DataGrid. The cure is a shared gridBase name ($grid-outline-focused).
+ *      base/treeList draw the same UNSCOPED `.dx-command-ai-header-button
+ *      .dx-button.dx-state-focused`, and the focus ring of the AI column button vanished in
+ *      DataGrid. The cure is a shared gridBase name ($grid-outline-focused).
  *
  *   2) REPORT (never fails): reads outside the root. A rule reads var(--dx-<component>-…), but its
- *      selector text contains no root of that component. Most such places are harmless — the element
- *      IS nested in the root (`.dx-editor-cell` inside the grid) and the selector text just does not
- *      say so. The dangerous ones are portals: elements JS creates outside the root (the dragged
- *      column preview, the sortable clone, a popup wrapper). The two cannot be told apart statically
- *      — that is knowledge about the DOM — so the verdict comes from the runtime audit
- *      playground/tier-reachability-audit.html, and this list is the material for its gallery: every
- *      new name here must be either proven nested or added as a root to registries.rootSelectors.
+ *      selector text contains no root of that component. Most such places are harmless — the
+ *      element IS nested in the root (`.dx-editor-cell` inside the grid) and the selector text just
+ *      does not say so. The dangerous ones are portals: elements JS creates outside the root (the
+ *      dragged column preview, the sortable clone, a popup wrapper). The two cannot be told apart
+ *      statically — that is knowledge about the DOM — so the verdict comes from the runtime audit
+ *      playground/tier-reachability-audit.html, and this list is the material for its gallery:
+ *      every new name here must be either proven nested or added as a root to
+ *      registries.rootSelectors.
  *
  *   3) GATE (fails): a name declared and never read. Questions 1 and 2 both ask "the read happens,
  *      does it land" — neither notices a name nothing reads at all. Such a name is still API: it
@@ -50,6 +51,7 @@ import { createRequire } from 'module';
 const here = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 const postcss = require('postcss');
+
 const packageRoot = join(here, '..', '..');
 const bundlePath = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');
 
@@ -66,7 +68,8 @@ const root = postcss.parse(css);
 
 const TIER_READ = /var\(\s*(--dx-[a-z0-9-]+)/g;
 const isTierName = (name) => name.startsWith('--dx-') && !name.startsWith('--dxds-');
-const readsOf = (value) => [...new Set([...value.matchAll(TIER_READ)].map(([, name]) => name))].filter(isTierName);
+const readsOf = (value) => [...new Set([...value.matchAll(TIER_READ)].map(([, name]) => name))]
+  .filter(isTierName);
 
 /* where each tier name is declared */
 const declaredAt = new Map();
@@ -106,11 +109,12 @@ const undeclared = new Map();
 root.walkRules((rule) => {
   if (!rule.selectors) return;
   rule.walkDecls((decl) => {
-    for (const name of readsOf(decl.value)) {
-      if (declaredAt.has(name) || SET_ELSEWHERE.has(name)) continue;
-      if (!undeclared.has(name)) undeclared.set(name, new Set());
-      rule.selectors.forEach((sel) => undeclared.get(name).add(sel.trim()));
-    }
+    readsOf(decl.value)
+      .filter((name) => !declaredAt.has(name) && !SET_ELSEWHERE.has(name))
+      .forEach((name) => {
+        if (!undeclared.has(name)) undeclared.set(name, new Set());
+        rule.selectors.forEach((sel) => undeclared.get(name).add(sel.trim()));
+      });
   });
 });
 undeclared.forEach((where, name) => {
@@ -205,10 +209,10 @@ const seenScopes = new Map();
 
 /*
  * A scope that names another widget's overlay (the toolbar's dx-dropdownmenu-popup, a popover or
- * tooltip wrapper) is a portal by construction: JS mounts it in the overlay container, under no root
- * of THIS component, so the tier never reaches it and "reviewed" cannot be true. The branch has to
- * read the Sass twin (or a :root role) instead - that is how the diagram's overflow menu lost its
- * icon margins for a month while the whitelist kept the gate quiet.
+ * tooltip wrapper) is a portal by construction: JS mounts it in the overlay container, under no
+ * root of THIS component, so the tier never reaches it and "reviewed" cannot be true. The branch
+ * has to read the Sass twin (or a :root role) instead - that is how the diagram's overflow menu
+ * lost its icon margins for a month while the whitelist kept the gate quiet.
  */
 const SHARED_OVERLAY = /-(popup|popup-wrapper|overlay|overlay-wrapper|overlay-content|popover|popover-wrapper|tooltip|tooltip-wrapper)$/;
 const ownClassOf = (component, scope) => {
@@ -218,7 +222,8 @@ const ownClassOf = (component, scope) => {
   ];
   return own.some((cls) => scope === cls || scope.startsWith(`${cls}-`));
 };
-const isForeignPortal = (component, scope) => SHARED_OVERLAY.test(scope) && !ownClassOf(component, scope);
+const isForeignPortal = (component, scope) => SHARED_OVERLAY.test(scope)
+  && !ownClassOf(component, scope);
 
 const reviewed = JSON.parse(readFileSync(scopesPath, 'utf8'));
 const listedPortals = Object.entries(reviewed)
@@ -296,7 +301,8 @@ root.walkDecls((decl) => {
   readsOf(decl.value).forEach(wake);
 });
 root.walkAtRules('container', (rule) => {
-  [...rule.params.matchAll(STYLE_QUERY_READ)].map(([, name]) => name).filter(isTierName).forEach(wake);
+  [...rule.params.matchAll(STYLE_QUERY_READ)]
+    .map(([, name]) => name).filter(isTierName).forEach(wake);
 });
 while (frontier.length) {
   (declaredValues.get(frontier.pop()) ?? []).forEach((value) => readsOf(value).forEach(wake));

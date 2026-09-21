@@ -8,14 +8,14 @@
  *
  * The journal describes each divergence in prose ("немного отличаются оттенки"). A design review
  * needs the actual pixels, so this compares the two BUILT bundles instead of the sources: for every
- * selector+property that exists in both themes it resolves the fluent-next value through the bundle's
- * own `:root` map down to a literal, and reports the pairs that really differ.
+ * selector+property that exists in both themes it resolves the fluent-next value through the
+ * bundle's own `:root` map down to a literal, and reports the pairs that really differ.
  *
  * Two things make the naive diff lie, and both are handled here:
  *
  *   - Formatting is not a difference. `#0F6CBD`, `rgb(15 108 189)` and `rgba(15,108,189,1)` are the
- *     same colour; the minifier and the token pipeline disagree about spelling constantly. Values are
- *     normalised to an rgba tuple before comparison, so only real colour changes survive.
+ *     same colour; the minifier and the token pipeline disagree about spelling constantly. Values
+ *     are normalised to an rgba tuple before comparison, so only real colour changes survive.
  *   - Absence is not a difference. fluent-next emits `var()` where fluent emitted a literal, which
  *     stops the minifier from collapsing longhands into shorthands (GOTCHAS §8). A property present
  *     on one side only is therefore reported separately as `shape`, never as a colour delta.
@@ -39,8 +39,12 @@ const onlyDecision = /--decision=(\d+)/.exec(process.argv.join(' '))?.[1];
 /* ------------------------------------------------------------------ colours */
 
 const NAMED = {
-  transparent: [0, 0, 0, 0], white: [255, 255, 255, 1], black: [0, 0, 0, 1],
-  gray: [128, 128, 128, 1], grey: [128, 128, 128, 1], red: [255, 0, 0, 1],
+  transparent: [0, 0, 0, 0],
+  white: [255, 255, 255, 1],
+  black: [0, 0, 0, 1],
+  gray: [128, 128, 128, 1],
+  grey: [128, 128, 128, 1],
+  red: [255, 0, 0, 1],
 };
 
 const hexToRgba = (hex) => {
@@ -98,7 +102,8 @@ const toRgba = (raw) => {
   const c = (1 - Math.abs(2 * l - 1)) * s;
   const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
   const m = l - c / 2;
-  const sector = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]][Math.floor(h / 60)];
+  const sectors = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]];
+  const sector = sectors[Math.floor(h / 60)];
   return [...sector.map((v) => Math.round((v + m) * 255)), alpha];
 };
 
@@ -171,8 +176,8 @@ const declarations = (ast, map) => {
 
 /*
  * One entry per row of the agenda table. `places` are matched against the selector, `props` against
- * the property; a place with no `props` accepts every colour-valued property. The patterns come from
- * the "Место" field of the journal entry, translated into the selectors that actually ship.
+ * the property; a place with no `props` accepts every colour-valued property. The patterns come
+ * from the "Место" field of the journal entry, translated into the selectors that actually ship.
  */
 const DECISIONS = [
   {
@@ -262,9 +267,9 @@ const COLOUR_PROPS = /(^|-)(color|fill|stroke)$/;
 const COLOUR_TOKEN = /(#[0-9a-f]{3,8}|(?:rgba?|hsla?)\([^()]*(?:\([^()]*\))?[^()]*\)|\b(?:transparent|white|black|gray|grey|red)\b)/i;
 
 /**
- * The legacy side often carries the colour inside a shorthand (`border: 1px solid rgba(...)`), while
- * fluent-next has to split it out because the value is a `var()`. Without this the two sides look
- * incomparable and a real colour change would be filed as "present only in fluent-next".
+ * The legacy side often carries the colour inside a shorthand (`border: 1px solid rgba(...)`),
+ * while fluent-next has to split it out because the value is a `var()`. Without this the two sides
+ * look incomparable and a real colour change would be filed as "present only in fluent-next".
  */
 const fromShorthand = (map, selectorAndProp) => {
   const [selector, prop] = selectorAndProp.split(' | ');
@@ -309,12 +314,20 @@ const compare = (decision, theme) => {
       const a = toRgba(after);
       const b = toRgba(before);
       if (a && b) {
-        if (a.join() !== b.join()) rows.push({ key, before: show(b), after: show(a), kind: 'colour' });
+        if (a.join() !== b.join()) {
+          rows.push({
+            key, before: show(b), after: show(a), kind: 'colour',
+          });
+        }
         return;
       }
       /* not a plain colour (box-shadow, gradient): compare as normalised text */
       const flat = (text) => text.replace(/\s+/g, ' ').replace(/,\s/g, ',').trim();
-      if (flat(before) !== flat(after)) rows.push({ key, before: flat(before), after: flat(after), kind: 'text' });
+      if (flat(before) !== flat(after)) {
+        rows.push({
+          key, before: flat(before), after: flat(after), kind: 'text',
+        });
+      }
     });
   });
   return { rows, shape };

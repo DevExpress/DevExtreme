@@ -37,7 +37,7 @@ import { createRequire } from 'module';
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = join(here, '..', '..');
 const themeDir = join(packageRoot, 'scss', 'widgets', 'fluent-next');
-const require_ = createRequire(import.meta.url);
+const requireFrom = createRequire(import.meta.url);
 
 const SETS = ['core', 'vnext', 'blazor', 'wpf'];
 const DENSITIES = ['fluent_small', 'fluent_medium', 'fluent_large'];
@@ -53,7 +53,7 @@ const COMPONENT = JSON.parse(
     .replace(/^"const" COMPONENT = /, ''),
 );
 
-const tokensRoot = dirname(require_.resolve('@devexpress/design-tokens-internal/package.json'));
+const tokensRoot = dirname(requireFrom.resolve('@devexpress/design-tokens-internal/package.json'));
 const tokensVersion = JSON.parse(readFileSync(join(tokensRoot, 'package.json'), 'utf8')).version;
 
 // scale + step as the package spells them: {spacing.120} -> spacing/120, {font-size.base-sm} ->
@@ -67,19 +67,19 @@ const refOf = (value) => {
 };
 
 const packageSteps = new Map(); // component -> scale -> Set(step)
-for (const set of SETS) {
-  for (const density of DENSITIES) {
+SETS.forEach((set) => {
+  DENSITIES.forEach((density) => {
     const file = join(tokensRoot, 'tokens', 'components', set, 'size', `${density}.json`);
-    if (!existsSync(file)) continue;
+    if (!existsSync(file)) return;
     const walk = (node, path = []) => {
-      for (const key of Object.keys(node ?? {})) {
+      Object.keys(node ?? {}).forEach((key) => {
         const value = node[key];
         if (value && typeof value === 'object' && !('value' in value) && !('$value' in value)) {
           walk(value, [...path, key]);
-          continue;
+          return;
         }
         const ref = refOf(value.value ?? value.$value);
-        if (!ref) continue;
+        if (!ref) return;
         const component = path[0];
         if (!packageSteps.has(component)) packageSteps.set(component, new Map());
         const scales = packageSteps.get(component);
@@ -87,43 +87,45 @@ for (const set of SETS) {
         const steps = scales.get(ref.scale);
         if (!steps.has(ref.step)) steps.set(ref.step, new Set());
         steps.get(ref.step).add(`${set}/${density.replace('fluent_', '')}`);
-      }
+      });
     };
     walk(JSON.parse(readFileSync(file, 'utf8')));
-  }
-}
+  });
+});
 
 // Our side: every `ds.$<scale>-<step>` read inside a _sizes.scss, with the variable it feeds.
 const SCALES = ['spacing', 'border-width', 'border-radius', 'font-size', 'line-height', 'font-weight', 'letter-spacing'];
 const declarations = [];
-for (const folder of readdirSync(themeDir).sort()) {
+readdirSync(themeDir).sort().forEach((folder) => {
   const file = join(themeDir, folder, '_sizes.scss');
-  if (!existsSync(file)) continue;
+  if (!existsSync(file)) return;
   const text = readFileSync(file, 'utf8');
-  for (const line of text.split('\n')) {
-    const decl = line.match(/^\$([a-z0-9-]+)\s*:\s*(.+?)(?:\s*!default)?;/);
-    if (!decl) continue;
+  text.split('\n').forEach((line) => {
+    const decl = /^\$([a-z0-9-]+)\s*:\s*(.+?)(?:\s*!default)?;/.exec(line);
+    if (!decl) return;
     const [, name, value] = decl;
-    for (const scale of SCALES) {
+    SCALES.forEach((scale) => {
       const re = new RegExp(`ds\\.\\$${scale}-([a-z0-9-]+)`, 'g');
       for (const m of value.matchAll(re)) {
-        declarations.push({ folder, name, scale, step: m[1], value: value.trim() });
+        declarations.push({
+          folder, name, scale, step: m[1], value: value.trim(),
+        });
       }
-    }
-  }
-}
+    });
+  });
+});
 
 const stepsFor = (folder, scale) => {
   const components = COMPONENT[folder] ?? [];
   const found = new Map();
-  for (const component of components) {
+  components.forEach((component) => {
     const scales = packageSteps.get(component);
-    if (!scales?.has(scale)) continue;
+    if (!scales?.has(scale)) return;
     for (const [step, where] of scales.get(scale)) {
       if (!found.has(step)) found.set(step, new Set());
       for (const w of where) found.get(step).add(w);
     }
-  }
+  });
   return found;
 };
 
@@ -141,8 +143,10 @@ const summary = {
   tokensVersion,
   declarations: findings.length,
   folders: new Set(findings.map((f) => f.folder)).size,
-  byVerdict: Object.fromEntries(verdicts.map((v) => [v, findings.filter((f) => f.verdict === v).length])),
-  byScale: Object.fromEntries(SCALES.map((s) => [s, findings.filter((f) => f.scale === s).length]).filter(([, n]) => n)),
+  byVerdict: Object.fromEntries(verdicts
+    .map((v) => [v, findings.filter((f) => f.verdict === v).length])),
+  byScale: Object.fromEntries(SCALES
+    .map((s) => [s, findings.filter((f) => f.scale === s).length]).filter(([, n]) => n)),
 };
 
 if (process.argv.includes('--json')) {
@@ -156,7 +160,8 @@ if (process.argv.includes('--json')) {
   const byFolder = {};
   for (const f of neu) (byFolder[f.folder] ??= []).push(f);
   console.log(`\nsteps the package does not use in this component (${neu.length}):`);
-  for (const [folder, rows] of Object.entries(byFolder).sort((a, b) => b[1].length - a[1].length).slice(0, 12)) {
+  const busiest = Object.entries(byFolder).sort((a, b) => b[1].length - a[1].length).slice(0, 12);
+  for (const [folder, rows] of busiest) {
     console.log(`  ${String(rows.length).padStart(3)} ${folder}  e.g. ${rows[0].name} reads ${rows[0].scale}-${rows[0].step}; package uses ${rows[0].packageUsesHere.join(', ')}`);
   }
 }

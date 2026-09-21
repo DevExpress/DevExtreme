@@ -1,22 +1,28 @@
 /*
- * Wave C of the naming standard (scss/widgets/fluent-next/NAMING.md): renames theme variables to the
- * standard, one reviewed batch at a time.
+ * Wave C of the naming standard (scss/widgets/fluent-next/NAMING.md): renames theme variables to
+ * the standard, one reviewed batch at a time.
  *
  *   node tools/naming/rename.mjs --check                  # validate the whole mapping
  *   node tools/naming/rename.mjs --apply --batch=C0-toast
  *   node tools/naming/rename.mjs --residue                # no old name survives anywhere
  *
- * The mapping in tools/naming/mapping.json is HAND-AUTHORED per batch and reviewed as a diff: the new
- * name depends on which CSS property the variable feeds (a `-color` that lands in `color:` becomes
- * `content`, one that lands in `background-color` becomes `bg`), and that cannot be derived from the
- * old name. What IS automated is the guard below — the mapping is rejected before anything is written
- * if it could silently change behaviour.
+ * The mapping in tools/naming/mapping.json is HAND-AUTHORED per batch and reviewed as a diff: the
+ * new name depends on which CSS property the variable feeds (a `-color` that lands in `color:`
+ * becomes `content`, one that lands in `background-color` becomes `bg`), and that cannot be derived
+ * from the old name. What IS automated is the guard below — the mapping is rejected before anything
+ * is written if it could silently change behaviour.
  *
  * A rename cannot change one byte of the compiled CSS. That is the acceptance criterion, and
  * `tests/fluent-next-naming.test.ts` keeps the invariants enforced afterwards.
  */
 
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'fs';
+import {
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  statSync,
+  existsSync,
+} from 'fs';
 import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -82,11 +88,11 @@ const themeFiles = walk(themeRoot);
 const allFiles = [...themeFiles, ...walk(baseRoot)];
 
 /*
- * A mapping key is either `$name` or `<folder>:$name`. The qualified form exists because two folders
- * can declare the same name as separate variables (dataGrid and pivotGrid both had
- * `$area-field-border-radius`), and one JSON object cannot hold that name twice. A qualified entry is
- * confined to its folder; an unqualified one is refused by the guard if more than one folder declares
- * the name.
+ * A mapping key is either `$name` or `<folder>:$name`. The qualified form exists because two
+ * folders can declare the same name as separate variables (dataGrid and pivotGrid both had
+ * `$area-field-border-radius`), and one JSON object cannot hold that name twice. A qualified entry
+ * is confined to its folder; an unqualified one is refused by the guard if more than one folder
+ * declares the name.
  */
 const parseKey = (key) => {
   const separator = key.indexOf(':');
@@ -130,7 +136,8 @@ const sizeBucket = (name) => {
   // "blur radius" is the CSS term for a shadow's blur length and has nothing to do with corners.
   if (/blur/.test(name)) return 'spacing';
   if (/radius/.test(name)) return 'border-radius';
-  // A bare `-border` segment is the border shorthand or its width (`1px solid`, `$border-width-10`);
+  // A bare `-border` segment is the border shorthand or its width (`1px solid`,
+  // `$border-width-10`);
   // radius and the radius corners are matched above. The segment must be hyphen-delimited, or
   // `borderedwidget` would be read as a border.
   if (/(^|-)border(-|$)|border-size/.test(name)) return 'border-width';
@@ -189,11 +196,12 @@ const guard = () => {
      * …and specifically to the component of the folder that declares the old name (rule O1), so a
      * batch cannot quietly move a variable into another component's namespace.
      *
-     * Every folder that declares the old name has to be checked, not the first one found. Two folders
-     * can hold same-named, independent variables with DIFFERENT values — dataGrid and pivotGrid both
-     * declared `$area-field-top-bottom-padding`, spacing-20 against spacing-10 in compact — and one
-     * rename then drags the second folder's variable into the first one's namespace. Caught only
-     * after the fact by a `git diff` showing files the batch had no business touching.
+     * Every folder that declares the old name has to be checked, not the first one found. Two
+     * folders can hold same-named, independent variables with DIFFERENT values — dataGrid and
+     * pivotGrid both declared `$area-field-top-bottom-padding`, spacing-20 against spacing-10 in
+     * compact — and one rename then drags the second folder's variable into the first one's
+     * namespace. Caught only after the fact by a `git diff` showing files the batch had no business
+     * touching.
      */
     const homes = [...new Set(themeFiles
       .filter((file) => declaredIn(file).has(from))
@@ -204,11 +212,12 @@ const guard = () => {
     if (!folder && homes.length > 1) {
       problems.push(`${from}: declared in ${homes.join(' and ')} — these are separate variables, rename them per owner`);
     }
-    homes.forEach((folder) => {
-      const expected = registries.components[folder];
+    homes.forEach((home) => {
+      const expected = registries.components[home];
       const actual = ownerOf(to);
-      if (expected && actual && actual !== expected && !registries.systemConcerns.includes(actual)) {
-        problems.push(`${to}: declared in ${folder} (component ${expected}) but named for ${actual}`);
+      const systemConcern = registries.systemConcerns.includes(actual);
+      if (expected && actual && actual !== expected && !systemConcern) {
+        problems.push(`${to}: declared in ${home} (component ${expected}) but named for ${actual}`);
       }
     });
 
@@ -246,8 +255,9 @@ const guard = () => {
        * occurrence of ours: that is the base module's parameter, which this rename must not touch.
        * Counting it made checks 5 and 6 fire on 60 already-applied names — the file still mentioned
        * the old spelling as a with() key, and the NEW name was "visible via `as *`" simply because
-       * the folder star-imports its own _colors.scss, which is how a widget reads its own variables.
-       * The named-argument form repeated it on the four base parameters treeview-checkbox() binds.
+       * the folder star-imports its own _colors.scss, which is how a widget reads its own
+       * variables. The named-argument form repeated it on the four base parameters
+       * treeview-checkbox() binds.
        */
       const keyRanges = withRanges(content);
       const real = [...content.matchAll(new RegExp(`\\${from}(?![\\w-])`, 'g'))].some((match) => {
@@ -270,9 +280,9 @@ const guard = () => {
 
   /*
    * A theme variable is ALLOWED to share its name with the base parameter it configures — 553 names
-   * already do, and it is what `with($x: $x)` looks like once the theme prefix is gone. It only turns
-   * dangerous when the same file ALSO pulls that base module in with `as *`, because then the two
-   * names live in one scope and the declaration either mutates base's variable or loses to it.
+   * already do, and it is what `with($x: $x)` looks like once the theme prefix is gone. It only
+   * turns dangerous when the same file ALSO pulls that base module in with `as *`, because then the
+   * two names live in one scope and the declaration either mutates base's variable or loses to it.
    * Check 6 above catches exactly that case; a blanket "must differ from any base name" rule would
    * instead force unusable names on the whole rename.
    */
@@ -327,7 +337,8 @@ const applyBatch = (batch) => {
     let changed = 0;
 
     // Aliases that resolve to a module declaring one of the renamed names. After wave A every
-    // cross-widget read is `alias.$name`, and skipping those leaves the reference pointing at a name
+    // cross-widget read is `alias.$name`, and skipping those leaves the reference pointing at a
+    // name
     // that no longer exists — the build then fails with "Undefined variable", or worse, a stale
     // artifact makes a byte-comparison look clean.
     const renamingAliases = new Set();
@@ -349,26 +360,35 @@ const applyBatch = (batch) => {
     });
 
     while (index < original.length) {
+      let rename = null;
+
       if (original[index] === '$') {
-        const name = /^\$[a-z0-9_-]+/i.exec(original.slice(index))?.[0];
-        const namespaced = index > 0 && original[index - 1] === '.';
+        const at = index;
+        const name = /^\$[a-z0-9_-]+/i.exec(original.slice(at))?.[0];
+        const namespaced = at > 0 && original[at - 1] === '.';
         const alias = namespaced
-          ? /([a-zA-Z][\w-]*)\.$/.exec(original.slice(0, index))?.[1]
+          ? /([a-zA-Z][\w-]*)\.$/.exec(original.slice(0, at))?.[1]
           : null;
         const target = name ? names[name] : undefined;
-        // a `with()` or named-`@include` KEY is the base module's parameter name and must keep its spelling
-        const isWithKey = keyRanges.some(([from, to]) => index >= from && index < to)
-          && /^\s*:/.test(original.slice(index + (name?.length ?? 0)));
+        // a `with()` or named-`@include` KEY is the base module's parameter name and must keep its
+        // spelling
+        const isWithKey = name
+          && keyRanges.some(([from, to]) => at >= from && at < to)
+          && /^\s*:/.test(original.slice(at + name.length));
 
         if (target && !isWithKey && (!namespaced || renamingAliases.has(alias))) {
-          output += target;
-          index += name.length;
-          changed += 1;
-          continue;
+          rename = { target, length: name.length };
         }
       }
-      output += original[index];
-      index += 1;
+
+      if (rename) {
+        output += rename.target;
+        index += rename.length;
+        changed += 1;
+      } else {
+        output += original[index];
+        index += 1;
+      }
     }
 
     if (changed) {
@@ -388,27 +408,28 @@ const applyBatch = (batch) => {
  * (base/_speedDialAction.scss takes $button-default-bg as a mixin parameter). Scanning base here
  * produced false survivors that no amount of renaming could ever clear.
  */
-const residue = () => Object.entries(mapping.batches).flatMap(([batch, names]) => Object.entries(names)
-  .map(([key, to]) => ({ ...parseKey(key), to }))
+const residue = () => Object.entries(mapping.batches)
+  .flatMap(([batch, names]) => Object.entries(names)
+    .map(([key, to]) => ({ ...parseKey(key), to }))
   // An identity entry ("already correct, recorded for the record") can never disappear.
-  .filter(({ from, to }) => from !== to)
-  .flatMap(({ folder, from }) => themeFiles
-    .filter((file) => folder === null
+    .filter(({ from, to }) => from !== to)
+    .flatMap(({ folder, from }) => themeFiles
+      .filter((file) => folder === null
       || file.slice(themeRoot.length + 1).split('/')[0] === folder)
-    .filter((file) => {
-      const content = stripComments(readFileSync(file, 'utf8'));
-      const ranges = withRanges(content);
-      const pattern = new RegExp(`\\${from}(?![\\w-])`, 'g');
-      // A surviving occurrence in a `with()` or named-`@include` KEY position is not a survivor:
-      // that is the base module's parameter name, which this rename must not touch
-      // (dataGrid/treeList/pivotGrid configure base with $datagrid-* keys).
-      return [...content.matchAll(pattern)].some((match) => {
-        const inWith = ranges.some(([start, end]) => match.index >= start && match.index < end);
-        const isKey = /^\s*:/.test(content.slice(match.index + from.length));
-        return !(inWith && isKey);
-      });
-    })
-    .map((file) => `${batch}: ${from} still in ${file.slice(packageRoot.length + 1)}`)));
+      .filter((file) => {
+        const content = stripComments(readFileSync(file, 'utf8'));
+        const ranges = withRanges(content);
+        const pattern = new RegExp(`\\${from}(?![\\w-])`, 'g');
+        // A surviving occurrence in a `with()` or named-`@include` KEY position is not a survivor:
+        // that is the base module's parameter name, which this rename must not touch
+        // (dataGrid/treeList/pivotGrid configure base with $datagrid-* keys).
+        return [...content.matchAll(pattern)].some((match) => {
+          const inWith = ranges.some(([start, end]) => match.index >= start && match.index < end);
+          const isKey = /^\s*:/.test(content.slice(match.index + from.length));
+          return !(inWith && isKey);
+        });
+      })
+      .map((file) => `${batch}: ${from} still in ${file.slice(packageRoot.length + 1)}`)));
 
 // ---------------------------------------------------------------------------------------------
 

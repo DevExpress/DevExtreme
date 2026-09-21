@@ -12,10 +12,10 @@
  *
  *   UPDATE_BASE_SIZE_BASELINE=1 pnpm test
  *
- * The scan is tools/sizes/inventory.mjs, which reads the places from tools/review/px-audit.mjs — the
- * same module the theme gate and SCALES.md are built from, so the three cannot disagree about what
- * counts as a place. It is driven as a child process because the tool is ESM and jest transforms
- * TypeScript only.
+ * The scan is tools/sizes/inventory.mjs, which reads the places from tools/review/px-audit.mjs —
+ * the same module the theme gate and SCALES.md are built from, so the three cannot disagree about
+ * what counts as a place. It is driven as a child process because the tool is ESM and jest
+ * transforms TypeScript only.
  */
 
 import { execFileSync } from 'child_process';
@@ -35,7 +35,7 @@ const markers: string[] = vocabulary.categories
   .map((category: { marker: string | null }) => category.marker)
   .filter(Boolean);
 
-type Summary = {
+interface Summary {
   comments: number;
   settable: {
     occurrences: number; variables: number; injected: number; open: number;
@@ -46,7 +46,7 @@ type Summary = {
     byCategory: Record<string, number>;
     byWidget: Record<string, number>;
   };
-};
+}
 
 const summary: Summary = JSON.parse(
   execFileSync(process.execPath, [tool, '--json'], { encoding: 'utf8', cwd: packageRoot }),
@@ -93,10 +93,10 @@ test('the generated inventory lists are not stale', () => {
 
 test('no marker name is a substring of a custom property name used in the layer', () => {
   /*
-   * Same trap as in the theme: the scan looks for the marker as a substring of the line's comment, so
-   * a marker that reads like a custom property would match prose about that property. The layer reads
-   * a handful of --dx-* names (cardView's grid columns, the scheduler animation offset), so it has to
-   * be checked here too and not only against the theme.
+   * Same trap as in the theme: the scan looks for the marker as a substring of the line's comment,
+   * so a marker that reads like a custom property would match prose about that property. The layer
+   * reads a handful of --dx-* names (cardView's grid columns, the scheduler animation offset), so
+   * it has to be checked here too and not only against the theme.
    */
   const names = new Set(walk(baseRoot).flatMap((file) => [
     ...readFileSync(file, 'utf8').matchAll(/--(dx[a-z0-9-]*)/g),

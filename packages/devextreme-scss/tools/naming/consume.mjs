@@ -34,6 +34,12 @@
  */
 
 /* wave F6, reviewed 13.08.2026 — see NAMING.md "wave F as-built" and RENAME_PROGRESS.md */
+import {
+  readFileSync, writeFileSync, existsSync, readdirSync,
+} from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
 const VAR_SAFE_MIXINS = new Set([
   'dx-icon-sizing', 'dx-icon-margin', 'dx-icon-font-centered-sizing', 'gradient-linear',
   'dx-button-styling', 'dx-button-styling-variant', 'dx-button-flat-color-styling',
@@ -101,16 +107,15 @@ const VAR_UNSAFE_ARGS = new Map([
   ])],
 ]);
 
-import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = join(here, '..', '..');
 const themeRoot = join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const registries = JSON.parse(readFileSync(join(here, 'registries.json'), 'utf8'));
 
-/* The tier's contents are read from the committed _public.scss (written by publish.mjs) and _public-links.scss (hand-written). */
+/*
+ * The tier's contents are read from the committed _public.scss (written by publish.mjs) and
+ * _public-links.scss (handwritten).
+ */
 const walkScss = (dir, out = []) => {
   readdirSync(dir, { withFileTypes: true }).forEach((entry) => {
     const abs = join(dir, entry.name);
@@ -147,9 +152,9 @@ if (!folders.length && !wiringMode) {
  * rules exist at all. Without this list a later `--wiring` run would silently undo the decision.
  */
 const WIRING_UNSAFE = new Set([
-  '$scheduler-left-column-width',            // `$x * $scheduler-small-size-factor` in base
-  '$scheduler-appointment-bg-focused',       // `@if $fill-focused-appointment` — a flag, not a value
-  '$scheduler-appointment-shadow-focused',   // `@if $is-shadow-color-for-focused-state`
+  '$scheduler-left-column-width', // `$x * $scheduler-small-size-factor` in base
+  '$scheduler-appointment-bg-focused', // `@if $fill-focused-appointment` — a flag, not a value
+  '$scheduler-appointment-shadow-focused', // `@if $is-shadow-color-for-focused-state`
 ]);
 
 if (wiringMode) {
@@ -168,7 +173,8 @@ if (wiringMode) {
   let files = 0;
   walkTheme(themeRoot).forEach((file) => {
     const source = readFileSync(file, 'utf8');
-    const out = source.replace(/(@use\s+"[^"]*base[^"]*"(?:\s+as\s+[\w*-]+)?\s+with\s*\()([\s\S]*?)(\)\s*;)/g,
+    const out = source.replace(
+      /(@use\s+"[^"]*base[^"]*"(?:\s+as\s+[\w*-]+)?\s+with\s*\()([\s\S]*?)(\)\s*;)/g,
       (whole, head, block, tail) => {
         const next = block.replace(/(:\s*)(\$[a-z0-9-]+)(\s*(?:,|$|\n))/g, (m, before, token, after) => {
           if (!manifestNames.has(token)) return m;
@@ -176,7 +182,8 @@ if (wiringMode) {
           return `${before}var(--dx-${token.slice(1)})${after}`;
         });
         return `${head}${next}${tail}`;
-      });
+      },
+    );
     if (out !== source) {
       writeFileSync(file, out);
       files += 1;
@@ -239,7 +246,9 @@ const convertMixinArgs = (folder, component, file) => {
 };
 
 folders.forEach((folder) => {
-  /* a path with a slash names a specific rule file of the folder (e.g. gridBase/layout/cell.scss) */
+  /*
+   * a path with a slash names a specific rule file of the folder (e.g. gridBase/layout/cell.scss)
+   */
   const explicitFile = folder.includes('/');
   const owner = explicitFile ? folder.slice(0, folder.indexOf('/')) : folder;
   const component = registries.components[owner];

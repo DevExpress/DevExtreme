@@ -391,7 +391,7 @@ test('--fix takes the doc comment along when the declaration has to move', () =>
   ));
 });
 
-test("a hoisted declaration takes its trailing comment with it", () => {
+test('a hoisted declaration takes its trailing comment with it', () => {
   const { output, warnings } = fix('trailing-comment.scss', scss(
     '$height: null !default;',
     '$other: 4px !default;',

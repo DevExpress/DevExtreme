@@ -3,19 +3,23 @@ import { mkdtempSync, readFileSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { basename, join } from 'path';
 
-export type Warning = { line: number; rule: string; text: string };
-export type Result = { warnings: Warning[]; output: string };
-export type Runner = {
+export interface Warning { line: number; rule: string; text: string }
+export interface Result { warnings: Warning[]; output: string }
+export interface Runner {
   lint: (name: string, source: string) => Result;
   fix: (name: string, source: string) => Result;
-};
+}
 
 const packageRoot = process.cwd();
 const stylelintBin = join(packageRoot, 'node_modules', '.bin', 'stylelint');
 
 export const scss = (...rows: string[]): string => `${rows.join('\n')}\n`;
 
-export const createRunner = (pluginFile: string, ruleName: string, ruleOptions: unknown = true): Runner => {
+export const createRunner = (
+  pluginFile: string,
+  ruleName: string,
+  ruleOptions: unknown = true,
+): Runner => {
   const fixture = mkdtempSync(join(tmpdir(), `${basename(pluginFile, '.mjs')}-`));
   const configPath = join(fixture, 'config.json');
   writeFileSync(configPath, JSON.stringify({

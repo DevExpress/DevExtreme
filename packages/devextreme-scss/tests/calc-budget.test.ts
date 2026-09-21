@@ -6,7 +6,8 @@
  *   - calc() is legitimate for percentage layout and for values derived from overridable tokens —
  *     runtime derivation is what the custom properties exist for;
  *   - a constant multiple of a token is not: when the token scale has the step, use it directly;
- *   - an expression repeated across rules is declared once and read back through its --dx-* variable
+ *   - an expression repeated across rules is declared once and read back through its --dx-*
+ *   variable
  *     (component tier in <widget>/_public.scss, system tier in common/_public.scss);
  *   - degenerate terms (`x + 0`, `x - y - 0`) are guarded away at build time in the base mixins;
  *   - pixel adjustments (± 1-2px) are frozen debt pending a design review — neither converted nor
@@ -26,7 +27,12 @@
  * disappearing shows up as a budget diff.
  */
 
-import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs';
+import {
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  existsSync,
+} from 'fs';
 import { join } from 'path';
 
 const packageRoot = process.cwd();
@@ -46,7 +52,7 @@ if (!bundleNames.length) {
     + 'builds it as a dependency)');
 }
 
-const measure = (css: string) => {
+const measure = (css: string): { calcOccurrences: number; declarationsWithDeepCalc: number } => {
   // A declaration is one `property: value` slice of the minified bundle; calc( occurrences inside
   // one value count its nesting depth (operands between the calc( tokens do not matter here).
   const declarations = css.match(/[a-z-][a-z0-9-]*\s*:[^;{}]*calc\([^;{}]*/g) ?? [];
