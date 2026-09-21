@@ -183,6 +183,15 @@ describe('themes.customAccentColor', () => {
     expect(declaredAccentColor()).toBe('#0f6cbd');
   });
 
+  it('takes an accent written as a reference to another custom property', () => {
+    const log = jest.spyOn(errors, 'log').mockImplementation(() => {});
+
+    customAccentColor('var(--brand)');
+
+    expect(document.documentElement.style.getPropertyValue('--dx-accent-color')).toBe('var(--brand)');
+    expect(log).not.toHaveBeenCalled();
+  });
+
   it.each([
     'foo',
     'rgb(167 3)',

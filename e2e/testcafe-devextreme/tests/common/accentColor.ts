@@ -147,6 +147,10 @@ const accentThroughApi = ClientFunction((color: string | null) => {
   return { seed, reported: themes.customAccentColor() };
 }, { dependencies: { asHex } });
 
+const declareBrandColor = ClientFunction((color: string) => {
+  document.documentElement.style.setProperty('--brand', color);
+});
+
 const rounded = (value: number): number => Math.round(value * 1000) / 1000;
 const stepOf = (measured: MeasuredStep[], step: number): Oklch => measured
   .find((entry) => entry.step === step)!.oklch!;
@@ -262,6 +266,16 @@ fixture`Custom accent color`
 
   await t.expect(afterReset.seed).eql(designed.seed, 'null brings the designed palette back');
   await t.expect(afterReset.reported).eql('', 'a cleared accent is reported as unset');
+});
+
+(isFluentNext() ? test : test.skip)('themes.customAccentColor takes an accent written as a reference', async (t) => {
+  const brandAccent = '#a703ff';
+
+  await declareBrandColor(brandAccent);
+  const applied = await accentThroughApi('var(--brand)');
+
+  await t.expect(applied.seed).eql(brandAccent, 'the palette is built from the color the reference resolves to');
+  await t.expect(applied.reported).eql(brandAccent, 'a reference is reported back as the color it resolves to');
 });
 
 (isFluentNext() ? test : test.skip)('themes.customAccentColor takes an accent written by name', async (t) => {

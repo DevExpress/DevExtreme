@@ -4,6 +4,7 @@
   "input": {
     "name": "--dx-accent-color",
     "setBy": "themes.customAccentColor(color), the documented entry point, or the application itself writing the property on the root element",
+    "acceptedForms": "any colour the browser parses, including var(--custom-property) pointing at one; a value that resolves to no colour, or to another element's colour such as currentColor or inherit, is refused with W0024",
     "whenUnset": "every derived step is invalid at computed-value time, so each generated palette keeps the designed colour through var(--dx-accent-color-<step>, <designed value>)"
   },
   "source": {
