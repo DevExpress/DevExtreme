@@ -1982,6 +1982,11 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
         assert.strictEqual(tooltip.option('target'), marker, 'focusable marker is the target');
         assert.strictEqual(tooltip.option('position').of, marker.firstElementChild, 'arrow targets the visible icon');
         assert.ok(onClick.notCalled, 'marker click is not a map click');
+        marker.click();
+        assert.notOk(tooltip.option('visible'), 'the second click closes the tooltip');
+        marker.click();
+        assert.ok(tooltip.option('visible'), 'the third click opens the tooltip again');
+        assert.ok(onClick.notCalled, 'toggling the tooltip does not trigger map clicks');
     });
 
     [false, true].forEach(rtlEnabled => {
@@ -2003,12 +2008,14 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
             positionMarker();
             const marker = getMarker();
             marker.focus();
-            marker.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
-            marker.dispatchEvent(new KeyboardEvent('keyup', { key, bubbles: true, cancelable: true }));
-            assert.ok(getTooltip().option('visible'), 'keyboard opens the tooltip');
-            assert.ok(onClick.calledOnce, 'keyboard activation calls the marker handler once');
-            assert.strictEqual(onClick.firstCall.args[0].tooltip, getTooltip(), 'keyboard activation exposes the same Popover');
-            assert.strictEqual(document.activeElement, marker, 'focus remains on the marker');
+            [true, false, true].forEach((visible, index) => {
+                marker.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+                marker.dispatchEvent(new KeyboardEvent('keyup', { key, bubbles: true, cancelable: true }));
+                assert.strictEqual(getTooltip().option('visible'), visible, 'keyboard toggles the tooltip');
+                assert.strictEqual(onClick.callCount, index + 1, 'each activation calls the marker handler once');
+                assert.strictEqual(onClick.lastCall.args[0].tooltip, getTooltip(), 'keyboard activation exposes the same Popover');
+                assert.strictEqual(document.activeElement, marker, 'focus remains on the marker');
+            });
             marker.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
             assert.notOk(getTooltip().option('visible'), 'native Popover handles Escape');
         });
@@ -2038,6 +2045,49 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
         getMarker().click();
         assert.ok(onClick.calledOnce, 'the actual click calls the handler');
         assert.strictEqual(onClick.firstCall.args[0].tooltip, getTooltip(), 'the handler receives the already shown Popover');
+        assert.notOk(getTooltip().option('visible'), 'the click closes an initially shown tooltip');
+    });
+
+    QUnit.test('hiding the Popover in the marker callback does not reopen it', async function(assert) {
+        const onClick = sinon.spy(({ tooltip }) => tooltip.hide());
+        await createMap({ markers: [{ location, tooltip: { text: 'Start', isShown: true }, onClick }] });
+        positionMarker();
+
+        getMarker().click();
+
+        assert.ok(onClick.calledOnce, 'the callback runs once');
+        assert.notOk(getTooltip().option('visible'), 'the hidden Popover is not reopened by the marker click');
+    });
+
+    QUnit.test('onHiding can cancel closing the tooltip by clicking its marker', async function(assert) {
+        const onHiding = sinon.spy(event => { event.cancel = true; });
+        await createMap({ markers: [{
+            location,
+            tooltip: 'Start',
+            onClick: ({ tooltip }) => tooltip.option('onHiding', onHiding)
+        }] });
+        positionMarker();
+        const marker = getMarker();
+        marker.click();
+
+        marker.click();
+
+        assert.ok(onHiding.calledOnce, 'the second click tries to hide the Popover');
+        assert.ok(getTooltip().option('visible'), 'onHiding keeps the tooltip open');
+    });
+
+    QUnit.test('clicking a marker closes only its tooltip', async function(assert) {
+        await createMap({ markers: [
+            { location, tooltip: { text: 'First', isShown: true } },
+            { location, tooltip: { text: 'Second', isShown: true } }
+        ] });
+        positionMarker();
+
+        getMarker().click();
+
+        const [first, second] = getPopovers();
+        assert.notOk(first.option('visible'), 'the clicked marker tooltip is closed');
+        assert.ok(second.option('visible'), 'the other tooltip remains open');
     });
 
     [false, true].forEach(focusStateEnabled => {

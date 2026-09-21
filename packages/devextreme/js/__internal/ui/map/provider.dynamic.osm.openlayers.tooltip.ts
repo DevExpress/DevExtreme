@@ -95,9 +95,9 @@ export class OpenLayersMarkerTooltip {
     return this._popover;
   }
 
-  show(): void {
+  setVisible(visible: boolean): void {
     if (!this._disposed) {
-      this._popover.option('visible', true);
+      this._popover.option('visible', visible);
     }
   }
 

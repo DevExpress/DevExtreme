@@ -333,8 +333,9 @@ class OpenLayersMap implements MapEngineMap {
       : undefined;
     const onClick = options.onClick || tooltip
       ? (): void => {
+        const showTooltip = !tooltip?.popover.option('visible');
         options.onClick?.(tooltip?.popover);
-        tooltip?.show();
+        tooltip?.setVisible(showTooltip);
       }
       : undefined;
     const markerElementBinding = this._attachMarkerElementHandlers(
@@ -375,7 +376,7 @@ class OpenLayersMap implements MapEngineMap {
     this._markers.add(handle);
     this._syncMarkerTabIndex(handle);
     if (options.tooltip?.visible) {
-      tooltip?.show();
+      tooltip?.setVisible(true);
     }
 
     return handle;
