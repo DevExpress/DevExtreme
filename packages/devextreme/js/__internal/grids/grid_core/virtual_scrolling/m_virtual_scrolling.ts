@@ -674,7 +674,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
 
     let $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed, position);
 
-    $virtualRow = this._wrapRowIfNeed($table, $virtualRow);
+    $virtualRow = this._wrapRowIfNeed($virtualRow);
 
     this._appendEmptyRow($table, $virtualRow, location);
   }

@@ -2278,8 +2278,8 @@ QUnit.module('API', {
         const $testElement = $('#container');
 
         this.options = {
-            rowTemplate: function(container, options) {
-                $('<tbody class="dx-row dx-data-row"><tr><td></td></tr></tbody>').appendTo(container);
+            dataRowTemplate: function(container, options) {
+                $('<tr><td></td></tr>').appendTo(container);
             }
         };
         setupDataGrid(this);

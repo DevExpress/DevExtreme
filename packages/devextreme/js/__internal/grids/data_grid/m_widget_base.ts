@@ -149,7 +149,7 @@ class DataGrid extends GridCoreWidget<Properties> {
 
     // @ts-expect-error
     extend(this._deprecatedOptions, {
-      rowTemplate: { since: '21.2', message: 'Use the "dataRowTemplate" option instead' },
+      // Note: add deprecated options here if needed
     });
   }
 

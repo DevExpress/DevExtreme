@@ -13354,7 +13354,6 @@ declare module DevExpress.ui {
       RowPreparedEvent: RowPreparedEvent<TRowData, TKey>;
       RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
       RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
-      RowTemplateData: RowTemplateData<TRowData, TKey>;
       RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
       RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
       RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
@@ -13750,7 +13749,6 @@ declare module DevExpress.ui {
       | 'onRowPrepared'
       | 'remoteOperations'
       | 'rowDragging'
-      | 'rowTemplate'
       | 'scrolling'
       | 'selection'
       | 'selectionFilter'
@@ -14147,18 +14145,6 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.RowRemovingInfo<TRowData, TKey>;
-    export type RowTemplateData<TRowData = any, TKey = any> = {
-      readonly key: TKey;
-      readonly data: TRowData;
-      readonly component: dxDataGrid<TRowData, TKey>;
-      readonly values: Array<any>;
-      readonly rowIndex: number;
-      readonly columns: Array<Column<TRowData, TKey>>;
-      readonly isSelected?: boolean;
-      readonly rowType: string;
-      readonly groupIndex?: number;
-      readonly isExpanded?: boolean;
-    };
     /**
      * [descr:_ui_data_grid_RowUpdatedEvent]
      */
@@ -14788,16 +14774,6 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.rowDragging]
      */
     rowDragging?: DevExpress.ui.dxDataGrid.RowDragging<TRowData, TKey>;
-    /**
-     * [descr:dxDataGridOptions.rowTemplate]
-     * @deprecated [depNote:dxDataGridOptions.rowTemplate]
-     */
-    rowTemplate?:
-      | template
-      | ((
-          rowElement: DevExpress.core.DxElement,
-          rowInfo: DevExpress.ui.dxDataGrid.RowTemplateData<TRowData, TKey>
-        ) => any);
     /**
      * [descr:dxDataGridOptions.dataRowTemplate]
      */
