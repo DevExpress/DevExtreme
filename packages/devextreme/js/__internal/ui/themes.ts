@@ -10,7 +10,6 @@ import { getOuterHeight } from '@js/core/utils/size';
 import { changeCallback, originalViewPort, value as viewPortValue } from '@js/core/utils/view_port';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
-import { isValidColor } from '@ts/color';
 import { uiLayerInitialized } from '@ts/core/utils/m_common';
 import { resolvedThemeMode } from '@ts/core/utils/theme_mode';
 import { themeModeChangedCallback, themeReadyCallback } from '@ts/ui/m_themes_callback';
@@ -43,6 +42,20 @@ let defaultTimeout = 15000;
 const THEME_MARKER_PREFIX = 'dx.';
 
 const ACCENT_COLOR_PROPERTY = '--dx-accent-color';
+
+const VALUES_THAT_POINT_AT_ANOTHER_COLOR = [
+  'currentcolor', 'inherit', 'initial', 'unset', 'revert', 'revert-layer',
+];
+
+function isValidColor(value: string): boolean {
+  const probe = domAdapter.createElement('div');
+
+  probe.style.color = value;
+
+  const parsed = probe.style.color.trim().toLowerCase();
+
+  return parsed !== '' && !VALUES_THAT_POINT_AT_ANOTHER_COLOR.includes(parsed);
+}
 
 function readThemeMarker(): string | null {
   if (!hasWindow()) {

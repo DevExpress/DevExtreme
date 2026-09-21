@@ -139,16 +139,21 @@ describe('themes.customAccentColor', () => {
     jest.restoreAllMocks();
   });
 
-  it('declares the color the theme builds its palette from', () => {
-    customAccentColor('#a703ff');
+  it.each([
+    '#a703ff',
+    '#abc',
+    '#a703ff80',
+    'rebeccapurple',
+    'rgb(167, 3, 255)',
+    'rgb(167 3 255)',
+    'hsl(280 100% 50%)',
+    'oklch(0.6 0.15 250)',
+    'color-mix(in oklab, red, blue)',
+    'transparent',
+  ])('declares %s as given, a color the browser parses', (value) => {
+    customAccentColor(value);
 
-    expect(declaredAccentColor()).toBe('#a703ff');
-  });
-
-  it('writes the color as given, whatever syntax it is written in', () => {
-    customAccentColor('rgb(167 3 255)');
-
-    expect(declaredAccentColor()).toBe('rgb(167 3 255)');
+    expect(declaredAccentColor()).toBe(value);
   });
 
   it('reads the color the page declares in a stylesheet', () => {
@@ -178,14 +183,18 @@ describe('themes.customAccentColor', () => {
     expect(declaredAccentColor()).toBe('#0f6cbd');
   });
 
-  it('leaves the accent color alone and warns when the value is not a color', () => {
+  it.each([
+    'foo',
+    'rgb(167 3)',
+    '   ',
+  ])('leaves the accent color alone and warns about %s, which parses as no color at all', (value) => {
     const log = jest.spyOn(errors, 'log').mockImplementation(() => {});
     customAccentColor('#a703ff');
 
-    customAccentColor('foo');
+    customAccentColor(value);
 
     expect(declaredAccentColor()).toBe('#a703ff');
-    expect(log).toHaveBeenCalledWith('W0024', 'foo');
+    expect(log).toHaveBeenCalledWith('W0024', value);
   });
 
   it('brings back the palette of the theme when passed an empty string', () => {
@@ -207,13 +216,30 @@ describe('themes.customAccentColor', () => {
     expect(log).not.toHaveBeenCalled();
   });
 
-  it('refuses a value that points at another color instead of naming one', () => {
+  it.each([
+    'currentColor',
+    'inherit',
+    'initial',
+    'unset',
+    'revert',
+    'revert-layer',
+  ])('refuses %s, which points at another color instead of naming one', (value) => {
     const log = jest.spyOn(errors, 'log').mockImplementation(() => {});
 
-    customAccentColor('inherit');
+    customAccentColor(value);
 
     expect(declaredAccentColor()).toBe('');
-    expect(log).toHaveBeenCalledWith('W0024', 'inherit');
+    expect(log).toHaveBeenCalledWith('W0024', value);
+  });
+
+  it('reads the value the same however it is capitalized or spaced', () => {
+    jest.spyOn(errors, 'log').mockImplementation(() => {});
+
+    customAccentColor(' #A703FF ');
+    const written = declaredAccentColor();
+    customAccentColor('INHERIT');
+
+    expect([written, declaredAccentColor()]).toEqual(['#A703FF', '#A703FF']);
   });
 
   it('declares the color and warns when the loaded theme knows no accent color', () => {

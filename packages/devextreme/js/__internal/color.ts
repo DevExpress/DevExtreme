@@ -1,7 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
 
-import domAdapter from '@js/core/dom_adapter';
-
 import type { ColorParseResult } from './utils/color.helpers';
 import {
   hslToRgb,
@@ -9,10 +7,6 @@ import {
   isIntegerBetweenMinAndMax,
   normalize, parseColor, toHexFromRgb, toHslFromRgb, toHsvFromRgb,
 } from './utils/color.helpers';
-
-const VALUES_THAT_POINT_AT_ANOTHER_COLOR = [
-  'currentcolor', 'inherit', 'initial', 'unset', 'revert', 'revert-layer',
-];
 
 const standardColorNames = {
   aliceblue: 'f0f8ff',
@@ -297,15 +291,5 @@ export class Color {
 }
 
 export type ColorInstance = Color;
-
-export function isValidColor(value: string): boolean {
-  const probe = domAdapter.createElement('div');
-
-  probe.style.color = value;
-
-  const parsed = probe.style.color.trim().toLowerCase();
-
-  return parsed !== '' && !VALUES_THAT_POINT_AT_ANOTHER_COLOR.includes(parsed);
-}
 
 export default Color;
