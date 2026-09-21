@@ -13,7 +13,7 @@ describe('getMinutesCellIntervals', () => {
       endDayHour: 16,
       durationMinutes: 6 * 60,
       skippedDays: [],
-    })).toEqual([{
+    }).cells).toEqual([{
       min: Date.UTC(2021, 8, 26, 4),
       max: Date.UTC(2021, 8, 26, 10),
       cellIndex: 0,
@@ -62,7 +62,7 @@ describe('getMinutesCellIntervals', () => {
       endDayHour: 24,
       durationMinutes: 12 * 60,
       skippedDays: [],
-    })).toEqual([{
+    }).cells).toEqual([{
       min: Date.UTC(2021, 8, 26, 0),
       max: Date.UTC(2021, 8, 26, 12),
       cellIndex: 0,
@@ -99,7 +99,7 @@ describe('getMinutesCellIntervals', () => {
       endDayHour: 4 + 12,
       durationMinutes: 4 * 60,
       skippedDays: [],
-    })).toEqual([{
+    }).cells).toEqual([{
       min: Date.UTC(2021, 8, 26, 4),
       max: Date.UTC(2021, 8, 26, 8),
       cellIndex: 0,
@@ -130,7 +130,7 @@ describe('getMinutesCellIntervals', () => {
       endDayHour: 24,
       durationMinutes: 8 * 60,
       skippedDays: [0, 6],
-    })).toEqual([{
+    }).cells).toEqual([{
       min: Date.UTC(2021, 8, 27, 0),
       max: Date.UTC(2021, 8, 27, 8),
       cellIndex: 0,

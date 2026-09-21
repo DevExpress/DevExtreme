@@ -170,7 +170,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     if (duration < 0) {
       duration = 0;
     }
-    return (differenceInDays - skippedDaysCount) * this.getCellCountInDay() + duration;
+
+    const visibleDaysCount = Math.max(0, differenceInDays - skippedDaysCount);
+    // NOTE: Days with a fall-back DST transition contain additional cells.
+    const extraCellCount = this.getFallBackExtraCellCounts()
+      .slice(0, visibleDaysCount)
+      .reduce((total, count) => total + count, 0);
+
+    return visibleDaysCount * this.getCellCountInDay() + extraCellCount + duration;
   }
 
   getIndicationWidth(): number {
@@ -256,7 +263,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     const tailDuration = fullInterval - (fullDays * toMs('day'));
     let tailDelta = 0;
     const skippedDaysCount = this.getSkippedDaysCount(firstViewDate, fullDays);
-    const cellCount = this.getCellCountInDay() * (fullDays - skippedDaysCount);
+    const visibleDaysCount = Math.max(0, fullDays - skippedDaysCount);
+    // NOTE: Days with a fall-back DST transition contain additional cells.
+    const extraCellCount = this.getFallBackExtraCellCounts()
+      .slice(0, visibleDaysCount)
+      .reduce((total, count) => total + count, 0);
+    const cellCount = this.getCellCountInDay() * visibleDaysCount + extraCellCount;
     const gapBeforeAppt = apptStart - dateUtils.trimTime(new Date(currentDate)).getTime();
     let result = cellCount * this.option().hoursInterval * toMs('hour');
 

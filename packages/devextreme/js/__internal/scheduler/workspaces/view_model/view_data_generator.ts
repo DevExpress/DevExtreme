@@ -41,12 +41,20 @@ import type {
 
 const toMs = dateUtils.dateToMilliseconds;
 
+// NOTE: Only these views represent the repeated hour of a fall-back DST transition
+// with additional cells. Month based views use day long cells and are not affected.
+const isFallBackStretchedView = (viewType: ViewType): boolean => isHorizontalView(viewType)
+  && viewType !== VIEWS.MONTH
+  && viewType !== VIEWS.TIMELINE_MONTH;
+
 export class ViewDataGenerator {
   protected tableAllDay: boolean | undefined = false;
 
   public hiddenInterval = 0;
 
   public skippedDays: number[] = [];
+
+  private fallBackExtraCellCountsCache?: { key: string; value: number[] };
 
   constructor(public readonly viewType: ViewType) {}
 
@@ -82,7 +90,7 @@ export class ViewDataGenerator {
     rowIndex: number,
     columnIndex: number,
     anchorDay: number,
-    cellCountInDay: number,
+    dayIndexInView: number,
   ): number {
     const rotated = this.getVisibleDaysOfWeek(anchorDay);
     const visibleCount = rotated.length;
@@ -97,7 +105,7 @@ export class ViewDataGenerator {
       return actualDayOffset - naiveDayOffset;
     }
     const dayIndex = isHorizontalView(this.viewType)
-      ? Math.floor(columnIndex / cellCountInDay)
+      ? dayIndexInView
       : columnIndex;
     const week = Math.floor(dayIndex / visibleCount);
     const idxInWeek = dayIndex % visibleCount;
@@ -149,6 +157,8 @@ export class ViewDataGenerator {
       startDayHour,
       endDayHour,
       hoursInterval,
+      startViewDate: options.startViewDate,
+      skippedDays: this.skippedDays,
     });
     const rowCountInGroup = this.getRowCount({
       intervalCount,
@@ -607,6 +617,82 @@ export class ViewDataGenerator {
     rowIndex: number,
     columnIndex: number,
   ): Date {
+    const {
+      startDayHour,
+      endDayHour,
+      hoursInterval,
+      interval,
+    } = options;
+    const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
+
+    const columnCountBase = this.getCellCount(options);
+    const rowCountBase = this.getRowCount(options);
+    const cellIndex = this.calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
+    const extraCellCounts = this.getFallBackExtraCellCounts(options);
+
+    if (!extraCellCounts.some((count) => count > 0)) {
+      return this.calculateDateByCellIndex(
+        options,
+        rowIndex,
+        columnIndex,
+        cellIndex,
+        Math.floor(cellIndex / cellCountInDay),
+      );
+    }
+
+    // NOTE: A day with a fall-back DST transition has additional cells, so the date
+    // of a cell is calculated as the elapsed time from the start of its day.
+    const { dayIndex, indexInDay } = this.getStretchedCellPosition(
+      cellIndex,
+      cellCountInDay,
+      extraCellCounts,
+    );
+    const dayStartDate = this.calculateDateByCellIndex(
+      options,
+      rowIndex,
+      columnIndex,
+      dayIndex * cellCountInDay,
+      dayIndex,
+    );
+    const cellDate = dateUtilsTs.addOffsets(dayStartDate, interval * indexInDay);
+    const daylightShift = dateUtils.getTimezonesDifference(dayStartDate, cellDate);
+
+    // NOTE: A fall-back transition inside a day is rendered by the additional cells,
+    // a spring-forward one still keeps the wall clock time of the following cells.
+    return daylightShift < 0
+      ? new Date(cellDate.getTime() + daylightShift)
+      : cellDate;
+  }
+
+  private getStretchedCellPosition(
+    cellIndex: number,
+    cellCountInDay: number,
+    extraCellCounts: number[],
+  ): { dayIndex: number; indexInDay: number } {
+    let dayIndex = 0;
+    let firstCellIndexInDay = 0;
+
+    while (dayIndex < extraCellCounts.length - 1) {
+      const cellCount = cellCountInDay + extraCellCounts[dayIndex];
+
+      if (cellIndex < firstCellIndexInDay + cellCount) {
+        break;
+      }
+
+      firstCellIndexInDay += cellCount;
+      dayIndex += 1;
+    }
+
+    return { dayIndex, indexInDay: cellIndex - firstCellIndexInDay };
+  }
+
+  private calculateDateByCellIndex(
+    options: ViewDataProviderExtendedOptions,
+    rowIndex: number,
+    columnIndex: number,
+    cellIndex: number,
+    dayIndex: number,
+  ): Date {
     const { startViewDate } = options;
     const {
       startDayHour,
@@ -617,11 +703,12 @@ export class ViewDataGenerator {
       viewOffset,
     } = options;
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
-
-    const columnCountBase = this.getCellCount(options);
-    const rowCountBase = this.getRowCount(options);
-    const cellIndex = this.calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
-    const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
+    const millisecondsOffset = this.getMillisecondsOffset(
+      cellIndex,
+      interval,
+      cellCountInDay,
+      dayIndex,
+    );
 
     let offsetByCount = 0;
     if (this.skippedDays.length > 0) {
@@ -629,7 +716,7 @@ export class ViewDataGenerator {
         rowIndex,
         columnIndex,
         this.getSkippedDaysAnchorDay(firstDayOfWeek, startViewDate),
-        cellCountInDay,
+        dayIndex,
       ) * toMs('day');
     }
 
@@ -665,8 +752,12 @@ export class ViewDataGenerator {
     return currentDate;
   }
 
-  getMillisecondsOffset(cellIndex: number, interval: number, cellCountInDay: number): number {
-    const dayIndex = Math.floor(cellIndex / cellCountInDay);
+  getMillisecondsOffset(
+    cellIndex: number,
+    interval: number,
+    cellCountInDay: number,
+    dayIndex = Math.floor(cellIndex / cellCountInDay),
+  ): number {
     const realHiddenInterval = dayIndex * this.hiddenInterval;
 
     return interval * cellIndex + realHiddenInterval;
@@ -674,6 +765,14 @@ export class ViewDataGenerator {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public calculateEndDate(startDate: Date, interval: number, endDayHour?: number): Date {
+    const endDate = dateUtilsTs.addOffsets(startDate, Math.round(interval));
+    const daylightShift = timezoneUtils.getDaylightOffsetInMs(startDate, endDate);
+    // NOTE: Cells of a fall-back DST transition represent the elapsed time,
+    // so the repeated hour is not skipped.
+    if (isFallBackStretchedView(this.viewType) && daylightShift < 0) {
+      return endDate;
+    }
+
     return timezoneUtils.addOffsetsWithoutDST(startDate, Math.round(interval));
   }
 
@@ -918,8 +1017,58 @@ export class ViewDataGenerator {
     const columnCountInDay = isHorizontalView(viewType)
       ? cellCountInDay
       : 1;
+    const extraCellCount = this.getFallBackExtraCellCounts(options)
+      .reduce((result, count) => result + count, 0);
 
-    return this.daysInInterval * intervalCount * columnCountInDay;
+    return this.daysInInterval * intervalCount * columnCountInDay + extraCellCount;
+  }
+
+  /**
+   * Returns the number of cells that are added to every visible day
+   * to render the repeated hour of a fall-back DST transition.
+   */
+  public getFallBackExtraCellCounts(options: CountGenerationConfig): number[] {
+    const {
+      intervalCount,
+      viewType,
+      startDayHour,
+      endDayHour,
+      hoursInterval,
+      currentDate,
+      startViewDate,
+      skippedDays = this.skippedDays,
+    } = options;
+
+    if (!isFallBackStretchedView(viewType)) {
+      return [];
+    }
+
+    const anchorDate = startViewDate ?? currentDate;
+    const dayCount = this.daysInInterval * intervalCount;
+    const cacheKey = [
+      anchorDate.getTime(),
+      dayCount,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      skippedDays,
+    ].join('|');
+
+    if (this.fallBackExtraCellCountsCache?.key !== cacheKey) {
+      this.fallBackExtraCellCountsCache = {
+        key: cacheKey,
+        value: timezoneUtils.getFallBackExtraCellCounts(
+          anchorDate,
+          dayCount,
+          hoursInterval,
+          startDayHour,
+          endDayHour,
+          skippedDays,
+        ),
+      };
+    }
+
+    return this.fallBackExtraCellCountsCache.value;
   }
 
   public getRowCount(options: CountGenerationConfig): number {

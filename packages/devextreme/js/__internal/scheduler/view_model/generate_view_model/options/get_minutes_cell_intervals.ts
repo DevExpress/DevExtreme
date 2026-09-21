@@ -10,6 +10,7 @@ interface Options {
   endDayHour: number;
   durationMinutes: number;
   skippedDays: number[];
+  stretchFallBackDays?: boolean;
 }
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -40,38 +41,54 @@ export const getMinutesCellIntervals = ({
   endDayHour,
   durationMinutes,
   skippedDays,
-}: Options): CellInterval[] => intervals.reduce<CellInterval[]>((result, interval, rowIndex) => {
-  const dayIntervals = splitIntervalByDay({
-    ...interval, startDayHour, endDayHour, skippedDays,
-  });
+  stretchFallBackDays = false,
+}: Options): { cells: CellInterval[]; fallBackShiftMs: number } => {
+  let fallBackShiftMs = 0;
+  const cells = intervals.reduce<CellInterval[]>((result, interval, rowIndex) => {
+    const dayIntervals = splitIntervalByDay({
+      ...interval, startDayHour, endDayHour, skippedDays,
+    });
 
-  let columnIndex = 0;
-  filterBySkippedDays(dayIntervals, skippedDays).forEach((dayInterval) => {
-    const firstAvailableDayTime = adjustDayIntervalMinForMidnightDST(
-      dayInterval.min,
-      startDayHour,
-    );
-    const date = new Date(firstAvailableDayTime);
-    while (date.getTime() < dayInterval.max) {
-      const min = date.getTime();
-      let max = date.setUTCMinutes(date.getUTCMinutes() + durationMinutes);
+    let columnIndex = 0;
+    let intervalFallBackShiftMs = 0;
+    filterBySkippedDays(dayIntervals, skippedDays).forEach((dayInterval) => {
+      const dayFallBackShiftMs = stretchFallBackDays
+        ? timeZoneUtils.getLocalFallBackShiftInWallClockRange(
+          dayInterval.min,
+          dayInterval.max,
+        )
+        : 0;
+      const firstAvailableDayTime = adjustDayIntervalMinForMidnightDST(
+        dayInterval.min,
+        startDayHour,
+      ) + intervalFallBackShiftMs;
+      const dayMax = dayInterval.max + intervalFallBackShiftMs + dayFallBackShiftMs;
+      const date = new Date(firstAvailableDayTime);
+      while (date.getTime() < dayMax) {
+        const min = date.getTime();
+        let max = date.setUTCMinutes(date.getUTCMinutes() + durationMinutes);
 
-      if (date.getUTCHours() > endDayHour) {
-        date.setUTCDate(date.getUTCDate() + 1);
-        date.setUTCHours(startDayHour, 0, 0, 0);
-        max = date.getTime();
+        if (date.getUTCHours() > endDayHour) {
+          date.setUTCDate(date.getUTCDate() + 1);
+          date.setUTCHours(startDayHour, 0, 0, 0);
+          max = date.getTime();
+        }
+
+        result.push({
+          min,
+          max,
+          rowIndex,
+          columnIndex,
+          cellIndex: result.length,
+        });
+        columnIndex += 1;
       }
+      intervalFallBackShiftMs += dayFallBackShiftMs;
+      fallBackShiftMs += dayFallBackShiftMs;
+    });
 
-      result.push({
-        min,
-        max,
-        rowIndex,
-        columnIndex,
-        cellIndex: result.length,
-      });
-      columnIndex += 1;
-    }
-  });
+    return result;
+  }, []);
 
-  return result;
-}, []);
+  return { cells, fallBackShiftMs };
+};

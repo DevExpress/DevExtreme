@@ -40,7 +40,11 @@ export const sortAppointments = (
       sortByDuration(innerStep1);
       sortByStartDate(innerStep1);
       sortByGroupIndex(innerStep1);
-      const innerStep2 = addPosition(innerStep1, optionManager.getCells(panelName));
+      const innerStep2 = addPosition(
+        innerStep1,
+        optionManager.getCells(panelName),
+        optionManager.getFallBackShiftMs(panelName),
+      );
       const innerStep3 = snapToCells(
         innerStep2,
         optionManager.getCells(panelName),

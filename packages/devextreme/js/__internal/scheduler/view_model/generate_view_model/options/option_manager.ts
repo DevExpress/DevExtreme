@@ -70,6 +70,7 @@ export class OptionManager {
   protected getPanelOptions(panelName: PanelName): {
     splitIntervals: DateInterval[];
     cells: CellInterval[];
+    fallBackShiftMs: number;
     collectorOptions: CollectorOptions;
     geometryOptions: GeometryOptions;
   } {
@@ -125,6 +126,7 @@ export class OptionManager {
       const {
         cells,
         dayIntervals,
+        fallBackShiftMs,
         intervals,
       } = getLayoutIntervals(
         compareOptions,
@@ -176,6 +178,7 @@ export class OptionManager {
       return {
         splitIntervals,
         cells,
+        fallBackShiftMs,
         collectorOptions,
         geometryOptions,
       };
@@ -188,6 +191,10 @@ export class OptionManager {
 
   getCells(panelName: PanelName): CellInterval[] {
     return this.getPanelOptions(panelName).cells;
+  }
+
+  getFallBackShiftMs(panelName: PanelName): number {
+    return this.getPanelOptions(panelName).fallBackShiftMs;
   }
 
   getCollectorOptions(panelName: PanelName): CollectorOptions {

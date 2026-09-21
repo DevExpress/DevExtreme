@@ -91,6 +91,7 @@ import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type {
   CellPositionData,
   CellRect,
+  CountGenerationConfig,
   DOMMetaData,
   GroupBoundsOffset,
   ViewCellData,
@@ -992,15 +993,44 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected getCellCount(): number {
-    return this.viewDataProvider.getCellCount({
-      intervalCount: this.option().intervalCount,
-      currentDate: this.option().currentDate,
+  protected getCountGenerationConfig(): CountGenerationConfig {
+    const {
+      intervalCount,
+      currentDate,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      startDate,
+      skippedDays,
+    } = this.option();
+
+    return {
+      intervalCount,
+      currentDate,
       viewType: this.type,
-      hoursInterval: this.option().hoursInterval,
-      startDayHour: this.option().startDayHour,
-      endDayHour: this.option().endDayHour,
-    });
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      startViewDate: this.viewDataProvider.viewDataGenerator.getStartViewDate({
+        currentDate,
+        startDayHour,
+        startDate: startDate ?? undefined,
+        intervalCount,
+        firstDayOfWeek: this.firstDayOfWeek(),
+        skippedDays,
+      } as ViewDataProviderOptions),
+      skippedDays,
+    };
+  }
+
+  protected getCellCount(): number {
+    return this.viewDataProvider.getCellCount(this.getCountGenerationConfig());
+  }
+
+  protected getFallBackExtraCellCounts(): number[] {
+    return this.viewDataProvider.viewDataGenerator.getFallBackExtraCellCounts(
+      this.getCountGenerationConfig(),
+    );
   }
 
   private isVirtualModeOn(): boolean {

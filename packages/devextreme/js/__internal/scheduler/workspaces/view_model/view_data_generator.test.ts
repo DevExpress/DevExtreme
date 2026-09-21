@@ -58,10 +58,10 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       rowIndex: number,
       columnIndex: number,
       firstDayOfWeek: number,
-      cellCountInDay: number,
+      dayIndexInView: number,
     ): number => (g as unknown as {
-      getVisibleDayOffset: (r: number, c: number, firstDay: number, cellCount: number) => number;
-    }).getVisibleDayOffset(rowIndex, columnIndex, firstDayOfWeek, cellCountInDay);
+      getVisibleDayOffset: (r: number, c: number, firstDay: number, dayIndex: number) => number;
+    }).getVisibleDayOffset(rowIndex, columnIndex, firstDayOfWeek, dayIndexInView);
 
     it('zero offset for empty skippedDays', () => {
       gen.skippedDays = [];
@@ -98,20 +98,20 @@ describe('ViewDataGenerator hiddenWeekDays support', () => {
       expect(callGetVisibleDayOffset(gen, 0, 4, 0, 1)).toBe(3);
     });
 
-    it('timelineWeek with hidden days and multiple cells in day uses day index', () => {
+    it('timelineWeek with hidden days uses the passed day index', () => {
       const timelineWeekGen = new ViewDataGeneratorWeek('timelineWeek');
       timelineWeekGen.skippedDays = [0, 6];
 
       const timelineWeek = timelineWeekGen as unknown as ViewDataGeneratorWeek;
 
       // 2 cells per day, first visible week day is Monday (firstDayOfWeek=1)
-      // Both cells of the first day must have the same offset.
-      expect(callGetVisibleDayOffset(timelineWeek, 0, 0, 1, 2)).toBe(0);
-      expect(callGetVisibleDayOffset(timelineWeek, 0, 1, 1, 2)).toBe(0);
+      // Both cells of the first day have the same day index and offset.
+      expect(callGetVisibleDayOffset(timelineWeek, 0, 0, 1, 0)).toBe(0);
+      expect(callGetVisibleDayOffset(timelineWeek, 0, 1, 1, 0)).toBe(0);
       // The first cell of next visible day still has zero offset.
-      expect(callGetVisibleDayOffset(timelineWeek, 0, 2, 1, 2)).toBe(0);
-      // After 5 visible days (10 cells), the next day jumps over weekend (+2 days).
-      expect(callGetVisibleDayOffset(timelineWeek, 0, 10, 1, 2)).toBe(2);
+      expect(callGetVisibleDayOffset(timelineWeek, 0, 2, 1, 1)).toBe(0);
+      // After 5 visible days, the next day jumps over weekend (+2 days).
+      expect(callGetVisibleDayOffset(timelineWeek, 0, 10, 1, 5)).toBe(2);
     });
 
     it('vertical week layout with hidden days uses column index as day index', () => {

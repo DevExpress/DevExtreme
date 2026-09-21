@@ -17,16 +17,17 @@ export const getWeekIntervals = (
   const shiftedIntervals = shiftIntervals(intervals, viewOffset);
   const shiftedSplitIntervals = shiftIntervals(splitIntervals, viewOffset);
 
-  const cells = getMinutesCellIntervals({
+  const { cells, fallBackShiftMs } = getMinutesCellIntervals({
     ...compareOptions,
     intervals,
     durationMinutes: cellDurationMinutes,
+    stretchFallBackDays: isTimeline,
   });
-  const shiftedCells = shiftIntervals(cells, viewOffset);
 
   return {
-    cells: shiftedCells,
+    cells: shiftIntervals(cells, viewOffset),
     dayIntervals: shiftedSplitIntervals,
     intervals: shiftedIntervals,
+    fallBackShiftMs,
   };
 };

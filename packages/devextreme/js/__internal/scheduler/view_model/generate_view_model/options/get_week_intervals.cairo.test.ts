@@ -6,6 +6,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
+import { ViewDataGeneratorDay } from '../../../workspaces/view_model/view_data_generator_day';
 import { getWeekIntervals } from './get_week_intervals';
 
 describe('getWeekIntervals', () => {
@@ -43,6 +44,34 @@ describe('getWeekIntervals', () => {
       rowIndex: 0,
       columnIndex: 96,
       cellIndex: 96,
+    });
+  });
+
+  // NOTE: The appointment layout and the grid count the added cells independently,
+  // so the results have to be equal.
+  it('T1335525: should keep the interval and the grid cell counts aligned', () => {
+    const currentDate = new Date(2026, 9, 29);
+    const generator = new ViewDataGeneratorDay('timelineDay');
+
+    [45, 60].forEach((cellDurationMinutes) => {
+      const intervals = getWeekIntervals({
+        startDayHour: 0,
+        endDayHour: 24,
+        min: Date.UTC(2026, 9, 29),
+        max: Date.UTC(2026, 9, 31),
+        skippedDays: [],
+      }, cellDurationMinutes, 0, true);
+      const cellCount = generator.getCellCount({
+        intervalCount: 2,
+        currentDate,
+        startViewDate: currentDate,
+        viewType: 'timelineDay',
+        hoursInterval: cellDurationMinutes / 60,
+        startDayHour: 0,
+        endDayHour: 24,
+      });
+
+      expect(intervals.cells).toHaveLength(cellCount);
     });
   });
 });

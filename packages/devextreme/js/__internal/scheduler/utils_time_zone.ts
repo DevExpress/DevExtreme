@@ -317,6 +317,99 @@ const isLocalTimeMidnightDST = (date: Date): boolean => {
   return startDayDate.getHours() === 1;
 };
 
+const getLocalDayStart = (date: Date): Date => new Date(
+  date.getFullYear(),
+  date.getMonth(),
+  date.getDate(),
+);
+
+// NOTE: All the helpers below work with the browser time zone, because the workspace
+// grid dates are generated with the local date arithmetic. The Scheduler timeZone option
+// only shifts appointments onto that grid, it does not change the grid DST rules.
+
+// NOTE: A DST transition never shifts the clock by more than 2 hours,
+// so the offset taken 2 hours after the range end always belongs
+// to the time after the transition.
+const DST_PROBE_INTERVAL_MS = 2 * toMs('hour');
+
+/**
+ * Returns the time that is repeated inside the [min, max) wall clock range
+ * because of a fall-back DST transition.
+ */
+const getLocalFallBackShiftInWallClockRange = (min: number, max: number): number => {
+  const localMin = createDateFromUTCWithLocalOffset(new Date(min));
+  let localMax = createDateFromUTCWithLocalOffset(new Date(max));
+  const offsetAfterMax = new Date(localMax.getTime() + DST_PROBE_INTERVAL_MS).getTimezoneOffset();
+  const ambiguousTimeShift = Math.max(
+    0,
+    (offsetAfterMax - localMax.getTimezoneOffset()) * toMs('minute'),
+  );
+  // NOTE: An ambiguous wall clock time is resolved to its first occurrence.
+  // The range end should be resolved to the last one instead.
+  const possibleLateMax = dateUtilsTs.addOffsets(localMax, ambiguousTimeShift);
+  const possibleLateWallClock = createUTCDateWithLocalOffset(possibleLateMax) as Date;
+  if (
+    ambiguousTimeShift > 0
+    && possibleLateWallClock.getTime() === max
+    && new Date(possibleLateMax.getTime() - 1).getTimezoneOffset()
+      === possibleLateMax.getTimezoneOffset()
+  ) {
+    localMax = possibleLateMax;
+  }
+  const elapsedDuration = localMax.getTime() - localMin.getTime();
+  const wallClockDuration = max - min;
+
+  return Math.max(0, elapsedDuration - wallClockDuration);
+};
+
+/**
+ * Returns the number of cells that should be added to every visible day
+ * to render the repeated hour of a fall-back DST transition.
+ */
+const getFallBackExtraCellCounts = (
+  startViewDate: Date,
+  dayCount: number,
+  hoursInterval: number,
+  startDayHour: number,
+  endDayHour: number,
+  skippedDays: number[] = [],
+): number[] => {
+  if (hoursInterval <= 0 || dayCount <= 0 || endDayHour <= startDayHour) {
+    return [];
+  }
+
+  const result: number[] = [];
+  const date = getLocalDayStart(startViewDate);
+  const cellDurationMs = hoursInterval * toMs('hour');
+
+  while (result.length < dayCount) {
+    if (!skippedDays.includes(date.getDay())) {
+      const wallClockDay = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+      const rangeMin = wallClockDay + startDayHour * toMs('hour');
+      const rangeMax = wallClockDay + endDayHour * toMs('hour');
+      const wallClockDuration = rangeMax - rangeMin;
+      const fallBackShiftMs = getLocalFallBackShiftInWallClockRange(rangeMin, rangeMax);
+
+      result.push(
+        Math.ceil((wallClockDuration + fallBackShiftMs) / cellDurationMs)
+          - Math.ceil(wallClockDuration / cellDurationMs),
+      );
+    }
+    date.setDate(date.getDate() + 1);
+  }
+
+  return result;
+};
+
+/**
+ * Returns the time an appointment should be shifted by to get into the additional cells
+ * that represent the repeated hour of a fall-back DST transition.
+ */
+const getLocalFallBackShiftMs = (fromDate: Date, toDate: Date): number => Math.max(
+  0,
+  (toDate.getTimezoneOffset() - fromDate.getTimezoneOffset()) * toMs('minute'),
+);
+
 const utils = {
   getDaylightOffset,
   getDaylightOffsetInMs,
@@ -344,6 +437,9 @@ const utils = {
   cacheTimeZones,
 
   isLocalTimeMidnightDST,
+  getLocalFallBackShiftInWallClockRange,
+  getFallBackExtraCellCounts,
+  getLocalFallBackShiftMs,
 };
 
 export default utils;

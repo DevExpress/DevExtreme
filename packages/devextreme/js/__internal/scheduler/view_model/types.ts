@@ -36,6 +36,7 @@ export interface LayoutIntervals {
   intervals: DateInterval[];
   dayIntervals: DateInterval[];
   cells: CellInterval[];
+  fallBackShiftMs: number;
 }
 
 export interface FilterOptions {

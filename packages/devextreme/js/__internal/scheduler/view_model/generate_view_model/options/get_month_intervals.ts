@@ -52,5 +52,6 @@ export const getMonthIntervals = (
     cells: shiftedCells,
     dayIntervals: shiftedCells,
     intervals: shiftedIntervals,
+    fallBackShiftMs: 0,
   };
 };

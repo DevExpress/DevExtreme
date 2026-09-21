@@ -66,6 +66,9 @@ export class DateHeaderDataGenerator {
       hoursInterval,
       isHorizontalGrouping,
       intervalCount,
+      currentDate,
+      startViewDate,
+      viewType,
       viewOffset,
     } = options;
 
@@ -74,8 +77,17 @@ export class DateHeaderDataGenerator {
     const cellCountInDay = this.viewDataGenerator
       .getCellCountInDay(startDayHour, endDayHour, hoursInterval);
     const horizontalGroupCount = getHorizontalGroupCount(groupCount, groupOrientation);
+    const extraCellCounts = this.viewDataGenerator.getFallBackExtraCellCounts({
+      intervalCount,
+      currentDate,
+      viewType,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      startViewDate,
+      skippedDays: options.skippedDays,
+    });
     const index = completeViewDataMap[0][0].allDay ? 1 : 0;
-    const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
 
     const datesRepeatCount = isHorizontalGrouping && !isGroupedByDate
       ? groupCount
@@ -83,17 +95,31 @@ export class DateHeaderDataGenerator {
 
     const daysInGroup = this.viewDataGenerator.daysInInterval * intervalCount;
     const daysInView = daysInGroup * datesRepeatCount;
+    const cells = completeViewDataMap[index];
 
     const weekDaysRow: DateHeaderCellData[] = [];
+    let cellIndex = 0;
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
-      const { startDate, endDate, ...restProps } = completeViewDataMap[index][dayIndex * colSpan];
+      const startCell = cells[cellIndex];
+      if (!startCell) {
+        break;
+      }
+
+      const { startDate, endDate, ...restProps } = startCell;
+      const dayIndexInGroup = dayIndex % daysInGroup;
+      const baseColSpan = cellCountInDay + (extraCellCounts[dayIndexInGroup] ?? 0);
+      const dayColSpan = isGroupedByDate
+        ? horizontalGroupCount * baseColSpan
+        : baseColSpan;
+      cellIndex += dayColSpan;
+
       const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
 
       weekDaysRow.push({
         ...restProps,
         startDate,
-        colSpan,
+        colSpan: dayColSpan,
         text: formatWeekdayAndDay(shiftedStartDate),
         isFirstGroupCell: false,
         isLastGroupCell: false,
@@ -140,6 +166,8 @@ export class DateHeaderDataGenerator {
       hoursInterval,
       startDayHour,
       endDayHour,
+      startViewDate,
+      skippedDays: options.skippedDays,
     });
     const cellCountInDay = this.viewDataGenerator
       .getCellCountInDay(startDayHour, endDayHour, hoursInterval);
@@ -277,16 +305,32 @@ export class DateHeaderDataGenerator {
       groupOrientation,
     );
     const colSpan = isGroupedByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
-    const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
     const displayedCellCount = getDisplayedCellCount(cellCount, completeViewDataMap);
-    const actualCellCount = Math.ceil((startCellIndex + displayedCellCount) / colSpan);
     const totalCellCount = getTotalCellCountByCompleteData(completeViewDataMap);
+    const completeDateRow = completeDateHeaderMap[rowIndex];
 
-    const dateRow = completeDateHeaderMap[rowIndex].slice(leftVirtualCellCount, actualCellCount);
+    let leftHeaderIndex = 0;
+    let finalLeftVirtualCellCount = 0;
+    while (
+      leftHeaderIndex < completeDateRow.length
+      && finalLeftVirtualCellCount
+        + (completeDateRow[leftHeaderIndex].colSpan ?? colSpan) <= startCellIndex
+    ) {
+      finalLeftVirtualCellCount += completeDateRow[leftHeaderIndex].colSpan ?? colSpan;
+      leftHeaderIndex += 1;
+    }
 
-    const finalLeftVirtualCellCount = leftVirtualCellCount * colSpan;
+    const visibleCellEnd = startCellIndex + displayedCellCount;
+    let rightHeaderIndex = leftHeaderIndex;
+    let renderedCellEnd = finalLeftVirtualCellCount;
+    while (rightHeaderIndex < completeDateRow.length && renderedCellEnd < visibleCellEnd) {
+      renderedCellEnd += completeDateRow[rightHeaderIndex].colSpan ?? colSpan;
+      rightHeaderIndex += 1;
+    }
+
+    const dateRow = completeDateRow.slice(leftHeaderIndex, rightHeaderIndex);
     const finalLeftVirtualCellWidth = finalLeftVirtualCellCount * cellWidth;
-    const finalRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;
+    const finalRightVirtualCellCount = totalCellCount - renderedCellEnd;
     const finalRightVirtualCellWidth = finalRightVirtualCellCount * cellWidth;
 
     return {
