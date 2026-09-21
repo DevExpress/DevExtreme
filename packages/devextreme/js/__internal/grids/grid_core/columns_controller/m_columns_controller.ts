@@ -350,17 +350,21 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
+  private _isWidthChanging(option, notFireEvent): boolean {
+    const isWidthOption = isObject(option) ? 'width' in option : option === 'width';
+
+    return !notFireEvent && isWidthOption;
+  }
+
   /**
    * A width change has to be followed by a dimension recalculation, otherwise the
-   * grid keeps the previously calculated layout. Option and beginUpdate/endUpdate
-   * based width changes already run inside a component update cycle, so only a bare
-   * columnOption call has to open one of its own.
+   * grid keeps the previously calculated layout. The recalculation is postponed to
+   * the end of a component update cycle, so a bare columnOption call has to open
+   * one of its own. An internal layout batch holds the controller lock only and
+   * applies already resolved dimensions, so it is left alone.
    */
-  private _needPostponedResize(option, notFireEvent): boolean {
-    const isWidthChanging = isObject(option) ? 'width' in option : option === 'width';
-
-    return !notFireEvent
-      && isWidthChanging
+  private _needOwnUpdateCycle(option, notFireEvent): boolean {
+    return this._isWidthChanging(option, notFireEvent)
       && !this._updateLockCount
       && !this.component._updateLockCount;
   }
@@ -1540,18 +1544,24 @@ export class ColumnsController extends modules.Controller {
       fireColumnsChanged(that);
     };
 
-    if (that._needPostponedResize(option, notFireEvent)) {
+    if (that._needOwnUpdateCycle(option, notFireEvent)) {
       that.component.beginUpdate();
       try {
         applyOptions();
-        // Command columns have no path in the columns option, so they never reach
-        // _updateRequireResize through an option change notification.
         that._setRequireResize();
       } finally {
         that.component.endUpdate();
       }
     } else {
       applyOptions();
+
+      // Command columns have no path in the columns option, so they never reach
+      // _updateRequireResize through an option change notification. _setRequireResize
+      // is a no-op outside a component update cycle, which leaves internal layout
+      // batches untouched.
+      if (that._isWidthChanging(option, notFireEvent)) {
+        that._setRequireResize();
+      }
     }
 
     return undefined;

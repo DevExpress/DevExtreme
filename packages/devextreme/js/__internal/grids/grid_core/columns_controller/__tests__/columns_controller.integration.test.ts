@@ -187,6 +187,39 @@ describe('Bugs', () => {
       expect(resize).toHaveBeenCalledTimes(1);
     });
 
+    it('should recalculate dimensions when a command column width changes inside a component update cycle', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1' }],
+        columnAutoWidth: true,
+        selection: { mode: 'multiple' },
+        columns: ['field1'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.beginUpdate();
+      instance.columnOption('command:select', 'width', 80);
+      instance.endUpdate();
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not recalculate dimensions when an internal layout batch applies widths', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const columnsController = instance.getController('columns');
+      const resize = spyOnResize(instance);
+
+      columnsController.beginUpdate();
+      columnsController.columnOption(0, 'width', 120);
+      columnsController.columnOption(1, 'width', 150);
+      columnsController.endUpdate();
+
+      expect(resize).not.toHaveBeenCalled();
+    });
+
     it('should not recalculate dimensions when a non-width option changes', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ field1: 'value 1', field2: 'value 2' }],
