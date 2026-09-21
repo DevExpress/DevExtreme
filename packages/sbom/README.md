@@ -11,7 +11,7 @@ Generates Software Bill of Materials (SBOM) files in CycloneDX format for DevExt
 ### Build SBOM for All Public Packages
 
 ```shell
-pnpm nx build sbom
+pnpm nx make sbom
 ```
 
 Generates SBOM files for all public packages:
@@ -26,15 +26,15 @@ Generates SBOM files for all public packages:
 ### Generate SBOM for Specific Package (development)
 
 ```shell
-pnpm nx make sbom <package-name> [--debug]
+pnpm nx make sbom --packages=<package-name>
 ```
 
-Generates SBOM for a single package. Use `--debug` to preserve the raw output from [cdxgen](https://github.com/cdxgen/cdxgen).
+Generates SBOM for a single package.
 
 **Example:**
 
 ```shell
-pnpm nx make sbom devextreme --debug
+pnpm nx make sbom --packages=devextreme
 ```
 
 ## Notes
