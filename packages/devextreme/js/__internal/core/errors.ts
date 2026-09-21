@@ -127,7 +127,7 @@ export default errorUtils({
         + '{0}\n\n'
         + 'Interoperability between different versions of the products listed herein cannot be guaranteed.\n\n',
 
-  W0024: 'Invalid accent color: \'{0}\'. The accent color is left unchanged.',
+  W0024: 'Invalid accent color: \'{0}\'. The previous accent color remains in effect.',
 
-  W0025: 'The \'{0}\' theme does not support a custom accent color. Use a fluent-next theme.',
+  W0025: 'The \'{0}\' theme does not support custom accent colors. Apply a Fluent Next theme to use the \'customAccentColor\' method.',
 });
