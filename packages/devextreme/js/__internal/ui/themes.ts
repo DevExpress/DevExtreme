@@ -429,16 +429,19 @@ export function customAccentColor(color?: string | null): string | undefined {
     return undefined;
   }
 
-  const themeName = current();
-  const isCustomAccentSupported = isFluentNext(themeName);
-
-  if (!isCustomAccentSupported) {
-    errors.log('W0025', themeName ?? '');
-  } else if (isValidColor(color)) {
-    root.style.setProperty(ACCENT_COLOR_PROPERTY, color);
-  } else {
+  if (!isValidColor(color)) {
     errors.log('W0024', color);
+
+    return undefined;
   }
+
+  const themeName = current();
+
+  if (themeName && !isFluentNext(themeName)) {
+    errors.log('W0025', themeName);
+  }
+
+  root.style.setProperty(ACCENT_COLOR_PROPERTY, color);
 
   return undefined;
 }

@@ -119,6 +119,11 @@ describe('themes.customAccentColor', () => {
     resetTheme();
   };
 
+  const useNoThemeYet = (): void => {
+    style('');
+    resetTheme();
+  };
+
   const declaredAccentColor = (): string => window.getComputedStyle(document.documentElement)
     .getPropertyValue('--dx-accent-color')
     .trim();
@@ -202,13 +207,13 @@ describe('themes.customAccentColor', () => {
     expect(log).toHaveBeenCalledWith('W0024', 'inherit');
   });
 
-  it('warns and sets nothing when the loaded theme knows no accent color', () => {
+  it('declares the color and warns when the loaded theme knows no accent color', () => {
     const log = jest.spyOn(errors, 'log').mockImplementation(() => {});
     useTheme('generic.light');
 
     customAccentColor('#a703ff');
 
-    expect(declaredAccentColor()).toBe('');
+    expect(declaredAccentColor()).toBe('#a703ff');
     expect(log).toHaveBeenCalledWith('W0025', 'generic.light');
   });
 
@@ -218,8 +223,18 @@ describe('themes.customAccentColor', () => {
 
     customAccentColor('#a703ff');
 
-    expect(declaredAccentColor()).toBe('');
+    expect(declaredAccentColor()).toBe('#a703ff');
     expect(log).toHaveBeenCalledWith('W0025', 'fluent.blue.light');
+  });
+
+  it('declares the color and stays silent while no theme has named itself yet', () => {
+    const log = jest.spyOn(errors, 'log').mockImplementation(() => {});
+    useNoThemeYet();
+
+    customAccentColor('#a703ff');
+
+    expect(declaredAccentColor()).toBe('#a703ff');
+    expect(log).not.toHaveBeenCalled();
   });
 
   it('clears the color a theme that knows no accent has inherited from the previous one', () => {
