@@ -3834,8 +3834,6 @@ QUnit.module('Panning over scale breaks', $.extend({}, environment, {
         }, 'the range really moved');
     });
 
-    // the scrollbar drag path was only covered with workdaysOnly, whose breaks carry a gapSize
-    // and are never reshaped by the tick generator
     QUnit.test('Dragging the scroll bar over a user-defined scale break must not change the chart scale', function(assert) {
         const chart = this.createDateChart({
             breaks: [12, 19, 26].map((day) => ({
@@ -3898,9 +3896,6 @@ QUnit.module('Panning over scale breaks', $.extend({}, environment, {
         });
         const scaleBefore = this.getDecadeScale(chart);
 
-        // the tolerance covers the break glyph itself: once the break leaves the window its drawn
-        // width returns to the plot, which spreads the same three decades over a slightly wider
-        // canvas - measured as 265 px per decade with the break and 267 px without it
         for(let i = 1; i <= 5; i++) {
             this.panForward();
             assert.roughEqual(this.getDecadeScale(chart), scaleBefore, 3, `chart keeps its scale after pan ${i}`);
@@ -3909,8 +3904,6 @@ QUnit.module('Panning over scale breaks', $.extend({}, environment, {
         assert.ok(chart.getArgumentAxis().visualRange().startValue > 1, 'the range really moved forward');
     });
 
-    // the window holds the whole break: where a window edge cuts a break the axis hides less than
-    // the scroll bar does, because the bar is built on the breaks of the whole range on purpose
     QUnit.test('Scroll bar must account for scale breaks on a logarithmic axis', function(assert) {
         const chart = this.createLogChart({
             breaks: [{ startValue: 100, endValue: 100000 }],

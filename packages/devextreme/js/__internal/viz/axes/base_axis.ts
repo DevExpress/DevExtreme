@@ -1438,9 +1438,6 @@ Axis.prototype = {
         ? { startValue: that._addToValue(current.startValue, delta), endValue: current.endValue }
         : { startValue: current.startValue, endValue: that._addToValue(current.endValue, -delta) };
 
-      // a step that runs past the data is clamped, not dropped: at the bound the best achievable
-      // range is the bound itself. Clamping also absorbs the rounding of a logarithmic shift,
-      // which can land a hair outside a bound it was meant to hit exactly
       current = {
         startValue: shifted.startValue < bounds.startValue ? bounds.startValue : shifted.startValue,
         endValue: shifted.endValue > bounds.endValue ? bounds.endValue : shifted.endValue,

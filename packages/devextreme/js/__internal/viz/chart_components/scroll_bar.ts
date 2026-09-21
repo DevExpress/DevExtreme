@@ -116,8 +116,6 @@ ScrollBar.prototype = {
     const lastPosition = _max(visibleArea.max - length, visibleArea.min);
     const start = _min(_max(position, visibleArea.min), lastPosition);
 
-    // the inverse of setPosition: the same boundary directions, or the end coordinate of a
-    // discrete thumb would resolve to the next category and every drag would widen the range
     const direction = this._getBoundaryDirection();
     const from = translator.from(start, -direction);
     const to = translator.from(start + length, direction);
