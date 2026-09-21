@@ -4,7 +4,7 @@
   "derivedFrom": {
     "componentTokens": "@devexpress/design-tokens-internal → components/core/theme/fluent",
     "componentTokenCount": 726,
-    "themeFolders": 86
+    "themeFolders": 87
   },
   "components": {
     "accordion": "accordion",
@@ -179,11 +179,13 @@
   },
   "systemFolders": [
     "common",
-    "typography"
+    "typography",
+    "viz"
   ],
   "systemTier": [
     "common",
-    "typography"
+    "typography",
+    "viz"
   ],
   "systemConcerns": [
     "backdrop",
@@ -198,7 +200,8 @@
     "state",
     "surface",
     "typography",
-    "valid-badge"
+    "valid-badge",
+    "viz"
   ],
   "chassis": {
     "gridBase": {
@@ -577,6 +580,9 @@
       ".dx-theme-mode-light",
       ".dx-theme-mode-dark",
       ".dx-theme-mode-inverted"
+    ],
+    "viz": [
+      ":root"
     ]
   },
   "themeIdentity": [

@@ -161,6 +161,12 @@ const ACCENT_CONTRACT = new Set([
   ...accentContract.steps.values.map((step) => `${accentContract.steps.prefix}${step}`),
 ]);
 
+const VIZ_CONTRACT = new Set<string>(
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  (require('../tools/naming/viz-contract.json') as { variables: { name: string }[] }).variables
+    .map(({ name }) => name),
+);
+
 const publicNameConsumers = (): Set<string> | null => {
   const roots = [
     join(packageRoot, '..', '..', 'apps', 'demos', 'Demos'),
@@ -369,7 +375,7 @@ const findings = {
     if (consumers === null) return [];
     return [...consumers]
       .filter((name) => !declared.has(name) && !RUNTIME_CONTRACT.has(name)
-        && !ACCENT_CONTRACT.has(name))
+        && !ACCENT_CONTRACT.has(name) && !VIZ_CONTRACT.has(name))
       .sort();
   })(),
 

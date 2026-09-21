@@ -1,0 +1,16 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+/*
+ * Data colours of the chart themes: a blue series is the same blue on either surface, so these are
+ * declared on the document root alone — exactly where the design system declares the colour
+ * families they take. Publishing them on the mode scopes as well would let a scope shadow an
+ * application's own value. The mode-dependent half of the contract lives in common/_colors.scss,
+ * and the typeface comes from the page's own name in common/_public-links.scss.
+ */
+$viz-blue: ds.$color-bg-blue !default;
+$viz-green: ds.$color-bg-green !default;
+$viz-pink: ds.$color-bg-pink !default;
+$viz-primary: ds.$color-bg-primary !default;
+$viz-purple: ds.$color-bg-purple !default;
+$viz-red: ds.$color-bg-red !default;
+$viz-yellow: ds.$color-bg-yellow !default;

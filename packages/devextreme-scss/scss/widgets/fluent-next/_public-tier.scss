@@ -75,6 +75,7 @@
 @use "treeView/public" as treeViewPublic;
 @use "typography/public" as typographyPublic;
 @use "validation/public" as validationPublic;
+@use "viz/public" as vizPublic;
 @use "widget/public" as widgetPublic;
 
 :root,
@@ -83,6 +84,10 @@
 .dx-theme-mode-inverted {
   @include commonPublic.publish();
   @include typographyPublic.publish();
+}
+
+:root {
+  @include vizPublic.publish();
 }
 
 .dx-accordion {
