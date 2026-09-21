@@ -625,6 +625,9 @@ timelineWeekModuleConfig = {
 
 QUnit.module('TimelineWeek with intervalCount markup', timelineWeekModuleConfig, () => {
     QUnit.test('TimelineWeek has right count of cells with view option intervalCount', async function(assert) {
+        // NOTE: Keep the range away from a fall-back DST day, otherwise extra cells
+        // are added and the count is no longer days * cellsPerDay.
+        this.instance.option('currentDate', new Date(2015, 5, 16));
         this.instance.option('intervalCount', 2);
 
         let cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
