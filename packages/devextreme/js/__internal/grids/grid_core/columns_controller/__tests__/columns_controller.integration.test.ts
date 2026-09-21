@@ -235,6 +235,43 @@ describe('Bugs', () => {
       expect(resetLastResizeTime).toHaveBeenCalled();
     });
 
+    it('should not recalculate dimensions when the width is set to its current value', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: [{ dataField: 'field1' }, { dataField: 'field2', width: 150 }],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption(1, 'width', 150);
+      instance.columnOption(1, { width: 150 });
+
+      expect(resize).not.toHaveBeenCalled();
+    });
+
+    it('should leave no postponed resize when onInitialized changes a width', async () => {
+      const onInitialized = (e: { component: DataGridInstance }): void => {
+        e.component.columnOption('command:expand', 'width', 15);
+        e.component.columnOption('field2', 'width', 150);
+      };
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        masterDetail: { enabled: true },
+        columns: ['field1', 'field2'],
+        onInitialized,
+      } as DataGridProperties);
+
+      // A flag set during onInitialized would never be consumed, and
+      // ResizingController.resize bails out while it is set.
+      expect((instance as unknown as InternalGrid)._requireResize).toBeFalsy();
+
+      const resize = spyOnResize(instance);
+      instance.columnOption('field2', 'width', 200);
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
     it('should not recalculate dimensions when a non-width option changes', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ field1: 'value 1', field2: 'value 2' }],

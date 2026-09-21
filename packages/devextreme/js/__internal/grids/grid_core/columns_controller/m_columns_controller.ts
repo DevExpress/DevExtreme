@@ -6,6 +6,7 @@ import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
+import { equalByValue } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -332,7 +333,11 @@ export class ColumnsController extends modules.Controller {
    * keyboard navigation already does it.
    */
   private _setRequireResize(): void {
-    if (!this.component._updateLockCount) {
+    // Only a real beginUpdate raises the module locks, and only it ends with the
+    // GridView._endUpdateCore that consumes the flag. Component._lockUpdate, used
+    // around onInitialized, raises the component lock alone, so a flag set there
+    // would never be consumed and would make every later resize bail out.
+    if (!this.component._updateLockCount || !this._updateLockCount) {
       return;
     }
 
@@ -346,23 +351,21 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  private _isWidthChanging(option, notFireEvent): boolean {
-    const isWidthOption = isObject(option) ? 'width' in option : option === 'width';
-
-    return !notFireEvent && isWidthOption;
-  }
-
   /**
-   * A width change has to be followed by a dimension recalculation, otherwise the
-   * grid keeps the previously calculated layout. The recalculation is postponed to
-   * the end of a component update cycle, so a bare columnOption call has to open
-   * one of its own. An internal layout batch holds the controller lock only and
-   * applies already resolved dimensions, so it is left alone.
+   * Whether the call actually changes a column width. columnOptionCore ignores an
+   * equal value, so comparing the shape alone would force a recalculation for a
+   * write that changes nothing. Must be evaluated before the options are applied.
    */
-  private _needOwnUpdateCycle(option, notFireEvent): boolean {
-    return this._isWidthChanging(option, notFireEvent)
-      && !this._updateLockCount
-      && !this.component._updateLockCount;
+  private _isWidthChanging(column, option, value, notFireEvent): boolean {
+    if (notFireEvent) {
+      return false;
+    }
+
+    if (isObject(option)) {
+      return 'width' in option && !equalByValue(column.width, option.width);
+    }
+
+    return option === 'width' && !equalByValue(column.width, value);
   }
 
   public publicMethods() {
@@ -1515,7 +1518,17 @@ export class ColumnsController extends modules.Controller {
       fireColumnsChanged(that);
     };
 
-    if (that._needOwnUpdateCycle(option, notFireEvent)) {
+    // A width change has to be followed by a dimension recalculation, which is
+    // postponed to the end of a component update cycle, so a bare call opens one of
+    // its own. Command columns have no path in the columns option, so they never
+    // reach _updateRequireResize through an option change notification and the flag
+    // is set here for both branches.
+    const isWidthChanging = that._isWidthChanging(column, option, value, notFireEvent);
+    const needOwnUpdateCycle = isWidthChanging
+      && !that._updateLockCount
+      && !that.component._updateLockCount;
+
+    if (needOwnUpdateCycle) {
       that.component.beginUpdate();
       try {
         applyOptions();
@@ -1526,11 +1539,7 @@ export class ColumnsController extends modules.Controller {
     } else {
       applyOptions();
 
-      // Command columns have no path in the columns option, so they never reach
-      // _updateRequireResize through an option change notification. _setRequireResize
-      // is a no-op outside a component update cycle, which leaves internal layout
-      // batches untouched.
-      if (that._isWidthChanging(option, notFireEvent)) {
+      if (isWidthChanging) {
         that._setRequireResize();
       }
     }
