@@ -270,7 +270,7 @@ Tooltip.prototype = {
     // text area
     const normalizedCSS = {};
     for (const name in that._textFontStyles) {
-      const normalizedName = camelize(name);
+      const normalizedName = camelize(name === 'fill-opacity' ? 'opacity' : name);
       normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, that._textFontStyles[name]);
     }
     that._textGroupHtml.css(normalizedCSS);

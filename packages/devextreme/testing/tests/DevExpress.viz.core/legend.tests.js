@@ -403,7 +403,10 @@ QUnit.test('Create legend, textOpacity is "undefined"', function(assert) {
         .draw(200, 200);
 
     assert.deepEqual(this.renderer.text.lastCall.returnValue.css.lastCall.args[0], {}, 'Label should not have font style');
-    assert.equal(this.renderer.g.getCall(1).returnValue.children[0].css.lastCall.args[0].fill, 'rgba(127,127,127,0.5)', 'Label\'s group should have fill with opacity');
+    const groupStyles = this.renderer.g.getCall(1).returnValue.children[0].css.lastCall.args[0];
+
+    assert.equal(groupStyles.fill, '#7F7F7F', 'Label\'s group should have the font colour');
+    assert.equal(groupStyles['fill-opacity'], 0.5, 'and the font opacity beside it');
 });
 
 QUnit.test('Create legend, textOpacity less than font opacity', function(assert) {
@@ -423,7 +426,10 @@ QUnit.test('Create legend, textOpacity less than font opacity', function(assert)
     ];
     this.createAndDrawLegend();
 
-    assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].fill, 'rgba(127,127,127,0.3)', 'Label should be changed');
+    const labelStyles = this.renderer.text.lastCall.returnValue.css.lastCall.args[0];
+
+    assert.equal(labelStyles.fill, '#7F7F7F', 'Label keeps the font colour');
+    assert.equal(labelStyles['fill-opacity'], 0.3, 'and takes the smaller opacity of the item');
 });
 
 QUnit.test('Create legend, selected fill is "none"', function(assert) {

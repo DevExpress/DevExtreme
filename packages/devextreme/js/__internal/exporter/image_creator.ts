@@ -555,11 +555,15 @@ function hex2rgba(hexColor, alpha) {
 function createGradient(element) {
   const options = { colors: [], transform: element.attributes.gradientTransform?.textContent };
 
-  _each(element.childNodes, (_, { attributes }) => {
+  _each(element.childNodes, (_, node) => {
+    const { attributes } = node;
+
     // @ts-expect-error
     options.colors.push({
       offset: attributes.offset.value,
-      stopColor: attributes['stop-color'].value,
+      stopColor: attributes['stop-color']
+        ? attributes['stop-color'].value
+        : window.getComputedStyle(node).getPropertyValue('stop-color'),
     });
   });
   return options;
