@@ -130,11 +130,11 @@ StyleDictionary.registerPreprocessor({
 
 /*
  * WORKAROUND for a bug in @devexpress/design-tokens-internal, present since 262.13.0: that release
- * dropped `color.shadow-none` from semantic/colors/*, but semantic/box-shadow/{fluent,material}.json
- * still reference it from every layer of `box-shadow.none`, so Style Dictionary fails the whole build
- * on three unresolvable references. The value the token carried up to 262.12.0 is substituted here,
- * which keeps the output identical to that release: `box-shadow.none` is all-zero geometry in a fully
- * transparent colour.
+ * dropped `color.shadow-none` from semantic/colors/*, but
+ * semantic/box-shadow/{fluent,material}.json still reference it from every layer of
+ * `box-shadow.none`, so Style Dictionary fails the whole build on three unresolvable references.
+ * The value the token carried up to 262.12.0 is substituted here, which keeps the output identical
+ * to that release: `box-shadow.none` is all-zero geometry in a fully transparent colour.
  *
  * Remove this once the package defines the token again or stops referencing it. The other two
  * preprocessors above patch the same class of export defect.
@@ -178,7 +178,6 @@ const require = createRequire(import.meta.url);
 const tokensDir = path.dirname(require.resolve('@devexpress/design-tokens-internal/package.json'));
 const buildPath = `${path.resolve(dirname, '../../scss/_design-system')}/`;
 
-
 // Kept in step with the @includes in widgets/fluent-next/_design-system.scss.
 const MODE_ROLES_MIXIN = 'roles';
 const MODE_ALIASES_MIXIN = 'aliases';
@@ -205,7 +204,6 @@ const FLUENT_MODES = [
   'dark',
   'light',
 ];
-
 
 /*
  * A bundle needs the mode-dependent declarations under three selectors, and a `:root` block cannot
@@ -430,8 +428,10 @@ async function validateReferences() {
   const defined = new Set();
   const used = new Map();
 
-  for (const file of files) {
-    const content = await readFile(file, 'utf-8');
+  const contents = await Promise.all(files.map((file) => readFile(file, 'utf-8')));
+
+  for (const [index, file] of files.entries()) {
+    const content = contents[index];
 
     for (const [, name] of content.matchAll(/--(dxds-[\w-]+)\s*:/g)) {
       defined.add(name);
@@ -562,8 +562,11 @@ async function validateConsumedTokens() {
 
   const referenced = new Map();
 
-  for (const file of await collectThemeStyleSheets()) {
-    const content = await readFile(file, 'utf-8');
+  const styleSheets = await collectThemeStyleSheets();
+  const styleSheetContents = await Promise.all(styleSheets.map((file) => readFile(file, 'utf-8')));
+
+  for (const [index, file] of styleSheets.entries()) {
+    const content = styleSheetContents[index];
     const source = path.relative(themePath, file);
     const found = [
       ...collectTokenReferences(content, source).map((name) => [name, `ds.$${name}`]),
@@ -600,7 +603,11 @@ async function build() {
 
     const sd = new StyleDictionary(config);
 
+    // Sequential on purpose: the configs write into one output tree, and a later one reads what
+    // an earlier one produced.
+    // eslint-disable-next-line no-await-in-loop
     await sd.hasInitialized;
+    // eslint-disable-next-line no-await-in-loop
     await sd.buildAllPlatforms();
   }
 

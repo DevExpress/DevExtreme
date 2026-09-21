@@ -18,7 +18,9 @@
  * A pure de-star cannot change one byte of the compiled CSS. That is the acceptance criterion.
  */
 
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'fs';
+import {
+  readFileSync, writeFileSync, readdirSync, statSync, existsSync,
+} from 'fs';
 import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -41,7 +43,9 @@ const stripComments = (content) => content
   .filter((_, index) => index % 2 === 0)
   .join('');
 
-/** Ranges of `with ( … )` argument lists: their left-hand sides are the base module's parameters. */
+/**
+ * Ranges of `with ( … )` argument lists: their left-hand sides are the base module's parameters.
+ */
 const withKeyRanges = (content) => {
   const ranges = [];
   const opener = /\bwith\s*\(/g;
@@ -79,12 +83,16 @@ const declaredNames = (file) => {
       index += 1;
     } else if (char === '$') {
       const name = /^\$[a-z0-9_-]+/i.exec(content.slice(index))?.[0];
-      if (!name) { index += 1; continue; }
-      const namespaced = index > 0 && content[index - 1] === '.';
-      const assignment = /^\s*:/.test(content.slice(index + name.length));
-      const inSkip = skip.some(([from, to]) => index >= from && index < to);
-      if (assignment && !namespaced && !inSkip && stack.every(Boolean)) names.add(name);
-      index += name.length;
+      if (!name) {
+        index += 1;
+      } else {
+        const at = index;
+        const namespaced = at > 0 && content[at - 1] === '.';
+        const assignment = /^\s*:/.test(content.slice(at + name.length));
+        const inSkip = skip.some(([from, to]) => at >= from && at < to);
+        if (assignment && !namespaced && !inSkip && stack.every(Boolean)) names.add(name);
+        index += name.length;
+      }
     } else {
       index += 1;
     }
@@ -132,20 +140,23 @@ const analyse = (file) => {
     });
   });
 
-  // The same module can be imported twice in one file (diagram/_index.scss imports ../fieldset/sizes
-  // on two consecutive lines). A repeated `@use … as *` of the same module is a no-op, and it cannot
-  // be namespaced twice under one alias, so the duplicate is dropped. Counting its names twice would
+  // The same module can be imported twice in one file (diagram/_index.scss imports
+  // ../fieldset/sizes
+  // on two consecutive lines). A repeated `@use … as *` of the same module is a no-op, and it
+  // cannot
+  // be namespaced twice under one alias, so the duplicate is dropped. Counting its names twice
+  // would
   // also make every one of them look like it came from two different providers.
   const seen = new Set();
-  targets.forEach((target) => {
-    if (seen.has(target.modulePath)) {
-      target.drop = true;
-      target.names = new Set();
-    }
+  const deduped = targets.map((target) => {
+    const duplicate = seen.has(target.modulePath);
     seen.add(target.modulePath);
+    return duplicate ? { ...target, drop: true, names: new Set() } : target;
   });
 
-  return { file, ownFolder, original, targets };
+  return {
+    file, ownFolder, original, targets: deduped,
+  };
 };
 
 const rewrite = ({ file, original, targets }) => {
@@ -163,7 +174,9 @@ const rewrite = ({ file, original, targets }) => {
   const mutations = [...ownDeclarations].filter((name) => provided.has(name));
   const ambiguous = [...provided].filter(([, aliases]) => aliases.length > 1);
   if (mutations.length || ambiguous.length) {
-    return { file, skipped: true, mutations, ambiguous: ambiguous.map(([name]) => name) };
+    return {
+      file, skipped: true, mutations, ambiguous: ambiguous.map(([name]) => name),
+    };
   }
 
   const skip = withKeyRanges(stripComments(original));
@@ -179,33 +192,28 @@ const rewrite = ({ file, original, targets }) => {
   let dropped = 0;
 
   while (index < original.length) {
-    const target = targets.find((candidate) => candidate.index === index);
-    if (target) {
-      if (target.drop) {
-        index += target.statement.length;
-        if (original[index] === '\n') index += 1; // do not leave a blank line behind
-        dropped += 1;
-      } else {
-        output += target.statement.replace(/\bas\s+\*/, `as ${target.alias}`);
-        index += target.statement.length;
-      }
-      continue;
-    }
+    const at = index;
+    const target = targets.find((candidate) => candidate.index === at);
+    const char = original[at];
+    const name = char === '$' ? /^\$[a-z0-9_-]+/i.exec(original.slice(at))?.[0] : null;
+    const namespaced = at > 0 && original[at - 1] === '.';
+    const rewritable = name && !namespaced && provided.has(name) && !inWithKeys(at, name);
 
-    const char = original[index];
-    if (char === '$') {
-      const name = /^\$[a-z0-9_-]+/i.exec(original.slice(index))?.[0];
-      const namespaced = index > 0 && original[index - 1] === '.';
-      if (name && !namespaced && provided.has(name) && !inWithKeys(index, name)) {
-        output += `${provided.get(name)[0]}.${name}`;
-        index += name.length;
-        rewritten += 1;
-        continue;
-      }
+    if (target && target.drop) {
+      index += target.statement.length;
+      if (original[index] === '\n') index += 1; // do not leave a blank line behind
+      dropped += 1;
+    } else if (target) {
+      output += target.statement.replace(/\bas\s+\*/, `as ${target.alias}`);
+      index += target.statement.length;
+    } else if (rewritable) {
+      output += `${provided.get(name)[0]}.${name}`;
+      index += name.length;
+      rewritten += 1;
+    } else {
+      output += char;
+      index += 1;
     }
-
-    output += char;
-    index += 1;
   }
 
   return {

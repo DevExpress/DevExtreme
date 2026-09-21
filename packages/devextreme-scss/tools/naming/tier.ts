@@ -11,56 +11,57 @@
 
 import { posix } from 'node:path';
 
-export type SourceFile = {
+export interface SourceFile {
   /** POSIX path relative to scss/widgets. */
   path: string;
   /** First folder under the theme, `''` for theme-root files. */
   folder: string;
   raw: string;
   stripped: string;
-};
+}
 
-export type Use = { spec: string; star: boolean; alias: string | null };
-export type NamespacedReference = { namespace: string; name: string };
-export type Parsed = {
+export interface Use { spec: string; star: boolean; alias: string | null }
+export interface NamespacedReference { namespace: string; name: string }
+export interface Parsed {
   path: string;
   folder: string;
   declarations: string[];
   /*
    * `references` intentionally contains both `$name` and the `name` half of `alias.$name`, because
    * the dead-variable check must see either form. Ownership checks must not: counting a namespaced
-   * read as a bare one reports the same read twice the moment the variable's name becomes canonical.
+   * read as a bare one reports the same read twice the moment the variable's name becomes
+   * canonical.
    */
   references: string[];
   bareReferences: string[];
   namespacedReferences: NamespacedReference[];
   uses: Use[];
-};
+}
 
-export type Registries = {
+export interface Registries {
   components: Record<string, string>;
   declarationHome: Record<string, string>;
   exemptFolders: Record<string, string>;
   systemTier?: string[];
   migrated: string[];
   rootSelectors: Record<string, string[]>;
-};
+}
 
-export type TierRecord = {
+export interface TierRecord {
   component: string;
   value: string;
   reason: string | null;
   /** Declaring files, POSIX paths relative to scss/widgets. */
   sources: string[];
-};
+}
 
 export type WiringKind = 'star' | 'feeder';
-export type WiringEntry = { folder: string; variable: string; kind: WiringKind };
+export interface WiringEntry { folder: string; variable: string; kind: WiringKind }
 
-export type BaseIndex = {
+export interface BaseIndex {
   names: Set<string>;
   declarationsByPath: Map<string, string[]>;
-};
+}
 
 export const THEME = 'fluent-next';
 export const DECLARATION_FILE = /(^|\/)_(colors|sizes|variables)\.scss$/;
@@ -108,8 +109,8 @@ export const findWithRanges = (content: string): [number, number][] => findRange
 
 /**
  * Parameter lists of `@mixin` / `@function`. A parameter with a default (`$button-selected-bg: $x`)
- * looks exactly like a declaration and is not inside a `{}` block, so brace tracking alone counts it
- * as one — same trap as `with()` keys.
+ * looks exactly like a declaration and is not inside a `{}` block, so brace tracking alone counts
+ * it as one — same trap as `with()` keys.
  */
 export const findSignatureRanges = (content: string): [number, number][] => findRanges(
   content,
@@ -130,8 +131,8 @@ const inRanges = (position: number, ranges: [number, number][]): boolean => rang
   .some(([from, to]) => position >= from && position < to);
 
 /**
- * A declaration is module-level when every enclosing block is a control directive: Sass `@if`/`@each`
- * do not create scope, but a mixin, a function or a style rule do.
+ * A declaration is module-level when every enclosing block is a control directive: Sass
+ * `@if`/`@each` do not create scope, but a mixin, a function or a style rule do.
  */
 export const parseScss = (path: string, folder: string, stripped: string): Parsed => {
   const content = stripped;
@@ -159,23 +160,27 @@ export const parseScss = (path: string, folder: string, stripped: string): Parse
       index += 1;
     } else if (char === '$') {
       const name = /^\$[a-z0-9_-]+/i.exec(content.slice(index))?.[0];
-      if (!name) { index += 1; continue; }
-      const namespaced = index > 0 && content[index - 1] === '.';
-      const after = content.slice(index + name.length);
-      const isAssignment = /^\s*:/.test(after);
-      const moduleLevel = blockStack.every((isControl) => isControl);
 
-      if (isAssignment && !namespaced && moduleLevel && !inRanges(index, withRanges)) {
-        declarations.push(name);
-      } else if (!isAssignment && !namespaced) {
-        references.push(name);
-        bareReferences.push(name);
-      } else if (!isAssignment && namespaced) {
-        const namespace = /([a-zA-Z][a-zA-Z0-9_-]*)\.$/.exec(content.slice(0, index))?.[1];
-        if (namespace) namespacedReferences.push({ namespace, name });
-        references.push(name);
+      if (!name) {
+        index += 1;
+      } else {
+        const namespaced = index > 0 && content[index - 1] === '.';
+        const after = content.slice(index + name.length);
+        const isAssignment = /^\s*:/.test(after);
+        const moduleLevel = blockStack.every((isControl) => isControl);
+
+        if (isAssignment && !namespaced && moduleLevel && !inRanges(index, withRanges)) {
+          declarations.push(name);
+        } else if (!isAssignment && !namespaced) {
+          references.push(name);
+          bareReferences.push(name);
+        } else if (!isAssignment && namespaced) {
+          const namespace = /([a-zA-Z][a-zA-Z0-9_-]*)\.$/.exec(content.slice(0, index))?.[1];
+          if (namespace) namespacedReferences.push({ namespace, name });
+          references.push(name);
+        }
+        index += name.length;
       }
-      index += name.length;
     } else if (char === '@' && content.startsWith('@use', index)) {
       const statement = /^@use\s+["']([^"']+)["']/.exec(content.slice(index));
       if (statement) {
@@ -202,7 +207,11 @@ export const parseScss = (path: string, folder: string, stripped: string): Parse
   };
 };
 
-export const parseSourceFile = (file: SourceFile): Parsed => parseScss(file.path, file.folder, file.stripped);
+export const parseSourceFile = (file: SourceFile): Parsed => parseScss(
+  file.path,
+  file.folder,
+  file.stripped,
+);
 
 // ---------------------------------------------------------------------------------------------
 // base wiring
@@ -247,7 +256,11 @@ export const starredBaseParameters = (parsed: Parsed, index: BaseIndex): Set<str
  *     `$x: … !default` SETS base's variable.
  *   - feeder: `$fluent-<baseName>` passed as a `with()` value for base's `-2` key.
  */
-export const baseWiringKind = (variable: string, parsed: Parsed, index: BaseIndex): WiringKind | null => {
+export const baseWiringKind = (
+  variable: string,
+  parsed: Parsed,
+  index: BaseIndex,
+): WiringKind | null => {
   if (starredBaseParameters(parsed, index).has(variable)) return 'star';
   if (variable.startsWith('$fluent-') && index.names.has(`$${variable.slice('$fluent-'.length)}`)) {
     return 'feeder';
@@ -261,8 +274,13 @@ export const baseWiringEntries = (
   exemptFolders: string[],
 ): WiringEntry[] => parsedTheme
   .flatMap((parsed) => parsed.declarations
-    .map((variable) => ({ folder: parsed.folder, variable, kind: baseWiringKind(variable, parsed, index) }))
-    .filter((entry): entry is WiringEntry => entry.kind !== null && !exemptFolders.includes(entry.folder)));
+    .map((variable) => ({
+      folder: parsed.folder,
+      variable,
+      kind: baseWiringKind(variable, parsed, index),
+    }))
+    .filter((entry): entry is WiringEntry => entry.kind !== null
+      && !exemptFolders.includes(entry.folder)));
 
 // ---------------------------------------------------------------------------------------------
 // the tier: which variables are published, and why the rest are not
@@ -310,7 +328,7 @@ export const tierRecords = (
             if (!sources.includes(file.path)) sources.push(file.path);
             declared.set(match[1], {
               value: match[2].trim().replace(/\s*!default$/, ''),
-              marker: (previous?.marker ?? false) || /dx-data-uri-static/.test(match[3] + match[2]),
+              marker: (previous?.marker ?? false) || (match[3] + match[2]).includes('dx-data-uri-static'),
               sources,
             });
           });
@@ -323,27 +341,30 @@ export const tierRecords = (
       });
     });
     declared.forEach(({ value, marker, sources }, variable) => {
-      const reason = marker || feeders.has(variable) || /(^|[^\w-])data-uri\(/.test(value)
-        ? 'data-uri'
-        : wiring.has(variable) ? 'base-wiring'
-          : CSS_WIDE_KEYWORDS.has(value) ? 'css-wide-keyword'
-            : value.includes('!important') ? 'important'
-              : value === 'null' ? 'null'
-                : value === 'false' || value === 'true' ? 'sass-flag' : null;
+      const reasonOf = (): string | null => {
+        if (marker || feeders.has(variable) || /(^|[^\w-])data-uri\(/.test(value)) return 'data-uri';
+        if (wiring.has(variable)) return 'base-wiring';
+        if (CSS_WIDE_KEYWORDS.has(value)) return 'css-wide-keyword';
+        if (value.includes('!important')) return 'important';
+        if (value === 'null') return 'null';
+        return value === 'false' || value === 'true' ? 'sass-flag' : null;
+      };
+      const reason = reasonOf();
       records.set(variable, {
         component, value, reason, sources,
       });
     });
   });
 
-  // a reference to a data-uri-excluded name carries the same baked image, so the referrer is excluded too
+  // a reference to a data-uri-excluded name carries the same baked image, so the referrer is
+  // excluded too
   for (let changed = true; changed;) {
     changed = false;
-    records.forEach((record) => {
+    records.forEach((record, variable) => {
       if (record.reason) return;
       if ([...record.value.matchAll(/\$[a-z0-9-]+/g)]
         .some(([token]) => records.get(token)?.reason === 'data-uri')) {
-        record.reason = 'data-uri';
+        records.set(variable, { ...record, reason: 'data-uri' });
         changed = true;
       }
     });
@@ -357,14 +378,25 @@ export const tierRecords = (
 
 export type Links = Map<string, string>; // --dx-a -> --dx-b
 
-/** Codepoint order: what `sort()` without a comparator does, spelled out so nobody reaches for localeCompare. */
-export const byCodepoint = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
+/**
+ * Codepoint order: what `sort()` without a comparator does, spelled out so nobody reaches for
+ * localeCompare.
+ */
+export const byCodepoint = (a: string, b: string): number => {
+  if (a < b) return -1;
+  return a > b ? 1 : 0;
+};
 
 export const propertyOf = (variable: string): string => `--dx-${variable.slice(1)}`;
 export const variableOf = (property: string): string => `$${property.slice('--dx-'.length)}`;
 
-/** A links file holds nothing but whole-value references; anything else is returned as a problem. */
-export const parseLinksFile = (path: string, content: string): { links: Links; problems: string[] } => {
+/**
+ * A links file holds nothing but whole-value references; anything else is returned as a problem.
+ */
+export const parseLinksFile = (
+  path: string,
+  content: string,
+): { links: Links; problems: string[] } => {
   const links: Links = new Map();
   const problems: string[] = [];
   content.split('\n').forEach((line, index) => {
@@ -388,9 +420,13 @@ export const useSpecFor = (publicPath: string, sourcePath: string): string => {
   return directory === '.' ? stem : posix.join(directory, stem);
 };
 
-export type Projection = { property: string; variable: string; sources: string[] };
+export interface Projection { property: string; variable: string; sources: string[] }
 
-export const renderPublicFile = (publicPath: string, projections: Projection[], hasLinks: boolean): string => {
+export const renderPublicFile = (
+  publicPath: string,
+  projections: Projection[],
+  hasLinks: boolean,
+): string => {
   const specs = [...new Set(projections.flatMap(({ sources }) => sources
     .map((source) => useSpecFor(publicPath, source))))].sort(byCodepoint);
   const header = [
@@ -405,7 +441,7 @@ export const renderPublicFile = (publicPath: string, projections: Projection[], 
   return `${header.join('\n')}\n\n@mixin publish {\n${body.join('\n')}\n}\n`;
 };
 
-export type CollectorEntry = { folder: string; selectors: string[] };
+export interface CollectorEntry { folder: string; selectors: string[] }
 
 export const namespaceOf = (folder: string): string => `${folder}Public`;
 
@@ -440,13 +476,13 @@ export const renderCollector = (entries: CollectorEntry[]): string => {
 // the plan: every generated file, or the reasons nothing can be written
 // ---------------------------------------------------------------------------------------------
 
-export type Publication = {
+export interface Publication {
   /** Generated files by path, byte-exact. Empty when `problems` is not. */
   files: Map<string, string>;
   /** Paths of `_public.scss` files that did not exist before. */
   created: string[];
   problems: string[];
-};
+}
 
 const publicPathOf = (folder: string): string => `${THEME}/${folder}/${PUBLIC_FILE}`;
 const linksPathOf = (folder: string): string => `${THEME}/${folder}/${LINKS_FILE}`;
@@ -513,11 +549,15 @@ export const planPublication = (
 
   const publishesOnRoot = (component: string): boolean => (registries.rootSelectors[component] ?? []).includes(':root');
 
-  // links: a target must be published where the referrer can see it, and a link may not shadow a value
+  // links: a target must be published where the referrer can see it, and a link may not shadow a
+  // value
   linksByFolder.forEach((links, folder) => {
-    const component = systemTierOf(registries).includes(folder) ? folder : registries.components[folder];
+    const component = systemTierOf(registries).includes(folder)
+      ? folder
+      : registries.components[folder];
     links.forEach((target, property) => {
-      const eligible = (perComponent.get(component) ?? []).some((projection) => projection.property === property);
+      const eligible = (perComponent.get(component) ?? [])
+        .some((projection) => projection.property === property);
       if (eligible) {
         problems.push(`${linksPathOf(folder)}: ${property} is a link, but ${variableOf(property)} is declared and eligible — remove one of the two`);
       }
@@ -538,7 +578,9 @@ export const planPublication = (
   existing.forEach((_, path) => {
     if (!path.endsWith(`/${PUBLIC_FILE}`)) return;
     const folder = path.split('/')[1];
-    const component = systemTierOf(registries).includes(folder) ? folder : registries.components[folder];
+    const component = systemTierOf(registries).includes(folder)
+      ? folder
+      : registries.components[folder];
     if (!component || !publishingComponents(registries).includes(component)) {
       problems.push(`${path}: ${folder} is not a publishing component — remove the file or register the component`);
       return;
@@ -557,7 +599,9 @@ export const planPublication = (
     }
   });
 
-  if (problems.length) return { files: new Map(), created: [], problems: [...new Set(problems)].sort(byCodepoint) };
+  if (problems.length) {
+    return { files: new Map(), created: [], problems: [...new Set(problems)].sort(byCodepoint) };
+  }
 
   const files = new Map<string, string>();
   const created: string[] = [];
@@ -575,7 +619,10 @@ export const planPublication = (
 };
 
 /** Paths whose committed content differs from the plan — what `--check` reports. */
-export const stalePaths = (plan: Publication, existing: ReadonlyMap<string, string>): string[] => [...plan.files]
+export const stalePaths = (
+  plan: Publication,
+  existing: ReadonlyMap<string, string>,
+): string[] => [...plan.files]
   .filter(([path, content]) => existing.get(path) !== content)
   .map(([path]) => path)
   .sort(byCodepoint);

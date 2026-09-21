@@ -11,7 +11,6 @@ describe('Equals svg to font', () => {
     // For opentype.js: first five glyphs are empty
     const countEmptySvg = 4;
 
-    // eslint-disable-next-line spellcheck/spell-checker, @typescript-eslint/no-unsafe-member-access
     return loadSync(pathToFont).glyphs.length - countEmptySvg;
   };
 
@@ -30,7 +29,7 @@ describe('Equals svg to font', () => {
 
       try {
         files = readdirSync(dir);
-      } catch (e) {
+      } catch {
         return;
       }
 

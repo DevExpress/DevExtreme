@@ -34,18 +34,21 @@ const markers: string[] = vocabulary.categories
   .map((category: { marker: string | null }) => category.marker)
   .filter(Boolean);
 
-type Place = { file: string; line: number; literals: string[]; text: string };
+interface Place { file: string; line: number; literals: string[]; text: string }
 
 const audit = (root?: string): { marked: number; unmarked: Place[] } => {
   const args = [tool, '--json', ...(root ? [`--root=${root}`] : [])];
+  const parse = (json: string): { marked: number; unmarked: Place[] } => JSON.parse(json) as {
+    marked: number; unmarked: Place[];
+  };
   try {
-    return JSON.parse(execFileSync(process.execPath, args, { encoding: 'utf8' }));
+    return parse(execFileSync(process.execPath, args, { encoding: 'utf8' }));
   } catch (error) {
     // a non-empty scan exits 1 by design — the payload is still on stdout
     const { stdout, status } = error as { stdout?: string; status?: number };
     if (!stdout) throw error;
     expect(status).toBe(1);
-    return JSON.parse(stdout);
+    return parse(stdout);
   }
 };
 

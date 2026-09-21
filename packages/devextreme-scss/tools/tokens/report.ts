@@ -12,19 +12,19 @@ export type Declarations = Map<string, string>;
 /** Generated file path -> its declarations. */
 export type GeneratedOutput = Map<string, Declarations>;
 
-export type NameDiff = { added: string[]; removed: string[] };
+export interface NameDiff { added: string[]; removed: string[] }
 
-export type ValueChange = { file: string; name: string; was: string; now: string };
+export interface ValueChange { file: string; name: string; was: string; now: string }
 
-export type DeclarationRef = { file: string; name: string };
+export interface DeclarationRef { file: string; name: string }
 
-export type OutputDiff = {
+export interface OutputDiff {
   changed: ValueChange[];
   gone: DeclarationRef[];
   appeared: DeclarationRef[];
-};
+}
 
-export type Report = {
+export interface Report {
   package: string;
   versionBefore: string;
   versionAfter: string;
@@ -33,7 +33,7 @@ export type Report = {
   names: NameDiff;
   lostConsumed: string[];
   output: OutputDiff;
-};
+}
 
 /*
  * Declarations only. A `var(--dxds-x)` read carries no value of its own, and counting it would
@@ -81,7 +81,9 @@ export const diffGenerated = (before: GeneratedOutput, after: GeneratedOutput): 
       if (value === undefined) {
         gone.push({ file, name });
       } else if (value !== was) {
-        changed.push({ file, name, was, now: value });
+        changed.push({
+          file, name, was, now: value,
+        });
       }
     });
   });
@@ -134,7 +136,9 @@ export const renderReport = (report: Report): string => {
     ),
     section(
       `Values that moved in the generated output (${output.changed.length})`,
-      output.changed.map(({ file, name, was, now }) => `- \`${file}\`: \`${name}\`\n`
+      output.changed.map(({
+        file, name, was, now,
+      }) => `- \`${file}\`: \`${name}\`\n`
         + `  - was: \`${was}\`\n  - now: \`${now}\``),
     ),
     section(`Gone from the generated output (${output.gone.length})`, output.gone.map(reference)),
@@ -156,12 +160,12 @@ export const renderReport = (report: Report): string => {
  * writes whichever view to stdout alone, which keeps `> report.md` markdown.
  */
 
-export type TerminalOptions = {
+export interface TerminalOptions {
   /** ANSI colour. Off by default so the output stays comparable. */
   color?: boolean;
   /** How many entries a section shows before it says how many more there are. */
   limit?: number;
-};
+}
 
 const DEFAULT_LIMIT = 12;
 

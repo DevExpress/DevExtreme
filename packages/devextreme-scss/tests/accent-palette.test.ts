@@ -1,13 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'fs';
 import { dirname, join } from 'path';
 
-const contract = require('../tools/naming/accent-contract.json') as {
-  declaredIn: string;
-  input: { name: string };
-  source: { name: string };
-  settings: { name: string }[];
-  steps: { prefix: string; values: number[] };
-};
+import contract from '../tools/naming/accent-contract.json';
 
 const packageRoot = process.cwd();
 const accentStylesheet = join(packageRoot, 'scss', 'widgets', ...contract.declaredIn.split('/'));

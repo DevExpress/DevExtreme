@@ -17,7 +17,9 @@
  * exactly this value already exist, or is design being asked for a new one?
  */
 
-import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'fs';
+import {
+  readFileSync, writeFileSync, readdirSync, existsSync, statSync,
+} from 'fs';
 import { join, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 import postcss from 'postcss';
@@ -190,8 +192,8 @@ const distinctValues = (rows, category) => {
   const map = new Map();
   const pick = (row) => {
     if (category.literals === 'steps') {
-      const steps = [...row.value.matchAll(/\$([a-z-]+-\d+)/g)].map((m) => m[1]);
-      if (steps.length) return steps;
+      const named = [...row.value.matchAll(/\$([a-z-]+-\d+)/g)].map((m) => m[1]);
+      if (named.length) return named;
       const weight = /^\s*(\d{3})\s*$/.exec(row.value);
       return weight ? [weight[1]] : [row.value.trim()];
     }
@@ -303,7 +305,8 @@ const calcByKind = CALC_KINDS.map((kind) => {
     if (!formulas.has(place.value)) formulas.set(place.value, []);
     formulas.get(place.value).push(place);
   });
-  return { ...kind, list, formulas: [...formulas.entries()].sort((a, b) => b[1].length - a[1].length) };
+  const ranked = [...formulas.entries()].sort((a, b) => b[1].length - a[1].length);
+  return { ...kind, list, formulas: ranked };
 });
 
 /* -------------------------------------------------------------- markdown */
@@ -313,6 +316,59 @@ const escapePipes = (text) => String(text).replace(/\|/g, '\\|');
 const countOf = (entry) => (entry.source === 'bundle'
   ? calcLight.length
   : categories.find((candidate) => candidate.id === entry.id).rows.length);
+
+const escape = (text) => String(text)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;');
+
+const calcMd = () => {
+  const out = [];
+  out.push(`## ${CALC_CATEGORY.title} — calc(), ${calcLight.length} expressions per bundle\n`);
+  out.push('A token arrives in CSS as `var()`, so Sass can no longer fold the arithmetic: everything '
+    + 'that used to be computed at build time is now computed by the browser. For comparison, the '
+    + 'built legacy fluent has **50** `calc()` expressions and not one of them with a token.\n');
+  out.push('| Class | Expressions | Why |');
+  out.push('|---|---|---|');
+  calcByKind.forEach((kind) => out.push(`| ${kind.title} | ${kind.list.length} | ${kind.why} |`));
+  out.push('');
+  calcByKind.forEach((kind) => {
+    if (!kind.list.length) return;
+    out.push(`### ${kind.title} (${kind.list.length})\n`);
+    kind.formulas.forEach(([formula, list]) => {
+      out.push(`**\`${escapePipes(formula)}\`** — ${list.length} place${list.length === 1 ? '' : 's'}:\n`);
+      list.slice(0, 12).forEach((place) => out.push(`- \`${escapePipes(place.selector)}\` → \`${place.prop}\``));
+      if (list.length > 12) out.push(`- … ${list.length - 12} more`);
+      out.push('');
+    });
+  });
+  return out;
+};
+
+const calcSection = () => `
+  <section class="card" id="calc">
+    <header class="chead">
+      <h2>${escape(CALC_CATEGORY.title)} — <code>calc()</code><span class="count">${calcLight.length}</span></h2>
+      <p class="sub">A token arrives in CSS as <code>var()</code>, so Sass can no longer fold the
+        arithmetic: everything that used to be computed at build time is now computed by the browser.
+        For comparison, the built legacy fluent has <b>50</b> <code>calc()</code> expressions and not
+        one with a token. Below is the light bundle; the dark one has the same set.</p>
+    </header>
+    <div class="kinds">${calcByKind.map((kind) => `
+      <div class="kind${kind.id === 'zero' ? ' zero' : ''}">
+        <h3><b>${kind.list.length}</b> ${escape(kind.title)}</h3>
+        <p>${kind.why.replace(/`([^`]+)`/g, (_, code) => `<code>${escape(code)}</code>`)}</p>
+      </div>`).join('')}
+    </div>
+    ${calcByKind.filter((kind) => kind.list.length).map((kind) => `
+      <h3 style="margin-top:6px">${escape(kind.title)} — ${kind.list.length}</h3>
+      <div style="display:flex;flex-direction:column;gap:8px">${kind.formulas.map(([formula, list]) => `
+        <details class="formula">
+          <summary><code>${escape(formula)}</code><span class="n">${list.length}</span></summary>
+          <ul>${list.map((place) => `<li>${escape(place.selector)} → ${escape(place.prop)}</li>`).join('')}</ul>
+        </details>`).join('')}
+      </div>`).join('')}
+  </section>
+`;
 
 const md = () => {
   const out = [];
@@ -360,33 +416,7 @@ const md = () => {
   return out.join('\n');
 };
 
-const calcMd = () => {
-  const out = [];
-  out.push(`## ${CALC_CATEGORY.title} — calc(), ${calcLight.length} expressions per bundle\n`);
-  out.push('A token arrives in CSS as `var()`, so Sass can no longer fold the arithmetic: everything '
-    + 'that used to be computed at build time is now computed by the browser. For comparison, the '
-    + 'built legacy fluent has **50** `calc()` expressions and not one of them with a token.\n');
-  out.push('| Class | Expressions | Why |');
-  out.push('|---|---|---|');
-  calcByKind.forEach((kind) => out.push(`| ${kind.title} | ${kind.list.length} | ${kind.why} |`));
-  out.push('');
-  calcByKind.forEach((kind) => {
-    if (!kind.list.length) return;
-    out.push(`### ${kind.title} (${kind.list.length})\n`);
-    kind.formulas.forEach(([formula, list]) => {
-      out.push(`**\`${escapePipes(formula)}\`** — ${list.length} place${list.length === 1 ? '' : 's'}:\n`);
-      list.slice(0, 12).forEach((place) => out.push(`- \`${escapePipes(place.selector)}\` → \`${place.prop}\``));
-      if (list.length > 12) out.push(`- … ${list.length - 12} more`);
-      out.push('');
-    });
-  });
-  return out;
-};
-
 /* ------------------------------------------------------------------ HTML */
-
-const escape = (text) => String(text)
-  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const categorySection = (category) => {
   const values = distinctValues(category.rows, category);
@@ -523,32 +553,6 @@ nav.rail a:hover { color:var(--ink); border-color:var(--ink-faint); }
 </div>
 </body>
 </html>
-`;
-
-const calcSection = () => `
-  <section class="card" id="calc">
-    <header class="chead">
-      <h2>${escape(CALC_CATEGORY.title)} — <code>calc()</code><span class="count">${calcLight.length}</span></h2>
-      <p class="sub">A token arrives in CSS as <code>var()</code>, so Sass can no longer fold the
-        arithmetic: everything that used to be computed at build time is now computed by the browser.
-        For comparison, the built legacy fluent has <b>50</b> <code>calc()</code> expressions and not
-        one with a token. Below is the light bundle; the dark one has the same set.</p>
-    </header>
-    <div class="kinds">${calcByKind.map((kind) => `
-      <div class="kind${kind.id === 'zero' ? ' zero' : ''}">
-        <h3><b>${kind.list.length}</b> ${escape(kind.title)}</h3>
-        <p>${kind.why.replace(/`([^`]+)`/g, (_, code) => `<code>${escape(code)}</code>`)}</p>
-      </div>`).join('')}
-    </div>
-    ${calcByKind.filter((kind) => kind.list.length).map((kind) => `
-      <h3 style="margin-top:6px">${escape(kind.title)} — ${kind.list.length}</h3>
-      <div style="display:flex;flex-direction:column;gap:8px">${kind.formulas.map(([formula, list]) => `
-        <details class="formula">
-          <summary><code>${escape(formula)}</code><span class="n">${list.length}</span></summary>
-          <ul>${list.map((place) => `<li>${escape(place.selector)} → ${escape(place.prop)}</li>`).join('')}</ul>
-        </details>`).join('')}
-      </div>`).join('')}
-  </section>
 `;
 
 if (mdOnly) {

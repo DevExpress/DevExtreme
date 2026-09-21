@@ -3,18 +3,20 @@
  *
  *   node tools/sizes/inventory.mjs            # write the lists, print the summary
  *   node tools/sizes/inventory.mjs --check    # read-only; exit 1 if a list on disk is stale
- *   node tools/sizes/inventory.mjs --json     # read-only; the summary, machine-readable (jest uses this)
+ *   node tools/sizes/inventory.mjs --json # read-only; the summary, machine-readable (jest uses
+ *   this)
  *
  * The layer is compiled once per bundle, so a value written into it reaches generic, material,
  * fluent and fluent-next at the same time. That is why the sizes are split in two, and the split is
  * not a matter of taste:
  *
  *   theme-settable — the literal is the default of a `$x: … !default` declaration. The knob already
- *                    exists: a theme passes its own value through `@use "…/base/x" with ($x: …)` and
- *                    the other themes keep the default, byte for byte. Nothing in base has to change.
+ *                    exists: a theme passes its own value through `@use "…/base/x" with ($x: …)`
+ *                    and the other themes keep the default, byte for byte. Nothing in base has to
+ *                    change.
  *   base-owned     — the literal is written where it applies: in a rule, a mixin body, a local
- *                    variable with no `!default`, a calc(), a @media condition. There is no knob, so
- *                    opening one means editing the shared layer, which is the base owners' call.
+ *                    variable with no `!default`, a calc(), a @media condition. There is no knob,
+ *                    so opening one means editing the shared layer, which is the base owners' call.
  *
  * The scan is tools/review/px-audit.mjs — the same module the gate and SCALES.md are built from, so
  * the inventory cannot claim a different set of places than the gate enforces.
@@ -37,7 +39,7 @@ const listsDir = join(here, 'lists');
 /*
  * A category answers "why is there no knob here", because that decides the cost of making one:
  *   local-var  — a `$x: 25px` with no `!default`; adding `!default` is the whole job.
- *   mixin-arg  — inside a @mixin body or its call; module variables cannot reach it, a parameter can.
+ *   mixin-arg  — inside a @mixin body or its call; no module variable reaches it, a parameter does.
  *   media      — a @media/@container condition; var() is invalid there, so no knob can ever exist.
  *   structural — an off-screen parking coordinate, not a size anyone designs.
  *   geometry   — box-shadow / outline / border / clip-path numbers, judged as a shape, not a step.
@@ -55,6 +57,11 @@ const codeOf = (text) => {
   return (at === -1 ? text : text.slice(0, at)).trim();
 };
 
+const statusOf = (parameter, configured) => {
+  if (parameter) return 'parameter';
+  return configured ? 'injected' : 'open';
+};
+
 const categoryOf = (code) => {
   if (/^\$[\w-]+\s*:/.test(code)) return 'local-var';
   if (code.includes('@media') || code.includes('@container')) return 'media';
@@ -64,6 +71,9 @@ const categoryOf = (code) => {
   if (code.includes('calc(')) return 'calc';
   return 'inline';
 };
+
+const blankBlockComments = (content) => content
+  .replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\n]/g, ' '));
 
 /*
  * Lines inside a `@mixin name(…)` parameter list. A literal there is a knob too, even though it is
@@ -88,7 +98,9 @@ const mixinParameterLines = (file) => {
   return inside;
 };
 
-/** The widget a file belongs to: `_toast.scss` -> toast, `scheduler/views/_index.scss` -> scheduler. */
+/**
+ * The widget a file belongs to: `_toast.scss` -> toast, `scheduler/views/_index.scss` -> scheduler.
+ */
 const widgetOf = (file) => {
   const [head, ...rest] = relative('scss/widgets/base', file).split('/');
   return rest.length ? head : head.replace(/^_/, '').replace(/\.scss$/, '');
@@ -102,13 +114,11 @@ const scssFiles = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((en
   return entry.name.endsWith('.scss') ? [full] : [];
 });
 
-const blankBlockComments = (content) => content
-  .replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\n]/g, ' '));
-
 /*
- * `@use "…/base/x" with (…)` is the only channel into the layer, and the block spans many lines with
- * nested parens (`var(--dx-a, 4px)`), so it is read by balancing brackets. A one-line regex here
- * silently under-reports: it finds a few dozen of the 300-odd names that are actually configured.
+ * `@use "…/base/x" with (…)` is the only channel into the layer, and the block spans many lines
+ * with nested parens (`var(--dx-a, 4px)`), so it is read by balancing brackets. A one-line regex
+ * here silently under-reports: it finds a few dozen of the 300-odd names that are actually
+ * configured.
  */
 const splitTopLevel = (body) => {
   const parts = [];
@@ -187,7 +197,7 @@ const build = () => {
         ...common,
         variable: declaration[1],
         kind: parameter ? 'mixin-parameter' : 'module-variable',
-        status: parameter ? 'parameter' : (configured ? 'injected' : 'open'),
+        status: statusOf(parameter, configured),
         ...(configured && !parameter ? { setBy: configured.file, setTo: configured.value } : {}),
       });
       return;
@@ -198,10 +208,10 @@ const build = () => {
   return { settable, owned };
 };
 
-const tally = (rows, key) => rows.reduce((totals, row) => {
-  totals[row[key]] = (totals[row[key]] ?? 0) + row.occurrences;
-  return totals;
-}, {});
+const tally = (rows, key) => rows.reduce((acc, row) => ({
+  ...acc,
+  [row[key]]: (acc[row[key]] ?? 0) + row.occurrences,
+}), {});
 
 const descending = (totals) => Object.fromEntries(
   Object.entries(totals).sort(([, a], [, b]) => b - a),
@@ -265,7 +275,10 @@ const ownedJson = (owned) => ({
 
 /* --------------------------------------------------------------------- output */
 
-/* The raw grep counts px inside comments too; the scan does not. Report the gap instead of hiding it. */
+/*
+ * The raw grep counts px inside comments too; the scan does not. Report the gap instead of hiding
+ * it.
+ */
 const commentedOccurrences = () => {
   const px = /-?\d*\.?\d+px\b/g;
   return scssFiles(baseDir).reduce((total, file) => {
@@ -316,7 +329,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     }
   });
   // --check and --json are read-only: the gate must not rewrite the tree it is judging.
-  if (!check && !json) artefacts.forEach(([name, content]) => writeFileSync(join(listsDir, name), content));
+  if (!check && !json) {
+    artefacts.forEach(([name, content]) => writeFileSync(join(listsDir, name), content));
+  }
 
   if (json) {
     process.stdout.write(`${JSON.stringify({ comments, settable, owned }, null, 2)}\n`);

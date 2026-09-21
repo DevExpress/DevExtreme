@@ -15,7 +15,8 @@
  *
  *   1. family  — a `-bg` slot must read a color-bg-* role, `-content` a color-content-* one, and so
  *                on. Needs no package. This is the class that produced the danger/success/warning
- *                fix and the gallery nav-disc defect (bg-disabled on a content slot: white on white).
+ *                fix and the gallery nav-disc defect (bg-disabled on a content slot: white on
+ *                white).
  *   2. package — `@devexpress/design-tokens-internal/tokens/components/{core,vnext,blazor,wpf}` IS
  *                the role assignment design made, for four products. The theme does not consume it
  *                (decision 06.08.2026), and that is exactly why it reads as a reference. Remeasured
@@ -23,8 +24,8 @@
  *                `{color.<role>}` references, and not one leaf in core, vnext or wpf points at a
  *                palette primitive. The rest are references to other scales - focus, box-shadow,
  *                opacity - plus a single literal in the whole package (`#0f6cbd00`, the transparent
- *                edge of the progress bar's indeterminate gradient). So the tier carries the mapping
- *                and no value of its own.
+ *                edge of the progress bar's indeterminate gradient). So the tier carries the
+ *                mapping and no value of its own.
  *
  *                And the mapping is not fluent's: `theme/material.json` assigns the SAME role to
  *                the same path for 724 of its 726 leaves in core, and 753 of 755 in vnext. The two
@@ -40,7 +41,9 @@
  * names the slots the package does use it for, which is usually the answer.
  */
 
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'fs';
+import {
+  readFileSync, writeFileSync, readdirSync, statSync, existsSync,
+} from 'fs';
 import { join, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
@@ -161,13 +164,36 @@ const COMPONENT_AS_SLOT = { 'focus-rect': 'outline', skeleton: 'bg', 'empty-item
 const SHARED = ['separator', 'focus-rect', 'backdrop', 'skeleton', 'empty-item', 'text-content', 'link'];
 
 const FAMILY = {
-  backdrop: 'bg', bg: 'bg', highlight: 'bg', scrim: 'bg', veil: 'bg',
-  caption: 'content', chevron: 'content', content: 'content', 'end-icon': 'content',
-  icon: 'content', placeholder: 'content', shortcut: 'content', 'start-icon': 'content',
-  subtitle: 'content', text: 'content', title: 'content',
-  border: 'border', line: 'border', outline: 'border', separator: 'border',
-  shadow: 'shadow', 'shadow-ambient': 'shadow', 'shadow-key': 'shadow',
-  grip: null, indicator: null, opacity: null, selector: null, thumb: null, track: null, trigger: null,
+  backdrop: 'bg',
+  bg: 'bg',
+  highlight: 'bg',
+  scrim: 'bg',
+  veil: 'bg',
+  caption: 'content',
+  chevron: 'content',
+  content: 'content',
+  'end-icon': 'content',
+  icon: 'content',
+  placeholder: 'content',
+  shortcut: 'content',
+  'start-icon': 'content',
+  subtitle: 'content',
+  text: 'content',
+  title: 'content',
+  border: 'border',
+  line: 'border',
+  outline: 'border',
+  separator: 'border',
+  shadow: 'shadow',
+  'shadow-ambient': 'shadow',
+  'shadow-key': 'shadow',
+  grip: null,
+  indicator: null,
+  opacity: null,
+  selector: null,
+  thumb: null,
+  track: null,
+  trigger: null,
 };
 
 /*
@@ -179,14 +205,36 @@ const FAMILY = {
  * either filled or outlined, so its family carries no claim.
  */
 const KIN = {
-  bg: 'bg', backdrop: 'bg', scrim: 'bg', veil: 'bg', highlight: 'bg',
-  content: 'content', text: 'content', icon: 'content', 'start-icon': 'content',
-  'end-icon': 'content', title: 'content', subtitle: 'content', caption: 'content',
-  placeholder: 'content', chevron: 'content', shortcut: 'content', trigger: 'content',
-  border: 'border', outline: 'border', separator: 'border', line: 'border',
-  shadow: 'shadow', 'shadow-ambient': 'shadow', 'shadow-key': 'shadow',
-  grip: 'ambiguous', indicator: 'ambiguous', opacity: 'ambiguous',
-  selector: 'ambiguous', thumb: 'ambiguous', track: 'ambiguous',
+  bg: 'bg',
+  backdrop: 'bg',
+  scrim: 'bg',
+  veil: 'bg',
+  highlight: 'bg',
+  content: 'content',
+  text: 'content',
+  icon: 'content',
+  'start-icon': 'content',
+  'end-icon': 'content',
+  title: 'content',
+  subtitle: 'content',
+  caption: 'content',
+  placeholder: 'content',
+  chevron: 'content',
+  shortcut: 'content',
+  trigger: 'content',
+  border: 'border',
+  outline: 'border',
+  separator: 'border',
+  line: 'border',
+  shadow: 'shadow',
+  'shadow-ambient': 'shadow',
+  'shadow-key': 'shadow',
+  grip: 'ambiguous',
+  indicator: 'ambiguous',
+  opacity: 'ambiguous',
+  selector: 'ambiguous',
+  thumb: 'ambiguous',
+  track: 'ambiguous',
 };
 const kinOf = (slot) => KIN[slot] ?? 'ambiguous';
 const kindred = (a, b) => a === b || kinOf(a) === 'ambiguous' || kinOf(b) === 'ambiguous'
@@ -220,17 +268,17 @@ const valueIndex = {};
 for (const mode of MODES) {
   const map = new Map();
   const collect = (dir) => {
-    for (const entry of readdirSync(dir)) {
+    readdirSync(dir).forEach((entry) => {
       const absolute = join(dir, entry);
-      if (statSync(absolute).isDirectory()) { collect(absolute); continue; }
-      if (!entry.endsWith('.json')) continue;
-      if (/material/.test(absolute)) continue;
+      if (statSync(absolute).isDirectory()) { collect(absolute); return; }
+      if (!entry.endsWith('.json')) return;
+      if (/material/.test(absolute)) return;
       // the mode files sit at semantic/colors/<theme>/<mode>.json - keep only this mode's
-      if (/[\\/]colors[\\/]/.test(absolute) && /^(light|dark)\.json$/.test(entry) && entry !== `${mode}.json`) continue;
-      for (const [name, value] of leavesOf(JSON.parse(readFileSync(absolute, 'utf8')))) {
+      if (/[\\/]colors[\\/]/.test(absolute) && /^(light|dark)\.json$/.test(entry) && entry !== `${mode}.json`) return;
+      leavesOf(JSON.parse(readFileSync(absolute, 'utf8'))).forEach(([name, value]) => {
         if (!map.has(name)) map.set(name, value);
-      }
-    }
+      });
+    });
   };
   for (const sub of ['base', 'global', 'semantic']) collect(join(tokensRoot, 'tokens', sub));
   valueIndex[mode] = map;
@@ -294,10 +342,10 @@ for (const file of styleFiles(themeDir)) {
     }
     /*
      * A tier name written straight as a custom property is a declaration too, and fourteen of them
-     * sit on the theme root - `--dx-color-warning: #{ds.$color-content-warning}` and its neighbours,
-     * the public aliases. Reading a role directly is the whole test: `--dx-toast-bg: #{$toast-bg}`
-     * in a generated `_public.scss` only republishes a declaration already audited under its Sass
-     * name, and counting it again would double the set.
+     * sit on the theme root - `--dx-color-warning: #{ds.$color-content-warning}` and its
+     * neighbours, the public aliases. Reading a role directly is the whole test: `--dx-toast-bg:
+     * #{$toast-bg}` in a generated `_public.scss` only republishes a declaration already audited
+     * under its Sass name, and counting it again would double the set.
      */
     const custom = /^\s*--(dx-[a-z0-9-]+)\s*:\s*(.+?)\s*;/.exec(line);
     if (!custom || !/ds\.\$/.test(custom[2])) return;
@@ -328,45 +376,43 @@ const borrowsOf = (value) => [...new Set([...value.matchAll(/(?:[A-Za-z][\w-]*\.
   .map((r) => r[1]).filter((n) => valueOf.has(n)))];
 
 const declarations = [];
-{
-  rawDeclarations.forEach(({
-    file, folder, colourFile, index, name, value,
-  }) => {
-    const roles = [...new Set(rolesOf(value))];
-    const borrows = borrowsOf(value);
-    if (!roles.length) return;
-    /*
+rawDeclarations.forEach(({
+  file, folder, colourFile, index, name, value,
+}) => {
+  const roles = [...new Set(rolesOf(value))];
+  const borrows = borrowsOf(value);
+  if (!roles.length) return;
+  /*
      * Outside the colour files a declaration joins only when it carries a colour: `_sizes.scss`
      * holds four that do - two shadows and two borders - and several hundred that read the spacing
      * and radius scales, which the size pass measures instead.
      */
-    if (!colourFile && !roles.some((role) => /^(color|box-shadow)-/.test(role))) return;
-    const state = trailing(name, STATES);
-    const bare = state ? name.slice(0, -state.length - 1) : name;
-    const slot = trailing(bare, PARTS);
-    /*
+  if (!colourFile && !roles.some((role) => /^(color|box-shadow)-/.test(role))) return;
+  const state = trailing(name, STATES);
+  const bare = state ? name.slice(0, -state.length - 1) : name;
+  const slot = trailing(bare, PARTS);
+  /*
      * A part word can also sit in the middle as a sub-element: `$menu-separator-bg` is slot `bg` on
      * sub-element `separator`, and the package models exactly that as its own `separator` slot. So
      * the comparison looks for the package's word among ours, not only at our last position -
      * otherwise every `<part>-bg` reads as a bg that borrowed a border role.
      */
-    const middle = slot ? bare.slice(0, -slot.length).replace(/-$/, '') : bare;
-    const subElementSlots = PARTS.filter((part) => middle === part || middle.endsWith(`-${part}`)
-      || middle.startsWith(`${part}-`) || middle.includes(`-${part}-`));
-    declarations.push({
-      folder,
-      where: `${relative(packageRoot, file)}:${index + 1}`,
-      name,
-      slot,
-      subElementSlots,
-      state: state ?? 'rest',
-      roles,
-      bridged: /rgb\(\s*from/.test(value),
-      value: value.trim(),
-      ...(borrows.length ? { borrows } : {}),
-    });
+  const middle = slot ? bare.slice(0, -slot.length).replace(/-$/, '') : bare;
+  const subElementSlots = PARTS.filter((part) => middle === part || middle.endsWith(`-${part}`)
+    || middle.startsWith(`${part}-`) || middle.includes(`-${part}-`));
+  declarations.push({
+    folder,
+    where: `${relative(packageRoot, file)}:${index + 1}`,
+    name,
+    slot,
+    subElementSlots,
+    state: state ?? 'rest',
+    roles,
+    bridged: /rgb\(\s*from/.test(value),
+    value: value.trim(),
+    ...(borrows.length ? { borrows } : {}),
   });
-}
+});
 
 /*
  * Does the collector see every line that reads a role?
@@ -381,7 +427,9 @@ const declarations = [];
  * beside a literal because the value is baked into an SVG and never reaches CSS. Anything else is a
  * blind spot, and the gate names the line.
  */
-const coverage = { lines: 0, collected: 0, dataUriStatic: 0, unexplained: [] };
+const coverage = {
+  lines: 0, collected: 0, dataUriStatic: 0, unexplained: [],
+};
 {
   const collected = new Set(declarations.map((d) => d.where));
   for (const file of styleFiles(themeDir)) {
@@ -399,13 +447,6 @@ const coverage = { lines: 0, collected: 0, dataUriStatic: 0, unexplained: [] };
 
 // --- the package side ---------------------------------------------------------------------------
 
-const leaves = leavesOf;
-const _unusedLeaves = (node, trail = []) => Object.entries(node ?? {}).flatMap(([key, value]) => {
-  if (key.startsWith('$') || !value || typeof value !== 'object') return [];
-  if ('$value' in value) return [[[...trail, key].join('.'), value.$value]];
-  return leaves(value, [...trail, key]);
-});
-
 /* A package path is `<component>.<sub-elements>.color.<variants>.<slot>.<state>`, and only the part
  * after `color.` describes the paint - `progress-bar.progress-line.color.indicator.…` would
  * otherwise match `line` in the sub-element. The slot is the rightmost segment that is one of our
@@ -422,8 +463,8 @@ const dissect = (path) => {
   }
   /* `separator.color` and `backdrop.color` carry no slot segment because the component IS the slot:
    * the package models them the way our system tier publishes them, as a thing rather than a part
-   * of a thing. Without this they fall out of the comparison entirely, and every `-separator-border`
-   * in the theme reads as a border nobody named. */
+   * of a thing. Without this they fall out of the comparison entirely, and every
+   * `-separator-border` in the theme reads as a border nobody named. */
   const asSlot = COMPONENT_AS_SLOT[segments[0]] ?? trailing(segments[0], PARTS);
   if (asSlot) return { slot: asSlot, state, variant: tail.join('.') };
   return { slot: null, state, variant: tail.join('.') };
@@ -448,22 +489,22 @@ const setFiles = (set) => {
 };
 const componentsOf = (set) => Object.assign({}, ...setFiles(set).map((f) => JSON.parse(readFileSync(f, 'utf8'))));
 
-const packageTier = {};   // set -> component -> { bySlot, byRole, unknownSlots }
+const packageTier = {}; // set -> component -> { bySlot, byRole, unknownSlots }
 for (const set of SETS) {
   const components = componentsOf(set);
   packageTier[set] = {};
   for (const [component, tree] of Object.entries(components)) {
     const bySlot = new Map();
-    const byState = new Map();   // slot -> state -> Set(role)
+    const byState = new Map(); // slot -> state -> Set(role)
     const byRole = new Map();
     const unknownSlots = new Set();
-    for (const [path, raw] of leaves(tree)) {
-      if (typeof raw !== 'string' || !raw.startsWith('{')) continue;
+    leavesOf(tree).forEach(([path, raw]) => {
+      if (typeof raw !== 'string' || !raw.startsWith('{')) return;
       const role = raw.replace(/[{}]/g, '').replace(/^(color|global\.color)\./, 'color-');
-      if (!role.startsWith('color-')) continue;
+      if (!role.startsWith('color-')) return;
       const anatomy = dissect(`${component}.${path}`);
-      if (!anatomy) continue;
-      if (!anatomy.slot) { unknownSlots.add(path); continue; }
+      if (!anatomy) return;
+      if (!anatomy.slot) { unknownSlots.add(path); return; }
       if (!bySlot.has(anatomy.slot)) bySlot.set(anatomy.slot, new Set());
       bySlot.get(anatomy.slot).add(role);
       if (!byState.has(anatomy.slot)) byState.set(anatomy.slot, new Map());
@@ -472,8 +513,10 @@ for (const set of SETS) {
       states.get(anatomy.state).add(role);
       if (!byRole.has(role)) byRole.set(role, new Set());
       byRole.get(role).add(anatomy.slot);
-    }
-    packageTier[set][component] = { bySlot, byState, byRole, unknownSlots };
+    });
+    packageTier[set][component] = {
+      bySlot, byState, byRole, unknownSlots,
+    };
   }
 }
 
@@ -493,15 +536,15 @@ for (const set of SETS) {
  */
 const TYPOGRAPHY = ['font-size', 'font-weight', 'line-height'];
 
-const typographyGrid = {};   // family -> [{ role, step }], the steps the role grid actually names
+const typographyGrid = {}; // family -> [{ role, step }], the steps the role grid actually names
 for (const family of TYPOGRAPHY) {
   const roles = [];
-  for (const [name, raw] of valueIndex.light) {
-    if (!name.startsWith(`${family}.`)) continue;
+  valueIndex.light.forEach((raw, name) => {
+    if (!name.startsWith(`${family}.`)) return;
     const step = /^\{?([a-z-]+)\.(\d+)\}?$/.exec(String(raw));
-    if (!step) continue;               // a role points at a step; a step points at a number
+    if (!step) return; // a role points at a step; a step points at a number
     roles.push({ role: name.split('.')[1], step: Number(step[2]) });
-  }
+  });
   typographyGrid[family] = roles.sort((a, b) => a.step - b.step);
 }
 
@@ -557,7 +600,7 @@ const PROPERTY_FAMILY = [
   [/shadow$/, 'shadow'],
 ];
 const bundlePath = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');
-const paints = new Map();   // --dx-name -> Set(css property)
+const paints = new Map(); // --dx-name -> Set(css property)
 /*
  * Names the bundle declares at all - not what they paint, just that they exist there.
  *
@@ -578,9 +621,10 @@ if (existsSync(bundlePath)) {
     }
   }
 }
-const familyOfProperty = (property) => PROPERTY_FAMILY.find(([re]) => re.test(property))?.[1] ?? null;
+const familyOfProperty = (property) => PROPERTY_FAMILY
+  .find(([re]) => re.test(property))?.[1] ?? null;
 
-// --- the comparison -------------------------------------------------------------------------------
+// --- the comparison ----------------------------------------------------------------------------
 
 const findings = [];
 for (const declaration of declarations) {
@@ -605,11 +649,13 @@ for (const declaration of declarations) {
   else {
     const seen = [];
     for (const set of SETS) {
-      for (const candidate of [...candidates, ...SHARED]) {
+      [...candidates, ...SHARED].forEach((candidate) => {
         const tier = packageTier[set][candidate];
-        if (!tier) continue;
-        seen.push({ set, component: candidate, tier, own: candidates.includes(candidate) });
-      }
+        if (!tier) return;
+        seen.push({
+          set, component: candidate, tier, own: candidates.includes(candidate),
+        });
+      });
     }
     if (!seen.length) record.package = { verdict: 'no-counterpart' };
     else {
@@ -621,8 +667,10 @@ for (const declaration of declarations) {
        * The second is the one worth a second look. */
       const sameComponent = new Set();
       const crossFamily = new Map();
-      const slotRoles = new Set();   // roles the package uses for our slot, or a kin slot
-      for (const { set, component, tier, own } of seen) {
+      const slotRoles = new Set(); // roles the package uses for our slot, or a kin slot
+      for (const {
+        set, component, tier, own,
+      } of seen) {
         /*
          * What the package offers HERE is gathered strictly: same family as our own slot, no
          * sub-elements and no wildcard. `$popup-content-shadow-ambient` is a shadow that happens to
@@ -631,13 +679,13 @@ for (const declaration of declarations) {
          * never on offer. The lenient reading stays where it belongs: deciding whether our role
          * already agrees with the package somewhere.
          */
-        for (const [pkgSlot, pkgRoles] of tier.bySlot) {
-          if (kinOf(pkgSlot) !== kinOf(slot) || kinOf(slot) === 'ambiguous') continue;
-          for (const role of pkgRoles) slotRoles.add(role);
-        }
-        for (const role of roles) {
+        tier.bySlot.forEach((pkgRoles, pkgSlot) => {
+          if (kinOf(pkgSlot) !== kinOf(slot) || kinOf(slot) === 'ambiguous') return;
+          pkgRoles.forEach((role) => slotRoles.add(role));
+        });
+        roles.forEach((role) => {
           const usedIn = [...(tier.byRole.get(role) ?? [])];
-          if (!usedIn.length) continue;
+          if (!usedIn.length) return;
           if (usedIn.some((pkgSlot) => ourSlots.includes(pkgSlot))) exact.push(`${set}/${component}`);
           else if (usedIn.some((pkgSlot) => ourSlots.some((ours) => kindred(pkgSlot, ours)))) kin.push(`${set}/${component}:${usedIn.join(',')}`);
           else {
@@ -646,9 +694,9 @@ for (const declaration of declarations) {
             crossFamily.get(key).push(`${set}/${component}`);
             if (own) sameComponent.add(`${set}/${component}:${usedIn.join(',')}`);
           }
-        }
+        });
       }
-      const here = [...slotRoles].sort();
+      const packageRolesHere = [...slotRoles].sort();
       /* A role of the slot's own family used elsewhere for a different part is not a crossing - the
        * package simply has not needed it here. Reserve `cross-family` for the case the name
        * promises: the role belongs to another family than the slot paints with. */
@@ -663,53 +711,56 @@ for (const declaration of declarations) {
           verdict: 'cross-family',
           usedFor: [...crossFamily].map(([slots, where]) => ({ slots: slots.split('|'), where: [...new Set(where)] })),
           sameComponent: [...sameComponent],
-          packageUsesHere: here,
+          packageUsesHere: packageRolesHere,
         };
       } else if (crossFamily.size) {
-        record.package = { verdict: 'role-new', packageUsesHere: here };
-      } else if (here.length) {
+        record.package = { verdict: 'role-new', packageUsesHere: packageRolesHere };
+      } else if (packageRolesHere.length) {
         const ourFamilies = new Set(roles.map(familyOf).filter((f) => f !== 'none'));
-        const theirFamilies = new Set(here.map(familyOf).filter((f) => f !== 'none'));
+        const theirFamilies = new Set(packageRolesHere.map(familyOf).filter((f) => f !== 'none'));
         // Only `color-none` on offer is not a family to conflict with - the package simply paints
         // nothing here, which says nothing about our role.
         if (!theirFamilies.size) record.package = { verdict: 'slot-absent' };
         else {
           const shared = [...ourFamilies].some((f) => theirFamilies.has(f));
-          record.package = { verdict: shared ? 'role-new' : 'family-conflict', packageUsesHere: here };
+          record.package = { verdict: shared ? 'role-new' : 'family-conflict', packageUsesHere: packageRolesHere };
         }
       } else record.package = { verdict: 'slot-absent' };
 
       /*
-       * The rung, which the verdict above never asks about. `agrees` means the package uses our role
-       * for our slot SOMEWHERE in this component, in any state - so `$text-editor-line-focused` read
-       * `agrees` while the package names `content-primary` for that underline at focus and `content`
-       * only at hover. `byState` has carried the answer since the tier was first parsed, and nothing
-       * read it.
+       * The rung, which the verdict above never asks about. `agrees` means the package uses our
+       * role for our slot SOMEWHERE in this component, in any state - so
+       * `$text-editor-line-focused` read `agrees` while the package names `content-primary` for
+       * that underline at focus and `content` only at hover. `byState` has carried the answer since
+       * the tier was first parsed, and nothing read it.
        *
        * Narrow on purpose, to one question: does the package use OUR role for OUR slot at a
-       * DIFFERENT rung? That is a ladder shifted by a step, and it is checkable. The looser reading -
-       * our role simply absent from the package's rung - fires 185 times and says mostly that our
-       * anatomy is richer: the package's grid names two roles for its whole content slot, so every
-       * dropzone, filter panel and link of ours disagrees with it and nothing follows from that.
+       * DIFFERENT rung? That is a ladder shifted by a step, and it is checkable. The looser
+       * reading - our role simply absent from the package's rung - fires 185 times and says
+       * mostly that our anatomy is richer: the package's grid names two roles for its whole
+       * content slot, so every dropzone, filter panel and link of ours disagrees with it and
+       * nothing follows from that.
        */
       const rung = new Set();
       const usedAt = new Set();
       const rungWhere = [];
-      for (const { set, component, tier, own } of seen) {
-        if (!own) continue;
-        for (const [pkgSlot, states] of tier.byState) {
-          if (kinOf(pkgSlot) !== kinOf(slot) || kinOf(slot) === 'ambiguous') continue;
+      seen.filter(({ own }) => own).forEach(({ set, component, tier }) => {
+        tier.byState.forEach((states, pkgSlot) => {
+          if (kinOf(pkgSlot) !== kinOf(slot) || kinOf(slot) === 'ambiguous') return;
           for (const [pkgState, named] of states) {
             if (pkgState === state || (state === 'disabled' && pkgState === 'disable')) {
               for (const role of named) rung.add(role);
               rungWhere.push(`${set}/${component}.${pkgSlot}.${pkgState}`);
             } else if (roles.some((role) => named.has(role))) usedAt.add(pkgState);
           }
-        }
-      }
+        });
+      });
       if (rung.size && usedAt.size && !roles.some((role) => rung.has(role))) {
         record.rung = {
-          state, want: [...rung].sort(), oursAt: [...usedAt].sort(), where: [...new Set(rungWhere)].sort(),
+          state,
+          want: [...rung].sort(),
+          oursAt: [...usedAt].sort(),
+          where: [...new Set(rungWhere)].sort(),
         };
       }
     }
@@ -724,24 +775,23 @@ for (const declaration of declarations) {
     }
   }
 
-  const here = record.package?.packageUsesHere ?? [];
-  if (here.length && roles.length === 1) {
-    const free = here.filter((candidate) => candidate !== roles[0] && sameValue(candidate, roles[0]));
-    const drift = MODES.filter((mode) => {
-      const ours = resolveRole(roles[0], mode);
-      return here.some((candidate) => resolveRole(candidate, mode) !== ours);
-    });
-    record.swap = { free, ours: Object.fromEntries(MODES.map((m) => [m, resolveRole(roles[0], m)])), drift };
+  const packageUses = record.package?.packageUsesHere ?? [];
+  if (packageUses.length && roles.length === 1) {
+    const free = packageUses
+      .filter((candidate) => candidate !== roles[0] && sameValue(candidate, roles[0]));
+    const ours = Object.fromEntries(MODES.map((m) => [m, resolveRole(roles[0], m)]));
+    record.swap = { free, ours };
     if (!free.length) {
       /* The role the package would have us use is often one step away and differs in a single mode.
        * Naming it turns a diagnosis into a decision - and a candidate that moves dark only is the
        * signature case of this report: no etalon can see it. */
       const wanted = FAMILY[record.slot];
-      record.near = here
+      record.near = packageUses
         .filter((candidate) => !wanted || familyOf(candidate) === wanted)
         .map((candidate) => ({
           role: candidate,
-          moves: MODES.filter((mode) => resolveRole(candidate, mode) !== resolveRole(roles[0], mode)),
+          moves: MODES
+            .filter((mode) => resolveRole(candidate, mode) !== resolveRole(roles[0], mode)),
         }))
         .filter((candidate) => candidate.moves.length)
         .sort((a, b) => a.moves.length - b.moves.length);
@@ -761,31 +811,31 @@ for (const declaration of declarations) {
  * value is a reset, not a gap.
  */
 const ACCEPTED_COLLAPSE = [['focused', 'hovered'], ['focused', 'active'], ['selected-focused', 'selected-hovered']];
-const acceptedPair = (a, b) => ACCEPTED_COLLAPSE.some(([x, y]) => (a === x && b === y) || (a === y && b === x));
+const acceptedPair = (a, b) => ACCEPTED_COLLAPSE
+  .some(([x, y]) => (a === x && b === y) || (a === y && b === x));
 
 const ladders = [];
 {
   const groups = new Map();
-  for (const declaration of declarations) {
-    if (!declaration.slot) continue;
+  declarations.filter((declaration) => declaration.slot).forEach((declaration) => {
     const stem = declaration.state === 'rest'
       ? declaration.name
       : declaration.name.slice(0, -declaration.state.length - 1);
     if (!groups.has(stem)) groups.set(stem, []);
     groups.get(stem).push(declaration);
-  }
-  for (const [stem, members] of groups) {
-    if (members.length < 2) continue;
+  });
+  groups.forEach((members, stem) => {
+    if (members.length < 2) return;
     const byRole = new Map();
-    for (const member of members) {
+    members.forEach((member) => {
       const key = member.roles.join('+');
       if (!byRole.has(key)) byRole.set(key, []);
       byRole.get(key).push(member.state);
-    }
-    for (const [role, states] of byRole) {
-      if (states.length < 2) continue;
+    });
+    byRole.forEach((states, role) => {
+      if (states.length < 2) return;
       const pairs = states.flatMap((a, i) => states.slice(i + 1).map((b) => [a, b]));
-      if (pairs.every(([a, b]) => acceptedPair(a, b))) continue;
+      if (pairs.every(([a, b]) => acceptedPair(a, b))) return;
       /* The precise question is about OUR role, not the package's anatomy: we paint two states
        * from role R, so does the design system ship R for the second state? `bg-alpha-hovered`
        * shared by hovered and active is a gap exactly when `bg-alpha-active` exists. This needs no
@@ -806,8 +856,8 @@ const ladders = [];
         states: states.sort(),
         unusedRungs,
       });
-    }
-  }
+    });
+  });
   ladders.sort((a, b) => a.stem.localeCompare(b.stem));
 }
 
@@ -847,32 +897,36 @@ const roleOfTierName = new Map(declarations
 const pairs = [];
 if (existsSync(bundlePath)) {
   const css = readFileSync(bundlePath, 'utf8');
-  for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-    if (selector.trim().startsWith('@')) continue;
+  [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, selector, body]) => {
+    if (selector.trim().startsWith('@')) return;
     // WCAG 1.4.3 exempts inactive controls, and the theme's disabled policy is gated separately
     // (tests/disabled-paint.test.ts). Measuring them here would bury the live pairs under them.
-    if (/dx-state-disabled|dx-state-readonly|dx-button-disable/.test(selector)) continue;
+    if (/dx-state-disabled|dx-state-readonly|dx-button-disable/.test(selector)) return;
     const grab = (property) => new RegExp(`(?:^|;)\\s*${property}\\s*:\\s*var\\(\\s*(--dx-[a-z0-9-]+)`).exec(body)?.[1];
     const fg = grab('color');
     const bg = grab('background-color') ?? grab('background');
-    if (!fg || !bg) continue;
+    if (!fg || !bg) return;
     const fgRole = roleOfTierName.get(fg);
     const bgRole = roleOfTierName.get(bg);
-    if (!fgRole || !bgRole) continue;
+    if (!fgRole || !bgRole) return;
     const measured = {};
-    for (const mode of MODES) {
+    MODES.forEach((mode) => {
       const a = hexOf(resolveRole(fgRole, mode));
       const b = hexOf(resolveRole(bgRole, mode));
       if (a && b) measured[mode] = Math.round(contrast(a, b) * 100) / 100;
-    }
-    if (!Object.keys(measured).length) continue;
-    pairs.push({ selector: selector.trim().replace(/\s+/g, ' ').slice(0, 90), fg, bg, fgRole, bgRole, contrast: measured });
-  }
+    });
+    if (!Object.keys(measured).length) return;
+    pairs.push({
+      selector: selector.trim().replace(/\s+/g, ' ').slice(0, 90), fg, bg, fgRole, bgRole, contrast: measured,
+    });
+  });
 }
 const AA = 4.5;
 const lowContrast = pairs
-  .filter((pair) => MODES.some((mode) => pair.contrast[mode] !== undefined && pair.contrast[mode] < AA))
-  .filter((pair, index, all) => all.findIndex((other) => other.fg === pair.fg && other.bg === pair.bg) === index)
+  .filter((pair) => MODES
+    .some((mode) => pair.contrast[mode] !== undefined && pair.contrast[mode] < AA))
+  .filter((pair, index, all) => all
+    .findIndex((other) => other.fg === pair.fg && other.bg === pair.bg) === index)
   .sort((a, b) => Math.min(...Object.values(a.contrast)) - Math.min(...Object.values(b.contrast)));
 
 /*
@@ -901,22 +955,26 @@ const statePairs = [];
 if (existsSync(bundlePath)) {
   const css = readFileSync(bundlePath, 'utf8');
   const rules = [];
-  for (const [, selectorList, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-    if (selectorList.trim().startsWith('@')) continue;
-    if (/dx-state-disabled|dx-state-readonly|dx-button-disable/.test(selectorList)) continue;
+  [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, selectorList, body]) => {
+    if (selectorList.trim().startsWith('@')) return;
+    if (/dx-state-disabled|dx-state-readonly|dx-button-disable/.test(selectorList)) return;
     const grab = (property) => new RegExp(`(?:^|;)\\s*${property}\\s*:\\s*var\\(\\s*(--dx-[a-z0-9-]+)`).exec(body)?.[1];
     const fg = grab('color');
     const bg = grab('background-color') ?? grab('background');
-    if (!fg && !bg) continue;
-    for (const one of selectorList.split(',')) {
+    if (!fg && !bg) return;
+    selectorList.split(',').forEach((one) => {
       const selector = one.trim().replace(/\s+/g, ' ');
-      if (!selector) continue;
-      rules.push({ selector, key: elementKey(selector), fg, bg, stated: STATE_CLASS.test(selector) });
+      if (!selector) return;
+      rules.push({
+        selector, key: elementKey(selector), fg, bg, stated: STATE_CLASS.test(selector),
+      });
       STATE_CLASS.lastIndex = 0;
-    }
-  }
+    });
+  });
   // The rest-state foreground of each element: the last rule that sets `color` without a state.
-  for (const rule of rules) if (rule.fg && !rule.stated) foregroundOf.set(rule.key, rule);
+  rules.forEach((rule) => {
+    if (rule.fg && !rule.stated) foregroundOf.set(rule.key, rule);
+  });
   /*
    * A theme may move the label WITH the state, in a rule of its own: the outlined button sets the
    * background in one rule and the label colour in another, both carrying the same state class.
@@ -929,21 +987,23 @@ if (existsSync(bundlePath)) {
     STATE_CLASS.lastIndex = 0;
     return `${elementKey(selector)}\u0000${(selector.match(STATE_CLASS) ?? []).sort().join('')}`;
   };
-  for (const rule of rules) if (rule.fg && rule.stated) statedForegroundOf.set(stateKey(rule.selector), rule);
-  for (const rule of rules) {
-    if (!rule.stated || !rule.bg || rule.fg) continue;
+  rules.forEach((rule) => {
+    if (rule.fg && rule.stated) statedForegroundOf.set(stateKey(rule.selector), rule);
+  });
+  rules.forEach((rule) => {
+    if (!rule.stated || !rule.bg || rule.fg) return;
     const rest = statedForegroundOf.get(stateKey(rule.selector)) ?? foregroundOf.get(rule.key);
-    if (!rest) continue;
+    if (!rest) return;
     const fgRole = roleOfTierName.get(rest.fg);
     const bgRole = roleOfTierName.get(rule.bg);
-    if (!fgRole || !bgRole) continue;
+    if (!fgRole || !bgRole) return;
     const measured = {};
-    for (const mode of MODES) {
+    MODES.forEach((mode) => {
       const a = hexOf(resolveRole(fgRole, mode));
       const b = hexOf(resolveRole(bgRole, mode));
       if (a && b) measured[mode] = Math.round(contrast(a, b) * 100) / 100;
-    }
-    if (!Object.keys(measured).length) continue;
+    });
+    if (!Object.keys(measured).length) return;
     statePairs.push({
       selector: rule.selector.slice(0, 90),
       restSelector: rest.selector.slice(0, 90),
@@ -953,14 +1013,16 @@ if (existsSync(bundlePath)) {
       bgRole,
       contrast: measured,
     });
-  }
+  });
 }
 /* Both thresholds are reported, as in the pass above: 4.5 for a label, 3 for a glyph or a
  * boundary. Which one applies is decided by what the element is, and the table says so per row. */
 const GRAPHIC = 3;
 const lowStatePairs = statePairs
-  .filter((pair) => MODES.some((mode) => pair.contrast[mode] !== undefined && pair.contrast[mode] < AA))
-  .filter((pair, index, all) => all.findIndex((other) => other.fg === pair.fg && other.bg === pair.bg) === index)
+  .filter((pair) => MODES
+    .some((mode) => pair.contrast[mode] !== undefined && pair.contrast[mode] < AA))
+  .filter((pair, index, all) => all
+    .findIndex((other) => other.fg === pair.fg && other.bg === pair.bg) === index)
   .sort((a, b) => Math.min(...Object.values(a.contrast)) - Math.min(...Object.values(b.contrast)));
 
 /*
@@ -979,35 +1041,37 @@ const MODIFIER_WORDS = new Set(Object.values(registries.modifiers).flat());
 const concepts = [];
 {
   const groups = new Map();
-  for (const declaration of declarations) {
-    if (!declaration.slot || declaration.roles.length !== 1) continue;
-    const bare = declaration.state === 'rest'
-      ? declaration.name
-      : declaration.name.slice(0, -declaration.state.length - 1);
-    const middle = bare.slice(0, -declaration.slot.length).replace(/-$/, '').split('-');
-    const modifiers = [...new Set(middle.filter((word) => MODIFIER_WORDS.has(word)))].sort();
-    if (!modifiers.length) continue;   // without a modifier the concept is too generic to compare
-    const key = `${modifiers.join('+')} ${declaration.slot} ${declaration.state}`;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(declaration);
-  }
-  for (const [concept, members] of groups) {
+  declarations
+    .filter((declaration) => declaration.slot && declaration.roles.length === 1)
+    .forEach((declaration) => {
+      const bare = declaration.state === 'rest'
+        ? declaration.name
+        : declaration.name.slice(0, -declaration.state.length - 1);
+      const middle = bare.slice(0, -declaration.slot.length).replace(/-$/, '').split('-');
+      const modifiers = [...new Set(middle.filter((word) => MODIFIER_WORDS.has(word)))].sort();
+      // without a modifier the concept is too generic to compare
+      if (!modifiers.length) return;
+      const key = `${modifiers.join('+')} ${declaration.slot} ${declaration.state}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(declaration);
+    });
+  groups.forEach((members, concept) => {
     const folders = [...new Set(members.map((m) => m.folder))];
     const roles = [...new Set(members.map((m) => m.roles[0]))];
-    if (folders.length < 2 || roles.length < 2) continue;
+    if (folders.length < 2 || roles.length < 2) return;
     const families = [...new Set(roles.map(familyOf).filter((f) => f !== 'none'))];
     /* Roles that resolve to one colour in both modes are the same paint under different names, and
      * unifying them costs nothing. That is a different problem from components that genuinely
      * disagree about the colour, and mixing the two would hide both. */
-    const valueOf = (role) => MODES.map((mode) => resolveRole(role, mode)).join(' / ');
-    const values = new Set(roles.map(valueOf));
+    const valueOfRole = (role) => MODES.map((mode) => resolveRole(role, mode)).join(' / ');
+    const values = new Set(roles.map(valueOfRole));
     const oneColour = values.size === 1;
     /* Inside a split concept, the interesting part is the cluster: components that paint the same
      * colour while spelling it from different families. Those cost nothing to unify, and until they
      * are unified the next palette change moves some of them and not the others. */
     const clusters = [...values].map((value) => ({
       value,
-      roles: roles.filter((role) => valueOf(role) === value),
+      roles: roles.filter((role) => valueOfRole(role) === value),
     })).filter((cluster) => cluster.roles.length > 1);
     const seen = new Set();
     concepts.push({
@@ -1021,9 +1085,11 @@ const concepts = [];
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
-      }).map((m) => ({ folder: m.folder, name: m.name, role: m.roles[0], where: m.where })),
+      }).map((m) => ({
+        folder: m.folder, name: m.name, role: m.roles[0], where: m.where,
+      })),
     });
-  }
+  });
   concepts.sort((a, b) => b.families.length - a.families.length
     || b.roles.length - a.roles.length || a.concept.localeCompare(b.concept));
 }
@@ -1044,26 +1110,29 @@ const declaredRoles = new Set();
 for (const [name] of valueIndex.light) declaredRoles.add(name.replace(/^(color|global\.color)\./, 'color-'));
 
 const offeredRoles = new Map();
-for (const set of SETS) {
-  for (const [, raw] of leavesOf(componentsOf(set))) {
-    if (typeof raw !== 'string' || !raw.startsWith('{')) continue;
+SETS.forEach((set) => {
+  leavesOf(componentsOf(set)).forEach(([, raw]) => {
+    if (typeof raw !== 'string' || !raw.startsWith('{')) return;
     const role = raw.replace(/[{}]/g, '').replace(/^(color|global\.color)\./, 'color-');
-    if (!role.startsWith('color-') || role === 'color-none') continue;
+    if (!role.startsWith('color-') || role === 'color-none') return;
     if (!offeredRoles.has(role)) offeredRoles.set(role, new Set());
     offeredRoles.get(role).add(set);
-  }
-}
+  });
+});
 const readRoles = new Set(declarations.flatMap((d) => d.roles));
 const unusedRoles = { capability: [], stale: [] };
-for (const [role, sets] of [...offeredRoles].sort()) {
-  if (readRoles.has(role)) continue;
-  unusedRoles[declaredRoles.has(role) ? 'capability' : 'stale'].push({ role, sets: [...sets].sort() });
-}
+[...offeredRoles].sort()
+  .filter(([role]) => !readRoles.has(role))
+  .forEach(([role, sets]) => {
+    unusedRoles[declaredRoles.has(role) ? 'capability' : 'stale']
+      .push({ role, sets: [...sets].sort() });
+  });
 
-// --- output ---------------------------------------------------------------------------------------
+// --- output ------------------------------------------------------------------------------------
 
 const count = (predicate) => findings.filter(predicate).length;
-const verdicts = ['agrees', 'agrees-kin', 'cross-family', 'family-conflict', 'role-new', 'slot-absent', 'no-counterpart', 'slot-unparsed'];
+const verdicts = ['agrees', 'agrees-kin', 'cross-family', 'family-conflict', 'role-new',
+  'slot-absent', 'no-counterpart', 'slot-unparsed'];
 const summary = {
   tokensVersion,
   declarations: findings.length,
@@ -1081,7 +1150,8 @@ const summary = {
   rolesStaleInNeighbours: unusedRoles.stale.length,
   contrastPairsMeasured: pairs.length,
   contrastBelowAA: lowContrast.length,
-  contrastDarkOnly: lowContrast.filter((p) => p.contrast.light >= AA && p.contrast.dark < AA).length,
+  contrastDarkOnly: lowContrast
+    .filter((p) => p.contrast.light >= AA && p.contrast.dark < AA).length,
   declarationsMissingFromBundle: findings.filter((f) => !declaredInBundle.has(`--dx-${f.name}`)).length,
   statePairsMeasured: statePairs.length,
   statePairsBelowGraphic: lowStatePairs.length,
@@ -1097,17 +1167,17 @@ const roleList = (roles) => roles.map((r) => `ds.$${r}`).join(' + ');
 
 const swapLine = (f) => {
   if (!f.swap) return null;
-  const { free, ours, drift } = f.swap;
+  const { free, ours } = f.swap;
   const value = MODES.map((m) => `${m} ${ours[m] ?? '?'}`).join(' / ');
   if (free.length) {
-    return `    - **free swap**: \`${free[0]}\` resolves identically in both modes (${value})`
-      + (free.length > 1 ? `; also ${free.slice(1).map((r) => `\`${r}\``).join(', ')}` : '');
+    return `    - **free swap**: \`${free[0]}\` resolves identically in both modes (${value})${
+      free.length > 1 ? `; also ${free.slice(1).map((r) => `\`${r}\``).join(', ')}` : ''}`;
   }
   const near = (f.near ?? []).slice(0, 3)
     .map((n) => `\`${n.role}\` (moves ${n.moves.join(' and ')})`)
     .join(', ');
-  return `    - ours resolves ${value}; no role of the right family shares it`
-    + (near ? `. Nearest of the right family: ${near}` : '');
+  return `    - ours resolves ${value}; no role of the right family shares it${
+    near ? `. Nearest of the right family: ${near}` : ''}`;
 };
 
 const md = () => {
@@ -1134,7 +1204,8 @@ const md = () => {
     out.push('');
   };
 
-  section('Cross-family - the package uses this role, but only for a slot of another kind',
+  section(
+    'Cross-family - the package uses this role, but only for a slot of another kind',
     findings.filter((f) => f.package?.verdict === 'cross-family'),
     (f) => [
       `- \`${f.name}\` = ${roleList(f.roles)}${f.bridged ? ' *(alpha bridge - see BRIDGES.md)*' : ''}  (${f.where})`,
@@ -1146,28 +1217,35 @@ const md = () => {
         ? `    - for our slot \`${f.slot}\` the package uses: ${f.package.packageUsesHere.map((r) => `\`${r}\``).join(', ')}`
         : `    - the package names no role for slot \`${f.slot}\` here`,
       swapLine(f),
-    ].filter(Boolean).join('\n'));
+    ].filter(Boolean).join('\n'),
+  );
 
-  section('Family conflict - the package paints this slot from another family entirely',
+  section(
+    'Family conflict - the package paints this slot from another family entirely',
     findings.filter((f) => f.package?.verdict === 'family-conflict'),
     (f) => [
       `- \`${f.name}\` = ${roleList(f.roles)}  (${f.where})`,
       `    - for slot \`${f.slot}\` the package uses: ${f.package.packageUsesHere.map((r) => `\`${r}\``).join(', ')}`,
       swapLine(f),
-    ].filter(Boolean).join('\n'));
+    ].filter(Boolean).join('\n'),
+  );
 
-  section('Family mismatch',
+  section(
+    'Family mismatch',
     findings.filter((f) => f.family),
     (f) => `- \`${f.name}\` = ${roleList(f.roles)}  (${f.where})\n`
-      + `    - slot \`${f.family.slot}\` wants \`color-${f.family.want}-*\`, reads a \`${f.family.got.join('/')}\` role`
-      + (f.package ? `; package verdict: ${f.package.verdict}` : ''));
+      + `    - slot \`${f.family.slot}\` wants \`color-${f.family.want}-*\`, reads a \`${f.family.got.join('/')}\` role${
+        f.package ? `; package verdict: ${f.package.verdict}` : ''}`,
+  );
 
-  section('The rung - our role is the one the package names for another state of the same slot',
+  section(
+    'The rung - our role is the one the package names for another state of the same slot',
     findings.filter((f) => f.rung),
     (f) => `- \`${f.name}\` = ${roleList(f.roles)}  (${f.where})\n`
       + `    - our rung is \`${f.rung.state}\`; the package uses this role for the same slot at `
       + `${f.rung.oursAt.map((x) => `\`${x}\``).join(', ')}\n`
-      + `    - and names for \`${f.rung.state}\`: ${f.rung.want.map((r) => `\`${r}\``).join(', ')}`);
+      + `    - and names for \`${f.rung.state}\`: ${f.rung.want.map((r) => `\`${r}\``).join(', ')}`,
+  );
 
   out.push(`## Roles the package assigns and the theme never reads - ${unusedRoles.capability.length}\n`);
   out.push('Counted from the package inward rather than from our declarations outward, because a whole');
@@ -1186,11 +1264,11 @@ const md = () => {
   out.push('the ones where every role resolves to the SAME colour in both modes - the same paint under');
   out.push('several names, free to unify and, until then, repainted differently by the next redesign.\n');
   for (const c of concepts) {
-    out.push(`- **${c.concept}** - ${c.roles.length} roles, ${c.families.length} famil${c.families.length > 1 ? 'ies' : 'y'}`
-      + (c.oneColour ? ', **one colour under several names**' : ''));
+    out.push(`- **${c.concept}** - ${c.roles.length} roles, ${c.families.length} famil${c.families.length > 1 ? 'ies' : 'y'}${
+      c.oneColour ? ', **one colour under several names**' : ''}`);
     for (const cluster of c.clusters) {
-      out.push(`    - **one colour, ${cluster.roles.length} names** (${cluster.value}): `
-        + cluster.roles.map((r) => `\`${r}\``).join(', '));
+      out.push(`    - **one colour, ${cluster.roles.length} names** (${cluster.value}): ${
+        cluster.roles.map((r) => `\`${r}\``).join(', ')}`);
     }
     for (const m of c.members) out.push(`    - ${m.folder}: \`${m.role}\`  (${m.where})`);
   }
@@ -1223,7 +1301,11 @@ const md = () => {
   out.push('| Selector | Glyph | On the state fill | Light | Dark |');
   out.push('|---|---|---|---|---|');
   for (const pair of lowStatePairs) {
-    const mark = (value) => (value === undefined ? '-' : `${value}${value < GRAPHIC ? ' \u26a0\u26a0' : value < AA ? ' \u26a0' : ''}`);
+    const warn = (value) => {
+      if (value < GRAPHIC) return ' \u26a0\u26a0';
+      return value < AA ? ' \u26a0' : '';
+    };
+    const mark = (value) => (value === undefined ? '-' : `${value}${warn(value)}`);
     out.push(`| \`${pair.selector}\` | \`${pair.fgRole}\` | \`${pair.bgRole}\` `
       + `| ${mark(pair.contrast.light)} | ${mark(pair.contrast.dark)} |`);
   }
@@ -1316,7 +1398,16 @@ for (const role of [...roleNames].sort()) {
 
 if (process.argv.includes('--json')) {
   console.log(JSON.stringify({
-    summary, findings, typography, ladders, lowContrast, lowStatePairs, concepts, unusedRoles, palette, coverage,
+    summary,
+    findings,
+    typography,
+    ladders,
+    lowContrast,
+    lowStatePairs,
+    concepts,
+    unusedRoles,
+    palette,
+    coverage,
   }, null, 2));
 } else if (process.argv.includes('--md')) {
   console.log(md());

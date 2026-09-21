@@ -511,7 +511,11 @@
     ],
     "file-manager": [
       ".dx-filemanager",
-      ".dx-filemanager-dialog-popup"
+      ".dx-filemanager-dialog-popup",
+      ".dx-filemanager-context-menu",
+      ".dx-filemanager-dialog-name-editor-popup",
+      ".dx-filemanager-dialog-delete-item-popup",
+      ".dx-filemanager-view-switcher-popup"
     ],
     "tabs": [
       ".dx-tabs"

@@ -51,11 +51,17 @@ function collectClaims(): Claim[] {
       const marker = MARKER.exec(line);
       if (!marker) return;
       const [, variable, literal, token, trailing] = marker;
-      const modes: ('light' | 'dark')[] = /mode-invariant/.test(trailing)
+      const modes: ('light' | 'dark')[] = trailing.includes('mode-invariant')
         ? ['light', 'dark']
         : [mode ?? 'light'];
       for (const each of modes) {
-        claims.push({ where: `${where}:${index + 1}`, variable, literal, token, mode: each });
+        claims.push({
+          where: `${where}:${index + 1}`,
+          variable,
+          literal,
+          token,
+          mode: each,
+        });
       }
     });
   }
@@ -77,12 +83,13 @@ const expand = (hex: string): string => {
  */
 const rootDeclarations = (css: string): Map<string, string> => {
   const declarations = new Map<string, string>();
-  for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-    if (!selector.split(',').some((one) => one.trim() === ':root')) continue;
-    for (const [, property, value] of body.matchAll(/(--[a-z0-9-]+):([^;]*)/g)) {
-      declarations.set(property, value.trim());
-    }
-  }
+  [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .filter(([, selector]) => selector.split(',').some((one) => one.trim() === ':root'))
+    .forEach(([, , body]) => {
+      [...body.matchAll(/(--[a-z0-9-]+):([^;]*)/g)].forEach(([, property, value]) => {
+        declarations.set(property, value.trim());
+      });
+    });
   return declarations;
 };
 

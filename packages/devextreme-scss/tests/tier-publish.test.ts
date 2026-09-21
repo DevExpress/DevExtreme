@@ -1,18 +1,21 @@
 /*
- * The emitter of the fluent-next component tier (tools/naming/publish.mjs) and the pure module behind
- * it (tools/naming/tier.ts), exercised on synthetic files so every case names one rule. The real tree
- * is covered by tests/fluent-next-naming.test.ts, which reads the same module.
+ * The emitter of the fluent-next component tier (tools/naming/publish.mjs) and the pure module
+ * behind it (tools/naming/tier.ts), exercised on synthetic files so every case names one rule. The
+ * real tree is covered by tests/fluent-next-naming.test.ts, which reads the same module.
  */
 
 import { execFileSync } from 'child_process';
 
 import { stripScssComments } from '../build/tokens/consumed-tokens';
 import {
-  type Registries, type SourceFile,
+  type Publication, type Registries, type SourceFile,
   COLLECTOR_PATH, GENERATED_MARKER,
   byCodepoint, parseLinksFile, planPublication, renderCollector, renderPublicFile, stalePaths,
   tierRecords, useSpecFor,
 } from '../tools/naming/tier';
+import { required } from './required';
+
+const BADGE_PUBLIC = 'fluent-next/badge/_public.scss';
 
 const file = (path: string, raw: string): SourceFile => {
   const segments = path.split('/');
@@ -54,7 +57,12 @@ const plan = (
   existing: Record<string, string> = {},
   overrides: Partial<Registries> = {},
   baseFiles: SourceFile[] = [],
-) => planPublication(themeFiles, baseFiles, registries(overrides), new Map(Object.entries(existing)));
+): Publication => planPublication(
+  themeFiles,
+  baseFiles,
+  registries(overrides),
+  new Map(Object.entries(existing)),
+);
 
 const lines = (content: string): string[] => content.split('\n').filter((line) => line.startsWith('  --dx-'));
 
@@ -85,7 +93,7 @@ describe('_public.scss', () => {
 
   test('a module with no eligible declarations is not imported', () => {
     const files = [...badge(), file('fluent-next/badge/_variables.scss', '$badge-flag: true;\n')];
-    const content = plan(files).files.get('fluent-next/badge/_public.scss')!;
+    const content = required(plan(files).files.get(BADGE_PUBLIC), BADGE_PUBLIC);
     expect(content).not.toContain('@use "variables"');
     expect(content).toContain('@use "colors" as *;');
     expect(content).toContain('@use "sizes" as *;');
@@ -109,7 +117,7 @@ describe('_public.scss', () => {
   });
 
   test('the file has the marker, two-space indentation, and a trailing newline', () => {
-    const content = plan(badge()).files.get('fluent-next/badge/_public.scss')!;
+    const content = required(plan(badge()).files.get(BADGE_PUBLIC), BADGE_PUBLIC);
     expect(content).toBe([
       GENERATED_MARKER,
       '@use "colors" as *;',
@@ -125,11 +133,11 @@ describe('_public.scss', () => {
   });
 
   test('the links file is included only when it exists', () => {
-    const without = plan(badge()).files.get('fluent-next/badge/_public.scss')!;
+    const without = required(plan(badge()).files.get(BADGE_PUBLIC), BADGE_PUBLIC);
     expect(without).not.toContain('links');
 
     const links = { 'fluent-next/badge/_public-links.scss': '@mixin publish {\n  --dx-badge-bg-hovered: var(--dx-badge-bg);\n}\n' };
-    const withLinks = plan(badge(), links).files.get('fluent-next/badge/_public.scss')!;
+    const withLinks = required(plan(badge(), links).files.get(BADGE_PUBLIC), BADGE_PUBLIC);
     expect(withLinks).toContain('@use "public-links" as links;');
     // stylelint wants the empty line between the declarations and the at-rule
     expect(withLinks.split('\n').slice(-5)).toEqual(['  --dx-badge-size: #{$badge-size};', '', '  @include links.publish();', '}', '']);
@@ -158,8 +166,9 @@ describe('_public.scss', () => {
 // ---------------------------------------------------------------------------------------------
 
 describe('eligibility', () => {
-  const reasons = (files: SourceFile[], wiring: string[] = []) => Object.fromEntries(
-    [...tierRecords(files, registries(), new Set(wiring))].map(([variable, { reason }]) => [variable, reason]),
+  const reasons = (files: SourceFile[], wiring: string[] = []): Record<string, string | null> => (
+    Object.fromEntries([...tierRecords(files, registries(), new Set(wiring))]
+      .map(([variable, { reason }]) => [variable, reason]))
   );
 
   test('an ordinary declaration is projected', () => {
@@ -274,8 +283,11 @@ describe('planPublication', () => {
   });
 
   test('removing a variable removes its projection', () => {
-    const before = plan(badge()).files.get('fluent-next/badge/_public.scss')!;
-    const after = plan(badge('$badge-bg: ds.$color-primary;\n')).files.get('fluent-next/badge/_public.scss')!;
+    const before = required(plan(badge()).files.get(BADGE_PUBLIC), BADGE_PUBLIC);
+    const after = required(
+      plan(badge('$badge-bg: ds.$color-primary;\n')).files.get(BADGE_PUBLIC),
+      BADGE_PUBLIC,
+    );
     expect(lines(before)).toContain('  --dx-badge-color: #{$badge-color};');
     expect(lines(after)).toEqual(['  --dx-badge-bg: #{$badge-bg};', '  --dx-badge-size: #{$badge-size};']);
   });
@@ -320,7 +332,7 @@ describe('planPublication', () => {
 
   test('typography is published once although it is both migrated and system tier', () => {
     const files = [file('fluent-next/typography/_sizes.scss', '$typography-line: 20px;\n')];
-    const collector = plan(files).files.get(COLLECTOR_PATH)!;
+    const collector = required(plan(files).files.get(COLLECTOR_PATH), COLLECTOR_PATH);
     expect(collector.match(/typographyPublic\.publish/g)).toHaveLength(1);
     expect(renderCollector([
       { folder: 'typography', selectors: [':root'] },
@@ -345,7 +357,7 @@ describe('planPublication', () => {
   });
 
   describe('problems stop the run and nothing is written', () => {
-    const links = (body: string) => ({
+    const links = (body: string): Record<string, string> => ({
       'fluent-next/badge/_public-links.scss': `@mixin publish {\n${body}\n}\n`,
     });
 

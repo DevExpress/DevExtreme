@@ -54,7 +54,7 @@ const bridge = readFileSync(bridgePath, 'utf8')
   .map((line) => line.trim())
   .filter((line) => line)
   .map((line) => {
-    const declaration = line.match(/^(\$[\w-]+)\s*:\s*(.+);$/);
+    const declaration = /^(\$[\w-]+)\s*:\s*(.+);$/.exec(line);
 
     return {
       line,

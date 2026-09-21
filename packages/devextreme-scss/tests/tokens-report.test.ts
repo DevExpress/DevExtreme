@@ -46,7 +46,7 @@ const grouped = (rendered: string, heading: string): {
   let filesNotShown = 0;
 
   lines.slice(start + 1, lines.indexOf('', start + 1)).forEach((line) => {
-    const tally = line.match(/^ {2}… and (\d+) more(?:, (\d+) file\(s\) not shown)?$/);
+    const tally = /^ {2}… and (\d+) more(?:, (\d+) file\(s\) not shown)?$/.exec(line);
     const current = files.at(-1);
 
     if (tally) {
@@ -132,7 +132,9 @@ describe('diffGenerated', () => {
     const after = generated({ 'dark.scss': { '--dxds-a': '3rem', '--dxds-c': '4rem' } });
 
     expect(diffGenerated(before, after)).toEqual({
-      changed: [{ file: 'dark.scss', name: '--dxds-a', was: '1rem', now: '3rem' }],
+      changed: [{
+        file: 'dark.scss', name: '--dxds-a', was: '1rem', now: '3rem',
+      }],
       gone: [{ file: 'dark.scss', name: '--dxds-b' }],
       appeared: [{ file: 'dark.scss', name: '--dxds-c' }],
     });
@@ -171,8 +173,12 @@ describe('diffGenerated', () => {
     });
 
     expect(diffGenerated(before, after).changed).toEqual([
-      { file: 'dark.scss', name: '--dxds-a', was: '1rem', now: '8rem' },
-      { file: 'dark.scss', name: '--dxds-b', was: '2rem', now: '9rem' },
+      {
+        file: 'dark.scss', name: '--dxds-a', was: '1rem', now: '8rem',
+      },
+      {
+        file: 'dark.scss', name: '--dxds-b', was: '2rem', now: '9rem',
+      },
     ]);
   });
 });
@@ -200,7 +206,9 @@ describe('renderReport', () => {
   it('prints a moved value with both sides', () => {
     const rendered = renderReport(report({
       output: {
-        changed: [{ file: 'dark.scss', name: '--dxds-a', was: '1rem', now: '3rem' }],
+        changed: [{
+          file: 'dark.scss', name: '--dxds-a', was: '1rem', now: '3rem',
+        }],
         gone: [],
         appeared: [],
       },
@@ -222,7 +230,9 @@ describe('renderReport', () => {
     expect(renderReport(report({ names: { added: ['a'], removed: ['b'] } }))).not.toContain(warning);
     expect(renderReport(report({
       output: {
-        changed: [{ file: 'dark.scss', name: '--dxds-a', was: '1rem', now: '3rem' }],
+        changed: [{
+          file: 'dark.scss', name: '--dxds-a', was: '1rem', now: '3rem',
+        }],
         gone: [],
         appeared: [],
       },
@@ -241,7 +251,11 @@ describe('renderReport', () => {
 });
 
 describe('renderTerminal', () => {
-  const change = (name: string, file = 'dark.scss') => ({ file, name, was: '1rem', now: '2rem' });
+  const change = (name: string, file = 'dark.scss'): {
+    file: string; name: string; was: string; now: string;
+  } => ({
+    file, name, was: '1rem', now: '2rem',
+  });
 
   it('leads with the versions and the size of the move', () => {
     const rendered = renderTerminal(report({
@@ -385,7 +399,13 @@ describe('renderPreamble', () => {
   it('says what is known before the rebuild and stops there', () => {
     const rendered = renderPreamble(report({
       lostConsumed: ['color-none'],
-      output: { changed: [{ file: 'dark.scss', name: '--dxds-a', was: '1rem', now: '2rem' }], gone: [], appeared: [] },
+      output: {
+        changed: [{
+          file: 'dark.scss', name: '--dxds-a', was: '1rem', now: '2rem',
+        }],
+        gone: [],
+        appeared: [],
+      },
     }));
 
     expect(rendered).toContain('262.23.0 → 262.24.0');

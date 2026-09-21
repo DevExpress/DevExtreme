@@ -46,20 +46,22 @@ const css = readFileSync(bundle, 'utf8');
  * A grid header's height centres a menu with `margin-top: calc((height - 32px) / 2)`. Reading that
  * as "height paints a margin" is how a pass turns arithmetic into a finding.
  */
-const paints = new Map();     // name -> Set(property) assigned directly
-const derived = new Map();    // name -> Set(property) computed from it
-for (const [, property, value] of css.matchAll(/([a-z-]+)\s*:\s*([^;{}]*var\(--dx-[^;{}]*)/g)) {
-  /* A custom property on the left is an alias declaration, not paint: it says this name stands for
+const paints = new Map(); // name -> Set(property) assigned directly
+const derived = new Map(); // name -> Set(property) computed from it
+/* A custom property on the left is an alias declaration, not paint: it says this name stands for
    * that one, which is a different relationship and has its own check in publish.mjs. */
-  if (property.startsWith('--')) continue;
-  for (const [, name] of value.matchAll(/var\(\s*(--dx-[a-z0-9-]+)/g)) {
-    if (name.startsWith('--dxds-')) continue;
-    const direct = value.trim().replace(/\s+/g, '') === `var(${name})`;
-    const bucket = direct ? paints : derived;
-    if (!bucket.has(name)) bucket.set(name, new Set());
-    bucket.get(name).add(property);
-  }
-}
+[...css.matchAll(/([a-z-]+)\s*:\s*([^;{}]*var\(--dx-[^;{}]*)/g)]
+  .filter(([, property]) => !property.startsWith('--'))
+  .forEach(([, property, value]) => {
+    [...value.matchAll(/var\(\s*(--dx-[a-z0-9-]+)/g)]
+      .filter(([, name]) => !name.startsWith('--dxds-'))
+      .forEach(([, name]) => {
+        const direct = value.trim().replace(/\s+/g, '') === `var(${name})`;
+        const bucket = direct ? paints : derived;
+        if (!bucket.has(name)) bucket.set(name, new Set());
+        bucket.get(name).add(property);
+      });
+  });
 
 /*
  * The vocabulary, longest word first so `-border-width` is read before `-width` and
@@ -157,18 +159,28 @@ for (const [name, set] of [...paints].sort()) {
    */
   if (/(border|outline)[a-z-]*-width$/.test(bare)) rule = RULES.find(([word]) => word === 'border-width');
   const mirrored = /-rtl-/.test(bare);
-  if (!rule) { noRule.push({ name, paints: [...set].sort() }); continue; }
   const props = [...set].sort();
-  const MIRROR = {
-    'inline-start': /^[a-z-]*(right|inline-start)$/, 'inline-end': /^[a-z-]*(left|inline-end)$/,
-  };
-  const axis = Object.keys(MIRROR).find((a) => bare.endsWith(a));
-  const bad = props.filter((p) => !rule[1].test(p) && !(mirrored && axis && MIRROR[axis].test(p)));
-  if (!bad.length) { agrees += 1; continue; }
-  rows.push({
-    name, says: rule[0], paints: props, bad, families: [...new Set(props.map(familyOf))].sort(),
-    verdict: bad.length === props.length ? 'wrong' : 'mixed',
-  });
+  if (!rule) {
+    noRule.push({ name, paints: props });
+  } else {
+    const MIRROR = {
+      'inline-start': /^[a-z-]*(right|inline-start)$/, 'inline-end': /^[a-z-]*(left|inline-end)$/,
+    };
+    const axis = Object.keys(MIRROR).find((a) => bare.endsWith(a));
+    const bad = props
+      .filter((p) => !rule[1].test(p) && !(mirrored && axis && MIRROR[axis].test(p)));
+    if (!bad.length) agrees += 1;
+    else {
+      rows.push({
+        name,
+        says: rule[0],
+        paints: props,
+        bad,
+        families: [...new Set(props.map(familyOf))].sort(),
+        verdict: bad.length === props.length ? 'wrong' : 'mixed',
+      });
+    }
+  }
 }
 
 const result = {
@@ -196,8 +208,8 @@ if (process.argv.includes('--json')) {
     const list = rows.filter((r) => r.verdict === verdict);
     console.log(`## ${verdict} - ${list.length}\n`);
     for (const r of list) {
-      console.log(`  ${r.name.padEnd(56)} says "${r.says}", paints ${r.bad.join(', ')}`
-        + (r.verdict === 'mixed' ? `  (also ${r.paints.filter((p) => !r.bad.includes(p)).join(', ')})` : ''));
+      console.log(`  ${r.name.padEnd(56)} says "${r.says}", paints ${r.bad.join(', ')}${
+        r.verdict === 'mixed' ? `  (also ${r.paints.filter((p) => !r.bad.includes(p)).join(', ')})` : ''}`);
     }
     console.log('');
   }

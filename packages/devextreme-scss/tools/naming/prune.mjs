@@ -14,11 +14,14 @@
  *      the ones declared three times through `@if $size`, which the count-based check in
  *      unused-elements.test.ts cannot see.
  *
- * Deliberately NOT touched: imports without an alias and without `as *` (`@use "../dropDownMenu";`).
- * Those pull a module in for its side effects — its CSS rules — and removing one deletes styles.
+ * Deliberately NOT touched: imports without an alias and without `as *` (`@use
+ * "../dropDownMenu";`). Those pull a module in for its side effects — its CSS rules — and removing
+ * one deletes styles.
  */
 
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'fs';
+import {
+  readFileSync, writeFileSync, readdirSync, statSync, existsSync,
+} from 'fs';
 import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -76,7 +79,9 @@ themeFiles.forEach((file) => {
 
     if (alias && VARIABLE_MODULES.includes(moduleName)) {
       if (!new RegExp(`\\b${alias}\\.`).test(rest)) {
-        deadImports.push({ file, statement, spec, reason: `alias ${alias} never referenced` });
+        deadImports.push({
+          file, statement, spec, reason: `alias ${alias} never referenced`,
+        });
       }
       return;
     }
@@ -87,7 +92,9 @@ themeFiles.forEach((file) => {
       const provided = mixinNames(modulePath);
       const used = [...provided].some((name) => new RegExp(`@include\\s+${name}\\b`).test(rest));
       if (!used) {
-        deadImports.push({ file, statement, spec, reason: 'no mixin from this module is included' });
+        deadImports.push({
+          file, statement, spec, reason: 'no mixin from this module is included',
+        });
       }
     }
   });
@@ -111,12 +118,15 @@ const declarationsOf = (content) => {
       index += 1;
     } else if (char === '$') {
       const name = /^\$[a-z0-9_-]+/i.exec(content.slice(index))?.[0];
-      if (!name) { index += 1; continue; }
-      const namespaced = index > 0 && content[index - 1] === '.';
-      if (/^\s*:/.test(content.slice(index + name.length)) && !namespaced && stack.every(Boolean)) {
-        names.add(name);
+      if (!name) {
+        index += 1;
+      } else {
+        const namespaced = index > 0 && content[index - 1] === '.';
+        if (/^\s*:/.test(content.slice(index + name.length)) && !namespaced && stack.every(Boolean)) {
+          names.add(name);
+        }
+        index += name.length;
       }
-      index += name.length;
     } else {
       index += 1;
     }

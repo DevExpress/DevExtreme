@@ -7,30 +7,23 @@
  *     name itself is validated by fluent-next-naming.test.ts;
  *   - the only `--dx-*` names base/** reads are the JS -> CSS runtime contract, and each of those
  *     reads has exactly the form tools/naming/runtime-contract.json fixes for it: a fallback where
- *     the value must never be missing, a bare read where the declaration is meant to disappear, or a
- *     default declared on the container where the theme owns the default.
+ *     the value must never be missing, a bare read where the declaration is meant to disappear, or
+ *     a default declared on the container where the theme owns the default.
  *
  * A new fallback in the theme, a new `--dx-*` read in base, or a changed read form of a contract
  * variable is a conscious edit of the json, not a silent pass.
  */
 
-import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
+import {
+  readFileSync,
+  readdirSync,
+  statSync,
+  existsSync,
+} from 'fs';
 import { join, sep } from 'path';
 
 import { stripScssComments } from '../build/tokens/consumed-tokens';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const contract = require('../tools/naming/runtime-contract.json') as {
-  variables: {
-    name: string;
-    setBy: string;
-    readIn: string;
-    property: string;
-    fallback: string | null;
-    defaultDeclaredIn?: string;
-    whenUnset: string;
-  }[];
-};
+import contract from '../tools/naming/runtime-contract.json';
 
 const packageRoot = process.cwd();
 const widgetsRoot = join(packageRoot, 'scss', 'widgets');

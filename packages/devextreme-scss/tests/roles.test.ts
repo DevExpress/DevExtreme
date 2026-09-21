@@ -19,20 +19,26 @@ import {
 import { tmpdir } from 'os';
 import { join } from 'path';
 
+import { required } from './required';
+
 const packageRoot = process.cwd();
 const tool = join(packageRoot, 'tools', 'review', 'roles.mjs');
 const baselinePath = join(packageRoot, 'tests', 'roles.baseline.json');
 
-type Finding = {
+interface Finding {
   name: string;
   slot: string | null;
   roles: string[];
   package?: { verdict: string };
-};
-type Open = {
-  name: string; verdict: string; roles: string[]; slot: string | null;
-  decision?: string; why?: string;
-};
+}
+interface Open {
+  name: string;
+  verdict: string;
+  roles: string[];
+  slot: string | null;
+  decision?: string;
+  why?: string;
+}
 
 const DECISIONS = ['confirmed', 'naming', 'rule-5', 'bridge', 'package-gap', 'design'];
 const SLOT_DECISIONS = ['naming', 'hairline', 'rule-5', 'known', 'design', 'drawn-mark', 'ring-and-fill'];
@@ -43,45 +49,79 @@ const STATE_PAIR_DECISIONS = ['graphic-ok', 'design', 'answered'];
 const CONCEPT_DECISIONS = ['spelling', 'shade', 'design', 'answered', 'false-group'];
 const RUNG_DECISIONS = ['answered', 'confirmed', 'anatomy', 'design', 'package-gap', 'known'];
 
-type Concept = {
-  concept: string; roles: string[]; families: string[];
-  members: { folder: string; role: string }[]; decision?: string; why?: string;
-};
+interface Concept {
+  concept: string;
+  roles: string[];
+  families: string[];
+  members: { folder: string; role: string }[];
+  decision?: string;
+  why?: string;
+}
 
-type ContrastPair = {
-  selector: string; fgRole: string; bgRole: string; contrast: Record<string, number>;
-  decision?: string; why?: string;
-};
+interface ContrastPair {
+  selector: string;
+  fgRole: string;
+  bgRole: string;
+  contrast: Record<string, number>;
+  decision?: string;
+  why?: string;
+}
 
-type StatePair = {
-  bg: string; fg: string; fgRole: string; bgRole: string;
-  contrast: Record<string, number>; selector: string;
-  group?: string; decision?: string;
-};
+interface StatePair {
+  bg: string;
+  fg: string;
+  fgRole: string;
+  bgRole: string;
+  contrast: Record<string, number>;
+  selector: string;
+  group?: string;
+  decision?: string;
+}
 
-type Ladder = { stem: string; states: string[]; role: string[]; decision?: string; why?: string };
+interface Ladder { stem: string; states: string[]; role: string[]; decision?: string; why?: string }
 
-type FamilyMismatch = {
-  name: string; slot: string; roles: string[]; paints: string[];
-  decision?: string; why?: string;
-};
+interface FamilyMismatch {
+  name: string;
+  slot: string;
+  roles: string[];
+  paints: string[];
+  decision?: string;
+  why?: string;
+}
 
-type SlotLie = {
-  name: string; slot: string | null; slotSays: string; paints: string[];
-  decision?: string; why?: string;
-};
+interface SlotLie {
+  name: string;
+  slot: string | null;
+  slotSays: string;
+  paints: string[];
+  decision?: string;
+  why?: string;
+}
 
-type Rung = {
-  name: string; state: string; roles: string[]; oursAt: string[]; want: string[];
-  decision?: string; why?: string;
-};
+interface Rung {
+  name: string;
+  state: string;
+  roles: string[];
+  oursAt: string[];
+  want: string[];
+  decision?: string;
+  why?: string;
+}
 
-type Typography = { variable: string; family: string; step: number; marker: string | null; roles: string[] };
+interface Typography {
+  variable: string;
+  family: string;
+  step: number;
+  marker: string | null;
+  roles: string[];
+}
 
 const run = (theme?: string): {
   summary: Record<string, unknown>;
   findings: (Finding & {
-    slot?: string | null; slotLies?: { slotSays: string }; paints?: { properties: string[] };
+    slot?: string | null;
+    slotLies?: { slotSays: string };
+    paints?: { properties: string[] };
     family?: { want: string | null; got: string[] };
     rung?: { state: string; want: string[]; oursAt: string[] };
   })[];
@@ -97,21 +137,30 @@ const run = (theme?: string): {
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,
   }),
-);
+) as ReturnType<typeof run>;
 
 const disagreements = (findings: Finding[]): Open[] => findings
   .filter((f) => f.package && ['cross-family', 'family-conflict'].includes(f.package.verdict))
   .map((f) => ({
-    name: f.name, verdict: f.package!.verdict, roles: f.roles, slot: f.slot,
+    name: f.name,
+    verdict: required(f.package, `${f.name}.package`).verdict,
+    roles: f.roles,
+    slot: f.slot,
   }))
   .sort((a, b) => a.name.localeCompare(b.name));
 
 const actual = run();
 const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
 
-const unmarked = (typography: Typography[]) => typography
+const unmarked = (typography: Typography[]): {
+  variable: string; reads: string; roleExists: boolean;
+}[] => typography
   .filter((t) => !t.marker)
-  .map((t) => ({ variable: t.variable, reads: `${t.family}-${t.step}`, roleExists: t.roles.length > 0 }))
+  .map((t) => ({
+    variable: t.variable,
+    reads: `${t.family}-${t.step}`,
+    roleExists: t.roles.length > 0,
+  }))
   .sort((a, b) => (a.variable + a.reads).localeCompare(b.variable + b.reads));
 
 if (process.env.UPDATE_ROLES_BASELINE) {
@@ -213,8 +262,8 @@ test('typography step reads with no marker are the known ones', () => {
 
 /*
  * The slot is the one claim in a name that can be checked against ground truth: NAMING.md says the
- * CSS property decides it, and the built bundle says which property the value reaches. Where the two
- * disagree the name misdescribes the code - sometimes deliberately (a hairline drawn with
+ * CSS property decides it, and the built bundle says which property the value reaches. Where the
+ * two disagree the name misdescribes the code - sometimes deliberately (a hairline drawn with
  * background-color is still a border), sometimes not (fourteen filterBuilder `-content` variables
  * that have never painted text). Banked with the reason either way.
  *
@@ -227,8 +276,8 @@ test('names whose slot contradicts the painted property are the reviewed ones', 
     .map((f) => ({
       name: f.name,
       slot: f.slot ?? null,
-      slotSays: f.slotLies!.slotSays,
-      paints: f.paints!.properties,
+      slotSays: required(f.slotLies, `${f.name}.slotLies`).slotSays,
+      paints: required(f.paints, `${f.name}.paints`).properties,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -252,11 +301,11 @@ test('roles whose family contradicts their slot are the reviewed ones', () => {
     ...baseline.slotLies.map((o: SlotLie) => o.name),
   ]);
   const seen = actual.findings
-    .filter((f) => f.family && f.family.want && !f.family.got.includes(f.family.want))
+    .filter((f) => f.family?.want && !f.family.got.includes(f.family.want))
     .filter((f) => !known.has(f.name))
     .map((f) => ({
       name: f.name,
-      slot: f.family!.want as string,
+      slot: required(f.family?.want, `${f.name}.family.want`),
       roles: f.roles,
       paints: f.paints?.properties ?? [],
     }))
@@ -269,7 +318,8 @@ test('roles whose family contradicts their slot are the reviewed ones', () => {
 
 test('every banked family mismatch carries a decision and a reason', () => {
   const undecided = baseline.familyMismatches
-    .filter((f: FamilyMismatch) => !f.decision || !FAMILY_DECISIONS.includes(f.decision) || !f.why?.trim())
+    .filter((f: FamilyMismatch) => !f.decision
+      || !FAMILY_DECISIONS.includes(f.decision) || !f.why?.trim())
     .map((f: FamilyMismatch) => f.name);
   expect(undecided).toEqual([]);
 });
@@ -280,19 +330,19 @@ test('every banked family mismatch carries a decision and a reason', () => {
  * `content-primary` for that line at focus and `content` only at hover. The state dimension was
  * parsed into `byState` from the first run and never read.
  *
- * Narrow on purpose: it fires only when the package uses OUR role for OUR slot at a DIFFERENT rung,
- * which is a ladder shifted by a step. The looser reading - our role simply absent from their rung -
- * fires 185 times and mostly reports that our anatomy is richer than theirs.
+ * Narrow on purpose: it fires only when the package uses OUR role for OUR slot at a DIFFERENT
+ * rung, which is a ladder shifted by a step. The looser reading - our role simply absent from
+ * their rung - fires 185 times and mostly reports that our anatomy is richer than theirs.
  */
 test('roles that sit on the package\'s rung for another state are the reviewed ones', () => {
   const seen = actual.findings
     .filter((f) => f.rung)
     .map((f) => ({
       name: f.name,
-      state: f.rung!.state,
+      state: required(f.rung, `${f.name}.rung`).state,
       roles: f.roles,
-      oursAt: f.rung!.oursAt,
-      want: f.rung!.want,
+      oursAt: required(f.rung, `${f.name}.rung`).oursAt,
+      want: required(f.rung, `${f.name}.rung`).want,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -341,14 +391,20 @@ test('every banked ladder carries a decision and a reason', () => {
  */
 test('text on its own background below AA is the reviewed set', () => {
   const measured = actual.lowContrast
-    .map(({ selector, fgRole, bgRole, contrast }) => ({ selector, fgRole, bgRole, contrast }))
+    .map(({
+      selector, fgRole, bgRole, contrast,
+    }) => ({
+      selector, fgRole, bgRole, contrast,
+    }))
     .sort((a, b) => a.selector.localeCompare(b.selector));
-  expect(measured).toEqual(baseline.contrast.map(({ decision, why, ...rest }: ContrastPair) => rest));
+  expect(measured)
+    .toEqual(baseline.contrast.map(({ decision, why, ...rest }: ContrastPair) => rest));
 });
 
 test('every banked contrast pair carries a decision and a reason', () => {
   const undecided = baseline.contrast
-    .filter((c: ContrastPair) => !c.decision || !CONTRAST_DECISIONS.includes(c.decision) || !c.why?.trim())
+    .filter((c: ContrastPair) => !c.decision
+      || !CONTRAST_DECISIONS.includes(c.decision) || !c.why?.trim())
     .map((c: ContrastPair) => c.selector);
   expect(undecided).toEqual([]);
 });
@@ -361,7 +417,9 @@ test('every banked contrast pair carries a decision and a reason', () => {
  */
 test('concepts painted with several roles are the reviewed ones', () => {
   const seen = actual.concepts
-    .map(({ concept, roles, families, members }) => ({
+    .map(({
+      concept, roles, families, members,
+    }) => ({
       concept,
       roles,
       families,
@@ -373,7 +431,8 @@ test('concepts painted with several roles are the reviewed ones', () => {
 
 test('every banked concept split carries a decision and a reason', () => {
   const undecided = baseline.concepts
-    .filter((c: Concept) => !c.decision || !CONCEPT_DECISIONS.includes(c.decision) || !c.why?.trim())
+    .filter((c: Concept) => !c.decision
+      || !CONCEPT_DECISIONS.includes(c.decision) || !c.why?.trim())
     .map((c: Concept) => c.concept);
   expect(undecided).toEqual([]);
 });

@@ -5,7 +5,8 @@
  * and are never touched — the generated file includes them.
  *
  *   node tools/naming/publish.mjs          # regenerates the tier files
- *   node tools/naming/publish.mjs --check  # exit 1 when a committed file is stale or a rule is broken
+ *   node tools/naming/publish.mjs --check # exit 1 when a committed file is stale or a rule is
+ *   broken
  *
  * The rules are the ones tests/fluent-next-naming.test.ts enforces; both read them from
  * tools/naming/tier.ts. Needs no built bundle.
@@ -16,8 +17,16 @@
  * retired name from reappearing, as an alias or otherwise.
  */
 
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'fs';
-import { join, dirname, relative, sep } from 'path';
+import {
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  statSync,
+  existsSync,
+} from 'fs';
+import {
+  join, dirname, relative, sep,
+} from 'path';
 import { fileURLToPath } from 'url';
 
 import { stripScssComments } from '../../build/tokens/consumed-tokens.ts';

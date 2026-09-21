@@ -1,10 +1,14 @@
-
-import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs';
+import {
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  existsSync,
+} from 'fs';
 import { join } from 'path';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const registries = require('../tools/naming/registries.json');
-const rootSelectors: Record<string, string[]> = registries.rootSelectors;
+import registries from '../tools/naming/registries.json';
+
+const { rootSelectors } = registries;
 const SYSTEM_FOLDERS: string[] = registries.systemFolders ?? [];
 
 const packageRoot = process.cwd();
@@ -42,7 +46,7 @@ const readRules = (css: string): Rule[] => {
   let match = re.exec(css);
 
   while (match !== null) {
-    const selector = match[1].split('}').pop()!.trim();
+    const selector = (match[1].split('}').pop() ?? '').trim();
 
     if (selector && !selector.startsWith('@')) {
       rules.push({ selector, body: match[2] });
@@ -108,7 +112,7 @@ const findBorrowedNames = (css: string): string[] => {
       const name = read[1];
       const chained = new RegExp(`(--dx-[a-z0-9-]+)\\s*:\\s*[^;]*${name}`).exec(body);
 
-      if (!chained || !chained[1].includes('disabled')) {
+      if (!chained?.[1].includes('disabled')) {
         borrowed.add(`${name} in ${selector}`);
       }
     }
@@ -171,7 +175,7 @@ const componentsWithoutOwnDisabledRule = (css: string): string[] => {
   return Object.entries(rootSelectors)
     .filter(([component]) => !SYSTEM_FOLDERS.includes(component))
     .filter(([, selectors]) => {
-      const classes = (selectors as string[])
+      const classes = (selectors)
         .filter((s) => s.trim().startsWith('.dx-'))
         .map((s) => s.trim().slice(1));
 
@@ -270,9 +274,7 @@ const elementsPaintingTheirOwnColour = (css: string): string[] => {
 
   readRules(css)
     .filter(({ selector, body }) => !selector.startsWith('@') && declaresColour.test(body))
-    .forEach(({ selector, body: _body, ...rest }) => {
-      void _body;
-      void rest;
+    .forEach(({ selector }) => {
       const isDisabled = DISABLED_SELECTOR.test(selector);
 
       selector.split(',').forEach((part) => {
@@ -337,7 +339,7 @@ const rootsMissingAncestorForm = (css: string): string[] => {
   const missing = new Set<string>();
 
   parts.forEach((part) => {
-    const self = part.match(/^\.(dx-[a-z0-9-]+)\.dx-state-disabled(?=\s|$)/);
+    const self = /^\.(dx-[a-z0-9-]+)\.dx-state-disabled(?=\s|$)/.exec(part);
 
     if (!self || !rootClasses.has(self[1])) {
       return;

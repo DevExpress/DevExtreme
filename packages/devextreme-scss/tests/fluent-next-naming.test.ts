@@ -2,8 +2,8 @@
  * Enforces the fluent-next SCSS naming standard — scss/widgets/fluent-next/NAMING.md.
  *
  * The standard is being rolled out wave by wave, so most checks are RATCHETS: the current set of
- * violations is compared against tests/fluent-next-naming.baseline.json, which must only ever shrink.
- * Regenerate it deliberately, as part of a wave, with:
+ * violations is compared against tests/fluent-next-naming.baseline.json, which must only ever
+ * shrink. Regenerate it deliberately, as part of a wave, with:
  *
  *   UPDATE_NAMING_BASELINE=1 pnpm test
  *
@@ -26,10 +26,21 @@ import {
   stripScssComments,
 } from '../build/tokens/consumed-tokens';
 import {
-  type Parsed, type SourceFile, baseIndex, findSignatureRanges, parseSourceFile,
-  starredBaseParameters as starredParametersOf, baseWiringKind as wiringKindOf,
-  tierRecords as computeTierRecords, planPublication, stalePaths,
+  type Parsed,
+  type Registries,
+  type SourceFile,
+  baseIndex,
+  findSignatureRanges,
+  parseSourceFile,
+  starredBaseParameters as starredParametersOf,
+  baseWiringKind as wiringKindOf,
+  tierRecords as computeTierRecords,
+  planPublication,
+  stalePaths,
 } from '../tools/naming/tier';
+import accentContract from '../tools/naming/accent-contract.json';
+import runtimeContract from '../tools/naming/runtime-contract.json';
+import { required } from './required';
 
 const packageRoot = process.cwd();
 const widgetsRoot = join(packageRoot, 'scss', 'widgets');
@@ -39,20 +50,38 @@ const themeRoot = join(widgetsRoot, 'fluent-next');
 const sourceLabel = (file: string): string => file.slice(widgetsRoot.length + 1);
 
 /*
- * A style query names a custom property in its condition (`@container style(--dx-theme-mode: dark)`)
- * and looks exactly like a declaration to a `--dx-…:` match. Preludes hold none, so dropping them
- * is safe; the reads themselves are covered by the resolve case below.
+ * A style query names a custom property in its condition (`@container style(--dx-theme-mode:
+ * dark)`) and looks exactly like a declaration to a `--dx-…:` match. Preludes hold none, so
+ * dropping them is safe; the reads themselves are covered by the resolve case below.
  */
-const declarationBody = (content: string, label: string): string => stripScssComments(content, label)
+const declarationBody = (content: string, label: string): string => stripScssComments(
+  content,
+  label,
+)
   .replace(/@[a-z-]+[^;{]*\{/g, '{');
 
 // The --dx-* component tier (see the "wave F" test block and NAMING.md): generated projections in
-// _public.scss, hand-written links in _public-links.scss, and the collector that mounts them.
+// _public.scss, handwritten links in _public-links.scss, and the collector that mounts them.
 const isPublicManifestFile = (file: string): boolean => file.endsWith('_public.scss')
   || file.endsWith('_public-links.scss');
 const isPublicTierFile = (file: string): boolean => isPublicManifestFile(file)
   || file.endsWith('_public-tier.scss');
-const registries = JSON.parse(
+/* The slice of registries.json this test reads. Declared rather than inferred: the file is read
+ * from disk (the drift check below needs the bytes), so nothing else gives it a type. */
+interface NamingRegistries extends Registries {
+  chassis: Record<string, { component: string; dependents: string[] }>;
+  derivedFrom: Record<string, string | number>;
+  embeds?: Record<string, string[]>;
+  modifiers: Record<string, string[]>;
+  parts: string[];
+  sizeSlots: string[];
+  states: string[];
+  subElements: Record<string, string[]>;
+  systemConcerns: string[];
+  systemFolders: string[];
+  themeIdentity: string[];
+}
+const registries: NamingRegistries = JSON.parse(
   readFileSync(join(packageRoot, 'tools', 'naming', 'registries.json'), 'utf8'),
 );
 const baselinePath = join(__dirname, 'fluent-next-naming.baseline.json');
@@ -105,11 +134,12 @@ const parsedFiles: ParsedFile[] = themeFiles.map((file, index) => ({
 }));
 
 /*
- * `base/**` parameter names, and the precise question of whether a given theme declaration is one of
- * them: the file has to pull that very base module in with `as *`. That star import IS the wiring —
- * the top-level `$x: … !default` in the theme sets base's variable — so such a name is base's
- * spelling and neither the grammar nor the ownership rule applies to it (NAMING.md, O8). The wide
- * form of the question ("does base declare this name anywhere") would wave through any legacy name.
+ * `base/**` parameter names, and the precise question of whether a given theme declaration is one
+ * of them: the file has to pull that very base module in with `as *`. That star import IS the
+ * wiring — the top-level `$x: … !default` in the theme sets base's variable — so such a name is
+ * base's spelling and neither the grammar nor the ownership rule applies to it (NAMING.md, O8). The
+ * wide form of the question ("does base declare this name anywhere") would wave through any legacy
+ * name.
  */
 const base = baseIndex(walk(join(widgetsRoot, 'base'), '.scss').map(sourceFileOf));
 const baseNames = base.names;
@@ -120,13 +150,16 @@ const parsedByFile = (file: string): ParsedFile => {
   return parsed;
 };
 
-const starredBaseParameters = (file: string): Set<string> => starredParametersOf(parsedByFile(file), base);
+const starredBaseParameters = (file: string): Set<string> => starredParametersOf(
+  parsedByFile(file),
+  base,
+);
 
 // ---------------------------------------------------------------------------------------------
 // component resolution
 // ---------------------------------------------------------------------------------------------
 
-const components: Record<string, string> = registries.components;
+const { components }: { components: Record<string, string> } = registries;
 const exemptFolders = Object.keys(registries.exemptFolders);
 const componentNames = [...new Set(Object.values(components))]
   .sort((a, b) => b.length - a.length); // longest first, so `data-grid` wins over `grid`
@@ -139,7 +172,7 @@ const componentOf = (variable: string): string | null => {
 };
 
 const isSystemName = (variable: string): boolean => registries.systemConcerns
-  .some((concern: string) => variable.slice(1).startsWith(`${concern}-`));
+  .some((concern) => variable.slice(1).startsWith(`${concern}-`));
 
 const isThemeIdentity = (variable: string): boolean => registries.themeIdentity.includes(variable);
 
@@ -148,17 +181,17 @@ const relevantFolders = Object.keys(components).filter((folder) => !exemptFolder
 const readsAllowedFor = (folder: string): Set<string> => {
   const allowed = new Set<string>();
   if (components[folder]) allowed.add(components[folder]);
-  Object.values(registries.chassis).forEach((chassis: any) => {
+  Object.values(registries.chassis).forEach((chassis) => {
     if (chassis.dependents.includes(folder)) allowed.add(chassis.component);
   });
   /*
-   * A composite widget may read the metrics of a widget it RENDERS: the toolbar's overflow menu is a
-   * real List, a grid cell in edit mode is a real editor. Duplicating those values instead would
-   * guarantee drift, which is the opposite of what O4 is for — O4 forbids borrowing a value because it
-   * looks right, not matching a widget you actually contain. Each entry in `embeds` names the element
-   * that justifies it and is reviewed as code, exactly like the chassis list.
+   * A composite widget may read the metrics of a widget it RENDERS: the toolbar's overflow menu is
+   * a real List, a grid cell in edit mode is a real editor. Duplicating those values instead would
+   * guarantee drift, which is the opposite of what O4 is for — O4 forbids borrowing a value because
+   * it looks right, not matching a widget you actually contain. Each entry in `embeds` names the
+   * element that justifies it and is reviewed as code, exactly like the chassis list.
    */
-  (registries.embeds?.[folder] ?? []).forEach((component: string) => allowed.add(component));
+  (registries.embeds?.[folder] ?? []).forEach((component) => allowed.add(component));
   return allowed;
 };
 
@@ -169,11 +202,7 @@ const readsAllowedFor = (folder: string): Set<string> => {
  * every read is held to it by tests/fallback-policy.test.ts. Here they are only excluded from the
  * public-surface checks.
  */
-const RUNTIME_CONTRACT = new Set<string>(
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  (require('../tools/naming/runtime-contract.json') as { variables: { name: string }[] }).variables
-    .map(({ name }) => name),
-);
+const RUNTIME_CONTRACT = new Set<string>(runtimeContract.variables.map(({ name }) => name));
 
 /*
  * The application -> CSS contract of the custom accent, the second category outside the component
@@ -181,14 +210,7 @@ const RUNTIME_CONTRACT = new Set<string>(
  * the reasons and the step set live in tools/naming/accent-contract.json, next to the runtime
  * contract; tests/accent-palette.test.ts holds the stylesheet and the generated palettes to it.
  */
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const accentContract = require('../tools/naming/accent-contract.json') as {
-  declaredIn: string;
-  input: { name: string };
-  source: { name: string };
-  settings: { name: string }[];
-  steps: { prefix: string; values: number[] };
-};
+
 const isAccentContractFile = (file: string): boolean => file.endsWith(
   join(...accentContract.declaredIn.split('/')),
 );
@@ -199,7 +221,9 @@ const ACCENT_CONTRACT = new Set([
   ...accentContract.steps.values.map((step) => `${accentContract.steps.prefix}${step}`),
 ]);
 
-/** Every `--dx-*` read anywhere outside the theme sources, or null when the monorepo is unavailable. */
+/**
+ * Every `--dx-*` read anywhere outside the theme sources, or null when the monorepo is unavailable.
+ */
 const publicNameConsumers = (): Set<string> | null => {
   const roots = [
     join(packageRoot, '..', '..', 'apps', 'demos', 'Demos'),
@@ -240,7 +264,8 @@ const perFolder = <T>(compute: (files: ParsedFile[], folder: string) => T): Reco
  *     of parameters for these spots (an old key and a `-2` redesign key) and the theme feeds both;
  *     the grammar name is already taken by the OLD key's feeder, so renaming the `-2` feeder would
  *     invent a distinction that does not exist. The knot is base's duplicated parameters — see the
- *     `-2`-pairs entry in DIVERGENCES.md; until base deduplicates, the feeder keeps the mirror name.
+ *     `-2`-pairs entry in DIVERGENCES.md; until base deduplicates, the feeder keeps the mirror
+ *     name.
  * Every wiring declaration is listed exactly in the `baseWiring` finding: a new one is a conscious
  * baseline edit, not a silent pass.
  */
@@ -269,7 +294,9 @@ const findings = {
 
     return {
       ...counts,
-      ...(foreignComponent.length ? { foreignComponent: [...new Set(foreignComponent)].sort() } : {}),
+      ...(foreignComponent.length
+        ? { foreignComponent: [...new Set(foreignComponent)].sort() }
+        : {}),
     };
   }),
 
@@ -279,7 +306,7 @@ const findings = {
     .flatMap(({ file, folder, declarations }) => declarations
       .map((variable) => ({ variable, kind: baseWiringKind(variable, file), folder }))
       .filter((entry) => entry.kind && !exemptFolders.includes(entry.folder))
-      .map(({ folder, variable, kind }) => `${folder}: ${variable} (${kind})`))
+      .map((entry) => `${entry.folder}: ${entry.variable} (${entry.kind})`))
     .sort(),
 
   /*
@@ -288,14 +315,15 @@ const findings = {
    * A declaration there must be a registered system concern (NAMING.md §"Системные concern'ы"),
    * theme identity, or a base-parameter mirror whose name base itself owns.
    */
-  systemTierNames: (() => {
+  systemTierNames: ((): string[] => {
     const offenders = new Set<string>();
 
     parsedFiles
       .filter(({ folder }) => folder === '' || registries.systemFolders.includes(folder))
       .forEach(({ declarations }) => declarations.forEach((variable) => {
         if (isThemeIdentity(variable) || isSystemName(variable)) return;
-        if (baseNames.has(variable)) return; // mirror of a base parameter, spelled as base spells it
+        // mirror of a base parameter, spelled as base spells it
+        if (baseNames.has(variable)) return;
         offenders.add(variable);
       }));
 
@@ -303,7 +331,7 @@ const findings = {
   })(),
 
   // O2: exactly one folder is the declaration home of a component.
-  multipleDeclarationHomes: (() => {
+  multipleDeclarationHomes: ((): string[] => {
     const homes: Record<string, Set<string>> = {};
     parsedFiles.forEach(({ folder, declarations }) => {
       if (!folder || exemptFolders.includes(folder)) return;
@@ -405,7 +433,8 @@ const findings = {
     .flatMap(({ file, folder, uses }) => uses
       .filter(({ spec, star }) => {
         // `/index` is style reuse, not a variable import: an index module emits CSS rules, and one
-        // widget including another's rules (htmlEditor reusing textEditor's) is not what O3 governs.
+        // widget including another's rules (htmlEditor reusing textEditor's) is not what O3
+        // governs.
         if (!star || spec.endsWith('/mixins') || spec.endsWith('/index')) return false;
         if (!spec.startsWith('..')) return false;
         const modulePath = resolve(join(themeRoot, file), '..', spec);
@@ -420,7 +449,7 @@ const findings = {
 
   // Declared but never referenced anywhere in the theme or base. Counts declarations and references
   // separately, so a variable declared three times through `@if $size` no longer hides.
-  deadVariables: (() => {
+  deadVariables: ((): string[] => {
     const baseFiles = walk(join(packageRoot, 'scss', 'widgets', 'base'), '.scss').map(parseFile);
     const referenced = new Set([...parsedFiles, ...baseFiles]
       .flatMap(({ references }) => references));
@@ -436,19 +465,19 @@ const findings = {
 
   // The public tier must expose the same names in every theme, or app CSS breaks on theme switch.
   /*
-   * The other half of the public-surface contract. Comparing the four themes' name sets is necessary
-   * but not sufficient: it sees neither a name the theme publishes that nobody reads, nor a consumer
-   * reading a name no theme declares. Both defects existed and both were invisible — `--dx-line-height`
-   * (published, read by nobody) and `--dx-texteditor-label-color` (read by five demo files, declared by
-   * no theme, no fallback, so the declaration silently dies).
+   * The other half of the public-surface contract. Comparing the four themes' name sets is
+   * necessary but not sufficient: it sees neither a name the theme publishes that nobody reads, nor
+   * a consumer reading a name no theme declares. Both defects existed and both were invisible —
+   * `--dx-line-height` (published, read by nobody) and `--dx-texteditor-label-color` (read by five
+   * demo files, declared by no theme, no fallback, so the declaration silently dies).
    *
    * The consumer side lives outside this package, so the check degrades instead of failing when the
    * monorepo is not there: an absent `apps/demos` simply means that half is not measured.
    */
   /*
-   * A signal for curating the public set, not proof of deadness: customer code is invisible to us, so
-   * this measures only "not referenced anywhere in this repository". 18 of 38 names are in that state,
-   * and one of them — `--dx-line-height` — is not referenced even by the themes themselves.
+   * A signal for curating the public set, not proof of deadness: customer code is invisible to us,
+   * so this measures only "not referenced anywhere in this repository". 18 of 38 names are in that
+   * state, and one of them — `--dx-line-height` — is not referenced even by the themes themselves.
    */
   /*
    * All three publicSurface* checks below cover the LEGACY tier only: the emitted wave-F component
@@ -457,7 +486,7 @@ const findings = {
    * invariants in the "wave F" block further down — mixing it in here would drown the legacy
    * ratchets in 769 by-design entries.
    */
-  publicSurfaceUnused: (() => {
+  publicSurfaceUnused: ((): string[] => {
     const declared = new Set<string>();
     THEMES.forEach((theme) => walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
       .filter((file) => !isPublicTierFile(file) && !isAccentContractFile(file))
@@ -469,7 +498,7 @@ const findings = {
     return [...declared].filter((name) => !consumers.has(name)).sort();
   })(),
 
-  publicSurfaceUndeclared: (() => {
+  publicSurfaceUndeclared: ((): string[] => {
     const declared = new Set<string>();
     THEMES.forEach((theme) => walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
       .filter((file) => !isPublicTierFile(file) && !isAccentContractFile(file))
@@ -484,7 +513,7 @@ const findings = {
       .sort();
   })(),
 
-  publicSurfaceDifferences: (() => {
+  publicSurfaceDifferences: ((): string[] => {
     const perTheme = THEMES.map((theme) => {
       const names = new Set<string>();
       walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
@@ -504,9 +533,9 @@ const findings = {
 
   /*
    * Wave F guard: `--dx-…:` declarations outside the tier files. The component tier is emitted ONLY
-   * from _public.scss / _public-links.scss; everything else declaring a --dx name is the frozen legacy
-   * surface (the pre-standard public tier, typography's scale publication, gridBase's runtime
-   * bits). Exact list by design: a new manual emission is a conscious baseline edit.
+   * from _public.scss / _public-links.scss; everything else declaring a --dx name is the frozen
+   * legacy surface (the pre-standard public tier, typography's scale publication, gridBase's
+   * runtime bits). Exact list by design: a new manual emission is a conscious baseline edit.
    */
   publicTierManualDeclarations: walk(themeRoot, '.scss')
     .filter((file) => !isPublicTierFile(file) && !isAccentContractFile(file))
@@ -528,7 +557,7 @@ const findings = {
    * set comes from the committed _public.scss / _public-links.scss files (their own gate lives in
    * the "wave F" block below).
    */
-  unconsumedManifestReads: (() => {
+  unconsumedManifestReads: ((): string[] => {
     const manifestNames = new Set(walk(themeRoot, '.scss')
       .filter(isPublicManifestFile)
       .flatMap((file) => [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
@@ -561,23 +590,24 @@ const findings = {
 // ---------------------------------------------------------------------------------------------
 
 test('registries: the grammar stays decidable', () => {
-  // Only overlaps between vocabularies competing for the SAME position are fatal. The trailing state
+  // Only overlaps between vocabularies competing for the SAME position are fatal. The trailing
+  // state
   // is matched first, so a part or a sub-element that is also a state word would be eaten as the
   // state and leave the mandatory slot missing. Everything else is resolved positionally: `content`
   // is deliberately both a part (text colour) and a sub-element (.dx-toast-content), and `text` is
   // both a part and the `stylingMode: 'text'` modifier.
-  expect(registries.states.filter((state: string) => registries.parts.includes(state))).toEqual([]);
+  expect(registries.states.filter((state) => registries.parts.includes(state))).toEqual([]);
 
   Object.entries(registries.subElements).forEach(([component, names]) => {
     expect({
       component,
-      clashes: (names as string[]).filter((name) => registries.states.includes(name)),
+      clashes: names.filter((name) => registries.states.includes(name)),
     }).toEqual({ component, clashes: [] });
   });
 
   // every component maps to exactly one declaration home
   Object.values(registries.components).forEach((component) => {
-    expect(typeof registries.declarationHome[component as string]).toBe('string');
+    expect(typeof registries.declarationHome[component]).toBe('string');
   });
 });
 
@@ -618,11 +648,15 @@ test('no name carries the theme prefix', () => {
  * and the slot position: `selected-hovered` must win over `selected`, and `padding-block` over
  * `block`.
  */
-const grammarViolation = (variable: string, component: string, isColors: boolean): string | null => {
+const grammarViolation = (
+  variable: string,
+  component: string,
+  isColors: boolean,
+): string | null => {
   const allowedSlots: string[] = isColors ? registries.parts : registries.sizeSlots;
   const middleWords: string[] = [
     ...(registries.subElements[component] ?? []),
-    ...Object.values(registries.modifiers).flat() as string[],
+    ...Object.values(registries.modifiers).flat(),
   ];
 
   const name = variable.slice(1);
@@ -648,23 +682,25 @@ const grammarViolation = (variable: string, component: string, isColors: boolean
   /*
    * The middle is consumed greedily, longest match first, because sub-elements and modifiers are
    * hyphenated words themselves: `clear-button`, `icon-container`, `with-label`. Validating segment
-   * by segment would reject every one of them ("clear" is not a sub-element — but `clear-button` is).
+   * by segment would reject every one of them ("clear" is not a sub-element — but `clear-button`
+   * is).
    */
   const ordered = [...middleWords].sort((a, b) => b.length - a.length);
   let middle = rest;
   while (middle) {
-    const word = ordered.find((candidate) => middle === candidate
-      || middle.startsWith(`${candidate}-`));
+    const head = middle;
+    const word = ordered.find((candidate) => head === candidate
+      || head.startsWith(`${candidate}-`));
     if (!word) {
-      return `"${middle}" is neither a sub-element of ${component} nor a modifier`;
+      return `"${head}" is neither a sub-element of ${component} nor a modifier`;
     }
-    middle = middle.slice(word.length).replace(/^-/, '');
+    middle = head.slice(word.length).replace(/^-/, '');
   }
   return null;
 };
 
 test('migrated components follow the grammar strictly', () => {
-  const migrated: string[] = registries.migrated;
+  const { migrated } = registries;
   const offenders: string[] = [];
 
   parsedFiles.forEach(({ file, folder, declarations }) => {
@@ -714,7 +750,7 @@ test('the rename mapping stays collision-free and fully applied', () => {
     readFileSync(join(packageRoot, 'tools', 'naming', 'mapping.json'), 'utf8'),
   );
   const pairs: [string, string][] = Object.values(mapping.batches)
-    .flatMap((names) => Object.entries(names as Record<string, string>)) as [string, string][];
+    .flatMap((names) => Object.entries(names as Record<string, string>));
 
   const targets = pairs.map(([, to]) => to);
   expect(targets.filter((to, index) => targets.indexOf(to) !== index)).toEqual([]);
@@ -735,11 +771,11 @@ test('the rename mapping stays collision-free and fully applied', () => {
 
 /*
  * The tier contract (NAMING.md, 06.08): --dxds-* roles/scales are the stable public API; --dx-* is
- * the product's own component tier, declared in <folder>/_public.scss onto
- * registries.rootSelectors and free to evolve between releases. The projections are GENERATED by
- * tools/naming/publish.mjs and committed; the relations are hand-written in <folder>/_public-links.scss.
- * Both the emitter and these checks read the same rules from tools/naming/tier.ts, so the checks
- * hold whatever wrote the files:
+ * the product's own component tier, declared in <folder>/_public.scss onto registries.rootSelectors
+ * and free to evolve between releases. The projections are GENERATED by tools/naming/publish.mjs
+ * and committed; the relations are handwritten in <folder>/_public-links.scss. Both the emitter
+ * and these checks read the same rules from tools/naming/tier.ts, so the checks hold whatever wrote
+ * the files:
  *   - composition: every eligible variable of a migrated component has its --dx twin, and nothing
  *     else is declared (eligibility knowledge lives in tierRecords: data-uri exclusion is
  *     transitive through references, CSS-wide keywords cannot ride a custom property, base wiring
@@ -757,11 +793,13 @@ const systemTier: string[] = registries.systemTier ?? [];
 const tierRecords = computeTierRecords(
   themeSources,
   registries,
-  new Set(findings.baseWiring.map((entry) => /(\$[a-z0-9-]+)/.exec(entry)![1])),
+  new Set(findings.baseWiring
+    .map((entry) => required(/(\$[a-z0-9-]+)/.exec(entry), `a variable in "${entry}"`)[1])),
 );
 const publicTierFiles = themeFiles.filter(isPublicManifestFile);
 const folderOf = (file: string): string => sourceLabel(file).split('/')[1];
-const tierDeclared = new Map<string, string>(); // $variable -> declaring _public / _public-links file
+// $variable -> declaring _public / _public-links file
+const tierDeclared = new Map<string, string>();
 publicTierFiles.forEach((file) => {
   [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
     .matchAll(/(--dx-[a-z0-9-]+)\s*:/g)]
@@ -832,13 +870,14 @@ walk(themeRoot, '.scss')
 test('component tier: _public.scss declarations equal the eligible variables exactly', () => {
   const eligible = new Map([...tierRecords].filter(([, { reason }]) => !reason));
   const missing = [...eligible.keys()].filter((variable) => !tierDeclared.has(variable)).sort()
-    .map((variable) => `${variable} (${eligible.get(variable)!.component}): not published — `
+    .map((variable) => `${variable} (${required(eligible.get(variable), variable).component}): not published — `
       + 'run pnpm naming:publish');
   const extra = [...tierDeclared.keys()]
     .filter((variable) => !eligible.has(variable) && !tierLinks.has(`--dx-${variable.slice(1)}`)).sort()
     .map((variable) => {
       const reason = tierRecords.get(variable)?.reason;
-      return `--dx-${variable.slice(1)} (${sourceLabel(tierDeclared.get(variable)!)}): ${reason
+      const declaredIn = required(tierDeclared.get(variable), `${variable} declaration`);
+      return `--dx-${variable.slice(1)} (${sourceLabel(declaredIn)}): ${reason
         ? `the variable is excluded from the tier (${reason})`
         : 'no such variable in the component\'s declaration files'} — run pnpm naming:publish`;
     });
@@ -912,7 +951,7 @@ test('component tier: an alias whose target sits on another root stays a copy', 
  */
 test('component tier: a link between two states must keep the state', () => {
   // longest first: `selected-hovered` must not be read as `hovered`
-  const states = [...(registries.states as string[])].sort((a, b) => b.length - a.length);
+  const states = [...registries.states].sort((a, b) => b.length - a.length);
   const stateOf = (property: string): string | undefined => states
     .find((state) => property.endsWith(`-${state}`));
 
@@ -970,7 +1009,12 @@ test('component tier: the collector matches registries.rootSelectors exactly', (
     includedTwice: sortedIncludes.filter((folder, index) => sortedIncludes[index - 1] === folder),
     notIncluded: publicFolders.filter((folder) => !includedFolders.includes(folder)).sort(),
     unknownNamespace: includedFolders.filter((folder) => folder.startsWith('?')),
-  }).toEqual({ offenders: [], includedTwice: [], notIncluded: [], unknownNamespace: [] });
+  }).toEqual({
+    offenders: [],
+    includedTwice: [],
+    notIncluded: [],
+    unknownNamespace: [],
+  });
 });
 
 test('component tier: every --dx-… read in the theme resolves to a declared name', () => {
@@ -1039,8 +1083,8 @@ test('component tier: every publishing component appears in the runtime-audit ga
 /*
  * The mirror of `node tools/naming/publish.mjs --check`, the way "the rename mapping stays
  * collision-free and fully applied" mirrors `rename.mjs --check`: the committed projections and the
- * collector are exactly what the emitter would write from today's declarations, and the hand-written
- * links break none of its rules.
+ * collector are exactly what the emitter would write from today's declarations, and the
+ * handwritten links break none of its rules.
  */
 test('component tier: the committed files are what tools/naming/publish.mjs writes', () => {
   const existing = new Map(themeSources
@@ -1054,7 +1098,7 @@ test('component tier: the committed files are what tools/naming/publish.mjs writ
 
 test('component tier: every declaring component has bundle-gated root selectors', () => {
   // The selectors themselves are gated against the built bundle by derive-registries.mjs; this
-  // holds the committed json coherent — a declaring component may not lack a scope.
+  // holds the committed JSON coherent — a declaring component may not lack a scope.
   const declaring = [...new Set(publicTierFiles
     .map((file) => sourceLabel(file).split('/')[1])
     .map((folder) => (systemTier.includes(folder) ? folder : components[folder])))];

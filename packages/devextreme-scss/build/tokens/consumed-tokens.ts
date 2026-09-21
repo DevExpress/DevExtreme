@@ -1,4 +1,5 @@
-// Pure half of the consumed-token check in build-tokens.mjs, so the tests can run it without a build.
+// Pure half of the consumed-token check in build-tokens.mjs, so the tests can run it without a
+// build.
 
 // A commented-out declaration still names a token, and a dead reference must not fail the build.
 // Throws on an unpaired delimiter: it would shift the alternation and hide the rest of the file.
@@ -18,7 +19,8 @@ export const stripScssComments = (content: string, source: string): string => {
     .join('');
 };
 
-// Wider than kebab-case on purpose: `[a-z0-9-]` would truncate `ds.$spacing-40_typo` to a valid name.
+// Wider than kebab-case on purpose: `[a-z0-9-]` would truncate `ds.$spacing-40_typo` to a valid
+// name.
 export const collectTokenReferences = (content: string, source: string): string[] => [
   ...stripScssComments(content, source).matchAll(/\bds\.\$([\w-]+)/g),
 ].map(([, name]) => name);
