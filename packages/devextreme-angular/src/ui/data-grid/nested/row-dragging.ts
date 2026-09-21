@@ -113,14 +113,6 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get filter(): string {
-        return this._getOption('filter');
-    }
-    set filter(value: string) {
-        this._setOption('filter', value);
-    }
-
-    @Input()
     get group(): string | undefined {
         return this._getOption('group');
     }

@@ -2991,12 +2991,6 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    */
   dropFeedbackMode?: DragHighlight;
   /**
-   * @docid GridBaseOptions.rowDragging.filter
-   * @deprecated
-   * @default "> *"
-   */
-  filter?: string;
-  /**
    * @docid GridBaseOptions.rowDragging.group
    * @default undefined
    */
