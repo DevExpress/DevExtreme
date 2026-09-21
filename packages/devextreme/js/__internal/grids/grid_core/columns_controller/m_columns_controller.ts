@@ -323,20 +323,7 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  /**
-   * Postpones a dimension recalculation until the end of the current component
-   * update cycle. GridView consumes the flag in its _endUpdateCore.
-   *
-   * Virtual scrolling throttles that recalculation by scrolling.updateTimeout to
-   * coalesce scroll-driven resizes. An explicit width change is a discrete action
-   * and must not wait for the throttle, so the last resize time is dropped the way
-   * keyboard navigation already does it.
-   */
   private _setRequireResize(): void {
-    // Only a real beginUpdate raises the module locks, and only it ends with the
-    // GridView._endUpdateCore that consumes the flag. Component._lockUpdate, used
-    // around onInitialized, raises the component lock alone, so a flag set there
-    // would never be consumed and would make every later resize bail out.
     if (!this.component._updateLockCount || !this._updateLockCount) {
       return;
     }
@@ -351,11 +338,6 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  /**
-   * Whether the call actually changes a column width. columnOptionCore ignores an
-   * equal value, so comparing the shape alone would force a recalculation for a
-   * write that changes nothing. Must be evaluated before the options are applied.
-   */
   private _isWidthChanging(column, option, value, notFireEvent): boolean {
     if (notFireEvent) {
       return false;
@@ -1518,11 +1500,6 @@ export class ColumnsController extends modules.Controller {
       fireColumnsChanged(that);
     };
 
-    // A width change has to be followed by a dimension recalculation, which is
-    // postponed to the end of a component update cycle, so a bare call opens one of
-    // its own. Command columns have no path in the columns option, so they never
-    // reach _updateRequireResize through an option change notification and the flag
-    // is set here for both branches.
     const isWidthChanging = that._isWidthChanging(column, option, value, notFireEvent);
     const needOwnUpdateCycle = isWidthChanging
       && !that._updateLockCount
