@@ -220,6 +220,21 @@ describe('Bugs', () => {
       expect(resize).not.toHaveBeenCalled();
     });
 
+    it('should drop the virtual scrolling resize throttle on a width change', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        scrolling: { mode: 'virtual' },
+        columns: ['field1', 'field2'],
+      });
+      const resizingController = instance.getController('resizing');
+      const resetLastResizeTime = jest.spyOn(resizingController, 'resetLastResizeTime');
+
+      instance.columnOption(1, 'width', 150);
+
+      expect(resetLastResizeTime).toHaveBeenCalled();
+    });
+
     it('should not recalculate dimensions when a non-width option changes', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ field1: 'value 1', field2: 'value 2' }],

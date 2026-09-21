@@ -337,11 +337,19 @@ export class ColumnsController extends modules.Controller {
   /**
    * Postpones a dimension recalculation until the end of the current component
    * update cycle. GridView consumes the flag in its _endUpdateCore.
+   *
+   * Virtual scrolling throttles that recalculation by scrolling.updateTimeout to
+   * coalesce scroll-driven resizes. An explicit width change is a discrete action
+   * and must not wait for the throttle, so the last resize time is dropped the way
+   * keyboard navigation already does it.
    */
   private _setRequireResize(): void {
-    if (this.component._updateLockCount) {
-      this.component._requireResize = true;
+    if (!this.component._updateLockCount) {
+      return;
     }
+
+    this.component._requireResize = true;
+    this.getController('resizing')?.resetLastResizeTime?.();
   }
 
   private _updateRequireResize(args) {
