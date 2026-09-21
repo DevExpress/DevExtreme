@@ -18,8 +18,8 @@ importers:
   .:
     devDependencies:
       '@devexpress/sbom-toolkit':
-        specifier: 0.11.2
-        version: 0.11.2
+        specifier: 0.14.0
+        version: 0.14.0
 
 packages:
 
@@ -152,8 +152,8 @@ packages:
     engines: {node: ^20 || ^22 || ^24 || ^25, pnpm: '>=10'}
     hasBin: true
 
-  '@devexpress/sbom-toolkit@0.11.2':
-    resolution: {integrity: sha512-uIRA+rVgi5R2WRkXrr//wRSvcrlesMogrfLoONVuA743CY4xy5ACJ3sBxa1614PlJHFAHxu1CLzhKKGD81e8BA==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.11.2/b79d441cc3c4171ec76b7aba2520bf2ae90baebf}
+  '@devexpress/sbom-toolkit@0.14.0':
+    resolution: {integrity: sha512-89PWP+cuAt+BSx+Y7Lw1XOJZlxwPhuMTvIUg1LktxK7y7SG3wvCeBSNIecI2m1ARW4tccWKww3IJcACVIP9bvA==, tarball: https://npm.pkg.github.com/download/@devexpress/sbom-toolkit/0.14.0/bac6ddb5b5cf778408ac69230896877e2a688306}
     hasBin: true
 
   '@gar/promise-retry@1.0.3':
@@ -1068,7 +1068,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@devexpress/sbom-toolkit@0.11.2':
+  '@devexpress/sbom-toolkit@0.14.0':
     dependencies:
       '@cyclonedx/cdxgen': 12.5.1
       spdx-license-ids: 3.0.23
