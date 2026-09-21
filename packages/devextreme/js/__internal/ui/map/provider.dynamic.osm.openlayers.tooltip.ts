@@ -13,7 +13,7 @@ const POPOVER_CLASS = 'dx-map-marker-popover';
 const TOOLTIP_MAX_WIDTH = 280;
 
 type MarkerPopover = Popover & Pick<InternalPopover,
-  '_renderDimensions' | '_setContentHeight' | '_renderPosition'>;
+  '_getEffectiveAriaRole' | '_renderDimensions' | '_setContentHeight' | '_renderPosition'>;
 
 export class OpenLayersMarkerTooltip {
   readonly element: HTMLElement;
@@ -101,7 +101,7 @@ export class OpenLayersMarkerTooltip {
     if (enabled !== this._focusEnabled) {
       this._focusEnabled = enabled;
       this._popover.option('_preventDialogContainerFocus', !enabled);
-      const focusEnabled = enabled && this.element.getAttribute('role') === 'dialog';
+      const focusEnabled = enabled && this._popover._getEffectiveAriaRole() === 'dialog';
       this._popover.option({
         focusStateEnabled: focusEnabled,
         tabFocusLoopEnabled: focusEnabled,
