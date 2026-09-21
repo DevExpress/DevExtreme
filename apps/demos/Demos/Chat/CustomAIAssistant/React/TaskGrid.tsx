@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import DataGrid, { Column, FilterRow, HeaderFilter } from 'devextreme-react/data-grid';
 import type { DataGridTypes } from 'devextreme-react/data-grid';
-import type { TaskGridProps } from '../types/types.ts';
-import { colors, tasks } from '../data/data.ts';
+import type { ColumnFilterExpression, Task, TaskGridProps } from './data.ts';
+import { colors, tasks } from './data.ts';
 
 const priorityClassNames = Object.fromEntries(
   Object.keys(colors).map((priority) => [priority, `priority-badge--${priority.toLowerCase()}`]),
@@ -14,9 +14,9 @@ function renderPriorityCell({ value }: DataGridTypes.ColumnCellTemplateData): Re
   return <div className={`priority-badge ${priorityClassNames[priority]}`}>{value}</div>;
 }
 
-const calculateCompletion = (row: { Completion: number }): boolean => row.Completion === 100;
-const calculateFilterExpression: NonNullable<DataGridTypes.Column['calculateFilterExpression']> = (filterValue, operation) => [
-  ((rowData: { Completion: number }) => rowData.Completion),
+const calculateCompletion = (row: Task): boolean => row.Completion === 100;
+const calculateFilterExpression = (filterValue: boolean, operation: string | null): ColumnFilterExpression => [
+  ((rowData: Task) => rowData.Completion),
   operation === '<>' || !filterValue ? '<' : '=',
   100,
 ];
@@ -50,7 +50,7 @@ export default function TaskGrid({ onInitialized }: TaskGridProps) {
           alignment="center"
           dataType="boolean"
           calculateCellValue={calculateCompletion}
-          calculateFilterExpression={calculateFilterExpression as never}
+          calculateFilterExpression={calculateFilterExpression}
         />
       </DataGrid>
     </div>

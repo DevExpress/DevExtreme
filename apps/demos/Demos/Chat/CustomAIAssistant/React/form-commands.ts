@@ -1,6 +1,6 @@
 import type { FormTypes } from 'devextreme-react/form';
-import { formFieldOptions } from '../data/data.ts';
-import type { AIResult, CommandResult, EmployeeForm, FormAction, FormFieldOption } from '../types/types.ts';
+import { formFieldOptions } from './data.ts';
+import type { AIResult, CommandResult, EmployeeForm, FormAction, FormFieldOption } from './data.ts';
 
 const SMART_PASTE_TIMEOUT_MS = 30000;
 
@@ -47,7 +47,7 @@ export function formatAiResultDetails(aiResult: AIResult): string {
 export function applyFormSmartPaste(form: EmployeeForm, text: string): Promise<CommandResult> {
   return new Promise((resolve) => {
     let settled = false;
-    let timeoutId: number | undefined;
+    let timeoutId = 0;
 
     const finish = (result: CommandResult): void => {
       if (settled) {

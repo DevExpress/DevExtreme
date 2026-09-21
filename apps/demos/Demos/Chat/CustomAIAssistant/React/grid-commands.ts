@@ -7,7 +7,7 @@ import type {
   GridCommand,
   GridFilterValue,
   TaskGrid,
-} from '../types/types.ts';
+} from './data.ts';
 
 const fail = (message: string): CommandResult => ({ status: 'failure', message });
 
@@ -67,7 +67,7 @@ To filter a date column by a year and/or month, use operator "anyof" with value 
       try {
         const newCondition: FilterCondition = [columnName, args.operator ?? '=', value ?? ''];
         const nextValue = combineFilterConditions(grid.option('filterValue'), newCondition);
-        grid.option('filterValue', nextValue as never);
+        grid.option('filterValue', nextValue);
 
         return {
           status: 'success',
@@ -189,7 +189,7 @@ export function combineFilterConditions(existing: unknown, next: FilterCondition
 }
 
 export function getColumnOrFail(grid: TaskGrid, columnName: string): ColumnLookup {
-  const column = grid.columnOption(columnName) as DataGridTypes.Column | undefined;
+  const column = grid.columnOption(columnName) as DataGridTypes.Column | null;
 
   if (!column) {
     return {

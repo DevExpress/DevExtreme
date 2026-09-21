@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import config from 'devextreme/core/config';
 import { loadMessages } from 'devextreme-react/common/core/localization';
-import EmployeeForm from './components/EmployeeForm.tsx';
-import TaskGrid from './components/TaskGrid.tsx';
-import AiAssistant from './components/AiAssistant.tsx';
-import { createAiIntegration } from './services/ai-service.ts';
-import type { EmployeeForm as EmployeeFormInstance, TaskGrid as TaskGridInstance } from './types/types.ts';
+import EmployeeForm from './EmployeeForm.tsx';
+import TaskGrid from './TaskGrid.tsx';
+import AiAssistant from './AiAssistant.tsx';
+import { createAiIntegration } from './ai-service.ts';
+import type { EmployeeForm as EmployeeFormInstance, TaskGrid as TaskGridInstance } from './data.ts';
 
 loadMessages({ en: { 'dxChat-textareaPlaceholder': 'Enter a prompt...' } });
 config({

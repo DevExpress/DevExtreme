@@ -4,9 +4,9 @@ import Popup, { type PopupTypes } from 'devextreme-react/popup';
 import SpeedDialAction from 'devextreme-react/speed-dial-action';
 import type { ButtonRef, ButtonTypes } from 'devextreme-react/button';
 import { ArrayStore, DataSource } from 'devextreme-react/common/data';
-import { routeMessage } from '../routing/chat-router.ts';
-import type { AiAssistantProps, PushMessage } from '../types/types.ts';
-import { clearButtonOptions, emptyViewMessage, emptyViewPrompt } from '../data/data.ts';
+import { routeMessage } from './chat-router.ts';
+import { clearButtonOptions, emptyViewMessage, emptyViewPrompt } from './data.ts';
+import type { AiAssistantProps, PushMessage } from './data.ts';
 
 const chatStore = new ArrayStore<ChatTypes.Message, number>({ key: 'id' });
 const chatDataSource = new DataSource({ store: chatStore, paginate: false });
@@ -128,6 +128,7 @@ export default function AiAssistant({ form, grid, aiIntegration }: AiAssistantPr
         resizeEnabled={true}
         showCloseButton={true}
         shading={false}
+        wrapperAttr={{ class: 'chat-popup' }}
         position={popupPosition}
         onShowing={onPopupShowing}
         onHiding={onPopupHiding}
