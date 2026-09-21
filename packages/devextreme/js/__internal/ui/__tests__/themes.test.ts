@@ -5,7 +5,7 @@ import $ from '@js/core/renderer';
 import errors from '@js/ui/widget/ui.errors';
 import { themeModeChangedCallback } from '@ts/ui/m_themes_callback';
 import {
-  customAccentColor, isFluentNext, mode, refreshMode, resetTheme,
+  customAccentColor, init, isFluentNext, mode, refreshMode, resetTheme,
 } from '@ts/ui/themes';
 
 /*
@@ -270,6 +270,22 @@ describe('themes.customAccentColor', () => {
 
     expect(declaredAccentColor()).toBe('#a703ff');
     expect(log).not.toHaveBeenCalled();
+  });
+
+  it('writes into the document it was initialized with, not into the one the page runs in', () => {
+    const otherDocument = document.implementation.createHTMLDocument();
+
+    try {
+      init({ context: otherDocument, _autoInit: true });
+      customAccentColor('#a703ff');
+
+      expect([
+        otherDocument.documentElement.style.getPropertyValue('--dx-accent-color'),
+        document.documentElement.style.getPropertyValue('--dx-accent-color'),
+      ]).toEqual(['#a703ff', '']);
+    } finally {
+      init({ _autoInit: true });
+    }
   });
 
   it('clears the color a theme that knows no accent has inherited from the previous one', () => {

@@ -430,7 +430,7 @@ export function customAccentColor(color?: string | null): string | undefined {
     return color === undefined ? '' : undefined;
   }
 
-  const root = domAdapter.getDocument().documentElement;
+  const root = context.documentElement;
 
   if (color === undefined) {
     return window.getComputedStyle(root).getPropertyValue(ACCENT_COLOR_PROPERTY).trim();
