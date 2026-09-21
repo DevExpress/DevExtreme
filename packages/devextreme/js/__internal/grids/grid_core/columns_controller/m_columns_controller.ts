@@ -90,12 +90,6 @@ interface IndexedColumns {
   negativeIndexedColumns: Record<string, Column[]>[];
 }
 
-export interface ColumnDimensionsUpdate {
-  columnIndex: Column['index'];
-  visibleWidth?: Column['visibleWidth'] | null;
-  width: Column['width'];
-}
-
 export class ColumnsController extends modules.Controller {
   public _skipProcessingColumnsChange: any;
 
@@ -138,8 +132,6 @@ export class ColumnsController extends modules.Controller {
   public aiColumnOptionChanged: any;
 
   public _columnChanges?: ColumnsChanges;
-
-  public _pendingVisibleWidthColumnIndices?: Set<number>;
 
   protected _dataController!: DataController;
 
@@ -342,12 +334,35 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  private _updateRequireResize(args) {
-    const { component } = this;
-
-    if (args.fullName.replace(COLUMN_OPTION_REGEXP, '') === 'width' && component._updateLockCount) {
-      component._requireResize = true;
+  /**
+   * Postpones a dimension recalculation until the end of the current component
+   * update cycle. GridView consumes the flag in its _endUpdateCore.
+   */
+  private _setRequireResize(): void {
+    if (this.component._updateLockCount) {
+      this.component._requireResize = true;
     }
+  }
+
+  private _updateRequireResize(args) {
+    if (args.fullName.replace(COLUMN_OPTION_REGEXP, '') === 'width') {
+      this._setRequireResize();
+    }
+  }
+
+  /**
+   * A width change has to be followed by a dimension recalculation, otherwise the
+   * grid keeps the previously calculated layout. Option and beginUpdate/endUpdate
+   * based width changes already run inside a component update cycle, so only a bare
+   * columnOption call has to open one of its own.
+   */
+  private _needPostponedResize(option, notFireEvent): boolean {
+    const isWidthChanging = isObject(option) ? 'width' in option : option === 'width';
+
+    return !notFireEvent
+      && isWidthChanging
+      && !this._updateLockCount
+      && !this.component._updateLockCount;
   }
 
   public publicMethods() {
@@ -1496,63 +1511,50 @@ export class ColumnsController extends modules.Controller {
     return this._columns ? this._columns.length : 0;
   }
 
-  /** Applies dimensions already resolved by an internal layout operation. */
-  public updateColumnDimensions(updates: ColumnDimensionsUpdate[]): void {
-    if (!updates.length) {
-      return;
-    }
-
-    const columnsByIndex = new Map<Column['index'], Column>();
-
-    this._columns.concat(this._commandColumns).forEach((column: Column) => {
-      if (!columnsByIndex.has(column.index)) {
-        columnsByIndex.set(column.index, column);
-      }
-    });
-
-    this.beginUpdate();
-    try {
-      updates.forEach((dimensions) => {
-        const column = columnsByIndex.get(dimensions.columnIndex);
-
-        if (!column) {
-          return;
-        }
-
-        if (Object.prototype.hasOwnProperty.call(dimensions, 'visibleWidth')) {
-          columnOptionCore(this, column, 'visibleWidth', dimensions.visibleWidth);
-        }
-        columnOptionCore(this, column, 'width', dimensions.width, {
-          invalidateVisibleWidths: false,
-        });
-      });
-    } finally {
-      this.endUpdate();
-    }
-  }
-
   public columnOption(identifier, option?, value?, notFireEvent?) {
     const that = this;
     const columns = that._columns.concat(that._commandColumns);
     const column = findColumn(columns, identifier);
 
-    if (column) {
-      if (arguments.length === 1) {
-        return extend({}, column);
-      }
+    if (!column) {
+      return undefined;
+    }
+
+    if (arguments.length === 1) {
+      return extend({}, column);
+    }
+
+    if (isString(option) && arguments.length === 2) {
+      return columnOptionCore(that, column, option);
+    }
+
+    const applyOptions = (): void => {
       if (isString(option)) {
-        if (arguments.length === 2) {
-          return columnOptionCore(that, column, option);
-        }
-        columnOptionCore(that, column, option, value, { notFireEvent });
+        columnOptionCore(that, column, option, value, notFireEvent);
       } else if (isObject(option)) {
         each(option, (optionName, optionValue) => {
-          columnOptionCore(that, column, optionName, optionValue, { notFireEvent });
+          columnOptionCore(that, column, optionName, optionValue, notFireEvent);
         });
       }
 
       fireColumnsChanged(that);
+    };
+
+    if (that._needPostponedResize(option, notFireEvent)) {
+      that.component.beginUpdate();
+      try {
+        applyOptions();
+        // Command columns have no path in the columns option, so they never reach
+        // _updateRequireResize through an option change notification.
+        that._setRequireResize();
+      } finally {
+        that.component.endUpdate();
+      }
+    } else {
+      applyOptions();
     }
+
+    return undefined;
   }
 
   private clearSorting() {

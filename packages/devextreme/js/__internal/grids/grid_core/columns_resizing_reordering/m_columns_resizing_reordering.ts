@@ -29,7 +29,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { ColumnDimensionsUpdate, ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
@@ -1081,23 +1081,21 @@ export class ColumnsResizerViewController extends modules.ViewController {
       return isString(width) && width.endsWith('%');
     }
 
-    function getColumnDimensions(column, columnWidth, contentWidth, adaptColumnWidthByRatio): ColumnDimensionsUpdate | undefined {
+    function setColumnWidth(column, columnWidth, contentWidth, adaptColumnWidthByRatio) {
       if (column) {
         const oldColumnWidth = column.width;
         if (oldColumnWidth) {
           adaptColumnWidthByRatio = isPercentWidth(oldColumnWidth);
         }
 
-        return {
-          columnIndex: column.index,
-          visibleWidth: adaptColumnWidthByRatio ? columnWidth : null,
-          width: adaptColumnWidthByRatio
-            ? `${(columnWidth / contentWidth * 100).toFixed(3)}%`
-            : columnWidth,
-        };
+        if (adaptColumnWidthByRatio) {
+          columnsController.columnOption(column.index, 'visibleWidth', columnWidth);
+          columnsController.columnOption(column.index, 'width', `${(columnWidth / contentWidth * 100).toFixed(3)}%`);
+        } else {
+          columnsController.columnOption(column.index, 'visibleWidth', null);
+          columnsController.columnOption(column.index, 'width', columnWidth);
+        }
       }
-
-      return undefined;
     }
 
     function correctContentWidth(contentWidth, visibleColumns) {
@@ -1170,19 +1168,12 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
       contentWidth = correctContentWidth(contentWidth, visibleColumns);
 
-      const columnDimensions = getColumnDimensions(column, cellWidth, contentWidth, adaptColumnWidthByRatio);
+      setColumnWidth(column, cellWidth, contentWidth, adaptColumnWidthByRatio);
 
       if (isNextColumnMode) {
         nextCellWidth = Math.floor(nextCellWidth);
-        const nextColumnDimensions = getColumnDimensions(nextColumn, nextCellWidth, contentWidth, adaptColumnWidthByRatio);
-        const updates = [columnDimensions, nextColumnDimensions].filter(isDefined);
-
-        columnsController.updateColumnDimensions(updates);
+        setColumnWidth(nextColumn, nextCellWidth, contentWidth, adaptColumnWidthByRatio);
       } else {
-        if (columnDimensions) {
-          columnsController.updateColumnDimensions([columnDimensions]);
-        }
-
         const columnWidths = this._columnHeadersView.getColumnWidths();
         columnWidths[resizingInfo.currentColumnIndex] = cellWidth;
         const hasScroll = columnWidths.reduce((totalWidth, width) => totalWidth + width, 0) > this._rowsView.contentWidth();
@@ -1192,19 +1183,11 @@ export class ColumnsResizerViewController extends modules.ViewController {
             columnsController.columnOption(visibleColumns[lastColumnIndex].index, 'visibleWidth', 'auto');
           }
         }
-
-        const updates: ColumnDimensionsUpdate[] = [];
-
         for (let i = 0; i < columnWidths.length; i++) {
           if (visibleColumns[i] && visibleColumns[i] !== column && visibleColumns[i].width === undefined) {
-            updates.push({
-              columnIndex: visibleColumns[i].index,
-              width: columnWidths[i],
-            });
+            columnsController.columnOption(visibleColumns[i].index, 'width', columnWidths[i]);
           }
         }
-
-        columnsController.updateColumnDimensions(updates);
       }
 
       columnsController.endUpdate();

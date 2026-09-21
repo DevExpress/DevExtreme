@@ -1,14 +1,16 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 
+import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
   afterTest,
   beforeTest,
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
-import { HIDDEN_COLUMNS_WIDTH } from '../../adaptivity/const';
 
 describe('getFilteringColumns', () => {
   beforeEach(beforeTest);
@@ -141,151 +143,134 @@ describe('Bugs', () => {
   });
 
   describe('T1329677 - DataGrid - Column width changes are not applied immediately', () => {
-    it('should invalidate calculated widths when a column width changes through columnOption', async () => {
-      const { instance } = await createDataGrid({
-        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
-        columns: ['field1', 'field2', 'field3'],
-      });
-      const columnsController = instance.getController('columns');
+    const spyOnResize = (instance: DataGridInstance): jest.Mock => jest
+      .spyOn(instance.getController('resizing'), 'resize') as unknown as jest.Mock;
 
-      columnsController.columnOption(0, 'visibleWidth', 100);
-      columnsController.columnOption(1, 'visibleWidth', 110);
-      columnsController.columnOption(2, 'visibleWidth', 120);
+    it('should recalculate dimensions when a column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const resize = spyOnResize(instance);
 
       instance.columnOption(1, 'width', 150);
 
-      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
-        null, null, null,
-      ]);
+      expect(resize).toHaveBeenCalledTimes(1);
+      expect(instance.columnOption(1, 'width')).toBe(150);
     });
 
-    it('should preserve an adaptive-hidden marker when a column width changes through columnOption', async () => {
+    it('should recalculate dimensions when a width changes through the object form', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption(1, { caption: 'Updated', width: 150 });
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should recalculate dimensions when a command column width changes through columnOption', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ field1: 'value 1' }],
+        columnAutoWidth: true,
+        selection: { mode: 'multiple' },
         columns: ['field1'],
       });
-      const columnsController = instance.getController('columns');
+      const resize = spyOnResize(instance);
 
-      columnsController.columnOption(0, 'visibleWidth', HIDDEN_COLUMNS_WIDTH);
+      instance.columnOption('command:select', 'width', 80);
 
-      instance.columnOption(0, 'width', 150);
-
-      expect(columnsController.columnOption(0, 'visibleWidth')).toBe(HIDDEN_COLUMNS_WIDTH);
+      expect(resize).toHaveBeenCalledTimes(1);
     });
 
-    it('should invalidate an auto visible width when a column width changes through columnOption', async () => {
+    it('should not recalculate dimensions when a non-width option changes', async () => {
       const { instance } = await createDataGrid({
-        dataSource: [{ field1: 'value 1' }],
-        columns: ['field1'],
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columns: ['field1', 'field2'],
       });
-      const columnsController = instance.getController('columns');
+      const resize = spyOnResize(instance);
 
-      columnsController.columnOption(0, 'visibleWidth', 'auto');
+      instance.columnOption(1, 'caption', 'Updated');
 
-      instance.columnOption(0, 'width', 150);
-
-      expect(columnsController.columnOption(0, 'visibleWidth')).toBeNull();
+      expect(resize).not.toHaveBeenCalled();
     });
 
-    it('should invalidate calculated widths of command columns when another column width changes through columnOption', async () => {
+    it('should not recalculate dimensions when the width change does not fire events', async () => {
       const { instance } = await createDataGrid({
-        dataSource: [{ field1: 'value 1' }],
-        columns: ['field1'],
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columns: ['field1', 'field2'],
       });
       const columnsController = instance.getController('columns');
+      const resize = spyOnResize(instance);
 
-      columnsController.addCommandColumn({ command: 'test', width: 'auto' });
-      columnsController.columnOption('command:test', 'visibleWidth', 100);
+      columnsController.columnOption(1, 'width', 150, true);
 
-      instance.columnOption('field1', 'width', 150);
-
-      expect(columnsController.columnOption('command:test', 'visibleWidth')).toBeNull();
+      expect(resize).not.toHaveBeenCalled();
     });
 
-    it('should preserve calculated widths of unrelated columns when applying resolved dimensions', async () => {
+    it('should recalculate dimensions once when a width changes inside a component update cycle', async () => {
       const { instance } = await createDataGrid({
-        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
-        columns: ['field1', 'field2', 'field3'],
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
       });
-      const columnsController = instance.getController('columns');
+      const resize = spyOnResize(instance);
 
-      columnsController.columnOption(0, 'visibleWidth', 100);
-      columnsController.columnOption(1, 'visibleWidth', 110);
-      columnsController.columnOption(2, 'visibleWidth', 120);
+      instance.beginUpdate();
+      instance.columnOption(0, 'width', 120);
+      instance.columnOption(1, 'width', 150);
+      instance.endUpdate();
 
-      columnsController.updateColumnDimensions([{
-        columnIndex: 1,
-        visibleWidth: null,
-        width: 150,
-      }]);
-
-      expect(columnsController.columnOption(1, 'width')).toBe(150);
-      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
-        100, null, 120,
-      ]);
+      expect(resize).toHaveBeenCalledTimes(1);
     });
 
-    it('should invalidate a stale visible width when another option changed the same column in the batch', async () => {
+    it('should recalculate dimensions once when the columns option sets a width', async () => {
       const { instance } = await createDataGrid({
-        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
-        columns: ['field1', 'field2', 'field3'],
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
       });
-      const columnsController = instance.getController('columns');
+      const resize = spyOnResize(instance);
 
-      columnsController.columnOption(0, 'visibleWidth', 100);
-      columnsController.columnOption(1, 'visibleWidth', 110);
-      columnsController.columnOption(2, 'visibleWidth', 120);
+      instance.option('columns[1].width', 150);
 
-      columnsController.beginUpdate();
-      columnsController.columnOption(1, 'caption', 'Updated field 2');
-      columnsController.columnOption(0, 'visibleWidth', 105);
-      columnsController.columnOption(1, 'width', 150);
-      columnsController.endUpdate();
-
-      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
-        105, null, null,
-      ]);
+      expect(resize).toHaveBeenCalledTimes(1);
     });
 
-    it('should preserve visible widths that are pending for their respective columns', async () => {
+    it('should leave no postponed resize after a width change', async () => {
       const { instance } = await createDataGrid({
-        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
-        columns: ['field1', 'field2', 'field3'],
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
       });
-      const columnsController = instance.getController('columns');
 
-      columnsController.columnOption(0, 'visibleWidth', 100);
-      columnsController.columnOption(1, 'visibleWidth', 110);
-      columnsController.columnOption(2, 'visibleWidth', 120);
+      instance.columnOption(1, 'width', 150);
 
-      columnsController.beginUpdate();
-      columnsController.columnOption(0, 'visibleWidth', 105);
-      columnsController.columnOption(1, 'visibleWidth', 115);
-      columnsController.columnOption(1, 'width', 150);
-      columnsController.endUpdate();
-
-      expect(columnsController.getColumns().map((column) => column.visibleWidth)).toEqual([
-        105, 115, null,
-      ]);
+      expect((instance as unknown as InternalGrid)._requireResize).toBeFalsy();
     });
 
-    it('should clear pending visible widths after the update batch completes', async () => {
+    it('should not recurse when onColumnsChanging changes a width', async () => {
+      const onColumnsChanging = (e: {
+        optionNames: Record<string, unknown>;
+        component: DataGridInstance;
+      }): void => {
+        if (e.optionNames.width && e.component.columnOption(1, 'width') === 100) {
+          e.component.columnOption(1, 'width', 150);
+        }
+      };
       const { instance } = await createDataGrid({
-        dataSource: [{ field1: 'value 1', field2: 'value 2', field3: 'value 3' }],
-        columns: ['field1', 'field2', 'field3'],
-      });
-      const columnsController = instance.getController('columns');
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columns: ['field1', 'field2'],
+        onColumnsChanging,
+      } as DataGridProperties);
 
-      columnsController.columnOption(0, 'visibleWidth', 100);
+      instance.columnOption(1, 'width', 100);
 
-      columnsController.beginUpdate();
-      columnsController.columnOption(0, 'visibleWidth', 105);
-      columnsController.columnOption(0, 'width', 150);
-      columnsController.endUpdate();
-
-      columnsController.columnOption(0, 'width', 160);
-
-      expect(columnsController.columnOption(0, 'visibleWidth')).toBeNull();
+      expect(instance.columnOption(1, 'width')).toBe(150);
     });
   });
 });

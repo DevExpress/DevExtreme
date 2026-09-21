@@ -80,6 +80,7 @@ test('DataGrid - column width changed via columnOption should be applied immedia
 }).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [{ Task_Subject: 'Test' }],
+    width: 1000,
     columnAutoWidth: true,
     columns: [
       { dataField: 'Task_Subject' },
