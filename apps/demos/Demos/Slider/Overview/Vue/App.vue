@@ -127,7 +127,7 @@ const tooltip = {
   format,
 };
 </script>
-<style scoped>
+<style>
 .custom-height-slider {
   height: 75px;
 }

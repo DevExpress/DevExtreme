@@ -101,7 +101,7 @@ function onRowHeaderLayoutChanged(data: DxCheckBoxTypes.ValueChangedEvent) {
   rowHeaderLayout.value = data.value ? 'tree' : 'standard';
 }
 </script>
-<style scoped>
+<style>
 .options {
   padding: 20px;
   margin-top: 20px;

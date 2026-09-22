@@ -65,7 +65,7 @@ import { dataSource } from './data.ts';
 
 const range = ref([]);
 </script>
-<style scoped>
+<style>
 #zoomed-chart {
   height: 335px;
   margin: 0 0 15px;

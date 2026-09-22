@@ -32,7 +32,7 @@ import {
 
 const customTicks = [0, 10, 25, 50];
 </script>
-<style scoped>
+<style>
 #gauge {
   height: 440px;
   width: 100%;

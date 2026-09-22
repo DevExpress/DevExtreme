@@ -63,7 +63,7 @@ const products = {
   group: 'Category',
 };
 </script>
-<style scoped>
+<style>
   .dx-field {
     margin-bottom: 50px;
   }

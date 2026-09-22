@@ -80,7 +80,7 @@ function showInfo(employee: any) {
   popupVisible.value = true;
 }
 </script>
-<style scoped>
+<style>
     #diagram {
       height: 725px;
     }

@@ -49,7 +49,7 @@ function refreshDataSource() {
   }
 }
 </script>
-<style scoped>
+<style>
 .filter-container {
   background-color: transparent;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.14), 0 0 2px 0 rgba(0, 0, 0, 0.12);

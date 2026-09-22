@@ -37,7 +37,7 @@ import { dataSource } from './data.ts';
 
 const range = ref(['1', '2']);
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 400px;
 }

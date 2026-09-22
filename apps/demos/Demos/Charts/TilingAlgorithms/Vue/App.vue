@@ -81,7 +81,7 @@ function customizeTooltip({
   };
 }
 </script>
-<style scoped>
+<style>
 #treemap {
   height: 460px;
 }

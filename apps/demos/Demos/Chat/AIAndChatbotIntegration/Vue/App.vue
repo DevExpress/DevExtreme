@@ -191,7 +191,7 @@ function onRegenerateButtonClick(): void {
 
 </script>
 
-<style scoped>
+<style>
 .chat-container {
   width: 100%;
   display: flex;

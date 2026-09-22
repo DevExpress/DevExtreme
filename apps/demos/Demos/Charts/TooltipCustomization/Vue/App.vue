@@ -30,7 +30,7 @@ import {
 import { populationData } from './data.ts';
 import TooltipTemplate from './TooltipTemplate.vue';
 </script>
-<style scoped>
+<style>
 #pie-chart {
   height: 440px;
 }

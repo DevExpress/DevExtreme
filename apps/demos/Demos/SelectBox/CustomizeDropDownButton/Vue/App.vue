@@ -111,7 +111,7 @@ const deferredProducts = {
   },
 };
 </script>
-<style scoped>
+<style>
 .dx-dropdowneditor-button .dx-button-content {
   text-align: center;
 }

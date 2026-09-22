@@ -41,7 +41,7 @@ import {
 
 const customizeText = ({ valueText }: Record<string, any>) => `${valueText} mg/L`;
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 210px;
 }
