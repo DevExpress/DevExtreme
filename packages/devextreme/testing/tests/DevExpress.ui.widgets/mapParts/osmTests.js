@@ -1959,6 +1959,26 @@ QUnit.module('OSM: marker tooltips', moduleConfig, () => {
         }
     });
 
+    QUnit.test('tooltip hosts share map containment without isolating their z-indices', async function(assert) {
+        const firstMarker = { location, tooltip: 'First' };
+        const map = await createMap({ markers: [firstMarker, { location, tooltip: 'Second' }] });
+        const [first, second] = getPopovers();
+        const firstHost = first.option('container');
+        const secondHost = second.option('container');
+        const overlayContainer = openLayersMock.mapInstance.getOverlayContainer();
+
+        assert.strictEqual(firstHost.parentElement, overlayContainer, 'first tooltip belongs to the shared layer');
+        assert.strictEqual(secondHost.parentElement, overlayContainer, 'second tooltip belongs to the shared layer');
+        assert.strictEqual(getComputedStyle(overlayContainer).contain, 'layout paint', 'the shared layer clips tooltip content');
+        assert.strictEqual(getComputedStyle(firstHost).contain, 'none', 'first host does not isolate the Popover z-index');
+        assert.strictEqual(getComputedStyle(secondHost).contain, 'none', 'second host does not isolate the Popover z-index');
+
+        await map.removeMarker(firstMarker);
+
+        assert.strictEqual(secondHost.parentElement, overlayContainer, 'removing a tooltip preserves the shared layer');
+        assert.ok(overlayContainer.isConnected, 'remaining tooltips retain their container');
+    });
+
     QUnit.test('disposing the map in the marker callback does not show its removed popover', async function(assert) {
         const map = await createMap({ markers: [{ location, tooltip: 'Start', onClick: () => map.dispose() }] });
         const show = sinon.spy(getTooltip(), 'show');

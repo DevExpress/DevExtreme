@@ -154,6 +154,7 @@ class OpenLayersMap implements MapEngineMap {
       }),
     });
     this.originalMap.getOverlayContainer().setAttribute('dir', 'ltr');
+    this.originalMap.getOverlayContainer().style.contain = 'layout paint';
     this.originalMap.getOverlayContainerStopEvent().setAttribute('dir', 'ltr');
     this._subscribedView = this.originalMap.getView();
     this._subscribedView.on('change:center', this._viewCenterChangeHandler);

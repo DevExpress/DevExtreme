@@ -43,7 +43,7 @@ export class OpenLayersMarkerTooltip {
   ) {
     const { ownerDocument } = _container;
     const host = ownerDocument.createElement('div');
-    Object.assign(host.style, { position: 'absolute', inset: '0', contain: 'layout paint' });
+    Object.assign(host.style, { position: 'absolute', inset: '0' });
     _map.getOverlayContainer().appendChild(host);
     this._host = host;
     const element = ownerDocument.createElement('div');
