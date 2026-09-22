@@ -796,7 +796,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
             const currentTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator();
 
-            assert.roughEqual(currentTimeIndicator.eq(0).position().left, 4000, 1.5, 'Current time indicator has correct left');
+            // Nov 7, 2021 falls back at 2:00, so 10:00 is two 30-minute cells further than the wall-clock offset.
+            assert.roughEqual(currentTimeIndicator.eq(0).position().left, 4400, 1.5, 'Current time indicator has correct left');
 
             clock.restore();
         });
