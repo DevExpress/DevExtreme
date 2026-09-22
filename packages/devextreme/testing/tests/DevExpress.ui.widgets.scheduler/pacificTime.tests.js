@@ -254,18 +254,29 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             { view: 'timelineWeek', times: expectedAllTimes, dates: expectedDateResults }
         ];
 
+        // A spring-forward timeline has no 2:00 or 2:30 cell. Vertical views still
+        // label that hour through the legacy date correction.
+        const withoutSkippedHour = (items) => items.filter((_, itemIndex) => itemIndex !== 4 && itemIndex !== 5);
+        const viewItems = (view, items) => (
+            view === 'timelineDay' || view === 'timelineWeek'
+                ? withoutSkippedHour(items)
+                : items
+        );
+
         {
             module('timeCellTemplate', () => {
                 testCases.forEach(testCase => {
                     test(`arguments should be valid in '${testCase.view}' view`, async function(assert) {
                         let index = 0;
+                        const dates = viewItems(testCase.view, testCase.dates);
+                        const times = viewItems(testCase.view, testCase.times);
 
                         await createWrapper({
                             dataSource: [],
                             timeCellTemplate: arg => {
-                                if(index < expectedAllTimes.length) {
-                                    assert.equal(arg.date.valueOf(), testCase.dates[index].valueOf(), 'arg.date should be valid');
-                                    assert.equal(arg.text, testCase.times[index], 'arg.text should be valid');
+                                if(index < times.length) {
+                                    assert.equal(arg.date.valueOf(), dates[index].valueOf(), 'arg.date should be valid');
+                                    assert.equal(arg.text, times[index], 'arg.text should be valid');
 
                                     index++;
                                 }
@@ -278,14 +289,14 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
                         });
 
-                        assert.expect(expectedAllTimes.length * 2);
+                        assert.expect(times.length * 2);
                     });
 
                     test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, async function(assert) {
                         let index = 0;
 
-                        const validExpectedDateResults = testCase.dates.slice(4);
-                        const times = testCase.times.slice(4);
+                        const validExpectedDateResults = viewItems(testCase.view, testCase.dates).slice(4);
+                        const times = viewItems(testCase.view, testCase.times).slice(4);
 
                         await createWrapper({
                             dataSource: [],
@@ -322,7 +333,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                         test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, async function(assert) {
                             let index = 0;
 
-                            const validExpectedDateResults = expectedDateResults.slice(4);
+                            const validExpectedDateResults = viewItems(testCase.view, expectedDateResults).slice(4);
 
                             await createWrapper({
                                 dataSource: [],
@@ -370,17 +381,18 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     });
 
                     const currentTimeResults = scheduler.timePanel.getTimeValues();
+                    const times = viewItems(testCase.view, testCase.times);
 
-                    assert.ok(currentTimeResults.length >= testCase.times.length, 'Count of current values should not less expected values');
-                    for(let i = 0; i < testCase.times.length; i++) {
-                        assert.equal(currentTimeResults[i], testCase.times[i], 'Current time value should be equal expected');
+                    assert.ok(currentTimeResults.length >= times.length, 'Count of current values should not less expected values');
+                    for(let i = 0; i < times.length; i++) {
+                        assert.equal(currentTimeResults[i], times[i], 'Current time value should be equal expected');
                     }
 
-                    assert.expect(testCase.times.length + 1);
+                    assert.expect(times.length + 1);
                 });
 
                 test(`Time value in time panel should be correct in ${testCase.view} when startViewDate is during DST change`, async function(assert) {
-                    const times = testCase.times.slice(4);
+                    const times = viewItems(testCase.view, testCase.times).slice(4);
 
                     const scheduler = await createWrapper({
                         dataSource: [],
