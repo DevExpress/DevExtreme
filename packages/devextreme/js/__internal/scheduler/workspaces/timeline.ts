@@ -18,6 +18,7 @@ import {
 } from '../classes';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import tableCreatorModule, { type GroupRows } from '../table_creator';
+import type { ViewCellData } from '../types';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { columnAlongCells } from '../utils/repeated_hour';
 import { getFirstVisibleDate } from '../utils/skipped_days';
@@ -137,22 +138,26 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   getIndicationCellCount(): number {
+    return this.getFallbackColumn(this.getToday())
+      ?? this.calculateDurationInCells(this.getTimeDiff());
+  }
+
+  private getFallbackColumn(date: Date): number | undefined {
     const plan = this.getFallbackPlan();
     if (!plan?.days.some((day) => day)) {
-      return this.calculateDurationInCells(this.getTimeDiff());
+      return undefined;
     }
-
     const { startDayHour, endDayHour } = this.option();
     return columnAlongCells(
       plan.days,
       plan.origins,
-      this.getToday(),
+      date,
       (endDayHour - startDayHour) * toMs('hour'),
       this.getCellDuration(),
     );
   }
 
-  private getFallbackPlan(): ReturnType<
+  protected getFallbackPlan(): ReturnType<
     typeof this.viewDataProvider.viewDataGenerator.getFallbackPlan
   > {
     const {
@@ -174,6 +179,19 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       skippedDays,
       startViewDate: this.getStartViewDate(),
     });
+  }
+
+  protected override getScrollDate(date: Date, cellData: ViewCellData): Date {
+    const { viewOffset } = this.option();
+    const isFallbackCell = this.getFallbackPlan()?.days.some((day) => day?.some((cell) => (
+      cell.start.getTime() + viewOffset === cellData.startDate.getTime()
+      && cell.end.getTime() + viewOffset === cellData.endDate.getTime()
+    )));
+    const isDateInCell = date >= cellData.startDate && date < cellData.endDate;
+
+    return isFallbackCell && isDateInCell
+      ? date
+      : super.getScrollDate(date, cellData);
   }
 
   private getTimeDiff(): number {
@@ -320,6 +338,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     return result;
+  }
+
+  override getCellIndexByDate(date: Date, inAllDayRow?: boolean): number {
+    const column = inAllDayRow ? undefined : this.getFallbackColumn(date);
+
+    return column === undefined
+      ? super.getCellIndexByDate(date, inAllDayRow)
+      : Math.floor(column);
   }
 
   getAllDayContainer(): null {

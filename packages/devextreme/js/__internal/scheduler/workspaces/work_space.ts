@@ -1691,15 +1691,21 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return undefined;
     }
 
-    currentDate.setHours(cell.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
+    const scrollDate = this.getScrollDate(currentDate, cell.cellData);
 
     return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
       cell.cellData,
       cell.position,
-      currentDate,
+      scrollDate,
       isDateAndTimeView(this.type),
       this.viewDirection === 'vertical',
     );
+  }
+
+  protected getScrollDate(date: Date, cellData: ViewCellData): Date {
+    date.setHours(cellData.startDate.getHours(), date.getMinutes(), 0, 0);
+
+    return date;
   }
 
   private isOutsideScrollable(target: Element, event: { pageX: number; pageY: number }): boolean {
