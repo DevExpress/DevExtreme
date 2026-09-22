@@ -328,12 +328,6 @@ testModule('render', moduleConfig, () => {
         assert.ok(overlayContainer.parent().hasClass(VIEWPORT_CLASS), 'overlay\'s container is the viewport\'s child');
     });
 
-    /*
-     * The generic bundle this suite loads scopes no modes, so these declare --dx-theme-mode
-     * themselves. It goes on the scope element rather than into a document stylesheet: under
-     * ?shadowDom the fixture lives in a shadow root, which a rule in <head> cannot reach, while a
-     * declaration on the element inherits down either way - and inheriting is the whole mechanism.
-     */
     const declareMode = ($scope, mode) => {
         $scope.get(0).style.setProperty('--dx-theme-mode', mode);
 
@@ -383,12 +377,6 @@ testModule('render', moduleConfig, () => {
         const $wrapper = overlay.$wrapper();
         const container = $wrapper.parent().get(0);
 
-        /*
-         * Re-appending a child that is already in place is not a no-op: the node is detached and
-         * re-inserted, which takes the focus out of the overlay, restarts its animations and
-         * reloads any iframe in its content. Watching for the detach is steadier than asserting on
-         * document.activeElement, which needs the window to be focused.
-         */
         const containerWatch = new MutationObserver(() => {});
         const wrapperWatch = new MutationObserver(() => {});
 
@@ -417,7 +405,6 @@ testModule('render', moduleConfig, () => {
         }).dxOverlay('instance');
 
         const input = overlay.$content().find('.probe-input').get(0);
-        // under ?shadowDom the overlay lives in a shadow root, and the document reports its host
         const focused = () => input.getRootNode().activeElement;
 
         input.focus();
@@ -513,7 +500,6 @@ testModule('render', moduleConfig, () => {
         });
     });
 });
-
 
 testModule('option', moduleConfig, () => {
     test('RTL markup - rtlEnabled by option', function(assert) {
@@ -655,7 +641,6 @@ testModule('option', moduleConfig, () => {
         });
     });
 });
-
 
 testModule('visibility', moduleConfig, () => {
     test('overlay should be shown when option visible set to true', function(assert) {
@@ -919,7 +904,6 @@ testModule('visibility', moduleConfig, () => {
 
             overlay.hide();
             overlay.show();
-
         } finally {
             visibilityChange.DEBUG_set_triggerResizeEvent(triggerFunction);
         }
@@ -1209,7 +1193,6 @@ testModule('visibility', moduleConfig, () => {
     });
 });
 
-
 testModule('position', moduleConfig, () => {
     test('position change should not show the content if the overlay is hidden', function(assert) {
         const instance = $('#overlay').dxOverlay().dxOverlay('instance');
@@ -1291,7 +1274,6 @@ testModule('position', moduleConfig, () => {
             position: 'absolute',
             top: '100px'
         }).appendTo($container);
-
 
         const widgetPosition = {
             my: 'bottom',
@@ -1402,7 +1384,6 @@ testModule('position', moduleConfig, () => {
     });
 });
 
-
 testModule('shading', moduleConfig, () => {
     [true, false].forEach((value) => {
         test('render shading', function(assert) {
@@ -1460,7 +1441,6 @@ testModule('shading', moduleConfig, () => {
         assert.ok(!/rgb\(255,\s?0,\s?0\)/.test($wrapper.css('backgroundColor')));
     });
 });
-
 
 testModule('dimensions', moduleConfig, () => {
     test('dimensions should be set correctly as number', function(assert) {
@@ -1587,7 +1567,6 @@ testModule('dimensions', moduleConfig, () => {
         assert.roughEqual(getWidth($wrapper), documentElement.clientWidth, 1.01, 'wrapper width is equal to document client width');
     });
 });
-
 
 testModule('animation', moduleConfig, () => {
     test('correct animation should be present', function(assert) {
@@ -1871,7 +1850,6 @@ testModule('animation', moduleConfig, () => {
             const instance = $element.dxOverlay('instance');
 
             instance.hide();
-
         } finally {
             fx.animate = origFX;
         }
@@ -1901,7 +1879,6 @@ testModule('animation', moduleConfig, () => {
         }
     });
 });
-
 
 testModule('content', moduleConfig, () => {
     test('content ready action should be fired if was set at initialization', function(assert) {
@@ -2076,7 +2053,6 @@ testModule('content', moduleConfig, () => {
     });
 });
 
-
 testModule('defer rendering', moduleConfig, () => {
     test('behavior if option set to true', function(assert) {
         const onContentReadyStub = sinon.stub();
@@ -2132,7 +2108,6 @@ testModule('defer rendering', moduleConfig, () => {
         clock.restore();
     });
 });
-
 
 testModule('hide on outside click', moduleConfig, () => {
     test('overlay should be hidden after click outside was present', function(assert) {
@@ -2264,7 +2239,6 @@ testModule('hide on outside click', moduleConfig, () => {
         const downEvent = $.Event('dxpointerdown', { pointerType: 'mouse' });
         $(document).trigger(downEvent);
         assert.ok(downEvent.isDefaultPrevented(), 'default prevented');
-
     });
 
     test('overlay should propagate events when shading is false (T181002)', function(assert) {
@@ -2349,7 +2323,6 @@ testModule('hide on outside click', moduleConfig, () => {
 
         assert.strictEqual(overlay1.option('visible'), false, 'First overlay is now hidden, because it has become active');
     });
-
 
     test('hideOnOutsideClick works after first overlay hiding', function(assert) {
         const $overlay1 = $('#overlay').dxOverlay({
@@ -2759,7 +2732,6 @@ testModule('hide on target scroll', moduleConfig, () => {
     });
 });
 
-
 testModule('container', moduleConfig, () => {
     test('wrapper should have width and height css attributes equal to container width and height', function(assert) {
         const $container = $('#customTargetContainer');
@@ -3104,7 +3076,6 @@ testModule('hide overlay by callback', moduleConfig, () => {
     });
 });
 
-
 testModule('API', moduleConfig, () => {
     test('toggle without args', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
@@ -3312,7 +3283,6 @@ testModule('API', moduleConfig, () => {
     });
 });
 
-
 testModule('integration tests', moduleConfig, () => {
     test('wrong gallery render on start in overlay widget (B232427)', function(assert) {
         const overlay = $('#overlayWithAnonymousTmpl').dxOverlay().dxOverlay('instance');
@@ -3325,7 +3295,6 @@ testModule('integration tests', moduleConfig, () => {
         assert.strictEqual($content.children().length, 1, 'Overlay content has one children');
     });
 });
-
 
 testModule('widget sizing render', moduleConfig, () => {
     test('constructor', function(assert) {
@@ -3413,7 +3382,6 @@ testModule('keyboard navigation', {
         assert.strictEqual(this.overlay.option('visible'), true, 'overlay doesn\'t handle keyboard propagated events');
     });
 });
-
 
 testModule('focus policy', {
     beforeEach: function() {
@@ -3685,7 +3653,6 @@ testModule('preventScrollEvents', () => {
         }).dxOverlay('instance');
 
         const $wrapper = $(overlay.content()).parent();
-
 
         const getWrapperEventListeners = () => $._data($wrapper.get(0)).events || {};
 
@@ -4092,7 +4059,6 @@ testModule('scrollable interaction', {
     });
 });
 
-
 testModule('specifying base z-index', moduleConfig, () => {
     test('overlay should render with correct z-index by default', function(assert) {
         const $overlay = $('#overlay').dxOverlay({ visible: true });
@@ -4118,7 +4084,6 @@ testModule('specifying base z-index', moduleConfig, () => {
         assert.strictEqual($wrapper.css('zIndex'), '10001', 'z-index for wrapper is correct');
     });
 });
-
 
 testModule('overlay utils', moduleConfig, () => {
     test('Overlay Base Zindex should return default ZIndex', function(assert) {

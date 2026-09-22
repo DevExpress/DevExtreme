@@ -1,8 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
-
 $filter-builder-icon-padding: null !default;
 $filter-builder-filled-editor-padding: null !default;
 $filter-builder-tree-view-item-left-padding: null !default;
@@ -29,14 +27,12 @@ $filter-builder-tree-view-item-min-height: null !default;
   $filter-builder-tree-view-item-min-height: ds.$spacing-240 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $filter-builder-action-icon-font-size: 21px !default; // dx-offscale: 21px
 $filter-builder-text-border-radius: ds.$border-radius-50 !default;
 $filter-builder-icon-margin-inline-end: ds.$spacing-100 !default;
 $filter-builder-icon-margin-inline-start: ds.$spacing-100 !default;
 $filter-builder-tree-view-toggle-item-visibility-inset-inline-end: ds.$spacing-160 !default;
 
-// Base-layer sizing injected with design tokens (wave B2 — filterBuilder/common)
 $filter-builder-action-icon-margin-inline-start: ds.$spacing-50 !default;
 $filter-builder-action-icon-margin-inline-end: ds.$spacing-50 !default;
 $filter-builder-group-content-padding-inline-end: ds.$spacing-260 !default;

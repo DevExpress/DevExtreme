@@ -4,15 +4,7 @@ $stepper-step-accent-bg: ds.$color-bg-primary !default;
 
 $stepper-step-accent-bg-hovered: ds.$color-bg-primary-hovered !default;
 
-/*
- * Reads the role directly rather than the accent variable: a tier link may not cross states
- * (selected-hovered -> hovered), and an alias would have to be published as one.
- */
 $stepper-step-bg-selected-hovered: ds.$color-bg-primary-hovered !default;
-
-// $stepper-step-danger-bg: ds.$color-bg-danger !default; // unused variable
-
-// $stepper-step-danger-hover-bg: ds.$color-bg-danger-hovered !default; // unused variable
 
 $stepper-step-base-bg: ds.$color-bg !default;
 

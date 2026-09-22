@@ -64,8 +64,6 @@ test('should exclude from recurrence if mode is "occurrence"', async (t) => {
     .expect(scheduler.getAppointmentCount())
     .eql(2);
 
-  // fluent-next narrowed the left column by 1px (65 -> 64) and raised the header by 2px
-  // (46 -> 48); the other themes were not touched
   const isFluentNext = getThemeName() === 'fluent-next';
 
   const rect0 = await appointment0.element.boundingClientRect;

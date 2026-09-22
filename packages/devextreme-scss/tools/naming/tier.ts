@@ -12,9 +12,7 @@
 import { posix } from 'node:path';
 
 export interface SourceFile {
-  /** POSIX path relative to scss/widgets. */
   path: string;
-  /** First folder under the theme, `''` for theme-root files. */
   folder: string;
   raw: string;
   stripped: string;
@@ -26,12 +24,6 @@ export interface Parsed {
   path: string;
   folder: string;
   declarations: string[];
-  /*
-   * `references` intentionally contains both `$name` and the `name` half of `alias.$name`, because
-   * the dead-variable check must see either form. Ownership checks must not: counting a namespaced
-   * read as a bare one reports the same read twice the moment the variable's name becomes
-   * canonical.
-   */
   references: string[];
   bareReferences: string[];
   namespacedReferences: NamespacedReference[];
@@ -51,7 +43,6 @@ export interface TierRecord {
   component: string;
   value: string;
   reason: string | null;
-  /** Declaring files, POSIX paths relative to scss/widgets. */
   sources: string[];
 }
 
@@ -77,10 +68,6 @@ const DECLARATION_LINE = /^\s*(\$[a-z0-9-]+)\s*:\s*([^;]*);(.*)$/;
 const LINK_LINE = /^\s*(--dx-[a-z0-9-]+)\s*:\s*var\((--dx-[a-z0-9-]+)\);\s*$/;
 const PROPERTY_LINE = /^\s*(--dx-[a-z0-9-]+)\s*:/;
 
-// ---------------------------------------------------------------------------------------------
-// parsing
-// ---------------------------------------------------------------------------------------------
-
 const findRanges = (content: string, opener: RegExp): [number, number][] => {
   const ranges: [number, number][] = [];
   let match = opener.exec(content);
@@ -100,28 +87,13 @@ const findRanges = (content: string, opener: RegExp): [number, number][] => {
   return ranges;
 };
 
-/**
- * Ranges of `@use … with ( … )` argument lists. Their left-hand sides are the *base module's*
- * parameter names, not declarations of this file, and must never be treated as either a declaration
- * or a foreign read.
- */
 export const findWithRanges = (content: string): [number, number][] => findRanges(content, /\bwith\s*\(/g);
 
-/**
- * Parameter lists of `@mixin` / `@function`. A parameter with a default (`$button-selected-bg: $x`)
- * looks exactly like a declaration and is not inside a `{}` block, so brace tracking alone counts
- * it as one — same trap as `with()` keys.
- */
 export const findSignatureRanges = (content: string): [number, number][] => findRanges(
   content,
   /@(?:mixin|function)\s+[\w-]+\s*\(/g,
 );
 
-/**
- * Argument lists of `@include`. A named argument (`$checkbox-border-color-focused: $x`) binds the
- * base mixin's parameter by its own name: the key is base's spelling, exactly like a `with()` key,
- * and must not read as a declaration of this file.
- */
 export const findIncludeRanges = (content: string): [number, number][] => findRanges(
   content,
   /@include\s+[\w.-]+\s*\(/g,
@@ -130,10 +102,6 @@ export const findIncludeRanges = (content: string): [number, number][] => findRa
 const inRanges = (position: number, ranges: [number, number][]): boolean => ranges
   .some(([from, to]) => position >= from && position < to);
 
-/**
- * A declaration is module-level when every enclosing block is a control directive: Sass
- * `@if`/`@each` do not create scope, but a mixin, a function or a style rule do.
- */
 export const parseScss = (path: string, folder: string, stripped: string): Parsed => {
   const content = stripped;
   const withRanges = [
@@ -184,8 +152,6 @@ export const parseScss = (path: string, folder: string, stripped: string): Parse
     } else if (char === '@' && content.startsWith('@use', index)) {
       const statement = /^@use\s+["']([^"']+)["']/.exec(content.slice(index));
       if (statement) {
-        // Only the module spec is consumed here. Scanning continues into the `with (…)` block: its
-        // right-hand sides are ordinary references.
         const tail = content.slice(index + statement[0].length, index + statement[0].length + 200);
         const beforeArguments = tail.split(/;|\bwith\s*\(/)[0];
         uses.push({
@@ -213,15 +179,6 @@ export const parseSourceFile = (file: SourceFile): Parsed => parseScss(
   file.stripped,
 );
 
-// ---------------------------------------------------------------------------------------------
-// base wiring
-// ---------------------------------------------------------------------------------------------
-
-/**
- * `base/**` parameter names, keyed by file so a star import can be resolved to the exact module it
- * pulls in. The wide question ("does base declare this name anywhere") would wave through any
- * legacy name; the precise one is asked by `starredBaseParameters`.
- */
 export const baseIndex = (baseFiles: SourceFile[]): BaseIndex => {
   const declarationsByPath = new Map<string, string[]>();
   const names = new Set<string>();
@@ -233,10 +190,6 @@ export const baseIndex = (baseFiles: SourceFile[]): BaseIndex => {
   return { names, declarationsByPath };
 };
 
-/**
- * The base parameters a theme file wires by star-importing the very base module that declares them:
- * a top-level `$x: … !default` there SETS base's variable, so the name is base's spelling.
- */
 export const starredBaseParameters = (parsed: Parsed, index: BaseIndex): Set<string> => {
   const names = new Set<string>();
   parsed.uses.forEach(({ spec, star }) => {
@@ -250,12 +203,6 @@ export const starredBaseParameters = (parsed: Parsed, index: BaseIndex): Set<str
   return names;
 };
 
-/*
- * Base wiring is configuration, not ownership. Two shapes, both structural:
- *   - star: the file star-imports the very base module that declares the name, and the top-level
- *     `$x: … !default` SETS base's variable.
- *   - feeder: `$fluent-<baseName>` passed as a `with()` value for base's `-2` key.
- */
 export const baseWiringKind = (
   variable: string,
   parsed: Parsed,
@@ -282,10 +229,6 @@ export const baseWiringEntries = (
     .filter((entry): entry is WiringEntry => entry.kind !== null
       && !exemptFolders.includes(entry.folder)));
 
-// ---------------------------------------------------------------------------------------------
-// the tier: which variables are published, and why the rest are not
-// ---------------------------------------------------------------------------------------------
-
 export const systemTierOf = (registries: Registries): string[] => registries.systemTier ?? [];
 
 export const tierFoldersOf = (component: string, registries: Registries): string[] => {
@@ -299,14 +242,12 @@ export const tierFoldersOf = (component: string, registries: Registries): string
   return folders.filter((folder) => !exempt.includes(folder));
 };
 
-/** Components that may publish: migrated plus the system tier, each once. */
 export const publishingComponents = (registries: Registries): string[] => [
   ...new Set([...registries.migrated, ...systemTierOf(registries)]),
 ];
 
 const inFolder = (file: SourceFile, folder: string): boolean => file.path.startsWith(`${THEME}/${folder}/`);
 
-/** Which variables the tier MUST declare, and why the rest are excluded. */
 export const tierRecords = (
   themeFiles: SourceFile[],
   registries: Registries,
@@ -333,8 +274,6 @@ export const tierRecords = (
             });
           });
         }
-        // Feeder calls are read from the RAW file on purpose: a commented-out call still documents
-        // that the variable bakes into an image somewhere.
         [...file.raw.matchAll(FEEDER_CALLS)]
           .forEach((call) => [...call[1].matchAll(/\$[a-z0-9-]+/g)]
             .forEach(([variable]) => feeders.add(variable)));
@@ -356,8 +295,6 @@ export const tierRecords = (
     });
   });
 
-  // a reference to a data-uri-excluded name carries the same baked image, so the referrer is
-  // excluded too
   for (let changed = true; changed;) {
     changed = false;
     records.forEach((record, variable) => {
@@ -372,16 +309,8 @@ export const tierRecords = (
   return records;
 };
 
-// ---------------------------------------------------------------------------------------------
-// the files
-// ---------------------------------------------------------------------------------------------
+export type Links = Map<string, string>;
 
-export type Links = Map<string, string>; // --dx-a -> --dx-b
-
-/**
- * Codepoint order: what `sort()` without a comparator does, spelled out so nobody reaches for
- * localeCompare.
- */
 export const byCodepoint = (a: string, b: string): number => {
   if (a < b) return -1;
   return a > b ? 1 : 0;
@@ -390,9 +319,6 @@ export const byCodepoint = (a: string, b: string): number => {
 export const propertyOf = (variable: string): string => `--dx-${variable.slice(1)}`;
 export const variableOf = (property: string): string => `$${property.slice('--dx-'.length)}`;
 
-/**
- * A links file holds nothing but whole-value references; anything else is returned as a problem.
- */
 export const parseLinksFile = (
   path: string,
   content: string,
@@ -412,7 +338,6 @@ export const parseLinksFile = (
   return { links, problems };
 };
 
-/** The `@use` spec that imports `sourcePath` from the directory of `publicPath`. */
 export const useSpecFor = (publicPath: string, sourcePath: string): string => {
   const relative = posix.relative(posix.dirname(publicPath), sourcePath);
   const directory = posix.dirname(relative);
@@ -445,10 +370,6 @@ export interface CollectorEntry { folder: string; selectors: string[] }
 
 export const namespaceOf = (folder: string): string => `${folder}Public`;
 
-/**
- * One rule per distinct selector list: the document root carries every system-tier folder and
- * stylelint forbids repeating a selector, so folders sharing a selector list share a rule.
- */
 export const renderCollector = (entries: CollectorEntry[]): string => {
   const sorted = [...entries].sort((a, b) => byCodepoint(a.folder, b.folder));
   const uses = sorted.map(({ folder }) => `@use "${folder}/public" as ${namespaceOf(folder)};`);
@@ -472,14 +393,8 @@ export const renderCollector = (entries: CollectorEntry[]): string => {
   return `${GENERATED_MARKER}\n${uses.join('\n')}\n\n${rules.join('\n\n')}\n`;
 };
 
-// ---------------------------------------------------------------------------------------------
-// the plan: every generated file, or the reasons nothing can be written
-// ---------------------------------------------------------------------------------------------
-
 export interface Publication {
-  /** Generated files by path, byte-exact. Empty when `problems` is not. */
   files: Map<string, string>;
-  /** Paths of `_public.scss` files that did not exist before. */
   created: string[];
   problems: string[];
 }
@@ -501,7 +416,6 @@ export const planPublication = (
     .map(({ variable }) => variable));
   const records = tierRecords(themeFiles, registries, wiring);
 
-  // eligible variables per component, with the folder that declares them
   const perComponent = new Map<string, Projection[]>();
   records.forEach((record, variable) => {
     if (record.reason) return;
@@ -510,7 +424,6 @@ export const planPublication = (
     perComponent.set(record.component, list);
   });
 
-  // hand-written links per folder
   const linksByFolder = new Map<string, Links>();
   existing.forEach((content, path) => {
     if (!path.endsWith(`/${LINKS_FILE}`)) return;
@@ -519,9 +432,8 @@ export const planPublication = (
     linksByFolder.set(path.split('/')[1], parsed.links);
   });
 
-  // where each component's file lives: the folder that declares its eligible variables
   const homeOf = new Map<string, string>();
-  const owners = new Map<string, string>(); // property -> component
+  const owners = new Map<string, string>();
   publishingComponents(registries).forEach((component) => {
     const folders = tierFoldersOf(component, registries);
     const declaring = [...new Set((perComponent.get(component) ?? [])
@@ -549,8 +461,6 @@ export const planPublication = (
 
   const publishesOnRoot = (component: string): boolean => (registries.rootSelectors[component] ?? []).includes(':root');
 
-  // links: a target must be published where the referrer can see it, and a link may not shadow a
-  // value
   linksByFolder.forEach((links, folder) => {
     const component = systemTierOf(registries).includes(folder)
       ? folder
@@ -574,7 +484,6 @@ export const planPublication = (
     });
   });
 
-  // stray files: a public file where the component has nothing to publish, or in a foreign folder
   existing.forEach((_, path) => {
     if (!path.endsWith(`/${PUBLIC_FILE}`)) return;
     const folder = path.split('/')[1];
@@ -618,7 +527,6 @@ export const planPublication = (
   return { files, created: created.sort(byCodepoint), problems: [] };
 };
 
-/** Paths whose committed content differs from the plan — what `--check` reports. */
 export const stalePaths = (
   plan: Publication,
   existing: ReadonlyMap<string, string>,

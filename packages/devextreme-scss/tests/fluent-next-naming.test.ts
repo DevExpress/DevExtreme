@@ -1,20 +1,3 @@
-/*
- * Enforces the fluent-next SCSS naming standard — scss/widgets/fluent-next/NAMING.md.
- *
- * The standard is being rolled out wave by wave, so most checks are RATCHETS: the current set of
- * violations is compared against tests/fluent-next-naming.baseline.json, which must only ever
- * shrink. Regenerate it deliberately, as part of a wave, with:
- *
- *   UPDATE_NAMING_BASELINE=1 pnpm test
- *
- * Two checks are hard failures from day one: the grammar invariants of the registries, and grammar
- * conformance for components already listed as `migrated`.
- *
- * Exceptions are COMPUTED from structural properties (a mixin-only import, a base module configured
- * through `with()`, an exempt folder recorded in the registries) and never listed by name. If an
- * exception has to be spelled out as a name, the rule is wrong.
- */
-
 import {
   readFileSync, writeFileSync, readdirSync, statSync, existsSync,
 } from 'fs';
@@ -46,7 +29,6 @@ const packageRoot = process.cwd();
 const widgetsRoot = join(packageRoot, 'scss', 'widgets');
 const themeRoot = join(widgetsRoot, 'fluent-next');
 
-// Labels a stylesheet for error messages: `fluent-next/common/_mixins.scss`.
 const sourceLabel = (file: string): string => file.slice(widgetsRoot.length + 1);
 
 /*
@@ -60,14 +42,10 @@ const declarationBody = (content: string, label: string): string => stripScssCom
 )
   .replace(/@[a-z-]+[^;{]*\{/g, '{');
 
-// The --dx-* component tier (see the "wave F" test block and NAMING.md): generated projections in
-// _public.scss, handwritten links in _public-links.scss, and the collector that mounts them.
 const isPublicManifestFile = (file: string): boolean => file.endsWith('_public.scss')
   || file.endsWith('_public-links.scss');
 const isPublicTierFile = (file: string): boolean => isPublicManifestFile(file)
   || file.endsWith('_public-tier.scss');
-/* The slice of registries.json this test reads. Declared rather than inferred: the file is read
- * from disk (the drift check below needs the bytes), so nothing else gives it a type. */
 interface NamingRegistries extends Registries {
   chassis: Record<string, { component: string; dependents: string[] }>;
   derivedFrom: Record<string, string | number>;
@@ -89,10 +67,6 @@ const updatingBaseline = process.env.UPDATE_NAMING_BASELINE === '1';
 
 const THEMES = ['generic', 'material', 'fluent', 'fluent-next'];
 const DECLARATION_FILES = ['_colors.scss', '_sizes.scss', '_variables.scss'];
-/*
- * The parser is shared with the emitter (tools/naming/tier.ts). `file` is the path relative to the
- * theme root (`button/_colors.scss`) — the spelling the baseline uses.
- */
 type ParsedFile = Parsed & { file: string };
 
 const walk = (dir: string, extension: string): string[] => {
@@ -133,14 +107,6 @@ const parsedFiles: ParsedFile[] = themeFiles.map((file, index) => ({
   file: resolve(file).slice(resolve(themeRoot).length + 1),
 }));
 
-/*
- * `base/**` parameter names, and the precise question of whether a given theme declaration is one
- * of them: the file has to pull that very base module in with `as *`. That star import IS the
- * wiring — the top-level `$x: … !default` in the theme sets base's variable — so such a name is
- * base's spelling and neither the grammar nor the ownership rule applies to it (NAMING.md, O8). The
- * wide form of the question ("does base declare this name anywhere") would wave through any legacy
- * name.
- */
 const base = baseIndex(walk(join(widgetsRoot, 'base'), '.scss').map(sourceFileOf));
 const baseNames = base.names;
 
@@ -155,16 +121,11 @@ const starredBaseParameters = (file: string): Set<string> => starredParametersOf
   base,
 );
 
-// ---------------------------------------------------------------------------------------------
-// component resolution
-// ---------------------------------------------------------------------------------------------
-
 const { components }: { components: Record<string, string> } = registries;
 const exemptFolders = Object.keys(registries.exemptFolders);
 const componentNames = [...new Set(Object.values(components))]
-  .sort((a, b) => b.length - a.length); // longest first, so `data-grid` wins over `grid`
+  .sort((a, b) => b.length - a.length);
 
-/** The component whose namespace a variable name belongs to, matched at hyphen boundaries. */
 const componentOf = (variable: string): string | null => {
   const name = variable.slice(1);
   return componentNames.find((component) => name === component || name.startsWith(`${component}-`))
@@ -184,32 +145,11 @@ const readsAllowedFor = (folder: string): Set<string> => {
   Object.values(registries.chassis).forEach((chassis) => {
     if (chassis.dependents.includes(folder)) allowed.add(chassis.component);
   });
-  /*
-   * A composite widget may read the metrics of a widget it RENDERS: the toolbar's overflow menu is
-   * a real List, a grid cell in edit mode is a real editor. Duplicating those values instead would
-   * guarantee drift, which is the opposite of what O4 is for — O4 forbids borrowing a value because
-   * it looks right, not matching a widget you actually contain. Each entry in `embeds` names the
-   * element that justifies it and is reviewed as code, exactly like the chassis list.
-   */
   (registries.embeds?.[folder] ?? []).forEach((component) => allowed.add(component));
   return allowed;
 };
 
-/*
- * The `--dx-*` names that are NOT part of the public tier: the runtime sets them with
- * `style.setProperty` and `base/**` reads them. The list, the setter, the read form and what
- * happens when the runtime gives no value live in tools/naming/runtime-contract.json; the form of
- * every read is held to it by tests/fallback-policy.test.ts. Here they are only excluded from the
- * public-surface checks.
- */
 const RUNTIME_CONTRACT = new Set<string>(runtimeContract.variables.map(({ name }) => name));
-
-/*
- * The application -> CSS contract of the custom accent, the second category outside the component
- * tier: one colour written by the application and the scale fluent-next derives from it. The names,
- * the reasons and the step set live in tools/naming/accent-contract.json, next to the runtime
- * contract; tests/accent-palette.test.ts holds the stylesheet and the generated palettes to it.
- */
 
 const isAccentContractFile = (file: string): boolean => file.endsWith(
   join(...accentContract.declaredIn.split('/')),
@@ -221,9 +161,6 @@ const ACCENT_CONTRACT = new Set([
   ...accentContract.steps.values.map((step) => `${accentContract.steps.prefix}${step}`),
 ]);
 
-/**
- * Every `--dx-*` read anywhere outside the theme sources, or null when the monorepo is unavailable.
- */
 const publicNameConsumers = (): Set<string> | null => {
   const roots = [
     join(packageRoot, '..', '..', 'apps', 'demos', 'Demos'),
@@ -241,10 +178,6 @@ const publicNameConsumers = (): Set<string> | null => {
   return names;
 };
 
-// ---------------------------------------------------------------------------------------------
-// findings
-// ---------------------------------------------------------------------------------------------
-
 const perFolder = <T>(compute: (files: ParsedFile[], folder: string) => T): Record<string, T> => {
   const result: Record<string, T> = {};
   relevantFolders.forEach((folder) => {
@@ -255,20 +188,6 @@ const perFolder = <T>(compute: (files: ParsedFile[], folder: string) => T): Reco
   return result;
 };
 
-/*
- * Base wiring is configuration, not ownership. Two shapes, both structural:
- *   - star: the file star-imports the very base module that declares the name, and the top-level
- *     `$x: … !default` SETS base's variable (the load-bearing mechanism O8 documents). The spelling
- *     is base's, so neither grammar nor ownership applies.
- *   - feeder: `$fluent-<baseName>` passed as a `with()` value for base's `-2` key. Base holds PAIRS
- *     of parameters for these spots (an old key and a `-2` redesign key) and the theme feeds both;
- *     the grammar name is already taken by the OLD key's feeder, so renaming the `-2` feeder would
- *     invent a distinction that does not exist. The knot is base's duplicated parameters — see the
- *     `-2`-pairs entry in DIVERGENCES.md; until base deduplicates, the feeder keeps the mirror
- *     name.
- * Every wiring declaration is listed exactly in the `baseWiring` finding: a new one is a conscious
- * baseline edit, not a silent pass.
- */
 const baseWiringKind = (variable: string, file: string): 'star' | 'feeder' | null => wiringKindOf(
   variable,
   parsedByFile(file),
@@ -276,7 +195,6 @@ const baseWiringKind = (variable: string, file: string): 'star' | 'feeder' | nul
 );
 
 const findings = {
-  // O1: a folder may only declare its own component's variables.
   ownershipOfDeclarations: perFolder((files, folder) => {
     const own = components[folder];
     const counts = { themePrefixed: 0, unclassified: 0 };
@@ -284,7 +202,7 @@ const findings = {
 
     files.forEach(({ file, declarations }) => declarations.forEach((variable) => {
       if (isThemeIdentity(variable) || isSystemName(variable)) return;
-      if (baseWiringKind(variable, file)) return; // counted exactly, in baseWiring below
+      if (baseWiringKind(variable, file)) return;
       const component = componentOf(variable);
       if (component === own) return;
       if (component) foreignComponent.push(`${variable} (${component})`);
@@ -300,8 +218,6 @@ const findings = {
     };
   }),
 
-  // The exact wiring inventory excluded from O1 above. Exact-match by design: adding a wiring
-  // declaration must show up as a baseline diff.
   baseWiring: parsedFiles
     .flatMap(({ file, folder, declarations }) => declarations
       .map((variable) => ({ variable, kind: baseWiringKind(variable, file), folder }))
@@ -309,12 +225,6 @@ const findings = {
       .map((entry) => `${entry.folder}: ${entry.variable} (${entry.kind})`))
     .sort(),
 
-  /*
-   * The system tier: the theme root and `common/` hold no component, so the per-component ownership
-   * check above never looked at them — they were the one place where any name at all was accepted.
-   * A declaration there must be a registered system concern (NAMING.md §"Системные concern'ы"),
-   * theme identity, or a base-parameter mirror whose name base itself owns.
-   */
   systemTierNames: ((): string[] => {
     const offenders = new Set<string>();
 
@@ -322,7 +232,6 @@ const findings = {
       .filter(({ folder }) => folder === '' || registries.systemFolders.includes(folder))
       .forEach(({ declarations }) => declarations.forEach((variable) => {
         if (isThemeIdentity(variable) || isSystemName(variable)) return;
-        // mirror of a base parameter, spelled as base spells it
         if (baseNames.has(variable)) return;
         offenders.add(variable);
       }));
@@ -330,7 +239,6 @@ const findings = {
     return [...offenders].sort();
   })(),
 
-  // O2: exactly one folder is the declaration home of a component.
   multipleDeclarationHomes: ((): string[] => {
     const homes: Record<string, Set<string>> = {};
     parsedFiles.forEach(({ folder, declarations }) => {
@@ -348,19 +256,9 @@ const findings = {
       .sort();
   })(),
 
-  // O3/O5: a folder may only read its own component's variables (plus chassis it depends on).
-  // Note this ratchet is deliberately weak until the rename lands: a read can only be classified as
-  // foreign once the name sits in a canonical component namespace, so legacy spellings
-  // ($datagrid-*, $fluent-*) are invisible here and show up under ownershipOfDeclarations instead.
-  // The check therefore gets STRICTER as waves land, which is the intended direction.
   foreignReads: perFolder((files, folder) => {
     const allowed = readsAllowedFor(folder);
     const declaredHere = new Set(files.flatMap(({ declarations }) => declarations));
-    /*
-     * Mixin and function parameters are local names, not reads of anything: `@mixin grid-base(
-     * $widget-name)` used to be reported as gridBase reading the `widget` component, because the
-     * parameter's first segment happens to be a component name.
-     */
     const parameters = new Set(files.flatMap(({ file }) => {
       const content = stripScssComments(readFileSync(join(themeRoot, file), 'utf8'), sourceLabel(join(themeRoot, file)));
       return findSignatureRanges(content)
@@ -376,8 +274,6 @@ const findings = {
       if (component && !allowed.has(component)) foreign.add(variable);
     }));
 
-    // Explicit form: `alias.$name`, where the alias resolves to another widget folder. This is what
-    // wave A made visible, and it does not depend on the variable name being canonical yet.
     files.forEach(({ file, uses, namespacedReferences }) => {
       const aliasToFolder = new Map<string, string>();
       uses.forEach(({ spec, alias }) => {
@@ -385,7 +281,7 @@ const findings = {
         const modulePath = resolve(join(themeRoot, file), '..', spec);
         if (!modulePath.startsWith(`${resolve(themeRoot)}${sep}`)) return;
         const target = modulePath.slice(resolve(themeRoot).length + 1).split(sep)[0];
-        if (target.startsWith('_')) return; // theme-level module, not a widget folder
+        if (target.startsWith('_')) return;
         aliasToFolder.set(alias, target);
       });
 
@@ -401,7 +297,6 @@ const findings = {
     return [...foreign].sort();
   }),
 
-  // O7: variables are declared only in _colors/_sizes/_variables.
   declarationsOutsideVariableFiles: parsedFiles
     .filter(({ file, folder, declarations }) => folder
       && !exemptFolders.includes(folder)
@@ -411,8 +306,6 @@ const findings = {
     .map(({ file, declarations }) => `${file}: ${declarations.length}`)
     .sort(),
 
-  // O8: a configurable base module must not be imported `as *`. Mixin-only modules are exempt,
-  // which is decided by the module path, not by a list of names.
   starImportsOfBase: parsedFiles
     .filter(({ folder }) => !exemptFolders.includes(folder))
     .flatMap(({ file, uses }) => uses
@@ -423,32 +316,22 @@ const findings = {
       .map(({ spec }) => `${file}: ${spec}`))
     .sort(),
 
-  // Cross-widget `as *` imports: what makes ownership lexically invisible and O3/O4 unsafe.
-  // Resolved against the importing file, because widgets like tabs/ have nested folders — counting
-  // path segments would call tabs/layout/… → ../variables/sizes a cross-widget import.
-  // Excluded on purpose: the theme-level layer (a module sitting in the theme root), the sanctioned
-  // system folder, and mixin-only modules, which expose no variables.
   crossWidgetStarImports: parsedFiles
     .filter(({ folder }) => folder && !exemptFolders.includes(folder))
     .flatMap(({ file, folder, uses }) => uses
       .filter(({ spec, star }) => {
-        // `/index` is style reuse, not a variable import: an index module emits CSS rules, and one
-        // widget including another's rules (htmlEditor reusing textEditor's) is not what O3
-        // governs.
         if (!star || spec.endsWith('/mixins') || spec.endsWith('/index')) return false;
         if (!spec.startsWith('..')) return false;
         const modulePath = resolve(join(themeRoot, file), '..', spec);
         if (!modulePath.startsWith(`${resolve(themeRoot)}${sep}`)) return false;
         const [target, ...rest] = modulePath.slice(resolve(themeRoot).length + 1).split(sep);
-        if (!rest.length) return false; // theme-level module
+        if (!rest.length) return false;
         return target !== folder && !registries.systemFolders.includes(target);
       })
       .map(({ spec }) => `${folder}: ${spec}`))
     .filter((entry, index, all) => all.indexOf(entry) === index)
     .sort(),
 
-  // Declared but never referenced anywhere in the theme or base. Counts declarations and references
-  // separately, so a variable declared three times through `@if $size` no longer hides.
   deadVariables: ((): string[] => {
     const baseFiles = walk(join(packageRoot, 'scss', 'widgets', 'base'), '.scss').map(parseFile);
     const referenced = new Set([...parsedFiles, ...baseFiles]
@@ -463,29 +346,6 @@ const findings = {
     return [...dead].sort();
   })(),
 
-  // The public tier must expose the same names in every theme, or app CSS breaks on theme switch.
-  /*
-   * The other half of the public-surface contract. Comparing the four themes' name sets is
-   * necessary but not sufficient: it sees neither a name the theme publishes that nobody reads, nor
-   * a consumer reading a name no theme declares. Both defects existed and both were invisible —
-   * `--dx-line-height` (published, read by nobody) and `--dx-texteditor-label-color` (read by five
-   * demo files, declared by no theme, no fallback, so the declaration silently dies).
-   *
-   * The consumer side lives outside this package, so the check degrades instead of failing when the
-   * monorepo is not there: an absent `apps/demos` simply means that half is not measured.
-   */
-  /*
-   * A signal for curating the public set, not proof of deadness: customer code is invisible to us,
-   * so this measures only "not referenced anywhere in this repository". 18 of 38 names are in that
-   * state, and one of them — `--dx-line-height` — is not referenced even by the themes themselves.
-   */
-  /*
-   * All three publicSurface* checks below cover the LEGACY tier only: the emitted wave-F component
-   * tier (_public.scss / _public-tier.scss) is write-only by design until the consumption wave, it
-   * exists in fluent-next alone by the tier contract (NAMING.md, 06.08), and it has its own hard
-   * invariants in the "wave F" block further down — mixing it in here would drown the legacy
-   * ratchets in 769 by-design entries.
-   */
   publicSurfaceUnused: ((): string[] => {
     const declared = new Set<string>();
     THEMES.forEach((theme) => walk(join(packageRoot, 'scss', 'widgets', theme), '.scss')
@@ -531,12 +391,6 @@ const findings = {
         .filter(({ names }) => names.has(name)).map(({ theme }) => theme).join(', ')}`);
   })(),
 
-  /*
-   * Wave F guard: `--dx-…:` declarations outside the tier files. The component tier is emitted ONLY
-   * from _public.scss / _public-links.scss; everything else declaring a --dx name is the frozen
-   * legacy surface (the pre-standard public tier, typography's scale publication, gridBase's
-   * runtime bits). Exact list by design: a new manual emission is a conscious baseline edit.
-   */
   publicTierManualDeclarations: walk(themeRoot, '.scss')
     .filter((file) => !isPublicTierFile(file) && !isAccentContractFile(file))
     .flatMap((file) => [...declarationBody(readFileSync(file, 'utf8'), sourceLabel(file))
@@ -544,19 +398,6 @@ const findings = {
       .map((match) => `${sourceLabel(file)}: ${match[1]}`))
     .sort(),
 
-  /*
-   * Wave F9, the lock on consumption: a read of a TIER variable in a rule file is a place the
-   * --dx-* tier is bypassed — the pixel is right, but a per-instance override silently does
-   * nothing there. Everything convertible was converted by waves F3–F9 (declarations,
-   * calc-interpolations, allowlisted mixin arguments, with() wiring values); this exact list is
-   * the irreducible remainder — Sass math (math.div, `2 *`), unguarded-math mixin arguments,
-   * Sass-local derivations and portal branches (a rule that paints the component inside another
-   * widget's overlay, where the tier does not reach: diagram's toolbar overflow menu) — plus the
-   * declaration files and with() keys, which are excluded by construction. A new entry means a new
-   * bypass: consume it or justify it here. The tier name
-   * set comes from the committed _public.scss / _public-links.scss files (their own gate lives in
-   * the "wave F" block below).
-   */
   unconsumedManifestReads: ((): string[] => {
     const manifestNames = new Set(walk(themeRoot, '.scss')
       .filter(isPublicManifestFile)
@@ -569,11 +410,6 @@ const findings = {
       .flatMap((file) => {
         const source = stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file));
         return source.split('\n').flatMap((line) => [
-          /*
-           * A with() KEY is base's spelling and is skipped by the leading-token check below even
-           * when it coincides with a manifest name; the VALUE on the same line is a read like any
-           * other — an unconverted `$base-key: $manifest-var,` is a tier bypass and must count.
-           */
           ...line.matchAll(/(^|[^\w.$-])(\$[a-z0-9-]+)/g),
         ]
           .map((match) => match[2])
@@ -585,17 +421,7 @@ const findings = {
   })(),
 };
 
-// ---------------------------------------------------------------------------------------------
-// hard invariants
-// ---------------------------------------------------------------------------------------------
-
 test('registries: the grammar stays decidable', () => {
-  // Only overlaps between vocabularies competing for the SAME position are fatal. The trailing
-  // state
-  // is matched first, so a part or a sub-element that is also a state word would be eaten as the
-  // state and leave the mandatory slot missing. Everything else is resolved positionally: `content`
-  // is deliberately both a part (text colour) and a sub-element (.dx-toast-content), and `text` is
-  // both a part and the `stylingMode: 'text'` modifier.
   expect(registries.states.filter((state) => registries.parts.includes(state))).toEqual([]);
 
   Object.entries(registries.subElements).forEach(([component, names]) => {
@@ -605,18 +431,12 @@ test('registries: the grammar stays decidable', () => {
     }).toEqual({ component, clashes: [] });
   });
 
-  // every component maps to exactly one declaration home
   Object.values(registries.components).forEach((component) => {
     expect(typeof registries.declarationHome[component]).toBe('string');
   });
 });
 
 test('registries are in sync with the design token package', () => {
-  /*
-   * Guards against editing registries.json by hand or letting it drift from the package. Counted
-   * from the package's flat index, the same source derive-registries.mjs reads — the component tier
-   * is no longer emitted as SCSS, so there is no generated file left to count.
-   */
   const flatTokens = JSON.parse(readFileSync(
     require.resolve('@devexpress/design-tokens-internal/tokens.flat.json'),
     'utf8',
@@ -639,15 +459,6 @@ test('no name carries the theme prefix', () => {
   expect(offenders).toEqual([]);
 });
 
-/**
- * Parses a name against the grammar, right-to-left with longest match:
- *
- *   $<component>(-<sub-element>)*(-<modifier>)*-<slot>(-<state>)
- *
- * Returns the reason it does not fit, or null when it does. Longest-match matters in both the state
- * and the slot position: `selected-hovered` must win over `selected`, and `padding-block` over
- * `block`.
- */
 const grammarViolation = (
   variable: string,
   component: string,
@@ -679,12 +490,6 @@ const grammarViolation = (
   }
   rest = rest.slice(0, -slot.length).replace(/-$/, '');
 
-  /*
-   * The middle is consumed greedily, longest match first, because sub-elements and modifiers are
-   * hyphenated words themselves: `clear-button`, `icon-container`, `with-label`. Validating segment
-   * by segment would reject every one of them ("clear" is not a sub-element — but `clear-button`
-   * is).
-   */
   const ordered = [...middleWords].sort((a, b) => b.length - a.length);
   let middle = rest;
   while (middle) {
@@ -721,7 +526,6 @@ test('migrated components follow the grammar strictly', () => {
 });
 
 test('design tokens are read only where variables are declared', () => {
-  // Covers `@use … with ()` arguments too, which stylelint cannot reach — it lints declarations.
   const offenders = walk(themeRoot, '.scss')
     .filter((file) => !DECLARATION_FILES.some((name) => file.endsWith(name)))
     .flatMap((file) => collectTokenReferences(readFileSync(file, 'utf8'), sourceLabel(file))
@@ -732,9 +536,6 @@ test('design tokens are read only where variables are declared', () => {
 });
 
 test('design tokens are never read as a raw custom property', () => {
-  // Banned everywhere, declaration files included: `var(--dxds-…)` compiles even when the name is
-  // wrong, while the bridge fails the build. stylelint covers declaration values, not at-rule
-  // parameters, and that is where these would appear.
   const offenders = walk(themeRoot, '.scss')
     .flatMap((file) => collectCustomPropertyReferences(readFileSync(file, 'utf8'), sourceLabel(file))
       .map((token) => `${sourceLabel(file)}: var(--dxds-${token})`))
@@ -744,8 +545,6 @@ test('design tokens are never read as a raw custom property', () => {
 });
 
 test('the rename mapping stays collision-free and fully applied', () => {
-  // Mirrors `node tools/naming/rename.mjs --check --residue` so CI enforces it too: a batch that is
-  // half-applied, or two batches mapping onto one name, must not survive a green test run.
   const mapping = JSON.parse(
     readFileSync(join(packageRoot, 'tools', 'naming', 'mapping.json'), 'utf8'),
   );
@@ -758,19 +557,14 @@ test('the rename mapping stays collision-free and fully applied', () => {
   const declaredEverywhere = new Set(parsedFiles.flatMap(({ declarations }) => declarations));
   const referencedEverywhere = new Set(parsedFiles.flatMap(({ references }) => references));
   const survivors = pairs
-    // An identity entry (already correct, recorded for the record) can never disappear.
     .filter(([from, to]) => from !== to)
     .map(([from]) => from)
     .filter((from) => declaredEverywhere.has(from) || referencedEverywhere.has(from));
   expect(survivors).toEqual([]);
 });
 
-// ---------------------------------------------------------------------------------------------
-// wave F: the --dx-* component tier
-// ---------------------------------------------------------------------------------------------
-
 /*
- * The tier contract (NAMING.md, 06.08): --dxds-* roles/scales are the stable public API; --dx-* is
+ * The tier contract (decided 06.08): --dxds-* roles/scales are the stable public API; --dx-* is
  * the product's own component tier, declared in <folder>/_public.scss onto registries.rootSelectors
  * and free to evolve between releases. The projections are GENERATED by tools/naming/publish.mjs
  * and committed; the relations are handwritten in <folder>/_public-links.scss. Both the emitter
@@ -782,12 +576,10 @@ test('the rename mapping stays collision-free and fully applied', () => {
  *     is base's spelling, null has nothing to publish);
  *   - the LINK form for a reference the referrer can resolve — same component, or a target
  *     published on `:root`: `--dx-a: var(--dx-b);` with no SCSS twin, so the relation is stated
- *     once, in one place, and stays live when the target moves (GOTCHAS §18.3);
+ *     once, in one place, and stays live when the target moves;
  *   - collector ↔ registries.rootSelectors consistency.
  */
 
-// A system-tier entry (registries.systemTier) is its own folder; grammar for its names stays the
-// systemConcerns path, so it must not appear in `components` or `migrated`.
 const systemTier: string[] = registries.systemTier ?? [];
 
 const tierRecords = computeTierRecords(
@@ -798,7 +590,6 @@ const tierRecords = computeTierRecords(
 );
 const publicTierFiles = themeFiles.filter(isPublicManifestFile);
 const folderOf = (file: string): string => sourceLabel(file).split('/')[1];
-// $variable -> declaring _public / _public-links file
 const tierDeclared = new Map<string, string>();
 publicTierFiles.forEach((file) => {
   [...stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file))
@@ -806,14 +597,6 @@ publicTierFiles.forEach((file) => {
     .forEach((match) => tierDeclared.set(`$${match[1].slice('--dx-'.length)}`, file));
 });
 
-/*
- * Which targets a link may point at. A custom property resolves only under the scope it was
- * declared on, so the referrer must sit inside the target's root: either the target is the same
- * component's (same _public.scss), or it is published on `:root`, which every rule sits under.
- * A target on ANOTHER component's root is out — `--dx-button-icon-size` lives on `.dx-button` /
- * `.dx-dropdowneditor-button`, and a gridBase rule that draws outside a button would resolve it to
- * nothing, taking the whole declaration with it (GOTCHAS §18.3, §21).
- */
 const publishesOnRoot = (file: string): boolean => {
   const folder = folderOf(file);
   const component = systemTier.includes(folder) ? folder : components[folder];
@@ -824,13 +607,7 @@ const linkableFrom = (target: string, referrer: string): boolean => {
   return !!home && (folderOf(home) === folderOf(referrer) || publishesOnRoot(home));
 };
 
-/*
- * A tier property whose whole value is `var(--dx-other)` states a relation instead of publishing a
- * value: "this equals that until someone overrides that". It has no SCSS twin on purpose — the
- * relation is written once, here, rather than duplicated as an alias variable that a value
- * comparison then has to rediscover at build time.
- */
-const tierLinks = new Map<string, { target: string; file: string }>(); // --dx-a -> --dx-b
+const tierLinks = new Map<string, { target: string; file: string }>();
 publicTierFiles.forEach((file) => {
   stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n').forEach((line) => {
     const link = /^\s*(--dx-[a-z0-9-]+)\s*:\s*var\((--dx-[a-z0-9-]+)\);\s*$/.exec(line);
@@ -838,22 +615,12 @@ publicTierFiles.forEach((file) => {
   });
 });
 
-/*
- * The other side of the same coin: a declaration that is nothing but a reference to another
- * published variable. Where the referrer can resolve the target it must become a link, and the
- * declaration itself must go. Nothing else catches a frozen copy — the composition case only asks
- * that the variable HAS a line, and the link case only looks at lines that already contain
- * var(--dx-…). Every component still to be migrated meets this fork, which is why the check lives
- * here. An alias whose target sits on another component's root is the boundary of the rule, not an
- * offender: it keeps its copy, and `tierCopies` holds it against the link form.
- */
 const tierAliases: { property: string; target: string; source: string }[] = [];
 const tierCopies: { property: string; target: string; source: string }[] = [];
 walk(themeRoot, '.scss')
   .filter((file) => /(^|\/)_(colors|sizes|variables)\.scss$/.test(file))
   .forEach((file) => {
     stripScssComments(readFileSync(file, 'utf8'), sourceLabel(file)).split('\n').forEach((line, index) => {
-      // `!default` is optional on purpose: an alias written without it is the same relation
       const alias = /^\s*\$([a-z0-9-]+)\s*:\s*(?:[A-Za-z]\w*\.)?\$([a-z0-9-]+)\s*(?:!default)?\s*;\s*$/.exec(line);
       if (!alias) return;
       const home = tierDeclared.get(`$${alias[1]}`);
@@ -899,7 +666,7 @@ test('component tier: references are written as links to a resolvable target', (
       if (!link || `var(${link.target})` !== value.trim()) {
         offenders.push(`${sourceLabel(file)}: ${property} — a reference must be the WHOLE value and `
           + 'written as var(--dx-target); a comparison or a formula freezes the relation at build '
-          + 'time (GOTCHAS §18.3)');
+          + 'time');
         return;
       }
       if (link.target === property) {
@@ -909,8 +676,7 @@ test('component tier: references are written as links to a resolvable target', (
       if (!linkableFrom(link.target, file)) {
         offenders.push(`${sourceLabel(file)}: ${property} links to ${link.target}, which is neither `
           + 'declared by this component nor published on :root — outside the target\'s root the '
-          + 'link resolves to nothing and the declaration disappears; publish the value instead '
-          + '(GOTCHAS §18.3)');
+          + 'link resolves to nothing and the declaration disappears; publish the value instead');
       }
     });
   });
@@ -923,34 +689,19 @@ test('component tier: an alias is published as a link, not as a copy of the valu
     .map((alias) => `${alias.source}: the declaration is a reference to `
       + `${alias.target.slice('--dx-'.length)}, so the tier must publish `
       + `\`${alias.property}: var(${alias.target});\` and the declaration itself must go — `
-      + 'publishing a copy of the value freezes the relation (GOTCHAS §18.3)');
+      + 'publishing a copy of the value freezes the relation');
   expect(offenders).toEqual([]);
 });
 
-/*
- * The boundary of the rule above, kept as a case of its own because the tree holds a live example
- * and the two rules read as one: `$grid-menu-item-icon-size: $button-icon-size` (gridBase/_sizes)
- * points at a name published on `.dx-button` / `.dx-dropdowneditor-button`. The grid rule that
- * draws the menu item's icon is under neither, so here the copied value is the correct answer and
- * the link form is the defect.
- */
 test('component tier: an alias whose target sits on another root stays a copy', () => {
   const offenders = tierCopies
     .filter((copy) => tierLinks.has(copy.property))
     .map((copy) => `${copy.source}: ${copy.property} is published as a link to ${copy.target}, `
-      + 'which lives on another component\'s root — the value must be published instead '
-      + '(GOTCHAS §18.3)');
+      + 'which lives on another component\'s root — the value must be published instead');
   expect(offenders).toEqual([]);
 });
 
-/*
- * The defect this catches is invisible while the two values agree: `…-text-bg-focused` pointed at
- * `…-outlined-bg-HOVERED` (button, PR #34888) and rendered correctly only because the outlined
- * variant painted focus and hover the same. Dropping the state is legitimate — `…-bg-hovered:
- * var(--dx-…-bg)` says "this state does not repaint it" — landing on a DIFFERENT state never is.
- */
 test('component tier: a link between two states must keep the state', () => {
-  // longest first: `selected-hovered` must not be read as `hovered`
   const states = [...registries.states].sort((a, b) => b.length - a.length);
   const stateOf = (property: string): string | undefined => states
     .find((state) => property.endsWith(`-${state}`));
@@ -978,7 +729,6 @@ test('component tier: the collector matches registries.rootSelectors exactly', (
 
   const offenders: string[] = [];
   const includedFolders: string[] = [];
-  // the @use header is not a selector — rules are matched on the body after it
   const rulesSource = collector.split('\n').filter((line) => !line.startsWith('@use ')).join('\n');
   [...rulesSource.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, selectorText, body]) => {
     const namespaces = [...body.matchAll(/@include (\w+)\.publish\(\);/g)].map((match) => match[1]);
@@ -987,11 +737,6 @@ test('component tier: the collector matches registries.rootSelectors exactly', (
     includedFolders.push(...folders);
     const ruleComponents = new Set(folders
       .map((folder) => (systemTier.includes(folder) ? folder : components[folder])));
-    /*
-     * A rule may serve several components — the document root carries every system-tier folder,
-     * and stylelint forbids repeating the same selector. What must hold is narrower than "one
-     * component per rule": each component in the rule owns exactly this selector list.
-     */
     const actual = selectorText.split(',').map((selector) => selector.trim()).filter(Boolean).sort();
     [...ruleComponents].forEach((component) => {
       const expected = [...(registries.rootSelectors[component] ?? [])].sort();
@@ -1049,19 +794,6 @@ test('component tier: every --dx-… read in the theme resolves to a declared na
   expect(offenders).toEqual([]);
 });
 
-/*
- * The runtime reachability audit (playground/tier-reachability-audit.html) is the only judge of
- * whether a variable reaches an element: "nested or not" is decided by the DOM, not by the text of
- * a selector. But the gallery has an illness of its own — the vacuous pass: a component that is not
- * on the page has nothing to check, and the audit stays green. That is how wave F stayed at 35
- * widgets while wave H added 28 more components the gallery never built: their holes surfaced only
- * in CI, as 208 screenshots.
- *
- * This case holds the gallery's roster: every component that publishes the tier must appear on the
- * page, either as a widget (`widget('dxCardView', …)`) or as markup carrying one of its classes.
- * Whether the SATELLITES are complete (is the popup opened, is the portal built) cannot be checked
- * statically — the page itself does that, counting the roots that matched no element at all.
- */
 test('component tier: every publishing component appears in the runtime-audit gallery', () => {
   const gallery = join(packageRoot, '..', 'devextreme', 'playground', 'tier-reachability-audit.html');
   if (!existsSync(gallery)) throw new Error(`the runtime-audit gallery is missing at ${gallery}`);
@@ -1080,12 +812,6 @@ test('component tier: every publishing component appears in the runtime-audit ga
   expect([...new Set(missing)].sort()).toEqual([]);
 });
 
-/*
- * The mirror of `node tools/naming/publish.mjs --check`, the way "the rename mapping stays
- * collision-free and fully applied" mirrors `rename.mjs --check`: the committed projections and the
- * collector are exactly what the emitter would write from today's declarations, and the
- * handwritten links break none of its rules.
- */
 test('component tier: the committed files are what tools/naming/publish.mjs writes', () => {
   const existing = new Map(themeSources
     .filter(({ path }) => isPublicTierFile(path))
@@ -1097,18 +823,12 @@ test('component tier: the committed files are what tools/naming/publish.mjs writ
 });
 
 test('component tier: every declaring component has bundle-gated root selectors', () => {
-  // The selectors themselves are gated against the built bundle by derive-registries.mjs; this
-  // holds the committed JSON coherent — a declaring component may not lack a scope.
   const declaring = [...new Set(publicTierFiles
     .map((file) => sourceLabel(file).split('/')[1])
     .map((folder) => (systemTier.includes(folder) ? folder : components[folder])))];
   expect(declaring.filter((component) => !registries.rootSelectors?.[component]?.length))
     .toEqual([]);
 });
-
-// ---------------------------------------------------------------------------------------------
-// ratchets
-// ---------------------------------------------------------------------------------------------
 
 if (updatingBaseline) {
   test('baseline regenerated', () => {

@@ -3,7 +3,6 @@
 
 $popup-dialog-shader-color: #444 !default;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $popup-title-padding: 10px !default;
 $popup-title-min-height-fallback: 19px !default;
 $popup-dialog-message-padding: 10px 10px 5px 10px !default;
@@ -11,7 +10,6 @@ $popup-dialog-message-padding: 10px 10px 5px 10px !default;
 .dx-popup-title {
   padding: $popup-title-padding;
 
-  // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
   @if $popup-title-min-height-fallback {
     min-height: $popup-title-min-height-fallback;
   }

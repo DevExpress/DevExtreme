@@ -3,6 +3,7 @@
  *
  *   pnpm run tokens:update 262.24.0   # bump, reinstall, rebuild, regenerate, report
  *   pnpm run tokens:update            # report the installed package, change nothing
+ *   pnpm run tokens:update --report   # the same, stated explicitly
  *
  * The four manual steps — edit the dependency, reinstall, rebuild the tokens, regenerate the
  * registries — are the cheap part. It stops there: the themes are not rebuilt, so the CSS bundles
@@ -52,11 +53,6 @@ const themeRoot = path.join(packageRoot, 'scss', 'widgets', THEME_FOLDER);
 const manifestPath = path.join(packageRoot, 'package.json');
 const PACKAGE = '@devexpress/design-tokens-internal';
 
-/*
- * Resolved as a path, not through `require`: `require.resolve` caches the resolved filename, pnpm
- * keeps the previous version in its store, and the cached path stays readable after an install — so
- * the "after" read would quietly return the package we just replaced.
- */
 const tokensPackage = path.join(packageRoot, 'node_modules', PACKAGE);
 
 const walk = (dir, extension) => readdirSync(dir, { withFileTypes: true, recursive: true })
@@ -76,7 +72,6 @@ const readGenerated = () => new Map(walk(generatedRoot, '.scss').map((file) => [
   parseDeclarations(readFileSync(file, 'utf8')),
 ]));
 
-/* The token names the theme actually reads, in the spelling the package uses. */
 const readConsumed = () => {
   const consumed = new Set();
 
@@ -91,21 +86,10 @@ const readConsumed = () => {
   return consumed;
 };
 
-/*
- * Markdown when the output is going somewhere — a file, a pipe, a pull request — and the terminal
- * view when a person is watching. NO_COLOR is the usual opt-out.
- *
- * stdout carries the report and nothing else. Everything a bump says while it works — the command
- * banners, what the child processes print, the preamble, the closing next steps — goes to stderr,
- * so `> report.md` gets the markdown even when the run is a bump rather than a report.
- */
 const plain = Boolean(process.env.NO_COLOR);
 const interactive = process.stdout.isTTY === true;
 const color = interactive && !plain;
 
-/*
- * The preamble is written to stderr, so whether it is coloured follows that stream, not stdout's.
- */
 const progressColor = process.stderr.isTTY === true && !plain;
 
 const show = (report) => {
@@ -118,7 +102,6 @@ const run = (command, args, cwd) => {
   process.stderr.write(`\n$ ${command} ${args.join(' ')}\n`);
 
   try {
-    /* The child writes to fd 2 as well: install and build chatter is progress, not the report. */
     execFileSync(command, args, { cwd, stdio: ['inherit', 2, 'inherit'] });
 
     return true;
@@ -136,15 +119,8 @@ const setDependency = (version) => {
   writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 };
 
-// ---------------------------------------------------------------------------------------------
-
 const [target] = process.argv.slice(2);
 
-/*
- * No argument reports and changes nothing: that is the answer to "what is installed and what does
- * the theme do with it", and it is what someone typing the command without reading it deserves to
- * get. A bump has to be asked for by version.
- */
 const reportOnly = target === undefined || target === '--report';
 
 if (!reportOnly && !/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(target)) {
@@ -154,7 +130,6 @@ if (!reportOnly && !/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(target)) {
 }
 const before = { ...readFlatTokens(), generated: readGenerated() };
 
-/* Every step that can fail leaves the tree somewhere; each of them says where, and stops. */
 const giveUp = (version) => {
   process.stderr.write(`\npackage.json asks for ${version} now.\n`
     + `To go back: pnpm run tokens:update ${before.version}\n`);
@@ -184,10 +159,6 @@ const summary = {
 };
 
 if (!reportOnly) {
-  /*
-   * Said before the rebuild, because the rebuild is what stops on a missing name — and it stops at
-   * the first one, having never looked for the others.
-   */
   process.stderr.write(`\n${renderPreamble(summary, { color: progressColor })}\n`);
 
   const rebuilt = run('node', ['build/tokens/build-tokens.mjs'], packageRoot)

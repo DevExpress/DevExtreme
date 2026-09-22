@@ -314,8 +314,6 @@ async function collectViolations(tab, url, renderDeadlineMs) {
   const raw = res && res.result && res.result.value;
   const all = raw ? JSON.parse(raw) : null;
 
-  // `window.__cspViolations` absent means the listener never ran, which used to read as "no
-  // violations" — the one failure this check could not see.
   if (!Array.isArray(all)) {
     throw new Error(`CSP listener did not run for ${url}`);
   }
@@ -349,7 +347,6 @@ async function visitPage(url, renderDeadlineMs = RENDER_DEADLINE_MS) {
 
 const CANARY_URL = `${SERVER_URL}/apps/demos/utils/server/csp-canary.html`;
 
-// Each probe in csp-canary.html, by the shape its violation comes back in.
 const CANARY_PROBES = [
   {
     what: 'inline <style> element',
@@ -366,8 +363,6 @@ const CANARY_PROBES = [
   },
 ];
 
-/* A GET whose body is thrown away: what is wanted is the status and the headers, and a server
- * that answers HEAD differently from GET would answer the wrong question. */
 function httpMeta(url) {
   return new Promise((resolve, reject) => {
     const req = http.request(url, { method: 'GET' }, (res) => {
@@ -379,11 +374,6 @@ function httpMeta(url) {
   });
 }
 
-/*
- * A run that reports no violations is only worth something if the detector was alive. The canary
- * page breaks the policy three ways on purpose; all three have to come back, or the demos were
- * never really checked.
- */
 async function verifyCanary() {
   const { statusCode, headers } = await httpMeta(CANARY_URL);
   const problem = canaryProblem(statusCode, headers);

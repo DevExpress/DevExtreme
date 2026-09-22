@@ -1,7 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
 $list-response-wait-opacity: ds.$opacity-50 !default;
 
 $list-padding-block: ds.$spacing-40 !default;
@@ -36,7 +35,6 @@ $list-next-button-padding-inline: null !default;
   --dx-list-item-padding-block: #{$list-item-padding-block};
 }
 
-// Values hoisted from style-file literals (tokenized)
 $list-group-header-font-weight: ds.$font-weight-base-strong !default;
 $list-item-border-width: ds.$border-width-10 !default;
 $list-border-width: ds.$border-width-10 !default;
@@ -48,14 +46,9 @@ $list-context-menu-content-border: ds.$border-width-10 solid !default;
 $list-items-row-gap: ds.$spacing-20 !default;
 $list-empty-message-min-height: 2em !default; // dx-relative: scales with the parent font-size
 
-// Base-layer sizing injected with design tokens (wave B2)
 $list-item-badge-container-width: ds.$spacing-200 !default;
 $list-slide-menu-button-padding: 0 ds.$spacing-100 !default;
 $list-delete-button-static-padding: 0 ds.$spacing-50 !default;
 $list-next-button-padding: ds.$spacing-50 !default;
 
-/*
- * Derived values, moved out of _index.scss: a file that emits rules must not declare
- * variables (NAMING.md, O7).
- */
 $list-item-border: $list-item-border-width solid !default;

@@ -2,7 +2,6 @@
 @use "sass:meta";
 @use "../mixins" as *;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $diagram-root-height: 600px !default;
 $diagram-root-min-height: 350px !default;
 $diagram-toolbar-wrapper-padding: 5px !default;
@@ -326,8 +325,6 @@ $diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
   position: absolute;
   top: 50%;
   left: 50%;
-
-  // centred with translate, so neither side has to be halved at build time
   transform: translate(-50%, -50%);
   width: $diagram-loading-indicator-width;
   height: $diagram-loading-indicator-height;

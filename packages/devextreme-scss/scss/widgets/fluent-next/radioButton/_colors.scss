@@ -1,9 +1,5 @@
 @use "../../../_design-system/variables/ds" as ds;
 
-/*
- * Moved from radioGroup/: these are the RADIO BUTTON's colours, and radioButton owns
- * `radio-button` (NAMING.md, O2). The readers followed.
- */
 $radio-button-icon-bg: ds.$color-bg !default;
 $radio-button-icon-border: ds.$color-border-contrast !default;
 $radio-button-icon-border-hovered: ds.$color-border-contrast-hovered !default;

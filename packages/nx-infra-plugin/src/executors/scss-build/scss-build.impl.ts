@@ -46,7 +46,6 @@ interface BuildDependencies {
   cleanCssSanitizeOptions: unknown;
   cleanCssDevOptions: unknown;
   devextremeVersion: string;
-  /** Version of the design-token package a theme is generated from; null when it is not installed. */
   tokensVersion: string | null;
 }
 
@@ -63,11 +62,6 @@ function readFileDataUri(filePath: string, svgEncoding?: string): string {
   return encodeDataUriContent(buffer, filePath, svgEncoding);
 }
 
-/*
- * `tokensVersion` is stamped on the stylesheets generated from the design-token package. Values in
- * those files come from a package version, not from this repository, so a bug report about a colour
- * or a size cannot be placed without it.
- */
 function createStarLicenseHeader(
   fileName: string,
   version: string,
@@ -147,7 +141,6 @@ function readTokensVersion(projectRequire: NodeRequire): string | null {
   try {
     return projectRequire(`${TOKENS_PACKAGE}/package.json`).version ?? null;
   } catch {
-    // A project that builds no token-generated theme does not depend on the package.
     return null;
   }
 }

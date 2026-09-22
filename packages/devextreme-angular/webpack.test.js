@@ -3,8 +3,6 @@ module.exports = {
   mode: 'development',
   plugins: [],
   resolve: {
-    // 'alias' is required in addition to 'fallback': pnpm hoists a transitive 'stream' npm package
-    // (style-dictionary -> @bundled-es-modules/*) that shadows the fallback otherwise
     alias: { stream: require.resolve('stream-browserify') },
     fallback: { stream: require.resolve('stream-browserify') },
   },
@@ -27,5 +25,4 @@ module.exports = {
       ],
     }],
   },
-
 };

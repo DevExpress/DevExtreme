@@ -7,12 +7,6 @@
   background-image: string.unquote($uri);
 }
 
-/*
- * A background image cannot read the element's `color`, so `gantt-icon-colored` bakes the rest
- * colour into the svg and every extra state needs the whole set emitted again. The same artwork
- * used as a mask carries only its alpha, so one copy is painted by `currentColor` and follows
- * whatever the cascade already puts on `.dx-icon` - including the disabled colour.
- */
 @mixin gantt-icon-masked($data-uri) {
   $uri: replace("#{$data-uri}", "currentColor", "%23000");
 
@@ -30,9 +24,6 @@
 @mixin gantt-icons-mixin($color: null, $masked: false) {
   .dx-gantt-i {
     @if $masked {
-      /* `background-size` for a `.dx-icon` is set by whatever hosts it - `contain` in a button,
-      an explicit icon size in the toolbar's overflow menu. Both resolve to the 20px content box
-      these square 18px glyphs already fill, so one `contain` mirrors the image the mask replaces. */
       mask-position: 50% 50%;
       mask-repeat: no-repeat;
       mask-size: contain;

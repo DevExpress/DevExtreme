@@ -1,7 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
 $tooltip-border-radius: $global-border-radius !default;
 
 $tooltip-padding: null !default;
@@ -17,10 +16,8 @@ $tooltip-box-shadow: ds.$box-shadow-md !default;
   $tooltip-padding: ds.$spacing-30 ds.$spacing-50 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $tooltip-overlay-content-border: ds.$border-width-10 solid transparent !default;
 
-// Base-layer sizing injected with design tokens (wave B2)
 $tooltip-overlay-content-min-width: ds.$spacing-340 !default;
 $tooltip-overlay-content-min-height: ds.$spacing-260 !default;
 $tooltip-popup-content-padding: ds.$spacing-120 ds.$spacing-170 !default;

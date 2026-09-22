@@ -16,11 +16,6 @@ const options: Options<Properties> = {
 
 const a11yCheckConfig = {};
 
-// The ON/OFF captions are decorative in the fluent, fluent-next and material themes:
-// they are hidden with `color: transparent`, and the caption of the inactive state is
-// translated outside the switch, where axe flattens its transparent text against the
-// page canvas instead of the page background and reports a bogus contrast violation.
-// The switch state is conveyed by aria-checked, so captions are excluded from checks.
 const selector: ElementContext = {
   include: [defaultSelector],
   exclude: ['.dx-switch-on', '.dx-switch-off'],

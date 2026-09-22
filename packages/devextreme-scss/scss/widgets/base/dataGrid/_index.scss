@@ -52,7 +52,6 @@ $datagrid-column-chooser-item-opacity: 0.5 !default;
   $datagrid-cell-focus-outline: $datagrid-cell-focus-outline,
 );
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $datagrid-header-filter-outline: 2px solid !default;
 $datagrid-header-filter-outline-offset: 2px !default;
 $datagrid-filter-panel-clear-filter-outline-offset: 3px !default;
@@ -222,11 +221,6 @@ $datagrid-button-margin-right: 10px !default;
         height: 100%;
         content: "";
 
-        /*
-         * A background image cannot read a colour role, so the placeholder's tint is frozen in
-         * the raster. `$…-mask-image` swaps the same artwork in as a mask, which carries only
-         * its alpha, so the colour and its opacity come from the theme instead.
-         */
         @if $datagrid-text-stub-mask-image {
           mask-image: $datagrid-text-stub-mask-image;
           mask-repeat: no-repeat repeat;

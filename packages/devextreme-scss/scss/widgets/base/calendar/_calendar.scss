@@ -1,6 +1,5 @@
 @use "../mixins" as *;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $calendar-border-width: 1px !default;
 $calendar-multiview-table-padding: 0 10px !default;
 

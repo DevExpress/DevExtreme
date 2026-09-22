@@ -1,16 +1,15 @@
 /*
- * Wave A of the naming standard (scss/widgets/fluent-next/NAMING.md, rule O3/O8): converts
- * cross-widget `@use "../<widget>/<module>" as *` imports into namespaced ones and prefixes every
- * reference accordingly.
+ * Converts cross-widget `@use "../<widget>/<module>" as *` imports into namespaced ones and
+ * prefixes every reference accordingly.
  *
- *   node tools/naming/destar.mjs --list                    # what would change, per folder
- *   node tools/naming/destar.mjs --apply --folders=toolbar,list
- *   node tools/naming/destar.mjs --apply --all
+ *   node tools/naming/destar.mjs                                # report, every folder
+ *   node tools/naming/destar.mjs --apply                        # the same, written to disk
+ *   node tools/naming/destar.mjs --apply --folders=toolbar,list # only these folders
  *
  * Why this has to happen before ownership work: a top-level `$x:` in a file that pulls a module in
  * with `as *` does not declare a local variable — it MUTATES that module's variable for the whole
  * compilation. So "give every widget its own variable" silently rewrites the provider until the
- * star imports are gone. See NAMING.md, O8.
+ * star imports are gone.
  *
  * Mixin-only imports (`../<widget>/mixins`) keep `as *` on purpose: they expose mixins, not
  * variables, and namespacing them would mean prefixing every `@include`.
@@ -43,9 +42,6 @@ const stripComments = (content) => content
   .filter((_, index) => index % 2 === 0)
   .join('');
 
-/**
- * Ranges of `with ( … )` argument lists: their left-hand sides are the base module's parameters.
- */
 const withKeyRanges = (content) => {
   const ranges = [];
   const opener = /\bwith\s*\(/g;
@@ -64,7 +60,6 @@ const withKeyRanges = (content) => {
   return ranges;
 };
 
-/** Module-level `$x:` declarations — `@if`/`@each` do not create scope, mixins and rules do. */
 const declaredNames = (file) => {
   const content = stripComments(readFileSync(file, 'utf8'));
   const skip = withKeyRanges(content);
@@ -115,13 +110,9 @@ const analyse = (file) => {
     const moduleName = basename(spec);
     if (!VARIABLE_MODULES.includes(moduleName)) return;
 
-    // Specs are relative to the importing FILE, and widgets like tabs/ have nested folders, so the
-    // module path cannot be assumed to sit one level under the theme root.
     const modulePath = join(dirname(file), dirname(spec), `_${moduleName}.scss`);
     if (!modulePath.startsWith(`${themeRoot}/`)) return;
 
-    // A module sitting directly in the theme root (`../sizes`, `../colors`) is the theme-level
-    // layer — theme identity plus the cross-cutting values. It is not a widget and keeps `as *`.
     if (dirname(modulePath) === themeRoot) return;
 
     const folder = modulePath.slice(themeRoot.length + 1).split('/')[0];
@@ -140,13 +131,6 @@ const analyse = (file) => {
     });
   });
 
-  // The same module can be imported twice in one file (diagram/_index.scss imports
-  // ../fieldset/sizes
-  // on two consecutive lines). A repeated `@use … as *` of the same module is a no-op, and it
-  // cannot
-  // be namespaced twice under one alias, so the duplicate is dropped. Counting its names twice
-  // would
-  // also make every one of them look like it came from two different providers.
   const seen = new Set();
   const deduped = targets.map((target) => {
     const duplicate = seen.has(target.modulePath);
@@ -163,14 +147,11 @@ const rewrite = ({ file, original, targets }) => {
   if (!targets.length) return null;
 
   const ownDeclarations = declaredNames(file);
-  const provided = new Map(); // name -> [alias]
+  const provided = new Map();
   targets.forEach(({ alias, names }) => names.forEach((name) => {
     provided.set(name, [...(provided.get(name) ?? []), alias]);
   }));
 
-  // A name this file declares at top level while a de-starred module also declares it is the silent
-  // mutation case: today the assignment rewrites the provider's variable. De-starring changes that,
-  // so it is not a pure rename and must be looked at by hand.
   const mutations = [...ownDeclarations].filter((name) => provided.has(name));
   const ambiguous = [...provided].filter(([, aliases]) => aliases.length > 1);
   if (mutations.length || ambiguous.length) {
@@ -180,7 +161,6 @@ const rewrite = ({ file, original, targets }) => {
   }
 
   const skip = withKeyRanges(stripComments(original));
-  // ranges are computed on stripped content; recompute on the original so offsets line up
   const skipOriginal = withKeyRanges(original);
   const inWithKeys = (position, name) => skipOriginal
     .some(([from, to]) => position >= from && position < to)
@@ -201,7 +181,7 @@ const rewrite = ({ file, original, targets }) => {
 
     if (target && target.drop) {
       index += target.statement.length;
-      if (original[index] === '\n') index += 1; // do not leave a blank line behind
+      if (original[index] === '\n') index += 1;
       dropped += 1;
     } else if (target) {
       output += target.statement.replace(/\bas\s+\*/, `as ${target.alias}`);

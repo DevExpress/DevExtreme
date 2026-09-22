@@ -10,8 +10,6 @@ export interface A11yCheckOptions extends RunOptions {
 const defaultOptions = {};
 const COLOR_CONTRAST_RULE = 'color-contrast';
 
-// axe gives a `rule`-type runOnly precedence over rules[id].enabled, so forcing runOnly would
-// silently re-enable color-contrast for callers that opted out of it (or narrowed runOnly).
 const isColorContrastChecked = (options: A11yCheckOptions): boolean => {
   if (options.rules?.[COLOR_CONTRAST_RULE]?.enabled === false) {
     return false;
@@ -37,8 +35,6 @@ export const a11yCheck = async (
   configuration = {},
 ):
 Promise<void> => {
-  // fluent-next shares fluent's structure/ARIA (already covered by the fluent run),
-  // so only color-contrast is re-checked for it — regardless of the caller's config.
   const isColorContrastOnly = getThemeName() === 'fluent-next';
 
   if (isColorContrastOnly && !isColorContrastChecked(options)) {

@@ -3,7 +3,6 @@ $treeview-disabled-opacity: null !default;
 @use "../mixins" as *;
 @use "../../base/icon_fonts" as *;
 
-// Sized from base/treeView, which owns the defaults and forwards a theme's values down.
 $treeview-searchbox-margin-bottom: null !default;
 
 .dx-treeview-loadindicator-wrapper {

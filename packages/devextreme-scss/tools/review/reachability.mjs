@@ -1,7 +1,7 @@
 /*
  * Reachability of the --dx-* component tier, measured on the BUILT fluent-next bundle.
  *
- * Two questions, each with its own strictness:
+ * Three questions, each with its own strictness:
  *
  *   1) GATE (fails): a cross-scope duplicate. The same selector and property are declared more than
  *      once and the copies read variables of DIFFERENT components. The last copy wins; inside the
@@ -71,7 +71,6 @@ const isTierName = (name) => name.startsWith('--dx-') && !name.startsWith('--dxd
 const readsOf = (value) => [...new Set([...value.matchAll(TIER_READ)].map(([, name]) => name))]
   .filter(isTierName);
 
-/* where each tier name is declared */
 const declaredAt = new Map();
 root.walkDecls((decl) => {
   if (!isTierName(decl.prop)) return;
@@ -80,29 +79,12 @@ root.walkDecls((decl) => {
   declaredAt.set(decl.prop, known);
 });
 
-/* --- 0. gate: read and never declared ---------------------------------------------------------
- * A var(--dx-…) whose name nothing declares. The value never arrives, the declaration is invalid
- * and simply disappears, and what the user sees is a plausible-looking default - a black glyph, a
- * missing background - so it reads as a design choice rather than a break.
- *
- * Every other pass here silently skipped the class: each of them filters reads down to names that
- * ARE declared somewhere, because that is how it knows which scope to compare against. A name
- * declared nowhere has no scope, fell out of the filter, and was never looked at again.
- *
- * Allowed only for a name some other layer sets at runtime: the CardView writes its card metrics
- * onto the element from JS, the scheduler animates the appointment form the same way, and the
- * accent hook is documented for the user to set. Those are pinned by name, so a sixth one cannot
- * join them by accident.
- */
 const SET_ELSEWHERE = new Set([
-  // packages/devextreme/js/__internal/grids/new/card_view/content_view/content/content.tsx
   '--dx-cardview-card-max-width',
   '--dx-cardview-card-min-width',
   '--dx-cardview-card-cover-ratio',
   '--dx-cardview-cardsperrow',
-  // packages/devextreme/js/__internal/scheduler/appointment_popup/form.ts
   '--dx-scheduler-animation-top',
-  // the custom-accent hook: undefined until the user sets it, and every read carries a fallback
   '--dx-accent-color',
 ]);
 const undeclared = new Map();
@@ -124,7 +106,6 @@ undeclared.forEach((where, name) => {
   process.stdout.write('     If another layer sets it at runtime, add it to SET_ELSEWHERE with the file that does.\n');
 });
 
-/* --- 1. gate: cross-scope duplicate ---------------------------------------------------------- */
 const copies = new Map();
 root.walkRules((rule) => {
   if (!rule.selectors) return;
@@ -142,7 +123,6 @@ root.walkRules((rule) => {
 const crossScope = [...copies.entries()]
   .filter(([, list]) => list.length > 1 && new Set(list.map((c) => c.scope)).size > 1);
 
-/* --- 2. report: reads outside the root ------------------------------------------------------- */
 const classesOf = (selector) => new Set([...selector.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map(([, cls]) => cls));
 const coveredBy = (selector, declRoots) => {
   const classes = classesOf(selector);
@@ -167,20 +147,6 @@ if (process.argv.includes('--report')) {
   [...orphans.keys()].sort().forEach((line) => process.stdout.write(`  ${line}\n`));
 }
 
-/* --- 3. gate: a scope outside the root must be a REVIEWED one --------------------------------
- * What it catches: a rule paints an element the component's root does not reach. "Nested or not"
- * cannot be decided statically — that is knowledge about the DOM — so the decision is made once and
- * recorded here, and the gate makes sure NEW such places cannot appear silently.
- *
- * That is how 208 screenshots moved in CI: a grid's pager carries dx-pager (never dx-pagination),
- * cardView's column chooser and the htmlEditor/fileManager dialogs are popups, and the clone of a
- * dragged pivotGrid field is created in the viewport. Every such place is either a new root in
- * registries.rootSelectors, or a line here backed by the runtime audit
- * (playground/tier-reachability-audit.html).
- *
- * The key is the component plus the first class of the selector, skipping cross-cutting modifiers
- * (dx-rtl, dx-state-*, ...): that class is the one answering "which element is this".
- */
 const GENERIC = /^dx-(rtl|state-|theme-|device-|color-scheme-|widget$|swatch)/;
 const scopesPath = join(here, 'nested-scopes.json');
 const componentOf = (name) => {
@@ -207,13 +173,6 @@ const seenScopes = new Map();
   if (!seenScopes.has(key)) seenScopes.set(key, `${name}  @  ${selector}`);
 });
 
-/*
- * A scope that names another widget's overlay (the toolbar's dx-dropdownmenu-popup, a popover or
- * tooltip wrapper) is a portal by construction: JS mounts it in the overlay container, under no
- * root of THIS component, so the tier never reaches it and "reviewed" cannot be true. The branch
- * has to read the Sass twin (or a :root role) instead - that is how the diagram's overflow menu
- * lost its icon margins for a month while the whitelist kept the gate quiet.
- */
 const SHARED_OVERLAY = /-(popup|popup-wrapper|overlay|overlay-wrapper|overlay-content|popover|popover-wrapper|tooltip|tooltip-wrapper)$/;
 const ownClassOf = (component, scope) => {
   const own = [
@@ -265,16 +224,6 @@ unreviewed.forEach(([key, example]) => {
   process.stdout.write(`     or, having proven nesting with the runtime audit, add "${scope}" to nested-scopes.json["${component}"]\n`);
 });
 
-/* --- 4. gate: declared and never read --------------------------------------------------------
- * Liveness spreads backwards from the ordinary properties: a tier name is live when a normal
- * declaration reads it, when a style query asks about it, or when a live tier name reads it.
- * Everything the fixpoint does not reach is declared for nobody. The known list is pinned in
- * unread-tier.json by exact set equality, the way the calc budget and the naming baseline are
- * pinned: a name that becomes live is banked by regenerating, a name that goes dead is a review,
- * not a rerun. Bank a drop with:
- *
- *   node tools/review/reachability.mjs --update-unread
- */
 const declaredValues = new Map();
 root.walkDecls((decl) => {
   if (!isTierName(decl.prop)) return;
@@ -310,12 +259,6 @@ while (frontier.length) {
 
 const unread = [...declaredAt.keys()].filter((name) => !live.has(name)).sort();
 const unreadPath = join(here, 'unread-tier.json');
-/*
- * The pin is a committed file, not something the tool can rebuild on the fly: without it there is
- * nothing to compare against, and passing would mean the gate quietly stopped working. So fail —
- * but say what is wrong, rather than throwing ENOENT from readFileSync. This happened on CI once:
- * reachability.mjs was committed and its pin was left untracked.
- */
 let pinned;
 try {
   pinned = JSON.parse(readFileSync(unreadPath, 'utf8'));

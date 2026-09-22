@@ -35,10 +35,6 @@
     align-items: center;
     margin-bottom: var(--dx-color-view-container-margin-block-end);
 
-    /*
-     * Kept as a whole declaration on purpose: it also resets the margin-bottom above, which the
-     * base rule — it sets margin-inline-start alone — would leave in place.
-     */
     &.dx-colorview-alpha-channel-label {
       margin: 0 0 0 var(--dx-color-view-container-alpha-label-margin);
     }

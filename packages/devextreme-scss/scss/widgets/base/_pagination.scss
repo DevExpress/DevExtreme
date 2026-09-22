@@ -1,6 +1,5 @@
 @use "./mixins" as *;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $pagination-page-padding-fallback: 7px 8px 8px !default;
 $pagination-page-horizontal-padding: 13px !default;
 $pagination-page-margin-left: 5px !default;
@@ -21,11 +20,9 @@ $pagination-pages-count-padding-left: 6px !default;
 $pagination-info-opacity: 0.7 !default;
 $pagination-nav-disabled-opacity: 0.3 !default;
 
-// Not a knob itself: the shared source of the two fallbacks below, which are.
 $pagination-paddings: 8px; // dx-fixed-size: the shared source of the two fallbacks below
 $pagination-info-paddings: 9px !default;
 
-// The pager's own padding and the nav button's, as fallbacks fluent-next switches off with false.
 $pagination-padding-block-fallback: $pagination-paddings !default;
 $pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !default;
 

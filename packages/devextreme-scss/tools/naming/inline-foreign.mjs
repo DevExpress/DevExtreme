@@ -1,21 +1,20 @@
 /*
- * Wave D of the naming standard (scss/widgets/fluent-next/NAMING.md, rule O4): removes a
- * cross-folder read by giving the reader its own value instead of the other folder's variable.
+ * Removes a cross-folder read by giving the reader its own value instead of the other folder's
+ * variable.
  *
  *   node tools/naming/inline-foreign.mjs           # report
  *   node tools/naming/inline-foreign.mjs --apply
  *
- * It only touches the one shape where O4 needs no judgment: a declaration whose ENTIRE value is a
+ * It only touches the one shape that needs no judgment: a declaration whose ENTIRE value is a
  * single `alias.$foreign` reference, where the provider's own value is a single design token or a
  * literal. Then `$mine: providerAlias.$theirs` becomes `$mine: ds.$token`, which is the same value
- * — so the compiled CSS cannot change — and the coupling is expressed through the token, exactly as
- * O4 asks.
+ * — so the compiled CSS cannot change — and the coupling is expressed through the token.
  *
  * Everything else is left alone and reported, because it needs a person:
  *   - the provider's value is derived from another variable (inlining would copy a chain,
  *     not a value)
  *   - the read is not a plain initialisation (it sits inside a rule, a mixin call or a calc)
- *   - the read is legal under the chassis exception O5, in which case it should STAY:
+ *   - the read is legal under the chassis exception, in which case it should STAY:
  *     `$mine: ds.$x` duplicated across a family is exactly the drift the chassis exists to
  *     prevent.
  *
@@ -50,7 +49,6 @@ const walk = (dir) => readdirSync(dir).flatMap((entry) => {
   return statSync(absolute).isDirectory() ? walk(absolute) : [absolute];
 }).filter((file) => file.endsWith('.scss'));
 
-/** `alias` -> folder it resolves to, for one file. */
 const aliasFolders = (file, content) => {
   const map = new Map();
   [...content.matchAll(/@use\s+(["'])([^"']+)\1([^;{]*)/g)].forEach(([, , spec, tail]) => {
@@ -66,7 +64,6 @@ const aliasFolders = (file, content) => {
   return map;
 };
 
-/** The right-hand side of `$name` in one of the candidate module files, if it is declared once. */
 const providerValue = (candidates, name) => {
   const found = [];
   candidates.filter((candidate) => existsSync(candidate)).forEach((candidate) => {
@@ -96,7 +93,7 @@ walk(themeRoot).forEach((file) => {
     .forEach((match) => {
       const [statement, own, alias, theirs, bang] = match;
       if (alias === 'ds') return;
-      if (!foreign.has(`${alias}.${theirs}`)) return; // chassis-legal or already handled
+      if (!foreign.has(`${alias}.${theirs}`)) return;
       const target = aliases.get(alias);
       if (!target) return;
       const value = providerValue(target.candidates, theirs);

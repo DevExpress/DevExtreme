@@ -2,7 +2,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 @use "../button/sizes" as buttonSizes;
 
-// Not colours: a font weight and two opacities (NAMING.md O7)
 $grid-column-chooser-font-weight: ds.$font-weight-base-strong !default;
 $grid-group-panel-message-line-height: buttonSizes.$button-text-line-height !default;
 
@@ -111,7 +110,6 @@ $grid-ai-prompt-editor-progress-bar-height: ds.$spacing-40 !default;
   $grid-command-ai-button-max-width: ds.$spacing-60 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $grid-icon-button-border-radius: ds.$border-radius-20 !default;
 $grid-margin-inline-start: ds.$spacing-50 !default;
 $grid-icon-margin: 0 ds.$spacing-30 !default;
@@ -147,17 +145,11 @@ $grid-row-border: ds.$border-width-10 solid transparent !default;
 $grid-link-icon-min-width: ds.$spacing-200 !default;
 $grid-editor-input-border-block-end-width: ds.$border-width-10 !default;
 
-// Command column widths the shared layer used to pin; the theme owns them now
 $grid-command-expand-column-width: ds.$spacing-300 !default;
 
-/*
- * The same expression the theme's own .dx-command-adaptive rule computes, so the shared layer
- * stops asserting 36px while the theme renders something else.
- */
 $grid-command-adaptive-column-width: calc(2 * #{$grid-cell-padding-inline} + #{$global-icon-size}) !default;
 $grid-ai-confirm-dialog-button-width: ds.$spacing-520 !default;
 
-// Sizes hoisted out of the shared layer's rules; values match what it used to pin
 $grid-context-menu-item-padding-block: ds.$spacing-70 !default;
 $grid-context-menu-item-padding-inline-start: ds.$spacing-50 !default;
 $grid-context-menu-item-padding-inline-end: ds.$spacing-300 !default;
@@ -177,7 +169,6 @@ $grid-bottom-load-panel-padding: ds.$spacing-100 !default;
 $grid-filter-panel-checkbox-padding-inline-end: ds.$spacing-100 !default;
 $grid-filter-panel-icon-margin-inline-end: ds.$spacing-70 !default;
 
-// The last of the shared layer's sizes: read in arithmetic, so base goes through its dual-mode helpers
 $grid-cell-content-padding: ds.$spacing-70 !default;
 $grid-summary-padding-block: ds.$spacing-140 !default;
 $grid-column-indicator-width: ds.$spacing-140 !default;

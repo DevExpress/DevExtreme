@@ -1,6 +1,5 @@
 @use "./mixins" as *;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $fieldset-root-margin-bottom: 20px !default;
 
 $fieldset-field-padding: 0.4em !default; // dx-relative

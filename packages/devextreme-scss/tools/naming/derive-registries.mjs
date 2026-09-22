@@ -1,6 +1,6 @@
 /*
  * Regenerates tools/naming/registries.json — the single source of truth for the fluent-next
- * SCSS naming standard (scss/widgets/fluent-next/NAMING.md).
+ * SCSS naming standard.
  *
  *   node tools/naming/derive-registries.mjs        # writes registries.json
  *   node tools/naming/derive-registries.mjs --check # fails if the committed file is stale
@@ -61,13 +61,13 @@ const OVERRIDES = {
   // onto rootSelectors[folder]); grammar stays the systemConcerns path, not the component one.
   systemTier: ['common', 'typography'],
 
-  // component -> folder that is allowed to declare it (O2: exactly one declaration home).
+  // component -> folder that is allowed to declare it (exactly one declaration home).
   // Only needed where more than one folder currently declares the component's variables.
   declarationHome: {
     grid: 'gridBase',
   },
 
-  // O5: a chassis may be read by its dependents, and only for the chassis component's variables.
+  // A chassis may be read by its dependents, and only for the chassis component's variables.
   // Dependents are widgets that literally render the chassis widget — not "whatever reads it
   // today".
   chassis: {
@@ -100,7 +100,7 @@ const OVERRIDES = {
        * restyles a real `.dx-button` in its dropdown-appointment block by feeding Button's
        * text-mode palette into `dx-button-flat-color-styling`, which is the same thing. `diagram`
        * and `calendar` are NOT here: they use Button's colours on SVG strokes and on calendar
-       * cells, i.e. on things that are not buttons, and for those O4 applies — their own variable
+       * cells, i.e. on things that are not buttons, and those get their own variable
        * on the same token.
        *
        * The enforcer can only encode this per folder, so a folder goes in when its reads are of the
@@ -140,7 +140,7 @@ const OVERRIDES = {
   },
 
   /*
-   * O4's counterpart: folder -> components it RENDERS, with the element that proves it. A read of a
+   * The counterpart: folder -> components it RENDERS, with the element that proves it. A read of a
    * component listed here is matching a widget the reader contains, not borrowing a value that
    * happened to look right. Everything not listed stays a violation.
    */
@@ -196,7 +196,7 @@ const OVERRIDES = {
   },
 
   /*
-   * Wave F: where the emitted --dx-* component tier is DECLARED (the Blazor --dxbl- model: on the
+   * Where the emitted --dx-* component tier is DECLARED (the Blazor --dxbl- model: on the
    * component's root class, not in :root — per-instance overrides via the cascade, no :root bloat).
    * The default derivation is `.dx-<component-without-hyphens>`; an entry here overrides it, and
    * every selector is machine-gated against the built bundle (assertRootSelectorsExist).
@@ -209,9 +209,9 @@ const OVERRIDES = {
    *     runtime class when the hierarchy provides one (.dx-texteditor, .dx-menu-base), and the
    *     dependents' root list when it does not (grid).
    * Popup satellites of composite widgets are included where known (date-box wrapper, tag-box
-   * popup); a consumption wave that converts a declaration must still prove its subject sits under
-   * one of these roots (browser smoke) — grid's column-chooser-style satellites get added here when
-   * that component's consumption wave lands.
+   * popup); converting a declaration to the tier must still prove its subject sits under one of
+   * these roots (browser smoke) — grid's column-chooser-style satellites get added here when that
+   * component is converted.
    */
   rootSelectors: {
     /*
@@ -241,7 +241,7 @@ const OVERRIDES = {
     // the ancestor of every box the component paints (palette, scales, previews, controls)
     'color-view': ['.dx-colorview-container'],
     /*
-     * Wave H satellites. dx-pager and dx-pagination are MUTUALLY EXCLUSIVE
+     * Satellites. dx-pager and dx-pagination are MUTUALLY EXCLUSIVE
      * (pagination/content.tsx, getClasses): the standalone widget gets dx-pagination, a grid's
      * pager runs in grid-compatibility mode and gets dx-pager instead — declaring on one leaves
      * the tier empty in the other, which is what emptied every grid pager in CI.
@@ -293,13 +293,13 @@ const OVERRIDES = {
     // the properties panel, the toolbox and the context toolbars are popups and floating panels
     diagram: ['.dx-diagram', '.dx-diagram-properties-popup', '.dx-diagram-toolbox-popup',
       '.dx-diagram-contextmenu', '.dx-diagram-context-toolbox', '.dx-diagram-floating-toolbar-container'],
-    // wave H roots that are not `.dx-<component>`: an overlay renders outside its source element,
+    // Roots that are not `.dx-<component>`: an overlay renders outside its source element,
     // and two components paint a box whose class is not their own
     popup: ['.dx-popup-wrapper'],
     'speed-dial-action': ['.dx-fa-button'], // .dx-speeddialaction exists only in JS
     widget: ['.dx-surface'], // the one variable paints the theme surface itself
     /*
-     * Portals (the wave F15 class): the widget paints boxes the JS renders outside the widget
+     * Portals: the widget paints boxes the JS renders outside the widget
      * element — the appointment editor and the appointment tooltip. Each class sits on the overlay
      * WRAPPER, so it is an ancestor of the painted box. fileManager is the same class of widget and
      * is listed with its dialogs above.
@@ -328,7 +328,7 @@ const OVERRIDES = {
     /*
      * Chassis. .dx-menu-base sits on dxMenu's root, on every submenu overlay content (Submenu
      * extends ContextMenu, whose content carries the class) and on dxContextMenu's content, so one
-     * class scopes the whole family. Known hole for the consumption wave: the decorative
+     * class scopes the whole family. Known hole when converting: the decorative
      * .dx-context-menu-container-border / -content-delimiter boxes may sit OUTSIDE .dx-menu-base
      * inside the overlay — prove ancestry before converting those two declarations.
      */
@@ -382,7 +382,7 @@ const OVERRIDES = {
      */
     fieldset: ['.dx-fieldset', '.dx-field'],
     /*
-     * Toolbar paints outside its own element (found by the wave-F5 reachability audit and its
+     * Toolbar paints outside its own element (found by the reachability audit and its
      * browser smoke): .dx-toolbar-menu-section lives in the overflow-menu POPUP — desktop renders
      * it under .dx-dropdownmenu-popup-wrapper (verified live: the wrapper carries no toolbar
      * class), .dx-toolbar-menu-container is the other, mobile overflow surface the bundle styles;
@@ -448,7 +448,7 @@ const OVERRIDES = {
   /*
    * Bundle configuration and theme identity: exempt from the component-prefix rule.
    * The first four are named by build/bundle-template.fluent-next.scss, which substitutes $COLOR,
-   * $MODE and $SIZE into them (see GOTCHAS.md §5), so their spelling belongs to the build.
+   * $MODE and $SIZE into them, so their spelling belongs to the build.
    * The $theme-marker-* trio is the theme's own: each holds one segment of the .dx-theme-marker
    * font-family that themes.current() parses at runtime. Only their VALUES reach that string, so
    * the names are free — they carry no component and are named after the thing they compose.
@@ -458,9 +458,9 @@ const OVERRIDES = {
     '$theme-marker-color', '$theme-marker-mode', '$theme-marker-size-postfix',
   ],
 
-  // Folders exempt from the standard, with the reason recorded in NAMING.md.
+  // Folders exempt from the standard.
   /*
-   * Wave H (28.08.2026) emptied this list: cardView's BEM names were the last entry, and the
+   * The list is empty: cardView's BEM names were the last entry, and the
    * rename that removed them touched only this theme's copy — the shared `$cardview-*` parameters
    * of base keep their spelling and stay mirrors, so generic/material/fluent are untouched.
    */
@@ -496,7 +496,7 @@ const OVERRIDES = {
     'shadow-key',
   ],
 
-  // A button inside another widget is a nested component (anatomy rule 3), not a part.
+  // A button inside another widget is a nested component, not a part.
   partsRemove: ['button'],
 
   /*
@@ -598,7 +598,7 @@ const OVERRIDES = {
    * transitive dependency of stylelint here, and adding it as a direct one would touch the shared
    * lockfile for a validation nicety. The list grows one entry at a time as components migrate, and
    * every addition is a reviewed diff — which is also what keeps physical axes out (`margin-left`
-   * is a real CSS property but is deliberately absent, see the logical-axes rule in NAMING.md).
+   * is a real CSS property but is deliberately absent under the logical-axes rule).
    */
   sizeSlots: [
     'size', 'gap', 'offset', 'spacing',
@@ -814,15 +814,15 @@ const OVERRIDES = {
     'text-box', 'text-area', 'number-box', 'date-box', 'date-range-box', 'select-box',
     'lookup', 'tag-box', 'color-box', 'drop-down-editor', 'drop-down-list',
     'grid', 'data-grid', 'tree-list',
-    // waves C11-C12, the finished tails
+    // the finished tails
     'switch', 'date-view', 'gallery',
     'typography', 'toolbar', 'overlay', 'informer', 'scroll-view', 'context-menu', 'fieldset',
     'menu', 'progress-bar', 'load-indicator', 'drop-down-menu',
-    // wave C9, the small folders
+    // the small folders
     'accordion', 'action-sheet', 'box', 'button-group', 'load-panel', 'tile-view', 'validation',
     'tooltip', 'radio-button', 'scrollable', 'drop-down-button', 'badge', 'card', 'icon', 'popover',
     'splitter', 'splitter-bar', 'sortable', 'tab-panel',
-    // wave H (28.08.2026): the components the tier never reached — see RENAME_PROGRESS.md
+    // the components the tier never reached
     'color-view', 'calendar', 'check-box', 'drawer', 'filter-builder', 'form', 'html-editor',
     'list', 'popup', 'radio-group', 'speed-dial-action', 'time-view', 'tree-view', 'widget',
     'scheduler', 'file-manager', 'tabs',
@@ -835,7 +835,7 @@ const OVERRIDES = {
    */
   // Names must not collide with a state; colliding with a part is fine (see assertParseable).
   subElements: {
-    // wave H: cardView anatomy, read off the base selectors when the folder migrated
+    // cardView anatomy, read off the base selectors when the folder migrated
     'card-view': [
       'card', 'cover', 'content', 'cell', 'field-value', 'field', 'header', 'selection-checkbox',
       'column-chooser', 'select-all-item', 'message', 'filter-panel', 'header-panel', 'dropzone',
@@ -843,13 +843,13 @@ const OVERRIDES = {
       'icon-container', 'cards', 'divider', 'allowance', 'prohibition', 'link', 'icon', 'caption',
       'text',
     ],
-    map: ['marker-tooltip'], // wave H
+    map: ['marker-tooltip'],
     toast: ['content', 'icon', 'item', 'stack'],
     // .dx-icon and .dx-button-text are real boxes inside a button; `icon` is also a part, which
     // is allowed — the grammar resolves it by position (see assertParseable).
     button: ['icon', 'text', 'content'],
     'text-box': ['search', 'search-bar', 'icon'],
-    // Wave C9: the small folders. Every word below is a DOM box of that widget
+    // The small folders. Every word below is a DOM box of that widget
     // (.dx-accordion-item-title,
     // .dx-actionsheet-item, .dx-tile, .dx-radio-value-container, …), not a re-spelling of a part.
     accordion: ['title', 'body', 'item', 'icon'],
@@ -870,13 +870,13 @@ const OVERRIDES = {
     scrollable: ['scroll', 'scrollbar'],
     'drop-down-button': ['action', 'toggle', 'spindown-icon', 'icon', 'item'],
     /*
-     * Wave C10. Every word is a DOM box of that widget, read off its selectors —
+     * Every word is a DOM box of that widget, read off its selectors —
      * `.dx-checkbox-icon`, `.dx-list-item-ghost-…`, `.dx-pager .dx-page`, `.dx-toolbar-label`,
      * `.dx-treeview-node`, and so on. Compounds (`group-header`, `nav-button`, `pull-down`) are one
      * anatomy level, not two.
      */
     'check-box': ['icon', 'mark', 'arrow', 'arrow-icon', 'container'],
-    // wave B7: .dx-switch-on and .dx-switch-off are the two labels the track slides between
+    // .dx-switch-on and .dx-switch-off are the two labels the track slides between
     switch: ['handle', 'container', 'inner', 'label'],
     /*
      * `menu-items-container` sits next to `items-container` on purpose: base/_contextMenu.scss
@@ -890,14 +890,14 @@ const OVERRIDES = {
     'date-view': ['roller', 'item', 'year', 'month', 'hours-colon'],
     'time-view': ['clock', 'digits', 'field', 'number-box', 'input', 'time-separator', 'spin',
       'format12',
-      // wave B8: the hour and minute hands are boxes the clock positions on the dial
+      // the hour and minute hands are boxes the clock positions on the dial
       'arrow'],
     fieldset: ['field', 'label', 'value', 'header', 'attention-icon', 'radio-group'],
     'radio-group': ['radio-button', 'collection', 'value-container'],
     'progress-bar': ['status', 'range', 'container', 'label'],
     menu: ['item', 'icon', 'text', 'separator', 'popup', 'tree-view', 'node', 'content', 'link'],
     slider: [
-      // wave H: anatomy the folder needed to enter `migrated`
+      // anatomy the folder needed to enter `migrated`
       'element', 'handle', 'bar', 'handle', 'inner', 'track', 'tooltip', 'label', 'wrapper'],
     gallery: ['indicator', 'indicator-item', 'nav-button', 'nav-arrow', 'nav-icon', 'item',
       'button'],
@@ -925,14 +925,14 @@ const OVERRIDES = {
     // .dx-fa-button / .dx-fa-button-label are the real class names of the floating action button
     'speed-dial-action': ['main', 'button', 'label', 'fa-button', 'fa-button-label'],
     /*
-     * Wave C16, the remaining composite widgets. Same rule as everywhere above: a word goes in only
+     * The remaining composite widgets. Same rule as everywhere above: a word goes in only
      * if it is a DOM box of that widget. Words that turned out to be variants live in MODIFIERS,
      * and names carrying a physical `-left`/`-right` are left for the manual tail of each folder.
      */
     calendar: ['cell', 'header', 'week-day-header', 'week-number', 'week-number-cell', 'navigator',
       'footer-button', 'view', 'element'],
     chat: [
-      // wave H: anatomy the folder needed to enter `migrated`
+      // anatomy the folder needed to enter `migrated`
       'alert', 'alerts', 'button', 'confirmation-popup-content', 'confirmation-popup-toolbar',
       'content', 'edited', 'section', 'size', 'start', 'view-items',
       'message-list', 'message-box', 'message', 'day-header', 'empty-view', 'avatar', 'bubble',
@@ -940,7 +940,7 @@ const OVERRIDES = {
       'caption', 'delete-button', 'cancel-button', 'context-menu', 'icon', 'box', 'container',
       'alert-list', 'prompt', 'textarea', 'toolbar', 'information', 'author-name', 'timestamp',
       'typing-indicator', 'circle', 'bubble', 'group',
-      // wave B3: .dx-chat-messagebubble-image is a real <img> box inside a bubble
+      // .dx-chat-messagebubble-image is a real <img> box inside a bubble
       'image'],
     /*
      * `alpha` alone was doing three jobs — the alpha row, the alpha cell and the alpha scale are
@@ -952,7 +952,7 @@ const OVERRIDES = {
       'container', 'label', 'handle', 'color-preview', 'preview', 'textbox', 'hex', 'overlay',
       'content-box', 'bg-box'],
     diagram: [
-      // wave H: anatomy the folder needed to enter `migrated`
+      // anatomy the folder needed to enter `migrated`
       'accordion-v', 'close-icon', 'closebutton', 'colorbutton', 'connection', 'connector', 'container', 'editor', 'editor-button', 'geometry-mark', 'h', 'input', 'input-button', 'input-image', 'items', 'large-editor', 'medium-editor', 'mobile', 'muted', 'properties-layout-icon', 'selection', 'separator', 'touchbar-item', 'toolbar', 'toolbar-icon', 'toolbar-wrapper', 'title-toolbar', 'toolbox',
       'context-toolbox', 'target', 'properties-panel', 'canvas', 'format', 'item', 'text', 'icon',
       'image-icon', 'button', 'popup', 'title', 'content', 'load-indicator', 'loading-indicator',
@@ -973,7 +973,7 @@ const OVERRIDES = {
      * spelled in the DOM — inventing readable expansions would break the link to the selector.
      */
     gantt: [
-      // wave H: anatomy the folder needed to enter `migrated`
+      // anatomy the folder needed to enter `migrated`
       'arrow', 'dependency-successor', 'edit-frame', 'edit-successor-dependency-l', 'header-item',
       'items-container', 'milestone', 'notch', 'selection', 'successor',
       'task', 'task-res', 'task-title', 'task-progress', 'task-wrapper', 'task-edit-wrapper',
@@ -984,7 +984,7 @@ const OVERRIDES = {
       'uploader', 'file-uploader', 'input-wrapper', 'wrapper', 'ai-dialog', 'content', 'icon', 'item',
       'highlighted-row', 'code-block', 'placeholder', 'size-editor', 'add-image-dialog', 'separator',
       'tabs', 'selects', 'title',
-      // wave B14: the quoted block, a table cell, and the bar that resizes a column or row together
+      // the quoted block, a table cell, and the bar that resizes a column or row together
       // with the strip that highlights the one being dragged
       'blockquote', 'cell', 'resizer', 'highlight'],
     'pivot-grid': ['area', 'area-field', 'fields-area-head', 'fields-area-head-cell', 'field-chooser',
@@ -995,16 +995,16 @@ const OVERRIDES = {
       'tree-view-search', 'drag', 'checkbox', 'field-chooser-field', 'field-area-box',
       'header-filter', 'indicators', 'data-area'],
     stepper: [
-      // wave H: anatomy the folder needed to enter `migrated`
+      // anatomy the folder needed to enter `migrated`
       'content', 'optional-mark', 'step', 'step-indicator', 'step-label', 'label', 'connector', 'value', 'icon', 'text',
       'item', 'container',
-      // wave B3: the two box-shadow rings around the indicator — `ring` is the selection ring,
+      // the two box-shadow rings around the indicator — `ring` is the selection ring,
       // `halo` is the gap the indicator punches in the connector behind it
       'ring', 'halo'],
     'recurrence-editor': ['switch', 'repeat-end', 'item', 'container', 'label', 'until-date-box',
       'count-number-box', 'interval-number-box', 'number-box', 'button-group', 'radio-group'],
     /*
-     * Wave C15, scheduler. Every word below is a `.dx-scheduler-*` DOM box (the legacy names were
+     * Scheduler. Every word below is a `.dx-scheduler-*` DOM box (the legacy names were
      * built from those class names), with the compounds kept whole because that is how the class
      * reads: `.dx-scheduler-appointment-tooltip-buttons`, `.dx-scheduler-header-panel-cell`, … The
      * variant words that were mixed into the same position — `small`, the duration steps `10min`…
@@ -1035,12 +1035,12 @@ const OVERRIDES = {
       'resource-item', 'resource-value', 'virtual-row', 'empty-cell',
     ],
     /*
-     * Wave C14, the file widgets. Compounds are one anatomy level: `progress-box` is
+     * The file widgets. Compounds are one anatomy level: `progress-box` is
      * `.dx-filemanager-progress-box`, `thumbnails-item` is `.dx-filemanager-thumbnails-item` — the
      * DOM class of each is exactly the compound.
      */
     'file-manager': [
-      // wave H: anatomy the 06.08 untangling gave base parameters, but the vocabulary never got
+      // anatomy the 06.08 untangling gave base parameters, but the vocabulary never got
       'thumbnail', 'box', 'path-separator', 'dialog', 'dialog-name-editor',
       'i-cancel', 'text-item', 'drop-zone-placeholder', 'progress-bold', 'close', 'context-menu',
       'file-uploader',
@@ -1050,24 +1050,23 @@ const OVERRIDES = {
       'thumbnails', 'thumbnails-item', 'thumbnails-view-port', 'custom-thumbnail', 'spacer',
       'progress-panel', 'progress-box', 'progress-title', 'progress-bar', 'close-button',
       'large-icon', 'view-mode-button', 'tree-view-item', 'drop-zone-placeholder',
-      // wave B5: .dx-splitter-wrapper is a splitter box the file manager positions itself
+      // .dx-splitter-wrapper is a splitter box the file manager positions itself
       'splitter-wrapper',
       'cancel-button', 'notification', 'container', 'separator', 'content', 'item', 'menu-item',
       'popup', 'overlay', 'editor', 'button', 'icon', 'text', 'title', 'image', 'placeholder',
       'drop-zone',
     ],
     'file-uploader': [
-      // wave H: anatomy the folder needed to enter `migrated`
+      // anatomy the folder needed to enter `migrated`
       'line',
       'file', 'file-name', 'file-size', 'file-status-message', 'file-container', 'file-icon',
       'button', 'upload-button', 'cancel-button', 'progress-bar', 'status', 'message', 'label',
       'text', 'files-container', 'wrapper',
     ],
     /*
-     * Wave C11 — the folder tails. `heading-N` and `xs…xl` are the steps of the type scale, an
-     * enumerated entity, which the standard allows to carry an ordinal (NAMING.md, numeric
-     * segments); the token package spells them the same way (font-size-heading-1,
-     * font-size-base-xs).
+     * The folder tails. `heading-N` and `xs…xl` are the steps of the type scale, an
+     * enumerated entity, which the standard allows to carry an ordinal (numeric segments); the
+     * token package spells them the same way (font-size-heading-1, font-size-base-xs).
      */
     typography: ['heading-1', 'heading-2', 'heading-3', 'heading-4', 'heading-5', 'heading-6',
       'xs', 's', 'm', 'l', 'xl', 'link'],
@@ -1126,7 +1125,7 @@ const OVERRIDES = {
     'text-editor': [
       'input', 'label', 'line', 'button', 'clear-button', 'spin-button', 'custom-button',
       'icon-container', 'invalid-badge',
-      // wave B13: the strip the floating label sits on (.dx-label::before) and the glyph inside an
+      // the strip the floating label sits on (.dx-label::before) and the glyph inside an
       // editor button (.dx-button-content .dx-icon) are both real boxes with sizes of their own
       'backdrop', 'icon',
     ],
@@ -1210,7 +1209,7 @@ const deriveFromTokens = (states) => {
  *
  * Both parse. Requiring sub-elements to avoid part names would have forced `body` on an element the
  * DOM calls `content`, which costs findability for no decidability gain. (This is the second time
- * the instinct "make all the vocabularies disjoint" turned out to be too strong — see NAMING.md.)
+ * the instinct "make all the vocabularies disjoint" turned out to be too strong.)
  */
 const assertParseable = (parts, states, modifiers, subElements) => {
   const clash = (a, b) => a.filter((value) => b.includes(value));
@@ -1291,7 +1290,7 @@ const build = () => {
   const { subElements } = OVERRIDES;
   assertParseable(parts, OVERRIDES.states, OVERRIDES.modifiers, subElements);
 
-  // Wave F: emission scope per migrated component — explicit override or the derived widget class
+  // Emission scope per migrated component — explicit override or the derived widget class
   const rootSelectors = {};
   [...OVERRIDES.migrated, ...OVERRIDES.systemTier].forEach((component) => {
     rootSelectors[component] = OVERRIDES.rootSelectors[component]

@@ -4,7 +4,6 @@
 
 $colorbox-input-left-padding: 40px !default;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $colorbox-texteditor-input-container-width: 15px !default;
 $colorbox-texteditor-input-container-height: 15px !default;
 $colorbox-texteditor-input-container-inset-inline-start: 14px !default;
@@ -26,10 +25,6 @@ $colorbox-toolbar-item-padding-right: 10px !default;
 
 .dx-colorbox {
   .dx-texteditor-input-container {
-    /*
-     * The preview is centred on the input with translateY, the same way dx-pending-indicator does
-     * it: no arithmetic on the height, so the size can be a token without a build-time/runtime fork.
-     */
     &::before {
       content: "";
       display: block;

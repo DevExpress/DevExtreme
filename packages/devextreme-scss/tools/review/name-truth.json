@@ -79,7 +79,7 @@
         "border-top-color"
       ],
       "decision": "banked",
-      "why": "Already reviewed by the colour audit: one value painting the band and the marks that bound it (rule 5)."
+      "why": "Already reviewed by the colour audit: one value painting the band and the marks that bound it."
     },
     {
       "name": "--dx-grid-command-ai-button-max-width",

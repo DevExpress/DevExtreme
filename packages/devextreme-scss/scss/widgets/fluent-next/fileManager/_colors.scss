@@ -19,12 +19,6 @@ $file-manager-file-item-border-focused: ds.$color-border-primary !default;
 $file-manager-item-content-focused: ds.$color-content-inverted !default;
 $file-manager-dirs-tree-item-bg-focused: ds.$color-bg-active !default;
 
-/*
- * The status icons (refresh/progress/done/error overlays) are SVG data-uri images: colors are
- * baked into the background-image at build time (string replace). CSS var() tokens do NOT
- * resolve inside a data-uri (they render black), so the values below are the static per-mode
- * equivalents of the ds.$ tokens named in the markers. See DIVERGENCES.md.
- */
 $file-manager-icon-success-content: #107c10 !default; // dx-data-uri-static: ds.$color-bg-success (mode-invariant)
 $file-manager-icon-danger-content: #c50f1f !default; // dx-data-uri-static: ds.$color-bg-danger (mode-invariant)
 $file-manager-icon: null !default;
@@ -40,7 +34,6 @@ $file-manager-icon-inverted-content: null !default;
   $file-manager-icon-inverted-content: #161616 !default; // dx-data-uri-static: ds.$color-content-inverted
 }
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $file-manager-drop-zone-placeholder-border: ds.$color-border-primary !default;
 $file-manager-bg: ds.$color-bg !default;
 $file-manager-danger-bg: ds.$color-bg-danger !default;

@@ -18,17 +18,11 @@ const meta = { fixable: true };
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
-// A size classified by the px audit is not a knob: the audit's gate accepts a fixed value only
-// when a theme sets it or a marker says why it stays, so a marked value is one the theme must not
-// pass through @use with(). The marker list is read from the audit's own vocabulary to keep one
-// source of truth; the path is package-relative.
 const readMarkers = (vocabularyPath) => {
   const { categories } = JSON.parse(readFileSync(join(packageRoot, vocabularyPath), 'utf8'));
   return categories.map(({ marker }) => marker).filter(Boolean);
 };
 
-// The marker sits where the px audit writes it: in the declaration's trailing comment, or in the
-// comment block directly above it (tools/review/px-audit.mjs reads the same two places).
 const classifyingComments = (decl) => {
   const parts = [];
   const trailing = decl.next();

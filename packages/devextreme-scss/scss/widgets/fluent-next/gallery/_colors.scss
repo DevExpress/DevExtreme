@@ -7,7 +7,6 @@ $gallery-indicator-item-bg-selected: ds.$color-bg-primary !default;
 $gallery-indicator-bg-focused: ds.$color-bg-primary !default;
 $gallery-indicator-item-border: ds.$color-border-subtle !default;
 
-// Semi-transparent surface over the indicator — relative-color bridge.
 $gallery-indicator-border-selected: rgb(from #{ds.$color-bg} r g b / 0.8) !default;
 $gallery-nav-button-bg: ds.$color-bg-static-dark !default;
 $gallery-nav-arrow-content: ds.$color-content-static-dark !default;

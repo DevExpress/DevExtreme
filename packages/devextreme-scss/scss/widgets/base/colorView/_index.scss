@@ -8,18 +8,12 @@ $color-view-hue-scale-width: 18px !default;
 $color-view-hue-scale-height: $color-view-palette-height !default;
 $color-view-hue-scale-wrapper-height: $color-view-hue-scale-height + 2 !default;
 
-/*
- * The handle is a drawing, not a box: its size is interlocked with the ring radii of the
- * radial-gradient and the inset shadows in _mixins.scss. Changing one without redrawing the
- * others breaks the handle, so these stay fixed rather than becoming knobs.
- */
 $colorview-palette-handle-size: 28px; // dx-fixed-size: diameter of the round palette handle, drawn as rings at 6/7/12/13px
 $colorview-transparent-background-color: #ccc;
 
 $colorview-handle-first-side-size: 36px; // dx-fixed-size: long side of the scale handles, drawn by the inset shadows
 $colorview-handle-second-side-size: 17px; // dx-fixed-size: short side of the scale handles, drawn by the inset shadows
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $color-view-label-hex-margin: 10px 0 0 0 !default;
 $color-view-alpha-label-margin-inline-start: 43px !default;
 $color-view-alpha-label-margin-inline-start-rtl: 41px !default;

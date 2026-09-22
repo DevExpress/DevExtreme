@@ -173,8 +173,6 @@ export class OverlayPositionController<
   }
 
   get $container(): dxElementWrapper | undefined {
-    // Resolved on every read: the swatch and the theme mode an element sits in can both change at
-    // runtime, and an overlay shown afterwards has to land in the scope that holds then.
     this.updateContainer();
 
     return this._$markupContainer;

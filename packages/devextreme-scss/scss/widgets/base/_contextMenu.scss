@@ -1,4 +1,3 @@
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $contextmenu-menu-items-container-padding: 1px !default;
 $contextmenu-menu-separator-height: 1px !default;
 $contextmenu-menu-separator-margin: 5px 0 !default;
@@ -10,8 +9,6 @@ $contextmenu-menu-separator-margin: 5px 0 !default;
   }
 
   .dx-menu-items-container {
-
-    // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
     @if $contextmenu-menu-items-container-padding {
       padding: $contextmenu-menu-items-container-padding;
     }

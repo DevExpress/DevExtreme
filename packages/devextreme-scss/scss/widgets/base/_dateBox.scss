@@ -1,6 +1,5 @@
 @use "./mixins" as *;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $datebox-texteditor-height: 20px !default;
 $datebox-popup-content-padding-top: 20px !default;
 $datebox-popup-content-padding-bottom: 20px !default;

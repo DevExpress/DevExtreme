@@ -2,11 +2,9 @@
 @use "colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// Moved out of _index.scss (O7): a transition and a shadow are values, not rules
 $switch-transition: all 0.2s cubic-bezier(0.33, 0, 0.67, 1) !default;
 $switch-box-shadow: none !default;
 
-// Not a colour: a radius that used to sit in _colors.scss (NAMING.md, O7)
 $switch-handle-border-radius: 50% !default;
 
 $switch-width: null !default;
@@ -18,10 +16,6 @@ $switch-handle-height: null !default;
 
 $switch-handle-on-box-shadow-blur: 0 !default;
 
-/*
- * Composite box-shadow (geometry + a colour reference), so it belongs here rather than in
- * _colors.scss — same rule as $toast-box-shadow. Moved out of _index.scss (O7).
- */
 $switch-handle-on-box-shadow: 0 0 0 $switch-handle-on-box-shadow-blur $switch-handle-on-shadow !default;
 $switch-container-rtl-offset: ds.$spacing-60 !default;
 
@@ -39,7 +33,6 @@ $switch-container-rtl-offset: ds.$spacing-60 !default;
   $switch-height: ds.$spacing-160 !default;
 }
 
-// Base-layer sizing injected with design tokens (wave B7)
 $switch-container-border-radius: ds.$border-radius-full !default;
 $switch-label-padding: ds.$spacing-40 0 !default;
 $switch-off-padding-block-end: ds.$spacing-100 !default;

@@ -1,7 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// Moved from menuBase/ so the component has a single declaration home (NAMING.md, O2)
 $menu-item-line-height: null !default;
 $menu-item-with-icon-padding-inline: null !default;
 $menu-padding-inline: null !default;
@@ -29,11 +28,9 @@ $menu-padding-block: null !default;
   $menu-padding-block: ds.$spacing-40 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $menu-tree-view-border: ds.$border-width-10 solid !default;
 $menu-tree-view-node-border-block-end: ds.$border-width-10 solid !default;
 
-// Base-layer sizing injected with design tokens (wave B2)
 $menu-separator-margin-inline-end: ds.$spacing-150 !default;
 $menu-separator-margin-block-end: ds.$spacing-150 !default;
 $menu-tree-view-node-padding: ds.$spacing-10 !default;

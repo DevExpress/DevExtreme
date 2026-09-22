@@ -1,7 +1,6 @@
 @mixin dx-toolbar-focus-outline(
   $accent-color,
   $border-radius,
-  // The focus ring's geometry, on the same role as its colour and radius.
   $outline-width: 2px,
   $outline-offset: 1px,
 ) {

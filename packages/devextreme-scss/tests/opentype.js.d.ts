@@ -1,5 +1,4 @@
 declare module 'opentype.js' {
-  // opentype.js hands glyphs back opaquely; nothing here reads inside one.
   type Glyph = Record<string, never>;
 
   interface GlyphSet {

@@ -1,17 +1,3 @@
-/*
- * Gate for the fluent-next theme-mode invariant: an element carrying `dx-theme-mode-light`,
- * `-dark` or `-inverted` repaints itself and its subtree.
- *
- * It breaks silently, because a custom property is substituted where it is DECLARED, not where it
- * is read: `:root { --dx-color-text: var(--dxds-color-content) }` computes on <html> and freezes
- * at the bundle's mode, whatever class sits below. The declaration stays valid and only the colour
- * is wrong, so nothing fails - 39 properties were in that state before this gate existed.
- *
- * Checked against the built bundle, not a list here: the three scopes declare the same names, and
- * nothing reading one of those names is declared where a mode class cannot reach it. A declaration
- * on a component root is fine and not flagged - that element may itself sit inside a scope.
- */
-
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import postcss from 'postcss';
@@ -33,18 +19,13 @@ if (!bundleNames.length) {
     + 'does it for you)');
 }
 
-/** The compound a selector actually targets: `:where(.a) .b` -> `.b`, `:root` -> `:root`. */
 const subjectOf = (selector: string): string => selector.trim().split(/[\s>+~]+/).filter(Boolean).pop() ?? '';
 
 const modeScopesOf = (selector: string): string[] => MODE_SCOPES
   .filter((scope) => subjectOf(selector) === `${MODE_CLASS_PREFIX}${scope}`);
 
-// A rule lands on the document element - the one place a mode class below it cannot reach.
 const isDocumentRoot = (selector: string): boolean => [':root', 'html'].includes(subjectOf(selector));
 
-// A rule can reach the root while also matching something else: `:root, .dx-button { … }` still
-// declares on <html>. So the question is whether ANY selector is the root, with no mode scope in
-// the same list to re-resolve it.
 const freezesOnDocumentRoot = (selectors: string[]): boolean => selectors.some(isDocumentRoot)
   && !selectors.some((selector) => modeScopesOf(selector).length);
 
@@ -90,8 +71,6 @@ const readBundle = (name: string): BundleFacts => {
   return { scopeNames, rootDeclarations, modeScopedNames };
 };
 
-// Frozen = declared on the document element and reading something a mode class redefines, whether
-// directly or through another such declaration - `box-shadow-md` over `color-shadow-key`.
 const frozenProperties = ({ rootDeclarations, modeScopedNames }: BundleFacts): string[] => {
   const frozen = new Map<string, string>();
   const tainted = new Set(modeScopedNames);

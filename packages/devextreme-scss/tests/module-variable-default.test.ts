@@ -112,8 +112,6 @@ test('a size classified by the px audit is not a knob, so the flag is not requir
     '$detached: 13px;',
   );
 
-  // only the two unclassified sizes are reported: $plain, and $detached, whose marker is a blank
-  // line away and therefore explains something else
   expect(classified.lint('classified.scss', source).warnings.map(({ line }) => line)).toEqual([1, 15]);
   expect(lint('unconfigured.scss', source).warnings).toHaveLength(6);
 });

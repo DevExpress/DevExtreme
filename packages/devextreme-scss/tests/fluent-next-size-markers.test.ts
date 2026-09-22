@@ -1,15 +1,3 @@
-/*
- * Every fixed pixel size in fluent-next must be classified.
- *
- * A px literal with no marker is invisible: it never reaches SCALES.md, so design never sees it and
- * no decision about it exists (design#1555). The markers are the only channel, so a new unmarked
- * literal fails here rather than silently joining the backlog.
- *
- * The scan itself lives in tools/review/px-audit.mjs — the same module the report is built from, so
- * the gate and SCALES.md can never disagree about what counts as marked. This test drives it as a
- * child process because the tool is ESM and jest transforms TypeScript only.
- */
-
 import { execFileSync } from 'child_process';
 import {
   mkdtempSync, readdirSync, readFileSync, writeFileSync,
@@ -44,7 +32,6 @@ const audit = (root?: string): { marked: number; unmarked: Place[] } => {
   try {
     return parse(execFileSync(process.execPath, args, { encoding: 'utf8' }));
   } catch (error) {
-    // a non-empty scan exits 1 by design — the payload is still on stdout
     const { stdout, status } = error as { stdout?: string; status?: number };
     if (!stdout) throw error;
     expect(status).toBe(1);
@@ -60,7 +47,6 @@ test('every fixed px size in fluent-next carries a classification marker', () =>
 });
 
 test('the gate rejects a new unmarked literal', () => {
-  // negative self-check: a green gate must mean "nothing to find", not "the scan stopped working"
   const fixture = mkdtempSync(join(tmpdir(), 'fluent-next-px-audit-'));
   writeFileSync(join(fixture, '_marked.scss'), [
     '.dx-widget {',
@@ -86,12 +72,6 @@ test('the gate rejects a new unmarked literal', () => {
 });
 
 test('no marker name is a substring of a custom property name used in the theme', () => {
-  /*
-   * The scan looks for the marker as a substring of the line's comment, so a marker that reads like
-   * a custom property would match prose about that property. `dx-border-width` was rejected for
-   * exactly this reason: the theme declares `--dx-border-width`, and a comment mentioning it would
-   * have filed that line under "border thickness".
-   */
   const names = new Set(walk(themeRoot).flatMap((file) => [
     ...readFileSync(file, 'utf8').matchAll(/--(dx[a-z0-9-]*)/g),
   ].map(([, name]) => name)));
@@ -101,20 +81,6 @@ test('no marker name is a substring of a custom property name used in the theme'
   expect(collisions).toEqual([]);
 });
 
-/*
- * A glyph is sized from the spacing scale, not from a typography one.
- *
- * Measured on the package at 262.23.0: every icon size core, vnext, blazor and wpf declare comes
- * from spacing (icon.size = {spacing.120} / {spacing.160} / {spacing.200}), at every density, and
- * not one from font-size. The theme read font-size in fifteen places until they were moved, and the
- * move cost nothing because font-size-N and spacing-N resolve to the same rem at every step - which
- * is exactly why the two are easy to confuse again. A `font-size` that happens to be right is the
- * failure mode this catches.
- *
- * Deliberately narrow: it matches a variable whose own name says it sizes a glyph. The rest of
- * tools/review/sizes.mjs stays a report - see the note in its header for why a step cannot be
- * gated the way a colour family can.
- */
 test('glyph sizes read the spacing scale, not a typography one', () => {
   const TYPOGRAPHY = /ds\.\$(font-size|line-height|font-weight)-/;
   const GLYPH = /^\$[a-z0-9-]*(icon|glyph|chevron|arrow)[a-z0-9-]*\s*:/;

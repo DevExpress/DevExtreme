@@ -21,7 +21,7 @@
     "",
     "slotLies - the slot word contradicts the CSS property the bundle shows it painting. Same rules as",
     "above: banked with a decision, exact equality. hairline and rule-5 are deliberate and stay; naming",
-    "is a rename wave waiting for a changelog, not a role defect.",
+    "is a rename waiting for a changelog, not a role defect.",
     "",
     "ladders - a slot whose states resolve to one role. `focused` reusing `hovered` is accepted",
     "convention and never listed. decision no-rung means the system has no role for the second state",
@@ -47,7 +47,7 @@
       ],
       "slot": "bg",
       "decision": "confirmed",
-      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. the naming standard decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
     },
     {
       "name": "check-box-invalid-mark-bg-active",
@@ -57,7 +57,7 @@
       ],
       "slot": "bg",
       "decision": "confirmed",
-      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. the naming standard decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
     },
     {
       "name": "check-box-invalid-mark-bg-focused",
@@ -67,7 +67,7 @@
       ],
       "slot": "bg",
       "decision": "confirmed",
-      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. the naming standard decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
     },
     {
       "name": "check-box-invalid-mark-bg-hovered",
@@ -77,7 +77,7 @@
       ],
       "slot": "bg",
       "decision": "confirmed",
-      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. NAMING.md decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
+      "why": "reverted 08.09 after checking Fluent 2: the mark is a foreground element there (the box is colorCompoundBrandBackground, the check is colorNeutralForegroundInverted) and the package models it the same way as an icon. the naming standard decides the SLOT WORD from the property, not the role family - reading it as both was mine. Value-neutral either way"
     },
     {
       "name": "load-indicator-segment-inner-border",
@@ -1199,7 +1199,7 @@
         "box-shadow-2xl"
       ],
       "decision": "design",
-      "why": "Both states were hand-built from spacing steps and differed only in the ambient layer - 12px of blur against 8px, with the key layer identical. Tokenising put each on the step its geometry already matched, 2xl, and the difference vanished: the focused popup now carries no elevation of its own and the focus outline is what marks the state. Left open on purpose rather than deleting the -focused name: the designers see both on the screenshots of this wave, and either they want a distinct step for focus or the name goes."
+      "why": "Both states were hand-built from spacing steps and differed only in the ambient layer - 12px of blur against 8px, with the key layer identical. Tokenising put each on the step its geometry already matched, 2xl, and the difference vanished: the focused popup now carries no elevation of its own and the focus outline is what marks the state. Left open on purpose rather than deleting the -focused name: the designers see both on the screenshots, and either they want a distinct step for focus or the name goes."
     },
     {
       "stem": "radio-button-border",

@@ -1,6 +1,5 @@
 /*
- * Wave B of the naming standard (scss/widgets/fluent-next/NAMING.md, rule O6): removes dead imports
- * and dead variables from the theme.
+ * Removes dead imports and dead variables from the theme.
  *
  *   node tools/naming/prune.mjs              # report
  *   node tools/naming/prune.mjs --apply
@@ -49,10 +48,6 @@ const stripComments = (content) => content
 const themeFiles = walk(themeRoot)
   .filter((file) => !exemptFolders.includes(file.slice(themeRoot.length + 1).split('/')[0]));
 
-// ---------------------------------------------------------------------------------------------
-// 1 + 2: dead imports
-// ---------------------------------------------------------------------------------------------
-
 const mixinNames = (file) => new Set(
   [...readFileSync(file, 'utf8').matchAll(/@mixin\s+([a-zA-Z][\w-]*)/g)].map((match) => match[1]),
 );
@@ -69,9 +64,6 @@ themeFiles.forEach((file) => {
     const moduleName = basename(spec);
     const rest = content.slice(0, use.index) + content.slice(use.index + statement.length);
 
-    // Removal is line-based, so a statement spanning several lines would leave a dangling tail.
-    // None of the variable-module imports are configured with `with()` today; if that ever changes,
-    // this refuses to touch it instead of corrupting the file.
     if (statement.includes('\n')) {
       process.stdout.write(`NOTE  multi-line @use left alone: ${file.slice(themeRoot.length + 1)} -> ${spec}\n`);
       return;
@@ -99,10 +91,6 @@ themeFiles.forEach((file) => {
     }
   });
 });
-
-// ---------------------------------------------------------------------------------------------
-// 3: dead variables
-// ---------------------------------------------------------------------------------------------
 
 const declarationsOf = (content) => {
   const names = new Set();
@@ -149,10 +137,6 @@ themeFiles.forEach((file) => {
     if (!referencedNames.has(name)) deadVariables.push({ file, name });
   });
 });
-
-// ---------------------------------------------------------------------------------------------
-// report / apply
-// ---------------------------------------------------------------------------------------------
 
 const byFile = new Map();
 deadImports.forEach((entry) => {

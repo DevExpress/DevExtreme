@@ -1,7 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// Not colours: two radii that used to sit in _colors.scss (NAMING.md, O7)
 $calendar-cell-contoured-border-radius: 50% !default;
 $calendar-week-number-border-radius: 0 !default;
 
@@ -30,11 +29,9 @@ $calendar-element-gap: ds.$spacing-80 !default;
   $calendar-footer-button-height: ds.$spacing-280 !default;
 }
 
-// Base-layer values injected with design tokens (wave B1)
 $calendar-week-day-header-font-size: ds.$font-size-caption-sm !default;
 $calendar-week-day-header-font-weight: ds.$font-weight-caption-strong !default;
 
-// Base-layer sizing injected with design tokens (wave B10)
 $calendar-border-width: ds.$border-width-10 !default;
 $calendar-view-multiview-padding-inline: ds.$spacing-100 !default;
 $calendar-cell-today-border-width: ds.$border-width-20 !default;

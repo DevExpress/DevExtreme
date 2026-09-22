@@ -1,6 +1,5 @@
 /*
- * Wave C of the naming standard (scss/widgets/fluent-next/NAMING.md): renames theme variables to
- * the standard, one reviewed batch at a time.
+ * Renames theme variables to the standard, one reviewed batch at a time.
  *
  *   node tools/naming/rename.mjs --check                  # validate the whole mapping
  *   node tools/naming/rename.mjs --apply --batch=C0-toast
@@ -34,8 +33,6 @@ const registries = JSON.parse(readFileSync(join(here, 'registries.json'), 'utf8'
 const mapping = JSON.parse(readFileSync(join(here, 'mapping.json'), 'utf8'));
 
 const NAME_PATTERN = /^\$[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
-/* A variable name can be a prefix of another ($grid-border vs $grid-border-width), so `\b` is
- * not a boundary here: after `bg` comes `-`, which `\b` happily matches. */
 const occurrence = (name) => new RegExp(`\\${name}(?![\\w-])`);
 
 const walk = (dir) => readdirSync(dir).flatMap((entry) => {
@@ -49,10 +46,6 @@ const stripComments = (content) => content
   .filter((_, index) => index % 2 === 0)
   .join('');
 
-/*
- * Argument lists of `@use … with ( … )` and of `@include …( … )`: a `$name:` KEY inside either is
- * the base module's parameter, spelled as base spells it, and never a name of this file.
- */
 const withRanges = (content) => {
   const ranges = [];
   const opener = /\bwith\s*\(|@include\s+[\w.-]+\s*\(/g;
@@ -76,7 +69,6 @@ const declaredIn = (file) => {
   const ranges = withRanges(content);
   const names = new Set();
   [...content.matchAll(/(^|[\s{;])\$([a-z0-9_-]+)\s*:/gi)].forEach((match) => {
-    // A `with()` left-hand side is the configured module's parameter, not a declaration here.
     const position = match.index + match[1].length;
     if (ranges.some(([from, to]) => position >= from && position < to)) return;
     names.add(`$${match[2]}`);
@@ -87,13 +79,6 @@ const declaredIn = (file) => {
 const themeFiles = walk(themeRoot);
 const allFiles = [...themeFiles, ...walk(baseRoot)];
 
-/*
- * A mapping key is either `$name` or `<folder>:$name`. The qualified form exists because two
- * folders can declare the same name as separate variables (dataGrid and pivotGrid both had
- * `$area-field-border-radius`), and one JSON object cannot hold that name twice. A qualified entry
- * is confined to its folder; an unqualified one is refused by the guard if more than one folder
- * declares the name.
- */
 const parseKey = (key) => {
   const separator = key.indexOf(':');
   return separator < 0
@@ -104,11 +89,6 @@ const parseKey = (key) => {
 const entries = Object.entries(mapping.batches).flatMap(([batch, names]) => Object
   .entries(names).map(([key, to]) => ({ batch, ...parseKey(key), to })));
 
-// ---------------------------------------------------------------------------------------------
-// guard
-// ---------------------------------------------------------------------------------------------
-
-/** Names visible in a file through `@use … as *`, i.e. the scope a new name could collide with. */
 const starVisibleNames = (file) => {
   const content = stripComments(readFileSync(file, 'utf8'));
   const names = new Set();
@@ -124,33 +104,20 @@ const starVisibleNames = (file) => {
   return names;
 };
 
-/** The scale a size variable lands on under SIZES_MIGRATION_PLAN.md's name heuristic. */
 const sizeBucket = (name) => {
-  // Legacy spellings first: `text-size` MEANS font-size (rejected.properties maps it there), and
-  // reading it as spacing would make an honest rename look like a scale change.
   if (/text-size/.test(name)) return 'font-size';
   if (/rounding/.test(name)) return 'border-radius';
   if (/text-weight/.test(name)) return 'font-weight';
   if (/font-size/.test(name)) return 'font-size';
   if (/line-height/.test(name)) return 'line-height';
-  // "blur radius" is the CSS term for a shadow's blur length and has nothing to do with corners.
   if (/blur/.test(name)) return 'spacing';
   if (/radius/.test(name)) return 'border-radius';
-  // A bare `-border` segment is the border shorthand or its width (`1px solid`,
-  // `$border-width-10`);
-  // radius and the radius corners are matched above. The segment must be hyphen-delimited, or
-  // `borderedwidget` would be read as a border.
   if (/(^|-)border(-|$)|border-size/.test(name)) return 'border-width';
   if (/letter-spacing/.test(name)) return 'letter-spacing';
   if (/font-weight/.test(name)) return 'font-weight';
   return 'spacing';
 };
 
-/*
- * The design token(s) a theme variable is actually declared with, across every `@if $size` branch.
- * Used to settle a disagreement between the old and the new name about which scale a value is on:
- * the value itself is the only party to that argument that cannot be wrong.
- */
 const valueBucket = (name) => {
   const buckets = new Set();
   themeFiles.forEach((file) => {
@@ -180,29 +147,15 @@ const guard = () => {
   entries.forEach(({
     batch, folder, from, to,
   }) => {
-    // 1. the mapping must be injective
     if (targets.has(to)) {
       problems.push(`${to}: two sources map to it (${targets.get(to)} and ${from})`);
     }
     targets.set(to, from);
 
-    // 2. the new name must be legal for stylelint
     if (!NAME_PATTERN.test(to)) problems.push(`${to}: does not match the name pattern`);
 
-    // 3. the new name must belong to the owner's namespace…
     if (!ownerOf(to)) problems.push(`${to}: first segment is neither a component nor a concern`);
 
-    /*
-     * …and specifically to the component of the folder that declares the old name (rule O1), so a
-     * batch cannot quietly move a variable into another component's namespace.
-     *
-     * Every folder that declares the old name has to be checked, not the first one found. Two
-     * folders can hold same-named, independent variables with DIFFERENT values — dataGrid and
-     * pivotGrid both declared `$area-field-top-bottom-padding`, spacing-20 against spacing-10 in
-     * compact — and one rename then drags the second folder's variable into the first one's
-     * namespace. Caught only after the fact by a `git diff` showing files the batch had no business
-     * touching.
-     */
     const homes = [...new Set(themeFiles
       .filter((file) => declaredIn(file).has(from))
       .map((file) => file.slice(themeRoot.length + 1).split('/')[0]))];
@@ -221,44 +174,21 @@ const guard = () => {
       }
     });
 
-    // 4. the scale a size variable lands on must not change. The heuristic is name-driven, so a
-    //    disagreement means one of the two names lies about the value — and a rename never touches
-    //    values. Ask the tokens the value is built from: if they agree with the NEW name, the old
-    //    name was the liar and the rename fixes it; anything else is a real problem.
-    // The bucket heuristic only says something about a SIZE: it reads `border`/`line`/`outline`
-    // as lengths and would flag every colour rename that adds or drops such a word. Ask the
-    // declaration site — either end of the rename, since the batch may or may not be applied yet.
     const isSize = themeFiles.some((file) => file.endsWith('_sizes.scss')
       && (declaredIn(file).has(from) || declaredIn(file).has(to)));
     if (isSize && sizeBucket(from) !== sizeBucket(to)) {
-      // Old name before the batch is applied, new name after it: `--check` has to give the same
-      // verdict either side of `--apply`, or a re-run turns a landed batch red.
       const actual = valueBucket(from) ?? valueBucket(to);
       if (actual === null) {
         problems.push(`${to}: size bucket changes ${sizeBucket(from)} -> ${sizeBucket(to)} and the value does not settle it`);
       } else if (actual === sizeBucket(from)) {
         problems.push(`${to}: size bucket changes ${sizeBucket(from)} -> ${sizeBucket(to)} while the value is on the ${actual} scale`);
       } else if (actual !== sizeBucket(to)) {
-        // The value agrees with NEITHER name, so it was already on the wrong scale before this
-        // rename. That is a token-mapping question for DIVERGENCES.md, not something a rename can
-        // cause or fix, and blocking on it would mean the old lie has to be preserved.
         notes.push(`${to}: value is on the ${actual} scale, neither ${sizeBucket(from)} nor ${sizeBucket(to)}`);
       }
     }
 
-    // 5. the new name must be free everywhere, and 6. invisible to any `as *` scope that sees the
-    //    old one — otherwise the declaration would silently mutate or lose to a foreign module
     allFiles.forEach((file) => {
       const content = stripComments(readFileSync(file, 'utf8'));
-      /*
-       * An occurrence of the old name in a `with()` or named-`@include` KEY position is not an
-       * occurrence of ours: that is the base module's parameter, which this rename must not touch.
-       * Counting it made checks 5 and 6 fire on 60 already-applied names — the file still mentioned
-       * the old spelling as a with() key, and the NEW name was "visible via `as *`" simply because
-       * the folder star-imports its own _colors.scss, which is how a widget reads its own
-       * variables. The named-argument form repeated it on the four base parameters
-       * treeview-checkbox() binds.
-       */
       const keyRanges = withRanges(content);
       const real = [...content.matchAll(new RegExp(`\\${from}(?![\\w-])`, 'g'))].some((match) => {
         const inWith = keyRanges.some(([start, end]) => match.index >= start && match.index < end);
@@ -278,14 +208,6 @@ const guard = () => {
     if (!batch) problems.push(`${from}: no batch`);
   });
 
-  /*
-   * A theme variable is ALLOWED to share its name with the base parameter it configures — 553 names
-   * already do, and it is what `with($x: $x)` looks like once the theme prefix is gone. It only
-   * turns dangerous when the same file ALSO pulls that base module in with `as *`, because then the
-   * two names live in one scope and the declaration either mutates base's variable or loses to it.
-   * Check 6 above catches exactly that case; a blanket "must differ from any base name" rule would
-   * instead force unusable names on the whole rename.
-   */
   themeFiles.forEach((file) => {
     const content = stripComments(readFileSync(file, 'utf8'));
     const starredBaseModules = [...content.matchAll(/@use\s+(["'])([^"']+)\1([^;{]*)/g)]
@@ -312,10 +234,6 @@ const guard = () => {
   return problems;
 };
 
-// ---------------------------------------------------------------------------------------------
-// apply
-// ---------------------------------------------------------------------------------------------
-
 const applyBatch = (batch) => {
   const raw = mapping.batches[batch];
   if (!raw) throw new Error(`unknown batch ${batch}; known: ${Object.keys(mapping.batches)}`);
@@ -336,11 +254,6 @@ const applyBatch = (batch) => {
     let index = 0;
     let changed = 0;
 
-    // Aliases that resolve to a module declaring one of the renamed names. After wave A every
-    // cross-widget read is `alias.$name`, and skipping those leaves the reference pointing at a
-    // name
-    // that no longer exists — the build then fails with "Undefined variable", or worse, a stale
-    // artifact makes a byte-comparison look clean.
     const renamingAliases = new Set();
     [...original.matchAll(/@use\s+(["'])([^"']+)\1([^;{]*)/g)].forEach(([, , spec, tail]) => {
       const alias = /\bas\s+([a-zA-Z][\w-]*)/.exec(tail)?.[1];
@@ -351,8 +264,6 @@ const applyBatch = (batch) => {
       ];
       const modulePath = candidates.find((candidate) => existsSync(candidate));
       if (!modulePath) return;
-      // Old AND new names: a batch can be half-applied (the owning module renamed, the namespaced
-      // readers not yet), and then the old names are already gone from the module.
       const declared = declaredIn(modulePath);
       const owns = Object.entries(names)
         .some(([from, to]) => declared.has(from) || declared.has(to));
@@ -370,8 +281,6 @@ const applyBatch = (batch) => {
           ? /([a-zA-Z][\w-]*)\.$/.exec(original.slice(0, at))?.[1]
           : null;
         const target = name ? names[name] : undefined;
-        // a `with()` or named-`@include` KEY is the base module's parameter name and must keep its
-        // spelling
         const isWithKey = name
           && keyRanges.some(([from, to]) => at >= from && at < to)
           && /^\s*:/.test(original.slice(at + name.length));
@@ -402,16 +311,9 @@ const applyBatch = (batch) => {
   process.stdout.write(`\nbatch ${batch}: ${touchedFiles} file(s), ${touchedNames} occurrence(s)\n`);
 };
 
-/*
- * Only the theme is in scope. `base/**` may legitimately contain the same spelling — sometimes as a
- * parameter this theme configures, sometimes as a mixin argument that has nothing to do with us
- * (base/_speedDialAction.scss takes $button-default-bg as a mixin parameter). Scanning base here
- * produced false survivors that no amount of renaming could ever clear.
- */
 const residue = () => Object.entries(mapping.batches)
   .flatMap(([batch, names]) => Object.entries(names)
     .map(([key, to]) => ({ ...parseKey(key), to }))
-  // An identity entry ("already correct, recorded for the record") can never disappear.
     .filter(({ from, to }) => from !== to)
     .flatMap(({ folder, from }) => themeFiles
       .filter((file) => folder === null
@@ -420,9 +322,6 @@ const residue = () => Object.entries(mapping.batches)
         const content = stripComments(readFileSync(file, 'utf8'));
         const ranges = withRanges(content);
         const pattern = new RegExp(`\\${from}(?![\\w-])`, 'g');
-        // A surviving occurrence in a `with()` or named-`@include` KEY position is not a survivor:
-        // that is the base module's parameter name, which this rename must not touch
-        // (dataGrid/treeList/pivotGrid configure base with $datagrid-* keys).
         return [...content.matchAll(pattern)].some((match) => {
           const inWith = ranges.some(([start, end]) => match.index >= start && match.index < end);
           const isKey = /^\s*:/.test(content.slice(match.index + from.length));
@@ -430,8 +329,6 @@ const residue = () => Object.entries(mapping.batches)
         });
       })
       .map((file) => `${batch}: ${from} still in ${file.slice(packageRoot.length + 1)}`)));
-
-// ---------------------------------------------------------------------------------------------
 
 const batchArgument = process.argv.find((argument) => argument.startsWith('--batch='))
   ?.slice('--batch='.length);

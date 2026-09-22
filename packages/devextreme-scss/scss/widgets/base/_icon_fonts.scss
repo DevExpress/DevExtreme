@@ -223,8 +223,6 @@
     $icon-padding: math.floor(math.div($icon-paddings, 2));
     $icon-line-height: $container-size - $icon-paddings-dirty;
   } @else {
-
-    // Token-based themes pass var()/calc() values — the derivation moves to CSS. With the defaults ($container-size is $icon-size, no borders) it is identically zero, so print 0 instead of shipping calc((X - X - 0) / 2) to the browser; a zero $borders-size alone drops its term the same way.
     @if $container-size == $icon-size and $borders-size == 0 {
       $icon-padding: 0;
     } @else if $borders-size == 0 {
@@ -253,12 +251,6 @@
   line-height: $icon-line-height;
 }
 
-/*
- * NOT converted to translate on purpose. Consumers cancel the horizontal half per widget — the
- * generic gallery pins its arrows to the edges with `left: 0` / `right: 0` and an explicit
- * `margin-left: 0` — and a margin can be overridden that way while a transform cannot. Centring
- * here has to stay something a downstream rule can switch off.
- */
 @mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {
   $icon-center-offset: null;
 
@@ -266,7 +258,6 @@
     $icon-center-offset: math.div(-$icon-size, 2);
   } @else {
 
-    // Token-based themes pass var()/calc() values — the derivation moves to CSS
     $icon-center-offset: calc(#{$icon-size} / -2);
   }
 

@@ -30,8 +30,6 @@
   @include dx-button-text-and-icon-sizing();
 }
 
-// NOTE: Button styles
-
 .dx-button-mode-contained {
   &.dx-button-normal {
     box-shadow: var(--dx-button-box-shadow);

@@ -121,10 +121,6 @@
   }
 }
 
-/*
- * Centred the same way dx-pending-indicator-centered below does it: translateY needs no
- * arithmetic on the size, so the size can be a token without a build-time/runtime fork.
- */
 @mixin dx-pending-indicator($indicator-size) {
   pointer-events: none;
   position: absolute;

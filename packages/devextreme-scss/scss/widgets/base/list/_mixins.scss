@@ -7,12 +7,6 @@
   background-image: string.unquote($uri);
 }
 
-/*
- * A background image cannot read the element's `color`, so `list-icon-colored` bakes the colour
- * into the svg and every state that recolours the icon needs it emitted again. The same artwork
- * used as a mask carries only its alpha, so one copy is painted by `currentColor` and follows
- * whatever the cascade already puts on `.dx-icon`.
- */
 @mixin list-icon-masked($data-uri) {
   $uri: replace("#{$data-uri}", "currentColor", "%23000");
 

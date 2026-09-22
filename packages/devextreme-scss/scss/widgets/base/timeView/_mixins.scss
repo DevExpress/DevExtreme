@@ -15,8 +15,6 @@
   $accent-color,
   $background-color,
   $digit-color,
-  // The clock face is the SVG behind it, so its size scales the whole dial; the arrows are centred
-  // on the dial with half their own width, which is why the offset is a knob of its own.
   $clock-size: 182px,
   $arrow-width: 10px,
   $arrow-offset: if(

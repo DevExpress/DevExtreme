@@ -129,8 +129,6 @@
   $calendar-cell-other-hover-color,
   $calendar-cell-hover-border-color,
   $calendar-cell-range-border-radius,
-  // Today is outlined and the contoured (keyboard-focused) date carries a ring; both are drawn at
-  // the same thickness, but they are separate decisions, so they are separate knobs.
   $cell-today-border-width: 2px,
   $cell-contoured-ring-width: 2px,
 ) {

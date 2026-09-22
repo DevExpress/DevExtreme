@@ -13,12 +13,6 @@
   height: $height;
 }
 
-/*
- * Only `refresh` (which `progress` reuses) and `cancel` are drawn in one colour, so only those two
- * can become a mask painted by `currentColor`. `done` and `danger` put an inverted glyph on a
- * success/danger disc beside the neutral arrows - three colours at once, which a mask cannot carry,
- * so they keep the baked image.
- */
 @mixin filemanager-icon-masked($data-uri, $width, $height) {
   $uri: replace("#{$data-uri}", "currentTextColor", "%23000");
 

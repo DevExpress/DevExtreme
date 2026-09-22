@@ -68,8 +68,6 @@
     width: 100%;
     padding-top: calc(var(--dx-file-uploader-padding-block) * 2 + var(--dx-file-uploader-file-wrapper-border-width));
     padding-right: var(--dx-file-uploader-file-wrapper-border-width);
-
-    // NOTE: height of the widget should be the same in default and drag over states, but not with margin help
     padding-bottom: calc(var(--dx-file-uploader-padding-block) * 2 + var(--dx-file-uploader-file-wrapper-border-width) + 1px); // dx-px-nudge: +1px over the dragover padding
     padding-left: var(--dx-file-uploader-file-wrapper-border-width);
     box-sizing: content-box;

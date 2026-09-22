@@ -38,7 +38,6 @@ $scheduler-time-indicator-bg: rgb(from #{ds.$color-content} r g b / 0.03) !defau
 $scheduler-tooltip-appointment-content: ds.$color-content !default;
 $scheduler-appointment-overlay-bg: ds.$color-bg !default;
 
-// Agenda
 $scheduler-agenda-appointment-recurrence-icon: ds.$color-content-inverted !default;
 $scheduler-agenda-appointment-bg-hovered: ds.$color-bg-hovered !default;
 $scheduler-agenda-appointment-bg-active: ds.$color-bg-alpha-active !default;
@@ -48,13 +47,11 @@ $scheduler-header-panel-cell-date-content: ds.$color-content-subtle !default;
 
 $scheduler-first-month-cell-bg: rgb(from #{$scheduler-appointment-base-bg} r g b / 0.15) !default;
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $scheduler-appointment-strip-bg: ds.$color-bg-primary !default;
 $scheduler-bg: ds.$color-bg !default;
 $scheduler-border: ds.$color-border !default;
 $scheduler-inverted-content: ds.$color-content-inverted !default;
 
-// Base-layer values injected with design tokens (wave B1)
 $scheduler-appointment-dragging-shadow: ds.$box-shadow-xl !default;
 $scheduler-tooltip-shadow: ds.$box-shadow-md !default;
 

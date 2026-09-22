@@ -15,5 +15,4 @@ $badge-line-height: null !default;
   $badge-line-height: ds.$line-height-caption-md !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
-$badge-border-radius: ds.$border-radius-full !default; // pill idiom (999em -> radius-full, visually identical)
+$badge-border-radius: ds.$border-radius-full !default;

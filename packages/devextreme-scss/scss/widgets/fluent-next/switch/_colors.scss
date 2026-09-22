@@ -31,5 +31,4 @@ $switch-invalid-bg: ds.$color-bg-danger-shared !default;
 $switch-invalid-bg-hovered: ds.$color-bg-danger-shared-hovered !default;
 $switch-invalid-bg-focused: ds.$color-bg-danger-shared-active !default;
 
-// Subtle ring around the ON handle; no switch shadow role — relative-color bridge over the handle token (see DIVERGENCES.md)
 $switch-handle-on-shadow: rgb(from #{ds.$color-content-inverted} r g b / 0.1) !default;

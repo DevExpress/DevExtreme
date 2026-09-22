@@ -7,7 +7,7 @@
  *
  * The colour pass (tools/review/roles.mjs) reads `components/<set>/theme/fluent.json` and answers
  * "is this the role the design system names for this slot". Nothing read `components/<set>/size/*`,
- * so the other 1391 declarations of the theme - spacing, border widths, radii and the typography
+ * so the other 874 declarations of the theme - spacing, border widths, radii and the typography
  * ramp - were never compared against anything at all.
  *
  * The comparison is deliberately coarser than the colour one. A colour slot has a family the name
@@ -20,8 +20,8 @@
  * So this is a REPORT, and deliberately not a gate. The colour pass can be one because a family is
  * a hard rule: a `-bg` slot reading a content role is wrong on its face, whoever wrote it. A step
  * carries no such rule. The steps this pass lists as unused are mostly places where the package
- * models a component more thinly than we do, and banking 170 of them with a reason each would
- * produce a list that says "we picked a different step, which is fine" 170 times - a gate that
+ * models a component more thinly than we do, and banking 169 of them with a reason each would
+ * produce a list that says "we picked a different step, which is fine" 169 times - a gate that
  * cannot go red for a reason anybody would act on.
  *
  * One rule did come out of the pass and IS gated, in tests/fluent-next-size-markers.test.ts: a
@@ -41,7 +41,6 @@ const requireFrom = createRequire(import.meta.url);
 
 const SETS = ['core', 'vnext', 'blazor', 'wpf'];
 const DENSITIES = ['fluent_small', 'fluent_medium', 'fluent_large'];
-// The folder-to-component map is the colour pass's; kept in one place so the two cannot disagree.
 const COMPONENT = JSON.parse(
   readFileSync(join(here, 'roles.mjs'), 'utf8')
     .match(/const COMPONENT = \{[\s\S]*?\n\};/)[0]
@@ -56,9 +55,6 @@ const COMPONENT = JSON.parse(
 const tokensRoot = dirname(requireFrom.resolve('@devexpress/design-tokens-internal/package.json'));
 const tokensVersion = JSON.parse(readFileSync(join(tokensRoot, 'package.json'), 'utf8')).version;
 
-// scale + step as the package spells them: {spacing.120} -> spacing/120, {font-size.base-sm} ->
-// font-size/base-sm. `global.` wrappers are unwrapped: {global.border-radius.default} is the
-// border-radius scale's `default` step.
 const refOf = (value) => {
   const m = String(value).match(/^\{([a-z-]+(?:\.[a-z-]+)?)\.([a-z0-9-]+)\}$/);
   if (!m) return null;
@@ -66,7 +62,7 @@ const refOf = (value) => {
   return { scale, step: m[2] };
 };
 
-const packageSteps = new Map(); // component -> scale -> Set(step)
+const packageSteps = new Map();
 SETS.forEach((set) => {
   DENSITIES.forEach((density) => {
     const file = join(tokensRoot, 'tokens', 'components', set, 'size', `${density}.json`);
@@ -93,7 +89,6 @@ SETS.forEach((set) => {
   });
 });
 
-// Our side: every `ds.$<scale>-<step>` read inside a _sizes.scss, with the variable it feeds.
 const SCALES = ['spacing', 'border-width', 'border-radius', 'font-size', 'line-height', 'font-weight', 'letter-spacing'];
 const declarations = [];
 readdirSync(themeDir).sort().forEach((folder) => {

@@ -23,12 +23,6 @@ const refs = (file: string, count: number): { file: string; name: string }[] => 
   (_, index) => ({ file, name: `--dxds-${file.replace('.scss', '')}-${index}` }),
 );
 
-/*
- * One section of the terminal view as data. The layout is spelled out here and nowhere else, so an
- * expectation can be about what the section says rather than about how many spaces a line starts
- * with — and it still fails when the layout moves, because a tally printed at the entry indent
- * parses as the last file's entry and leaves `omitted` at zero.
- */
 const grouped = (rendered: string, heading: string): {
   files: { file: string; names: string[] }[];
   omitted: number;
@@ -55,7 +49,6 @@ const grouped = (rendered: string, heading: string): {
     } else if (!line.startsWith('    ')) {
       files.push({ file: line.trim(), names: [] });
     } else if (current) {
-      /* An entry line carries the name first; a value change pads it out to the column width. */
       current.names.push(line.trim().split(/\s{2,}/)[0]);
     } else {
       throw new Error(`entry with no file above it: ${line}`);
@@ -161,7 +154,6 @@ describe('diffGenerated', () => {
     });
   });
 
-  /* Two modes declare the same name, and a value moving in one of them is not the other's news. */
   it('keeps files apart and orders the findings by file, then by name', () => {
     const before = generated({
       'light.scss': { '--dxds-a': '1rem' },
@@ -191,7 +183,6 @@ describe('renderReport', () => {
     expect(renderReport(report())).toContain('| tokens | 2 | 3 |');
   });
 
-  /* Nothing moved from one version to another when only one version is involved. */
   it('heads a run over an unchanged version as a state, not a transition', () => {
     const rendered = renderReport(report({ versionBefore: '262.23.0', versionAfter: '262.23.0' }));
 
@@ -222,7 +213,6 @@ describe('renderReport', () => {
       .toContain('- `color-bg` — the token build will refuse to run');
   });
 
-  /* The closing line is the call to re-record etalons: it belongs to runs that changed pixels. */
   it('adds the etalon warning only when something moved or left', () => {
     const warning = 'etalon screenshots';
 
@@ -242,7 +232,6 @@ describe('renderReport', () => {
     }))).toContain(warning);
   });
 
-  /* A name that only arrived costs nothing to look at, so it must not raise the alarm. */
   it('treats an added name as free', () => {
     expect(renderReport(report({
       output: { changed: [], gone: [], appeared: [{ file: 'dark.scss', name: '--dxds-c' }] },
@@ -268,7 +257,6 @@ describe('renderTerminal', () => {
     expect(rendered).toContain('tokens 16822 → 17004  (+2 −1)');
   });
 
-  /* Four empty sections are what makes the markdown unreadable in a terminal. */
   it('says only what happened, and says so when nothing did', () => {
     const quiet = renderTerminal(report());
 
@@ -292,7 +280,6 @@ describe('renderTerminal', () => {
     expect(rendered).toContain('  light.scss\n    --dxds-b  1rem → 2rem');
   });
 
-  /* A bump can add thousands of names; the terminal is not where that list belongs. */
   it('caps a long section and says how much it left out', () => {
     const rendered = renderTerminal(report({
       output: { changed: [], gone: [], appeared: refs('base.scss', 9) },
@@ -308,12 +295,6 @@ describe('renderTerminal', () => {
     });
   });
 
-  /*
-   * Several files is what tells the two readings of the limit apart. One file hides the difference:
-   * its header shifts what is shown and what is counted by the same one, so a cap taken on the
-   * printed lines comes out right by accident. Here the budget is four entries, the second file
-   * has to keep the header that carries them, and five entries are left over — not seven lines.
-   */
   it('caps entries rather than the lines they are printed as', () => {
     const rendered = renderTerminal(report({
       output: {
@@ -333,11 +314,6 @@ describe('renderTerminal', () => {
     });
   });
 
-  /*
-   * The budget can run out before a file is reached at all. The tally is then not the last printed
-   * file's remainder, and saying so is the difference between "one long file was cut short" and
-   * "there is another file here you cannot see".
-   */
   it('says when the cap left whole files out of the section', () => {
     const rendered = renderTerminal(report({
       output: {
@@ -395,7 +371,6 @@ describe('renderTerminal', () => {
 });
 
 describe('renderPreamble', () => {
-  /* Printed while the rebuild is still ahead, so it must not pretend to know how it went. */
   it('says what is known before the rebuild and stops there', () => {
     const rendered = renderPreamble(report({
       lostConsumed: ['color-none'],

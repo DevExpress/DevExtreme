@@ -10,11 +10,6 @@
   @include resize-handle-states(
     var(--dx-splitter-resize-handle-content),
     var(--dx-splitter-resize-handle-bg),
-    /* The grip does not change on hover. The name this argument used to carry was read and
-       never declared, so the declaration was invalid and the browser kept the rest colour;
-       reading the rest name renders the same and stops the dangling read. The package does
-       assign one (resize-handler.color.content.hovered = content-primary-hovered), but on our
-       hovered bar it measures 1.17 in dark, so adopting it is a design decision, not a fix. */
     var(--dx-splitter-resize-handle-content),
     var(--dx-splitter-resize-handle-bg-hovered),
     var(--dx-splitter-resize-handle-content-focused),
