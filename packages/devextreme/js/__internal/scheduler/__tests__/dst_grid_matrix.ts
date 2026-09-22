@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies -- test-only helper
-import { expect } from '@jest/globals';
+import {
+  beforeEach, describe, expect, it,
+} from '@jest/globals';
 
 import fx from '../../../common/core/animation/fx';
 import { createTimeZoneCalculator } from '../r1/timezone_calculator';
