@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
+import type { VisualRange } from '@js/common/charts';
 import registerComponent from '@js/core/component_registrator';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -1497,11 +1498,12 @@ class RangeSelector extends BaseWidget {
     return sliderMarkerOptions;
   }
 
-  getValue(): ThemeValue {
+  getValue(): (number | string | Date)[] {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return convertVisualRangeObject(this._slidersController.getSelectedRange());
   }
 
-  setValue(value: ThemeValue, e?: ThemeValue): void {
+  setValue(value: (number | string | Date)[] | VisualRange, e?: ThemeValue): void {
     const visualRange = parseValue(value);
     if (!this._isUpdating && value) {
       this._validateRange(visualRange.startValue, visualRange.endValue);
