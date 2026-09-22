@@ -290,7 +290,7 @@ const getCancelButtonConfig = (): ButtonProperties => {
 };
 
 const getConfirmDialogWidth = (gridElement?: Element | dxElementWrapper): number => {
-  const fromTheme = gridElement && themeLength(gridElement, '--dx-grid-ai-confirm-dialog-width');
+  const fromTheme = themeLength(gridElement, '--dx-grid-ai-confirm-dialog-width');
 
   if (fromTheme !== undefined) {
     return fromTheme;

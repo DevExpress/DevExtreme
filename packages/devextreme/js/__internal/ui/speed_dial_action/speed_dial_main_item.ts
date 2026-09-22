@@ -36,6 +36,12 @@ type SpeedDialActionPosition = Omit<PositionConfig, 'of'> & {
   of?: PositionConfig['of'] | dxElementWrapper | null;
 };
 
+interface ActionsGeometry {
+  indent: number;
+  childIndent: number;
+  childOffset: number;
+}
+
 let speedDialMainItem: SpeedDialMainItem | null = null;
 
 const modifyActionOptions = (action: SpeedDialAction): SpeedDialItemProperties => {
@@ -352,12 +358,13 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
   _getDirectionIndex(
     actions: SpeedDialItem[],
     direction: SpeedDialItemProperties['direction'],
+    geometry: ActionsGeometry,
   ): number {
     const directionIndex = 1;
 
     if (direction === 'auto') {
       const contentHeight = getHeight(this.$content());
-      const { indent, childIndent } = this._getActionsGeometry();
+      const { indent, childIndent } = geometry;
       const actionsHeight = indent + childIndent * actions.length - contentHeight;
       const offsetTop = this.$content()?.offset()?.top ?? 0;
 
@@ -380,11 +387,11 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
    * the FAB root and the runtime reads them back (fluent-next); a theme that declares nothing keeps
    * the per-theme literals from the default options.
    */
-  _getActionsGeometry(): { indent: number; childIndent: number; childOffset: number } {
+  _getActionsGeometry(): ActionsGeometry {
     const $element = this.$element();
     const length = (
       property: string,
-      option: 'indent' | 'childIndent' | 'childOffset',
+      option: keyof ActionsGeometry,
     ): number => themeLength($element, property)
       ?? (this.initialOption(option) as unknown as number);
 
@@ -398,7 +405,8 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
   _getActionPosition(actions: SpeedDialItem[], index: number): SpeedDialActionPosition {
     const action = actions[index];
     const hasActionLabel = Boolean(action._options.silent('label'));
-    const { indent, childIndent, childOffset } = this._getActionsGeometry();
+    const geometry = this._getActionsGeometry();
+    const { indent, childIndent, childOffset } = geometry;
 
     let actionOffsetX = 0;
 
@@ -410,7 +418,7 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
 
     const actionOffsetYValue = indent + childIndent * index;
     const { direction } = this.option();
-    const actionOffsetY = this._getDirectionIndex(actions, direction) * actionOffsetYValue;
+    const actionOffsetY = this._getDirectionIndex(actions, direction, geometry) * actionOffsetYValue;
 
     let actionPositionAtMy: HorizontalAlignment = 'center';
 

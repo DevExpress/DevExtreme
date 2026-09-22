@@ -5,6 +5,7 @@ import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibi
 import { isFunction } from 'core/utils/type';
 import $ from 'jquery';
 import { AppointmentDataSource } from '__internal/scheduler/view_model/m_appointment_data_source';
+import { getViewModelOptions } from '__internal/scheduler/view_model/generate_view_model/options/get_view_model_options';
 
 import { createWrapper, initTestMarkup, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitForAsync, waitGlobalFailure } from '../../helpers/scheduler/waitForAsync.js';
@@ -162,6 +163,21 @@ QUnit.module('Initialization', {
 
             assert.ok(consoleErrors[0].startsWith('E1062'), 'E1062 Error message');
         });
+    });
+
+    QUnit.test('Minimum appointment height comes from the theme', async function(assert) {
+        // .dx-scheduler is the scope the tier declares this on, and the view model reads it from there
+        const $style = $('<style>')
+            .text('.dx-scheduler { --dx-scheduler-appointment-min-height: 44px; }')
+            .appendTo('head');
+
+        try {
+            const { instance } = await createWrapper({ dataSource: [], currentView: 'month' });
+
+            assert.strictEqual(getViewModelOptions(instance).appointmentMinHeight, 44);
+        } finally {
+            $style.remove();
+        }
     });
 
     QUnit.test('Header panel should be visible in "Day" view with intervalCount > 1 if crossScrollingEnabled: true, showAllDayPanel: false (T895058)', async function(assert) {

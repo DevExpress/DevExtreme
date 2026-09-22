@@ -1122,3 +1122,29 @@ QUnit.module('Toolbar', moduleConfig, () => {
     });
 
 });
+
+QUnit.module('Toolbar sizes declared by the theme', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+        // .dx-filemanager is the scope the tier declares this on; the toolbar reads from inside it
+        this.$style = $('<style>')
+            .text('.dx-filemanager { --dx-file-manager-toolbar-viewmode-popup-width: 77px; }')
+            .appendTo('head');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
+    },
+
+    afterEach: function() {
+        this.clock.tick(5000);
+        this.clock.restore();
+        this.$element.remove();
+        this.$style.remove();
+        fx.off = false;
+    }
+}, () => {
+    test('view-mode popup width comes from the theme', function(assert) {
+        const instance = this.$element.dxFileManager({ fileSystemProvider: [] }).dxFileManager('instance');
+
+        assert.strictEqual(instance._toolbar._getViewModePopupWidth(), 77);
+    });
+});

@@ -63,4 +63,15 @@ describe('themeLength', () => {
   it('is undefined for an empty selection', () => {
     expect(themeLength($(), PROPERTY)).toBeUndefined();
   });
+
+  it('is undefined without an element', () => {
+    expect(themeLength(undefined, PROPERTY)).toBeUndefined();
+  });
+
+  it('is undefined for a node that is not an element', () => {
+    declared = '60px';
+
+    expect(themeLength($(document), PROPERTY)).toBeUndefined();
+    expect(themeLength($(document.createTextNode('x')) as never, PROPERTY)).toBeUndefined();
+  });
 });

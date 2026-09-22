@@ -819,7 +819,8 @@ describe('createConfirmDialog', () => {
 
     createConfirmDialog(undefined, gridElement);
 
-    expect(themeLength).toHaveBeenCalledWith(gridElement, '--dx-grid-ai-confirm-dialog-width');
+    expect((themeLength as jest.Mock).mock.calls[0])
+      .toEqual([gridElement, '--dx-grid-ai-confirm-dialog-width']);
     expect(custom).toHaveBeenCalledWith(
       expect.objectContaining({
         width: 333,
