@@ -11,10 +11,8 @@ import { createScheduler } from './__mock__/create_scheduler';
 import { DEFAULT_CELL_WIDTH, setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
 /**
- * What 26_1 renders for the Cairo fall-back when the browser zone is not Cairo.
- * Grid dates are wall clocks packed as UTC, so the repeated hour is simply missing:
- * 48 cells, one 11:00 PM, and both passes share a column.
- * Phase B is expected to change the marked expectations.
+ * Cairo fall-back when the browser zone is not Cairo.
+ * Both 23:00 passes are columns of their own, and the next day still starts at midnight.
  */
 describe('Cairo fall-back grid when the browser zone is UTC', () => {
   beforeEach(() => {
@@ -56,36 +54,41 @@ describe('Cairo fall-back grid when the browser zone is UTC', () => {
     const secondPass = POM.getAppointment('B').getGeometry();
     const across = POM.getAppointment('C').getGeometry();
 
-    expect(row).toHaveLength(48);
+    expect(row).toHaveLength(49);
     expect(workspace.viewDataProvider.completeDateHeaderMap[0].map((header) => header.colSpan))
-      .toEqual([24, 24]);
+      .toEqual([25, 24]);
     expect(timeHeaders[0]).toBe('12:00 AM');
     expect(timeHeaders[23]).toBe('11:00 PM');
-    expect(timeHeaders[24]).toBe('12:00 AM');
-    expect(timeHeaders.filter((text) => text === '11:00 PM')).toEqual(['11:00 PM', '11:00 PM']);
+    expect(timeHeaders[24]).toBe('11:00 PM');
+    expect(timeHeaders[25]).toBe('12:00 AM');
 
     expect(cell(0).startDate.toISOString()).toBe('2026-10-29T00:00:00.000Z');
     expect(cell(23).startDate.toISOString()).toBe('2026-10-29T23:00:00.000Z');
-    expect(cell(23).endDate.toISOString()).toBe('2026-10-30T00:00:00.000Z');
-    expect(cell(24).startDate.toISOString()).toBe('2026-10-30T00:00:00.000Z');
+    expect(cell(24).startDate.toISOString()).toBe('2026-10-29T23:00:00.000Z');
+    expect(cell(23).startDateUTC?.toISOString()).toBe('2026-10-29T20:00:00.000Z');
+    expect(cell(24).startDateUTC?.toISOString()).toBe('2026-10-29T21:00:00.000Z');
+    expect(cell(25).startDate.toISOString()).toBe('2026-10-30T00:00:00.000Z');
+    expect(cell(25).startDateUTC?.toISOString()).toBe('2026-10-29T22:00:00.000Z');
 
     expect(Object.keys(cell(0)).sort()).toEqual([
       'allDay',
       'endDate',
+      'endDateUTC',
       'groupIndex',
       'index',
       'isFirstGroupCell',
       'isLastGroupCell',
       'key',
       'startDate',
+      'startDateUTC',
     ]);
     expect(Object.values(cell(0)).some((value) => value === undefined)).toBe(false);
 
     expect(firstPass.left).toBe(23 * DEFAULT_CELL_WIDTH);
-    expect(secondPass.left).toBe(firstPass.left);
+    expect(secondPass.left).toBe(24 * DEFAULT_CELL_WIDTH);
     expect(firstPass.width).toBe(62);
     expect(secondPass.width).toBe(62);
     expect(across.left).toBe(firstPass.left);
-    expect(across.width).toBe(125);
+    expect(across.width).toBe(375);
   });
 });

@@ -15,19 +15,22 @@ const HOUR_MS = 60 * 60 * 1000;
 const QUARTER_MS = 15 * 60 * 1000;
 
 /**
- * Keys `cellData` owns on 26_1. Jest's `toEqual` drops a key whose value is
- * `undefined`, and `JSON.stringify` does too, so a QUnit `deepEqual` failure
- * can look like a match. Compare this list instead of the object.
+ * Keys `cellData` owns on a timeline whose view has a DST plan.
+ * Jest's `toEqual` drops a key whose value is `undefined`, and so does
+ * `JSON.stringify`, so a QUnit `deepEqual` failure can look like a match.
+ * Compare this list instead of the object.
  */
 export const CELL_DATA_KEYS = [
   'allDay',
   'endDate',
+  'endDateUTC',
   'groupIndex',
   'index',
   'isFirstGroupCell',
   'isLastGroupCell',
   'key',
   'startDate',
+  'startDateUTC',
 ];
 
 /** Real length of a full local day. A fall-back has a negative `deltaMs`. */
@@ -144,7 +147,7 @@ export const describeDaylightGridMatrix = (matchesScheduler: boolean): void => {
       expect(spring.days.map((day) => day.cells.length)).toEqual([23, 24]);
     });
 
-    it('keeps the 26_1 cellData keys, with no undefined own value', async () => {
+    it('keeps defined instants on cellData and no undefined own value', async () => {
       fx.off = true;
       setupSchedulerTestEnvironment({ width: DEFAULT_CELL_WIDTH, height: 80 });
 

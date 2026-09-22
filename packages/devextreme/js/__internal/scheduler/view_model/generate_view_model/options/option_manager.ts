@@ -1,11 +1,13 @@
 import { Cache } from '../../../global_cache';
 import type Scheduler from '../../../scheduler';
 import type { DOMMetaData } from '../../../types';
+import { type DaylightPlan, getStretchShiftMs } from '../../../utils/daylight_grid';
 import type {
   CellInterval,
   CompareOptions,
   DateInterval,
   LayoutIntervals,
+  ListEntity,
   PanelName,
 } from '../../types';
 import type { CollectorOptions } from '../steps/add_collector/types';
@@ -39,6 +41,7 @@ const getLayoutIntervals = (
   isTimeline: boolean,
   isMonthView: boolean,
   panelName: PanelName,
+  daylightPlan?: DaylightPlan,
 ): LayoutIntervals => {
   switch (true) {
     case isMonthView:
@@ -51,6 +54,7 @@ const getLayoutIntervals = (
         cellDurationMinutes,
         viewOffset,
         isTimeline,
+        isTimeline && !isMonthView ? daylightPlan : undefined,
       );
   }
 };
@@ -65,6 +69,31 @@ export class OptionManager {
     private readonly layoutData?: WorkspaceLayoutData,
   ) {
     this.options = getViewModelOptions(schedulerStore);
+  }
+
+  public applyLayoutDates<T extends ListEntity>(items: T[]): T[] {
+    const plan = this.schedulerStore.getWorkSpace()
+      .viewDataProvider.viewDataGenerator.getDaylightPlan();
+
+    if (!plan || this.options.isMonthView || !this.options.isTimelineView) {
+      return items;
+    }
+
+    const { viewOffset } = this.options;
+
+    return items.map((entity) => ({
+      ...entity,
+      layoutStartMs: entity.startDateUTC + viewOffset + getStretchShiftMs(
+        plan,
+        entity.startDateUTC,
+        entity.source.startDate,
+      ),
+      layoutEndMs: entity.endDateUTC + viewOffset + getStretchShiftMs(
+        plan,
+        entity.endDateUTC,
+        entity.source.endDate,
+      ),
+    }));
   }
 
   protected getPanelOptions(panelName: PanelName): {
@@ -133,6 +162,8 @@ export class OptionManager {
         isTimelineView || panelName === 'allDayPanel',
         isMonthView,
         panelName,
+        this.schedulerStore.getWorkSpace()
+          .viewDataProvider.viewDataGenerator.getDaylightPlan(),
       );
 
       const groupByDateSplitIntervals = viewOrientation === 'vertical' ? dayIntervals : cells;

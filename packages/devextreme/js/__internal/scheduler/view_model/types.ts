@@ -94,6 +94,12 @@ export interface UTCDates {
   endDateUTC: number;
 }
 
+/** Stretched axis used for placement. Wall `startDateUTC` stays unchanged. */
+export interface LayoutDates {
+  layoutStartMs?: number;
+  layoutEndMs?: number;
+}
+
 export interface UTCDatesBeforeSplit {
   datesBeforeSplit: UTCDates;
 }
@@ -104,6 +110,7 @@ export interface UTCDatesAfterSplit {
 
 export type ListEntity = MinimalAppointmentEntity
   & UTCDates
+  & LayoutDates
   & UTCDatesBeforeSplit
   & AllDayPanelOccupation
   & GroupIndex

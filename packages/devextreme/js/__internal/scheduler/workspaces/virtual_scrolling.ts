@@ -643,12 +643,19 @@ export class VirtualScrollingDispatcher {
     } = cellData;
 
     const timeToScroll = date.getTime();
-    const cellStartTime = startDate.getTime();
-    const cellEndTime = endDate.getTime();
+    const instantStart = cellData.startDateUTC?.getTime();
+    const instantEnd = cellData.endDateUTC?.getTime();
+    const useInstants = instantStart !== undefined
+      && instantEnd !== undefined
+      && timeToScroll >= instantStart
+      && timeToScroll < instantEnd;
+    const cellStartTime = useInstants ? instantStart : startDate.getTime();
+    const cellEndTime = useInstants ? instantEnd : endDate.getTime();
+    const cellSpan = cellEndTime - cellStartTime;
 
-    const scrollInCell = allDay || !isCalculateTime
+    const scrollInCell = allDay || !isCalculateTime || cellSpan <= 0
       ? 0
-      : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
+      : (timeToScroll - cellStartTime) / cellSpan;
 
     const cellWidth = this.getCellWidth();
     const rowHeight = this.getCellHeight();

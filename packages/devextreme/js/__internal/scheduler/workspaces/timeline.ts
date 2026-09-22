@@ -18,6 +18,7 @@ import {
 } from '../classes';
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import tableCreatorModule, { type GroupRows } from '../table_creator';
+import { getColumnByWallMs, toWallMs } from '../utils/daylight_grid';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { getFirstVisibleDate } from '../utils/skipped_days';
 import timezoneUtils from '../utils_time_zone';
@@ -136,6 +137,18 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   getIndicationCellCount(): number {
+    const plan = this.viewDataProvider.viewDataGenerator.getDaylightPlan();
+
+    if (plan) {
+      const { indicatorTime, viewOffset } = this.option();
+      const instant = new Date((indicatorTime ?? new Date()).getTime() - viewOffset);
+      const gridDate = this.timeZoneCalculator
+        ? this.timeZoneCalculator.createDate(instant, 'toGrid')
+        : instant;
+
+      return getColumnByWallMs(plan, toWallMs(gridDate), instant.getTime());
+    }
+
     const timeDiff = this.getTimeDiff();
     return this.calculateDurationInCells(timeDiff);
   }

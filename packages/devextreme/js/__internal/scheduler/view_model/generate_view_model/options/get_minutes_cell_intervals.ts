@@ -1,5 +1,7 @@
 import { dateUtils } from '@ts/core/utils/m_date';
 
+import type { DaylightPlan } from '../../../utils/daylight_grid';
+import { cellLayoutRange } from '../../../utils/daylight_grid';
 import timeZoneUtils from '../../../utils_time_zone';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import type { CellInterval, DateInterval } from '../../types';
@@ -10,6 +12,7 @@ interface Options {
   endDayHour: number;
   durationMinutes: number;
   skippedDays: number[];
+  daylightPlan?: DaylightPlan;
 }
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -40,38 +43,50 @@ export const getMinutesCellIntervals = ({
   endDayHour,
   durationMinutes,
   skippedDays,
-}: Options): CellInterval[] => intervals.reduce<CellInterval[]>((result, interval, rowIndex) => {
-  const dayIntervals = splitIntervalByDay({
-    ...interval, startDayHour, endDayHour, skippedDays,
-  });
+  daylightPlan,
+}: Options): CellInterval[] => {
+  if (daylightPlan) {
+    return daylightPlan.days.flatMap((day) => day.cells).map((cell, cellIndex) => ({
+      ...cellLayoutRange(daylightPlan, cell),
+      rowIndex: 0,
+      columnIndex: cellIndex,
+      cellIndex,
+    }));
+  }
 
-  let columnIndex = 0;
-  filterBySkippedDays(dayIntervals, skippedDays).forEach((dayInterval) => {
-    const firstAvailableDayTime = adjustDayIntervalMinForMidnightDST(
-      dayInterval.min,
-      startDayHour,
-    );
-    const date = new Date(firstAvailableDayTime);
-    while (date.getTime() < dayInterval.max) {
-      const min = date.getTime();
-      let max = date.setUTCMinutes(date.getUTCMinutes() + durationMinutes);
+  return intervals.reduce<CellInterval[]>((result, interval, rowIndex) => {
+    const dayIntervals = splitIntervalByDay({
+      ...interval, startDayHour, endDayHour, skippedDays,
+    });
 
-      if (date.getUTCHours() > endDayHour) {
-        date.setUTCDate(date.getUTCDate() + 1);
-        date.setUTCHours(startDayHour, 0, 0, 0);
-        max = date.getTime();
+    let columnIndex = 0;
+    filterBySkippedDays(dayIntervals, skippedDays).forEach((dayInterval) => {
+      const firstAvailableDayTime = adjustDayIntervalMinForMidnightDST(
+        dayInterval.min,
+        startDayHour,
+      );
+      const date = new Date(firstAvailableDayTime);
+      while (date.getTime() < dayInterval.max) {
+        const min = date.getTime();
+        let max = date.setUTCMinutes(date.getUTCMinutes() + durationMinutes);
+
+        if (date.getUTCHours() > endDayHour) {
+          date.setUTCDate(date.getUTCDate() + 1);
+          date.setUTCHours(startDayHour, 0, 0, 0);
+          max = date.getTime();
+        }
+
+        result.push({
+          min,
+          max,
+          rowIndex,
+          columnIndex,
+          cellIndex: result.length,
+        });
+        columnIndex += 1;
       }
+    });
 
-      result.push({
-        min,
-        max,
-        rowIndex,
-        columnIndex,
-        cellIndex: result.length,
-      });
-      columnIndex += 1;
-    }
-  });
-
-  return result;
-}, []);
+    return result;
+  }, []);
+};

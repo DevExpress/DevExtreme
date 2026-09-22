@@ -68,6 +68,7 @@ import {
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
 import type { GroupOrientation, ViewType } from '@ts/scheduler/types';
+import { getColumnByWallMs, toWallMs } from '@ts/scheduler/utils/daylight_grid';
 import Scrollable, { type ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
 
 import type NotifyScheduler from '../base/widget_notify_scheduler';
@@ -1065,6 +1066,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       firstDayOfWeek: this.option().firstDayOfWeek ?? 0,
       showCurrentTimeIndicator: this.option().showCurrentTimeIndicator,
       skippedDays: this.option().skippedDays,
+      timeZoneCalculator: this.timeZoneCalculator,
 
       ...renderState,
       startRowIndex: renderState.startRowIndex ?? 0,
@@ -1684,7 +1686,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return undefined;
     }
 
-    currentDate.setHours(cell.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
+    const hitsInstant = cell.cellData.startDateUTC
+      && currentDate.getTime() >= cell.cellData.startDateUTC.getTime()
+      && cell.cellData.endDateUTC
+      && currentDate.getTime() < cell.cellData.endDateUTC.getTime();
+
+    if (!hitsInstant) {
+      currentDate.setHours(cell.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
+    }
 
     return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
       cell.cellData,
@@ -1724,8 +1733,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const normalizedCellData: NormalizedCellData = {
       startDate: cellData.startDate ?? new Date(),
       endDate: cellData.endDate ?? new Date(),
-      startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid'),
-      endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid'),
+      startDateUTC: cellData.startDateUTC
+        ?? (cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid')),
+      endDateUTC: cellData.endDateUTC
+        ?? (cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid')),
       groups: cellData.groups,
       groupIndex: cellData.groupIndex,
       allDay: cellData.allDay,
@@ -1776,6 +1787,17 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   // TODO: refactor current time indicator
   getCellIndexByDate(date: Date, inAllDayRow?: boolean): number {
     const { viewDataGenerator } = this.viewDataProvider;
+    const plan = viewDataGenerator.getDaylightPlan();
+
+    if (plan && !inAllDayRow) {
+      const adjusted = new Date(date.getTime() - this.option().viewOffset);
+      const gridDate = this.timeZoneCalculator
+        ? this.timeZoneCalculator.createDate(adjusted, 'toGrid')
+        : adjusted;
+      const column = getColumnByWallMs(plan, toWallMs(gridDate), adjusted.getTime());
+
+      return Math.max(0, Math.floor(column));
+    }
 
     const timeInterval = inAllDayRow
       ? 24 * 60 * 60 * 1000
@@ -2013,7 +2035,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   updateScrollPosition(date: Date, appointmentGroupValues?: GroupValues, allDay = false): void {
-    const newDate = this.timeZoneCalculator?.createDate(date, 'toGrid') ?? date;
+    const plan = this.viewDataProvider.viewDataGenerator.getDaylightPlan();
+    const newDate = plan
+      ? date
+      : this.timeZoneCalculator?.createDate(date, 'toGrid') ?? date;
     const inAllDayRow = allDay && this.isAllDayPanelVisible;
 
     if (this.needUpdateScrollPosition(newDate, appointmentGroupValues, inAllDayRow)) {

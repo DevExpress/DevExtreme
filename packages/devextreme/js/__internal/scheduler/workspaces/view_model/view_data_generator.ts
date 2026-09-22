@@ -23,6 +23,13 @@ import type {
   ViewDataMap,
   ViewType,
 } from '../../types';
+import {
+  buildDaylightPlan,
+  type DaylightCell,
+  type DaylightPlan,
+  getPlanCell,
+  visibleDayOrigins,
+} from '../../utils/daylight_grid';
 import { VIEWS } from '../../utils/options/constants_view';
 import { getAllGroupValues } from '../../utils/resource_manager/group_utils';
 import {
@@ -47,6 +54,10 @@ export class ViewDataGenerator {
   public hiddenInterval = 0;
 
   public skippedDays: number[] = [];
+
+  private daylightPlan?: DaylightPlan;
+
+  private extendedOptions?: ViewDataProviderExtendedOptions;
 
   constructor(public readonly viewType: ViewType) {}
 
@@ -140,6 +151,7 @@ export class ViewDataGenerator {
     this.skippedDays = options.skippedDays ?? this.skippedDays;
     this.setVisibilityDates(options);
     this.setHiddenInterval(startDayHour, endDayHour, hoursInterval);
+    this.refreshDaylightPlan(options);
 
     const groupsList = getAllGroupValues(getResourceManager().groupsLeafs);
     const cellCountInGroupRow = this.getCellCount({
@@ -552,6 +564,18 @@ export class ViewDataGenerator {
     const { getResourceManager } = options;
 
     const groupsList = getAllGroupValues(getResourceManager().groupsLeafs);
+    const planCell = this.planCell(columnIndex);
+
+    if (planCell) {
+      const data = this.cellFromPlan(planCell, options.viewOffset);
+
+      if (groupsList.length > 0) {
+        // eslint-disable-next-line prefer-destructuring
+        data.groups = groupsList[0];
+      }
+
+      return data;
+    }
 
     const startDate = this.getDateByCellIndices(
       options,
@@ -595,7 +619,8 @@ export class ViewDataGenerator {
     const shiftedStartDate = dateUtilsTs.addOffsets(startDate, viewOffset);
 
     return {
-      ...data,
+      groups: data.groups,
+      groupIndex: data.groupIndex,
       startDate: shiftedStartDate,
       endDate: shiftedStartDate,
       allDay: true,
@@ -905,7 +930,68 @@ export class ViewDataGenerator {
     return Math.ceil(result);
   }
 
+  public getDaylightPlan(): DaylightPlan | undefined {
+    return this.daylightPlan;
+  }
+
+  public refreshDaylightPlan(options: ViewDataProviderExtendedOptions): void {
+    this.extendedOptions = options;
+    this.skippedDays = options.skippedDays ?? this.skippedDays;
+
+    if (!this.usesHourCells()) {
+      this.daylightPlan = undefined;
+      return;
+    }
+
+    const dayCount = this.daysInInterval * options.intervalCount;
+    const origins = visibleDayOrigins(
+      options.startViewDate,
+      dayCount,
+      this.skippedDays,
+      options.startDayHour,
+    );
+
+    this.daylightPlan = buildDaylightPlan(
+      origins,
+      options.startDayHour,
+      options.endDayHour,
+      options.interval,
+      options.timeZoneCalculator,
+    );
+  }
+
+  private usesHourCells(): boolean {
+    return this.viewType === VIEWS.TIMELINE_DAY
+      || this.viewType === VIEWS.TIMELINE_WEEK
+      || this.viewType === VIEWS.TIMELINE_WORK_WEEK;
+  }
+
+  private planCell(columnIndex: number): DaylightCell | undefined {
+    return this.daylightPlan
+      ? getPlanCell(this.daylightPlan, columnIndex)
+      : undefined;
+  }
+
+  private cellFromPlan(cell: DaylightCell, viewOffset: number): ViewCellDataSimple {
+    return {
+      startDate: dateUtilsTs.addOffsets(cell.start, viewOffset),
+      endDate: dateUtilsTs.addOffsets(cell.end, viewOffset),
+      startDateUTC: new Date(cell.startUTC + viewOffset),
+      endDateUTC: new Date(cell.endUTC + viewOffset),
+      allDay: this.tableAllDay,
+      groupIndex: 0,
+    };
+  }
+
   public getCellCount(options: CountGenerationConfig): number {
+    if (!this.daylightPlan && this.extendedOptions && this.usesHourCells()) {
+      this.refreshDaylightPlan(this.extendedOptions);
+    }
+
+    if (this.daylightPlan) {
+      return this.daylightPlan.cellCount;
+    }
+
     const {
       intervalCount,
       viewType,

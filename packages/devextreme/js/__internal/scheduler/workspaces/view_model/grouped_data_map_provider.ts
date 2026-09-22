@@ -13,6 +13,7 @@ import type {
   ViewType,
 } from '../../types';
 import timezoneUtils from '../../utils_time_zone';
+import { cellBoundMs, dateHitsCell } from './cell_bounds';
 import type { ViewDataGenerator } from './view_data_generator';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -82,6 +83,12 @@ export class GroupedDataMapProvider {
       if (isFindByDate) {
         secondMin = dateUtils.trimTime(secondMin);
         secondMax = dateUtils.setToDayEnd(secondMin);
+      } else {
+        const bounds = cellBoundMs(cellData);
+
+        if (startDate.getTime() < bounds.end && endDate.getTime() > bounds.start) {
+          return cellData.startDate;
+        }
       }
 
       if (dateUtils.intervalsOverlap({
@@ -203,6 +210,10 @@ export class GroupedDataMapProvider {
     }: ViewCellData,
   ): boolean {
     const { viewType } = this.viewOptions;
+
+    if (!inAllDayRow && dateHitsCell(originCellData, startDate)) {
+      return true;
+    }
 
     const cellSecondIntervalOffset = this.getCellSecondIntervalOffset(
       originCellStartDate,

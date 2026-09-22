@@ -15,12 +15,15 @@ const getInsideCellX = (date: number, { min, max }: CellInterval, cellSizeX: num
 };
 
 export const getAppointmentX = (
-  entity: Pick<GeometryMinimalEntity, 'startDateUTC' | 'endDateUTC' | 'cellIndex' | 'endCellIndex' | 'columnIndex'>,
+  entity: Pick<GeometryMinimalEntity,
+    'startDateUTC' | 'endDateUTC' | 'layoutStartMs' | 'layoutEndMs' | 'cellIndex' | 'endCellIndex' | 'columnIndex'>,
   cellSize: AbstractSize,
   cells: CellInterval[],
 ): X => {
-  const startX = getInsideCellX(entity.startDateUTC, cells[entity.cellIndex], cellSize.sizeX);
-  const endX = getInsideCellX(entity.endDateUTC, cells[entity.endCellIndex], cellSize.sizeX);
+  const start = entity.layoutStartMs ?? entity.startDateUTC;
+  const end = entity.layoutEndMs ?? entity.endDateUTC;
+  const startX = getInsideCellX(start, cells[entity.cellIndex], cellSize.sizeX);
+  const endX = getInsideCellX(end, cells[entity.endCellIndex], cellSize.sizeX);
   const offsetX = entity.columnIndex * cellSize.sizeX + startX;
   const sizeX = (entity.endCellIndex - entity.cellIndex) * cellSize.sizeX + endX - startX;
 

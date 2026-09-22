@@ -19,6 +19,17 @@ export const snapToCells = <T extends ListEntity & Position>(
     const isLessThanTwoCells = cellDuration > 0 && appointmentDuration / cellDuration < 2;
     const shouldSnap = mode === 'always' || isLessThanTwoCells;
 
+    if (entity.layoutStartMs !== undefined && entity.layoutEndMs !== undefined) {
+      const layoutStartMs = shouldSnap ? startCell.min : entity.layoutStartMs;
+      const layoutEndMs = shouldSnap ? endCell.max : entity.layoutEndMs;
+
+      return {
+        ...entity,
+        layoutStartMs,
+        layoutEndMs,
+      };
+    }
+
     const startDateUTC = shouldSnap ? startCell.min : entity.startDateUTC;
     const endDateUTC = shouldSnap ? endCell.max : entity.endDateUTC;
 

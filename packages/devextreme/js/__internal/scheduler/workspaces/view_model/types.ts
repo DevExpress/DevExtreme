@@ -65,6 +65,9 @@ export interface ViewCellDataSimple {
   groupIndex: number;
   startDate: Date;
   endDate: Date;
+  /** True instants. Present on timeline cells whose view has a DST plan. */
+  startDateUTC?: Date;
+  endDateUTC?: Date;
   allDay?: boolean;
 }
 

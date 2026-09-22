@@ -103,11 +103,16 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
         />
       );
 
+    const weekDayStyle = isWeekDayCell
+      ? { flexGrow: colSpan, flexBasis: 0 }
+      : undefined;
+
     return (
       <th
         className={classes}
         colSpan={colSpan}
         title={text}
+        style={weekDayStyle}
       >
         {children}
       </th>

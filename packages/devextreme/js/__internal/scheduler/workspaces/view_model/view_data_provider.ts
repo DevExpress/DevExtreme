@@ -29,6 +29,7 @@ import type {
 } from '../../types';
 import timeZoneUtils from '../../utils_time_zone';
 import type { EdgeIndices } from '../cells_selection_controller';
+import { cellBoundMs } from './cell_bounds';
 import { DateHeaderDataGenerator } from './date_header_data_generator';
 import { GroupedDataMapProvider } from './grouped_data_map_provider';
 import { TimePanelDataGenerator } from './time_panel_data_generator';
@@ -321,14 +322,19 @@ export default class ViewDataProvider {
   }
 
   isGroupIntersectDateInterval(groupIndex: number, startDate: Date, endDate: Date): boolean {
-    const groupStartDate = this.getGroupStartDate(groupIndex);
-    const groupEndDate = this.getGroupEndDate(groupIndex);
+    const groupedData = this.groupedDataMap.dateTableGroupedMap[groupIndex];
+    const firstCell = groupedData?.[0]?.[0]?.cellData;
+    const lastRow = groupedData?.[groupedData.length - 1];
+    const lastCell = lastRow?.[lastRow.length - 1]?.cellData;
 
-    if (!groupStartDate || !groupEndDate) {
+    if (!firstCell || !lastCell) {
       return false;
     }
 
-    return startDate < groupEndDate && endDate > groupStartDate;
+    const groupStart = cellBoundMs(firstCell).start;
+    const groupEnd = cellBoundMs(lastCell).end;
+
+    return startDate.getTime() < groupEnd && endDate.getTime() > groupStart;
   }
 
   findGlobalCellPosition(
@@ -361,7 +367,6 @@ export default class ViewDataProvider {
         const cellData = currentRow[columnIndex];
         const {
           startDate: cellStartDate,
-          endDate: cellEndDate,
           groupIndex: cellGroupIndex,
           allDay: cellAllDay,
         } = cellData;
@@ -371,9 +376,15 @@ export default class ViewDataProvider {
           continue;
         }
 
+        const hitsInstant = Boolean(
+          cellData.startDateUTC
+          && cellData.endDateUTC
+          && date.getTime() >= cellData.startDateUTC.getTime()
+          && date.getTime() < cellData.endDateUTC.getTime(),
+        );
         const isDateInCell = allDay
           ? dateUtils.sameDate(date, cellStartDate)
-          : date >= cellStartDate && date < cellEndDate;
+          : hitsInstant;
 
         if (isDateInCell) {
           return {
@@ -389,6 +400,28 @@ export default class ViewDataProvider {
           resultCellData = cellData;
           resultCellColumnIndex = columnIndex;
           resultCellRowIndex = rowIndex;
+        }
+      }
+    }
+
+    for (let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
+      const currentRow = completeViewDataMap[rowIndex];
+
+      for (let columnIndex = 0; columnIndex < currentRow.length; columnIndex += 1) {
+        const cellData = currentRow[columnIndex];
+        const wallStart = cellData.startDate.getTime();
+        const wallEnd = cellData.endDate.getTime();
+
+        if (groupIndex !== cellData.groupIndex || allDay !== Boolean(cellData.allDay)) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
+        if (wallStart < wallEnd && date.getTime() >= wallStart && date.getTime() < wallEnd) {
+          return {
+            position: getCellPosition(columnIndex, rowIndex),
+            cellData,
+          };
         }
       }
     }
@@ -411,8 +444,11 @@ export default class ViewDataProvider {
     const groupedData = dateTableGroupedMap[groupIndex];
     const includedDays = groupedData.reduce(
       (rowCount, row) => rowCount + row.filter(
-        ({ cellData }) => startDate.getTime() < cellData.endDate.getTime()
-          && endDate.getTime() > cellData.startDate.getTime(),
+        ({ cellData }) => {
+          const bounds = cellBoundMs(cellData);
+
+          return startDate.getTime() < bounds.end && endDate.getTime() > bounds.start;
+        },
       ).length,
       0,
     );

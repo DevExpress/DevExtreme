@@ -71,10 +71,16 @@ export class DateHeaderDataGenerator {
 
     const resourceManager = getResourceManager();
     const groupCount = resourceManager.groupCount();
+    const plan = this.viewDataGenerator.getDaylightPlan();
     const cellCountInDay = this.viewDataGenerator
       .getCellCountInDay(startDayHour, endDayHour, hoursInterval);
     const horizontalGroupCount = getHorizontalGroupCount(groupCount, groupOrientation);
     const index = completeViewDataMap[0][0].allDay ? 1 : 0;
+
+    if (plan) {
+      return this.generateWeekDaysFromPlan(options, completeViewDataMap, index);
+    }
+
     const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
 
     const datesRepeatCount = isHorizontalGrouping && !isGroupedByDate
@@ -98,6 +104,46 @@ export class DateHeaderDataGenerator {
         isFirstGroupCell: false,
         isLastGroupCell: false,
       });
+    }
+
+    return weekDaysRow;
+  }
+
+  private generateWeekDaysFromPlan(
+    options: ViewDataProviderExtendedOptions,
+    completeViewDataMap: ViewCellData[][],
+    rowIndex: number,
+  ): DateHeaderCellData[] {
+    const plan = this.viewDataGenerator.getDaylightPlan();
+    const row = completeViewDataMap[rowIndex];
+    const weekDaysRow: DateHeaderCellData[] = [];
+
+    if (!plan) {
+      return weekDaysRow;
+    }
+
+    let cursor = 0;
+
+    while (cursor < row.length) {
+      const cell = row[cursor];
+      const indexInGroup = cursor % plan.cellCount;
+      const day = plan.days.find((item) => (
+        indexInGroup >= item.firstCellIndex
+        && indexInGroup < item.firstCellIndex + item.cells.length
+      ));
+      const colSpan = day?.cells.length ?? 1;
+      const { startDate, endDate, ...restProps } = cell;
+      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -options.viewOffset);
+
+      weekDaysRow.push({
+        ...restProps,
+        startDate,
+        colSpan,
+        text: formatWeekdayAndDay(shiftedStartDate),
+        isFirstGroupCell: false,
+        isLastGroupCell: false,
+      });
+      cursor += colSpan;
     }
 
     return weekDaysRow;
@@ -141,6 +187,10 @@ export class DateHeaderDataGenerator {
       startDayHour,
       endDayHour,
     });
+    const plan = this.viewDataGenerator.getDaylightPlan();
+    const keepHeaderDate = (headerIndex: number, date: Date): Date => (
+      headerIndex < 0 ? date : date
+    );
     const cellCountInDay = this.viewDataGenerator
       .getCellCountInDay(startDayHour, endDayHour, hoursInterval);
 
@@ -171,7 +221,7 @@ export class DateHeaderDataGenerator {
         idx % cellCountInGroupRow,
         shiftedStartDateForHeaderText,
         headerCellTextFormat,
-        getDateForHeaderText,
+        plan ? keepHeaderDate : getDateForHeaderText,
         {
           interval,
           startViewDate,

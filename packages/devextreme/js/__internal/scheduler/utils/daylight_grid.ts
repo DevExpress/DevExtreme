@@ -504,6 +504,20 @@ export const getStretchShiftMs = (
   );
 };
 
+/** Wall-clock position of a cell once repeated hours take their own space. */
+export const cellLayoutRange = (
+  plan: DaylightPlan,
+  cell: DaylightCell,
+): { min: number; max: number } => {
+  const startWall = toWallMs(cell.start);
+  const endWall = toWallMs(cell.end);
+
+  return {
+    min: startWall + getStretchShiftMs(plan, startWall, cell.startUTC),
+    max: endWall + getStretchShiftMs(plan, endWall, cell.endUTC),
+  };
+};
+
 /**
  * Position of a wall clock along the time axis. Every cell counts as one,
  * including a cell the jump cut shorter than the configured duration.
