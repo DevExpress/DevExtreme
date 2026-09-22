@@ -279,6 +279,7 @@ interface SchedulerWorkSpaceLike {
   removeDroppableCellClass: () => void;
   keepOriginalHours: () => boolean;
   getDataByDroppableCell: () => DroppableCellData;
+  getIndicationCellCount?: () => number;
   getStartViewDate: () => Date | undefined;
   getEndViewDate: () => Date;
   scrollTo: (

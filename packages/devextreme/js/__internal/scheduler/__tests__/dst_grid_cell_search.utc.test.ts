@@ -93,7 +93,7 @@ describe('cell search on a Cairo fall-back timeline', () => {
 
   it('asks the plan for the indicator column of the second 23:00', async () => {
     const { workspace } = await createTimeline();
-    const column = workspace.getIndicationCellCount();
+    const column = workspace.getIndicationCellCount?.();
 
     expect(column).toBe(24.5);
   });
