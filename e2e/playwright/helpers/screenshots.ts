@@ -32,8 +32,6 @@ const resolveLocator = (
   return element ?? null;
 };
 
-// The page screenshot is clipped to the layout viewport: Playwright would otherwise include the
-// scrollbar, which TestCafe left out, and every full-page etalon would have to be re-recorded.
 const viewportClip = async (page: Page): Promise<{
   x: number; y: number; width: number; height: number;
 }> => page.evaluate(() => ({
@@ -88,7 +86,7 @@ const expectScreenshot = async (
   name: string,
 ): Promise<void> => {
   if (!locator) {
-    await expect(page).toHaveScreenshot([name], { clip: await viewportClip(page) });
+    await expect(page).toHaveScreenshot([name]);
     return;
   }
 
