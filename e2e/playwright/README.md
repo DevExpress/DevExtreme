@@ -34,8 +34,9 @@ comparer did. Etalons live in `etalons/` next to the test and carry the theme in
 `PivotGrid markup (fluent.blue.light).png` — the same convention the TestCafe run uses.
 
 The pixel budget follows the renderer: the agent and the container draw the same pixels and are
-both judged strictly (`maxDiffPixelRatio` 0.001, `threshold` 0.1), the UI mode included. A run on
-the host is lenient (0.05 / 0.2) because its comparison is not trustworthy anyway — see below.
+both judged strictly (`maxDiffPixels` 0, `threshold` 0.1), the UI mode included: no pixel may drift
+beyond the per-pixel threshold, which is what the TestCafe comparer enforced. A run on the host is
+lenient (0.05 / 0.2) because its comparison is not trustworthy anyway — see below.
 
 Run the screenshot tests in the container and nowhere else. The etalons are Linux renders, and a
 macOS or Windows one differs in text metrics — the image comes out a different size, which no

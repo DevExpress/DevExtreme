@@ -14,7 +14,7 @@ const [width, height] = DEFAULT_BROWSER_SIZE;
 const rendersLikeCI = !!process.env.CI || !!process.env.DX_CONTAINER;
 
 const screenshotBudget = rendersLikeCI
-  ? { maxDiffPixelRatio: 0.001, threshold: 0.1 }
+  ? { maxDiffPixels: 0, threshold: 0.1 }
   : { maxDiffPixelRatio: 0.05, threshold: 0.2 };
 
 export default defineConfig<TestOptions>({
