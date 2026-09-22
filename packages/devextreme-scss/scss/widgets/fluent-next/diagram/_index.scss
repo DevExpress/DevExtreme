@@ -480,7 +480,13 @@
   }
 }
 
-@include diagram-action-icons-mixin($diagram-content, $diagram-content, $diagram-toolbar-icon-size, $diagram-toolbar-colorbutton-border-width, $masked: true);
+@include diagram-action-icons-mixin(
+  $toolbar-color: null,
+  $menu-color: null,
+  $icon-size: $diagram-toolbar-icon-size,
+  $toolbar-colorbutton-border-width: $diagram-toolbar-colorbutton-border-width,
+  $masked: true,
+);
 
 /*
  * What the mask leaves to the cascade: the paint. `.dx-diagram-i` is the element the toolbar and

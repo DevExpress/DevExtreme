@@ -29,28 +29,12 @@ $diagram-bg: ds.$color-bg !default;
 $diagram-danger-icon: ds.$color-content-danger !default;
 
 /*
- * SVG data-uri icons are colored by baking the value into a background-image data-uri at build
- * time (string replace of `currentColor`). CSS var() tokens do NOT resolve inside such a data-uri
- * (they render black), so the values below are the static per-mode equivalents of the ds.$ tokens
- * named in the markers — keep them in sync with the design-tokens package. See DIVERGENCES.
- */
-$diagram-content: null !default;
-
-/*
  * The properties-panel toggle sits on a contained `default` button, whose fill is the same accent
  * in both modes - so the button paints its own content with `content-static-dark`, which does not
  * flip. The icon has to follow that, not `content-inverted`: inverted would turn the glyph
  * near-black on dark while every other mark on the same button stayed white.
  */
 $diagram-properties-panel-icon: #fff !default; // dx-data-uri-static: ds.$color-content-static-dark (mode-invariant)
-
-@if $mode == "light" {
-  $diagram-content: #161616 !default; // dx-data-uri-static: ds.$color-content
-}
-
-@if $mode == "dark" {
-  $diagram-content: #fff !default; // dx-data-uri-static: ds.$color-content
-}
 
 // Canvas = deeper neutral surface
 $diagram-canvas-bg: ds.$color-bg-canvas !default;
