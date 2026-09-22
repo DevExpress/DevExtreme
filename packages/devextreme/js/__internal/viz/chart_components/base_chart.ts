@@ -682,7 +682,11 @@ export const BaseChart = BaseWidget.inherit({
         zoomMaxArg = argBusinessRange.maxVisible;
       }
 
-      this._scrollBar.init(argBusinessRange, !this._argumentAxes[0].getOptions().valueMarginsEnabled).setPosition(zoomMinArg, zoomMaxArg);
+      const argumentAxis = this._argumentAxes[0];
+
+      this._scrollBar
+        .init(argBusinessRange, !argumentAxis.getOptions().valueMarginsEnabled, argumentAxis.getWholeRangeBreaks())
+        .setPosition(zoomMinArg, zoomMaxArg);
     }
 
     this._updateTracker(trackerCanvases);

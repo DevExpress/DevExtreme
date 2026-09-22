@@ -979,6 +979,8 @@ export const MockAxis = function(renderOptions) {
 
         getZoomBounds: sinon.stub(),
 
+        getWholeRangeBreaks: sinon.stub().returns([]),
+
         setInitRange: sinon.stub(),
 
         setGroupSeries: sinon.stub(),
