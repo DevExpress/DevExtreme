@@ -21,12 +21,20 @@ export const getWeekIntervals = (
     ...compareOptions,
     intervals,
     durationMinutes: cellDurationMinutes,
+    stretchRepeatedHour: isTimeline,
   });
   const shiftedCells = shiftIntervals(cells, viewOffset);
+  const lastCellMax = shiftedCells.reduce((max, cell) => Math.max(max, cell.max), 0);
+  const coveredIntervals = isTimeline
+    ? shiftedIntervals.map((interval) => ({
+      ...interval,
+      max: Math.max(interval.max, lastCellMax),
+    }))
+    : shiftedIntervals;
 
   return {
     cells: shiftedCells,
     dayIntervals: shiftedSplitIntervals,
-    intervals: shiftedIntervals,
+    intervals: coveredIntervals,
   };
 };

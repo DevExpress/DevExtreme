@@ -77,6 +77,8 @@ export class TimePanelDataGenerator {
       hoursInterval,
       startDayHour,
       endDayHour,
+      startViewDate: options.startViewDate,
+      skippedDays: options.skippedDays,
     });
 
     let allDayRowsCount = 0;

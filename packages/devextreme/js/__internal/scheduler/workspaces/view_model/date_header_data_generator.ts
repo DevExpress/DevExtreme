@@ -19,6 +19,10 @@ interface DateHeaderGenerateOptions extends ViewDataProviderExtendedOptions {
   isMonthDateHeader?: boolean;
 }
 
+const keepActualCellDate = (cellIndex: number, date: Date): Date => (
+  cellIndex < 0 ? date : date
+);
+
 interface DateHeaderDataRowConfig {
   dateRow: DateHeaderCellData[];
   leftVirtualCellCount: number;
@@ -73,8 +77,10 @@ export class DateHeaderDataGenerator {
     const groupCount = resourceManager.groupCount();
     const cellCountInDay = this.viewDataGenerator
       .getCellCountInDay(startDayHour, endDayHour, hoursInterval);
+    const extraCellCounts = this.viewDataGenerator.getRepeatedHourExtraCellCounts(options);
     const horizontalGroupCount = getHorizontalGroupCount(groupCount, groupOrientation);
     const index = completeViewDataMap[0][0].allDay ? 1 : 0;
+    const hasRepeatedHour = extraCellCounts.some((count) => count > 0);
     const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
 
     const datesRepeatCount = isHorizontalGrouping && !isGroupedByDate
@@ -85,15 +91,26 @@ export class DateHeaderDataGenerator {
     const daysInView = daysInGroup * datesRepeatCount;
 
     const weekDaysRow: DateHeaderCellData[] = [];
+    let columnCursor = 0;
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
-      const { startDate, endDate, ...restProps } = completeViewDataMap[index][dayIndex * colSpan];
+      const extraCells = extraCellCounts[dayIndex % daysInGroup] ?? 0;
+      const dayColSpan = hasRepeatedHour
+        ? (isGroupedByDate ? horizontalGroupCount : 1) * (cellCountInDay + extraCells)
+        : colSpan;
+      const cell = completeViewDataMap[index][hasRepeatedHour ? columnCursor : dayIndex * colSpan];
+      columnCursor += dayColSpan;
+      if (!cell) {
+        break;
+      }
+
+      const { startDate, endDate, ...restProps } = cell;
       const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
 
       weekDaysRow.push({
         ...restProps,
         startDate,
-        colSpan,
+        colSpan: dayColSpan,
         text: formatWeekdayAndDay(shiftedStartDate),
         isFirstGroupCell: false,
         isLastGroupCell: false,
@@ -140,7 +157,12 @@ export class DateHeaderDataGenerator {
       hoursInterval,
       startDayHour,
       endDayHour,
+      startViewDate,
+      skippedDays: options.skippedDays,
     });
+    const hasRepeatedHour = this.viewDataGenerator
+      .getRepeatedHourExtraCellCounts(options)
+      .some((count) => count > 0);
     const cellCountInDay = this.viewDataGenerator
       .getCellCountInDay(startDayHour, endDayHour, hoursInterval);
 
@@ -171,7 +193,7 @@ export class DateHeaderDataGenerator {
         idx % cellCountInGroupRow,
         shiftedStartDateForHeaderText,
         headerCellTextFormat,
-        getDateForHeaderText,
+        hasRepeatedHour ? keepActualCellDate : getDateForHeaderText,
         {
           interval,
           startViewDate,
@@ -276,7 +298,18 @@ export class DateHeaderDataGenerator {
       getResourceManager().groupCount(),
       groupOrientation,
     );
+    const headerSpans = completeDateHeaderMap[rowIndex].map((cell) => cell.colSpan ?? baseColSpan);
+    const spansVary = headerSpans.some((span) => span !== headerSpans[0]);
     const colSpan = isGroupedByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
+    if (spansVary) {
+      return this.generateVariableSpanHeaderRow(
+        completeDateHeaderMap[rowIndex],
+        headerSpans,
+        completeViewDataMap,
+        options,
+        cellWidth,
+      );
+    }
     const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
     const displayedCellCount = getDisplayedCellCount(cellCount, completeViewDataMap);
     const actualCellCount = Math.ceil((startCellIndex + displayedCellCount) / colSpan);
@@ -295,6 +328,46 @@ export class DateHeaderDataGenerator {
       leftVirtualCellWidth: isProvideVirtualCellsWidth ? finalLeftVirtualCellWidth : undefined,
       rightVirtualCellCount: finalRightVirtualCellCount,
       rightVirtualCellWidth: isProvideVirtualCellsWidth ? finalRightVirtualCellWidth : undefined,
+    };
+  }
+
+  private generateVariableSpanHeaderRow(
+    headerRow: DateHeaderCellData[],
+    headerSpans: number[],
+    completeViewDataMap: ViewCellData[][],
+    options: ViewDataProviderExtendedOptions,
+    cellWidth: number,
+  ): DateHeaderDataRowConfig {
+    const { startCellIndex, cellCount, isProvideVirtualCellsWidth } = options;
+    const displayedCellCount = getDisplayedCellCount(cellCount, completeViewDataMap);
+    const endCellIndex = startCellIndex + displayedCellCount;
+    const totalCellCount = getTotalCellCountByCompleteData(completeViewDataMap);
+
+    let covered = 0;
+    let firstHeader = 0;
+    while (
+      firstHeader < headerSpans.length
+      && covered + headerSpans[firstHeader] <= startCellIndex
+    ) {
+      covered += headerSpans[firstHeader];
+      firstHeader += 1;
+    }
+
+    let rightCovered = 0;
+    let lastHeader = 0;
+    while (lastHeader < headerSpans.length && rightCovered < endCellIndex) {
+      rightCovered += headerSpans[lastHeader];
+      lastHeader += 1;
+    }
+
+    return {
+      dateRow: headerRow.slice(firstHeader, lastHeader),
+      leftVirtualCellCount: covered,
+      leftVirtualCellWidth: isProvideVirtualCellsWidth ? covered * cellWidth : undefined,
+      rightVirtualCellCount: Math.max(0, totalCellCount - rightCovered),
+      rightVirtualCellWidth: isProvideVirtualCellsWidth
+        ? Math.max(0, totalCellCount - rightCovered) * cellWidth
+        : undefined,
     };
   }
 }

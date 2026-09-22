@@ -1,4 +1,5 @@
 import type Scheduler from '../../scheduler';
+import { shiftRepeatedHourTimestamp } from '../../utils/repeated_hour';
 import type { AppointmentEntity, ListEntity, SortedEntity } from '../types';
 import type { OptionManager } from './options/option_manager';
 import { addCollector } from './steps/add_collector/add_collector';
@@ -25,6 +26,8 @@ export const sortAppointments = (
     hasAllDayPanel,
     snapToCellsMode,
     viewOffset,
+    isTimelineView,
+    compareOptions,
     compareOptions: { endDayHour },
   } = optionManager.options;
 
@@ -36,7 +39,43 @@ export const sortAppointments = (
       const innerStep0 = isMonthView || panelName === 'allDayPanel'
         ? expandAllDayAllDayPanel(group, endDayHour, viewOffset)
         : expandAllDayRegularPanel(group);
-      const innerStep1 = splitByParts(innerStep0, optionManager.getSplitIntervals(panelName));
+      const stretchedTimeline = isTimelineView && !isMonthView && panelName === 'regularPanel';
+      const timelineCells = stretchedTimeline ? optionManager.getCells(panelName) : [];
+      const shiftedStep = stretchedTimeline
+        ? innerStep0.map((entity) => {
+          const viewStartUtc = timelineCells[0]?.min;
+          if (viewStartUtc === undefined) {
+            return entity;
+          }
+
+          const startDateUTC = shiftRepeatedHourTimestamp(
+            entity.startDateUTC,
+            entity.source.startDate,
+            viewStartUtc,
+            compareOptions.startDayHour,
+            compareOptions.endDayHour,
+            compareOptions.skippedDays,
+            optionManager.options.type === 'timelineWeek' || optionManager.options.type === 'timelineWorkWeek',
+          );
+          const endDateUTC = shiftRepeatedHourTimestamp(
+            entity.endDateUTC,
+            entity.source.endDate,
+            viewStartUtc,
+            compareOptions.startDayHour,
+            compareOptions.endDayHour,
+            compareOptions.skippedDays,
+            optionManager.options.type === 'timelineWeek' || optionManager.options.type === 'timelineWorkWeek',
+          );
+
+          return {
+            ...entity,
+            startDateUTC,
+            endDateUTC,
+            duration: endDateUTC - startDateUTC,
+          };
+        })
+        : innerStep0;
+      const innerStep1 = splitByParts(shiftedStep, optionManager.getSplitIntervals(panelName));
       sortByDuration(innerStep1);
       sortByStartDate(innerStep1);
       sortByGroupIndex(innerStep1);

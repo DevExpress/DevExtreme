@@ -19,6 +19,7 @@ import {
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import { findFallbackInstant, getRepeatedHourLayoutMs, getVisibleFallbackMs } from '../utils/repeated_hour';
 import { getFirstVisibleDate } from '../utils/skipped_days';
 import timezoneUtils from '../utils_time_zone';
 import type { ViewDataProviderOptions } from './view_model/types';
@@ -136,6 +137,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   getIndicationCellCount(): number {
+    if (this.hasRepeatedHourCells()) {
+      return this.getRepeatedHourCellCount(this.getToday());
+    }
+
     const timeDiff = this.getTimeDiff();
     return this.calculateDurationInCells(timeDiff);
   }
@@ -244,7 +249,36 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return dateUtils.trimTime(new Date(this.getStartViewDate())) as Date;
   }
 
+  override isIndicatorVisible(): boolean {
+    if (super.isIndicatorVisible()) {
+      return true;
+    }
+
+    if (!this.hasRepeatedHourCells()) {
+      return false;
+    }
+
+    const { startDayHour, endDayHour } = this.option();
+    const today = this.getToday();
+    const hour = today.getHours() + today.getMinutes() / 60;
+    if (hour < startDayHour || hour >= endDayHour) {
+      return false;
+    }
+
+    const transition = findFallbackInstant(today);
+    const extraMs = getVisibleFallbackMs(today, startDayHour, endDayHour);
+
+    return transition !== undefined
+      && extraMs > 0
+      && today.getTime() >= transition
+      && today.getTime() < transition + extraMs;
+  }
+
   protected override getIntervalBetween(currentDate: Date, allDay?: boolean): number {
+    if (!allDay && this.hasRepeatedHourCells()) {
+      return this.getRepeatedHourCellCount(currentDate) * this.getCellDuration();
+    }
+
     const { startDayHour, endDayHour } = this.option();
     const firstViewDate = this.getStartViewDate();
     const firstViewDateTime = firstViewDate.getTime();
@@ -284,6 +318,67 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     return result;
+  }
+
+  private hasRepeatedHourCells(): boolean {
+    return this.getRepeatedHourExtraCellCounts().some((count) => count > 0);
+  }
+
+  private getRepeatedHourExtraCellCounts(): number[] {
+    const {
+      intervalCount,
+      currentDate,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      startDate,
+      skippedDays,
+    } = this.option();
+
+    return this.viewDataProvider.viewDataGenerator.getRepeatedHourExtraCellCounts({
+      intervalCount,
+      currentDate,
+      viewType: this.type,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      skippedDays,
+      startViewDate: this.viewDataProvider.viewDataGenerator.getStartViewDate({
+        currentDate,
+        startDayHour,
+        endDayHour,
+        hoursInterval,
+        intervalCount,
+        viewType: this.type,
+        startDate: startDate ?? undefined,
+        firstDayOfWeek: this.firstDayOfWeek(),
+        skippedDays,
+      } as ViewDataProviderOptions),
+    });
+  }
+
+  private getRepeatedHourCellCount(date: Date): number {
+    const {
+      startDayHour,
+      endDayHour,
+      skippedDays = [],
+      intervalCount,
+    } = this.option();
+    const cellDuration = this.getCellDuration();
+    const skipHiddenDays = this.type === 'timelineWeek' || this.type === 'timelineWorkWeek';
+    const visibleDayCount = this.viewDataProvider.viewDataGenerator.daysInInterval * intervalCount;
+
+    return getRepeatedHourLayoutMs({
+      from: this.getStartViewDate(),
+      to: date,
+      startDayHour,
+      endDayHour,
+      cellDurationMs: cellDuration,
+      nominalCellCount: this.getCellCountInDay(),
+      skippedDays,
+      visibleDayCount,
+      skipHiddenDays,
+    }) / cellDuration;
   }
 
   getAllDayContainer(): null {

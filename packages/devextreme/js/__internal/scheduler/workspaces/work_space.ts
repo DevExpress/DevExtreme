@@ -993,13 +993,36 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected getCellCount(): number {
-    return this.viewDataProvider.getCellCount({
-      intervalCount: this.option().intervalCount,
-      currentDate: this.option().currentDate,
+    const {
+      intervalCount,
+      currentDate,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      startDate,
+      skippedDays,
+    } = this.option();
+    const startViewDate = this.viewDataProvider.viewDataGenerator.getStartViewDate({
+      currentDate,
+      startDayHour,
+      endDayHour,
+      hoursInterval,
+      intervalCount,
       viewType: this.type,
-      hoursInterval: this.option().hoursInterval,
-      startDayHour: this.option().startDayHour,
-      endDayHour: this.option().endDayHour,
+      startDate: startDate ?? undefined,
+      firstDayOfWeek: this.firstDayOfWeek(),
+      skippedDays,
+    } as ViewDataProviderOptions);
+
+    return this.viewDataProvider.getCellCount({
+      intervalCount,
+      currentDate,
+      viewType: this.type,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      startViewDate,
+      skippedDays,
     });
   }
 

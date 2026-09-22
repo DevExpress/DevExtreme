@@ -24,6 +24,11 @@ import type {
   ViewType,
 } from '../../types';
 import { VIEWS } from '../../utils/options/constants_view';
+import {
+  clampToNextLocalMidnight,
+  getExtraCellCount,
+  getVisibleFallbackMs,
+} from '../../utils/repeated_hour';
 import { getAllGroupValues } from '../../utils/resource_manager/group_utils';
 import {
   getVisibleDaysOfWeek,
@@ -40,6 +45,8 @@ import type {
 } from './types';
 
 const toMs = dateUtils.dateToMilliseconds;
+
+const REPEATED_HOUR_VIEWS = new Set<ViewType>(['timelineDay', 'timelineWeek', 'timelineWorkWeek']);
 
 export class ViewDataGenerator {
   protected tableAllDay: boolean | undefined = false;
@@ -149,6 +156,8 @@ export class ViewDataGenerator {
       startDayHour,
       endDayHour,
       hoursInterval,
+      startViewDate: options.startViewDate,
+      skippedDays: this.skippedDays,
     });
     const rowCountInGroup = this.getRowCount({
       intervalCount,
@@ -607,6 +616,74 @@ export class ViewDataGenerator {
     rowIndex: number,
     columnIndex: number,
   ): Date {
+    const {
+      startDayHour,
+      endDayHour,
+      hoursInterval,
+      interval,
+    } = options;
+    const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
+    const columnCountBase = this.getCellCount(options);
+    const rowCountBase = this.getRowCount(options);
+    const cellIndex = this.calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
+    const extraCellCounts = this.getRepeatedHourExtraCellCounts(options);
+
+    if (extraCellCounts.some((count) => count > 0)) {
+      const { dayIndex, indexInDay } = this.locateRepeatedHourCell(
+        cellIndex,
+        cellCountInDay,
+        extraCellCounts,
+      );
+      const nominalCellIndex = dayIndex * cellCountInDay;
+      const dayStart = this.calculateDateByCellIndex(
+        options,
+        rowIndex,
+        nominalCellIndex,
+        nominalCellIndex,
+      );
+
+      if ((extraCellCounts[dayIndex] ?? 0) > 0) {
+        return new Date(dayStart.getTime() + interval * indexInDay);
+      }
+
+      return this.calculateDateByCellIndex(
+        options,
+        rowIndex,
+        nominalCellIndex + indexInDay,
+        nominalCellIndex + indexInDay,
+      );
+    }
+
+    return this.calculateDateByCellIndex(options, rowIndex, columnIndex, cellIndex);
+  }
+
+  private locateRepeatedHourCell(
+    cellIndex: number,
+    cellCountInDay: number,
+    extraCellCounts: number[],
+  ): { dayIndex: number; indexInDay: number } {
+    let dayIndex = 0;
+    let firstCellIndex = 0;
+
+    while (dayIndex < extraCellCounts.length - 1) {
+      const dayCellCount = cellCountInDay + extraCellCounts[dayIndex];
+      if (cellIndex < firstCellIndex + dayCellCount) {
+        break;
+      }
+
+      firstCellIndex += dayCellCount;
+      dayIndex += 1;
+    }
+
+    return { dayIndex, indexInDay: cellIndex - firstCellIndex };
+  }
+
+  private calculateDateByCellIndex(
+    options: ViewDataProviderExtendedOptions,
+    rowIndex: number,
+    columnIndex: number,
+    cellIndex: number,
+  ): Date {
     const { startViewDate } = options;
     const {
       startDayHour,
@@ -617,10 +694,6 @@ export class ViewDataGenerator {
       viewOffset,
     } = options;
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
-
-    const columnCountBase = this.getCellCount(options);
-    const rowCountBase = this.getRowCount(options);
-    const cellIndex = this.calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
     const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 
     let offsetByCount = 0;
@@ -674,7 +747,20 @@ export class ViewDataGenerator {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public calculateEndDate(startDate: Date, interval: number, endDayHour?: number): Date {
-    return timezoneUtils.addOffsetsWithoutDST(startDate, Math.round(interval));
+    const roundedInterval = Math.round(interval);
+    if (!REPEATED_HOUR_VIEWS.has(this.viewType)) {
+      return timezoneUtils.addOffsetsWithoutDST(startDate, roundedInterval);
+    }
+
+    const elapsedEnd = dateUtilsTs.addOffsets(startDate, roundedInterval);
+    const daylightShift = timezoneUtils.getDaylightOffsetInMs(startDate, elapsedEnd);
+    // A fallback cell keeps elapsed time, so the repeated hour is not skipped.
+    // A spring-forward cell still follows the wall clock.
+    const endDate = daylightShift < 0
+      ? elapsedEnd
+      : timezoneUtils.addOffsetsWithoutDST(startDate, roundedInterval);
+
+    return clampToNextLocalMidnight(startDate, endDate);
   }
 
   protected calculateCellIndex(
@@ -918,8 +1004,45 @@ export class ViewDataGenerator {
     const columnCountInDay = isHorizontalView(viewType)
       ? cellCountInDay
       : 1;
+    const extraCellCount = this.getRepeatedHourExtraCellCounts(options)
+      .reduce((total, count) => total + count, 0);
 
-    return this.daysInInterval * intervalCount * columnCountInDay;
+    return this.daysInInterval * intervalCount * columnCountInDay + extraCellCount;
+  }
+
+  public getRepeatedHourExtraCellCounts(options: CountGenerationConfig): number[] {
+    const {
+      viewType, startViewDate, hoursInterval, startDayHour, endDayHour, intervalCount,
+    } = options;
+    if (!REPEATED_HOUR_VIEWS.has(viewType) || !startViewDate || hoursInterval <= 0) {
+      return [];
+    }
+
+    const skippedDays = options.skippedDays ?? this.skippedDays;
+    const skipHiddenDays = viewType === 'timelineWeek' || viewType === 'timelineWorkWeek';
+    const dayCount = this.daysInInterval * intervalCount;
+    const cellDurationMs = hoursInterval * toMs('hour');
+    const wallMs = (endDayHour - startDayHour) * toMs('hour');
+    const result: number[] = [];
+    const day = new Date(
+      startViewDate.getFullYear(),
+      startViewDate.getMonth(),
+      startViewDate.getDate(),
+    );
+
+    while (result.length < dayCount) {
+      const isHidden = skipHiddenDays && skippedDays.includes(day.getDay());
+      if (!isHidden) {
+        result.push(getExtraCellCount(
+          wallMs,
+          getVisibleFallbackMs(day, startDayHour, endDayHour),
+          cellDurationMs,
+        ));
+      }
+      day.setDate(day.getDate() + 1);
+    }
+
+    return result;
   }
 
   public getRowCount(options: CountGenerationConfig): number {
