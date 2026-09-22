@@ -1730,7 +1730,7 @@ class TagBox<
     const currentValue = value || [];
     const existedItems = listValues.length ? getIntersection(currentValue, listValues) : [];
     const newItems = existedItems.length
-      // @ts-expect-error fix on core/m_array level
+      // @ts-expect-error fix on core/array level
       ? removeDuplicates(listValues, currentValue)
       : listValues;
 
