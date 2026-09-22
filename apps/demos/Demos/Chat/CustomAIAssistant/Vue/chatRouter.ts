@@ -157,6 +157,10 @@ function buildFormResultsPromise(
   formAction: FormAction | null,
   text: string,
 ): Promise<OperationOutcome> {
+  if (!formAction) {
+    return Promise.resolve({ results: [], error: null });
+  }
+
   const clearResult = applyFormClearAction(form, formAction);
   if (clearResult) {
     return Promise.resolve({ results: [clearResult], error: null });
