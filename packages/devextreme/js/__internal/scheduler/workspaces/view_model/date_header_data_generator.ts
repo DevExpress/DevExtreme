@@ -158,6 +158,7 @@ export class DateHeaderDataGenerator {
       endDayHour,
       startViewDate,
       skippedDays: options.skippedDays,
+      timeZoneCalculator: options.timeZoneCalculator,
     });
     const hasRepeatedHour = Boolean(
       this.viewDataGenerator.getFallbackPlan(options)?.days.some((day) => day),

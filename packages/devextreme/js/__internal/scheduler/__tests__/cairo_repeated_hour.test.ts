@@ -100,7 +100,7 @@ describe('timeline repeated hour during the Egypt fallback', () => {
   });
 
   it('keeps a UTC appointment on its displayed hour when the browser repeats 23:00', async () => {
-    const { POM } = await createScheduler({
+    const { scheduler, POM } = await createScheduler({
       dataSource: [{
         text: 'UTC',
         startDate: new Date('2026-10-29T21:00:00.000Z'),
@@ -113,6 +113,7 @@ describe('timeline repeated hour during the Egypt fallback', () => {
       timeZone: 'Etc/UTC',
     });
 
+    expect(scheduler.getWorkSpace().viewDataProvider.viewDataMap.dateTableMap[0]).toHaveLength(24);
     expect(POM.getAppointment('UTC').getGeometry().left).toBe(21 * DEFAULT_CELL_WIDTH);
   });
 

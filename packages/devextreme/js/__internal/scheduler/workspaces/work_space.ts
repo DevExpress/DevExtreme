@@ -1023,6 +1023,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       endDayHour,
       startViewDate,
       skippedDays,
+      timeZoneCalculator: this.timeZoneCalculator,
     });
   }
 
@@ -1085,6 +1086,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       firstDayOfWeek: this.option().firstDayOfWeek ?? 0,
       showCurrentTimeIndicator: this.option().showCurrentTimeIndicator,
       skippedDays: this.option().skippedDays,
+      timeZoneCalculator: this.timeZoneCalculator,
 
       ...renderState,
       startRowIndex: renderState.startRowIndex ?? 0,

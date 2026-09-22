@@ -162,6 +162,7 @@ export class ViewDataGenerator {
       hoursInterval,
       startViewDate: options.startViewDate,
       skippedDays: this.skippedDays,
+      timeZoneCalculator: options.timeZoneCalculator,
     });
     const rowCountInGroup = this.getRowCount({
       intervalCount,
@@ -1001,6 +1002,7 @@ export class ViewDataGenerator {
   } | undefined {
     const {
       viewType, startViewDate, hoursInterval, startDayHour, endDayHour, intervalCount,
+      timeZoneCalculator,
     } = options;
     if (!REPEATED_HOUR_VIEWS.has(viewType) || !startViewDate || hoursInterval <= 0) {
       return undefined;
@@ -1015,6 +1017,7 @@ export class ViewDataGenerator {
       startDayHour,
       endDayHour,
       skippedDays.join(','),
+      timeZoneCalculator?.options.timeZone ?? '',
     ].join('|');
 
     if (this.fallbackPlanCache?.key !== cacheKey) {
@@ -1028,6 +1031,7 @@ export class ViewDataGenerator {
           startDayHour,
           endDayHour,
           cellDurationMs,
+          timeZoneCalculator,
         )),
       };
     }

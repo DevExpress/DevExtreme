@@ -1,5 +1,6 @@
 import { dateUtils } from '@ts/core/utils/m_date';
 
+import type { TimeZoneCalculator } from '../../../r1/timezone_calculator/calculator';
 import { buildFallbackDayCells } from '../../../utils/repeated_hour';
 import timeZoneUtils from '../../../utils_time_zone';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
@@ -12,6 +13,7 @@ interface Options {
   durationMinutes: number;
   skippedDays: number[];
   stretchRepeatedHour?: boolean;
+  timeZoneCalculator?: TimeZoneCalculator;
 }
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -43,6 +45,7 @@ export const getMinutesCellIntervals = ({
   durationMinutes,
   skippedDays,
   stretchRepeatedHour = false,
+  timeZoneCalculator,
 }: Options): CellInterval[] => intervals.reduce<CellInterval[]>((result, interval, rowIndex) => {
   const dayIntervals = splitIntervalByDay({
     ...interval, startDayHour, endDayHour, skippedDays,
@@ -54,7 +57,13 @@ export const getMinutesCellIntervals = ({
   filterBySkippedDays(dayIntervals, skippedDays).forEach((dayInterval) => {
     const localDay = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(dayInterval.min));
     const fallbackCells = stretchRepeatedHour
-      ? buildFallbackDayCells(localDay, startDayHour, endDayHour, cellDurationMs)
+      ? buildFallbackDayCells(
+        localDay,
+        startDayHour,
+        endDayHour,
+        cellDurationMs,
+        timeZoneCalculator,
+      )
       : undefined;
     const dayStart = adjustDayIntervalMinForMidnightDST(dayInterval.min, startDayHour);
 

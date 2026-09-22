@@ -2,6 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { ItemContextMenuEvent } from '@js/ui/list';
 import type { Appointment, Properties } from '@js/ui/scheduler';
 
+import type { TimeZoneCalculator } from './r1/timezone_calculator/calculator';
 import type { ResourceLoader } from './utils/loader/resource_loader';
 import type { ResourceId } from './utils/loader/types';
 import type { GroupLeaf, GroupValues, RawGroupValues } from './utils/resource_manager/types';
@@ -120,6 +121,7 @@ export interface CountGenerationConfig {
   endDayHour: number;
   startViewDate?: Date;
   skippedDays?: number[];
+  timeZoneCalculator?: TimeZoneCalculator;
 }
 
 export interface ViewOptions {

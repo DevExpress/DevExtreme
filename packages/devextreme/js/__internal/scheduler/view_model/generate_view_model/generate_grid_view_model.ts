@@ -35,6 +35,7 @@ export const sortAppointments = (
     compareOptions,
     compareOptions: { endDayHour },
     cellDurationMinutes,
+    timeZoneCalculator,
   } = optionManager.options;
   const repeatedHourPlan = isTimelineView && !isMonthView
     ? buildRepeatedHourPlan(
@@ -44,6 +45,7 @@ export const sortAppointments = (
       compareOptions.endDayHour,
       cellDurationMinutes * 60 * 1000,
       compareOptions.skippedDays,
+      timeZoneCalculator,
     )
     : undefined;
 
@@ -63,7 +65,7 @@ export const sortAppointments = (
             sourceDate: number,
           ): number => repeatedHourShiftMsFromPlan(
             repeatedHourPlan,
-            instantOnGrid(gridDateUTC, sourceDate),
+            instantOnGrid(gridDateUTC, sourceDate, timeZoneCalculator),
           );
           const endSource = entity.allDay
             ? timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(entity.endDateUTC)).getTime()

@@ -1,3 +1,4 @@
+import type { TimeZoneCalculator } from '../../../r1/timezone_calculator/calculator';
 import { shiftIntervals } from '../../common/shift_intervals';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import { trimInterval } from '../../common/trim_interval';
@@ -9,6 +10,7 @@ export const getWeekIntervals = (
   cellDurationMinutes: number,
   viewOffset: number,
   isTimeline: boolean,
+  timeZoneCalculator?: TimeZoneCalculator,
 ): LayoutIntervals => {
   const { startDayHour, endDayHour, ...dateInterval } = compareOptions;
   const trimmedInterval = trimInterval(dateInterval);
@@ -22,6 +24,7 @@ export const getWeekIntervals = (
     intervals,
     durationMinutes: cellDurationMinutes,
     stretchRepeatedHour: isTimeline,
+    timeZoneCalculator,
   });
   const shiftedCells = shiftIntervals(cells, viewOffset);
   const lastCellMax = shiftedCells.length > 0

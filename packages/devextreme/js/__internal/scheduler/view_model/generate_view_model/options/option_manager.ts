@@ -1,4 +1,5 @@
 import { Cache } from '../../../global_cache';
+import type { TimeZoneCalculator } from '../../../r1/timezone_calculator/calculator';
 import type Scheduler from '../../../scheduler';
 import type { DOMMetaData } from '../../../types';
 import type {
@@ -39,6 +40,7 @@ const getLayoutIntervals = (
   isTimeline: boolean,
   isMonthView: boolean,
   panelName: PanelName,
+  timeZoneCalculator: TimeZoneCalculator,
 ): LayoutIntervals => {
   switch (true) {
     case isMonthView:
@@ -51,6 +53,7 @@ const getLayoutIntervals = (
         cellDurationMinutes,
         viewOffset,
         isTimeline,
+        timeZoneCalculator,
       );
   }
 };
@@ -133,6 +136,7 @@ export class OptionManager {
         isTimelineView || panelName === 'allDayPanel',
         isMonthView,
         panelName,
+        this.schedulerStore.timeZoneCalculator,
       );
 
       const groupByDateSplitIntervals = viewOrientation === 'vertical' ? dayIntervals : cells;

@@ -1,5 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 
+import type { TimeZoneCalculator } from '../r1/timezone_calculator/calculator';
 import timeZoneUtils from '../utils_time_zone';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -15,6 +16,8 @@ export interface RepeatedHourPlan {
   days: (TimelineCell[] | undefined)[];
   origins: Date[];
   wallSpanMs: number;
+  startDayHour: number;
+  transitions: (FallbackTransition | undefined)[];
 }
 
 const midnight = (date: Date): Date => new Date(
@@ -23,108 +26,133 @@ const midnight = (date: Date): Date => new Date(
   date.getDate(),
 );
 
-const nextMidnight = (date: Date): Date => new Date(
-  date.getFullYear(),
-  date.getMonth(),
-  date.getDate() + 1,
-);
-
 const atHour = (day: Date, hour: number): Date => {
   const { hours, minutes } = dateUtils.dateTimeFromDecimal(hour);
 
   return new Date(day.getFullYear(), day.getMonth(), day.getDate(), hours, minutes, 0, 0);
 };
 
-const sameClock = (first: Date, second: Date): boolean => first.getHours() === second.getHours()
+const sameClock = (first: Date, second: Date): boolean => (
+  first.getFullYear() === second.getFullYear()
+  && first.getMonth() === second.getMonth()
+  && first.getDate() === second.getDate()
+  && first.getHours() === second.getHours()
   && first.getMinutes() === second.getMinutes()
-  && first.getDate() === second.getDate();
+  && first.getSeconds() === second.getSeconds()
+  && first.getMilliseconds() === second.getMilliseconds()
+);
 
 const wallMinutes = (date: Date): number => date.getHours() * 60 + date.getMinutes();
 
-const dayFallbackMs = (day: Date): number => Math.max(
-  0,
-  nextMidnight(day).getTime() - midnight(day).getTime() - DAY_MS,
-);
-
 const coversWholeDay = (endDayHour: number): boolean => endDayHour >= 24;
 
-const inVisibleHours = (
+export interface FallbackTransition {
+  extraMs: number;
+  repeatedStartMinutes: number;
+  instant: Date;
+}
+
+const isSameCalendarDay = (first: Date, second: Date): boolean => (
+  first.getFullYear() === second.getFullYear()
+  && first.getMonth() === second.getMonth()
+  && first.getDate() === second.getDate()
+);
+
+const getOffset = (
   date: Date,
-  startMinutes: number,
-  endMinutes: number,
-): boolean => {
-  const minutes = wallMinutes(date);
-
-  return minutes >= startMinutes && minutes < endMinutes;
-};
-
-const visibleLimit = (day: Date, endDayHour: number, extraMs: number): Date => {
-  if (coversWholeDay(endDayHour)) {
-    return nextMidnight(day);
-  }
-
-  const first = atHour(day, endDayHour);
-  const later = new Date(first.getTime() + extraMs);
-
-  return sameClock(first, later) ? later : first;
-};
-
-const repeatedStart = (day: Date, startDayHour: number, extraMs: number): Date | undefined => {
-  const first = atHour(day, startDayHour);
-  const later = new Date(first.getTime() + extraMs);
-
-  return sameClock(first, later) ? later : undefined;
-};
-
-const fallbackTransition = (day: Date): Date => {
-  let low = midnight(day).getTime();
-  let high = nextMidnight(day).getTime();
-  const initialOffset = new Date(low).getTimezoneOffset();
-
-  while (high - low > 1) {
-    const mid = Math.floor((low + high) / 2);
-    if (new Date(mid).getTimezoneOffset() === initialOffset) {
-      low = mid;
-    } else {
-      high = mid;
-    }
-  }
-
-  return new Date(high);
-};
-
-const getNextVisibleStart = (
-  starts: number[],
-  cursor: number,
-  limit: number,
-): number | undefined => starts.find((start) => start > cursor && start < limit);
-
-const clipToVisibleHours = (
-  start: number,
-  end: number,
-  startMinutes: number,
-  endMinutes: number,
+  timeZoneCalculator?: TimeZoneCalculator,
 ): number => {
-  if (inVisibleHours(new Date(end - 1), startMinutes, endMinutes)) {
-    return end;
+  if (timeZoneCalculator) {
+    return timeZoneCalculator.getOffsets(date, undefined).common * HOUR_MS;
   }
 
-  let low = start;
-  let high = end;
+  return -date.getTimezoneOffset() * toMs('minute');
+};
+
+const toGridDate = (
+  date: Date,
+  timeZoneCalculator?: TimeZoneCalculator,
+): Date => timeZoneCalculator?.createDate(date, 'toGrid') ?? date;
+
+const locateOffsetChange = (
+  lowTime: number,
+  highTime: number,
+  offset: number,
+  timeZoneCalculator?: TimeZoneCalculator,
+): number => {
+  let low = lowTime;
+  let high = highTime;
   while (high - low > 1) {
-    const mid = Math.floor((low + high) / 2);
-    if (inVisibleHours(new Date(mid), startMinutes, endMinutes)) {
-      low = mid;
+    const middle = Math.floor((low + high) / 2);
+    if (getOffset(new Date(middle), timeZoneCalculator) === offset) {
+      low = middle;
     } else {
-      high = mid;
+      high = middle;
     }
   }
 
-  return low + 1;
+  return high;
+};
+
+const findFallbackTransition = (
+  day: Date,
+  timeZoneCalculator?: TimeZoneCalculator,
+): FallbackTransition | undefined => {
+  const approximateStart = timeZoneCalculator?.createDate(midnight(day), 'fromGrid')
+    ?? midnight(day);
+  const scanStart = approximateStart.getTime() - 12 * HOUR_MS;
+  const scanEnd = approximateStart.getTime() + 36 * HOUR_MS;
+  const scanStep = 30 * toMs('minute');
+  let previousTime = scanStart;
+  let previousOffset = getOffset(new Date(previousTime), timeZoneCalculator);
+
+  for (let time = scanStart + scanStep; time <= scanEnd; time += scanStep) {
+    const offset = getOffset(new Date(time), timeZoneCalculator);
+    if (offset < previousOffset) {
+      const high = locateOffsetChange(
+        previousTime,
+        time,
+        previousOffset,
+        timeZoneCalculator,
+      );
+      const instant = new Date(high);
+      const gridTransition = toGridDate(instant, timeZoneCalculator);
+      if (isSameCalendarDay(gridTransition, day)) {
+        return {
+          extraMs: previousOffset - offset,
+          repeatedStartMinutes: wallMinutes(gridTransition),
+          instant,
+        };
+      }
+    }
+
+    previousTime = time;
+    previousOffset = offset;
+  }
+
+  return undefined;
+};
+
+const appendCells = (
+  result: TimelineCell[],
+  dayStart: number,
+  startElapsed: number,
+  endElapsed: number,
+  cellDurationMs: number,
+): void => {
+  let cursor = startElapsed;
+  while (cursor < endElapsed && result.length < 10000) {
+    const cellEnd = Math.min(cursor + cellDurationMs, endElapsed);
+    result.push({
+      start: new Date(dayStart + cursor),
+      end: new Date(dayStart + cellEnd),
+    });
+    cursor = cellEnd;
+  }
 };
 
 /**
- * Cells of one local day that contain a fall-back, clipped to the visible hours.
+ * Cells of one Scheduler-zone day that contain a fall-back, clipped to the visible hours.
  * Hours outside that range, including the hidden part of a repeated hour, are omitted.
  * Returns undefined when the day is not longer than the wall clock.
  */
@@ -133,9 +161,10 @@ export const buildFallbackDayCells = (
   startDayHour: number,
   endDayHour: number,
   cellDurationMs: number,
+  timeZoneCalculator?: TimeZoneCalculator,
 ): TimelineCell[] | undefined => {
-  const extraMs = dayFallbackMs(day);
-  if (extraMs <= 0 || cellDurationMs <= 0 || endDayHour <= startDayHour) {
+  const transition = findFallbackTransition(day, timeZoneCalculator);
+  if (!transition || cellDurationMs <= 0 || endDayHour <= startDayHour) {
     return undefined;
   }
 
@@ -143,36 +172,33 @@ export const buildFallbackDayCells = (
   const endMinutes = coversWholeDay(endDayHour)
     ? 24 * 60
     : Math.round(endDayHour * 60);
-  const limit = visibleLimit(day, endDayHour, extraMs).getTime();
-  const visibleStarts = [
-    fallbackTransition(day),
-    repeatedStart(day, startDayHour, extraMs),
-  ]
-    .filter((date): date is Date => date !== undefined)
-    .map((date) => date.getTime())
-    .sort((first, second) => first - second);
+  const extraMinutes = transition.extraMs / toMs('minute');
+  const repeatedEndMinutes = transition.repeatedStartMinutes + extraMinutes;
+  const dayStart = atHour(day, 0).getTime();
   const cells: TimelineCell[] = [];
-  let cursor = atHour(day, startDayHour).getTime();
 
-  while (cursor < limit && cells.length < 10000) {
-    const hidden = !inVisibleHours(new Date(cursor), startMinutes, endMinutes);
-    const nextVisibleStart = getNextVisibleStart(visibleStarts, cursor, limit);
-    if (hidden) {
-      if (nextVisibleStart === undefined) {
-        break;
-      }
-      cursor = nextVisibleStart;
-    } else {
-      const nextBoundary = getNextVisibleStart(visibleStarts, cursor, limit);
-      const stepEnd = Math.min(cursor + cellDurationMs, nextBoundary ?? limit, limit);
-      const visibleEnd = clipToVisibleHours(cursor, stepEnd, startMinutes, endMinutes);
-      if (visibleEnd <= cursor) {
-        break;
-      }
+  const firstStart = Math.max(startMinutes, 0);
+  const firstEnd = Math.min(endMinutes, repeatedEndMinutes);
+  if (firstStart < firstEnd) {
+    appendCells(
+      cells,
+      dayStart,
+      firstStart * toMs('minute'),
+      firstEnd * toMs('minute'),
+      cellDurationMs,
+    );
+  }
 
-      cells.push({ start: new Date(cursor), end: new Date(visibleEnd) });
-      cursor = visibleEnd;
-    }
+  const secondStart = Math.max(startMinutes, transition.repeatedStartMinutes);
+  const secondEnd = Math.min(endMinutes, 24 * 60);
+  if (secondStart < secondEnd) {
+    appendCells(
+      cells,
+      dayStart,
+      (secondStart + extraMinutes) * toMs('minute'),
+      (secondEnd + extraMinutes) * toMs('minute'),
+      cellDurationMs,
+    );
   }
 
   return cells.length > 0 ? cells : undefined;
@@ -223,8 +249,8 @@ const wallOffsetOnDay = (
   wallSpanMs: number,
 ): { done: boolean; offset: number } => {
   const intoDay = wallClockMs(instant) - wallClockMs(origin);
-  const sameDay = midnight(instant).getTime() === midnight(origin).getTime();
-  if (sameDay && intoDay < wallSpanMs) {
+  const isSameDay = midnight(instant).getTime() === midnight(origin).getTime();
+  if (isSameDay && intoDay < wallSpanMs) {
     return { done: true, offset: offset + intoDay };
   }
 
@@ -274,9 +300,9 @@ export const columnAlongCells = (
     const cells = days[index];
     if (!cells) {
       const intoDay = wallClockMs(instant) - wallClockMs(dayOrigins[index]);
-      const sameDay = midnight(instant).getTime() === midnight(dayOrigins[index]).getTime();
+      const isSameDay = midnight(instant).getTime() === midnight(dayOrigins[index]).getTime();
       const dayColumns = wallSpanMs / cellDurationMs;
-      if (sameDay && intoDay < wallSpanMs) {
+      if (isSameDay && intoDay < wallSpanMs) {
         return column + Math.max(0, intoDay) / cellDurationMs;
       }
       column += dayColumns;
@@ -331,19 +357,28 @@ export const offsetAlongCells = (
  * the timeline. The source instant picks the second occurrence only when that
  * displayed clock time itself falls in the repeated hour.
  */
-export const instantOnGrid = (gridDateUTC: number, sourceDate: number): Date => {
+export const instantOnGrid = (
+  gridDateUTC: number,
+  sourceDate: number,
+  timeZoneCalculator?: TimeZoneCalculator,
+): Date => {
   const gridInstant = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(gridDateUTC));
-  const extraMs = dayFallbackMs(gridInstant);
-  if (extraMs <= 0) {
+  const transition = findFallbackTransition(gridInstant, timeZoneCalculator);
+  if (!transition) {
     return gridInstant;
   }
 
-  const secondOccurrence = new Date(gridInstant.getTime() + extraMs);
   const source = new Date(sourceDate);
-  const displayedInRepeatedHour = sameClock(gridInstant, secondOccurrence);
+  const sourceGridDate = toGridDate(source, timeZoneCalculator);
+  const gridMinutes = wallMinutes(gridInstant);
+  const repeatedEndMinutes = transition.repeatedStartMinutes
+    + transition.extraMs / toMs('minute');
+  const displayedInRepeatedHour = gridMinutes >= transition.repeatedStartMinutes
+    && gridMinutes < repeatedEndMinutes;
+  const secondOccurrence = new Date(gridInstant.getTime() + transition.extraMs);
   const sourceIsSecond = displayedInRepeatedHour
-    && sameClock(source, gridInstant)
-    && source.getTime() >= secondOccurrence.getTime();
+    && sameClock(sourceGridDate, gridInstant)
+    && source.getTime() >= transition.instant.getTime();
 
   return sourceIsSecond ? secondOccurrence : gridInstant;
 };
@@ -355,6 +390,7 @@ export const buildRepeatedHourPlan = (
   endDayHour: number,
   cellDurationMs: number,
   skippedDays: number[],
+  timeZoneCalculator?: TimeZoneCalculator,
 ): RepeatedHourPlan | undefined => {
   const rangeStart = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(rangeMin));
   const rangeEnd = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(rangeMax));
@@ -368,12 +404,23 @@ export const buildRepeatedHourPlan = (
     day.setDate(day.getDate() + 1);
   }
 
-  const days = origins.map((origin) => buildFallbackDayCells(
+  const transitions = origins.map((origin) => findFallbackTransition(
     origin,
-    startDayHour,
-    endDayHour,
-    cellDurationMs,
+    timeZoneCalculator,
   ));
+  const days = origins.map((origin, index) => {
+    if (!transitions[index]) {
+      return undefined;
+    }
+
+    return buildFallbackDayCells(
+      origin,
+      startDayHour,
+      endDayHour,
+      cellDurationMs,
+      timeZoneCalculator,
+    );
+  });
   if (!days.some((cells) => cells)) {
     return undefined;
   }
@@ -382,7 +429,50 @@ export const buildRepeatedHourPlan = (
     days,
     origins,
     wallSpanMs: (endDayHour - startDayHour) * HOUR_MS,
+    startDayHour,
+    transitions,
   };
+};
+
+const nominalOffsetAlongPlan = (
+  plan: RepeatedHourPlan,
+  instant: Date,
+): number => {
+  const {
+    days, origins, wallSpanMs, startDayHour, transitions,
+  } = plan;
+  let offset = 0;
+
+  for (let index = 0; index < days.length; index += 1) {
+    if (isBeyondInstant(origins[index], instant)) {
+      return offset;
+    }
+
+    const transition = transitions[index];
+    if (!transition) {
+      const placed = wallOffsetOnDay(origins[index], instant, offset, wallSpanMs);
+      if (placed.done) {
+        return placed.offset;
+      }
+      offset = placed.offset;
+    } else {
+      const dayStart = atHour(origins[index], 0).getTime();
+      const elapsed = instant.getTime() - dayStart;
+      const repeatedEndElapsed = transition.repeatedStartMinutes * toMs('minute')
+        + transition.extraMs;
+      const dayEndElapsed = DAY_MS + transition.extraMs;
+      if (elapsed < dayEndElapsed) {
+        const wallElapsed = elapsed >= repeatedEndElapsed
+          ? elapsed - transition.extraMs
+          : elapsed;
+        return offset + wallElapsed - startDayHour * HOUR_MS;
+      }
+
+      offset += wallSpanMs;
+    }
+  }
+
+  return offset;
 };
 
 export const repeatedHourShiftMsFromPlan = (
@@ -397,12 +487,7 @@ export const repeatedHourShiftMsFromPlan = (
   const offset = offsetAlongCells(days, origins, instant, wallSpanMs);
   // Same visible days, without the extra elapsed time. A calendar delta would
   // count hidden weekdays and cancel the shift those days never contributed.
-  const nominal = offsetAlongCells(
-    Array.from<TimelineCell[] | undefined>({ length: origins.length }),
-    origins,
-    instant,
-    wallSpanMs,
-  );
+  const nominal = nominalOffsetAlongPlan(plan, instant);
 
   return Math.max(0, offset - nominal);
 };
@@ -415,6 +500,7 @@ export const repeatedHourShiftMs = (
   endDayHour: number,
   cellDurationMs: number,
   skippedDays: number[],
+  timeZoneCalculator?: TimeZoneCalculator,
 ): number => repeatedHourShiftMsFromPlan(
   buildRepeatedHourPlan(
     rangeMin,
@@ -423,6 +509,7 @@ export const repeatedHourShiftMs = (
     endDayHour,
     cellDurationMs,
     skippedDays,
+    timeZoneCalculator,
   ),
   instant,
 );
