@@ -1,5 +1,7 @@
 import React, { useCallback } from 'react';
-import DataGrid, { Column, FilterRow, HeaderFilter } from 'devextreme-react/data-grid';
+import DataGrid, {
+  Column, FilterRow, HeaderFilter, LoadPanel,
+} from 'devextreme-react/data-grid';
 import type { DataGridTypes } from 'devextreme-react/data-grid';
 import type { ColumnFilterExpression, Task, TaskGridProps } from './data.ts';
 import { colors, tasks } from './data.ts';
@@ -15,11 +17,12 @@ function renderPriorityCell({ value }: DataGridTypes.ColumnCellTemplateData): Re
 }
 
 const calculateCompletion = (row: Task): boolean => row.Completion === 100;
-const calculateFilterExpression = (filterValue: boolean, operation: string | null): ColumnFilterExpression => [
-  ((rowData: Task) => rowData.Completion),
-  operation === '<>' || !filterValue ? '<' : '=',
-  100,
-];
+const calculateFilterExpression = (filterValue: boolean, operation: string | null): ColumnFilterExpression => {
+  const wantsCompleted = operation === '<>' ? !filterValue : !!filterValue;
+  const rawCompletion = (rowData: Task) => rowData.Completion;
+
+  return [rawCompletion, wantsCompleted ? '=' : '<', 100];
+};
 
 export default function TaskGrid({ onInitialized }: TaskGridProps) {
   const onGridInitialized = useCallback((event: DataGridTypes.InitializedEvent): void => {
@@ -40,6 +43,7 @@ export default function TaskGrid({ onInitialized }: TaskGridProps) {
       >
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
+        <LoadPanel enabled={true} />
         <Column dataField="Subject" width={250} />
         <Column dataField="StartDate" dataType="date" />
         <Column dataField="DueDate" dataType="date" />

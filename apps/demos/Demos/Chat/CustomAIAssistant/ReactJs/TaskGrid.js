@@ -1,5 +1,7 @@
 import React, { useCallback } from 'react';
-import DataGrid, { Column, FilterRow, HeaderFilter } from 'devextreme-react/data-grid';
+import DataGrid, {
+  Column, FilterRow, HeaderFilter, LoadPanel,
+} from 'devextreme-react/data-grid';
 import { colors, tasks } from './data.js';
 
 const priorityClassNames = Object.fromEntries(
@@ -10,11 +12,12 @@ function renderPriorityCell({ value }) {
   return <div className={`priority-badge ${priorityClassNames[priority]}`}>{value}</div>;
 }
 const calculateCompletion = (row) => row.Completion === 100;
-const calculateFilterExpression = (filterValue, operation) => [
-  (rowData) => rowData.Completion,
-  operation === '<>' || !filterValue ? '<' : '=',
-  100,
-];
+const calculateFilterExpression = (filterValue, operation) => {
+  const wantsCompleted = operation === '<>' ? !filterValue : !!filterValue;
+  const rawCompletion = (rowData) => rowData.Completion;
+
+  return [rawCompletion, wantsCompleted ? '=' : '<', 100];
+};
 export default function TaskGrid({ onInitialized }) {
   const onGridInitialized = useCallback(
     (event) => {
@@ -36,6 +39,7 @@ export default function TaskGrid({ onInitialized }) {
       >
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
+        <LoadPanel enabled={true} />
         <Column
           dataField="Subject"
           width={250}

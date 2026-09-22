@@ -21,6 +21,7 @@ const popupPosition = {
   of: '.demo-container',
   offset: '-20 20',
 };
+const popupWrapperAttr = { class: 'chat-popup' };
 const emptyViewHtml = { __html: emptyViewPrompt };
 function EmptyView() {
   return (
@@ -116,6 +117,7 @@ export default function AiAssistant({ form, grid, aiIntegration }) {
         toolbar: 'top',
         location: 'after',
         options: {
+          cssClass: 'ai-chat-clear-button',
           ...clearButtonOptions,
           disabled: true,
           onClick: clearChat,
@@ -150,7 +152,7 @@ export default function AiAssistant({ form, grid, aiIntegration }) {
         resizeEnabled={true}
         showCloseButton={true}
         shading={false}
-        wrapperAttr={{ class: 'chat-popup' }}
+        wrapperAttr={popupWrapperAttr}
         position={popupPosition}
         onShowing={onPopupShowing}
         onHiding={onPopupHiding}
