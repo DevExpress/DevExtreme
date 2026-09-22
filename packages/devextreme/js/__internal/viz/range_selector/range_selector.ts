@@ -416,6 +416,38 @@ function correctValueByInterval(
     : adjust(Math.floor(adjust(value / interval)) * interval);
 }
 
+interface DiscreteRange {
+  range: ThemeValue;
+  categories: ThemeValue[];
+  categoriesInfo: ThemeValue;
+}
+
+function buildDiscreteRange(
+  translatorRange: ThemeValue,
+  seriesDataSource: ThemeValue,
+  scaleOptions: ThemeValue,
+  startValue: ThemeValue,
+  endValue: ThemeValue,
+): DiscreteRange {
+  const rangeForCategories = new Range({
+    minVisible: startValue,
+    maxVisible: endValue,
+  });
+
+  rangeForCategories.addRange(translatorRange);
+
+  const ownCategories = seriesDataSource
+    ? seriesDataSource.argCategories
+    : scaleOptions.categories || (startValue && endValue && [startValue, endValue]);
+  const categories = ownCategories || [];
+
+  return {
+    range: rangeForCategories,
+    categories,
+    categoriesInfo: getCategoriesInfo(categories, startValue, endValue),
+  };
+}
+
 interface RangeBounds {
   inverted: boolean;
   minValue: ThemeValue;
@@ -452,28 +484,20 @@ function calculateTranslatorRange(
   scaleOptions: ThemeValue,
 ): ThemeValue {
   let { startValue, endValue } = scaleOptions;
-  let categories: ThemeValue[] = [];
-  let categoriesInfo: ThemeValue = null;
   // TODO: There should be something like "seriesDataSource.getArgumentRange()"
   let translatorRange = seriesDataSource ? seriesDataSource.getBoundRange().arg : new Range();
   const isDateValue = scaleOptions.valueType === 'datetime';
   const firstDayOfWeek = getFirstDayOfWeek(scaleOptions);
   const { minRange } = scaleOptions;
 
-  if (scaleOptions.type === DISCRETE) {
-    const rangeForCategories = new Range({
-      minVisible: startValue,
-      maxVisible: endValue,
-    });
+  const discreteRange = scaleOptions.type === DISCRETE
+    ? buildDiscreteRange(translatorRange, seriesDataSource, scaleOptions, startValue, endValue)
+    : undefined;
+  const categories = discreteRange?.categories;
+  const categoriesInfo = discreteRange?.categoriesInfo;
 
-    rangeForCategories.addRange(translatorRange);
-    translatorRange = rangeForCategories;
-
-    categories = seriesDataSource
-      ? seriesDataSource.argCategories
-      : scaleOptions.categories || (startValue && endValue && [startValue, endValue]);
-    categories = categories || [];
-    categoriesInfo = getCategoriesInfo(categories, startValue, endValue);
+  if (discreteRange) {
+    translatorRange = discreteRange.range;
     scaleOptions._categoriesInfo = categoriesInfo;
   }
 
