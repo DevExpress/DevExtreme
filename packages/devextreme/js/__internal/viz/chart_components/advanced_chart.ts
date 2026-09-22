@@ -41,6 +41,10 @@ const COMMON_AXIS_SETTINGS = 'commonAxisSettings';
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
 
+function returnFalse(): boolean {
+  return false;
+}
+
 function prepareAxis(axisOptions) {
   if (isArray(axisOptions)) {
     return axisOptions.length === 0 ? [{}] : axisOptions;
@@ -177,12 +181,12 @@ export class AdvancedChart extends BaseChart {
     this._panesClipRects[clipArrayName] = [];
   }
 
-  _getElementsClipRectID(paneName: string): ThemeValue {
+  _getElementsClipRectID(paneName?: string): ThemeValue {
     const clipShape = this._panesClipRects.fixed[this._getPaneIndex(paneName)];
     return clipShape?.id;
   }
 
-  _getPaneIndex(paneName: string): ThemeValue {
+  _getPaneIndex(paneName?: string): ThemeValue {
     const name = paneName || DEFAULT_PANE_NAME;
 
     return this.panes.findIndex((pane) => pane.name === name);
@@ -549,7 +553,7 @@ export class AdvancedChart extends BaseChart {
     return (this._argumentAxes || []).find((a) => !a.isVirtual);
   }
 
-  getValueAxis(name: string): ThemeValue {
+  getValueAxis(name?: string): ThemeValue {
     return (this._valueAxes || []).find(
       _isDefined(name)
         ? (a) => a.name === name
@@ -649,10 +653,6 @@ export class AdvancedChart extends BaseChart {
     axis.isVirtual = virtual;
 
     return axis;
-  }
-
-  _applyVisualRangeByVirtualAxes(): ThemeValue {
-    return false;
   }
 
   _applyCustomVisualRangeOption(axis: ThemeValue, range?: ThemeValue): void {
@@ -902,6 +902,8 @@ export class AdvancedChart extends BaseChart {
 }
 
 setupWidgetPrototype(AdvancedChart, {
+  _applyVisualRangeByVirtualAxes: returnFalse,
+
   _fontFields: [`${COMMON_AXIS_SETTINGS}.label.${FONT}`, `${COMMON_AXIS_SETTINGS}.title.${FONT}`],
 
   _partialOptionChangesMap: {
