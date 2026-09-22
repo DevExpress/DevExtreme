@@ -475,25 +475,27 @@ export class ResizingController extends modules.ViewController {
     resultWidths: ColumnWidth[],
     visibleColumns: Column[],
   ): void {
-    const expandColumnIndexes = visibleColumns.reduce<number[]>(
-      (indexes, column, index) => (
-        column.type === GROUP_COMMAND_COLUMN_NAME ? [...indexes, index] : indexes
-      ),
-      [],
+    const isExpandColumn = (column: Column): boolean => column.type === GROUP_COMMAND_COLUMN_NAME;
+
+    const lastExpandColumnIndex = visibleColumns.reduce(
+      (result, column, index) => (isExpandColumn(column) ? index : result),
+      -1,
     );
 
-    // NOTE: all groupExpand columns share a single column id (command:expand),
-    // so the width of the last one is what actually gets applied to all of them.
-    const expandColumnWidth = resultWidths[expandColumnIndexes.at(-1) ?? -1];
+    if (lastExpandColumnIndex < 0) {
+      return;
+    }
 
-    // NOTE: a falsy width means the column could not be measured (e.g. the grid is hidden),
-    // in that case the measured widths are kept as is.
+    const expandColumnWidth = resultWidths[lastExpandColumnIndex];
+
     if (!expandColumnWidth) {
       return;
     }
 
-    expandColumnIndexes.forEach((index) => {
-      resultWidths[index] = expandColumnWidth;
+    visibleColumns.forEach((column, index) => {
+      if (isExpandColumn(column)) {
+        resultWidths[index] = expandColumnWidth;
+      }
     });
   }
 
