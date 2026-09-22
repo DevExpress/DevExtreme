@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { DxPopup, DxPopupTypes, DxToolbarItem } from 'devextreme-vue/popup';
+import { DxPopup, type DxPopupTypes, DxToolbarItem } from 'devextreme-vue/popup';
 import DxChat, { DxSuggestions } from 'devextreme-vue/chat';
 import type { DxChatTypes } from 'devextreme-vue/chat';
 import { DxSpeedDialAction } from 'devextreme-vue/speed-dial-action';
