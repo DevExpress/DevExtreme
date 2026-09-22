@@ -15,6 +15,23 @@ const views = ['week', 'workWeek', 'month', 'timelineWeek', 'agenda'];
 const currentDate = new Date(2021, 3, 26);
 const VALIDATION_MESSAGE =
   'The hiddenWeekDays option cannot hide all days of the week. At least one day must remain visible.';
+const DayCheckBox = ({
+  dayIndex, label, value, onDayToggle,
+}) => {
+  const onValueChanged = useCallback(
+    (e) => {
+      onDayToggle(dayIndex, e);
+    },
+    [dayIndex, onDayToggle],
+  );
+  return (
+    <CheckBox
+      text={label}
+      value={value}
+      onValueChanged={onValueChanged}
+    />
+  );
+};
 const App = () => {
   const [visibleDays, setVisibleDays] = useState(defaultVisible);
   const isInvalid = visibleDays.length === 0;
@@ -46,10 +63,11 @@ const App = () => {
             className="option"
             key={label}
           >
-            <CheckBox
-              text={label}
+            <DayCheckBox
+              dayIndex={idx}
+              label={label}
               value={visibleDays.includes(idx)}
-              onValueChanged={(e) => onDayToggle(idx, e)}
+              onDayToggle={onDayToggle}
             />
           </div>
         ))}

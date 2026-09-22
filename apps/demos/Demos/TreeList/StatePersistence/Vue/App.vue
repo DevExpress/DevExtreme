@@ -65,7 +65,7 @@ function onStateResetClick() {
   treeList.value?.instance?.state(null);
 }
 </script>
-<style scoped>
+<style>
 #employees {
   height: 440px;
   margin-top: 30px;

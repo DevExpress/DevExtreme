@@ -829,6 +829,35 @@ describe('oneWayWithChanges', () => {
   });
 });
 
+describe('action', () => {
+  interface ActionOptions {
+    onTest?: () => void;
+  }
+
+  // The action returned by _createActionByOption binds the handler on its first call and
+  // caches it, so a new action has to be created when the option changes.
+  it('should call the handler assigned after the action was already executed', () => {
+    const initialHandler = jest.fn();
+    const newHandler = jest.fn();
+    const { component, optionsController } = setup<ActionOptions>(
+      { onTest: initialHandler },
+      {},
+    );
+
+    const action = optionsController.action('onTest');
+
+    action.value?.({});
+
+    expect(initialHandler).toHaveBeenCalledTimes(1);
+
+    component.option('onTest', newHandler);
+    action.value?.({});
+
+    expect(newHandler).toHaveBeenCalledTimes(1);
+    expect(initialHandler).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe('notifyColumnOptionChanged', () => {
   it('should not update the internal state', () => {
     const publicOptions = { columns: [{ visible: true }] };

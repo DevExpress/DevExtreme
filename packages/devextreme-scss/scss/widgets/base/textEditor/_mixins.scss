@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 
 @mixin dx-editor-content-wrapper() {
   display: flex;
@@ -31,7 +30,7 @@
     }
   }
 
-  &.dx-textarea  {
+  &.dx-textarea {
     .dx-label {
       span {
         top: 0;
@@ -68,7 +67,7 @@
     }
   }
 
-  &.dx-textarea  {
+  &.dx-textarea {
     .dx-label {
       span {
         top: $texteditor-input-top-padding;
@@ -233,7 +232,7 @@
           position: relative;
 
           &::before {
-            content: '';
+            content: "";
             width: 100%;
             position: absolute;
             height: 3px;

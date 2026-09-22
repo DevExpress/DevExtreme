@@ -127,17 +127,15 @@ if (Globalize?.formatDate) {
       return Globalize.locale().main(`dates/calendars/gregorian/${path}`);
     },
 
-    getPeriodNames(format: Format, type: string): string[] {
-      // eslint-disable-next-line no-param-reassign
-      format = format || 'wide';
-      // eslint-disable-next-line no-param-reassign
-      type = type === 'format' ? type : 'stand-alone';
+    getPeriodNames(format?: Format, type?: string): string[] {
+      const nameFormat = format || 'wide';
+      const nameType = type === 'format' ? type : 'stand-alone';
 
-      const json: Record<string, string> = Globalize.locale().main(`dates/calendars/gregorian/dayPeriods/${type}/${format}`);
+      const json: Record<string, string> = Globalize.locale().main(`dates/calendars/gregorian/dayPeriods/${nameType}/${nameFormat}`);
       return [json.am, json.pm];
     },
 
-    getMonthNames(format: Format, type: string): string[] {
+    getMonthNames(format: Format, type?: string): string[] {
       const months: Record<string, string> = Globalize.locale().main(`dates/calendars/gregorian/months/${type === 'format' ? type : 'stand-alone'}/${format || 'wide'}`);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -228,7 +226,7 @@ if (Globalize?.formatDate) {
       return this.removeRtlMarks(formatter(date));
     },
 
-    parse(text: string, format: FormatObject | DateParser | string): Date | null | undefined {
+    parse(text: string, format?: FormatObject | DateParser | string): Date | null | undefined {
       if (!text) {
         return undefined;
       }

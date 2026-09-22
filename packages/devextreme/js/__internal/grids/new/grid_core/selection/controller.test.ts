@@ -7,6 +7,7 @@ import { getContext } from '../di.test_utils';
 import { ItemsController } from '../items_controller/items_controller';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
+import { ToolbarController } from '../toolbar/controller';
 import { SelectionController } from './controller';
 
 const setup = (config: Options = {}) => {
@@ -23,6 +24,7 @@ const setup = (config: Options = {}) => {
     selectionController: context.get(SelectionController),
     itemsController: context.get(ItemsController),
     dataController: context.get(DataController),
+    toolbarController: context.get(ToolbarController),
   };
 };
 
@@ -530,6 +532,55 @@ describe('SelectionController', () => {
     });
   });
 
+  // Toolbar buttons
+
+  describe('selection toolbar buttons', () => {
+    const setupOnePageSelectAll = () => {
+      const result = setup({
+        keyExpr: 'id',
+        dataSource: [
+          { id: 1, value: 'test1' },
+          { id: 2, value: 'test2' },
+          { id: 3, value: 'test3' },
+          { id: 4, value: 'test4' },
+        ],
+        paging: {
+          enabled: true,
+          pageSize: 2,
+        },
+        selection: {
+          mode: 'multiple',
+          allowSelectAll: true,
+          selectAllMode: 'page',
+        },
+        selectedCardKeys: [1, 2],
+      });
+
+      const getButtonDisabled = (name: string): unknown => result.toolbarController.items.value
+        .find((item) => item.name === name)
+        ?.options
+        ?.disabled;
+
+      return { ...result, getButtonDisabled };
+    };
+
+    // The buttons are derived from the selection helper's internal, non-signal state, so the
+    // effect updating them depends on the data only through dataController.items / isLoaded.
+    it('should be updated when the displayed data changes and the selection does not', () => {
+      const { optionsController, getButtonDisabled } = setupOnePageSelectAll();
+
+      // The whole first page is selected
+      expect(getButtonDisabled('selectAllButton')).toBe(true);
+      expect(getButtonDisabled('clearSelectionButton')).toBe(false);
+
+      optionsController.option('paging.pageIndex', 1);
+
+      // Nothing on the second page is selected, while selectedCardKeys is unchanged
+      expect(getButtonDisabled('selectAllButton')).toBe(false);
+      expect(getButtonDisabled('clearSelectionButton')).toBe(true);
+    });
+  });
+
   describe('needToHiddenCheckBoxes', () => {
     describe('when the selection mode is equal to \'multiple\' and the showCheckBoxesMode is equal to \'onClick\'', () => {
       it('should return true', () => {
@@ -975,7 +1026,7 @@ describe('SelectionController', () => {
         expect(() => {
           // @ts-expect-error - accessing private method
           selectionController.selectionChanged(selectionChangedEvent);
-        }).toThrowError('E1042');
+        }).toThrow('E1042');
       });
     });
 

@@ -202,4 +202,96 @@ QUnit.module('aria accessibility', () => {
         instance.option('focusedElement', $element.find('.dx-item:eq(1)'));
         assert.equal($element.attr('aria-activedescendant'), undefined, 'aria-activedescendant does not exist after selection update');
     });
+
+    QUnit.module('aria-label of tabs', {
+        beforeEach: function() {
+            this.createTabPanel = (options) => {
+                this.$element = $('<div>').appendTo('#qunit-fixture').dxTabPanel(options);
+                this.instance = this.$element.dxTabPanel('instance');
+            };
+            this.getTab = (index) => this.$element.find(`.${TABS_ITEM_CLASS}`).eq(index);
+        }
+    }, () => {
+        QUnit.test('tab with title and icon should not get aria-label', function(assert) {
+            this.createTabPanel({ items: [{ title: 'User', icon: 'user' }] });
+
+            assert.strictEqual(this.getTab(0).attr('aria-label'), undefined);
+        });
+
+        QUnit.test('string item should not get aria-label', function(assert) {
+            this.createTabPanel({ items: ['User'] });
+
+            assert.strictEqual(this.getTab(0).attr('aria-label'), undefined);
+        });
+
+        QUnit.test('tab of the item without title and icon should not get aria-label', function(assert) {
+            this.createTabPanel({ items: [{ text: 'User content' }] });
+
+            assert.strictEqual(this.getTab(0).attr('aria-label'), undefined);
+        });
+
+        [
+            { icon: 'user', expected: 'user', description: 'a dxIcon without a localized message' },
+            { icon: 'close', expected: 'Close', description: 'a dxIcon with a localized message' },
+            { icon: '/path/file.png', expected: 'file', description: 'a path to an image' },
+        ].forEach(({ icon, expected, description }) => {
+            QUnit.test(`icon-only tab should get aria-label "${expected}" for ${description}`, function(assert) {
+                this.createTabPanel({ items: [{ icon }] });
+
+                assert.strictEqual(this.getTab(0).attr('aria-label'), expected);
+            });
+        });
+
+        QUnit.test('icon-only tab should get aria-label even if the item has content text or html', function(assert) {
+            this.createTabPanel({
+                items: [
+                    { icon: 'user', text: 'User content' },
+                    { icon: 'find', html: '<b>Find content</b>' },
+                ],
+            });
+
+            assert.strictEqual(this.getTab(0).attr('aria-label'), 'user', 'item with text');
+            assert.strictEqual(this.getTab(1).attr('aria-label'), 'find', 'item with html');
+        });
+
+        QUnit.test('icon-only tab with badge should get aria-label derived from icon', function(assert) {
+            this.createTabPanel({ items: [{ icon: 'user', badge: '5' }] });
+
+            assert.strictEqual(this.getTab(0).attr('aria-label'), 'user');
+        });
+
+        QUnit.test('aria-label should be derived from item data when a custom itemTitleTemplate is used', function(assert) {
+            this.createTabPanel({
+                items: [{ icon: 'user' }, { icon: 'user', title: 'User' }],
+                itemTitleTemplate: (data) => `<i class="dx-icon dx-icon-${data.icon}"></i>`,
+            });
+
+            assert.strictEqual(this.getTab(0).attr('aria-label'), 'user', 'icon-only item');
+            assert.strictEqual(this.getTab(1).attr('aria-label'), undefined, 'item with title');
+        });
+
+        [true, false].forEach((repaintChangesOnly) => {
+            QUnit.test(`aria-label should follow item title and icon changes, repaintChangesOnly: ${repaintChangesOnly}`, function(assert) {
+                this.createTabPanel({ items: [{ title: 'User', icon: 'user' }], repaintChangesOnly });
+
+                this.instance.option('items[0].title', '');
+                assert.strictEqual(this.getTab(0).attr('aria-label'), 'user', 'label appears when title is cleared');
+
+                this.instance.option('items[0].icon', 'close');
+                assert.strictEqual(this.getTab(0).attr('aria-label'), 'Close', 'label follows the icon');
+
+                this.instance.option('items[0].title', 'Close');
+                assert.strictEqual(this.getTab(0).attr('aria-label'), undefined, 'label is removed when title is set');
+            });
+
+            QUnit.test(`aria-label should be recalculated when items are replaced, repaintChangesOnly: ${repaintChangesOnly}`, function(assert) {
+                this.createTabPanel({ items: [{ icon: 'user' }], repaintChangesOnly });
+
+                this.instance.option('items', [{ title: 'User', icon: 'user' }, { icon: 'find' }]);
+
+                assert.strictEqual(this.getTab(0).attr('aria-label'), undefined, 'title and icon item');
+                assert.strictEqual(this.getTab(1).attr('aria-label'), 'find', 'icon-only item');
+            });
+        });
+    });
 });

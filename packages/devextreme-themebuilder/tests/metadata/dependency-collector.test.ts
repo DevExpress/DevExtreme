@@ -99,6 +99,11 @@ const filesContent: { [key: string]: string } = {
   'grid_core.ts': 'import menu from \'./menu\'; import r from \'./render\';import col from \'./grid_column\';',
   'grid_column.ts': '// STYLE column',
 
+  // non-relative dependency and tsx entry tests
+  'bare_entry.js': 'import b from \'bare_dep\';',
+  'bare_dep.js': '// STYLE bareDep',
+  'tsx_entry.tsx': 'import m from \'./menu\';\n// STYLE ignoredForTsx',
+
   // validation tests
   [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/righttheme/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";',
   [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/extratheme/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./menu";',
@@ -245,6 +250,36 @@ describe('DependencyCollector', () => {
     const fullDependencyTree = dependencyCollector.getFullDependencyTree('dx.all.js');
 
     expect(fullDependencyTree).toEqual(simpleDependencies);
+  });
+
+  test('fillFullDependencyTree - a non-relative dependency is used as is', () => {
+    const dependencyCollector = new DependencyCollector();
+    const fullDependencyTree = dependencyCollector.getFullDependencyTree('bare_entry.js');
+
+    expect(fullDependencyTree).toEqual({
+      widget: '',
+      dependencies: {
+        'bare_dep.js': {
+          widget: 'baredep',
+          dependencies: {},
+        },
+      },
+    });
+  });
+
+  test('fillFullDependencyTree - a widget is not detected for a tsx file', () => {
+    const dependencyCollector = new DependencyCollector();
+    const fullDependencyTree = dependencyCollector.getFullDependencyTree('tsx_entry.tsx');
+
+    expect(fullDependencyTree).toEqual({
+      widget: '',
+      dependencies: {
+        'menu.js': {
+          widget: 'menu',
+          dependencies: {},
+        },
+      },
+    });
   });
 
   test('collect - right result and cache worked', () => {

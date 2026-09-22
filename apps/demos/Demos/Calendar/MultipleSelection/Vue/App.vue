@@ -105,7 +105,7 @@ function clearValue() {
 }
 
 </script>
-<style scoped>
+<style>
 #calendar-demo {
   display: flex;
 }

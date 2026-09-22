@@ -3,7 +3,8 @@
   "compilerOptions": {
     "lib": ["es2023", "DOM", "DOM.Iterable"],
     "ignoreDeprecations": "6.0",
-    "strict": true
+    "strict": true,
+    "resolveJsonModule": true
   },
   "include": [
     "Demos/**/Vue/**/*.vue",

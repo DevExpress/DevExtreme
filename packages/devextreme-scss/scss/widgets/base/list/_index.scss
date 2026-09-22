@@ -1,10 +1,7 @@
 @use "../mixins" as *;
 @use "../button/mixins" as *;
 
-// adduse
-
-
-$list-searchbox-margin-bottom: 5px;
+$list-searchbox-margin-bottom: 5px !default;
 
 .dx-list {
   margin: 0;
@@ -92,7 +89,6 @@ $list-searchbox-margin-bottom: 5px;
     transform: rotate(180deg);
   }
 }
-
 
 .dx-list-item-response-wait {
   opacity: 0.5;

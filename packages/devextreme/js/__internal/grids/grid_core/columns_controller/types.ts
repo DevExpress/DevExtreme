@@ -1,6 +1,15 @@
-import type { ColumnAIOptions, ColumnBase } from '@js/common/grids';
+import type { ColumnAIOptions, ColumnBase, ColumnLookup } from '@js/common/grids';
+import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
-import type { COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION } from './const';
+import type { DataFilter } from '../filter/types';
+import type {
+  COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
+} from './const';
+
+type InternalColumnLookup = ColumnLookup & {
+  items?: RawItemData[];
+  dataType?: string;
+};
 
 export type DropLocationNames = typeof GROUP_LOCATION
   | typeof COLUMN_CHOOSER_LOCATION
@@ -13,14 +22,34 @@ export type ColumnIndex = number | {
 
 export type FilterField = Omit<Column, 'filterOperations'> & { filterOperations?: string[] | null };
 
+export type ColumnUserState = Pick<Column, typeof USER_STATE_FIELD_NAMES[number]>;
+
 export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
 
-export interface Column extends ColumnBase {
+export type ColumnSelector = ((data: RawItemData) => unknown) & {
+  columnIndex?: number;
+  filterValue?: unknown;
+  selectedFilterOperation?: unknown;
+  originalCallback?: unknown;
+};
+
+type FilterTargets = 'filterRow' | 'headerFilter' | 'filterBuilder' | 'search';
+
+export interface InternalColumnOptions {
   parseValue?: (text: string) => unknown;
+  deserializeValue?: (value: unknown) => unknown;
+  serializeValue?: (value: unknown, target?: string) => unknown;
+  selector?: ColumnSelector;
+  createFilterExpression?: (
+    filterValue: unknown,
+    selectedFilterOperation: string | null | undefined,
+    target: FilterTargets,
+  ) => DataFilter;
   index?: number;
   groupIndex?: number;
   type?: string;
   defaultFilterOperations?: string[];
+  defaultFilterOperation?: string;
   visibleWidth?: string | number;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
@@ -31,7 +60,10 @@ export interface Column extends ColumnBase {
   bufferedFilterValue?: ColumnBase['filterValue'];
   bufferedSelectedFilterOperation?: ColumnBase['selectedFilterOperation'];
   added?: AddedColumn;
+  lookup?: InternalColumnLookup;
 }
+
+export type Column = ColumnBase & InternalColumnOptions;
 
 export interface ColumnsChanges {
   changeTypes: {
@@ -52,4 +84,5 @@ export interface ColumnsChanges {
   };
   columnIndex?: number;
   columnIndices?: number[];
+  appliedFilters?: DataFilter[];
 }

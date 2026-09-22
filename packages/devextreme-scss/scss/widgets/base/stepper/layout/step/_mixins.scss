@@ -198,14 +198,14 @@
       &.dx-step-completed {
         .dx-step-indicator {
           border-color: $selected-hover-bg;
-          background-color:$selected-hover-bg;
+          background-color: $selected-hover-bg;
         }
       }
 
       &.dx-step-selected {
         .dx-step-indicator {
           border-color: $selected-hover-bg;
-          background-color:$selected-hover-bg;
+          background-color: $selected-hover-bg;
           box-shadow: 0 0 0 2px $shadow-color, 0 0 0 4px $selected-hover-bg, 0 0 0 8px $shadow-color;
         }
       }

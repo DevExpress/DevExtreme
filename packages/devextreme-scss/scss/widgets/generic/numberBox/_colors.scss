@@ -1,10 +1,7 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 10. Active spin buttons color
@@ -26,7 +23,6 @@ $numberbox-spin-container-border-radius: $base-border-radius !default;
 * $type color
 */
 $numberbox-spin-icon-color: $base-icon-color !default;
-
 
 @if $color == "carmine" {
   $numberbox-spin-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;

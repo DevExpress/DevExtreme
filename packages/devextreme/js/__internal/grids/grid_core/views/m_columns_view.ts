@@ -193,7 +193,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _dataController!: DataController;
 
-  protected _adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsController;
 
   protected _columnChooserController!: ColumnChooserController;
 
@@ -207,7 +207,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._scrollLeft = -1;
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
     this._columnChooserController = this.getController('columnChooser');
     this._editorFactoryController = this.getController('editorFactory');
     this._selectionController = this.getController('selection');
@@ -737,12 +737,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: column_fixing, filter_row, row_dragging, virtual_columns
    */
   protected _resizeCore() {
-    const scrollLeft = this._scrollLeft;
-
-    if (scrollLeft >= 0) {
-      this._scrollLeft = 0;
-      this.scrollTo({ left: scrollLeft });
-    }
+    this.updateScrollLeftPosition();
   }
 
   /**
@@ -1080,7 +1075,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return ['scrollChanged'];
   }
 
-  protected _updateScrollLeftPosition() {
+  protected updateScrollLeftPosition(): void {
     const scrollLeft = this._scrollLeft;
 
     if (scrollLeft >= 0) {

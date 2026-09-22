@@ -16,7 +16,7 @@ $datagrid-text-stub-background-image-path: null !default;
 @use "../icon_fonts" as *;
 @use "./common";
 @use "./variables" as *;
-@use 'layout/cell' with (
+@use "layout/cell" with (
   $datagrid-border: $datagrid-border,
   $datagrid-border-color: $datagrid-border-color,
   $datagrid-base-background-color: $datagrid-base-background-color,
@@ -94,7 +94,7 @@ $datagrid-text-stub-background-image-path: null !default;
     font-family: inherit;
 
     &::before {
-      font-family: 'DXIcons', sans-serif;
+      font-family: "DXIcons", sans-serif;
     }
   }
 
@@ -183,7 +183,7 @@ $datagrid-text-stub-background-image-path: null !default;
       &:not(.dx-datagrid-group-space)::before {
         display: block;
         height: 100%;
-        content: '';
+        content: "";
         background-image: $datagrid-text-stub-background-image-path;
         background-repeat: no-repeat repeat;
       }

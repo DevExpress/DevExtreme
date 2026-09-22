@@ -1,8 +1,4 @@
-@use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $switch-accent-color: $base-accent !default;
 $switch-accent-color-hover: $base-accent-hover !default;
@@ -42,4 +38,3 @@ $switch-off-border-active-color: $base-border-color-accessible-focused !default;
 $switch-invalid-color: $base-invalid-color !default;
 $switch-invalid-color-hover: $base-invalid-color-hover !default;
 $switch-invalid-color-focused: $base-invalid-color-selected !default;
-

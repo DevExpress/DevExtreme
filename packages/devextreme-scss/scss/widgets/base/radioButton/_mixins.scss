@@ -38,7 +38,7 @@
 
     @if $useRipple {
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         width: $ripple-size;
         height: $ripple-size;

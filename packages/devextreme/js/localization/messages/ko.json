@@ -243,7 +243,7 @@
         "dxTreeList-editingAddRowToNode": "추가",
 
         "dxPager-infoText": "{1}페이지 중 {0}페이지 ({2}개 항목)",
-        "dxPager-pagesCountText": "/ ",
+        "dxPager-pagesCountText": "/",
         "dxPager-pageSize": "페이지당 항목: {0}",
         "dxPager-pageSizesAllText": "전체",
         "dxPager-page": "{0}페이지",
@@ -254,7 +254,7 @@
         "dxPager-ariaPageNumber": "페이지 번호",
 
         "dxPagination-infoText": "{1}페이지 중 {0}페이지 ({2}개 항목)",
-        "dxPagination-pagesCountText": "/ ",
+        "dxPagination-pagesCountText": "/",
         "dxPagination-pageSize": "페이지당 항목: {0}",
         "dxPagination-pageSizesAllText": "전체",
         "dxPagination-page": "{0}페이지",

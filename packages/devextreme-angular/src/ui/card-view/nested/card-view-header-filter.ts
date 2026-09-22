@@ -32,14 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCardViewCardViewHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
-    @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
     }
@@ -61,14 +53,6 @@ export class DxoCardViewCardViewHeaderFilterComponent extends NestedOption imple
     }
     set search(value: HeaderFilterSearchConfig) {
         this._setOption('search', value);
-    }
-
-    @Input()
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
     }
 
     @Input()

@@ -435,6 +435,19 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
+     * [descr:BaseWidgetOptions.encodeHtml]
+    
+     */
+    @Input()
+    get encodeHtml(): boolean {
+        return this._getOption('encodeHtml');
+    }
+    set encodeHtml(value: boolean) {
+        this._setOption('encodeHtml', value);
+    }
+
+
+    /**
      * [descr:BaseWidgetOptions.export]
     
      */
@@ -998,6 +1011,13 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() encodeHtmlChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
@@ -1191,6 +1211,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
             { emit: 'dataSourceChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'encodeHtmlChange' },
             { emit: 'exportChange' },
             { emit: 'legendChange' },
             { emit: 'loadingIndicatorChange' },

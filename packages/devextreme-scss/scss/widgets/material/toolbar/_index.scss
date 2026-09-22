@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -13,8 +12,6 @@
 @use "mixins" as *;
 @use "../../base/toolbar";
 @use "../../base/toolbar/mixins" as *;
-
-// adduse
 @use "../dropDownMenu";
 
 .dx-toolbar {

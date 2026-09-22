@@ -8,7 +8,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { value as viewPort } from 'core/utils/view_port';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import fx from 'common/core/animation/fx';
 import dateLocalization from 'common/core/localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
@@ -1401,7 +1401,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             initViews: true
         });
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             countApplyFilter++;
         };
 
@@ -1970,7 +1970,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             initViews: true
         });
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             countApplyFilter++;
         };
 
@@ -2004,7 +2004,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             initViews: true
         });
 
-        that.dataController._applyFilter = function() {
+        that.dataController.applyFilter = function() {
             countApplyFilter++;
         };
 

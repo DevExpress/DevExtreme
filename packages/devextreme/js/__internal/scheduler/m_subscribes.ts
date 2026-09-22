@@ -200,6 +200,14 @@ const subscribes = {
     return this.getWorkSpace().getCellHeight();
   },
 
+  getAllDayHeight() {
+    return this.getWorkSpace().getAllDayHeight();
+  },
+
+  isVerticalGroupedWorkSpace() {
+    return this.getWorkSpace().isVerticalGroupedWorkSpace();
+  },
+
   needCorrectAppointmentDates() {
     return !['month', 'timelineMonth'].includes(this.currentView.type);
   },

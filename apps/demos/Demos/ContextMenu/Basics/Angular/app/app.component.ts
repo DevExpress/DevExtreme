@@ -7,12 +7,6 @@ if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 class ContextMenuItem {
   text: string;
 
@@ -21,8 +15,8 @@ class ContextMenuItem {
 
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   imports: [
     DxContextMenuModule,
   ],

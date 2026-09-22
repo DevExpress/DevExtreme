@@ -94,6 +94,14 @@ export class DxiSchedulerResourceComponent extends CollectionNestedOption {
     }
 
     @Input()
+    get parentIdExpr(): string {
+        return this._getOption('parentIdExpr');
+    }
+    set parentIdExpr(value: string) {
+        this._setOption('parentIdExpr', value);
+    }
+
+    @Input()
     get useColorAsDefault(): boolean {
         return this._getOption('useColorAsDefault');
     }

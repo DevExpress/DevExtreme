@@ -340,7 +340,7 @@ class TextEditorMask<
   _replaceSelectedText(
     text: string,
     selection: CaretRange,
-    char: string,
+    char: string | undefined,
   ): string {
     if (char === undefined) {
       return text;

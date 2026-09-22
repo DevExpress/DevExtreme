@@ -1,13 +1,12 @@
-
-@use './item';
-@use './variables' as *;
+@use "./item";
+@use "./variables" as *;
 
 /*
   NOTE: Maximal space needed:
   2px maximal right header item padding + 4px maximal dxSortable placeholder (drop indicator) width
   We can increase this number up to the CardView root padding without issues
 */
-$sortable-side-offset: 6px;
+$sortable-side-offset: 6px !default;
 
 .dx-cardview-header-item-sorting {
   display: flex;
@@ -102,4 +101,3 @@ $sortable-side-offset: 6px;
   border-color: $cardview-header-item__sort-indicator__border-color;
   border-radius: $cardview-header-item__sort-indicator__border-radius;
 }
-

@@ -2,9 +2,11 @@ import React from 'react';
 import List from 'devextreme-react/list';
 import { navigation } from './data.ts';
 
+const listStyle = { width: '200px' };
+
 function NavigationList() {
   return (
-    <div className="list" style={{ width: '200px' }}>
+    <div className="list" style={listStyle}>
       <List
         dataSource={navigation}
         className="panel-list"

@@ -89,7 +89,6 @@ export class GanttTreeList {
       onNodesInitialized: (): void => {
         this._onNodesInitialized();
       },
-      _disableDeprecationWarnings: true,
     });
 
     return this._treeList;
@@ -171,7 +170,6 @@ export class GanttTreeList {
       return getHeight(this._$treeList);
     }
     this._gantt._hasHeight = isDefined(this._gantt.option('height'))
-      // @ts-expect-error ts-error
       && this._gantt.option('height') !== '';
     return this._gantt._hasHeight ? '100%' : '';
   }

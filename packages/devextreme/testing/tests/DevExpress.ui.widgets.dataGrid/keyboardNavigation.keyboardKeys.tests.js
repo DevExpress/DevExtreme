@@ -5,7 +5,7 @@ import $ from 'jquery';
 import 'ui/data_grid';
 
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
@@ -1810,14 +1810,12 @@ QUnit.module('Keyboard keys', {
                 return $container;
             };
 
-            this.dataController.store = function() {
-                return {
-                    key: function() { },
-                    update: function(key, values) {
-                        isStoreUpdated = true;
-                        return $.Deferred().resolve(key, values);
-                    }
-                };
+            this.dataControllerOptions.store = {
+                key: function() { },
+                update: function(key, values) {
+                    isStoreUpdated = true;
+                    return $.Deferred().resolve(key, values);
+                }
             };
 
             // act

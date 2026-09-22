@@ -662,7 +662,7 @@ describe('AIAssistantView', () => {
         const onSpy = jest.spyOn(mockMessageStore, 'on');
         createAIAssistantView({ render: false });
 
-        expect(onSpy).toHaveBeenCalledWith('push', expect.any(Function));
+        expect(onSpy as unknown as jest.Mock).toHaveBeenCalledWith('push', expect.any(Function));
         onSpy.mockRestore();
       });
 

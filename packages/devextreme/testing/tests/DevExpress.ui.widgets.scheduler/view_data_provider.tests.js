@@ -1950,30 +1950,61 @@ module('View Data Provider', {
                     renderOptions: await getRenderOptions(),
                 });
 
+                const firstGroupCell = {
+                    id: 1,
+                    text: 'First group',
+                    color: 'red',
+                    resourceIndex: 'groupId',
+                    data: {
+                        id: 1,
+                        color: 'red',
+                        text: 'First group'
+                    }
+                };
+                const secondGroupCell = {
+                    id: 2,
+                    text: 'Second group',
+                    color: 'green',
+                    resourceIndex: 'groupId',
+                    data: {
+                        id: 2,
+                        color: 'green',
+                        text: 'Second group'
+                    }
+                };
+
                 const expectedGroupPanelData = {
                     baseColSpan: 2,
-                    groupPanelItems: [[{
-                        color: 'red',
-                        data: {
-                            id: 1,
-                            color: 'red',
-                            text: 'First group'
-                        },
-                        id: 1,
-                        key: '0_groupId_1',
-                        resourceName: 'groupId',
-                        text: 'First group'
+                    maxDepth: 1,
+                    columnCountPerGroup: 2,
+                    hasHierarchy: false,
+                    groupTree: [{
+                        ...firstGroupCell,
+                        key: 'groupId_1',
+                        path: [firstGroupCell],
+                        leafCount: 1,
+                        children: [],
                     }, {
-                        color: 'green',
-                        data: {
-                            id: 2,
-                            color: 'green',
-                            text: 'Second group'
-                        },
-                        id: 2,
-                        key: '0_groupId_2',
-                        resourceName: 'groupId',
-                        text: 'Second group'
+                        ...secondGroupCell,
+                        key: 'groupId_2',
+                        path: [secondGroupCell],
+                        leafCount: 1,
+                        children: [],
+                    }],
+                    groupPanelItems: [[{
+                        ...firstGroupCell,
+                        key: 'groupId_1',
+                        isLeaf: true,
+                        isLastColumn: false,
+                        path: [firstGroupCell],
+                        colSpan: 2
+                    }, {
+                        ...secondGroupCell,
+                        key: 'groupId_2',
+                        isLeaf: true,
+                        isLastColumn: true,
+                        path: [secondGroupCell],
+                        colSpan: 2
                     }]]
                 };
 

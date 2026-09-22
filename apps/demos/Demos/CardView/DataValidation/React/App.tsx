@@ -34,6 +34,20 @@ function hireDateValidationCallback(options: ValidationCallbackData): boolean {
   return new Date(options.value) > new Date(options.data.birthDate);
 }
 
+const popupOptions = {
+  title: 'Employee Info',
+  showTitle: true,
+  width: 700,
+  height: 525,
+};
+
+const notesEditorOptions = { height: 100 };
+
+const mobilePhoneEditorOptions = {
+  mask: '+1 (000) 000-0000',
+  useMaskedValue: true,
+};
+
 const App = () => (
   <CardView
     dataSource={employees}
@@ -53,12 +67,7 @@ const App = () => (
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
-      popup={{
-        title: 'Employee Info',
-        showTitle: true,
-        width: 700,
-        height: 525,
-      }}
+      popup={popupOptions}
     >
       <Form>
         <Item
@@ -99,7 +108,7 @@ const App = () => (
             dataField="notes"
             editorType="dxTextArea"
             colSpan={2}
-            editorOptions={{ height: 100 }}
+            editorOptions={notesEditorOptions}
           ></Item>
           <Item
             dataField="picture"
@@ -123,10 +132,7 @@ const App = () => (
           ></Item>
           <Item
             dataField="mobilePhone"
-            editorOptions={{
-              mask: '+1 (000) 000-0000',
-              useMaskedValue: true,
-            }}
+            editorOptions={mobilePhoneEditorOptions}
           ></Item>
           <Item
             dataField="email"

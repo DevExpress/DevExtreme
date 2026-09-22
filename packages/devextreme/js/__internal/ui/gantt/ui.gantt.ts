@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -137,8 +136,6 @@ class Gantt extends Widget<Properties> {
 
   _init(): void {
     super._init();
-
-    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
 
     this._initGantt();
     this._isGanttRendered = false;
@@ -299,7 +296,6 @@ class Gantt extends Widget<Properties> {
     this._ganttView = this._createComponent(this._$ganttView, GanttView, {
       width: '100%',
       height: this._ganttTreeList?.getOffsetHeight(),
-      // @ts-expect-error ts-error
       rowHeight: this._ganttTreeList?.getRowHeight(),
       headerHeight: this._ganttTreeList?.getHeaderHeight(),
       tasks: this._tasks,
@@ -499,7 +495,6 @@ class Gantt extends Widget<Properties> {
       }
     }
     const validKeys = [rootValue];
-    // @ts-expect-error ts-error
     this._appendChildKeys(validationTree[rootValue], validKeys);
 
     // @ts-expect-error ts-error
@@ -770,7 +765,6 @@ class Gantt extends Widget<Properties> {
     if (!this._loadPanel) {
       this._loadPanel = this._createComponent(this._$loadPanel, LoadPanel, {
         position: {
-          // @ts-expect-error ts-error
           of: this.$element(),
         },
       });

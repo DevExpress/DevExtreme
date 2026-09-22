@@ -21,7 +21,7 @@ import {
   GROUP_ROW_CLASS,
   TIME_PANEL_CLASS,
 } from '../classes';
-import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../r1/utils/index';
+import { agendaUtils, formatWeekday } from '../r1/utils/index';
 import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type { ResourceId } from '../utils/loader/types';
 import { VIEWS } from '../utils/options/constants_view';
@@ -102,7 +102,6 @@ class SchedulerAgenda extends WorkSpace {
           if (this.$groupTable) {
             this.$groupTable.remove();
             this.$groupTable = null;
-            this.detachGroupCountClass();
           }
         } else if (!this.$groupTable) {
           this.initGroupTable();
@@ -230,13 +229,6 @@ class SchedulerAgenda extends WorkSpace {
     return rows.every((groupRow) => groupRow.every((cell) => !cell));
   }
 
-  protected override attachGroupCountClass(): void {
-    const className = getVerticalGroupCountClass(this.option().groups);
-    if (className) {
-      this.$element().addClass(className);
-    }
-  }
-
   private removeEmptyRows(rows: number[][]): number[][] {
     const isEmpty = (data: number[]): boolean => !data.some((value) => value > 0);
     return rows.filter((row) => row.length && !isEmpty(row));
@@ -279,9 +271,7 @@ class SchedulerAgenda extends WorkSpace {
         const resourceItem = resource?.items
           .find((rItem) => rItem.id === value);
 
-        // @ts-expect-error
         if (cellTemplate?.render) {
-          // @ts-expect-error
           cellTemplates.push(cellTemplate.render.bind(cellTemplate, {
             model: {
               data: resourceData,

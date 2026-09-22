@@ -33,14 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoGanttGanttHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
-    @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
     }
@@ -62,14 +54,6 @@ export class DxoGanttGanttHeaderFilterComponent extends NestedOption implements 
     }
     set search(value: HeaderFilterSearchConfig) {
         this._setOption('search', value);
-    }
-
-    @Input()
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
     }
 
     @Input()

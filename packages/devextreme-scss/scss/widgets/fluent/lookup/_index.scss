@@ -12,8 +12,6 @@
 @use "../../base/lookup";
 @use "../../base/lookup/mixins" as *;
 @use "../overlay/colors" as *;
-
-// adduse
 @use "../dropDownList";
 
 .dx-lookup {

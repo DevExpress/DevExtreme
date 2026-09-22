@@ -7,7 +7,7 @@
   $border-width,
   $cancel-button-color,
 ) {
-  .dx-chat-editing-preview::before{
+  .dx-chat-editing-preview::before {
     width: $border-width;
     background-color: $accent-color;
   }

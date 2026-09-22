@@ -2,17 +2,18 @@ import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import rendererModule from 'viz/core/renderers/renderer_default';
+import { stubSeam } from '../../helpers/moduleSeam.js';
 import legendModule from 'viz/components/legend';
 import titleModule from 'viz/core/title';
 import dxChart from 'viz/chart';
 import dxPieChart from 'viz/pie_chart';
 import dxPolarChart from 'viz/polar_chart';
-import { overlapping } from '__internal/viz/chart_components/m_base_chart';
+import { overlapping } from '__internal/viz/chart_components/base_chart';
 import seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
-const seriesFamilyNativeConstructor = { ...seriesFamilyModule }.SeriesFamily;
+const seriesFamilyNativeConstructor = seriesFamilyModule.SeriesFamily;
 setupSeriesFamily();
 QUnit.testStart(function() {
     const markup =
@@ -2325,7 +2326,7 @@ QUnit.test('check horizontal alignment === center', function(assert) {
 QUnit.module('Auto hide point markers', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
-        seriesFamilyModule.SeriesFamily = seriesFamilyNativeConstructor;
+        seriesFamilyModule.DEBUG_set_SeriesFamily(seriesFamilyNativeConstructor);
         const dataSource = [];
         for(let i = 0; i < 500000; i += 250) {
             const y1 = Math.sin(i);
@@ -3300,7 +3301,7 @@ QUnit.module('Option changing in onDrawn after zooming', {
     beforeEach: function() {
         this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, 'move');
         this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, 'move');
-        sinon.stub(rendererModule, 'Renderer').callsFake(function() {
+        stubSeam(rendererModule, 'Renderer', 'DEBUG_set_Renderer').callsFake(function() {
             return new Renderer();
         });
     },
@@ -4901,7 +4902,7 @@ QUnit.test('Reset axes animation before adjusting position of vertical axes (fix
 QUnit.module('SeriesFamily', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
-        seriesFamilyModule.SeriesFamily = seriesFamilyNativeConstructor;
+        seriesFamilyModule.DEBUG_set_SeriesFamily(seriesFamilyNativeConstructor);
     }
 }));
 
@@ -5072,5 +5073,182 @@ QUnit.module('React async templates rendering', {
         this.clock.tick(this.templateTimeout);
 
         assert.strictEqual(axis._majorTicks[0].templateContainer.attr('visibility'), 'visible', 'label is visible');
+    });
+});
+
+QUnit.module('encodeHtml', $.extend({}, moduleSetup, {
+    beforeEach: function() {
+        moduleSetup.beforeEach.call(this);
+        // QUnit keeps the fixture at left: -10000px, and the tooltip is not drawn
+        // when its anchor point is outside the canvas - move the fixture into the viewport
+        this.fixtureCss = $('#qunit-fixture').css(['left', 'top']);
+        $('#qunit-fixture').css({ left: 0, top: 0 });
+    },
+    afterEach: function() {
+        $('#qunit-fixture').css(this.fixtureCss);
+        moduleSetup.afterEach.call(this);
+    },
+    createChartWithMarkupLikeTexts: function(encodeHtml) {
+        const options = {
+            dataSource: [{ arg: '<A>', val: 850 }, { arg: 'B', val: 5940 }],
+            series: [{ name: '<North America> | Total' }],
+            tooltip: {
+                enabled: true,
+                customizeTooltip: function(pointInfo) {
+                    return { text: pointInfo.seriesName + ' - ' + pointInfo.valueText };
+                }
+            }
+        };
+
+        if(encodeHtml !== undefined) {
+            options.encodeHtml = encodeHtml;
+        }
+
+        return this.createChart(options);
+    },
+    checkTexts: function(assert, chart, expected) {
+        function getTexts($root) {
+            return $root.find('text').map(function() {
+                return $(this).text();
+            }).get();
+        }
+
+        chart.getAllSeries()[0].getAllPoints()[0].showTooltip();
+
+        assert.deepEqual(getTexts(this.$container.find('.dxc-arg-elements')), expected.axisLabels, 'argument axis labels');
+        assert.deepEqual(getTexts(this.$container.find('.dxc-legend')), expected.legend, 'legend');
+        assert.strictEqual(getTexts($('.dxc-tooltip')).join(''), expected.tooltip, 'tooltip');
+    }
+}));
+
+QUnit.test('Markup-like texts are treated as html by default (T1334517)', function(assert) {
+    const chart = this.createChartWithMarkupLikeTexts(undefined);
+
+    this.checkTexts(assert, chart, {
+        axisLabels: ['', 'B'],
+        legend: [' | Total'],
+        tooltip: ' | Total - 850'
+    });
+});
+
+QUnit.test('Markup-like texts are rendered as is when encodeHtml is enabled (T1334517)', function(assert) {
+    const chart = this.createChartWithMarkupLikeTexts(true);
+
+    this.checkTexts(assert, chart, {
+        axisLabels: ['<A>', 'B'],
+        legend: ['<North America> | Total'],
+        tooltip: '<North America> | Total - 850'
+    });
+});
+
+QUnit.test('encodeHtml is applied on option changing (T1334517)', function(assert) {
+    const chart = this.createChartWithMarkupLikeTexts(undefined);
+
+    chart.option('encodeHtml', true);
+
+    this.checkTexts(assert, chart, {
+        axisLabels: ['<A>', 'B'],
+        legend: ['<North America> | Total'],
+        tooltip: '<North America> | Total - 850'
+    });
+});
+
+QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
+    beforeEach() {
+        moduleSetup.beforeEach.call(this);
+
+        const workdays = [];
+        for(let day = 1; day <= 31; day++) {
+            const date = new Date(1994, 2, day);
+            if(date.getDay() !== 0 && date.getDay() !== 6) {
+                workdays.push({ date: date, val: day });
+            }
+        }
+
+        this.options = {
+            dataSource: workdays,
+            series: [{ argumentField: 'date', valueField: 'val' }],
+            scrollBar: { visible: true },
+            legend: { visible: false },
+            argumentAxis: {
+                visualRange: {
+                    startValue: new Date(1994, 2, 9),
+                    endValue: new Date(1994, 2, 18)
+                }
+            }
+        };
+    },
+    createChart(options) {
+        return moduleSetup.createChart.call(this, $.extend(true, {}, this.options, options));
+    },
+    setVisualRange(chart, firstDay) {
+        const axis = chart.getArgumentAxis();
+
+        axis.visualRange({
+            startValue: new Date(1994, 2, firstDay),
+            endValue: new Date(1994, 2, firstDay + 9)
+        });
+
+        const $thumb = this.$container.find('.dxc-scroll-bar rect');
+        const barArea = chart._scrollBar._translator.getCanvasVisibleArea();
+        const wholeRange = axis.getTranslator().getBusinessRange();
+
+        return {
+            position: parseFloat($thumb.attr('y')),
+            barShare: parseFloat($thumb.attr('height')) / (barArea.max - barArea.min),
+            contentShare: axis.getVisualRangeLengthWithoutBreaks()
+                / axis.getVisualRangeLengthWithoutBreaks({ minVisible: wholeRange.min, maxVisible: wholeRange.max })
+        };
+    },
+    checkThumbSlidesSmoothly(assert, chart) {
+        const thumbs = [];
+
+        for(let firstDay = 1; firstDay <= 22; firstDay++) {
+            thumbs.push(this.setVisualRange(chart, firstDay));
+        }
+
+        for(let i = 1; i < thumbs.length; i++) {
+            assert.ok(thumbs[i].position >= thumbs[i - 1].position,
+                `thumb never moves back on March ${i + 1} (${thumbs[i - 1].position} -> ${thumbs[i].position})`);
+            assert.roughEqual(thumbs[i].barShare, thumbs[i].contentShare, 0.005,
+                `thumb size matches the rendered content on March ${i + 1}`);
+        }
+
+        assert.ok(thumbs[thumbs.length - 1].position > thumbs[0].position, 'the thumb did move');
+    }
+}), () => {
+    QUnit.test('Thumb must not jump when the visual range starts inside a weekend break', function(assert) {
+        const chart = this.createChart({ argumentAxis: { workdaysOnly: true } });
+
+        const beforeBreak = this.setVisualRange(chart, 11);
+        const insideBreak = this.setVisualRange(chart, 12);
+
+        assert.ok(insideBreak.position > beforeBreak.position,
+            `thumb moves forward instead of jumping to the beginning of the scroll bar (${beforeBreak.position} -> ${insideBreak.position})`);
+        assert.roughEqual(insideBreak.barShare, insideBreak.contentShare, 0.005,
+            'thumb size matches the rendered content');
+    });
+
+    QUnit.test('Thumb must slide smoothly over weekend breaks (workdaysOnly)', function(assert) {
+        this.checkThumbSlidesSmoothly(assert, this.createChart({ argumentAxis: { workdaysOnly: true } }));
+    });
+
+    QUnit.test('Thumb must slide smoothly over a user-defined scale break', function(assert) {
+        const chart = this.createChart({
+            argumentAxis: {
+                breaks: [{
+                    startValue: new Date(1994, 2, 12),
+                    endValue: new Date(1994, 2, 14)
+                }]
+            }
+        });
+
+        assert.ok(this.$container.find('.dxc-arg-breaks path').length > 0, 'the scale break is applied');
+
+        this.checkThumbSlidesSmoothly(assert, chart);
+    });
+
+    QUnit.test('Thumb must slide smoothly when there are no scale breaks', function(assert) {
+        this.checkThumbSlidesSmoothly(assert, this.createChart({}));
     });
 });

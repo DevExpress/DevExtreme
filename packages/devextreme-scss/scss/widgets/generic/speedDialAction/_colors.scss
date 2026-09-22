@@ -1,10 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
-
-// adduse
-
 
 $speed-dial-action-bg: null !default;
 $speed-dial-action-hover-bg: null !default;
@@ -13,7 +9,6 @@ $speed-dial-action-color: null !default;
 $speed-dial-action-shadow: 0 6px 12px rgba(0, 0, 0, 0.2) !default;
 $speed-dial-action-label-shadow: 0 6px 12px rgba(0, 0, 0, 0.16) !default;
 $speed-dial-action-shading-color: null !default;
-
 
 @if $color == "carmine" {
   $speed-dial-action-bg: $base-bg !default;
@@ -78,4 +73,3 @@ $speed-dial-action-shading-color: null !default;
   $speed-dial-action-color: $base-text-color !default;
   $speed-dial-action-shading-color: $overlay-shader-bg !default;
 }
-

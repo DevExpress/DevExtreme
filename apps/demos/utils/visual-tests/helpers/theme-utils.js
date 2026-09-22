@@ -27,16 +27,12 @@ export async function testScreenshot(
   const testTheme = process.env.THEME;
 
   const themeOptions = {
-    looksSameComparisonOptions: {
-      tolerance: 20,
-      antialiasingTolerance: 20,
-    },
     textDiffTreshold: 0.2,
   };
 
   const finalOptions = {
-    ...comparisonOptions,
     ...themeOptions,
+    ...comparisonOptions,
   };
 
   await t

@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 10. Indicator background color
@@ -132,4 +129,3 @@ $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
 }
-

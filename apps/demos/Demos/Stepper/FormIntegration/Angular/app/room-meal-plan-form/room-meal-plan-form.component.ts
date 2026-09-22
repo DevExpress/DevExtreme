@@ -5,15 +5,9 @@ import { type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import 'devextreme/ui/select_box';
 import type { BookingFormData } from '../app.types';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'room-meal-plan-form',
-  templateUrl: `.${modulePrefix}/room-meal-plan-form/room-meal-plan-form.component.html`,
+  templateUrl: './room-meal-plan-form.component.html',
   imports: [
     DxFormModule,
   ],

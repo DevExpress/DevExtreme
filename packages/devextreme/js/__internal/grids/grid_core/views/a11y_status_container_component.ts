@@ -1,8 +1,9 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 
 const CLASSES = {
-  container: 'dx-gridbase-a11y-status-container',
+  container: SCREEN_READER_ONLY_CLASS,
 };
 
 export interface A11yStatusContainerComponentProps {

@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 /**
 * $name 10. Item text color
@@ -15,7 +12,6 @@ $tileview-hover-bg: null !default;
 $tileview-hover-border-color: null !default;
 $tileview-active-bg: null !default;
 $tileview-active-color: null !default;
-
 
 @if $color == "carmine" {
   $tileview-bg: $base-element-bg !default;
@@ -88,4 +84,3 @@ $tileview-active-color: null !default;
   $tileview-active-bg: color.change(color.adjust($tileview-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
   $tileview-active-color: $tileview-color !default;
 }
-

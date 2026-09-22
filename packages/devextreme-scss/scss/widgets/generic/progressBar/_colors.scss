@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
-
-// adduse
 
 /**
 * $name 10. Bar background color
@@ -60,4 +57,3 @@ $progressbar-range-indeterminate-color: $base-accent !default;
   $progressbar-bg: color.adjust($base-bg, $lightness: -13.5%, $space: hsl) !default;
   $progressbar-border-color: $base-border-color !default;
 }
-

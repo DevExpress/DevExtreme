@@ -1544,31 +1544,31 @@ describe('aiMode', () => {
       ],
     });
 
-    expect(columnSendRequestSpy).toBeCalledTimes(1);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(1);
 
     instance.option('paging.pageIndex', 2);
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(2);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(2);
 
     instance.option('paging.pageIndex', 3);
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(3);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(3);
 
     instance.option('filterValue', ['id', '>', 50]);
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(4);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(4);
 
     instance.option('filterValue', undefined);
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(5);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(5);
 
     instance.columnOption('name', 'groupIndex', 0);
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(6);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(6);
 
     instance.clearGrouping();
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(7);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(7);
   });
 
   it('should NOT call aiIntegration.sendRequest with manual mode', async () => {
@@ -1602,31 +1602,31 @@ describe('aiMode', () => {
       ],
     });
 
-    expect(columnSendRequestSpy).toBeCalledTimes(0);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(0);
 
     instance.option('paging.pageIndex', 2);
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(0);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(0);
 
     instance.option('paging.pageIndex', 3);
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(0);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(0);
 
     instance.option('filterValue', ['id', '>', 50]);
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(0);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(0);
 
     instance.option('filterValue', undefined);
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(0);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(0);
 
     instance.columnOption('name', 'groupIndex', 0);
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(0);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(0);
 
     instance.clearGrouping();
     jest.runAllTimers();
-    expect(columnSendRequestSpy).toBeCalledTimes(0);
+    expect(columnSendRequestSpy).toHaveBeenCalledTimes(0);
   });
 
   describe('when mode is manual', () => {
@@ -1652,7 +1652,7 @@ describe('aiMode', () => {
       });
       const dropDownButton = component.getAIHeaderCell(3).getDropDownButton();
 
-      expect(columnSendRequestSpy).toBeCalledTimes(0);
+      expect(columnSendRequestSpy).toHaveBeenCalledTimes(0);
 
       dropDownButton?.getButtonElement()?.click();
 
@@ -1672,7 +1672,7 @@ describe('aiMode', () => {
       await Promise.resolve();
 
       expect(aiPromptEditor.getProgressBar().isVisible()).toBe(false);
-      expect(columnSendRequestSpy).toBeCalledTimes(1);
+      expect(columnSendRequestSpy).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -199,7 +199,6 @@ export default class SelectionStrategy<
           if (localFilter && !isSelectAll) {
             filteredItems = filteredItems.filter(localFilter);
           } else if (needLoadAllData) {
-            // @ts-expect-error dataQuary
             filteredItems = dataQuery(filteredItems).filter(remoteFilter).toArray();
           }
 

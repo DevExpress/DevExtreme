@@ -1,6 +1,6 @@
 @use "sass:string";
 
-@function replace($string, $search, $replace: '') {
+@function replace($string, $search, $replace: "") {
   $index: string.index($string, $search);
 
   @if $index {
@@ -11,11 +11,11 @@
 }
 
 @function escape($color) {
-  $color: replace($color, '#', '%23');
-  $color: replace($color, '$', '%24'); // stylelint-disable-line scss/no-duplicate-dollar-variables
-  $color: replace($color, '(', '%28'); // stylelint-disable-line scss/no-duplicate-dollar-variables
-  $color: replace($color, ')', '%29'); // stylelint-disable-line scss/no-duplicate-dollar-variables
-  $color: replace($color, ' ', '%20'); // stylelint-disable-line scss/no-duplicate-dollar-variables
+  $color: replace($color, "#", "%23");
+  $color: replace($color, "$", "%24"); // stylelint-disable-line scss/no-duplicate-dollar-variables
+  $color: replace($color, "(", "%28"); // stylelint-disable-line scss/no-duplicate-dollar-variables
+  $color: replace($color, ")", "%29"); // stylelint-disable-line scss/no-duplicate-dollar-variables
+  $color: replace($color, " ", "%20"); // stylelint-disable-line scss/no-duplicate-dollar-variables
 
   @return $color;
 }

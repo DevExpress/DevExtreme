@@ -365,9 +365,9 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
         return -directionIndex;
       }
 
-      // @ts-expect-error _$wrapperCoveredElement does not exist on OverlayPositionController
-      const offsetBottom = getHeight(this._positionController._$wrapperCoveredElement)
-        - contentHeight - offsetTop;
+      const { $visualContainer } = this._positionController;
+      const containerHeight: number = $visualContainer ? getHeight($visualContainer) : 0;
+      const offsetBottom = containerHeight - contentHeight - offsetTop;
 
       return offsetTop >= offsetBottom ? -directionIndex : directionIndex;
     }

@@ -277,7 +277,6 @@ class CollectionWidget<
             if (that._disposed) {
               return;
             }
-            // @ts-expect-error arguments
             const items = normalizeLoadResult(loadResult).data;
 
             dataController.applyMapFunction(items);

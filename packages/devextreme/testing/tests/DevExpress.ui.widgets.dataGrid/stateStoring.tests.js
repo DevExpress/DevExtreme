@@ -1774,7 +1774,7 @@ QUnit.module('State Storing for filterPanel', {
         this.clock = sinon.useFakeTimers();
         this.preventOptionChanged = true;
         this.setupDataGridModules = function(options) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'editing', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling', 'focus', 'keyboardNavigation', 'filterSync'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'editing', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling', 'focus', 'keyboardNavigation', 'filterSync', 'filterBuilder'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: $.extend({

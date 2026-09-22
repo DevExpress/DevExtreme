@@ -187,12 +187,10 @@ class DiagramFloatingPanel extends DiagramPanel {
     }
 
     return {
-      // @ts-expect-error ts-error
       animation: hasWindow() ? this._getPopupAnimation() : null,
       shading: false,
       showTitle: false,
       focusStateEnabled: false,
-      // @ts-expect-error ts-error
       container: this._getPopupContainer(),
       width: this._getPopupWidth(),
       height: this._getPopupHeight(),

@@ -42,7 +42,7 @@ export interface ColorBoxProperties extends Omit<Properties,
 | 'onEnterKey' | 'onFocusIn'
 | 'onFocusOut' | 'onInput'
 | 'onKeyDown' | 'onKeyUp' | 'onPaste'
-| 'onValueChanged' | 'validationMessagePosition'
+| 'onValueChanged' | 'validationMessagePosition' | 'dropDownOptions'
 | 'onContentReady' | 'onDisposing'
 | 'onOptionChanged' | 'onInitialized'> {
   buttonsLocation?: string;

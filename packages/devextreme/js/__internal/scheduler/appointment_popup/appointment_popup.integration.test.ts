@@ -704,8 +704,7 @@ describe('Appointment Form', () => {
 
         scheduler.showAppointmentPopup();
 
-        const $icon = $(POM.popup.subjectIcon);
-        expect($icon.css('color')).toBe('');
+        expect(POM.popup.subjectIcon.style.color).toBe('');
       });
     });
 
@@ -1060,7 +1059,7 @@ describe('Appointment Popup', () => {
     expect(POM.isPopupVisible()).toBe(false);
 
     jest.useFakeTimers();
-    POM.getAppointment('common-app').element?.click();
+    POM.getAppointment('common-app').click();
     jest.runAllTimers();
 
     POM.tooltip.getAppointmentItem()?.click();

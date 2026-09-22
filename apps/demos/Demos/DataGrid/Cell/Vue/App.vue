@@ -60,7 +60,7 @@ import ChartCell from './ChartCell.vue';
 import { weekData } from './data.ts';
 
 </script>
-<style scoped>
+<style>
 #gridContainer td {
   vertical-align: middle;
 }

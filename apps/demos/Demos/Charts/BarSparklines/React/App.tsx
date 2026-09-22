@@ -6,6 +6,7 @@ import RowTemplate from './RowTemplate.tsx';
 const months = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 const years = ['2021', '2022', '2023'];
 const monthLabel = { 'aria-label': 'Month' };
+const tableStyle = { border: 1 };
 
 const dataSource = new DataSource({
   store: new CustomStore({
@@ -30,7 +31,7 @@ function App() {
       <div id="chart-demo">
         <table
           className="demo-table"
-          style={{ border: 1 }}
+          style={tableStyle}
         >
           <tbody>
             <tr>

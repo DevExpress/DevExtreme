@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 /**
 * $name 10. Label text color
@@ -65,4 +62,3 @@ $form-field-mark-color: null !default;
   $form-field-required-color: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
   $form-field-mark-color: color.adjust($base-text-color, $lightness: 55%, $space: hsl) !default;
 }
-

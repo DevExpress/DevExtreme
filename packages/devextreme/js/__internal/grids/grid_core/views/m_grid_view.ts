@@ -11,6 +11,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getWidth } from '@js/core/utils/size';
+import { setHeight } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import * as accessibility from '@js/ui/shared/accessibility';
@@ -22,6 +23,8 @@ import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/data_controller';
+import type { DataChange } from '../data_controller/types';
+import type { DataSourceController } from '../data_source/data_source_controller';
 import modules from '../m_modules';
 import gridCoreUtils, { type SelectionRange } from '../m_utils';
 import type { RowsView } from './m_rows_view';
@@ -94,6 +97,8 @@ export class ResizingController extends modules.ViewController {
 
   public _dataController!: DataController;
 
+  private dataSourceController!: DataSourceController;
+
   protected _rowsView!: RowsView;
 
   private _columnHeadersView!: ColumnHeadersView;
@@ -118,7 +123,7 @@ export class ResizingController extends modules.ViewController {
 
   private _lastHeight: any;
 
-  protected _adaptiveColumnsController!: AdaptiveColumnsController;
+  protected adaptiveColumnsController!: AdaptiveColumnsController;
 
   private _editorFactoryController!: EditorFactory;
 
@@ -153,9 +158,10 @@ export class ResizingController extends modules.ViewController {
   public init() {
     this._prevContentMinHeight = null;
     this._dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
     this._columnHeadersView = this.getView('columnHeadersView');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this.adaptiveColumnsController = this.getController('adaptiveColumns');
     this._editorFactoryController = this.getController('editorFactory');
     this._footerView = this.getView('footerView');
     this._rowsView = this.getView('rowsView');
@@ -164,11 +170,12 @@ export class ResizingController extends modules.ViewController {
 
   private _initPostRenderHandlers() {
     if (!this._refreshSizesHandler) {
-      this._refreshSizesHandler = (e) => {
+      this._refreshSizesHandler = (change: DataChange) => {
         // @ts-expect-error
         let resizeDeferred = new Deferred<null>().resolve(null);
-        const changeType = e?.changeType;
-        const isDelayed = e?.isDelayed;
+        const changeType = change?.changeType;
+        // @ts-expect-error e.isDelayed is set for virtual scrolling with scrolling.legacyMode
+        const isDelayed = change?.isDelayed;
         const needFireContentReady = changeType
           && changeType !== 'updateSelection'
           && changeType !== 'updateFocusedRow'
@@ -178,12 +185,12 @@ export class ResizingController extends modules.ViewController {
         this._dataController.changed.remove(this._refreshSizesHandler);
 
         if (this._checkSize()) {
-          resizeDeferred = this._refreshSizes(e);
+          resizeDeferred = this._refreshSizes(change);
         }
 
         if (needFireContentReady) {
           when(resizeDeferred).done(() => {
-            this._setAriaLabel(e);
+            this._setAriaLabel(change);
             this.fireContentReadyAction();
           });
         }
@@ -253,7 +260,7 @@ export class ResizingController extends modules.ViewController {
     let labelParts: string[] = [];
 
     const columnCount = this._columnsController?._columns?.filter(({ visible }) => !!visible).length ?? 0;
-    const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
+    const totalItemsCount = Math.max(0, this.dataSourceController.totalItemsCount());
     const widgetAriaLabel = this._getWidgetAriaLabel();
     widgetStatusText = messageLocalization
       // @ts-expect-error Badly typed format method
@@ -825,7 +832,7 @@ export class ResizingController extends modules.ViewController {
 
       // IE11
       if (maxHeightHappened && !isMaxHeightApplied) {
-        $(groupElement).css('height', maxHeight);
+        setHeight($(groupElement), maxHeight);
       }
 
       if (!dataController.isLoaded()) {

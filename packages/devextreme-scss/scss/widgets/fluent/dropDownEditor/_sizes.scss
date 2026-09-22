@@ -1,10 +1,7 @@
 @use "../sizes" as *;
 
-// adduse
-
 $fluent-dropdowneditor-list-font-size: null !default;
 $fluent-dropdowneditor-list-line-height: null !default;
-
 
 @if $size == "default" {
   $fluent-dropdowneditor-list-font-size: 14px !default;

@@ -1,8 +1,5 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
-
-// adduse
 
 $radiogroup-accent-color: $base-accent !default;
 $radiogroup-accent-color-hover: $base-accent-hover !default;

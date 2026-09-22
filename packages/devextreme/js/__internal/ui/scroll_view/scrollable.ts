@@ -53,7 +53,7 @@ export interface ScrollableProperties extends DOMComponentProperties<any>, Omit<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   keyof DOMComponentProperties<any>
 > {
-  _onVisibilityChanged?: (data: unknown) => void;
+  _onVisibilityChanged?: (scrollable: unknown) => void;
   useSimulatedScrollbar?: boolean;
   useKeyboard?: boolean;
   updateManually?: boolean;

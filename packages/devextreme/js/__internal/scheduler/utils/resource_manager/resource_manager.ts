@@ -4,6 +4,7 @@ import { getResourceIndex } from '../data_accessor/appointment_resource_data_acc
 import { ResourceLoader } from '../loader/resource_loader';
 import type {
   ResourceConfig,
+  ResourceData,
 } from '../loader/types';
 import { getAppointmentColor } from './appointment_color_utils';
 import type { AppointmentResource } from './appointment_groups_utils';
@@ -12,6 +13,7 @@ import {
   getAppointmentResources,
 } from './appointment_groups_utils';
 import { groupResources } from './group_utils';
+import type { ResourceHierarchyNode } from './hierarchy_tree_utils';
 import type { GroupLeaf, GroupNode } from './types';
 
 export class ResourceManager {
@@ -58,6 +60,20 @@ export class ResourceManager {
     return this.groups
       .map((group) => this.resourceById[group])
       .filter(Boolean);
+  }
+
+  public isHierarchicalResource(resourceIndex: string): boolean {
+    return Boolean(this.resourceById[resourceIndex]?.hasHierarchy);
+  }
+
+  public getResourceHierarchyTree(resourceIndex: string): ResourceHierarchyNode[] {
+    return this.resourceById[resourceIndex]?.hierarchyTree ?? [];
+  }
+
+  public getResourceLeafItems(resourceIndex: string): ResourceData[] {
+    const resource = this.resourceById[resourceIndex];
+
+    return resource?.leafItems ?? [];
   }
 
   public async loadAppointmentsResources(

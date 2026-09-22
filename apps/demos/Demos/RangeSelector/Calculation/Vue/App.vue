@@ -71,7 +71,7 @@ const workingDaysCount = computed(() => {
   return workingDaysCounter;
 });
 </script>
-<style scoped>
+<style>
 #range-selector {
   height: 200px;
 }

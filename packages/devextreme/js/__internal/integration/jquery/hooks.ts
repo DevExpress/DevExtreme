@@ -1,8 +1,8 @@
 import { each } from '@ts/core/utils/m_iterator';
 import { isNumeric } from '@ts/core/utils/m_type';
 import { compare as compareVersion } from '@ts/core/utils/m_version';
-import registerEvent from '@ts/events/core/m_event_registrator';
-import hookTouchProps from '@ts/events/core/m_hook_touch_props';
+import registerEvent from '@ts/events/core/event_registrator';
+import hookTouchProps from '@ts/events/core/hook_touch_props';
 import { setEventFixMethod } from '@ts/events/utils/index';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';

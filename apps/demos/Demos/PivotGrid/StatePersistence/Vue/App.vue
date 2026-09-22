@@ -126,7 +126,7 @@ function onContextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
   }
 }
 </script>
-<style scoped>
+<style>
 #pivotgrid-demo > .dx-button {
   margin: 10px 0;
 }

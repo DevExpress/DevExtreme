@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 
@@ -43,11 +43,11 @@ const App = () => {
   const locales = service.getLocales();
   const payments = service.getPayments();
 
-  const changeLocale = (e: SelectBoxTypes.ValueChangedEvent) => {
+  const changeLocale = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setLocale(e.value);
     sessionStorage.setItem('locale', e.value);
     document.location.reload();
-  };
+  }, [setLocale]);
 
   return (
     <div>

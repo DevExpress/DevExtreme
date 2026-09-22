@@ -7,6 +7,17 @@ import { employees as allEmployees } from './data.ts';
 import type { Employee } from './types.ts';
 import EmployeeTemplate from './EmployeeTemplate.tsx';
 
+function TabTitle({ data, onClose }: { data: Employee; onClose: (item: Employee) => void }) {
+  const handleClose = useCallback(() => onClose(data), [onClose, data]);
+
+  return (
+    <>
+      <span>{data.FirstName} {data.LastName}</span>
+      <i className="dx-icon dx-icon-close" onClick={handleClose} />
+    </>
+  );
+}
+
 function App() {
   const [employees, setEmployees] = useState<Employee[]>(allEmployees.slice(0, 3));
   const [selectedItem, setSelectedItem] = useState<Employee>(allEmployees[0]);
@@ -35,14 +46,9 @@ function App() {
     }
   }, [employees]);
 
-  const renderTitle = useCallback((data: Employee) => (
-    <>
-      <span>
-        {data.FirstName} {data.LastName}
-      </span>
-      {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={(): void => { closeButtonHandler(data); }} />}
-    </>
-  ), [employees, closeButtonHandler]);
+  const renderTitle = useCallback((data: Employee) => employees.length >= 2
+    ? <TabTitle data={data} onClose={closeButtonHandler} />
+    : <><span>{data.FirstName} {data.LastName}</span></>, [employees.length, closeButtonHandler]);
 
   const onSelectionChanged = useCallback((args: TabPanelTypes.SelectionChangedEvent): void => {
     setSelectedItem(args.addedItems[0]);

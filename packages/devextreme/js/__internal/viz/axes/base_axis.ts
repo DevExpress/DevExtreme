@@ -31,9 +31,10 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { adjust } from '@js/core/utils/math';
 import {
-  isDefined, isFunction, isPlainObject, type,
+  isDate, isDefined, isFunction, isPlainObject, type,
 } from '@js/core/utils/type';
 import formatHelper from '@js/format_helper';
+import { multiplyInExponentialForm } from '@ts/core/utils/m_math';
 import constants from '@ts/viz/axes/axes_constants';
 import { calculateCanvasMargins, measureLabels } from '@ts/viz/axes/axes_utils';
 import createConstantLine from '@ts/viz/axes/constant_line';
@@ -69,6 +70,12 @@ const _isArray = Array.isArray;
 
 const DEFAULT_AXIS_LABEL_SPACING = 5;
 const MAX_GRID_BORDER_ADHENSION = 4;
+
+const PANNING_CORRECTION_ITERATION_COUNT = 5;
+const PANNING_CORRECTION_PRECISION = 1e-4;
+
+const ZOOM_FACTOR_PRECISION = 2;
+const ZOOM_FACTOR_MULTIPLIER = 10 ** ZOOM_FACTOR_PRECISION;
 
 const TOP = constants.top;
 const BOTTOM = constants.bottom;
@@ -313,7 +320,8 @@ function getConstantLineSharpDirection(coord, axisCanvas) {
   return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
 
-export const Axis = function (renderSettings) {
+// eslint-disable-next-line import/no-mutable-exports -- description seam for tests
+export let Axis = function (renderSettings) {
   const that = this;
 
   that._renderer = renderSettings.renderer;
@@ -1291,6 +1299,156 @@ Axis.prototype = {
       length = currentBusinessRange.maxVisible - currentBusinessRange.minVisible;
     }
     return length;
+  },
+
+  _getTickIntervalValue() {
+    const tickInterval = this.getTickInterval();
+
+    if (!isDefined(tickInterval)) {
+      return 0;
+    }
+
+    return this._options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval;
+  },
+
+  getWholeRangeBreaks() {
+    const businessRange = this._translator.getBusinessRange();
+    const { type } = this._options;
+
+    if (type === constants.discrete
+      || !isDefined(businessRange.min) || !isDefined(businessRange.max)) {
+      return [];
+    }
+
+    const interval = this._getTickIntervalValue();
+
+    return this._getBreaksForRange(businessRange.min, businessRange.max)
+      .reduce((result, scaleBreak) => {
+        const hidden = this._getHiddenDuration(scaleBreak, interval);
+        const shift = (this.calculateInterval(scaleBreak.to, scaleBreak.from) - hidden) / 2;
+
+        return hidden ? result.concat(extend({}, scaleBreak, {
+          from: this._addToValue(scaleBreak.from, shift),
+          to: this._addToValue(scaleBreak.to, -shift),
+          cumulativeWidth: 0,
+        })) : result;
+      }, []);
+  },
+
+  _getBreaksForRange(minVisible, maxVisible) {
+    const viewport = minVisible > maxVisible
+      ? { minVisible: maxVisible, maxVisible: minVisible }
+      : { minVisible, maxVisible };
+    const breaks = this._getScaleBreaks(this._options, viewport, this._series, this.isArgumentAxis);
+
+    return this._filterBreaks(breaks, viewport, this._options.breakStyle);
+  },
+
+  _getHiddenDuration(scaleBreak, tickInterval) {
+    const duration = this.calculateInterval(scaleBreak.to, scaleBreak.from);
+
+    return scaleBreak.gapSize ? duration : Math.max(duration - tickInterval, 0);
+  },
+
+  getVisualRangeLengthWithoutBreaks(range) {
+    const businessRange = range || this._translator.getBusinessRange();
+    const length = this.getVisualRangeLength(businessRange);
+    const options = this._options;
+
+    if (options.type === constants.discrete
+      || !isDefined(businessRange.minVisible) || !isDefined(businessRange.maxVisible)) {
+      return length;
+    }
+
+    const interval = this._getTickIntervalValue();
+
+    return this._getBreaksForRange(businessRange.minVisible, businessRange.maxVisible)
+      .reduce((result, scaleBreak) => result - this._getHiddenDuration(scaleBreak, interval), length);
+  },
+
+  _addToValue(value, diff) {
+    if (this._options.type === constants.logarithmic) {
+      const translator = this.getTranslator();
+
+      return translator.toValue(translator.fromValue(value) + diff);
+    }
+
+    return isDate(value) ? new Date(value.getTime() + diff) : value + diff;
+  },
+
+  adjustPannedRange(range, anchor?: 'start' | 'end') {
+    const that = this;
+    const storedParams = that._storedZoomEndParams;
+    const { type } = that._options;
+
+    if (!storedParams || type === constants.discrete) {
+      return range;
+    }
+
+    const { startRange } = storedParams;
+
+    if (!this._getBreaksForRange(range.startValue, range.endValue).length
+      && !this._getBreaksForRange(startRange.startValue, startRange.endValue).length) {
+      return range;
+    }
+
+    const isReversed = range.startValue > range.endValue;
+
+    if (isReversed) {
+      const reordered = that.adjustPannedRange({ startValue: range.endValue, endValue: range.startValue }, anchor);
+
+      return { startValue: reordered.endValue, endValue: reordered.startValue };
+    }
+
+    const targetLength = that.getVisualRangeLengthWithoutBreaks({
+      minVisible: startRange.startValue,
+      maxVisible: startRange.endValue,
+    });
+
+    if (!targetLength) {
+      return range;
+    }
+
+    const tolerance = targetLength * PANNING_CORRECTION_PRECISION;
+    const bounds = that.getZoomBounds();
+    const keepsEndValue = anchor
+      ? anchor === 'end'
+      : range.startValue > startRange.startValue || range.endValue > startRange.endValue;
+    let result = range;
+    let current = range;
+    let bestDeviation = Infinity;
+
+    for (let i = 0; i < PANNING_CORRECTION_ITERATION_COUNT; i += 1) {
+      const delta = that.getVisualRangeLengthWithoutBreaks({
+        minVisible: current.startValue,
+        maxVisible: current.endValue,
+      }) - targetLength;
+      const deviation = Math.abs(delta);
+
+      if (deviation < bestDeviation) {
+        bestDeviation = deviation;
+        result = current;
+      }
+
+      if (deviation <= tolerance) {
+        break;
+      }
+
+      const shifted = keepsEndValue
+        ? { startValue: that._addToValue(current.startValue, delta), endValue: current.endValue }
+        : { startValue: current.startValue, endValue: that._addToValue(current.endValue, -delta) };
+
+      current = {
+        startValue: shifted.startValue < bounds.startValue ? bounds.startValue : shifted.startValue,
+        endValue: shifted.endValue > bounds.endValue ? bounds.endValue : shifted.endValue,
+      };
+
+      if (current.startValue >= current.endValue) {
+        break;
+      }
+    }
+
+    return result;
   },
 
   getVisualRangeCenter(range, useMerge) {
@@ -2467,9 +2625,17 @@ Axis.prototype = {
       };
       const typeIsNotChanged = that.getOptions().type === that._storedZoomEndParams.type;
       const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange, false)) : NaN;
-      const zoomFactor = typeIsNotChanged
-      // @ts-expect-error
-        ? +`${Math.round(`${that.getVisualRangeLength(previousBusinessRange) / (that.getVisualRangeLength() || 1)}e+2`)}e-2` : NaN;
+      const calcZoomFactor = (): number => {
+        if (action === 'pan') {
+          return 1;
+        }
+
+        const currentLength = that.getVisualRangeLength() || 1;
+        const ratio = that.getVisualRangeLength(previousBusinessRange) / currentLength;
+
+        return Math.round(multiplyInExponentialForm(ratio, ZOOM_FACTOR_PRECISION)) / ZOOM_FACTOR_MULTIPLIER;
+      };
+      const zoomFactor = typeIsNotChanged ? calcZoomFactor() : NaN;
       const zoomEndEvent = that._getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
       zoomEndEvent.cancel = that.checkZoomingLowerLimitOvercome(zoomFactor === 1 ? 'pan' : 'zoom', zoomFactor).stopInteraction;
@@ -2839,3 +3005,9 @@ Axis.prototype = {
   shift: _noop,
   /// #ENDDEBUG
 };
+
+/// #DEBUG
+export function DEBUG_set_Axis(value: typeof Axis): void {
+  Axis = value;
+}
+/// #ENDDEBUG

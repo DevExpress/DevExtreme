@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`HeaderFilter View integration should render popup with list by default 1`] = `
 <div
@@ -377,6 +377,12 @@ exports[`HeaderFilter View integration should render popup with list by default 
             class="dx-overlay-content"
             style="width: 222px; height: 90px;"
           />
+        </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 5
         </div>
       </div>
     </div>
@@ -856,6 +862,12 @@ exports[`HeaderFilter View integration should render popup with tree list if dat
             class="dx-overlay-content"
             style="width: 222px; height: 90px;"
           />
+        </div>
+        <div
+          class="dx-screen-reader-only"
+          role="status"
+        >
+          Items: 5
         </div>
       </div>
     </div>

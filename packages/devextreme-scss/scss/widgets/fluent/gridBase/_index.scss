@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
@@ -21,21 +20,19 @@
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
 @use "../typography/sizes" as *;
-
-// adduse
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";
-@use 'variables' as *;
-@forward 'variables';
-@use 'layout/cell' as *;
+@use "variables" as *;
+@forward "variables";
+@use "layout/cell" as *;
 @use "layout/aiChat" as *;
 
-$fluent-grid-base-border-hidden: 1px solid transparent;
-$fluent-grid-base-row-border: 1px solid transparent;
-$fluent-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
-$fluent-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
-$fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-height;
+$fluent-grid-base-border-hidden: 1px solid transparent !default;
+$fluent-grid-base-row-border: 1px solid transparent !default;
+$fluent-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color !default;
+$fluent-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color !default;
+$fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-height !default;
 
 @mixin grid-base($widget-name) {
   @include fluent-grid-base-cell($widget-name);
@@ -596,7 +593,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     touch-action: pinch-zoom;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;

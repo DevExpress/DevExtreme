@@ -134,7 +134,7 @@ describe.each([
         });
 
         jest.useFakeTimers();
-        POM.getAppointments()[0].element.click();
+        POM.getAppointments()[0].click();
         jest.runAllTimers();
 
         if (method === 'delete key') {
@@ -160,7 +160,7 @@ describe.each([
         });
 
         jest.useFakeTimers();
-        POM.getAppointments()[0].element.click();
+        POM.getAppointments()[0].click();
         jest.runAllTimers();
 
         if (method === 'delete key') {
@@ -220,7 +220,7 @@ describe.each([
         });
 
         jest.useFakeTimers();
-        POM.getAppointment('Recurring Apt2').element?.click();
+        POM.getAppointment('Recurring Apt2').click();
         jest.runAllTimers();
 
         POM.tooltip.getDeleteButton().click();
@@ -243,7 +243,7 @@ describe.each([
         });
 
         jest.useFakeTimers();
-        POM.getAppointment('Recurring Apt2').element?.click();
+        POM.getAppointment('Recurring Apt2').click();
         jest.runAllTimers();
 
         POM.tooltip.getDeleteButton().click();
@@ -265,7 +265,7 @@ describe.each([
         });
 
         jest.useFakeTimers();
-        POM.getAppointments()[0].element.click();
+        POM.getAppointments()[0].click();
         jest.runAllTimers();
 
         POM.tooltip.getDeleteButton().click();

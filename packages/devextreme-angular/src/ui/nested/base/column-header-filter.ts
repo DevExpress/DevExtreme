@@ -5,7 +5,6 @@ import {
     Component,
 } from '@angular/core';
 
-import type { SearchMode } from 'devextreme/common';
 import type { ColumnHeaderFilterSearchConfig, HeaderFilterGroupInterval, HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
 import type { Store } from 'devextreme/data';
 import type { Options as DataSourceOptions } from 'devextreme/data/data_source';
@@ -15,13 +14,6 @@ import type { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
     template: ''
 })
 export abstract class DxoColumnHeaderFilter extends NestedOption {
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
     }
@@ -57,25 +49,11 @@ export abstract class DxoColumnHeaderFilter extends NestedOption {
         this._setOption('search', value);
     }
 
-    get searchMode(): SearchMode {
-        return this._getOption('searchMode');
-    }
-    set searchMode(value: SearchMode) {
-        this._setOption('searchMode', value);
-    }
-
     get width(): number | string | undefined {
         return this._getOption('width');
     }
     set width(value: number | string | undefined) {
         this._setOption('width', value);
-    }
-
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
     }
 
     get texts(): HeaderFilterTexts | dxGanttHeaderFilterTexts | { cancel?: string, emptyValue?: string, ok?: string } {

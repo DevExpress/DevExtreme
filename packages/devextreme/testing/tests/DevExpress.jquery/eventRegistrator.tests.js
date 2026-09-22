@@ -2,7 +2,6 @@ import $ from 'jquery';
 import registerEvent from 'common/core/events/core/event_registrator';
 import * as typeUtils from 'core/utils/type';
 import 'integration/jquery';
-import Class from 'core/class';
 
 QUnit.testStart(function() {
     const markup =
@@ -15,8 +14,14 @@ QUnit.testStart(function() {
 
 QUnit.module.if('event registration', !QUnit.urlParams['nojquery'], {
     beforeEach: function() {
-        const impl = Class.inherit({
-            ctor: function() {
+        class TestEventImplementer {
+            noBubble = false;
+
+            delegateType = false;
+
+            bindType = false;
+
+            constructor() {
                 const impl = this;
 
                 impl.LOG = {};
@@ -37,16 +42,10 @@ QUnit.module.if('event registration', !QUnit.urlParams['nojquery'], {
                         };
                     };
                 });
-            },
+            }
+        }
 
-            noBubble: false,
-
-            delegateType: false,
-
-            bindType: false
-        });
-
-        this.testEventImplementer = new impl();
+        this.testEventImplementer = new TestEventImplementer();
 
         registerEvent('dxtestevent', this.testEventImplementer);
         this.element = $('#element');

@@ -19,6 +19,7 @@ import ValidationEngine from '@js/ui/validation_engine';
 import ValidationMessage from '@js/ui/validation_message';
 import domUtils from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
@@ -43,10 +44,9 @@ export type UnresolvedEvents = 'onContentReady' | 'onDisposing' | 'onInitialized
 export type ValueChangedEvent<TNativeEvent = Event> = NativeEventInfo<Editor, TNativeEvent>
   & ValueChangedInfo;
 
-// NOTE: internal (not present in the public options) members of an editor.
-// Every internal editor properties interface inherits this bundle, while the public
-// members always come from the component-parametrized public options interface.
 export interface EditorInternalProperties {
+  integrationOptions?: Record<string, unknown>;
+  onKeyboardHandled?: WidgetProperties['onKeyboardHandled'];
   validationMessageOffset?: { h: number; v: number };
   validationBoundary?: dxElementWrapper;
   validationTooltipOptions?: Record<string, unknown>;
@@ -92,15 +92,10 @@ class Editor<
     return instance instanceof Editor;
   }
 
-  ctor(element: Element, options: TProperties): void {
-    this.showValidationMessageTimeout = undefined;
-    this.validationRequest = Callbacks();
-
-    super.ctor(element, options);
-  }
-
   _createElement(element: Element): void {
     super._createElement(element);
+    this.showValidationMessageTimeout = undefined;
+    this.validationRequest = Callbacks();
     const $element = this.$element();
     if ($element) {
       data($element[0], VALIDATION_TARGET, this);

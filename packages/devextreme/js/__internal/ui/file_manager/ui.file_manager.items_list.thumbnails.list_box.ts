@@ -19,6 +19,7 @@ import {
   getOuterWidth,
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import type { SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import ScrollView from '@js/ui/scroll_view';
 import type { CollectionWidgetEditProperties, SelectOption } from '@ts/ui/collection/collection_widget.edit';
@@ -151,7 +152,12 @@ class ListBoxLayoutUtils {
 }
 
 interface FileManagerThumbnailListBoxOptions extends
-  CollectionWidgetEditProperties<FileManagerThumbnailListBox> {
+  Omit<CollectionWidgetEditProperties<FileManagerThumbnailListBox>, 'onSelectionChanged'> {
+  onSelectionChanged?: (e: SelectionChangeInfo & {
+    addedItemKeys?: unknown[];
+    removedItemKeys?: unknown[];
+  }) => void;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   itemThumbnailTemplate?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

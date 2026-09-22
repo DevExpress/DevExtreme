@@ -42,7 +42,6 @@ import type {
   SubmenuShowingEvent,
   SubmenuShownEvent,
 } from '@js/ui/menu';
-import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
@@ -51,6 +50,7 @@ import type {
 } from '@ts/ui/context_menu/menu_base';
 import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
+import type { OverlayProperties } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 import { SCROLLABLE_CLASS } from '@ts/ui/scroll_view/consts';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -131,7 +131,7 @@ export interface ContextMenuProperties<TItem extends Item = Item> extends
   hideOnParentScroll?: boolean;
   visualContainer?: string | Element | Window | null;
   overlayContainer?: string | Element | null;
-  boundaryOffset?: PositionConfig['boundaryOffset'];
+  boundaryOffset?: PositionConfig['boundaryOffset'] | { h?: number; v?: number };
   onSubmenuCreated?: ((e: SubmenuCreatedEvent) => void) | null;
   onLeftFirstItem?: (($item?: dxElementWrapper) => void) | null;
   onLeftLastItem?: (($item?: dxElementWrapper) => void) | null;
@@ -784,10 +784,9 @@ class ContextMenu<
   }
 
   _initScrollable($container: dxElementWrapper): void {
-    this._createComponent($container, Scrollable, {
+    const scrollable: Scrollable = this._createComponent($container, Scrollable, {
       useKeyboard: false,
-      // @ts-expect-error ts-error
-      _onVisibilityChanged: (scrollable: Scrollable) => {
+      _onVisibilityChanged: (): void => {
         scrollable.scrollTo(0);
       },
     });
@@ -1027,7 +1026,7 @@ class ContextMenu<
     this._updateSelectedItemOnClick(actionArgs);
 
     // T238943. Give the workaround with e.cancel and remove this hack
-    const notCloseMenuOnItemClick = itemData && itemData.closeMenuOnClick === false;
+    const notCloseMenuOnItemClick = itemData?.closeMenuOnClick === false;
     if (!itemData || itemData.disabled || notCloseMenuOnItemClick) {
       return;
     }

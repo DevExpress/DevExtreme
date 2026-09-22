@@ -100,7 +100,6 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
         ): void => {
           this._fireAction(args.itemData);
         },
-        // @ts-expect-error ts-error
         integrationOptions: {},
       });
       $menu.appendTo(this._list.$element());

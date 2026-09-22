@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../button/colors" as *;
-
-// adduse
 
 /**
 * $name 20. Item border color
@@ -257,4 +254,3 @@ $list-item-chevron-icon-color: $base-icon-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
 }
-

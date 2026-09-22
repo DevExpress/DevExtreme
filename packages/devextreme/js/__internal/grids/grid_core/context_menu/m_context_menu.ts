@@ -120,7 +120,6 @@ export class ContextMenuView extends modules.View {
           params.itemData?.onItemClick?.(params);
         },
         cssClass: this.getWidgetContainerClass(),
-        // @ts-expect-error
         target: this.component.$element(),
       },
     );

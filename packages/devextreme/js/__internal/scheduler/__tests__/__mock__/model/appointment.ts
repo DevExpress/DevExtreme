@@ -5,6 +5,7 @@ const EMPTY_POSITION = {
 type Position = typeof EMPTY_POSITION;
 export interface AppointmentModel<T = HTMLDivElement> {
   element: T;
+  click: () => void;
   getText: () => string;
   getDisplayDate: () => string;
   getAriaLabel: () => string;
@@ -15,6 +16,19 @@ export interface AppointmentModel<T = HTMLDivElement> {
   isFocused: () => boolean;
   isDragSource: () => boolean;
 }
+
+// Coordinates must be non-zero: isFakeClickEvent treats an all-zero click as keyboard-initiated.
+const clickWithMouse = (element: HTMLDivElement | null): void => {
+  element?.dispatchEvent(new MouseEvent('click', {
+    bubbles: true,
+    cancelable: true,
+    view: window,
+    screenX: 1,
+    screenY: 1,
+    clientX: 1,
+    clientY: 1,
+  }));
+};
 
 const getColor = (appointment: HTMLDivElement): string => appointment.style.backgroundColor;
 const getAgendaColor = (appointment: HTMLDivElement): string => {
@@ -45,6 +59,7 @@ export const createAppointmentModel = <T extends HTMLDivElement | null>(
   element: T,
 ): AppointmentModel<T> => ({
   element,
+  click: () => clickWithMouse(element),
   getText: () => getText(element),
   getDisplayDate: () => getDisplayDate(element),
   getAriaLabel: () => element?.getAttribute('aria-label') ?? '',

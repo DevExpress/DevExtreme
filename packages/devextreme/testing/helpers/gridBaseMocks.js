@@ -1,6 +1,96 @@
 module.exports = function($, gridCore, columnResizingReordering, domUtils, commonUtils, typeUtils, ArrayStore, nameWidget) {
     const exports = {};
 
+    exports.MockDataSourceAdapter = function(options) {
+        // Loads read options.items: the stores tests pass in options.store are write-only spies.
+        const itemsStore = function() {
+            return new ArrayStore(options.items);
+        };
+
+        const loadCustomResult = (loadOptions) => {
+            const d = $.Deferred();
+
+            itemsStore().load(loadOptions)
+                .done((data, extra) => {
+                    d.resolve({ data: data, extra: extra });
+                })
+                .fail(d.reject);
+
+            return d;
+        };
+
+        return {
+            _dataSource: options.dataSource,
+            beginLoading: function() {
+            },
+            endLoading: function() {
+            },
+            remoteOperations: function() {
+                return {};
+            },
+            loadOptions: function() {
+                return {};
+            },
+            key: function() {
+                return options.key;
+            },
+            isLoading: function() {
+                return false;
+            },
+            lastLoadOptions: function() {
+                return {};
+            },
+            operationTypes: function() {
+                return undefined;
+            },
+            select: function() {
+                return undefined;
+            },
+            getDataIndexGetter: function() {
+                return undefined;
+            },
+            getCachedStoreData: function() {
+                return undefined;
+            },
+            loadingOperationTypes: function() {
+                return undefined;
+            },
+            hasKnownLastPage: function() {
+                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
+            },
+            totalItemsCount: function() {
+                return options.totalItemsCount;
+            },
+            totalCount: function() {
+                return options.totalCount || 0;
+            },
+            pageCount: function() {
+                return options.pageCount;
+            },
+            dispose: function() {
+            },
+            store: function() {
+                return options.store;
+            },
+            push: function() {
+            },
+            pushed: $.Callbacks(),
+            load: function(loadOptions) {
+                return itemsStore().load(loadOptions);
+            },
+            customLoader: {
+                load: loadCustomResult,
+                loadFromStore: loadCustomResult,
+                isLoading: function() {
+                    return false;
+                },
+                isLoadingAll: function() {
+                    return false;
+                }
+            }
+        };
+    };
+
     exports.MockDataController = function(options) {
 
         if(!typeUtils.isDefined(options.itemsCount)) {
@@ -31,32 +121,13 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         }
 
         return {
-            _applyFilter: function() {
+            applyFilter: function() {
                 this._isFilterApplied = true;
             },
 
             changedArgs: [],
 
-            dataSource: function() {
-                return {
-                    beginLoading: function() {
-                    },
-                    endLoading: function() {
-                    },
-                    remoteOperations: function() {
-                        return {};
-                    },
-                    loadOptions: function() {
-                        return {};
-                    },
-                    store: function() {
-                        return new ArrayStore(options.items);
-                    },
-                    load: function(options) {
-                        return this.store().load(options);
-                    }
-                };
-            },
+            mockOptions: options,
 
             pageSize: function(value) {
                 if(value === undefined) {
@@ -71,21 +142,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return typeUtils.isDefined(options.pageSizes) ? options.pageSizes : [];
             },
 
-            hasKnownLastPage: function() {
-                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
-            },
-
             updatePagesCount: function(count) {
                 options.pageCount = count;
                 this.changed.fire();
-            },
-
-            pageCount: function() {
-                return options.pageCount;
-            },
-
-            totalCount: function() {
-                return options.totalCount || 0;
             },
 
             pageIndex: function(index) {
@@ -123,10 +182,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     changeType: 'refresh',
                     items: options.items
                 });
-            },
-
-            store: function() {
-                return options.store;
             },
 
             insertItems: function(insertingItems) {
@@ -170,10 +225,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             itemsCount: function() {
                 return options.itemsCount;
-            },
-
-            totalItemsCount: function() {
-                return options.totalItemsCount;
             },
 
             isLoading: function() {
@@ -236,24 +287,20 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getCombinedFilter: commonUtils.noop,
 
+            getCombinedFilterWithExcludedColumn: commonUtils.noop,
+
             getRowIndexByKey: function(key) {
                 return gridCore.getIndexByKey(key, options.items);
-            },
-
-            loadingOperationTypes: function() {
-                return {};
             },
 
             skipProcessingPagingChange: commonUtils.noop,
             changed: $.Callbacks(),
             loadingChanged: $.Callbacks(),
+            dataErrorOccurred: $.Callbacks('stopOnFalse'),
             pageChanged: $.Callbacks(),
             dataSourceChanged: $.Callbacks(),
-            pushed: $.Callbacks(),
+            rowIndicesChanged: $.Callbacks(),
             fireError: function() { },
-            getMaxRowIndex: function() {
-                this.items().length - 1;
-            },
             loadViewport: commonUtils.noop,
             updateViewport: commonUtils.noop,
             getScrollingTimeout: function() {
@@ -641,7 +688,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return visibleGroupColumns;
             },
 
-            isDataSourceApplied: function() {
+            isDataSourceAdapterApplied: function() {
                 return true;
             },
 
@@ -805,6 +852,21 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             cancelAll: commonUtils.noop,
 
+            loadOptions: function() {
+                return {};
+            },
+            beginLoading: commonUtils.noop,
+            endLoading: commonUtils.noop,
+            key: function() {
+                return options.key;
+            },
+            select: function() {
+                return options.select;
+            },
+            cancel: function() {
+                return false;
+            },
+
             on(eventName, eventHandler) {
                 this[eventName].add(eventHandler);
             },
@@ -952,11 +1014,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         _subscribeToEvents(rootElement) { }
     };
 
+    // The dataSource and filter controllers are leaves that the data controller resolves
+    // in init(), so they are always included rather than listed by every caller.
+    const ALWAYS_INCLUDED_MODULES = ['dataSource', 'filter'];
+
     exports['setup' + nameWidget + 'Modules'] = function(that, moduleNames, options) {
         const modules = [];
 
         $.each(gridCore.modules, function() {
-            if($.inArray(this.name, moduleNames) !== -1) {
+            if($.inArray(this.name, moduleNames) !== -1 || $.inArray(this.name, ALWAYS_INCLUDED_MODULES) !== -1) {
                 modules.push(this);
             }
         });
@@ -1165,8 +1231,36 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         };
 
 
+        // processModules() bound the widget's public methods to the controllers it built. A
+        // `controllers` override swaps those out afterwards, leaving the widget calling into an
+        // orphan that never gets init()ed. Re-point each public method the replacement implements.
+        const replacedControllers = [];
+        options && options.controllers && $.each(options.controllers, function(name, replacement) {
+            const original = that._controllers[name];
+            if(original && replacement && original !== replacement && original.publicMethods) {
+                replacedControllers.push({ original: original, replacement: replacement });
+            }
+        });
+
         options && options.controllers && $.extend(that._controllers, options.controllers);
         options && options.views && $.extend(that._views, options.views);
+
+        $.each(replacedControllers, function(_, pair) {
+            $.each(pair.original.publicMethods(), function(__, methodName) {
+                if(typeof pair.replacement[methodName] === 'function') {
+                    that[methodName] = function() {
+                        return pair.replacement[methodName].apply(pair.replacement, arguments);
+                    };
+                }
+            });
+        });
+
+        const mockedDataController = options && options.controllers && options.controllers.data;
+        if(mockedDataController && mockedDataController.mockOptions && that._controllers.dataSource) {
+            that._controllers.dataSource.adapter = new exports.MockDataSourceAdapter(
+                mockedDataController.mockOptions
+            );
+        }
 
         $.each(that._controllers, function(name) {
             that[name + 'Controller'] = this;

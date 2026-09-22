@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "../../../colors" as *;
 @use "../../../button/colors" as *;
 @use "../../../../base/icon_fonts" as *;
 @use "../../../../base/tabs";
@@ -7,9 +6,6 @@
 @use "../../variables/colors" as *;
 @use "../../variables/borders" as *;
 @use "../../mixins" as *;
-
-// adduse
-
 
 .dx-tab {
   gap: $generic-tabs-item-gap;

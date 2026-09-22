@@ -1,85 +1,107 @@
-/* eslint-disable no-self-compare */
-/* eslint-disable prefer-rest-params */
-/* eslint-disable prefer-spread */
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable no-continue */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
-/* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
-
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import formatHelper from '@js/format_helper';
+import type DOMComponent from '@ts/core/widget/dom_component';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
+import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugin as loadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
-import BaseWidget from '@ts/viz/core/m_base_widget';
 import { plugin as titlePlugin } from '@ts/viz/core/title';
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
-import { getAppropriateFormat as _getAppropriateFormat } from '@ts/viz/core/utils';
+import { getAppropriateFormat } from '@ts/viz/core/utils';
 import themeManagerModule from '@ts/viz/gauges/theme_manager';
+import type { TrackerParameters } from '@ts/viz/gauges/tracker';
 import Tracker from '@ts/viz/gauges/tracker';
 import { Translator1D } from '@ts/viz/translators/translator1d';
 
-const _Number = Number;
-const _extend = extend;
+const { format } = formatHelper;
 
-const _format = formatHelper.format;
-export const BaseGauge = BaseWidget.inherit({
-  _rootClassPrefix: 'dxg',
+export interface GaugeAnimationSettings {
+  duration: number;
+  easing: ThemeValue;
+  step?: (pos: number) => void;
+  complete?: () => void;
+}
 
-  _themeSection: 'gauge',
+export interface Rect {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
 
-  _titleBBoxCache: null,
+export interface GaugeFormatOptions {
+  format?: ThemeValue;
+  customizeText?: (this: ThemeValue, formatObject: ThemeValue) => ThemeValue;
+}
 
-  _createThemeManager() {
+export abstract class BaseGauge extends BaseWidget {
+  static addPlugin: (plugin: ThemeValue) => void;
+
+  static getInstance: typeof DOMComponent.getInstance;
+
+  _valueChangingLocker!: number;
+
+  _translator;
+
+  _tracker;
+
+  _innerRect!: Rect;
+
+  _area;
+
+  _isValidDomain?: boolean;
+
+  _animationSettings!: GaugeAnimationSettings | null;
+
+  _containerBackgroundColor;
+
+  _defaultFormatOptions;
+
+  _noAnimation?: boolean;
+
+  _resizing?: boolean;
+
+  _titleBBoxCache: ThemeValue;
+
+  _createThemeManager(): ThemeValue {
     return new themeManagerModule.ThemeManager(this._getThemeManagerOptions());
-  },
+  }
 
-  _initCore() {
-    const that = this;
-    const root = that._renderer.root;
+  _initCore(): void {
+    const { root } = this._renderer;
 
-    that._valueChangingLocker = 0;
-    that._translator = that._factory.createTranslator();
+    this._valueChangingLocker = 0;
+    this._translator = this._factory.createTranslator();
 
-    that._tracker = that._factory.createTracker({ renderer: that._renderer, container: root });
+    this._tracker = this._factory.createTracker({ renderer: this._renderer, container: root });
 
-    that._setTrackerCallbacks();
-  },
+    this._setTrackerCallbacks();
+  }
 
-  _beginValueChanging() {
+  _beginValueChanging(): void {
     this._resetIsReady();
     this._onBeginUpdate();
-    ++this._valueChangingLocker;
-  },
+    this._valueChangingLocker += 1;
+  }
 
-  _endValueChanging() {
-    if (--this._valueChangingLocker === 0) {
+  _endValueChanging(): void {
+    this._valueChangingLocker -= 1;
+    if (this._valueChangingLocker === 0) {
       this._drawn();
     }
-  },
+  }
 
-  _setTrackerCallbacks() {
-    const that = this;
-    const renderer = that._renderer;
-    const tooltip = that._tooltip;
+  _setTrackerCallbacks(): void {
+    const renderer = this._renderer;
+    const tooltip = this._tooltip;
 
-    that._tracker.setCallbacks({
-      'tooltip-show': function (target, info, callback) {
+    this._tracker.setCallbacks({
+      'tooltip-show': (target: ThemeValue, info: ThemeValue, callback: ThemeValue): ThemeValue => {
         const tooltipParameters = target.getTooltipParameters();
         const offset = renderer.getRootOffset();
-        const formatObject = _extend({
+        const formatObject = extend({
           value: tooltipParameters.value,
           valueText: tooltip.formatValue(tooltipParameters.value),
           color: tooltipParameters.color,
@@ -91,111 +113,182 @@ export const BaseGauge = BaseWidget.inherit({
           offset: tooltipParameters.offset,
         }, { target: info }, undefined, callback);
       },
-      'tooltip-hide': function () {
-        return tooltip.hide();
-      },
+      'tooltip-hide': (): ThemeValue => tooltip.hide(),
     });
-  },
+  }
 
-  _dispose() {
+  _dispose(...args: unknown[]): void {
     this._cleanCore();
-    this.callBase.apply(this, arguments);
-  },
+    super._dispose(...args);
+  }
 
-  _disposeCore() {
-    const that = this;
-    that._themeManager.dispose();
-    that._tracker.dispose();
+  _disposeCore(): void {
+    this._themeManager.dispose();
+    this._tracker.dispose();
 
-    that._translator = that._tracker = null;
-  },
+    this._tracker = null;
+    this._translator = null;
+  }
 
-  _cleanCore() {
+  _cleanCore(): void {
     this._tracker.deactivate();
     this._noAnimation = false;
     this._cleanContent();
-  },
+  }
 
-  _renderCore() {
-    const that = this;
-    if (!that._isValidDomain) return;
+  _renderCore(): void {
+    if (!this._isValidDomain) return;
 
-    that._renderContent();
-    that._renderGraphicObjects();
-    that._tracker.setTooltipState(that._tooltip.isEnabled());
-    that._tracker.activate();
-    that._noAnimation = false;
+    this._renderContent();
+    this._renderGraphicObjects();
+    this._tracker.setTooltipState(this._tooltip.isEnabled());
+    this._tracker.activate();
+    this._noAnimation = false;
     /// #DEBUG
-    that._debug_rendered && that._debug_rendered();
+    if (this._debug_rendered) {
+      this._debug_rendered();
+    }
     /// #ENDDEBUG
-  },
+  }
 
-  _applyChanges() {
-    this.callBase.apply(this, arguments);
-    this._resizing = this._noAnimation = false;
-  },
+  _applyChanges(...args: unknown[]): void {
+    super._applyChanges(...args);
+    this._noAnimation = false;
+    this._resizing = false;
+  }
 
-  _setContentSize() {
-    const that = this;
-    that._resizing = that._noAnimation = that._changes.count() === 2;
-    that.callBase.apply(that, arguments);
-  },
+  _setContentSize(...args: unknown[]): void {
+    this._noAnimation = this._changes.count() === 2;
+    this._resizing = this._noAnimation;
+    super._setContentSize(...args);
+  }
 
-  _getChangesRequireCoreUpdate() {
+  _getChangesRequireCoreUpdate(): string[] {
     return ['DOMAIN', 'MOSTLY_TOTAL', 'EXPORT'];
-  },
+  }
 
-  _isTitleBBoxChanged() {
+  _isTitleBBoxChanged(): boolean {
     const titleBBox = this._title.getLayoutOptions();
     const hasTitleHeightChanged = titleBBox.height !== this._titleBBoxCache?.height;
     const hasTitleYChanged = titleBBox.y !== this._titleBBoxCache?.y;
-    const hasVerticalAlignmentChanged = titleBBox.verticalAlignment !== this._titleBBoxCache?.verticalAlignment;
+    const hasVerticalAlignmentChanged = titleBBox.verticalAlignment
+      !== this._titleBBoxCache?.verticalAlignment;
 
     this._titleBBoxCache = null;
 
     return hasTitleHeightChanged || hasTitleYChanged || hasVerticalAlignmentChanged;
-  },
+  }
 
-  _forceCoreUpdate() {
+  _forceCoreUpdate(): boolean {
     const isTriggeredByTitleOnly = this._changes.has('TITLE')
-            && !this._getChangesRequireCoreUpdate().some((change) => this._changes.has(change));
+      && !this._getChangesRequireCoreUpdate().some((change) => this._changes.has(change));
 
     if (isTriggeredByTitleOnly) {
       return this._isTitleBBoxChanged();
     }
 
     return true;
-  },
+  }
 
-  _applySize(rect) {
-    const that = this;
+  _applySize(rect: number[]): number[] {
     /// #DEBUG
-    that._DEBUG_rootRect = rect;
+    this._DEBUG_rootRect = rect;
     /// #ENDDEBUG
-    that._innerRect = {
+    this._innerRect = {
       left: rect[0], top: rect[1], right: rect[2], bottom: rect[3],
     };
-    // If loading indicator is shown it is got hidden at the end of "_renderCore" - during "_drawn". Then "loadingIndicator" option is changed.
-    // It causes another "_setContentSize" execution (inside of the first one). Layout backwards during inner "_setContentSize" and clears its cache and
-    // then backwards again during outer "_setContentSize" when "_cache" is null - so it fails.
+    // If loading indicator is shown it is got hidden at the end of "_renderCore" - during "_drawn".
+    // Then "loadingIndicator" option is changed.
+    // It causes another "_setContentSize" execution (inside of the first one). Layout backwards
+    // during inner "_setContentSize" and clears its cache and then backwards again during outer
+    // "_setContentSize" when "_cache" is null - so it fails.
     // The following code dirtily preserves layout cache for the outer backward.
-    // The appropriate solution is to remove heavy rendering from "_applySize" - it should be done later during some other change processing.
-    // It would be even better to somehow defer any inside option changes - so they all are applied after all changes are processed.
-    const layoutCache = that._layout._cache;
+    // The appropriate solution is to remove heavy rendering from "_applySize" - it should be done
+    // later during some other change processing.
+    // It would be even better to somehow defer any inside option changes - so they all are applied
+    // after all changes are processed.
+    const layoutCache = this._layout._cache;
 
-    if (that._forceCoreUpdate()) {
-      that._cleanCore();
-      that._renderCore();
+    if (this._forceCoreUpdate()) {
+      this._cleanCore();
+      this._renderCore();
     }
 
-    that._layout._cache = that._layout._cache || layoutCache;
-    return [rect[0], that._innerRect.top, rect[2], that._innerRect.bottom];
-  },
+    this._layout._cache = this._layout._cache || layoutCache;
+    return [rect[0], this._innerRect.top, rect[2], this._innerRect.bottom];
+  }
 
+  _change_DOMAIN(): void {
+    this._setupDomain();
+  }
+
+  _change_MOSTLY_TOTAL(): void {
+    this._applyMostlyTotalChange();
+  }
+
+  _setupDomain(): void {
+    this._setupDomainCore();
+    // T130599
+    this._isValidDomain = isFinite(
+      1 / (this._translator.getDomain()[1] - this._translator.getDomain()[0]),
+    );
+    if (!this._isValidDomain) {
+      this._incidentOccurred('W2301');
+    }
+    this._change(['MOSTLY_TOTAL']);
+  }
+
+  _applyMostlyTotalChange(): void {
+    this._setupCodomain();
+    this._setupAnimationSettings();
+    this._setupDefaultFormat();
+    this._change(['LAYOUT']);
+  }
+
+  _setupAnimationSettings(): void {
+    let option = this.option('animation');
+    this._animationSettings = null;
+    if (option === undefined || option) {
+      option = extend({
+        enabled: true,
+        duration: 1000,
+        easing: 'easeOutCubic',
+      }, option);
+      if (option.enabled && option.duration > 0) {
+        this._animationSettings = { duration: Number(option.duration), easing: option.easing };
+      }
+    }
+    //  It is better to place it here than to create separate function for one line of code
+    this._containerBackgroundColor = this.option('containerBackgroundColor')
+      || this._themeManager.theme().containerBackgroundColor;
+  }
+
+  _setupDefaultFormat(): void {
+    const domain = this._translator.getDomain();
+    this._defaultFormatOptions = getAppropriateFormat(
+      domain[0],
+      domain[1],
+      this._getApproximateScreenRange(),
+    );
+  }
+
+  abstract _setupDomainCore(): void;
+
+  abstract _cleanContent(): void;
+
+  abstract _renderContent(): void;
+
+  abstract _setupCodomain(): void;
+
+  abstract _getApproximateScreenRange(): number;
+}
+
+setupWidgetPrototype(BaseGauge, {
+  _rootClassPrefix: 'dxg',
+  _themeSection: 'gauge',
+  _titleBBoxCache: null,
   _initialChanges: ['DOMAIN'],
-
   _themeDependentChanges: ['DOMAIN'],
-
   _optionChangesMap: {
     subtitle: 'MOSTLY_TOTAL',
     indicator: 'MOSTLY_TOTAL',
@@ -204,129 +297,55 @@ export const BaseGauge = BaseWidget.inherit({
     startValue: 'DOMAIN',
     endValue: 'DOMAIN',
   },
-
   _optionChangesOrder: ['DOMAIN', 'MOSTLY_TOTAL'],
-
-  _change_DOMAIN() {
-    this._setupDomain();
-  },
-
-  _change_MOSTLY_TOTAL() {
-    this._applyMostlyTotalChange();
-  },
-
   _updateExtraElements: noop,
-
-  _setupDomain() {
-    const that = this;
-    that._setupDomainCore();
-    // T130599
-    that._isValidDomain = isFinite(1 / (that._translator.getDomain()[1] - that._translator.getDomain()[0]));
-    if (!that._isValidDomain) {
-      that._incidentOccurred('W2301');
-    }
-    that._change(['MOSTLY_TOTAL']);
-  },
-
-  _applyMostlyTotalChange() {
-    const that = this;
-    that._setupCodomain();
-    that._setupAnimationSettings();
-    that._setupDefaultFormat();
-    that._change(['LAYOUT']);
-  },
-
-  _setupAnimationSettings() {
-    const that = this;
-    let option = that.option('animation');
-    that._animationSettings = null;
-    if (option === undefined || option) {
-      option = _extend({
-        enabled: true,
-        duration: 1000,
-        easing: 'easeOutCubic',
-      }, option);
-      if (option.enabled && option.duration > 0) {
-        that._animationSettings = { duration: _Number(option.duration), easing: option.easing };
-      }
-    }
-    //  It is better to place it here than to create separate function for one line of code
-    that._containerBackgroundColor = that.option('containerBackgroundColor') || that._themeManager.theme().containerBackgroundColor;
-  },
-
-  _setupDefaultFormat() {
-    const domain = this._translator.getDomain();
-    this._defaultFormatOptions = _getAppropriateFormat(domain[0], domain[1], this._getApproximateScreenRange());
-  },
-
-  _setupDomainCore: null,
-
-  _calculateSize: null,
-
-  _cleanContent: null,
-
-  _renderContent: null,
-
-  _setupCodomain: null,
-
-  _getApproximateScreenRange: null,
-
   _factory: {
-    createTranslator() {
+    createTranslator(): ThemeValue {
       return new Translator1D();
     },
 
-    createTracker(parameters) {
+    createTracker(parameters: TrackerParameters): Tracker {
       return new Tracker(parameters);
     },
   },
 });
 
 //  TODO: find a better place for it
-export const formatValue = function (value, options, extra) {
-  if (Object.is(value, -0)) {
-    value = 0;
-  }
-  options = options || {};
-  const text = _format(value, options.format);
-  let formatObject;
-  if (typeof options.customizeText === 'function') {
-    formatObject = _extend({ value, valueText: text }, extra);
-    return String(options.customizeText.call(formatObject, formatObject));
+export function formatValue(
+  value: number,
+  options?: GaugeFormatOptions,
+  extra?: ThemeValue,
+): string {
+  const normalizedValue = Object.is(value, -0) ? 0 : value;
+  const formatOptions: GaugeFormatOptions = options ?? {};
+  const text = format(normalizedValue, formatOptions.format);
+  if (typeof formatOptions.customizeText === 'function') {
+    const formatObject = extend({ value: normalizedValue, valueText: text }, extra);
+    return String(formatOptions.customizeText.call(formatObject, formatObject));
   }
   return text;
-};
-
-//  TODO: find a better place for it
-export const getSampleText = function (translator, options) {
-  // @ts-expect-error
-  const text1 = formatValue(translator.getDomainStart(), options);
-  // @ts-expect-error
-  const text2 = formatValue(translator.getDomainEnd(), options);
-  return text1.length >= text2.length ? text1 : text2;
-};
-
-export function compareArrays(array1, array2) {
-  return array1 && array2 && array1.length === array2.length && compareArraysElements(array1, array2);
 }
 
-function compareArraysElements(array1, array2) {
-  let i;
-  const ii = array1.length;
-  let array1ValueIsNaN;
-  let array2ValueIsNaN;
+//  TODO: find a better place for it
+export function getSampleText(translator: ThemeValue, options?: GaugeFormatOptions): string {
+  const text1 = formatValue(translator.getDomainStart(), options);
+  const text2 = formatValue(translator.getDomainEnd(), options);
+  return text1.length >= text2.length ? text1 : text2;
+}
 
-  for (i = 0; i < ii; ++i) {
-    array1ValueIsNaN = array1[i] !== array1[i];
-    array2ValueIsNaN = array2[i] !== array2[i];
-
-    if (array1ValueIsNaN && array2ValueIsNaN) {
-      continue;
+function compareArraysElements(array1: ThemeValue[], array2: ThemeValue[]): boolean {
+  for (let i = 0; i < array1.length; i += 1) {
+    const bothValuesAreNaN = Number.isNaN(array1[i]) && Number.isNaN(array2[i]);
+    if (!bothValuesAreNaN && array1[i] !== array2[i]) {
+      return false;
     }
-
-    if (array1[i] !== array2[i]) return false;
   }
   return true;
+}
+
+export function compareArrays(array1: ThemeValue, array2: ThemeValue): boolean {
+  return Boolean(array1 && array2 && array1.length === array2.length)
+    && compareArraysElements(array1, array2);
 }
 
 // PLUGINS_SECTION
@@ -336,19 +355,29 @@ BaseGauge.addPlugin(tooltipPlugin);
 BaseGauge.addPlugin(loadingIndicatorPlugin);
 
 // These are gauges specifics on using tooltip - they require refactoring.
-const _setTooltipOptions = BaseGauge.prototype._setTooltipOptions;
-BaseGauge.prototype._setTooltipOptions = function () {
-  _setTooltipOptions.apply(this, arguments);
-  this._tracker && this._tracker.setTooltipState(this._tooltip.isEnabled());
+const { _setTooltipOptions: setTooltipOptions } = BaseGauge.prototype;
+BaseGauge.prototype._setTooltipOptions = function setTooltipOptionsWithTracker(
+  this: BaseGauge,
+  ...args: unknown[]
+): void {
+  setTooltipOptions.apply(this, args);
+  if (this._tracker) {
+    this._tracker.setTooltipState(this._tooltip.isEnabled());
+  }
 };
 
-const { _change_TITLE } = BaseGauge.prototype;
-BaseGauge.prototype._change_TITLE = function () {
+const { _change_TITLE: changeTitle } = BaseGauge.prototype;
+BaseGauge.prototype._change_TITLE = function changeTitleWithCache(
+  this: BaseGauge,
+  ...args: unknown[]
+): void {
   this._titleBBoxCache = { ...this._title.getLayoutOptions() };
 
-  _change_TITLE.apply(this, arguments);
+  changeTitle.apply(this, args);
 
   /// #DEBUG
-  this._DEBUG_change_title && this._DEBUG_change_title();
+  if (this._DEBUG_change_title) {
+    this._DEBUG_change_title();
+  }
   /// #ENDDEBUG
 };

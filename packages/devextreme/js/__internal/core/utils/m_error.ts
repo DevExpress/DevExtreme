@@ -1,4 +1,3 @@
-/* eslint-disable import/no-commonjs */
 import { extend } from '@js/core/utils/extend';
 import { format } from '@js/core/utils/string';
 import { version } from '@js/core/version';
@@ -7,12 +6,17 @@ import consoleUtils from './m_console';
 
 const ERROR_URL = `https://js.devexpress.com/error/${version.split('.').slice(0, 2).join('_')}/`;
 
+export interface DxError extends Error {
+  __id: string;
+  __details: string;
+  url: string;
+}
+
 function error(baseErrors, errors?) {
   const exports = {
 
     ERROR_MESSAGES: extend(errors, baseErrors),
 
-    // eslint-disable-next-line object-shorthand
     Error: function (...args) {
       return makeError(args);
     },

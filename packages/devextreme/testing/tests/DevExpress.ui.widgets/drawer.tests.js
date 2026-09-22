@@ -7,7 +7,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import eventsEngine from 'common/core/events/core/events_engine';
-import visibilityChange from 'common/core/events/visibility_change';
+import * as visibilityChange from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import Button from 'ui/button';
 import Drawer from 'ui/drawer';
@@ -281,16 +281,16 @@ QUnit.module('Drawer behavior', () => {
 
         const triggerResizeEventInitial = visibilityChange.triggerResizeEvent;
 
-        visibilityChange.triggerResizeEvent = ($element) => {
+        visibilityChange.DEBUG_set_triggerResizeEvent(($element) => {
             assert.ok(true, 'resize event call is expected');
             assert.equal($element, drawer.viewContent(), 'ViewContent element is expected');
             const rect = $(drawer.viewContent())[0].getBoundingClientRect();
             assert.strictEqual(rect.width, 90, 'ViewContent element width');
             assert.strictEqual(rect.height, 50, 'ViewContent element height');
 
-            visibilityChange.triggerResizeEvent = triggerResizeEventInitial;
+            visibilityChange.DEBUG_set_triggerResizeEvent(triggerResizeEventInitial);
             done();
-        };
+        });
 
         drawer.toggle();
     });
@@ -311,18 +311,18 @@ QUnit.module('Drawer behavior', () => {
         const triggerFunction = visibilityChange.triggerResizeEvent;
 
         try {
-            visibilityChange.triggerResizeEvent = ($element) => {
+            visibilityChange.DEBUG_set_triggerResizeEvent(($element) => {
                 assert.ok(true, 'resize event call is expected');
                 assert.equal($element, drawer.viewContent(), 'ViewContent element is expected');
 
                 const rect = $(drawer.viewContent())[0].getBoundingClientRect();
                 assert.strictEqual(rect.width, 90, 'ViewContent element width');
                 assert.strictEqual(rect.height, 50, 'ViewContent element height');
-            };
+            });
 
             drawer.toggle();
         } finally {
-            visibilityChange.triggerResizeEvent = triggerFunction;
+            visibilityChange.DEBUG_set_triggerResizeEvent(triggerFunction);
         }
     });
 
@@ -337,15 +337,15 @@ QUnit.module('Drawer behavior', () => {
         assert.expect(2);
 
         try {
-            visibilityChange.triggerResizeEvent = function($element) {
+            visibilityChange.DEBUG_set_triggerResizeEvent(function($element) {
                 assert.ok(true, 'event was triggered');
                 assert.equal($element, instance.viewContent(), 'Event was triggered for right element');
-            };
+            });
 
             instance.option('position', 'left');
 
         } finally {
-            visibilityChange.triggerResizeEvent = triggerFunction;
+            visibilityChange.DEBUG_set_triggerResizeEvent(triggerFunction);
         }
     });
 
@@ -979,7 +979,7 @@ QUnit.module('Drawer behavior', () => {
                                     minSize: minSize
                                 }).dxDrawer('instance');
 
-                                visibilityChange.triggerResizeEvent = ($element) => {
+                                visibilityChange.DEBUG_set_triggerResizeEvent(($element) => {
                                     resizeCallCount++;
                                     assert.strictEqual(resizeCallCount, 1, 'resize event should be triggered once');
                                     assert.equal($element, drawer.viewContent(), 'ViewContent element is expected');
@@ -993,9 +993,9 @@ QUnit.module('Drawer behavior', () => {
                                     assert.strictEqual(viewRect.width, expectedViewRect.width, 'ViewContent width');
                                     assert.strictEqual(viewRect.height, expectedViewRect.height, 'ViewContent height');
 
-                                    visibilityChange.triggerResizeEvent = triggerResizeEventInitial;
+                                    visibilityChange.DEBUG_set_triggerResizeEvent(triggerResizeEventInitial);
                                     done();
-                                };
+                                });
 
                                 drawer.toggle();
                             });

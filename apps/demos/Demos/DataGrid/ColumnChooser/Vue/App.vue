@@ -149,7 +149,7 @@ const recursive = ref(true);
 const editorOptions: DxTextBoxTypes.Properties = { placeholder: 'Search column' };
 
 </script>
-<style scoped>
+<style>
 #employees {
   max-height: 440px;
 }

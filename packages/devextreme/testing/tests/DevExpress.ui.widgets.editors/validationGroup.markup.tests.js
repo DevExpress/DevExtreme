@@ -1,39 +1,38 @@
 import $ from 'jquery';
-import Class from 'core/class';
 import DefaultAdapter from '__internal/ui/validation/default_adapter';
 import ValidationEngine from 'ui/validation_engine';
 
 import 'ui/validation_group';
 
-const Fixture = Class.inherit({
+class Fixture {
 
-    ctor: function() {
+    constructor() {
         ValidationEngine.initGroups();
         this.originalValidationGroupFunction = ValidationEngine.validateGroup;
-    },
+    }
 
-    teardown: function() {
+    teardown() {
         ValidationEngine.validateGroup = this.originalValidationGroupFunction;
-    },
+    }
 
-    createValidationGroupContainer: function(container) {
+    createValidationGroupContainer(container) {
         if(container) {
             this.$groupContainer = $(container);
         }
-    },
+    }
 
-    createGroup: function(container) {
+    createGroup(container) {
         this.createValidationGroupContainer(container);
         const group = this.$groupContainer.dxValidationGroup().dxValidationGroup('instance');
 
         return group;
-    },
+    }
 
-    disposeGroup: function() {
+    disposeGroup() {
         this.$groupContainer.dxValidationGroup('_dispose');
-    },
+    }
 
-    createValidatorInGroup: function() {
+    createValidatorInGroup() {
         const $container = $('<div/>');
         $container.appendTo(this.$groupContainer);
 
@@ -41,7 +40,7 @@ const Fixture = Class.inherit({
             adapter: sinon.createStubInstance(DefaultAdapter)
         }).dxValidator('instance');
     }
-});
+}
 
 const { testStart, test, module: testModule } = QUnit;
 

@@ -144,7 +144,7 @@ const customTicks = [900, 1000, 1020, 1100];
 const pressureLabelFormat = { type: 'decimal' };
 const value = computed(() => cities.find(({ name }) => name === selected.value));
 </script>
-<style scoped>
+<style>
 #gauge-demo {
   width: 90%;
   margin: 0 auto;

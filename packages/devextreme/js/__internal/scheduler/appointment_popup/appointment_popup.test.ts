@@ -2,6 +2,7 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import type DataSource from '@js/data/data_source';
 import { loadMessages, locale } from '@js/localization';
 import type { GroupItem } from '@js/ui/form';
 import { fireEvent } from '@testing-library/dom';
@@ -1338,6 +1339,88 @@ describe('Isolated AppointmentPopup environment', () => {
       const resourceEditor = POM.dxForm.getEditor('ownerId') as any;
       expect(resourceEditor.NAME).toBe('dxSelectBox');
       expect(resourceEditor.option('value')).toEqual(2);
+    });
+
+    describe('Hierarchical resources', () => {
+      const rooms = [
+        { id: 'board', text: 'Board rooms' },
+        { id: 11, text: 'Room 11', parentId: 'board' },
+        { id: 12, text: 'Room 12', parentId: 'board' },
+        { id: 21, text: 'Room 21' },
+      ];
+
+      const appointmentData = {
+        text: 'Resource test app',
+        startDate: new Date(2017, 4, 9, 9, 30),
+        endDate: new Date(2017, 4, 9, 11),
+        roomId: 11,
+      };
+
+      const hierarchicalResources = [{
+        fieldExpr: 'roomId',
+        parentIdExpr: 'parentId',
+        dataSource: rooms,
+      }];
+
+      it('should offer hierarchy leaves in the editor', async () => {
+        const { POM } = await createAppointmentPopup({
+          appointmentData,
+          resources: hierarchicalResources,
+        });
+
+        const resourceEditor = POM.dxForm.getEditor('roomId');
+        expect(resourceEditor?.option('dataSource')).toEqual([rooms[1], rooms[2], rooms[3]]);
+        expect(resourceEditor?.option('value')).toBe(11);
+      });
+
+      it('should keep the resource displayExpr and valueExpr', async () => {
+        const resources = [{
+          fieldExpr: 'roomId',
+          parentIdExpr: 'parent',
+          valueExpr: 'key',
+          displayExpr: 'name',
+          dataSource: [
+            { key: 'board', name: 'Board rooms' },
+            { key: 'room-11', name: 'Room 11', parent: 'board' },
+          ],
+        }];
+
+        const { POM } = await createAppointmentPopup({
+          appointmentData: { ...appointmentData, roomId: 'room-11' },
+          resources,
+        });
+
+        const resourceEditor = POM.dxForm.getEditor('roomId');
+        expect(resourceEditor?.option('displayExpr')).toBe('name');
+        expect(resourceEditor?.option('valueExpr')).toBe('key');
+        expect(resourceEditor?.option('dataSource')).toEqual([
+          { key: 'room-11', name: 'Room 11', parent: 'board' },
+        ]);
+        expect(resourceEditor?.option('value')).toBe('room-11');
+      });
+
+      it('should offer hierarchy leaves for a resource that was not loaded yet', async () => {
+        const { POM } = await createAppointmentPopup({
+          preloadResources: false,
+          appointmentData,
+          resources: hierarchicalResources,
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const editorDataSource = (POM.dxForm.getEditor('roomId') as any).getDataSource();
+
+        await editorDataSource.load();
+
+        expect(editorDataSource.items()).toEqual([rooms[1], rooms[2], rooms[3]]);
+      });
+
+      it('should keep the lazy dataSource for a resource without parentIdExpr', async () => {
+        const resources = [{ fieldExpr: 'roomId', dataSource: rooms }];
+
+        const { POM } = await createAppointmentPopup({ appointmentData, resources });
+
+        const editorDataSource = POM.dxForm.getEditor('roomId')?.option('dataSource');
+        expect((editorDataSource as DataSource).items()).toEqual(rooms);
+      });
     });
   });
 

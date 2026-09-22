@@ -5,19 +5,21 @@ import { toComparable } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
+import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 
 import dataGridCore from '../m_core';
 import { createGroupFilter } from '../m_utils';
 import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
 import type { DataItem, GroupInfoData, GroupItemData } from './types';
 
-const loadTotalCount = function (dataSource, options) {
+const loadTotalCount = function (dataSourceAdapter: DataSourceAdapter, options) {
   // @ts-expect-error
   const d = new Deferred();
   const loadOptions = extend({ skip: 0, take: 1, requireTotalCount: true }, options);
 
-  dataSource.load(loadOptions).done((data, extra) => {
-    d.resolve(extra && extra.totalCount);
+  dataSourceAdapter.customLoader.load(loadOptions).done(({ extra }) => {
+    d.resolve(extra!.totalCount);
   }).fail(d.reject.bind(d));
   return d;
 };
@@ -209,11 +211,12 @@ const createNotGroupFilter = function (path, storeLoadOptions, group) {
     for (let j = 0; j <= i; j++) {
       filterElement.push([groups[j].selector, i === j ? '<>' : '=', path[j]]);
     }
-    filter.push(dataGridCore.combineFilters(filterElement));
+    filter.push(combineFilters(filterElement));
   }
-  filter = dataGridCore.combineFilters(filter, 'or');
+  // @ts-expect-error
+  filter = combineFilters(filter, 'or');
 
-  return dataGridCore.combineFilters([filter, storeLoadOptions.filter]);
+  return combineFilters([filter, storeLoadOptions.filter]);
 };
 
 const getGroupCount = function (item, groupCount) {
@@ -341,7 +344,6 @@ export class GroupingHelper extends GroupingHelperCore {
 
     if (groupCount) {
       let { data } = options;
-      // @ts-expect-error
       const query = dataQuery(data);
       storeHelper.multiLevelGroup(query, groups).enumerate().done((groupedData) => {
         data = groupedData;
@@ -375,12 +377,14 @@ export class GroupingHelper extends GroupingHelperCore {
 
   private changeRowExpand(path) {
     const that = this;
-    const dataSource = that._dataSource;
-    const beginPageIndex = dataSource.beginPageIndex
-      ? dataSource.beginPageIndex()
-      : dataSource.pageIndex();
-    const dataSourceItems = dataSource.items();
-    const offset = correctSkipLoadOption(that, beginPageIndex * dataSource.pageSize());
+    const { dataSourceAdapter } = that;
+    // @ts-expect-error badly typedDataSourceAdapter.beginPageIndex
+    const beginPageIndex = dataSourceAdapter.beginPageIndex
+      // @ts-expect-error badly typedDataSourceAdapter.beginPageIndex
+      ? dataSourceAdapter.beginPageIndex()
+      : dataSourceAdapter.pageIndex();
+    const dataSourceItems = dataSourceAdapter.items();
+    const offset = correctSkipLoadOption(that, beginPageIndex * dataSourceAdapter.pageSize());
     const groupInfo = that.findGroupInfo(path);
     let groupCountQuery;
 
@@ -388,10 +392,10 @@ export class GroupingHelper extends GroupingHelperCore {
       // @ts-expect-error
       groupCountQuery = new Deferred().resolve(groupInfo.count);
     } else {
-      groupCountQuery = loadTotalCount(dataSource, {
+      groupCountQuery = loadTotalCount(dataSourceAdapter, {
         filter: createGroupFilter(path, {
-          filter: dataSource.filter(),
-          group: dataSource.group(),
+          filter: dataSourceAdapter.filter(),
+          group: dataSourceAdapter.group(),
         }),
       });
     }
@@ -417,7 +421,8 @@ export class GroupingHelper extends GroupingHelperCore {
       }
       that.updateTotalItemsCount();
     }).fail(function () {
-      dataSource._eventsStrategy.fireEvent('loadError', arguments);
+      // @ts-expect-error badly typedDataSourceAdapter._eventsStrategy
+      dataSourceAdapter._eventsStrategy.fireEvent('loadError', arguments);
     });
   }
 
@@ -428,15 +433,15 @@ export class GroupingHelper extends GroupingHelperCore {
   protected refresh(options, operationTypes?) {
     const that = this;
     const { storeLoadOptions } = options;
-    const dataSource = that._dataSource;
+    const { dataSourceAdapter } = that;
 
     // @ts-expect-error
     super.refresh.apply(this, arguments);
 
     if (operationTypes.reload) {
       return foreachCollapsedGroups(that, (groupInfo) => {
-        const groupCountQuery = loadTotalCount(dataSource, { filter: createGroupFilter(groupInfo.path, storeLoadOptions) });
-        const groupOffsetQuery = loadTotalCount(dataSource, { filter: createOffsetFilter(groupInfo.path, storeLoadOptions) });
+        const groupCountQuery = loadTotalCount(dataSourceAdapter, { filter: createGroupFilter(groupInfo.path, storeLoadOptions) });
+        const groupOffsetQuery = loadTotalCount(dataSourceAdapter, { filter: createOffsetFilter(groupInfo.path, storeLoadOptions) });
 
         return when(groupOffsetQuery, groupCountQuery).done((offset, count) => {
           // eslint-disable-next-line radix

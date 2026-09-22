@@ -679,6 +679,20 @@ export default [
             '@typescript-eslint/lines-between-class-members': 'off',
         },
     },
+    // Rules for signal-based code
+    {
+        files: [
+            'js/__internal/grids/new/**/*.ts?(x)',
+            'js/__internal/core/state_manager/**/*.ts',
+        ],
+        ignores: [
+            '**/*.test.ts',
+            '**/*.test.tsx',
+        ],
+        rules: {
+            'devextreme-custom/no-bare-property-read': 'error',
+        },
+    },
     // Rules for Jest tests
     {
         files: ['js/__internal/**/*test.ts?(x)'],

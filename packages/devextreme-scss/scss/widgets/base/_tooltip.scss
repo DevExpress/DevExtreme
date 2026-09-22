@@ -1,5 +1,3 @@
-// adduse
-
 .dx-tooltip-wrapper {
   .dx-overlay-content {
     min-width: 34px;
@@ -10,7 +8,7 @@
     &::before {
       display: inline-block;
       height: 100%;
-      content: '';
+      content: "";
       vertical-align: middle;
     }
 

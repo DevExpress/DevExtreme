@@ -296,7 +296,7 @@ describe('decorators', () => {
         obj.value = 42;
         obj.tag = 'decorated';
       }
-    })).toThrowError();
+    })).toThrow();
 
     expect(myClassInstance.value).toBe(1);
     expect(myClassInstance.tag).toBe('');

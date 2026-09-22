@@ -25,7 +25,12 @@ export const normalizeOptions = (options, value) => (typeof options !== 'string'
 
 export const deviceMatch = (device, filter) => isEmptyObject(filter) || findBestMatches(device, [filter]).length > 0;
 
-export const getFieldName = (fullName) => fullName.substr(fullName.lastIndexOf('.') + 1);
+type FieldName<T extends string> = T extends `${string}.${infer TRest}` ? FieldName<TRest> : T;
+
+export function getFieldName<T extends string>(fullName: T): FieldName<T>;
+export function getFieldName(fullName: string): string {
+  return fullName.substr(fullName.lastIndexOf('.') + 1);
+}
 
 export const getParentName = (fullName) => fullName.substr(0, fullName.lastIndexOf('.'));
 

@@ -1,6 +1,8 @@
 import './module_not_extended/column_headers';
 import './m_columns_controller';
-import './m_data_controller';
+import './data_source/data_source_module';
+import './module_not_extended/filter';
+import './module_not_extended/data_controller';
 import './module_not_extended/sorting';
 import './module_not_extended/rows';
 import './module_not_extended/context_menu';
@@ -16,7 +18,6 @@ import { extend } from '@js/core/utils/extend';
 import { isString } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 
 import gridCore from './m_core';
@@ -24,6 +25,7 @@ import gridCore from './m_core';
 const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
 
 gridCore.registerModulesOrder([
+  'dataSource',
   'stateStoring',
   'columns',
   'selection',
@@ -37,6 +39,7 @@ gridCore.registerModulesOrder([
   'masterDetail',
   'validating',
   'adaptivity',
+  'filter',
   'data',
   'virtualScrolling',
   'aiColumn',
@@ -128,8 +131,6 @@ class DataGrid extends GridCoreWidget<Properties> {
 
     super._init();
 
-    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(that);
-
     // @ts-expect-error
     gridCore.processModules(that, gridCore as any);
 
@@ -143,6 +144,7 @@ class DataGrid extends GridCoreWidget<Properties> {
   }
 
   protected _setDeprecatedOptions() {
+    // @ts-expect-error
     super._setDeprecatedOptions();
 
     // @ts-expect-error

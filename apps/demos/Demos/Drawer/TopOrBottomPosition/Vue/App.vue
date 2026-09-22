@@ -80,7 +80,7 @@ const toolbarContent = [{
   },
 }];
 </script>
-<style scoped>
+<style>
     .demo-container {
       overflow: visible;
     }

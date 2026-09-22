@@ -1,0 +1,115 @@
+import type { TooltipShowMode, VerticalEdge } from '@js/common';
+import $ from '@js/core/renderer';
+import type { Format } from '@js/localization';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { WidgetProperties } from '@ts/core/widget/widget';
+import Widget from '@ts/core/widget/widget';
+import SliderTooltip from '@ts/ui/slider/slider_tooltip';
+
+const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
+
+export interface SliderHandleProperties extends WidgetProperties {
+  value?: number;
+
+  tooltip?: {
+    enabled?: boolean;
+    format?: Format;
+    position?: VerticalEdge;
+    showMode?: TooltipShowMode;
+  };
+}
+
+class SliderHandle extends Widget<SliderHandleProperties> {
+  _sliderTooltip?: SliderTooltip | null;
+
+  _getDefaultOptions(): SliderHandleProperties {
+    return {
+      ...super._getDefaultOptions(),
+      hoverStateEnabled: false,
+      value: 0,
+      tooltip: {
+        enabled: false,
+        format: (value: number): string => `${value}`,
+        position: 'top',
+        showMode: 'onHover',
+      },
+    };
+  }
+
+  _initMarkup(): void {
+    super._initMarkup();
+    this.$element().addClass(SLIDER_HANDLE_CLASS);
+
+    const { value } = this.option();
+
+    this.setAria({
+      role: 'slider',
+      // eslint-disable-next-line spellcheck/spell-checker
+      valuenow: value,
+      label: 'Slider',
+    });
+  }
+
+  _render(): void {
+    super._render();
+    this._renderTooltip();
+  }
+
+  _renderTooltip(): void {
+    const { tooltip, value } = this.option();
+    const {
+      position, format, enabled, showMode,
+    } = tooltip ?? {};
+
+    const $sliderTooltip = $('<div>');
+    this._sliderTooltip = this._createComponent($sliderTooltip, SliderTooltip, {
+      target: this.$element(),
+      container: $sliderTooltip,
+      position,
+      visible: enabled,
+
+      showMode,
+      format,
+      value,
+    });
+  }
+
+  _clean(): void {
+    super._clean();
+    this._sliderTooltip?.dispose();
+    this._sliderTooltip = null;
+  }
+
+  _updateTooltipOptions(args: OptionChanged<SliderHandleProperties>): void {
+    const tooltipOptions = Widget.getOptionsFromContainer(args);
+
+    this._setWidgetOption('_sliderTooltip', [tooltipOptions]);
+    this._sliderTooltip?.option('visible', tooltipOptions.enabled);
+  }
+
+  _optionChanged(args: OptionChanged<SliderHandleProperties>): void {
+    const { name, value } = args;
+    switch (name) {
+      case 'value': {
+        this._sliderTooltip?.option('value', value);
+        this.setAria('valuenow', value);
+        break;
+      }
+      case 'tooltip':
+        this._updateTooltipOptions(args);
+        break;
+      default:
+        super._optionChanged(args);
+    }
+  }
+
+  updateTooltipPosition(): void {
+    this._sliderTooltip?.updatePosition();
+  }
+
+  repaint(): void {
+    this._sliderTooltip?.repaint();
+  }
+}
+
+export default SliderHandle;

@@ -159,7 +159,7 @@ const setAlternatingRowsBackground = (gridCell: ExсelDataGridCell, excelCell: a
 };
 </script>
 
-<style scoped>
+<style>
 #priceDataGrid,
 #ratingDataGrid {
   padding: 10px;

@@ -9,9 +9,9 @@ import {
   isCrossDomain,
 } from '@js/core/utils/ajax_utils';
 import { Deferred } from '@js/core/utils/deferred';
-import injector from '@js/core/utils/dependency_injector';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import { injector } from '@ts/core/utils/dependency_injector';
 
 const window = getWindow();
 
@@ -69,7 +69,7 @@ const setHttpTimeout = function (timeout, xhr) {
 };
 
 const sendRequest = function (options) {
-  const xhr = httpRequest.getXhr();
+  const xhr: XMLHttpRequest & { customStatus?: string } = httpRequest.getXhr();
   // @ts-expect-error only void function can be called with new
   const d = new Deferred();
   const result = d.promise();

@@ -46,8 +46,8 @@
   $material-treeview-toggle-item-width + $material-treeview-item-element-gap,
 );
 @include default-expander-icon(
-  'chevrondown',
-  'chevronright',
+  "chevrondown",
+  "chevronright",
   $material-base-icon-size,
   $material-treeview-toggle-item-width,
   $treeview-spin-icon-color,

@@ -1,16 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DxButtonModule } from 'devextreme-angular';
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'vehicle-card',
-  templateUrl: `.${modulePrefix}/vehicle-card/vehicle-card.component.html`,
-  styleUrls: [`.${modulePrefix}/vehicle-card/vehicle-card.component.css`],
+  templateUrl: './vehicle-card.component.html',
+  styleUrls: ['./vehicle-card.component.css'],
   imports: [
     DxButtonModule,
   ],

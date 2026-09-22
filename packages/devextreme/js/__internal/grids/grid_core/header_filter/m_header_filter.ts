@@ -9,13 +9,16 @@ import storeHelper from '@js/common/data/store_helper';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
 import filterUtils from '@js/ui/shared/filtering';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
+import type {
+  DataFilter, FilterSourceContext,
+} from '@ts/grids/grid_core/filter/types';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -23,11 +26,11 @@ import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import gridCoreUtils from '../m_utils';
 import {
-  allowHeaderFiltering,
   headerFilterMixin,
   HeaderFilterView,
   updateHeaderFilterItemSelectionState,
 } from './m_header_filter_core';
+import { allowHeaderFiltering, createHeaderFilterExpressions } from './utils';
 
 const DATE_INTERVAL_FORMATS = {
   year(value) {
@@ -79,13 +82,11 @@ function ungroupUTCDates(items, dateParts?, dates?) {
 
 export function convertDataFromUTCToLocal(data, column) {
   const dates = ungroupUTCDates(data);
-  // @ts-expect-error
   const query = dataQuery(dates);
   const group = gridCoreUtils.getHeaderFilterGroupParameters({
     ...column,
     calculateCellValue: (date) => date,
   });
-  // @ts-expect-error
   return storeHelper.queryByOptions(query, { group }).toArray();
 }
 
@@ -122,14 +123,28 @@ export class HeaderFilterController extends Modules.ViewController {
 
   private _dataController!: DataController;
 
-  private _headerFilterView!: HeaderFilterView;
+  private dataSourceController!: DataSourceController;
 
-  private _currentColumn: any;
+  private _headerFilterView!: HeaderFilterView;
 
   public init() {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this._headerFilterView = this.getView('headerFilterView');
+  }
+
+  public isFilterSourceActive({ columnSourcesActive }: FilterSourceContext): boolean {
+    return columnSourcesActive;
+  }
+
+  public getFilterExpressions({
+    excludedColumn,
+    columnsController,
+  }: FilterSourceContext): DataFilter[] {
+    const columns = columnsController.getVisibleColumns(null, true);
+
+    return createHeaderFilterExpressions(columns, excludedColumn);
   }
 
   private _updateSelectedState(items, column) {
@@ -234,8 +249,8 @@ export class HeaderFilterController extends Modules.ViewController {
   }
 
   private getDataSource(column) {
-    const dataSource = this._dataController.dataSource();
-    const remoteGrouping = dataSource?.remoteOperations().grouping;
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
+    const remoteGrouping = this.dataSourceController.remoteOperations().grouping;
     const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
     const headerFilterDataSource = column.headerFilter?.dataSource;
     const headerFilterOptions = this.option('headerFilter');
@@ -244,29 +259,24 @@ export class HeaderFilterController extends Modules.ViewController {
       component: this.component,
     };
 
-    if (!dataSource) return;
+    if (!dataSourceAdapter) return;
 
     if (isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
-      // @ts-expect-error
       options.dataSource = normalizeDataSourceOptions(headerFilterDataSource);
     } else if (column.lookup) {
       isLookup = true;
 
       if (this.option('syncLookupFilterValues')) {
-        this._currentColumn = column;
-        const filter = this._dataController.getCombinedFilter();
-        this._currentColumn = null;
+        const filter = this._dataController.getCombinedFilterWithExcludedColumn(column);
 
-        options.dataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+        options.dataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSourceAdapter, filter);
       } else {
         options.dataSource = gridCoreUtils.normalizeLookupDataSource(column.lookup);
       }
     } else {
       const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
 
-      this._currentColumn = column;
-      const filter = this._dataController.getCombinedFilter();
-      this._currentColumn = null;
+      const filter = this._dataController.getCombinedFilterWithExcludedColumn(column);
 
       options.dataSource = {
         filter,
@@ -278,9 +288,10 @@ export class HeaderFilterController extends Modules.ViewController {
           // TODO remove in 16.1
           options.dataField = column.dataField || column.name;
 
-          dataSource.load(options).done((data) => {
+          dataSourceAdapter.customLoader.load(options).done(({ data }) => {
             const convertUTCDates = remoteGrouping && isUTCFormat(column.serializationFormat) && cutoffLevel > 3;
             if (convertUTCDates) {
+              // @ts-expect-error queryByOptions().toArray() is typed as unknown[]
               data = convertDataFromUTCToLocal(data, column);
             }
             that._processGroupItems(data, null, null, {
@@ -327,10 +338,6 @@ export class HeaderFilterController extends Modules.ViewController {
     return options.dataSource;
   }
 
-  public getCurrentColumn() {
-    return this._currentColumn;
-  }
-
   public showHeaderFilterMenu(columnIndex, isGroupPanel) {
     const columnsController = this._columnsController;
     const column = extend(true, {}, this._columnsController.getColumns()[columnIndex]);
@@ -361,8 +368,7 @@ export class HeaderFilterController extends Modules.ViewController {
 
     if (column) {
       const groupInterval = filterUtils.getGroupInterval(column);
-      const dataSource = that._dataController.dataSource();
-      const remoteFiltering = dataSource && dataSource.remoteOperations().filtering;
+      const remoteFiltering = that.dataSourceController.remoteOperations().filtering;
       const previousOnHidden = options.onHidden;
 
       extend(options, column, {
@@ -499,62 +505,6 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelHeaderFi
   }
 };
 
-export function invertFilterExpression(filter) {
-  return ['!', filter];
-}
-
-const data = (Base: ModuleType<DataController>) => class DataControllerFilterRowExtender extends Base {
-  private skipCalculateColumnFilters() {
-    return false;
-  }
-
-  protected _calculateAdditionalFilter() {
-    if (this.skipCalculateColumnFilters()) {
-      return super._calculateAdditionalFilter();
-    }
-
-    const that = this;
-    const filters = [super._calculateAdditionalFilter()];
-    const columns = that._columnsController.getVisibleColumns(null, true);
-    const headerFilterController = this._headerFilterController;
-    const currentColumn = headerFilterController.getCurrentColumn();
-
-    each(columns, (_, column) => {
-      let filter;
-
-      if (currentColumn && currentColumn.index === column.index) {
-        return;
-      }
-
-      if (allowHeaderFiltering(column) && column.calculateFilterExpression && Array.isArray(column.filterValues) && column.filterValues.length) {
-        let filterValues: any = [];
-
-        each(column.filterValues, (_, filterValue) => {
-          if (Array.isArray(filterValue)) {
-            filter = filterValue;
-          } else {
-            if (column.deserializeValue && !gridCoreUtils.isDateType(column.dataType) && column.dataType !== 'number') {
-              filterValue = column.deserializeValue(filterValue);
-            }
-
-            filter = column.createFilterExpression(filterValue, '=', 'headerFilter');
-          }
-          if (filter) {
-            filter.columnIndex = column.index;
-          }
-          filterValues.push(filter);
-        });
-
-        filterValues = gridCoreUtils.combineFilters(filterValues, 'or');
-
-        filters.push(column.filterType === 'exclude' ? ['!', filterValues] : filterValues);
-      }
-    });
-
-    return gridCoreUtils.combineFilters(filters);
-  }
-};
-
 export const headerFilterModule = {
   defaultOptions() {
     return {
@@ -586,9 +536,6 @@ export const headerFilterModule = {
     headerFilterView: HeaderFilterView,
   },
   extenders: {
-    controllers: {
-      data,
-    },
     views: {
       columnHeadersView,
       headerPanel,

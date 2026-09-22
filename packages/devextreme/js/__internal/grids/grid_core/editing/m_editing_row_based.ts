@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { equalByValue } from '@js/core/utils/common';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ModuleType } from '../m_types';
@@ -12,6 +11,7 @@ import {
   MODES_WITH_DELAYED_FOCUS,
   ROW_SELECTED_CLASS,
 } from './const';
+import { editingRowBasedDataControllerExtender } from './extenders/editing_row_based_data_controller';
 import type { EditingController } from './m_editing';
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class RowBasedEditingControllerExtender extends Base {
@@ -107,17 +107,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 };
 
-const data = (Base: ModuleType<DataController>) => class DataEditingRowBasedExtender extends Base {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _getChangedColumnIndices(oldItem, newItem, rowIndex, isLiveUpdate) {
-    if (this._editingController.isRowBasedEditMode() && oldItem.isEditing !== newItem.isEditing) {
-      return;
-    }
-
-    return super._getChangedColumnIndices.apply(this, arguments as any);
-  }
-};
-
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingRowBasedExtender extends Base {
   protected _createRow(row) {
     const $row = super._createRow.apply(this, arguments as any);
@@ -138,20 +127,13 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingRowBasedEx
 
     return $row;
   }
-
-  protected _update(change) {
-    super._update(change);
-    if (change.changeType === 'updateSelection') {
-      this.getTableElements().children('tbody').children(`.${EDIT_ROW}`).removeClass(ROW_SELECTED_CLASS);
-    }
-  }
 };
 
 export const editingRowBasedModule = {
   extenders: {
     controllers: {
       editing: editingControllerExtender,
-      data,
+      data: editingRowBasedDataControllerExtender,
     },
     views: {
       rowsView,

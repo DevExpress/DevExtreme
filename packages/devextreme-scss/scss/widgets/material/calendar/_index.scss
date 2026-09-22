@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -8,9 +7,6 @@
 @use "../button/mixins" as *;
 @use "../../base/calendar/calendar";
 @use "../../base/calendar/mixins" as *;
-
-// adduse
-
 @include dx-calendar-mixin(
   $calendar-bg,
   $material-calendar-legacy-width,
@@ -65,7 +61,7 @@
   $calendar-cell-hover-border-color,
   999em,
   1px,
-  '.dx-calendar-cell-range-hover',
-  '.dx-calendar-cell-range-hover-start',
-  '.dx-calendar-cell-range-hover-end',
+  ".dx-calendar-cell-range-hover",
+  ".dx-calendar-cell-range-hover-start",
+  ".dx-calendar-cell-range-hover-end",
 );

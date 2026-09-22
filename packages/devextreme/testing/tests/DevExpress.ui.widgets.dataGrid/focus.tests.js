@@ -4571,8 +4571,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
             this.setupModule();
 
-            this.getController('data').store = function() {
-            };
+            this.getController('dataSource').disposeAdapter();
 
             this.getController('data').dataErrorOccurred.add(function(e) {
                 dataErrors.push(e);
@@ -5837,7 +5836,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             this.clock.tick(10);
 
             // act
-            this.getController('data')._dataSource.operationTypes = () => undefined;
+            this.getController('dataSource').getAdapter().operationTypes = () => undefined;
             try {
                 this.option('focusedRowKey', 'Dan');
             } catch(e) {

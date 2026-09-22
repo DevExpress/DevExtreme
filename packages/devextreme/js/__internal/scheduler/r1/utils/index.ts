@@ -57,11 +57,11 @@ export {
   getSkippedHoursInRange,
   getStartViewDateTimeOffset,
   getStartViewDateWithoutDST,
+  getTimelineGroupPanelRows,
   getToday,
   getTotalCellCountByCompleteData,
   getTotalRowCountByCompleteData,
   getValidCellDateForLocalTimeFormat,
-  getVerticalGroupCountClass,
   getViewStartByOptions,
   isAppointmentTakesAllDay,
   isDateAndTimeView,
@@ -82,6 +82,14 @@ export {
   formatWeekday,
   formatWeekdayAndDay,
 } from './format_weekday';
+export {
+  buildGroupPanelTree,
+  flattenGroupPanelTreeToLeafRows,
+  flattenGroupPanelTreeToRows,
+  getGroupPanelTreeDepth,
+  getResourceCellTemplateData,
+  stringifyId,
+} from './group_panel_tree';
 
 export const agendaUtils = {
   calculateEndViewDate,

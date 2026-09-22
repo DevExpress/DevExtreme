@@ -2,23 +2,17 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DataSourceOptions } from 'devextreme-angular/common/data';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Priority, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-let modulePrefix = '';
-// @ts-ignore
-if (window && window.config?.packageConfigPaths) {
-  modulePrefix = '/app';
-}
-
 @Component({
   selector: 'demo-app',
-  templateUrl: `.${modulePrefix}/app.component.html`,
-  styleUrls: [`.${modulePrefix}/app.component.css`],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   preserveWhitespaces: true,
   providers: [Service],
   imports: [
@@ -53,7 +47,7 @@ export class AppComponent {
     };
   }
 
-  onAdd = (e: Parameters<DxDataGridTypes.RowDragging['onAdd']>[0]) => {
+  onAdd = (e: DxDataGridTypes.RowDraggingAddEvent) => {
     const key = e.itemData.ID;
     const values = { Status: e.toData };
 

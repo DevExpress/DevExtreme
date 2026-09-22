@@ -1,5 +1,4 @@
 @use "sass:math";
-@use "sass:color";
 @use "sass:selector";
 @use "colors" as *;
 @use "../colors" as *;
@@ -21,22 +20,20 @@
 @use "../button/sizes" as *;
 @use "../validation/colors" as *;
 @use "../typography/sizes" as *;
-
-// adduse
 @use "variables" as *;
 @forward "variables";
-@use 'layout/cell' as *;
+@use "layout/cell" as *;
 @use "layout/aiChat" as *;
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";
 
-$material-grid-base-border-hidden: 1px solid transparent;
-$material-grid-base-row-border: 1px solid transparent;
-$material-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
-$material-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
+$material-grid-base-border-hidden: 1px solid transparent !default;
+$material-grid-base-row-border: 1px solid transparent !default;
+$material-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color !default;
+$material-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color !default;
 
-$material-grid-base-group-panel-message-line-height: $material-button-text-line-height;
+$material-grid-base-group-panel-message-line-height: $material-button-text-line-height !default;
 
 @mixin grid-base($widget-name) {
   @include material-grid-base-cell($widget-name);
@@ -564,7 +561,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     touch-action: pinch-zoom;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;

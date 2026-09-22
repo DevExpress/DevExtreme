@@ -1,4 +1,4 @@
-import { errorHandlingModule } from '@ts/grids/grid_core/error_handling/m_error_handling';
+import { errorHandlingModule } from '@ts/grids/grid_core/error_handling/error_handling_module';
 
 import gridCore from '../m_core';
 

@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-const dataUriRegex = /data-uri\((?:'(image\/svg\+xml;charset=UTF-8)',\s)?['"]?([^)'"]+)['"]?\)/g;
+const dataUriRegex = /data-uri\((?:['"](image\/svg\+xml;charset=UTF-8)['"],\s)?['"]?([^)'"]+)['"]?\)/g;
 
 const svg = (buffer: Buffer, svgEncoding?: string): string => {
   const encoding = svgEncoding || 'image/svg+xml;charset=UTF-8';

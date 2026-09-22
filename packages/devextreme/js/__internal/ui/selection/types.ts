@@ -19,7 +19,7 @@ type Sensitivity = 'case' | 'base' | 'variant' | any;
 export type KeyExpr = string | string[];
 export type KeyHash = string | number | symbol;
 
-interface SelectionChangeEvent<TItem, TKey> {
+export interface SelectionChangeEvent<TItem, TKey> {
   selectedItems: TItem[];
   selectedItemKeys: TKey[];
   addedItemKeys: TKey[];

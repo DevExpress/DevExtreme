@@ -32,7 +32,7 @@ describe('two-way binding', () => {
     component.$_config.updateValue = jest.fn();
     wrapper.getComponent('#component1').vm.$emit('update:modelValue', 'newValue');
     await nextTick(() => {
-      expect(component.$_config.updateValue).toBeCalled();
+      expect(component.$_config.updateValue).toHaveBeenCalled();
     });
   });
 
@@ -55,7 +55,7 @@ describe('two-way binding', () => {
     component.$_config.updateValue = jest.fn();
     await wrapper.setProps({ testValue: 'test' });
     await nextTick(() => {
-      expect(component.$_config.updateValue).toBeCalled();
+      expect(component.$_config.updateValue).toHaveBeenCalled();
     });
   });
 

@@ -15,20 +15,6 @@ on:
         type: string
         description: Package file filter pattern
         required: false
-  workflow_call:
-    inputs:
-      tag:
-        type: string
-        default: daily
-        required: false
-      filter:
-        type: string
-        default: ''
-        required: false
-      branch:
-        type: string
-        default: ''
-        required: false
 
 permissions:
   contents: read
@@ -44,14 +30,12 @@ jobs:
   build:
     name: Build packages
     runs-on: ubuntu-latest
-    environment: ${{ (inputs.tag == 'stable' || (github.event_name == 'workflow_dispatch' && !contains(github.workflow_ref, '/.github/workflows/packages_publishing_scheduler.yml@'))) && 'packages-publishing' || 'packages-publishing-automation' }}
+    environment: ${{ (inputs.tag == 'stable' && 'packages-publishing-stable') || 'packages-publishing-daily' }}
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
       - name: Get sources
         uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.branch || github.ref }}
 
       - name: Set up nodejs
         uses: actions/setup-node@v6
@@ -101,14 +85,9 @@ jobs:
       # Generates CycloneDX SBOM JSON files for the selected packages using the just-built tgz files.
       # Produces packages/sbom/dist/*.cdx.json.
       - name: Build SBOMs
-        working-directory: packages/sbom
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pnpm install --frozen-lockfile
-          rm -rf dist/
-          pnpm dx-make-sbom ../../ dist/ "$SBOM_PACKAGES"
-          cp dist/devextreme.cdx.json dist/devextreme-dist.cdx.json
+        run: pnpm nx make sbom --packages="$SBOM_PACKAGES"
 
       # Collects concrete SBOM file paths for validation because the shared action expects explicit file names.
       # Produces the sbomFiles.outputs.files multiline output.
@@ -174,8 +153,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v6
-        with:
-          ref: ${{ inputs.branch || github.ref }}
 
       - name: Download packages
         uses: actions/download-artifact@v8

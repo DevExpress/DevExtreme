@@ -374,7 +374,6 @@ export interface PivotGridDataSourceField {
      * @public
      */
     headerFilter?: {
-        allowSearch?: boolean;
         /**
          * @docid PivotGridDataSourceOptions.fields.headerFilter.allowSelectAll
          * @default true

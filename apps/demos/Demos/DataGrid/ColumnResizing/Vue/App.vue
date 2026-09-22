@@ -39,7 +39,7 @@ const resizingModes: DxDataGridTypes.ColumnResizeMode[] = ['nextColumn', 'widget
 const currentMode = ref(resizingModes[0]);
 
 </script>
-<style scoped>
+<style>
 #orders {
   max-height: 310px;
 }

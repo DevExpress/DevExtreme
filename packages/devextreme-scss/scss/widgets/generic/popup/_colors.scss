@@ -1,9 +1,6 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
-
-// adduse
 
 /**
 * $name 20. Header background color
@@ -48,4 +45,3 @@ $popup-border-radius: $overlay-content-border-radius !default;
 }
 
 $popup-bottom-bg: $popup-title-bg !default;
-

@@ -6,7 +6,7 @@ import type { LoadOptions } from '@js/data';
 import DataSource from '@js/data/data_source';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
-import ArrayStore from '@ts/data/m_array_store';
+import ArrayStore from '@ts/data/array_store';
 
 import {
   afterTest,

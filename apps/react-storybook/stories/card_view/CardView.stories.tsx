@@ -285,7 +285,7 @@ const meta: Meta<typeof CardView> = {
         off: undefined,
       },
     },
-    'columnChooser.allowSearch': {
+    'columnChooser.search.enabled': {
       control: 'boolean',
     },
     'columnChooser.enabled': {

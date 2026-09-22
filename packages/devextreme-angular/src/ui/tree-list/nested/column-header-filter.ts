@@ -17,7 +17,6 @@ import {
 import type { DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig } from 'devextreme/common/grids';
-import type { SearchMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -34,14 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTreeListColumnHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
@@ -80,14 +71,6 @@ export class DxoTreeListColumnHeaderFilterComponent extends NestedOption impleme
     }
     set search(value: ColumnHeaderFilterSearchConfig) {
         this._setOption('search', value);
-    }
-
-    @Input()
-    get searchMode(): SearchMode {
-        return this._getOption('searchMode');
-    }
-    set searchMode(value: SearchMode) {
-        this._setOption('searchMode', value);
     }
 
     @Input()

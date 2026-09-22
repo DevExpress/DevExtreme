@@ -1,11 +1,7 @@
 @use "sass:color";
-@use "../sizes" as *;
 @use "../colors" as *;
 
-// adduse
-
 $timeview-bg: null !default;
-
 
 @if $color == "carmine" {
   $timeview-bg: color.adjust($base-bg, $lightness: -2.7%, $space: hsl) !default;

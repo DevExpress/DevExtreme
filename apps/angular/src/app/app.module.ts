@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, provideZoneChangeDetection } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -14,7 +14,9 @@ import { DevExtremeModule } from 'devextreme-angular';
     ReactiveFormsModule,
     DevExtremeModule,
   ],
-  providers: [],
+  providers: [
+    provideZoneChangeDetection(),
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

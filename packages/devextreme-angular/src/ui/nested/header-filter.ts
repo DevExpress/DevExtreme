@@ -29,15 +29,12 @@ import { DxoColumnHeaderFilter } from './base/column-header-filter';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
-        'allowSearch',
         'allowSelectAll',
         'dataSource',
         'groupInterval',
         'height',
         'search',
-        'searchMode',
         'width',
-        'searchTimeout',
         'texts',
         'visible',
         'showRelevantValues'

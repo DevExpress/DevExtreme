@@ -84,7 +84,7 @@ const onExporting = ({ component }: DxDataGridTypes.ExportingEvent) => {
 };
 </script>
 
-<style scoped>
+<style>
 img {
   height: 100px;
 }

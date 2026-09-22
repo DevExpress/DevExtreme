@@ -1,18 +1,17 @@
 import $ from 'jquery';
-import Class from 'core/class';
 import DefaultAdapter from '__internal/ui/validation/default_adapter';
 import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 
 import 'ui/validation_summary';
 
-const Fixture = Class.inherit({
-    createSummary: function(container, options) {
+class Fixture {
+    createSummary(container, options) {
         this.$summaryContainer = $(container || '#dxSummary');
         return this.$summaryContainer.dxValidationSummary($.extend({}, options)).dxValidationSummary('instance');
-    },
+    }
 
-    createValidator: function(validatorOptions) {
+    createValidator(validatorOptions) {
         const $container = $('<div/>');
         this.stubAdapter = sinon.createStubInstance(DefaultAdapter);
         $container.appendTo('#qunit-fixture');
@@ -20,7 +19,7 @@ const Fixture = Class.inherit({
             adapter: this.stubAdapter
         }, validatorOptions)).dxValidator('instance');
     }
-});
+}
 
 
 QUnit.testStart(function() {

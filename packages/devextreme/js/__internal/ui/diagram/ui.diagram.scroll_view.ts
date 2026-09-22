@@ -38,7 +38,7 @@ class DiagramScrollView extends Widget<Properties> {
     super._initMarkup();
 
     const $scrollViewWrapper = $('<div>').appendTo(this.$element());
-    const options = {
+    const options: Partial<Properties> = {
       direction: 'both',
       bounceEnabled: false,
       scrollByContent: false,
@@ -48,13 +48,11 @@ class DiagramScrollView extends Widget<Properties> {
     };
     const { useNativeScrolling } = this.option();
     if (useNativeScrolling !== undefined) {
-      // @ts-expect-error ts-error
       options.useNative = useNativeScrolling;
     }
     this._scrollView = this._createComponent(
       $scrollViewWrapper,
       ScrollView,
-      // @ts-expect-error ts-error
       options,
     );
     this._onCreateDiagramAction({

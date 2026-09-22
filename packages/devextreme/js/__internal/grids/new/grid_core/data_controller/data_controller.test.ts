@@ -101,6 +101,30 @@ describe('DataController', () => {
     });
   });
 
+  describe('remoteOperations', () => {
+    it('should reload the store when the option is changed at runtime', async () => {
+      const loadSpy = jest.fn(() => generateData(10));
+      const { optionsController, dataController } = setup({
+        dataSource: new CustomStore({
+          load: loadSpy,
+        }),
+        remoteOperations: {
+          filtering: false, sorting: false, paging: false,
+        },
+      });
+      await dataController.waitLoaded();
+
+      expect(loadSpy).toHaveBeenCalledTimes(1);
+
+      optionsController.option('remoteOperations', {
+        filtering: true, sorting: false, paging: false,
+      });
+      await dataController.waitLoaded();
+
+      expect(loadSpy).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe('regressions', () => {
     it('should work good with odata store', async () => {
       const sendRequestSpy = jest.spyOn(ajax, 'sendRequest').mockImplementation((params: any) => {

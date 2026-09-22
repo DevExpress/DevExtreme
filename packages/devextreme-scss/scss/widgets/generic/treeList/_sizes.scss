@@ -2,8 +2,6 @@
 @use "../sizes" as *;
 @use "../../base/treeList/variables" as *;
 
-// adduse
-
 $treelist-generic-expand-icon-size: null !default;
 
 @if $size == "default" {
@@ -20,4 +18,3 @@ $treelist-expand-icon-name-collapsed: spinright !default;
 $treelist-expand-icon-right-gap: 4px !default;
 $treelist-expand-checkbox-size: 16px !default;
 $treelist-expand-checkbox-right-gap: 8px !default;
-
