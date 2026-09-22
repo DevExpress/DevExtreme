@@ -619,11 +619,11 @@ export class ViewDataGenerator {
     const shiftedStartDate = dateUtilsTs.addOffsets(startDate, viewOffset);
 
     return {
-      groups: data.groups,
       groupIndex: data.groupIndex,
       startDate: shiftedStartDate,
       endDate: shiftedStartDate,
       allDay: true,
+      ...(data.groups !== undefined ? { groups: data.groups } : {}),
     };
   }
 
