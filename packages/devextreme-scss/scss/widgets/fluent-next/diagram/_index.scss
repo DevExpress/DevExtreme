@@ -480,13 +480,39 @@
   }
 }
 
-@include diagram-action-icons-mixin($diagram-content, $diagram-content, $diagram-toolbar-icon-size, $diagram-toolbar-colorbutton-border-width);
+@include diagram-action-icons-mixin($diagram-content, $diagram-content, $diagram-toolbar-icon-size, $diagram-toolbar-colorbutton-border-width, $masked: true);
+
+/*
+ * What the mask leaves to the cascade: the paint. `.dx-diagram-i` is the element the toolbar and
+ * the menus put the icon class on, so the colour it inherits is the one the mode scope already
+ * resolved - the same #161616 / #fff the baked images carried, and the disabled colour where the
+ * editor around it is disabled and its own text has been dimmed all along.
+ */
+.dx-diagram-i {
+  mask-repeat: no-repeat;
+  background-color: currentColor;
+}
+
+/*
+ * The four elements that carry no mask of their own: the empty placeholder, the panel toggle that
+ * is white over both modes' accent and keeps its baked image, and the two colour buttons, which
+ * hand the artwork to a pseudo-element so that their `border-bottom` swatch survives. Paint with
+ * nothing to cut it to shape would be a filled rectangle.
+ */
+.dx-diagram-i-selectbox-null-icon,
+.dx-diagram-i-button-fill,
+.dx-diagram-i-menu-fill,
+.dx-diagram-i-button-properties-panel-open {
+  background-color: transparent;
+}
 
 .dx-diagram-toolbox-popup .dx-button-has-icon .dx-icon.dx-icon-diagram-toolbox-drag {
-  @include diagram-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-drag.svg"), $diagram-content, $diagram-toolbox-title-size, $diagram-toolbox-title-size);
+  @include diagram-icon-masked(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/toolbox-drag.svg"), $diagram-toolbox-title-size, $diagram-toolbox-title-size);
 
   line-height: $diagram-toolbox-title-size;
-  background-size: $diagram-toolbox-title-size $diagram-toolbox-title-size;
+  mask-repeat: no-repeat;
+  mask-size: $diagram-toolbox-title-size $diagram-toolbox-title-size;
+  background-color: currentColor;
 }
 
 .dx-diagram-i-button-properties-panel-open {
