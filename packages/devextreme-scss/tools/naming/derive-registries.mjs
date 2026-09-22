@@ -990,7 +990,7 @@ const OVERRIDES = {
       // the quoted block, a table cell, and the bar that resizes a column or row together
       // with the strip that highlights the one being dragged
       'blockquote', 'cell', 'resizer', 'highlight',
-      // the Generate / Cancel buttons of the AI dialog: the theme sizes them for the runtime to read
+      // the AI dialog's Generate and Cancel buttons, sized by the theme for the runtime to read
       'button'],
     'pivot-grid': ['area', 'area-field', 'fields-area-head', 'fields-area-head-cell', 'field-chooser',
       'field', 'fields', 'expand-icon', 'row', 'column', 'cell', 'last-cell', 'header', 'headers',

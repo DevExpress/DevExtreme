@@ -23,6 +23,7 @@ import {
 } from '../tools/naming/tier';
 import accentContract from '../tools/naming/accent-contract.json';
 import runtimeContract from '../tools/naming/runtime-contract.json';
+import runtimeReads from '../tools/naming/runtime-reads.json';
 import vizContract from '../tools/naming/viz-contract.json';
 import { required } from './required';
 
@@ -152,11 +153,7 @@ const readsAllowedFor = (folder: string): Set<string> => {
 
 const RUNTIME_CONTRACT = new Set<string>(runtimeContract.variables.map(({ name }) => name));
 
-const RUNTIME_READS = new Set<string>(
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  (require('../tools/naming/runtime-reads.json') as { variables: { name: string }[] }).variables
-    .map(({ name }) => name),
-);
+const RUNTIME_READS = new Set<string>(runtimeReads.variables.map(({ name }) => name));
 
 const isAccentContractFile = (file: string): boolean => file.endsWith(
   join(...accentContract.declaredIn.split('/')),

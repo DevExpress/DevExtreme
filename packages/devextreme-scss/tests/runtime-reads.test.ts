@@ -5,23 +5,18 @@
  * fluent-next renders the old geometry. This file is where that would show.
  */
 
-import { existsSync, readFileSync, readdirSync, statSync } from 'fs';
+import {
+  readFileSync,
+  readdirSync,
+  statSync,
+  existsSync,
+} from 'fs';
 import { join, sep } from 'path';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const contract = require('../tools/naming/runtime-reads.json') as {
-  variables: { name: string; kind: 'length' | 'keyword'; readBy: string; meaning: string }[];
-};
+import accent from '../tools/naming/accent-contract.json';
 /* JS writes these, so they are the other direction and are governed by their own file. */
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const written = require('../tools/naming/runtime-contract.json') as { variables: { name: string }[] };
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const accent = require('../tools/naming/accent-contract.json') as {
-  input: { name: string };
-  source: { name: string };
-  settings: { name: string }[];
-  steps: { prefix: string; values: number[] };
-};
+import written from '../tools/naming/runtime-contract.json';
+import contract from '../tools/naming/runtime-reads.json';
 
 const packageRoot = process.cwd();
 const repoRoot = join(packageRoot, '..', '..');
