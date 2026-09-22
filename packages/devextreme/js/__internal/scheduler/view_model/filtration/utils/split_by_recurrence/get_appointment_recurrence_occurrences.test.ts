@@ -2,7 +2,9 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
+import { createTimeZoneCalculator } from '../../../../r1/timezone_calculator';
 import { getAsciiStringByDate } from '../../../../recurrence/base';
+import { buildDaylightPlan } from '../../../../utils/daylight_grid';
 import { getAppointmentRecurrenceOccurrences } from './get_appointment_recurrence_occurrences';
 
 const options = {
@@ -340,5 +342,51 @@ describe('getAppointmentRecurrenceOccurrences', () => {
         },
       ]);
     });
+  });
+});
+
+describe('repeated hour and a visible DST plan', () => {
+  it('places a daily Cairo 23:00 occurrence on the first pass', () => {
+    const appointment: any = {
+      source: {
+        startDate: Date.parse('2026-10-29T21:00:00.000Z'),
+        endDate: Date.parse('2026-10-29T21:15:00.000Z'),
+      },
+      recurrenceRule: 'FREQ=DAILY',
+      hasRecurrenceRule: true,
+    };
+    const [occurrence] = getAppointmentRecurrenceOccurrences(appointment, {
+      interval: {
+        min: Date.parse('2026-10-29T00:00:00.000Z'),
+        max: Date.parse('2026-10-30T12:00:00.000Z'),
+      },
+      timeZone: 'Africa/Cairo',
+    });
+
+    expect(occurrence.source.startDate).toBe(Date.parse('2026-10-29T20:00:00.000Z'));
+  });
+
+  it('does not add the unreachable-hour shift when the plan already lays that day out', () => {
+    const startDate = Date.UTC(2025, 2, 9, 10, 30);
+    const endDate = Date.UTC(2025, 2, 9, 11, 30);
+    const appointment: any = { source: { startDate, endDate } };
+    const pacificOptions = {
+      interval: { min: startDate - HOUR_MS, max: endDate + HOUR_MS },
+      timeZone: 'Canada/Pacific',
+    };
+    const plan = buildDaylightPlan(
+      [new Date(2025, 2, 9)],
+      0,
+      24,
+      HOUR_MS,
+      createTimeZoneCalculator('Canada/Pacific'),
+    );
+    const withoutPlan = getAppointmentRecurrenceOccurrences(appointment, pacificOptions)[0];
+    const withPlan = getAppointmentRecurrenceOccurrences(appointment, {
+      ...pacificOptions,
+      daylightPlan: plan,
+    })[0];
+
+    expect(withPlan.startDateUTC - withoutPlan.startDateUTC).toBe(-HOUR_MS);
   });
 });

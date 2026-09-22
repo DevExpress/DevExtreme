@@ -1,21 +1,35 @@
 import { getDateByAsciiString } from '../../../../recurrence/base';
+import type { DaylightPlan } from '../../../../utils/daylight_grid';
 import type { DateInterval, MinimalAppointmentEntity, UTCDates } from '../../../types';
 import { generateRecurrenceUTCDates } from './generate_recurrence_utc_dates';
 import type { DateInformation } from './get_date_information';
-import { getDateInformation, getDateOffsetMs } from './get_date_information';
+import {
+  getDateInformation,
+  getDateOffsetMs,
+  isCoveredByDaylightPlan,
+  resolveFirstPass,
+} from './get_date_information';
 
 interface Options {
   firstDayOfWeek?: number;
   interval: DateInterval;
   timeZone: string;
+  daylightPlan?: DaylightPlan;
 }
 
 // NOTE: When DST+1, then 2 AM equal 3 AM and interval [2 AM, 3 AM) is unreachable
 // Recurrence is different because each occurrence has to have the same time in any timezone shift
+const noShift = (): number[] => [0, 0];
+
 const getUnreachableShiftRecurrence = (
   startDateInfo: DateInformation,
   endDateInfo: DateInformation,
+  coveredByPlan: boolean,
 ): number[] => {
+  if (coveredByPlan) {
+    return noShift();
+  }
+
   switch (true) {
     case startDateInfo.isUnreachableTime:
       return [startDateInfo.deltaMs, startDateInfo.deltaMs];
@@ -29,7 +43,12 @@ const getUnreachableShiftRecurrence = (
 const getUnreachableShift = (
   startDateInfo: DateInformation,
   endDateInfo: DateInformation,
+  coveredByPlan: boolean,
 ): number[] => {
+  if (coveredByPlan) {
+    return noShift();
+  }
+
   switch (true) {
     case startDateInfo.isUnreachableTime && endDateInfo.isUnreachableTime:
       return [startDateInfo.deltaMs, startDateInfo.deltaMs];
@@ -50,6 +69,7 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
     firstDayOfWeek,
     interval,
     timeZone,
+    daylightPlan,
   }: Options,
 ): (T & UTCDates)[] => {
   const {
@@ -60,7 +80,13 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
   if (!appointment.hasRecurrenceRule) {
     const startDateInfo = getDateInformation(startDateMsBase, timeZone);
     const endDateInfo = getDateInformation(endDateMsBase, timeZone);
-    const [startDateFix, endDateFix] = getUnreachableShift(startDateInfo, endDateInfo);
+    const covered = isCoveredByDaylightPlan(daylightPlan, startDateMsBase)
+      || isCoveredByDaylightPlan(daylightPlan, endDateMsBase);
+    const [startDateFix, endDateFix] = getUnreachableShift(
+      startDateInfo,
+      endDateInfo,
+      covered,
+    );
 
     return [{
       ...appointment,
@@ -89,9 +115,8 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
   );
 
   return dates
-    .map((startDateMs) => {
-      // NOTE: Appointment can cross DST in Target timezone or in Appointment timezone,
-      // so we need to calculate DST changes for both startDate and endDate
+    .map((occurrenceStart) => {
+      const startDateMs = occurrenceStart;
       const endDateMs = startDateMs + duration;
       const startDateInfo = getDateInformation(startDateMs, timeZone);
       const startDateAppointmentOffset = getDateOffsetMs(startDateMs, startDateTimeZone);
@@ -107,9 +132,19 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
       const endAppointmentChange = endDateAppointmentOffsetBase - endDateAppointmentOffset;
       const endDateDSTChange = endDateTimeZone ? endAppointmentChange : endChange;
 
-      const [startDateFix, endDateFix] = getUnreachableShiftRecurrence(startDateInfo, endDateInfo);
-      const sourceStartDate = startDateMs + startDateDSTChange;
-      const sourceEndDate = endDateMs + endDateDSTChange;
+      // The offset correction runs first. A wall clock still in the repeated hour
+      // then takes the first pass, so the two steps do not cancel each other.
+      const startResolved = resolveFirstPass(startDateMs + startDateDSTChange, timeZone);
+      const endResolved = resolveFirstPass(endDateMs + endDateDSTChange, timeZone);
+      const covered = isCoveredByDaylightPlan(daylightPlan, startResolved.instant)
+        || isCoveredByDaylightPlan(daylightPlan, endResolved.instant);
+      const [startDateFix, endDateFix] = getUnreachableShiftRecurrence(
+        startResolved.info,
+        endResolved.info,
+        covered,
+      );
+      const sourceStartDate = startResolved.instant;
+      const sourceEndDate = endResolved.instant;
 
       return {
         ...appointment,
@@ -117,8 +152,8 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
           startDate: sourceStartDate,
           endDate: sourceEndDate,
         },
-        startDateUTC: sourceStartDate + startDateFix + startDateInfo.offsetMs,
-        endDateUTC: sourceEndDate + endDateFix + endDateInfo.offsetMs,
+        startDateUTC: sourceStartDate + startDateFix + startResolved.info.offsetMs,
+        endDateUTC: sourceEndDate + endDateFix + endResolved.info.offsetMs,
       };
     })
     .filter((item) => !exceptionDates.has(item.source.startDate));
