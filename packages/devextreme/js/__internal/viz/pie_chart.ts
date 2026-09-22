@@ -18,6 +18,8 @@ import { each as _each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
 import consts from '@ts/viz/components/consts';
 import { plugins as annotationsPlugins } from '@ts/viz/core/annotations';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugins as centerTemplatePlugins } from '@ts/viz/core/center_template';
 import { getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords, normalizeAngle } from '@ts/viz/core/utils';
 import { Range } from '@ts/viz/translators/range';
@@ -146,26 +148,26 @@ const pieSizeEqualizer = (function () {
   };
 }());
 
-const dxPieChart = BaseChart.inherit({
-  _themeSection: 'pie',
+class PieChart extends BaseChart {
+  _abstractSeries!: ThemeValue;
+
+  _center!: ThemeValue;
+
+  _innerRadius!: number;
+
+  _sizeGroupLayout!: ThemeValue;
 
   _layoutManagerOptions() {
-    return _extend(true, {}, this.callBase(), {
+    return _extend(true, {}, super._layoutManagerOptions(), {
       piePercentage: correctPercentValue(this._themeManager.getOptions('diameter')),
       minPiePercentage: correctPercentValue(this._themeManager.getOptions('minDiameter')),
     });
-  },
-
-  _optionChangesMap: {
-    diameter: 'REINIT',
-    minDiameter: 'REINIT',
-    sizeGroup: 'REINIT',
-  },
+  }
 
   _disposeCore() {
     pieSizeEqualizer.remove(this);
-    this.callBase();
-  },
+    super._disposeCore();
+  }
 
   _groupSeries() {
     const { series } = this;
@@ -177,11 +179,11 @@ const dxPieChart = BaseChart.inherit({
       }],
       argumentOptions: series[0]?.getOptions(),
     };
-  },
+  }
 
   getArgumentAxis() {
     return null;
-  },
+  }
 
   _getValueAxis() {
     const translator = new Translator1D()
@@ -195,7 +197,7 @@ const dxPieChart = BaseChart.inherit({
         translator.setDomain(range.min, range.max);
       },
     };
-  },
+  }
 
   _populateBusinessRange() {
     this.series.map((series) => {
@@ -204,22 +206,22 @@ const dxPieChart = BaseChart.inherit({
       series.getValueAxis().setBusinessRange(range);
       return range;
     });
-  },
+  }
 
   _specialProcessSeries() {
     _each(this.series, (_, singleSeries) => {
       singleSeries.arrangePoints();
     });
-  },
+  }
 
   _checkPaneName() {
     return true;
-  },
+  }
 
   _processSingleSeries(singleSeries) {
-    this.callBase(singleSeries);
+    super._processSingleSeries(singleSeries);
     singleSeries.arrangePoints();
-  },
+  }
 
   _handleSeriesDataUpdated() {
     let maxPointCount = 0;
@@ -229,11 +231,11 @@ const dxPieChart = BaseChart.inherit({
     this.series.forEach((s) => {
       s.setMaxPointsCount(maxPointCount);
     });
-    this.callBase();
-  },
+    super._handleSeriesDataUpdated();
+  }
 
   _getLegendOptions(item) {
-    const legendItem = this.callBase(item);
+    const legendItem = super._getLegendOptions(item);
     const { legendData } = legendItem;
 
     legendData.argument = item.argument;
@@ -242,9 +244,9 @@ const dxPieChart = BaseChart.inherit({
     legendData.points = [item];
 
     return legendItem;
-  },
+  }
 
-  _getLegendTargets() {
+  _getLegendTargets(): ThemeValue[] {
     const itemsByArgument = {};
 
     (this.series || []).forEach((series) => {
@@ -277,11 +279,11 @@ const dxPieChart = BaseChart.inherit({
     });
 
     return items;
-  },
+  }
 
   _getLayoutTargets() {
     return [{ canvas: this._canvas }];
-  },
+  }
 
   _getLayoutSeries(series, drawOptions) {
     let layout;
@@ -310,7 +312,7 @@ const dxPieChart = BaseChart.inherit({
     };
 
     return layout;
-  },
+  }
 
   _getLayoutSeriesForEqualPies(series, sizeGroupLayout) {
     const canvas = this._canvas;
@@ -324,7 +326,7 @@ const dxPieChart = BaseChart.inherit({
     this.layoutManager.correctPieLabelRadius(series, layout, canvas);
 
     return layout;
-  },
+  }
 
   _updateSeriesDimensions(drawOptions) {
     const visibleSeries = this._getVisibleSeries();
@@ -352,7 +354,7 @@ const dxPieChart = BaseChart.inherit({
         innerRad += delta + seriesSpacing;
       });
     }
-  },
+  }
 
   _renderSeries(drawOptions, isRotated, isLegendInside) {
     this._calculateSeriesLayout(drawOptions, isRotated);
@@ -364,15 +366,15 @@ const dxPieChart = BaseChart.inherit({
     }
 
     this._renderSeriesElements(drawOptions, isLegendInside);
-  },
+  }
 
   _getCenter() {
     return this._center;
-  },
+  }
 
   getInnerRadius() {
     return this._innerRadius;
-  },
+  }
 
   _getLegendCallBack() {
     const legend = this._legend;
@@ -395,7 +397,7 @@ const dxPieChart = BaseChart.inherit({
         callback(getLegendItemAction(points));
       });
     };
-  },
+  }
 
   _locateLabels(resolveLabelOverlapping) {
     let iterationCount = 0;
@@ -405,13 +407,11 @@ const dxPieChart = BaseChart.inherit({
       wordWrapApplied = this._adjustSeriesLabels(resolveLabelOverlapping === 'shift');
       labelsWereOverlapped = this._resolveLabelOverlapping(resolveLabelOverlapping);
     } while ((labelsWereOverlapped || wordWrapApplied) && ++iterationCount < MAX_RESOLVE_ITERATION_COUNT);
-  },
+  }
 
   _adjustSeriesLabels(moveLabelsFromCenter) {
     return this.series.reduce((r, s) => s.adjustLabels(moveLabelsFromCenter) || r, false);
-  },
-
-  _applyExtraSettings: _noop,
+  }
 
   _resolveLabelOverlappingShift() {
     const inverseDirection = this.option('segmentsDirection') === 'anticlockwise';
@@ -460,17 +460,46 @@ const dxPieChart = BaseChart.inherit({
       ) || labelsOverlapped;
     }
     return labelsOverlapped;
-  },
+  }
 
   _setGeometry({ centerX: x, centerY: y, radiusInner }) {
     this._center = { x, y };
     this._innerRadius = radiusInner;
+  }
+
+  _disposeSeries(seriesIndex?): void {
+    super._disposeSeries(seriesIndex);
+    Object.assign(this, { _abstractSeries: null });
+  }
+
+  _getExtraOptions() {
+    return {
+      startAngle: this.option('startAngle'),
+      innerRadius: this.option('innerRadius'),
+      segmentsDirection: this.option('segmentsDirection'),
+      type: this.option('type'),
+    };
+  }
+
+  getSizeGroup() {
+    return this._themeManager.getOptions('sizeGroup');
+  }
+
+  getSizeGroupLayout() {
+    return this._sizeGroupLayout || {};
+  }
+}
+
+setupWidgetPrototype(PieChart, {
+  _themeSection: 'pie',
+
+  _optionChangesMap: {
+    diameter: 'REINIT',
+    minDiameter: 'REINIT',
+    sizeGroup: 'REINIT',
   },
 
-  _disposeSeries() {
-    this.callBase.apply(this, arguments);
-    this._abstractSeries = null;
-  },
+  _applyExtraSettings: _noop,
 
   _legendDataField: 'point',
 
@@ -505,33 +534,15 @@ const dxPieChart = BaseChart.inherit({
   _reinitAxes: _noop,
 
   _correctAxes: _noop,
-
-  _getExtraOptions() {
-    return {
-      startAngle: this.option('startAngle'),
-      innerRadius: this.option('innerRadius'),
-      segmentsDirection: this.option('segmentsDirection'),
-      type: this.option('type'),
-    };
-  },
-
-  getSizeGroup() {
-    return this._themeManager.getOptions('sizeGroup');
-  },
-
-  getSizeGroupLayout() {
-    return this._sizeGroupLayout || {};
-  },
 });
-
 _each(OPTIONS_FOR_REFRESH_SERIES, (_, name) => {
-  dxPieChart.prototype._optionChangesMap[name] = 'REFRESH_SERIES_DATA_INIT';
+  PieChart.prototype._optionChangesMap[name] = 'REFRESH_SERIES_DATA_INIT';
 });
 
-dxPieChart.addPlugin(centerTemplatePlugins.pieChart);
-dxPieChart.addPlugin(annotationsPlugins.core);
-dxPieChart.addPlugin(annotationsPlugins.pieChart);
+PieChart.addPlugin(centerTemplatePlugins.pieChart);
+PieChart.addPlugin(annotationsPlugins.core);
+PieChart.addPlugin(annotationsPlugins.pieChart);
 
-registerComponent('dxPieChart', dxPieChart);
+registerComponent('dxPieChart', PieChart);
 
-export default dxPieChart;
+export default PieChart;
