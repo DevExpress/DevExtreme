@@ -1,4 +1,4 @@
-import { Ajax } from '@ts/core/utils/m_ajax';
+import { Ajax } from '@ts/core/utils/ajax';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
 
