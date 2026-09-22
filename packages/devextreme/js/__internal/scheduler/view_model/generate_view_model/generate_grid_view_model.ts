@@ -55,7 +55,7 @@ export const sortAppointments = (
             compareOptions.startDayHour,
             compareOptions.endDayHour,
             compareOptions.skippedDays,
-            optionManager.options.type === 'timelineWeek' || optionManager.options.type === 'timelineWorkWeek',
+            true,
           );
           const endDateUTC = shiftRepeatedHourTimestamp(
             entity.endDateUTC,
@@ -64,7 +64,7 @@ export const sortAppointments = (
             compareOptions.startDayHour,
             compareOptions.endDayHour,
             compareOptions.skippedDays,
-            optionManager.options.type === 'timelineWeek' || optionManager.options.type === 'timelineWorkWeek',
+            true,
           );
 
           return {

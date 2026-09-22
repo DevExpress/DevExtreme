@@ -60,6 +60,30 @@ describe('repeated hour layout', () => {
     })).toBe(24.5 * HOUR);
   });
 
+  it('does not shift across a hidden fallback day', () => {
+    const dayBefore = new Date(2026, 9, 28);
+    const dayAfterNoon = new Date(2026, 9, 30, 12);
+
+    expect(getCumulativeFallbackShiftMs(dayBefore, dayAfterNoon, 0, 24, [4], true)).toBe(0);
+  });
+
+  it('does not move the indicator by a hidden fallback day', () => {
+    const dayBefore = new Date(2026, 9, 28);
+    const dayAfterNoon = new Date(2026, 9, 30, 12);
+
+    expect(getRepeatedHourLayoutMs({
+      from: dayBefore,
+      to: dayAfterNoon,
+      startDayHour: 0,
+      endDayHour: 24,
+      cellDurationMs: CELL,
+      nominalCellCount: 96,
+      skippedDays: [4],
+      visibleDayCount: 2,
+      skipHiddenDays: true,
+    })).toBe(36 * HOUR);
+  });
+
   it('shifts only instants at or after the fallback', () => {
     const first = new Date(2026, 9, 29, 23);
     const transition = findFallbackInstant(fallbackDay) ?? 0;

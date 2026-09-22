@@ -55,6 +55,8 @@ export class ViewDataGenerator {
 
   public skippedDays: number[] = [];
 
+  private repeatedHourCellCountCache?: { key: string; counts: number[] };
+
   constructor(public readonly viewType: ViewType) {}
 
   get daysInInterval(): number {
@@ -1019,21 +1021,35 @@ export class ViewDataGenerator {
     }
 
     const skippedDays = options.skippedDays ?? this.skippedDays;
-    const skipHiddenDays = viewType === 'timelineWeek' || viewType === 'timelineWorkWeek';
     const dayCount = this.daysInInterval * intervalCount;
+    const cacheKey = [
+      viewType,
+      startViewDate.getTime(),
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      dayCount,
+      skippedDays.join(','),
+    ].join('|');
+    if (this.repeatedHourCellCountCache?.key === cacheKey) {
+      return this.repeatedHourCellCountCache.counts;
+    }
+
     const cellDurationMs = hoursInterval * toMs('hour');
     const wallMs = (endDayHour - startDayHour) * toMs('hour');
-    const result: number[] = [];
+    const counts: number[] = [];
     const day = new Date(
       startViewDate.getFullYear(),
       startViewDate.getMonth(),
       startViewDate.getDate(),
     );
+    const maxSteps = dayCount * 8;
+    let steps = 0;
 
-    while (result.length < dayCount) {
-      const isHidden = skipHiddenDays && skippedDays.includes(day.getDay());
-      if (!isHidden) {
-        result.push(getExtraCellCount(
+    while (counts.length < dayCount && steps < maxSteps) {
+      steps += 1;
+      if (!skippedDays.includes(day.getDay())) {
+        counts.push(getExtraCellCount(
           wallMs,
           getVisibleFallbackMs(day, startDayHour, endDayHour),
           cellDurationMs,
@@ -1042,7 +1058,8 @@ export class ViewDataGenerator {
       day.setDate(day.getDate() + 1);
     }
 
-    return result;
+    this.repeatedHourCellCountCache = { key: cacheKey, counts };
+    return counts;
   }
 
   public getRowCount(options: CountGenerationConfig): number {

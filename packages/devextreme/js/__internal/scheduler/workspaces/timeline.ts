@@ -365,7 +365,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       intervalCount,
     } = this.option();
     const cellDuration = this.getCellDuration();
-    const skipHiddenDays = this.type === 'timelineWeek' || this.type === 'timelineWorkWeek';
     const visibleDayCount = this.viewDataProvider.viewDataGenerator.daysInInterval * intervalCount;
 
     return getRepeatedHourLayoutMs({
@@ -377,7 +376,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       nominalCellCount: this.getCellCountInDay(),
       skippedDays,
       visibleDayCount,
-      skipHiddenDays,
+      skipHiddenDays: true,
     }) / cellDuration;
   }
 
