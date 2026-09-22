@@ -1,48 +1,26 @@
-/* eslint-disable prefer-rest-params */
-/* eslint-disable @stylistic/no-mixed-operators */
-/* eslint-disable max-depth */
-/* eslint-disable no-bitwise */
-/* eslint-disable prefer-spread */
-/* eslint-disable @typescript-eslint/no-this-alias */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
-/* eslint-disable func-names */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-multi-assign */
-/* eslint-disable @stylistic/max-len */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable no-else-return */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
+/* eslint-disable max-classes-per-file */
 
+import type { VisualRange } from '@js/common/charts';
 import registerComponent from '@js/core/component_registrator';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { adjust } from '@js/core/utils/math';
 import {
-  isDate as _isDate,
-  isDefined as _isDefined,
-  isFunction,
-  isNumeric as _isNumber,
-  isPlainObject,
-  type as _type,
+  isDate, isDefined, isFunction, isNumeric, isPlainObject, type as getType,
 } from '@js/core/utils/type';
-import formatHelper from '@js/format_helper';
+import formatHelper from '@ts/core/format_helper';
+import type DOMComponent from '@ts/core/widget/dom_component';
 import constants from '@ts/viz/axes/axes_constants';
 import { Axis } from '@ts/viz/axes/base_axis';
 import { tickGenerator } from '@ts/viz/axes/tick_generator';
 import { correctValueType, getParser } from '@ts/viz/components/parse_utils';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
-import baseWidgetModule from '@ts/viz/core/base_widget';
+import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin as dataSourcePlugin } from '@ts/viz/core/data_source';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
+import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugin as LoadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
 import { plugin as titlePlugin } from '@ts/viz/core/title';
 import {
@@ -50,7 +28,7 @@ import {
   getCategoriesInfo,
   getLog,
   getVizRangeObject as parseValue,
-  normalizeEnum as _normalizeEnum,
+  normalizeEnum,
   patchFontOptions,
   rangesAreEqual,
 } from '@ts/viz/core/utils';
@@ -61,9 +39,6 @@ import { SlidersController } from '@ts/viz/range_selector/sliders_controller';
 import { Tracker } from '@ts/viz/range_selector/tracker';
 import { Range } from '@ts/viz/translators/range';
 
-const _max = Math.max;
-const _ceil = Math.ceil;
-const _floor = Math.floor;
 const START_VALUE = 'startValue';
 const END_VALUE = 'endValue';
 const DATETIME = 'datetime';
@@ -83,56 +58,133 @@ const INVISIBLE_POS = -1000;
 const SEMIDISCRETE_GRID_SPACING_FACTOR = 50;
 const DEFAULT_AXIS_DIVISION_FACTOR = 30;
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
-const logarithmBase = 10;
+const DEFAULT_LOGARITHM_BASE = 10;
 
-function calculateMarkerHeight(renderer, value, sliderMarkerOptions) {
-  const formattedText = value === undefined ? consts.emptySliderMarkerText : formatValue(value, sliderMarkerOptions);
-  const textBBox = getTextBBox(renderer, formattedText, sliderMarkerOptions.font);
-  return _ceil(textBBox.height) + 2 * sliderMarkerOptions.paddingTopBottom + consts.pointerSize;
+interface Indents {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
 }
 
-function calculateScaleLabelHalfWidth(renderer, value, scaleOptions, tickIntervalsInfo) {
-  const formattedText = formatValue(value, scaleOptions.label, tickIntervalsInfo, scaleOptions.valueType, scaleOptions.type, scaleOptions.logarithmBase);
+interface TickIntervalsInfo {
+  tickInterval: ThemeValue;
+  minorTickInterval: ThemeValue;
+  bounds: ThemeValue;
+  ticks: ThemeValue[];
+}
+
+interface IntervalCustomTicks {
+  intervals: ThemeValue[];
+  altIntervals?: ThemeValue[];
+}
+
+type DateMarkerVisibilityChecker = (
+  isDateScale: boolean,
+  isMarkerVisible: boolean,
+  min: ThemeValue,
+  max: ThemeValue,
+  tickInterval: ThemeValue,
+) => boolean;
+
+interface Canvas {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  right?: number;
+  bottom?: number;
+}
+
+function getTextBBox(renderer: ThemeValue, text: string, fontOptions: ThemeValue): ThemeValue {
+  const textElement = renderer.text(text, INVISIBLE_POS, INVISIBLE_POS)
+    .css(patchFontOptions(fontOptions))
+    .append(renderer.root);
+
+  const textBBox = textElement.getBBox();
+  textElement.remove();
+  return textBBox;
+}
+
+function calculateMarkerHeight(
+  renderer: ThemeValue,
+  value: ThemeValue,
+  sliderMarkerOptions: ThemeValue,
+): number {
+  const formattedText = value === undefined
+    ? consts.emptySliderMarkerText
+    : formatValue(value, sliderMarkerOptions);
+  const textBBox = getTextBBox(renderer, formattedText, sliderMarkerOptions.font);
+  return Math.ceil(textBBox.height) + 2 * sliderMarkerOptions.paddingTopBottom + consts.pointerSize;
+}
+
+function calculateScaleLabelHalfWidth(
+  renderer: ThemeValue,
+  value: ThemeValue,
+  scaleOptions: ThemeValue,
+  tickIntervalsInfo: TickIntervalsInfo,
+): number {
+  const formattedText = formatValue(
+    value,
+    scaleOptions.label,
+    tickIntervalsInfo,
+    scaleOptions.valueType,
+    scaleOptions.type,
+    scaleOptions.logarithmBase,
+  );
   const textBBox = getTextBBox(renderer, formattedText, scaleOptions.label.font);
 
-  return _ceil(textBBox.width / 2);
+  return Math.ceil(textBBox.width / 2);
 }
 
-function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, tickIntervalsInfo) {
-  let leftMarkerHeight;
+function calculateIndents(
+  renderer: ThemeValue,
+  scale: ThemeValue,
+  sliderMarkerOptions: ThemeValue,
+  indentOptions: ThemeValue,
+  tickIntervalsInfo: TickIntervalsInfo,
+): Indents {
   let leftScaleLabelWidth = 0;
   let rightScaleLabelWidth = 0;
-  let rightMarkerHeight;
-  let placeholderWidthLeft;
-  let placeholderWidthRight;
-  let placeholderHeight;
   const ticks = scale.type === 'semidiscrete' ? scale.customTicks : tickIntervalsInfo.ticks;
-  let startTickValue;
-  let endTickValue;
+  const indents = indentOptions || {};
 
-  indentOptions = indentOptions || {};
+  const placeholderWidthLeftOption = indents.left;
+  const placeholderWidthRightOption = indents.right;
 
-  placeholderWidthLeft = indentOptions.left;
-  placeholderWidthRight = indentOptions.right;
-
-  placeholderHeight = sliderMarkerOptions.placeholderHeight;
+  let { placeholderHeight } = sliderMarkerOptions;
 
   if (sliderMarkerOptions.visible) {
-    leftMarkerHeight = calculateMarkerHeight(renderer, scale.startValue, sliderMarkerOptions);
-    rightMarkerHeight = calculateMarkerHeight(renderer, scale.endValue, sliderMarkerOptions);
+    const leftMarkerHeight = calculateMarkerHeight(renderer, scale.startValue, sliderMarkerOptions);
+    const rightMarkerHeight = calculateMarkerHeight(renderer, scale.endValue, sliderMarkerOptions);
     if (placeholderHeight === undefined) {
-      placeholderHeight = _max(leftMarkerHeight, rightMarkerHeight);
+      placeholderHeight = Math.max(leftMarkerHeight, rightMarkerHeight);
     }
   }
 
   if (scale.label.visible) {
-    startTickValue = _isDefined(scale.startValue) ? ticks[0] : undefined;
-    endTickValue = _isDefined(scale.endValue) ? ticks[ticks.length - 1] : undefined;
-    leftScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, startTickValue, scale, tickIntervalsInfo);
-    rightScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, endTickValue, scale, tickIntervalsInfo);
+    const startTickValue = isDefined(scale.startValue) ? ticks[0] : undefined;
+    const endTickValue = isDefined(scale.endValue) ? ticks[ticks.length - 1] : undefined;
+    leftScaleLabelWidth = calculateScaleLabelHalfWidth(
+      renderer,
+      startTickValue,
+      scale,
+      tickIntervalsInfo,
+    );
+    rightScaleLabelWidth = calculateScaleLabelHalfWidth(
+      renderer,
+      endTickValue,
+      scale,
+      tickIntervalsInfo,
+    );
   }
-  placeholderWidthLeft = placeholderWidthLeft !== undefined ? placeholderWidthLeft : leftScaleLabelWidth;
-  placeholderWidthRight = (placeholderWidthRight !== undefined ? placeholderWidthRight : rightScaleLabelWidth) || 1; // T240698
+  const placeholderWidthLeft = placeholderWidthLeftOption !== undefined
+    ? placeholderWidthLeftOption
+    : leftScaleLabelWidth;
+  // T240698
+  const placeholderWidthRight = (placeholderWidthRightOption !== undefined
+    ? placeholderWidthRightOption
+    : rightScaleLabelWidth) || 1;
 
   return {
     left: placeholderWidthLeft,
@@ -142,21 +194,28 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
   };
 }
 
-function calculateValueType(firstValue, secondValue) {
-  const typeFirstValue = _type(firstValue);
-  const typeSecondValue = _type(secondValue);
-  const validType = function (type) {
-    return typeFirstValue === type || typeSecondValue === type;
-  };
+function calculateValueType(firstValue: ThemeValue, secondValue: ThemeValue): string {
+  const typeFirstValue = getType(firstValue);
+  const typeSecondValue = getType(secondValue);
+  const validType = (type: string): boolean => typeFirstValue === type || typeSecondValue === type;
 
-  return validType('date') ? DATETIME : validType('number') ? 'numeric' : validType(STRING) ? STRING : '';
+  if (validType('date')) {
+    return DATETIME;
+  }
+  if (validType('number')) {
+    return 'numeric';
+  }
+  return validType(STRING) ? STRING : '';
 }
 
-function showScaleMarkers(scaleOptions) {
-  return scaleOptions.valueType === DATETIME && scaleOptions.marker.visible;
+function showScaleMarkers(scaleOptions: ThemeValue): boolean {
+  return Boolean(scaleOptions.valueType === DATETIME && scaleOptions.marker.visible);
 }
 
-function updateTranslatorRangeInterval(translatorRange, scaleOptions) {
+function updateTranslatorRangeInterval(
+  translatorRange: ThemeValue,
+  scaleOptions: ThemeValue,
+): void {
   let intervalX = scaleOptions.minorTickInterval || scaleOptions.tickInterval;
   if (scaleOptions.valueType === 'datetime') {
     intervalX = dateUtils.dateToMilliseconds(intervalX);
@@ -164,13 +223,17 @@ function updateTranslatorRangeInterval(translatorRange, scaleOptions) {
   translatorRange.addRange({ interval: intervalX });
 }
 
-function checkLogarithmicOptions(options, defaultLogarithmBase, incidentOccurred) {
+function checkLogarithmicOptions(
+  options: ThemeValue,
+  defaultLogarithmBase: number,
+  incidentOccurred: ThemeValue,
+): void {
   if (!options) {
     return;
   }
 
-  const logarithmBase = options.logarithmBase;
-  if (options.type === LOGARITHMIC && logarithmBase <= 0 || (logarithmBase && !_isNumber(logarithmBase))) {
+  const base = options.logarithmBase;
+  if ((options.type === LOGARITHMIC && base <= 0) || (base && !isNumeric(base))) {
     options.logarithmBase = defaultLogarithmBase;
     incidentOccurred('E2104');
   } else if (options.type !== LOGARITHMIC) {
@@ -178,22 +241,37 @@ function checkLogarithmicOptions(options, defaultLogarithmBase, incidentOccurred
   }
 }
 
-function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers, tickIntervalsInfo) {
+function calculateScaleAreaHeight(
+  renderer: ThemeValue,
+  scaleOptions: ThemeValue,
+  visibleMarkers: boolean,
+  tickIntervalsInfo: TickIntervalsInfo,
+): number {
   const labelScaleOptions = scaleOptions.label;
   const markerScaleOptions = scaleOptions.marker;
-  const placeholderHeight = scaleOptions.placeholderHeight;
-  const ticks = scaleOptions.type === 'semidiscrete' ? scaleOptions.customTicks : tickIntervalsInfo.ticks;
+  const { placeholderHeight } = scaleOptions;
+  const ticks = scaleOptions.type === 'semidiscrete'
+    ? scaleOptions.customTicks
+    : tickIntervalsInfo.ticks;
   const text = formatValue(ticks[0], labelScaleOptions);
 
   if (placeholderHeight) {
-    return placeholderHeight;
-  } else {
-    return (labelScaleOptions.visible ? labelScaleOptions.topIndent + getTextBBox(renderer, text, labelScaleOptions.font).height : 0)
-            + (visibleMarkers ? markerScaleOptions.topIndent + markerScaleOptions.separatorHeight : 0);
+    return Number(placeholderHeight);
   }
+  const labelHeight: number = labelScaleOptions.visible
+    ? labelScaleOptions.topIndent + getTextBBox(renderer, text, labelScaleOptions.font).height
+    : 0;
+  const markerHeight: number = visibleMarkers
+    ? markerScaleOptions.topIndent + markerScaleOptions.separatorHeight
+    : 0;
+  return labelHeight + markerHeight;
 }
 
-function getMinorTickIntervalUnit(tickInterval, minorTickInterval, withCorrection) {
+function getMinorTickIntervalUnit(
+  tickInterval: ThemeValue,
+  minorTickInterval: ThemeValue,
+  withCorrection: boolean,
+): ThemeValue {
   let interval = dateUtils.getDateUnitInterval(minorTickInterval);
   const majorUnit = dateUtils.getDateUnitInterval(tickInterval);
   const idx = dateUtils.dateUnitIntervals.indexOf(interval);
@@ -205,32 +283,34 @@ function getMinorTickIntervalUnit(tickInterval, minorTickInterval, withCorrectio
   return interval;
 }
 
-function getNextTickInterval(tickInterval, minorTickInterval, isDateType) {
+function getNextTickInterval(
+  tickInterval: ThemeValue,
+  minorTickInterval: ThemeValue,
+  isDateType: boolean,
+): ThemeValue {
   if (!tickInterval) {
-    tickInterval = minorTickInterval;
-  } else if (isDateType) {
-    // @ts-expect-error
-    tickInterval = dateUtils.getNextDateUnit(tickInterval);
-  } else {
-    tickInterval += minorTickInterval;
+    return minorTickInterval;
   }
-
-  return tickInterval;
+  if (isDateType) {
+    return dateUtils.getNextDateUnit(tickInterval, undefined);
+  }
+  return tickInterval + minorTickInterval;
 }
 
-function calculateTickIntervalsForSemidiscreteScale(scaleOptions, min, max, screenDelta) {
-  const minorTickInterval = scaleOptions.minorTickInterval;
-  let tickInterval = scaleOptions.tickInterval;
-  let interval;
+function calculateTickIntervalsForSemidiscreteScale(
+  scaleOptions: ThemeValue,
+  min: ThemeValue,
+  max: ThemeValue,
+  screenDelta: number,
+): TickIntervalsInfo {
+  const { minorTickInterval } = scaleOptions;
+  let { tickInterval } = scaleOptions;
   const isDateType = scaleOptions.valueType === 'datetime';
   const gridSpacingFactor = scaleOptions.axisDivisionFactor || {};
-  let tickCountByInterval;
-  let tickCountByScreen;
 
   if (!tickInterval) {
+    let interval = getNextTickInterval(tickInterval, minorTickInterval, isDateType);
     do {
-      interval = getNextTickInterval(tickInterval, minorTickInterval, isDateType);
-
       if (tickInterval !== interval) {
         tickInterval = interval;
       } else {
@@ -241,9 +321,14 @@ function calculateTickIntervalsForSemidiscreteScale(scaleOptions, min, max, scre
         interval = dateUtils.dateToMilliseconds(tickInterval);
       }
 
-      tickCountByInterval = _ceil((max - min) / interval);
-      tickCountByScreen = _floor(screenDelta / (gridSpacingFactor[tickInterval] || SEMIDISCRETE_GRID_SPACING_FACTOR)) || 1;
-    } while (interval && tickCountByInterval > tickCountByScreen);
+      const tickCountByInterval = Math.ceil((max - min) / interval);
+      const factor = gridSpacingFactor[tickInterval] || SEMIDISCRETE_GRID_SPACING_FACTOR;
+      const tickCountByScreen = Math.floor(screenDelta / factor) || 1;
+      if (!(tickCountByInterval > tickCountByScreen)) {
+        break;
+      }
+      interval = getNextTickInterval(tickInterval, minorTickInterval, isDateType);
+    } while (interval);
   }
 
   return {
@@ -256,120 +341,210 @@ function calculateTickIntervalsForSemidiscreteScale(scaleOptions, min, max, scre
   };
 }
 
-function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range) {
-  let result;
-  const min = _isDefined(range.minVisible) ? range.minVisible : range.min;
-  const max = _isDefined(range.maxVisible) ? range.maxVisible : range.max;
+function updateTickIntervals(
+  scaleOptions: ThemeValue,
+  screenDelta: number,
+  incidentOccurred: ThemeValue,
+  range: ThemeValue,
+): TickIntervalsInfo {
+  const min = isDefined(range.minVisible) ? range.minVisible : range.min;
+  const max = isDefined(range.maxVisible) ? range.maxVisible : range.max;
   const categoriesInfo = scaleOptions._categoriesInfo;
-  let ticksInfo;
-  let length;
-  const bounds = {};
 
   if (scaleOptions.type === SEMIDISCRETE) {
-    result = calculateTickIntervalsForSemidiscreteScale(scaleOptions, min, max, screenDelta);
-  } else {
-    ticksInfo = tickGenerator({
-      axisType: scaleOptions.type,
-      dataType: scaleOptions.valueType,
-      logBase: scaleOptions.logarithmBase,
-      allowNegatives: true,
-      linearThreshold: Math.abs(scaleOptions.linearThreshold || 0),
-
-      axisDivisionFactor: scaleOptions.axisDivisionFactor,
-      minorAxisDivisionFactor: scaleOptions.minorAxisDivisionFactor,
-      calculateMinors: true,
-
-      allowDecimals: scaleOptions.allowDecimals,
-      endOnTick: scaleOptions.endOnTick,
-
-      incidentOccurred,
-      rangeIsEmpty: range.isEmpty(),
-    })(
-      {
-        min,
-        max,
-        categories: _isDefined(categoriesInfo) ? categoriesInfo.categories : [],
-      },
-      screenDelta,
-      scaleOptions.tickInterval,
-      scaleOptions.forceUserTickInterval,
-      undefined,
-      scaleOptions.minorTickInterval,
-      scaleOptions.minorTickCount,
-    );
-
-    length = ticksInfo.ticks.length;
-    // @ts-expect-error
-    bounds.minVisible = ticksInfo.ticks[0] < min ? ticksInfo.ticks[0] : min;
-    // @ts-expect-error
-    bounds.maxVisible = ticksInfo.ticks[length - 1] > max ? ticksInfo.ticks[length - 1] : max;
-
-    result = {
-      tickInterval: ticksInfo.tickInterval,
-      minorTickInterval: scaleOptions.minorTickInterval === 0 ? 0 : ticksInfo.minorTickInterval,
-      bounds,
-      ticks: ticksInfo.ticks,
-    };
+    return calculateTickIntervalsForSemidiscreteScale(scaleOptions, min, max, screenDelta);
   }
 
-  return result;
+  const ticksInfo = tickGenerator({
+    axisType: scaleOptions.type,
+    dataType: scaleOptions.valueType,
+    logBase: scaleOptions.logarithmBase,
+    allowNegatives: true,
+    linearThreshold: Math.abs(scaleOptions.linearThreshold || 0),
+
+    axisDivisionFactor: scaleOptions.axisDivisionFactor,
+    minorAxisDivisionFactor: scaleOptions.minorAxisDivisionFactor,
+    calculateMinors: true,
+
+    allowDecimals: scaleOptions.allowDecimals,
+    endOnTick: scaleOptions.endOnTick,
+
+    incidentOccurred,
+    rangeIsEmpty: range.isEmpty(),
+  })(
+    {
+      min,
+      max,
+      categories: isDefined(categoriesInfo) ? categoriesInfo.categories : [],
+    },
+    screenDelta,
+    scaleOptions.tickInterval,
+    scaleOptions.forceUserTickInterval,
+    undefined,
+    scaleOptions.minorTickInterval,
+    scaleOptions.minorTickCount,
+  );
+
+  const { length } = ticksInfo.ticks;
+  const bounds = {
+    minVisible: ticksInfo.ticks[0] < min ? ticksInfo.ticks[0] : min,
+    maxVisible: ticksInfo.ticks[length - 1] > max ? ticksInfo.ticks[length - 1] : max,
+  };
+
+  return {
+    tickInterval: ticksInfo.tickInterval,
+    minorTickInterval: scaleOptions.minorTickInterval === 0 ? 0 : ticksInfo.minorTickInterval,
+    bounds,
+    ticks: ticksInfo.ticks,
+  };
 }
 
-function getFirstDayOfWeek(options) {
+function getFirstDayOfWeek(options: ThemeValue): ThemeValue {
   return options.workWeek?.[0];
 }
 
-function calculateTranslatorRange(seriesDataSource, scaleOptions) {
-  let minValue;
-  let maxValue;
-  let inverted = false;
-  let startValue = scaleOptions.startValue;
-  let endValue = scaleOptions.endValue;
-  let categories;
-  let categoriesInfo;
+function correctValueByInterval(
+  value: ThemeValue,
+  isDateValue: boolean,
+  interval: ThemeValue,
+  firstDayOfWeek: ThemeValue,
+): ThemeValue {
+  if (!isDefined(value)) {
+    return value;
+  }
+  return isDateValue
+    ? dateUtils.correctDateWithUnitBeginning(new Date(value), interval, null, firstDayOfWeek)
+    : adjust(Math.floor(adjust(value / interval)) * interval);
+}
+
+interface DiscreteRange {
+  range: ThemeValue;
+  categories: ThemeValue[];
+  categoriesInfo: ThemeValue;
+}
+
+function buildDiscreteRange(
+  translatorRange: ThemeValue,
+  seriesDataSource: ThemeValue,
+  scaleOptions: ThemeValue,
+  startValue: ThemeValue,
+  endValue: ThemeValue,
+): DiscreteRange {
+  const rangeForCategories = new Range({
+    minVisible: startValue,
+    maxVisible: endValue,
+  });
+
+  rangeForCategories.addRange(translatorRange);
+
+  const ownCategories = seriesDataSource
+    ? seriesDataSource.argCategories
+    : scaleOptions.categories || (startValue && endValue && [startValue, endValue]);
+  const categories = ownCategories || [];
+
+  return {
+    range: rangeForCategories,
+    categories,
+    categoriesInfo: getCategoriesInfo(categories, startValue, endValue),
+  };
+}
+
+interface RangeBounds {
+  inverted: boolean;
+  minValue: ThemeValue;
+  maxValue: ThemeValue;
+}
+
+function calculateRangeBounds(
+  startValue: ThemeValue,
+  endValue: ThemeValue,
+  categoriesInfo: ThemeValue,
+): RangeBounds {
+  if (isDefined(startValue) && isDefined(endValue)) {
+    const inverted = categoriesInfo ? categoriesInfo.inverted : startValue > endValue;
+    if (categoriesInfo) {
+      return { inverted, minValue: categoriesInfo.start, maxValue: categoriesInfo.end };
+    }
+    return {
+      inverted,
+      minValue: inverted ? endValue : startValue,
+      maxValue: inverted ? startValue : endValue,
+    };
+  }
+  if (isDefined(startValue) || isDefined(endValue)) {
+    return { inverted: false, minValue: startValue, maxValue: endValue };
+  }
+  if (categoriesInfo) {
+    return { inverted: false, minValue: categoriesInfo.start, maxValue: categoriesInfo.end };
+  }
+  return { inverted: false, minValue: undefined, maxValue: undefined };
+}
+
+function calculateTranslatorRange(
+  seriesDataSource: ThemeValue,
+  scaleOptions: ThemeValue,
+): ThemeValue {
+  let { startValue, endValue } = scaleOptions;
   // TODO: There should be something like "seriesDataSource.getArgumentRange()"
   let translatorRange = seriesDataSource ? seriesDataSource.getBoundRange().arg : new Range();
-  let rangeForCategories;
-  const isDate = scaleOptions.valueType === 'datetime';
+  const isDateValue = scaleOptions.valueType === 'datetime';
   const firstDayOfWeek = getFirstDayOfWeek(scaleOptions);
-  const minRange = scaleOptions.minRange;
+  const { minRange } = scaleOptions;
 
-  if (scaleOptions.type === DISCRETE) {
-    rangeForCategories = new Range({
-      minVisible: startValue,
-      maxVisible: endValue,
-    });
+  const discreteRange = scaleOptions.type === DISCRETE
+    ? buildDiscreteRange(translatorRange, seriesDataSource, scaleOptions, startValue, endValue)
+    : undefined;
+  const categories = discreteRange?.categories;
+  const categoriesInfo = discreteRange?.categoriesInfo;
 
-    rangeForCategories.addRange(translatorRange);
-    translatorRange = rangeForCategories;
-
-    categories = seriesDataSource ? seriesDataSource.argCategories : scaleOptions.categories || startValue && endValue && [startValue, endValue];
-    categories = categories || [];
-    scaleOptions._categoriesInfo = categoriesInfo = getCategoriesInfo(categories, startValue, endValue);
+  if (discreteRange) {
+    translatorRange = discreteRange.range;
+    scaleOptions._categoriesInfo = categoriesInfo;
   }
 
   if (scaleOptions.type === SEMIDISCRETE) {
-    startValue = scaleOptions.startValue = correctValueByInterval(scaleOptions.startValue, isDate, minRange, firstDayOfWeek);
-    endValue = scaleOptions.endValue = correctValueByInterval(scaleOptions.endValue, isDate, minRange, firstDayOfWeek);
+    startValue = correctValueByInterval(
+      scaleOptions.startValue,
+      isDateValue,
+      minRange,
+      firstDayOfWeek,
+    );
+    scaleOptions.startValue = startValue;
+    endValue = correctValueByInterval(scaleOptions.endValue, isDateValue, minRange, firstDayOfWeek);
+    scaleOptions.endValue = endValue;
 
-    translatorRange.minVisible = correctValueByInterval(translatorRange.minVisible, isDate, minRange, firstDayOfWeek);
-    translatorRange.maxVisible = correctValueByInterval(translatorRange.maxVisible, isDate, minRange, firstDayOfWeek);
+    translatorRange.minVisible = correctValueByInterval(
+      translatorRange.minVisible,
+      isDateValue,
+      minRange,
+      firstDayOfWeek,
+    );
+    translatorRange.maxVisible = correctValueByInterval(
+      translatorRange.maxVisible,
+      isDateValue,
+      minRange,
+      firstDayOfWeek,
+    );
 
-    translatorRange.min = correctValueByInterval(translatorRange.min, isDate, minRange, firstDayOfWeek);
-    translatorRange.max = correctValueByInterval(translatorRange.max, isDate, minRange, firstDayOfWeek);
+    translatorRange.min = correctValueByInterval(
+      translatorRange.min,
+      isDateValue,
+      minRange,
+      firstDayOfWeek,
+    );
+    translatorRange.max = correctValueByInterval(
+      translatorRange.max,
+      isDateValue,
+      minRange,
+      firstDayOfWeek,
+    );
   }
 
-  if (_isDefined(startValue) && _isDefined(endValue)) {
-    inverted = categoriesInfo ? categoriesInfo.inverted : startValue > endValue;
-    minValue = categoriesInfo ? categoriesInfo.start : inverted ? endValue : startValue;
-    maxValue = categoriesInfo ? categoriesInfo.end : inverted ? startValue : endValue;
-  } else if (_isDefined(startValue) || _isDefined(endValue)) {
-    minValue = startValue;
-    maxValue = endValue;
-  } else if (categoriesInfo) {
-    minValue = categoriesInfo.start;
-    maxValue = categoriesInfo.end;
-  }
+  const { inverted, minValue, maxValue } = calculateRangeBounds(
+    startValue,
+    endValue,
+    categoriesInfo,
+  );
 
   translatorRange.addRange({
     invert: inverted,
@@ -386,95 +561,151 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
     axisType: scaleOptions.type,
     dataType: scaleOptions.valueType,
   });
-  seriesDataSource && translatorRange.sortCategories(categories);
+  if (seriesDataSource) {
+    translatorRange.sortCategories(categories);
+  }
 
   return translatorRange;
 }
 
-function startEndNotDefined(start, end) {
-  return !_isDefined(start) || !_isDefined(end);
+function startEndNotDefined(start: ThemeValue, end: ThemeValue): boolean {
+  return !isDefined(start) || !isDefined(end);
 }
 
-function getTextBBox(renderer, text, fontOptions) {
-  const textElement = renderer.text(text, INVISIBLE_POS, INVISIBLE_POS).css(patchFontOptions(fontOptions)).append(renderer.root);
-
-  const textBBox = textElement.getBBox();
-  textElement.remove();
-  return textBBox;
-}
-
-function getDateMarkerVisibilityChecker(screenDelta) {
-  return function (isDateScale, isMarkerVisible, min, max, tickInterval) {
+function getDateMarkerVisibilityChecker(
+  screenDelta: number,
+): DateMarkerVisibilityChecker {
+  return function checkDateMarkerVisibility(
+    isDateScale: boolean,
+    isMarkerVisible: boolean,
+    min: ThemeValue,
+    max: ThemeValue,
+    tickInterval: ThemeValue,
+  ): boolean {
     if (isMarkerVisible && isDateScale) {
-      if (!_isDefined(tickInterval) || tickInterval.years || tickInterval.months >= 6
-                || (screenDelta / SEMIDISCRETE_GRID_SPACING_FACTOR < (_ceil((max - min) / dateUtils.dateToMilliseconds('year')) + 1))) {
-        isMarkerVisible = false;
+      const yearsCount = Math.ceil((max - min) / dateUtils.dateToMilliseconds('year')) + 1;
+      if (!isDefined(tickInterval) || tickInterval.years || tickInterval.months >= 6
+        || (screenDelta / SEMIDISCRETE_GRID_SPACING_FACTOR < yearsCount)) {
+        return false;
       }
     }
     return isMarkerVisible;
   };
 }
 
-function updateScaleOptions(scaleOptions, seriesDataSource, translatorRange, tickIntervalsInfo, checkDateMarkerVisibility) {
-  let bounds;
-  let isEmptyInterval;
+function getIntervalCustomTicks(options: ThemeValue): IntervalCustomTicks {
+  let min = options.startValue;
+  let max = options.endValue;
+  const isDateValue = options.valueType === 'datetime';
+  const firstDayOfWeek = getFirstDayOfWeek(options);
+  const { tickInterval } = options;
+  const res: IntervalCustomTicks = {
+    intervals: [],
+  };
+
+  if (!isDefined(min) || !isDefined(max)) {
+    return res;
+  }
+  res.intervals = dateUtils.getSequenceByInterval(min, max, options.minorTickInterval);
+
+  if (tickInterval !== options.minorTickInterval) {
+    res.altIntervals = res.intervals;
+
+    min = correctValueByInterval(min, isDateValue, tickInterval, firstDayOfWeek);
+    max = correctValueByInterval(max, isDateValue, tickInterval, firstDayOfWeek);
+    res.intervals = dateUtils.getSequenceByInterval(min, max, tickInterval);
+    const [firstAltInterval] = res.altIntervals;
+    res.intervals[0] = firstAltInterval;
+  }
+
+  return res;
+}
+
+function updateScaleOptions(
+  scaleOptions: ThemeValue,
+  seriesDataSource: ThemeValue,
+  translatorRange: ThemeValue,
+  tickIntervalsInfo: TickIntervalsInfo,
+  checkDateMarkerVisibility: ThemeValue,
+): void {
+  let isEmptyInterval = false;
   const categoriesInfo = scaleOptions._categoriesInfo;
-  let intervals;
   const isDateTime = scaleOptions.valueType === DATETIME;
 
   if (seriesDataSource && !seriesDataSource.isEmpty() && !translatorRange.isEmpty()) {
-    bounds = tickIntervalsInfo.bounds;
+    const { bounds } = tickIntervalsInfo;
     translatorRange.addRange(bounds);
     scaleOptions.startValue = translatorRange.invert ? bounds.maxVisible : bounds.minVisible;
     scaleOptions.endValue = translatorRange.invert ? bounds.minVisible : bounds.maxVisible;
   }
 
-  scaleOptions.marker.visible = checkDateMarkerVisibility(isDateTime && scaleOptions.type.indexOf(DISCRETE) === -1, scaleOptions.marker.visible, scaleOptions.startValue, scaleOptions.endValue, tickIntervalsInfo.tickInterval);
+  scaleOptions.marker.visible = checkDateMarkerVisibility(
+    isDateTime && scaleOptions.type.indexOf(DISCRETE) === -1,
+    scaleOptions.marker.visible,
+    scaleOptions.startValue,
+    scaleOptions.endValue,
+    tickIntervalsInfo.tickInterval,
+  );
 
   if (categoriesInfo) {
     scaleOptions.startValue = categoriesInfo.start;
     scaleOptions.endValue = categoriesInfo.end;
   }
   if (scaleOptions.type.indexOf(DISCRETE) === -1) {
-    isEmptyInterval = (_isDate(scaleOptions.startValue) && _isDate(scaleOptions.endValue) && (scaleOptions.startValue.getTime() === scaleOptions.endValue.getTime())) || (scaleOptions.startValue === scaleOptions.endValue);
+    isEmptyInterval = (isDate(scaleOptions.startValue) && isDate(scaleOptions.endValue)
+      && (scaleOptions.startValue.getTime() === scaleOptions.endValue.getTime()))
+      || (scaleOptions.startValue === scaleOptions.endValue);
   }
-  scaleOptions.isEmpty = startEndNotDefined(scaleOptions.startValue, scaleOptions.endValue) || isEmptyInterval;
+  scaleOptions.isEmpty = startEndNotDefined(scaleOptions.startValue, scaleOptions.endValue)
+    || isEmptyInterval;
 
   if (scaleOptions.isEmpty) {
-    scaleOptions.startValue = scaleOptions.endValue = undefined;
+    scaleOptions.startValue = undefined;
+    scaleOptions.endValue = undefined;
   } else {
     scaleOptions.minorTickInterval = tickIntervalsInfo.minorTickInterval;
     scaleOptions.tickInterval = tickIntervalsInfo.tickInterval;
-    if (isDateTime && (!_isDefined(scaleOptions.label.format) || (scaleOptions.type === SEMIDISCRETE && scaleOptions.minorTickInterval !== scaleOptions.tickInterval))) {
+    const needsFormat = !isDefined(scaleOptions.label.format)
+      || (scaleOptions.type === SEMIDISCRETE
+        && scaleOptions.minorTickInterval !== scaleOptions.tickInterval);
+    if (isDateTime && needsFormat) {
       if (scaleOptions.type === DISCRETE) {
-        // @ts-expect-error
         scaleOptions.label.format = formatHelper.getDateFormatByTicks(tickIntervalsInfo.ticks);
       } else if (!scaleOptions.marker.visible) {
-        // @ts-expect-error
-        scaleOptions.label.format = formatHelper.getDateFormatByTickInterval(scaleOptions.startValue, scaleOptions.endValue, scaleOptions.tickInterval);
+        scaleOptions.label.format = formatHelper.getDateFormatByTickInterval(
+          scaleOptions.startValue,
+          scaleOptions.endValue,
+          scaleOptions.tickInterval,
+        );
       } else {
-        scaleOptions.label.format = dateUtils.getDateFormatByTickInterval(scaleOptions.tickInterval);
+        scaleOptions.label.format = dateUtils.getDateFormatByTickInterval(
+          scaleOptions.tickInterval,
+        );
       }
     }
   }
 
   if (scaleOptions.type === SEMIDISCRETE) {
-    intervals = getIntervalCustomTicks(scaleOptions);
+    const intervals = getIntervalCustomTicks(scaleOptions);
     scaleOptions.customMinorTicks = intervals.altIntervals;
     scaleOptions.customTicks = intervals.intervals;
     scaleOptions.customBoundTicks = [scaleOptions.customTicks[0]];
   }
 }
 
-function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred, containerColor) {
-  let parsedValue = 0;
-  let valueType = correctValueType(_normalizeEnum(scaleOption.valueType));
-  const validateStartEndValues = function (field, parser) {
+function prepareScaleOptions(
+  scaleOption: ThemeValue,
+  calculatedValueType: ThemeValue,
+  incidentOccurred: ThemeValue,
+  containerColor: ThemeValue,
+): ThemeValue {
+  let valueType = correctValueType(normalizeEnum(scaleOption.valueType));
+  const validateStartEndValues = (field: string, parser: ThemeValue): void => {
     const messageToIncidentOccurred = field === START_VALUE ? 'start' : 'end';
 
-    if (_isDefined(scaleOption[field])) {
-      parsedValue = parser(scaleOption[field]);
-      if (_isDefined(parsedValue)) {
+    if (isDefined(scaleOption[field])) {
+      const parsedValue = parser(scaleOption[field]);
+      if (isDefined(parsedValue)) {
         scaleOption[field] = parsedValue;
       } else {
         scaleOption[field] = undefined;
@@ -503,7 +734,7 @@ function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred,
   validateStartEndValues(START_VALUE, parser);
   validateStartEndValues(END_VALUE, parser);
 
-  checkLogarithmicOptions(scaleOption, logarithmBase, incidentOccurred);
+  checkLogarithmicOptions(scaleOption, DEFAULT_LOGARITHM_BASE, incidentOccurred);
   if (!scaleOption.type) {
     scaleOption.type = 'continuous';
   }
@@ -515,86 +746,282 @@ function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred,
     scaleOption.marker.visible = false;
     scaleOption.maxRange = undefined;
   }
-  // @ts-expect-error
-  scaleOption.forceUserTickInterval |= _isDefined(scaleOption.tickInterval) && !_isDefined(scaleOption.axisDivisionFactor);
-  scaleOption.axisDivisionFactor = _isDefined(scaleOption.axisDivisionFactor) ? scaleOption.axisDivisionFactor : DEFAULT_AXIS_DIVISION_FACTOR;
-  scaleOption.minorAxisDivisionFactor = _isDefined(scaleOption.minorAxisDivisionFactor) ? scaleOption.minorAxisDivisionFactor : DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
+  // eslint-disable-next-line no-bitwise
+  scaleOption.forceUserTickInterval |= Number(
+    isDefined(scaleOption.tickInterval) && !isDefined(scaleOption.axisDivisionFactor),
+  );
+  scaleOption.axisDivisionFactor = isDefined(scaleOption.axisDivisionFactor)
+    ? scaleOption.axisDivisionFactor
+    : DEFAULT_AXIS_DIVISION_FACTOR;
+  scaleOption.minorAxisDivisionFactor = isDefined(scaleOption.minorAxisDivisionFactor)
+    ? scaleOption.minorAxisDivisionFactor
+    : DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
   return scaleOption;
 }
 
-function correctValueByInterval(value, isDate, interval, firstDayOfWeek) {
-  if (_isDefined(value)) {
-    value = isDate
-      ? dateUtils.correctDateWithUnitBeginning(new Date(value), interval, null, firstDayOfWeek)
-      : adjust(_floor(adjust(value / interval)) * interval);
+function getSliderMarkerDateFormat(
+  markerVisible: boolean,
+  startValue: ThemeValue,
+  endValue: ThemeValue,
+  interval: ThemeValue,
+): ThemeValue {
+  if (markerVisible) {
+    return dateUtils.getDateFormatByTickInterval(interval);
   }
-  return value;
+  if (isDefined(startValue) && isDefined(endValue)) {
+    return formatHelper.getDateFormatByTickInterval(startValue, endValue, interval);
+  }
+  return undefined;
 }
 
-function getIntervalCustomTicks(options) {
-  let min = options.startValue;
-  let max = options.endValue;
-  const isDate = options.valueType === 'datetime';
-  const firstDayOfWeek = getFirstDayOfWeek(options);
-  const tickInterval = options.tickInterval;
-  const res = {
-    intervals: [],
-  };
-
-  if (!_isDefined(min) || !_isDefined(max)) {
-    return res;
-  }
-  // @ts-expect-error
-  res.intervals = dateUtils.getSequenceByInterval(min, max, options.minorTickInterval);
-
-  if (tickInterval !== options.minorTickInterval) {
-    // @ts-expect-error
-    res.altIntervals = res.intervals;
-
-    min = correctValueByInterval(min, isDate, tickInterval, firstDayOfWeek);
-    max = correctValueByInterval(max, isDate, tickInterval, firstDayOfWeek);
-    // @ts-expect-error
-    res.intervals = dateUtils.getSequenceByInterval(min, max, tickInterval);
-    // @ts-expect-error
-    res.intervals[0] = res.altIntervals[0];
-  }
-
-  return res;
-}
-
-function getPrecisionForSlider(startValue, endValue, screenDelta) {
+function getPrecisionForSlider(
+  startValue: ThemeValue,
+  endValue: ThemeValue,
+  screenDelta: number,
+): number {
   const d = Math.abs(endValue - startValue) / screenDelta;
-  const tail = d - _floor(d);
+  const tail = d - Math.floor(d);
 
-  return tail > 0 ? _ceil(Math.abs(adjust(getLog(tail, 10)))) : 0;
+  return tail > 0 ? Math.ceil(Math.abs(adjust(getLog(tail, 10)))) : 0;
 }
 
-const dxRangeSelector = baseWidgetModule.inherit({
-  _toggleParentsScrollSubscription() {},
-  _eventsMap: {
-    onValueChanged: { name: VALUE_CHANGED },
-  },
+// AxisWrapper
 
-  _rootClassPrefix: 'dxrs',
+function prepareAxisOptions(
+  scaleOptions: ThemeValue,
+  isCompactMode: boolean,
+  height: number,
+  axisPosition: number,
+): ThemeValue {
+  scaleOptions.marker.label.font = scaleOptions.label.font;
 
-  _rootClass: 'dxrs-range-selector',
+  scaleOptions.color = scaleOptions.tick.color;
+  scaleOptions.marker.color = scaleOptions.tick.color;
+  scaleOptions.opacity = scaleOptions.tick.opacity;
+  scaleOptions.marker.opacity = scaleOptions.tick.opacity;
+  scaleOptions.width = scaleOptions.tick.width;
+  scaleOptions.marker.width = scaleOptions.tick.width;
 
-  _dataIsReady() {
+  scaleOptions.placeholderSize = (scaleOptions.placeholderHeight || 0) + axisPosition;
+
+  scaleOptions.argumentType = scaleOptions.valueType;
+  scaleOptions.visible = isCompactMode;
+  scaleOptions.isHorizontal = true;
+  scaleOptions.calculateMinors = true;
+
+  scaleOptions.semiDiscreteInterval = scaleOptions.minRange;
+
+  if (!isCompactMode) {
+    scaleOptions.minorTick.length = height;
+    scaleOptions.tick.length = height;
+  }
+  scaleOptions.label.indentFromAxis = scaleOptions.label.topIndent + axisPosition;
+
+  return scaleOptions;
+}
+
+function createDateMarkersEvent(
+  scaleOptions: ThemeValue,
+  markerTrackers: ThemeValue,
+  setSelectedRange: ThemeValue,
+): void {
+  function onPointerDown(e: ThemeValue): void {
+    const { range } = e.target;
+    const minRange = scaleOptions.minRange
+      ? dateUtils.addInterval(range.startValue, scaleOptions.minRange)
+      : undefined;
+    const maxRange = scaleOptions.maxRange
+      ? dateUtils.addInterval(range.startValue, scaleOptions.maxRange)
+      : undefined;
+    if (!((minRange && minRange > range.endValue) || (maxRange && maxRange < range.endValue))) {
+      setSelectedRange(range, e);
+    }
+  }
+
+  each(markerTrackers, (_, value: ThemeValue) => {
+    value.on('dxpointerdown', onPointerDown);
+  });
+}
+
+function getSharpDirection(): number {
+  return 1;
+}
+
+function getTickStartPositionShift(length: number): number {
+  return length % 2 === 1 ? -Math.floor(length / 2) : -length / 2;
+}
+
+function checkShiftedLabels(
+  majorTicks: ThemeValue[],
+  boxes: ThemeValue[],
+  minSpacing: number,
+  alignment: string,
+): void {
+  function checkLabelsOverlapping(nearestLabelsIndexes: number[]): void {
+    if (nearestLabelsIndexes.length === 2
+      && constants.areLabelsOverlap(
+        boxes[nearestLabelsIndexes[0]],
+        boxes[nearestLabelsIndexes[1]],
+        minSpacing,
+        alignment,
+      )) {
+      majorTicks[nearestLabelsIndexes[0]].removeLabel();
+    }
+  }
+  function getTwoVisibleLabels(startIndex: number): number[] {
+    const labels: number[] = [];
+
+    for (let i = startIndex; labels.length < 2 && i < majorTicks.length; i += 1) {
+      if (majorTicks[i].label) {
+        labels.push(i);
+      }
+    }
+
+    return labels;
+  }
+
+  if (majorTicks.length < 3) {
+    return;
+  }
+
+  checkLabelsOverlapping(getTwoVisibleLabels(0));
+  checkLabelsOverlapping(getTwoVisibleLabels(majorTicks.length - 2).reverse());
+}
+
+class AxisWrapper {
+  _axis;
+
+  _updateSelectedRangeCallback;
+
+  constructor(params: ThemeValue) {
+    this._axis = new Axis({
+      renderer: params.renderer,
+      axesContainerGroup: params.root,
+      scaleBreaksGroup: params.scaleBreaksGroup,
+      labelsAxesGroup: params.labelsAxesGroup,
+      incidentOccurred: params.incidentOccurred,
+      // TODO: These dependencies should be statically resolved (not for every new instance)
+      axisType: 'xyAxes',
+      drawingType: 'linear',
+      widgetClass: 'dxrs',
+      axisClass: 'range-selector',
+      isArgumentAxis: true,
+      getTemplate(): void {},
+    });
+    this._updateSelectedRangeCallback = params.updateSelectedRange;
+    this._axis.getAxisSharpDirection = getSharpDirection;
+    this._axis.getSharpDirectionByCoords = getSharpDirection;
+    this._axis.getTickStartPositionShift = getTickStartPositionShift;
+    this._axis._checkShiftedLabels = checkShiftedLabels;
+  }
+
+  update(
+    options: ThemeValue,
+    isCompactMode: boolean,
+    canvas: Canvas,
+    businessRange: ThemeValue,
+    seriesDataSource: ThemeValue,
+  ): void {
+    const axis = this._axis;
+    axis.updateOptions(prepareAxisOptions(
+      options,
+      isCompactMode,
+      canvas.height,
+      canvas.height / 2 - Math.ceil(options.width / 2),
+    ));
+    axis.validate();
+    axis.setBusinessRange(businessRange, true);
+    if (seriesDataSource !== undefined && seriesDataSource.isShowChart()) {
+      axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
+    }
+
+    axis.draw(canvas);
+    axis.shift({ left: 0, bottom: -canvas.height / 2 + canvas.top });
+    if (axis.getMarkerTrackers()) {
+      // TODO: Check who is responsible for destroying events
+      createDateMarkersEvent(options, axis.getMarkerTrackers(), this._updateSelectedRangeCallback);
+    }
+    axis.drawScaleBreaks({ start: canvas.top, end: canvas.top + canvas.height });
+  }
+
+  visualRange(): void { }
+
+  getViewport(): ThemeValue {
+    return {};
+  }
+
+  allScaleSelected(value: ThemeValue): { startValue: boolean; endValue: boolean } {
+    const { startValue, endValue } = this._axis.visualRange();
+
+    return {
+      startValue: value[0].valueOf() === startValue.valueOf(),
+      endValue: value[1].valueOf() === endValue.valueOf(),
+    };
+  }
+
+  getOptions(): ThemeValue {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._axis.getOptions() || {};
+  }
+}
+
+each(Axis.prototype, (field: string) => {
+  if (field !== 'constructor' && !field.startsWith('_') && isFunction(Axis.prototype[field])
+    && !(field in AxisWrapper.prototype)) {
+    AxisWrapper.prototype[field] = function callAxisMethod(
+      this: { _axis: ThemeValue },
+      ...args: unknown[]
+    ): ThemeValue {
+      const axis: ThemeValue = this._axis;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return axis[field](...args);
+    };
+  }
+});
+
+class RangeSelector extends BaseWidget {
+  static addPlugin: (plugin: ThemeValue) => void;
+
+  static getInstance: typeof DOMComponent.getInstance;
+
+  _clipRect;
+
+  _axis!: ThemeValue;
+
+  _rangeView;
+
+  _slidersController;
+
+  _tracker;
+
+  _clientRect!: number[];
+
+  _rangeOption: ThemeValue;
+
+  _isUpdating?: boolean;
+
+  _dataSourceIsAsync?: boolean;
+
+  __isResizing?: boolean;
+
+  __skipAnimation?: boolean;
+
+  _toggleParentsScrollSubscription(): void {}
+
+  _dataIsReady(): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._dataIsLoaded();
-  },
+  }
 
-  _initialChanges: ['DATA_SOURCE', 'VALUE'],
+  _getDefaultSize(): { width: number; height: number } {
+    return {
+      width: 400, height: 160,
+    };
+  }
 
-  _themeDependentChanges: ['MOSTLY_TOTAL'],
-
-  _themeSection: 'rangeSelector',
-
-  _fontFields: ['scale.label.font', 'sliderMarker.font'],
-
-  _initCore() {
-    const that = this;
-    const renderer = that._renderer;
-    const root = renderer.root;
+  _initCore(): void {
+    const renderer = this._renderer;
+    const { root } = renderer;
 
     // TODO: Move it to the SlidersEventManager
     root.css({
@@ -602,97 +1029,97 @@ const dxRangeSelector = baseWidgetModule.inherit({
     });
 
     // RangeContainer
-    that._clipRect = renderer.clipRect(); // TODO: Try to remove it
+    this._clipRect = renderer.clipRect(); // TODO: Try to remove it
     // TODO: Groups could be created by the corresponding components
     const rangeViewGroup = renderer.g().attr({ class: 'dxrs-view' }).append(root);
-    const slidersGroup = renderer.g().attr({ class: 'dxrs-slidersContainer', 'clip-path': that._clipRect.id }).append(root);
-    const scaleGroup = renderer.g().attr({ class: 'dxrs-scale', 'clip-path': that._clipRect.id }).append(root);
-    const labelsAxesGroup = renderer.g().attr({ class: 'dxrs-scale-elements', 'clip-path': that._clipRect.id }).append(root);
+    const slidersGroup = renderer.g()
+      .attr({ class: 'dxrs-slidersContainer', 'clip-path': this._clipRect.id })
+      .append(root);
+    const scaleGroup = renderer.g()
+      .attr({ class: 'dxrs-scale', 'clip-path': this._clipRect.id })
+      .append(root);
+    const labelsAxesGroup = renderer.g()
+      .attr({ class: 'dxrs-scale-elements', 'clip-path': this._clipRect.id })
+      .append(root);
     const scaleBreaksGroup = renderer.g().attr({ class: 'dxrs-scale-breaks' }).append(root);
     const trackersGroup = renderer.g().attr({ class: 'dxrs-trackers' }).append(root);
 
-    that._axis = new AxisWrapper({
+    this._axis = new AxisWrapper({
       renderer,
       root: scaleGroup,
       scaleBreaksGroup,
       labelsAxesGroup,
-      updateSelectedRange(range, e) { that.setValue(convertVisualRangeObject(range), e); },
-      incidentOccurred: that._incidentOccurred,
+      updateSelectedRange: (range: ThemeValue, e: ThemeValue): void => {
+        this.setValue(convertVisualRangeObject(range), e);
+      },
+      incidentOccurred: this._incidentOccurred,
     });
 
-    that._rangeView = new RangeView({
+    this._rangeView = new RangeView({
       renderer,
       root: rangeViewGroup,
-      translator: that._axis.getTranslator(),
+      translator: this._axis.getTranslator(),
     });
 
-    that._slidersController = new SlidersController({
+    this._slidersController = new SlidersController({
       renderer,
       root: slidersGroup,
       trackersGroup,
-      updateSelectedRange(range, lastSelectedRange, e) {
-        if (!that._rangeOption) {
-          that.option(VALUE, convertVisualRangeObject(range, isPlainObject(that._options.silent(VALUE))));
+      updateSelectedRange: (
+        range: ThemeValue,
+        lastSelectedRange: ThemeValue,
+        e: ThemeValue,
+      ): void => {
+        if (!this._rangeOption) {
+          this.option(
+            VALUE,
+            convertVisualRangeObject(range, isPlainObject(this._options.silent(VALUE))),
+          );
         }
 
-        that._eventTrigger(VALUE_CHANGED, {
+        this._eventTrigger(VALUE_CHANGED, {
           value: convertVisualRangeObject(range),
           previousValue: convertVisualRangeObject(lastSelectedRange),
           event: e,
         });
       },
-      axis: that._axis,
-      translator: that._axis.getTranslator(),
+      axis: this._axis,
+      translator: this._axis.getTranslator(),
     });
 
-    that._tracker = new Tracker({
+    this._tracker = new Tracker({
       renderer,
-      controller: that._slidersController,
+      controller: this._slidersController,
     });
-  },
+  }
 
-  _getDefaultSize() {
-    return {
-      width: 400, height: 160,
-    };
-  },
-
-  _disposeCore() {
+  _disposeCore(): void {
     this._axis.dispose();
     this._slidersController.dispose();
     this._tracker.dispose();
-  },
+  }
 
-  _applySize(rect) {
+  _applySize(rect: number[]): void {
     this._clientRect = rect.slice();
     this._change(['MOSTLY_TOTAL']);
-  },
+  }
 
-  _optionChangesMap: {
-    scale: 'SCALE',
-    value: 'VALUE',
-    dataSource: 'DATA_SOURCE',
-  },
-
-  _optionChangesOrder: ['SCALE', 'DATA_SOURCE'],
-
-  _change_SCALE() {
+  _change_SCALE(): void {
     this._change(['MOSTLY_TOTAL']);
-  },
+  }
 
-  _setValueByDataSource() {
-    const that = this;
-    const options = that._options.silent();
-    const axis = that._axis;
+  _setValueByDataSource(): void {
+    const options = this._options.silent();
+    const axis = this._axis;
 
     if (options.dataSource) {
-      let selectedRangeUpdateMode = that.option('selectedRangeUpdateMode');
-      const value = that.getValue();
-      const valueIsReady = _isDefined(value[0]) && _isDefined(value[1]);
-      if (_isDefined(selectedRangeUpdateMode)) {
-        selectedRangeUpdateMode = _normalizeEnum(selectedRangeUpdateMode);
-        that.__skipAnimation = true;
-      } else if (valueIsReady && !that._dataSourceIsAsync) { // T696409 T930471
+      let selectedRangeUpdateMode = this.option('selectedRangeUpdateMode');
+      const value = this.getValue();
+      const valueIsReady = isDefined(value[0]) && isDefined(value[1]);
+      if (isDefined(selectedRangeUpdateMode)) {
+        selectedRangeUpdateMode = normalizeEnum(selectedRangeUpdateMode);
+        this.__skipAnimation = true;
+      } else if (valueIsReady && !this._dataSourceIsAsync) { // T696409 T930471
         selectedRangeUpdateMode = RESET;
       }
 
@@ -711,104 +1138,105 @@ const dxRangeSelector = baseWidgetModule.inherit({
       if (selectedRangeUpdateMode === RESET) {
         options[VALUE] = null;
       } else if (selectedRangeUpdateMode === SHIFT && valueIsReady) {
-        const value = that.getValue();
-        that.__skipAnimation = true;
-        options[VALUE] = { length: axis.getVisualRangeLength({ minVisible: value[0], maxVisible: value[1] }) };
+        const currentValue = this.getValue();
+        this.__skipAnimation = true;
+        options[VALUE] = {
+          length: axis.getVisualRangeLength({
+            minVisible: currentValue[0],
+            maxVisible: currentValue[1],
+          }),
+        };
       } else if (selectedRangeUpdateMode === KEEP) {
-        that.__skipAnimation = true;
+        this.__skipAnimation = true;
       }
     }
-    that._dataSourceIsAsync = undefined;
-  },
+    this._dataSourceIsAsync = undefined;
+  }
 
-  _change_DATA_SOURCE() {
+  _change_DATA_SOURCE(): void {
     if (this._options.silent('dataSource')) {
       this._updateDataSource();
     }
-  },
+  }
 
-  _customChangesOrder: ['MOSTLY_TOTAL', 'VALUE', 'SLIDER_SELECTION'],
-
-  _change_MOSTLY_TOTAL() {
+  _change_MOSTLY_TOTAL(): void {
     this._applyMostlyTotalChange();
-  },
+  }
 
-  _change_SLIDER_SELECTION() {
-    const that = this;
-    const value = that._options.silent(VALUE);
+  _change_SLIDER_SELECTION(): void {
+    const value = this._options.silent(VALUE);
 
-    that._slidersController.setSelectedRange(value && parseValue(value));
-  },
+    this._slidersController.setSelectedRange(value && parseValue(value));
+  }
 
-  _change_VALUE() {
-    const that = this;
-    const option = that._rangeOption;
-    that._dataSourceIsAsync = !that._dataIsReady();
+  _change_VALUE(): void {
+    const option = this._rangeOption;
+    this._dataSourceIsAsync = !this._dataIsReady();
     if (option) {
-      that._options.silent(VALUE, option);
-      that.setValue(option);
+      this._options.silent(VALUE, option);
+      this.setValue(option);
     }
-  },
+  }
 
-  _validateRange(start, end) {
-    const ensureValueInvalid = (value) => _isDefined(value) && !this._axis.getTranslator().isValid(value);
+  _validateRange(start: ThemeValue, end: ThemeValue): void {
+    const ensureValueInvalid = (value: ThemeValue): boolean => isDefined(value)
+      && !this._axis.getTranslator().isValid(value);
 
     if (this._dataIsReady() && (ensureValueInvalid(start) || ensureValueInvalid(end))) {
       this._incidentOccurred('E2203');
     }
-  },
+  }
 
-  _applyChanges() {
-    const that = this;
-    const value = that._options.silent(VALUE);
+  _applyChanges(...args: unknown[]): void {
+    const value = this._options.silent(VALUE);
 
-    if (that._changes.has('VALUE') && value) {
-      that._rangeOption = value;
+    if (this._changes.has('VALUE') && value) {
+      this._rangeOption = value;
     }
-    that.callBase.apply(that, arguments);
-    that._rangeOption = null;
-    that.__isResizing = that.__skipAnimation = false;
-  },
+    super._applyChanges(...args);
+    this._rangeOption = null;
+    this.__isResizing = false;
+    this.__skipAnimation = false;
+  }
 
-  _applyMostlyTotalChange() {
-    const that = this;
-    const renderer = that._renderer;
-    const rect = that._clientRect;
-    let currentAnimationEnabled;
-    const canvas = {
+  _applyMostlyTotalChange(): void {
+    const renderer = this._renderer;
+    const rect = this._clientRect;
+    const skipAnimation = Boolean(this.__isResizing || this.__skipAnimation);
+    const currentAnimationEnabled = skipAnimation ? renderer.animationEnabled() : undefined;
+    const canvas: Canvas = {
       left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1],
     };
 
-    if (that.__isResizing || that.__skipAnimation) {
-      currentAnimationEnabled = renderer.animationEnabled();
+    if (skipAnimation) {
       renderer.updateAnimationOptions({
         enabled: false,
       });
     }
 
-    that._clipRect.attr({
+    this._clipRect.attr({
       x: rect[0], y: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1],
     });
 
-    that._axis.getTranslator().update(new Range(), canvas, { isHorizontal: true });
+    this._axis.getTranslator().update(new Range(), canvas, { isHorizontal: true });
 
-    that._updateContent({
+    this._updateContent({
       left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1],
     });
 
-    if (that.__isResizing || that.__skipAnimation) {
+    if (skipAnimation) {
       renderer.updateAnimationOptions({
         enabled: currentAnimationEnabled,
       });
     }
 
-    that._drawn();
-  },
+    this._drawn();
+  }
 
-  _dataSourceChangedHandler() {
+  _dataSourceChangedHandler(): void {
     this._setValueByDataSource();
     this._requestChange(['MOSTLY_TOTAL']);
-  },
+  }
 
   // It seems that we REALLY like to translate option structures from one form to another.
   // TODO: The more appropriate way is the following:
@@ -824,9 +1252,9 @@ const dxRangeSelector = baseWidgetModule.inherit({
   //     that._getOption("behavior")
   // ]);
   // that._axis.update(that._getOption("scale"));
-  _completeSeriesDataSourceCreation(scaleOptions, seriesDataSource) {
+  _completeSeriesDataSourceCreation(scaleOptions: ThemeValue, seriesDataSource: ThemeValue): void {
     const rect = this._clientRect;
-    const canvas = {
+    const canvas: Canvas = {
       left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1],
     };
 
@@ -835,103 +1263,164 @@ const dxRangeSelector = baseWidgetModule.inherit({
       label: {},
     }));
 
-    seriesDataSource.isShowChart() && this._axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
+    if (seriesDataSource.isShowChart()) {
+      this._axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
+    }
     this._axis.updateCanvas(canvas);
 
     seriesDataSource.createPoints();
-  },
+  }
 
-  _updateContent(canvas) {
-    const that = this;
-    const chartOptions = that.option('chart');
-    const seriesDataSource = that._createSeriesDataSource(chartOptions);
-    const isCompactMode = !((seriesDataSource && seriesDataSource.isShowChart()) || that.option('background.image.url'));
-    const scaleOptions = prepareScaleOptions(that._getOption('scale'), seriesDataSource && seriesDataSource.getCalculatedValueType(), that._incidentOccurred, this._getOption('containerBackgroundColor', true));
-    seriesDataSource && that._completeSeriesDataSourceCreation(scaleOptions, seriesDataSource);
+  _updateContent(canvas: Canvas): void {
+    const chartOptions = this.option('chart');
+    const seriesDataSource = this._createSeriesDataSource(chartOptions);
+    const isCompactMode = !((seriesDataSource && seriesDataSource.isShowChart())
+      || this.option('background.image.url'));
+    const scaleOptions = prepareScaleOptions(
+      this._getOption('scale'),
+      seriesDataSource && seriesDataSource.getCalculatedValueType(),
+      this._incidentOccurred,
+      this._getOption('containerBackgroundColor', true),
+    );
+    if (seriesDataSource) {
+      this._completeSeriesDataSourceCreation(scaleOptions, seriesDataSource);
+    }
     const argTranslatorRange = calculateTranslatorRange(seriesDataSource, scaleOptions);
-    const tickIntervalsInfo = updateTickIntervals(scaleOptions, canvas.width, that._incidentOccurred, argTranslatorRange);
-    const chartThemeManager = seriesDataSource && seriesDataSource.isShowChart() && seriesDataSource.getThemeManager();
+    const tickIntervalsInfo = updateTickIntervals(
+      scaleOptions,
+      canvas.width,
+      this._incidentOccurred,
+      argTranslatorRange,
+    );
+    const chartThemeManager = seriesDataSource && seriesDataSource.isShowChart()
+      && seriesDataSource.getThemeManager();
 
     if (chartThemeManager) {
-      // TODO: Looks like usage of "chartThemeManager" can be replaced with "that._getOption("chart").valueAxis.logarithmBase - check it
-      checkLogarithmicOptions(chartOptions && chartOptions.valueAxis, chartThemeManager.getOptions('valueAxis').logarithmBase, that._incidentOccurred);
+      // TODO: Looks like usage of "chartThemeManager" can be replaced with
+      // "that._getOption("chart").valueAxis.logarithmBase - check it
+      checkLogarithmicOptions(
+        chartOptions && chartOptions.valueAxis,
+        chartThemeManager.getOptions('valueAxis').logarithmBase,
+        this._incidentOccurred,
+      );
     }
 
-    updateScaleOptions(scaleOptions, seriesDataSource, argTranslatorRange, tickIntervalsInfo, getDateMarkerVisibilityChecker(canvas.width));
+    updateScaleOptions(
+      scaleOptions,
+      seriesDataSource,
+      argTranslatorRange,
+      tickIntervalsInfo,
+      getDateMarkerVisibilityChecker(canvas.width),
+    );
     updateTranslatorRangeInterval(argTranslatorRange, scaleOptions);
-    const sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo, argTranslatorRange);
-    const indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option('indent'), tickIntervalsInfo);
-    const rangeContainerCanvas = {
+    const sliderMarkerOptions = this._prepareSliderMarkersOptions(
+      scaleOptions,
+      canvas.width,
+      tickIntervalsInfo,
+      argTranslatorRange,
+    );
+    const indents = calculateIndents(
+      this._renderer,
+      scaleOptions,
+      sliderMarkerOptions,
+      this.option('indent'),
+      tickIntervalsInfo,
+    );
+    const scaleAreaHeight = calculateScaleAreaHeight(
+      this._renderer,
+      scaleOptions,
+      showScaleMarkers(scaleOptions),
+      tickIntervalsInfo,
+    );
+    const rangeContainerCanvas: Canvas = {
       left: canvas.left + indents.left,
       top: canvas.top + indents.top,
-      width: canvas.left + indents.left + _max(canvas.width - indents.left - indents.right, 1),
-      height: _max(!isCompactMode
-        ? canvas.height - indents.top - indents.bottom - calculateScaleAreaHeight(that._renderer, scaleOptions, showScaleMarkers(scaleOptions), tickIntervalsInfo)
+      width: canvas.left + indents.left + Math.max(canvas.width - indents.left - indents.right, 1),
+      height: Math.max(!isCompactMode
+        ? canvas.height - indents.top - indents.bottom - scaleAreaHeight
         : HEIGHT_COMPACT_MODE, 0),
       right: 0,
       bottom: 0,
     };
 
     // TODO: There should be one call to some axis method (not 4 methods)
-    that._axis.update(scaleOptions, isCompactMode, rangeContainerCanvas, argTranslatorRange, seriesDataSource);
+    this._axis.update(
+      scaleOptions,
+      isCompactMode,
+      rangeContainerCanvas,
+      argTranslatorRange,
+      seriesDataSource,
+    );
 
     scaleOptions.minorTickInterval = scaleOptions.isEmpty ? 0 : scaleOptions.minorTickInterval;
 
     // RangeContainer
-    that._updateElements(scaleOptions, sliderMarkerOptions, isCompactMode, rangeContainerCanvas, seriesDataSource);
+    this._updateElements(
+      scaleOptions,
+      sliderMarkerOptions,
+      isCompactMode,
+      rangeContainerCanvas,
+      seriesDataSource,
+    );
 
     if (chartThemeManager) {
       chartThemeManager.dispose(); // TODO: Move it inside "SeriesDataSource"
     }
-  },
+  }
 
-  _updateElements(scaleOptions, sliderMarkerOptions, isCompactMode, canvas, seriesDataSource) {
-    const that = this;
-    const behavior = that._getOption('behavior');
-    const shutterOptions = that._getOption('shutter');
+  _updateElements(
+    scaleOptions: ThemeValue,
+    sliderMarkerOptions: ThemeValue,
+    isCompactMode: boolean,
+    canvas: Canvas,
+    seriesDataSource: ThemeValue,
+  ): void {
+    const behavior = this._getOption('behavior');
+    const shutterOptions = this._getOption('shutter');
     const isNotSemiDiscrete = scaleOptions.type !== SEMIDISCRETE;
 
-    shutterOptions.color = shutterOptions.color || that._getOption(CONTAINER_BACKGROUND_COLOR, true);
+    shutterOptions.color = shutterOptions.color
+      || this._getOption(CONTAINER_BACKGROUND_COLOR, true);
 
-    that._rangeView.update(
-      that.option('background'),
-      that._themeManager.theme('background'),
+    this._rangeView.update(
+      this.option('background'),
+      this._themeManager.theme('background'),
       canvas,
       isCompactMode,
-      behavior.animationEnabled && that._renderer.animationEnabled(),
+      behavior.animationEnabled && this._renderer.animationEnabled(),
       seriesDataSource,
     );
 
     // TODO: Is entire options bag really needed for SlidersContainer?
-    that._isUpdating = true;
-    that._slidersController.update(
+    this._isUpdating = true;
+    this._slidersController.update(
       [canvas.top, canvas.top + canvas.height],
       behavior,
       isCompactMode,
-      that._getOption('sliderHandle'),
+      this._getOption('sliderHandle'),
       sliderMarkerOptions,
       shutterOptions,
       {
-        minRange: isNotSemiDiscrete ? that.option('scale.minRange') : undefined,
-        maxRange: isNotSemiDiscrete ? that.option('scale.maxRange') : undefined,
+        minRange: isNotSemiDiscrete ? this.option('scale.minRange') : undefined,
+        maxRange: isNotSemiDiscrete ? this.option('scale.maxRange') : undefined,
       },
-      that._axis.getFullTicks(),
-      that._getOption('selectedRangeColor', true),
+      this._axis.getFullTicks(),
+      this._getOption('selectedRangeColor', true),
     );
 
-    that._requestChange(['SLIDER_SELECTION']);
-    that._isUpdating = false;
-    that._tracker.update(!that._axis.getTranslator().getBusinessRange().isEmpty(), behavior);
-  },
+    this._requestChange(['SLIDER_SELECTION']);
+    this._isUpdating = false;
+    this._tracker.update(!this._axis.getTranslator().getBusinessRange().isEmpty(), behavior);
+  }
 
-  _createSeriesDataSource(chartOptions) {
-    const that = this;
-    let seriesDataSource;
-    const dataSource = that._dataSourceItems(); // TODO: This code can be executed when data source is not loaded (it is an error)!
-    const scaleOptions = that._getOption('scale');
-    const valueType = scaleOptions.valueType || calculateValueType(scaleOptions.startValue, scaleOptions.endValue);
+  _createSeriesDataSource(chartOptions: ThemeValue): ThemeValue {
+    // TODO: This code can be executed when data source is not loaded (it is an error)!
+    const dataSource = this._dataSourceItems();
+    const scaleOptions = this._getOption('scale');
+    const valueType = scaleOptions.valueType
+      || calculateValueType(scaleOptions.startValue, scaleOptions.endValue);
     const valueAxis = new Axis({
-      renderer: that._renderer,
+      renderer: this._renderer,
       axisType: 'xyAxes',
       drawingType: 'linear',
     });
@@ -939,248 +1428,128 @@ const dxRangeSelector = baseWidgetModule.inherit({
     valueAxis.updateOptions({
       isHorizontal: false,
       label: {},
-      categoriesSortingMethod: that._getOption('chart').valueAxis.categoriesSortingMethod,
+      categoriesSortingMethod: this._getOption('chart').valueAxis.categoriesSortingMethod,
     });
 
-    if (dataSource || (chartOptions && chartOptions.series)) {
-      chartOptions = extend({}, chartOptions, {
-        theme: that.option('theme'),
-      });
-      seriesDataSource = new SeriesDataSource({
-        renderer: that._renderer,
-        dataSource,
-        valueType: _normalizeEnum(valueType),
-        axisType: scaleOptions.type,
-        chart: chartOptions,
-        dataSourceField: that.option('dataSourceField'),
-        incidentOccurred: that._incidentOccurred,
-        categories: scaleOptions.categories,
-        argumentAxis: that._axis,
-        valueAxis,
-      });
+    if (!dataSource && !(chartOptions && chartOptions.series)) {
+      return undefined;
     }
-    return seriesDataSource;
-  },
 
-  _prepareSliderMarkersOptions(scaleOptions, screenDelta, tickIntervalsInfo, argRange) {
-    const that = this;
-    const minorTickInterval = tickIntervalsInfo.minorTickInterval;
-    const tickInterval = tickIntervalsInfo.tickInterval;
+    const options = extend({}, chartOptions, {
+      theme: this.option('theme'),
+    });
+    return new SeriesDataSource({
+      renderer: this._renderer,
+      dataSource,
+      valueType: normalizeEnum(valueType),
+      axisType: scaleOptions.type,
+      chart: options,
+      dataSourceField: this.option('dataSourceField'),
+      incidentOccurred: this._incidentOccurred,
+      categories: scaleOptions.categories,
+      argumentAxis: this._axis,
+      valueAxis,
+    });
+  }
+
+  _prepareSliderMarkersOptions(
+    scaleOptions: ThemeValue,
+    screenDelta: number,
+    tickIntervalsInfo: TickIntervalsInfo,
+    argRange: ThemeValue,
+  ): ThemeValue {
+    const { minorTickInterval, tickInterval } = tickIntervalsInfo;
     let interval = tickInterval;
-    const endValue = scaleOptions.endValue;
-    const startValue = scaleOptions.startValue;
-    const sliderMarkerOptions = that._getOption(SLIDER_MARKER);
-    const doNotSnap = !that._getOption('behavior').snapToTicks;
+    const { endValue, startValue } = scaleOptions;
+    const sliderMarkerOptions = this._getOption(SLIDER_MARKER);
+    const doNotSnap = !this._getOption('behavior').snapToTicks;
     const isTypeDiscrete = scaleOptions.type === DISCRETE;
     const isValueTypeDatetime = scaleOptions.valueType === DATETIME;
 
-    sliderMarkerOptions.borderColor = that._getOption(CONTAINER_BACKGROUND_COLOR, true);
+    sliderMarkerOptions.borderColor = this._getOption(CONTAINER_BACKGROUND_COLOR, true);
 
     if (!sliderMarkerOptions.format && !argRange.isEmpty()) {
-      if (doNotSnap && _isNumber(scaleOptions.startValue)) {
+      if (doNotSnap && isNumeric(scaleOptions.startValue)) {
         sliderMarkerOptions.format = {
           type: 'fixedPoint',
           precision: getPrecisionForSlider(startValue, endValue, screenDelta),
         };
       }
       if (isValueTypeDatetime && !isTypeDiscrete) {
-        if (_isDefined(minorTickInterval) && minorTickInterval !== 0) {
+        if (isDefined(minorTickInterval) && minorTickInterval !== 0) {
           interval = getMinorTickIntervalUnit(tickInterval, minorTickInterval, doNotSnap);
         }
 
-        if (!scaleOptions.marker.visible) {
-          if (_isDefined(startValue) && _isDefined(endValue)) {
-            // @ts-expect-error
-            sliderMarkerOptions.format = formatHelper.getDateFormatByTickInterval(startValue, endValue, interval);
-          }
-        } else {
-          sliderMarkerOptions.format = dateUtils.getDateFormatByTickInterval(interval);
+        const dateFormat = getSliderMarkerDateFormat(
+          scaleOptions.marker.visible,
+          startValue,
+          endValue,
+          interval,
+        );
+        if (dateFormat !== undefined) {
+          sliderMarkerOptions.format = dateFormat;
         }
       }
       // T347293
       if (isValueTypeDatetime && isTypeDiscrete && tickIntervalsInfo.ticks.length) {
-        // @ts-expect-error
         sliderMarkerOptions.format = formatHelper.getDateFormatByTicks(tickIntervalsInfo.ticks);
       }
     }
     return sliderMarkerOptions;
-  },
+  }
 
-  getValue() {
+  getValue(): (number | string | Date)[] {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return convertVisualRangeObject(this._slidersController.getSelectedRange());
-  },
+  }
 
-  setValue(value, e) {
+  setValue(value: (number | string | Date)[] | VisualRange, e?: ThemeValue): void {
     const visualRange = parseValue(value);
     if (!this._isUpdating && value) {
       this._validateRange(visualRange.startValue, visualRange.endValue);
-      !rangesAreEqual(visualRange, this._slidersController.getSelectedRange()) && this._slidersController.setSelectedRange(visualRange, e);
+      if (!rangesAreEqual(visualRange, this._slidersController.getSelectedRange())) {
+        this._slidersController.setSelectedRange(visualRange, e);
+      }
     }
-  },
+  }
 
-  _setContentSize() {
+  _setContentSize(...args: unknown[]): void {
     this.__isResizing = this._changes.count() === 2;
-    this.callBase.apply(this, arguments);
+    super._setContentSize(...args);
+  }
+}
+
+setupWidgetPrototype(RangeSelector, {
+  _eventsMap: {
+    onValueChanged: { name: VALUE_CHANGED },
   },
+  _rootClassPrefix: 'dxrs',
+  _rootClass: 'dxrs-range-selector',
+  _initialChanges: ['DATA_SOURCE', 'VALUE'],
+  _themeDependentChanges: ['MOSTLY_TOTAL'],
+  _themeSection: 'rangeSelector',
+  _fontFields: ['scale.label.font', 'sliderMarker.font'],
+  _optionChangesMap: {
+    scale: 'SCALE',
+    value: 'VALUE',
+    dataSource: 'DATA_SOURCE',
+  },
+  _optionChangesOrder: ['SCALE', 'DATA_SOURCE'],
+  _customChangesOrder: ['MOSTLY_TOTAL', 'VALUE', 'SLIDER_SELECTION'],
 });
 
-each(['selectedRangeColor', 'containerBackgroundColor', 'sliderMarker', 'sliderHandle',
+[
+  'selectedRangeColor', CONTAINER_BACKGROUND_COLOR, SLIDER_MARKER, 'sliderHandle',
   'shutter', OPTION_BACKGROUND, 'behavior', 'chart', 'indent',
-], (_, name) => {
-  dxRangeSelector.prototype._optionChangesMap[name] = 'MOSTLY_TOTAL';
+].forEach((name) => {
+  RangeSelector.prototype._optionChangesMap[name] = 'MOSTLY_TOTAL';
 });
 
-// AxisWrapper
+registerComponent('dxRangeSelector', RangeSelector);
 
-function prepareAxisOptions(scaleOptions, isCompactMode, height, axisPosition) {
-  scaleOptions.marker.label.font = scaleOptions.label.font;
+RangeSelector.addPlugin(exportPlugin);
+RangeSelector.addPlugin(titlePlugin);
+RangeSelector.addPlugin(LoadingIndicatorPlugin);
+RangeSelector.addPlugin(dataSourcePlugin);
 
-  scaleOptions.color = scaleOptions.marker.color = scaleOptions.tick.color;
-  scaleOptions.opacity = scaleOptions.marker.opacity = scaleOptions.tick.opacity;
-  scaleOptions.width = scaleOptions.marker.width = scaleOptions.tick.width;
-
-  scaleOptions.placeholderSize = (scaleOptions.placeholderHeight || 0) + axisPosition;
-
-  scaleOptions.argumentType = scaleOptions.valueType;
-  scaleOptions.visible = isCompactMode;
-  scaleOptions.isHorizontal = true;
-  scaleOptions.calculateMinors = true;
-
-  scaleOptions.semiDiscreteInterval = scaleOptions.minRange;
-
-  if (!isCompactMode) {
-    scaleOptions.minorTick.length = scaleOptions.tick.length = height;
-  }
-  scaleOptions.label.indentFromAxis = scaleOptions.label.topIndent + axisPosition;
-
-  return scaleOptions;
-}
-
-function createDateMarkersEvent(scaleOptions, markerTrackers, setSelectedRange) {
-  each(markerTrackers, (_, value) => {
-    value.on('dxpointerdown', onPointerDown);
-  });
-  function onPointerDown(e) {
-    const range = e.target.range;
-    const minRange = scaleOptions.minRange ? dateUtils.addInterval(range.startValue, scaleOptions.minRange) : undefined;
-    const maxRange = scaleOptions.maxRange ? dateUtils.addInterval(range.startValue, scaleOptions.maxRange) : undefined;
-    if (!(minRange && minRange > range.endValue || maxRange && maxRange < range.endValue)) {
-      setSelectedRange(range, e);
-    }
-  }
-}
-
-function getSharpDirection() {
-  return 1;
-}
-
-function getTickStartPositionShift(length) {
-  return length % 2 === 1 ? -_floor(length / 2) : -length / 2;
-}
-
-function checkShiftedLabels(majorTicks, boxes, minSpacing, alignment) {
-  function checkLabelsOverlapping(nearestLabelsIndexes) {
-    if (nearestLabelsIndexes.length === 2
-            && constants.areLabelsOverlap(boxes[nearestLabelsIndexes[0]], boxes[nearestLabelsIndexes[1]], minSpacing, alignment)) {
-      majorTicks[nearestLabelsIndexes[0]].removeLabel();
-    }
-  }
-  function getTwoVisibleLabels(startIndex) {
-    const labels = [];
-
-    for (let i = startIndex; labels.length < 2 && i < majorTicks.length; i++) {
-      // @ts-expect-error
-      majorTicks[i].label && labels.push(i);
-    }
-
-    return labels;
-  }
-
-  if (majorTicks.length < 3) {
-    return;
-  }
-
-  checkLabelsOverlapping(getTwoVisibleLabels(0));
-  checkLabelsOverlapping(getTwoVisibleLabels(majorTicks.length - 2).reverse());
-}
-function AxisWrapper(params) {
-  const that = this;
-  that._axis = new Axis({
-    renderer: params.renderer,
-    axesContainerGroup: params.root,
-    scaleBreaksGroup: params.scaleBreaksGroup,
-    labelsAxesGroup: params.labelsAxesGroup,
-    incidentOccurred: params.incidentOccurred,
-    // TODO: These dependencies should be statically resolved (not for every new instance)
-    axisType: 'xyAxes',
-    drawingType: 'linear',
-    widgetClass: 'dxrs',
-    axisClass: 'range-selector',
-    isArgumentAxis: true,
-    getTemplate() {},
-  });
-  that._updateSelectedRangeCallback = params.updateSelectedRange;
-  that._axis.getAxisSharpDirection = that._axis.getSharpDirectionByCoords = getSharpDirection;
-  that._axis.getTickStartPositionShift = getTickStartPositionShift;
-  that._axis._checkShiftedLabels = checkShiftedLabels;
-}
-
-AxisWrapper.prototype = {
-  constructor: AxisWrapper,
-
-  update(options, isCompactMode, canvas, businessRange, seriesDataSource) {
-    const axis = this._axis;
-    axis.updateOptions(prepareAxisOptions(options, isCompactMode, canvas.height, canvas.height / 2 - _ceil(options.width / 2)));
-    axis.validate();
-    axis.setBusinessRange(businessRange, true);
-    if (seriesDataSource !== undefined && seriesDataSource.isShowChart()) {
-      axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
-    }
-
-    axis.draw(canvas);
-    axis.shift({ left: 0, bottom: -canvas.height / 2 + canvas.top });
-    if (axis.getMarkerTrackers()) {
-      // TODO: Check who is responsible for destroying events
-      createDateMarkersEvent(options, axis.getMarkerTrackers(), this._updateSelectedRangeCallback);
-    }
-    axis.drawScaleBreaks({ start: canvas.top, end: canvas.top + canvas.height });
-  },
-
-  visualRange() { },
-
-  getViewport() {
-    return {};
-  },
-
-  allScaleSelected(value) {
-    const { startValue, endValue } = this._axis.visualRange();
-
-    return {
-      startValue: value[0].valueOf() === startValue.valueOf(),
-      endValue: value[1].valueOf() === endValue.valueOf(),
-    };
-  },
-
-  getOptions() {
-    return this._axis.getOptions() || {};
-  },
-};
-
-each(Axis.prototype, (field) => {
-  if (field !== 'constructor' && field[0] !== '_' && isFunction(Axis.prototype[field]) && !(field in AxisWrapper.prototype)) {
-    AxisWrapper.prototype[field] = function () {
-      const axis = this._axis;
-
-      return axis[field].apply(axis, arguments);
-    };
-  }
-});
-
-registerComponent('dxRangeSelector', dxRangeSelector);
-
-export default dxRangeSelector;
-
-dxRangeSelector.addPlugin(exportPlugin);
-dxRangeSelector.addPlugin(titlePlugin);
-dxRangeSelector.addPlugin(LoadingIndicatorPlugin);
-dxRangeSelector.addPlugin(dataSourcePlugin);
+export default RangeSelector;
