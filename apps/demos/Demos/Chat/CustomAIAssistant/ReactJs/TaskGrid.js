@@ -15,7 +15,6 @@ const calculateCompletion = (row) => row.Completion === 100;
 const calculateFilterExpression = (filterValue, operation) => {
   const wantsCompleted = operation === '<>' ? !filterValue : !!filterValue;
   const rawCompletion = (rowData) => rowData.Completion;
-
   return [rawCompletion, wantsCompleted ? '=' : '<', 100];
 };
 export default function TaskGrid({ onInitialized }) {
