@@ -60,6 +60,8 @@ ScrollBar.prototype = {
     const scrollElement = this._scroll.element;
 
     eventsEngine.on(scrollElement, dragEventStart, (e) => {
+      this._dragStartOffset = this._offset;
+
       fireEvent({
         type: 'dxc-scroll-start',
         originalEvent: e,
@@ -68,35 +70,59 @@ ScrollBar.prototype = {
     });
 
     eventsEngine.on(scrollElement, dragEventMove, (e) => {
-      const dX = -e.offset.x * this._scale;
-      const dY = -e.offset.y * this._scale;
-      const lx = this._offset - (this._layoutOptions.vertical ? dY : dX) / this._scale;
-      this._applyPosition(lx, lx + this._translator.canvasLength / this._scale);
+      const position = this._getDragPosition(e);
+      this._applyPosition(position, position + this._thumbLength);
 
-      fireEvent({
-        type: 'dxc-scroll-move',
-        originalEvent: e,
-        target: scrollElement,
-        // @ts-expect-error
-        offset: {
-          x: dX,
-          y: dY,
-        },
-      });
+      fireEvent(this._getDragEvent('dxc-scroll-move', e, scrollElement, position));
     });
 
     eventsEngine.on(scrollElement, dragEventEnd, (e) => {
-      fireEvent({
-        type: 'dxc-scroll-end',
-        originalEvent: e,
-        target: scrollElement,
-        // @ts-expect-error
-        offset: {
-          x: -e.offset.x * this._scale,
-          y: -e.offset.y * this._scale,
-        },
-      });
+      fireEvent(this._getDragEvent('dxc-scroll-end', e, scrollElement, this._getDragPosition(e)));
     });
+  },
+
+  _getDragPosition(e) {
+    const offset = this._layoutOptions.vertical ? e.offset.y : e.offset.x;
+
+    return (this._dragStartOffset ?? this._offset) + offset;
+  },
+
+  _getDragEvent(type, e, target, position) {
+    return {
+      type,
+      originalEvent: e,
+      target,
+      offset: {
+        x: -e.offset.x * this._scale,
+        y: -e.offset.y * this._scale,
+      },
+      scrollRange: this._getRangeAtPosition(position),
+    };
+  },
+
+  _getBoundaryDirection() {
+    return this._translateWithOffset || (this._hasBreaks ? 1 : 0);
+  },
+
+  _getRangeAtPosition(position) {
+    const translator = this._translator;
+    const length = this._thumbLength;
+
+    if (!isFinite(position) || !isFinite(length)) {
+      return undefined;
+    }
+
+    const visibleArea = translator.getCanvasVisibleArea();
+    const lastPosition = _max(visibleArea.max - length, visibleArea.min);
+    const start = _min(_max(position, visibleArea.min), lastPosition);
+
+    const direction = this._getBoundaryDirection();
+    const from = translator.from(start, -direction);
+    const to = translator.from(start + length, direction);
+
+    return translator.isInverted()
+      ? { startValue: to, endValue: from }
+      : { startValue: from, endValue: to };
   },
 
   update(options) {
@@ -129,18 +155,21 @@ ScrollBar.prototype = {
     return that;
   },
 
-  init(range, stick) {
+  init(range, stick, wholeRangeBreaks) {
     const that = this;
     const isDiscrete = range.axisType === 'discrete';
     that._translateWithOffset = (isDiscrete && !stick && 1) || 0;
+    that._hasBreaks = !!wholeRangeBreaks?.length;
     that._translator.update(extend({}, range, {
       minVisible: null,
       maxVisible: null,
       visibleCategories: null,
+      breaks: wholeRangeBreaks?.length ? wholeRangeBreaks : null,
+      userBreaks: null,
     }, isDiscrete && {
       min: null,
       max: null,
-    } || {}), that._canvas, { isHorizontal: !that._layoutOptions.vertical, stick });
+    } || {}), that._canvas, { isHorizontal: !that._layoutOptions.vertical, stick, breaksSize: 0 });
     return that;
   },
 
@@ -215,15 +244,18 @@ ScrollBar.prototype = {
   // Axis like functions
 
   setPosition(min, max) {
-    const that = this;
-    const translator = that._translator;
-    const minPoint = isDefined(min) ? translator.translate(min, -that._translateWithOffset) : translator.translate('canvas_position_start');
-    const maxPoint = isDefined(max) ? translator.translate(max, that._translateWithOffset) : translator.translate('canvas_position_end');
+    const translator = this._translator;
+    const direction = this._getBoundaryDirection();
+    const minPoint = isDefined(min) ? translator.translate(min, -direction) : translator.translate('canvas_position_start');
+    const maxPoint = isDefined(max) ? translator.translate(max, direction) : translator.translate('canvas_position_end');
 
-    that._offset = _min(minPoint, maxPoint);
-    that._scale = translator.getScale(min, max);
+    this._offset = _min(minPoint, maxPoint);
+    this._thumbLength = Math.abs(maxPoint - minPoint);
+    this._scale = this._thumbLength
+      ? translator.canvasLength / this._thumbLength
+      : translator.getScale(min, max);
 
-    that._applyPosition(_min(minPoint, maxPoint), _max(minPoint, maxPoint));
+    this._applyPosition(_min(minPoint, maxPoint), _max(minPoint, maxPoint));
   },
 
   customPositionIsAvailable() {
