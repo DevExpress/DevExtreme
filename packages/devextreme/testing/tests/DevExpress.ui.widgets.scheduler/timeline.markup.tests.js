@@ -628,12 +628,12 @@ QUnit.module('TimelineWeek with intervalCount markup', timelineWeekModuleConfig,
         this.instance.option('intervalCount', 2);
 
         let cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance.getCellCountInDay() * 7 * 2, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCount(), 'view has right cell count');
 
         this.instance.option('intervalCount', 4);
 
         cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance.getCellCountInDay() * 7 * 4, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCount(), 'view has right cell count');
     });
 
     QUnit.test('TimelineWeek view cells have right cellData with view option intervalCount=2', async function(assert) {

@@ -1,0 +1,293 @@
+import dateUtils from '@js/core/utils/date';
+
+import timeZoneUtils from '../utils_time_zone';
+
+const toMs = dateUtils.dateToMilliseconds;
+const HOUR_MS = toMs('hour');
+const DAY_MS = toMs('day');
+
+export interface TimelineCell {
+  start: Date;
+  end: Date;
+}
+
+const midnight = (date: Date): Date => new Date(
+  date.getFullYear(),
+  date.getMonth(),
+  date.getDate(),
+);
+
+const nextMidnight = (date: Date): Date => new Date(
+  date.getFullYear(),
+  date.getMonth(),
+  date.getDate() + 1,
+);
+
+const atHour = (day: Date, hour: number): Date => {
+  const { hours, minutes } = dateUtils.dateTimeFromDecimal(hour);
+
+  return new Date(day.getFullYear(), day.getMonth(), day.getDate(), hours, minutes, 0, 0);
+};
+
+const sameClock = (first: Date, second: Date): boolean => first.getHours() === second.getHours()
+  && first.getMinutes() === second.getMinutes()
+  && first.getDate() === second.getDate();
+
+const wallMinutes = (date: Date): number => date.getHours() * 60 + date.getMinutes();
+
+const dayFallbackMs = (day: Date): number => Math.max(
+  0,
+  nextMidnight(day).getTime() - midnight(day).getTime() - DAY_MS,
+);
+
+const coversWholeDay = (endDayHour: number): boolean => endDayHour >= 24;
+
+const inVisibleHours = (
+  date: Date,
+  startMinutes: number,
+  endMinutes: number,
+  endDayHour: number,
+): boolean => coversWholeDay(endDayHour)
+  || (wallMinutes(date) >= startMinutes && wallMinutes(date) < endMinutes);
+
+const visibleLimit = (day: Date, endDayHour: number, extraMs: number): Date => {
+  if (coversWholeDay(endDayHour)) {
+    return nextMidnight(day);
+  }
+
+  const first = atHour(day, endDayHour);
+  const later = new Date(first.getTime() + extraMs);
+
+  return sameClock(first, later) ? later : first;
+};
+
+const repeatedStart = (day: Date, startDayHour: number, extraMs: number): Date | undefined => {
+  const first = atHour(day, startDayHour);
+  const later = new Date(first.getTime() + extraMs);
+
+  return sameClock(first, later) ? later : undefined;
+};
+
+const clipToVisibleHours = (
+  start: number,
+  end: number,
+  startMinutes: number,
+  endMinutes: number,
+  endDayHour: number,
+): number => {
+  const stillVisible = coversWholeDay(endDayHour)
+    || inVisibleHours(new Date(end - 1), startMinutes, endMinutes, endDayHour);
+  if (stillVisible) {
+    return end;
+  }
+
+  let low = start;
+  let high = end;
+  while (high - low > 1) {
+    const mid = Math.floor((low + high) / 2);
+    if (inVisibleHours(new Date(mid), startMinutes, endMinutes, endDayHour)) {
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+
+  return low + 1;
+};
+
+/**
+ * Cells of one local day that contain a fall-back, clipped to the visible hours.
+ * Hours outside that range, including the hidden part of a repeated hour, are omitted.
+ * Returns undefined when the day is not longer than the wall clock.
+ */
+export const buildFallbackDayCells = (
+  day: Date,
+  startDayHour: number,
+  endDayHour: number,
+  cellDurationMs: number,
+): TimelineCell[] | undefined => {
+  const extraMs = dayFallbackMs(day);
+  if (extraMs <= 0 || cellDurationMs <= 0 || endDayHour <= startDayHour) {
+    return undefined;
+  }
+
+  const startMinutes = Math.round(startDayHour * 60);
+  const endMinutes = coversWholeDay(endDayHour)
+    ? 24 * 60
+    : Math.round(endDayHour * 60);
+  const limit = visibleLimit(day, endDayHour, extraMs).getTime();
+  const nextVisibleStart = repeatedStart(day, startDayHour, extraMs);
+  const cells: TimelineCell[] = [];
+  let cursor = atHour(day, startDayHour).getTime();
+
+  while (cursor < limit && cells.length < 10000) {
+    const hidden = !inVisibleHours(new Date(cursor), startMinutes, endMinutes, endDayHour);
+    const cannotSkip = !nextVisibleStart
+      || nextVisibleStart.getTime() <= cursor
+      || nextVisibleStart.getTime() >= limit;
+    if (hidden) {
+      if (cannotSkip) {
+        break;
+      }
+      cursor = nextVisibleStart.getTime();
+    } else {
+      const stepEnd = Math.min(cursor + cellDurationMs, limit);
+      const visibleEnd = clipToVisibleHours(cursor, stepEnd, startMinutes, endMinutes, endDayHour);
+      if (visibleEnd <= cursor) {
+        break;
+      }
+
+      cells.push({ start: new Date(cursor), end: new Date(visibleEnd) });
+      const jumpedOverHiddenHour = visibleEnd < stepEnd
+        && nextVisibleStart !== undefined
+        && nextVisibleStart.getTime() > visibleEnd
+        && nextVisibleStart.getTime() < limit;
+      cursor = jumpedOverHiddenHour ? nextVisibleStart.getTime() : visibleEnd;
+    }
+  }
+
+  return cells.length > 0 ? cells : undefined;
+};
+
+const wallClockMs = (date: Date): number => Date.UTC(
+  date.getFullYear(),
+  date.getMonth(),
+  date.getDate(),
+  date.getHours(),
+  date.getMinutes(),
+  date.getSeconds(),
+  date.getMilliseconds(),
+);
+
+/**
+ * Position of an instant on the timeline built from fallback cells.
+ * Days without a list advance by the wall-clock span. Hidden gaps are absent.
+ */
+const offsetInFallbackDay = (
+  cells: TimelineCell[],
+  instant: Date,
+  offset: number,
+): number | undefined => {
+  let cursor = offset;
+  for (const cell of cells) {
+    const duration = cell.end.getTime() - cell.start.getTime();
+    if (instant.getTime() < cell.end.getTime()) {
+      if (instant.getTime() <= cell.start.getTime()) {
+        return cursor;
+      }
+      return cursor + (instant.getTime() - cell.start.getTime());
+    }
+    cursor += duration;
+  }
+
+  return undefined;
+};
+
+const wallOffsetOnDay = (
+  origin: Date,
+  instant: Date,
+  offset: number,
+  wallSpanMs: number,
+): { done: boolean; offset: number } => {
+  const intoDay = wallClockMs(instant) - wallClockMs(origin);
+  const sameDay = midnight(instant).getTime() === midnight(origin).getTime();
+  if (sameDay && intoDay < wallSpanMs) {
+    return { done: true, offset: offset + Math.max(0, intoDay) };
+  }
+
+  return { done: false, offset: offset + wallSpanMs };
+};
+
+export const offsetAlongCells = (
+  days: (TimelineCell[] | undefined)[],
+  dayOrigins: Date[],
+  instant: Date,
+  wallSpanMs: number,
+): number => {
+  let offset = 0;
+
+  for (let index = 0; index < days.length; index += 1) {
+    const cells = days[index];
+    if (!cells) {
+      const placed = wallOffsetOnDay(dayOrigins[index], instant, offset, wallSpanMs);
+      if (placed.done) {
+        return placed.offset;
+      }
+      offset = placed.offset;
+    } else {
+      const inside = offsetInFallbackDay(cells, instant, offset);
+      if (inside !== undefined) {
+        return inside;
+      }
+      offset += cells.reduce(
+        (sum, cell) => sum + (cell.end.getTime() - cell.start.getTime()),
+        0,
+      );
+    }
+  }
+
+  return offset;
+};
+
+export const repeatedHourShiftMs = (
+  rangeMin: number,
+  rangeMax: number,
+  instant: Date,
+  startDayHour: number,
+  endDayHour: number,
+  cellDurationMs: number,
+  skippedDays: number[],
+): number => {
+  const rangeStart = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(rangeMin));
+  const rangeEnd = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(rangeMax));
+  const origins: Date[] = [];
+  const day = midnight(rangeStart);
+
+  while (day.getTime() < rangeEnd.getTime()) {
+    if (!skippedDays.includes(day.getDay())) {
+      origins.push(atHour(day, startDayHour));
+    }
+    day.setDate(day.getDate() + 1);
+  }
+
+  const days = origins.map((origin) => buildFallbackDayCells(
+    origin,
+    startDayHour,
+    endDayHour,
+    cellDurationMs,
+  ));
+  const hasFallback = days.some((cells) => cells);
+  const startsAfterView = origins.length > 0 && instant.getTime() >= origins[0].getTime();
+  if (!hasFallback || !startsAfterView) {
+    return 0;
+  }
+
+  const offset = offsetAlongCells(
+    days,
+    origins,
+    instant,
+    (endDayHour - startDayHour) * HOUR_MS,
+  );
+  const wallDelta = wallClockMs(instant) - wallClockMs(origins[0]);
+
+  return Math.max(0, offset - wallDelta);
+};
+
+export const visibleDayOrigins = (
+  startViewDate: Date,
+  dayCount: number,
+  skippedDays: number[],
+  startDayHour: number,
+): Date[] => {
+  const origins: Date[] = [];
+  const day = midnight(startViewDate);
+
+  while (origins.length < dayCount) {
+    if (!skippedDays.includes(day.getDay())) {
+      origins.push(atHour(day, startDayHour));
+    }
+    day.setDate(day.getDate() + 1);
+  }
+
+  return origins;
+};

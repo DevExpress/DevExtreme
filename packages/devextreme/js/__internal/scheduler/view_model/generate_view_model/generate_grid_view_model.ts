@@ -1,4 +1,5 @@
 import type Scheduler from '../../scheduler';
+import { repeatedHourShiftMs } from '../../utils/repeated_hour';
 import type { AppointmentEntity, ListEntity, SortedEntity } from '../types';
 import type { OptionManager } from './options/option_manager';
 import { addCollector } from './steps/add_collector/add_collector';
@@ -25,7 +26,10 @@ export const sortAppointments = (
     hasAllDayPanel,
     snapToCellsMode,
     viewOffset,
+    isTimelineView,
+    compareOptions,
     compareOptions: { endDayHour },
+    cellDurationMinutes,
   } = optionManager.options;
 
   const step2 = maybeSplit(items, hasAllDayPanel, (entities, panelName) => {
@@ -36,7 +40,30 @@ export const sortAppointments = (
       const innerStep0 = isMonthView || panelName === 'allDayPanel'
         ? expandAllDayAllDayPanel(group, endDayHour, viewOffset)
         : expandAllDayRegularPanel(group);
-      const innerStep1 = splitByParts(innerStep0, optionManager.getSplitIntervals(panelName));
+      const stretchedTimeline = isTimelineView && !isMonthView && panelName === 'regularPanel';
+      const shiftedStep = stretchedTimeline
+        ? innerStep0.map((entity) => {
+          const shiftOf = (sourceDate: number): number => repeatedHourShiftMs(
+            compareOptions.min,
+            compareOptions.max,
+            new Date(sourceDate),
+            compareOptions.startDayHour,
+            compareOptions.endDayHour,
+            cellDurationMinutes * 60 * 1000,
+            compareOptions.skippedDays,
+          );
+          const startDateUTC = entity.startDateUTC + shiftOf(entity.source.startDate);
+          const endDateUTC = entity.endDateUTC + shiftOf(entity.source.endDate);
+
+          return {
+            ...entity,
+            startDateUTC,
+            endDateUTC,
+            duration: endDateUTC - startDateUTC,
+          };
+        })
+        : innerStep0;
+      const innerStep1 = splitByParts(shiftedStep, optionManager.getSplitIntervals(panelName));
       sortByDuration(innerStep1);
       sortByStartDate(innerStep1);
       sortByGroupIndex(innerStep1);

@@ -24,6 +24,7 @@ import type {
   ViewType,
 } from '../../types';
 import { VIEWS } from '../../utils/options/constants_view';
+import { buildFallbackDayCells, type TimelineCell, visibleDayOrigins } from '../../utils/repeated_hour';
 import { getAllGroupValues } from '../../utils/resource_manager/group_utils';
 import {
   getVisibleDaysOfWeek,
@@ -41,12 +42,22 @@ import type {
 
 const toMs = dateUtils.dateToMilliseconds;
 
+const REPEATED_HOUR_VIEWS = new Set<ViewType>(['timelineDay', 'timelineWeek', 'timelineWorkWeek']);
+
 export class ViewDataGenerator {
   protected tableAllDay: boolean | undefined = false;
 
   public hiddenInterval = 0;
 
   public skippedDays: number[] = [];
+
+  private fallbackPlanCache?: {
+    key: string;
+    days: (TimelineCell[] | undefined)[];
+    origins: Date[];
+  };
+
+  private resolvedCellEnd?: Date;
 
   constructor(public readonly viewType: ViewType) {}
 
@@ -149,6 +160,8 @@ export class ViewDataGenerator {
       startDayHour,
       endDayHour,
       hoursInterval,
+      startViewDate: options.startViewDate,
+      skippedDays: this.skippedDays,
     });
     const rowCountInGroup = this.getRowCount({
       intervalCount,
@@ -558,11 +571,12 @@ export class ViewDataGenerator {
       rowIndex,
       columnIndex,
     );
-    const endDate = this.calculateEndDate(
+    const endDate = this.resolvedCellEnd ?? this.calculateEndDate(
       startDate,
       options.interval,
       options.endDayHour,
     );
+    this.resolvedCellEnd = undefined;
 
     const data: ViewCellDataSimple = {
       startDate,
@@ -607,6 +621,62 @@ export class ViewDataGenerator {
     rowIndex: number,
     columnIndex: number,
   ): Date {
+    const {
+      startDayHour,
+      endDayHour,
+      hoursInterval,
+    } = options;
+    const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
+    const columnCountBase = this.getCellCount(options);
+    const rowCountBase = this.getRowCount(options);
+    const cellIndex = this.calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
+    const plan = this.getFallbackPlan(options);
+    this.resolvedCellEnd = undefined;
+
+    if (plan?.days.some((day) => day)) {
+      const { dayIndex, indexInDay } = this.locatePlanCell(cellIndex, cellCountInDay, plan.days);
+      const cells = plan.days[dayIndex];
+      const cell = cells?.[indexInDay];
+      if (cell) {
+        const { viewOffset } = options;
+        this.resolvedCellEnd = new Date(cell.end.getTime() + viewOffset);
+        return new Date(cell.start.getTime() + viewOffset);
+      }
+
+      const nominalIndex = dayIndex * cellCountInDay + indexInDay;
+      return this.calculateDateByCellIndex(options, rowIndex, nominalIndex, nominalIndex);
+    }
+
+    return this.calculateDateByCellIndex(options, rowIndex, columnIndex, cellIndex);
+  }
+
+  private locatePlanCell(
+    cellIndex: number,
+    cellCountInDay: number,
+    days: (TimelineCell[] | undefined)[],
+  ): { dayIndex: number; indexInDay: number } {
+    let dayIndex = 0;
+    let firstCellIndex = 0;
+
+    while (dayIndex < days.length - 1) {
+      const dayCellCount = days[dayIndex]?.length ?? cellCountInDay;
+      if (cellIndex < firstCellIndex + dayCellCount) {
+        break;
+      }
+
+      firstCellIndex += dayCellCount;
+      dayIndex += 1;
+    }
+
+    return { dayIndex, indexInDay: cellIndex - firstCellIndex };
+  }
+
+  private calculateDateByCellIndex(
+    options: ViewDataProviderExtendedOptions,
+    rowIndex: number,
+    columnIndex: number,
+    cellIndex: number,
+  ): Date {
     const { startViewDate } = options;
     const {
       startDayHour,
@@ -617,10 +687,6 @@ export class ViewDataGenerator {
       viewOffset,
     } = options;
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
-
-    const columnCountBase = this.getCellCount(options);
-    const rowCountBase = this.getRowCount(options);
-    const cellIndex = this.calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
     const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 
     let offsetByCount = 0;
@@ -918,8 +984,55 @@ export class ViewDataGenerator {
     const columnCountInDay = isHorizontalView(viewType)
       ? cellCountInDay
       : 1;
+    const plan = this.getFallbackPlan(options);
+    if (!plan?.days.some((day) => day)) {
+      return this.daysInInterval * intervalCount * columnCountInDay;
+    }
 
-    return this.daysInInterval * intervalCount * columnCountInDay;
+    return plan.days.reduce(
+      (total, day) => total + (day?.length ?? cellCountInDay),
+      0,
+    );
+  }
+
+  public getFallbackPlan(options: CountGenerationConfig): {
+    days: (TimelineCell[] | undefined)[];
+    origins: Date[];
+  } | undefined {
+    const {
+      viewType, startViewDate, hoursInterval, startDayHour, endDayHour, intervalCount,
+    } = options;
+    if (!REPEATED_HOUR_VIEWS.has(viewType) || !startViewDate || hoursInterval <= 0) {
+      return undefined;
+    }
+
+    const skippedDays = options.skippedDays ?? this.skippedDays;
+    const dayCount = this.daysInInterval * intervalCount;
+    const cacheKey = [
+      startViewDate.getTime(),
+      dayCount,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      skippedDays.join(','),
+    ].join('|');
+
+    if (this.fallbackPlanCache?.key !== cacheKey) {
+      const origins = visibleDayOrigins(startViewDate, dayCount, skippedDays, startDayHour);
+      const cellDurationMs = hoursInterval * toMs('hour');
+      this.fallbackPlanCache = {
+        key: cacheKey,
+        origins,
+        days: origins.map((origin) => buildFallbackDayCells(
+          origin,
+          startDayHour,
+          endDayHour,
+          cellDurationMs,
+        )),
+      };
+    }
+
+    return this.fallbackPlanCache;
   }
 
   public getRowCount(options: CountGenerationConfig): number {

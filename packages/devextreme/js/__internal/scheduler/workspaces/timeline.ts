@@ -19,6 +19,7 @@ import {
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import { offsetAlongCells } from '../utils/repeated_hour';
 import { getFirstVisibleDate } from '../utils/skipped_days';
 import timezoneUtils from '../utils_time_zone';
 import type { ViewDataProviderOptions } from './view_model/types';
@@ -136,8 +137,44 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   getIndicationCellCount(): number {
-    const timeDiff = this.getTimeDiff();
-    return this.calculateDurationInCells(timeDiff);
+    const plan = this.getFallbackPlan();
+    if (!plan?.days.some((day) => day)) {
+      return this.calculateDurationInCells(this.getTimeDiff());
+    }
+
+    const { startDayHour, endDayHour } = this.option();
+    const offset = offsetAlongCells(
+      plan.days,
+      plan.origins,
+      this.getToday(),
+      (endDayHour - startDayHour) * toMs('hour'),
+    );
+
+    return offset / this.getCellDuration();
+  }
+
+  private getFallbackPlan(): ReturnType<
+    typeof this.viewDataProvider.viewDataGenerator.getFallbackPlan
+  > {
+    const {
+      intervalCount,
+      currentDate,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      skippedDays,
+    } = this.option();
+
+    return this.viewDataProvider.viewDataGenerator.getFallbackPlan({
+      intervalCount,
+      currentDate,
+      viewType: this.type,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      skippedDays,
+      startViewDate: this.getStartViewDate(),
+    });
   }
 
   private getTimeDiff(): number {

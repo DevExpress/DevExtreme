@@ -118,6 +118,8 @@ export interface CountGenerationConfig {
   hoursInterval: number;
   startDayHour: number;
   endDayHour: number;
+  startViewDate?: Date;
+  skippedDays?: number[];
 }
 
 export interface ViewOptions {
