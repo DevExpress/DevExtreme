@@ -1,5 +1,6 @@
 import type Scheduler from '../../scheduler';
 import { repeatedHourShiftMs } from '../../utils/repeated_hour';
+import timeZoneUtils from '../../utils_time_zone';
 import type { AppointmentEntity, ListEntity, SortedEntity } from '../types';
 import type { OptionManager } from './options/option_manager';
 import { addCollector } from './steps/add_collector/add_collector';
@@ -52,8 +53,11 @@ export const sortAppointments = (
             cellDurationMinutes * 60 * 1000,
             compareOptions.skippedDays,
           );
+          const endInstant = entity.allDay
+            ? timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(entity.endDateUTC)).getTime()
+            : entity.source.endDate;
           const startDateUTC = entity.startDateUTC + shiftOf(entity.source.startDate);
-          const endDateUTC = entity.endDateUTC + shiftOf(entity.source.endDate);
+          const endDateUTC = entity.endDateUTC + shiftOf(endInstant);
 
           return {
             ...entity,

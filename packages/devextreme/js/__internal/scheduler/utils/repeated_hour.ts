@@ -46,9 +46,11 @@ const inVisibleHours = (
   date: Date,
   startMinutes: number,
   endMinutes: number,
-  endDayHour: number,
-): boolean => coversWholeDay(endDayHour)
-  || (wallMinutes(date) >= startMinutes && wallMinutes(date) < endMinutes);
+): boolean => {
+  const minutes = wallMinutes(date);
+
+  return minutes >= startMinutes && minutes < endMinutes;
+};
 
 const visibleLimit = (day: Date, endDayHour: number, extraMs: number): Date => {
   if (coversWholeDay(endDayHour)) {
@@ -73,11 +75,8 @@ const clipToVisibleHours = (
   end: number,
   startMinutes: number,
   endMinutes: number,
-  endDayHour: number,
 ): number => {
-  const stillVisible = coversWholeDay(endDayHour)
-    || inVisibleHours(new Date(end - 1), startMinutes, endMinutes, endDayHour);
-  if (stillVisible) {
+  if (inVisibleHours(new Date(end - 1), startMinutes, endMinutes)) {
     return end;
   }
 
@@ -85,7 +84,7 @@ const clipToVisibleHours = (
   let high = end;
   while (high - low > 1) {
     const mid = Math.floor((low + high) / 2);
-    if (inVisibleHours(new Date(mid), startMinutes, endMinutes, endDayHour)) {
+    if (inVisibleHours(new Date(mid), startMinutes, endMinutes)) {
       low = mid;
     } else {
       high = mid;
@@ -121,7 +120,7 @@ export const buildFallbackDayCells = (
   let cursor = atHour(day, startDayHour).getTime();
 
   while (cursor < limit && cells.length < 10000) {
-    const hidden = !inVisibleHours(new Date(cursor), startMinutes, endMinutes, endDayHour);
+    const hidden = !inVisibleHours(new Date(cursor), startMinutes, endMinutes);
     const cannotSkip = !nextVisibleStart
       || nextVisibleStart.getTime() <= cursor
       || nextVisibleStart.getTime() >= limit;
@@ -132,7 +131,7 @@ export const buildFallbackDayCells = (
       cursor = nextVisibleStart.getTime();
     } else {
       const stepEnd = Math.min(cursor + cellDurationMs, limit);
-      const visibleEnd = clipToVisibleHours(cursor, stepEnd, startMinutes, endMinutes, endDayHour);
+      const visibleEnd = clipToVisibleHours(cursor, stepEnd, startMinutes, endMinutes);
       if (visibleEnd <= cursor) {
         break;
       }
@@ -192,10 +191,68 @@ const wallOffsetOnDay = (
   const intoDay = wallClockMs(instant) - wallClockMs(origin);
   const sameDay = midnight(instant).getTime() === midnight(origin).getTime();
   if (sameDay && intoDay < wallSpanMs) {
-    return { done: true, offset: offset + Math.max(0, intoDay) };
+    return { done: true, offset: offset + intoDay };
   }
 
   return { done: false, offset: offset + wallSpanMs };
+};
+
+const columnInFallbackDay = (
+  cells: TimelineCell[],
+  instant: Date,
+  column: number,
+): number | undefined => {
+  let cursor = column;
+  for (const cell of cells) {
+    const duration = cell.end.getTime() - cell.start.getTime();
+    if (instant.getTime() < cell.end.getTime()) {
+      if (instant.getTime() <= cell.start.getTime() || duration <= 0) {
+        return cursor;
+      }
+      return cursor + (instant.getTime() - cell.start.getTime()) / duration;
+    }
+    cursor += 1;
+  }
+
+  return undefined;
+};
+
+/**
+ * Column index of an instant. Each fallback cell is one column, even when its
+ * elapsed length is shorter than the configured cell duration.
+ */
+export const columnAlongCells = (
+  days: (TimelineCell[] | undefined)[],
+  dayOrigins: Date[],
+  instant: Date,
+  wallSpanMs: number,
+  cellDurationMs: number,
+): number => {
+  if (cellDurationMs <= 0) {
+    return 0;
+  }
+
+  let column = 0;
+  for (let index = 0; index < days.length; index += 1) {
+    const cells = days[index];
+    if (!cells) {
+      const intoDay = wallClockMs(instant) - wallClockMs(dayOrigins[index]);
+      const sameDay = midnight(instant).getTime() === midnight(dayOrigins[index]).getTime();
+      const dayColumns = wallSpanMs / cellDurationMs;
+      if (sameDay && intoDay < wallSpanMs) {
+        return column + Math.max(0, intoDay) / cellDurationMs;
+      }
+      column += dayColumns;
+    } else {
+      const inside = columnInFallbackDay(cells, instant, column);
+      if (inside !== undefined) {
+        return inside;
+      }
+      column += cells.length;
+    }
+  }
+
+  return column;
 };
 
 export const offsetAlongCells = (
@@ -262,15 +319,18 @@ export const repeatedHourShiftMs = (
     return 0;
   }
 
-  const offset = offsetAlongCells(
-    days,
+  const wallSpanMs = (endDayHour - startDayHour) * HOUR_MS;
+  const offset = offsetAlongCells(days, origins, instant, wallSpanMs);
+  // Same visible days, without the extra elapsed time. A calendar delta would
+  // count hidden weekdays and cancel the shift those days never contributed.
+  const nominal = offsetAlongCells(
+    Array.from<TimelineCell[] | undefined>({ length: origins.length }),
     origins,
     instant,
-    (endDayHour - startDayHour) * HOUR_MS,
+    wallSpanMs,
   );
-  const wallDelta = wallClockMs(instant) - wallClockMs(origins[0]);
 
-  return Math.max(0, offset - wallDelta);
+  return Math.max(0, offset - nominal);
 };
 
 export const visibleDayOrigins = (

@@ -56,4 +56,45 @@ describe('timeline repeated hour during the Egypt fallback', () => {
       .toBe(4 * DEFAULT_CELL_WIDTH);
     expect(POM.getAppointment('C').getGeometry().width).toBe(6 * DEFAULT_CELL_WIDTH);
   });
+
+  it('keeps a later appointment aligned when hidden days sit on the fallback', async () => {
+    const { POM } = await createScheduler({
+      dataSource: [{
+        text: 'Monday',
+        startDate: new Date(2026, 10, 2, 0),
+        endDate: new Date(2026, 10, 2, 1),
+      }],
+      views: [{
+        type: 'timelineDay',
+        intervalCount: 2,
+        hiddenWeekDays: [0, 5, 6],
+        maxAppointmentsPerCell: 'unlimited',
+      }],
+      currentView: 'timelineDay',
+      currentDate: new Date(2026, 9, 29),
+      cellDuration: 60,
+      timeZone: 'Africa/Cairo',
+    });
+
+    expect(POM.getAppointment('Monday').getGeometry().left).toBe(25 * DEFAULT_CELL_WIDTH);
+  });
+
+  it('stretches an all-day appointment across the repeated hour', async () => {
+    const { POM } = await createScheduler({
+      dataSource: [{
+        text: 'All',
+        startDate: new Date(2026, 9, 29),
+        endDate: new Date(2026, 9, 29),
+        allDay: true,
+      }],
+      views: [{ type: 'timelineDay', intervalCount: 1, maxAppointmentsPerCell: 'unlimited' }],
+      currentView: 'timelineDay',
+      currentDate: new Date(2026, 9, 29),
+      cellDuration: 60,
+      timeZone: 'Africa/Cairo',
+      showAllDayPanel: false,
+    });
+
+    expect(POM.getAppointment('All').getGeometry().width).toBe(25 * DEFAULT_CELL_WIDTH);
+  });
 });
