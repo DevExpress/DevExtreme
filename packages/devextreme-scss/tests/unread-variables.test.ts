@@ -1,24 +1,3 @@
-/*
- * Module variables that nothing reads.
- *
- * unused-elements.test.ts asks whether a name appears anywhere, and the value side of a
- * `@use "…" with ($a: $b)` entry is an appearance - so a variable that is only declared and handed
- * onwards looks used even when the module it is handed to never reads it. This file asks where the
- * chain ends: liveness starts at the declarations, mixin arguments and interpolations that read a
- * variable, and spreads backwards through the configure graph, `$b` becoming live only once `$a`
- * is. A chain that ends nowhere is dead in every theme - the value is computed and dropped.
- *
- * Two sass rules the walk has to respect:
- *
- * - a file that loads a module with `as *` and then writes `$x: value` is setting THAT module's
- *   variable rather than declaring its own, which is how a theme sets the base layer's colours;
- * - a variable local to a mixin, a function or a rule is not a module variable at all, so only
- *   what stands at brace and paren depth 0 counts as a declaration.
- *
- * A read this file cannot attribute to one module wakes every module that declares the name: the
- * gate would rather miss a dead variable than name a live one.
- */
-
 import {
   existsSync,
   readdirSync,
@@ -46,7 +25,6 @@ const walk = (directory: string): string[] => readdirSync(directory, { withFileT
     return entry.name.endsWith('.scss') ? [path] : [];
   });
 
-// Comments are blanked rather than dropped, so that every reported line number is the real one.
 const blank = (text: string): string => text.replace(/[^\n]/g, ' ');
 const stripComments = (text: string): string => text
   .replace(/\/\*[\s\S]*?\*\//g, blank)
@@ -77,6 +55,7 @@ const LOAD = /@(use|forward)\s+["']([^"']+)["']((?:\s+as\s+[\w*-]+)?)\s*(with\s*
 const ENTRY = /^\s*\$([\w-]+)\s*:([\s\S]*)$/;
 const VARIABLE = /^\$([\w-]+)/;
 const NAMESPACED = /([\w-]+)\s*\.\s*$/;
+const CONDITIONAL_BRANCH = /@(if|else)\b[^{}]*$/;
 
 const closingParen = (text: string, from: number): number => {
   let depth = 1;
@@ -142,14 +121,21 @@ files.forEach((file) => {
   });
 
   const inWith = (index: number): boolean => withRanges.some(([from, to]) => index >= from && index < to);
-  let braces = 0;
+  const scopes: boolean[] = [];
+  let statement = 0;
   let parens = 0;
   let index = 0;
   while (index < text.length) {
     const character = text[index];
-    if (character === '{') braces += 1;
-    else if (character === '}') braces = Math.max(0, braces - 1);
-    else if (character === '(') parens += 1;
+    if (character === '{') {
+      scopes.push(CONDITIONAL_BRANCH.test(text.slice(statement, index).trim()));
+      statement = index + 1;
+    } else if (character === '}') {
+      scopes.pop();
+      statement = index + 1;
+    } else if (character === ';') {
+      statement = index + 1;
+    } else if (character === '(') parens += 1;
     else if (character === ')') parens = Math.max(0, parens - 1);
 
     const variable = character === '$' && !inWith(index)
@@ -160,9 +146,11 @@ files.forEach((file) => {
     } else {
       const [spelling, name] = variable;
       const declares = /^\s*:/.test(text.slice(index + spelling.length))
-        && braces === 0 && parens === 0;
-      if (declares) declarations.get(file)?.set(name, lineAt(index));
-      else {
+        && scopes.every((conditional) => conditional) && parens === 0;
+      if (declares) {
+        const known = declarations.get(file)?.get(name);
+        if (known === undefined) declarations.get(file)?.set(name, lineAt(index));
+      } else {
         const before = text.slice(Math.max(0, index - 40), index);
         reads.push({ file, name, namespace: NAMESPACED.exec(before)?.[1] });
       }
@@ -184,7 +172,6 @@ const wildcardOwner = (file: string, name: string): string | null => {
   return null;
 };
 
-// `$x: value` under `@use "m" as *` writes m's variable; it does not declare a second one here.
 const writes = new Map<string, string>();
 declarations.forEach((names, file) => {
   names.forEach((_, name) => {
