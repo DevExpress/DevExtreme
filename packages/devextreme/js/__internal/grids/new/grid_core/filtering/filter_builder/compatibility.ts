@@ -1,7 +1,7 @@
 import { FilterController } from '../filter_controller';
-import { FilterSyncController } from './controller';
+import { FilterSyncController } from '../filter_sync/controller';
 
-export class CompatibilityFilterSyncController {
+export class CompatibilityFilterBuilderController {
   public static dependencies = [
     FilterController,
     FilterSyncController,

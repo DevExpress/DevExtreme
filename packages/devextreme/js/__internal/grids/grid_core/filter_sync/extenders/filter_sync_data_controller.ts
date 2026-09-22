@@ -35,7 +35,7 @@ export const filterSyncDataControllerExtender = (
           const column: Column = this._columnsController.getColumnByPath(args.fullName);
 
           if (column && !this.filterSyncController.isSyncingColumnOptions()) {
-            this.filterSyncController.withColumnOptionsSync(() => {
+            this.filterController.suspendColumnSources(() => {
               this.syncColumnOption(
                 column,
                 this.parseColumnPropertyName(args.fullName),
