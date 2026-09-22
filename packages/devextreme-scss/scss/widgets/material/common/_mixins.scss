@@ -32,7 +32,6 @@ $badge-invalid-bg: $base-invalid-color !default;
   height: $material-invalid-badge-size;
   text-align: center;
   line-height: $material-invalid-badge-size + 1;
-  font-size: $material-base-font-size;
 }
 
 @mixin dx-invalid-material-badge() {
