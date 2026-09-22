@@ -11,6 +11,27 @@
   background-image: string.unquote($uri);
 }
 
+/*
+ * The colours in these files are substituted at build time, so a dial or a hand is a different
+ * image in every mode and keeps the colours of its bundle inside a `dx-theme-mode-*` island. The
+ * same files carry no colour at all once they are masks: what should paint becomes white, what
+ * should stay open becomes black, `mask-mode: luminance` reads that back as coverage, and the paint
+ * comes from the mode scope through `background-color`.
+ *
+ * Luminance rather than alpha because two of the three openings are painted, not empty: the minute
+ * hand's pivot is a ring whose middle is filled in the dial's colour, and the dial itself sits
+ * under the digits. Black leaves both of them open; the drop shadow around the dial is black at 5%
+ * and falls away with them.
+ */
+@mixin clock-masked-image($data-uri) {
+  $painted: replace("#{$data-uri}", escape("$accent-color"), "%23fff");
+  $digits: replace($painted, escape("$digit-color"), "%23fff");
+  $uri: replace($digits, escape("$background-color"), "%23000");
+
+  mask-image: string.unquote($uri);
+  mask-mode: luminance;
+}
+
 @mixin clock-action-icons-mixin(
   $accent-color,
   $background-color,
@@ -24,16 +45,59 @@
     math.div(-$arrow-width, 2),
     calc(#{$arrow-width} / -2)
   ),
+  // The dial is a circle of 85 in the 91 half-width of the artwork, and it casts the one shadow.
+  // Both are only read when the dial is drawn rather than carried by the image.
+  $dial-size: null,
+  $dial-shadow: null,
+  $masked: false,
 ) {
   .dx-timeview-clock {
-    @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"), $accent-color, $background-color, $digit-color);
+    @if $masked {
+      /*
+       * The dial and the digits are two colours the mode decides, and one element paints one of
+       * them: the dial becomes a circle CSS draws, the artwork stays as the digits' mask over it.
+       * Both go to pseudo-elements so that the hands, which are children, keep painting above.
+       */
+      min-width: $clock-size;
+      min-height: $clock-size;
+      max-height: $clock-size;
 
-    min-width: $clock-size;
-    min-height: $clock-size;
-    max-height: $clock-size;
-    background-size: $clock-size;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      &::before {
+        width: $dial-size;
+        height: $dial-size;
+        border-radius: 50%;
+        background-color: $background-color;
+        box-shadow: $dial-shadow;
+      }
+
+      &::after {
+        @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"));
+
+        width: $clock-size;
+        height: $clock-size;
+        mask-repeat: no-repeat;
+        mask-size: 100% 100%;
+        background-color: $digit-color;
+      }
+    } @else {
+      @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"), $accent-color, $background-color, $digit-color);
+
+      min-width: $clock-size;
+      min-height: $clock-size;
+      max-height: $clock-size;
+      background-size: $clock-size;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+    }
   }
 
   .dx-timeview-hourarrow,
@@ -43,17 +107,36 @@
     width: $arrow-width;
     margin-left: $arrow-offset;
     height: 50%;
-    background-position: bottom;
-    background-repeat: no-repeat;
+
+    @if $masked {
+      mask-position: bottom;
+      mask-repeat: no-repeat;
+      background-color: $accent-color;
+
+      /* above the dial and the digits: pseudo-elements of the clock paint after this one */
+      z-index: 1;
+    } @else {
+      background-position: bottom;
+      background-repeat: no-repeat;
+    }
+
     transform-origin: 50% 100%;
     backface-visibility: hidden;
   }
 
   .dx-timeview-hourarrow {
-    @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"), $accent-color, $background-color, $digit-color);
+    @if $masked {
+      @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"));
+    } @else {
+      @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"), $accent-color, $background-color, $digit-color);
+    }
   }
 
   .dx-timeview-minutearrow {
-    @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"), $accent-color, $background-color, $digit-color);
+    @if $masked {
+      @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"));
+    } @else {
+      @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"), $accent-color, $background-color, $digit-color);
+    }
   }
 }

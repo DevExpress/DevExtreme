@@ -19,3 +19,9 @@ $time-view-clock-arrow-width: ds.$spacing-100 !default;
 
 // Derived once and published: the arrows are centred on the dial with half their own width.
 $time-view-clock-arrow-offset: calc(#{$time-view-clock-arrow-width} / -2) !default;
+
+/*
+ * Derived once and published: the dial is the circle of 85 in the artwork's 91 half-width, so it is
+ * that fraction of the size the whole drawing is scaled to.
+ */
+$time-view-clock-dial-size: calc(#{$time-view-clock-size} * 85 / 91) !default;

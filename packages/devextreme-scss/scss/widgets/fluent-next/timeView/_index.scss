@@ -10,6 +10,9 @@
   $clock-size: var(--dx-time-view-clock-size),
   $arrow-width: var(--dx-time-view-clock-arrow-width),
   $arrow-offset: var(--dx-time-view-clock-arrow-offset),
+  $dial-size: var(--dx-time-view-clock-dial-size),
+  $dial-shadow: var(--dx-time-view-clock-shadow),
+  $masked: true,
 );
 
 .dx-timeview {
