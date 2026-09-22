@@ -23,6 +23,7 @@ import {
 } from '../tools/naming/tier';
 import accentContract from '../tools/naming/accent-contract.json';
 import runtimeContract from '../tools/naming/runtime-contract.json';
+import vizContract from '../tools/naming/viz-contract.json';
 import { required } from './required';
 
 const packageRoot = process.cwd();
@@ -161,11 +162,7 @@ const ACCENT_CONTRACT = new Set([
   ...accentContract.steps.values.map((step) => `${accentContract.steps.prefix}${step}`),
 ]);
 
-const VIZ_CONTRACT = new Set<string>(
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  (require('../tools/naming/viz-contract.json') as { variables: { name: string }[] }).variables
-    .map(({ name }) => name),
-);
+const VIZ_CONTRACT = new Set<string>(vizContract.variables.map(({ name }) => name));
 
 const publicNameConsumers = (): Set<string> | null => {
   const roots = [

@@ -1,7 +1,9 @@
 import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 
-const contract = require('../tools/naming/viz-contract.json') as {
+import vizContract from '../tools/naming/viz-contract.json';
+
+const contract = vizContract as {
   declaredIn: { perMode: string; onRootOnly: string; linked: string };
   readBy: string;
   palette: string;
@@ -81,16 +83,23 @@ const sameValue = (first: string, second: string): boolean => {
 };
 
 test('every contract name is declared from the role, or from the name, the contract states', () => {
-  contract.variables.forEach(({ name, role, from, declaredPerMode }) => {
-    if (from) {
-      expect(stylesheet(contract.declaredIn.linked)).toContain(`${name}: var(${from});`);
-      return;
-    }
+  const offenders = contract.variables.flatMap(({
+    name, role, from, declaredPerMode,
+  }) => {
+    const declaredFromRole = declaredPerMode
+      ? contract.declaredIn.perMode
+      : contract.declaredIn.onRootOnly;
+    const declaredIn = from ? contract.declaredIn.linked : declaredFromRole;
+    const declaration = from
+      ? `${name}: var(${from});`
+      : `${variableOf(name)}: ds.$${role} !default;`;
 
-    const css = stylesheet(declaredPerMode ? contract.declaredIn.perMode : contract.declaredIn.onRootOnly);
-
-    expect(css).toContain(`${variableOf(name)}: ds.$${role} !default;`);
+    return stylesheet(declaredIn).includes(declaration)
+      ? []
+      : [`${declaredIn} does not declare ${declaration}`];
   });
+
+  expect(offenders).toEqual([]);
 });
 
 test('the chart themes and the palette read exactly the contract names', () => {
