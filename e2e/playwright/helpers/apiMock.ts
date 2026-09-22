@@ -15,10 +15,21 @@ export async function mockApi(page: Page, requests: MockedRequest[]): Promise<vo
     url, body, status = 200, headers,
   } of [...requests].reverse()) {
     await page.route(url, async (route) => {
+      const crossOrigin = {
+        'access-control-allow-origin': '*',
+        'access-control-allow-methods': '*',
+        'access-control-allow-headers': '*',
+      };
+
+      if (route.request().method() === 'OPTIONS') {
+        await route.fulfill({ status: 204, headers: crossOrigin });
+        return;
+      }
+
       await route.fulfill({
         status,
         contentType: 'application/json',
-        headers: { 'access-control-allow-origin': '*', ...headers },
+        headers: { ...crossOrigin, ...headers },
         body: JSON.stringify(body),
       });
     });

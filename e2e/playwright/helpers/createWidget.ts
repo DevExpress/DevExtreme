@@ -43,7 +43,7 @@ export const createWidget = async <TWidgetName extends WidgetName>(
   selector: string = DEFAULT_SELECTOR,
   { disableFxAnimation } = DEFAULT_OPTIONS,
 ): Promise<void> => page.evaluate(
-  ({
+  async ({
     name, options, elementSelector, disableAnimation,
   }) => {
     const functionMark = '__dxFunction__:';
@@ -83,7 +83,7 @@ export const createWidget = async <TWidgetName extends WidgetName>(
 
     // A configuration that has to reach for something on the page — a store built by
     // "DevExpress.data" — arrives as a factory and is only called here, as it was in TestCafe.
-    const resolved = typeof revived === 'function' ? revived() : revived;
+    const resolved = await (typeof revived === 'function' ? revived() : revived);
 
     (window as any).widget = ($(elementSelector) as any)[name](resolved)[name]('instance');
   },
