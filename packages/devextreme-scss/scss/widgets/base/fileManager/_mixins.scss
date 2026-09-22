@@ -14,10 +14,8 @@
 }
 
 /*
- * Only `refresh` (which `progress` reuses) and `cancel` are drawn in one colour, so only those two
- * can become a mask painted by `currentColor`. `done` and `danger` put an inverted glyph on a
- * success/danger disc beside the neutral arrows - three colours at once, which a mask cannot carry,
- * so they keep the baked image.
+ * `refresh` (which `progress` reuses) and `cancel` are drawn in one colour, so the whole artwork is
+ * a mask painted by `currentColor`.
  */
 @mixin filemanager-icon-masked($data-uri, $width, $height) {
   $uri: replace("#{$data-uri}", "currentTextColor", "%23000");
@@ -27,6 +25,38 @@
   mask-repeat: no-repeat;
   mask-size: contain;
   background-color: currentColor;
+  width: $width;
+  height: $height;
+}
+
+/*
+ * `done` and `danger` put a status disc over the neutral arrows and a glyph inside the disc: three
+ * colours, and a mask carries one. The mask keeps the silhouette of the arrows and the disc for
+ * `currentColor` to fill, and the disc goes back on top as an image of its own. That image is the
+ * same in both modes, because the disc is a fixed green or red and the glyph on it is the static
+ * content colour a fixed fill asks for.
+ */
+@mixin filemanager-icon-status($data-uri, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $width, $height) {
+  $shapes1: replace("#{$data-uri}", "currentTextColor", "%23000");
+  $shapes2: replace($shapes1, "currentSuccessBgColor", "%23000");
+  $shapes3: replace($shapes2, "currentSuccessTextColor", "%23000");
+  $shapes4: replace($shapes3, "currentDangerBgColor", "%23000");
+  $mask: replace($shapes4, "currentDangerTextColor", "%23000");
+  $disc1: replace("#{$data-uri}", "currentTextColor", "transparent");
+  $disc2: replace($disc1, "currentSuccessBgColor", escape("#{$success-bg-color}"));
+  $disc3: replace($disc2, "currentSuccessTextColor", escape("#{$success-text-color}"));
+  $disc4: replace($disc3, "currentDangerBgColor", escape("#{$danger-bg-color}"));
+  $disc: replace($disc4, "currentDangerTextColor", escape("#{$danger-text-color}"));
+
+  mask-image: string.unquote($mask);
+  mask-position: 50% 50%;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: currentColor;
+  background-image: string.unquote($disc);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
   width: $width;
   height: $height;
 }
@@ -48,11 +78,19 @@
     }
 
     &.dx-filemanager-i-done {
-      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/done.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @if $masked {
+        @include filemanager-icon-status(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/done.svg"), $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      } @else {
+        @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/done.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      }
     }
 
     &.dx-filemanager-i-danger {
-      @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/danger.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      @if $masked {
+        @include filemanager-icon-status(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/danger.svg"), $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      } @else {
+        @include filemanager-icon-colored(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/fileManager/danger.svg"), $text-color, $success-bg-color, $success-text-color, $danger-bg-color, $danger-text-color, $icon-size, $icon-size);
+      }
     }
 
     &.dx-filemanager-i-cancel {

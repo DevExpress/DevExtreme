@@ -20,25 +20,15 @@ $file-manager-item-content-focused: ds.$color-content-inverted !default;
 $file-manager-dirs-tree-item-bg-focused: ds.$color-bg-active !default;
 
 /*
- * The status icons (refresh/progress/done/error overlays) are SVG data-uri images: colors are
- * baked into the background-image at build time (string replace). CSS var() tokens do NOT
- * resolve inside a data-uri (they render black), so the values below are the static per-mode
- * equivalents of the ds.$ tokens named in the markers. See DIVERGENCES.md.
+ * The status disc keeps its colours inside the data-uri, where a var() does not resolve: these two
+ * are the same value in both modes, so an image carrying them answers for both. The glyph on the
+ * disc takes the static content colour rather than the inverted one - the disc is a fixed green or
+ * red in either mode, so what sits on it does not flip either, and the contrast against it is the
+ * better for it. See DIVERGENCES.md.
  */
 $file-manager-icon-success-content: #107c10 !default; // dx-data-uri-static: ds.$color-bg-success (mode-invariant)
 $file-manager-icon-danger-content: #c50f1f !default; // dx-data-uri-static: ds.$color-bg-danger (mode-invariant)
-$file-manager-icon: null !default;
-$file-manager-icon-inverted-content: null !default;
-
-@if $mode == "light" {
-  $file-manager-icon: #161616 !default; // dx-data-uri-static: ds.$color-content
-  $file-manager-icon-inverted-content: #fff !default; // dx-data-uri-static: ds.$color-content-inverted
-}
-
-@if $mode == "dark" {
-  $file-manager-icon: #fff !default; // dx-data-uri-static: ds.$color-content
-  $file-manager-icon-inverted-content: #161616 !default; // dx-data-uri-static: ds.$color-content-inverted
-}
+$file-manager-icon-inverted-content: #fff !default; // dx-data-uri-static: ds.$color-content-static-dark (mode-invariant)
 
 // Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $file-manager-drop-zone-placeholder-border: ds.$color-border-primary !default;
