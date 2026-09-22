@@ -578,7 +578,6 @@ export class ChartTracker extends BaseTracker {
       !eventCanceled(eventArgs, series, 'point') && eventTrigger(SERIES_CLICK, { target: series, event });
     });
   }
-  /// #DEBUG
 
   update(options) {
     const that = this;
@@ -735,8 +734,9 @@ export class ChartTracker extends BaseTracker {
 }
 
 Object.assign(ChartTracker.prototype, {
+  /// #DEBUG
   __trackerDelay: DELAY,
-  /// #ENDDEBUG,
+  /// #ENDDEBUG
 
   _notifyLegendOnHoverArgument: false,
 });
