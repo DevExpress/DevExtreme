@@ -569,18 +569,10 @@ export class ViewDataGenerator {
 
     const groupsList = getAllGroupValues(getResourceManager().groupsLeafs);
 
-    const {
-      startDate,
-      endDate,
-      startDateUTC,
-      endDateUTC,
-    } = this.getCellDates(options, rowIndex, columnIndex);
-
+    // NOTE: The exact instants are spread in so that a cell without them carries no
+    // key for them at all, which a deep comparison of two cells relies on.
     const data: ViewCellDataSimple = {
-      startDate,
-      endDate,
-      startDateUTC,
-      endDateUTC,
+      ...this.getCellDates(options, rowIndex, columnIndex),
       allDay: this.tableAllDay,
       groupIndex: 0,
     };
@@ -607,13 +599,12 @@ export class ViewDataGenerator {
     const { viewOffset } = options;
     const startDate = dateUtils.trimTime(data.startDate);
     const shiftedStartDate = dateUtilsTs.addOffsets(startDate, viewOffset);
+    const { startDateUTC, endDateUTC, ...rest } = data;
 
     return {
-      ...data,
+      ...rest,
       startDate: shiftedStartDate,
       endDate: shiftedStartDate,
-      startDateUTC: undefined,
-      endDateUTC: undefined,
       allDay: true,
     };
   }
