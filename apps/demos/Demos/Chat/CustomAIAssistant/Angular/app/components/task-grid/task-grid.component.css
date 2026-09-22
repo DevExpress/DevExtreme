@@ -1,0 +1,11 @@
+#grid-container {
+  margin-top: 20px;
+  min-height: 360px;
+}
+
+::ng-deep .priority-badge {
+  border-radius: 24px;
+  padding: 2px 8px;
+  display: inline-block;
+  text-align: center;
+}
