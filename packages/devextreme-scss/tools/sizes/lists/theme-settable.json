@@ -6943,7 +6943,7 @@
     },
     {
       "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 20,
+      "line": 41,
       "widget": "timeView",
       "literals": [
         "182px"
@@ -6957,7 +6957,7 @@
     },
     {
       "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 21,
+      "line": 42,
       "widget": "timeView",
       "literals": [
         "10px"

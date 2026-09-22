@@ -2,11 +2,11 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 /*
- * The dial, its digits and the hands are drawn from the roles directly: the artwork carries no
- * colour any more, it masks the paint the mode scope resolves. See base/timeView/_mixins.scss.
+ * The dial and the hands are drawn from the roles directly: the artwork carries no colour any more,
+ * it masks the paint the mode scope resolves. The digits take the colour the clock inherits, so
+ * they need no name of their own. See base/timeView/_mixins.scss.
  */
-$time-view-clock-digits-content: ds.$color-content !default;
-$time-view-clock-accent-bg: ds.$color-bg-inverted !default;
+$time-view-clock-arrow-bg: ds.$color-bg-inverted !default;
 $time-view-clock-bg: ds.$color-bg-canvas !default;
 
 /*

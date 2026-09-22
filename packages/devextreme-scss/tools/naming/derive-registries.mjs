@@ -891,7 +891,10 @@ const OVERRIDES = {
     'time-view': ['clock', 'digits', 'field', 'number-box', 'input', 'time-separator', 'spin',
       'format12',
       // wave B8: the hour and minute hands are boxes the clock positions on the dial
-      'arrow'],
+      'arrow',
+      // the dial is the circle the clock draws under the digits, the box the hands turn on - a
+      // box of the widget since the drawing stopped being one image
+      'dial'],
     fieldset: ['field', 'label', 'value', 'header', 'attention-icon', 'radio-group'],
     'radio-group': ['radio-button', 'collection', 'value-container'],
     'progress-bar': ['status', 'range', 'container', 'label'],

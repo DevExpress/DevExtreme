@@ -86,7 +86,9 @@
         height: $clock-size;
         mask-repeat: no-repeat;
         mask-size: 100% 100%;
-        background-color: $digit-color;
+
+        /* the digits are the widget's own text: the mask hands them the colour it inherits */
+        background-color: currentColor;
       }
     } @else {
       @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"), $accent-color, $background-color, $digit-color);
