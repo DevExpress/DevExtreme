@@ -11,6 +11,7 @@ export {
   DisposingEvent,
   InitializedEvent,
   MarkerAddedEvent,
+  MarkerClickEvent,
   MarkerRemovedEvent,
   OptionChangedEvent,
   ReadyEvent,

@@ -8,7 +8,7 @@ import dxMap, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, CalculateOsmRouteInfo, OsmTileServer, RouteMode } from "devextreme/ui/map";
+import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MarkerClickEvent, CalculateOsmRouteInfo, OsmTileServer, RouteMode } from "devextreme/ui/map";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -155,7 +155,7 @@ type IMarkerProps = React.PropsWithChildren<{
     lat?: number;
     lng?: number;
   }[];
-  onClick?: (() => void);
+  onClick?: ((e: MarkerClickEvent) => void);
   tooltip?: Record<string, any> | string | {
     isShown?: boolean;
     text?: string;

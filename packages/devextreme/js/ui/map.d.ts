@@ -9,6 +9,8 @@ import {
   ChangedOptionInfo,
 } from '../events';
 
+import dxPopover from './popover';
+
 import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
@@ -119,6 +121,19 @@ export type MarkerAddedEvent = EventInfo<dxMap> & {
    * @type object
    */
   originalMarker: any;
+};
+
+/**
+ * @docid _ui_map_MarkerClickEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type MarkerClickEvent = EventInfo<dxMap> & {
+  /** @docid _ui_map_MarkerClickEvent.location */
+  location: MapLocation;
+  /** @docid _ui_map_MarkerClickEvent.tooltip */
+  tooltip?: dxPopover;
 };
 
 /**
@@ -300,8 +315,9 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
       location?: any | string | Array<number>;
       /**
        * @docid
+       * @type_function_param1 e:{ui/map:MarkerClickEvent}
        */
-      onClick?: Function;
+      onClick?: ((e: MarkerClickEvent) => void);
       /**
        * @docid
        */

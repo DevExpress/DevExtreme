@@ -137,7 +137,15 @@
             this.view = options.view;
             this.eventHandlers = {};
             this.overlayContainer = document.createElement('div');
+            Object.assign(this.overlayContainer.style, {
+                position: 'absolute',
+                zIndex: '0',
+                width: '100%',
+                height: '100%',
+                pointerEvents: 'none'
+            });
             this.overlayContainerStopEvent = document.createElement('div');
+            options.target.append(this.overlayContainer, this.overlayContainerStopEvent);
             api.mapCreated = true;
             api.mapInstance = this;
             api.mapOptions = options;

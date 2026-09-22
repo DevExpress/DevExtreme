@@ -1,4 +1,5 @@
 import type { MapLocation } from '@js/ui/map';
+import type Popover from '@js/ui/popover';
 
 export const SUBDOMAIN_PLACEHOLDER = '{s}';
 
@@ -37,8 +38,9 @@ export interface MapEngineMarkerOptions {
   htmlOffset?: { top: number; left: number };
   iconSrc?: string;
   location: MapLocation;
-  onClick?: () => void;
+  onClick?: (tooltip?: Popover) => void;
   rtlEnabled?: boolean;
+  tooltip?: { text: string; visible: boolean };
 }
 
 export interface MapEngineUpdateDimensionsResult {
@@ -47,7 +49,7 @@ export interface MapEngineUpdateDimensionsResult {
 
 export interface MapEngineMarker {
   readonly originalMarker: unknown;
-  dispose: () => void;
+  dispose: (restoreFocus?: boolean) => void;
 }
 
 export interface MapEngineRouteOptions {
