@@ -24,7 +24,10 @@ export const getWeekIntervals = (
     stretchRepeatedHour: isTimeline,
   });
   const shiftedCells = shiftIntervals(cells, viewOffset);
-  const lastCellMax = shiftedCells.reduce((max, cell) => Math.max(max, cell.max), 0);
+  const lastCellMax = shiftedCells.reduce(
+    (max, cell) => Math.max(max, cell.max),
+    Number.NEGATIVE_INFINITY,
+  );
   const coveredIntervals = isTimeline
     ? shiftedIntervals.map((interval) => ({
       ...interval,
