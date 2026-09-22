@@ -1,3 +1,4 @@
+import type { DaylightPlan } from '../../../utils/daylight_grid';
 import { shiftIntervals } from '../../common/shift_intervals';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import { trimInterval } from '../../common/trim_interval';
@@ -9,6 +10,7 @@ export const getWeekIntervals = (
   cellDurationMinutes: number,
   viewOffset: number,
   isTimeline: boolean,
+  daylightPlan?: DaylightPlan,
 ): LayoutIntervals => {
   const { startDayHour, endDayHour, ...dateInterval } = compareOptions;
   const trimmedInterval = trimInterval(dateInterval);
@@ -21,6 +23,7 @@ export const getWeekIntervals = (
     ...compareOptions,
     intervals,
     durationMinutes: cellDurationMinutes,
+    daylightPlan: isTimeline ? daylightPlan : undefined,
   });
   const shiftedCells = shiftIntervals(cells, viewOffset);
 

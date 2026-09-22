@@ -28,7 +28,8 @@ export const sortAppointments = (
     compareOptions: { endDayHour },
   } = optionManager.options;
 
-  const step2 = maybeSplit(items, hasAllDayPanel, (entities, panelName) => {
+  const laidOut = optionManager.applyLayoutDates(items);
+  const step2 = maybeSplit(laidOut, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);
     const positionInsideGroup = byGroup.map((group) => {
       sortByDuration(group);

@@ -92,6 +92,9 @@ export type CalculateStartViewDate = (
 export interface ViewCellData {
   startDate: Date;
   endDate: Date;
+  /** True instants. Present on timeline cells whose view has a DST plan. */
+  startDateUTC?: Date;
+  endDateUTC?: Date;
   text?: string;
   otherMonth?: boolean;
   today?: boolean;

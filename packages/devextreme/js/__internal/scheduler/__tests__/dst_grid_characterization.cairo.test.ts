@@ -13,8 +13,7 @@ import { DEFAULT_CELL_WIDTH, setupSchedulerTestEnvironment } from './__mock__/mo
 const MINUTE_MS = 60 * 1000;
 
 /**
- * What 26_1 renders when the browser zone is Cairo, so grid dates carry the real offset.
- * Phase B is expected to change the marked expectations.
+ * Cairo grid when the browser zone is Cairo, so grid dates carry the real offset.
  */
 describe('Cairo grid when the browser zone is Cairo', () => {
   beforeEach(() => {
@@ -57,17 +56,18 @@ describe('Cairo grid when the browser zone is Cairo', () => {
     const secondPass = POM.getAppointment('B');
     const across = POM.getAppointment('C');
 
-    expect(row).toHaveLength(192);
+    expect(row).toHaveLength(196);
     expect(duration(92)).toBe(15 * MINUTE_MS);
-    expect(duration(95)).toBe(75 * MINUTE_MS);
+    expect(duration(95)).toBe(15 * MINUTE_MS);
     expect(cell(95).startDate.toISOString()).toBe('2026-10-29T20:45:00.000Z');
-    expect(cell(95).endDate.toISOString()).toBe('2026-10-29T22:00:00.000Z');
-    expect(cell(96).startDate.toISOString()).toBe('2026-10-29T22:00:00.000Z');
+    expect(cell(95).endDate.toISOString()).toBe('2026-10-29T21:00:00.000Z');
+    expect(cell(96).startDate.toISOString()).toBe('2026-10-29T21:00:00.000Z');
+    expect(cell(100).startDate.toISOString()).toBe('2026-10-29T22:00:00.000Z');
 
     expect(firstPass.getGeometry().left).toBe(92 * DEFAULT_CELL_WIDTH);
-    expect(secondPass.getGeometry().left).toBe(firstPass.getGeometry().left);
+    expect(secondPass.getGeometry().left).toBe(96 * DEFAULT_CELL_WIDTH);
     expect(firstPass.getGeometry().width).toBe(DEFAULT_CELL_WIDTH);
-    expect(across.getGeometry().width).toBe(2 * DEFAULT_CELL_WIDTH);
+    expect(across.getGeometry().width).toBe(6 * DEFAULT_CELL_WIDTH);
     expect(firstPass.getDisplayDate()).toBe('11:00 PM - 11:15 PM');
     expect(secondPass.getDisplayDate()).toBe(firstPass.getDisplayDate());
     expect(across.getDisplayDate()).toBe('11:00 PM - 11:30 PM');
@@ -86,14 +86,14 @@ describe('Cairo grid when the browser zone is Cairo', () => {
     const cell = (index: number) => row[index].cellData;
     const headers = POM.getHeaderPanelContent();
 
-    expect(row).toHaveLength(48);
+    expect(row).toHaveLength(47);
     expect(cell(0).startDate.getHours()).toBe(1);
     expect(cell(0).startDate.toISOString()).toBe('2026-04-23T22:00:00.000Z');
+    expect(cell(22).startDate.getHours()).toBe(23);
+    expect(cell(22).startDate.getDate()).toBe(24);
     expect(cell(23).startDate.getHours()).toBe(0);
     expect(cell(23).startDate.getDate()).toBe(25);
-    expect(cell(24).startDate.getHours()).toBe(1);
-    expect(cell(24).startDate.getDate()).toBe(25);
     expect(headers[2]).toBe('1:00 AM');
-    expect(headers[26]).toBe('1:00 AM');
+    expect(headers[25]).toBe('12:00 AM');
   });
 });

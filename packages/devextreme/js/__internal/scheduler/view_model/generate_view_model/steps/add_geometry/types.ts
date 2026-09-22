@@ -44,7 +44,10 @@ export interface CollectorCSS {
   marginBottom: string;
 }
 
-export type GeometryMinimalEntity = Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'groupIndex' | 'duration'>
+export type GeometryMinimalEntity = Pick<
+  ListEntity,
+  'startDateUTC' | 'endDateUTC' | 'layoutStartMs' | 'layoutEndMs' | 'groupIndex' | 'duration'
+>
   & Position
   & Level
   & AppointmentCollector
