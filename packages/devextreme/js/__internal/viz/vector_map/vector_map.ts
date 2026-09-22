@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import '@ts/viz/vector_map/projection';
 
 import componentRegistrator from '@js/core/component_registrator';
-import type DOMComponent from '@ts/core/widget/dom_component';
 // PLUGINS_SECTION
+import type { AnnotationsPluginMembers } from '@ts/viz/core/annotations';
 import { plugins as annotationsPlugins } from '@ts/viz/core/annotations';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import BaseWidget from '@ts/viz/core/base_widget';
@@ -10,6 +11,7 @@ import { plugin as ExportPlugin } from '@ts/viz/core/export';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugin as LoadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
 import { plugin as TitlePlugin } from '@ts/viz/core/title';
+import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as TooltipPlugin } from '@ts/viz/core/tooltip';
 import { parseScalar } from '@ts/viz/core/utils';
 import { ControlBar } from '@ts/viz/vector_map/control_bar/control_bar';
@@ -44,11 +46,9 @@ function mergeBounds(sumBounds: number[], dataBounds: number[] | undefined): num
   ] : sumBounds;
 }
 
+interface VectorMap extends AnnotationsPluginMembers, TooltipPluginMembers {}
+
 class VectorMap extends BaseWidget {
-  static addPlugin: (plugin: ThemeValue) => void;
-
-  static getInstance: typeof DOMComponent.getInstance;
-
   _root;
 
   _projection;
@@ -312,9 +312,9 @@ class VectorMap extends BaseWidget {
     }
   }
 
-  _applyChanges(...args: unknown[]): void {
+  _applyChanges(): void {
     this._notifyDirty();
-    super._applyChanges(...args);
+    super._applyChanges();
     this._notifyReady();
   }
 

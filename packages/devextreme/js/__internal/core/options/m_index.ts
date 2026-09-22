@@ -210,7 +210,7 @@ export class Options {
     }
   }
 
-  silent(options, value?: unknown) {
+  silent(options?, value?: unknown) {
     const isGetter = arguments.length < 2 && type(options) !== 'object';
 
     if (isGetter) {

@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import formatHelper from '@js/format_helper';
-import type DOMComponent from '@ts/core/widget/dom_component';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugin as loadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
 import { plugin as titlePlugin } from '@ts/viz/core/title';
+import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
 import { getAppropriateFormat } from '@ts/viz/core/utils';
 import themeManagerModule from '@ts/viz/gauges/theme_manager';
@@ -36,11 +37,20 @@ export interface GaugeFormatOptions {
   customizeText?: (this: ThemeValue, formatObject: ThemeValue) => ThemeValue;
 }
 
+export interface BaseGauge extends TooltipPluginMembers {
+  _change_TITLE: () => void;
+  _factory: ThemeValue;
+  _title: ThemeValue;
+  _updateExtraElements: () => void;
+
+  /// #DEBUG
+  _DEBUG_change_title?: () => void;
+  _DEBUG_rootRect?: number[];
+  _debug_rendered?: () => void;
+  /// #ENDDEBUG
+}
+
 export abstract class BaseGauge extends BaseWidget {
-  static addPlugin: (plugin: ThemeValue) => void;
-
-  static getInstance: typeof DOMComponent.getInstance;
-
   _valueChangingLocker!: number;
 
   _translator;
@@ -117,9 +127,9 @@ export abstract class BaseGauge extends BaseWidget {
     });
   }
 
-  _dispose(...args: unknown[]): void {
+  _dispose(): void {
     this._cleanCore();
-    super._dispose(...args);
+    super._dispose();
   }
 
   _disposeCore(): void {
@@ -151,16 +161,16 @@ export abstract class BaseGauge extends BaseWidget {
     /// #ENDDEBUG
   }
 
-  _applyChanges(...args: unknown[]): void {
-    super._applyChanges(...args);
+  _applyChanges(): void {
+    super._applyChanges();
     this._noAnimation = false;
     this._resizing = false;
   }
 
-  _setContentSize(...args: unknown[]): void {
+  _setContentSize(): void {
     this._noAnimation = this._changes.count() === 2;
     this._resizing = this._noAnimation;
-    super._setContentSize(...args);
+    super._setContentSize();
   }
 
   _getChangesRequireCoreUpdate(): string[] {
@@ -358,9 +368,8 @@ BaseGauge.addPlugin(loadingIndicatorPlugin);
 const { _setTooltipOptions: setTooltipOptions } = BaseGauge.prototype;
 BaseGauge.prototype._setTooltipOptions = function setTooltipOptionsWithTracker(
   this: BaseGauge,
-  ...args: unknown[]
 ): void {
-  setTooltipOptions.apply(this, args);
+  setTooltipOptions.call(this);
   if (this._tracker) {
     this._tracker.setTooltipState(this._tooltip.isEnabled());
   }
@@ -369,11 +378,10 @@ BaseGauge.prototype._setTooltipOptions = function setTooltipOptionsWithTracker(
 const { _change_TITLE: changeTitle } = BaseGauge.prototype;
 BaseGauge.prototype._change_TITLE = function changeTitleWithCache(
   this: BaseGauge,
-  ...args: unknown[]
 ): void {
   this._titleBBoxCache = { ...this._title.getLayoutOptions() };
 
-  changeTitle.apply(this, args);
+  changeTitle.call(this);
 
   /// #DEBUG
   if (this._DEBUG_change_title) {
