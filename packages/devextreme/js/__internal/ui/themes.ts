@@ -41,6 +41,22 @@ let defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
 
+const ACCENT_COLOR_PROPERTY = '--dx-accent-color';
+
+const VALUES_THAT_POINT_AT_ANOTHER_COLOR = [
+  'currentcolor', 'inherit', 'initial', 'unset', 'revert', 'revert-layer',
+];
+
+function isValidColor(value: string): boolean {
+  const probe = domAdapter.createElement('div');
+
+  probe.style.color = value;
+
+  const parsed = probe.style.color.trim().toLowerCase();
+
+  return parsed !== '' && !VALUES_THAT_POINT_AT_ANOTHER_COLOR.includes(parsed);
+}
+
 function readThemeMarker(): string | null {
   if (!hasWindow()) {
     return null;
@@ -223,7 +239,6 @@ function initContext(newContext): void {
 }
 
 function getCssClasses(themeName?: string): string[] {
-  // @ts-expect-error ts-error
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line no-param-reassign,@typescript-eslint/no-use-before-define, @typescript-eslint/prefer-nullish-coalescing
   themeName = themeName || current();
@@ -288,7 +303,7 @@ export function detachCssClasses(element: dxElementWrapper): void {
 
 // eslint-disable-next-line @stylistic/max-len
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/explicit-function-return-type,consistent-return
-export function current(options) {
+export function current(options?) {
   if (!arguments.length) {
     currentThemeName = currentThemeName || readThemeMarker();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -366,6 +381,10 @@ export function isFluent(themeName: string): boolean {
   return isTheme('fluent', themeName);
 }
 
+export function isFluentNext(themeName: string): boolean {
+  return isTheme('fluent-next', themeName);
+}
+
 export function isMaterialBased(themeName: string): boolean {
   return isMaterial(themeName) || isFluent(themeName);
 }
@@ -402,6 +421,42 @@ export function mode(element: Element | dxElementWrapper): 'light' | 'dark' {
  */
 export function refreshMode(): void {
   themeModeChangedCallback.fire();
+}
+
+export function customAccentColor(): string;
+export function customAccentColor(color: string | null): void;
+export function customAccentColor(color?: string | null): string | undefined {
+  if (!hasWindow()) {
+    return color === undefined ? '' : undefined;
+  }
+
+  const root = context.documentElement;
+
+  if (color === undefined) {
+    return window.getComputedStyle(root).getPropertyValue(ACCENT_COLOR_PROPERTY).trim();
+  }
+
+  if (color === null || color === '') {
+    root.style.removeProperty(ACCENT_COLOR_PROPERTY);
+
+    return undefined;
+  }
+
+  if (!isValidColor(color)) {
+    errors.log('W0024', color);
+
+    return undefined;
+  }
+
+  const themeName = current();
+
+  if (themeName && !isFluentNext(themeName)) {
+    errors.log('W0025', themeName);
+  }
+
+  root.style.setProperty(ACCENT_COLOR_PROPERTY, color);
+
+  return undefined;
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -534,6 +589,7 @@ export default {
   isMaterialBased,
   mode,
   refreshMode,
+  customAccentColor,
   detachCssClasses,
   attachCssClasses,
   current,

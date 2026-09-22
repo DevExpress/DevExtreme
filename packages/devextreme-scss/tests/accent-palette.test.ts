@@ -102,6 +102,14 @@ test('no step multiplies and divides by the same number — Chrome 145 folds tha
   expect(offenders).toEqual([]);
 });
 
+test('every step pins the alpha, so a translucent accent does not fade the whole scale', () => {
+  const offenders = [...stylesheet().matchAll(/--dx-accent-color-(\d+): (.+);/g)]
+    .filter(([, , expression]) => !expression.endsWith('h / 1)'))
+    .map(([, step]) => `step ${step} inherits the alpha of the accent`);
+
+  expect(offenders).toEqual([]);
+});
+
 test('the built bundles carry both halves of the accent', () => {
   expect(bundleNames.length).toBeGreaterThan(0);
 

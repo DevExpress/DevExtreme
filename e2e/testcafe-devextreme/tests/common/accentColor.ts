@@ -8,7 +8,6 @@ import { getData } from '../dataGrid/helpers/generateDataSourceData';
 import { isFluentNext, testScreenshot } from '../../helpers/themeUtils';
 
 const STEPS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180];
-const ARBITRARY_ACCENT = '#a703ff';
 
 const DESIGNED_PALETTE_TOLERANCE = 4;
 const HUE_TOLERANCE = 0.01;
@@ -24,6 +23,23 @@ interface MeasuredStep {
   resolved: string;
   oklch: Oklch | null;
 }
+
+const asHex = (value: string): string => {
+  const probe = document.createElement('div');
+  document.body.appendChild(probe);
+  probe.style.backgroundColor = `rgb(from ${value} r g b)`;
+  const resolved = getComputedStyle(probe).backgroundColor;
+  probe.remove();
+
+  const channels = (resolved.match(/[-\d.]+/g) ?? []).slice(0, 3);
+  const scale = resolved.startsWith('color(') ? 255 : 1;
+
+  return channels.length === 3
+    ? `#${channels
+      .map((raw) => Math.round(Math.min(255, Math.max(0, +raw * scale))).toString(16).padStart(2, '0'))
+      .join('')}`
+    : resolved;
+};
 
 const measurePalette = ClientFunction((accent: string | null, steps: number[]) => {
   const root = document.documentElement;
@@ -101,27 +117,11 @@ const drawPaletteStrip = ClientFunction((accent: string, steps: number[]) => {
     return { step, swatch, caption };
   });
 
-  const asHex = (color: string): string => {
-    const probe = document.createElement('div');
-    probe.style.backgroundColor = `rgb(from ${color} r g b)`;
-    strip.appendChild(probe);
-    const resolved = getComputedStyle(probe).backgroundColor;
-    probe.remove();
-    const channels = (resolved.match(/[-\d.]+/g) ?? []).slice(0, 3);
-    const scale = resolved.startsWith('color(') ? 255 : 1;
-
-    return channels.length === 3
-      ? `#${channels
-        .map((raw) => Math.round(Math.min(255, Math.max(0, +raw * scale))).toString(16).padStart(2, '0'))
-        .join('')}`
-      : resolved;
-  };
-
   swatches.forEach(({ step, swatch, caption }) => {
     caption.textContent = `${step}\n${asHex(getComputedStyle(swatch).backgroundColor)}`;
     caption.style.whiteSpace = 'pre';
   });
-}, { dependencies: { PALETTE_STRIP } });
+}, { dependencies: { PALETTE_STRIP, asHex } });
 const oklchDistance = (first: Oklch, second: Oklch): number => {
   const radians = Math.PI / 180;
   const firstA = first.c * Math.cos(first.h * radians);
@@ -132,6 +132,24 @@ const oklchDistance = (first: Oklch, second: Oklch): number => {
 
   return Math.sqrt(squared) * 100;
 };
+
+const accentThroughApi = ClientFunction((color: string | null) => {
+  const { themes } = (window as any).DevExpress.ui;
+
+  themes.customAccentColor(color);
+
+  const probe = document.createElement('div');
+  document.body.appendChild(probe);
+  probe.style.backgroundColor = 'var(--dxds-primary-100)';
+  const seed = asHex(getComputedStyle(probe).backgroundColor);
+  probe.remove();
+
+  return { seed, reported: themes.customAccentColor() };
+}, { dependencies: { asHex } });
+
+const declareBrandColor = ClientFunction((color: string) => {
+  document.documentElement.style.setProperty('--brand', color);
+});
 
 const rounded = (value: number): number => Math.round(value * 1000) / 1000;
 const stepOf = (measured: MeasuredStep[], step: number): Oklch => measured
@@ -164,7 +182,8 @@ fixture`Custom accent color`
 });
 
 (isFluentNext() ? test : test.skip)('an arbitrary accent keeps hue, order and clamps', async (t) => {
-  const { measured, source, settings } = await measurePalette(ARBITRARY_ACCENT, STEPS);
+  const arbitraryAccent = '#a703ff';
+  const { measured, source, settings } = await measurePalette(arbitraryAccent, STEPS);
   const steps = measured;
   const lightest = stepOf(steps, 10);
   const darkest = stepOf(steps, 180);
@@ -214,4 +233,55 @@ fixture`Custom accent color`
     focusedRowKey: GRID_DATA[2].field_0,
     showBorders: true,
   }, `#${ACCENT_GRID}`);
+});
+
+(isFluentNext() ? test : test.skip)('a translucent accent still gives an opaque palette', async (t) => {
+  const translucentAccent = '#a703ff80';
+  const { measured } = await measurePalette(translucentAccent, STEPS);
+
+  await t
+    .expect(measured.filter((entry) => entry.resolved.includes('/')).map((entry) => entry.step))
+    .eql([], 'no step may inherit the alpha of the accent');
+});
+
+(isFluentNext() ? test : test.skip)('themes.customAccentColor sets, keeps and clears the accent', async (t) => {
+  const designedAccent = '#0f6cbd';
+  const arbitraryAccent = '#a703ff';
+  const designed = await accentThroughApi(null);
+
+  await t.expect(designed.reported).eql('', 'an accent nobody set is reported as unset');
+  await t.expect(designed.seed).eql(designedAccent, 'the theme starts on the accent it was drawn with');
+
+  const applied = await accentThroughApi(arbitraryAccent);
+
+  await t.expect(applied.seed).eql(arbitraryAccent, 'the palette is built from the accent that was set');
+  await t.expect(applied.reported).eql(arbitraryAccent, 'the accent that was set is reported back');
+
+  const afterRefusedValue = await accentThroughApi('not-a-color');
+
+  await t.expect(afterRefusedValue.seed).eql(arbitraryAccent, 'a refused value leaves the palette alone');
+  await t.expect(afterRefusedValue.reported).eql(arbitraryAccent, 'a refused value leaves the accent alone');
+
+  const afterReset = await accentThroughApi(null);
+
+  await t.expect(afterReset.seed).eql(designed.seed, 'null brings the designed palette back');
+  await t.expect(afterReset.reported).eql('', 'a cleared accent is reported as unset');
+});
+
+(isFluentNext() ? test : test.skip)('themes.customAccentColor takes an accent written as a reference', async (t) => {
+  const brandAccent = '#a703ff';
+
+  await declareBrandColor(brandAccent);
+  const applied = await accentThroughApi('var(--brand)');
+
+  await t.expect(applied.seed).eql(brandAccent, 'the palette is built from the color the reference resolves to');
+  await t.expect(applied.reported).eql(brandAccent, 'a reference is reported back as the color it resolves to');
+});
+
+(isFluentNext() ? test : test.skip)('themes.customAccentColor takes an accent written by name', async (t) => {
+  const namedAccent = 'rebeccapurple';
+  const applied = await accentThroughApi(namedAccent);
+
+  await t.expect(applied.seed).eql('#663399', 'the palette is built from the color the name stands for');
+  await t.expect(applied.reported).eql(namedAccent, 'the accent is reported back as it was written, not as a hex');
 });
