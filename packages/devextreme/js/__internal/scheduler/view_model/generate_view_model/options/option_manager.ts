@@ -76,7 +76,7 @@ export class OptionManager {
 
   public applyLayoutDates<T extends ListEntity>(items: T[]): T[] {
     const plan = this.schedulerStore.getWorkSpace()
-      .viewDataProvider.viewDataGenerator.getDaylightPlan();
+      .viewDataProvider?.viewDataGenerator.getDaylightPlan();
 
     if (!plan || this.options.isMonthView) {
       return items;
@@ -166,9 +166,9 @@ export class OptionManager {
         isMonthView,
         panelName,
         this.schedulerStore.getWorkSpace()
-          .viewDataProvider.viewDataGenerator.getDaylightPlan(),
+          .viewDataProvider?.viewDataGenerator.getDaylightPlan(),
         this.schedulerStore.getWorkSpace()
-          .viewDataProvider.viewDataGenerator.getVerticalSlots(),
+          .viewDataProvider?.viewDataGenerator.getVerticalSlots(),
       );
 
       const groupByDateSplitIntervals = viewOrientation === 'vertical' ? dayIntervals : cells;
