@@ -4,7 +4,13 @@
 
 import { describe, expect, it } from '@jest/globals';
 
-import { buildFallbackDayCells, repeatedHourShiftMs } from './repeated_hour';
+import {
+  buildFallbackDayCells,
+  columnAlongCells,
+  instantOnGrid,
+  repeatedHourShiftMs,
+  visibleDayOrigins,
+} from './repeated_hour';
 
 describe('buildFallbackDayCells', () => {
   it('adds the repeated hour on 29 October 2026 and clips each cell to 15 minutes', () => {
@@ -78,5 +84,47 @@ describe('repeatedHourShiftMs', () => {
     );
 
     expect(shift).toBe(45 * minuteMs);
+  });
+
+  it('does not shift a UTC clock time that only matches the fallback as an absolute instant', () => {
+    const gridUtc = Date.UTC(2026, 9, 29, 21);
+    const source = new Date('2026-10-29T21:00:00.000Z').getTime();
+    const instant = instantOnGrid(gridUtc, source);
+    const shift = repeatedHourShiftMs(
+      Date.UTC(2026, 9, 29),
+      Date.UTC(2026, 9, 30),
+      instant,
+      0,
+      24,
+      cellDurationMs,
+      [],
+    );
+
+    expect(instant.getHours()).toBe(21);
+    expect(shift).toBe(0);
+  });
+
+  it('still uses the source instant when the displayed time is the repeated hour', () => {
+    const gridUtc = Date.UTC(2026, 9, 29, 23);
+    const second = new Date('2026-10-29T21:00:00.000Z').getTime();
+    const instant = instantOnGrid(gridUtc, second);
+
+    expect(instant.toISOString()).toBe('2026-10-29T21:00:00.000Z');
+  });
+});
+
+describe('columnAlongCells', () => {
+  it('stops on a hidden Friday instead of walking into Monday', () => {
+    const hourMs = 60 * 60 * 1000;
+    const origins = visibleDayOrigins(new Date(2026, 9, 29), 2, [0, 5, 6], 0);
+    const days = origins.map((origin) => buildFallbackDayCells(origin, 0, 24, hourMs));
+
+    expect(columnAlongCells(
+      days,
+      origins,
+      new Date(2026, 9, 30, 10),
+      24 * hourMs,
+      hourMs,
+    )).toBe(25);
   });
 });

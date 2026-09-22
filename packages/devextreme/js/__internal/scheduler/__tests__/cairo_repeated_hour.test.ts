@@ -97,4 +97,21 @@ describe('timeline repeated hour during the Egypt fallback', () => {
 
     expect(POM.getAppointment('All').getGeometry().width).toBe(25 * DEFAULT_CELL_WIDTH);
   });
+
+  it('keeps a UTC appointment on its displayed hour when the browser repeats 23:00', async () => {
+    const { POM } = await createScheduler({
+      dataSource: [{
+        text: 'UTC',
+        startDate: new Date('2026-10-29T21:00:00.000Z'),
+        endDate: new Date('2026-10-29T22:00:00.000Z'),
+      }],
+      views: [{ type: 'timelineDay', intervalCount: 1, maxAppointmentsPerCell: 'unlimited' }],
+      currentView: 'timelineDay',
+      currentDate: new Date(2026, 9, 29),
+      cellDuration: 60,
+      timeZone: 'Etc/UTC',
+    });
+
+    expect(POM.getAppointment('UTC').getGeometry().left).toBe(21 * DEFAULT_CELL_WIDTH);
+  });
 });

@@ -182,6 +182,10 @@ const offsetInFallbackDay = (
   return undefined;
 };
 
+const isBeyondInstant = (origin: Date, instant: Date): boolean => (
+  origin.getTime() > instant.getTime()
+);
+
 const wallOffsetOnDay = (
   origin: Date,
   instant: Date,
@@ -234,6 +238,9 @@ export const columnAlongCells = (
 
   let column = 0;
   for (let index = 0; index < days.length; index += 1) {
+    if (isBeyondInstant(dayOrigins[index], instant)) {
+      return column;
+    }
     const cells = days[index];
     if (!cells) {
       const intoDay = wallClockMs(instant) - wallClockMs(dayOrigins[index]);
@@ -264,6 +271,9 @@ export const offsetAlongCells = (
   let offset = 0;
 
   for (let index = 0; index < days.length; index += 1) {
+    if (isBeyondInstant(dayOrigins[index], instant)) {
+      return offset;
+    }
     const cells = days[index];
     if (!cells) {
       const placed = wallOffsetOnDay(dayOrigins[index], instant, offset, wallSpanMs);
@@ -284,6 +294,28 @@ export const offsetAlongCells = (
   }
 
   return offset;
+};
+
+/**
+ * Grid coordinate for a shift. The displayed UTC timestamp is the position on
+ * the timeline. The source instant picks the second occurrence only when that
+ * displayed clock time itself falls in the repeated hour.
+ */
+export const instantOnGrid = (gridDateUTC: number, sourceDate: number): Date => {
+  const gridInstant = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(gridDateUTC));
+  const extraMs = dayFallbackMs(gridInstant);
+  if (extraMs <= 0) {
+    return gridInstant;
+  }
+
+  const secondOccurrence = new Date(gridInstant.getTime() + extraMs);
+  const source = new Date(sourceDate);
+  const displayedInRepeatedHour = sameClock(gridInstant, secondOccurrence);
+  const sourceIsSecond = displayedInRepeatedHour
+    && sameClock(source, gridInstant)
+    && source.getTime() >= secondOccurrence.getTime();
+
+  return sourceIsSecond ? secondOccurrence : gridInstant;
 };
 
 export const repeatedHourShiftMs = (
