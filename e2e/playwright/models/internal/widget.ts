@@ -1,6 +1,8 @@
 import type { Locator, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import type { WidgetName } from '../types';
 import { hasClass } from './hasClass';
+import { classMatcher } from './classMatcher';
 
 const CLASS = {
   focused: 'dx-state-focused',
@@ -8,6 +10,8 @@ const CLASS = {
   active: 'dx-state-active',
   disabled: 'dx-state-disabled',
 };
+
+type WidgetState = keyof typeof CLASS;
 
 export default abstract class Widget {
   public static className = '';
@@ -25,20 +29,30 @@ export default abstract class Widget {
     return `dx-${widgetName.slice(2).toLowerCase() + (className ? `-${className}` : '')}`;
   }
 
-  public isFocused(): Promise<boolean> {
-    return this.hasClass(CLASS.focused);
+  public async expectClass(className: string, present = true): Promise<void> {
+    const assertion = expect(this.element);
+
+    await (present ? assertion : assertion.not).toHaveClass(classMatcher(className));
   }
 
-  public isHovered(): Promise<boolean> {
-    return this.hasClass(CLASS.hovered);
+  public expectState(state: WidgetState, present = true): Promise<void> {
+    return this.expectClass(CLASS[state], present);
   }
 
-  public isActive(): Promise<boolean> {
-    return this.hasClass(CLASS.active);
+  public expectFocused(present = true): Promise<void> {
+    return this.expectState('focused', present);
   }
 
-  public isDisabled(): Promise<boolean> {
-    return this.hasClass(CLASS.disabled);
+  public expectHovered(present = true): Promise<void> {
+    return this.expectState('hovered', present);
+  }
+
+  public expectActive(present = true): Promise<void> {
+    return this.expectState('active', present);
+  }
+
+  public expectDisabled(present = true): Promise<void> {
+    return this.expectState('disabled', present);
   }
 
   public hasClass(className: string): Promise<boolean> {

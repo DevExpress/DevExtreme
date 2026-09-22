@@ -15,8 +15,8 @@ export default class Button extends Widget {
     return this.element.locator(CLASS.text);
   }
 
-  public isSelected(): Promise<boolean> {
-    return this.hasClass(CLASS.selected);
+  public expectSelected(present = true): Promise<void> {
+    return this.expectClass(CLASS.selected, present);
   }
 
   // eslint-disable-next-line class-methods-use-this

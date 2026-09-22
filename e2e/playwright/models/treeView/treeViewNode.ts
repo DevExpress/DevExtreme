@@ -1,5 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
-import { hasClass } from '../internal/hasClass';
+import { expect } from '@playwright/test';
+import { classMatcher } from '../internal/classMatcher';
 import CheckBox from '../checkBox';
 
 const CLASS = {
@@ -18,8 +19,10 @@ export default class TreeViewNode {
     this.element = element;
   }
 
-  public isFocused(): Promise<boolean> {
-    return hasClass(this.element, CLASS.focused);
+  public async expectFocused(present = true): Promise<void> {
+    const assertion = expect(this.element);
+
+    await (present ? assertion : assertion.not).toHaveClass(classMatcher(CLASS.focused));
   }
 
   public getCheckBox(): CheckBox {

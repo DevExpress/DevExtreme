@@ -10,12 +10,12 @@ export const CLASS = {
 export default class CheckBox extends Widget {
   public static className = 'dx-checkbox';
 
-  public isChecked(): Promise<boolean> {
-    return this.hasClass(CLASS.checked);
+  public expectChecked(present = true): Promise<void> {
+    return this.expectClass(CLASS.checked, present);
   }
 
-  public isIndeterminate(): Promise<boolean> {
-    return this.hasClass(CLASS.indeterminate);
+  public expectIndeterminate(present = true): Promise<void> {
+    return this.expectClass(CLASS.indeterminate, present);
   }
 
   // eslint-disable-next-line class-methods-use-this
