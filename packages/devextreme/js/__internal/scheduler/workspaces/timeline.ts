@@ -178,6 +178,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       endDayHour,
       skippedDays,
       startViewDate: this.getStartViewDate(),
+      timeZoneCalculator: this.timeZoneCalculator,
     });
   }
 

@@ -10,6 +10,7 @@ import {
   isTimelineView,
 } from '../../r1/utils/index';
 import { VIEWS } from '../../utils/options/constants_view';
+import { normalizeFallbackDate } from '../../utils/repeated_hour';
 import timeZoneUtils from '../../utils_time_zone';
 import type { ViewDataProviderExtendedOptions } from './types';
 import type { ViewDataGenerator } from './view_data_generator';
@@ -18,8 +19,6 @@ interface DateHeaderGenerateOptions extends ViewDataProviderExtendedOptions {
   cellWidth?: number;
   isMonthDateHeader?: boolean;
 }
-
-const keepCellDate = (cellIndex: number, date: Date): Date => (cellIndex < 0 ? date : date);
 
 interface DateHeaderDataRowConfig {
   dateRow: DateHeaderCellData[];
@@ -160,9 +159,8 @@ export class DateHeaderDataGenerator {
       skippedDays: options.skippedDays,
       timeZoneCalculator: options.timeZoneCalculator,
     });
-    const hasRepeatedHour = Boolean(
-      this.viewDataGenerator.getFallbackPlan(options)?.days.some((day) => day),
-    );
+    const fallbackPlan = this.viewDataGenerator.getFallbackPlan(options);
+    const hasRepeatedHour = Boolean(fallbackPlan?.days.some((day) => day));
     const cellCountInDay = this.viewDataGenerator
       .getCellCountInDay(startDayHour, endDayHour, hoursInterval);
 
@@ -193,7 +191,13 @@ export class DateHeaderDataGenerator {
         idx % cellCountInGroupRow,
         shiftedStartDateForHeaderText,
         headerCellTextFormat,
-        hasRepeatedHour ? keepCellDate : getDateForHeaderText,
+        fallbackPlan && hasRepeatedHour
+          ? (_: number, date: Date): Date => normalizeFallbackDate(
+            fallbackPlan,
+            date,
+            viewOffset,
+          )
+          : getDateForHeaderText,
         {
           interval,
           startViewDate,

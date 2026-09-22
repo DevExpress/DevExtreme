@@ -24,7 +24,13 @@ import type {
   ViewType,
 } from '../../types';
 import { VIEWS } from '../../utils/options/constants_view';
-import { buildFallbackDayCells, type TimelineCell, visibleDayOrigins } from '../../utils/repeated_hour';
+import {
+  buildRepeatedHourPlanFromOrigins,
+  getFallbackCoordinateShift,
+  type RepeatedHourPlan,
+  type TimelineCell,
+  visibleDayOrigins,
+} from '../../utils/repeated_hour';
 import { getAllGroupValues } from '../../utils/resource_manager/group_utils';
 import {
   getVisibleDaysOfWeek,
@@ -53,8 +59,7 @@ export class ViewDataGenerator {
 
   private fallbackPlanCache?: {
     key: string;
-    days: (TimelineCell[] | undefined)[];
-    origins: Date[];
+    plan: RepeatedHourPlan | undefined;
   };
 
   private resolvedCellEnd?: Date;
@@ -645,7 +650,14 @@ export class ViewDataGenerator {
       }
 
       const nominalIndex = dayIndex * cellCountInDay + indexInDay;
-      return this.calculateDateByCellIndex(options, rowIndex, nominalIndex, nominalIndex);
+      const date = this.calculateDateByCellIndex(
+        options,
+        rowIndex,
+        nominalIndex,
+        nominalIndex,
+      );
+
+      return new Date(date.getTime() + getFallbackCoordinateShift(plan, dayIndex));
     }
 
     return this.calculateDateByCellIndex(options, rowIndex, columnIndex, cellIndex);
@@ -996,10 +1008,7 @@ export class ViewDataGenerator {
     );
   }
 
-  public getFallbackPlan(options: CountGenerationConfig): {
-    days: (TimelineCell[] | undefined)[];
-    origins: Date[];
-  } | undefined {
+  public getFallbackPlan(options: CountGenerationConfig): RepeatedHourPlan | undefined {
     const {
       viewType, startViewDate, hoursInterval, startDayHour, endDayHour, intervalCount,
       timeZoneCalculator,
@@ -1025,18 +1034,17 @@ export class ViewDataGenerator {
       const cellDurationMs = hoursInterval * toMs('hour');
       this.fallbackPlanCache = {
         key: cacheKey,
-        origins,
-        days: origins.map((origin) => buildFallbackDayCells(
-          origin,
+        plan: buildRepeatedHourPlanFromOrigins(
+          origins,
           startDayHour,
           endDayHour,
           cellDurationMs,
           timeZoneCalculator,
-        )),
+        ),
       };
     }
 
-    return this.fallbackPlanCache;
+    return this.fallbackPlanCache.plan;
   }
 
   public getRowCount(options: CountGenerationConfig): number {

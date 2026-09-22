@@ -17,6 +17,8 @@ export interface RepeatedHourPlan {
   origins: Date[];
   wallSpanMs: number;
   startDayHour: number;
+  endDayHour: number;
+  cellDurationMs: number;
   transitions: (FallbackTransition | undefined)[];
 }
 
@@ -383,27 +385,13 @@ export const instantOnGrid = (
   return sourceIsSecond ? secondOccurrence : gridInstant;
 };
 
-export const buildRepeatedHourPlan = (
-  rangeMin: number,
-  rangeMax: number,
+export function buildRepeatedHourPlanFromOrigins(
+  origins: Date[],
   startDayHour: number,
   endDayHour: number,
   cellDurationMs: number,
-  skippedDays: number[],
   timeZoneCalculator?: TimeZoneCalculator,
-): RepeatedHourPlan | undefined => {
-  const rangeStart = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(rangeMin));
-  const rangeEnd = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(rangeMax));
-  const origins: Date[] = [];
-  const day = midnight(rangeStart);
-
-  while (day.getTime() < rangeEnd.getTime()) {
-    if (!skippedDays.includes(day.getDay())) {
-      origins.push(atHour(day, startDayHour));
-    }
-    day.setDate(day.getDate() + 1);
-  }
-
+): RepeatedHourPlan | undefined {
   const transitions = origins.map((origin) => findFallbackTransition(
     origin,
     timeZoneCalculator,
@@ -430,8 +418,101 @@ export const buildRepeatedHourPlan = (
     origins,
     wallSpanMs: (endDayHour - startDayHour) * HOUR_MS,
     startDayHour,
+    endDayHour,
+    cellDurationMs,
     transitions,
   };
+}
+
+export const buildRepeatedHourPlan = (
+  rangeMin: number,
+  rangeMax: number,
+  startDayHour: number,
+  endDayHour: number,
+  cellDurationMs: number,
+  skippedDays: number[],
+  timeZoneCalculator?: TimeZoneCalculator,
+): RepeatedHourPlan | undefined => {
+  const rangeStart = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(rangeMin));
+  const rangeEnd = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(rangeMax));
+  const origins: Date[] = [];
+  const day = midnight(rangeStart);
+
+  while (day.getTime() < rangeEnd.getTime()) {
+    if (!skippedDays.includes(day.getDay())) {
+      origins.push(atHour(day, startDayHour));
+    }
+    day.setDate(day.getDate() + 1);
+  }
+
+  return buildRepeatedHourPlanFromOrigins(
+    origins,
+    startDayHour,
+    endDayHour,
+    cellDurationMs,
+    timeZoneCalculator,
+  );
+};
+
+const getCellsDuration = (cells: TimelineCell[] | undefined, wallSpanMs: number): number => (
+  cells?.reduce(
+    (sum, cell) => sum + cell.end.getTime() - cell.start.getTime(),
+    0,
+  ) ?? wallSpanMs
+);
+
+const getDayCoordinateShift = (
+  plan: RepeatedHourPlan,
+  dayIndex: number,
+): number => {
+  const targetDuration = getCellsDuration(plan.days[dayIndex], plan.wallSpanMs);
+  const localCells = buildFallbackDayCells(
+    plan.origins[dayIndex],
+    plan.startDayHour,
+    plan.endDayHour,
+    plan.cellDurationMs,
+  );
+  const localDuration = getCellsDuration(localCells, plan.wallSpanMs);
+
+  return targetDuration - localDuration;
+};
+
+export const getFallbackCoordinateShift = (
+  plan: RepeatedHourPlan,
+  dayIndex: number,
+): number => plan.days
+  .slice(0, dayIndex)
+  .reduce((shift, _, index) => shift + getDayCoordinateShift(plan, index), 0);
+
+export const normalizeFallbackDate = (
+  plan: RepeatedHourPlan,
+  date: Date,
+  viewOffset = 0,
+): Date => {
+  const sourceDate = new Date(date.getTime() - viewOffset);
+  const dayIndex = plan.origins.findIndex((origin, index) => {
+    const nextOrigin = plan.origins[index + 1];
+    return sourceDate.getTime() >= origin.getTime()
+      && (!nextOrigin || sourceDate.getTime() < nextOrigin.getTime()
+        + getFallbackCoordinateShift(plan, index + 1));
+  });
+
+  if (dayIndex < 0) {
+    return date;
+  }
+
+  let shift = getFallbackCoordinateShift(plan, dayIndex);
+  const transition = plan.transitions[dayIndex];
+  if (transition) {
+    const repeatedEnd = atHour(plan.origins[dayIndex], 0).getTime()
+      + transition.repeatedStartMinutes * toMs('minute')
+      + transition.extraMs;
+    if (sourceDate.getTime() >= repeatedEnd + shift) {
+      shift += getDayCoordinateShift(plan, dayIndex);
+    }
+  }
+
+  return new Date(date.getTime() - shift);
 };
 
 const nominalOffsetAlongPlan = (

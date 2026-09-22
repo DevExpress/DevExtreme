@@ -46,7 +46,7 @@ describe('timeline repeated hour in a configured Scheduler time zone', () => {
         startDate: new Date('2026-10-29T23:00:00+02:00'),
         endDate: new Date('2026-10-29T23:15:00+02:00'),
       }],
-      views: [{ type: 'timelineDay', intervalCount: 1, maxAppointmentsPerCell: 'unlimited' }],
+      views: [{ type: 'timelineDay', intervalCount: 2, maxAppointmentsPerCell: 'unlimited' }],
       currentView: 'timelineDay',
       currentDate: new Date(2026, 9, 29),
       cellDuration: 60,
@@ -55,8 +55,11 @@ describe('timeline repeated hour in a configured Scheduler time zone', () => {
 
     const workspace = scheduler.getWorkSpace();
     const cells = workspace.viewDataProvider.viewDataMap.dateTableMap[0];
+    const headers = workspace.viewDataProvider.completeDateHeaderMap.at(-1) ?? [];
 
-    expect(cells).toHaveLength(25);
+    expect(cells).toHaveLength(49);
+    expect(cells[24].cellData.endDate.getTime()).toBe(cells[25].cellData.startDate.getTime());
+    expect(headers[23].text).toBe(headers[24].text);
     expect(POM.getAppointment('B').getGeometry().left - POM.getAppointment('A').getGeometry().left)
       .toBe(DEFAULT_CELL_WIDTH);
   });
