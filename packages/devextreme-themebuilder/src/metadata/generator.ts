@@ -112,7 +112,7 @@ export default class MetadataGenerator {
     });
 
     const overriddenVariables = MetadataGenerator.getOverriddenVariables(metaItems);
-    const collector = `$never-used: collector(${MetadataGenerator.getMapFromMeta(metaItems)});\n`;
+    const collector = `$_never-used: collector(${MetadataGenerator.getMapFromMeta(metaItems)});\n`;
     modifiedContent = overriddenVariables + '\n\n' + modifiedContent + collector;
 
     return modifiedContent;

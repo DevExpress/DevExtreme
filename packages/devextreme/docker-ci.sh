@@ -40,7 +40,8 @@ function run_test {
 
 function run_test_impl {
     local port=`node -e "console.log(require('./ports.json').qunit)"`
-    local url="http://0.0.0.0:$port/run?notimers=true"
+    # Use 127.0.0.1, not 0.0.0.0 — Chrome cannot fetch modules from 0.0.0.0.
+    local url="http://127.0.0.1:$port/run?notimers=true"
     local runner_pid
     local runner_result=0
 

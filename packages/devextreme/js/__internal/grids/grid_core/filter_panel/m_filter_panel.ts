@@ -14,6 +14,7 @@ import {
 } from '@ts/filter_builder/m_utils';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter_sync/m_filter_sync';
 import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
 import modules from '@ts/grids/grid_core/m_modules';
@@ -33,12 +34,15 @@ export class FilterPanelView extends modules.View {
 
   private _dataController!: DataController;
 
+  private dataSourceController!: DataSourceController;
+
   private _filterSyncController!: FilterSyncController;
 
   private readonly _filterValueBuffer: any;
 
   public init() {
     this._dataController = this.getController('data');
+    this.dataSourceController = this.getController('dataSource');
     this._columnsController = this.getController('columns');
     this._filterSyncController = this.getController('filterSync');
 
@@ -46,7 +50,7 @@ export class FilterPanelView extends modules.View {
   }
 
   public isVisible() {
-    return !!(this.option('filterPanel.visible') && this._dataController.dataSource());
+    return !!this.option('filterPanel.visible') && this.dataSourceController.hasAdapter();
   }
 
   protected _renderCore() {

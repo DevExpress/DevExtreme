@@ -6,7 +6,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
+import { map } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Menu from '@js/ui/menu';
@@ -16,8 +16,11 @@ import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_col
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnsResizerViewController } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
-import type { DataController } from '@ts/grids/grid_core/data_controller/data_controller';
+import type { DataSourceController } from '@ts/grids/grid_core/data_source/data_source_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
+import type { FilterController } from '@ts/grids/grid_core/filter/filter_controller';
+import type { DataFilter } from '@ts/grids/grid_core/filter/types';
+import { combineFilters } from '@ts/grids/grid_core/filter/utils';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -25,6 +28,8 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
 import Editor from '@ts/ui/editor/editor';
 import type MenuInternal from '@ts/ui/menu/menu';
+
+import { createFilterRowExpressions } from './utils';
 
 const OPERATION_ICONS = {
   '=': 'filter-operation-equals',
@@ -204,7 +209,11 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
   private _applyFilterViewController!: ApplyFilterViewController;
 
+  private dataSourceController!: DataSourceController;
+
   public init() {
+    this.dataSourceController = this.getController('dataSource');
+
     super.init();
     this._applyFilterViewController = this.getController('applyFilter');
   }
@@ -545,12 +554,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   private _renderEditor($editorContainer, options) {
     $editorContainer.empty();
     const $element = $('<div>').appendTo($editorContainer);
-    const dataSource = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
 
     if (options.lookup && this.option('syncLookupFilterValues')) {
       const filter = this._dataController.getCombinedFilterWithExcludedColumn(options);
 
-      const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSource, filter);
+      const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSourceAdapter, filter);
       const lookupOptions = {
         ...options,
         lookup: {
@@ -739,8 +748,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 
   protected _handleDataChanged(e) {
-    const dataSource = this._dataController?.dataSource?.();
-    const lastLoadOptions = dataSource?.lastLoadOptions?.();
+    const lastLoadOptions = this.dataSourceController.lastLoadOptions();
 
     // @ts-expect-error
     super._handleDataChanged.apply(this, arguments);
@@ -760,7 +768,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
 
     const columns = this._columnsController.getVisibleColumns();
-    const dataSource = this._dataController.dataSource();
+    const dataSourceAdapter = this.dataSourceController.getAdapter();
     const rowIndex = this.element().find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).index();
 
     if (rowIndex === -1) {
@@ -789,7 +797,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
             editor.option('items', [...items, selectedItem]);
           }
 
-          const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
+          const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSourceAdapter, filter);
           editor.option('dataSource', lookupDataSource);
         }
       }
@@ -811,30 +819,25 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 };
 
-const data = (Base: ModuleType<DataController>) => class DataControllerFilterRowExtender extends Base {
+const filterController = (
+  Base: ModuleType<FilterController>,
+) => class FilterControllerFilterRowExtender extends Base {
   private skipCalculateColumnFilters() {
     return false;
   }
 
-  protected calculateAdditionalFilter() {
+  public getAdditionalFilter(excludedColumn?: Column | null): DataFilter {
     if (this.skipCalculateColumnFilters()) {
-      return super.calculateAdditionalFilter();
+      return super.getAdditionalFilter(excludedColumn);
     }
 
-    const filters = [super.calculateAdditionalFilter()];
-    const columns = this._columnsController.getVisibleColumns(null, true);
+    const columns: Column[] = this.columnsController.getVisibleColumns(null, true);
+    const filters = [
+      super.getAdditionalFilter(excludedColumn),
+      ...createFilterRowExpressions(columns, excludedColumn ?? null),
+    ];
 
-    const excludedColumn = this.getFilterExcludedColumn();
-
-    each(columns, function () {
-      const shouldSkip = excludedColumn?.index === this.index;
-      if (this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue) && !shouldSkip) {
-        const filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
-        filters.push(filter);
-      }
-    });
-
-    return gridCoreUtils.combineFilters(filters);
+    return combineFilters(filters);
   }
 };
 
@@ -1046,7 +1049,7 @@ export const filterRowModule = {
   },
   extenders: {
     controllers: {
-      data,
+      filter: filterController,
       columnsResizer,
       editing,
     },

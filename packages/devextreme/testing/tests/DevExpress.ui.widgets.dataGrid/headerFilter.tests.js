@@ -5,12 +5,11 @@ import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 import $ from 'jquery';
 import ArrayStore from 'common/data/array_store';
-import { noop } from 'core/utils/common';
 import ODataStore from 'common/data/odata/store';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import { DataSource } from 'common/data/data_source/data_source';
 import { isFunction } from 'core/utils/type';
-import { invertFilterExpression } from '__internal/grids/grid_core/header_filter/m_header_filter';
+import { invertFilterExpression } from '__internal/grids/grid_core/header_filter/utils';
 import dragEvents from 'common/core/events/drag';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import viewPortUtils from 'core/utils/view_port';
@@ -536,10 +535,10 @@ QUnit.module('Header Filter', {
         const that = this;
         const testElement = $('#container');
 
+        that.generateItems(5);
         that.setupDataGrid();
 
-        that.dataController.dataSource = noop;
-
+        that.dataSourceController.disposeAdapter();
 
         that.columnHeadersView.render(testElement);
         that.headerFilterView.render(testElement);
@@ -4085,7 +4084,7 @@ QUnit.module('Header Filter with real columnsController', {
         that.setupDataGrid();
 
         const column = that.columnsController.getVisibleColumns()[0];
-        that.dataController.store().on('loading', function(options) {
+        that.dataSourceController.store().on('loading', function(options) {
             loadOptions = options;
         });
 

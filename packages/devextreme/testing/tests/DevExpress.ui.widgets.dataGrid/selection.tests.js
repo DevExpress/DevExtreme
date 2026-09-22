@@ -55,7 +55,7 @@ const setupSelectionModule = function() {
     ];
 
     this.dataSource = createDataSource(this.array);
-    this.dataController.setDataSource(this.dataSource);
+    this.dataController.initDataSourceAdapter(this.dataSource);
     this.dataSource.load();
 };
 
@@ -276,7 +276,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         ];
 
         this.dataSource = createDataSource(array);
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.applyOptions({
             selection: { mode: 'single' }
@@ -301,7 +301,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         ];
 
         this.dataSource = createDataSource(array);
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.applyOptions({
             selection: { mode: 'single' }
@@ -326,7 +326,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         ];
 
         this.dataSource = createDataSource(array);
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.applyOptions({
             selection: { mode: 'single' }
@@ -353,7 +353,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         const array = [item1, item2];
 
         this.dataSource = createDataSource(array);
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.applyOptions({
             selection: { mode: 'single' }
@@ -377,7 +377,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         ];
 
         this.dataSource = createDataSource(array);
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.applyOptions({
             selection: { mode: 'single' }
@@ -398,7 +398,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         const array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } }, {}, {}];
 
         this.dataSource = createDataSource(array);
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.applyOptions({
             selection: { mode: 'single' }
@@ -420,7 +420,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         const array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } }, {}, {}];
 
         this.dataSource = createDataSource(array);
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.applyOptions({
             selection: { mode: 'single' }
@@ -443,7 +443,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
             { name: 'Dan', address: { country: 'USA', city: 'Chicago' } }];
 
         this.dataSource = createDataSource(array);
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.applyOptions({
             selection: { mode: 'single' }
@@ -490,7 +490,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
     // T135244
     QUnit.test('set selectedRows. Not Loading data then no selected rows', function(assert) {
         let loadingCount = 0;
-        this.dataController.store().on('loading', function() {
+        this.dataSourceController.store().on('loading', function() {
             loadingCount++;
         });
 
@@ -608,7 +608,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         ];
 
         this.dataSource = createDataSource(array, { key: ['prop1', 'prop2'] });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.applyOptions({
@@ -1002,7 +1002,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         this.dataController.optionChanged({ name: 'dataSource' });
 
         this.clock.tick(10);
-        this.dataController.store().on('loading', function(options) {
+        this.dataSourceController.store().on('loading', function(options) {
             loadOptions = options;
         });
 
@@ -1254,7 +1254,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
             paginate: true
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.selectionController.changeItemSelection(1);
         assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ name: 'Dan1', pay: 151 }]);
@@ -1289,7 +1289,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         });
 
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         let loadingCount = 0;
@@ -1344,7 +1344,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         this.dataController.resetDataSource();
 
         let loadingCount = 0;
-        this.dataController.store().on('loading', function() {
+        this.dataSourceController.store().on('loading', function() {
             loadingCount++;
         });
 
@@ -1425,7 +1425,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         }
 
         that.dataSource = createDataSource(that.array, { key: 'id' });
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
 
         // act
@@ -1440,7 +1440,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         const that = this;
 
         that.dataSource = createDataSource(that.array, { key: ['name', 'age'] });
-        that.dataController.setDataSource(that.dataSource);
+        that.dataController.initDataSourceAdapter(that.dataSource);
         that.dataSource.load();
 
         // act
@@ -1457,7 +1457,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         });
 
         this.dataSource = createDataSource(this.array, {}, { pageSize: 5, filter: ['age', '>', 15] });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // act
@@ -1828,7 +1828,7 @@ const setupSelectionWithKeysModule = function() {
     ];
 
     const dataSource = createDataSource(this.array, { key: 'id' });
-    this.dataController.setDataSource(dataSource);
+    this.dataController.initDataSourceAdapter(dataSource);
     dataSource.load();
 };
 
@@ -2105,7 +2105,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
         dataSource.load();
 
 
-        this.dataController.setDataSource(dataSource);
+        this.dataController.initDataSourceAdapter(dataSource);
         this.selectionController.selectRows([2, 3]);
 
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 3]);
@@ -2120,7 +2120,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 allowSelectAll: true
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         this.selectionController.selectRows([2]);
 
@@ -2146,7 +2146,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 allowSelectAll: true
             },
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         // act
         this.selectionController.selectRows([1]);
@@ -2177,7 +2177,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 allowSelectAll: true
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         // act
         this.selectionController.selectAll();
@@ -2206,7 +2206,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 mode: 'multiple',
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         sinon.spy(this.selectionController, '_updateSelectedOnPush');
         sinon.spy(this.selectionController, 'getSelectedRowsData');
@@ -2227,7 +2227,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
                 deferred: true
             }
         });
-        const store = this.dataController.dataSource().store();
+        const store = this.dataSourceController.store();
 
         sinon.spy(this.selectionController, '_updateSelectedOnPush');
         sinon.spy(this.selectionController, 'getSelectedRowsData');
@@ -2459,7 +2459,7 @@ QUnit.module('Selection SelectAllMode', {
         ];
 
         this.dataSource = createDataSource(this.array, { key: 'id' }, { pageSize: 4 });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
     },
     afterEach: teardownModule
@@ -2599,7 +2599,7 @@ QUnit.module('Selection SelectAllMode', {
 
         // act
         $.each(this.selectionController.getSelectedRowKeys(), function(index, key) {
-            that.dataController.store().remove(key);
+            that.dataSourceController.store().remove(key);
         });
 
         this.dataController.refresh();
@@ -2607,7 +2607,7 @@ QUnit.module('Selection SelectAllMode', {
         // assert
         assert.equal(this.array.length, 0, 'array length');
         assert.equal(this.dataController.items().length, 0, 'items count');
-        assert.equal(this.dataController.totalCount(), 0, 'totalCount');
+        assert.equal(this.dataSourceController.totalCount(), 0, 'totalCount');
     });
 
     QUnit.test('Select All for multiple selection change page', function(assert) {
@@ -2976,7 +2976,7 @@ QUnit.module('Selection SelectAllMode', {
 
     QUnit.test('get isSelected rows after Select All when dataSource has complex key', function(assert) {
         this.dataSource = createDataSource(this.array, { key: ['id', 'value'] }, { pageSize: 4 });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.applyOptions({
             selection: {
@@ -3004,7 +3004,7 @@ QUnit.module('Selection SelectAllMode', {
 
     QUnit.test('get isSelected rows after Select All when dataSource has no key', function(assert) {
         this.dataSource = createDataSource(this.array, {}, { pageSize: 4 });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
         this.applyOptions({
             selection: {
@@ -3043,7 +3043,7 @@ QUnit.module('Selection SelectAllMode', {
         const onSelectionChangedSpy = sinon.spy();
 
         this.dataSource = createDataSource(data, { key: 'id' });
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.applyOptions({
@@ -3117,7 +3117,7 @@ QUnit.module('Selection when grouping', {
             selection: { mode: 'single' }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.selectionController.selectRows({ group: 'A', value: 2 });
@@ -3134,7 +3134,7 @@ QUnit.module('Selection when grouping', {
             selection: { mode: 'single' }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.selectionController.changeItemSelection(0);
@@ -3148,7 +3148,7 @@ QUnit.module('Selection when grouping', {
             selection: { mode: 'single' }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.selectionController.changeItemSelection(1);
@@ -3164,7 +3164,7 @@ QUnit.module('Selection when grouping', {
             selection: { mode: 'multiple' }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.selectionController.changeItemSelection(1);
@@ -3184,7 +3184,7 @@ QUnit.module('Selection when grouping', {
             selection: { mode: 'multiple' }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.dataSource.reload();
@@ -3192,7 +3192,7 @@ QUnit.module('Selection when grouping', {
         this.dataController.pageIndex(1);
         this.selectionController.changeItemSelection(1);
 
-        assert.ok(this.dataController._dataSource.items()[0].isContinuation);
+        assert.ok(this.dataSourceController.getAdapter().items()[0].isContinuation);
         assert.ok(!this.dataController.items()[0].isSelected);
         assert.ok(this.dataController.items()[1].isSelected);
         assert.ok(!this.dataController.items()[2].isSelected);
@@ -3203,7 +3203,7 @@ QUnit.module('Selection when grouping', {
             selection: { mode: 'multiple' }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         this.selectionController.changeItemSelection(1);
@@ -3218,7 +3218,7 @@ QUnit.module('Selection when grouping', {
     });
 
     QUnit.test('selectAll when remoteOperations enabled', function(assert) {
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // act
@@ -3243,7 +3243,7 @@ QUnit.module('Selection when grouping', {
             grouping: { autoExpandAll: false }
         });
 
-        this.dataController.setDataSource(this.dataSource);
+        this.dataController.initDataSourceAdapter(this.dataSource);
         this.dataSource.load();
 
         // act

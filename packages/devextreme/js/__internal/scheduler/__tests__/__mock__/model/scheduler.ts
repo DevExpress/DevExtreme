@@ -1,4 +1,5 @@
 import { within } from '@testing-library/dom';
+import { SCREEN_READER_ONLY_CLASS } from '@ts/core/widget/widget';
 import { ToolbarModel } from '@ts/scheduler/__tests__/__mock__/model/toolbar';
 
 import { APPOINTMENT_POPUP_CLASS } from '../../../appointment_popup/popup';
@@ -55,7 +56,7 @@ export class SchedulerModel {
   }
 
   getStatusContent(): string {
-    const statusElement = this.container.querySelector('.dx-screen-reader-only');
+    const statusElement = this.container.querySelector(`.${SCREEN_READER_ONLY_CLASS}`);
     return statusElement?.textContent ?? '';
   }
 

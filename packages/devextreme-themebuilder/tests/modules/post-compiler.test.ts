@@ -163,6 +163,96 @@ describe('PostCompiler - swatch features (fixSwatchCss)', () => {
     expect(result).toBe(expectedCss);
   });
 
+  test('fixSwatchCss - apply custom properties to the swatch class instead of :root (T1334644)', () => {
+    const compilerCss = `
+.dx-swatch-c :root {
+  --dx-color-primary: #fff;
+  --dx-color-text: #000;
+}`;
+
+    const expectedCss = `
+.dx-swatch-c {
+  --dx-color-primary: #fff;
+  --dx-color-text: #000;
+}`;
+
+    const result = fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
+    expect(result).toBe(expectedCss);
+  });
+
+  test('fixSwatchCss - do not change the order of cascade\'s classes in rules next to :root', () => {
+    const compilerCss = `
+.dx-swatch-c .dx-widget {
+  color: #fff;
+}
+.dx-swatch-c :root {
+  --dx-color-primary: #fff;
+}
+.dx-swatch-c .dx-checkbox-checked.dx-checkbox-icon {
+  background-color: #fff;
+}`;
+
+    const expectedCss = `
+.dx-swatch-c .dx-widget {
+  color: #fff;
+}
+.dx-swatch-c {
+  --dx-color-primary: #fff;
+}
+.dx-swatch-c .dx-checkbox-checked.dx-checkbox-icon {
+  background-color: #fff;
+}`;
+
+    const result = fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
+    expect(result).toBe(expectedCss);
+  });
+
+  test('fixSwatchCss - apply compound :root selectors to the swatch class itself', () => {
+    const compilerCss = `
+.dx-swatch-c :root.dx-foo {
+  --dx-color-primary: #fff;
+}
+.dx-swatch-c :root:not(.dx-bar) {
+  --dx-color-text: #000;
+}
+.dx-swatch-c :root .dx-widget {
+  color: #fff;
+}`;
+
+    const expectedCss = `
+.dx-swatch-c.dx-foo {
+  --dx-color-primary: #fff;
+}
+.dx-swatch-c:not(.dx-bar) {
+  --dx-color-text: #000;
+}
+.dx-swatch-c .dx-widget {
+  color: #fff;
+}`;
+
+    const result = fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
+    expect(result).toBe(expectedCss);
+  });
+
+  test('fixSwatchCss - apply custom properties to the swatch class inside media queries', () => {
+    const compilerCss = `
+@media (max-width: 600px) {
+  .dx-swatch-c :root {
+    --dx-color-primary: #fff;
+  }
+}`;
+
+    const expectedCss = `
+@media (max-width: 600px) {
+  .dx-swatch-c {
+    --dx-color-primary: #fff;
+  }
+}`;
+
+    const result = fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
+    expect(result).toBe(expectedCss);
+  });
+
   test('fixSwatchCss - fix theme marker in swatch css', () => {
     const compilerCss = '.dx-swatch-c .dx-theme-marker { font-family: \'dx.generic.light\'; }';
 

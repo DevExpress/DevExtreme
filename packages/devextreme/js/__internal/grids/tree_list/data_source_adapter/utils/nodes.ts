@@ -18,7 +18,7 @@ export type ConvertContext = Pick<NodesContext, 'keyGetter' | 'parentIdGetter' |
 export type FillNodesContext = Pick<NodesContext, 'hasItemsGetter' | 'isChildrenLoaded' | 'isFullBranchFilterMode'>;
 
 export function convertItemToNode(
-  item: unknown,
+  item: RawItemData,
   nodeByKey: NodeByKey,
   context: ConvertContext,
 ): TreeNode {

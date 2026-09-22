@@ -8,7 +8,7 @@ import dataUtils from 'core/element_data';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import { getHeight, setHeight, setWidth, getOuterHeight, getWidth } from 'core/utils/size';
-import devices from '__internal/core/m_devices';
+import devices from '__internal/core/devices';
 import config from 'core/config';
 import support from '__internal/core/utils/m_support';
 import browser from 'core/utils/browser';
@@ -19,7 +19,6 @@ import { setupDataGridModules, MockDataController, MockColumnsController, MockSe
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import numberLocalization from 'common/core/localization/number';
 import virtualScrollingCore from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
-import ODataStore from 'common/data/odata/store';
 import ArrayStore from 'common/data/array_store';
 
 const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
@@ -941,14 +940,18 @@ QUnit.module('Rows view', {
             { data: { name: 'aaaüaaa' }, values: ['aaaüaaa'] },
             { data: { name: 'aaaaaaü' }, values: ['aaaaaaü'] },
             { data: { name: 'üaaaaaa' }, values: ['üaaaaaa'] }];
-        const dataController = new MockDataController({ items: rows });
-        dataController.getDataSource = () => ({ loadOptions: () => ({
-            langParams: {
-                collatorOptions: {
-                    sensitivity: 'base'
-                },
+        const dataController = new MockDataController({
+            items: rows,
+            dataSource: {
+                loadOptions: () => ({
+                    langParams: {
+                        collatorOptions: {
+                            sensitivity: 'base'
+                        },
+                    }
+                })
             }
-        }) });
+        });
 
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
@@ -980,11 +983,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
-        const store = new ODataStore({ url: 'test.org' });
-
-        dataController.store = function() {
-            return store;
-        };
 
         // act
         this.options.searchPanel = {
@@ -1014,11 +1012,6 @@ QUnit.module('Rows view', {
         const dataController = new MockDataController({ items: rows });
         const rowsView = this.createRowsView(this.items, dataController, columns);
         const testElement = $('#container');
-        const store = new ODataStore({ url: 'test.org' });
-
-        dataController.store = function() {
-            return store;
-        };
 
         // act
         this.options.searchPanel = {
@@ -4660,7 +4653,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         that.rowsView.resize();
 
         // assert
-        assert.equal(that.dataController.pageCount(), 3, 'page count = 3');
+        assert.equal(that.dataSourceController.pageCount(), 3, 'page count = 3');
         assert.ok(!that.rowsView._hasHeight, 'not has height');
         assert.ok(that.rowsView._rowHeight > 0, 'row height > 0');
         assert.equal(Math.round(getHeight(that.rowsView._getFreeSpaceRowElements())), Math.round(that.rowsView._rowHeight * 2), 'height free space row');
@@ -4686,7 +4679,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         that.rowsView.resize();
 
         // assert
-        assert.equal(that.dataController.pageCount(), 3, 'page count = 3');
+        assert.equal(that.dataSourceController.pageCount(), 3, 'page count = 3');
         assert.ok(!that.rowsView._hasHeight, 'not has height');
         assert.ok(that.rowsView._rowHeight > 0, 'row height > 0');
         assert.equal(getHeight(that.rowsView._getFreeSpaceRowElements()), 0, 'no height free space row');

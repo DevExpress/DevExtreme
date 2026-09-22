@@ -1,1 +1,2 @@
-window.Quill = module.exports = null;
+window.Quill = null;
+export default null;

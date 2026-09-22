@@ -178,7 +178,7 @@ export const editingDataControllerExtender = (
       return;
     }
 
-    const dataSourceKeys = dataSource.map((item) => this.keyOf(item));
+    const dataSourceKeys = dataSource.map((item) => this.dataSourceController.keyOf(item));
     const survivingChanges = changes.filter(
       (change) => change.type === 'insert' || dataSourceKeys.some((key) => equalByValue(change.key, key)),
     );

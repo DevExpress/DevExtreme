@@ -11,8 +11,8 @@ import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } fr
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
-import type { FilterValue } from './data_controller/types';
 import type { EditingController } from './editing/m_editing';
+import type { FilterValue } from './filter/types';
 import type { ModuleItem } from './m_modules';
 
 export type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
@@ -210,6 +210,7 @@ export interface Controllers {
   editorFactory: import('./editor_factory/m_editor_factory').EditorFactory;
   errorHandling: import('./error_handling/error_handling_view_controller').ErrorHandlingViewController;
   export: import('../data_grid/export/m_export').ExportController;
+  filter: import('./filter/filter_controller').FilterController;
   filterSync: import('./filter_sync/m_filter_sync').FilterSyncController;
   focus: import('./focus/m_focus').FocusController;
   headerFilter: import('./header_filter/m_header_filter').HeaderFilterController;

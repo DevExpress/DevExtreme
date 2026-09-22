@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import caret from '__internal/ui/text_box/utils.caret';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import domAdapter from '__internal/core/m_dom_adapter';
-import devices from '__internal/core/m_devices';
+import domAdapter from '__internal/core/dom_adapter';
+import devices from '__internal/core/devices';
 
 const { module: testModule, test } = QUnit;
 

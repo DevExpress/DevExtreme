@@ -7,7 +7,7 @@ import { addNamespace, fireEvent } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import devices from '@ts/core/m_devices';
+import devices from '@ts/core/devices';
 import domUtils from '@ts/core/utils/m_dom';
 import type { EmitterEvent } from '@ts/events/core/emitter';
 import Emitter from '@ts/events/core/emitter';
@@ -24,10 +24,11 @@ type NativeClickEvent = Event & {
 
 let prevented: boolean | null = null;
 let lastFiredEvent: NativeClickEvent | null = null;
-const subscriptions = new Map<NativeClickEvent, NodesDisposingSubscription>();
+let lastSubscription: NodesDisposingSubscription | null = null;
 
 const onNodeRemove = (): void => {
   lastFiredEvent = null;
+  lastSubscription = null;
 };
 
 const clickHandler = function (e: EmitterEvent & { originalEvent: NativeClickEvent }): void {
@@ -41,25 +42,16 @@ const clickHandler = function (e: EmitterEvent & { originalEvent: NativeClickEve
       originalEvent.DXCLICK_FIRED = true;
     }
 
-    if (lastFiredEvent && subscriptions.has(lastFiredEvent)) {
-      // @ts-expect-error the subscription stores onceCallback, not callback, so this
-      // destructured callback is always undefined and off() drops every dxremove
-      // handler from the nodes
-      const { nodes, callback } = subscriptions.get(lastFiredEvent) as NodesDisposingSubscription;
+    if (lastSubscription) {
+      const { nodes, onceCallback } = lastSubscription;
 
-      unsubscribeNodesDisposing(lastFiredEvent, callback, nodes);
-
-      subscriptions.delete(lastFiredEvent);
+      unsubscribeNodesDisposing(lastFiredEvent, onceCallback, nodes);
     }
 
     lastFiredEvent = originalEvent;
-
-    const subscriptionData: NodesDisposingSubscription = subscribeNodesDisposing(
-      lastFiredEvent,
-      onNodeRemove,
-    );
-
-    subscriptions.set(lastFiredEvent, subscriptionData);
+    lastSubscription = originalEvent
+      ? subscribeNodesDisposing(originalEvent, onNodeRemove)
+      : null;
 
     fireEvent({
       type: CLICK_EVENT_NAME,
