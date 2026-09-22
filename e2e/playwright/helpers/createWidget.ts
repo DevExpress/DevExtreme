@@ -38,7 +38,8 @@ export const createWidget = async <TWidgetName extends WidgetName>(
   page: Page,
   widgetName: TWidgetName,
   widgetOptions: TWidgetName extends keyof WidgetOptions
-    ? WidgetOptions[TWidgetName] | (() => WidgetOptions[TWidgetName])
+    ? WidgetOptions[TWidgetName]
+    | (() => WidgetOptions[TWidgetName] | Promise<WidgetOptions[TWidgetName]>)
     : unknown,
   selector: string = DEFAULT_SELECTOR,
   { disableFxAnimation } = DEFAULT_OPTIONS,
