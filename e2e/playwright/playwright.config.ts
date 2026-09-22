@@ -25,7 +25,7 @@ export default defineConfig<TestOptions>({
   forbidOnly: !!process.env.CI,
   workers: process.env.CI ? 8 : 4,
   reporter: process.env.CI
-    ? [['list'], ['html', { open: 'never', outputFolder: './artifacts/playwright-report' }]]
+    ? [['list'], ['blob', { outputDir: './artifacts/blob-report' }]]
     : [['list']],
   timeout: 60000,
   expect: {
