@@ -232,7 +232,7 @@ jobs:
       - name: Download Browser
         if: matrix.framework == 'angular'
         run: |
-          PUPPETEER_CMD="browsers install chrome@150.0.7871.124"
+          PUPPETEER_CMD="browsers install chrome@153.0.8010.52"
           pnpm --filter devextreme-angular exec puppeteer $PUPPETEER_CMD
 
       - name: Test ${{ matrix.framework }}
