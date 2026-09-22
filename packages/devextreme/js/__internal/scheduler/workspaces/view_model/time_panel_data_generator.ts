@@ -4,6 +4,7 @@ import { shiftIntegerByModule } from '@ts/core/utils/math';
 import {
   getDisplayedRowCount, getIsGroupedAllDayPanel, getKeyByGroup, weekUtils,
 } from '@ts/scheduler/r1/utils/index';
+import { formatImplicitSchedulerTime } from '@ts/scheduler/utils/global_formats';
 
 import type {
   TimePanelCellData,
@@ -60,7 +61,9 @@ export class TimePanelDataGenerator {
     } = options;
     const rowsCount = completeViewDataMap.length - 1;
     const lastRow = completeViewDataMap[rowsCount];
-    const realEndViewDate = lastRow[lastRow.length - 1].endDate;
+    const lastLabeledCell = lastRow.find((cell) => !cell.isDaylightHole)
+      ?? lastRow[lastRow.length - 1];
+    const realEndViewDate = lastLabeledCell.endDate;
 
     const rowCountInGroup = this.viewDataGenerator.getRowCount({
       intervalCount,
@@ -82,10 +85,9 @@ export class TimePanelDataGenerator {
     let allDayRowsCount = 0;
     let usualCellIndex = 0;
     return completeViewDataMap.map((row, index) => {
+      const labelCell = row.find((cell) => !cell.isDaylightHole) ?? row[0];
       const {
         allDay,
-        startDate,
-        endDate,
         groups,
         groupIndex,
         isFirstGroupCell,
@@ -93,6 +95,7 @@ export class TimePanelDataGenerator {
         index: cellIndex,
         ...restCellProps
       } = row[0];
+      const { startDate } = labelCell;
 
       const highlighted = allDay
         ? false
@@ -124,19 +127,33 @@ export class TimePanelDataGenerator {
       }
 
       const timeIndex = (index - allDayRowsCount) % rowCountInGroup;
-      return {
-        ...restCellProps,
-        startDate,
-        allDay,
-        highlighted,
-        text: weekUtils.getTimePanelCellText(
+      const wallMinutes = (cell: ViewCellData): number => cell.startDate.getHours() * 60
+        + cell.startDate.getMinutes();
+      const labeled = (rowCells: ViewCellData[]): ViewCellData => rowCells
+        .find((cell) => !cell.isDaylightHole) ?? rowCells[0];
+      const sameWall = (rowCells: ViewCellData[] | undefined): boolean => Boolean(
+        rowCells && wallMinutes(labeled(rowCells)) === wallMinutes(labelCell),
+      );
+      const repeatedHour = sameWall(completeViewDataMap[index - 1])
+        || sameWall(completeViewDataMap[index + 1]);
+      const planLabel = Boolean(labelCell.startDateUTC) || row.some((cell) => cell.isDaylightHole);
+      const text = planLabel && (timeIndex % 2 === 0 || repeatedHour)
+        ? formatImplicitSchedulerTime(startDate)
+        : weekUtils.getTimePanelCellText(
           timeIndex,
           startDate,
           startViewDate,
           cellDuration,
           startDayHour,
           viewOffset,
-        ),
+        );
+
+      return {
+        ...restCellProps,
+        startDate,
+        allDay,
+        highlighted,
+        text,
         groups: isVerticalGrouping ? groups : undefined,
         groupIndex: isVerticalGrouping ? groupIndex : undefined,
         isFirstGroupCell: isVerticalGrouping && isFirstGroupCell,

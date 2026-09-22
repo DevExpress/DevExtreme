@@ -634,9 +634,11 @@ export default class ViewDataProvider {
       lastCell.allDay ?? false,
     );
 
-    return isHorizontalView(this.viewType)
+    const between = isHorizontalView(this.viewType)
       ? this.getCellsBetweenHorizontalView(cellMatrix, firstIdx, lastIdx)
       : this.getCellsBetweenVerticalView(cellMatrix, firstIdx, lastIdx);
+
+    return between.filter((cell) => !cell.isDaylightHole);
   }
 
   private getCellsBetweenHorizontalView(

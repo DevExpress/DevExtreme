@@ -121,6 +121,7 @@ import type { CollectorCSS, RealSize } from './view_model/generate_view_model/st
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentItemViewModel, AppointmentViewModelPlain, PanelName } from './view_model/types';
 import SchedulerAgenda from './workspaces/agenda';
+import type CellsSelectionState from './workspaces/cells_selection_state';
 import type { PositionHelper } from './workspaces/helpers/position_helper';
 import SchedulerTimelineDay from './workspaces/timeline_day';
 import SchedulerTimelineMonth from './workspaces/timeline_month';
@@ -279,6 +280,8 @@ interface SchedulerWorkSpaceLike {
   removeDroppableCellClass: () => void;
   keepOriginalHours: () => boolean;
   getDataByDroppableCell: () => DroppableCellData;
+  getIndicationCellCount?: () => number;
+  cellsSelectionState: CellsSelectionState;
   getStartViewDate: () => Date | undefined;
   getEndViewDate: () => Date;
   scrollTo: (
@@ -2197,6 +2200,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const targetCell = $cell
       ? this._workSpace.getCellData($cell)
       : this.getTargetCellData();
+
+    if (targetCell.isDaylightHole) {
+      return rawAppointment;
+    }
     const appointment = new AppointmentAdapter(
       rawAppointment,
       this._dataAccessors,

@@ -60,6 +60,7 @@ export interface ViewCellData {
   isSelected?: boolean;
   isFocused?: boolean;
   highlighted?: boolean;
+  isDaylightHole?: boolean;
 }
 
 interface DataCellTemplateData extends BaseTemplateData {

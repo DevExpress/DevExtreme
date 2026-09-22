@@ -48,6 +48,51 @@ import type {
 
 const toMs = dateUtils.dateToMilliseconds;
 
+export interface VerticalSlot {
+  wallMinutes: number;
+  occurrence: number;
+}
+
+const wallMinutesOf = (date: Date): number => date.getHours() * 60 + date.getMinutes();
+
+const slotKey = (slot: VerticalSlot): string => `${slot.wallMinutes}:${slot.occurrence}`;
+
+const unionVerticalSlots = (plan: DaylightPlan): VerticalSlot[] => {
+  const slots: VerticalSlot[] = [];
+  const seen = new Set<string>();
+
+  plan.days.forEach((day) => {
+    const seenInDay = new Map<number, number>();
+
+    day.cells.forEach((cell) => {
+      const wallMinutes = wallMinutesOf(cell.start);
+      const occurrence = seenInDay.get(wallMinutes) ?? 0;
+      seenInDay.set(wallMinutes, occurrence + 1);
+      const slot = { wallMinutes, occurrence };
+
+      if (!seen.has(slotKey(slot))) {
+        seen.add(slotKey(slot));
+        slots.push(slot);
+      }
+    });
+  });
+
+  return slots.sort((left, right) => left.wallMinutes - right.wallMinutes
+    || left.occurrence - right.occurrence);
+};
+
+const cellForSlot = (cells: DaylightCell[], slot: VerticalSlot): DaylightCell | undefined => {
+  const seenInDay = new Map<number, number>();
+
+  return cells.find((cell) => {
+    const wallMinutes = wallMinutesOf(cell.start);
+    const occurrence = seenInDay.get(wallMinutes) ?? 0;
+    seenInDay.set(wallMinutes, occurrence + 1);
+
+    return wallMinutes === slot.wallMinutes && occurrence === slot.occurrence;
+  });
+};
+
 export class ViewDataGenerator {
   protected tableAllDay: boolean | undefined = false;
 
@@ -56,6 +101,8 @@ export class ViewDataGenerator {
   public skippedDays: number[] = [];
 
   private daylightPlan?: DaylightPlan;
+
+  private verticalSlots?: VerticalSlot[];
 
   private extendedOptions?: ViewDataProviderExtendedOptions;
 
@@ -564,7 +611,22 @@ export class ViewDataGenerator {
     const { getResourceManager } = options;
 
     const groupsList = getAllGroupValues(getResourceManager().groupsLeafs);
-    const planCell = this.planCell(columnIndex);
+    const verticalCell = this.verticalCell(rowIndex, columnIndex);
+
+    if (verticalCell) {
+      const data = verticalCell === 'hole'
+        ? this.holeCell(rowIndex, columnIndex)
+        : this.cellFromPlan(verticalCell, options.viewOffset);
+
+      if (groupsList.length > 0) {
+        // eslint-disable-next-line prefer-destructuring
+        data.groups = groupsList[0];
+      }
+
+      return data;
+    }
+
+    const planCell = isHorizontalView(this.viewType) ? this.planCell(columnIndex) : undefined;
 
     if (planCell) {
       const data = this.cellFromPlan(planCell, options.viewOffset);
@@ -938,8 +1000,9 @@ export class ViewDataGenerator {
     this.extendedOptions = options;
     this.skippedDays = options.skippedDays ?? this.skippedDays;
 
-    if (!this.usesHourCells()) {
+    if (!this.usesDaylightPlan()) {
       this.daylightPlan = undefined;
+      this.verticalSlots = undefined;
       return;
     }
 
@@ -958,18 +1021,59 @@ export class ViewDataGenerator {
       options.interval,
       options.timeZoneCalculator,
     );
+    this.verticalSlots = this.daylightPlan && !isHorizontalView(this.viewType)
+      ? unionVerticalSlots(this.daylightPlan)
+      : undefined;
   }
 
-  private usesHourCells(): boolean {
+  public getVerticalSlots(): VerticalSlot[] | undefined {
+    return this.verticalSlots;
+  }
+
+  private usesDaylightPlan(): boolean {
     return this.viewType === VIEWS.TIMELINE_DAY
       || this.viewType === VIEWS.TIMELINE_WEEK
-      || this.viewType === VIEWS.TIMELINE_WORK_WEEK;
+      || this.viewType === VIEWS.TIMELINE_WORK_WEEK
+      || this.viewType === VIEWS.DAY
+      || this.viewType === VIEWS.WEEK
+      || this.viewType === VIEWS.WORK_WEEK;
   }
 
   private planCell(columnIndex: number): DaylightCell | undefined {
     return this.daylightPlan
       ? getPlanCell(this.daylightPlan, columnIndex)
       : undefined;
+  }
+
+  private verticalCell(rowIndex: number, columnIndex: number): DaylightCell | 'hole' | undefined {
+    const slot = this.verticalSlots?.[rowIndex];
+    const day = this.daylightPlan?.days[columnIndex];
+
+    if (!slot || !day) {
+      return undefined;
+    }
+
+    return cellForSlot(day.cells, slot) ?? 'hole';
+  }
+
+  private holeCell(rowIndex: number, columnIndex: number): ViewCellDataSimple {
+    const slot = this.verticalSlots?.[rowIndex];
+    const sample = this.daylightPlan?.days[columnIndex]?.cells[0]?.start ?? new Date();
+    const startDate = new Date(
+      sample.getFullYear(),
+      sample.getMonth(),
+      sample.getDate(),
+      Math.floor((slot?.wallMinutes ?? 0) / 60),
+      (slot?.wallMinutes ?? 0) % 60,
+    );
+
+    return {
+      startDate,
+      endDate: startDate,
+      isDaylightHole: true,
+      allDay: this.tableAllDay,
+      groupIndex: 0,
+    };
   }
 
   private cellFromPlan(cell: DaylightCell, viewOffset: number): ViewCellDataSimple {
@@ -984,11 +1088,11 @@ export class ViewDataGenerator {
   }
 
   public getCellCount(options: CountGenerationConfig): number {
-    if (!this.daylightPlan && this.extendedOptions && this.usesHourCells()) {
+    if (!this.daylightPlan && this.extendedOptions && this.usesDaylightPlan()) {
       this.refreshDaylightPlan(this.extendedOptions);
     }
 
-    if (this.daylightPlan) {
+    if (this.daylightPlan && isHorizontalView(this.viewType)) {
       return this.daylightPlan.cellCount;
     }
 
@@ -1015,6 +1119,10 @@ export class ViewDataGenerator {
       endDayHour,
       hoursInterval,
     } = options;
+
+    if (this.verticalSlots) {
+      return this.verticalSlots.length;
+    }
 
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
     const rowCountInDay = !isHorizontalView(viewType)

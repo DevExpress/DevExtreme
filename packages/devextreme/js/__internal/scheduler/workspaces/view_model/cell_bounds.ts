@@ -11,6 +11,10 @@ export const cellBoundMs = (cell: ViewCellData): { start: number; end: number } 
  * That wall range contains nothing, so an instant has to be able to hit the cell too.
  */
 export const dateHitsCell = (cell: ViewCellData, date: Date): boolean => {
+  if (cell.isDaylightHole) {
+    return false;
+  }
+
   const time = date.getTime();
 
   if (cell.startDateUTC && cell.endDateUTC) {

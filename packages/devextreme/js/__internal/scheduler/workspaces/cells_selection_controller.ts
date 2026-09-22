@@ -253,6 +253,10 @@ export class CellsSelectionController {
     nextFocusedCellData: ViewCellData,
     focusedCellData: ViewCellData | null | undefined,
   ): boolean {
+    if (nextFocusedCellData.isDaylightHole) {
+      return false;
+    }
+
     if (!focusedCellData) {
       return true;
     }

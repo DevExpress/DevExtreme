@@ -16,6 +16,7 @@ export interface DateTableCellBaseProps extends CellBaseProps {
   isFirstDayMonthHighlighting?: boolean;
   isSelected: boolean;
   isFocused: boolean;
+  isDaylightHole?: boolean;
 }
 
 export const DateTableCallBaseDefaultProps: DefaultProps<DateTableCellBaseProps> = {
@@ -84,6 +85,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
       isSelected,
       isFirstGroupCell,
       isLastGroupCell,
+      isDaylightHole,
       dataCellTemplate,
       children,
     } = this.props;
@@ -100,6 +102,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
       [DATE_TABLE_CELL_CLASS]: !allDay,
       'dx-state-focused': isSelected,
       'dx-scheduler-focused-cell': isFocused,
+      'dx-scheduler-date-table-hole': Boolean(isDaylightHole),
       [className ?? '']: true,
     });
     const ariaLabel = isSelected ? ADD_APPOINTMENT_LABEL : undefined;
@@ -108,6 +111,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
     return (
       <CellBase
         className={classes}
+        style={isDaylightHole ? { pointerEvents: 'none' } : undefined}
         viewContext={viewContext}
         isFirstGroupCell={isFirstGroupCell}
         isLastGroupCell={isLastGroupCell}

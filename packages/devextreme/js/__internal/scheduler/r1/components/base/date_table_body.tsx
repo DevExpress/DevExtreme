@@ -98,6 +98,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                             isFocused,
                             isLastGroupCell,
                             isSelected,
+                            isDaylightHole,
                             otherMonth,
                             startDate,
                             text,
@@ -121,6 +122,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                               isFirstDayMonthHighlighting,
                               isSelected,
                               isFocused,
+                              isDaylightHole,
                             } as CellTemplateProps} />)
                         }
                       </Row>

@@ -1,4 +1,5 @@
 import type { DaylightPlan } from '../../../utils/daylight_grid';
+import type { VerticalSlot } from '../../../workspaces/view_model/view_data_generator';
 import { shiftIntervals } from '../../common/shift_intervals';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import { trimInterval } from '../../common/trim_interval';
@@ -11,6 +12,7 @@ export const getWeekIntervals = (
   viewOffset: number,
   isTimeline: boolean,
   daylightPlan?: DaylightPlan,
+  verticalSlots?: VerticalSlot[],
 ): LayoutIntervals => {
   const { startDayHour, endDayHour, ...dateInterval } = compareOptions;
   const trimmedInterval = trimInterval(dateInterval);
@@ -23,7 +25,8 @@ export const getWeekIntervals = (
     ...compareOptions,
     intervals,
     durationMinutes: cellDurationMinutes,
-    daylightPlan: isTimeline ? daylightPlan : undefined,
+    daylightPlan,
+    verticalSlots: isTimeline ? undefined : verticalSlots,
   });
   const shiftedCells = shiftIntervals(cells, viewOffset);
 
