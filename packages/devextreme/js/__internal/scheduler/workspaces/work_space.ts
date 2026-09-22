@@ -1686,7 +1686,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return undefined;
     }
 
-    currentDate.setHours(cell.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
+    const hitsInstant = cell.cellData.startDateUTC
+      && currentDate.getTime() >= cell.cellData.startDateUTC.getTime()
+      && cell.cellData.endDateUTC
+      && currentDate.getTime() < cell.cellData.endDateUTC.getTime();
+
+    if (!hitsInstant) {
+      currentDate.setHours(cell.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
+    }
 
     return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
       cell.cellData,
@@ -2028,7 +2035,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   updateScrollPosition(date: Date, appointmentGroupValues?: GroupValues, allDay = false): void {
-    const newDate = this.timeZoneCalculator?.createDate(date, 'toGrid') ?? date;
+    const plan = this.viewDataProvider.viewDataGenerator.getDaylightPlan();
+    const newDate = plan
+      ? date
+      : this.timeZoneCalculator?.createDate(date, 'toGrid') ?? date;
     const inAllDayRow = allDay && this.isAllDayPanelVisible;
 
     if (this.needUpdateScrollPosition(newDate, appointmentGroupValues, inAllDayRow)) {
