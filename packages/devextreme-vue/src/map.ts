@@ -14,6 +14,7 @@ import {
  RouteRemovedEvent,
  MapProvider,
  MapType,
+ MarkerClickEvent,
  CalculateOsmRouteInfo,
  OsmTileServer,
  OsmTileServerConfig,
@@ -227,7 +228,7 @@ const DxMarkerConfig = {
   props: {
     iconSrc: String,
     location: [Array, Object, String] as PropType<Array<number> | Record<string, any> | string>,
-    onClick: Function as PropType<(() => void)>,
+    onClick: Function as PropType<((e: MarkerClickEvent) => void)>,
     tooltip: [Object, String] as PropType<Record<string, any> | string>
   }
 };

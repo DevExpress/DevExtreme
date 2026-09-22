@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 
 
-import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MapProvider, CalculateOsmRouteInfo, OsmTileServer, RouteMode, MapType } from 'devextreme/ui/map';
+import type { MarkerClickEvent, ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, OptionChangedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent, MapProvider, CalculateOsmRouteInfo, OsmTileServer, RouteMode, MapType } from 'devextreme/ui/map';
 
 import DxMap from 'devextreme/ui/map';
 
@@ -276,10 +276,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get markers(): { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[] {
+    get markers(): { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: ((e: MarkerClickEvent) => void), tooltip?: string | { isShown?: boolean, text?: string } }[] {
         return this._getOption('markers');
     }
-    set markers(value: { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[]) {
+    set markers(value: { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: ((e: MarkerClickEvent) => void), tooltip?: string | { isShown?: boolean, text?: string } }[]) {
         this._setOption('markers', value);
     }
 
@@ -568,7 +568,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() markersChange: EventEmitter<{ iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[]>;
+    @Output() markersChange: EventEmitter<{ iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: ((e: MarkerClickEvent) => void), tooltip?: string | { isShown?: boolean, text?: string } }[]>;
 
     /**
     

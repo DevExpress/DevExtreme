@@ -23387,6 +23387,20 @@ declare module DevExpress.ui {
         originalMarker: any;
       };
     /**
+     * [descr:_ui_map_MarkerClickEvent]
+     */
+    export type MarkerClickEvent =
+      DevExpress.common.core.events.EventInfo<dxMap> & {
+        /**
+         * [descr:_ui_map_MarkerClickEvent.location]
+         */
+        location: MapLocation;
+        /**
+         * [descr:_ui_map_MarkerClickEvent.tooltip]
+         */
+        tooltip?: dxPopover;
+      };
+    /**
      * [descr:_ui_map_MarkerRemovedEvent]
      */
     export type MarkerRemovedEvent =
@@ -23546,7 +23560,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMapOptions.markers.onClick]
        */
-      onClick?: Function;
+      onClick?: (e: DevExpress.ui.dxMap.MarkerClickEvent) => void;
       /**
        * [descr:dxMapOptions.markers.tooltip]
        */
