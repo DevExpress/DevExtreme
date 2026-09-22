@@ -11,6 +11,12 @@ export interface TimelineCell {
   end: Date;
 }
 
+export interface RepeatedHourPlan {
+  days: (TimelineCell[] | undefined)[];
+  origins: Date[];
+  wallSpanMs: number;
+}
+
 const midnight = (date: Date): Date => new Date(
   date.getFullYear(),
   date.getMonth(),
@@ -70,6 +76,29 @@ const repeatedStart = (day: Date, startDayHour: number, extraMs: number): Date |
   return sameClock(first, later) ? later : undefined;
 };
 
+const fallbackTransition = (day: Date): Date => {
+  let low = midnight(day).getTime();
+  let high = nextMidnight(day).getTime();
+  const initialOffset = new Date(low).getTimezoneOffset();
+
+  while (high - low > 1) {
+    const mid = Math.floor((low + high) / 2);
+    if (new Date(mid).getTimezoneOffset() === initialOffset) {
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+
+  return new Date(high);
+};
+
+const getNextVisibleStart = (
+  starts: number[],
+  cursor: number,
+  limit: number,
+): number | undefined => starts.find((start) => start > cursor && start < limit);
+
 const clipToVisibleHours = (
   start: number,
   end: number,
@@ -115,33 +144,34 @@ export const buildFallbackDayCells = (
     ? 24 * 60
     : Math.round(endDayHour * 60);
   const limit = visibleLimit(day, endDayHour, extraMs).getTime();
-  const nextVisibleStart = repeatedStart(day, startDayHour, extraMs);
+  const visibleStarts = [
+    fallbackTransition(day),
+    repeatedStart(day, startDayHour, extraMs),
+  ]
+    .filter((date): date is Date => date !== undefined)
+    .map((date) => date.getTime())
+    .sort((first, second) => first - second);
   const cells: TimelineCell[] = [];
   let cursor = atHour(day, startDayHour).getTime();
 
   while (cursor < limit && cells.length < 10000) {
     const hidden = !inVisibleHours(new Date(cursor), startMinutes, endMinutes);
-    const cannotSkip = !nextVisibleStart
-      || nextVisibleStart.getTime() <= cursor
-      || nextVisibleStart.getTime() >= limit;
+    const nextVisibleStart = getNextVisibleStart(visibleStarts, cursor, limit);
     if (hidden) {
-      if (cannotSkip) {
+      if (nextVisibleStart === undefined) {
         break;
       }
-      cursor = nextVisibleStart.getTime();
+      cursor = nextVisibleStart;
     } else {
-      const stepEnd = Math.min(cursor + cellDurationMs, limit);
+      const nextBoundary = getNextVisibleStart(visibleStarts, cursor, limit);
+      const stepEnd = Math.min(cursor + cellDurationMs, nextBoundary ?? limit, limit);
       const visibleEnd = clipToVisibleHours(cursor, stepEnd, startMinutes, endMinutes);
       if (visibleEnd <= cursor) {
         break;
       }
 
       cells.push({ start: new Date(cursor), end: new Date(visibleEnd) });
-      const jumpedOverHiddenHour = visibleEnd < stepEnd
-        && nextVisibleStart !== undefined
-        && nextVisibleStart.getTime() > visibleEnd
-        && nextVisibleStart.getTime() < limit;
-      cursor = jumpedOverHiddenHour ? nextVisibleStart.getTime() : visibleEnd;
+      cursor = visibleEnd;
     }
   }
 
@@ -318,15 +348,14 @@ export const instantOnGrid = (gridDateUTC: number, sourceDate: number): Date => 
   return sourceIsSecond ? secondOccurrence : gridInstant;
 };
 
-export const repeatedHourShiftMs = (
+export const buildRepeatedHourPlan = (
   rangeMin: number,
   rangeMax: number,
-  instant: Date,
   startDayHour: number,
   endDayHour: number,
   cellDurationMs: number,
   skippedDays: number[],
-): number => {
+): RepeatedHourPlan | undefined => {
   const rangeStart = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(rangeMin));
   const rangeEnd = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(rangeMax));
   const origins: Date[] = [];
@@ -345,13 +374,26 @@ export const repeatedHourShiftMs = (
     endDayHour,
     cellDurationMs,
   ));
-  const hasFallback = days.some((cells) => cells);
-  const startsAfterView = origins.length > 0 && instant.getTime() >= origins[0].getTime();
-  if (!hasFallback || !startsAfterView) {
+  if (!days.some((cells) => cells)) {
+    return undefined;
+  }
+
+  return {
+    days,
+    origins,
+    wallSpanMs: (endDayHour - startDayHour) * HOUR_MS,
+  };
+};
+
+export const repeatedHourShiftMsFromPlan = (
+  plan: RepeatedHourPlan | undefined,
+  instant: Date,
+): number => {
+  if (!plan || instant.getTime() < plan.origins[0].getTime()) {
     return 0;
   }
 
-  const wallSpanMs = (endDayHour - startDayHour) * HOUR_MS;
+  const { days, origins, wallSpanMs } = plan;
   const offset = offsetAlongCells(days, origins, instant, wallSpanMs);
   // Same visible days, without the extra elapsed time. A calendar delta would
   // count hidden weekdays and cancel the shift those days never contributed.
@@ -364,6 +406,26 @@ export const repeatedHourShiftMs = (
 
   return Math.max(0, offset - nominal);
 };
+
+export const repeatedHourShiftMs = (
+  rangeMin: number,
+  rangeMax: number,
+  instant: Date,
+  startDayHour: number,
+  endDayHour: number,
+  cellDurationMs: number,
+  skippedDays: number[],
+): number => repeatedHourShiftMsFromPlan(
+  buildRepeatedHourPlan(
+    rangeMin,
+    rangeMax,
+    startDayHour,
+    endDayHour,
+    cellDurationMs,
+    skippedDays,
+  ),
+  instant,
+);
 
 export const visibleDayOrigins = (
   startViewDate: Date,

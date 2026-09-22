@@ -1,5 +1,9 @@
 import type Scheduler from '../../scheduler';
-import { instantOnGrid, repeatedHourShiftMs } from '../../utils/repeated_hour';
+import {
+  buildRepeatedHourPlan,
+  instantOnGrid,
+  repeatedHourShiftMsFromPlan,
+} from '../../utils/repeated_hour';
 import timeZoneUtils from '../../utils_time_zone';
 import type { AppointmentEntity, ListEntity, SortedEntity } from '../types';
 import type { OptionManager } from './options/option_manager';
@@ -32,6 +36,16 @@ export const sortAppointments = (
     compareOptions: { endDayHour },
     cellDurationMinutes,
   } = optionManager.options;
+  const repeatedHourPlan = isTimelineView && !isMonthView
+    ? buildRepeatedHourPlan(
+      compareOptions.min,
+      compareOptions.max,
+      compareOptions.startDayHour,
+      compareOptions.endDayHour,
+      cellDurationMinutes * 60 * 1000,
+      compareOptions.skippedDays,
+    )
+    : undefined;
 
   const step2 = maybeSplit(items, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);
@@ -44,14 +58,12 @@ export const sortAppointments = (
       const stretchedTimeline = isTimelineView && !isMonthView && panelName === 'regularPanel';
       const shiftedStep = stretchedTimeline
         ? innerStep0.map((entity) => {
-          const shiftOf = (gridDateUTC: number, sourceDate: number): number => repeatedHourShiftMs(
-            compareOptions.min,
-            compareOptions.max,
+          const shiftOf = (
+            gridDateUTC: number,
+            sourceDate: number,
+          ): number => repeatedHourShiftMsFromPlan(
+            repeatedHourPlan,
             instantOnGrid(gridDateUTC, sourceDate),
-            compareOptions.startDayHour,
-            compareOptions.endDayHour,
-            cellDurationMinutes * 60 * 1000,
-            compareOptions.skippedDays,
           );
           const endSource = entity.allDay
             ? timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(entity.endDateUTC)).getTime()

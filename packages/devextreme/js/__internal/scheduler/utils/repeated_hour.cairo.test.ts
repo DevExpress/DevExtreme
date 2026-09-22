@@ -37,6 +37,18 @@ describe('buildFallbackDayCells', () => {
       '2026-10-29T21:45:00.000Z',
     ]);
   });
+
+  it('includes both occurrences when endDayHour falls inside the repeated hour', () => {
+    const cells = buildFallbackDayCells(new Date(2026, 9, 29), 0, 23.5, 15 * 60 * 1000);
+
+    expect(cells).toHaveLength(96);
+    expect(cells?.slice(-4).map((cell) => cell.start.toISOString())).toEqual([
+      '2026-10-29T20:00:00.000Z',
+      '2026-10-29T20:15:00.000Z',
+      '2026-10-29T21:00:00.000Z',
+      '2026-10-29T21:15:00.000Z',
+    ]);
+  });
 });
 
 describe('repeatedHourShiftMs', () => {
