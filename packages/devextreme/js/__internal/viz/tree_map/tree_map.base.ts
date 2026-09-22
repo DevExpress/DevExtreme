@@ -5,10 +5,10 @@ import '@ts/viz/tree_map/colorizing.discrete';
 
 import componentRegistrator from '@js/core/component_registrator';
 import { noop } from '@js/core/utils/common';
-import type DOMComponent from '@ts/core/widget/dom_component';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
 import BaseWidget from '@ts/viz/core/base_widget';
+import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { patchFontOptions } from '@ts/viz/core/utils';
@@ -17,6 +17,7 @@ import { buildRectAppearance, buildTextAppearance } from '@ts/viz/tree_map/commo
 import Node from '@ts/viz/tree_map/node';
 import { getAlgorithm as getTilingAlgorithm, setDefaultAlgorithm } from '@ts/viz/tree_map/tiling';
 
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /* eslint-disable spellcheck/spell-checker */
 const directions: Record<string, number[]> = {
   lefttoprightbottom: [+1, +1],
@@ -257,11 +258,29 @@ function processLabelsLayout(context: ThemeValue, node: ThemeValue): void {
   }
 }
 
+interface TreeMapBase extends DataSourcePluginMembers {
+  _applyHoverState: (node: ThemeValue, state: boolean) => void;
+  _applySelectionState: (node: ThemeValue, state: boolean) => void;
+  _createProxyType: () => void;
+  _drillToNode: (index: number) => void;
+  _extendProxyType: (members: ThemeValue) => void;
+  _hoverNode: (node: ThemeValue, state: boolean) => void;
+  _moveTooltip: (node: ThemeValue, coords?: number[]) => void;
+  _onNodesCreated: () => void;
+  _onTilingPerformed: () => void;
+  _selectNode: (node: ThemeValue, state: boolean, isSingle?: boolean) => void;
+  _showTooltip: (index: number, coords?: number[]) => void;
+  clearHover: () => void;
+  clearSelection: () => void;
+  drillUp: () => void;
+  getCurrentNode: () => ThemeValue;
+  getRootNode: () => ThemeValue;
+  hideTooltip: () => void;
+  resetDrillDown: () => void;
+  resetNodes: () => void;
+}
+
 class TreeMapBase extends BaseWidget {
-  static addPlugin: (plugin: ThemeValue) => void;
-
-  static getInstance: typeof DOMComponent.getInstance;
-
   _handlers!: ThemeValue;
 
   _rectOffsets!: ThemeValue;
@@ -298,7 +317,7 @@ class TreeMapBase extends BaseWidget {
     return { width: 400, height: 400 };
   }
 
-  _init(...args: unknown[]): void {
+  _init(): void {
     this._rectOffsets = {};
     this._handlers = Object.create(this._handlers);
     this._context = {
@@ -321,7 +340,7 @@ class TreeMapBase extends BaseWidget {
     };
     this._root = { nodes: [] };
     this._topNode = this._root;
-    super._init(...args);
+    super._init();
   }
 
   _initCore(): void {
@@ -407,8 +426,8 @@ class TreeMapBase extends BaseWidget {
     this._performLabelsLayout();
   }
 
-  _applyChanges(...args: unknown[]): void {
-    super._applyChanges(...args);
+  _applyChanges(): void {
+    super._applyChanges();
     // This looks dirty.
     if (!this._isDataExpected) {
       this._drawn();

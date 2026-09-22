@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 // PLUGINS_SECTION
 import componentRegistrator from '@js/core/component_registrator';
 import { isDefined } from '@js/core/utils/type';
 import { validateData } from '@ts/viz/components/data_validator';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
+import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { map, normalizeEnum } from '@ts/viz/core/utils';
@@ -180,6 +182,8 @@ function createBarCustomizeFunction(
     };
   };
 }
+
+interface Sparkline extends DataSourcePluginMembers {}
 
 class Sparkline extends BaseSparkline {
   _series;

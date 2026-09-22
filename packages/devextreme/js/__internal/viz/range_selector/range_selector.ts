@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /* eslint-disable max-classes-per-file */
 
 import type { VisualRange } from '@js/common/charts';
@@ -10,7 +11,6 @@ import {
   isDate, isDefined, isFunction, isNumeric, isPlainObject, type as getType,
 } from '@js/core/utils/type';
 import formatHelper from '@ts/core/format_helper';
-import type DOMComponent from '@ts/core/widget/dom_component';
 import constants from '@ts/viz/axes/axes_constants';
 import { Axis } from '@ts/viz/axes/base_axis';
 import { tickGenerator } from '@ts/viz/axes/tick_generator';
@@ -18,6 +18,7 @@ import { correctValueType, getParser } from '@ts/viz/components/parse_utils';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
 import BaseWidget from '@ts/viz/core/base_widget';
+import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin as dataSourcePlugin } from '@ts/viz/core/data_source';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
@@ -979,11 +980,9 @@ each(Axis.prototype, (field: string) => {
   }
 });
 
+interface RangeSelector extends DataSourcePluginMembers {}
+
 class RangeSelector extends BaseWidget {
-  static addPlugin: (plugin: ThemeValue) => void;
-
-  static getInstance: typeof DOMComponent.getInstance;
-
   _clipRect;
 
   _axis!: ThemeValue;
@@ -1187,13 +1186,13 @@ class RangeSelector extends BaseWidget {
     }
   }
 
-  _applyChanges(...args: unknown[]): void {
+  _applyChanges(): void {
     const value = this._options.silent(VALUE);
 
     if (this._changes.has('VALUE') && value) {
       this._rangeOption = value;
     }
-    super._applyChanges(...args);
+    super._applyChanges();
     this._rangeOption = null;
     this.__isResizing = false;
     this.__skipAnimation = false;
@@ -1513,9 +1512,9 @@ class RangeSelector extends BaseWidget {
     }
   }
 
-  _setContentSize(...args: unknown[]): void {
+  _setContentSize(): void {
     this.__isResizing = this._changes.count() === 2;
-    super._setContentSize(...args);
+    super._setContentSize();
   }
 }
 
