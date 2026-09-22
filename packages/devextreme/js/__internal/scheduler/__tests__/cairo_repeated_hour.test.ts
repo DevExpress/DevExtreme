@@ -3,10 +3,11 @@
  */
 
 import {
-  afterEach, beforeEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 
 import fx from '../../../common/core/animation/fx';
+import type SchedulerTimelineDay from '../workspaces/timeline_day';
 import { createScheduler } from './__mock__/create_scheduler';
 import { DEFAULT_CELL_WIDTH, setupSchedulerTestEnvironment } from './__mock__/mock_scheduler';
 
@@ -113,5 +114,126 @@ describe('timeline repeated hour during the Egypt fallback', () => {
     });
 
     expect(POM.getAppointment('UTC').getGeometry().left).toBe(21 * DEFAULT_CELL_WIDTH);
+  });
+
+  it('uses the stretched cells for the current time panel index', async () => {
+    const indicatorTime = new Date('2026-10-29T23:15:00+02:00');
+    const { scheduler } = await createScheduler({
+      dataSource: [],
+      views: [{ type: 'timelineDay', intervalCount: 1 }],
+      currentView: 'timelineDay',
+      currentDate: new Date(2026, 9, 29),
+      cellDuration: 15,
+      indicatorTime,
+      timeZone: 'Africa/Cairo',
+    });
+    const workspace = scheduler.getWorkSpace() as unknown as SchedulerTimelineDay;
+
+    expect(workspace.getCurrentTimePanelCellIndices()).toEqual([97]);
+    expect(workspace.getCurrentTimePanelCellIndices()[0])
+      .toBe(Math.floor(workspace.getIndicationCellCount()));
+  });
+
+  it('scrolls to the cell in the second repeated hour', async () => {
+    const date = new Date('2026-10-29T21:37:30.000Z');
+    const dateTime = date.getTime();
+    const { scheduler } = await createScheduler({
+      dataSource: [],
+      views: [{ type: 'timelineDay', intervalCount: 1 }],
+      currentView: 'timelineDay',
+      currentDate: new Date(2026, 9, 29),
+      cellDuration: 15,
+      timeZone: 'Africa/Cairo',
+    });
+    const workspace = scheduler.getWorkSpace() as unknown as SchedulerTimelineDay;
+    const cells = workspace.viewDataProvider.viewDataMap.dateTableMap[0];
+    const calculateCoordinates = jest.spyOn(
+      workspace.virtualScrollingDispatcher,
+      'calculateCoordinatesByDataAndPosition',
+    );
+    scheduler.scrollTo(date, { alignInView: 'start' });
+    const coordinates = calculateCoordinates.mock.results[0]?.value as
+      | { left: number }
+      | undefined;
+
+    expect(cells[98].cellData.startDate.toISOString()).toBe('2026-10-29T21:30:00.000Z');
+    expect(calculateCoordinates.mock.calls[0]?.[2].getTime()).toBe(dateTime);
+    expect(coordinates?.left).toBe(98.5 * DEFAULT_CELL_WIDTH);
+  });
+
+  it('keeps ordinary-day scroll normalization in a view with a fallback day', async () => {
+    const { scheduler } = await createScheduler({
+      dataSource: [],
+      views: [{ type: 'timelineDay', intervalCount: 2 }],
+      currentView: 'timelineDay',
+      currentDate: new Date(2026, 9, 29),
+      cellDuration: 15,
+      timeZone: 'Africa/Cairo',
+    });
+    const workspace = scheduler.getWorkSpace() as unknown as SchedulerTimelineDay;
+    const calculateCoordinates = jest.spyOn(
+      workspace.virtualScrollingDispatcher,
+      'calculateCoordinatesByDataAndPosition',
+    );
+
+    scheduler.scrollTo(new Date(2026, 9, 30, 10, 15, 30), { alignInView: 'start' });
+    const coordinates = calculateCoordinates.mock.results[0]?.value as
+      | { left: number }
+      | undefined;
+
+    expect(calculateCoordinates.mock.calls[0]?.[2].getSeconds()).toBe(0);
+    expect(coordinates?.left).toBe(141 * DEFAULT_CELL_WIDTH);
+  });
+
+  it('places a daily occurrence on the same repeated hour as a single appointment', async () => {
+    const { POM } = await createScheduler({
+      dataSource: [{
+        text: 'Single B',
+        startDate: new Date('2026-10-29T23:00:00+02:00'),
+        endDate: new Date('2026-10-29T23:15:00+02:00'),
+      }, {
+        text: 'Recurring B',
+        startDate: new Date('2026-10-29T23:00:00+02:00'),
+        endDate: new Date('2026-10-29T23:15:00+02:00'),
+        recurrenceRule: 'FREQ=DAILY;COUNT=1',
+      }],
+      views: [{ type: 'timelineDay', intervalCount: 1, maxAppointmentsPerCell: 'unlimited' }],
+      currentView: 'timelineDay',
+      currentDate: new Date(2026, 9, 29),
+      cellDuration: 15,
+      timeZone: 'Africa/Cairo',
+    });
+
+    expect(POM.getAppointment('Recurring B').getGeometry().left)
+      .toBe(POM.getAppointment('Single B').getGeometry().left);
+  });
+
+  it('keeps the second repeated hour aligned with a view offset', async () => {
+    const { scheduler, POM } = await createScheduler({
+      dataSource: [{
+        text: 'A',
+        startDate: new Date('2026-10-29T23:00:00+03:00'),
+        endDate: new Date('2026-10-29T23:15:00+03:00'),
+      }, {
+        text: 'B',
+        startDate: new Date('2026-10-29T23:00:00+02:00'),
+        endDate: new Date('2026-10-29T23:15:00+02:00'),
+      }],
+      views: [{
+        type: 'timelineDay',
+        intervalCount: 1,
+        maxAppointmentsPerCell: 'unlimited',
+        offset: 60,
+      }],
+      currentView: 'timelineDay',
+      currentDate: new Date(2026, 9, 29),
+      cellDuration: 15,
+      timeZone: 'Africa/Cairo',
+    });
+    const cells = scheduler.getWorkSpace().viewDataProvider.viewDataMap.dateTableMap[0];
+
+    expect(cells[92].cellData.startDate.toISOString()).toBe('2026-10-29T21:00:00.000Z');
+    expect(POM.getAppointment('B').getGeometry().left - POM.getAppointment('A').getGeometry().left)
+      .toBe(4 * DEFAULT_CELL_WIDTH);
   });
 });
