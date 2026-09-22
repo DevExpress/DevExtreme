@@ -204,14 +204,15 @@ export class GroupedDataMapProvider {
       endDate: cellEndDate,
       allDay: cellAllDay,
     }: ViewCellData,
-    {
-      startDate: originCellStartDate,
-      endDate: originCellEndDate,
-    }: ViewCellData,
+    originCell: ViewCellData,
   ): boolean {
     const { viewType } = this.viewOptions;
+    const {
+      startDate: originCellStartDate,
+      endDate: originCellEndDate,
+    } = originCell;
 
-    if (!inAllDayRow && dateHitsCell(originCellData, startDate)) {
+    if (!inAllDayRow && dateHitsCell(originCell, startDate)) {
       return true;
     }
 
