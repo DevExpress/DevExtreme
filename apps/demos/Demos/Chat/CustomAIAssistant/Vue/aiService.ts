@@ -2,8 +2,7 @@ import { AzureOpenAI, type OpenAI } from 'openai';
 import notify from 'devextreme/ui/notify';
 import { AIIntegration } from 'devextreme-vue/common/ai-integration';
 import type { RequestParams, AIResponse } from 'devextreme-vue/common/ai-integration';
-import { AI_SERVICE_CONFIG } from './data.ts';
-import { ChatCommandError } from './types.ts';
+import { AI_SERVICE_CONFIG, ChatCommandError } from './data.ts';
 
 async function getAIResponse(
   aiService: AzureOpenAI,

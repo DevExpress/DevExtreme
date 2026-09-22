@@ -10,9 +10,9 @@ import type {
   RouteMessageContext,
   RouterContext,
   TaskGrid,
-} from './types';
-import { ChatCommandError } from './types.ts';
+} from './data.ts';
 import {
+  ChatCommandError,
   FIELD_OR_VALUE_NOT_FOUND_MESSAGE, FORM_ACTION_TYPES, MAX_USER_MESSAGE_LENGTH, ROUTER_TARGETS,
 } from './data.ts';
 import { applyFormClearAction, applyFormSmartPaste, getFormFieldOptions } from './formCommands.ts';

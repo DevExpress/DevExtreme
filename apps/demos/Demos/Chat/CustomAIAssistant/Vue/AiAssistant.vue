@@ -2,22 +2,22 @@
   <DxPopup
     v-model:visible="popupVisible"
     title="AI Assistant"
-    :wrapperAttr="popupClass"
+    :wrapper-attr="popupClass"
     :width="400"
     height="90%"
-    :dragEnabled="true"
-    :resizeEnabled="true"
-    :showCloseButton="true"
+    :drag-enabled="true"
+    :resize-enabled="true"
+    :show-close-button="true"
     :shading="false"
     :position="popupPosition"
-    :onHiding="onPopupHiding"
-    :onShowing="onPopupShowing"
+    @hiding="onPopupHiding"
+    @showing="onPopupShowing"
   >
     <DxToolbarItem
       toolbar="top"
       location="after"
       widget="dxButton"
-      :cssClass="CLASSES.clearChatButton"
+      :css-class="CLASSES.clearChatButton"
       :options="clearButtonOptions"
     />
 
@@ -25,19 +25,19 @@
       <DxChat
         :disabled="disabled"
         height="100%"
-        :showAvatar="false"
+        :show-avatar="false"
         width="auto"
-        :dataSource="dataSource"
-        :reloadOnChange="true"
+        :data-source="dataSource"
+        :reload-on-change="true"
         :user="chatUser"
-        :showUserName="false"
-        :speechToTextEnabled="true"
-        emptyViewTemplate="empty-view"
-        :onMessageEntered="onMessageEntered"
+        :show-user-name="false"
+        :speech-to-text-enabled="true"
+        empty-view-template="empty-view"
+        @message-entered="onMessageEntered"
       >
         <DxSuggestions
           :items="suggestions"
-          :onItemClick="onSuggestionClick"
+          @item-click="onSuggestionClick"
         />
         <template #empty-view>
           <div class="dx-chat-messagelist-empty-image dx-ai-chat__empty-image"/>
@@ -55,13 +55,13 @@
     icon="sparkle"
     label="AI Assistant"
     :visible="fabVisible"
-    :onClick="toggle"
+    @click="toggle"
   />
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { DxPopup, DxToolbarItem } from 'devextreme-vue/popup';
+import { DxPopup, DxPopupTypes, DxToolbarItem } from 'devextreme-vue/popup';
 import DxChat, { DxSuggestions } from 'devextreme-vue/chat';
 import type { DxChatTypes } from 'devextreme-vue/chat';
 import { DxSpeedDialAction } from 'devextreme-vue/speed-dial-action';
@@ -84,7 +84,7 @@ const suggestions = chatSuggestions;
 const chatUser = { id: 'user' };
 const popupClass = { class: 'chat-popup' };
 
-const popupPosition = {
+const popupPosition: DxPopupTypes.Properties['position'] = {
   my: 'right top',
   at: 'right top',
   of: '.demo-container',
@@ -99,7 +99,7 @@ const clearButtonInstance = ref<dxButton>();
 const store = new ArrayStore({ key: 'id' });
 const dataSource = new DataSource({ store, paginate: false });
 
-const clearButtonOptions = {
+const clearButtonOptions: DxButtonTypes.Properties = {
   icon: 'clearhistory',
   disabled: true,
   hint: 'Clear chat',
@@ -109,12 +109,12 @@ const clearButtonOptions = {
   },
 };
 
-function updateClearButtonState() {
+function updateClearButtonState(): void {
   isClearDisabled.value = dataSource.items().length === 0;
   clearButtonInstance.value?.option('disabled', isClearDisabled.value);
 }
 
-function pushMessage(message: Partial<DxChatTypes.TextMessage>) {
+function pushMessage(message: Partial<DxChatTypes.TextMessage>): void {
   store.push([
     {
       type: 'insert',
@@ -127,25 +127,25 @@ function pushMessage(message: Partial<DxChatTypes.TextMessage>) {
   ]);
 }
 
-function clearChat() {
+function clearChat(): void {
   store.clear();
   dataSource.reload();
   updateClearButtonState();
 }
 
-function toggle() {
+function toggle(): void {
   popupVisible.value = !popupVisible.value;
 }
 
-function onPopupShowing() {
+function onPopupShowing(): void {
   fabVisible.value = false;
 }
 
-function onPopupHiding() {
+function onPopupHiding(): void {
   fabVisible.value = true;
 }
 
-function onSuggestionClick(e: { itemData?: { prompt?: string } }) {
+function onSuggestionClick(e: { itemData?: { prompt?: string } }): void {
   const { prompt } = e.itemData ?? {};
 
   const message: DxChatTypes.TextMessage = {
@@ -159,7 +159,7 @@ function onSuggestionClick(e: { itemData?: { prompt?: string } }) {
   emit('message-submitted', message);
 }
 
-function onMessageEntered(e: DxChatTypes.MessageEnteredEvent) {
+function onMessageEntered(e: DxChatTypes.MessageEnteredEvent): void {
   emit('message-submitted', e.message);
 }
 

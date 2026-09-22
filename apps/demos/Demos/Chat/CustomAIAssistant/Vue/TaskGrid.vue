@@ -2,30 +2,30 @@
   <DxDataGrid
     ref="dataGridRef"
     id="grid-container"
-    :dataSource="tasks"
-    keyExpr="ID"
-    :showBorders="true"
-    :filterSyncEnabled="true"
+    :data-source="tasks"
+    key-expr="ID"
+    :show-borders="true"
+    :filter-sync-enabled="true"
   >
     <DxFilterRow :visible="true"/>
     <DxHeaderFilter :visible="true"/>
 
     <DxColumn
-      dataField="Subject"
+      data-field="Subject"
       :width="250"
     />
     <DxColumn
-      dataField="StartDate"
-      dataType="date"
+      data-field="StartDate"
+      data-type="date"
     />
     <DxColumn
-      dataField="DueDate"
-      dataType="date"
+      data-field="DueDate"
+      data-type="date"
     />
     <DxColumn
-      dataField="Priority"
+      data-field="Priority"
       caption="Priority"
-      cellTemplate="priority-cell"
+      cell-template="priority-cell"
     />
     <template #priority-cell="{ data }">
       <div
@@ -34,13 +34,13 @@
       >{{ data.value }}</div>
     </template>
     <DxColumn
-      dataField="Completion"
+      data-field="Completion"
       caption="Completed"
       alignment="center"
-      dataType="boolean"
-      :editorOptions="completionEditorOptions"
-      :calculateCellValue="calculateCompletionCellValue"
-      :calculateFilterExpression="calculateCompletionFilterExpression"
+      data-type="boolean"
+      :editor-options="completionEditorOptions"
+      :calculate-cell-value="calculateCompletionCellValue"
+      :calculate-filter-expression="calculateCompletionFilterExpression"
     />
   </DxDataGrid>
 </template>
@@ -49,7 +49,7 @@
 import { ref } from 'vue';
 import { DxDataGrid, DxColumn, DxFilterRow, DxHeaderFilter } from 'devextreme-vue/data-grid';
 import { colors, tasks } from './data.ts';
-import type { ColumnFilterExpression, Task, TaskPriority } from './types';
+import type { ColumnFilterExpression, Task, TaskPriority } from './data.ts';
 
 const dataGridRef = ref<InstanceType<typeof DxDataGrid>>();
 
@@ -82,7 +82,7 @@ defineExpose({
 });
 </script>
 
-<style scoped>
+<style>
 #grid-container {
   margin-top: 20px;
   min-height: 360px;

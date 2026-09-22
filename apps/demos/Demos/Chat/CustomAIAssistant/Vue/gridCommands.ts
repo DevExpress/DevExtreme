@@ -9,7 +9,7 @@ import type {
   GridFilterValue,
   Task,
   TaskGrid,
-} from './types';
+} from './data.ts';
 
 export function getFilterConditions(filterValue: unknown): FilterCondition[] {
   if (!Array.isArray(filterValue)) return [];

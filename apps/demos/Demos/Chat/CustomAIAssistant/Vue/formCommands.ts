@@ -1,7 +1,7 @@
 import type { SmartPastedEvent } from 'devextreme/ui/form';
 import type {
   AIResult, CommandResult, EmployeeForm, FormAction, FormFieldOption,
-} from './types';
+} from './data.ts';
 import { SMART_PASTE_TIMEOUT_MS } from './data.ts';
 
 export function getFormFieldOptions(form: EmployeeForm): FormFieldOption[] {

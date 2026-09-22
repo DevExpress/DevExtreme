@@ -5,34 +5,34 @@
   >
     <DxForm
       ref="formRef"
-      :formData="formData"
-      :colCount="3"
-      labelLocation="top"
-      :aiIntegration="aiIntegration"
-      :onOptionChanged="onOptionChanged"
+      :form-data="formData"
+      :col-count="3"
+      label-location="top"
+      :ai-integration="aiIntegration"
+      @option-changed="onOptionChanged"
     >
       <DxSimpleItem
         v-for="field in formFields"
         :key="field.dataField"
-        :dataField="field.dataField"
+        :data-field="field.dataField"
         :label="field.label"
-        :editorType="field.editorType"
-        :editorOptions="field.editorOptions"
-        :aiOptions="field.aiOptions"
+        :editor-type="field.editorType"
+        :editor-options="field.editorOptions"
+        :ai-options="field.aiOptions"
       />
       <DxButtonItem
         name="Save"
-        :colSpan="3"
-        cssClass="save-button"
-        :buttonOptions="saveButtonOptions"
+        :col-span="3"
+        css-class="save-button"
+        :button-options="saveButtonOptions"
       />
     </DxForm>
   </div>
 
   <DxToast
     ref="toastRef"
-    :displayTime="600"
-    :closeOnClick="true"
+    :display-time="600"
+    :close-on-click="true"
     message="Form data is saved."
     type="success"
     :position="toastPosition"
@@ -46,7 +46,7 @@ import type { DxFormTypes } from 'devextreme-vue/form';
 import { DxToast } from 'devextreme-vue/toast';
 import type { AIIntegration } from 'devextreme-vue/common/ai-integration';
 import { employee, formFieldsConfig } from './data.ts';
-import type { Employee } from './types';
+import type { Employee } from './data.ts';
 
 defineProps<{ aiIntegration: AIIntegration }>();
 
@@ -72,7 +72,7 @@ const saveButtonOptions = {
   onClick: () => toastRef.value?.instance.show(),
 };
 
-function onOptionChanged(e: DxFormTypes.OptionChangedEvent) {
+function onOptionChanged(e: DxFormTypes.OptionChangedEvent): void {
   if (e.name === 'isDirty') {
     e.component?.getButton('Save')?.option('disabled', !e.value);
   }
@@ -85,7 +85,7 @@ defineExpose({
 });
 </script>
 
-<style scoped>
+<style>
 #form-container {
   border: 1px solid #e0e0e0;
   padding: 16px;

@@ -2,7 +2,7 @@
   <div class="demo-container">
     <EmployeeForm
       ref="employeeFormRef"
-      :aiIntegration="aiIntegration"
+      :ai-integration="aiIntegration"
     />
     <TaskGrid ref="taskGridRef"/>
     <AiAssistant
@@ -68,7 +68,7 @@ async function onMessageSubmitted(message: DxChatTypes.TextMessage): Promise<voi
 }
 </script>
 
-<style scoped>
+<style>
 .demo-container {
   margin: 20px;
   height: 556px;
