@@ -25,7 +25,6 @@ $fieldset-datebox-value-min-width: 60% !default; // dx-relative-%
 
 .dx-field {
   position: relative;
-  padding: $fieldset-field-padding;
 
   @include dx-clearfix-mixin();
 }

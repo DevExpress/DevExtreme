@@ -10,9 +10,7 @@
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
-  $scheduler-appointment-collector-height: var(--dx-scheduler-appointment-collector-height),
   $scheduler-appointment-min-size: var(--dx-scheduler-appointment-min-size),
-  $scheduler-appointment-content-padding: var(--dx-scheduler-appointment-content-padding),
   $scheduler-appointment-reduced-content-padding: var(--dx-scheduler-appointment-reduced-content-padding),
   $scheduler-grouped-appointment-month-text-size: var(--dx-scheduler-appointment-month-text-font-size),
   $scheduler-border-width: var(--dx-scheduler-border-width),
@@ -44,7 +42,6 @@
   $scheduler-timeline-group-three-empty-cell-width: var(--dx-scheduler-timeline-group-three-empty-cell-width),
   $scheduler-timeline-cell-width: var(--dx-scheduler-timeline-cell-width),
   $scheduler-agenda-left-column-width: var(--dx-scheduler-agenda-left-column-width),
-  $scheduler-group-header-agenda-font-size: var(--dx-scheduler-group-header-agenda-font-size),
   $scheduler-agenda-date-table-padding-top: var(--dx-scheduler-agenda-date-table-padding-block-start),
   $scheduler-renovation-virtual-row-height: var(--dx-scheduler-virtual-row-height),
   $scheduler-tooltip-width: var(--dx-scheduler-tooltip-width),

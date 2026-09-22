@@ -2,9 +2,6 @@
 
 $numberbox-spin-idle-opacity: 0.2 !default;
 
-$spin-container-width: 22px !default;
-$touch-friendly-spin-container-width: 64px !default;
-
 .dx-numberbox {
   position: relative;
 
@@ -22,7 +19,6 @@ $touch-friendly-spin-container-width: 64px !default;
 }
 
 .dx-numberbox-spin-container {
-  width: $spin-container-width;
   height: 100%;
 }
 
@@ -35,10 +31,6 @@ $touch-friendly-spin-container-width: 64px !default;
 }
 
 .dx-numberbox-spin-touch-friendly {
-  .dx-numberbox-spin-container {
-    width: $touch-friendly-spin-container-width;
-  }
-
   .dx-numberbox-spin-down,
   .dx-numberbox-spin-up {
     width: 50%;

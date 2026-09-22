@@ -54,19 +54,12 @@ $pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !
     .dx-page {
       display: inline-block;
       cursor: pointer;
-
-      @if $pagination-page-padding-fallback {
-        padding: $pagination-page-padding-fallback;
-      }
-
       margin-left: $pagination-page-margin-left;
       margin-right: $pagination-page-margin-right;
     }
 
     .dx-separator {
       display: inline-block;
-      padding-left: $pagination-separator-padding-left;
-      padding-right: $pagination-separator-padding-right;
     }
 
     .dx-info {
@@ -79,19 +72,9 @@ $pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !
     }
 
     .dx-navigate-button {
-      @if $pagination-navigate-button-width-fallback {
-        width: $pagination-navigate-button-width-fallback;
-      }
-
-      height: $pagination-navigate-button-height;
       cursor: pointer;
       display: inline-block;
       vertical-align: top;
-
-      @if $pagination-navigate-button-padding-block-fallback {
-        padding: $pagination-navigate-button-padding-block-fallback $pagination-page-horizontal-padding;
-      }
-
       box-sizing: content-box;
 
       &.dx-button-disable {

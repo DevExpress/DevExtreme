@@ -153,20 +153,12 @@ $scrollable-scroll-padding: 2px !default;
   top: 0;
   right: 0;
   height: 100%;
-
-  .dx-scrollable-scroll {
-    width: $scrollable-scroll-width;
-  }
 }
 
 .dx-scrollbar-horizontal {
   bottom: 0;
   left: 0;
   width: 100%;
-
-  .dx-scrollable-scroll {
-    height: $scrollable-scroll-height;
-  }
 }
 
 .dx-scrollable-scroll {

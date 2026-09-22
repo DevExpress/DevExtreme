@@ -1,0 +1,14 @@
+[
+  {
+    "file": "scss/widgets/base/dataGrid/_index.scss",
+    "property": "outline",
+    "selector": ".dx-command-ai-header-button .dx-button.dx-state-focused",
+    "reason": "the winner sits in treeList; a ThemeBuilder build without TreeList still needs this declaration"
+  },
+  {
+    "file": "scss/widgets/base/dataGrid/_index.scss",
+    "property": "outline-color",
+    "selector": ".dx-command-ai-header-button .dx-button.dx-state-focused",
+    "reason": "the winner sits in treeList; a ThemeBuilder build without TreeList still needs this declaration"
+  }
+]

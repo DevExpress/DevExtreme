@@ -142,8 +142,6 @@ $list-empty-message-button-padding: 0 3em !default; // dx-relative
   .dx-list-reorder-handle {
     cursor: move;
     background-repeat: no-repeat;
-    background-size: 75% 75%;
-    background-position: center;
     touch-action: manipulation;
 
     .dx-state-disabled & {
@@ -242,8 +240,6 @@ $list-empty-message-button-padding: 0 3em !default; // dx-relative
 }
 
 .dx-list-static-delete-button {
-  padding: $list-static-delete-button-padding;
-
   .dx-button-content {
     overflow: visible;
   }

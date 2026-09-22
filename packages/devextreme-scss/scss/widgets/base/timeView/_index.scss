@@ -17,11 +17,3 @@ $timeview-numberbox-spin-touch-friendly-width: 110px !default;
 .dx-timeview-clock {
   position: relative;
 }
-
-.dx-timeview-field .dx-numberbox {
-  width: $timeview-numberbox-width;
-
-  &.dx-numberbox-spin-touch-friendly {
-    width: $timeview-numberbox-spin-touch-friendly-width;
-  }
-}

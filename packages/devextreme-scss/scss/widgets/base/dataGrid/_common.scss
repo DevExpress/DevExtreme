@@ -22,7 +22,6 @@ $datagrid-column-chooser-item-opacity: 0.5 !default;
 @mixin dx-group-panel-item() {
   display: inline-block;
   min-width: $datagrid-common-group-min-width;
-  margin-right: $datagrid-common-addrow-margin-right;
   white-space: nowrap;
 
   .dx-sort {
@@ -34,7 +33,6 @@ $datagrid-column-chooser-item-opacity: 0.5 !default;
   display: flex;
   white-space: nowrap;
   width: 100%;
-  touch-action: pinch-zoom;
 
   .dx-group-panel-message {
     @include dx-overflow();
@@ -86,7 +84,6 @@ $datagrid-column-chooser-item-opacity: 0.5 !default;
     .dx-group-panel-item,
     .dx-block-separator {
       margin-right: 0;
-      margin-left: $datagrid-common-form-buttons-margin-left;
     }
 
     .dx-sort {

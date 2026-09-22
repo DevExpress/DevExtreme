@@ -27,7 +27,6 @@ $generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding
   .dx-field-value {
     &.dx-attention {
       color: $fieldset-field-value-invalid-color;
-      padding-left: $generic-fieldset-attention-icon-offset;
 
       &::before {
         @include dx-invalid-generic-badge();

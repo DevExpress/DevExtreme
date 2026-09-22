@@ -7,14 +7,11 @@ $loadpanel-content-border-radius: 5px !default;
 
 .dx-loadpanel-content {
   padding: $loadpanel-content-padding;
-  border: $loadpanel-content-border;
-  background: #fefefe;
   text-align: center;
 
   @include user-select(none);
 
   -webkit-user-drag: none;
-  border-radius: $loadpanel-content-border-radius;
 
   &::before {
     display: inline-block;

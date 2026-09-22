@@ -3,8 +3,6 @@ $dropdownlist-list-min-height: 35px !default;
 
 .dx-dropdownlist-popup-wrapper {
   .dx-list {
-    min-height: $dropdownlist-list-min-height;
-
     .dx-scrollable-content {
       margin: 0;
     }

@@ -59,11 +59,8 @@ $colorbox-toolbar-item-padding-right: 10px !default;
 }
 
 .dx-colorbox-overlay {
-  padding: $colorbox-overlay-padding;
-
   .dx-popup-content {
     overflow: hidden;
-    padding: 0;
   }
 
   .dx-popup-bottom {
