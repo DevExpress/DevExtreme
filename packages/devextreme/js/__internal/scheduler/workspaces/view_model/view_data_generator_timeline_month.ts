@@ -2,7 +2,7 @@ import dateUtils from '@js/core/utils/date';
 import { setOptionHour, timelineMonthUtils } from '@ts/scheduler/r1/utils/index';
 
 import type { CountGenerationConfig } from '../../types';
-import type { ViewDataProviderOptions } from './types';
+import type { StartViewDateConfig } from './types';
 import { ViewDataGenerator } from './view_data_generator';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -27,7 +27,7 @@ export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
     return 1;
   }
 
-  protected calculateStartViewDate(options: ViewDataProviderOptions): Date {
+  protected calculateStartViewDate(options: StartViewDateConfig): Date {
     return timelineMonthUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

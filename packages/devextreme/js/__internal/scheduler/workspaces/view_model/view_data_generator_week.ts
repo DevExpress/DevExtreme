@@ -1,5 +1,5 @@
 import { weekUtils } from '../../r1/utils/index';
-import type { ViewDataProviderOptions } from './types';
+import type { StartViewDateConfig } from './types';
 import { ViewDataGenerator } from './view_data_generator';
 
 export class ViewDataGeneratorWeek extends ViewDataGenerator {
@@ -7,7 +7,7 @@ export class ViewDataGeneratorWeek extends ViewDataGenerator {
     return weekUtils.getIntervalDuration(intervalCount);
   }
 
-  protected calculateStartViewDate(options: ViewDataProviderOptions): Date {
+  protected calculateStartViewDate(options: StartViewDateConfig): Date {
     return weekUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

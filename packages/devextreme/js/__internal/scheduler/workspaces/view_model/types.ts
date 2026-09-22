@@ -43,6 +43,16 @@ export interface ViewDataProviderOptions extends CommonOptions {
   groupByDate: boolean;
 }
 
+/** The options a view needs to place its first cell. */
+export interface StartViewDateConfig {
+  currentDate: Date;
+  startDayHour: number;
+  intervalCount: number;
+  startDate?: Date;
+  firstDayOfWeek: number;
+  skippedDays?: number[];
+}
+
 export interface ViewDataProviderExtendedOptions extends CommonOptions, ViewOptions {
   startViewDate: Date;
   isVerticalGrouping: boolean;
@@ -65,6 +75,12 @@ export interface ViewCellDataSimple {
   groupIndex: number;
   startDate: Date;
   endDate: Date;
+  /**
+   * Exact instants of a cell whose wall clock is ambiguous or shifted by a DST
+   * transition. Absent on every other cell, where the wall clock alone is exact.
+   */
+  startDateUTC?: Date;
+  endDateUTC?: Date;
   allDay?: boolean;
 }
 

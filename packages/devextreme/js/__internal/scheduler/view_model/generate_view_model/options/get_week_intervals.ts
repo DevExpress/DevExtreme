@@ -1,4 +1,4 @@
-import type { TimeZoneCalculator } from '../../../r1/timezone_calculator/calculator';
+import type { DaylightPlan } from '../../../utils/daylight_grid';
 import { shiftIntervals } from '../../common/shift_intervals';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import { trimInterval } from '../../common/trim_interval';
@@ -10,7 +10,7 @@ export const getWeekIntervals = (
   cellDurationMinutes: number,
   viewOffset: number,
   isTimeline: boolean,
-  timeZoneCalculator?: TimeZoneCalculator,
+  daylightPlan?: DaylightPlan,
 ): LayoutIntervals => {
   const { startDayHour, endDayHour, ...dateInterval } = compareOptions;
   const trimmedInterval = trimInterval(dateInterval);
@@ -23,17 +23,16 @@ export const getWeekIntervals = (
     ...compareOptions,
     intervals,
     durationMinutes: cellDurationMinutes,
-    stretchRepeatedHour: isTimeline,
-    timeZoneCalculator,
+    daylightPlan: isTimeline ? daylightPlan : undefined,
   });
   const shiftedCells = shiftIntervals(cells, viewOffset);
-  const lastCellMax = shiftedCells.length > 0
-    ? shiftedCells[shiftedCells.length - 1].max
-    : undefined;
-  const coveredIntervals = isTimeline
+  // NOTE: A day that repeats an hour pushes the cells after it past the nominal end of
+  // the view, so the interval an appointment is matched against has to follow them.
+  const lastCellMax = shiftedCells[shiftedCells.length - 1]?.max;
+  const coveredIntervals = daylightPlan && isTimeline && lastCellMax !== undefined
     ? shiftedIntervals.map((interval) => ({
       ...interval,
-      max: lastCellMax === undefined ? interval.max : Math.max(interval.max, lastCellMax),
+      max: Math.max(interval.max, lastCellMax),
     }))
     : shiftedIntervals;
 

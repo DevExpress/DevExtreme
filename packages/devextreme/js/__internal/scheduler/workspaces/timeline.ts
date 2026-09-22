@@ -19,8 +19,9 @@ import {
 import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import tableCreatorModule, { type GroupRows } from '../table_creator';
 import type { ViewCellData } from '../types';
+import type { DaylightPlan } from '../utils/daylight_grid';
+import { getColumnByWallMs, isRepeatedCell, toWallMs } from '../utils/daylight_grid';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
-import { columnAlongCells } from '../utils/repeated_hour';
 import { getFirstVisibleDate } from '../utils/skipped_days';
 import timezoneUtils from '../utils_time_zone';
 import type { ViewDataProviderOptions } from './view_model/types';
@@ -138,28 +139,31 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   getIndicationCellCount(): number {
-    return this.getFallbackColumn(this.getToday())
-      ?? this.calculateDurationInCells(this.getTimeDiff());
+    return this.getIndicationColumn() ?? this.calculateDurationInCells(this.getTimeDiff());
   }
 
-  private getFallbackColumn(date: Date): number | undefined {
-    const plan = this.getFallbackPlan();
-    if (!plan?.days.some((day) => day)) {
-      return undefined;
-    }
-    const { startDayHour, endDayHour } = this.option();
-    return columnAlongCells(
-      plan.days,
-      plan.origins,
-      date,
-      (endDayHour - startDayHour) * toMs('hour'),
-      this.getCellDuration(),
-    );
+  /** Column the current time sits in, with the view's DST transitions laid out. */
+  private getIndicationColumn(): number | undefined {
+    const { indicatorTime } = this.option();
+    // NOTE: The option accepts anything a Date can be built from, and an unusable
+    // value leaves the column on the first pass over a repeated hour.
+    const sourceUTC = new Date(indicatorTime ?? Date.now()).getTime();
+
+    return this.getDaylightColumn(this.getToday(), sourceUTC);
   }
 
-  protected getFallbackPlan(): ReturnType<
-    typeof this.viewDataProvider.viewDataGenerator.getFallbackPlan
-  > {
+  /**
+   * Column of a grid date once the view's DST transitions are laid out as cells.
+   * `sourceUTC` is the instant behind the date, which tells the two passes over a
+   * repeated hour apart.
+   */
+  private getDaylightColumn(date: Date, sourceUTC?: number): number | undefined {
+    const plan = this.getDaylightPlan();
+
+    return plan && getColumnByWallMs(plan, toWallMs(date), sourceUTC);
+  }
+
+  protected getDaylightPlan(): DaylightPlan | undefined {
     const {
       intervalCount,
       currentDate,
@@ -169,7 +173,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       skippedDays,
     } = this.option();
 
-    return this.viewDataProvider.viewDataGenerator.getFallbackPlan({
+    return this.viewDataProvider.viewDataGenerator.getDaylightPlan({
       intervalCount,
       currentDate,
       viewType: this.type,
@@ -183,16 +187,15 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   protected override getScrollDate(date: Date, cellData: ViewCellData): Date {
-    const { viewOffset } = this.option();
-    const isFallbackCell = this.getFallbackPlan()?.days.some((day) => day?.some((cell) => (
-      cell.start.getTime() + viewOffset === cellData.startDate.getTime()
-      && cell.end.getTime() + viewOffset === cellData.endDate.getTime()
-    )));
-    const isDateInCell = date >= cellData.startDate && date < cellData.endDate;
+    const plan = this.getDaylightPlan();
+    const startDateUTC = cellData.startDateUTC?.getTime();
+    // NOTE: A cell of a repeated hour shows a wall clock the day passes twice, so
+    // snapping the hour onto it would resolve to whichever pass the client zone picks.
+    const isAmbiguous = plan !== undefined
+      && startDateUTC !== undefined
+      && isRepeatedCell(plan, startDateUTC);
 
-    return isFallbackCell && isDateInCell
-      ? date
-      : super.getScrollDate(date, cellData);
+    return isAmbiguous ? date : super.getScrollDate(date, cellData);
   }
 
   private getTimeDiff(): number {
@@ -342,7 +345,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   override getCellIndexByDate(date: Date, inAllDayRow?: boolean): number {
-    const column = inAllDayRow ? undefined : this.getFallbackColumn(date);
+    const column = inAllDayRow ? undefined : this.getDaylightColumn(date);
 
     return column === undefined
       ? super.getCellIndexByDate(date, inAllDayRow)
@@ -448,7 +451,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   getCurrentTimePanelCellIndices(): number[] {
     const columnCountPerGroup = this.getCellCount();
     const today = this.getToday();
-    const index = this.getCellIndexByDate(today);
+    const column = this.getIndicationColumn();
+    const index = column === undefined ? this.getCellIndexByDate(today) : Math.floor(column);
     const { columnIndex: currentTimeColumnIndex } = this.getCellCoordinatesByIndex(index);
 
     if (currentTimeColumnIndex === undefined) {

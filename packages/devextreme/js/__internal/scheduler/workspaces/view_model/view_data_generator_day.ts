@@ -1,6 +1,6 @@
 import { dayUtils } from '../../r1/utils/index';
 import { getFirstVisibleDate } from '../../utils/skipped_days';
-import type { ViewDataProviderOptions } from './types';
+import type { StartViewDateConfig } from './types';
 import { ViewDataGenerator } from './view_data_generator';
 
 export class ViewDataGeneratorDay extends ViewDataGenerator {
@@ -11,7 +11,7 @@ export class ViewDataGeneratorDay extends ViewDataGenerator {
     return startViewDate.getDay();
   }
 
-  protected override calculateStartViewDate(options: ViewDataProviderOptions): Date {
+  protected override calculateStartViewDate(options: StartViewDateConfig): Date {
     const startViewDate = dayUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

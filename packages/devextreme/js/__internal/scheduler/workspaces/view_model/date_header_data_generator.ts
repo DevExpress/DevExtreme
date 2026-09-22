@@ -10,7 +10,6 @@ import {
   isTimelineView,
 } from '../../r1/utils/index';
 import { VIEWS } from '../../utils/options/constants_view';
-import { normalizeFallbackDate } from '../../utils/repeated_hour';
 import timeZoneUtils from '../../utils_time_zone';
 import type { ViewDataProviderExtendedOptions } from './types';
 import type { ViewDataGenerator } from './view_data_generator';
@@ -19,6 +18,9 @@ interface DateHeaderGenerateOptions extends ViewDataProviderExtendedOptions {
   cellWidth?: number;
   isMonthDateHeader?: boolean;
 }
+
+/** A cell of a DST plan already shows the wall clock it must be labelled with. */
+const keepHeaderDate = (_: number, date: Date): Date => date;
 
 interface DateHeaderDataRowConfig {
   dateRow: DateHeaderCellData[];
@@ -74,8 +76,7 @@ export class DateHeaderDataGenerator {
     const groupCount = resourceManager.groupCount();
     const cellCountInDay = this.viewDataGenerator
       .getCellCountInDay(startDayHour, endDayHour, hoursInterval);
-    const fallbackDays = this.viewDataGenerator.getFallbackPlan(options)?.days;
-    const hasRepeatedHour = Boolean(fallbackDays?.some((day) => day));
+    const daylightPlan = this.viewDataGenerator.getDaylightPlan(options);
     const horizontalGroupCount = getHorizontalGroupCount(groupCount, groupOrientation);
     const index = completeViewDataMap[0][0].allDay ? 1 : 0;
     const colSpan = isGroupedByDate ? horizontalGroupCount * cellCountInDay : cellCountInDay;
@@ -91,18 +92,19 @@ export class DateHeaderDataGenerator {
     let columnCursor = 0;
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
-      const dayCells = fallbackDays?.[dayIndex % daysInGroup];
-      const cellsInDay = dayCells?.length ?? cellCountInDay;
-      const dayColSpan = hasRepeatedHour
+      const cellsInDay = daylightPlan?.days[dayIndex % daysInGroup].cells.length ?? cellCountInDay;
+      const dayColSpan = daylightPlan
         ? (isGroupedByDate ? horizontalGroupCount : 1) * cellsInDay
         : colSpan;
-      const cell = completeViewDataMap[index][hasRepeatedHour ? columnCursor : dayIndex * colSpan];
+      const cell = completeViewDataMap[index][daylightPlan ? columnCursor : dayIndex * colSpan];
       columnCursor += dayColSpan;
       if (!cell) {
         break;
       }
 
-      const { startDate, endDate, ...restProps } = cell;
+      const {
+        startDate, endDate, startDateUTC, endDateUTC, ...restProps
+      } = cell;
       const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
 
       weekDaysRow.push({
@@ -159,8 +161,7 @@ export class DateHeaderDataGenerator {
       skippedDays: options.skippedDays,
       timeZoneCalculator: options.timeZoneCalculator,
     });
-    const fallbackPlan = this.viewDataGenerator.getFallbackPlan(options);
-    const hasRepeatedHour = Boolean(fallbackPlan?.days.some((day) => day));
+    const hasDaylightPlan = Boolean(this.viewDataGenerator.getDaylightPlan(options));
     const cellCountInDay = this.viewDataGenerator
       .getCellCountInDay(startDayHour, endDayHour, hoursInterval);
 
@@ -177,6 +178,8 @@ export class DateHeaderDataGenerator {
       const {
         startDate,
         endDate,
+        startDateUTC,
+        endDateUTC,
         isFirstGroupCell,
         isLastGroupCell,
         ...restProps
@@ -191,13 +194,10 @@ export class DateHeaderDataGenerator {
         idx % cellCountInGroupRow,
         shiftedStartDateForHeaderText,
         headerCellTextFormat,
-        fallbackPlan && hasRepeatedHour
-          ? (_: number, date: Date): Date => normalizeFallbackDate(
-            fallbackPlan,
-            date,
-            viewOffset,
-          )
-          : getDateForHeaderText,
+        // NOTE: A cell of a DST plan already carries the wall clock it shows, so the
+        // legacy correction, which assumes every day holds the same number of cells,
+        // must not run over it.
+        hasDaylightPlan ? keepHeaderDate : getDateForHeaderText,
         {
           interval,
           startViewDate,

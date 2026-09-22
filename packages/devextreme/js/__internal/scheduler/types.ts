@@ -94,6 +94,12 @@ export type CalculateStartViewDate = (
 export interface ViewCellData {
   startDate: Date;
   endDate: Date;
+  /**
+   * Exact instants of a cell whose wall clock is ambiguous or shifted by a DST
+   * transition. Absent on every other cell, where the wall clock alone is exact.
+   */
+  startDateUTC?: Date;
+  endDateUTC?: Date;
   text?: string;
   otherMonth?: boolean;
   today?: boolean;

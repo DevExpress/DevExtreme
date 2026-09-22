@@ -1,11 +1,16 @@
 import type { Orientation } from '@js/common';
 import type { SnapToCellsMode } from '@js/ui/scheduler';
+import { dateUtils } from '@ts/core/utils/m_date';
 import type Scheduler from '@ts/scheduler/scheduler';
 
 import type { TimeZoneCalculator } from '../../../r1/timezone_calculator/calculator';
 import type { ViewType } from '../../../types';
+import type { DaylightPlan } from '../../../utils/daylight_grid';
+import { buildDaylightPlanForRange } from '../../../utils/daylight_grid';
 import { getCompareOptions } from '../../common/get_compare_options';
 import type { CompareOptions } from '../../types';
+
+const toMs = dateUtils.dateToMilliseconds;
 
 interface ViewConfig {
   isTimelineView: boolean;
@@ -58,6 +63,11 @@ export interface ViewModelOptions {
   cellDurationMinutes: number;
   isVirtualScrolling: boolean;
   timeZoneCalculator: TimeZoneCalculator;
+  /**
+   * The grid of a timeline whose range crosses a DST transition, shared by the cell
+   * intervals and by the appointments placed on them. Undefined for every other view.
+   */
+  daylightPlan: DaylightPlan | undefined;
 }
 
 export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions => {
@@ -101,5 +111,16 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
     hasAllDayPanel: showAllDayPanel && allDayPanelMode !== 'hidden' && viewOrientation === 'vertical',
     isVirtualScrolling,
     timeZoneCalculator: schedulerStore.timeZoneCalculator,
+    daylightPlan: isTimelineView && !isMonthView
+      ? buildDaylightPlanForRange(
+        compareOptions.min,
+        compareOptions.max,
+        compareOptions.startDayHour,
+        compareOptions.endDayHour,
+        cellDurationMinutes * toMs('minute'),
+        compareOptions.skippedDays,
+        schedulerStore.timeZoneCalculator,
+      )
+      : undefined,
   };
 };

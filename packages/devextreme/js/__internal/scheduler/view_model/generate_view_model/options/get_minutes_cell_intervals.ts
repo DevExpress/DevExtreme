@@ -1,7 +1,6 @@
 import { dateUtils } from '@ts/core/utils/m_date';
 
-import type { TimeZoneCalculator } from '../../../r1/timezone_calculator/calculator';
-import { buildFallbackDayCells } from '../../../utils/repeated_hour';
+import type { DaylightPlan } from '../../../utils/daylight_grid';
 import timeZoneUtils from '../../../utils_time_zone';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import type { CellInterval, DateInterval } from '../../types';
@@ -12,8 +11,7 @@ interface Options {
   endDayHour: number;
   durationMinutes: number;
   skippedDays: number[];
-  stretchRepeatedHour?: boolean;
-  timeZoneCalculator?: TimeZoneCalculator;
+  daylightPlan?: DaylightPlan;
 }
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -44,33 +42,25 @@ export const getMinutesCellIntervals = ({
   endDayHour,
   durationMinutes,
   skippedDays,
-  stretchRepeatedHour = false,
-  timeZoneCalculator,
+  daylightPlan,
 }: Options): CellInterval[] => intervals.reduce<CellInterval[]>((result, interval, rowIndex) => {
   const dayIntervals = splitIntervalByDay({
     ...interval, startDayHour, endDayHour, skippedDays,
   });
 
   let columnIndex = 0;
-  let fallbackShiftMs = 0;
-  const cellDurationMs = durationMinutes * toMs('minute');
+  // How far the day being laid out has moved from its nominal place, because earlier
+  // days took more or less elapsed time than their wall clock says.
+  let shiftMs = 0;
   filterBySkippedDays(dayIntervals, skippedDays).forEach((dayInterval) => {
-    const localDay = timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(dayInterval.min));
-    const fallbackCells = stretchRepeatedHour
-      ? buildFallbackDayCells(
-        localDay,
-        startDayHour,
-        endDayHour,
-        cellDurationMs,
-        timeZoneCalculator,
-      )
-      : undefined;
-    const dayStart = adjustDayIntervalMinForMidnightDST(dayInterval.min, startDayHour);
+    const planDay = daylightPlan?.days.find((day) => day.wallStartMs === dayInterval.min);
 
-    if (fallbackCells) {
-      let position = dayStart + fallbackShiftMs;
-      fallbackCells.forEach((cell) => {
-        const duration = cell.end.getTime() - cell.start.getTime();
+    if (planDay) {
+      let position = dayInterval.min + shiftMs;
+
+      planDay.cells.forEach((cell) => {
+        const duration = cell.endUTC - cell.startUTC;
+
         result.push({
           min: position,
           max: position + duration,
@@ -81,28 +71,31 @@ export const getMinutesCellIntervals = ({
         position += duration;
         columnIndex += 1;
       });
-      fallbackShiftMs += (position - dayStart - fallbackShiftMs) - (dayInterval.max - dayStart);
-    } else {
-      const date = new Date(dayStart);
-      while (date.getTime() < dayInterval.max) {
-        const min = date.getTime();
-        let max = date.setUTCMinutes(date.getUTCMinutes() + durationMinutes);
+      shiftMs += planDay.elapsedMs - (dayInterval.max - dayInterval.min);
 
-        if (date.getUTCHours() > endDayHour) {
-          date.setUTCDate(date.getUTCDate() + 1);
-          date.setUTCHours(startDayHour, 0, 0, 0);
-          max = date.getTime();
-        }
+      return;
+    }
 
-        result.push({
-          min: min + fallbackShiftMs,
-          max: max + fallbackShiftMs,
-          rowIndex,
-          columnIndex,
-          cellIndex: result.length,
-        });
-        columnIndex += 1;
+    const date = new Date(adjustDayIntervalMinForMidnightDST(dayInterval.min, startDayHour));
+
+    while (date.getTime() < dayInterval.max) {
+      const min = date.getTime();
+      let max = date.setUTCMinutes(date.getUTCMinutes() + durationMinutes);
+
+      if (date.getUTCHours() > endDayHour) {
+        date.setUTCDate(date.getUTCDate() + 1);
+        date.setUTCHours(startDayHour, 0, 0, 0);
+        max = date.getTime();
       }
+
+      result.push({
+        min: min + shiftMs,
+        max: max + shiftMs,
+        rowIndex,
+        columnIndex,
+        cellIndex: result.length,
+      });
+      columnIndex += 1;
     }
   });
 

@@ -6,7 +6,12 @@ import {
 } from '@ts/scheduler/r1/utils/index';
 
 import timezoneUtils from '../../utils_time_zone';
-import type { MonthViewCellDataSimple, ViewDataProviderExtendedOptions, ViewDataProviderOptions } from './types';
+import type {
+  MonthViewCellDataSimple,
+  StartViewDateConfig,
+  ViewDataProviderExtendedOptions,
+  ViewDataProviderOptions,
+} from './types';
 import { calculateAlignedWeeksBetweenDates } from './utils/view_generator_utils';
 import { ViewDataGenerator } from './view_data_generator';
 
@@ -85,7 +90,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     return toMs('day');
   }
 
-  protected calculateStartViewDate(options: ViewDataProviderOptions): Date {
+  protected calculateStartViewDate(options: StartViewDateConfig): Date {
     return monthUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

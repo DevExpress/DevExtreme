@@ -3,7 +3,7 @@ import type { JSXTemplate } from '@ts/core/r1/types';
 import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
-import { renderUtils } from '../../utils/index';
+import { isTimelineView, renderUtils } from '../../utils/index';
 import type { DateTimeCellTemplateProps, DefaultProps } from '../types';
 import type { CellBaseProps } from './cell';
 import { CellBaseDefaultProps } from './cell';
@@ -108,7 +108,11 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
         className={classes}
         colSpan={colSpan}
         title={text}
-        style={isWeekDayCell ? normalizeStyles({ flexGrow: colSpan }) : undefined}
+        // NOTE: Day headers of a timeline share one flex row, where a day that repeats
+        // or skips an hour is wider or narrower than the rest.
+        style={isWeekDayCell && isTimelineView(viewType)
+          ? normalizeStyles({ flexGrow: colSpan })
+          : undefined}
       >
         {children}
       </th>

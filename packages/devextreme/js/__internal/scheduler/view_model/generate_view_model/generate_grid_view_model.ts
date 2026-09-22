@@ -1,10 +1,5 @@
 import type Scheduler from '../../scheduler';
-import {
-  buildRepeatedHourPlan,
-  instantOnGrid,
-  repeatedHourShiftMsFromPlan,
-} from '../../utils/repeated_hour';
-import timeZoneUtils from '../../utils_time_zone';
+import { getStretchShiftMs } from '../../utils/daylight_grid';
 import type { AppointmentEntity, ListEntity, SortedEntity } from '../types';
 import type { OptionManager } from './options/option_manager';
 import { addCollector } from './steps/add_collector/add_collector';
@@ -31,23 +26,9 @@ export const sortAppointments = (
     hasAllDayPanel,
     snapToCellsMode,
     viewOffset,
-    isTimelineView,
-    compareOptions,
     compareOptions: { endDayHour },
-    cellDurationMinutes,
-    timeZoneCalculator,
+    daylightPlan,
   } = optionManager.options;
-  const repeatedHourPlan = isTimelineView && !isMonthView
-    ? buildRepeatedHourPlan(
-      compareOptions.min,
-      compareOptions.max,
-      compareOptions.startDayHour,
-      compareOptions.endDayHour,
-      cellDurationMinutes * 60 * 1000,
-      compareOptions.skippedDays,
-      timeZoneCalculator,
-    )
-    : undefined;
 
   const step2 = maybeSplit(items, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);
@@ -57,22 +38,14 @@ export const sortAppointments = (
       const innerStep0 = isMonthView || panelName === 'allDayPanel'
         ? expandAllDayAllDayPanel(group, endDayHour, viewOffset)
         : expandAllDayRegularPanel(group);
-      const stretchedTimeline = isTimelineView && !isMonthView && panelName === 'regularPanel';
-      const shiftedStep = stretchedTimeline
+      // NOTE: Cells of a repeated hour carry time of their own, so an appointment
+      // after one has to move along with them and one across one has to grow.
+      const shifted = daylightPlan && panelName === 'regularPanel'
         ? innerStep0.map((entity) => {
-          const shiftOf = (
-            gridDateUTC: number,
-            sourceDate: number,
-          ): number => repeatedHourShiftMsFromPlan(
-            repeatedHourPlan,
-            instantOnGrid(gridDateUTC, sourceDate, timeZoneCalculator),
-          );
-          const endSource = entity.allDay
-            ? timeZoneUtils.createDateFromUTCWithLocalOffset(new Date(entity.endDateUTC)).getTime()
-            : entity.source.endDate;
           const startDateUTC = entity.startDateUTC
-            + shiftOf(entity.startDateUTC, entity.source.startDate);
-          const endDateUTC = entity.endDateUTC + shiftOf(entity.endDateUTC, endSource);
+            + getStretchShiftMs(daylightPlan, entity.startDateUTC, entity.source.startDate);
+          const endDateUTC = entity.endDateUTC
+            + getStretchShiftMs(daylightPlan, entity.endDateUTC, entity.source.endDate);
 
           return {
             ...entity,
@@ -82,7 +55,7 @@ export const sortAppointments = (
           };
         })
         : innerStep0;
-      const innerStep1 = splitByParts(shiftedStep, optionManager.getSplitIntervals(panelName));
+      const innerStep1 = splitByParts(shifted, optionManager.getSplitIntervals(panelName));
       sortByDuration(innerStep1);
       sortByStartDate(innerStep1);
       sortByGroupIndex(innerStep1);

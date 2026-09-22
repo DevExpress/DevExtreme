@@ -1002,17 +1002,16 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       startDate,
       skippedDays,
     } = this.option();
+    // NOTE: The provider's own start view date is unavailable until it has been
+    // updated at least once, so derive it from the options instead.
     const startViewDate = this.viewDataProvider.viewDataGenerator.getStartViewDate({
       currentDate,
       startDayHour,
-      endDayHour,
-      hoursInterval,
       intervalCount,
-      viewType: this.type,
       startDate: startDate ?? undefined,
       firstDayOfWeek: this.firstDayOfWeek(),
       skippedDays,
-    } as ViewDataProviderOptions);
+    });
 
     return this.viewDataProvider.getCellCount({
       intervalCount,
@@ -1739,8 +1738,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const normalizedCellData: NormalizedCellData = {
       startDate: cellData.startDate ?? new Date(),
       endDate: cellData.endDate ?? new Date(),
-      startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid'),
-      endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid'),
+      // NOTE: A cell that carries its own instants sits on a DST transition, where
+      // the wall clock is either ambiguous or shifted and cannot be converted back.
+      startDateUTC: cellData.startDateUTC
+        ?? (cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid')),
+      endDateUTC: cellData.endDateUTC
+        ?? (cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid')),
       groups: cellData.groups,
       groupIndex: cellData.groupIndex,
       allDay: cellData.allDay,
