@@ -299,8 +299,8 @@ export class DateHeaderDataGenerator {
       groupOrientation,
     );
     const headerSpans = completeDateHeaderMap[rowIndex].map((cell) => cell.colSpan ?? baseColSpan);
-    const spansVary = headerSpans.some((span) => span !== headerSpans[0]);
-    const colSpan = isGroupedByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
+    const fixedColSpan = isGroupedByDate ? horizontalGroupCount * baseColSpan : baseColSpan;
+    const spansVary = headerSpans.some((span) => span !== fixedColSpan);
     if (spansVary) {
       return this.generateVariableSpanHeaderRow(
         completeDateHeaderMap[rowIndex],
@@ -310,16 +310,16 @@ export class DateHeaderDataGenerator {
         cellWidth,
       );
     }
-    const leftVirtualCellCount = Math.floor(startCellIndex / colSpan);
+    const leftVirtualCellCount = Math.floor(startCellIndex / fixedColSpan);
     const displayedCellCount = getDisplayedCellCount(cellCount, completeViewDataMap);
-    const actualCellCount = Math.ceil((startCellIndex + displayedCellCount) / colSpan);
+    const actualCellCount = Math.ceil((startCellIndex + displayedCellCount) / fixedColSpan);
     const totalCellCount = getTotalCellCountByCompleteData(completeViewDataMap);
 
     const dateRow = completeDateHeaderMap[rowIndex].slice(leftVirtualCellCount, actualCellCount);
 
-    const finalLeftVirtualCellCount = leftVirtualCellCount * colSpan;
+    const finalLeftVirtualCellCount = leftVirtualCellCount * fixedColSpan;
     const finalLeftVirtualCellWidth = finalLeftVirtualCellCount * cellWidth;
-    const finalRightVirtualCellCount = totalCellCount - actualCellCount * colSpan;
+    const finalRightVirtualCellCount = totalCellCount - actualCellCount * fixedColSpan;
     const finalRightVirtualCellWidth = finalRightVirtualCellCount * cellWidth;
 
     return {

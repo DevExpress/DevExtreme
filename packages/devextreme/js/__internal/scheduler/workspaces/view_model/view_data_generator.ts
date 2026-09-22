@@ -26,6 +26,7 @@ import type {
 import { VIEWS } from '../../utils/options/constants_view';
 import {
   clampToNextLocalMidnight,
+  dateAtVisibleOffset,
   getExtraCellCount,
   getVisibleFallbackMs,
 } from '../../utils/repeated_hour';
@@ -645,7 +646,23 @@ export class ViewDataGenerator {
       );
 
       if ((extraCellCounts[dayIndex] ?? 0) > 0) {
-        return new Date(dayStart.getTime() + interval * indexInDay);
+        const visibleDate = dateAtVisibleOffset(
+          dayStart,
+          startDayHour,
+          endDayHour,
+          interval * indexInDay,
+        );
+        const startOfRange = new Date(
+          dayStart.getFullYear(),
+          dayStart.getMonth(),
+          dayStart.getDate(),
+          Math.floor(startDayHour),
+          Math.round((startDayHour % 1) * 60),
+          0,
+          0,
+        );
+
+        return new Date(visibleDate.getTime() + (dayStart.getTime() - startOfRange.getTime()));
       }
 
       return this.calculateDateByCellIndex(
