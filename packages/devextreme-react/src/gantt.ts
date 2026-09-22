@@ -243,7 +243,6 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
   height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig;
-  searchMode?: SearchMode;
   width?: number | string | undefined;
 }>
 const _componentColumnHeaderFilter = (props: IColumnHeaderFilterProps) => {
@@ -488,7 +487,6 @@ type IGanttHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   height?: number;
   search?: HeaderFilterSearchConfig;
-  searchTimeout?: number;
   texts?: dxGanttHeaderFilterTexts;
   visible?: boolean;
   width?: number;
@@ -541,9 +539,7 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
   height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
-  searchMode?: SearchMode;
   width?: number | string | undefined;
-  searchTimeout?: number;
   texts?: dxGanttHeaderFilterTexts;
   visible?: boolean;
 }>

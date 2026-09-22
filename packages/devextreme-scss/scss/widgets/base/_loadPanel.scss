@@ -2,14 +2,11 @@
 
 .dx-loadpanel-content {
   padding: 10px;
-  border: 1px solid #ccc;
-  background: #fefefe;
   text-align: center;
 
   @include user-select(none);
 
   -webkit-user-drag: none;
-  border-radius: 5px;
 
   &::before {
     display: inline-block;
