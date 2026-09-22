@@ -29,7 +29,6 @@
   width: var(--dx-invalid-badge-size);
   height: var(--dx-invalid-badge-size);
   line-height: calc(var(--dx-invalid-badge-size) + 1px); // dx-px-nudge: +1px over the badge size
-  font-size: $global-font-size;
 }
 
 @mixin dx-invalid-fluent-badge() {
