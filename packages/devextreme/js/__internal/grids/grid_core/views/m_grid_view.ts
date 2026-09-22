@@ -396,7 +396,6 @@ export class ResizingController extends modules.ViewController {
     const needBestFit = this._needBestFit() || visibleColumns.some((column) => column.width === 'auto');
     const hasMinWidth = visibleColumns.some((column) => !!column.minWidth);
 
-    // Prepare for measurement
     this._toggleContentMinHeight(this._hasHeight); // T1047239, T1270354
     this._setVisibleWidths(visibleColumns, []);
     const restoreAfterBestFitMode = needBestFit && this._enableTemporaryBestFitMode();
