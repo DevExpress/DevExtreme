@@ -1,4 +1,4 @@
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent, normalizeStyles } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate } from '@ts/core/r1/types';
 import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 
@@ -108,6 +108,9 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
         className={classes}
         colSpan={colSpan}
         title={text}
+        // The header row is a flex line with equal growth, so colspan alone
+        // does not widen a day that has extra fallback cells.
+        style={isWeekDayCell ? normalizeStyles({ flexGrow: colSpan }) : undefined}
       >
         {children}
       </th>
