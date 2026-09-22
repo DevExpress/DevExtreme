@@ -1,14 +1,8 @@
 @use "./mixins" as *;
 
 // Design sizing values (parametrizable; fluent-next injects tokens)
-$pagination-page-padding-fallback: 7px 8px 8px !default;
-$pagination-page-horizontal-padding: 13px !default;
 $pagination-page-margin-left: 5px !default;
 $pagination-page-margin-right: 1px !default;
-$pagination-separator-padding-left: 8px !default;
-$pagination-separator-padding-right: 8px !default;
-$pagination-navigate-button-width-fallback: 10px !default;
-$pagination-navigate-button-height: 20px !default;
 $pagination-first-child-margin-left: 1px !default;
 $pagination-first-child-padding-left: 10px !default;
 $pagination-first-child-padding-right: 9px !default;
@@ -27,7 +21,6 @@ $pagination-info-paddings: 9px !default;
 
 // The pager's own padding and the nav button's, as fallbacks fluent-next switches off with false.
 $pagination-padding-block-fallback: $pagination-paddings !default;
-$pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !default;
 
 .dx-pager,
 .dx-pagination {

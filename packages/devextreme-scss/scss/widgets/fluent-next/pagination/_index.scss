@@ -2,16 +2,10 @@
 @use "sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/pagination" with (
-  $pagination-page-padding-fallback: false,
-  $pagination-navigate-button-width-fallback: false,
   $pagination-padding-block-fallback: false,
-  $pagination-navigate-button-padding-block-fallback: false,
   $pagination-info-paddings: var(--dx-pagination-info-margin-inline),
   $pagination-page-margin-left: var(--dx-pagination-page-margin-inline-start),
   $pagination-page-margin-right: var(--dx-pagination-page-margin-inline-end),
-  $pagination-separator-padding-left: var(--dx-pagination-separator-padding-inline-start),
-  $pagination-separator-padding-right: var(--dx-pagination-separator-padding-inline-end),
-  $pagination-navigate-button-height: var(--dx-pagination-navigate-button-height),
   $pagination-first-child-margin-left: var(--dx-pagination-first-child-margin-inline-start),
   $pagination-first-child-padding-left: var(--dx-pagination-first-child-padding-inline-start),
   $pagination-first-child-padding-right: var(--dx-pagination-first-child-padding-inline-end),
@@ -22,7 +16,6 @@
   $pagination-pages-count-padding-left: var(--dx-pagination-pages-count-padding-inline-start),
   $pagination-info-opacity: false,
   $pagination-nav-disabled-opacity: false,
-  $pagination-page-horizontal-padding: var(--dx-pagination-page-padding-inline),
 );
 @use "../gridBase/sizes" as gridBaseSizes;
 

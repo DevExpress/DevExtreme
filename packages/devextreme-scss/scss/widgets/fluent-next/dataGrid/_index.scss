@@ -7,10 +7,8 @@
 @use "../../base/dataGrid" as baseGrid with (
   $datagrid-draggable-column-opacity: var(--dx-grid-draggable-column-opacity),
   $datagrid-common-group-min-width: var(--dx-data-grid-group-panel-item-min-width),
-  $datagrid-common-addrow-margin-right: var(--dx-data-grid-group-panel-item-margin-inline-end),
   $datagrid-common-addrow-margin-left: var(--dx-data-grid-group-panel-item-sort-margin-inline-start),
   $datagrid-common-form-buttons-border-radius: var(--dx-data-grid-block-separator-border-radius),
-  $datagrid-common-form-buttons-margin-left: var(--dx-data-grid-group-panel-item-rtl-margin-inline-end),
   $datagrid-common-form-buttons-margin-right: var(--dx-data-grid-group-panel-item-sort-rtl-margin-inline-start),
   $datagrid-header-filter-outline: var(--dx-grid-outline-focused),
   $datagrid-header-filter-outline-offset: var(--dx-data-grid-outline-offset-focused),
