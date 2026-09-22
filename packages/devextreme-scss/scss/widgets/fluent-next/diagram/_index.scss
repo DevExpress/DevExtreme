@@ -17,6 +17,7 @@
   $diagram-popup-title-toolbar-bg: var(--dx-diagram-popup-title-toolbar-bg),
 );
 @use "../../base/diagram/mixins" as *;
+@use "../../base/mask" as mask;
 
 .dx-diagram {
   border-color: var(--dx-diagram-border);
@@ -496,16 +497,17 @@
  */
 .dx-diagram-i {
   mask-repeat: no-repeat;
-  background-color: currentColor;
+
+  @include mask.masked-glyph-paint();
 }
 
 /*
- * The four elements that carry no mask of their own: the empty placeholder, the panel toggle that
- * is white over both modes' accent and keeps its baked image, and the two colour buttons, which
- * hand the artwork to a pseudo-element so that their `border-bottom` swatch survives. Paint with
- * nothing to cut it to shape would be a filled rectangle.
+ * The three elements that carry no mask of their own: the panel toggle, which is white over both
+ * modes' accent and keeps its baked image, and the two colour buttons, which hand the artwork to a
+ * pseudo-element so that their `border-bottom` swatch survives a mask. Paint with nothing to cut it
+ * to shape would be a filled rectangle. (The empty selectbox placeholder needs no line here: its
+ * mask is the empty drawing, so it cuts everything away.)
  */
-.dx-diagram-i-selectbox-null-icon,
 .dx-diagram-i-button-fill,
 .dx-diagram-i-menu-fill,
 .dx-diagram-i-button-properties-panel-open {
@@ -518,7 +520,8 @@
   line-height: var(--dx-diagram-toolbox-title-size);
   mask-repeat: no-repeat;
   mask-size: var(--dx-diagram-toolbox-title-size) var(--dx-diagram-toolbox-title-size);
-  background-color: currentColor;
+
+  @include mask.masked-glyph-paint();
 }
 
 .dx-diagram-i-button-properties-panel-open {

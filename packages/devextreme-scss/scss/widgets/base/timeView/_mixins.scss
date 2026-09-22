@@ -2,6 +2,7 @@
 @use "sass:meta";
 @use "sass:string";
 @use "../string" as *;
+@use "../mask" as *;
 
 @mixin clock-colored-image($data-uri, $accent-color, $background-color, $digit-color) {
   $uri: replace("#{$data-uri}", escape("$accent-color"), escape("#{$accent-color}"));
@@ -88,7 +89,7 @@
         mask-size: 100% 100%;
 
         /* the digits are the widget's own text: the mask hands them the colour it inherits */
-        background-color: currentColor;
+        @include masked-glyph-paint();
       }
     } @else {
       @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"), $accent-color, $background-color, $digit-color);
@@ -113,7 +114,8 @@
     @if $masked {
       mask-position: bottom;
       mask-repeat: no-repeat;
-      background-color: $accent-color;
+
+      @include masked-glyph-paint($accent-color);
 
       /* above the dial and the digits: pseudo-elements of the clock paint after this one */
       z-index: 1;

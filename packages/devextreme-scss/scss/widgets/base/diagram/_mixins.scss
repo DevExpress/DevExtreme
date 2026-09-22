@@ -1,6 +1,7 @@
 @use "sass:meta";
 @use "sass:string";
 @use "../string" as *;
+@use "../mask" as *;
 
 @mixin diagram-icon-colored($data-uri, $current-color, $width, $height) {
   $uri: replace("#{$data-uri}", "currentColor", escape("#{$current-color}"));
@@ -62,7 +63,8 @@
     inset: 0;
     mask-image: string.unquote($uri);
     mask-repeat: no-repeat;
-    background-color: currentColor;
+
+    @include masked-glyph-paint();
   }
 }
 
