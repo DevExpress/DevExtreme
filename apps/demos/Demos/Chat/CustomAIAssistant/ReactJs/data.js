@@ -112,6 +112,7 @@ export const formFieldsConfig = [
   },
   {
     dataField: 'Position',
+    label: { text: 'Position' },
     editorType: 'dxSelectBox',
     editorOptions: { items: positions, searchEnabled: true },
     aiOptions: {
@@ -121,6 +122,7 @@ export const formFieldsConfig = [
   },
   {
     dataField: 'State',
+    label: { text: 'State' },
     editorType: 'dxSelectBox',
     editorOptions: { items: states, searchEnabled: true },
     aiOptions: {
@@ -130,6 +132,7 @@ export const formFieldsConfig = [
   },
   {
     dataField: 'BirthDate',
+    label: { text: 'Birth Date' },
     editorType: 'dxDateBox',
     editorOptions: { displayFormat: 'M/d/yyyy' },
     aiOptions: {

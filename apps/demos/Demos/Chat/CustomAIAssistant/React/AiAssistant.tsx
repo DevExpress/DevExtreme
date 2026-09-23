@@ -34,7 +34,7 @@ function EmptyView(): React.JSX.Element {
   );
 }
 
-export default function AiAssistant({ form, grid, aiIntegration }: AiAssistantProps) {
+export default function AiAssistant({ formRef, gridRef, aiIntegration }: AiAssistantProps) {
   const clearButtonInstance = useRef<ReturnType<ButtonRef['instance']> | null>(null);
   const [visible, setVisible] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -51,13 +51,15 @@ export default function AiAssistant({ form, grid, aiIntegration }: AiAssistantPr
 
   const handleUserMessage = useCallback((message: ChatTypes.Message): void => {
     setDisabled(true);
+    const form = formRef.current?.instance();
+    const grid = gridRef.current?.instance();
     if (form && grid) {
       routeMessage(String(message.text), { form, gridInstance: grid, aiIntegration, pushMessage }).finally(() => {
         setDisabled(false);
         updateClearButtonState();
       });
     }
-  }, [aiIntegration, form, grid, pushMessage, updateClearButtonState]);
+  }, [aiIntegration, formRef, gridRef, pushMessage, updateClearButtonState]);
 
   const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent): void => {
     handleUserMessage(message);

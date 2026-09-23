@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import DataGrid, {
   Column, FilterRow, HeaderFilter, LoadPanel,
 } from 'devextreme-react/data-grid';
-import type { DataGridTypes } from 'devextreme-react/data-grid';
+import type { DataGridRef, DataGridTypes } from 'devextreme-react/data-grid';
 import type { ColumnFilterExpression, Task, TaskGridProps } from './data.ts';
 import { colors, tasks } from './data.ts';
 
@@ -24,22 +24,20 @@ const calculateFilterExpression = (filterValue: boolean, operation: string | nul
   return [rawCompletion, wantsCompleted ? '=' : '<', 100];
 };
 
-export default function TaskGrid({ onInitialized }: TaskGridProps) {
-  const onGridInitialized = useCallback((event: DataGridTypes.InitializedEvent): void => {
-    if (event.component) {
-      onInitialized(event.component);
-    }
-  }, [onInitialized]);
+export default function TaskGrid({ gridRef }: TaskGridProps) {
+  const setGridRef = useCallback((instance: DataGridRef | null): void => {
+    gridRef.current = instance;
+  }, [gridRef]);
 
   return (
     <div id="grid-container">
       <DataGrid
+        ref={setGridRef}
         dataSource={tasks}
         keyExpr="ID"
         height={360}
         showBorders={true}
         filterSyncEnabled={true}
-        onInitialized={onGridInitialized}
       >
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />

@@ -1,6 +1,4 @@
-import React, {
-  useCallback, useMemo, useRef, useState,
-} from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Form, Item, ButtonItem } from 'devextreme-react/form';
 import { Toast } from 'devextreme-react/toast';
 import { employee, formFieldsConfig } from './data.js';
@@ -18,35 +16,34 @@ const toastPosition = {
   my: { x: 'center', y: 'bottom' },
   offset: { x: 0, y: -20 },
 };
-export default function EmployeeForm({ aiIntegration, onInitialized }) {
-  const formRef = useRef(null);
+export default function EmployeeForm({ aiIntegration, formRef }) {
   const [toastVisible, setToastVisible] = useState(false);
-  const onOptionChanged = useCallback((event) => {
-    if (event.name === 'isDirty') {
-      formRef.current?.instance().getButton('Save')?.option('disabled', !event.value);
-    }
-  }, []);
-  const onSave = useCallback(() => setToastVisible(true), []);
-  const onToastHiding = useCallback(() => setToastVisible(false), []);
-  const onFormInitialized = useCallback(
+  const setFormRef = useCallback(
+    (instance) => {
+      formRef.current = instance;
+    },
+    [formRef],
+  );
+  const onOptionChanged = useCallback(
     (event) => {
-      if (event.component) {
-        onInitialized(event.component);
+      if (event.name === 'isDirty') {
+        formRef.current?.instance().getButton('Save')?.option('disabled', !event.value);
       }
     },
-    [onInitialized],
+    [formRef],
   );
+  const onSave = useCallback(() => setToastVisible(true), []);
+  const onToastHiding = useCallback(() => setToastVisible(false), []);
   const buttonOptions = useMemo(() => ({ ...saveButtonOptions, onClick: onSave }), [onSave]);
   return (
     <div id="form-container">
       <Form
-        ref={formRef}
+        ref={setFormRef}
         formData={employee}
         colCount={3}
         labelLocation="top"
         aiIntegration={aiIntegration}
         onOptionChanged={onOptionChanged}
-        onInitialized={onFormInitialized}
       >
         {formFieldsConfig.map((field) => (
           <Item

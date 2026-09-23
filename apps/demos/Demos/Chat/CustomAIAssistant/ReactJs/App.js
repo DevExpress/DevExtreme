@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import config from 'devextreme/core/config';
 import { loadMessages } from 'devextreme-react/common/core/localization';
 import EmployeeForm from './EmployeeForm.js';
@@ -19,21 +19,19 @@ config({
   },
 });
 export default function App() {
-  const [form, setForm] = useState(null);
-  const [grid, setGrid] = useState(null);
+  const formRef = useRef({ current: null });
+  const gridRef = useRef({ current: null });
   const [aiIntegration] = useState(createAiIntegration);
-  const onFormInitialized = useCallback((instance) => setForm(instance), []);
-  const onGridInitialized = useCallback((instance) => setGrid(instance), []);
   return (
     <>
       <EmployeeForm
         aiIntegration={aiIntegration}
-        onInitialized={onFormInitialized}
+        formRef={formRef.current}
       />
-      <TaskGrid onInitialized={onGridInitialized} />
+      <TaskGrid gridRef={gridRef.current} />
       <AiAssistant
-        form={form}
-        grid={grid}
+        formRef={formRef.current}
+        gridRef={gridRef.current}
         aiIntegration={aiIntegration}
       />
     </>

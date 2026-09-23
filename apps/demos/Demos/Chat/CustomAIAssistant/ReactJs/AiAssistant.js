@@ -35,7 +35,7 @@ function EmptyView() {
     </>
   );
 }
-export default function AiAssistant({ form, grid, aiIntegration }) {
+export default function AiAssistant({ formRef, gridRef, aiIntegration }) {
   const clearButtonInstance = useRef(null);
   const [visible, setVisible] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -58,6 +58,8 @@ export default function AiAssistant({ form, grid, aiIntegration }) {
   const handleUserMessage = useCallback(
     (message) => {
       setDisabled(true);
+      const form = formRef.current?.instance();
+      const grid = gridRef.current?.instance();
       if (form && grid) {
         routeMessage(String(message.text), {
           form,
@@ -70,7 +72,7 @@ export default function AiAssistant({ form, grid, aiIntegration }) {
         });
       }
     },
-    [aiIntegration, form, grid, pushMessage, updateClearButtonState],
+    [aiIntegration, formRef, gridRef, pushMessage, updateClearButtonState],
   );
   const onMessageEntered = useCallback(
     ({ message }) => {

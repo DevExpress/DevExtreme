@@ -1,11 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import config from 'devextreme/core/config';
 import { loadMessages } from 'devextreme-react/common/core/localization';
+import type { DataGridRef } from 'devextreme-react/data-grid';
+import type { FormRef } from 'devextreme-react/form';
 import EmployeeForm from './EmployeeForm.tsx';
 import TaskGrid from './TaskGrid.tsx';
 import AiAssistant from './AiAssistant.tsx';
 import { createAiIntegration } from './ai-service.ts';
-import type { EmployeeForm as EmployeeFormInstance, TaskGrid as TaskGridInstance } from './data.ts';
 
 loadMessages({ en: { 'dxChat-textareaPlaceholder': 'Enter a prompt...' } });
 config({
@@ -20,18 +21,15 @@ config({
   },
 });
 export default function App() {
-  const [form, setForm] = useState<EmployeeFormInstance | null>(null);
-  const [grid, setGrid] = useState<TaskGridInstance | null>(null);
+  const formRef = useRef({ current: null as FormRef | null });
+  const gridRef = useRef({ current: null as DataGridRef | null });
   const [aiIntegration] = useState(createAiIntegration);
-
-  const onFormInitialized = useCallback((instance: EmployeeFormInstance): void => setForm(instance), []);
-  const onGridInitialized = useCallback((instance: TaskGridInstance): void => setGrid(instance), []);
 
   return (
     <>
-      <EmployeeForm aiIntegration={aiIntegration} onInitialized={onFormInitialized} />
-      <TaskGrid onInitialized={onGridInitialized} />
-      <AiAssistant form={form} grid={grid} aiIntegration={aiIntegration} />
+      <EmployeeForm aiIntegration={aiIntegration} formRef={formRef.current} />
+      <TaskGrid gridRef={gridRef.current} />
+      <AiAssistant formRef={formRef.current} gridRef={gridRef.current} aiIntegration={aiIntegration} />
     </>
   );
 }

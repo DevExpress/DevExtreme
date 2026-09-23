@@ -17,24 +17,22 @@ const calculateFilterExpression = (filterValue, operation) => {
   const rawCompletion = (rowData) => rowData.Completion;
   return [rawCompletion, wantsCompleted ? '=' : '<', 100];
 };
-export default function TaskGrid({ onInitialized }) {
-  const onGridInitialized = useCallback(
-    (event) => {
-      if (event.component) {
-        onInitialized(event.component);
-      }
+export default function TaskGrid({ gridRef }) {
+  const setGridRef = useCallback(
+    (instance) => {
+      gridRef.current = instance;
     },
-    [onInitialized],
+    [gridRef],
   );
   return (
     <div id="grid-container">
       <DataGrid
+        ref={setGridRef}
         dataSource={tasks}
         keyExpr="ID"
         height={360}
         showBorders={true}
         filterSyncEnabled={true}
-        onInitialized={onGridInitialized}
       >
         <FilterRow visible={true} />
         <HeaderFilter visible={true} />
