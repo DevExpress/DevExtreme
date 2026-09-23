@@ -20,18 +20,6 @@ $diagram-toolbox-shape-text-content: ds.$color-content-subtle !default;
 $diagram-bg: ds.$color-bg !default;
 $diagram-danger-icon: ds.$color-content-danger !default;
 
-$diagram-content: null !default;
-
-$diagram-properties-panel-icon: #fff !default; // dx-data-uri-static: ds.$color-content-static-dark (mode-invariant)
-
-@if $mode == "light" {
-  $diagram-content: #161616 !default; // dx-data-uri-static: ds.$color-content
-}
-
-@if $mode == "dark" {
-  $diagram-content: #fff !default; // dx-data-uri-static: ds.$color-content
-}
-
 $diagram-canvas-bg: ds.$color-bg-canvas !default;
 $diagram-shadow: ds.$box-shadow-md !default;
 

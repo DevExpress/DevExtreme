@@ -311,7 +311,15 @@
   margin-left: var(--dx-file-manager-context-menu-text-item-left-margin);
 }
 
-@include filemanager-icons-mixin($file-manager-icon, $file-manager-icon-success-content, $file-manager-icon-inverted-content, $file-manager-icon-danger-content, $file-manager-icon-inverted-content, $file-manager-large-icon-size, $masked: true);
+@include filemanager-icons-mixin(
+  $text-color: null,
+  $success-bg-color: $file-manager-icon-success-content,
+  $success-text-color: $file-manager-icon-static-content,
+  $danger-bg-color: $file-manager-icon-danger-content,
+  $danger-text-color: $file-manager-icon-static-content,
+  $icon-size: $file-manager-large-icon-size,
+  $masked: true,
+);
 
 .dx-filemanager.dx-state-disabled .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text,
 .dx-state-disabled .dx-filemanager .dx-treeview .dx-treeview-item .dx-filemanager-dirs-tree-item-text {

@@ -21,18 +21,7 @@ $file-manager-dirs-tree-item-bg-focused: ds.$color-bg-active !default;
 
 $file-manager-icon-success-content: #107c10 !default; // dx-data-uri-static: ds.$color-bg-success (mode-invariant)
 $file-manager-icon-danger-content: #c50f1f !default; // dx-data-uri-static: ds.$color-bg-danger (mode-invariant)
-$file-manager-icon: null !default;
-$file-manager-icon-inverted-content: null !default;
-
-@if $mode == "light" {
-  $file-manager-icon: #161616 !default; // dx-data-uri-static: ds.$color-content
-  $file-manager-icon-inverted-content: #fff !default; // dx-data-uri-static: ds.$color-content-inverted
-}
-
-@if $mode == "dark" {
-  $file-manager-icon: #fff !default; // dx-data-uri-static: ds.$color-content
-  $file-manager-icon-inverted-content: #161616 !default; // dx-data-uri-static: ds.$color-content-inverted
-}
+$file-manager-icon-static-content: #fff !default; // dx-data-uri-static: ds.$color-content-static-dark (mode-invariant)
 
 $file-manager-drop-zone-placeholder-border: ds.$color-border-primary !default;
 $file-manager-bg: ds.$color-bg !default;

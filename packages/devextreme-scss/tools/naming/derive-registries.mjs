@@ -890,8 +890,9 @@ const OVERRIDES = {
     'date-view': ['roller', 'item', 'year', 'month', 'hours-colon'],
     'time-view': ['clock', 'digits', 'field', 'number-box', 'input', 'time-separator', 'spin',
       'format12',
-      // the hour and minute hands are boxes the clock positions on the dial
-      'arrow'],
+      // wave B8: the hour and minute hands are boxes the clock positions on the dial
+      'arrow',
+      'dial'],
     fieldset: ['field', 'label', 'value', 'header', 'attention-icon', 'radio-group'],
     'radio-group': ['radio-button', 'collection', 'value-container'],
     'progress-bar': ['status', 'range', 'container', 'label'],

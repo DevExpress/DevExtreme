@@ -1,5 +1,6 @@
 @use "sass:string";
 @use "../string" as *;
+@use "../mask" as *;
 
 @mixin gantt-icon-colored($data-uri, $color) {
   $uri: replace("#{$data-uri}", "currentColor", escape("#{$color}"));
@@ -27,7 +28,8 @@
       mask-position: 50% 50%;
       mask-repeat: no-repeat;
       mask-size: contain;
-      background-color: currentColor;
+
+      @include masked-glyph-paint();
     }
 
     &.dx-gantt-i-add {

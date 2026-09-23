@@ -1006,6 +1006,18 @@
       ],
       "decision": "package-confirms",
       "why": "Same underline, hovered rung."
+    },
+    {
+      "name": "time-view-clock-digits-bg",
+      "slot": "bg",
+      "roles": [
+        "color-content"
+      ],
+      "paints": [
+        "background-color"
+      ],
+      "decision": "drawn-mark",
+      "why": "The numerals are the clock's text, drawn as a mask over the dial, and a mask is painted by background-color - so the slot word follows the property while the role follows the element. Same shape as the checkbox mark and the typing dot above."
     }
   ],
   "ladders": [

@@ -4,12 +4,15 @@
 @use "../../base/timeView/mixins" as *;
 @use "../../base/timeView";
 @include clock-action-icons-mixin(
-  $time-view-clock-accent-bg,
-  $time-view-clock-bg,
-  $time-view-clock-digits-content,
+  var(--dx-time-view-clock-arrow-bg),
+  var(--dx-time-view-clock-bg),
+  var(--dx-time-view-clock-digits-bg),
   $clock-size: var(--dx-time-view-clock-size),
   $arrow-width: var(--dx-time-view-clock-arrow-width),
   $arrow-offset: var(--dx-time-view-clock-arrow-offset),
+  $dial-size: calc(var(--dx-time-view-clock-size) * 85 / 91),
+  $dial-shadow: var(--dx-time-view-clock-shadow),
+  $masked: true,
 );
 
 .dx-timeview {

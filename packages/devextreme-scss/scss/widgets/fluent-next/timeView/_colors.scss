@@ -1,17 +1,8 @@
 @use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
 
-$time-view-clock-digits-content: null !default;
-$time-view-clock-accent-bg: null !default;
-$time-view-clock-bg: null !default;
+$time-view-clock-digits-bg: ds.$color-content !default;
+$time-view-clock-arrow-bg: ds.$color-bg-inverted !default;
+$time-view-clock-bg: ds.$color-bg-canvas !default;
 
-@if $mode == "light" {
-  $time-view-clock-digits-content: #161616 !default; // dx-data-uri-static: ds.$color-content
-  $time-view-clock-accent-bg: #242424 !default; // dx-data-uri-static: ds.$color-bg-inverted
-  $time-view-clock-bg: #fafafa !default; // dx-data-uri-static: ds.$color-bg-canvas
-}
-
-@if $mode == "dark" {
-  $time-view-clock-digits-content: #fff !default; // dx-data-uri-static: ds.$color-content
-  $time-view-clock-accent-bg: #fff !default; // dx-data-uri-static: ds.$color-bg-inverted
-  $time-view-clock-bg: #1d1d1d !default; // dx-data-uri-static: ds.$color-bg-canvas
-}
+$time-view-clock-shadow: ds.$box-shadow-sm !default;
