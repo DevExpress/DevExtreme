@@ -233,12 +233,19 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
+    - name: Sanitize job name
+      if: ${{ always() }}
+      run: echo "JOB_NAME=$(echo "${{ matrix.name }}" | tr -c 'A-Za-z0-9._-' '-')" >> $GITHUB_ENV
+
     - name: Run Playwright tests
       working-directory: ./e2e/playwright
       env:
         NODE_OPTIONS: --max-old-space-size=8192
         # The browser context takes the timezone, so the agent clock is left alone.
         TIMEZONE: ${{ matrix.timezone }}
+        # The default blob name is built from the test paths only, so jobs that differ by theme or
+        # timezone alone would write the same zip and overwrite each other once merged.
+        PLAYWRIGHT_BLOB_OUTPUT_NAME: report-${{ env.JOB_NAME }}.zip
       run: |
         THEME="--theme ${{ matrix.theme || 'fluent.blue.light' }}"
         [ "${{ matrix.componentFolder }}" != "" ] && COMPONENT_FOLDER="--componentFolder ${{ matrix.componentFolder }}"
@@ -247,10 +254,6 @@ jobs:
         all_args="$COMPONENT_FOLDER $CONCURRENCY $INDICES $THEME"
         echo "$all_args"
         pnpm run test $all_args
-
-    - name: Sanitize job name
-      if: ${{ always() }}
-      run: echo "JOB_NAME=$(echo "${{ matrix.name }}" | tr '/' '-')" >> $GITHUB_ENV
 
     - name: Upload blob report
       if: ${{ failure() }}
