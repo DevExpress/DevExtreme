@@ -7,11 +7,11 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 486,
-    "variables": 424,
+    "occurrences": 488,
+    "variables": 426,
     "injected": 462,
     "open": 0,
-    "parameters": 24
+    "parameters": 26
   },
   "places": [
     {
@@ -6943,7 +6943,7 @@
     },
     {
       "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 42,
+      "line": 46,
       "widget": "timeView",
       "literals": [
         "182px"
@@ -6957,7 +6957,7 @@
     },
     {
       "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 43,
+      "line": 47,
       "widget": "timeView",
       "literals": [
         "10px"
@@ -6966,6 +6966,34 @@
       "marker": null,
       "text": "$arrow-width: 10px,",
       "variable": "arrow-width",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
+      "file": "scss/widgets/base/timeView/_mixins.scss",
+      "line": 59,
+      "widget": "timeView",
+      "literals": [
+        "4px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$pivot-size: 4px,",
+      "variable": "pivot-size",
+      "kind": "mixin-parameter",
+      "status": "parameter"
+    },
+    {
+      "file": "scss/widgets/base/timeView/_mixins.scss",
+      "line": 60,
+      "widget": "timeView",
+      "literals": [
+        "5px"
+      ],
+      "occurrences": 1,
+      "marker": null,
+      "text": "$pivot-offset: 5px,",
+      "variable": "pivot-offset",
       "kind": "mixin-parameter",
       "status": "parameter"
     },
