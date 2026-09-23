@@ -22,6 +22,8 @@ $time-view-clock-arrow-offset: calc(#{$time-view-clock-arrow-width} / -2) !defau
 
 /*
  * Derived once and published: the dial is the circle of 85 in the artwork's 91 half-width, so it is
- * that fraction of the size the whole drawing is scaled to.
+ * that fraction of the size the whole drawing is scaled to. Derived from the value, not from the
+ * published name - these files may not read a custom property, and the size above is a literal, so
+ * the two knobs are overridden separately, exactly like the arrow's width and its offset.
  */
-$time-view-clock-dial-size: calc(var(--dx-time-view-clock-size) * 85 / 91) !default;
+$time-view-clock-dial-size: calc(#{$time-view-clock-size} * 85 / 91) !default;
