@@ -9,7 +9,7 @@ import { getAppointmentRecurrenceOccurrences } from './get_appointment_recurrenc
 export const splitByRecurrence = <T extends MinimalAppointmentEntity & AllDayPanelOccupation>(
   entities: T[],
   {
-    timeZone, firstDayOfWeek, allDayIntervals, regularIntervals,
+    timeZone, firstDayOfWeek, allDayIntervals, regularIntervals, daylightPlan,
   }: FilterOptions,
 ): (T & UTCDates)[] => entities.reduce<(T & UTCDates)[]>((acc, appointment) => {
   const intervals = appointment.allDay || appointment.isAllDayPanelOccupied
@@ -21,7 +21,9 @@ export const splitByRecurrence = <T extends MinimalAppointmentEntity & AllDayPan
   };
   const occurrences = getAppointmentRecurrenceOccurrences<T>(
     appointment,
-    { firstDayOfWeek, interval: recurrenceInterval, timeZone },
+    {
+      firstDayOfWeek, interval: recurrenceInterval, timeZone, daylightPlan,
+    },
   );
 
   acc.push(...occurrences);

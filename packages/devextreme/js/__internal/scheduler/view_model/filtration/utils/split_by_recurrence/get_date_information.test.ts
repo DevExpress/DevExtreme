@@ -1,52 +1,75 @@
-import {
-  afterAll, describe, expect, it,
-} from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 
-import { globalCache } from '../../../../global_cache';
-import { findDSTOfDay } from './get_date_information';
+import { createTimeZoneCalculator } from '../../../../r1/timezone_calculator';
+import { buildDaylightPlan } from '../../../../utils/daylight_grid';
+import { getDateInformation, isCoveredByDaylightPlan, resolveFirstPass } from './get_date_information';
 
 const HOUR_MS = 3600_000;
 
-describe('findDSTOfDay', () => {
-  afterAll(() => {
-    globalCache.DST.clear();
+describe('getDateInformation', () => {
+  it('reports a constant offset when the day has no transition', () => {
+    const info = getDateInformation(Date.UTC(2025, 0, 1, 12), 'America/Santiago');
+
+    expect(info.deltaMs).toBe(0);
+    expect(info.offsetMs).toBe(-3 * HOUR_MS);
+    expect(info.isUnreachableTime).toBe(false);
+    expect(info.isDoubleTimeStart).toBe(false);
   });
 
-  it('should return no DST if interval has no DST', () => {
-    expect(findDSTOfDay(Date.UTC(2025, 0, 1), 'America/Santiago')).toEqual([
-      -Date.UTC(2025, 0, 1), -3 * HOUR_MS, -3 * HOUR_MS,
-    ]);
+  it('marks the Santiago spring jump and the hour it skips', () => {
+    const jump = getDateInformation(Date.UTC(2025, 8, 7, 4), 'America/Santiago');
+    const skipped = getDateInformation(Date.UTC(2025, 8, 7, 4, 30), 'America/Santiago');
+    const after = getDateInformation(Date.UTC(2025, 8, 7, 5, 30), 'America/Santiago');
+
+    expect(jump.isDoubleTimeStart).toBe(true);
+    expect(jump.deltaMs).toBe(HOUR_MS);
+    expect(skipped.isUnreachableTime).toBe(true);
+    expect(skipped.offsetMs).toBe(-4 * HOUR_MS);
+    expect(after.offsetMs).toBe(-3 * HOUR_MS);
+    expect(after.isUnreachableTime).toBe(false);
   });
 
-  it('should return summer DST in America/Santiago', () => {
-    expect(findDSTOfDay(Date.UTC(2025, 3, 6), 'America/Santiago')).toEqual([
-      Date.UTC(2025, 3, 6, 3),
-      -3 * HOUR_MS,
-      -4 * HOUR_MS,
-    ]);
+  it('keeps the pre-transition offset through the first pass of a Pacific fall-back', () => {
+    const firstPass = getDateInformation(Date.UTC(2025, 10, 2, 8, 30), 'Canada/Pacific');
+    const jump = getDateInformation(Date.UTC(2025, 10, 2, 9), 'Canada/Pacific');
+
+    expect(firstPass.deltaMs).toBe(-HOUR_MS);
+    expect(firstPass.offsetMs).toBe(-7 * HOUR_MS);
+    expect(jump.isDoubleTimeStart).toBe(true);
+    expect(jump.offsetMs).toBe(-8 * HOUR_MS);
+  });
+});
+
+describe('resolveFirstPass', () => {
+  it('moves a second pass of Cairo 23:00 back to the first pass', () => {
+    const second = Date.parse('2026-10-29T21:30:00.000Z');
+    const resolved = resolveFirstPass(second, 'Africa/Cairo');
+
+    expect(resolved.instant).toBe(Date.parse('2026-10-29T20:30:00.000Z'));
+    expect(resolved.info.offsetMs).toBe(3 * HOUR_MS);
   });
 
-  it('should return winter DST in America/Santiago', () => {
-    expect(findDSTOfDay(Date.UTC(2025, 8, 7), 'America/Santiago')).toEqual([
-      Date.UTC(2025, 8, 7, 4),
-      -4 * HOUR_MS,
-      -3 * HOUR_MS,
-    ]);
-  });
+  it('leaves an explicit first pass where it is', () => {
+    const first = Date.parse('2026-10-29T20:30:00.000Z');
+    const resolved = resolveFirstPass(first, 'Africa/Cairo');
 
-  it('should return summer DST in Canada/Pacific', () => {
-    expect(findDSTOfDay(Date.UTC(2025, 2, 9, 10), 'Canada/Pacific')).toEqual([
-      Date.UTC(2025, 2, 9, 10),
-      -8 * HOUR_MS,
-      -7 * HOUR_MS,
-    ]);
+    expect(resolved.instant).toBe(first);
+    expect(resolved.info.offsetMs).toBe(3 * HOUR_MS);
   });
+});
 
-  it('should return winter DST in Canada/Pacific', () => {
-    expect(findDSTOfDay(Date.UTC(2025, 10, 2), 'Canada/Pacific')).toEqual([
-      Date.UTC(2025, 10, 2, 2) + 7 * HOUR_MS,
-      -7 * HOUR_MS,
-      -8 * HOUR_MS,
-    ]);
+describe('isCoveredByDaylightPlan', () => {
+  it('covers only the transition day the plan lays out', () => {
+    const plan = buildDaylightPlan(
+      [new Date(2026, 9, 29), new Date(2026, 9, 30)],
+      0,
+      24,
+      HOUR_MS,
+      createTimeZoneCalculator('Africa/Cairo'),
+    );
+
+    expect(isCoveredByDaylightPlan(plan, Date.parse('2026-10-29T20:30:00.000Z'))).toBe(true);
+    expect(isCoveredByDaylightPlan(plan, Date.parse('2026-10-30T10:00:00.000Z'))).toBe(false);
+    expect(isCoveredByDaylightPlan(undefined, Date.parse('2026-10-29T20:30:00.000Z'))).toBe(false);
   });
 });

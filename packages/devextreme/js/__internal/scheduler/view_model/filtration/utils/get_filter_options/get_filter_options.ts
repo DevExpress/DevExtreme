@@ -33,5 +33,7 @@ export const getFilterOptions = (
       getVisibleDateTimeIntervals(compareOptions, false),
       viewOffset,
     ),
+    daylightPlan: schedulerStore.getWorkSpace()
+      .viewDataProvider?.viewDataGenerator.getDaylightPlan(),
   };
 };

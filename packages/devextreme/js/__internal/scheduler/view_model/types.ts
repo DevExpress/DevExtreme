@@ -2,6 +2,7 @@ import type { Orientation } from '@js/common';
 
 import type { AllDayPanelModeType, SafeAppointment } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
+import type { DaylightPlan } from '../utils/daylight_grid';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { GroupLeaf } from '../utils/resource_manager/types';
 import type {
@@ -49,6 +50,8 @@ export interface FilterOptions {
   firstDayOfWeek?: number;
   allDayIntervals: DateInterval[];
   regularIntervals: DateInterval[];
+  /** Set when the visible view already lays out this transition. */
+  daylightPlan?: DaylightPlan;
 }
 
 export interface SortedIndex {
