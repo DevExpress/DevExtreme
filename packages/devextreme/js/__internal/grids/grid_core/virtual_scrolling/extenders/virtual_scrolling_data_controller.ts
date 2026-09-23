@@ -535,7 +535,6 @@ export const virtualScrollingDataControllerExtender = (
       return this.getRowIndexOffset(true, true);
     }
 
-    // @ts-expect-error changeType can be 'append' only when virtual scrolling with scrolling.legacyMode are enabled
     const lastVisibleItem = change.changeType === 'append' && this._items.length > 0
       ? this._items.at(-1)
       : null;
