@@ -1,13 +1,3 @@
-/*
- * What paints a glyph that comes in as a mask. `currentColor` follows the cascade, so the icon
- * takes the colour the mode scope, the state or the host has already resolved - which is the whole
- * reason the artwork stopped carrying one.
- *
- * Forced colours are the exception that has to be spelled out. They replace `background-color` with
- * the palette's Canvas, and Canvas is what the icon sits on, so the mask would paint nothing at
- * all; a baked image, not being a colour, used to survive that. The replacement happens after
- * `currentColor` resolves, so the palette's text colour has to be named outright.
- */
 @mixin masked-glyph-paint($color: currentColor) {
   background-color: $color;
 

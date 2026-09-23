@@ -1,30 +1,8 @@
-/*
- * A `url(data:…)` reads no custom property, so whatever colour is substituted into an svg at build
- * time is frozen in the image. A mode class switches custom properties and nothing else, which
- * leaves a baked icon showing the colours of the bundle it came from: light glyphs stay light
- * inside a `.dx-theme-mode-dark` island of the light bundle, and the other way round in the dark
- * one. Nothing in the source says which icons still carry a colour — only the built bundles do.
- *
- * The gate is the comparison that answers it: every data uri in the light bundle must appear, at
- * the same selector and the same property, in its dark counterpart. Masks and images whose colours
- * are the same in both modes pass by construction; a colour that follows the mode cannot.
- *
- * MODE_DEPENDENT is the escape hatch and is empty on purpose. An entry is a claim that one icon
- * cannot be expressed without a per-mode image AND that its rules are emitted inside the mode
- * scopes instead — the reason belongs next to it, and `scss/widgets/fluent-next/DIVERGENCES.md`
- * carries the long form. Adding one is a decision, not a regeneration.
- *
- * The bundles come from packages/devextreme/artifacts/css — the `test` target depends on
- * `build:themes`, so they are fresh here, and a missing bundle fails loudly rather than passing on
- * an empty scan.
- */
-
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 
 const artifactsCss = join(process.cwd(), '..', 'devextreme', 'artifacts', 'css');
 
-/** Selectors whose image is allowed to differ between the modes, with the reason it has to. */
 const MODE_DEPENDENT: { selector: string; property: string; reason: string }[] = [];
 
 interface Decl {
@@ -33,10 +11,6 @@ interface Decl {
   uri: string;
 }
 
-/*
- * A regex over the whole declaration would stop at the first `)` and svg attributes such as
- * `transform="matrix(…)"` are not encoded, so the uri is read from `url("` to the closing `")`.
- */
 function dataUris(css: string): Decl[] {
   const found: Decl[] = [];
   let cursor = 0;

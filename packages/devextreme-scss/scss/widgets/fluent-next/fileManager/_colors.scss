@@ -19,13 +19,6 @@ $file-manager-file-item-border-focused: ds.$color-border-primary !default;
 $file-manager-item-content-focused: ds.$color-content-inverted !default;
 $file-manager-dirs-tree-item-bg-focused: ds.$color-bg-active !default;
 
-/*
- * The status disc keeps its colours inside the data-uri, where a var() does not resolve: these two
- * are the same value in both modes, so an image carrying them answers for both. The glyph on the
- * disc takes the static content colour rather than the inverted one - the disc is a fixed green or
- * red in either mode, so what sits on it does not flip either, and the contrast against it is the
- * better for it. See DIVERGENCES.md.
- */
 $file-manager-icon-success-content: #107c10 !default; // dx-data-uri-static: ds.$color-bg-success (mode-invariant)
 $file-manager-icon-danger-content: #c50f1f !default; // dx-data-uri-static: ds.$color-bg-danger (mode-invariant)
 $file-manager-icon-inverted-content: #fff !default; // dx-data-uri-static: ds.$color-content-static-dark (mode-invariant)

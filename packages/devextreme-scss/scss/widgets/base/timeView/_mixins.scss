@@ -12,22 +12,6 @@
   background-image: string.unquote($uri);
 }
 
-/*
- * The colours in these files are substituted at build time, so a dial or a hand is a different
- * image in every mode and keeps the colours of its bundle inside a `dx-theme-mode-*` island. The
- * same files carry no colour at all once they are masks: what should paint becomes white, what
- * should stay open becomes black, `mask-mode: luminance` reads that back as coverage, and the paint
- * comes from the mode scope through `background-color`.
- *
- * Luminance rather than alpha because the dial is painted, not empty: it sits under the digits, so
- * black is what leaves it open for the element below to draw. The drop shadow around it is black at
- * 5% and falls away with it.
- *
- * `$background` is that decision per file: the dial's own drawing is open, the minute hand's pivot
- * is not. The pivot reads as a hole, but the artwork fills it in the dial's colour on purpose - it
- * has to cover the hour hand crossing underneath, which no mask can do - so there it is part of the
- * silhouette and gets its colour back from a pseudo-element.
- */
 @mixin clock-masked-image($data-uri, $background: "%23000") {
   $painted: replace("#{$data-uri}", escape("$accent-color"), "%23fff");
   $digits: replace($painted, escape("$digit-color"), "%23fff");
@@ -50,23 +34,14 @@
     math.div(-$arrow-width, 2),
     calc(#{$arrow-width} / -2)
   ),
-  // The dial is a circle of 85 in the 91 half-width of the artwork, and it casts the one shadow.
-  // Both are only read when the dial is drawn rather than carried by the image.
   $dial-size: null,
   $dial-shadow: null,
-  // The middle of the minute hand's pivot ring, in the artwork's own units: 4 across, its centre 5
-  // above the hand's base. Read only on the masked path, which has to paint it back.
   $pivot-size: 4px,
   $pivot-offset: 5px,
   $masked: false,
 ) {
   .dx-timeview-clock {
     @if $masked {
-      /*
-       * The dial and the digits are two colours the mode decides, and one element paints one of
-       * them: the dial becomes a circle CSS draws, the artwork stays as the digits' mask over it.
-       * Both go to pseudo-elements so that the hands, which are children, keep painting above.
-       */
       min-width: $clock-size;
       min-height: $clock-size;
       max-height: $clock-size;
@@ -96,7 +71,6 @@
         mask-repeat: no-repeat;
         mask-size: 100% 100%;
 
-        /* the digits are the widget's own text: the mask hands them the colour it inherits */
         @include masked-glyph-paint();
       }
     } @else {
@@ -125,7 +99,6 @@
 
       @include masked-glyph-paint($accent-color);
 
-      /* above the dial and the digits: pseudo-elements of the clock paint after this one */
       z-index: 1;
     } @else {
       background-position: bottom;
@@ -148,12 +121,6 @@
     @if $masked {
       @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"), "%23fff");
 
-      /*
-       * The middle of the pivot ring, which the artwork painted in the dial's colour so that the
-       * hour hand crossing underneath does not show through it. The mask keeps that disc opaque and
-       * this puts its colour back: `$pivot-offset` is where the ring's centre sits above the hand's
-       * own base, and the mask is placed at the image's own size, so both are the artwork's.
-       */
       &::after {
         content: "";
         position: absolute;

@@ -11,13 +11,6 @@
   height: $height;
 }
 
-/*
- * A background image cannot read the element's `color`, so the colour is baked into the svg at
- * build time and the same artwork becomes a different image in every colour mode - which is why an
- * icon inside a `dx-theme-mode-*` island keeps the colour of the bundle it came from. The same
- * artwork used as a mask carries only its alpha, so one copy is painted by whatever the cascade
- * already puts on the element.
- */
 @mixin diagram-icon-masked($data-uri, $width, $height) {
   $uri: replace("#{$data-uri}", "currentColor", "%23000");
 
@@ -26,13 +19,6 @@
   height: $height;
 }
 
-/*
- * The two `none` marks put a red slash over the box, and the red comes from the svg's own
- * stylesheet, which outranks the `fill` attribute the colour is substituted into. One mask cannot
- * carry two colours, so the mask keeps the union of both shapes for `currentColor` to fill and the
- * red slash is laid back on top as an image of its own - an image that is the same in every mode,
- * because the red is.
- */
 @mixin diagram-icon-two-tone($data-uri, $width, $height) {
   $shapes: replace("#{$data-uri}", "currentColor", "%23000");
   $mask: replace($shapes, "%23FF0000", "%23000");
@@ -44,12 +30,6 @@
   height: $height;
 }
 
-/*
- * The two colour buttons show the current fill as a `border-bottom`, and a mask clips a border away
- * with everything else it covers. The artwork moves to a pseudo-element of its own, which the mask
- * can have to itself; `inset: 0` gives it the padding box the background image was sized against,
- * so the glyph lands where it always did and the swatch stays on the element.
- */
 @mixin diagram-icon-masked-inset($data-uri, $width, $height) {
   $uri: replace("#{$data-uri}", "currentColor", "%23000");
 

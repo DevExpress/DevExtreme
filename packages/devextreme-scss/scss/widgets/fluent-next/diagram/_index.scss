@@ -489,25 +489,12 @@
   $masked: true,
 );
 
-/*
- * What the mask leaves to the cascade: the paint. `.dx-diagram-i` is the element the toolbar and
- * the menus put the icon class on, so the colour it inherits is the one the mode scope already
- * resolved - the same #161616 / #fff the baked images carried, and the disabled colour where the
- * editor around it is disabled and its own text has been dimmed all along.
- */
 .dx-diagram-i {
   mask-repeat: no-repeat;
 
   @include mask.masked-glyph-paint();
 }
 
-/*
- * The three elements that carry no mask of their own: the panel toggle, which is white over both
- * modes' accent and keeps its baked image, and the two colour buttons, which hand the artwork to a
- * pseudo-element so that their `border-bottom` swatch survives a mask. Paint with nothing to cut it
- * to shape would be a filled rectangle. (The empty selectbox placeholder needs no line here: its
- * mask is the empty drawing, so it cuts everything away.)
- */
 .dx-diagram-i-button-fill,
 .dx-diagram-i-menu-fill,
 .dx-diagram-i-button-properties-panel-open {

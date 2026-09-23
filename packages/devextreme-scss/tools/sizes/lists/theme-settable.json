@@ -6943,7 +6943,7 @@
     },
     {
       "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 46,
+      "line": 30,
       "widget": "timeView",
       "literals": [
         "182px"
@@ -6957,7 +6957,7 @@
     },
     {
       "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 47,
+      "line": 31,
       "widget": "timeView",
       "literals": [
         "10px"
@@ -6971,7 +6971,7 @@
     },
     {
       "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 59,
+      "line": 39,
       "widget": "timeView",
       "literals": [
         "4px"
@@ -6985,7 +6985,7 @@
     },
     {
       "file": "scss/widgets/base/timeView/_mixins.scss",
-      "line": 60,
+      "line": 40,
       "widget": "timeView",
       "literals": [
         "5px"
