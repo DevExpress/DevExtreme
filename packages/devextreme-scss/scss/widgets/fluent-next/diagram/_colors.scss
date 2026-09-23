@@ -34,7 +34,7 @@ $diagram-danger-icon: ds.$color-content-danger !default;
  * flip. The icon has to follow that, not `content-inverted`: inverted would turn the glyph
  * near-black on dark while every other mark on the same button stayed white.
  */
-$diagram-properties-panel-icon: #fff !default; // dx-data-uri-static: ds.$color-content-static-dark (mode-invariant)
+$diagram-properties-panel-icon-bg: ds.$color-content-static-dark !default;
 
 // Canvas = deeper neutral surface
 $diagram-canvas-bg: ds.$color-bg-canvas !default;

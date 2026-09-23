@@ -660,6 +660,7 @@
   "--dx-diagram-popup-title-toolbar-bg",
   "--dx-diagram-popup-title-toolbar-font-size",
   "--dx-diagram-properties-layout-icon-size",
+  "--dx-diagram-properties-panel-icon-bg",
   "--dx-diagram-properties-panel-padding",
   "--dx-diagram-properties-panel-spacing",
   "--dx-diagram-selection-bg",

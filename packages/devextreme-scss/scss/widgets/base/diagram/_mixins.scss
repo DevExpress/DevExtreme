@@ -20,8 +20,7 @@
 }
 
 @mixin diagram-icon-two-tone($data-uri, $width, $height) {
-  $shapes: replace("#{$data-uri}", "currentColor", "%23000");
-  $mask: replace($shapes, "%23FF0000", "%23000");
+  $mask: replace("#{$data-uri}", "currentColor", "%23000");
   $overlay: replace("#{$data-uri}", "currentColor", "transparent");
 
   mask-image: string.unquote($mask);
@@ -36,6 +35,7 @@
   position: relative;
   width: $width;
   height: $height;
+  background-color: transparent;
 
   &::before {
     content: "";
@@ -58,6 +58,14 @@
 
 @mixin diagram-action-icons-mixin($toolbar-color, $menu-color, $icon-size, $toolbar-colorbutton-border-width, $masked: false) {
   $diagram-wide-icon-size: if(meta.type-of($icon-size) == number, 1.56 * $icon-size, calc(1.56 * #{$icon-size}));
+
+  @if $masked {
+    .dx-diagram-i {
+      mask-repeat: no-repeat;
+
+      @include masked-glyph-paint();
+    }
+  }
 
   .dx-diagram-i-selectbox-null-icon {
     @include diagram-icon(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/selectbox-null-icon.svg"), $toolbar-color, $diagram-wide-icon-size, $icon-size, $masked);
