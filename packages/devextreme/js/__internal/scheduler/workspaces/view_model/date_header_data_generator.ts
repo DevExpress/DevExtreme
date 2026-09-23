@@ -212,7 +212,11 @@ export class DateHeaderDataGenerator {
         ...restProps
       } = cellData;
 
-      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
+      // A vertical daylight column is already dated on its own day. Undoing the
+      // offset across a fall-back moves Sunday onto Saturday.
+      const shiftedStartDate = plan && !isTimelineView(viewType)
+        ? startDate
+        : timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
       const shiftedStartDateForHeaderText = shouldShiftDatesForHeaderText
         ? shiftedStartDate
         : startDate;

@@ -22,10 +22,14 @@ export const getAppointmentX = (
 ): X => {
   const start = entity.layoutStartMs ?? entity.startDateUTC;
   const end = entity.layoutEndMs ?? entity.endDateUTC;
-  const startX = getInsideCellX(start, cells[entity.cellIndex], cellSize.sizeX);
-  const endX = getInsideCellX(end, cells[entity.endCellIndex], cellSize.sizeX);
-  const offsetX = entity.columnIndex * cellSize.sizeX + startX;
-  const sizeX = (entity.endCellIndex - entity.cellIndex) * cellSize.sizeX + endX - startX;
+  const startCell = cells[entity.cellIndex];
+  const endCell = cells[entity.endCellIndex];
+  const startX = getInsideCellX(start, startCell, cellSize.sizeX);
+  const endX = getInsideCellX(end, endCell, cellSize.sizeX);
+  // The spring-forward hole is a row with no cell, so the slot span is wider
+  // than the number of real cells and the bar has to reach the end label.
+  const offsetX = startCell.columnIndex * cellSize.sizeX + startX;
+  const sizeX = (endCell.columnIndex - startCell.columnIndex) * cellSize.sizeX + endX - startX;
 
   return { offsetX, sizeX };
 };
