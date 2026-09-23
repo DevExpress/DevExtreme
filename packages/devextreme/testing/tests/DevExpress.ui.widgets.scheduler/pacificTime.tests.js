@@ -500,11 +500,11 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             top: 76,
         }, {
             view: 'timelineDay',
-            left: 400,
+            left: 0,
             top: 30,
         }, {
             view: 'timelineWeek',
-            left: 400,
+            left: 0,
             top: 30,
         }].forEach(({ view, left, top }) => {
             test(`Appointments should be rendered corrrectly when startViewDate is during DST change in ${view}`, async function(assert) {
