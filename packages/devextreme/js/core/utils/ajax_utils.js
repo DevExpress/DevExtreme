@@ -1,6 +1,7 @@
 // deprecated
 export {
     isCrossDomain,
+    isFormData,
     getJsonpCallbackName,
     getRequestHeaders,
     getRequestOptions,
