@@ -132,19 +132,19 @@
       "name": "--dx-viz-red",
       "role": "color-bg-red",
       "declaredPerMode": false,
-      "paints": "the second series colour, the falling half of an indicating set, the falling bar of a candlestick or a stock series, and the highest point of a sparkline"
+      "paints": "the second series colour, the falling bar of a candlestick or a stock series, and the highest point of a sparkline"
     },
     {
       "name": "--dx-viz-green",
       "role": "color-bg-green",
       "declaredPerMode": false,
-      "paints": "the third series colour, the rising half of an indicating set, and the far end of the gradient set"
+      "paints": "the third series colour and the far end of the gradient set"
     },
     {
       "name": "--dx-viz-yellow",
       "role": "color-bg-yellow",
       "declaredPerMode": false,
-      "paints": "the fourth series colour, the middle of an indicating set, and the lowest point of a sparkline"
+      "paints": "the fourth series colour and the lowest point of a sparkline"
     },
     {
       "name": "--dx-viz-orange",
@@ -163,6 +163,24 @@
       "role": "color-bg-purple",
       "declaredPerMode": false,
       "paints": "the sixth series colour"
+    },
+    {
+      "name": "--dx-viz-success",
+      "role": "color-bg-success",
+      "declaredPerMode": false,
+      "paints": "the good end of an indicating set: the first range of a gauge range container"
+    },
+    {
+      "name": "--dx-viz-warning",
+      "role": "color-bg-warning",
+      "declaredPerMode": false,
+      "paints": "the middle of an indicating set"
+    },
+    {
+      "name": "--dx-viz-danger",
+      "role": "color-bg-danger",
+      "declaredPerMode": false,
+      "paints": "the bad end of an indicating set, and the slider marker of a range selector while the range being dragged is not allowed"
     },
     {
       "name": "--dx-viz-primary",

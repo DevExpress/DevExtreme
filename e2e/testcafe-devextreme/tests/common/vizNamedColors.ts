@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createWidget } from '../../helpers/createWidget';
+import { dragWithDisabledMouseUp } from '../../helpers/mouseUpEvents';
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/testPageUtils';
 import { getThemeName, testScreenshot } from '../../helpers/themeUtils';
@@ -76,6 +77,23 @@ if (getThemeName() === 'fluent-next') {
         <div style="padding-bottom: 6px">${mode} scope</div>
         <div id="${mode}" style="width: ${width}px; height: ${height}px"></div>
       </div>`).join('');
+  });
+
+  const drawScope = ClientFunction((mode: string, width: number, height: number) => {
+    const container = document.querySelector('#container') as HTMLElement;
+
+    container.style.display = 'flex';
+    container.style.width = 'max-content';
+    container.innerHTML = `
+      <div class="dx-theme-mode-${mode}" style="
+        background: var(--dx-viz-bg);
+        color: var(--dx-viz-content);
+        font: 12px 'Segoe UI', sans-serif;
+        padding: 8px;
+      ">
+        <div style="padding-bottom: 6px">${mode} scope</div>
+        <div id="${mode}" style="width: ${width}px; height: ${height}px"></div>
+      </div>`;
   });
 
   const inBothScopes = async (
@@ -178,6 +196,25 @@ if (getThemeName() === 'fluent-next') {
     await shoot(t, 'Viz bar gauge shelf');
   });
 
+  test('a gauge range container takes the published indicating set', async (t) => {
+    await inBothScopes('dxCircularGauge', {
+      scale: { startValue: 0, endValue: 100, label: { visible: false } },
+      value: 62,
+      rangeContainer: {
+        width: 14,
+        ranges: [
+          { startValue: 0, endValue: 40 },
+          { startValue: 40, endValue: 70 },
+          { startValue: 70, endValue: 100 },
+        ],
+      },
+      animation: { enabled: false },
+      tooltip: { enabled: false },
+    }, { width: 240, height: 150 });
+
+    await shoot(t, 'Viz gauge indicating set');
+  });
+
   test('a tree map tile with no palette colour takes the published cyan', async (t) => {
     await inBothScopes('dxTreeMap', {
       dataSource: TILE_DATA,
@@ -241,6 +278,23 @@ if (getThemeName() === 'fluent-next') {
     }, { width: 240, height: 150 });
 
     await shoot(t, 'Viz gauge indicators');
+  });
+
+  ['light', 'dark'].forEach((mode) => {
+    test(`a range that is not allowed marks the slider with the published danger: ${mode}`, async (t) => {
+      await drawScope(mode, 400, 90);
+      await createWidget('dxRangeSelector', {
+        scale: {
+          startValue: 0, endValue: 100, tickInterval: 25, minRange: 30,
+        },
+        value: [20, 70],
+        animation: { enabled: false },
+      }, `#${mode}`);
+
+      await dragWithDisabledMouseUp(t, Selector('#container .slider-tracker'), { offsetX: 130, offsetY: 0 });
+
+      await shoot(t, `Viz range selector invalid ${mode}`);
+    });
   });
 
   test('the hairline between tree map tiles stays the same colour in both scopes', async (t) => {

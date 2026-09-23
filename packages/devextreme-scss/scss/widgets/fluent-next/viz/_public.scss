@@ -3,6 +3,7 @@
 
 @mixin publish {
   --dx-viz-blue: #{$viz-blue};
+  --dx-viz-danger: #{$viz-danger};
   --dx-viz-gray: #{$viz-gray};
   --dx-viz-green: #{$viz-green};
   --dx-viz-orange: #{$viz-orange};
@@ -10,6 +11,8 @@
   --dx-viz-primary: #{$viz-primary};
   --dx-viz-purple: #{$viz-purple};
   --dx-viz-red: #{$viz-red};
+  --dx-viz-success: #{$viz-success};
   --dx-viz-tile-border: #{$viz-tile-border};
+  --dx-viz-warning: #{$viz-warning};
   --dx-viz-yellow: #{$viz-yellow};
 }

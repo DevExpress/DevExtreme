@@ -2333,6 +2333,7 @@
   "--dx-viz-content-orange",
   "--dx-viz-content-subtle",
   "--dx-viz-cyan-subtle",
+  "--dx-viz-danger",
   "--dx-viz-font-family",
   "--dx-viz-gray",
   "--dx-viz-gray-subtle",
@@ -2347,9 +2348,11 @@
   "--dx-viz-purple-subtle",
   "--dx-viz-red",
   "--dx-viz-red-subtle",
+  "--dx-viz-success",
   "--dx-viz-tile-border",
   "--dx-viz-tooltip-bg",
   "--dx-viz-tooltip-content",
+  "--dx-viz-warning",
   "--dx-viz-yellow",
   "--dx-widget-bg"
 ]

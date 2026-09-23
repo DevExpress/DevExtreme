@@ -23,6 +23,8 @@ const VIZ_FONT_FAMILY = '--dx-viz-font-family';
 
 const VIZ_PRIMARY = '--dx-viz-primary';
 
+const VIZ_DANGER = '--dx-viz-danger';
+
 const VIZ_BLUE = '--dx-viz-blue';
 const VIZ_GRAY = '--dx-viz-gray';
 const VIZ_ORANGE = '--dx-viz-orange';
@@ -54,6 +56,8 @@ const LIGHT = {
   [VIZ_FONT_FAMILY]: FONT_FAMILY,
 
   [VIZ_PRIMARY]: '#0f6cbd',
+
+  [VIZ_DANGER]: '#c50f1f',
 
   [VIZ_BLUE]: '#0078d4',
   [VIZ_GRAY]: '#757575',
@@ -268,6 +272,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
         font: {
           color: paint(VIZ_BG),
         },
+        invalidRangeColor: paint(VIZ_DANGER),
       },
       sliderHandle: {
         color: paint(VIZ_PRIMARY),

@@ -19,7 +19,7 @@ const { getTheme } = publicThemes as unknown as { getTheme: (name: string) => Th
 const LITERALS = 'fluent next literals';
 const LITERAL_PALETTE = {
   simpleSet: ['#0078d4', '#c83d3d', '#008f04', '#eaa300', '#e43ba6', '#865cbf'],
-  indicatingSet: ['#008f04', '#eaa300', '#c83d3d'],
+  indicatingSet: ['#107c10', '#f7630c', '#c50f1f'],
   gradientSet: ['#0078d4', '#008f04'],
   accentColor: '#0f6cbd',
 };

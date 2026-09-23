@@ -362,8 +362,11 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
 
 const PUBLISHED_FONT = 'var(--dx-viz-font-family, \'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif)';
 const PUBLISHED_BLUE = 'var(--dx-viz-blue, #0078d4)';
+const PUBLISHED_DANGER = 'var(--dx-viz-danger, #c50f1f)';
 const PUBLISHED_GRAY = 'var(--dx-viz-gray, #757575)';
 const PUBLISHED_ORANGE = 'var(--dx-viz-orange, #f7630c)';
+const PUBLISHED_SUCCESS = 'var(--dx-viz-success, #107c10)';
+const PUBLISHED_WARNING = 'var(--dx-viz-warning, #f7630c)';
 const PUBLISHED_TILE_BORDER = 'var(--dx-viz-tile-border, #ffffff)';
 const PUBLISHED_GREEN = 'var(--dx-viz-green, #008f04)';
 const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
@@ -457,13 +460,13 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
 
         assert.deepEqual(simpleSet, [
             PUBLISHED_BLUE,
-            'var(--dx-viz-red, #c83d3d)',
+            PUBLISHED_RED,
             PUBLISHED_GREEN,
-            'var(--dx-viz-yellow, #eaa300)',
+            PUBLISHED_YELLOW,
             'var(--dx-viz-pink, #e43ba6)',
             'var(--dx-viz-purple, #865cbf)',
         ], 'simpleSet');
-        assert.deepEqual(indicatingSet, [PUBLISHED_GREEN, 'var(--dx-viz-yellow, #eaa300)', 'var(--dx-viz-red, #c83d3d)'], 'indicatingSet');
+        assert.deepEqual(indicatingSet, [PUBLISHED_SUCCESS, PUBLISHED_WARNING, PUBLISHED_DANGER], 'indicatingSet');
         assert.deepEqual([gradientSet.getColor(0), gradientSet.getColor(1)], [
             `color-mix(in srgb, ${PUBLISHED_BLUE} 100%, ${PUBLISHED_GREEN})`,
             `color-mix(in srgb, ${PUBLISHED_BLUE} 0%, ${PUBLISHED_GREEN})`,
@@ -476,6 +479,12 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         assert.strictEqual(registeredTheme.rangeSelector.selectedRangeColor, PUBLISHED_PRIMARY, 'rangeSelector selected range');
         assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.color, PUBLISHED_PRIMARY, 'rangeSelector slider marker');
         assert.strictEqual(registeredTheme.rangeSelector.sliderHandle.color, PUBLISHED_PRIMARY, 'rangeSelector slider handle');
+    });
+
+    QUnit.test(`fluent-next theme should mark a range that is not allowed with the published danger: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.invalidRangeColor, PUBLISHED_DANGER, 'rangeSelector invalid range');
     });
 
     QUnit.test(`fluent-next theme should paint the shapes that are data with the published blue: ${theme}`, function(assert) {
