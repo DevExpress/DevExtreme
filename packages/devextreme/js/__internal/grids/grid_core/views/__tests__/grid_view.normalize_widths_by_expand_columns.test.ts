@@ -7,7 +7,7 @@ type ColumnWidth = number | string | undefined;
 
 // NOTE: the method is private, so it is picked from the prototype to be tested in isolation.
 const resizingControllerPrototype = ResizingController.prototype as unknown as {
-  _normalizeWidthsByExpandColumns: (
+  normalizeWidthsByExpandColumns: (
     resultWidths: ColumnWidth[],
     visibleColumns: Column[],
   ) => void;
@@ -17,7 +17,7 @@ const normalizeWidthsByExpandColumns = (
   resultWidths: ColumnWidth[],
   visibleColumns: Column[],
 ): ColumnWidth[] => {
-  resizingControllerPrototype._normalizeWidthsByExpandColumns(resultWidths, visibleColumns);
+  resizingControllerPrototype.normalizeWidthsByExpandColumns(resultWidths, visibleColumns);
 
   return resultWidths;
 };
@@ -25,7 +25,7 @@ const normalizeWidthsByExpandColumns = (
 const expandColumn = (): Column => ({ type: 'groupExpand', command: 'expand' } as Column);
 const dataColumn = (dataField: string): Column => ({ dataField } as Column);
 
-describe('ResizingController._normalizeWidthsByExpandColumns', () => {
+describe('ResizingController.normalizeWidthsByExpandColumns', () => {
   it('leaves the widths as is when there are no expand columns', () => {
     const columns = [dataColumn('a'), dataColumn('b')];
 

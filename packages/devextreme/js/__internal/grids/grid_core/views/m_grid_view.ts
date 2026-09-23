@@ -368,7 +368,7 @@ export class ResizingController extends modules.ViewController {
     }
   }
 
-  private _enableTemporaryBestFitMode(): () => void {
+  private enableTemporaryBestFitMode(): () => void {
     const $element = this.component.$element();
     const focusedElement = domAdapter.getActiveElement($element.get(0) as HTMLElement | null);
     const selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
@@ -388,7 +388,7 @@ export class ResizingController extends modules.ViewController {
     };
   }
 
-  private _synchronizeColumns(): void {
+  private synchronizeColumns(): void {
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
     const columnAutoWidth = this.option('columnAutoWidth') as boolean;
@@ -398,7 +398,7 @@ export class ResizingController extends modules.ViewController {
 
     this._toggleContentMinHeight(this._hasHeight); // T1047239, T1270354
     this._setVisibleWidths(visibleColumns, []);
-    const restoreAfterBestFitMode = needBestFit && this._enableTemporaryBestFitMode();
+    const restoreAfterBestFitMode = needBestFit && this.enableTemporaryBestFitMode();
     this._clearMaxWidth();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -432,7 +432,7 @@ export class ResizingController extends modules.ViewController {
       const isColumnWidthsCorrected = this._correctColumnWidths(resultWidths, visibleColumns);
 
       if (columnAutoWidth) {
-        this._normalizeWidthsByExpandColumns(resultWidths, visibleColumns);
+        this.normalizeWidthsByExpandColumns(resultWidths, visibleColumns);
         if (this._needStretch()) {
           this._processStretch(resultWidths, visibleColumns);
         }
@@ -470,7 +470,7 @@ export class ResizingController extends modules.ViewController {
     return freeWidth / columnCountWithoutWidth;
   }
 
-  private _normalizeWidthsByExpandColumns(
+  private normalizeWidthsByExpandColumns(
     resultWidths: ColumnWidth[],
     visibleColumns: Column[],
   ): void {
@@ -733,7 +733,7 @@ export class ResizingController extends modules.ViewController {
     when(prevResult).always(() => {
       deferRender(() => {
         if (that._dataController.isLoaded()) {
-          that._synchronizeColumns();
+          that.synchronizeColumns();
         }
         // IE11
         that._resetGroupElementHeight();
