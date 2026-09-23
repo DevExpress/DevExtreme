@@ -42,8 +42,13 @@ The widget's `Properties` type (alias of `dx<Widget>Options`) is the source of t
    (`Component as BaseComponent`, `IHtmlOptions`, `ComponentRef`, and `NestedOption`/
    `NestedComponentMeta` if there are nested options), and `type` imports of the event types.
 2. **`ReplaceFieldTypes`** helper (copied verbatim).
-3. **`I<Name>OptionsNarrowedEvents`** — one field per `onX` event, typed
-   `((e: XEvent) => void)`, so the wrapper exposes the concrete event type.
+3. **`I<Name>OptionsNarrowedEvents`**: one field per **independent** event (see
+   `independentEvents` below) whose JSDoc names an exported event type
+   (`@type_function_param1 e:{ui/button:ClickEvent}`). The field is typed
+   `((e: XEvent) => void)`, so the wrapper exposes the concrete event type. Not every `onX`
+   is narrowed: `onOptionChanged` never is, and neither is an event with
+   `@type_function_param1 e:object`. If nothing is narrowed, `ReplaceFieldTypes` and this
+   type are left out. See template README §3.
 4. **`I<Name>Options`** — `React.PropsWithChildren<ReplaceFieldTypes<Properties,
    I<Name>OptionsNarrowedEvents> & IHtmlOptions & { render?...; component?... }>` (template
    props included only if the widget has a `template`).
@@ -51,7 +56,9 @@ The widget's `Properties` type (alias of `dx<Widget>Options`) is the source of t
 6. **Component** — `memo(forwardRef((props, ref) => { … }))`. Inside:
    - `useImperativeHandle` returning `{ instance() { return baseRef.current?.getInstance(); } }`;
    - `useMemo` arrays describing widget behavior, each derived from the API:
-     - `independentEvents` — the list of every `onX` event name;
+     - `independentEvents`: every `onX` event name **except** names containing `Changed`
+       without `Value`. So `onValueChanged` is included, but `onOptionChanged` and
+       `onSelectionChanged` are not. See template README §2.
      - `subscribableOptions` / `defaults` — for two-way–bindable options (`defaultX` maps to `x`);
      - `expectedChildren` — nested option components (`{ optionName, isCollectionItem }`);
      - `templateProps` — `{ tmplOption, render, component }` per `template` option;
@@ -79,8 +86,9 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 
 - **Option added** → it flows in through `Properties`; add it to `subscribableOptions`/
   `defaults` only if it is two-way bindable, and to `templateProps` if it is a template.
-- **Event added/removed/renamed** → update `I<Name>OptionsNarrowedEvents` and the
-  `independentEvents` array.
+- **Event added/removed/renamed**: update the `independentEvents` array if the event
+  qualifies (README §2). Update `I<Name>OptionsNarrowedEvents` only if it is also narrowed
+  (README §3).
 - **Nested option added/changed** → add/update the `_component*` + `Object.assign` export and
   the owner's `expectedChildren` entry.
 - **Type change** → the concrete event/enum type imports must be updated to match.
