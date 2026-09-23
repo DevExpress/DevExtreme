@@ -480,6 +480,15 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         assert.strictEqual(registeredTheme.sparkline.firstLastColor, PUBLISHED_BLUE, 'sparkline first and last point');
     });
 
+    QUnit.test(`fluent-next theme should paint a falling value with the published red: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.chart.commonSeriesSettings.candlestick.reduction.color, PUBLISHED_RED, 'candlestick reduction');
+        assert.strictEqual(registeredTheme.chart.commonSeriesSettings.stock.reduction.color, PUBLISHED_RED, 'stock reduction');
+        assert.strictEqual(registeredTheme.rangeSelector.chart.commonSeriesSettings.candlestick.reduction.color, PUBLISHED_RED, 'rangeSelector candlestick reduction');
+        assert.strictEqual(registeredTheme.rangeSelector.chart.commonSeriesSettings.stock.reduction.color, PUBLISHED_RED, 'rangeSelector stock reduction');
+    });
+
     QUnit.test(`fluent-next theme should mark the extremes of a sparkline with the published yellow and red: ${theme}`, function(assert) {
         const registeredTheme = getRegisteredTheme(theme);
 

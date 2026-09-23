@@ -152,6 +152,18 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
           color: paint(VIZ_BORDER),
         },
       },
+      commonSeriesSettings: {
+        candlestick: {
+          reduction: {
+            color: paint(VIZ_RED),
+          },
+        },
+        stock: {
+          reduction: {
+            color: paint(VIZ_RED),
+          },
+        },
+      },
       scrollBar: {
         color: paint(VIZ_BORDER),
       },

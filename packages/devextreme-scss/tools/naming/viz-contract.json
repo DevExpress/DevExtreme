@@ -84,7 +84,7 @@
       "name": "--dx-viz-red",
       "role": "color-bg-red",
       "declaredPerMode": false,
-      "paints": "the second series colour, the falling half of an indicating set, and the highest point of a sparkline"
+      "paints": "the second series colour, the falling half of an indicating set, the falling bar of a candlestick or a stock series, and the highest point of a sparkline"
     },
     {
       "name": "--dx-viz-green",

@@ -13,6 +13,31 @@ if (getThemeName() === 'fluent-next') {
   const SPARKLINE_DATA = [5.1, 6.8, 4.2, 7.6, 5.5, 3.1, 6.2, 4.8, 8.4, 5.9]
     .map((val, index) => ({ arg: String(index + 1), val }));
 
+  const CANDLE_DATA = [
+    {
+      arg: 1, open: 5, high: 7.2, low: 4.4, close: 6.6,
+    },
+    {
+      arg: 2, open: 6.6, high: 7, low: 4.8, close: 5.1,
+    },
+    {
+      arg: 3, open: 5.1, high: 6.4, low: 4.6, close: 6.2,
+    },
+    {
+      arg: 4, open: 6.2, high: 6.8, low: 4.2, close: 4.5,
+    },
+    {
+      arg: 5, open: 4.5, high: 6.6, low: 4.1, close: 6.3,
+    },
+  ];
+
+  const HIDDEN_AXIS = {
+    visible: false,
+    grid: { visible: false },
+    tick: { visible: false },
+    label: { visible: false },
+  };
+
   const drawScopes = ClientFunction((width: number, height: number) => {
     const container = document.querySelector('#container') as HTMLElement;
 
@@ -32,7 +57,7 @@ if (getThemeName() === 'fluent-next') {
   });
 
   const inBothScopes = async (
-    widget: 'dxSparkline' | 'dxSankey',
+    widget: 'dxSparkline' | 'dxChart' | 'dxSankey',
     options: unknown,
     size: { width: number; height: number },
   ): Promise<void> => {
@@ -81,6 +106,27 @@ if (getThemeName() === 'fluent-next') {
     }, { width: 240, height: 60 });
 
     await shoot(t, 'Viz sparkline winloss');
+  });
+
+  test('a falling candlestick takes the published red', async (t) => {
+    await inBothScopes('dxChart', {
+      dataSource: CANDLE_DATA,
+      series: [{
+        type: 'candlestick',
+        argumentField: 'arg',
+        openValueField: 'open',
+        highValueField: 'high',
+        lowValueField: 'low',
+        closeValueField: 'close',
+      }],
+      legend: { visible: false },
+      animation: { enabled: false },
+      argumentAxis: HIDDEN_AXIS,
+      valueAxis: HIDDEN_AXIS,
+      tooltip: { enabled: false },
+    }, { width: 240, height: 140 });
+
+    await shoot(t, 'Viz candlestick reduction');
   });
 
   test('a sankey link takes the published grey', async (t) => {
