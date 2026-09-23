@@ -38,12 +38,7 @@ const getUnreachableShiftRecurrence = (
 const getUnreachableShift = (
   startDateInfo: DateInformation,
   endDateInfo: DateInformation,
-  coveredByPlan: boolean,
 ): number[] => {
-  if (coveredByPlan) {
-    return noShift();
-  }
-
   switch (true) {
     case startDateInfo.isUnreachableTime && endDateInfo.isUnreachableTime:
       return [startDateInfo.deltaMs, startDateInfo.deltaMs];
@@ -75,12 +70,9 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
   if (!appointment.hasRecurrenceRule) {
     const startDateInfo = getDateInformation(startDateMsBase, timeZone);
     const endDateInfo = getDateInformation(endDateMsBase, timeZone);
-    const covered = isCoveredByDaylightPlan(daylightPlan, startDateMsBase)
-      || isCoveredByDaylightPlan(daylightPlan, endDateMsBase);
     const [startDateFix, endDateFix] = getUnreachableShift(
       startDateInfo,
       endDateInfo,
-      covered,
     );
 
     return [{

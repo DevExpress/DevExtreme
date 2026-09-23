@@ -366,7 +366,7 @@ describe('repeated hour and a visible DST plan', () => {
     expect(occurrence.source.startDate).toBe(Date.parse('2026-10-29T20:00:00.000Z'));
   });
 
-  it('does not add the unreachable-hour shift when the plan already lays that day out', () => {
+  it('keeps the real wall time when the plan already lays that day out', () => {
     const startDate = Date.UTC(2025, 2, 9, 10, 30);
     const endDate = Date.UTC(2025, 2, 9, 11, 30);
     const appointment: any = { source: { startDate, endDate } };
@@ -387,7 +387,8 @@ describe('repeated hour and a visible DST plan', () => {
       daylightPlan: plan,
     })[0];
 
-    expect(withPlan.startDateUTC - withoutPlan.startDateUTC).toBe(-HOUR_MS);
+    expect(withPlan.startDateUTC).toBe(withoutPlan.startDateUTC);
+    expect(withPlan.endDateUTC).toBe(withoutPlan.endDateUTC);
   });
 
   it('keeps a one-hour span when a daily occurrence starts in the skipped hour', () => {
