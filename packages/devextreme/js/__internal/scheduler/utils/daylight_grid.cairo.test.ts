@@ -181,7 +181,7 @@ describe('getStretchShiftMs', () => {
   it('keeps a wall clock that the spring-forward skips at the jump', () => {
     const plan = planOf(visibleDayOrigins(new Date(2026, 3, 24), 1, [], 0));
 
-    expect(getStretchShiftMs(plan, toWallMs(new Date(2026, 3, 24, 0, 30)))).toBe(-30 * MINUTE_MS);
+    expect(getStretchShiftMs(plan, Date.UTC(2026, 3, 24, 0, 30))).toBe(-30 * MINUTE_MS);
   });
 
   it('separates the two passes over a repeated hour by their source instant', () => {
