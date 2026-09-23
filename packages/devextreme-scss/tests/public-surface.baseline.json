@@ -2339,6 +2339,7 @@
   "--dx-viz-primary",
   "--dx-viz-purple",
   "--dx-viz-red",
+  "--dx-viz-tile-border",
   "--dx-viz-tooltip-bg",
   "--dx-viz-tooltip-content",
   "--dx-viz-yellow",

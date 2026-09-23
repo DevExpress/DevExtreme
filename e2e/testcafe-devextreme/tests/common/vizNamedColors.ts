@@ -31,6 +31,11 @@ if (getThemeName() === 'fluent-next') {
     },
   ];
 
+  const TILE_DATA = [
+    { name: 'a', value: 9 }, { name: 'b', value: 5 }, { name: 'c', value: 4 },
+    { name: 'd', value: 3 }, { name: 'e', value: 2 }, { name: 'f', value: 2 },
+  ];
+
   const HIDDEN_AXIS = {
     visible: false,
     grid: { visible: false },
@@ -57,7 +62,7 @@ if (getThemeName() === 'fluent-next') {
   });
 
   const inBothScopes = async (
-    widget: 'dxSparkline' | 'dxBullet' | 'dxChart' | 'dxSankey',
+    widget: 'dxSparkline' | 'dxBullet' | 'dxChart' | 'dxTreeMap' | 'dxSankey',
     options: unknown,
     size: { width: number; height: number },
   ): Promise<void> => {
@@ -153,5 +158,18 @@ if (getThemeName() === 'fluent-next') {
     }, { width: 240, height: 130 });
 
     await shoot(t, 'Viz sankey link');
+  });
+
+  test('the hairline between tree map tiles stays the same colour in both scopes', async (t) => {
+    await inBothScopes('dxTreeMap', {
+      dataSource: TILE_DATA,
+      valueField: 'value',
+      colorizer: { type: 'gradient', range: [0, 9] },
+      tile: { label: { visible: false } },
+      interactWithGroup: false,
+      tooltip: { enabled: false },
+    }, { width: 240, height: 120 });
+
+    await shoot(t, 'Viz tree map tile border');
   });
 }

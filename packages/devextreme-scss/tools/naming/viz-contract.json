@@ -69,6 +69,12 @@
       "paints": "the grid: major and minor grid lines, legend border, tree map group border"
     },
     {
+      "name": "--dx-viz-tile-border",
+      "role": "color-content-static-dark",
+      "declaredPerMode": false,
+      "paints": "the hairline that separates two tree map tiles. It is drawn on top of the tiles, not on the surface, so it does not follow the mode: the tile under it is a palette colour in both"
+    },
+    {
       "name": "--dx-viz-blue",
       "role": "color-bg-blue",
       "declaredPerMode": false,

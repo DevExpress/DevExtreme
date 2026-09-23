@@ -363,6 +363,7 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
 const PUBLISHED_FONT = 'var(--dx-viz-font-family, \'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif)';
 const PUBLISHED_BLUE = 'var(--dx-viz-blue, #0078d4)';
 const PUBLISHED_GRAY = 'var(--dx-viz-gray, #757575)';
+const PUBLISHED_TILE_BORDER = 'var(--dx-viz-tile-border, #ffffff)';
 const PUBLISHED_GREEN = 'var(--dx-viz-green, #008f04)';
 const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
 const PUBLISHED_RED = 'var(--dx-viz-red, #c83d3d)';
@@ -510,6 +511,12 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.bullet.targetColor, ink, 'bullet target');
+    });
+
+    QUnit.test(`fluent-next theme should keep a mark that lies on a data colour out of the mode: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.treeMap.tile.border.color, PUBLISHED_TILE_BORDER, 'tree map tile border');
     });
 });
 

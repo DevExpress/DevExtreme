@@ -937,6 +937,16 @@
       ],
       "decision": "drawn-mark",
       "why": "The numerals are the clock's text, drawn as a mask over the dial, and a mask is painted by background-color - so the slot word follows the property while the role follows the element. Same shape as the checkbox mark and the typing dot above."
+    },
+    {
+      "name": "viz-tile-border",
+      "slot": "border",
+      "roles": [
+        "color-content-static-dark"
+      ],
+      "paints": [],
+      "decision": "drawn-mark",
+      "why": "The hairline is drawn on top of the tiles by the chart itself, not between two surfaces of the page, so it keeps a content role. It is the static one because the tile under it is a palette colour in both modes - a border role would follow the mode the tile does not. It paints nothing in this package: the name travels into SVG from js/__internal/viz, which is why paints is empty."
     }
   ],
   "ladders": [

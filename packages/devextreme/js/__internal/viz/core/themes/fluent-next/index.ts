@@ -21,6 +21,8 @@ const VIZ_GRAY = '--dx-viz-gray';
 const VIZ_RED = '--dx-viz-red';
 const VIZ_YELLOW = '--dx-viz-yellow';
 
+const VIZ_TILE_BORDER = '--dx-viz-tile-border';
+
 const LIGHT = {
   [VIZ_BG]: '#ffffff',
   [VIZ_BG_ACTIVE]: '#e1e1e1',
@@ -42,6 +44,8 @@ const LIGHT = {
   [VIZ_GRAY]: '#757575',
   [VIZ_RED]: '#c83d3d',
   [VIZ_YELLOW]: '#eaa300',
+
+  [VIZ_TILE_BORDER]: '#ffffff',
 };
 
 type PublishedName = keyof typeof LIGHT;
@@ -211,6 +215,11 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
           font: {
             color: paint(VIZ_CONTENT_SUBTLE),
           },
+        },
+      },
+      tile: {
+        border: {
+          color: paint(VIZ_TILE_BORDER),
         },
       },
     },
