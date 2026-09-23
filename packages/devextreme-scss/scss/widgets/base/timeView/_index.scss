@@ -1,8 +1,5 @@
 @use "./mixins";
 
-$timeview-numberbox-width: 70px !default;
-$timeview-numberbox-spin-touch-friendly-width: 110px !default;
-
 .dx-timeview {
   &.dx-state-disabled,
   .dx-state-disabled {
@@ -15,12 +12,4 @@ $timeview-numberbox-spin-touch-friendly-width: 110px !default;
 
 .dx-timeview-clock {
   position: relative;
-}
-
-.dx-timeview-field .dx-numberbox {
-  width: $timeview-numberbox-width;
-
-  &.dx-numberbox-spin-touch-friendly {
-    width: $timeview-numberbox-spin-touch-friendly-width;
-  }
 }

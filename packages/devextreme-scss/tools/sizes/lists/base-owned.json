@@ -6,9 +6,9 @@
     "marker — the classification comment already on the line, from tools/review/size-markers.json."
   ],
   "summary": {
-    "occurrences": 217,
+    "occurrences": 216,
     "byCategory": {
-      "inline": 92,
+      "inline": 91,
       "geometry": 65,
       "local-var": 35,
       "calc": 9,
@@ -21,7 +21,7 @@
       "scheduler": 33,
       "textEditor": 26,
       "gridBase": 22,
-      "htmlEditor": 16,
+      "htmlEditor": 15,
       "cardView": 15,
       "pivotGrid": 11,
       "ui": 8,
@@ -65,7 +65,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 20,
+      "line": 19,
       "widget": "htmlEditor",
       "literals": [
         "11px"
@@ -77,7 +77,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 21,
+      "line": 20,
       "widget": "htmlEditor",
       "literals": [
         "15px"
@@ -137,7 +137,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 355,
+      "line": 354,
       "widget": "htmlEditor",
       "literals": [
         "0.1px"
@@ -149,19 +149,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 369,
-      "widget": "htmlEditor",
-      "literals": [
-        "35px"
-      ],
-      "occurrences": 1,
-      "marker": "dx-fixed-size",
-      "text": "min-height: 35px; // dx-fixed-size: the mention suggestion list keeps a row of space while filtering",
-      "category": "inline"
-    },
-    {
-      "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 378,
+      "line": 375,
       "widget": "htmlEditor",
       "literals": [
         "50px"
@@ -173,7 +161,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 391,
+      "line": 388,
       "widget": "htmlEditor",
       "literals": [
         "360px"
@@ -185,7 +173,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 416,
+      "line": 413,
       "widget": "htmlEditor",
       "literals": [
         "6px"
@@ -197,7 +185,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 423,
+      "line": 420,
       "widget": "htmlEditor",
       "literals": [
         "240px"
@@ -209,7 +197,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 436,
+      "line": 433,
       "widget": "htmlEditor",
       "literals": [
         "3px"
@@ -221,7 +209,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 456,
+      "line": 453,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -233,7 +221,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 467,
+      "line": 464,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -245,7 +233,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 523,
+      "line": 520,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -305,7 +293,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 23,
+      "line": 19,
       "widget": "pagination",
       "literals": [
         "8px"
@@ -905,7 +893,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 152,
+      "line": 149,
       "widget": "dataGrid",
       "literals": [
         "-2px"
@@ -917,7 +905,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 188,
+      "line": 185,
       "widget": "dataGrid",
       "literals": [
         "14px"
@@ -929,7 +917,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 314,
+      "line": 316,
       "widget": "dataGrid",
       "literals": [
         "21px"
@@ -941,7 +929,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 378,
+      "line": 380,
       "widget": "dataGrid",
       "literals": [
         "-1px"
@@ -977,7 +965,7 @@
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 86,
+      "line": 87,
       "widget": "fileManager",
       "literals": [
         "431px"
@@ -1243,7 +1231,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 955,
+      "line": 952,
       "widget": "gridBase",
       "literals": [
         "-2px"
@@ -1267,7 +1255,7 @@
     },
     {
       "file": "scss/widgets/base/lookup/_index.scss",
-      "line": 10,
+      "line": 9,
       "widget": "lookup",
       "literals": [
         "45px"
@@ -1328,7 +1316,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 76,
+      "line": 75,
       "widget": "pivotGrid",
       "literals": [
         "-4px"
@@ -1340,7 +1328,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 77,
+      "line": 76,
       "widget": "pivotGrid",
       "literals": [
         "-1px"
@@ -1352,7 +1340,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 81,
+      "line": 80,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
@@ -1364,7 +1352,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 86,
+      "line": 85,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
@@ -1376,7 +1364,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 339,
+      "line": 338,
       "widget": "pivotGrid",
       "literals": [
         "-1px"
@@ -1388,7 +1376,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 610,
+      "line": 609,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
@@ -1424,7 +1412,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_common.scss",
-      "line": 75,
+      "line": 68,
       "widget": "scheduler",
       "literals": [
         "450px"
@@ -1436,7 +1424,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 90,
+      "line": 82,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -1448,7 +1436,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 91,
+      "line": 83,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -1460,7 +1448,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 93,
+      "line": 85,
       "widget": "scheduler",
       "literals": [
         "-2px"
@@ -1472,7 +1460,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 95,
+      "line": 87,
       "widget": "scheduler",
       "literals": [
         "2px"
@@ -1484,7 +1472,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 96,
+      "line": 88,
       "widget": "scheduler",
       "literals": [
         "-2px"
@@ -1496,7 +1484,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 100,
+      "line": 92,
       "widget": "scheduler",
       "literals": [
         "-2px"
@@ -1508,7 +1496,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 101,
+      "line": 93,
       "widget": "scheduler",
       "literals": [
         "2px"
@@ -1520,7 +1508,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 104,
+      "line": 96,
       "widget": "scheduler",
       "literals": [
         "2px"
@@ -1532,7 +1520,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 105,
+      "line": 97,
       "widget": "scheduler",
       "literals": [
         "-2px"
@@ -1544,7 +1532,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 106,
+      "line": 98,
       "widget": "scheduler",
       "literals": [
         "-2px"
@@ -1556,7 +1544,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 132,
+      "line": 124,
       "widget": "scheduler",
       "literals": [
         "14px"
@@ -1568,7 +1556,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 133,
+      "line": 125,
       "widget": "scheduler",
       "literals": [
         "12px"
@@ -1580,7 +1568,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 136,
+      "line": 128,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -1592,7 +1580,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 137,
+      "line": 129,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -1604,7 +1592,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 466,
+      "line": 455,
       "widget": "scheduler",
       "literals": [
         "-1px"
@@ -1640,7 +1628,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 44,
+      "line": 42,
       "widget": "scheduler",
       "literals": [
         "20px"
@@ -1652,7 +1640,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 48,
+      "line": 46,
       "widget": "scheduler",
       "literals": [
         "2px"
@@ -1664,19 +1652,19 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 50,
+      "line": 48,
       "widget": "scheduler",
       "literals": [
         "50px"
       ],
       "occurrences": 1,
       "marker": "dx-fixed-size",
-      "text": "$scheduler-workspace-date-table-cell-height: 50px; // dx-fixed-size: four derived heights multiply it, so a var() cannot pass",
+      "text": "$scheduler-workspace-date-table-cell-height: 50px; // dx-fixed-size: derived heights multiply it, so a var() cannot pass",
       "category": "local-var"
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 54,
+      "line": 50,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -1688,7 +1676,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 57,
+      "line": 53,
       "widget": "scheduler",
       "literals": [
         "80px"
@@ -1700,7 +1688,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 121,
+      "line": 114,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -1712,7 +1700,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 405,
+      "line": 392,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -1724,7 +1712,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 697,
+      "line": 667,
       "widget": "scheduler",
       "literals": [
         "-13px"
@@ -1736,7 +1724,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 707,
+      "line": 677,
       "widget": "scheduler",
       "literals": [
         "-1px"
@@ -1748,7 +1736,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 870,
+      "line": 830,
       "widget": "scheduler",
       "literals": [
         "-1px"
@@ -1772,7 +1760,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/month/_index.scss",
-      "line": 73,
+      "line": 68,
       "widget": "scheduler",
       "literals": [
         "-2px"
@@ -1993,7 +1981,7 @@
     },
     {
       "file": "scss/widgets/base/treeView/_common.scss",
-      "line": 85,
+      "line": 79,
       "widget": "treeView",
       "literals": [
         "8px"

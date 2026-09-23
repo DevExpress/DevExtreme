@@ -3,8 +3,6 @@
 @use "../sizes" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/numberBox" with (
-  $spin-container-width: var(--dx-number-box-spin-container-width),
-  $touch-friendly-spin-container-width: var(--dx-number-box-spin-container-touch-friendly-width),
   $numberbox-spin-idle-opacity: false,
 );
 @use "../textEditor" as *;

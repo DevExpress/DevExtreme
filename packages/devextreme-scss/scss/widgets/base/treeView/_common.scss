@@ -3,14 +3,8 @@ $treeview-disabled-opacity: null !default;
 @use "../mixins" as *;
 @use "../../base/icon_fonts" as *;
 
-$treeview-searchbox-margin-bottom: null !default;
-
 .dx-treeview-loadindicator-wrapper {
   text-align: center;
-}
-
-.dx-treeview-search {
-  margin-bottom: $treeview-searchbox-margin-bottom;
 }
 
 .dx-treeview {

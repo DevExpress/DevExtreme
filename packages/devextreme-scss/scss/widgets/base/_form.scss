@@ -3,7 +3,6 @@ $form-switch-margin-top: 7px !default;
 $form-switch-margin-bottom: 4px !default;
 $form-multiview-item-content-padding: 20px !default;
 $form-group-content-padding-top: 19px !default;
-$form-group-content-padding-bottom: 20px !default;
 $form-group-content-margin-top: 6px !default;
 $form-field-item-label-location-left-padding-inline-end: 10px !default;
 $form-field-item-label-location-right-padding-inline-start: 10px !default;
@@ -30,7 +29,6 @@ $form-field-item-label-location-right-padding-inline-start: 10px !default;
 
   .dx-label-h-align {
     &.dx-flex-layout {
-      display: -webkit-box; // stylelint-disable-line value-no-vendor-prefix
       display: flex;
 
       .dx-field-item-label {
@@ -135,7 +133,6 @@ $form-field-item-label-location-right-padding-inline-start: 10px !default;
 .dx-form-group-with-caption {
   & > .dx-form-group-content {
     padding-top: $form-group-content-padding-top;
-    padding-bottom: $form-group-content-padding-bottom;
     margin-top: $form-group-content-margin-top;
   }
 }

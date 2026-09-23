@@ -1275,6 +1275,7 @@ class TagBox<
       return true;
     }
 
+    // @ts-expect-error getIntersection does not guard against undefined arguments
     const intersection = getIntersection(selectedItems, this._selectedItems);
 
     if (intersection.length !== this._selectedItems?.length) {
@@ -1730,11 +1731,9 @@ class TagBox<
     const currentValue = value || [];
     const existedItems = listValues.length ? getIntersection(currentValue, listValues) : [];
     const newItems = existedItems.length
-      // @ts-expect-error fix on core/m_array level
       ? removeDuplicates(listValues, currentValue)
       : listValues;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return existedItems.concat(newItems);
   }
 

@@ -10,9 +10,7 @@
 @use "../../base/mixins" as *;
 @use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
-  $scheduler-appointment-collector-height: var(--dx-scheduler-appointment-collector-height),
   $scheduler-appointment-min-size: var(--dx-scheduler-appointment-min-size),
-  $scheduler-appointment-content-padding: var(--dx-scheduler-appointment-content-padding),
   $scheduler-appointment-reduced-content-padding: var(--dx-scheduler-appointment-reduced-content-padding),
   $scheduler-grouped-appointment-month-text-size: var(--dx-scheduler-appointment-month-text-font-size),
   $scheduler-border-width: var(--dx-scheduler-border-width),
@@ -44,7 +42,6 @@
   $scheduler-timeline-group-three-empty-cell-width: var(--dx-scheduler-timeline-group-three-empty-cell-width),
   $scheduler-timeline-cell-width: var(--dx-scheduler-timeline-cell-width),
   $scheduler-agenda-left-column-width: var(--dx-scheduler-agenda-left-column-width),
-  $scheduler-group-header-agenda-font-size: var(--dx-scheduler-group-header-agenda-font-size),
   $scheduler-agenda-date-table-padding-top: var(--dx-scheduler-agenda-date-table-padding-block-start),
   $scheduler-renovation-virtual-row-height: var(--dx-scheduler-virtual-row-height),
   $scheduler-tooltip-width: var(--dx-scheduler-tooltip-width),
@@ -101,14 +98,11 @@
   $scheduler-panel-text-color: var(--dx-scheduler-panel-content),
   $scheduler-left-column-width: $scheduler-left-column-width,
   $scheduler-timeline-cell-height: var(--dx-scheduler-timeline-cell-height),
-  $scheduler-workspace-active-cell-color: var(--dx-scheduler-workspace-cell-bg-active),
-  $scheduler-workspace-hovered-cell-color: var(--dx-scheduler-workspace-cell-content-hovered),
   $scheduler-workspace-focused-cell-color: var(--dx-scheduler-workspace-cell-bg-focused),
   $scheduler-droppable-cell-background-color: var(--dx-scheduler-droppable-cell-bg),
   $scheduler-appointment-text-color: var(--dx-scheduler-appointment-content),
   $scheduler-fill-focused-appointment: $scheduler-appointment-bg-focused,
   $scheduler-is-shadow-color-for-focused-state: $scheduler-appointment-shadow-focused,
-  $scheduler-dd-appointment-hover-text-color: var(--dx-scheduler-dd-appointment-content-hovered),
 
   $agenda-appointment-recurrence-icon-color: var(--dx-scheduler-agenda-appointment-recurrence-icon),
   $agenda-appointment-hover-bg: var(--dx-scheduler-agenda-appointment-bg-hovered),

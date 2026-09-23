@@ -1,2 +1,2 @@
 // deprecated
-export { isKeysEqual, findChanges } from '../../__internal/core/utils/m_array_compare';
+export { isKeysEqual, findChanges } from '../../__internal/core/utils/array_compare';

@@ -7,29 +7,13 @@
     "The match is by variable name. A name declared in a nested module is only reachable once the parent forwards it (see base/chat/_index.scss), which is why an \"open\" row can sit next to injected ones from the same widget."
   ],
   "summary": {
-    "occurrences": 525,
-    "variables": 454,
-    "injected": 501,
+    "occurrences": 486,
+    "variables": 424,
+    "injected": 462,
     "open": 0,
     "parameters": 24
   },
   "places": [
-    {
-      "file": "scss/widgets/base/_box.scss",
-      "line": 1,
-      "widget": "box",
-      "literals": [
-        "14px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$box-item-content-font-size: 14px !default;",
-      "variable": "box-item-content-font-size",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/box/_index.scss",
-      "setTo": "var(--dx-box-item-content-font-size)"
-    },
     {
       "file": "scss/widgets/base/_contextMenu.scss",
       "line": 1,
@@ -157,22 +141,6 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/dateBox/_index.scss",
       "setTo": "var(--dx-date-box-apply-button-margin-inline-end)"
-    },
-    {
-      "file": "scss/widgets/base/_dropDownList.scss",
-      "line": 1,
-      "widget": "dropDownList",
-      "literals": [
-        "35px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$dropdownlist-list-min-height: 35px !default;",
-      "variable": "dropdownlist-list-min-height",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/dropDownList/_index.scss",
-      "setTo": "var(--dx-drop-down-list-min-height)"
     },
     {
       "file": "scss/widgets/base/_fieldset.scss",
@@ -579,22 +547,6 @@
       "line": 6,
       "widget": "form",
       "literals": [
-        "20px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$form-group-content-padding-bottom: 20px !default;",
-      "variable": "form-group-content-padding-bottom",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/form/_index.scss",
-      "setTo": "var(--dx-form-group-content-padding-block-end)"
-    },
-    {
-      "file": "scss/widgets/base/_form.scss",
-      "line": 7,
-      "widget": "form",
-      "literals": [
         "6px"
       ],
       "occurrences": 1,
@@ -704,7 +656,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 25,
+      "line": 24,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -962,38 +914,6 @@
       "setTo": "var(--dx-load-panel-content-padding)"
     },
     {
-      "file": "scss/widgets/base/_loadPanel.scss",
-      "line": 4,
-      "widget": "loadPanel",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$loadpanel-content-border: 1px solid #ccc !default;",
-      "variable": "loadpanel-content-border",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/loadPanel/_index.scss",
-      "setTo": "var(--dx-load-panel-content-border)"
-    },
-    {
-      "file": "scss/widgets/base/_loadPanel.scss",
-      "line": 5,
-      "widget": "loadPanel",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$loadpanel-content-border-radius: 5px !default;",
-      "variable": "loadpanel-content-border-radius",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/loadPanel/_index.scss",
-      "setTo": "var(--dx-load-panel-content-border-radius)"
-    },
-    {
       "file": "scss/widgets/base/_map.scss",
       "line": 1,
       "widget": "map",
@@ -1074,73 +994,8 @@
       "setTo": "var(--dx-menu-item-content-padding-inline-start)"
     },
     {
-      "file": "scss/widgets/base/_numberBox.scss",
-      "line": 5,
-      "widget": "numberBox",
-      "literals": [
-        "22px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$spin-container-width: 22px !default;",
-      "variable": "spin-container-width",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/numberBox/_index.scss",
-      "setTo": "var(--dx-number-box-spin-container-width)"
-    },
-    {
-      "file": "scss/widgets/base/_numberBox.scss",
-      "line": 6,
-      "widget": "numberBox",
-      "literals": [
-        "64px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$touch-friendly-spin-container-width: 64px !default;",
-      "variable": "touch-friendly-spin-container-width",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/numberBox/_index.scss",
-      "setTo": "var(--dx-number-box-spin-container-touch-friendly-width)"
-    },
-    {
       "file": "scss/widgets/base/_pagination.scss",
       "line": 3,
-      "widget": "pagination",
-      "literals": [
-        "7px",
-        "8px"
-      ],
-      "occurrences": 3,
-      "marker": null,
-      "text": "$pagination-page-padding-fallback: 7px 8px 8px !default;",
-      "variable": "pagination-page-padding-fallback",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/pagination/_index.scss",
-      "setTo": "false"
-    },
-    {
-      "file": "scss/widgets/base/_pagination.scss",
-      "line": 4,
-      "widget": "pagination",
-      "literals": [
-        "13px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pagination-page-horizontal-padding: 13px !default;",
-      "variable": "pagination-page-horizontal-padding",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/pagination/_index.scss",
-      "setTo": "var(--dx-pagination-page-padding-inline)"
-    },
-    {
-      "file": "scss/widgets/base/_pagination.scss",
-      "line": 5,
       "widget": "pagination",
       "literals": [
         "5px"
@@ -1156,7 +1011,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 6,
+      "line": 5,
       "widget": "pagination",
       "literals": [
         "1px"
@@ -1172,71 +1027,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 7,
-      "widget": "pagination",
-      "literals": [
-        "8px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pagination-separator-padding-left: 8px !default;",
-      "variable": "pagination-separator-padding-left",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/pagination/_index.scss",
-      "setTo": "var(--dx-pagination-separator-padding-inline-start)"
-    },
-    {
-      "file": "scss/widgets/base/_pagination.scss",
-      "line": 8,
-      "widget": "pagination",
-      "literals": [
-        "8px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pagination-separator-padding-right: 8px !default;",
-      "variable": "pagination-separator-padding-right",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/pagination/_index.scss",
-      "setTo": "var(--dx-pagination-separator-padding-inline-end)"
-    },
-    {
-      "file": "scss/widgets/base/_pagination.scss",
-      "line": 9,
-      "widget": "pagination",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pagination-navigate-button-width-fallback: 10px !default;",
-      "variable": "pagination-navigate-button-width-fallback",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/pagination/_index.scss",
-      "setTo": "false"
-    },
-    {
-      "file": "scss/widgets/base/_pagination.scss",
-      "line": 10,
-      "widget": "pagination",
-      "literals": [
-        "20px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pagination-navigate-button-height: 20px !default;",
-      "variable": "pagination-navigate-button-height",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/pagination/_index.scss",
-      "setTo": "var(--dx-pagination-navigate-button-height)"
-    },
-    {
-      "file": "scss/widgets/base/_pagination.scss",
-      "line": 11,
+      "line": 6,
       "widget": "pagination",
       "literals": [
         "1px"
@@ -1252,7 +1043,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 12,
+      "line": 7,
       "widget": "pagination",
       "literals": [
         "10px"
@@ -1268,7 +1059,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 13,
+      "line": 8,
       "widget": "pagination",
       "literals": [
         "9px"
@@ -1284,7 +1075,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 14,
+      "line": 9,
       "widget": "pagination",
       "literals": [
         "7px"
@@ -1300,7 +1091,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 15,
+      "line": 10,
       "widget": "pagination",
       "literals": [
         "8px"
@@ -1316,7 +1107,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 16,
+      "line": 11,
       "widget": "pagination",
       "literals": [
         "4px"
@@ -1332,7 +1123,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 17,
+      "line": 12,
       "widget": "pagination",
       "literals": [
         "40px"
@@ -1348,7 +1139,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 18,
+      "line": 13,
       "widget": "pagination",
       "literals": [
         "6px"
@@ -1364,7 +1155,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 24,
+      "line": 20,
       "widget": "pagination",
       "literals": [
         "9px"
@@ -1377,22 +1168,6 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/pagination/_index.scss",
       "setTo": "var(--dx-pagination-info-margin-inline)"
-    },
-    {
-      "file": "scss/widgets/base/_pagination.scss",
-      "line": 27,
-      "widget": "pagination",
-      "literals": [
-        "1px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$pagination-navigate-button-padding-block-fallback: $pagination-paddings - 1px !default;",
-      "variable": "pagination-navigate-button-padding-block-fallback",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/pagination/_index.scss",
-      "setTo": "false"
     },
     {
       "file": "scss/widgets/base/_popup.scss",
@@ -1409,39 +1184,6 @@
       "status": "injected",
       "setBy": "scss/widgets/fluent-next/popup/_index.scss",
       "setTo": "var(--dx-popup-title-padding)"
-    },
-    {
-      "file": "scss/widgets/base/_popup.scss",
-      "line": 7,
-      "widget": "popup",
-      "literals": [
-        "19px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$popup-title-min-height-fallback: 19px !default;",
-      "variable": "popup-title-min-height-fallback",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/popup/_index.scss",
-      "setTo": "false"
-    },
-    {
-      "file": "scss/widgets/base/_popup.scss",
-      "line": 8,
-      "widget": "popup",
-      "literals": [
-        "10px",
-        "5px"
-      ],
-      "occurrences": 4,
-      "marker": null,
-      "text": "$popup-dialog-message-padding: 10px 10px 5px 10px !default;",
-      "variable": "popup-dialog-message-padding",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/popup/_index.scss",
-      "setTo": "var(--dx-popup-dialog-message-padding)"
     },
     {
       "file": "scss/widgets/base/_progressBar.scss",
@@ -1896,22 +1638,6 @@
       "line": 1,
       "widget": "toast",
       "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$toast-content-padding: 10px !default;",
-      "variable": "toast-content-padding",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/toast/_index.scss",
-      "setTo": "var(--dx-toast-content-padding)"
-    },
-    {
-      "file": "scss/widgets/base/_toast.scss",
-      "line": 2,
-      "widget": "toast",
-      "literals": [
         "35px"
       ],
       "occurrences": 1,
@@ -2355,22 +2081,6 @@
       "line": 11,
       "widget": "colorBox",
       "literals": [
-        "20px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$colorbox-overlay-padding: 20px !default;",
-      "variable": "colorbox-overlay-padding",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/colorBox/_index.scss",
-      "setTo": "var(--dx-color-box-overlay-padding)"
-    },
-    {
-      "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 12,
-      "widget": "colorBox",
-      "literals": [
         "10px"
       ],
       "occurrences": 1,
@@ -2788,22 +2498,6 @@
       "line": 24,
       "widget": "dataGrid",
       "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$datagrid-common-addrow-margin-right: 10px !default;",
-      "variable": "datagrid-common-addrow-margin-right",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/dataGrid/_index.scss",
-      "setTo": "var(--dx-data-grid-group-panel-item-margin-inline-end)"
-    },
-    {
-      "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 25,
-      "widget": "dataGrid",
-      "literals": [
         "6px"
       ],
       "occurrences": 1,
@@ -2817,7 +2511,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 26,
+      "line": 25,
       "widget": "dataGrid",
       "literals": [
         "3px"
@@ -2833,23 +2527,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 27,
-      "widget": "dataGrid",
-      "literals": [
-        "10px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$datagrid-common-form-buttons-margin-left: 10px !default;",
-      "variable": "datagrid-common-form-buttons-margin-left",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/dataGrid/_index.scss",
-      "setTo": "var(--dx-data-grid-group-panel-item-rtl-margin-inline-end)"
-    },
-    {
-      "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 28,
+      "line": 26,
       "widget": "dataGrid",
       "literals": [
         "6px"
@@ -2865,7 +2543,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 55,
+      "line": 52,
       "widget": "dataGrid",
       "literals": [
         "2px"
@@ -2881,7 +2559,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 56,
+      "line": 53,
       "widget": "dataGrid",
       "literals": [
         "2px"
@@ -2897,7 +2575,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 57,
+      "line": 54,
       "widget": "dataGrid",
       "literals": [
         "3px"
@@ -2913,7 +2591,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 58,
+      "line": 55,
       "widget": "dataGrid",
       "literals": [
         "10px"
@@ -2929,7 +2607,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 59,
+      "line": 56,
       "widget": "dataGrid",
       "literals": [
         "10px"
@@ -2945,7 +2623,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 60,
+      "line": 57,
       "widget": "dataGrid",
       "literals": [
         "20px"
@@ -2961,7 +2639,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 61,
+      "line": 58,
       "widget": "dataGrid",
       "literals": [
         "10px"
@@ -3600,22 +3278,6 @@
       "line": 24,
       "widget": "fileManager",
       "literals": [
-        "9px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$filemanager-progress-box-close-button-margin-top: 9px !default;",
-      "variable": "filemanager-progress-box-close-button-margin-top",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/fileManager/_index.scss",
-      "setTo": "var(--dx-file-manager-progress-box-close-button-margin-block-start)"
-    },
-    {
-      "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 25,
-      "widget": "fileManager",
-      "literals": [
         "5px"
       ],
       "occurrences": 1,
@@ -4131,7 +3793,7 @@
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 64,
+      "line": 65,
       "widget": "fileManager",
       "literals": [
         "3px"
@@ -5055,22 +4717,6 @@
       ],
       "occurrences": 1,
       "marker": null,
-      "text": "$list-static-delete-button-padding: 0 5px !default;",
-      "variable": "list-static-delete-button-padding",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/list/_index.scss",
-      "setTo": "var(--dx-list-delete-button-static-padding)"
-    },
-    {
-      "file": "scss/widgets/base/list/_index.scss",
-      "line": 11,
-      "widget": "list",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
       "text": "$list-next-button-padding: 5px !default;",
       "variable": "list-next-button-padding",
       "kind": "module-variable",
@@ -5559,40 +5205,8 @@
       "setTo": "var(--dx-radio-group-collection-horizontal-column-gap)"
     },
     {
-      "file": "scss/widgets/base/scheduler/_common.scss",
-      "line": 5,
-      "widget": "scheduler",
-      "literals": [
-        "22px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-appointment-collector-height: 22px !default;",
-      "variable": "scheduler-appointment-collector-height",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
-      "setTo": "var(--dx-scheduler-appointment-collector-height)"
-    },
-    {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 1,
-      "widget": "scheduler",
-      "literals": [
-        "22px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-appointment-collector-height: 22px !default;",
-      "variable": "scheduler-appointment-collector-height",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
-      "setTo": "var(--dx-scheduler-appointment-collector-height)"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 48,
+      "line": 42,
       "widget": "scheduler",
       "literals": [
         "3px"
@@ -5608,7 +5222,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 49,
+      "line": 43,
       "widget": "scheduler",
       "literals": [
         "28px"
@@ -5624,7 +5238,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 56,
+      "line": 49,
       "widget": "scheduler",
       "literals": [
         "15px"
@@ -5640,7 +5254,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 58,
+      "line": 51,
       "widget": "scheduler",
       "literals": [
         "360px"
@@ -5656,7 +5270,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 59,
+      "line": 52,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -5672,7 +5286,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 60,
+      "line": 53,
       "widget": "scheduler",
       "literals": [
         "7px"
@@ -5688,7 +5302,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 61,
+      "line": 54,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -5704,7 +5318,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 62,
+      "line": 55,
       "widget": "scheduler",
       "literals": [
         "5px",
@@ -5721,7 +5335,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 63,
+      "line": 56,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -5737,7 +5351,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 64,
+      "line": 57,
       "widget": "scheduler",
       "literals": [
         "16px"
@@ -5753,7 +5367,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 65,
+      "line": 58,
       "widget": "scheduler",
       "literals": [
         "12px"
@@ -5769,7 +5383,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 67,
+      "line": 60,
       "widget": "scheduler",
       "literals": [
         "11px"
@@ -5785,7 +5399,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 86,
+      "line": 79,
       "widget": "scheduler",
       "literals": [
         "4px"
@@ -5801,24 +5415,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 87,
-      "widget": "scheduler",
-      "literals": [
-        "5px",
-        "7px"
-      ],
-      "occurrences": 2,
-      "marker": null,
-      "text": "$scheduler-appointment-content-padding: 5px 7px !default;",
-      "variable": "scheduler-appointment-content-padding",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
-      "setTo": "var(--dx-scheduler-appointment-content-padding)"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 88,
+      "line": 80,
       "widget": "scheduler",
       "literals": [
         "40px"
@@ -5834,7 +5431,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 98,
+      "line": 90,
       "widget": "scheduler",
       "literals": [
         "7px",
@@ -5851,7 +5448,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 108,
+      "line": 100,
       "widget": "scheduler",
       "literals": [
         "12px"
@@ -5867,7 +5464,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 110,
+      "line": 102,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -5883,7 +5480,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 111,
+      "line": 103,
       "widget": "scheduler",
       "literals": [
         "20px"
@@ -5899,7 +5496,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 112,
+      "line": 104,
       "widget": "scheduler",
       "literals": [
         "14px"
@@ -5915,7 +5512,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 113,
+      "line": 105,
       "widget": "scheduler",
       "literals": [
         "30px"
@@ -5931,7 +5528,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 114,
+      "line": 106,
       "widget": "scheduler",
       "literals": [
         "16px"
@@ -5947,7 +5544,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 115,
+      "line": 107,
       "widget": "scheduler",
       "literals": [
         "6px"
@@ -5963,7 +5560,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 120,
+      "line": 112,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -5979,7 +5576,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 121,
+      "line": 113,
       "widget": "scheduler",
       "literals": [
         "20px"
@@ -5995,7 +5592,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 123,
+      "line": 115,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -6011,7 +5608,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 124,
+      "line": 116,
       "widget": "scheduler",
       "literals": [
         "20px"
@@ -6027,7 +5624,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 130,
+      "line": 122,
       "widget": "scheduler",
       "literals": [
         "30px"
@@ -6043,7 +5640,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 131,
+      "line": 123,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -6059,7 +5656,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 139,
+      "line": 131,
       "widget": "scheduler",
       "literals": [
         "18px"
@@ -6075,7 +5672,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 145,
+      "line": 137,
       "widget": "scheduler",
       "literals": [
         "12px"
@@ -6091,7 +5688,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 148,
+      "line": 140,
       "widget": "scheduler",
       "literals": [
         "3px"
@@ -6107,7 +5704,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 149,
+      "line": 141,
       "widget": "scheduler",
       "literals": [
         "4px"
@@ -6123,7 +5720,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 150,
+      "line": 142,
       "widget": "scheduler",
       "literals": [
         "2px"
@@ -6139,7 +5736,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 151,
+      "line": 143,
       "widget": "scheduler",
       "literals": [
         "3px"
@@ -6155,7 +5752,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 152,
+      "line": 144,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -6171,7 +5768,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 153,
+      "line": 145,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -6187,7 +5784,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 154,
+      "line": 146,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -6203,7 +5800,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 155,
+      "line": 147,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -6219,7 +5816,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 156,
+      "line": 148,
       "widget": "scheduler",
       "literals": [
         "15px"
@@ -6235,7 +5832,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 157,
+      "line": 149,
       "widget": "scheduler",
       "literals": [
         "3px"
@@ -6251,7 +5848,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 158,
+      "line": 150,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -6267,7 +5864,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 202,
+      "line": 194,
       "widget": "scheduler",
       "literals": [
         "2px"
@@ -6283,7 +5880,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 203,
+      "line": 195,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -6299,7 +5896,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 204,
+      "line": 196,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -6315,7 +5912,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 205,
+      "line": 197,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -6331,7 +5928,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 206,
+      "line": 198,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -6347,7 +5944,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 207,
+      "line": 199,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -6363,7 +5960,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 208,
+      "line": 200,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -6379,7 +5976,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 209,
+      "line": 201,
       "widget": "scheduler",
       "literals": [
         "5px",
@@ -6396,7 +5993,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 210,
+      "line": 202,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -6412,7 +6009,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 211,
+      "line": 203,
       "widget": "scheduler",
       "literals": [
         "40px"
@@ -6428,7 +6025,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 212,
+      "line": 204,
       "widget": "scheduler",
       "literals": [
         "100px"
@@ -6444,7 +6041,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 214,
+      "line": 206,
       "widget": "scheduler",
       "literals": [
         "100px"
@@ -6460,7 +6057,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 215,
+      "line": 207,
       "widget": "scheduler",
       "literals": [
         "160px"
@@ -6476,7 +6073,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 216,
+      "line": 208,
       "widget": "scheduler",
       "literals": [
         "80px"
@@ -6492,7 +6089,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 217,
+      "line": 209,
       "widget": "scheduler",
       "literals": [
         "240px"
@@ -6508,7 +6105,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 218,
+      "line": 210,
       "widget": "scheduler",
       "literals": [
         "200px"
@@ -6524,7 +6121,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 219,
+      "line": 211,
       "widget": "scheduler",
       "literals": [
         "70px"
@@ -6540,23 +6137,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 220,
-      "widget": "scheduler",
-      "literals": [
-        "18px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-group-header-agenda-font-size: 18px !default;",
-      "variable": "scheduler-group-header-agenda-font-size",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
-      "setTo": "var(--dx-scheduler-group-header-agenda-font-size)"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 221,
+      "line": 212,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -6572,7 +6153,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 222,
+      "line": 213,
       "widget": "scheduler",
       "literals": [
         "50px"
@@ -6588,7 +6169,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 282,
+      "line": 271,
       "widget": "scheduler",
       "literals": [
         "7px"
@@ -6604,7 +6185,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 283,
+      "line": 272,
       "widget": "scheduler",
       "literals": [
         "9px"
@@ -6620,7 +6201,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 284,
+      "line": 273,
       "widget": "scheduler",
       "literals": [
         "2px"
@@ -6636,7 +6217,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 285,
+      "line": 274,
       "widget": "scheduler",
       "literals": [
         "25px",
@@ -6653,7 +6234,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 286,
+      "line": 275,
       "widget": "scheduler",
       "literals": [
         "7px",
@@ -6670,7 +6251,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 287,
+      "line": 276,
       "widget": "scheduler",
       "literals": [
         "24px"
@@ -6686,7 +6267,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 288,
+      "line": 277,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -6878,7 +6459,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 45,
+      "line": 43,
       "widget": "scheduler",
       "literals": [
         "20px"
@@ -6894,7 +6475,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 46,
+      "line": 44,
       "widget": "scheduler",
       "literals": [
         "14px"
@@ -6910,7 +6491,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 55,
+      "line": 51,
       "widget": "scheduler",
       "literals": [
         "30px"
@@ -6926,7 +6507,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 59,
+      "line": 55,
       "widget": "scheduler",
       "literals": [
         "16px"
@@ -6942,7 +6523,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 61,
+      "line": 57,
       "widget": "scheduler",
       "literals": [
         "6px"
@@ -6958,7 +6539,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 77,
+      "line": 72,
       "widget": "scheduler",
       "literals": [
         "100px"
@@ -6974,7 +6555,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 78,
+      "line": 73,
       "widget": "scheduler",
       "literals": [
         "160px"
@@ -6990,7 +6571,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 79,
+      "line": 74,
       "widget": "scheduler",
       "literals": [
         "80px"
@@ -7006,7 +6587,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 80,
+      "line": 75,
       "widget": "scheduler",
       "literals": [
         "240px"
@@ -7022,7 +6603,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 81,
+      "line": 76,
       "widget": "scheduler",
       "literals": [
         "200px"
@@ -7038,7 +6619,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 95,
+      "line": 90,
       "widget": "scheduler",
       "literals": [
         "70px"
@@ -7054,23 +6635,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 96,
-      "widget": "scheduler",
-      "literals": [
-        "18px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-group-header-agenda-font-size: 18px !default;",
-      "variable": "scheduler-group-header-agenda-font-size",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
-      "setTo": "var(--dx-scheduler-group-header-agenda-font-size)"
-    },
-    {
-      "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 97,
+      "line": 91,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -7086,7 +6651,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 109,
+      "line": 102,
       "widget": "scheduler",
       "literals": [
         "50px"
@@ -7117,22 +6682,6 @@
       "setTo": "var(--dx-scheduler-agenda-left-column-width)"
     },
     {
-      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
-      "line": 8,
-      "widget": "scheduler",
-      "literals": [
-        "18px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scheduler-group-header-agenda-font-size: 18px !default;",
-      "variable": "scheduler-group-header-agenda-font-size",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/scheduler/_index.scss",
-      "setTo": "var(--dx-scheduler-group-header-agenda-font-size)"
-    },
-    {
       "file": "scss/widgets/base/scheduler/views/timelines/_index.scss",
       "line": 9,
       "widget": "scheduler",
@@ -7151,38 +6700,6 @@
     {
       "file": "scss/widgets/base/scrollable/_index.scss",
       "line": 4,
-      "widget": "scrollable",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scrollable-scroll-width: 5px !default;",
-      "variable": "scrollable-scroll-width",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/scrollable/_index.scss",
-      "setTo": "var(--dx-scrollable-scroll-width)"
-    },
-    {
-      "file": "scss/widgets/base/scrollable/_index.scss",
-      "line": 5,
-      "widget": "scrollable",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$scrollable-scroll-height: 5px !default;",
-      "variable": "scrollable-scroll-height",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/scrollable/_index.scss",
-      "setTo": "var(--dx-scrollable-scroll-height)"
-    },
-    {
-      "file": "scss/widgets/base/scrollable/_index.scss",
-      "line": 6,
       "widget": "scrollable",
       "literals": [
         "2px"
@@ -7423,38 +6940,6 @@
       "variable": "button-icononly-padding",
       "kind": "mixin-parameter",
       "status": "parameter"
-    },
-    {
-      "file": "scss/widgets/base/timeView/_index.scss",
-      "line": 3,
-      "widget": "timeView",
-      "literals": [
-        "70px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$timeview-numberbox-width: 70px !default;",
-      "variable": "timeview-numberbox-width",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/timeView/_index.scss",
-      "setTo": "var(--dx-time-view-field-number-box-width)"
-    },
-    {
-      "file": "scss/widgets/base/timeView/_index.scss",
-      "line": 4,
-      "widget": "timeView",
-      "literals": [
-        "110px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$timeview-numberbox-spin-touch-friendly-width: 110px !default;",
-      "variable": "timeview-numberbox-spin-touch-friendly-width",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/timeView/_index.scss",
-      "setTo": "var(--dx-time-view-field-number-box-spin-touch-friendly-width)"
     },
     {
       "file": "scss/widgets/base/timeView/_mixins.scss",
@@ -7706,23 +7191,7 @@
     },
     {
       "file": "scss/widgets/base/treeView/_index.scss",
-      "line": 2,
-      "widget": "treeView",
-      "literals": [
-        "5px"
-      ],
-      "occurrences": 1,
-      "marker": null,
-      "text": "$treeview-searchbox-margin-bottom: 5px !default;",
-      "variable": "treeview-searchbox-margin-bottom",
-      "kind": "module-variable",
-      "status": "injected",
-      "setBy": "scss/widgets/fluent-next/treeView/_index.scss",
-      "setTo": "var(--dx-tree-view-search-box-margin-block-end)"
-    },
-    {
-      "file": "scss/widgets/base/treeView/_index.scss",
-      "line": 12,
+      "line": 11,
       "widget": "treeView",
       "literals": [
         "1px"
@@ -7738,7 +7207,7 @@
     },
     {
       "file": "scss/widgets/base/treeView/_index.scss",
-      "line": 13,
+      "line": 12,
       "widget": "treeView",
       "literals": [
         "1px"

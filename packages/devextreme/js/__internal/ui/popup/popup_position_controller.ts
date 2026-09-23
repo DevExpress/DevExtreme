@@ -153,7 +153,7 @@ export class PopupPositionController<
     this._$dragResizeContainer = this._getDragResizeContainer();
   }
 
-  _getDragResizeContainer(): dxElementWrapper | undefined {
+  _getDragResizeContainer(): dxElementWrapper {
     if (this._properties.dragOutsideBoundary) {
       return $(window);
     }
@@ -162,11 +162,13 @@ export class PopupPositionController<
       return $(this._properties.dragAndResizeArea);
     }
 
-    const isContainerDefined = originalViewPort().get(0) || this._properties.container;
+    if (this._properties.container) {
+      return $(this._properties.container);
+    }
 
-    return isContainerDefined
-      ? this._$markupContainer
-      : $(window);
+    const $viewPort = originalViewPort();
+
+    return $viewPort.get(0) ? $viewPort : $(window);
   }
 
   _getVisualContainer(): dxElementWrapper {

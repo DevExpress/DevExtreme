@@ -142,6 +142,7 @@ const TOOLBAR_ITEM_CONTENT_CLASS = 'dx-toolbar-item-content';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
 const VIEWPORT_CLASS = 'dx-viewport';
+const SWATCH_CLASS = 'dx-swatch-custom';
 
 const viewport = function() { return $(`.${VIEWPORT_CLASS}`); };
 
@@ -2401,6 +2402,62 @@ QUnit.module('drag', {
 
         assert.deepEqual([this.$overlayContent[0].style.width, this.$overlayContent[0].style.height], ['auto', 'auto'], 'correct size');
     });
+
+    QUnit.module('popup inside a swatch', {
+        beforeEach: function() {
+            this.popup.dispose();
+
+            this.$swatch = $('<div>')
+                .addClass(SWATCH_CLASS)
+                .appendTo($('<div>').appendTo('#qunit-fixture'));
+
+            this.popup = $('<div>')
+                .appendTo(this.$swatch)
+                .dxPopup({
+                    animation: null,
+                    dragEnabled: true,
+                    visible: true,
+                    width: 100,
+                    height: 100,
+                    position: { of: viewport() },
+                    visualContainer: viewport()
+                })
+                .dxPopup('instance');
+
+            this.$overlayContent = this.popup.$content().parent();
+            this.$title = this.popup.topToolbar();
+        }
+    }, () => {
+        QUnit.test('markup should be rendered in a container of the viewport for the swatch', function(assert) {
+            const $container = this.$overlayContent.closest(`.${POPUP_WRAPPER_CLASS}`).parent();
+
+            assert.ok($container.hasClass(SWATCH_CLASS), 'container carries the swatch class');
+            assert.ok($container.parent().hasClass(VIEWPORT_CLASS), 'container is a child of the viewport');
+        });
+
+        QUnit.test('popup should be dragged', function(assert) {
+            const position = this.$overlayContent.position();
+
+            pointerMock(this.$title).start().down().move(50, 50).up();
+
+            assert.deepEqual(this.$overlayContent.position(), {
+                top: position.top + 50,
+                left: position.left + 50
+            }, 'popup was moved');
+        });
+
+        QUnit.test('popup should not be dragged out of the viewport', function(assert) {
+            const viewWidth = getOuterWidth(viewport());
+            const viewHeight = getOuterHeight(viewport());
+            const position = this.$overlayContent.position();
+            const startEvent = pointerMock(this.$title).start().dragStart().lastEvent();
+
+            assert.strictEqual(position.left - startEvent.maxLeftOffset, 0, 'popup should not be dragged left of the viewport');
+            assert.strictEqual(position.left + startEvent.maxRightOffset, viewWidth - getOuterWidth(this.$overlayContent), 'popup should not be dragged right of the viewport');
+            assert.strictEqual(position.top - startEvent.maxTopOffset, 0, 'popup should not be dragged above the viewport');
+            assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent), 'popup should not be dragged below the viewport');
+        });
+    });
 });
 
 QUnit.module('resize', {
@@ -2595,6 +2652,43 @@ QUnit.module('resize', {
             this.popup.option('container', this.$container);
 
             assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was changed');
+        });
+    });
+
+    QUnit.module('popup inside a swatch', {
+        beforeEach: function() {
+            this.popup.dispose();
+
+            this.$swatch = $('<div>')
+                .addClass(SWATCH_CLASS)
+                .appendTo($('<div>').appendTo('#qunit-fixture'));
+
+            this.popup = $('<div>')
+                .appendTo(this.$swatch)
+                .dxPopup({
+                    animation: null,
+                    resizeEnabled: true,
+                    visible: true,
+                    width: 200,
+                    height: 200,
+                    position: { of: viewport() },
+                    visualContainer: viewport()
+                })
+                .dxPopup('instance');
+
+            this.$overlayContent = this.popup.$content().parent();
+            this.$handle = this.$overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
+        }
+    }, () => {
+        QUnit.test('resize area should be the viewport', function(assert) {
+            assert.strictEqual(this.popup._resizable.option('area').get(0), viewport().get(0), 'the viewport is the area of the resizable');
+        });
+
+        QUnit.test('popup should grow when resized', function(assert) {
+            pointerMock(this.$handle).start().down().move(60, 40).up();
+
+            assert.strictEqual(getWidth(this.$overlayContent), 260, 'width was increased');
+            assert.strictEqual(getHeight(this.$overlayContent), 240, 'height was increased');
         });
     });
 

@@ -1,4 +1,3 @@
-$scheduler-appointment-collector-height: 22px !default;
 $scheduler-appointment-base-color: null !default;
 $scheduler-appointment-start-color: null !default;
 $scheduler-appointment-active-color: null !default;
@@ -14,14 +13,11 @@ $scheduler-workspace-accent-color: null !default;
 $scheduler-first-month-cell-background-color: null !default;
 $scheduler-panel-text-color: null !default;
 $scheduler-left-column-width: null !default;
-$scheduler-workspace-active-cell-color: null !default;
-$scheduler-workspace-hovered-cell-color: null !default;
 $scheduler-workspace-focused-cell-color: null !default;
 $scheduler-droppable-cell-background-color: null !default;
 $scheduler-appointment-text-color: null !default;
 $scheduler-fill-focused-appointment: null !default;
 $scheduler-is-shadow-color-for-focused-state: null !default;
-$scheduler-dd-appointment-hover-text-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-tooltip-list-focused-bg: null !default;
 $scheduler-timeline-cell-height: null !default;
@@ -31,8 +27,6 @@ $agenda-appointment-hover-bg: null !default;
 $agenda-appointment-active-bg: null !default;
 $agenda-appointment-text-color: null !default;
 $agenda-appointment-title-font-size: null !default;
-
-$scheduler-header-panel-table-cell-height: null !default;
 
 $scheduler-appointment-popup-icon-margin-top: null !default;
 $scheduler-appointment-popup-repeat-end-item-height: null !default;
@@ -51,7 +45,6 @@ $scheduler-common-collector-size: 28px !default;
 @use "./common" with (
   $scheduler-common-collector-margin: $scheduler-common-collector-margin,
   $scheduler-common-collector-size: $scheduler-common-collector-size,
-  $scheduler-appointment-collector-height: $scheduler-appointment-collector-height,
 );
 $scheduler-tooltip-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15) !default;
 
@@ -84,7 +77,6 @@ $scheduler-appointment-content-details-font-size: 11px !default;
 );
 
 $scheduler-appointment-min-size: 4px !default;
-$scheduler-appointment-content-padding: 5px 7px !default;
 $scheduler-appointment-reduced-content-padding: 40px !default;
 
 $scheduler-hovered-appointment-top-shadow-size: 5px; // dx-fixed-size: negated and composed into shadows, so a var() cannot pass
@@ -217,7 +209,6 @@ $scheduler-timeline-group-header-width: 80px !default;
 $scheduler-timeline-group-three-empty-cell-width: 240px !default;
 $scheduler-timeline-cell-width: 200px !default;
 $scheduler-agenda-left-column-width: 70px !default;
-$scheduler-group-header-agenda-font-size: 18px !default;
 $scheduler-agenda-date-table-padding-top: 10px !default;
 $scheduler-renovation-virtual-row-height: 50px !default;
 
@@ -233,7 +224,6 @@ $scheduler-renovation-virtual-row-height: 50px !default;
   $scheduler-timeline-group-three-empty-cell-width: $scheduler-timeline-group-three-empty-cell-width,
   $scheduler-timeline-cell-width: $scheduler-timeline-cell-width,
   $scheduler-agenda-left-column-width: $scheduler-agenda-left-column-width,
-  $scheduler-group-header-agenda-font-size: $scheduler-group-header-agenda-font-size,
   $scheduler-agenda-date-table-padding-top: $scheduler-agenda-date-table-padding-top,
   $scheduler-renovation-virtual-row-height: $scheduler-renovation-virtual-row-height,
   $scheduler-workspace-background-color: $scheduler-workspace-background-color,
@@ -248,8 +238,6 @@ $scheduler-renovation-virtual-row-height: 50px !default;
   $scheduler-current-time-cell-color: $scheduler-current-time-cell-color,
   $scheduler-time-indicator-color: $scheduler-time-indicator-color,
 
-  $scheduler-workspace-active-cell-color: $scheduler-workspace-active-cell-color,
-  $scheduler-workspace-hovered-cell-color: $scheduler-workspace-hovered-cell-color,
   $scheduler-workspace-focused-cell-color: $scheduler-workspace-focused-cell-color,
   $scheduler-focused-cell-shadow: $scheduler-focused-cell-shadow,
   $scheduler-droppable-cell-background-color: $scheduler-droppable-cell-background-color,
@@ -561,7 +549,6 @@ $scheduler-appointment-content-padding-right: 5px !default;
   }
 
   .dx-scheduler-appointment-content {
-    padding: $scheduler-appointment-content-padding;
     cursor: pointer;
     height: 100%;
 

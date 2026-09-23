@@ -2,7 +2,6 @@
 @use "../../base/mixins" as *;
 
 $scheduler-appointment-collector-margin: 3px; // dx-fixed-size: the collector margin, multiplied elsewhere so a var() cannot pass
-$scheduler-appointment-collector-height: 22px !default;
 
 $scheduler-common-collector-margin: null !default;
 $scheduler-common-collector-size: null !default;
@@ -22,9 +21,7 @@ $scheduler-common-collector-size: null !default;
 .dx-scheduler-appointment-collector {
   position: absolute;
   display: block;
-  height: $scheduler-appointment-collector-height;
   cursor: pointer;
-  margin: $scheduler-appointment-collector-margin;
 
   .dx-scheduler-appointment-collector-content,
   .dx-button-content {
@@ -47,10 +44,6 @@ $scheduler-common-collector-size: null !default;
     padding: 0;
     max-width: none;
   }
-}
-
-.dx-scheduler-adaptive .dx-scheduler-appointment-collector {
-  margin: $scheduler-common-collector-margin;
 }
 
 .dx-scheduler-work-space-mouse-selection {

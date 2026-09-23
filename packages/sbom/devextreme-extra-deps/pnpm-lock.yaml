@@ -1,0 +1,46 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      cldr-core:
+        specifier: 36.0.0
+        version: 36.0.0
+      cldr-dates-modern:
+        specifier: 36.0.0
+        version: 36.0.0(cldr-numbers-modern@36.0.0(cldr-core@36.0.0))
+      cldr-numbers-modern:
+        specifier: 36.0.0
+        version: 36.0.0(cldr-core@36.0.0)
+
+packages:
+
+  cldr-core@36.0.0:
+    resolution: {integrity: sha512-QLnAjt20rZe38c8h8OJ9jPND+O4o5O8Nw0TK/P3KpNn1cmOhMu0rk6Kc3ap96c5OStQ9gAngs9+Be2sum26NOw==}
+
+  cldr-dates-modern@36.0.0:
+    resolution: {integrity: sha512-YiUBgo0AqBVWMbZEtw2YFk6/YagcvGmcpARejeqXe9R2ZZvv7Ek40idaoIXEjBb0wKVtJ1cYBFpMChEC0CBbqQ==}
+    peerDependencies:
+      cldr-numbers-modern: 36.0.0
+
+  cldr-numbers-modern@36.0.0:
+    resolution: {integrity: sha512-+8u6N4WrhMIb66jcUlubW3uDyRWSuAY4OuXTizMKSQnHHdufnY5rO9A0GzopMiak3+bMj8LFaDlblXOTt+mifQ==}
+    peerDependencies:
+      cldr-core: 36.0.0
+
+snapshots:
+
+  cldr-core@36.0.0: {}
+
+  cldr-dates-modern@36.0.0(cldr-numbers-modern@36.0.0(cldr-core@36.0.0)):
+    dependencies:
+      cldr-numbers-modern: 36.0.0(cldr-core@36.0.0)
+
+  cldr-numbers-modern@36.0.0(cldr-core@36.0.0):
+    dependencies:
+      cldr-core: 36.0.0

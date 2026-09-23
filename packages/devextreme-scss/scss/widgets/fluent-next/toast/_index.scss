@@ -2,7 +2,6 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/toast" with (
-  $toast-content-padding: var(--dx-toast-content-padding),
   $toast-icon-width: var(--dx-toast-icon-width),
   $toast-icon-height: var(--dx-toast-icon-height),
   $toast-icon-margin-right: var(--dx-toast-icon-margin-inline-end),
