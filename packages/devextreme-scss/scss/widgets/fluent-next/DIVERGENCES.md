@@ -24,44 +24,45 @@ rule that every colour variable is published into the component tier, because pu
 that turns nothing would be worse than not publishing it.
 
 **A single-colour icon does not need this.** The same artwork used as a `mask-image` carries only
-its alpha, so `background-color: currentColor` paints it from the cascade and the colour stays a
-token. That is how gantt, list and two of the file manager icons were retired - see
-`base/gantt/_mixins.scss` and `base/list/_mixins.scss` for the `$masked` flag, which keeps the
-legacy themes on the baked path so their emitted css does not move.
+its alpha, so `background-color` paints it from the cascade or from a role and the colour stays a
+token. That is how gantt, list, the file manager, timeView and diagram were retired - see the
+`$masked` flag in each `base/<widget>/_mixins.scss`, which keeps the legacy themes on the baked path
+so their emitted css does not move.
 
-## Current inventory - 16 markers, 3 components
+**What is left is only what is the same in both modes.** A literal that does not flip answers for
+every mode scope, so it is a frozen value, not a broken island. That every remaining data uri is
+mode-invariant is not a claim to be trusted: `tests/data-uri-mode-parity.test.ts` compares the light
+and the dark bundle and requires the same image at the same rule.
 
-### fileManager - 6, structural
+## Current inventory - 3 markers, 1 component
 
-`done.svg` and `danger.svg` each put an inverted glyph on a success or danger disc beside the
-neutral arrows. Three fills in one image; a single-colour mask cannot express that, so the six
-literals stay. Tellingly the disabled state never needed a second copy of these two - they report
-an outcome and do not grey out.
+### fileManager - 3, structural
 
-### timeView - 6, structural
+`done.svg` and `danger.svg` put a glyph on a success or danger disc beside the neutral arrows. The
+arrows are a mask painted by `currentColor`, and the disc goes back on top as an image of its own,
+so the two fills inside it stay literals: the disc is a fixed green or red in both modes, and the
+glyph on it is `content-static-dark` - what sits on a fill that does not flip has no reason to flip
+either.
 
-Two of the three images are genuinely two-tone:
+### diagram - none
 
-- `min-arrow.svg` - the tip is a donut, `fill="$background-color"` inside `stroke="$accent-color"`.
-  Under an alpha mask both are opaque, the canvas-coloured hole fills in and the tip becomes a
-  solid dot.
-- `clock-bg.svg` - the dial and the numerals are deliberately opposed, so one colour would erase
-  the digits.
+Every diagram icon is a mask, the properties-panel toggle included: it paints from
+`content-static-dark`, the role its literal used to stand for, so nothing is frozen any more.
 
-`hour-arrow.svg` alone is single-colour, but converting it frees no literal: `$accent-color` is
-still required by `min-arrow`.
+Two images are still emitted there, and neither is a marker. The `none` connector marks carry
+`.st0{fill:#FF0000}` in their `<style>` block, which beats the `fill="currentColor"` attribute on
+the same path, so the slash is genuinely red and no substitution reaches it: the mask keeps the
+union of the slash and the box for `currentColor` to fill, and the red goes back on top as an image
+that is the same in both modes. The selectbox placeholder is an empty drawing.
 
-### diagram - 4, deliberate
+### Masks and forced colours
 
-34 of the 36 diagram icons are single-colour and a working mask migration exists, but it was
-measured and declined: diagram has no per-state duplication yet, so it saves nothing today, and
-the wide connectors are one-pixel hairlines whose anti-aliasing shifts enough under a mask to fail
-the screenshot comparer at its real defaults. Two icons could never follow anyway -
-`connector-begin-none.svg` and `connector-end-none.svg` declare `.st0{fill:#FF0000}` in a `<style>`
-block, which beats the `fill="currentColor"` attribute on the same path, so their diagonal slash
-is genuinely red.
-
-Revisit when diagram grows a second state: from that point a mask saves the whole set per state.
+A forced-colours palette replaces `background-color` with its Canvas, which is what an icon sits on,
+so a mask left to itself paints nothing at all where a baked image used to survive.
+`base/_mask.scss` is what every masked glyph paints through, and it names the palette's text colour
+for that case. One mask is deliberately not on it: the grid's virtual-row placeholder
+(`base/dataGrid/_index.scss`) is a skeleton, not a glyph, and a solid `CanvasText` bar in place of
+the rows it stands for would be worse than the nothing it shows now.
 
 ## Rasters
 

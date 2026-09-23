@@ -2,6 +2,7 @@
 @use "sass:meta";
 @use "sass:string";
 @use "../string" as *;
+@use "../mask" as *;
 
 @mixin clock-colored-image($data-uri, $accent-color, $background-color, $digit-color) {
   $uri: replace("#{$data-uri}", escape("$accent-color"), escape("#{$accent-color}"));
@@ -9,6 +10,15 @@
   $uri: replace($uri, escape("$digit-color"), escape("#{$digit-color}")); // stylelint-disable-line scss/no-duplicate-dollar-variables
 
   background-image: string.unquote($uri);
+}
+
+@mixin clock-masked-image($data-uri, $background: "%23000") {
+  $painted: replace("#{$data-uri}", escape("$accent-color"), "%23fff");
+  $digits: replace($painted, escape("$digit-color"), "%23fff");
+  $uri: replace($digits, escape("$background-color"), $background);
+
+  mask-image: string.unquote($uri);
+  mask-mode: luminance;
 }
 
 @mixin clock-action-icons-mixin(
@@ -24,16 +34,59 @@
     math.div(-$arrow-width, 2),
     calc(#{$arrow-width} / -2)
   ),
+  $dial-size: null,
+  $dial-shadow: null,
+  $pivot-size: 4px,
+  $pivot-offset: 5px,
+  $masked: false,
 ) {
-  .dx-timeview-clock {
-    @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"), $accent-color, $background-color, $digit-color);
+  @if $masked and not $dial-size {
+    @error "clock-action-icons-mixin: the masked path draws the dial and needs $dial-size.";
+  }
 
-    min-width: $clock-size;
-    min-height: $clock-size;
-    max-height: $clock-size;
-    background-size: $clock-size;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
+  .dx-timeview-clock {
+    @if $masked {
+      min-width: $clock-size;
+      min-height: $clock-size;
+      max-height: $clock-size;
+
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      &::before {
+        width: $dial-size;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background-color: $background-color;
+        box-shadow: $dial-shadow;
+      }
+
+      &::after {
+        @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"));
+
+        width: $clock-size;
+        height: $clock-size;
+        mask-repeat: no-repeat;
+        mask-size: 100% 100%;
+
+        @include masked-glyph-paint($digit-color);
+      }
+    } @else {
+      @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"), $accent-color, $background-color, $digit-color);
+
+      min-width: $clock-size;
+      min-height: $clock-size;
+      max-height: $clock-size;
+      background-size: $clock-size;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+    }
   }
 
   .dx-timeview-hourarrow,
@@ -43,17 +96,48 @@
     width: $arrow-width;
     margin-left: $arrow-offset;
     height: 50%;
-    background-position: bottom;
-    background-repeat: no-repeat;
+
+    @if $masked {
+      mask-position: bottom;
+      mask-repeat: no-repeat;
+
+      @include masked-glyph-paint($accent-color);
+
+      z-index: 1;
+    } @else {
+      background-position: bottom;
+      background-repeat: no-repeat;
+    }
+
     transform-origin: 50% 100%;
     backface-visibility: hidden;
   }
 
   .dx-timeview-hourarrow {
-    @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"), $accent-color, $background-color, $digit-color);
+    @if $masked {
+      @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"), "%23fff");
+    } @else {
+      @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/hour-arrow.svg"), $accent-color, $background-color, $digit-color);
+    }
   }
 
   .dx-timeview-minutearrow {
-    @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"), $accent-color, $background-color, $digit-color);
+    @if $masked {
+      @include clock-masked-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"), "%23fff");
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: $pivot-offset;
+        width: $pivot-size;
+        height: $pivot-size;
+        transform: translate(-50%, 50%);
+        border-radius: 50%;
+        background-color: $background-color;
+      }
+    } @else {
+      @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/min-arrow.svg"), $accent-color, $background-color, $digit-color);
+    }
   }
 }

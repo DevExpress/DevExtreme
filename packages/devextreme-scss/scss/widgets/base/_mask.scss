@@ -1,0 +1,7 @@
+@mixin masked-glyph-paint($color: currentColor) {
+  background-color: $color;
+
+  @media (forced-colors: active) {
+    background-color: CanvasText;
+  }
+}
