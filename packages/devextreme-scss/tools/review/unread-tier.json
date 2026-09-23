@@ -142,6 +142,8 @@
     "--dx-viz-content",
     "--dx-viz-content-subtle",
     "--dx-viz-font-family",
+    "--dx-viz-gray",
+    "--dx-viz-gray-subtle",
     "--dx-viz-green",
     "--dx-viz-grid",
     "--dx-viz-pink",

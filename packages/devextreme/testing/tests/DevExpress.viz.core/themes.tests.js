@@ -362,15 +362,18 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
 
 const PUBLISHED_FONT = 'var(--dx-viz-font-family, \'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif)';
 const PUBLISHED_BLUE = 'var(--dx-viz-blue, #0078d4)';
+const PUBLISHED_GRAY = 'var(--dx-viz-gray, #757575)';
 const PUBLISHED_GREEN = 'var(--dx-viz-green, #008f04)';
 const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
+const PUBLISHED_RED = 'var(--dx-viz-red, #c83d3d)';
+const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
 
 [
-    { theme: 'fluent-next.blue.light', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)' },
-    { theme: 'fluent-next.blue.light.compact', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)' },
-    { theme: 'fluent-next.blue.dark', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)' },
-    { theme: 'fluent-next.blue.dark.compact', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)' },
-].forEach(({ theme, surface, hovered, pressed, plate, onPlate }) => {
+    { theme: 'fluent-next.blue.light', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)' },
+    { theme: 'fluent-next.blue.light.compact', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)' },
+    { theme: 'fluent-next.blue.dark', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)' },
+    { theme: 'fluent-next.blue.dark.compact', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)' },
+].forEach(({ theme, surface, hovered, pressed, plate, onPlate, quiet }) => {
     QUnit.test(`fluent-next theme should be registered: ${theme}`, function(assert) {
         themeModule.currentTheme(theme);
 
@@ -473,6 +476,25 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
         assert.strictEqual(registeredTheme.bullet.color, PUBLISHED_BLUE, 'bullet');
         assert.strictEqual(registeredTheme.gauge.valueIndicators.rangebar.color, PUBLISHED_BLUE, 'gauge rangebar');
         assert.strictEqual(registeredTheme.gauge.valueIndicators['textcloud'].color, PUBLISHED_BLUE, 'gauge textcloud');
+        assert.strictEqual(registeredTheme.sparkline.lineColor, PUBLISHED_BLUE, 'sparkline line');
+        assert.strictEqual(registeredTheme.sparkline.firstLastColor, PUBLISHED_BLUE, 'sparkline first and last point');
+    });
+
+    QUnit.test(`fluent-next theme should mark the extremes of a sparkline with the published yellow and red: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.sparkline.minColor, PUBLISHED_YELLOW, 'sparkline minimum');
+        assert.strictEqual(registeredTheme.sparkline.maxColor, PUBLISHED_RED, 'sparkline maximum');
+    });
+
+    QUnit.test(`fluent-next theme should keep a win and a loss grey, from the published pair: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.sparkline.winColor, PUBLISHED_GRAY, 'sparkline win');
+        assert.strictEqual(registeredTheme.sparkline.barPositiveColor, PUBLISHED_GRAY, 'sparkline bar above zero');
+        assert.strictEqual(registeredTheme.sparkline.lossColor, quiet, 'sparkline loss');
+        assert.strictEqual(registeredTheme.sparkline.barNegativeColor, quiet, 'sparkline bar below zero');
+        assert.strictEqual(registeredTheme.sankey.link.color, PUBLISHED_GRAY, 'sankey link');
     });
 });
 

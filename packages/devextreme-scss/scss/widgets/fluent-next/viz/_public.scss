@@ -3,6 +3,7 @@
 
 @mixin publish {
   --dx-viz-blue: #{$viz-blue};
+  --dx-viz-gray: #{$viz-gray};
   --dx-viz-green: #{$viz-green};
   --dx-viz-pink: #{$viz-pink};
   --dx-viz-primary: #{$viz-primary};

@@ -57,6 +57,12 @@
       "paints": "the export menu button outline while pressed or focused"
     },
     {
+      "name": "--dx-viz-gray-subtle",
+      "role": "color-bg-gray-subtle",
+      "declaredPerMode": true,
+      "paints": "the quieter half of a pair that carries no meaning of its own: a losing bar of a win-loss sparkline and a bar below zero"
+    },
+    {
       "name": "--dx-viz-grid",
       "role": "color-border-subtle",
       "declaredPerMode": true,
@@ -66,13 +72,19 @@
       "name": "--dx-viz-blue",
       "role": "color-bg-blue",
       "declaredPerMode": false,
-      "paints": "the first series colour, the near end of the gradient set the tree map and the map mix their scales from, and the shapes that are data rather than chrome: bullet bar, gauge range bar, map markers and the map legend marker"
+      "paints": "the first series colour, the near end of the gradient set the tree map and the map mix their scales from, and the shapes that are data rather than chrome: bullet bar, gauge range bar, sparkline line, map markers and the map legend marker"
+    },
+    {
+      "name": "--dx-viz-gray",
+      "role": "color-bg-gray",
+      "declaredPerMode": false,
+      "paints": "a data shape the design deliberately leaves without meaning: a winning bar of a win-loss sparkline, a bar above zero, and the link between two sankey nodes, grey rather than green on purpose"
     },
     {
       "name": "--dx-viz-red",
       "role": "color-bg-red",
       "declaredPerMode": false,
-      "paints": "the second series colour, and the falling half of an indicating set"
+      "paints": "the second series colour, the falling half of an indicating set, and the highest point of a sparkline"
     },
     {
       "name": "--dx-viz-green",
@@ -84,7 +96,7 @@
       "name": "--dx-viz-yellow",
       "role": "color-bg-yellow",
       "declaredPerMode": false,
-      "paints": "the fourth series colour and the middle of an indicating set"
+      "paints": "the fourth series colour, the middle of an indicating set, and the lowest point of a sparkline"
     },
     {
       "name": "--dx-viz-pink",
