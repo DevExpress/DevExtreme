@@ -39,8 +39,7 @@ const getContainerClasses = (
 ): string[] => {
   const classes = scopeClasses($element);
   // A scope the viewport already resolves to needs no container of its own: it would be a wrapper
-  // that repaints nothing, and one that measures nothing - callers reading the container as a
-  // geometric area (popup drag and resize) would be clamped to its zero height.
+  // that repaints nothing.
   const sorted = (cssClasses: string[]): string => [...cssClasses].sort().join(' ');
 
   return sorted(classes) === sorted(scopeClasses($viewport)) ? [] : classes;
