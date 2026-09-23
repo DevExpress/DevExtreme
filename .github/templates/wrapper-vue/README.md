@@ -107,10 +107,13 @@ become `any`: `keyExpr` gives `(((item: any) => any))`.
   parentheses: `((() => void))`, `(Array<…>)`.
 
 **Events** always use the function member only, with the component's own named event type,
-even when the declaration also allows `| string | null`:
+even when the declaration also allows `| string | null`. The parameter name comes from
+the JSDoc `@type_function_param1 <name>:{…}`. It is `e` almost everywhere; the exception
+is `onValidated`, which uses `validatedInfo`:
 
 ```ts
 onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
+onValidated: Function as PropType<((validatedInfo: ValidatedEvent) => void)>,
 ```
 
 Examples:

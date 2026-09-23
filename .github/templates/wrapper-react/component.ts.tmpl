@@ -72,8 +72,10 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type I__Name__OptionsNarrowedEvents__TPD__ = {
-//#each NARROWED_EVENT   (alphabetical; README §3 — append " | undefined" only if the deciding declaration has it)
-  __onEvent__?: ((e: __EventType____TP__) => void);
+//#each NARROWED_EVENT   (alphabetical; README §3)
+//#   __param__      the JSDoc parameter name: `e`, or e.g. `validatedInfo` for onValidated
+//#   __undefined__  " | undefined" if the deciding declaration has it, otherwise empty
+  __onEvent__?: ((__param__: __EventType____TP__) => void)__undefined__;
 //#endeach
 }
 
