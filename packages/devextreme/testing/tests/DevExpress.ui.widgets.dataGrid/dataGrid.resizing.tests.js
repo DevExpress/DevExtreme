@@ -1230,13 +1230,13 @@ QUnit.module('API Methods', baseModuleConfig, () => {
             dataSource: [{ field1: 1, field2: 2, field3: 3 }]
         });
 
-        sinon.spy(dataGrid.getController('resizing'), '_synchronizeColumns');
+        sinon.spy(dataGrid.getController('resizing'), 'synchronizeColumns');
 
         // act
         resizeCallbacks.fire();
 
         // assert
-        assert.equal(dataGrid.getController('resizing')._synchronizeColumns.callCount, 0, 'synchronizeColumns is not called');
+        assert.equal(dataGrid.getController('resizing').synchronizeColumns.callCount, 0, 'synchronizeColumns is not called');
 
 
         // act
@@ -1244,7 +1244,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
         resizeCallbacks.fire();
 
         // assert
-        assert.equal(dataGrid.getController('resizing')._synchronizeColumns.callCount, 1, 'synchronizeColumns is called');
+        assert.equal(dataGrid.getController('resizing').synchronizeColumns.callCount, 1, 'synchronizeColumns is called');
     });
 
     // T372519
@@ -1264,7 +1264,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
 
         const rowsViewHeight = $('#dataGrid .dx-datagrid-rowsview').height();
 
-        sinon.spy(dataGrid.getController('resizing'), '_synchronizeColumns');
+        sinon.spy(dataGrid.getController('resizing'), 'synchronizeColumns');
 
         // act
         $('#qunit-fixture').hide();
@@ -1272,7 +1272,7 @@ QUnit.module('API Methods', baseModuleConfig, () => {
         $('#qunit-fixture').show();
 
         // assert
-        assert.equal(dataGrid.getController('resizing')._synchronizeColumns.callCount, 0, 'synchronizeColumns is not called');
+        assert.equal(dataGrid.getController('resizing').synchronizeColumns.callCount, 0, 'synchronizeColumns is not called');
         assert.equal($('#dataGrid .dx-datagrid-rowsview').height(), rowsViewHeight, 'rowsView height is not changed');
     });
 

@@ -194,7 +194,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(dataGrid.getVisibleRows().length, 1, 'rows are filtered');
     });
 
-    QUnit.testInActiveWindow('Filter row editor should have focus after _synchronizeColumns (T638737)', function(assert) {
+    QUnit.testInActiveWindow('Filter row editor should have focus after synchronizeColumns (T638737)', function(assert) {
         $('#qunit-fixture').css('position', 'static');
         // arrange, act
         const dataGrid = createDataGrid({
