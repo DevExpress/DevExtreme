@@ -20,12 +20,20 @@ import Store from '@js/data/abstract_store';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
 import inflector from '@ts/core/utils/m_inflector';
-import type { Column, ColumnsChanges, FilterField } from '@ts/grids/grid_core/columns_controller/types';
+import type {
+  Column,
+  ColumnIdentifier,
+  ColumnOptionChanged,
+  ColumnsChanges,
+  ColumnsOptionChanged,
+  DropLocationNames,
+  FilterField,
+} from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import type { Module, OptionChanged } from '@ts/grids/grid_core/m_types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
-import type { Module } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import {
@@ -136,7 +144,7 @@ export class ColumnsController extends modules.Controller {
   private getCommonColumnSettings(column): Partial<Column> {
     switch (true) {
       case !column?.type:
-        return this.option('commonColumnSettings');
+        return this.option('commonColumnSettings') ?? {};
       case column?.type === AI_COLUMN_NAME:
         return this.getAIColumnSettings();
       default:
@@ -247,7 +255,7 @@ export class ColumnsController extends modules.Controller {
     return column;
   }
 
-  public optionChanged(args) {
+  public optionChanged(args: OptionChanged | ColumnOptionChanged): void {
     let needUpdateRequireResize;
 
     switch (args.name) {
@@ -264,7 +272,7 @@ export class ColumnsController extends modules.Controller {
         args.handled = true;
 
         if (!this._skipProcessingColumnsChange) {
-          if (args.name === args.fullName) {
+          if (args.fullName === 'columns') {
             this._columnsUserState = null;
             this._ignoreColumnOptionNames = null;
             this.init();
@@ -305,17 +313,14 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  private _columnOptionChanged(args) {
-    let columnOptionValue = {};
+  private _columnOptionChanged(args: ColumnOptionChanged): void {
     const column = this.getColumnByPath(args.fullName);
     const columnOptionName = this.getColumnOptionNameByFullName(args.fullName);
 
     if (column) {
-      if (columnOptionName) {
-        columnOptionValue[columnOptionName] = args.value;
-      } else {
-        columnOptionValue = args.value;
-      }
+      const columnOptionValue = columnOptionName
+        ? { [columnOptionName]: args.value }
+        : args.value;
 
       this._skipProcessingColumnsChange = args.fullName;
       this.columnOption(column.index, columnOptionValue);
@@ -332,7 +337,7 @@ export class ColumnsController extends modules.Controller {
     this.getController('resizing')?.resetLastResizeTime?.();
   }
 
-  private _updateRequireResize(args) {
+  private _updateRequireResize(args: ColumnsOptionChanged | ColumnOptionChanged): void {
     if (args.fullName.replace(COLUMN_OPTION_REGEXP, '') === 'width') {
       this.setRequireResize();
     }
@@ -947,7 +952,12 @@ export class ColumnsController extends modules.Controller {
   /**
    * @extended: column_chooser
    */
-  public allowMoveColumn(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
+  public allowMoveColumn(
+    fromVisibleIndex,
+    toVisibleIndex,
+    sourceLocation: DropLocationNames,
+    targetLocation: DropLocationNames,
+  ) {
     const that = this;
     const columnIndex = getColumnIndexByVisibleIndex(that, fromVisibleIndex, sourceLocation);
     const sourceColumn = that._columns[columnIndex];
@@ -974,7 +984,12 @@ export class ColumnsController extends modules.Controller {
     return false;
   }
 
-  public moveColumn(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
+  public moveColumn(
+    fromVisibleIndex,
+    toVisibleIndex,
+    sourceLocation: DropLocationNames,
+    targetLocation: DropLocationNames,
+  ) {
     const that = this;
     const options: any = {};
     let prevGroupIndex;
@@ -1471,7 +1486,7 @@ export class ColumnsController extends modules.Controller {
     return this._columns ? this._columns.length : 0;
   }
 
-  public columnOption(identifier, option?, value?, notFireEvent?) {
+  public columnOption(identifier: ColumnIdentifier | undefined, option?, value?, notFireEvent?) {
     const that = this;
     const columns = that._columns.concat(that._commandColumns);
     const column = findColumn(columns, identifier);
@@ -1567,7 +1582,7 @@ export class ColumnsController extends modules.Controller {
     return visibleColumns.indexOf(visibleColumn);
   }
 
-  public getVisibleColumnIndex(id, rowIndex?) {
+  public getVisibleColumnIndex(id: ColumnIdentifier, rowIndex?) {
     const index = this.columnOption(id, 'index');
 
     return this.getVisibleIndex(index, rowIndex);
@@ -1591,7 +1606,7 @@ export class ColumnsController extends modules.Controller {
     that._checkColumns();
   }
 
-  private deleteColumn(id) {
+  private deleteColumn(id: ColumnIdentifier) {
     const that = this;
     const column = that.columnOption(id);
 
