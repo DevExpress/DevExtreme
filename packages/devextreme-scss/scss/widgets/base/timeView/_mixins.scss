@@ -40,6 +40,10 @@
   $pivot-offset: 5px,
   $masked: false,
 ) {
+  @if $masked and not $dial-size {
+    @error "clock-action-icons-mixin: the masked path draws the dial and needs $dial-size.";
+  }
+
   .dx-timeview-clock {
     @if $masked {
       min-width: $clock-size;
@@ -57,7 +61,7 @@
 
       &::before {
         width: $dial-size;
-        height: $dial-size;
+        aspect-ratio: 1;
         border-radius: 50%;
         background-color: $background-color;
         box-shadow: $dial-shadow;
@@ -71,7 +75,7 @@
         mask-repeat: no-repeat;
         mask-size: 100% 100%;
 
-        @include masked-glyph-paint();
+        @include masked-glyph-paint($digit-color);
       }
     } @else {
       @include clock-colored-image(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/timeView/clock-bg.svg"), $accent-color, $background-color, $digit-color);

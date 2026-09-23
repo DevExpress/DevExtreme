@@ -2178,7 +2178,7 @@
   "--dx-time-view-clock-arrow-offset",
   "--dx-time-view-clock-arrow-width",
   "--dx-time-view-clock-bg",
-  "--dx-time-view-clock-dial-size",
+  "--dx-time-view-clock-digits-bg",
   "--dx-time-view-clock-margin-block-end",
   "--dx-time-view-clock-shadow",
   "--dx-time-view-clock-size",
