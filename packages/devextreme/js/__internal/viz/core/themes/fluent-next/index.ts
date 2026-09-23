@@ -3,33 +3,37 @@ const FONT_FAMILY = '\'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir n
 const VIZ_BG = '--dx-viz-bg';
 const VIZ_BG_ACTIVE = '--dx-viz-bg-active';
 const VIZ_BG_HOVERED = '--dx-viz-bg-hovered';
-const VIZ_BLUE = '--dx-viz-blue';
 const VIZ_BORDER = '--dx-viz-border';
 const VIZ_BORDER_ACTIVE = '--dx-viz-border-active';
 const VIZ_BORDER_HOVERED = '--dx-viz-border-hovered';
 const VIZ_CONTENT = '--dx-viz-content';
 const VIZ_CONTENT_SUBTLE = '--dx-viz-content-subtle';
-const VIZ_FONT_FAMILY = '--dx-viz-font-family';
 const VIZ_GRID = '--dx-viz-grid';
-const VIZ_PRIMARY = '--dx-viz-primary';
 const VIZ_TOOLTIP_BG = '--dx-viz-tooltip-bg';
 const VIZ_TOOLTIP_CONTENT = '--dx-viz-tooltip-content';
+const VIZ_FONT_FAMILY = '--dx-viz-font-family';
+
+const VIZ_PRIMARY = '--dx-viz-primary';
+
+const VIZ_BLUE = '--dx-viz-blue';
 
 const LIGHT = {
   [VIZ_BG]: '#ffffff',
   [VIZ_BG_ACTIVE]: '#e1e1e1',
   [VIZ_BG_HOVERED]: '#f5f5f5',
-  [VIZ_BLUE]: '#0078d4',
   [VIZ_BORDER]: '#cbcbcb',
   [VIZ_BORDER_ACTIVE]: '#b6b6b6',
   [VIZ_BORDER_HOVERED]: '#c0c0c0',
   [VIZ_CONTENT]: '#161616',
   [VIZ_CONTENT_SUBTLE]: '#444444',
-  [VIZ_FONT_FAMILY]: FONT_FAMILY,
   [VIZ_GRID]: '#e1e1e1',
-  [VIZ_PRIMARY]: '#0f6cbd',
   [VIZ_TOOLTIP_BG]: '#242424',
   [VIZ_TOOLTIP_CONTENT]: '#ffffff',
+  [VIZ_FONT_FAMILY]: FONT_FAMILY,
+
+  [VIZ_PRIMARY]: '#0f6cbd',
+
+  [VIZ_BLUE]: '#0078d4',
 };
 
 type PublishedName = keyof typeof LIGHT;
