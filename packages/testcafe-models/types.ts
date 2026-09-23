@@ -84,6 +84,7 @@ export type WidgetName =
   | 'dxTreeMap'
   | 'dxTreeView'
   | 'dxValidationSummary'
+  | 'dxVectorMap'
   | 'dxValidator'
   | 'dxVectorMap'
   | 'dxGantt';

@@ -8,10 +8,12 @@ const VIZ_BORDER = '--dx-viz-border';
 const VIZ_BORDER_ACTIVE = '--dx-viz-border-active';
 const VIZ_BORDER_HOVERED = '--dx-viz-border-hovered';
 const VIZ_CONTENT = '--dx-viz-content';
+const VIZ_CONTENT_ORANGE = '--dx-viz-content-orange';
 const VIZ_CONTENT_SUBTLE = '--dx-viz-content-subtle';
 const VIZ_GRAY_SUBTLE = '--dx-viz-gray-subtle';
 const VIZ_GRID = '--dx-viz-grid';
 const VIZ_INDIGO_SUBTLE = '--dx-viz-indigo-subtle';
+const VIZ_ORANGE_SUBTLE = '--dx-viz-orange-subtle';
 const VIZ_RED_SUBTLE = '--dx-viz-red-subtle';
 const VIZ_TOOLTIP_BG = '--dx-viz-tooltip-bg';
 const VIZ_TOOLTIP_CONTENT = '--dx-viz-tooltip-content';
@@ -21,6 +23,7 @@ const VIZ_PRIMARY = '--dx-viz-primary';
 
 const VIZ_BLUE = '--dx-viz-blue';
 const VIZ_GRAY = '--dx-viz-gray';
+const VIZ_ORANGE = '--dx-viz-orange';
 const VIZ_RED = '--dx-viz-red';
 const VIZ_YELLOW = '--dx-viz-yellow';
 
@@ -35,10 +38,12 @@ const LIGHT = {
   [VIZ_BORDER_ACTIVE]: '#b6b6b6',
   [VIZ_BORDER_HOVERED]: '#c0c0c0',
   [VIZ_CONTENT]: '#161616',
+  [VIZ_CONTENT_ORANGE]: '#ad4100',
   [VIZ_CONTENT_SUBTLE]: '#444444',
   [VIZ_GRAY_SUBTLE]: '#cfcfcf',
   [VIZ_GRID]: '#e1e1e1',
   [VIZ_INDIGO_SUBTLE]: '#becefc',
+  [VIZ_ORANGE_SUBTLE]: '#f9c1aa',
   [VIZ_RED_SUBTLE]: '#f9bfb9',
   [VIZ_TOOLTIP_BG]: '#242424',
   [VIZ_TOOLTIP_CONTENT]: '#ffffff',
@@ -48,6 +53,7 @@ const LIGHT = {
 
   [VIZ_BLUE]: '#0078d4',
   [VIZ_GRAY]: '#757575',
+  [VIZ_ORANGE]: '#f7630c',
   [VIZ_RED]: '#c83d3d',
   [VIZ_YELLOW]: '#eaa300',
 
@@ -66,10 +72,12 @@ const DARK: Record<PublishedName, string> = {
   [VIZ_BORDER_ACTIVE]: '#656565',
   [VIZ_BORDER_HOVERED]: '#ababab',
   [VIZ_CONTENT]: '#ffffff',
+  [VIZ_CONTENT_ORANGE]: '#f57d48',
   [VIZ_CONTENT_SUBTLE]: '#cbcbcb',
   [VIZ_GRAY_SUBTLE]: '#4a4a4a',
   [VIZ_GRID]: '#4c4c4c',
   [VIZ_INDIGO_SUBTLE]: '#2e4195',
+  [VIZ_ORANGE_SUBTLE]: '#893200',
   [VIZ_RED_SUBTLE]: '#861e20',
   [VIZ_TOOLTIP_BG]: '#ffffff',
   [VIZ_TOOLTIP_CONTENT]: '#161616',
@@ -276,9 +284,15 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
         },
       },
       'layer:area': {
+        color: paint(VIZ_GRAY_SUBTLE),
         borderColor: paint(VIZ_BG),
         hoveredBorderColor: paint(VIZ_CONTENT),
         selectedBorderColor: paint(VIZ_CONTENT),
+      },
+      'layer:line': {
+        color: paint(VIZ_ORANGE_SUBTLE),
+        hoveredColor: paint(VIZ_ORANGE),
+        selectedColor: paint(VIZ_CONTENT_ORANGE),
       },
       'layer:marker:dot': {
         color: paint(VIZ_BLUE),

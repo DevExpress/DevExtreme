@@ -363,6 +363,7 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
 const PUBLISHED_FONT = 'var(--dx-viz-font-family, \'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif)';
 const PUBLISHED_BLUE = 'var(--dx-viz-blue, #0078d4)';
 const PUBLISHED_GRAY = 'var(--dx-viz-gray, #757575)';
+const PUBLISHED_ORANGE = 'var(--dx-viz-orange, #f7630c)';
 const PUBLISHED_TILE_BORDER = 'var(--dx-viz-tile-border, #ffffff)';
 const PUBLISHED_GREEN = 'var(--dx-viz-green, #008f04)';
 const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
@@ -370,12 +371,13 @@ const PUBLISHED_RED = 'var(--dx-viz-red, #c83d3d)';
 const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
 
 [
-    { theme: 'fluent-next.blue.light', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', marker: 'var(--dx-viz-indigo-subtle, #becefc)', secondHalf: 'var(--dx-viz-red-subtle, #f9bfb9)' },
-    { theme: 'fluent-next.blue.light.compact', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', marker: 'var(--dx-viz-indigo-subtle, #becefc)', secondHalf: 'var(--dx-viz-red-subtle, #f9bfb9)' },
-    { theme: 'fluent-next.blue.dark', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', marker: 'var(--dx-viz-indigo-subtle, #2e4195)', secondHalf: 'var(--dx-viz-red-subtle, #861e20)' },
-    { theme: 'fluent-next.blue.dark.compact', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', marker: 'var(--dx-viz-indigo-subtle, #2e4195)', secondHalf: 'var(--dx-viz-red-subtle, #861e20)' },
+    { theme: 'fluent-next.blue.light', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', marker: 'var(--dx-viz-indigo-subtle, #becefc)', secondHalf: 'var(--dx-viz-red-subtle, #f9bfb9)', mapLine: 'var(--dx-viz-orange-subtle, #f9c1aa)', mapLineSelected: 'var(--dx-viz-content-orange, #ad4100)' },
+    { theme: 'fluent-next.blue.light.compact', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', marker: 'var(--dx-viz-indigo-subtle, #becefc)', secondHalf: 'var(--dx-viz-red-subtle, #f9bfb9)', mapLine: 'var(--dx-viz-orange-subtle, #f9c1aa)', mapLineSelected: 'var(--dx-viz-content-orange, #ad4100)' },
+    { theme: 'fluent-next.blue.dark', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', marker: 'var(--dx-viz-indigo-subtle, #2e4195)', secondHalf: 'var(--dx-viz-red-subtle, #861e20)', mapLine: 'var(--dx-viz-orange-subtle, #893200)', mapLineSelected: 'var(--dx-viz-content-orange, #f57d48)' },
+    { theme: 'fluent-next.blue.dark.compact', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', marker: 'var(--dx-viz-indigo-subtle, #2e4195)', secondHalf: 'var(--dx-viz-red-subtle, #861e20)', mapLine: 'var(--dx-viz-orange-subtle, #893200)', mapLineSelected: 'var(--dx-viz-content-orange, #f57d48)' },
 ].forEach(({
     theme, surface, hovered, pressed, plate, onPlate, ink, shelf, quiet, marker, secondHalf,
+    mapLine, mapLineSelected,
 }) => {
     QUnit.test(`fluent-next theme should be registered: ${theme}`, function(assert) {
         themeModule.currentTheme(theme);
@@ -527,10 +529,19 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         assert.strictEqual(registeredTheme.treeMap.tile.border.color, PUBLISHED_TILE_BORDER, 'tree map tile border');
     });
 
+    QUnit.test(`fluent-next theme should draw a map line in the published orange: ${theme}`, function(assert) {
+        const line = getRegisteredTheme(theme).map['layer:line'];
+
+        assert.strictEqual(line.color, mapLine, 'map line at rest');
+        assert.strictEqual(line.hoveredColor, PUBLISHED_ORANGE, 'map line under the pointer');
+        assert.strictEqual(line.selectedColor, mapLineSelected, 'map line selected');
+    });
+
     QUnit.test(`fluent-next theme should name every gauge indicator the theme draws: ${theme}`, function(assert) {
         const { valueIndicators } = getRegisteredTheme(theme).gauge;
 
         assert.strictEqual(valueIndicators._default.color, quiet, 'default needle');
+        assert.strictEqual(getRegisteredTheme(theme).map['layer:area'].color, quiet, 'map area fill');
         assert.strictEqual(valueIndicators['trianglemarker'].color, marker, 'triangle marker');
         assert.strictEqual(valueIndicators['twocolorneedle'].secondColor, secondHalf, 'two-colour needle');
     });

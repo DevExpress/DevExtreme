@@ -36,6 +36,23 @@ if (getThemeName() === 'fluent-next') {
     { name: 'd', value: 3 }, { name: 'e', value: 2 }, { name: 'f', value: 2 },
   ];
 
+  const AREAS = {
+    type: 'FeatureCollection',
+    features: [
+      { type: 'Feature', properties: { name: 'a' }, geometry: { type: 'Polygon', coordinates: [[[0, 0], [40, 0], [40, 30], [0, 30], [0, 0]]] } },
+      { type: 'Feature', properties: { name: 'b' }, geometry: { type: 'Polygon', coordinates: [[[45, 0], [90, 0], [90, 30], [45, 30], [45, 0]]] } },
+      { type: 'Feature', properties: { name: 'c' }, geometry: { type: 'Polygon', coordinates: [[[0, 35], [90, 35], [90, 60], [0, 60], [0, 35]]] } },
+    ],
+  };
+
+  const LINES = {
+    type: 'FeatureCollection',
+    features: [
+      { type: 'Feature', properties: { name: 'l1' }, geometry: { type: 'LineString', coordinates: [[0, 0], [30, 25], [60, 5], [90, 30]] } },
+      { type: 'Feature', properties: { name: 'l2' }, geometry: { type: 'LineString', coordinates: [[0, 40], [30, 20], [60, 45], [90, 15]] } },
+    ],
+  };
+
   const HIDDEN_AXIS = {
     visible: false,
     grid: { visible: false },
@@ -63,7 +80,7 @@ if (getThemeName() === 'fluent-next') {
 
   const inBothScopes = async (
     widget: 'dxSparkline' | 'dxBullet' | 'dxChart' | 'dxTreeMap' | 'dxBarGauge' | 'dxCircularGauge'
-    | 'dxSankey',
+    | 'dxSankey' | 'dxVectorMap',
     options: unknown,
     size: { width: number; height: number },
   ): Promise<void> => {
@@ -159,6 +176,32 @@ if (getThemeName() === 'fluent-next') {
     }, { width: 240, height: 130 });
 
     await shoot(t, 'Viz bar gauge shelf');
+  });
+
+  test('a map area takes the published quiet grey', async (t) => {
+    await inBothScopes('dxVectorMap', {
+      layers: [{ dataSource: AREAS, type: 'area' }],
+      bounds: [-4, 64, 94, -4],
+      panningEnabled: false,
+      zoomingEnabled: false,
+      controlBar: { enabled: false },
+      tooltip: { enabled: false },
+    }, { width: 240, height: 130 });
+
+    await shoot(t, 'Viz map area');
+  });
+
+  test('a map line takes the published orange', async (t) => {
+    await inBothScopes('dxVectorMap', {
+      layers: [{ dataSource: LINES, type: 'line' }],
+      bounds: [-4, 49, 94, -4],
+      panningEnabled: false,
+      zoomingEnabled: false,
+      controlBar: { enabled: false },
+      tooltip: { enabled: false },
+    }, { width: 240, height: 130 });
+
+    await shoot(t, 'Viz map line');
   });
 
   test('a sankey link takes the published grey', async (t) => {
