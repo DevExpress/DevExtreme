@@ -11,6 +11,8 @@ const VIZ_CONTENT = '--dx-viz-content';
 const VIZ_CONTENT_SUBTLE = '--dx-viz-content-subtle';
 const VIZ_GRAY_SUBTLE = '--dx-viz-gray-subtle';
 const VIZ_GRID = '--dx-viz-grid';
+const VIZ_INDIGO_SUBTLE = '--dx-viz-indigo-subtle';
+const VIZ_RED_SUBTLE = '--dx-viz-red-subtle';
 const VIZ_TOOLTIP_BG = '--dx-viz-tooltip-bg';
 const VIZ_TOOLTIP_CONTENT = '--dx-viz-tooltip-content';
 const VIZ_FONT_FAMILY = '--dx-viz-font-family';
@@ -36,6 +38,8 @@ const LIGHT = {
   [VIZ_CONTENT_SUBTLE]: '#444444',
   [VIZ_GRAY_SUBTLE]: '#cfcfcf',
   [VIZ_GRID]: '#e1e1e1',
+  [VIZ_INDIGO_SUBTLE]: '#becefc',
+  [VIZ_RED_SUBTLE]: '#f9bfb9',
   [VIZ_TOOLTIP_BG]: '#242424',
   [VIZ_TOOLTIP_CONTENT]: '#ffffff',
   [VIZ_FONT_FAMILY]: FONT_FAMILY,
@@ -65,6 +69,8 @@ const DARK: Record<PublishedName, string> = {
   [VIZ_CONTENT_SUBTLE]: '#cbcbcb',
   [VIZ_GRAY_SUBTLE]: '#4a4a4a',
   [VIZ_GRID]: '#4c4c4c',
+  [VIZ_INDIGO_SUBTLE]: '#2e4195',
+  [VIZ_RED_SUBTLE]: '#861e20',
   [VIZ_TOOLTIP_BG]: '#ffffff',
   [VIZ_TOOLTIP_CONTENT]: '#161616',
 };
@@ -185,8 +191,19 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
         backgroundColor: paint(VIZ_BORDER),
       },
       valueIndicators: {
+        _default: {
+          color: paint(VIZ_GRAY_SUBTLE),
+        },
         rangebar: {
           color: paint(VIZ_BLUE),
+        },
+        // eslint-disable-next-line spellcheck/spell-checker
+        trianglemarker: {
+          color: paint(VIZ_INDIGO_SUBTLE),
+        },
+        // eslint-disable-next-line spellcheck/spell-checker
+        twocolorneedle: {
+          secondColor: paint(VIZ_RED_SUBTLE),
         },
         // eslint-disable-next-line spellcheck/spell-checker
         textcloud: {

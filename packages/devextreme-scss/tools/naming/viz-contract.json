@@ -66,7 +66,19 @@
       "name": "--dx-viz-gray-subtle",
       "role": "color-bg-gray-subtle",
       "declaredPerMode": true,
-      "paints": "the quieter half of a pair that carries no meaning of its own: a losing bar of a win-loss sparkline and a bar below zero"
+      "paints": "the quieter half of a pair that carries no meaning of its own: a losing bar of a win-loss sparkline, a bar below zero, and the gauge needle the theme falls back to"
+    },
+    {
+      "name": "--dx-viz-indigo-subtle",
+      "role": "color-bg-indigo-subtle",
+      "declaredPerMode": true,
+      "paints": "the triangle marker a gauge puts on its scale for a subvalue"
+    },
+    {
+      "name": "--dx-viz-red-subtle",
+      "role": "color-bg-red-subtle",
+      "declaredPerMode": true,
+      "paints": "the second half of a two-colour gauge needle"
     },
     {
       "name": "--dx-viz-grid",

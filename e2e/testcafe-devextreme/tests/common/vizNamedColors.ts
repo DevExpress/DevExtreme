@@ -62,7 +62,8 @@ if (getThemeName() === 'fluent-next') {
   });
 
   const inBothScopes = async (
-    widget: 'dxSparkline' | 'dxBullet' | 'dxChart' | 'dxTreeMap' | 'dxBarGauge' | 'dxSankey',
+    widget: 'dxSparkline' | 'dxBullet' | 'dxChart' | 'dxTreeMap' | 'dxBarGauge' | 'dxCircularGauge'
+    | 'dxSankey',
     options: unknown,
     size: { width: number; height: number },
   ): Promise<void> => {
@@ -172,6 +173,19 @@ if (getThemeName() === 'fluent-next') {
     }, { width: 240, height: 130 });
 
     await shoot(t, 'Viz sankey link');
+  });
+
+  test('every gauge indicator the theme draws takes a published name', async (t) => {
+    await inBothScopes('dxCircularGauge', {
+      scale: { startValue: 0, endValue: 100, label: { visible: false } },
+      value: 62,
+      subvalues: [24],
+      valueIndicator: { type: 'twocolorneedle' },
+      animation: { enabled: false },
+      tooltip: { enabled: false },
+    }, { width: 240, height: 150 });
+
+    await shoot(t, 'Viz gauge indicators');
   });
 
   test('the hairline between tree map tiles stays the same colour in both scopes', async (t) => {

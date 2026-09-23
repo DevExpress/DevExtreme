@@ -16,6 +16,7 @@ export type WidgetName =
   | 'dxCalendarView'
   | 'dxCardView'
   | 'dxChart'
+  | 'dxCircularGauge'
   | 'dxChat'
   | 'dxCheckBox'
   | 'dxCircularGauge'
