@@ -773,6 +773,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
         assert.equal($cells.eq(0).text(), dateLocalization.format(new Date(2016, 10, 6, 1), 'shorttime'), 'Cell text is OK');
         assert.equal($cells.eq(2).text(), dateLocalization.format(new Date(2016, 10, 6, 1, 30), 'shorttime'), 'Cell text is OK');
+        // 2:00 AM follows the repeated 1:00 and 1:30 rows.
+        assert.equal($cells.eq(4).text(), dateLocalization.format(new Date(2016, 10, 6, 2), 'shorttime'), 'Cell text is OK');
     });
 
     test('DateTimeIndicator should show correct time in current time zone', async function(assert) {
