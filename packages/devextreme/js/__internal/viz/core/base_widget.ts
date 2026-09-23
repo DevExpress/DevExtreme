@@ -24,7 +24,6 @@ import {
   isDefined, isNumeric, isObject as _isObject, type,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import warnings from '@js/viz/core/errors_warnings';
 // @ts-expect-error
 import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
 import graphicObject from '@ts/common/charts';
@@ -36,6 +35,7 @@ import {
   createEventTrigger,
   createIncidentOccurred, createResizeHandler,
 } from '@ts/viz/core/base_widget.utils';
+import warnings from '@ts/viz/core/errors_warnings';
 import { changes, isDisabledOnServer, replaceInherit } from '@ts/viz/core/helpers';
 import _Layout from '@ts/viz/core/layout';
 import { Renderer } from '@ts/viz/core/renderers/renderer';

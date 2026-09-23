@@ -18,7 +18,7 @@ import { each } from '@js/core/utils/iterator';
 import _windowResizeCallbacks from '@js/core/utils/resize_callbacks';
 import { format as _stringFormat } from '@js/core/utils/string';
 import { version } from '@js/core/version';
-import warnings from '@js/viz/core/errors_warnings';
+import warnings from '@ts/viz/core/errors_warnings';
 import { normalizeEnum } from '@ts/viz/core/utils';
 
 const { ERROR_MESSAGES } = warnings;
