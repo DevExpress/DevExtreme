@@ -1,0 +1,276 @@
+//# ─────────────────────────────────────────────────────────────────────────────
+//# DevExtreme React wrapper — component file template
+//# Output: packages/devextreme-react/src/<kebab-name>.ts
+//# How to fill it: see README.md next to this file.
+//#
+//# Every line starting with "//#" is a template directive or note — delete ALL
+//# of them in the output. Keep every other line byte-for-byte, only replacing
+//# __PLACEHOLDERS__.
+//#
+//#   //#if FLAG … //#else … //#endif   keep the branch whose FLAG holds
+//#   //#each ITEM … //#endeach         repeat the body once per ITEM (0..n times)
+//#
+//# Flags:  GENERIC    Properties has type params (e.g. Properties<TItem, TKey>)
+//#         NARROWED   ≥1 narrowed event (README §3)
+//#         NESTED     ≥1 nested option component (README §6)
+//#         EXTENSION  component is an extension (only Validator today)
+//#         EXTRA      the `& { … }` block of I__Name__Options is non-empty
+//#                    (GENERIC or a template or a root subscribable option)
+//#         TEMPLATE / ROOT_SUBSCRIBABLE / SUBSCRIBABLE / INDEPENDENT_EVENTS
+//#                    the matching list (README §2, §4, §5) is non-empty
+//#         RAF / PORTAL   README §1
+//#       Per nested block: COLLECTION_ITEM, HAS_CHILDREN, PREDEFINED,
+//#                    NESTED_SUBSCRIBABLE_FIELD, NESTED_TEMPLATE_FIELD (README §6)
+//#
+//# Placeholders:
+//#   __Name__     PascalCase name without "dx"          TabPanel
+//#   __dxName__   widget class                          dxTabPanel
+//#   __module__   d.ts path under js/, no extension     ui/tab_panel
+//#   __TP__       type args, or empty                   <TItem, TKey>
+//#   __TPD__      type params with defaults, or empty   <TItem = any, TKey = any>
+//# ─────────────────────────────────────────────────────────────────────────────
+"use client"
+//#if GENERIC
+export { ExplicitTypes } from "devextreme/__module__";
+//#endif
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
+import __dxName__, {
+    Properties
+} from "devextreme/__module__";
+
+//#if EXTENSION
+import { ExtensionComponent as BaseComponent } from "./core/extension-component";
+import { IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+//#else
+//#if NESTED
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+//#else
+import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
+//#endif
+//#endif
+//#if NESTED
+import NestedOption from "./core/nested-option";
+//#endif
+
+//# README §8: own module first, then one line per other module. Only types that
+//# are actually referenced below. Alias names that collide (README §8).
+import type { __OwnTypes__ } from "devextreme/__module__";
+//#each OTHER_TYPE_MODULE
+import type { __Types__ } from "devextreme/__otherModule__";
+//#endeach
+
+//#if NARROWED
+type ReplaceFieldTypes<TSource, TReplacement> = {
+  [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
+}
+
+type I__Name__OptionsNarrowedEvents__TPD__ = {
+//#each NARROWED_EVENT   (alphabetical; README §3 — append " | undefined" only if the deciding declaration has it)
+  __onEvent__?: ((e: __EventType____TP__) => void);
+//#endeach
+}
+
+//#endif
+//#if NARROWED
+//#if EXTRA
+type I__Name__Options__TPD__ = React.PropsWithChildren<ReplaceFieldTypes<Properties__TP__, I__Name__OptionsNarrowedEvents__TP__> & IHtmlOptions & {
+//#else
+type I__Name__Options__TPD__ = React.PropsWithChildren<ReplaceFieldTypes<Properties__TP__, I__Name__OptionsNarrowedEvents__TP__> & IHtmlOptions>
+//#endif
+//#else
+//#if EXTRA
+type I__Name__Options__TPD__ = React.PropsWithChildren<Properties__TP__ & IHtmlOptions & {
+//#else
+type I__Name__Options__TPD__ = React.PropsWithChildren<Properties__TP__ & IHtmlOptions>
+//#endif
+//#endif
+//#if EXTRA
+//#if GENERIC
+  dataSource?: Properties__TP__["dataSource"];
+//#endif
+//#each TEMPLATE   (README §5; order as in the .d.ts, i.e. alphabetical)
+  __tmplRender__?: (...params: any) => React.ReactNode;
+  __tmplComponent__?: React.ComponentType<any>;
+//#endeach
+//#each ROOT_SUBSCRIBABLE   (README §4; first ALL default* lines, then ALL on*Change lines)
+  default__Opt__?: __OptType__;
+//#endeach
+//#each ROOT_SUBSCRIBABLE
+  on__Opt__Change?: (value: __OptType__) => void;
+//#endeach
+}>
+//#endif
+
+interface __Name__Ref__TPD__ {
+  instance: () => __dxName____TP__;
+}
+
+//#if EXTENSION
+const _component__Name__ = memo(
+//#else
+const __Name__ = memo(
+//#endif
+  forwardRef(
+    __TPD__(props: React.PropsWithChildren<I__Name__Options__TP__>, ref: ForwardedRef<__Name__Ref__TP__>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), []);
+
+//#if SUBSCRIBABLE   (README §4: root + "owner.option" paths; no spaces after commas)
+      const subscribableOptions = useMemo(() => (["__opt__","__nestedOption__.__opt__"]), []);
+//#endif
+//#if INDEPENDENT_EVENTS   (README §2; alphabetical; no spaces after commas)
+      const independentEvents = useMemo(() => (["__onEvent__","__onOtherEvent__"]), []);
+
+//#endif
+//#if ROOT_SUBSCRIBABLE
+      const defaults = useMemo(() => ({
+//#each ROOT_SUBSCRIBABLE
+        default__Opt__: "__opt__",
+//#endeach
+      }), []);
+
+//#endif
+//#if NESTED   (README §6.4; the LAST entry has no trailing comma)
+      const expectedChildren = useMemo(() => ({
+        __childKey__: { optionName: "__childOption__", isCollectionItem: __true_or_false__ },
+        __lastChildKey__: { optionName: "__childOption__", isCollectionItem: __true_or_false__ }
+      }), []);
+
+//#endif
+//#if TEMPLATE
+      const templateProps = useMemo(() => ([
+//#each TEMPLATE
+        {
+          tmplOption: "__tmplOption__",
+          render: "__tmplRender__",
+          component: "__tmplComponent__"
+        },
+//#endeach
+      ]), []);
+
+//#endif
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<I__Name__Options__TP__>>, {
+          WidgetClass: __dxName__,
+          ref: baseRef,
+//#if RAF   (only dxChart, dxDateBox, dxDataGrid, dxFilterBuilder)
+          useRequestAnimationFrameFlag: true,
+//#endif
+//#if PORTAL   (only dxLoadPanel, dxOverlay, dxPopover, dxPopup, dxToast, dxTooltip, dxValidationMessage)
+          isPortalComponent: true,
+//#endif
+//#if SUBSCRIBABLE
+          subscribableOptions,
+//#endif
+//#if INDEPENDENT_EVENTS
+          independentEvents,
+//#endif
+//#if ROOT_SUBSCRIBABLE
+          defaults,
+//#endif
+//#if NESTED
+          expectedChildren,
+//#endif
+//#if TEMPLATE
+          templateProps,
+//#endif
+          ...props,
+        })
+      );
+    },
+  ),
+) as __TPD__(props: React.PropsWithChildren<I__Name__Options__TP__> & { ref?: Ref<__Name__Ref__TP__> }) => ReactElement | null;
+//#if EXTENSION
+
+const __Name__ = Object.assign<typeof _component__Name__, NestedComponentMeta>(_component__Name__, {
+  componentType: "extension",
+});
+//#endif
+//#if NESTED
+//# Two empty lines before the first nested block, one between blocks, one after
+//# the last. Blocks are sorted alphabetically by __Nested__ name.
+
+
+//#each NESTED_COMPONENT
+// owners:
+//#each OWNER   (root __Name__ and/or parent nested component names, all sorted alphabetically together)
+// __Owner__
+//#endeach
+type I__Nested__Props = React.PropsWithChildren<{
+//#each FIELD   (README §6.3: every public field incl. inherited, alphabetical, all optional)
+  __field__?: __FieldType__;
+//#endeach
+//#each NESTED_SUBSCRIBABLE_FIELD   (pairs, per field)
+  default__Field__?: __FieldType__;
+  on__Field__Change?: (value: __FieldType__) => void;
+//#endeach
+//#each NESTED_TEMPLATE_FIELD
+  __tmplRender__?: (...params: any) => React.ReactNode;
+  __tmplComponent__?: React.ComponentType<any>;
+//#endeach
+}>
+const _component__Nested__ = (props: I__Nested__Props) => {
+  return React.createElement(NestedOption<I__Nested__Props>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "__optionName__",
+//#if COLLECTION_ITEM
+      IsCollectionItem: true,
+//#endif
+//#if NESTED_SUBSCRIBABLE_FIELD   (last entry: no trailing comma)
+      DefaultsProps: {
+        default__Field__: "__field__"
+      },
+//#endif
+//#if HAS_CHILDREN   (last entry: no trailing comma)
+      ExpectedChildren: {
+        __childKey__: { optionName: "__childOption__", isCollectionItem: __true_or_false__ }
+      },
+//#endif
+//#if NESTED_TEMPLATE_FIELD   (several: `[{ … }, { … }]`)
+      TemplateProps: [{
+        tmplOption: "__tmplOption__",
+        render: "__tmplRender__",
+        component: "__tmplComponent__"
+      }],
+//#endif
+//#if PREDEFINED   (README §6.5; last entry: no trailing comma)
+      PredefinedProps: {
+        __discriminator__: "__value__"
+      },
+//#endif
+    },
+  });
+};
+
+const __Nested__ = Object.assign<typeof _component__Nested__, NestedComponentMeta>(_component__Nested__, {
+  componentType: "option",
+});
+
+//#endeach
+//#endif
+export default __Name__;
+export {
+  __Name__,
+  I__Name__Options,
+//#if NESTED
+  __Name__Ref,
+//#each NESTED_COMPONENT   (same alphabetical order; the very last line has no comma)
+  __Nested__,
+  I__Nested__Props,
+//#endeach
+//#else
+  __Name__Ref
+//#endif
+};
+import type * as __Name__Types from 'devextreme/__module___types';
+export { __Name__Types };
+

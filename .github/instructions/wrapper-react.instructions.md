@@ -18,10 +18,13 @@ wrapper change is required and what the reviewer checks.
 
 ## Adding a new component
 
-Fastest path: **clone the closest existing wrapper and rename**, rather than writing a file
-from scratch. For a plain Widget-based component copy `load-indicator.ts`; for one with a
-`template` copy `button.ts`; for a container with nested options copy `data-grid.ts` (it
-contains the nested config-component pattern).
+Use the template at
+[`.github/templates/wrapper-react/`](../templates/wrapper-react/README.md). Fill
+`component.ts.tmpl` from the component's `.d.ts` by following the README's rules. They are
+the exact rules of the retired generator: which events are independent or narrowed, which
+options are subscribable, what becomes a nested component, and how names and type aliases
+are formed. You don't need to read other wrappers. Never open the large ones (`data-grid.ts`,
+`tree-list.ts`, `card-view.ts`, `chart.ts`) to learn the pattern.
 
 Files to create and register (keep every list alphabetical):
 
