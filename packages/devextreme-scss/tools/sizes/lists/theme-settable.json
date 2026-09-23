@@ -5206,7 +5206,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 47,
+      "line": 42,
       "widget": "scheduler",
       "literals": [
         "3px"
@@ -5222,7 +5222,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 48,
+      "line": 43,
       "widget": "scheduler",
       "literals": [
         "28px"
@@ -5238,7 +5238,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 54,
+      "line": 49,
       "widget": "scheduler",
       "literals": [
         "15px"
@@ -5254,7 +5254,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 56,
+      "line": 51,
       "widget": "scheduler",
       "literals": [
         "360px"
@@ -5270,7 +5270,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 57,
+      "line": 52,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -5286,7 +5286,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 58,
+      "line": 53,
       "widget": "scheduler",
       "literals": [
         "7px"
@@ -5302,7 +5302,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 59,
+      "line": 54,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -5318,7 +5318,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 60,
+      "line": 55,
       "widget": "scheduler",
       "literals": [
         "5px",
@@ -5335,7 +5335,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 61,
+      "line": 56,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -5351,7 +5351,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 62,
+      "line": 57,
       "widget": "scheduler",
       "literals": [
         "16px"
@@ -5367,7 +5367,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 63,
+      "line": 58,
       "widget": "scheduler",
       "literals": [
         "12px"
@@ -5383,7 +5383,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 65,
+      "line": 60,
       "widget": "scheduler",
       "literals": [
         "11px"
@@ -5399,7 +5399,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 84,
+      "line": 79,
       "widget": "scheduler",
       "literals": [
         "4px"
@@ -5415,7 +5415,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 85,
+      "line": 80,
       "widget": "scheduler",
       "literals": [
         "40px"
@@ -5431,7 +5431,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 95,
+      "line": 90,
       "widget": "scheduler",
       "literals": [
         "7px",
@@ -5448,7 +5448,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 105,
+      "line": 100,
       "widget": "scheduler",
       "literals": [
         "12px"
@@ -5464,7 +5464,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 107,
+      "line": 102,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -5480,7 +5480,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 108,
+      "line": 103,
       "widget": "scheduler",
       "literals": [
         "20px"
@@ -5496,7 +5496,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 109,
+      "line": 104,
       "widget": "scheduler",
       "literals": [
         "14px"
@@ -5512,7 +5512,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 110,
+      "line": 105,
       "widget": "scheduler",
       "literals": [
         "30px"
@@ -5528,7 +5528,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 111,
+      "line": 106,
       "widget": "scheduler",
       "literals": [
         "16px"
@@ -5544,7 +5544,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 112,
+      "line": 107,
       "widget": "scheduler",
       "literals": [
         "6px"
@@ -5560,7 +5560,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 117,
+      "line": 112,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -5576,7 +5576,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 118,
+      "line": 113,
       "widget": "scheduler",
       "literals": [
         "20px"
@@ -5592,7 +5592,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 120,
+      "line": 115,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -5608,7 +5608,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 121,
+      "line": 116,
       "widget": "scheduler",
       "literals": [
         "20px"
@@ -5624,7 +5624,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 127,
+      "line": 122,
       "widget": "scheduler",
       "literals": [
         "30px"
@@ -5640,7 +5640,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 128,
+      "line": 123,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -5656,7 +5656,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 136,
+      "line": 131,
       "widget": "scheduler",
       "literals": [
         "18px"
@@ -5672,7 +5672,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 142,
+      "line": 137,
       "widget": "scheduler",
       "literals": [
         "12px"
@@ -5688,7 +5688,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 145,
+      "line": 140,
       "widget": "scheduler",
       "literals": [
         "3px"
@@ -5704,7 +5704,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 146,
+      "line": 141,
       "widget": "scheduler",
       "literals": [
         "4px"
@@ -5720,7 +5720,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 147,
+      "line": 142,
       "widget": "scheduler",
       "literals": [
         "2px"
@@ -5736,7 +5736,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 148,
+      "line": 143,
       "widget": "scheduler",
       "literals": [
         "3px"
@@ -5752,7 +5752,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 149,
+      "line": 144,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -5768,7 +5768,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 150,
+      "line": 145,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -5784,7 +5784,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 151,
+      "line": 146,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -5800,7 +5800,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 152,
+      "line": 147,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -5816,7 +5816,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 153,
+      "line": 148,
       "widget": "scheduler",
       "literals": [
         "15px"
@@ -5832,7 +5832,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 154,
+      "line": 149,
       "widget": "scheduler",
       "literals": [
         "3px"
@@ -5848,7 +5848,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 155,
+      "line": 150,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -5864,7 +5864,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 199,
+      "line": 194,
       "widget": "scheduler",
       "literals": [
         "2px"
@@ -5880,7 +5880,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 200,
+      "line": 195,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -5896,7 +5896,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 201,
+      "line": 196,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -5912,7 +5912,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 202,
+      "line": 197,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -5928,7 +5928,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 203,
+      "line": 198,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -5944,7 +5944,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 204,
+      "line": 199,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -5960,7 +5960,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 205,
+      "line": 200,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -5976,7 +5976,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 206,
+      "line": 201,
       "widget": "scheduler",
       "literals": [
         "5px",
@@ -5993,7 +5993,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 207,
+      "line": 202,
       "widget": "scheduler",
       "literals": [
         "1px"
@@ -6009,7 +6009,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 208,
+      "line": 203,
       "widget": "scheduler",
       "literals": [
         "40px"
@@ -6025,7 +6025,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 209,
+      "line": 204,
       "widget": "scheduler",
       "literals": [
         "100px"
@@ -6041,7 +6041,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 211,
+      "line": 206,
       "widget": "scheduler",
       "literals": [
         "100px"
@@ -6057,7 +6057,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 212,
+      "line": 207,
       "widget": "scheduler",
       "literals": [
         "160px"
@@ -6073,7 +6073,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 213,
+      "line": 208,
       "widget": "scheduler",
       "literals": [
         "80px"
@@ -6089,7 +6089,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 214,
+      "line": 209,
       "widget": "scheduler",
       "literals": [
         "240px"
@@ -6105,7 +6105,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 215,
+      "line": 210,
       "widget": "scheduler",
       "literals": [
         "200px"
@@ -6121,7 +6121,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 216,
+      "line": 211,
       "widget": "scheduler",
       "literals": [
         "70px"
@@ -6137,7 +6137,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 217,
+      "line": 212,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -6153,7 +6153,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 218,
+      "line": 213,
       "widget": "scheduler",
       "literals": [
         "50px"
@@ -6169,7 +6169,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 278,
+      "line": 271,
       "widget": "scheduler",
       "literals": [
         "7px"
@@ -6185,7 +6185,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 279,
+      "line": 272,
       "widget": "scheduler",
       "literals": [
         "9px"
@@ -6201,7 +6201,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 280,
+      "line": 273,
       "widget": "scheduler",
       "literals": [
         "2px"
@@ -6217,7 +6217,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 281,
+      "line": 274,
       "widget": "scheduler",
       "literals": [
         "25px",
@@ -6234,7 +6234,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 282,
+      "line": 275,
       "widget": "scheduler",
       "literals": [
         "7px",
@@ -6251,7 +6251,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 283,
+      "line": 276,
       "widget": "scheduler",
       "literals": [
         "24px"
@@ -6267,7 +6267,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 284,
+      "line": 277,
       "widget": "scheduler",
       "literals": [
         "5px"
@@ -6459,7 +6459,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 45,
+      "line": 43,
       "widget": "scheduler",
       "literals": [
         "20px"
@@ -6475,7 +6475,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 46,
+      "line": 44,
       "widget": "scheduler",
       "literals": [
         "14px"
@@ -6491,7 +6491,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 53,
+      "line": 51,
       "widget": "scheduler",
       "literals": [
         "30px"
@@ -6507,7 +6507,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 57,
+      "line": 55,
       "widget": "scheduler",
       "literals": [
         "16px"
@@ -6523,7 +6523,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 59,
+      "line": 57,
       "widget": "scheduler",
       "literals": [
         "6px"
@@ -6539,7 +6539,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 75,
+      "line": 72,
       "widget": "scheduler",
       "literals": [
         "100px"
@@ -6555,7 +6555,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 76,
+      "line": 73,
       "widget": "scheduler",
       "literals": [
         "160px"
@@ -6571,7 +6571,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 77,
+      "line": 74,
       "widget": "scheduler",
       "literals": [
         "80px"
@@ -6587,7 +6587,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 78,
+      "line": 75,
       "widget": "scheduler",
       "literals": [
         "240px"
@@ -6603,7 +6603,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 79,
+      "line": 76,
       "widget": "scheduler",
       "literals": [
         "200px"
@@ -6619,7 +6619,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 93,
+      "line": 90,
       "widget": "scheduler",
       "literals": [
         "70px"
@@ -6635,7 +6635,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 94,
+      "line": 91,
       "widget": "scheduler",
       "literals": [
         "10px"
@@ -6651,7 +6651,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/views/_index.scss",
-      "line": 105,
+      "line": 102,
       "widget": "scheduler",
       "literals": [
         "50px"

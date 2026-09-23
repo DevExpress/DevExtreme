@@ -160,7 +160,9 @@ class CollectionWidgetLiveUpdate<
         isItemEquals: this._isItemStrictEquals.bind(this),
         detectReorders: true,
       });
+      // @ts-expect-error DataChange requires key on inserts and data on removes
       if (result && this._itemsCache.length && !this._shouldAddNewGroup(result, this._itemsCache)) {
+        // @ts-expect-error DataChange requires key on inserts and data on removes
         this._modifyByChanges(result, true);
         this._renderEmptyMessage();
         return true;

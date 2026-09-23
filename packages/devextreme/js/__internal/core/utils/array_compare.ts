@@ -1,40 +1,66 @@
+/* eslint-disable max-depth -- findChanges is kept as a single pass on purpose */
 import { logger } from '@js/core/utils/console';
 import { isDefined, isObject } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 
-const getKeyWrapper = function (item, getKey) {
+type GetKey<TItem, TKey> = (item: TItem) => TKey;
+
+export type ItemChange<TItem, TKey> = { type: 'insert'; data: TItem; index: number }
+  | { type: 'update'; data: TItem; key: TKey; index: number; oldItem: TItem }
+  | { type: 'remove'; key: TKey; index: number; oldItem: TItem };
+
+interface FindChangesOptions<TItem, TKey> {
+  oldItems: TItem[];
+  newItems: TItem[];
+  getKey: GetKey<TItem, TKey>;
+  isItemEquals: (oldItem: TItem, newItem: TItem) => boolean;
+  detectReorders?: boolean;
+}
+
+function getKeyWrapper<TItem, TKey>(item: TItem, getKey: GetKey<TItem, TKey>): TKey | string {
   const key = getKey(item);
+
   if (isObject(key)) {
     try {
       return JSON.stringify(key);
-    } catch (e) {
+    } catch {
       return key;
     }
   }
+
   return key;
-};
+}
 
-const getSameNewByOld = function (oldItem, newItems, newIndexByKey, getKey) {
+function getSameNewByOld<TItem, TKey>(
+  oldItem: TItem,
+  newItems: TItem[],
+  newIndexByKey: Record<string, number>,
+  getKey: GetKey<TItem, TKey>,
+): TItem | undefined {
   const key = getKeyWrapper(oldItem, getKey);
-  return newItems[newIndexByKey[key]];
-};
 
-export const isKeysEqual = function (oldKeys, newKeys) {
+  return newItems[newIndexByKey[String(key)]];
+}
+
+export function isKeysEqual(oldKeys: unknown[], newKeys: unknown[]): boolean {
   if (oldKeys.length !== newKeys.length) {
     return false;
   }
 
-  for (let i = 0; i < newKeys.length; i++) {
+  for (let i = 0; i < newKeys.length; i += 1) {
     if (oldKeys[i] !== newKeys[i]) {
       return false;
     }
   }
 
   return true;
-};
+}
 
-const mapIndexByKey = function (items, getKey) {
-  const indexByKey = {};
+function mapIndexByKey<TItem, TKey>(
+  items: TItem[],
+  getKey: GetKey<TItem, TKey>,
+): Record<string, number> {
+  const indexByKey: Record<string, number> = {};
 
   items.forEach((item, index) => {
     const key = getKeyWrapper(item, getKey);
@@ -43,32 +69,33 @@ const mapIndexByKey = function (items, getKey) {
       throw errors.Error('E1040', key);
     }
 
-    indexByKey[key] = index;
+    indexByKey[String(key)] = index;
   });
 
   return indexByKey;
-};
+}
 
-export const findChanges = function ({
+export function findChanges<TItem, TKey>({
   oldItems,
   newItems,
   getKey,
   isItemEquals,
   detectReorders = false,
-}) {
+}: FindChangesOptions<TItem, TKey>): ItemChange<TItem, TKey>[] | undefined {
   try {
     const oldIndexByKey = mapIndexByKey(oldItems, getKey);
     const newIndexByKey = mapIndexByKey(newItems, getKey);
     let addedCount = 0;
     let removeCount = 0;
-    const result: any[] = [];
+    const result: ItemChange<TItem, TKey>[] = [];
 
     const itemCount = Math.max(oldItems.length, newItems.length);
     for (let index = 0; index < itemCount + addedCount; index += 1) {
       const newItem = newItems[index];
       const oldNextIndex = index - addedCount + removeCount;
       const nextOldItem = oldItems[oldNextIndex];
-      const isRemoved = !newItem || (nextOldItem && !getSameNewByOld(nextOldItem, newItems, newIndexByKey, getKey));
+      const isRemoved = !newItem
+        || (nextOldItem && !getSameNewByOld(nextOldItem, newItems, newIndexByKey, getKey));
 
       if (isRemoved) {
         if (nextOldItem) {
@@ -78,15 +105,15 @@ export const findChanges = function ({
             index,
             oldItem: nextOldItem,
           });
-          removeCount++;
-          index--;
+          removeCount += 1;
+          index -= 1;
         }
       } else {
         const key = getKeyWrapper(newItem, getKey);
-        const oldIndex = oldIndexByKey[key];
+        const oldIndex = oldIndexByKey[String(key)];
         const oldItem = oldItems[oldIndex];
         if (!oldItem) {
-          addedCount++;
+          addedCount += 1;
           result.push({
             type: 'insert',
             data: newItem,
@@ -104,7 +131,7 @@ export const findChanges = function ({
           }
         } else {
           if (!detectReorders) {
-            return;
+            return undefined;
           }
 
           result.push({
@@ -118,8 +145,8 @@ export const findChanges = function ({
             data: newItem,
             index,
           });
-          addedCount++;
-          removeCount++;
+          addedCount += 1;
+          removeCount += 1;
         }
       }
     }
@@ -137,4 +164,4 @@ export const findChanges = function ({
 
     return undefined;
   }
-};
+}

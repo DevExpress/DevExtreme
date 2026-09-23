@@ -26,7 +26,6 @@ $datagrid-border: 1px solid !default;
 * $type color
 */
 $datagrid-columnchooser-item-color: null !default;
-$datagrid-block-separator-bg: null !default;
 
 /**
 * $name 25. Header text weight
@@ -202,7 +201,6 @@ $datagrid-draggable-column-text-color: null !default;
 
 @if $color == "carmine" {
   $datagrid-columnchooser-item-color: $base-label-color !default;
-  $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: -6.5%, $space: hsl) !default;
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.7) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
@@ -244,7 +242,6 @@ $datagrid-draggable-column-text-color: null !default;
 
 @if $color == "contrast" {
   $datagrid-columnchooser-item-color: $base-text-color !default;
-  $datagrid-block-separator-bg: $base-inverted-bg !default;
   $datagrid-drag-header-border-color: $base-border-color !default;
   $datagrid-drag-header-shadow-color: $base-shadow-color !default;
   $datagrid-drag-header-second-shadow-color: $base-shadow-color !default;
@@ -286,7 +283,6 @@ $datagrid-draggable-column-text-color: null !default;
 
 @if $color == "dark" {
   $datagrid-columnchooser-item-color: color.adjust($datagrid-base-color, $lightness: -26%, $space: hsl) !default;
-  $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: 6.5%, $space: hsl) !default;
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
@@ -328,7 +324,6 @@ $datagrid-draggable-column-text-color: null !default;
 
 @if $color == "darkmoon" {
   $datagrid-columnchooser-item-color: $screen-text-color !default;
-  $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: 6.5%, $space: hsl) !default;
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
@@ -370,7 +365,6 @@ $datagrid-draggable-column-text-color: null !default;
 
 @if $color == "darkviolet" {
   $datagrid-columnchooser-item-color: color.adjust($datagrid-base-color, $lightness: -38.5%, $space: hsl) !default;
-  $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: 6.5%, $space: hsl) !default;
   $datagrid-drag-header-border-color: color.change($base-accent-highlight-color, $alpha: 0.8) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
@@ -412,7 +406,6 @@ $datagrid-draggable-column-text-color: null !default;
 
 @if $color == "greenmist" {
   $datagrid-columnchooser-item-color: color.adjust($datagrid-base-color, $lightness: 38.5%, $space: hsl) !default;
-  $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: -6.5%, $space: hsl) !default;
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
@@ -454,7 +447,6 @@ $datagrid-draggable-column-text-color: null !default;
 
 @if $color == "light" {
   $datagrid-columnchooser-item-color: color.adjust($datagrid-base-color, $lightness: 26%, $space: hsl) !default;
-  $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: -6.5%, $space: hsl) !default;
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
@@ -496,7 +488,6 @@ $datagrid-draggable-column-text-color: null !default;
 
 @if $color == "softblue" {
   $datagrid-columnchooser-item-color: $base-icon-color !default;
-  $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: -6.5%, $space: hsl) !default;
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
