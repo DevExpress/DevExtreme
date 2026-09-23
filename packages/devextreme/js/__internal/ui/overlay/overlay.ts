@@ -649,18 +649,11 @@ class Overlay<
     }
   }
 
-  /*
-   * The container carries the mode its owner resolved to when the overlay was shown, and nothing
-   * re-picks it afterwards: `_moveToContainer` runs on becoming visible and on a content
-   * re-render, and a class moving up the tree is neither.
-   */
   _themeModeChangeHandler(): void {
     if (!this._isVisible()) {
       return;
     }
 
-    // Move only if the scope named a different node: appending is not a no-op for a child already
-    // in place, and the detach takes the focus out, restarts animations and reloads any iframe.
     const { $container } = this._positionController;
     const wrapper = this._$wrapper?.get(0) as HTMLElement | undefined;
 
@@ -668,13 +661,6 @@ class Overlay<
       return;
     }
 
-    /*
-     * The move detaches the wrapper, and a detached element loses the focus for good - the browser
-     * does not hand it back on re-insert. Unlike a container the application changed on one named
-     * overlay, this runs on every open overlay at once, because an application announced that a
-     * class moved somewhere; taking the caret out of whatever the user was typing in is not part
-     * of that. The selection survives on the element itself, so restoring the focus is enough.
-     */
     const focused = domAdapter.getActiveElement(wrapper) as HTMLElement | null;
     const shouldRestoreFocus = !!wrapper && !!focused && domUtils.contains(wrapper, focused);
 

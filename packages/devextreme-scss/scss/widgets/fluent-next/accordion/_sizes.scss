@@ -1,7 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// Not a colour: a font size that used to sit in _colors.scss (NAMING.md, O7)
 $accordion-title-font-size: $global-font-size !default;
 
 $accordion-title-padding-inline: null !default;
@@ -31,5 +30,4 @@ $accordion-item-opened-margin: 0 !default;
   $accordion-title-icon-size: ds.$spacing-160 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $accordion-title-font-weight: ds.$font-weight-base-strong !default;

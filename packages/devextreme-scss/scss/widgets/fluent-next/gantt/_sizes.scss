@@ -25,7 +25,6 @@ $gantt-task-wrapper-padding-block-start: 0 !default;
   $gantt-milestone-size: ds.$spacing-140 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $gantt-task-progress-notch-border-width: ds.$border-width-40 !default;
 $gantt-toolbar-wrapper-padding: ds.$spacing-50 !default;
 $gantt-si-padding-inline-start: ds.$spacing-160 !default;
@@ -52,7 +51,6 @@ $gantt-tm-border-inline-start: ds.$border-width-10 dashed !default;
 $gantt-ti-border-inline-end: ds.$border-width-10 dashed !default;
 $gantt-toolbar-items-container-min-height: ds.$spacing-440 !default;
 
-// Base-layer sizing injected with design tokens (wave B2)
 $gantt-toolbar-separator-border-inline-start: ds.$border-width-10 solid transparent !default;
 $gantt-splitter-bar-width: ds.$spacing-20 !default;
 $gantt-view-min-width: ds.$spacing-10 !default;

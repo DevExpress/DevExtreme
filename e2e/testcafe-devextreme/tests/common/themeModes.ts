@@ -5,11 +5,6 @@ import { getComputedPropertyValue } from '../../helpers/domUtils';
 import { clearTestPage } from '../../helpers/testPageUtils';
 import { getFullThemeName, getThemeName } from '../../helpers/themeUtils';
 
-/*
- * The only place the mode classes are exercised in a real browser: jsdom does not inherit a custom
- * property, and inheritance is the whole mechanism. Every assertion is relative - "this scope
- * differs from that one", never a hex literal - so a token bump does not touch the test.
- */
 if (getThemeName() === 'fluent-next') {
   fixture`Theme modes`
     .page(url(__dirname, '../container.html'))
@@ -18,7 +13,6 @@ if (getThemeName() === 'fluent-next') {
   const buildMode = getFullThemeName().includes('.dark') ? 'dark' : 'light';
   const oppositeMode = buildMode === 'dark' ? 'light' : 'dark';
 
-  // Roles the mode decides, one per family, plus the two system-tier names that used to freeze.
   const MODE_DEPENDENT = ['--dxds-color-bg', '--dxds-color-content'];
   const SYSTEM_TIER = ['--dx-global-content', '--dx-surface-overlay', '--dx-focus-rect-outline'];
 
@@ -90,8 +84,6 @@ if (getThemeName() === 'fluent-next') {
       .eql(oppositeMode, 'with no named scope above it, inverted opposes the bundle');
     await t.expect(await valueAt('#in-dark', '--dx-theme-mode')).eql('light');
     await t.expect(await valueAt('#in-light', '--dx-theme-mode')).eql('dark');
-    // The depth-3 case pins that the NEAREST scope is what is read, not the bundle: inside a dark
-    // block the pair resolves dark -> light -> dark, not light -> dark.
     await t.expect(await valueAt('#nested', '--dx-theme-mode'))
       .eql(buildMode, 'inverted inside inverted flips back');
     await t.expect(await valueAt('#nested-in-dark', '--dx-theme-mode'))
@@ -102,8 +94,6 @@ if (getThemeName() === 'fluent-next') {
     await render(`<div class="dx-theme-mode-${oppositeMode}"><div id="probe"></div></div>`);
 
     for (const name of SYSTEM_TIER) {
-      // These are declared on the document root; a custom property resolves where it is declared,
-      // so without the mode classes on that same rule the value would stay the bundle's.
       await t.expect(await valueAt('#probe', name))
         .notEql(await valueAt('html', name), `${name} must re-resolve inside a mode scope`);
     }
@@ -116,13 +106,10 @@ if (getThemeName() === 'fluent-next') {
       <div class="dx-theme-mode-${oppositeMode}"><div class="dx-theme-mode-inverted"><div id="back"></div></div></div>
     `);
 
-    // The element inherits the property from a scope above it, so only the cascade knows - which
-    // is why this case lives here and not next to themes.ts.
     await t.expect(await reportedMode('#plain')).eql(buildMode, 'no scope above it - the loaded theme answers');
     await t.expect(await reportedMode('#scoped')).eql(oppositeMode, 'the mode is inherited from the scope, not declared here');
     await t.expect(await reportedMode('#back')).eql(buildMode, 'and inverted inside it flips back');
 
-    // The public answer and the property the theme publishes must not drift apart.
     for (const id of ['#plain', '#scoped', '#back']) {
       await t.expect(await reportedMode(id)).eql(await valueAt(id, '--dx-theme-mode'));
     }
@@ -144,10 +131,6 @@ if (getThemeName() === 'fluent-next') {
   });
 
   test('an open overlay follows its scope once the application says the mode changed', async (t) => {
-    /*
-     * The scope has to be LOCAL: a page-level switch reaches the container through the cascade on
-     * its own, so that version of this case passes with the subscription removed.
-     */
     await render(`<div id="scope" class="dx-theme-mode-${oppositeMode}"><div id="owner"></div></div>`);
 
     await createWidget('dxPopup', {
@@ -176,8 +159,6 @@ if (getThemeName() === 'fluent-next') {
 
     const asOpened = await valueAt('.dx-popup-wrapper', '--dxds-color-bg');
 
-    // A class moved by the application is invisible to us; this pins that we do not pretend
-    // otherwise - the overlay waits to be told.
     await setScopeMode('#scope', buildMode, false);
 
     await t.expect(await valueAt('.dx-popup-wrapper', '--dxds-color-bg'))

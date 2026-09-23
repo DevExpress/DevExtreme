@@ -12,7 +12,7 @@
     "tests/fluent-next-naming.test.ts scans those three trees, over the legacy tier. Two questions,",
     "two gates - do not read either as the whole answer.",
     "",
-    "The names read in neither place are the ones worth a decision, and they come in three kinds. Counts move with every wave - run the tool rather than trusting a number written here (16.09.2026: 87 names listed, 22 of them read outside the bundle, 65 read nowhere).",
+    "The names read in neither place are the ones worth a decision, and they come in three kinds. Counts move with every change - run the tool rather than trusting a number written here (16.09.2026: 87 names listed, 22 of them read outside the bundle, 65 read nowhere).",
     "",
     "Defects: the theme publishes a knob and no rule turns it (--dx-switch-box-shadow,",
     "--dx-scheduler-appointment-15min-height). Some are leftovers of a rename that moved the read and",

@@ -1,23 +1,3 @@
-/*
- * Every fixed pixel size in the shared layer scss/widgets/base/** must end up in one of two states:
- * set from a theme, or classified with a marker saying why it stays.
- *
- * The layer is compiled once per bundle, so a number written into it reaches generic, material,
- * fluent and fluent-next at the same time. 444 places could not be classified in one commit, so
- * this is a RATCHET rather than a flat "zero unmarked" like the theme gate
- * (tests/fluent-next-size-markers.test.ts). The ratchet has since reached zero, which means it now
- * behaves like that flat bar: any new unmarked place fails the gate. The counts are compared
- * against tests/base-size-markers.baseline.json and must only ever shrink. Regenerate it
- * deliberately, as part of a batch, with:
- *
- *   UPDATE_BASE_SIZE_BASELINE=1 pnpm test
- *
- * The scan is tools/sizes/inventory.mjs, which reads the places from tools/review/px-audit.mjs —
- * the same module the theme gate and SCALES.md are built from, so the three cannot disagree about
- * what counts as a place. It is driven as a child process because the tool is ESM and jest
- * transforms TypeScript only.
- */
-
 import { execFileSync } from 'child_process';
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
@@ -60,11 +40,6 @@ const walk = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }
   });
 
 test('the inventory accounts for every px literal in the layer', () => {
-  /*
-   * An independent count, so a scanner that quietly stops seeing a file cannot pass the ratchet by
-   * reporting fewer places. Every literal is either in code (settable or base-owned) or in a
-   * comment; nothing may fall between the buckets.
-   */
   const raw = walk(baseRoot).reduce(
     (total, file) => total + (readFileSync(file, 'utf8').match(/-?\d*\.?\d+px\b/g)?.length ?? 0),
     0,
@@ -73,13 +48,6 @@ test('the inventory accounts for every px literal in the layer', () => {
 });
 
 test('the generated inventory lists are not stale', () => {
-  /*
-   * inventory.mjs writes base-owned.json and theme-settable.json, which people read instead of
-   * running the tool — the numbers in a batch report come from there. Nothing regenerated them
-   * automatically, so a batch that changed the layer and forgot to rerun the tool left them
-   * describing the previous state. --check reruns the scan and exits 1 when the files on disk
-   * disagree with it; the fix is `node tools/sizes/inventory.mjs`.
-   */
   let failure: string | null = null;
 
   try {
@@ -92,12 +60,6 @@ test('the generated inventory lists are not stale', () => {
 });
 
 test('no marker name is a substring of a custom property name used in the layer', () => {
-  /*
-   * Same trap as in the theme: the scan looks for the marker as a substring of the line's comment,
-   * so a marker that reads like a custom property would match prose about that property. The layer
-   * reads a handful of --dx-* names (cardView's grid columns, the scheduler animation offset), so
-   * it has to be checked here too and not only against the theme.
-   */
   const names = new Set(walk(baseRoot).flatMap((file) => [
     ...readFileSync(file, 'utf8').matchAll(/--(dx[a-z0-9-]*)/g),
   ].map(([, name]) => name)));
@@ -107,14 +69,8 @@ test('no marker name is a substring of a custom property name used in the layer'
   expect(collisions).toEqual([]);
 });
 
-// ---------------------------------------------------------------------------------------------
-// ratchets
-// ---------------------------------------------------------------------------------------------
-
 const findings = {
-  // Knobs the layer already offers that no theme turns: theme-side work, base stays untouched.
   openKnobs: summary.settable.open,
-  // Places with no knob and no marker: the backlog this task works through, batch by batch.
   unclassified: summary.owned.unmarked,
   unclassifiedByWidget: summary.owned.byWidget,
 };

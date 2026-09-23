@@ -24,7 +24,6 @@ $half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2) !default;
 $htmleditor-border-width: 1px !default;
 $transparent-border: $htmleditor-border-width solid transparent !default;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $variable-padding: 3px 6px !default;
 $variable-border-radius: 8px !default;
 $blockquote-padding-inline-start: 12px !default;

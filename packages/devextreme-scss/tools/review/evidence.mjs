@@ -17,7 +17,7 @@
  *     same colour; the minifier and the token pipeline disagree about spelling constantly. Values
  *     are normalised to an rgba tuple before comparison, so only real colour changes survive.
  *   - Absence is not a difference. fluent-next emits `var()` where fluent emitted a literal, which
- *     stops the minifier from collapsing longhands into shorthands (GOTCHAS §8). A property present
+ *     stops the minifier from collapsing longhands into shorthands. A property present
  *     on one side only is therefore reported separately as `shape`, never as a colour delta.
  *
  * The output is deliberately per-place and not aggregated: a reviewer decides "danger tints are too
@@ -35,8 +35,6 @@ const cssDir = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
 
 const asMarkdown = process.argv.includes('--md');
 const onlyDecision = /--decision=(\d+)/.exec(process.argv.join(' '))?.[1];
-
-/* ------------------------------------------------------------------ colours */
 
 const NAMED = {
   transparent: [0, 0, 0, 0],
@@ -58,19 +56,11 @@ const hexToRgba = (hex) => {
 
 const clamp = (value, max) => Math.min(max, Math.max(0, value));
 
-/**
- * A colour as an [r, g, b, a] tuple, or null when the text is not a single colour.
- *
- * Channels are clamped the way a browser clamps them, which matters here: legacy fluent ships
- * out-of-gamut values such as `hsla(0,0%,-46.42%,.2)` (Sass `color.adjust` running past the end of
- * the scale), and comparing them literally would report a difference where the screen shows none.
- */
 const toRgba = (raw) => {
   const value = raw.trim().toLowerCase();
   if (NAMED[value]) return NAMED[value];
   if (/^#[0-9a-f]{3,8}$/.test(value)) return hexToRgba(value);
 
-  /* relative colour — the ③ bridge: rgb(from <colour> r g b / a) keeps the channels, sets alpha */
   const relative = /^rgba?\(\s*from\s+(.+?)\s+r\s+g\s+b\s*(?:\/\s*([\d.%]+)\s*)?\)$/.exec(value);
   if (relative) {
     const base = toRgba(relative[1]);
@@ -95,7 +85,6 @@ const toRgba = (raw) => {
     );
     return [channel(parts[0]), channel(parts[1]), channel(parts[2]), alpha];
   }
-  /* hsl -> rgb, so an hsl() literal and a hex token are comparable */
   const h = ((parseFloat(parts[0]) % 360) + 360) % 360;
   const s = clamp(num(parts[1]), 1);
   const l = clamp(num(parts[2]), 1);
@@ -114,15 +103,12 @@ const show = (tuple) => {
   return a === 1 ? hex : `${hex} @${Math.round(a * 100)}%`;
 };
 
-/* ------------------------------------------------------------------ bundles */
-
 const load = (name) => {
   const file = join(cssDir, `dx.${name}.css`);
   if (!existsSync(file)) throw new Error(`нет бандла ${file} — соберите build:themes-dev`);
   return postcss.parse(readFileSync(file, 'utf8'));
 };
 
-/** `--dxds-*` definitions from the bundle's own :root, so var() can be resolved to a literal. */
 const rootMap = (ast) => {
   const map = new Map();
   ast.walkRules((rule) => {
@@ -134,7 +120,6 @@ const rootMap = (ast) => {
   return map;
 };
 
-/** Follows var() chains (honouring fallbacks) until a literal is left. */
 const resolve = (value, map, seen = new Set()) => {
   let out = value;
   for (let pass = 0; pass < 12 && out.includes('var('); pass += 1) {
@@ -149,10 +134,6 @@ const resolve = (value, map, seen = new Set()) => {
   return out.trim();
 };
 
-/**
- * selector + property -> last written value (the cascade winner within one bundle).
- * Media queries are kept apart: a size-mode override must not overwrite the default.
- */
 const declarations = (ast, map) => {
   const found = new Map();
   ast.walkRules((rule) => {
@@ -172,13 +153,6 @@ const declarations = (ast, map) => {
   return found;
 };
 
-/* ---------------------------------------------------------------- decisions */
-
-/*
- * One entry per row of the agenda table. `places` are matched against the selector, `props` against
- * the property; a place with no `props` accepts every colour-valued property. The patterns come
- * from the "Место" field of the journal entry, translated into the selectors that actually ship.
- */
 const DECISIONS = [
   {
     id: 1,
@@ -266,11 +240,6 @@ const COLOUR_PROPS = /(^|-)(color|fill|stroke)$/;
 
 const COLOUR_TOKEN = /(#[0-9a-f]{3,8}|(?:rgba?|hsla?)\([^()]*(?:\([^()]*\))?[^()]*\)|\b(?:transparent|white|black|gray|grey|red)\b)/i;
 
-/**
- * The legacy side often carries the colour inside a shorthand (`border: 1px solid rgba(...)`),
- * while fluent-next has to split it out because the value is a `var()`. Without this the two sides
- * look incomparable and a real colour change would be filed as "present only in fluent-next".
- */
 const fromShorthand = (map, selectorAndProp) => {
   const [selector, prop] = selectorAndProp.split(' | ');
   const shorthand = /^(.*?)-color$/.exec(prop)?.[1];
@@ -284,8 +253,6 @@ const fromShorthand = (map, selectorAndProp) => {
   }
   return undefined;
 };
-
-/* --------------------------------------------------------------------- run */
 
 const themes = ['light', 'dark'].map((mode) => {
   const legacyAst = load(`fluent.blue.${mode}`);
@@ -321,7 +288,6 @@ const compare = (decision, theme) => {
         }
         return;
       }
-      /* not a plain colour (box-shadow, gradient): compare as normalised text */
       const flat = (text) => text.replace(/\s+/g, ' ').replace(/,\s/g, ',').trim();
       if (flat(before) !== flat(after)) {
         rows.push({

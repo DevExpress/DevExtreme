@@ -1,7 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
 $scheduler-appointment-resizing-opacity: ds.$opacity-70 !default;
 $scheduler-appointment-opacity-disabled: ds.$opacity-60 !default;
 
@@ -179,7 +178,6 @@ $scheduler-header-panel-time-cell-padding: null !default;
   $scheduler-appointment-20min-icon-inset-inline-end: ds.$spacing-50 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $scheduler-group-header-font-weight: ds.$font-weight-title-default !default;
 $scheduler-tooltip-subject-font-weight: ds.$font-weight-base-strong !default;
 $scheduler-appointment-title-font-size: ds.$font-size-base-sm !default;
@@ -223,12 +221,10 @@ $scheduler-appointment-strip-border-end-end-radius: ds.$border-radius-60 !defaul
 $scheduler-appointment-strip-border-start-start-radius: ds.$border-radius-60 !default;
 $scheduler-appointment-strip-border-end-start-radius: ds.$border-radius-60 !default;
 
-// Base-layer values injected with design tokens (wave B1)
 $scheduler-agenda-title-font-weight: ds.$font-weight-base-stronger !default;
 $scheduler-agenda-details-font-size: ds.$font-size-caption-md !default;
 $scheduler-appointment-icon-font-size: ds.$spacing-180 !default;
 
-// Base-layer sizing injected with design tokens (wave B2 — scheduler/views)
 $scheduler-views-header-border: ds.$border-width-20 solid !default;
 $scheduler-views-empty-cell-border-block-end: ds.$border-width-10 solid !default;
 $scheduler-views-empty-cell-border-inline-end: ds.$border-width-10 solid !default;
@@ -241,7 +237,6 @@ $scheduler-views-time-indicator-height: ds.$spacing-10 !default;
 $scheduler-views-group-header-content-height: ds.$spacing-400 !default;
 $scheduler-views-vertical-group-min-height: ds.$spacing-1000 !default;
 
-// Base-layer sizing injected with design tokens (wave B2)
 $scheduler-all-day-appointment-content-padding: 0 ds.$spacing-70 !default;
 $scheduler-appointment-recurrence-icon-inset-block-start: ds.$spacing-90 !default;
 $scheduler-header-panel-current-time-cell-height: ds.$spacing-20 !default;
@@ -250,11 +245,9 @@ $scheduler-rtl-padding: 0 ds.$spacing-70 0 25px !default; // dx-offscale: 25px
 $scheduler-appointment-collector-width: ds.$spacing-240 !default;
 $scheduler-appointment-content-padding-inline-end: ds.$spacing-50 !default;
 
-// Base submodule sizing injected with design tokens (B2 tail)
 $scheduler-common-collector-margin: 0 ds.$spacing-30 !default;
 $scheduler-common-collector-size: ds.$spacing-280 !default;
 
-// Base submodule sizing injected with design tokens (B2 tail)
 $scheduler-tooltip-width: 360px !default;  // dx-offscale: 360px
 $scheduler-tooltip-content-padding: ds.$spacing-50 !default;
 $scheduler-tooltip-title-margin-block-start: ds.$spacing-70 !default;
@@ -262,12 +255,10 @@ $scheduler-tooltip-title-margin-inline-start: ds.$spacing-50 !default;
 $scheduler-tooltip-date-margin: ds.$spacing-50 ds.$spacing-100 !default;
 $scheduler-tooltip-remove-margin-block-start: ds.$spacing-100 !default;
 
-// B2 tail: scheduler font-sizes
 $scheduler-appointment-content-details-font-size: ds.$font-size-110 !default; // dx-no-semantic-role: 11px has no font-size role
 $scheduler-tooltip-subject-font-size: ds.$font-size-title-sm !default;
 $scheduler-tooltip-date-font-size: ds.$font-size-caption-md !default;
 
-// B2 tail: deep scheduler submodules (multi-hop)
 $scheduler-appointment-reduced-icon-inset-block-start: ds.$spacing-30 !default;
 $scheduler-appointment-marker-border-radius-active: ds.$border-radius-40 !default;
 $scheduler-appointment-content-details-margin-block-start: ds.$spacing-20 !default;
@@ -289,13 +280,8 @@ $scheduler-group-header-agenda-font-size: ds.$font-size-180 !default; // dx-no-s
 $scheduler-agenda-date-table-padding-block-start: ds.$spacing-100 !default;
 $scheduler-virtual-row-height: ds.$spacing-480 !default;
 
-/*
- * Derived values, moved out of _index.scss: a file that emits rules must not declare
- * variables (NAMING.md, O7).
- */
 $scheduler-all-day-table-cell-height: calc(#{$scheduler-workspace-date-table-cell-height} * 1.5) !default;
 
-// Base-layer sizing injected with design tokens (wave B15)
 $scheduler-appointment-collector-height: ds.$spacing-220 !default;
 $scheduler-appointment-min-size: ds.$spacing-40 !default;
 $scheduler-appointment-reduced-content-padding: ds.$spacing-400 !default;

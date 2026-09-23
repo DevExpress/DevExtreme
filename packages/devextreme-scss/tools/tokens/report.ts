@@ -6,10 +6,8 @@
  * build/tokens/consumed-tokens.ts uses.
  */
 
-/** Custom property name -> value, as one generated file declares them. */
 export type Declarations = Map<string, string>;
 
-/** Generated file path -> its declarations. */
 export type GeneratedOutput = Map<string, Declarations>;
 
 export interface NameDiff { added: string[]; removed: string[] }
@@ -35,10 +33,6 @@ export interface Report {
   output: OutputDiff;
 }
 
-/*
- * Declarations only. A `var(--dxds-x)` read carries no value of its own, and counting it would
- * report a change every time an unrelated reference moved.
- */
 export const parseDeclarations = (css: string): Declarations => new Map(
   [...css.matchAll(/(--dxds-[\w-]+)\s*:\s*([^;\n}]+)/g)].map(([, name, value]) => [name, value.trim()]),
 );
@@ -54,7 +48,6 @@ export const diffNames = (before: Iterable<string>, after: Iterable<string>): Na
   removed: missingFrom(before, new Set(after)),
 });
 
-/** Names the theme reads that the package no longer offers — the build refuses to run on these. */
 export const findLostConsumed = (
   consumed: Iterable<string>,
   available: ReadonlySet<string>,
@@ -153,17 +146,8 @@ export const renderReport = (report: Report): string => {
   ].join('\n');
 };
 
-/*
- * The same report for a person watching it happen. Markdown belongs in a pull request; in a
- * terminal its pipes and its four `_none_` sections are noise, so this view drops what did not
- * happen, groups the values by file, and caps the long lists. update.mjs picks by `isTTY` and
- * writes whichever view to stdout alone, which keeps `> report.md` markdown.
- */
-
 export interface TerminalOptions {
-  /** ANSI colour. Off by default so the output stays comparable. */
   color?: boolean;
-  /** How many entries a section shows before it says how many more there are. */
   limit?: number;
 }
 
@@ -176,14 +160,12 @@ const dim = (text: string, color: boolean): string => paint('2', text, color);
 const red = (text: string, color: boolean): string => paint('31', text, color);
 const yellow = (text: string, color: boolean): string => paint('33', text, color);
 
-/* For a flat list, where one line is one entry. Grouped sections take groupCapped below. */
 const capped = (lines: string[], limit: number): string[] => (lines.length > limit
   ? [...lines.slice(0, limit), `    … and ${lines.length - limit} more`]
   : lines);
 
 const pad = (text: string, width: number): string => text + ' '.repeat(Math.max(0, width - text.length));
 
-/* Same file, several names: say the file once and line the names up under it. */
 const groupByFile = <T extends DeclarationRef>(
   entries: T[],
   line: (entry: T, width: number) => string,
@@ -198,19 +180,6 @@ const groupByFile = <T extends DeclarationRef>(
   });
 };
 
-/*
- * The cap is on entries, and it has to be taken before the grouping rather than after it. Capping
- * the grouped lines spent part of the budget on file headers, counted those headers as omitted
- * entries — so the tally read one too high per file — and could cut a header away from the
- * entries under it, leaving names with no file to attribute them to. One file hid all three:
- * its single header shifts both sides of the subtraction by one.
- *
- * The tally sits at the file indent rather than the entry one, because what it leaves out is
- * rarely the last file's alone — with the budget spent, whole files further down never appear in
- * the section at all, and a line indented under the last one printed would read as that file's
- * remainder. Those absent files are counted too: the entry tally alone cannot say whether the
- * section is a long file cut short or several files that were never reached.
- */
 const groupCapped = <T extends DeclarationRef>(
   entries: T[],
   limit: number,
@@ -231,11 +200,6 @@ const groupCapped = <T extends DeclarationRef>(
   ];
 };
 
-/*
- * What can be said before the rebuild: which package, how much it moved, and what the theme reads
- * that is no longer there. update.mjs prints this first, because the rebuild stops at the first
- * missing name and never gets to the rest of them.
- */
 export const renderPreamble = (report: Report, options: TerminalOptions = {}): string => {
   const color = options.color ?? false;
   const limit = options.limit ?? DEFAULT_LIMIT;

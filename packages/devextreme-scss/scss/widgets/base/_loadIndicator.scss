@@ -1,7 +1,6 @@
 @use "sass:math";
 @use "sass:meta";
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $loadindicator-width: 32px !default;
 $loadindicator-height: 32px !default;
 
@@ -51,12 +50,6 @@ $loadindicator-height: 32px !default;
     top: 50%;
     left: 50%;
     position: absolute;
-
-    /*
-     * Centred with translate rather than negative half-size margins: nothing has to halve the
-     * size, so it can be a token, and a consumer's own margin can no longer knock the indicator
-     * off centre — which is what the duplicated .dx-loadindicator specificity bump guarded.
-     */
     transform: translate(-50%, -50%);
   }
 }

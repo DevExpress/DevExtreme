@@ -1,7 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// Not a colour: a font weight that used to sit in _colors.scss (NAMING.md, O7)
 $pivot-grid-field-area-box-font-weight: ds.$font-weight-base-default !default;
 
 $pivot-grid-cell-padding: null !default;
@@ -41,7 +40,6 @@ $pivot-grid-area-field-border-radius: null !default;
   $pivot-grid-area-field-padding-block: ds.$spacing-10 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $pivot-grid-headers-font-size: ds.$font-size-title-xs !default;
 $pivot-grid-area-font-size: 13px !default; // dx-offscale: 13px
 $pivot-grid-area-field-line-height: ds.$line-height-base-md !default;
@@ -57,7 +55,6 @@ $pivot-grid-area-box-border: ds.$border-width-10 solid !default;
 $pivot-grid-chevron-icon-size: ds.$spacing-200 !default;
 $pivot-grid-field-chooser-field-min-height: ds.$spacing-360 !default;
 
-// Base-layer sizing injected with design tokens (wave B2)
 $pivot-grid-position-indicator-vertical-height: ds.$spacing-20 !default;
 $pivot-grid-position-indicator-horizontal-width: ds.$spacing-20 !default;
 $pivot-grid-position-indicator-last-margin-inline-start: ds.$spacing-30 !default;
@@ -78,15 +75,12 @@ $pivot-grid-field-chooser-button-margin-inline-start: ds.$spacing-40 !default;
 $pivot-grid-fields-area-head-padding-inline-start: ds.$spacing-20 !default;
 $pivot-grid-icon-sorted-margin-inline-end: ds.$spacing-50 !default;
 
-// Base submodule sizing injected with design tokens (B2 tail)
 $pivot-grid-field-chooser-drag-width: ds.$spacing-1000 !default;
 $pivot-grid-field-chooser-drag-height: ds.$spacing-1000 !default;
 
-// B2 tail: pivotGrid cell side paddings
 $pivot-grid-header-cell-padding-inline: ds.$spacing-20 !default;
 $pivot-grid-fields-area-head-cell-padding-inline: ds.$spacing-20 !default;
 
-// Base-layer sizing injected with design tokens (wave B16)
 $pivot-grid-border-width: ds.$border-width-10 !default;
 $pivot-grid-icon-size: ds.$spacing-140 !default;
 $pivot-grid-field-padding: ds.$spacing-20 !default;

@@ -1,13 +1,6 @@
 @use "../colors" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-/*
- * O4: diagram used to read Button's contained backgrounds for these. They are not buttons —
- * they are SVG strokes and fills on connector marks and the geometry mark — so the coupling
- * moves to the token. `ds.$color-bg-primary` is a BUTTON component token used
- * outside button; keeping it preserves the value, and the mapping question is recorded in
- * DIVERGENCES.md.
- */
 $diagram-connector-border: ds.$color-bg-primary !default;
 $diagram-connection-border: ds.$color-bg-success !default;
 $diagram-geometry-mark-border: ds.$color-bg-danger !default;
@@ -24,17 +17,13 @@ $diagram-image-icon-muted-content: rgb(from #{ds.$color-content-subtle} r g b / 
 $diagram-image-icon-accent-border: ds.$color-content-primary !default;
 $diagram-toolbox-shape-text-content: ds.$color-content-subtle !default;
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $diagram-bg: ds.$color-bg !default;
 $diagram-danger-icon: ds.$color-content-danger !default;
 
-// Canvas = deeper neutral surface
 $diagram-canvas-bg: ds.$color-bg-canvas !default;
 $diagram-shadow: ds.$box-shadow-md !default;
 
-// Values hoisted from style-file literals (tokenized)
 $diagram-selection-mark-content: ds.$color-border-contrast !default;
 $diagram-selection-bg: rgb(from #{ds.$color-border-contrast} r g b / 0.02) !default;
 
-// Base-layer values injected with design tokens (wave B1)
 $diagram-popup-title-toolbar-bg: ds.$color-bg-alpha-hovered !default;

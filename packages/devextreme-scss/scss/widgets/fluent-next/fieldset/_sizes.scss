@@ -2,7 +2,6 @@
 @use "../common/sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-// Moved here from the theme root: this component owns it (NAMING.md O1)
 $fieldset-value-padding-inline: null !default;
 
 @if $size == "default" {
@@ -41,5 +40,4 @@ $fieldset-field-value-bottom-padding: ds.$spacing-200 !default;
 $fieldset-attention-icon-offset: calc(#{$fieldset-value-padding-inline} + #{$invalid-badge-size}) !default;
 $fieldset-radio-group-min-height: ds.$spacing-260 !default;
 
-// Base-layer sizing injected with design tokens (wave B2)
 $fieldset-margin-block-end: ds.$spacing-200 !default;

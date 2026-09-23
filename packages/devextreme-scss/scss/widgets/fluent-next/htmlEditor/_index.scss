@@ -110,7 +110,6 @@
       padding-inline-start: 0;
     }
   }
-
 }
 
 .dx-invalid.dx-htmleditor {
@@ -292,7 +291,6 @@
   text-align: start;
 }
 
-// a mention renders wherever the editor's value is rendered, so it reads the system tier
 .dx-mention {
   background-color: var(--dx-mention-bg);
 }

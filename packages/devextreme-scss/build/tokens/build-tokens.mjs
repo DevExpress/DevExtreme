@@ -205,16 +205,6 @@ const FLUENT_MODES = [
   'light',
 ];
 
-/*
- * A bundle needs the mode-dependent declarations under three selectors, and a `:root` block cannot
- * be re-scoped on load — `meta.load-css` emits it verbatim and `@use` paths take no interpolation —
- * so these layers ship as mixins the theme places where it wants.
- *
- * Otherwise identical to Style Dictionary's own `css/variables` (lib/common/formats.js) minus the
- * selector nesting; keep the two in step.
- */
-// `prefix` belongs to the declaration lines, not to the header comment — upstream drops it before
-// building the header (getFormattingCloneWithoutPrefix), and so must we.
 const headerFormatting = ({ prefix, ...formatting } = {}) => formatting;
 
 StyleDictionary.registerFormat({
@@ -277,15 +267,9 @@ StyleDictionary.registerFormat({
 const FILE_OPTIONS = {
   outputReferences: true,
   themeable: true,
-  // 262.22.0 gave almost every semantic colour a $description, which Style Dictionary prints as a
-  // trailing `/** … */` on the declaration. Those comments are the package's own Figma bookkeeping,
-  // not something the bundle should carry, and the mode/shared split parses this generated text.
   formatting: { commentStyle: 'none' },
 };
 
-// 'text' covers reference-only tokens such as popup.box-shadow.composite
-// ($type "text", $value "{box-shadow.lg}") — expanding them would inline the
-// referenced composite shadow structure instead of keeping a var() reference.
 const customExpand = {
   exclude: ['shadow', 'text'],
 };
@@ -359,9 +343,6 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
     },
     options: FILE_OPTIONS,
   },
-  // The semantic tier is emitted under an explicit semantic/ folder mirroring the
-  // package layout (tokens/semantic/{typography,box-shadow,colors}) so the middle
-  // customization layer is discoverable in the generated output.
   {
     destination: `${THEME_NAME}/semantic/typography.scss`,
     format: 'css/variables',
@@ -379,12 +360,6 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
     },
     options: { ...FILE_OPTIONS, mixin: MODE_ROLES_MIXIN },
   },
-  /*
-   * The layers that read a colour role without being one: box-shadow composites and the global
-   * focus aliases. Their text is mode-independent, but a custom property resolves where it is
-   * declared, so on `:root` they would freeze at the bundle's mode. Both mode configs emit this
-   * file; the sources are the same, so the two writes are byte-identical.
-   */
   {
     destination: `${THEME_NAME}/${MODE_ALIASES_FILE}.scss`,
     format: 'dx/mode-scoped-mixin',
@@ -399,9 +374,6 @@ const createModeConfig = (mode) => createConfig(mode, getModeFiles(mode), [
   },
 ]);
 
-// Component *size* tokens are excluded for the same reason as the component theme: fluent-next
-// maps sizes onto the base scales (spacing/font-size/border-radius/…), so no widget would read the
-// `*-layout-*` names (see widgets/fluent-next/_design-system.scss).
 const createDsConfig = () => createConfig('ds', getBridgeFiles(), [
   {
     destination: 'variables/_ds.scss',
@@ -465,14 +437,6 @@ async function collectThemeStyleSheets() {
     .map((entry) => path.join(entry.parentPath, entry.name));
 }
 
-/*
- * Emitting by source file is a coarse answer: many declarations in those files do not depend on
- * the mode, and repeating them in four scopes per bundle is pure weight. Which is which is derived
- * from the generated text - a name whose two mode values differ, plus anything reading such a name
- * through a chain - so a token that starts or stops depending on the mode moves on its own at the
- * next bump. The remainder goes to a plain `:root` block; the theme-mode-scope gate is the judge.
- * The counts are printed at the end of the build.
- */
 const DECLARATION = /^(\s*)(--[\w-]+)\s*:\s*([^;]+);\s*$/;
 
 const parseDeclarations = (content) => content.split('\n').reduce((declarations, line) => {
@@ -484,8 +448,6 @@ const parseDeclarations = (content) => content.split('\n').reduce((declarations,
 const readsOf = (value) => [...value.matchAll(/var\(\s*(--[\w-]+)/g)].map(([, name]) => name);
 
 const modeDependentNames = (light, dark, aliases) => {
-  // Both key sets, not just the light one: a name only one mode declares differs by definition,
-  // and seeding from one side would drop it from the other scope without moving it to :root.
   const tainted = new Set([...light.keys(), ...dark.keys()]
     .filter((name) => light.get(name) !== dark.get(name)));
 
@@ -538,7 +500,6 @@ async function splitModeScopedLayers() {
     'utf-8',
   )));
 
-  // Either mode file carries the shared roles: for those, light and dark agree by definition.
   const shared = [...parsed.light, ...parsed.aliases].filter(([name]) => !dependent.has(name));
   const header = sources.light.content.slice(0, sources.light.content.indexOf('@mixin'));
   const body = shared.map(([name, value]) => `  ${name}: ${value};`).join('\n');
@@ -548,9 +509,6 @@ async function splitModeScopedLayers() {
   return { dependent: dependent.size, shared: shared.length };
 }
 
-// Every token a widget reads must still exist in the package. Without this a deleted token surfaces
-// much later as a Sass "Undefined variable", one name per rebuild, with no hint that a bump caused
-// it. Read from the flat index, not the bridge: it carries the version for the message.
 async function validateConsumedTokens() {
   const { version, tokens } = JSON.parse(
     await readFile(path.join(tokensDir, 'tokens.flat.json'), 'utf-8'),
@@ -603,8 +561,6 @@ async function build() {
 
     const sd = new StyleDictionary(config);
 
-    // Sequential on purpose: the configs write into one output tree, and a later one reads what
-    // an earlier one produced.
     // eslint-disable-next-line no-await-in-loop
     await sd.hasInitialized;
     // eslint-disable-next-line no-await-in-loop

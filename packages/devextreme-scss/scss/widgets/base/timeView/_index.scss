@@ -1,7 +1,5 @@
 @use "./mixins";
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
-
 .dx-timeview {
   &.dx-state-disabled,
   .dx-state-disabled {

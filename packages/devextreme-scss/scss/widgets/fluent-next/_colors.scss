@@ -16,12 +16,6 @@ $theme-marker-mode: null !default;
   $theme-marker-mode: "dark" !default;
 }
 
-/*
- * Public --dx-* custom properties, chained onto the design-token roles (a custom property may
- * reference another custom property). Mode/accent branching lives in the token definitions.
- * --dx-color-shadow carries alpha (the DS ships no solid-black token; the shadow roles are
- * rgba over black) — unlike the legacy solid #000 of the other themes.
- */
 :root,
 .dx-theme-mode-light,
 .dx-theme-mode-dark,
@@ -29,8 +23,6 @@ $theme-marker-mode: null !default;
   --dx-component-color-bg: #{ds.$color-bg};
   --dx-color-main-bg: #{ds.$color-bg-canvas};
   --dx-color-primary: #{ds.$color-content-primary};
-
-  // Content-role, not surface: consumers use these as text/icon colors (fluent's semantic $base-*), and the two roles diverge in dark mode
   --dx-color-danger: #{ds.$color-content-danger};
   --dx-color-success: #{ds.$color-content-success};
   --dx-color-warning: #{ds.$color-content-warning};

@@ -96,18 +96,11 @@
   $scheduler-workspace-accent-color: var(--dx-scheduler-workspace-accent-content),
   $scheduler-first-month-cell-background-color: var(--dx-scheduler-first-month-cell-bg),
   $scheduler-panel-text-color: var(--dx-scheduler-panel-content),
-  // NOT var(): base multiplies it (`$scheduler-left-column-width * $scheduler-small-size-factor`)
-  // outside any meta.type-of guard
   $scheduler-left-column-width: $scheduler-left-column-width,
   $scheduler-timeline-cell-height: var(--dx-scheduler-timeline-cell-height),
   $scheduler-workspace-focused-cell-color: var(--dx-scheduler-workspace-cell-bg-focused),
   $scheduler-droppable-cell-background-color: var(--dx-scheduler-droppable-cell-bg),
   $scheduler-appointment-text-color: var(--dx-scheduler-appointment-content),
-  /*
-   * NOT var(): base reads these two as BUILD-TIME FLAGS (`@if $fill-focused-appointment`), so they
-   * decide which rules exist rather than what they print. A var() string is always truthy, which
-   * would freeze the choice and hide it from the reader.
-   */
   $scheduler-fill-focused-appointment: $scheduler-appointment-bg-focused,
   $scheduler-is-shadow-color-for-focused-state: $scheduler-appointment-shadow-focused,
 

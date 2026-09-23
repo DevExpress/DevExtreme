@@ -41,11 +41,9 @@ $form-group-custom-caption-icon-margin: null !default;
   $form-layout-manager-tabpanel-content-padding: ds.$spacing-160 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $form-field-item-help-text-padding-block-start: ds.$spacing-20 !default;
 $form-group-content-border-block-start: ds.$border-width-10 solid !default;
 
-// Base-layer sizing injected with design tokens (wave B2)
 $form-first-row-padding-block-start: ds.$spacing-100 !default;
 $form-switch-margin-block-start: ds.$spacing-70 !default;
 $form-switch-margin-block-end: ds.$spacing-40 !default;

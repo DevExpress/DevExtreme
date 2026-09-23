@@ -1,6 +1,5 @@
 @use "./mixins" as *;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $fileuploader-button-margin-left: 12px !default;
 $fileuploader-upload-button-margin-top: 10px !default;
 $fileuploader-show-file-list-padding-top: 22px !default;
@@ -124,7 +123,6 @@ $fileuploader-input-wrapper-vertical-padding: 1em !default; // dx-relative
   align-items: center;
   width: 100%;
 
-  // fluent-next passes false (not null: !default would treat that as unset): its own rule paints this
   @if $fileuploader-file-container-padding {
     padding: $fileuploader-file-container-padding;
   }

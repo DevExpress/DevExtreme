@@ -8,12 +8,6 @@ import {
   customAccentColor, init, isFluentNext, mode, refreshMode, resetTheme,
 } from '@ts/ui/themes';
 
-/*
- * jsdom resolves a custom property declared ON an element but does not inherit it, so these cases
- * name the mode at the element `mode()` reads it from. Inheritance - a scope declaring the property
- * and a descendant resolving it through the cascade, which is how the mechanism actually works - is
- * covered in a real browser by e2e/testcafe-devextreme/tests/common/themeModes.ts.
- */
 const style = (css: string): void => { document.head.innerHTML = `<style>${css}</style>`; };
 
 const withThemeMarker = (themeName: string): string => `.dx-theme-marker { font-family: "dx.${themeName}"; }`;

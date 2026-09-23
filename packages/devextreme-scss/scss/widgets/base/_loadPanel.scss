@@ -1,6 +1,5 @@
 @use "./mixins" as *;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $loadpanel-content-padding: 10px !default;
 
 .dx-loadpanel-content {

@@ -143,7 +143,6 @@ describe('stripScssComments delimiter check', () => {
   });
 
   it('throws when delimiters pair up in the wrong order', () => {
-    // Even count, so only the ordering check can catch this one.
     expect(() => stripScssComments('$a: 1;\n*/\n$b: 2;\n/* note', 'probe.scss')).toThrow('Unpaired block comment');
   });
 

@@ -2,9 +2,10 @@
  * The roles report: which semantic role every colour slot of the theme reads, and what the token
  * package's component tier says the same slot should read.
  *
- *   node tools/review/roles.mjs           # → scss/widgets/fluent-next/ROLES.md
- *   node tools/review/roles.mjs --md      # markdown to stdout
- *   node tools/review/roles.mjs --json    # machine-readable, for the gate
+ *   node tools/review/roles.mjs                        # → scss/widgets/fluent-next/ROLES.md
+ *   node tools/review/roles.mjs --md                   # markdown to stdout
+ *   node tools/review/roles.mjs --json                 # machine-readable, for the gate
+ *   node tools/review/roles.mjs --theme=<dir> --json   # another theme folder; needs --json or --md
  *
  * Nothing else checks the CHOICE of role. The naming enforcer checks the name, the resolve diff
  * checks that a value did not move, the reachability audit checks delivery, the screenshots check
@@ -20,12 +21,13 @@
  *   2. package — `@devexpress/design-tokens-internal/tokens/components/{core,vnext,blazor,wpf}` IS
  *                the role assignment design made, for four products. The theme does not consume it
  *                (decision 06.08.2026), and that is exactly why it reads as a reference. Remeasured
- *                on 262.23.0: of the colour leaves, 712/720 in core and 741/749 in vnext are plain
+ *                on 262.25.0: of the colour leaves, 712/722 in core and 741/751 in vnext are plain
  *                `{color.<role>}` references, and not one leaf in core, vnext or wpf points at a
  *                palette primitive. The rest are references to other scales - focus, box-shadow,
- *                opacity - plus a single literal in the whole package (`#0f6cbd00`, the transparent
- *                edge of the progress bar's indeterminate gradient). So the tier carries the
- *                mapping and no value of its own.
+ *                opacity - plus three literals: `#0f6cbd00` in core and vnext (the transparent
+ *                edge of the progress bar's indeterminate gradient) and a malformed `#aN` twice
+ *                on wpf's grid.cell.color.focused.bg. So the tier carries the mapping and no
+ *                value of its own.
  *
  *                And the mapping is not fluent's: `theme/material.json` assigns the SAME role to
  *                the same path for 724 of its 726 leaves in core, and 753 of 755 in vnext. The two
@@ -50,8 +52,6 @@ import { createRequire } from 'module';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const packageRoot = join(here, '..', '..');
-// --theme= lets the gate run the same code over a synthetic tree, so a green gate means "nothing
-// to find" rather than "the scan matched nothing".
 const themeArg = process.argv.find((a) => a.startsWith('--theme='));
 const themeDir = themeArg ? themeArg.slice('--theme='.length) : join(packageRoot, 'scss', 'widgets', 'fluent-next');
 const registries = JSON.parse(readFileSync(join(packageRoot, 'tools', 'naming', 'registries.json'), 'utf8'));
@@ -69,18 +69,6 @@ const leavesOf = (node, trail = []) => Object.entries(node ?? {}).flatMap(([key,
   return leavesOf(value, [...trail, key]);
 });
 
-/*
- * Theme folder -> the package components that describe the same thing, most authoritative first.
- * A judgment call per line, so the list is explicit rather than derived: `chat` is the package's
- * `ai-chat`, all three grids are its single `grid`, and our chassis folders (textEditor, gridBase)
- * map to the component the package models, not to a widget name. A folder that is absent here has
- * no counterpart worth comparing - the report says so instead of guessing.
- *
- * Six were added 09.09 after asking whether the gap was real or just my spelling: cardView is the
- * package's `grid`, the way tools/review/package-disabled.mjs has always mapped it; a speed-dial
- * action is a button; a lookup is a listbox; an action sheet is a popup. Name similarity was doing
- * the matching before, and it does not survive contact with another product's vocabulary.
- */
 const COMPONENT = {
   accordion: ['accordion'],
   actionSheet: ['popup', 'menu-list'],
@@ -147,18 +135,6 @@ const COMPONENT = {
   typography: ['text-content', 'button-text'],
 };
 
-// slot -> the --dxds- colour family it has to read. null = the slot is genuinely two-sided (a thumb
-// can be filled or outlined), so the family signal says nothing and only the package can answer.
-/*
- * Cross-cutting nodes: the package models a separator, a focus rect, a backdrop and a skeleton as
- * components of their own, the way our system tier publishes them on :root rather than inside a
- * widget. Every component is compared against these too, after its own, so `$menu-separator-bg`
- * finds `separator.color` instead of reading as a menu background that borrowed a border role.
- */
-/* A package component whose name IS the slot but is not spelled the way our grammar spells it.
- * Until 09.09 the package's whole `focus-rect` component - four roles for the focus indicator -
- * never entered the comparison, because neither `focus-rect.color.default` nor the name
- * `focus-rect` matches any of our parts, so it was dropped as an unknown slot. */
 const COMPONENT_AS_SLOT = { 'focus-rect': 'outline', skeleton: 'bg', 'empty-item': 'content' };
 
 const SHARED = ['separator', 'focus-rect', 'backdrop', 'skeleton', 'empty-item', 'text-content', 'link'];
@@ -196,14 +172,6 @@ const FAMILY = {
   trigger: null,
 };
 
-/*
- * Slot kinship. The package splits what we deliberately keep together: `content` is our umbrella
- * slot and `text` is reserved for elements that tokenise text and icon separately (NAMING.md), so
- * the package painting our `content` as `text` is the documented naming divergence, not a finding.
- * Comparison therefore runs twice - exact slot first, then kin - and only a role that crosses a
- * family boundary is reported. `ambiguous` matches anything: a thumb or a track is legitimately
- * either filled or outlined, so its family carries no claim.
- */
 const KIN = {
   bg: 'bg',
   backdrop: 'bg',
@@ -242,8 +210,6 @@ const kindred = (a, b) => a === b || kinOf(a) === 'ambiguous' || kinOf(b) === 'a
 
 const PARTS = [...registries.parts].sort((a, b) => b.length - a.length);
 const STATES = [...registries.states].sort((a, b) => b.length - a.length);
-// `rest` is absence of a suffix in the theme and an explicit segment in the package; `disable` is a
-// vendor typo that ships in switch.color.checked.bg.disable.
 const PACKAGE_STATES = new Set([...registries.states, 'rest', 'disable']);
 
 const familyOf = (role) => {
@@ -257,13 +223,6 @@ const trailing = (name, vocabulary) => {
   return null;
 };
 
-/*
- * Resolved values, per mode, read from the package rather than from a built bundle: the report has
- * to answer "would this swap move a pixel" without waiting for a theme build, and the answer lives
- * in the tokens. A swap that resolves identically in BOTH modes is free - a declaration fix with no
- * etalon to re-shoot. One that moves only in dark is the case this whole report exists for: every
- * screenshot etalon is .light, so nothing in CI can see it.
- */
 const valueIndex = {};
 for (const mode of MODES) {
   const map = new Map();
@@ -273,7 +232,6 @@ for (const mode of MODES) {
       if (statSync(absolute).isDirectory()) { collect(absolute); return; }
       if (!entry.endsWith('.json')) return;
       if (/material/.test(absolute)) return;
-      // the mode files sit at semantic/colors/<theme>/<mode>.json - keep only this mode's
       if (/[\\/]colors[\\/]/.test(absolute) && /^(light|dark)\.json$/.test(entry) && entry !== `${mode}.json`) return;
       leavesOf(JSON.parse(readFileSync(absolute, 'utf8'))).forEach(([name, value]) => {
         if (!map.has(name)) map.set(name, value);
@@ -288,9 +246,6 @@ const resolveRole = (role, mode, depth = 0) => {
   const raw = valueIndex[mode].get(key) ?? valueIndex[mode].get(role);
   if (raw === undefined) return null;
   if (typeof raw !== 'string' || !raw.startsWith('{') || depth > 12) return String(raw).toLowerCase();
-  /* The alpha roles are written as a reference with a hex alpha glued on - "{neutral.270}0A".
-   * Resolving the reference alone loses the transparency and resolving the whole string finds
-   * nothing, which is why these came back null and every alpha role looked absent. */
   const alpha = /^\{([^}]+)\}([0-9a-f]{2})$/i.exec(raw);
   if (alpha) {
     const base = resolveRole(alpha[1], mode, depth + 1);
@@ -304,28 +259,12 @@ const sameValue = (a, b) => MODES.every((mode) => {
   return va !== null && vb !== null && va === vb;
 });
 
-// --- the theme side -----------------------------------------------------------------------------
-
-/*
- * Block comments are blanked, not removed: dropping them shifts every line number after the first
- * one in a file, and this whole report is line references. typography/_sizes.scss:69 was printed
- * as :65 because of a four-line comment above it.
- */
 const styleFiles = (dir) => readdirSync(dir).flatMap((entry) => {
   const absolute = join(dir, entry);
   if (statSync(absolute).isDirectory()) return styleFiles(absolute);
   return entry.endsWith('.scss') ? [absolute] : [];
 });
 
-/*
- * Collected in two passes, because a declaration does not have to name a role itself.
- * `$speed-dial-action-bg: buttonColors.$button-normal-contained-bg` carries the button's value, and
- * `$pivot-grid-area-field-bg: rgb(from #{$pivot-grid-field-area-box-bg} …)` carries a sibling's.
- * Collecting only the lines with a literal `ds.$` in them dropped those from the set entirely - no
- * verdict, no family check, no list - while `every colour declaration reaches a verdict` stayed
- * green, because it measured completeness over the set the collector had already narrowed.
- * So: pass one takes every declaration, pass two resolves the references until they reach roles.
- */
 const rawDeclarations = [];
 for (const file of styleFiles(themeDir)) {
   const folder = relative(themeDir, file).split('/')[0];
@@ -356,8 +295,6 @@ for (const file of styleFiles(themeDir)) {
 }
 
 const valueOf = new Map(rawDeclarations.filter((d) => d.sass).map((d) => [d.name, d.value]));
-/* A reference reaches its roles through however many hops it takes; the depth cap only stops a
- * cycle, and `seen` keeps a diamond from counting the same source twice. */
 const rolesOf = (value, seen = new Set(), depth = 0) => {
   if (depth > 8) return [];
   const direct = [...value.matchAll(/ds\.\$([a-z0-9-]+)/g)].map((r) => r[1]);
@@ -370,8 +307,6 @@ const rolesOf = (value, seen = new Set(), depth = 0) => {
   });
   return [...direct, ...borrowed];
 };
-/* What a declaration borrows from, for the report: the names it reads that are declarations
- * themselves rather than roles. */
 const borrowsOf = (value) => [...new Set([...value.matchAll(/(?:[A-Za-z][\w-]*\.)?\$([a-z0-9-]+)/g)]
   .map((r) => r[1]).filter((n) => valueOf.has(n)))];
 
@@ -382,21 +317,10 @@ rawDeclarations.forEach(({
   const roles = [...new Set(rolesOf(value))];
   const borrows = borrowsOf(value);
   if (!roles.length) return;
-  /*
-     * Outside the colour files a declaration joins only when it carries a colour: `_sizes.scss`
-     * holds four that do - two shadows and two borders - and several hundred that read the spacing
-     * and radius scales, which the size pass measures instead.
-     */
   if (!colourFile && !roles.some((role) => /^(color|box-shadow)-/.test(role))) return;
   const state = trailing(name, STATES);
   const bare = state ? name.slice(0, -state.length - 1) : name;
   const slot = trailing(bare, PARTS);
-  /*
-     * A part word can also sit in the middle as a sub-element: `$menu-separator-bg` is slot `bg` on
-     * sub-element `separator`, and the package models exactly that as its own `separator` slot. So
-     * the comparison looks for the package's word among ours, not only at our last position -
-     * otherwise every `<part>-bg` reads as a bg that borrowed a border role.
-     */
   const middle = slot ? bare.slice(0, -slot.length).replace(/-$/, '') : bare;
   const subElementSlots = PARTS.filter((part) => middle === part || middle.endsWith(`-${part}`)
     || middle.startsWith(`${part}-`) || middle.includes(`-${part}-`));
@@ -445,12 +369,6 @@ const coverage = {
   }
 }
 
-// --- the package side ---------------------------------------------------------------------------
-
-/* A package path is `<component>.<sub-elements>.color.<variants>.<slot>.<state>`, and only the part
- * after `color.` describes the paint - `progress-bar.progress-line.color.indicator.…` would
- * otherwise match `line` in the sub-element. The slot is the rightmost segment that is one of our
- * parts, so a package slot we have no word for is reported rather than silently mapped. */
 const dissect = (path) => {
   const segments = path.split('.');
   const colourAt = segments.indexOf('color');
@@ -461,21 +379,11 @@ const dissect = (path) => {
     const slot = trailing(tail[i], PARTS);
     if (slot) return { slot, state, variant: tail.slice(0, i).join('.') };
   }
-  /* `separator.color` and `backdrop.color` carry no slot segment because the component IS the slot:
-   * the package models them the way our system tier publishes them, as a thing rather than a part
-   * of a thing. Without this they fall out of the comparison entirely, and every
-   * `-separator-border` in the theme reads as a border nobody named. */
   const asSlot = COMPONENT_AS_SLOT[segments[0]] ?? trailing(segments[0], PARTS);
   if (asSlot) return { slot: asSlot, state, variant: tail.join('.') };
   return { slot: null, state, variant: tail.join('.') };
 };
 
-/*
- * wpf keeps eight components outside `theme/fluent.json`, in a folder each: accordion,
- * button-group, docking, groupbox, listbox-edit, pagercontrol, progress-bar and text-content.
- * Reading only `theme/` dropped 450 leaves, including the whole accordion and the progress bar's
- * hue variants. Merged under the same set so a role found there answers exactly as one in theme/.
- */
 const WPF_EXTRA = ['accordion', 'button-group', 'docking', 'groupbox', 'listbox-edit', 'pagercontrol', 'progress-bar', 'text-content'];
 const setFiles = (set) => {
   const files = [join(tokensRoot, 'tokens', 'components', set, 'theme', 'fluent.json')];
@@ -489,13 +397,13 @@ const setFiles = (set) => {
 };
 const componentsOf = (set) => Object.assign({}, ...setFiles(set).map((f) => JSON.parse(readFileSync(f, 'utf8'))));
 
-const packageTier = {}; // set -> component -> { bySlot, byRole, unknownSlots }
+const packageTier = {};
 for (const set of SETS) {
   const components = componentsOf(set);
   packageTier[set] = {};
   for (const [component, tree] of Object.entries(components)) {
     const bySlot = new Map();
-    const byState = new Map(); // slot -> state -> Set(role)
+    const byState = new Map();
     const byRole = new Map();
     const unknownSlots = new Set();
     leavesOf(tree).forEach(([path, raw]) => {
@@ -529,20 +437,20 @@ for (const set of SETS) {
  * line-height 120/180. Most carry `dx-no-semantic-role`; the rest carry no marker at all, because
  * the px gate only looks at literals and a step read is not a literal.
  *
- * None of the four neighbours has this: their component sets reference the typography ROLES and a
+ * None of the four neighbors has this: their component sets reference the typography ROLES and a
  * bare step three times in total. So a place here is not "the package is missing a role" by
  * default - it is a choice between the legacy value and the design system's grid, and the report
  * has to put both in front of whoever decides.
  */
 const TYPOGRAPHY = ['font-size', 'font-weight', 'line-height'];
 
-const typographyGrid = {}; // family -> [{ role, step }], the steps the role grid actually names
+const typographyGrid = {};
 for (const family of TYPOGRAPHY) {
   const roles = [];
   valueIndex.light.forEach((raw, name) => {
     if (!name.startsWith(`${family}.`)) return;
     const step = /^\{?([a-z-]+)\.(\d+)\}?$/.exec(String(raw));
-    if (!step) return; // a role points at a step; a step points at a number
+    if (!step) return;
     roles.push({ role: name.split('.')[1], step: Number(step[2]) });
   });
   typographyGrid[family] = roles.sort((a, b) => a.step - b.step);
@@ -581,18 +489,6 @@ for (const file of sizeFiles(themeDir)) {
   });
 }
 
-/*
- * What each tier name actually paints, read out of the built bundle.
- *
- * The slot is supposed to encode the CSS property (NAMING.md: assigned in `color:` -> content, in
- * `background-color` -> bg, in `border-color` -> border), and that is the one claim in the whole
- * name that can be checked against ground truth instead of read. filterBuilder is why it is worth
- * checking: fourteen `-content` variables reach base as `button-color($color, ...)`, which sets
- * `background-color` - the roles were right all along and the names were not.
- *
- * Needs a built bundle; without one this half of the report is simply absent, the way the calc
- * inventory in SCALES.md is.
- */
 const PROPERTY_FAMILY = [
   [/^(background|background-color|background-image)$/, 'bg'],
   [/^(color|fill|caret-color|-webkit-text-fill-color)$/, 'content'],
@@ -600,16 +496,7 @@ const PROPERTY_FAMILY = [
   [/shadow$/, 'shadow'],
 ];
 const bundlePath = join(packageRoot, '..', 'devextreme', 'artifacts', 'css', 'dx.fluent-next.blue.light.css');
-const paints = new Map(); // --dx-name -> Set(css property)
-/*
- * Names the bundle declares at all - not what they paint, just that they exist there.
- *
- * Every check that reads a painted property goes quiet when the bundle predates the source: a
- * renamed variable simply is not found, so it reports no property, so it cannot contradict its
- * slot. Renaming twenty-three names on 09.09 against a bundle built that morning hid twenty-four
- * declarations this way, and the slot check looked like it had passed. The count below is banked
- * with exact equality, so a stale bundle moves a number instead of removing findings.
- */
+const paints = new Map();
 const declaredInBundle = new Set();
 if (existsSync(bundlePath)) {
   const css = readFileSync(bundlePath, 'utf8');
@@ -624,8 +511,6 @@ if (existsSync(bundlePath)) {
 const familyOfProperty = (property) => PROPERTY_FAMILY
   .find(([re]) => re.test(property))?.[1] ?? null;
 
-// --- the comparison ----------------------------------------------------------------------------
-
 const findings = [];
 for (const declaration of declarations) {
   const {
@@ -634,9 +519,6 @@ for (const declaration of declarations) {
   const ourSlots = [slot, ...subElementSlots].filter(Boolean);
   const record = { ...declaration, family: null, package: null };
 
-  // The family signal follows the CSS property, which is what the slot encodes (NAMING.md): a
-  // separator drawn with background-color is still painted by `bg`. Sub-elements steer the package
-  // comparison, not this one.
   if (slot && FAMILY[slot]) {
     const want = FAMILY[slot];
     const got = [...new Set(roles.map(familyOf))].filter((f) => f !== 'none');
@@ -661,24 +543,12 @@ for (const declaration of declarations) {
     else {
       const exact = [];
       const kin = [];
-      /* Whether the package uses our role for another part OF THE SAME widget or only somewhere
-       * else entirely. The first is a word disagreement - the package calls the switch knob a
-       * `trigger` and paints it from a content role, exactly as we do, and only our slot says `bg`.
-       * The second is the one worth a second look. */
       const sameComponent = new Set();
       const crossFamily = new Map();
-      const slotRoles = new Set(); // roles the package uses for our slot, or a kin slot
+      const slotRoles = new Set();
       for (const {
         set, component, tier, own,
       } of seen) {
-        /*
-         * What the package offers HERE is gathered strictly: same family as our own slot, no
-         * sub-elements and no wildcard. `$popup-content-shadow-ambient` is a shadow that happens to
-         * live on the content area, and a scroll bar's thumb is ambiguous by design - letting
-         * either widen the candidate set turns a correct role into a conflict with roles that were
-         * never on offer. The lenient reading stays where it belongs: deciding whether our role
-         * already agrees with the package somewhere.
-         */
         tier.bySlot.forEach((pkgRoles, pkgSlot) => {
           if (kinOf(pkgSlot) !== kinOf(slot) || kinOf(slot) === 'ambiguous') return;
           pkgRoles.forEach((role) => slotRoles.add(role));
@@ -697,9 +567,6 @@ for (const declaration of declarations) {
         });
       }
       const packageRolesHere = [...slotRoles].sort();
-      /* A role of the slot's own family used elsewhere for a different part is not a crossing - the
-       * package simply has not needed it here. Reserve `cross-family` for the case the name
-       * promises: the role belongs to another family than the slot paints with. */
       const crosses = FAMILY[slot] && roles.some((role) => {
         const family = familyOf(role);
         return family !== 'none' && family !== FAMILY[slot];
@@ -718,8 +585,6 @@ for (const declaration of declarations) {
       } else if (packageRolesHere.length) {
         const ourFamilies = new Set(roles.map(familyOf).filter((f) => f !== 'none'));
         const theirFamilies = new Set(packageRolesHere.map(familyOf).filter((f) => f !== 'none'));
-        // Only `color-none` on offer is not a family to conflict with - the package simply paints
-        // nothing here, which says nothing about our role.
         if (!theirFamilies.size) record.package = { verdict: 'slot-absent' };
         else {
           const shared = [...ourFamilies].some((f) => theirFamilies.has(f));
@@ -727,20 +592,6 @@ for (const declaration of declarations) {
         }
       } else record.package = { verdict: 'slot-absent' };
 
-      /*
-       * The rung, which the verdict above never asks about. `agrees` means the package uses our
-       * role for our slot SOMEWHERE in this component, in any state - so
-       * `$text-editor-line-focused` read `agrees` while the package names `content-primary` for
-       * that underline at focus and `content` only at hover. `byState` has carried the answer since
-       * the tier was first parsed, and nothing read it.
-       *
-       * Narrow on purpose, to one question: does the package use OUR role for OUR slot at a
-       * DIFFERENT rung? That is a ladder shifted by a step, and it is checkable. The looser
-       * reading - our role simply absent from the package's rung - fires 185 times and says
-       * mostly that our anatomy is richer: the package's grid names two roles for its whole
-       * content slot, so every dropzone, filter panel and link of ours disagrees with it and
-       * nothing follows from that.
-       */
       const rung = new Set();
       const usedAt = new Set();
       const rungWhere = [];
@@ -769,7 +620,6 @@ for (const declaration of declarations) {
   if (painted.length) {
     const families = [...new Set(painted.map(familyOfProperty).filter(Boolean))];
     record.paints = { properties: painted, families };
-    // The slot claims a family; the bundle says which one the property actually belongs to.
     if (FAMILY[slot] && families.length && !families.includes(FAMILY[slot])) {
       record.slotLies = { slotSays: FAMILY[slot], propertySays: families };
     }
@@ -782,9 +632,6 @@ for (const declaration of declarations) {
     const ours = Object.fromEntries(MODES.map((m) => [m, resolveRole(roles[0], m)]));
     record.swap = { free, ours };
     if (!free.length) {
-      /* The role the package would have us use is often one step away and differs in a single mode.
-       * Naming it turns a diagnosis into a decision - and a candidate that moves dark only is the
-       * signature case of this report: no etalon can see it. */
       const wanted = FAMILY[record.slot];
       record.near = packageUses
         .filter((candidate) => !wanted || familyOf(candidate) === wanted)
@@ -800,16 +647,6 @@ for (const declaration of declarations) {
   findings.push(record);
 }
 
-/*
- * State ladders: does a state actually change the paint?
- *
- * Needs neither the package nor a bundle - it reads the theme against itself. A slot whose hovered
- * and active resolve to one role has a state in the name that the eye cannot find, and the ladder
- * the design system ships for that role is going unused. Two collapses are accepted convention and
- * are named here rather than discovered every run: `focused` reuses `hovered` because the
- * foundation has no focused state (DIVERGENCES), and a state that deliberately resets to the rest
- * value is a reset, not a gap.
- */
 const ACCEPTED_COLLAPSE = [['focused', 'hovered'], ['focused', 'active'], ['selected-focused', 'selected-hovered']];
 const acceptedPair = (a, b) => ACCEPTED_COLLAPSE
   .some(([x, y]) => (a === x && b === y) || (a === y && b === x));
@@ -836,11 +673,6 @@ const ladders = [];
       if (states.length < 2) return;
       const pairs = states.flatMap((a, i) => states.slice(i + 1).map((b) => [a, b]));
       if (pairs.every(([a, b]) => acceptedPair(a, b))) return;
-      /* The precise question is about OUR role, not the package's anatomy: we paint two states
-       * from role R, so does the design system ship R for the second state? `bg-alpha-hovered`
-       * shared by hovered and active is a gap exactly when `bg-alpha-active` exists. This needs no
-       * component mapping, so it answers for all 86 folders, including the 22 the package has
-       * never heard of. */
       const unusedRungs = states
         .filter((state) => state !== 'rest')
         .flatMap((state) => role.split('+').map((r) => {
@@ -861,15 +693,6 @@ const ladders = [];
   ladders.sort((a, b) => a.stem.localeCompare(b.stem));
 }
 
-/*
- * Contrast, measured only where the bundle itself puts a foreground and a background in ONE rule.
- *
- * This is the blind spot the whole report circles: every screenshot etalon is .light, and axe's
- * colour-contrast rule looks at text only, so a role that is fine in light and wrong in dark has
- * nothing watching it. Guessing which surface a text sits on would produce noise; a rule that sets
- * both is ground truth and needs no assumption. It covers a subset - most backgrounds live on an
- * ancestor - but every pair it reports is real.
- */
 const hexOf = (value) => {
   const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(value).trim());
   if (!hex) return null;
@@ -888,9 +711,6 @@ const contrast = (a, b) => {
   return (x + 0.05) / (y + 0.05);
 };
 
-/* A value built through the alpha bridge renders as a tint over whatever is behind it, not as the
- * role's opaque hex - measuring it against the role would invent a contrast nobody sees. The
- * html editor's code block, `rgb(from color-content-subtle r g b / .15)`, is why this is here. */
 const roleOfTierName = new Map(declarations
   .filter((d) => !d.bridged && d.roles.length === 1)
   .map((d) => [`--dx-${d.name}`, d.roles[0]]));
@@ -899,8 +719,6 @@ if (existsSync(bundlePath)) {
   const css = readFileSync(bundlePath, 'utf8');
   [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].forEach(([, selector, body]) => {
     if (selector.trim().startsWith('@')) return;
-    // WCAG 1.4.3 exempts inactive controls, and the theme's disabled policy is gated separately
-    // (tests/disabled-paint.test.ts). Measuring them here would bury the live pairs under them.
     if (/dx-state-disabled|dx-state-readonly|dx-button-disable/.test(selector)) return;
     const grab = (property) => new RegExp(`(?:^|;)\\s*${property}\\s*:\\s*var\\(\\s*(--dx-[a-z0-9-]+)`).exec(body)?.[1];
     const fg = grab('color');
@@ -929,20 +747,6 @@ const lowContrast = pairs
     .findIndex((other) => other.fg === pair.fg && other.bg === pair.bg) === index)
   .sort((a, b) => Math.min(...Object.values(a.contrast)) - Math.min(...Object.values(b.contrast)));
 
-/*
- * Contrast across a state change - the blind spot of the pass above.
- *
- * The rule-local pass only sees a foreground and a background written together. A state ladder
- * never writes them together: the hovered/focused rule repaints the fill and leaves the glyph to
- * the rule that set it in the rest state. So exactly the states where a value moves are the ones
- * the rule-local pass cannot measure, and the checked+focused checkbox - 1.62 in dark, against a
- * rest state that measures a comfortable 3.36 - sat under it unseen.
- *
- * Pairing rule: strip the state classes from a selector and two rules describe the same element.
- * Variant classes (dx-checkbox-checked, dx-invalid) are NOT stripped, so a checked box is never
- * paired with an unchecked one. A pair is reported only when the fill comes from a state rule and
- * the glyph from the element's own rest rule - that is the cross-rule case by construction.
- */
 const STATE_CLASS = /\.dx-state-(?:hover|focused|active|selected)\b/g;
 const elementKey = (selector) => selector
   .replace(STATE_CLASS, '')
@@ -971,17 +775,9 @@ if (existsSync(bundlePath)) {
       STATE_CLASS.lastIndex = 0;
     });
   });
-  // The rest-state foreground of each element: the last rule that sets `color` without a state.
   rules.forEach((rule) => {
     if (rule.fg && !rule.stated) foregroundOf.set(rule.key, rule);
   });
-  /*
-   * A theme may move the label WITH the state, in a rule of its own: the outlined button sets the
-   * background in one rule and the label colour in another, both carrying the same state class.
-   * Pairing such a background with the REST label measures a pair that never renders - it reported
-   * the outlined button at 4.02 where the button actually renders 5.85. So the state's own
-   * foreground wins when there is one, and the rest foreground is the fallback it always was.
-   */
   const statedForegroundOf = new Map();
   const stateKey = (selector) => {
     STATE_CLASS.lastIndex = 0;
@@ -1015,8 +811,6 @@ if (existsSync(bundlePath)) {
     });
   });
 }
-/* Both thresholds are reported, as in the pass above: 4.5 for a label, 3 for a glyph or a
- * boundary. Which one applies is decided by what the element is, and the table says so per row. */
 const GRAPHIC = 3;
 const lowStatePairs = statePairs
   .filter((pair) => MODES
@@ -1025,18 +819,6 @@ const lowStatePairs = statePairs
     .findIndex((other) => other.fg === pair.fg && other.bg === pair.bg) === index)
   .sort((a, b) => Math.min(...Object.values(a.contrast)) - Math.min(...Object.values(b.contrast)));
 
-/*
- * The same concept across components.
- *
- * Every check above asks about one declaration. This one asks the question the task is actually
- * named after: does the theme paint the same thing the same way everywhere? Group by what the name
- * says the thing IS - its modifiers plus slot plus state, with the sub-elements dropped - and a
- * concept that resolves to several roles is either a considered difference or nobody comparing.
- *
- * Ranked by how many FAMILIES disagree, not how many roles: `border-danger` against
- * `border-danger-shared` is a shade, and two components can honestly differ on it. bg against
- * border against content for one concept cannot be explained by the element being different.
- */
 const MODIFIER_WORDS = new Set(Object.values(registries.modifiers).flat());
 const concepts = [];
 {
@@ -1049,7 +831,6 @@ const concepts = [];
         : declaration.name.slice(0, -declaration.state.length - 1);
       const middle = bare.slice(0, -declaration.slot.length).replace(/-$/, '').split('-');
       const modifiers = [...new Set(middle.filter((word) => MODIFIER_WORDS.has(word)))].sort();
-      // without a modifier the concept is too generic to compare
       if (!modifiers.length) return;
       const key = `${modifiers.join('+')} ${declaration.slot} ${declaration.state}`;
       if (!groups.has(key)) groups.set(key, []);
@@ -1060,15 +841,9 @@ const concepts = [];
     const roles = [...new Set(members.map((m) => m.roles[0]))];
     if (folders.length < 2 || roles.length < 2) return;
     const families = [...new Set(roles.map(familyOf).filter((f) => f !== 'none'))];
-    /* Roles that resolve to one colour in both modes are the same paint under different names, and
-     * unifying them costs nothing. That is a different problem from components that genuinely
-     * disagree about the colour, and mixing the two would hide both. */
     const valueOfRole = (role) => MODES.map((mode) => resolveRole(role, mode)).join(' / ');
     const values = new Set(roles.map(valueOfRole));
     const oneColour = values.size === 1;
-    /* Inside a split concept, the interesting part is the cluster: components that paint the same
-     * colour while spelling it from different families. Those cost nothing to unify, and until they
-     * are unified the next palette change moves some of them and not the others. */
     const clusters = [...values].map((value) => ({
       value,
       roles: roles.filter((role) => valueOfRole(role) === value),
@@ -1094,18 +869,6 @@ const concepts = [];
     || b.roles.length - a.roles.length || a.concept.localeCompare(b.concept));
 }
 
-/*
- * What the package offers and the theme never takes.
- *
- * Every other check starts from a declaration we wrote and asks whether its role is right. This one
- * starts from the package and asks what we never reached for at all - a whole family can be missing
- * without a single declaration looking wrong, which is how the four focus roles stayed invisible
- * until the component holding them was finally parsed.
- *
- * Split in two, because the two halves mean opposite things: a role that exists in the semantic
- * layer and goes unread is capability we are not using, while a role the neighbours reference that
- * does not exist at all is a stale name in their set.
- */
 const declaredRoles = new Set();
 for (const [name] of valueIndex.light) declaredRoles.add(name.replace(/^(color|global\.color)\./, 'color-'));
 
@@ -1127,8 +890,6 @@ const unusedRoles = { capability: [], stale: [] };
     unusedRoles[declaredRoles.has(role) ? 'capability' : 'stale']
       .push({ role, sets: [...sets].sort() });
   });
-
-// --- output ------------------------------------------------------------------------------------
 
 const count = (predicate) => findings.filter(predicate).length;
 const verdicts = ['agrees', 'agrees-kin', 'cross-family', 'family-conflict', 'role-new',
@@ -1331,7 +1092,7 @@ const md = () => {
   out.push('Most are the name and not the role: fourteen filterBuilder `-content` variables reach base as');
   out.push('`button-color()`, which sets `background-color`, and the bg roles they carry were right all');
   out.push('along. Two idioms are deliberate and stay - a hairline drawn with `background-color` keeps its');
-  out.push('border role, and a value that paints two properties is named after the dominant one (rule 5).\n');
+  out.push('border role, and a value that paints two properties is named after the dominant one.\n');
   out.push('| Where | Variable | Reads | Slot says | Actually paints |');
   out.push('|---|---|---|---|---|');
   for (const f of lies) {
@@ -1372,18 +1133,8 @@ const md = () => {
   return out.join('\n');
 };
 
-/*
- * Every role the theme reads, resolved in both modes.
- *
- * The decision page draws specimens - a real checkbox fill with a real mark on it, a real button
- * in each state - and a specimen is only worth looking at if it is painted with the value the
- * bundle actually ships. Emitting the palette here keeps the page from re-implementing the
- * resolver and from drifting away from the numbers printed beside the picture.
- */
 const palette = {};
 const roleNames = new Set([...declarations.flatMap((d) => d.roles), ...offeredRoles.keys()]);
-// plus everything the semantic layer declares at all: the palette carries the roles offered as a
-// replacement too, and the theme does not read those by definition
 for (const key of valueIndex.light.keys()) {
   if (key.startsWith('color.')) roleNames.add(key.replace(/^color\./, 'color-'));
 }

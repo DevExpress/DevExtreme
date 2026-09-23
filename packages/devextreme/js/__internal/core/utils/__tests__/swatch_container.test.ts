@@ -5,19 +5,12 @@ import $ from '@js/core/renderer';
 import { value as viewPort } from '@js/core/utils/view_port';
 import swatchContainer from '@ts/core/utils/swatch_container';
 
-/*
- * The viewport is mocked rather than assigned: `value(x)` falls back to <body> for anything empty,
- * so the state before documentReady - `value()` returning undefined - is otherwise unreachable,
- * and that is the state overlays created too early run into (T713615, T1143527).
- */
 jest.mock('@js/core/utils/view_port');
 
 const viewPortMock = viewPort as unknown as jest.Mock<() => unknown>;
 
 const { getSwatchContainer } = swatchContainer;
 
-// jsdom resolves a custom property declared ON an element but does not inherit it, so the tests
-// name the resolved mode at the elements the code reads it from.
 const MODE_STYLES = `
   .mode-light { --dx-theme-mode: light; }
   .mode-dark { --dx-theme-mode: dark; }
@@ -96,11 +89,6 @@ describe('getSwatchContainer', () => {
       expect(container.parentElement).toBe($viewport);
     });
 
-    /*
-     * `dx-theme-mode-inverted` means "the opposite of my surroundings" and the container is
-     * reparented to the viewport, where the surroundings are different ones - so the mode comes
-     * from what the cascade resolved, never from the class the element wears.
-     */
     it('names the resolved mode, not the class the element carries', () => {
       const container = containerFor('<div class="target dx-theme-mode-inverted mode-light"></div>');
 
@@ -111,8 +99,6 @@ describe('getSwatchContainer', () => {
       expect(containerFor('<div class="target dx-theme-mode-inverted"></div>')).toBe($viewport);
     });
 
-    // The contract is light or dark; anything else names no scope the theme can paint, and a
-    // container carrying it would be a wrapper no rule matches.
     it('carries no mode when the value names none', () => {
       expect(containerFor('<div class="target mode-sepia"></div>')).toBe($viewport);
     });
@@ -171,8 +157,6 @@ describe('getSwatchContainer', () => {
       expect(classesOf(inSwatch)).toEqual(['dx-swatch-custom']);
     });
 
-    // Only swatch and mode classes describe the scope; anything else on the page may have tagged
-    // the container, and re-creating it on every call would grow the viewport without bound.
     it('reuses a container that picked up an unrelated class', () => {
       const first = containerFor('<div class="dx-swatch-custom"><div class="target"></div></div>');
 

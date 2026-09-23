@@ -18,7 +18,7 @@
  *   mixed    it feeds properties of several families and the name can only name one
  *   wrong    every property it feeds disagrees with the name
  *
- * `mixed` is not automatically a defect - NAMING rule 5 allows one value in two properties, named
+ * `mixed` is not automatically a defect - the standard allows one value in two properties, named
  * for the dominant one - but until now that set was never enumerated, so no one could tell a
  * deliberate pair from an accident.
  */
@@ -36,20 +36,8 @@ if (!existsSync(bundle)) {
 }
 
 const css = readFileSync(bundle, 'utf8');
-/*
- * Two ways a name reaches a property, and only one of them is a claim about it.
- *
- *   direct   `padding: var(--dx-x)` - the name IS the padding, and it had better say so
- *   derived  `padding: calc((var(--dx-x) - 16px) / 2)` - the name is a quantity the padding is
- *            computed FROM, and naming it after the padding would be the lie
- *
- * A grid header's height centres a menu with `margin-top: calc((height - 32px) / 2)`. Reading that
- * as "height paints a margin" is how a pass turns arithmetic into a finding.
- */
-const paints = new Map(); // name -> Set(property) assigned directly
-const derived = new Map(); // name -> Set(property) computed from it
-/* A custom property on the left is an alias declaration, not paint: it says this name stands for
-   * that one, which is a different relationship and has its own check in publish.mjs. */
+const paints = new Map();
+const derived = new Map();
 [...css.matchAll(/([a-z-]+)\s*:\s*([^;{}]*var\(--dx-[^;{}]*)/g)]
   .filter(([, property]) => !property.startsWith('--'))
   .forEach(([, property, value]) => {
@@ -63,12 +51,6 @@ const derived = new Map(); // name -> Set(property) computed from it
       });
   });
 
-/*
- * The vocabulary, longest word first so `-border-width` is read before `-width` and
- * `-text-transform` before `-transform`. Each entry: the word, and what it is allowed to feed.
- * Shorthands count - `border: <width> solid <colour>` carries the width, so a `-border-width` name
- * on `border` is telling the truth. So does the SVG spelling of a fill and a stroke.
- */
 const RULES = [
   ['text-transform', /^text-transform$/],
   ['border-radius', /border[a-z-]*radius/],
@@ -131,10 +113,6 @@ const FAMILY_OF_PROPERTY = [
 ];
 const familyOf = (property) => FAMILY_OF_PROPERTY.find(([re]) => re.test(property))?.[1] ?? 'other';
 
-/*
- * A state suffix is not a word about a property: `-bg-hovered` is still a bg. Stripped before the
- * word is read, or four hundred names fall out of the pass for saying "hovered".
- */
 const STATES = JSON.parse(readFileSync(join(packageRoot, 'tools', 'naming', 'registries.json'), 'utf8'))
   .states.slice().sort((a, b) => b.length - a.length);
 const bareOf = (name) => {
@@ -149,14 +127,6 @@ const noRule = [];
 for (const [name, set] of [...paints].sort()) {
   const bare = bareOf(name);
   let rule = RULES.find(([word]) => bare === word || bare.endsWith(`-${word}`));
-  /*
-   * Two spellings the flat list cannot see.
-   *
-   * A width that belongs to a border names its side first: `-border-inline-start-width` ends in
-   * `-width` and is not a width of the box. And an RTL name is physical on purpose - the theme
-   * publishes `-rtl-margin-inline-start` for the rule that writes `margin-right`, because that IS
-   * what inline-start means when the page is mirrored.
-   */
   if (/(border|outline)[a-z-]*-width$/.test(bare)) rule = RULES.find(([word]) => word === 'border-width');
   const mirrored = /-rtl-/.test(bare);
   const props = [...set].sort();

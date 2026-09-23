@@ -1,6 +1,5 @@
 @use "../mixins" as *;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $filemanager-root-height: 500px !default;
 $filemanager-root-border: 1px solid !default;
 $filemanager-overlay-content-min-width: 240px !default;
@@ -61,7 +60,6 @@ $filemanager-progress-bold-font-weight: 600 !default;
 $filemanager-error-message-font-size: 0.85em !default; // dx-relative
 $filemanager-drawer-panel-content-width: 30% !default; // dx-relative-%
 
-// Half the difference between the splitter border and bar, centring the wrapper on the bar.
 $filemanager-splitter-wrapper-right: 3px !default;
 
 .dx-filemanager {

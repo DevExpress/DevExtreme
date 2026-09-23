@@ -94,7 +94,6 @@ test('Simple appointment should not overlap allDay appointment when specific wid
 
   await t
     .expect(scheduler.collectors.count).eql(1)
-    // fluent-next raised the header by 2px (46 -> 48); the other themes were not touched
     .expect(await element.getBoundingClientRectProperty('top'))
     .eql(getThemeName() === 'fluent-next' ? 140.828125 : 138.828125);
 }).before(async () => createWidget('dxScheduler', {

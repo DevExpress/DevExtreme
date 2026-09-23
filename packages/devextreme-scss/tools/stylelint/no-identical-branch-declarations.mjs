@@ -142,12 +142,6 @@ const declaredBetween = (parent, after, before, name) => parent.nodes
   .slice(parent.index(after) + 1, parent.index(before))
   .some((node) => isVariable(node) && node.prop === name);
 
-/*
- * A marker comment sits at the end of the declaration line, and postcss keeps it as a separate
- * node: removing the declaration alone leaves the comment behind, where it collapses onto the next
- * surviving declaration and claims something that was never written about it. So a trailing comment
- * travels with its declaration, and a chain whose branches disagree about it is left to a human.
- */
 const trailingComment = (decl) => {
   const next = decl.next();
   const sameLine = next?.type === 'comment' && next.source?.start?.line === decl.source?.end?.line;
@@ -219,8 +213,6 @@ const ruleFunction = (primary) => (root, result) => {
 
         const hoisted = first.clone();
         const trailerSource = trailingComment(first);
-        // keep the comment's own raws (`inline` is what makes it print as `//`), move it one space
-        // behind the declaration it explains
         const trailer = trailerSource?.clone({ raws: { ...trailerSource.raws, before: ' ' } });
         const references = localReferences(first.value);
         const comment = earlier && attachedComment(earlier);

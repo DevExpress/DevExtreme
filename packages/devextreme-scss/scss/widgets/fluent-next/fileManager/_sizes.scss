@@ -55,18 +55,15 @@ $file-manager-toolbar-height: toolbarSizes.$toolbar-height !default;
   $file-manager-progress-box-button-close-margin-block-start: ds.$spacing-50 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $file-manager-toolbar-padding: 0 ds.$spacing-100 !default;
 $file-manager-button-content-padding: $file-manager-file-actions-button-top-bottom-padding ds.$spacing-60 !default;
 $file-manager-file-uploader-drop-zone-placeholder-border: ds.$border-width-20 solid !default;
 $file-manager-border-focused: ds.$border-width-10 solid !default;
 
-// Base-layer values injected with design tokens (wave B1)
 $file-manager-progress-title-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: 180 is off the font-size-role scale
 $file-manager-progress-title-font-weight: ds.$font-weight-title-default !default;
 $file-manager-progress-bold-font-weight: ds.$font-weight-base-strong !default;
 
-// Base-layer sizing injected with design tokens (wave B2)
 $file-manager-height: 500px !default; // dx-offscale: 500px
 $file-manager-border-width: ds.$border-width-10 !default;
 $file-manager-overlay-content-min-width: 240px !default; // dx-offscale: 240px
@@ -121,9 +118,4 @@ $file-manager-dialog-name-editor-min-height: 180px !default; // dx-offscale: 180
 $file-manager-dialog-name-editor-max-height: 180px !default; // dx-offscale: 180px
 $file-manager-progress-box-cancel-button-margin-block-start: ds.$spacing-50 !default;
 
-/*
- * Base centres the splitter wrapper on the bar with half the difference between the border and
- * the bar. Both are tokens here, so the relationship is derived instead of frozen at 3px: move
- * either token and this follows.
- */
 $file-manager-splitter-wrapper-inset-inline-end: calc((#{splitterBarSizes.$splitter-bar-border-width} - #{splitterBarSizes.$splitter-bar-width}) / 2) !default;

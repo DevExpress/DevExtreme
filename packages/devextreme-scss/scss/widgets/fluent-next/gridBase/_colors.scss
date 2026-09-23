@@ -55,13 +55,7 @@ $grid-column-separator-bg: ds.$color-bg-primary !default;
 $grid-filter-row-bg: ds.$color-bg-canvas !default;
 $grid-header-filter-icon-active: ds.$color-content-primary !default;
 
-/*
- * The virtual-row placeholder: the raster is a plain shape now, and the colour it is painted
- * with is the design system's `skeleton` role - `color.bg-inverted` at 10% opacity. That role
- * lives in the token package under components/, which build-tokens does not consume, so it is
- * composed here from the two semantic tokens that do reach `ds.$`.
- */
-$grid-text-stub-bg: rgb(from #{ds.$color-bg-inverted} r g b / 0.1) !default; // ds.$opacity-10
+$grid-text-stub-bg: rgb(from #{ds.$color-bg-inverted} r g b / 0.1) !default;
 $grid-filter-panel-content: ds.$color-content-primary !default;
 $grid-draggable-column-content: ds.$color-content !default;
 
@@ -72,7 +66,6 @@ $grid-draggable-column-content: ds.$color-content !default;
   --dx-datagrid-row-alternation-bg: #{$grid-row-alternation-bg};
 }
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $grid-ai-chat-empty-icon-bg: ds.$color-bg-primary-subtler !default;
 $grid-ai-chat-empty-icon-content: ds.$color-content-primary !default;
 $grid-ai-chat-message-pending-content: ds.$color-content-primary !default;

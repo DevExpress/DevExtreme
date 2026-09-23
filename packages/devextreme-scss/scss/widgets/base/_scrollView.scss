@@ -1,7 +1,6 @@
 @use "sass:meta";
 @use "./mixins" as *;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $scrollview-top-pocket-width: 40px !default;
 $scrollview-top-pocket-height: 40px !default;
 $scrollview-pull-down-indicator-padding: 4px !default;
@@ -17,11 +16,6 @@ $scrollview-pulldown-icon-font-size: 24px !default;
 $pulldown-height: 50px !default;
 $pulldown-padding: 15px !default;
 
-/*
- * The pull-down area is parked directly above the viewport, so the offset is its own height plus
- * both paddings, negated. A theme that feeds var() into either leaves Sass nothing to add up, so the
- * offset is a knob of its own: the theme derives it once instead of the browser recomputing it here.
- */
 $pulldown-top-offset: if(
   meta.type-of($pulldown-height) == number and meta.type-of($pulldown-padding) == number,
   -($pulldown-height + $pulldown-padding * 2),

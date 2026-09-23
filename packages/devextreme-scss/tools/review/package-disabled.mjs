@@ -8,8 +8,6 @@ const require = createRequire(import.meta.url);
 const tokensDir = path.dirname(require.resolve('@devexpress/design-tokens-internal/package.json'));
 const bundle = path.resolve('../devextreme/artifacts/css/dx.fluent-next.blue.light.css');
 
-// Package component -> the class the theme puts its rules on. A component the theme spells
-// differently, or splits, is listed with every root it uses.
 const ROOTS = {
   accordion: ['dx-accordion'],
   'ai-chat': ['dx-chat', 'dx-ai-chat'],
@@ -58,7 +56,6 @@ const css = readFileSync(bundle, 'utf8');
 const rules = readRules(css)
   .filter(({ selector }) => /dx-state-disabled|dx-button-disable|dx-state-readonly/.test(selector));
 
-// The variable a declaration ends in, resolved to the package role it was fed from.
 const varRole = new Map();
 for (const [, , name, value] of css.matchAll(/(^|;|\{)\s*(--dx-[a-z0-9-]+)\s*:\s*([^;]+)/g)) {
   const ref = /var\(\s*--dxds-color-([a-z0-9-]+)/.exec(value);

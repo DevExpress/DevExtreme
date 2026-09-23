@@ -1,19 +1,3 @@
-/*
- * The fallback policy of the fluent-next tier, as a gate (NAMING.md, "Гейты процесса", rule 1):
- *
- *   - inside the theme a `var(--dx-…)` or `var(--dxds-…)` read never carries a fallback. The
- *     declaration is guaranteed by the tier's own emission on the component root (or by the token
- *     package on :root), so a fallback would only double the weight and hide a broken emission; the
- *     name itself is validated by fluent-next-naming.test.ts;
- *   - the only `--dx-*` names base/** reads are the JS -> CSS runtime contract, and each of those
- *     reads has exactly the form tools/naming/runtime-contract.json fixes for it: a fallback where
- *     the value must never be missing, a bare read where the declaration is meant to disappear, or
- *     a default declared on the container where the theme owns the default.
- *
- * A new fallback in the theme, a new `--dx-*` read in base, or a changed read form of a contract
- * variable is a conscious edit of the json, not a silent pass.
- */
-
 import {
   readFileSync,
   readdirSync,
@@ -44,7 +28,7 @@ test('the theme never writes a fallback into a var(--dx…) or var(--dxds…) re
   const offenders = themeFiles.flatMap((file) => stripped(file).split('\n').flatMap((line, index) => [
     ...line.matchAll(/var\(\s*(--dx(?:ds)?-[a-z0-9-]+)\s*,/g),
   ].map((match) => `${label(file)}:${index + 1}: ${match[1]} is read with a fallback — the tier `
-    + 'declares it on the component root, a fallback hides a broken emission (NAMING.md, rule 1)')));
+    + 'declares it on the component root, a fallback hides a broken emission')));
   expect(offenders).toEqual([]);
 });
 

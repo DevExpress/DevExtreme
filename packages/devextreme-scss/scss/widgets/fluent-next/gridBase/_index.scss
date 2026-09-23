@@ -17,17 +17,6 @@
 @use "../scrollable";
 @use "../overlay";
 @use "../pagination";
-
-/*
- * base/gridBase/variables holds no rules, so configuring it here changes no CSS position — and
- * this is the first load of that module in the graph: the theme's gridBase is used before
- * base/dataGrid and base/treeList, which are what pull base/gridBase in.
- *
- * Every size the shared layer used to pin is passed from here. Where the theme already won the
- * cascade the wiring is visually neutral by construction; where it did not, the token carries the
- * value the layer used to hold, so nothing moves either way. Both were measured in the browser
- * against the previous build, not assumed — see .claude/measure/.
- */
 @use "../../base/gridBase/variables" as baseGridVariables with (
   $grid-texteditor-input-padding: var(--dx-grid-editor-input-padding),
   $grid-command-select-column-width: var(--dx-grid-command-select-column-width),

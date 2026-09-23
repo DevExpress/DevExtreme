@@ -4,7 +4,6 @@
 $grid-cell-padding: 7px !default;
 $grid-texteditor-input-padding: 32px !default;
 
-// the footer used to be written as `$x * 2`; the knob holds the padding itself now
 $grid-total-footer-padding-block: 14px !default;
 $grid-command-select-column-width: 70px !default;
 $grid-command-edit-column-width: 100px !default;
@@ -17,7 +16,6 @@ $grid-sort-index-width: 12px !default;
 $grid-sort-index-offset: 3px !default;
 $grid-ai-assistant-confirm-dialog-button-width: 50px !default;
 
-// Sizes the shared layer used to pin inside rules; the theme owns them now
 $grid-context-menu-item-padding-block: 7px !default;
 $grid-context-menu-item-padding-inline-start: 5px !default;
 $grid-context-menu-item-padding-inline-end: 30px !default;
@@ -38,14 +36,6 @@ $grid-filter-panel-padding: 10px !default;
 $grid-filter-panel-checkbox-padding-inline-end: 10px !default;
 $grid-filter-panel-icon-margin-inline-end: 7px !default;
 
-/*
- * The four sizes above are read in arithmetic, and arithmetic is where a token cannot follow: a
- * legacy theme passes numbers, which Sass folds at build time, while fluent-next passes var(),
- * which Sass can neither add nor negate nor round. So every such spot goes through one of the
- * three helpers below: with numbers they return exactly what the layer emitted before, with
- * var() they emit the same sum as a single runtime calc(). Nothing else in the layer changes.
- */
-
 @function grid-negate($value) {
   @if meta.type-of($value) == number {
     @return -$value;
@@ -62,11 +52,6 @@ $grid-filter-panel-icon-margin-inline-end: 7px !default;
   @return calc(#{$first} + #{$second});
 }
 
-/*
- * Header text must not run under the indicator icons, so its max-width subtracts them. math.round()
- * guarded against a fractional theme value; with the current numbers (14/3/12) every one of the
- * eight sums is already whole, so dropping it in the var() branch subtracts the same amount.
- */
 @function grid-header-text-max-width($indicators, $margins, $sort-indexes: 0) {
   @if meta.type-of($grid-column-header-indicator-width) == number
     and meta.type-of($grid-text-content-margin) == number

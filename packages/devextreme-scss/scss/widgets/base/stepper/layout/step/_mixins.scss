@@ -68,12 +68,6 @@
   $disabled-text-color,
   $disabled-bg,
   $disabled-shadow,
-  /*
-   * The indicator is a dot on top of the connector line. Three box-shadow rings shape it, from the
-   * inside out: the selection ring starts at $indicator-ring-inset and ends at $indicator-ring-size,
-   * and $indicator-halo-size is the gap the indicator punches in the connector behind it. The
-   * defaults are the values every theme drew before the sizes were opened.
-   */
   $indicator-ring-inset: 2px,
   $indicator-ring-size: 4px,
   $indicator-halo-size: 8px,

@@ -8,12 +8,10 @@ $html-editor-table-border: ds.$color-border !default;
 $html-editor-file-uploader-input-wrapper-border: ds.$color-border !default;
 $html-editor-file-uploader-input-wrapper-bg: ds.$color-bg-canvas !default;
 
-// Color computations hoisted from style files (phase 0.5 layer normalization)
 $html-editor-cover-bg: rgb(from #{ds.$color-bg} r g b / 0.4) !default;
 $html-editor-faded-content: rgb(from #{ds.$color-content} r g b / 0.8) !default;
 $html-editor-uploader-cover-bg: rgb(from #{ds.$color-border} r g b / 0.8) !default;
 $html-editor-highlighted-row-bg: ds.$color-bg-primary-alpha-active !default;
 
-// Base-layer values injected with design tokens (wave B1)
 $html-editor-code-block-bg: ds.$color-bg-active !default;
 $html-editor-placeholder-content: ds.$color-content-subtler !default;

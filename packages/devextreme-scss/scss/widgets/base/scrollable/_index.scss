@@ -1,7 +1,6 @@
 @use "sass:selector";
 @use "./mixins" as *;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $scrollable-scroll-padding: 2px !default;
 
 .dx-scrollable-scrollbar-simulated {

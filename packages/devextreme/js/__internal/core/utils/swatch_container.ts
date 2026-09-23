@@ -20,8 +20,6 @@ const closestClassesByPrefix = (
   return $scope.length ? classesByPrefix($scope.get(0), prefix) : [];
 };
 
-// The container is reparented to the viewport, where the surroundings are different ones, so the
-// class has to name the mode the cascade resolved rather than the one the element wears.
 const themeModeClasses = ($element: dxElementWrapper): string[] => {
   const mode = resolvedThemeMode($element);
 
@@ -45,9 +43,6 @@ const getContainerClasses = (
   return sorted(classes) === sorted(scopeClasses($viewport)) ? [] : classes;
 };
 
-// A container carrying a swatch or a mode class beyond the ones asked for belongs to a scope the
-// element itself is not in. A class with neither prefix says nothing about the scope, so it does
-// not disqualify a container - anything on the page may have tagged it.
 const isExactScope = (
   node: Element,
   containerClasses: string[],
@@ -55,13 +50,6 @@ const isExactScope = (
   .every((prefix) => classesByPrefix(node, prefix)
     .every((cssClass) => containerClasses.includes(cssClass)));
 
-/*
- * Where an overlay belonging to `element` should be rendered: the viewport itself, or a child of it
- * repeating the swatch and the theme mode the element resolved to.
- *
- * Undefined while the viewport is unset - before documentReady - which callers read as "not ready
- * yet" (speed_dial_action defers to ready(); T713615, T1143527).
- */
 const getSwatchContainer = (
   element: Element | dxElementWrapper,
 ): dxElementWrapper | undefined => {

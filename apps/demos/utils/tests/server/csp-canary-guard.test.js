@@ -11,11 +11,6 @@ describe('canaryProblem', () => {
     expect(canaryProblem(200, { 'content-security-policy': POLICY })).toBeNull();
   });
 
-  /*
-   * The case the check was blind to: the demo server sets the policy header on every response, so
-   * a 404 carries a complete, correct-looking policy and everything below the status check agrees
-   * the canary is fine.
-   */
   it('names the status when the canary page is not there', () => {
     const problem = canaryProblem(404, { 'content-security-policy-report-only': POLICY });
 
@@ -23,10 +18,6 @@ describe('canaryProblem', () => {
     expect(problem).toContain('not where the check looks for it');
   });
 
-  /*
-   * Anything else the server answers is not a moved file, and saying so would be the same wrong
-   * diagnosis one level down.
-   */
   it('reports another status without guessing at the cause', () => {
     const problem = canaryProblem(500, { 'content-security-policy-report-only': POLICY });
 

@@ -1,17 +1,3 @@
-/*
- * A published name has to describe the CSS property it is assigned to.
- *
- * The naming enforcer checks the SHAPE of a name - component, element, part, state - and the colour
- * audit checks that a colour slot reads the right role. Neither asks whether `-height` is written
- * to a height or `-gap` to a gap, and `--dx-list-bottom-padding` fed a margin for a year without a
- * single check going red.
- *
- * Measured from the built bundle by tools/review/name-truth.mjs, so the question is what the
- * browser does with the name, not what the SCSS looks like. Only DIRECT assignments are judged: a
- * name inside a calc() is a quantity another property is computed from, and naming it after that
- * property would be the lie.
- */
-
 import { execFileSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -46,11 +32,6 @@ test('every reviewed row carries a decision and a reason', () => {
   expect(undecided).toEqual([]);
 });
 
-/*
- * The vocabulary has to stay closed: a word the pass does not know is a name nobody is checking.
- * Held loosely - this is a ceiling, not an exact count - because the number falls as words are
- * given rules and that should not be a red build.
- */
 test('the words the pass cannot read stay a short list', () => {
   expect(actual.summary.noRule).toBeLessThanOrEqual(120);
   expect(actual.summary.agrees).toBeGreaterThan(1800);

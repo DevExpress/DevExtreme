@@ -2,11 +2,6 @@
 
 $button-contained-bg-disabled: ds.$color-bg-disabled !default;
 
-/*
- * The outlined mode used to paint its disabled BORDER with this same value. The package separates
- * them - color.outline.*.border.disabled names border-disabled, while color.contained.*.bg
- * .disabled names bg-disabled - so the border has its own role now.
- */
 $button-outlined-border-disabled: ds.$color-border-disabled !default;
 
 $button-normal-contained-content: ds.$color-content !default;
@@ -120,5 +115,4 @@ $button-danger-text-bg: transparent !default;
 
 $button-success-text-bg: transparent !default;
 
-// Theme-layer values used by this widget's style files (phase 0.5 layer normalization)
 $button-normal-outlined-border: ds.$color-border !default;

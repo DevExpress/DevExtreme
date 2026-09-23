@@ -1,11 +1,6 @@
 @use "../sizes" as *;
 @use "../../../_design-system/variables/ds" as ds;
 
-/*
- * O4: these used to be read from popup/, speedDialAction/ and fieldset/. Diagram's floating
- * toolbar and its toolbar text are diagram's own anatomy, so the values live here; the
- * `@if $size` branches are copied because the providers had them.
- */
 $diagram-floating-toolbar-container-border-radius: calc(#{$global-border-radius} * 2) !default;
 $diagram-floating-toolbar-button-size: null !default;
 $diagram-toolbar-text-padding-inline-start: null !default;
@@ -21,8 +16,6 @@ $diagram-toolbar-text-padding-block-end: ds.$spacing-200 !default;
   $diagram-floating-toolbar-button-size: ds.$spacing-320 !default;
   $diagram-toolbar-text-padding-inline-start: ds.$spacing-120 !default;
 }
-
-// Not colours: opacities that used to sit in _colors.scss (NAMING.md, O7)
 
 $diagram-toolbox-width: null !default;
 $diagram-toolbox-h-padding: null !default;
@@ -89,7 +82,6 @@ $diagram-toolbox-input-margin: ds.$spacing-20 !default;
   $diagram-large-editor-width: 220px !default; // dx-offscale: 220px
 }
 
-// Values hoisted from style-file literals (tokenized)
 $diagram-popup-close-icon-font-size: ds.$spacing-120 !default;
 $diagram-popup-close-icon-line-height: ds.$spacing-120 !default;
 $diagram-toolbar-colorbutton-border-width: ds.$border-width-30 !default;
@@ -115,7 +107,6 @@ $diagram-button-min-height: ds.$spacing-240 !default;
 $diagram-accordion-item-title-min-height: ds.$spacing-320 !default;
 $diagram-popup-title-toolbar-font-size: 0.8em !default; // dx-relative: scales with the parent font-size
 
-// Base-layer sizing injected with design tokens (wave B2)
 $diagram-height: 600px !default; // dx-offscale: 600px
 $diagram-min-height: 350px !default; // dx-offscale: 350px
 $diagram-toolbar-wrapper-padding: ds.$spacing-50 !default;
@@ -128,11 +119,6 @@ $diagram-loading-indicator-height: ds.$spacing-640 !default;
 $diagram-context-toolbox-target-width: ds.$spacing-10 !default;
 $diagram-context-toolbox-target-height: ds.$spacing-10 !default;
 
-/*
- * Derived values, moved out of _index.scss: a file that emits rules must not declare
- * variables (NAMING.md, O7).
- */
 $diagram-toolbar-icon-size: $global-icon-size !default;
 
-// Base-layer sizing injected with design tokens (wave B11)
 $diagram-border-width: ds.$border-width-10 !default;

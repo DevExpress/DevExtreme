@@ -12,8 +12,6 @@
   $switch-handle-margin,
   $switch-handle-border-radius,
   $switch-transition,
-  // A pill: any radius past half the track height draws the same shape, so the default is a number
-  // large enough to be one at every size the themes use.
   $switch-container-border-radius: 500px,
   $switch-label-padding: 4px 0,
   $switch-off-padding-bottom: 10px,

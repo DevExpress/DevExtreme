@@ -53,7 +53,7 @@
   "places": [
     {
       "file": "scss/widgets/base/_fileUploader.scss",
-      "line": 213,
+      "line": 211,
       "widget": "fileUploader",
       "literals": [
         "-6px"
@@ -89,7 +89,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 153,
+      "line": 152,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -101,7 +101,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 160,
+      "line": 159,
       "widget": "htmlEditor",
       "literals": [
         "-100000px"
@@ -113,7 +113,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 161,
+      "line": 160,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -125,7 +125,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 225,
+      "line": 224,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -137,7 +137,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 354,
+      "line": 353,
       "widget": "htmlEditor",
       "literals": [
         "0.1px"
@@ -149,7 +149,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 375,
+      "line": 374,
       "widget": "htmlEditor",
       "literals": [
         "50px"
@@ -161,7 +161,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 388,
+      "line": 387,
       "widget": "htmlEditor",
       "literals": [
         "360px"
@@ -173,7 +173,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 413,
+      "line": 412,
       "widget": "htmlEditor",
       "literals": [
         "6px"
@@ -185,7 +185,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 420,
+      "line": 419,
       "widget": "htmlEditor",
       "literals": [
         "240px"
@@ -197,7 +197,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 433,
+      "line": 432,
       "widget": "htmlEditor",
       "literals": [
         "3px"
@@ -209,7 +209,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 453,
+      "line": 452,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -221,7 +221,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 464,
+      "line": 463,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -233,7 +233,7 @@
     },
     {
       "file": "scss/widgets/base/_htmlEditor.scss",
-      "line": 520,
+      "line": 519,
       "widget": "htmlEditor",
       "literals": [
         "1px"
@@ -245,7 +245,7 @@
     },
     {
       "file": "scss/widgets/base/_icon_fonts.scss",
-      "line": 313,
+      "line": 304,
       "widget": "icon_fonts",
       "literals": [
         "14px"
@@ -257,7 +257,7 @@
     },
     {
       "file": "scss/widgets/base/_icon_fonts.scss",
-      "line": 681,
+      "line": 672,
       "widget": "icon_fonts",
       "literals": [
         "14px"
@@ -293,7 +293,7 @@
     },
     {
       "file": "scss/widgets/base/_pagination.scss",
-      "line": 19,
+      "line": 17,
       "widget": "pagination",
       "literals": [
         "8px"
@@ -329,7 +329,7 @@
     },
     {
       "file": "scss/widgets/base/_scrollView.scss",
-      "line": 54,
+      "line": 48,
       "widget": "scrollView",
       "literals": [
         "-20px"
@@ -341,7 +341,7 @@
     },
     {
       "file": "scss/widgets/base/_scrollView.scss",
-      "line": 153,
+      "line": 147,
       "widget": "scrollView",
       "literals": [
         "-15px",
@@ -355,7 +355,7 @@
     },
     {
       "file": "scss/widgets/base/_scrollView.scss",
-      "line": 234,
+      "line": 228,
       "widget": "scrollView",
       "literals": [
         "-20px"
@@ -683,7 +683,7 @@
     },
     {
       "file": "scss/widgets/base/colorBox/_index.scss",
-      "line": 22,
+      "line": 21,
       "widget": "colorBox",
       "literals": [
         "25px"
@@ -695,7 +695,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 16,
+      "line": 11,
       "widget": "colorView",
       "literals": [
         "28px"
@@ -707,7 +707,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 19,
+      "line": 14,
       "widget": "colorView",
       "literals": [
         "36px"
@@ -719,7 +719,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 20,
+      "line": 15,
       "widget": "colorView",
       "literals": [
         "17px"
@@ -731,7 +731,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 84,
+      "line": 78,
       "widget": "colorView",
       "literals": [
         "1px"
@@ -743,7 +743,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 120,
+      "line": 114,
       "widget": "colorView",
       "literals": [
         "-7px"
@@ -755,7 +755,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 126,
+      "line": 120,
       "widget": "colorView",
       "literals": [
         "-6px"
@@ -767,7 +767,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 144,
+      "line": 138,
       "widget": "colorView",
       "literals": [
         "16px"
@@ -779,7 +779,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 145,
+      "line": 139,
       "widget": "colorView",
       "literals": [
         "8px"
@@ -791,7 +791,7 @@
     },
     {
       "file": "scss/widgets/base/colorView/_index.scss",
-      "line": 149,
+      "line": 143,
       "widget": "colorView",
       "literals": [
         "6px",
@@ -893,7 +893,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 149,
+      "line": 148,
       "widget": "dataGrid",
       "literals": [
         "-2px"
@@ -905,7 +905,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 185,
+      "line": 184,
       "widget": "dataGrid",
       "literals": [
         "14px"
@@ -917,7 +917,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 316,
+      "line": 310,
       "widget": "dataGrid",
       "literals": [
         "21px"
@@ -929,7 +929,7 @@
     },
     {
       "file": "scss/widgets/base/dataGrid/_index.scss",
-      "line": 380,
+      "line": 374,
       "widget": "dataGrid",
       "literals": [
         "-1px"
@@ -953,7 +953,7 @@
     },
     {
       "file": "scss/widgets/base/diagram/_index.scss",
-      "line": 177,
+      "line": 176,
       "widget": "diagram",
       "literals": [
         "2px"
@@ -965,7 +965,7 @@
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 87,
+      "line": 85,
       "widget": "fileManager",
       "literals": [
         "431px"
@@ -977,7 +977,7 @@
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 301,
+      "line": 299,
       "widget": "fileManager",
       "literals": [
         "-5000px"
@@ -989,7 +989,7 @@
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 302,
+      "line": 300,
       "widget": "fileManager",
       "literals": [
         "-5000px"
@@ -1001,7 +1001,7 @@
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 307,
+      "line": 305,
       "widget": "fileManager",
       "literals": [
         "-5000px"
@@ -1013,7 +1013,7 @@
     },
     {
       "file": "scss/widgets/base/fileManager/_index.scss",
-      "line": 308,
+      "line": 306,
       "widget": "fileManager",
       "literals": [
         "-5000px"
@@ -1049,7 +1049,7 @@
     },
     {
       "file": "scss/widgets/base/gantt/_index.scss",
-      "line": 60,
+      "line": 59,
       "widget": "gantt",
       "literals": [
         "-1px"
@@ -1061,7 +1061,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 25,
+      "line": 24,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1073,7 +1073,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 37,
+      "line": 36,
       "widget": "gridBase",
       "literals": [
         "5px"
@@ -1085,7 +1085,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 55,
+      "line": 54,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1097,7 +1097,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 86,
+      "line": 85,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1109,7 +1109,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 314,
+      "line": 313,
       "widget": "gridBase",
       "literals": [
         "10px"
@@ -1121,7 +1121,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 431,
+      "line": 430,
       "widget": "gridBase",
       "literals": [
         "2px"
@@ -1133,7 +1133,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 433,
+      "line": 432,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1145,7 +1145,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 481,
+      "line": 480,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1157,7 +1157,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 557,
+      "line": 556,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1169,7 +1169,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 558,
+      "line": 557,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1181,7 +1181,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 559,
+      "line": 558,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1193,7 +1193,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 560,
+      "line": 559,
       "widget": "gridBase",
       "literals": [
         "-1px"
@@ -1205,7 +1205,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 567,
+      "line": 566,
       "widget": "gridBase",
       "literals": [
         "1px"
@@ -1217,7 +1217,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 661,
+      "line": 660,
       "widget": "gridBase",
       "literals": [
         "9px",
@@ -1231,7 +1231,7 @@
     },
     {
       "file": "scss/widgets/base/gridBase/_index.scss",
-      "line": 952,
+      "line": 951,
       "widget": "gridBase",
       "literals": [
         "-2px"
@@ -1279,7 +1279,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 63,
+      "line": 62,
       "widget": "pivotGrid",
       "literals": [
         "1px"
@@ -1291,7 +1291,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 64,
+      "line": 63,
       "widget": "pivotGrid",
       "literals": [
         "1px",
@@ -1304,7 +1304,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 69,
+      "line": 68,
       "widget": "pivotGrid",
       "literals": [
         "-5px"
@@ -1316,7 +1316,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 75,
+      "line": 74,
       "widget": "pivotGrid",
       "literals": [
         "-4px"
@@ -1328,7 +1328,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 76,
+      "line": 75,
       "widget": "pivotGrid",
       "literals": [
         "-1px"
@@ -1340,7 +1340,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 80,
+      "line": 79,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
@@ -1352,7 +1352,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 85,
+      "line": 84,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
@@ -1364,7 +1364,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 338,
+      "line": 337,
       "widget": "pivotGrid",
       "literals": [
         "-1px"
@@ -1376,7 +1376,7 @@
     },
     {
       "file": "scss/widgets/base/pivotGrid/_index.scss",
-      "line": 609,
+      "line": 608,
       "widget": "pivotGrid",
       "literals": [
         "-3px"
@@ -1592,7 +1592,7 @@
     },
     {
       "file": "scss/widgets/base/scheduler/_index.scss",
-      "line": 455,
+      "line": 454,
       "widget": "scheduler",
       "literals": [
         "-1px"
@@ -1808,7 +1808,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 201,
+      "line": 199,
       "widget": "textEditor",
       "literals": [
         "1px",
@@ -1821,7 +1821,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 225,
+      "line": 223,
       "widget": "textEditor",
       "literals": [
         "-1px",
@@ -1834,7 +1834,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 240,
+      "line": 238,
       "widget": "textEditor",
       "literals": [
         "-1px",
@@ -1847,7 +1847,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 245,
+      "line": 243,
       "widget": "textEditor",
       "literals": [
         "-1px",
@@ -1860,7 +1860,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 249,
+      "line": 247,
       "widget": "textEditor",
       "literals": [
         "-1px",
@@ -1873,7 +1873,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 653,
+      "line": 651,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -1885,7 +1885,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 654,
+      "line": 652,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -1897,7 +1897,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 786,
+      "line": 784,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -1909,7 +1909,7 @@
     },
     {
       "file": "scss/widgets/base/textEditor/_mixins.scss",
-      "line": 840,
+      "line": 838,
       "widget": "textEditor",
       "literals": [
         "1px"
@@ -1921,7 +1921,7 @@
     },
     {
       "file": "scss/widgets/base/toolbar/_index.scss",
-      "line": 101,
+      "line": 100,
       "widget": "toolbar",
       "literals": [
         "-5px"
@@ -1933,7 +1933,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 176,
+      "line": 175,
       "widget": "treeList",
       "literals": [
         "14px"
@@ -1945,7 +1945,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 276,
+      "line": 270,
       "widget": "treeList",
       "literals": [
         "16px"
@@ -1957,7 +1957,7 @@
     },
     {
       "file": "scss/widgets/base/treeList/_index.scss",
-      "line": 284,
+      "line": 278,
       "widget": "treeList",
       "literals": [
         "21px"

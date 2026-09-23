@@ -19,10 +19,8 @@ $toast-content-padding-inline: ds.$spacing-120 !default;
   $toast-item-gap: ds.$spacing-80 !default;
 }
 
-// Values hoisted from style-file literals (tokenized)
 $toast-content-font-weight: ds.$font-weight-base-default !default;
 
-// Base-layer sizing injected with design tokens (wave B2)
 $toast-content-padding: ds.$spacing-100 !default;
 $toast-icon-width: ds.$spacing-360 !default;
 $toast-icon-height: ds.$spacing-360 !default;
@@ -30,8 +28,4 @@ $toast-icon-margin-inline-end: ds.$spacing-100 !default;
 $toast-icon-rtl-margin-inline-end: ds.$spacing-100 !default;
 $toast-stack-gap: ds.$spacing-30 !default;
 
-/*
- * Composite box-shadow (geometry + a colour reference), so it belongs here rather than in
- * _colors.scss — see NAMING.md, PARTS: only pure shadow *colours* are a colour part.
- */
 $toast-box-shadow: ds.$box-shadow-lg !default;

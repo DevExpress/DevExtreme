@@ -1,9 +1,3 @@
-/*
- * The emitter of the fluent-next component tier (tools/naming/publish.mjs) and the pure module
- * behind it (tools/naming/tier.ts), exercised on synthetic files so every case names one rule. The
- * real tree is covered by tests/fluent-next-naming.test.ts, which reads the same module.
- */
-
 import { execFileSync } from 'child_process';
 
 import { stripScssComments } from '../build/tokens/consumed-tokens';
@@ -65,10 +59,6 @@ const plan = (
 );
 
 const lines = (content: string): string[] => content.split('\n').filter((line) => line.startsWith('  --dx-'));
-
-// ---------------------------------------------------------------------------------------------
-// the generated file
-// ---------------------------------------------------------------------------------------------
 
 describe('_public.scss', () => {
   test('the @use header names the modules that declare the projected variables, in codepoint order', () => {
@@ -139,7 +129,6 @@ describe('_public.scss', () => {
     const links = { 'fluent-next/badge/_public-links.scss': '@mixin publish {\n  --dx-badge-bg-hovered: var(--dx-badge-bg);\n}\n' };
     const withLinks = required(plan(badge(), links).files.get(BADGE_PUBLIC), BADGE_PUBLIC);
     expect(withLinks).toContain('@use "public-links" as links;');
-    // stylelint wants the empty line between the declarations and the at-rule
     expect(withLinks.split('\n').slice(-5)).toEqual(['  --dx-badge-size: #{$badge-size};', '', '  @include links.publish();', '}', '']);
   });
 
@@ -160,10 +149,6 @@ describe('_public.scss', () => {
     ].join('\n'));
   });
 });
-
-// ---------------------------------------------------------------------------------------------
-// eligibility — one rule per case, through the shared tierRecords
-// ---------------------------------------------------------------------------------------------
 
 describe('eligibility', () => {
   const reasons = (files: SourceFile[], wiring: string[] = []): Record<string, string | null> => (
@@ -242,10 +227,6 @@ describe('eligibility', () => {
     expect(Object.keys(reasons(files)).sort()).toEqual(['$badge-bg', '$badge-color', '$badge-size']);
   });
 });
-
-// ---------------------------------------------------------------------------------------------
-// the plan
-// ---------------------------------------------------------------------------------------------
 
 describe('planPublication', () => {
   test('a component gets a file when it has something to publish, and only then', () => {
@@ -482,7 +463,6 @@ describe('parseLinksFile', () => {
   });
 });
 
-// the shell around the module: a .ts import from .mjs, registries.json, the walk — on the real tree
 test('publish.mjs --check passes on the committed tree', () => {
   const output = execFileSync(process.execPath, ['tools/naming/publish.mjs', '--check'], {
     cwd: process.cwd(),

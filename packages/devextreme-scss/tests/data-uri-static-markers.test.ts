@@ -1,19 +1,3 @@
-/*
- * A `dx-data-uri-static` marker claims that a frozen hex literal is the current value of a design
- * token. Nothing else keeps the two in step: the colour has to be a literal because a CSS var()
- * does not resolve inside a data-uri, so the token package can be bumped and the literal will
- * quietly keep the old value while everything around it moves. See
- * scss/widgets/fluent-next/DIVERGENCES.md for why the literals exist at all.
- *
- * The token side is read from the built bundles — the `test` target depends on `build:themes`, so
- * they are fresh here, and a missing bundle fails loudly rather than passing on an empty scan. Only
- * the `:root` scope of a bundle counts: the mode classes carry the opposite mode's values, and a
- * baked literal answers for a page that names no mode.
- *
- * There is nothing to regenerate: a failure means either the literal or the marker is wrong, and
- * which one it is has to be decided by looking at the token.
- */
-
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 
@@ -75,12 +59,6 @@ const expand = (hex: string): string => {
     : value;
 };
 
-/*
- * A bundle declares each role more than once: the mode it was built for sits on `:root`, and the
- * opposite mode sits on the `dx-theme-mode-*` classes. A literal baked into
- * a data-uri is what a page with no mode class shows, so only the `:root` scope may answer here —
- * scanning the whole text would hand back whichever block happens to come first.
- */
 const rootDeclarations = (css: string): Map<string, string> => {
   const declarations = new Map<string, string>();
   [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]

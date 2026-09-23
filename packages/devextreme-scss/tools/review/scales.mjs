@@ -31,8 +31,6 @@ const themeDir = join(widgetsDir, 'fluent-next');
 const cssDir = join(packageRoot, '..', 'devextreme', 'artifacts', 'css');
 const mdOnly = process.argv.includes('--md');
 
-/* ------------------------------------------------------------------ reading */
-
 const scssFiles = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
   const full = join(dir, entry.name);
   if (entry.isDirectory()) return scssFiles(full);
@@ -53,18 +51,10 @@ const widgetOf = (file) => {
   return parts.length > 2 ? parts[1] : (name || 'shared');
 };
 
-/* ------------------------------------------------------------ categories */
-
 const vocabulary = JSON.parse(readFileSync(join(here, 'size-markers.json'), 'utf8'));
 const MARKERS = vocabulary.categories.filter((entry) => entry.source === 'sources');
 const CALC_CATEGORY = vocabulary.categories.find((entry) => entry.source === 'bundle');
 
-/* -------------------------------------------------------- package steps */
-
-/**
- * Package scales: family -> value in rem -> step names. Negative values live in a separate
- * `spacing-minus` family, so that is the one asked for a negative literal.
- */
 const scaleSteps = () => {
   const file = join(packageRoot, 'scss', '_design-system', 'base.scss');
   const families = new Map();
@@ -83,7 +73,6 @@ const scaleSteps = () => {
 const steps = scaleSteps();
 const ROOT_FONT_SIZE = 16;
 
-/** `-1px` in the `spacing` family -> `ds.$spacing-minus-10`, when such a step exists. */
 const stepFor = (literal, family) => {
   if (!family || !literal.endsWith('px')) return null;
   const px = Number(literal.slice(0, -2));
@@ -97,11 +86,6 @@ const stepsFor = (value, family) => [...new Set((value.match(/-?\d*\.?\d+px/g) ?
   .map((literal) => stepFor(literal, family))
   .filter(Boolean))];
 
-/*
- * The family is chosen by the property, not by the category: the same number exists in several
- * scales at once, and `ds.$spacing-130` for a font size points the wrong way. The variable name is
- * as good a hint as the property: `$pivot-grid-area-font-size` speaks for itself.
- */
 const FAMILY_BY_PROPERTY = [
   [/font-size/, 'font-size'],
   [/line-height/, 'line-height'],
@@ -112,7 +96,6 @@ const FAMILY_BY_PROPERTY = [
 const familyFor = (hint, fallback) => (
   FAMILY_BY_PROPERTY.find(([pattern]) => pattern.test(hint))?.[1] ?? fallback);
 
-/** A line of code -> what it is: a variable declaration, a property, a mixin argument. */
 const describe = (line) => {
   const declaration = /^\s*(\$[\w-]+)\s*:\s*(.+?)\s*(?:!default)?\s*;/.exec(line);
   if (declaration) return { kind: 'variable', name: declaration[1], value: declaration[2].replace(/\s*!default\s*$/, '') };
@@ -123,11 +106,6 @@ const describe = (line) => {
   return { kind: 'other', name: '', value: line.trim() };
 };
 
-/**
- * Where the value actually lands. Besides the direct `property: $variable`, two channels are
- * counted, without which half of the size variables would look unused: a mixin argument, and a
- * parameter injected into base through `@use … with (…)`.
- */
 const usageIndex = new Map();
 const remember = (name, what) => {
   if (!usageIndex.has(name)) usageIndex.set(name, new Set());
@@ -146,7 +124,6 @@ sources.forEach((lines) => {
     const injected = /^\s*\$[\w-]+\s*:\s*(\$[\w-]+)\s*,?\s*$/.exec(line);
     if (injected) remember(injected[1], inWith ? 'injected into base' : 'mixin argument');
 
-    /* positional mixin argument: the variable name stands alone on the line */
     const positional = /^\s*(\$[\w-]+)\s*,\s*$/.exec(line);
     if (positional) remember(positional[1], 'mixin argument');
 
@@ -181,13 +158,6 @@ const collect = (marker, scale) => {
 
 const categories = MARKERS.map((entry) => ({ ...entry, rows: collect(entry.marker, entry.scale) }));
 
-/**
- * The distinct values of a category are what design is asked about. The vocabulary's `literals`
- * field decides what counts as a value: `steps` — the step the place sits on (`ds.$font-size-180`
- * -> `font-size-180`: what is asked for is a role over the step, not a number), `px` — pixels only
- * (in a px category the `100%` of `inset(calc(100% - 2px) …)` is an edge, not a size), `any` — any
- * literal with a unit.
- */
 const distinctValues = (rows, category) => {
   const map = new Map();
   const pick = (row) => {
@@ -210,8 +180,6 @@ const distinctValues = (rows, category) => {
   });
   return [...map.entries()].sort((a, b) => b[1].length - a[1].length);
 };
-
-/* -------------------------------------------------------- the calc category */
 
 const rootMap = (ast) => {
   const map = new Map();
@@ -285,8 +253,6 @@ const calcPlaces = [];
       const kind = CALC_KINDS.find((entry) => entry.test(decl.value));
       calcPlaces.push({
         mode,
-        // combinators are spaced out: the production build strips those spaces and the dev build
-        // keeps them, and the report must not depend on which flavour produced the bundle
         selector: rule.selectors[0].trim().replace(/\s*([>+~])\s*/g, ' $1 '),
         prop: decl.prop,
         value: decl.value.replace(/\s+/g, ' '),
@@ -308,8 +274,6 @@ const calcByKind = CALC_KINDS.map((kind) => {
   const ranked = [...formulas.entries()].sort((a, b) => b[1].length - a[1].length);
   return { ...kind, list, formulas: ranked };
 });
-
-/* -------------------------------------------------------------- markdown */
 
 const escapePipes = (text) => String(text).replace(/\|/g, '\\|');
 
@@ -415,8 +379,6 @@ const md = () => {
   });
   return out.join('\n');
 };
-
-/* ------------------------------------------------------------------ HTML */
 
 const categorySection = (category) => {
   const values = distinctValues(category.rows, category);

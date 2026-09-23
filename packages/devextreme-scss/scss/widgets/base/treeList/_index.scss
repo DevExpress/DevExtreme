@@ -52,7 +52,6 @@ $treelist-focused-border-color: $datagrid-focused-border-color !default;
 $treelist-text-stub-background-image-path: $datagrid-text-stub-background-image-path !default;
 $treelist-row-error-color: $datagrid-row-error-color !default;
 
-// Design sizing values (parametrizable; fluent-next injects tokens)
 $treelist-header-filter-outline: 2px solid !default;
 $treelist-header-filter-outline-offset: 2px !default;
 $treelist-button-margin-left: 10px !default;
@@ -209,11 +208,6 @@ $treelist-button-margin-right: 10px !default;
         height: 100%;
         content: "";
 
-        /*
-         * A background image cannot read a colour role, so the placeholder's tint is frozen in
-         * the raster. `$…-mask-image` swaps the same artwork in as a mask, which carries only
-         * its alpha, so the colour and its opacity come from the theme instead.
-         */
         @if $datagrid-text-stub-mask-image {
           mask-image: $datagrid-text-stub-mask-image;
           mask-repeat: no-repeat repeat;

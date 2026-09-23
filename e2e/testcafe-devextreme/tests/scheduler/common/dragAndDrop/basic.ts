@@ -29,8 +29,6 @@ test('Drag-n-drop in the "month" view', async (t) => {
 
   await t
     .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 4))
-    // fluent-next raised the header by 2px, so the month rows share 2px less and the
-    // appointment's share of a row shrinks: measured 23.75px against 23.8281px elsewhere
     .expect(draggableAppointment.size.height)
     .eql(getThemeName() === 'fluent-next' ? '23.75px' : '23.8281px')
     .expect(draggableAppointment.date.time)

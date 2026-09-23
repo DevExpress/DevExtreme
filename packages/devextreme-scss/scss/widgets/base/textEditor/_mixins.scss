@@ -157,8 +157,6 @@
   $label-margin-top-diff,
   $texteditor-label-outside-font-size,
   $texteditor-label-outside-height,
-  // The label widens itself by its padding and pulls the same amount back, so the box grows around
-  // the text without moving it: the margin is derived, not a second decision.
   $label-padding-inline: 2px,
   $label-border-radius: 1px,
   $label-backdrop-height: 3px,

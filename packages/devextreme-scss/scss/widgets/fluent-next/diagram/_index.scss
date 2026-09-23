@@ -442,10 +442,6 @@
   }
 }
 
-/*
- * The toolbar's overflow menu is a portal: its popup is mounted in the overlay container, under no
- * diagram root, so the diagram tier does not reach it and a var() read would leave the margin at 0.
- */
 .dx-dropdownmenu-popup {
   .dx-diagram-image-dropdown-item,
   .dx-diagram-color-edit-item {
