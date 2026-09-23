@@ -2,6 +2,7 @@ import { Cache } from '../../../global_cache';
 import type Scheduler from '../../../scheduler';
 import type { DOMMetaData } from '../../../types';
 import { type DaylightPlan, getStretchShiftMs } from '../../../utils/daylight_grid';
+import type { VerticalSlot } from '../../../workspaces/view_model/view_data_generator';
 import type {
   CellInterval,
   CompareOptions,
@@ -42,6 +43,7 @@ const getLayoutIntervals = (
   isMonthView: boolean,
   panelName: PanelName,
   daylightPlan?: DaylightPlan,
+  verticalSlots?: VerticalSlot[],
 ): LayoutIntervals => {
   switch (true) {
     case isMonthView:
@@ -54,7 +56,8 @@ const getLayoutIntervals = (
         cellDurationMinutes,
         viewOffset,
         isTimeline,
-        isTimeline && !isMonthView ? daylightPlan : undefined,
+        !isMonthView ? daylightPlan : undefined,
+        verticalSlots,
       );
   }
 };
@@ -75,7 +78,7 @@ export class OptionManager {
     const plan = this.schedulerStore.getWorkSpace()
       .viewDataProvider?.viewDataGenerator.getDaylightPlan();
 
-    if (!plan || this.options.isMonthView || !this.options.isTimelineView) {
+    if (!plan || this.options.isMonthView) {
       return items;
     }
 
@@ -164,6 +167,8 @@ export class OptionManager {
         panelName,
         this.schedulerStore.getWorkSpace()
           .viewDataProvider?.viewDataGenerator.getDaylightPlan(),
+        this.schedulerStore.getWorkSpace()
+          .viewDataProvider?.viewDataGenerator.getVerticalSlots(),
       );
 
       const groupByDateSplitIntervals = viewOrientation === 'vertical' ? dayIntervals : cells;

@@ -19,6 +19,7 @@ export interface CellBaseProps extends PropsWithClassName,
   index: number;
   contentTemplateProps?: ContentTemplateProps;
   ariaLabel?: string;
+  style?: { pointerEvents?: 'none' };
 }
 
 export const CellBaseDefaultProps: DefaultProps<CellBaseProps> = {
@@ -44,6 +45,7 @@ export class CellBase extends BaseInfernoComponent<CellBaseProps> {
       isLastGroupCell,
       children,
       ariaLabel,
+      style,
     } = this.props;
 
     const classes = renderUtils
@@ -53,6 +55,7 @@ export class CellBase extends BaseInfernoComponent<CellBaseProps> {
       <td
         className={classes}
         aria-label={ariaLabel}
+        style={style}
       >
         {children}
       </td>

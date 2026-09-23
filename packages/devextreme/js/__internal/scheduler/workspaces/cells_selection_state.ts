@@ -34,8 +34,14 @@ export default class CellsSelectionState {
   }
 
   setFocusedCell(rowIndex: number, columnIndex: number, isAllDay: boolean): void {
-    if (rowIndex >= 0) {
-      this.focusedCell = this.viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
+    if (rowIndex < 0) {
+      return;
+    }
+
+    const cell = this.viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
+
+    if (!cell?.isDaylightHole) {
+      this.focusedCell = cell;
     }
   }
 
@@ -65,6 +71,10 @@ export default class CellsSelectionState {
         firstCellCoordinates.allDay,
       )
       : (this.firstSelectedCell ?? lastCell);
+
+    if (lastCell.isDaylightHole || firstCell.isDaylightHole) {
+      return;
+    }
 
     this.firstSelectedCell = firstCell;
 

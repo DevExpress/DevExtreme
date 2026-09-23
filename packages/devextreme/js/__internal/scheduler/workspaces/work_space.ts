@@ -175,6 +175,7 @@ interface NormalizedCellData {
   groups?: ViewCellData['groups'];
   groupIndex: ViewCellData['groupIndex'];
   allDay?: ViewCellData['allDay'];
+  isDaylightHole?: ViewCellData['isDaylightHole'];
   index?: ViewCellData['index'];
   isFirstGroupCell?: ViewCellData['isFirstGroupCell'];
   isLastGroupCell?: ViewCellData['isLastGroupCell'];
@@ -278,7 +279,7 @@ interface WorkspaceOptionActionMap {
 
 export type WorkspaceCoordinates = Coordinates & { groupIndex?: number };
 
-export type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups'>;
+export type DroppableCellData = Pick<ViewCellData, 'startDate' | 'endDate' | 'allDay' | 'groups' | 'isDaylightHole'>;
 
 export interface WorkspaceOptionsInternal extends WidgetProperties<SchedulerWorkSpace> {
   newAppointments: boolean;
@@ -1172,6 +1173,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
     eventsEngine.on($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, (e) => {
       const $cell = $(e.target as Element | null);
+
+      if (this.getFullCellData($cell)?.isDaylightHole) {
+        return;
+      }
+
       this.cellClickAction?.(
         {
           event: e,
@@ -1740,6 +1746,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       groups: cellData.groups,
       groupIndex: cellData.groupIndex,
       allDay: cellData.allDay,
+      isDaylightHole: cellData.isDaylightHole,
     };
 
     return extend(true, {}, normalizedCellData) as NormalizedCellData;
@@ -1822,7 +1829,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   getDataByDroppableCell(): DroppableCellData {
-    const cellData = this.getCellData($(this.getDroppableCell()));
+    const $cell = $(this.getDroppableCell());
+    const cellData = this.getCellData($cell);
     const { allDay } = cellData;
     const { startDate } = cellData;
     const { endDate } = cellData;
@@ -1832,6 +1840,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       endDate,
       allDay,
       groups: cellData.groups,
+      isDaylightHole: cellData.isDaylightHole,
     };
   }
 

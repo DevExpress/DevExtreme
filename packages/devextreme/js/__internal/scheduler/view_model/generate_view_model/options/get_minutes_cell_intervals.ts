@@ -3,6 +3,7 @@ import { dateUtils } from '@ts/core/utils/m_date';
 import type { DaylightPlan } from '../../../utils/daylight_grid';
 import { cellLayoutRange } from '../../../utils/daylight_grid';
 import timeZoneUtils from '../../../utils_time_zone';
+import type { VerticalSlot } from '../../../workspaces/view_model/view_data_generator';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import type { CellInterval, DateInterval } from '../../types';
 
@@ -13,9 +14,45 @@ interface Options {
   durationMinutes: number;
   skippedDays: number[];
   daylightPlan?: DaylightPlan;
+  verticalSlots?: VerticalSlot[];
 }
 
 const toMs = dateUtils.dateToMilliseconds;
+
+const wallMinutesOf = (date: Date): number => date.getHours() * 60 + date.getMinutes();
+
+const verticalDayCells = (
+  plan: DaylightPlan,
+  slots: VerticalSlot[],
+): CellInterval[] => {
+  const cells: CellInterval[] = [];
+
+  plan.days.forEach((day, dayIndex) => {
+    const seenInDay = new Map<number, number>();
+
+    day.cells.forEach((cell) => {
+      const wallMinutes = wallMinutesOf(cell.start);
+      const occurrence = seenInDay.get(wallMinutes) ?? 0;
+      seenInDay.set(wallMinutes, occurrence + 1);
+      const rowIndex = slots.findIndex(
+        (slot) => slot.wallMinutes === wallMinutes && slot.occurrence === occurrence,
+      );
+
+      if (rowIndex < 0) {
+        return;
+      }
+
+      cells.push({
+        ...cellLayoutRange(plan, cell),
+        rowIndex: dayIndex,
+        columnIndex: rowIndex,
+        cellIndex: cells.length,
+      });
+    });
+  });
+
+  return cells;
+};
 
 const filterBySkippedDays = <T extends DateInterval>(
   intervals: T[],
@@ -44,7 +81,12 @@ export const getMinutesCellIntervals = ({
   durationMinutes,
   skippedDays,
   daylightPlan,
+  verticalSlots,
 }: Options): CellInterval[] => {
+  if (daylightPlan && verticalSlots) {
+    return verticalDayCells(daylightPlan, verticalSlots);
+  }
+
   if (daylightPlan) {
     return daylightPlan.days.flatMap((day) => day.cells).map((cell, cellIndex) => ({
       ...cellLayoutRange(daylightPlan, cell),
