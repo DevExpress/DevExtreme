@@ -772,7 +772,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         const $cells = scheduler.instance.$element().find('.dx-scheduler-time-panel-cell div');
 
         assert.equal($cells.eq(0).text(), dateLocalization.format(new Date(2016, 10, 6, 1), 'shorttime'), 'Cell text is OK');
-        assert.equal($cells.eq(2).text(), dateLocalization.format(new Date(2016, 10, 6, 2), 'shorttime'), 'Cell text is OK');
+        assert.equal($cells.eq(2).text(), dateLocalization.format(new Date(2016, 10, 6, 1, 30), 'shorttime'), 'Cell text is OK');
     });
 
     test('DateTimeIndicator should show correct time in current time zone', async function(assert) {

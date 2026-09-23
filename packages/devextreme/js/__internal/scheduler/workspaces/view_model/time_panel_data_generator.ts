@@ -61,8 +61,9 @@ export class TimePanelDataGenerator {
     } = options;
     const rowsCount = completeViewDataMap.length - 1;
     const lastRow = completeViewDataMap[rowsCount];
-    const lastLabeledCell = lastRow.find((cell) => !cell.isDaylightHole)
-      ?? lastRow[lastRow.length - 1];
+    const lastLabeledCell = lastRow.reduce<ViewCellData | undefined>((found, cell) => (
+      cell.isDaylightHole ? found : cell
+    ), undefined) ?? lastRow[lastRow.length - 1];
     const realEndViewDate = lastLabeledCell.endDate;
 
     const rowCountInGroup = this.viewDataGenerator.getRowCount({
@@ -88,6 +89,10 @@ export class TimePanelDataGenerator {
       const labelCell = row.find((cell) => !cell.isDaylightHole) ?? row[0];
       const {
         allDay,
+        endDate,
+        startDateUTC,
+        endDateUTC,
+        isDaylightHole,
         groups,
         groupIndex,
         isFirstGroupCell,
