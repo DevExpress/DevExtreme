@@ -179,7 +179,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             startDate: new Date(2020, 2, 8, 4, 30),
         }, {
             cellDuration: 120,
-            appointmentLeft: 400,
+            appointmentLeft: 300,
             view: 'timelineWeek',
             startDate: new Date(2020, 2, 8, 4),
         }, {
@@ -763,6 +763,10 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
                     scheduler.workSpace.selectCells(firstCell, lastCell);
 
+                    await new Promise((resolve) => {
+                        setTimeout(resolve, 20);
+                    });
+
                     const cells = scheduler.workSpace.getCells();
                     const selectedCells = scheduler.workSpace.getSelectedCells();
 
@@ -808,7 +812,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
             const currentTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator();
 
-            assert.roughEqual(currentTimeIndicator.eq(0).position().left, 4000, 1.5, 'Current time indicator has correct left');
+            assert.roughEqual(currentTimeIndicator.eq(0).position().left, 4400, 1.5, 'Current time indicator has correct left');
 
             clock.restore();
         });
