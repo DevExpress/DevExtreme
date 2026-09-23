@@ -6,4 +6,4 @@ export {
     removeDuplicates,
     normalizeIndexes,
     groupBy
-} from '../../__internal/core/utils/m_array';
+} from '../../__internal/core/utils/array';

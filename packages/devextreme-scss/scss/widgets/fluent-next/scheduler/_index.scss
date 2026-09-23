@@ -100,8 +100,6 @@
   // outside any meta.type-of guard
   $scheduler-left-column-width: $scheduler-left-column-width,
   $scheduler-timeline-cell-height: var(--dx-scheduler-timeline-cell-height),
-  $scheduler-workspace-active-cell-color: var(--dx-scheduler-workspace-cell-bg-active),
-  $scheduler-workspace-hovered-cell-color: var(--dx-scheduler-workspace-cell-content-hovered),
   $scheduler-workspace-focused-cell-color: var(--dx-scheduler-workspace-cell-bg-focused),
   $scheduler-droppable-cell-background-color: var(--dx-scheduler-droppable-cell-bg),
   $scheduler-appointment-text-color: var(--dx-scheduler-appointment-content),
@@ -112,7 +110,6 @@
    */
   $scheduler-fill-focused-appointment: $scheduler-appointment-bg-focused,
   $scheduler-is-shadow-color-for-focused-state: $scheduler-appointment-shadow-focused,
-  $scheduler-dd-appointment-hover-text-color: var(--dx-scheduler-dd-appointment-content-hovered),
 
   $agenda-appointment-recurrence-icon-color: var(--dx-scheduler-agenda-appointment-recurrence-icon),
   $agenda-appointment-hover-bg: var(--dx-scheduler-agenda-appointment-bg-hovered),

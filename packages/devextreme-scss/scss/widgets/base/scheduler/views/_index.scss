@@ -14,8 +14,6 @@ $scheduler-accent-border-color: null !default;
 $scheduler-current-time-cell-color: null !default;
 $scheduler-time-indicator-color: null !default;
 
-$scheduler-workspace-active-cell-color: null !default;
-$scheduler-workspace-hovered-cell-color: null !default;
 $scheduler-workspace-focused-cell-color: null !default;
 $scheduler-focused-cell-shadow: null !default;
 $scheduler-droppable-cell-background-color: null !default;
@@ -63,7 +61,6 @@ $scheduler-month-date-text-padding: 6px !default;
   $scheduler-base-border-color: $scheduler-base-border-color,
 );
 @use "./month" with (
-  $scheduler-base-border: $scheduler-base-border,
   $scheduler-base-border-color: $scheduler-base-border-color,
   $scheduler-workspace-accent-color: $scheduler-workspace-accent-color,
   $scheduler-workspace-date-table-cell-height: $scheduler-workspace-date-table-cell-height,

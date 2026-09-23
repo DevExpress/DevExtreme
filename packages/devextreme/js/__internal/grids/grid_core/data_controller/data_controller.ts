@@ -5,7 +5,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
-import { findChanges } from '@ts/core/utils/m_array_compare';
+import { findChanges } from '@ts/core/utils/array_compare';
 import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { DataSource } from '@ts/data/data_source/data_source';
 import type { ChangingEvent } from '@ts/data/data_source/types';
