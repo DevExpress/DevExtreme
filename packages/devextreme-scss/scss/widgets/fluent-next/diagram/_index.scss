@@ -501,5 +501,5 @@
 
 .dx-diagram-i-button-properties-panel-open {
   @include diagram-icon-masked(data-uri("image/svg+xml;charset=UTF-8", "images/widgets/common/diagram/properties-panel-open.svg"), $diagram-toolbar-icon-size, $diagram-toolbar-icon-size);
-  @include mask.masked-glyph-paint(var(--dx-diagram-properties-panel-icon-bg));
+  @include mask.masked-glyph-paint();
 }

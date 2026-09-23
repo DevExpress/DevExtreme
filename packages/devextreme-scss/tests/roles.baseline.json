@@ -511,18 +511,6 @@
       "why": "A stroke painted from a content role. For a glyph that may well be right - a drawn mark keeps its content role - but nothing in the package models a diagram icon."
     },
     {
-      "name": "diagram-properties-panel-icon-bg",
-      "slot": "bg",
-      "roles": [
-        "color-content-static-dark"
-      ],
-      "paints": [
-        "background-color"
-      ],
-      "decision": "drawn-mark",
-      "why": "The toggle's glyph, drawn as a mask over the accent button, and a mask is painted by background-color - the slot word follows the property, the role follows the element. Static rather than inverted because the button's fill is the same accent in both modes."
-    },
-    {
       "name": "diagram-selection-mark-content",
       "slot": "content",
       "roles": [

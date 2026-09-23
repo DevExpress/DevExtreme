@@ -28,14 +28,6 @@ $diagram-toolbox-shape-text-content: ds.$color-content-subtle !default;
 $diagram-bg: ds.$color-bg !default;
 $diagram-danger-icon: ds.$color-content-danger !default;
 
-/*
- * The properties-panel toggle sits on a contained `default` button, whose fill is the same accent
- * in both modes - so the button paints its own content with `content-static-dark`, which does not
- * flip. The icon has to follow that, not `content-inverted`: inverted would turn the glyph
- * near-black on dark while every other mark on the same button stayed white.
- */
-$diagram-properties-panel-icon-bg: ds.$color-content-static-dark !default;
-
 // Canvas = deeper neutral surface
 $diagram-canvas-bg: ds.$color-bg-canvas !default;
 $diagram-shadow: ds.$box-shadow-md !default;
