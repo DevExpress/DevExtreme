@@ -221,11 +221,6 @@ const OVERRIDES = {
      * mode scope already.
      */
     common: [':root', ...THEME_MODE_SELECTORS],
-    /*
-     * The data colours of the charts do not depend on the mode, so they sit on the document root
-     * alone, where the design system also declares the colour families they take. A copy on each
-     * mode scope would shadow whatever an application writes on the root.
-     */
     viz: [':root'],
     /*
      * The drop-down editor's inner button is a dxButton whose root carries dx-button-normal +
@@ -449,9 +444,6 @@ const OVERRIDES = {
     'surface', // ds.$color-surface-neutral-*
     'state', // ds.$opacity-* for disabled/readonly conventions
     'motion',
-    // The data-visualization family (charts, gauges, maps, the range selector): drawn in SVG from
-    // JS, so the theme publishes what those widgets paint with instead of styling them, and the
-    // value travels into the markup as var(--dx-viz-…). See tools/naming/viz-contract.json.
     'viz',
   ],
 

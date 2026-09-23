@@ -1,9 +1,3 @@
-/*
- * Charts are typeset like the page around them, so the name the chart themes read is the page's own
- * font rather than a second declaration of the same role. It is declared wherever --dx-global-font-family
- * is declared: a name that reads a mode-scoped value and sits on the document element alone would
- * freeze at the root's answer, which tests/theme-mode-scope.test.ts forbids.
- */
 @mixin publish {
   --dx-viz-font-family: var(--dx-global-font-family);
 }

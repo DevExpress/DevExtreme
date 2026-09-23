@@ -31,7 +31,6 @@ if (!bundleNames.length) {
     + 'built theme; run `pnpm nx run devextreme-scss:build:themes`');
 }
 
-/** Every rule that declares `name`, with the selectors each one is declared on. */
 const declarationsOf = (css: string, name: string): { selectors: string[]; value: string }[] => [
   ...css.matchAll(new RegExp(`([^{}]*)\\{[^{}]*${name}:([^;}]*)[;}]`, 'g')),
 ].map((found) => ({
@@ -39,15 +38,9 @@ const declarationsOf = (css: string, name: string): { selectors: string[]; value
   value: found[2].trim(),
 }));
 
-/** The value a name carries on the document root, where a bundle states its own mode. */
 const onRoot = (css: string, name: string): string | undefined => declarationsOf(css, name)
   .find(({ selectors }) => selectors.includes(':root'))?.value;
 
-/*
- * What a name finally carries, following the chain from the root. An accent step is the end of the
- * line: it reads whatever the application wrote, so the designed value beside it is what the theme
- * is entitled to fall back to.
- */
 const resolved = (css: string, name: string): string => {
   const expand = (value: string, depth: number): string => {
     if (depth > 12 || !value.includes('var(')) {
@@ -70,7 +63,6 @@ const resolved = (css: string, name: string): string => {
   return expand(onRoot(css, name) ?? '', 0);
 };
 
-/** Compares a css value with a literal written in the theme, ignoring quoting and spacing. */
 const sameValue = (first: string, second: string): boolean => {
   const plain = (value: string): string => value
     .toLowerCase()
@@ -134,7 +126,6 @@ test('a name declared per mode is on every mode scope, the rest only on the root
 
 const constantOf = (name: string): string => `VIZ_${name.slice('--dx-viz-'.length).toUpperCase().replace(/-/g, '_')}`;
 
-/** The fallback table of one theme, as the source writes it: { VIZ_BG: '#ffffff', … }. */
 const fallbackTable = (theme: string, table: string): Record<string, string> => {
   const body = new RegExp(`const ${table}[^=]*= \\{([\\s\\S]*?)\\n\\};`).exec(theme)?.[1] ?? '';
   const unquote = (value: string): string => value.replace(/\\'/g, "'");
@@ -146,7 +137,6 @@ const fallbackTable = (theme: string, table: string): Record<string, string> => 
     .map((match) => [match[1], match[2] === undefined ? named(match[3]) : unquote(match[2])]));
 };
 
-/** The fallbacks the palette writes beside its own references: var(--dx-viz-blue, #0078d4). */
 const paletteFallbacks = (): Record<string, string> => Object.fromEntries(
   [...source(contract.palette).matchAll(/var\((--dx-viz-[a-z-]+), ([^)]*)\)/g)]
     .map((match) => [constantOf(match[1]), match[2].trim()]),
