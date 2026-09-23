@@ -67,7 +67,8 @@ const BERLIN_SUMMER_CASE_OFFSET: TestCase = {
   currentDate: '2024-03-31',
   startDate: new Date('2024-03-30T23:00:00Z'),
   cellIdxArray: Array.from({ length: 8 }, (_, idx) => [idx, 3]),
-  expectedTopPosition: [0, 25, 50, 75, 100, 125, 150, 175],
+  // Row 2 is still the missing 02:00. The view offset does not move that hole.
+  expectedTopPosition: [0, 25, 25, 75, 100, 125, 150, 175],
 };
 
 const BERLIN_WINTER_CASE: TestCase = {
@@ -98,7 +99,8 @@ const LOS_ANGELES_SUMMER_CASE_OFFSET: TestCase = {
   currentDate: '2024-03-10',
   startDate: new Date('2024-03-10T08:00:00Z'),
   cellIdxArray: Array.from({ length: 8 }, (_, idx) => [idx, 3]),
-  expectedTopPosition: [0, 25, 50, 75, 100, 125, 150, 175],
+  // Row 2 is still the missing 02:00. The view offset does not move that hole.
+  expectedTopPosition: [0, 25, 25, 75, 100, 125, 150, 175],
 };
 
 const LOS_ANGELES_WINTER_CASE: TestCase = {
