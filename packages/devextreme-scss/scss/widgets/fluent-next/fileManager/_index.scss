@@ -314,9 +314,9 @@
 @include filemanager-icons-mixin(
   $text-color: null,
   $success-bg-color: $file-manager-icon-success-content,
-  $success-text-color: $file-manager-icon-inverted-content,
+  $success-text-color: $file-manager-icon-static-content,
   $danger-bg-color: $file-manager-icon-danger-content,
-  $danger-text-color: $file-manager-icon-inverted-content,
+  $danger-text-color: $file-manager-icon-static-content,
   $icon-size: $file-manager-large-icon-size,
   $masked: true,
 );

@@ -34,26 +34,35 @@ every mode scope, so it is a frozen value, not a broken island. That every remai
 mode-invariant is not a claim to be trusted: `tests/data-uri-mode-parity.test.ts` compares the light
 and the dark bundle and requires the same image at the same rule.
 
-## Current inventory - 4 markers, 2 components
+## Current inventory - 3 markers, 1 component
 
 ### fileManager - 3, structural
 
 `done.svg` and `danger.svg` put a glyph on a success or danger disc beside the neutral arrows. The
 arrows are a mask painted by `currentColor`, and the disc goes back on top as an image of its own,
 so the two fills inside it stay literals: the disc is a fixed green or red in both modes, and the
-glyph on it is `content-static-dark` for the same reason the diagram toggle is - what sits on a fill
-that does not flip has no reason to flip either.
+glyph on it is `content-static-dark` - what sits on a fill that does not flip has no reason to flip
+either.
 
-### diagram - 1, deliberate
+### diagram - none
 
-`$diagram-properties-panel-icon` is white over the accent-filled toggle in both modes. Its image is
-the only baked one left in the widget; everything else is a mask.
+Every diagram icon is a mask, the properties-panel toggle included: it paints from
+`content-static-dark`, the role its literal used to stand for, so nothing is frozen any more.
 
-The two `none` connector marks are worth a note because they are not a marker: `.st0{fill:#FF0000}`
-in their `<style>` block beats the `fill="currentColor"` attribute on the same path, so the slash is
-genuinely red and no substitution reaches it. They are masked all the same - the mask keeps the
-union of the slash and the box for `currentColor` to fill, and the red is laid back over it as an
-image that is the same in both modes.
+Two images are still emitted there, and neither is a marker. The `none` connector marks carry
+`.st0{fill:#FF0000}` in their `<style>` block, which beats the `fill="currentColor"` attribute on
+the same path, so the slash is genuinely red and no substitution reaches it: the mask keeps the
+union of the slash and the box for `currentColor` to fill, and the red goes back on top as an image
+that is the same in both modes. The selectbox placeholder is an empty drawing.
+
+### Masks and forced colours
+
+A forced-colours palette replaces `background-color` with its Canvas, which is what an icon sits on,
+so a mask left to itself paints nothing at all where a baked image used to survive.
+`base/_mask.scss` is what every masked glyph paints through, and it names the palette's text colour
+for that case. One mask is deliberately not on it: the grid's virtual-row placeholder
+(`base/dataGrid/_index.scss`) is a skeleton, not a glyph, and a solid `CanvasText` bar in place of
+the rows it stands for would be worse than the nothing it shows now.
 
 ## Rasters
 
