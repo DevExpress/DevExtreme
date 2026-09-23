@@ -1,26 +1,29 @@
-export function compare(x, y, maxLevel?) {
-  function normalizeArg(value) {
-    if (typeof value === 'string') {
-      return value.split('.');
-    }
-    if (typeof value === 'number') {
-      return [value];
-    }
-    return value;
-  }
+export type ComparableVersion = string | number | (string | number)[];
 
-  x = normalizeArg(x);
-  y = normalizeArg(y);
+function toParts(value: ComparableVersion): number[] {
+  const source = typeof value === 'number' ? [value] : value;
+  const parts = typeof source === 'string' ? source.split('.') : source;
 
-  let length = Math.max(x.length, y.length);
+  return parts.map((part) => parseInt(String(part || 0), 10));
+}
 
-  if (isFinite(maxLevel)) {
+export function compare(
+  x: ComparableVersion,
+  y: ComparableVersion,
+  maxLevel?: number,
+): number {
+  const xParts = toParts(x);
+  const yParts = toParts(y);
+
+  let length = Math.max(xParts.length, yParts.length);
+
+  if (maxLevel !== undefined && isFinite(maxLevel)) {
     length = Math.min(length, maxLevel);
   }
 
-  for (let i = 0; i < length; i++) {
-    const xItem = parseInt(x[i] || 0, 10);
-    const yItem = parseInt(y[i] || 0, 10);
+  for (let i = 0; i < length; i += 1) {
+    const xItem = xParts[i] ?? 0;
+    const yItem = yParts[i] ?? 0;
 
     if (xItem < yItem) {
       return -1;
