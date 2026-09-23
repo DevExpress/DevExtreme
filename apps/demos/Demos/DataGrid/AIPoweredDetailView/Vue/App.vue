@@ -89,8 +89,8 @@ function onRowCollapsing() {
   activeAbortRequest.value = null;
 }
 
-function onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickEvent) {
-  if (column.type === 'detailExpand' && row.rowType === 'data') {
+function onCellClick({ column, row, rowType, component, key }: DxDataGridTypes.CellClickEvent) {
+  if (column.type === 'detailExpand' && rowType === 'data') {
     if (row.isExpanded) {
       component.collapseRow(key);
     } else {

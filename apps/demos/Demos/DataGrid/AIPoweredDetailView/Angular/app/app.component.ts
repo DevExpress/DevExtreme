@@ -53,8 +53,8 @@ export class AppComponent {
     this.activeAbortRequest = undefined;
   }
 
-  onCellClick({ column, row, component, key }: DxDataGridTypes.CellClickEvent) {
-    if (column.type === 'detailExpand' && row.rowType === 'data') {
+  onCellClick({ column, row, rowType, component, key }: DxDataGridTypes.CellClickEvent) {
+    if (column.type === 'detailExpand' && rowType === 'data') {
       if (row.isExpanded) {
         component.collapseRow(key);
       } else {

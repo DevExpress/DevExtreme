@@ -43,8 +43,8 @@ export default function App() {
     activeAbortRequest.current = null;
   }, []);
 
-  const onCellClick = useCallback(({ column, row, component, key }: DataGridTypes.CellClickEvent) => {
-    if (column.type === 'detailExpand' && row.rowType === 'data') {
+  const onCellClick = useCallback(({ column, row, rowType, component, key }: DataGridTypes.CellClickEvent) => {
+    if (column.type === 'detailExpand' && rowType === 'data') {
       if (row.isExpanded) {
         component.collapseRow(key);
       } else {

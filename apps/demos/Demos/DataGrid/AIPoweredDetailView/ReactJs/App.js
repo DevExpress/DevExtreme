@@ -35,9 +35,9 @@ export default function App() {
     activeAbortRequest.current = null;
   }, []);
   const onCellClick = useCallback(({
-    column, row, component, key,
+    column, row, rowType, component, key,
   }) => {
-    if (column.type === 'detailExpand' && row.rowType === 'data') {
+    if (column.type === 'detailExpand' && rowType === 'data') {
       if (row.isExpanded) {
         component.collapseRow(key);
       } else {
