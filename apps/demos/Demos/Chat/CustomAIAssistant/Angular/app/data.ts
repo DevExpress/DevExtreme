@@ -233,7 +233,7 @@ export const chatSuggestions = [
 export interface FormFieldDescriptor {
   dataField: string;
   label: { text: string };
-  editorType?: string;
+  editorType?: DxFormTypes.FormItemComponent;
   editorOptions?: Record<string, unknown>;
   aiOptions: { instruction: string };
 }

@@ -86,9 +86,14 @@ To filter a date column by a year and/or month (the same thing the grid's own he
 
       if (isDateColumn && typeof value === 'string') {
         const parsedDate = new Date(value);
-        if (!Number.isNaN(parsedDate.getTime())) {
-          value = parsedDate;
+        if (Number.isNaN(parsedDate.getTime())) {
+          return {
+            status: 'failure',
+            message: `I couldn't apply that filter to '${caption}'. Check that the value matches the column's type.`,
+          };
         }
+
+        value = parsedDate;
       }
 
       if (args.operator === 'anyof' && isDateColumn && Array.isArray(value)) {
