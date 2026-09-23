@@ -771,10 +771,14 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
         const $cells = scheduler.instance.$element().find('.dx-scheduler-time-panel-cell div');
 
-        assert.equal($cells.eq(0).text(), dateLocalization.format(new Date(2016, 10, 6, 1), 'shorttime'), 'Cell text is OK');
-        assert.equal($cells.eq(2).text(), dateLocalization.format(new Date(2016, 10, 6, 1, 30), 'shorttime'), 'Cell text is OK');
-        // 2:00 AM follows the repeated 1:00 and 1:30 rows.
-        assert.equal($cells.eq(4).text(), dateLocalization.format(new Date(2016, 10, 6, 2), 'shorttime'), 'Cell text is OK');
+        const oneOClock = dateLocalization.format(new Date(2016, 10, 6, 1), 'shorttime');
+        const oneThirty = dateLocalization.format(new Date(2016, 10, 6, 1, 30), 'shorttime');
+
+        // First pass is 1:00 then 1:30. The second 1:00 follows that 1:30, and 2:00 is still the cell after both passes.
+        assert.equal($cells.eq(0).text(), oneOClock, 'First 1:00 is OK');
+        assert.equal($cells.eq(1).text(), oneThirty, '1:30 AM is OK');
+        assert.equal($cells.eq(2).text(), oneOClock, 'Second 1:00 is OK');
+        assert.equal($cells.eq(4).text(), dateLocalization.format(new Date(2016, 10, 6, 2), 'shorttime'), '2:00 AM is OK');
     });
 
     test('DateTimeIndicator should show correct time in current time zone', async function(assert) {
