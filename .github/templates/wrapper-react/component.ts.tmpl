@@ -9,7 +9,11 @@
 //#
 //#   //#if FLAG … //#else … //#endif   keep the branch whose FLAG holds
 //#   //#each ITEM … //#endeach         repeat the body once per ITEM (0..n times)
+//#   //#each … //#sep … //#endeach     lines after //#sep are emitted only BETWEEN items
+//#   __X_LIST__                         one placeholder for a whole comma-joined list;
+//#                                      string arrays have no spaces: "a","b","c"
 //#
+//# Lists have any length; a single line in an //#each is repeated per item.
 //# Flags:  GENERIC    Properties has type params (e.g. Properties<TItem, TKey>)
 //#         NARROWED   ≥1 narrowed event (README §3)
 //#         NESTED     ≥1 nested option component (README §6)
@@ -55,9 +59,11 @@ import NestedOption from "./core/nested-option";
 
 //# README §8: own module first, then one line per other module. Only types that
 //# are actually referenced below. Alias names that collide (README §8).
-import type { __OwnTypes__ } from "devextreme/__module__";
+//# These two lists are joined with ", " (comma + space), e.g.
+//# ClickEvent, ContentReadyEvent as ButtonContentReadyEvent, template
+import type { __OWN_TYPES_LIST__ } from "devextreme/__module__";
 //#each OTHER_TYPE_MODULE
-import type { __Types__ } from "devextreme/__otherModule__";
+import type { __TYPES_LIST__ } from "devextreme/__otherModule__";
 //#endeach
 
 //#if NARROWED
@@ -123,11 +129,11 @@ const __Name__ = memo(
         }
       ), []);
 
-//#if SUBSCRIBABLE   (README §4: root + "owner.option" paths; no spaces after commas)
-      const subscribableOptions = useMemo(() => (["__opt__","__nestedOption__.__opt__"]), []);
+//#if SUBSCRIBABLE   (README §4: ALL root + "owner.option" paths, A→Z, e.g. "items","selectedIndex","paging.pageSize")
+      const subscribableOptions = useMemo(() => ([__SUBSCRIBABLE_LIST__]), []);
 //#endif
-//#if INDEPENDENT_EVENTS   (README §2; alphabetical; no spaces after commas)
-      const independentEvents = useMemo(() => (["__onEvent__","__onOtherEvent__"]), []);
+//#if INDEPENDENT_EVENTS   (README §2: ALL events, A→Z, e.g. "onContentReady","onDisposing","onInitialized")
+      const independentEvents = useMemo(() => ([__INDEPENDENT_EVENTS_LIST__]), []);
 
 //#endif
 //#if ROOT_SUBSCRIBABLE
@@ -138,10 +144,11 @@ const __Name__ = memo(
       }), []);
 
 //#endif
-//#if NESTED   (README §6.4; the LAST entry has no trailing comma)
+//#if NESTED
       const expectedChildren = useMemo(() => ({
+//#each ROOT_CHILD   (README §6.4; drop the comma on the LAST entry)
         __childKey__: { optionName: "__childOption__", isCollectionItem: __true_or_false__ },
-        __lastChildKey__: { optionName: "__childOption__", isCollectionItem: __true_or_false__ }
+//#endeach
       }), []);
 
 //#endif
@@ -225,26 +232,36 @@ const _component__Nested__ = (props: I__Nested__Props) => {
 //#if COLLECTION_ITEM
       IsCollectionItem: true,
 //#endif
-//#if NESTED_SUBSCRIBABLE_FIELD   (last entry: no trailing comma)
+//#if NESTED_SUBSCRIBABLE_FIELD
       DefaultsProps: {
-        default__Field__: "__field__"
+//#each NESTED_SUBSCRIBABLE_FIELD   (drop the comma on the LAST entry)
+        default__Field__: "__field__",
+//#endeach
       },
 //#endif
-//#if HAS_CHILDREN   (last entry: no trailing comma)
+//#if HAS_CHILDREN
       ExpectedChildren: {
-        __childKey__: { optionName: "__childOption__", isCollectionItem: __true_or_false__ }
+//#each CHILD   (README §6.4; drop the comma on the LAST entry)
+        __childKey__: { optionName: "__childOption__", isCollectionItem: __true_or_false__ },
+//#endeach
       },
 //#endif
-//#if NESTED_TEMPLATE_FIELD   (several: `[{ … }, { … }]`)
+//#if NESTED_TEMPLATE_FIELD
       TemplateProps: [{
+//#each NESTED_TEMPLATE_FIELD
         tmplOption: "__tmplOption__",
         render: "__tmplRender__",
         component: "__tmplComponent__"
+//#sep
+      }, {
+//#endeach
       }],
 //#endif
-//#if PREDEFINED   (README §6.5; last entry: no trailing comma)
+//#if PREDEFINED
       PredefinedProps: {
-        __discriminator__: "__value__"
+//#each PREDEFINED_PROP   (README §6.5; drop the comma on the LAST entry)
+        __discriminator__: "__value__",
+//#endeach
       },
 //#endif
     },

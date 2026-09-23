@@ -10,6 +10,7 @@
 //#   //#if FLAG … //#else … //#endif   keep the branch whose FLAG holds
 //#   //#each ITEM … //#endeach         repeat the body once per ITEM (0..n times)
 //#
+//# Lists have any length; a single line in an //#each is repeated per item.
 //# Flags:  GENERIC     Properties has type params (only adds the ExplicitTypes line)
 //#         EXTENSION   component is an extension (only Validator today)
 //#         EDITOR      the widget class JSDoc has `@isEditor` (README §4)
@@ -40,8 +41,9 @@ import  __DefaultType__ from "devextreme/__defaultModule__";
 //#endeach
 //#each TYPE_MODULE
 import {
+//#each TYPE   (first-use order; an aliased name is written " __Type__ as __Prefix____Type__,")
  __Type__,
- __OtherType__ as __Prefix____OtherType__,
+//#endeach
 } from "devextreme/__typeModule__";
 //#endeach
 //#if NESTED
@@ -134,14 +136,18 @@ const Dx__Nested__ = defineComponent(Dx__Nested__Config);
 //#if COLLECTION_ITEM
 (Dx__Nested__ as any).$_isCollectionItem = true;
 //#endif
-//#if PREDEFINED   (README §5.5; the last entry has no comma)
+//#if PREDEFINED
 (Dx__Nested__ as any).$_predefinedProps = {
-  __discriminator__: "__value__"
+//#each PREDEFINED_PROP   (README §5.5; drop the comma on the LAST entry)
+  __discriminator__: "__value__",
+//#endeach
 };
 //#endif
-//#if HAS_CHILDREN   (the last entry has no comma)
+//#if HAS_CHILDREN
 (Dx__Nested__ as any).$_expectedChildren = {
-  __childKey__: { isCollectionItem: __true_or_false__, optionName: "__childOption__" }
+//#each CHILD   (README §5.4; drop the comma on the LAST entry)
+  __childKey__: { isCollectionItem: __true_or_false__, optionName: "__childOption__" },
+//#endeach
 };
 //#endif
 

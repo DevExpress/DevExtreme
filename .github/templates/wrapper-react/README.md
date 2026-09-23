@@ -292,7 +292,7 @@ finished.
 Check that there are no leftover `__` placeholders and no `//#` lines:
 
 ```bash
-grep -nE "__[A-Za-z]+__|^//#" src/<name>.ts
+grep -nE "__[A-Za-z_]+__|^//#" src/<name>.ts
 ```
 
 ## 10. Reference wrappers (open at most one, only if unsure)

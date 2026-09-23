@@ -266,7 +266,7 @@ finished.
 Check that there are no leftover placeholders or directives:
 
 ```bash
-grep -nE "__[A-Za-z]+__|^//#" src/<name>.ts
+grep -nE "__[A-Za-z_]+__|^//#" src/<name>.ts
 ```
 
 ## 8. Reference wrappers (open at most one, only if unsure)
