@@ -134,13 +134,24 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
 
       // The offset correction runs first. A wall clock still in the repeated hour
       // then takes the first pass, so the two steps do not cancel each other.
-      const startResolved = resolveFirstPass(startDateMs + startDateDSTChange, timeZone);
-      const endResolved = resolveFirstPass(endDateMs + endDateDSTChange, timeZone);
+      // If the first pass does not move the instant, keep the offset read at the
+      // original occurrence. Re-reading it after the end was pulled onto the jump
+      // would give the end the same offset as the start and drop the duration.
+      const startInstant = startDateMs + startDateDSTChange;
+      const endInstant = endDateMs + endDateDSTChange;
+      const startResolved = resolveFirstPass(startInstant, timeZone);
+      const endResolved = resolveFirstPass(endInstant, timeZone);
+      const startOffsetMs = startResolved.instant === startInstant
+        ? startDateInfo.offsetMs
+        : startResolved.info.offsetMs;
+      const endOffsetMs = endResolved.instant === endInstant
+        ? endDateInfo.offsetMs
+        : endResolved.info.offsetMs;
       const covered = isCoveredByDaylightPlan(daylightPlan, startResolved.instant)
         || isCoveredByDaylightPlan(daylightPlan, endResolved.instant);
       const [startDateFix, endDateFix] = getUnreachableShiftRecurrence(
-        startResolved.info,
-        endResolved.info,
+        startDateInfo,
+        endDateInfo,
         covered,
       );
       const sourceStartDate = startResolved.instant;
@@ -152,8 +163,8 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
           startDate: sourceStartDate,
           endDate: sourceEndDate,
         },
-        startDateUTC: sourceStartDate + startDateFix + startResolved.info.offsetMs,
-        endDateUTC: sourceEndDate + endDateFix + endResolved.info.offsetMs,
+        startDateUTC: sourceStartDate + startDateFix + startOffsetMs,
+        endDateUTC: sourceEndDate + endDateFix + endOffsetMs,
       };
     })
     .filter((item) => !exceptionDates.has(item.source.startDate));

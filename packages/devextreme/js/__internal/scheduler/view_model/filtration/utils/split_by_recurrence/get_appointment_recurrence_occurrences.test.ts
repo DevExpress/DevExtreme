@@ -389,4 +389,26 @@ describe('repeated hour and a visible DST plan', () => {
 
     expect(withPlan.startDateUTC - withoutPlan.startDateUTC).toBe(-HOUR_MS);
   });
+
+  it('keeps a one-hour span when a daily occurrence starts in the skipped hour', () => {
+    const appointment: any = {
+      source: {
+        startDate: Date.parse('2020-03-01T10:00:00.000Z'),
+        endDate: Date.parse('2020-03-01T11:00:00.000Z'),
+      },
+      recurrenceRule: 'FREQ=DAILY',
+      hasRecurrenceRule: true,
+    };
+    const occurrences = getAppointmentRecurrenceOccurrences(appointment, {
+      interval: {
+        min: Date.parse('2020-03-08T00:00:00.000Z'),
+        max: Date.parse('2020-03-09T00:00:00.000Z'),
+      },
+      timeZone: 'America/Los_Angeles',
+    });
+    const occurrence = occurrences[0];
+
+    expect(occurrence.startDateUTC).toBe(Date.parse('2020-03-08T03:00:00.000Z'));
+    expect(occurrence.endDateUTC).toBe(Date.parse('2020-03-08T04:00:00.000Z'));
+  });
 });
