@@ -151,7 +151,7 @@ class Widget<
           const device = devices.real();
           const { platform } = device;
           const { version } = device;
-          return platform === 'ios' && compareVersions(version, '13.3') <= 0;
+          return platform === 'ios' && compareVersions(version ?? [], '13.3') <= 0;
         },
         options: {
           useResizeObserver: false,
