@@ -71,6 +71,7 @@ export type WidgetName =
   | 'dxTreeView'
   | 'dxValidationSummary'
   | 'dxValidator'
+  | 'dxVectorMap'
   | 'dxGantt';
 
 export interface WidgetOptions {

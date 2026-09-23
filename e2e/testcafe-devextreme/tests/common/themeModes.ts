@@ -48,6 +48,22 @@ if (getThemeName() === 'fluent-next') {
     size: { width: 220, height: 160 },
   };
 
+  const MAP_WITH_LABELLED_MARKERS = {
+    layers: [{
+      type: 'marker',
+      dataSource: {
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: [0, 0] },
+          properties: { text: 'a' },
+        }],
+      },
+      label: { enabled: true, dataField: 'text' },
+    }],
+    size: { width: 220, height: 160 },
+  };
+
   const writeRootProperty = ClientFunction((name: string, value: string) => {
     const root = document.documentElement;
 
@@ -58,15 +74,27 @@ if (getThemeName() === 'fluent-next') {
     }
   });
 
-  const exportedFrom = ClientFunction((selector: string) => {
-    const markup = (window as any).DevExpress.viz.getMarkup([($(selector) as any).dxChart('instance')]);
-    const text = new DOMParser().parseFromString(markup, 'image/svg+xml').querySelector('text');
+  const exportedFrom = ClientFunction((
+    selector: string,
+    widgetName: string,
+    paintedSelector: string,
+    paintedAttribute: string,
+  ) => {
+    const instance = ($(selector) as any)[widgetName]('instance');
+    const markup = (window as any).DevExpress.viz.getMarkup([instance]);
+    const painted = new DOMParser().parseFromString(markup, 'image/svg+xml').querySelector(paintedSelector);
 
     return {
       references: (markup.match(/var\(--dx-/g) ?? []).length,
-      painted: text?.getAttribute('style') ?? '',
+      painted: painted?.getAttribute(paintedAttribute) ?? '',
     };
   });
+
+  type Exported = Promise<{ references: number; painted: string }>;
+
+  const exportedChartFrom = (selector: string): Exported => exportedFrom(selector, 'dxChart', 'text', 'style');
+
+  const exportedHaloFrom = (selector: string): Exported => exportedFrom(selector, 'dxVectorMap', '[stroke-linejoin="round"]', 'stroke');
 
   test('a named mode class re-resolves the roles under it', async (t) => {
     await render(`
@@ -217,14 +245,32 @@ if (getThemeName() === 'fluent-next') {
   });
 
   test('a chart exports the colors it was painted in, not the ones written beside them', async (t) => {
-    const light = await exportedFrom('#light-chart');
-    const dark = await exportedFrom('#dark-chart');
+    const light = await exportedChartFrom('#light-chart');
+    const dark = await exportedChartFrom('#dark-chart');
 
     await t.expect(light.references).eql(0, 'nothing resolves a reference once the markup is out of the document');
     await t.expect(dark.references).eql(0);
     await t.expect(light.painted).notEql('', 'the exported text carries the colour it was painted with');
     await t.expect(dark.painted).notEql(light.painted, 'each chart exports in the mode of its own scope');
   }).before(twoChartsInTwoModes);
+
+  test('a map exports the halo behind its labels, not the name the halo was written with', async (t) => {
+    const light = await exportedHaloFrom('#light-map');
+    const dark = await exportedHaloFrom('#dark-map');
+
+    await t.expect(light.references).eql(0, 'a stroke written outside the attribute path resolves too');
+    await t.expect(dark.references).eql(0);
+    await t.expect(light.painted).notEql('', 'the exported halo carries the colour it was painted with');
+    await t.expect(dark.painted).notEql(light.painted, 'each map exports in the mode of its own scope');
+  }).before(async () => {
+    await render(`
+      <div class="dx-theme-mode-light"><div id="light-map"></div></div>
+      <div class="dx-theme-mode-dark"><div id="dark-map"></div></div>
+    `);
+
+    await createWidget('dxVectorMap', MAP_WITH_LABELLED_MARKERS, '#light-map');
+    await createWidget('dxVectorMap', MAP_WITH_LABELLED_MARKERS, '#dark-map');
+  });
 
   test('an open overlay keeps its mode until the application says so', async (t) => {
     await render(`<div id="scope" class="dx-theme-mode-${oppositeMode}"><div id="owner"></div></div>`);
