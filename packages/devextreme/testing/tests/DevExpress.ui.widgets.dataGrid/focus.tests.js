@@ -5331,7 +5331,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             assert.equal(focusedCellChangedCount, 0, 'onFocusedCellChanged fires count');
         });
 
-        QUnit.testInActiveWindow('Should not render overlay on focused row with tabindex if useKeyboard set false', function(assert) {
+        QUnit.testInActiveWindow('Should not render overlay on focused row with tabindex if keyboardNavigation.enabled set false', function(assert) {
         // arrange
             this.data = [
                 { name: 'Alex', phone: '111111', room: 6 },
