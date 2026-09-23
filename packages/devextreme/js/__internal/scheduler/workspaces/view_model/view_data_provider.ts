@@ -537,8 +537,24 @@ export default class ViewDataProvider {
   getLastViewDate(): Date {
     const { completeViewDataMap } = this;
     const rowsCount = completeViewDataMap.length - 1;
+    const lastRow = completeViewDataMap[rowsCount];
+    const lastRowEnd = lastRow[lastRow.length - 1].endDate;
 
-    return completeViewDataMap[rowsCount][completeViewDataMap[rowsCount].length - 1].endDate;
+    // An offset rotates early-morning rows to the bottom, so the last row is not the latest date.
+    if (this.options.viewOffset && this.viewDataGenerator.getVerticalSlots()) {
+      let maxTime = lastRowEnd.getTime();
+      completeViewDataMap.forEach((row) => {
+        row.forEach((cell) => {
+          const time = cell.endDate?.getTime() ?? 0;
+          if (time > maxTime) {
+            maxTime = time;
+          }
+        });
+      });
+      return new Date(maxTime);
+    }
+
+    return lastRowEnd;
   }
 
   getStartViewDate(): Date {
@@ -553,6 +569,11 @@ export default class ViewDataProvider {
     const lastEndDate = new Date(
       this.getLastViewDate().getTime() - dateUtils.dateToMilliseconds('minute'),
     );
+    // Vertical daylight cells keep their wall time, so the offset is not in the date.
+    if (this.viewDataGenerator.getDaylightPlan() && this.viewDataGenerator.getVerticalSlots()) {
+      return lastEndDate;
+    }
+
     return dateUtilsTs.addOffsets(lastEndDate, -this.options.viewOffset);
   }
 

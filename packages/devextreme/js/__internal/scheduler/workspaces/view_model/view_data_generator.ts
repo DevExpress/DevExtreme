@@ -99,6 +99,22 @@ const unionVerticalSlots = (plan: DaylightPlan): VerticalSlot[] => {
   return slots.sort((left, right) => elapsedSlotKey(left, plan) - elapsedSlotKey(right, plan));
 };
 
+// Offset moves the first row to that wall time. Adding it to the instant instead
+// turns the repeated 1:00 into a second 7:00 or 8:00 on the shared week scale.
+const rotateSlots = (slots: VerticalSlot[], viewOffset: number): VerticalSlot[] => {
+  const offsetMinutes = Math.round(viewOffset / toMs('minute'));
+  const start = ((offsetMinutes % MINUTES_IN_DAY) + MINUTES_IN_DAY) % MINUTES_IN_DAY;
+
+  if (!start) {
+    return slots;
+  }
+
+  return [
+    ...slots.filter((slot) => slot.wallMinutes >= start),
+    ...slots.filter((slot) => slot.wallMinutes < start),
+  ];
+};
+
 const cellForSlot = (cells: DaylightCell[], slot: VerticalSlot): DaylightCell | undefined => {
   const seenInDay = new Map<number, number>();
 
@@ -634,7 +650,7 @@ export class ViewDataGenerator {
     if (verticalCell) {
       const data = verticalCell === 'hole'
         ? this.holeCell(rowIndex, columnIndex)
-        : this.cellFromPlan(verticalCell, options.viewOffset);
+        : this.cellFromPlan(verticalCell, 0);
 
       if (groupsList.length > 0) {
         // eslint-disable-next-line prefer-destructuring
@@ -1040,7 +1056,7 @@ export class ViewDataGenerator {
       options.timeZoneCalculator,
     );
     this.verticalSlots = this.daylightPlan && !isHorizontalView(this.viewType)
-      ? unionVerticalSlots(this.daylightPlan)
+      ? rotateSlots(unionVerticalSlots(this.daylightPlan), options.viewOffset)
       : undefined;
   }
 
