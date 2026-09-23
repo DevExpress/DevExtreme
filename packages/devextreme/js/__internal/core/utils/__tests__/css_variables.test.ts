@@ -64,7 +64,7 @@ describe('copying resolved styles onto a detached copy', () => {
     return host.firstElementChild as SVGElement;
   };
 
-  it('replaces a reference with what the live node is painted with', () => {
+  it('replaces a reference in a style with what the live node is painted with', () => {
     const source = svgWith('<rect></rect>');
     const rect = source.firstElementChild as SVGElement;
 
@@ -79,15 +79,32 @@ describe('copying resolved styles onto a detached copy', () => {
     expect(copiedRect.style.getPropertyValue('fill')).toBe('red');
   });
 
+  it('replaces a reference in an attribute the same way', () => {
+    const source = svgWith('<rect></rect>');
+    const rect = source.firstElementChild as SVGElement;
+
+    rect.style.setProperty('fill', 'red');
+
+    const copy = source.cloneNode(true) as SVGElement;
+    const copiedRect = copy.firstElementChild as SVGElement;
+
+    copiedRect.setAttribute('fill', 'var(--dx-viz-blue, #0078d4)');
+    copyResolvedStyles(source, copy);
+
+    expect(copiedRect.getAttribute('fill')).toBe('red');
+  });
+
   it('leaves a literal alone', () => {
     const source = svgWith('<rect></rect>');
     const copy = source.cloneNode(true) as SVGElement;
     const copiedRect = copy.firstElementChild as SVGElement;
 
     copiedRect.style.setProperty('fill', '#00ff00');
+    copiedRect.setAttribute('stroke', '#0000ff');
     copyResolvedStyles(source, copy);
 
     expect(copiedRect.style.getPropertyValue('fill')).toBe('#00ff00');
+    expect(copiedRect.getAttribute('stroke')).toBe('#0000ff');
   });
 
   it('steps over a node that carries no style at all', () => {
@@ -95,5 +112,20 @@ describe('copying resolved styles onto a detached copy', () => {
     const copy = source.cloneNode(true) as Element;
 
     expect(() => copyResolvedStyles(source, copy)).not.toThrow();
+  });
+
+  it('reaches the stroke a text node carries on a tspan of its own', () => {
+    const source = svgWith('<text><tspan></tspan></text>');
+    const tspan = source.querySelector('tspan') as SVGElement;
+
+    tspan.style.setProperty('stroke', 'blue');
+
+    const copy = source.cloneNode(true) as SVGElement;
+    const copiedTspan = copy.querySelector('tspan') as SVGElement;
+
+    copiedTspan.setAttribute('stroke', 'var(--dx-viz-bg, #ffffff)');
+    copyResolvedStyles(source, copy);
+
+    expect(copiedTspan.getAttribute('stroke')).toBe('blue');
   });
 });

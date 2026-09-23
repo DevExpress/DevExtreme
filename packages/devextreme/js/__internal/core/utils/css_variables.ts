@@ -96,6 +96,12 @@ function referencedProperties(style: CSSStyleDeclaration): string[] {
   return properties;
 }
 
+function referencedAttributes(element: Element): string[] {
+  return Array.from(element.attributes)
+    .filter(({ value }) => isCssVariableReference(value))
+    .map(({ name }) => name);
+}
+
 export function copyResolvedStyles(source: Element, copy: Element): void {
   const sources = [source, ...source.querySelectorAll('*')];
   const window = getWindow();
@@ -103,8 +109,9 @@ export function copyResolvedStyles(source: Element, copy: Element): void {
   [copy, ...copy.querySelectorAll('*')].forEach((node, index) => {
     const style = inlineStyleOf(node);
     const properties = style ? referencedProperties(style) : [];
+    const attributes = referencedAttributes(node);
 
-    if (!style || !properties.length) {
+    if (!properties.length && !attributes.length) {
       return;
     }
 
@@ -114,7 +121,15 @@ export function copyResolvedStyles(source: Element, copy: Element): void {
       const carried = computed.getPropertyValue(property);
 
       if (carried) {
-        style.setProperty(property, carried);
+        style?.setProperty(property, carried);
+      }
+    });
+
+    attributes.forEach((attribute) => {
+      const carried = computed.getPropertyValue(attribute);
+
+      if (carried) {
+        node.setAttribute(attribute, carried);
       }
     });
   });
