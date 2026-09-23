@@ -1,97 +1,136 @@
-/* eslint-disable guard-for-in */
-/* eslint-disable no-restricted-syntax */
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import domAdapter from '@js/core/dom_adapter';
 import { extendFromObject } from '@js/core/utils/extend';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 
-const createScript = function (options) {
-  const script = domAdapter.createElement('script');
-  for (const name in options) {
-    script[name] = options[name];
-  }
-  return script;
+export type AjaxRequestData = string | FormData | Record<string, unknown>;
+
+export type AjaxRequestHeaders = Record<string, unknown>;
+
+export interface AjaxUploadHandlers {
+  onprogress?: (e: ProgressEvent) => void;
+  onloadstart?: (e: ProgressEvent) => void;
+  onabort?: (e: ProgressEvent) => void;
+}
+
+export interface AjaxRequestOptions {
+  url?: string;
+  method?: string;
+  data?: AjaxRequestData;
+  dataType?: string;
+  cache?: boolean;
+  crossDomain?: boolean;
+  contentType?: string | false;
+  accepts?: Record<string, string>;
+  headers?: AjaxRequestHeaders;
+  jsonp?: string | false;
+  jsonpCallback?: string;
+  timeout?: number;
+  async?: boolean;
+  username?: string;
+  password?: string;
+  responseType?: string;
+  xhrFields?: Record<string, unknown>;
+  upload?: AjaxUploadHandlers;
+  beforeSend?: (xhr: XMLHttpRequest) => void;
+}
+
+export interface AjaxRequestTarget {
+  url: string;
+  parameters: AjaxRequestData | null | undefined;
+}
+
+// NOTE: not instanceof - a FormData built in another window (an iframe, or the one
+// getWindow() was pointed at) comes from a different realm and would not match.
+export const isFormData = (data: unknown): data is FormData => Object.prototype.toString
+  .call(data) === '[object FormData]';
+
+type ScriptAttributes = Partial<Pick<HTMLScriptElement, 'src' | 'text'>>;
+
+const createScript = (attributes: ScriptAttributes): HTMLScriptElement => {
+  const script = domAdapter.createElement('script') as HTMLScriptElement;
+
+  return Object.assign(script, attributes);
 };
 
-const appendToHead = function (element) {
-  return domAdapter.getHead().appendChild(element);
+const appendToHead = (element: Node): void => {
+  domAdapter.getHead().appendChild(element);
 };
 
-const removeScript = function (scriptNode) {
-  scriptNode.parentNode.removeChild(scriptNode);
+const removeScript = (scriptNode: Node): void => {
+  scriptNode.parentNode?.removeChild(scriptNode);
 };
 
-const evalScript = function (code) {
+const evalScript = (code: string): void => {
   const script = createScript({ text: code });
   appendToHead(script);
   removeScript(script);
 };
 
-const evalCrossDomainScript = function (url) {
+const evalCrossDomainScript = (url: string): Promise<void> => {
   const script = createScript({ src: url });
 
   return new Promise((resolve, reject) => {
-    const events = {
-      load: resolve,
-      error: reject,
+    const events: Record<string, () => void> = {
+      load: (): void => resolve(),
+      error: (): void => reject(),
     };
 
-    const loadHandler = function (e) {
+    const loadHandler = (e: Event): void => {
       events[e.type]();
       removeScript(script);
     };
 
-    for (const event in events) {
+    Object.keys(events).forEach((event) => {
       domAdapter.listen(script, event, loadHandler);
-    }
+    });
 
     appendToHead(script);
   });
 };
 
-function getMethod(options) {
+function getMethod(options: AjaxRequestOptions): string {
   return (options.method || 'GET').toUpperCase();
 }
 
-const paramsConvert = function (params) {
+const paramsConvert = (params: Record<string, unknown>): string => {
   const result: string[] = [];
 
-  for (const name in params) {
-    let value = params[name];
-
-    if (value === undefined) {
-      continue;
+  Object.entries(params).forEach(([name, rawValue]) => {
+    if (rawValue === undefined) {
+      return;
     }
 
-    if (value === null) {
-      value = '';
-    }
+    let value: unknown = rawValue === null ? '' : rawValue;
 
     if (typeof value === 'function') {
-      value = value();
+      value = (value as () => unknown)();
     }
 
-    result.push(`${encodeURIComponent(name)}=${encodeURIComponent(value)}`);
-  }
+    result.push(`${encodeURIComponent(name)}=${encodeURIComponent(value as string)}`);
+  });
 
   return result.join('&');
 };
 
-const getContentTypeHeader = function (options) {
-  let defaultContentType;
-  if (options.data && !options.upload && getMethod(options) !== 'GET') {
-    defaultContentType = 'application/x-www-form-urlencoded;charset=utf-8';
-  }
+const getContentTypeHeader = (options: AjaxRequestOptions): string | undefined => {
+  const defaultContentType = options.data
+    && !options.upload
+    && !isFormData(options.data)
+    && getMethod(options) !== 'GET'
+    ? 'application/x-www-form-urlencoded;charset=utf-8'
+    : undefined;
 
   return options.contentType
         || defaultContentType;
 };
 
-const getAcceptHeader = function (options) {
+const getAcceptHeader = (options: AjaxRequestOptions): string => {
   const dataType = options.dataType || '*';
   const scriptAccept = 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript';
-  const accepts = {
+  const accepts: Record<string, string> = {
     '*': '*/*',
     text: 'text/plain',
     html: 'text/html',
@@ -108,7 +147,7 @@ const getAcceptHeader = function (options) {
     : accepts['*'];
 };
 
-const getRequestHeaders = function (options) {
+const getRequestHeaders = (options: AjaxRequestOptions): AjaxRequestHeaders => {
   const headers = options.headers || {};
 
   headers['Content-Type'] = headers['Content-Type'] || getContentTypeHeader(options);
@@ -120,41 +159,47 @@ const getRequestHeaders = function (options) {
   return headers;
 };
 
-const getJsonpOptions = function (options) {
-  if (options.dataType === 'jsonp') {
-    const random = Math.random().toString().replace(/\D/g, '');
-    const callbackName = options.jsonpCallback || `dxCallback${Date.now()}_${random}`;
-    const callbackParameter = options.jsonp || 'callback';
-
-    options.data = options.data || {};
-    options.data[callbackParameter] = callbackName;
-
-    return callbackName;
+const getJsonpOptions = (options: AjaxRequestOptions): string | undefined => {
+  if (options.dataType !== 'jsonp') {
+    return undefined;
   }
+
+  const random = Math.random().toString().replace(/\D/g, '');
+  const callbackName = options.jsonpCallback || `dxCallback${Date.now()}_${random}`;
+  const callbackParameter = options.jsonp || 'callback';
+
+  options.data = options.data || {};
+  (options.data as Record<string, unknown>)[callbackParameter] = callbackName;
+
+  return callbackName;
 };
 
-const getRequestOptions = function (options, headers) {
-  let params = options.data;
+const getRequestOptions = (
+  options: AjaxRequestOptions,
+  headers: AjaxRequestHeaders,
+): AjaxRequestTarget => {
+  let params: AjaxRequestData | null | undefined = options.data;
   const paramsAlreadyString = typeof params === 'string';
+  const sendsFormData = isFormData(params);
   let url = options.url || window.location.href;
 
-  if (!paramsAlreadyString && !options.cache) {
+  if (!paramsAlreadyString && !sendsFormData && !options.cache) {
     params = params || {};
-    params._ = Date.now();
+    (params as Record<string, unknown>)._ = Date.now();
   }
 
-  if (params && !options.upload) {
+  if (params && !options.upload && !sendsFormData) {
     if (!paramsAlreadyString) {
-      params = paramsConvert(params);
+      params = paramsConvert(params as Record<string, unknown>);
     }
 
     if (getMethod(options) === 'GET') {
       if (params !== '') {
-        url += (url.indexOf('?') > -1 ? '&' : '?') + params;
+        url += (url.includes('?') ? '&' : '?') + (params as string);
       }
       params = null;
-    } else if (headers['Content-Type'] && headers['Content-Type'].indexOf('application/x-www-form-urlencoded') > -1) {
-      params = params.replace(/%20/g, '+');
+    } else if ((headers['Content-Type'] as string | undefined)?.includes('application/x-www-form-urlencoded')) {
+      params = (params as string).replace(/%20/g, '+');
     }
   }
 
@@ -164,7 +209,7 @@ const getRequestOptions = function (options, headers) {
   };
 };
 
-const isCrossDomain = function (url) {
+const isCrossDomain = (url: string | undefined): boolean => {
   if (!hasWindow()) {
     return true;
   }
@@ -176,7 +221,7 @@ const isCrossDomain = function (url) {
   originAnchor.href = window.location.href;
 
   try {
-    urlAnchor.href = url;
+    urlAnchor.href = url as string;
 
     // NOTE: IE11
     // eslint-disable-next-line no-self-assign
