@@ -100,9 +100,10 @@ describe('cell search on a Cairo fall-back timeline', () => {
 
   it('applies viewOffset once, so the appointment stays on its cell', async () => {
     const shifted = await createTimeline(60);
-    const cell = shifted.row[23];
+    const appointmentCell = shifted.row[22];
 
-    expect(cell.startDateUTC?.toISOString()).toBe('2026-10-29T21:00:00.000Z');
-    expect(shifted.POM.getAppointment('A').getGeometry().left).toBe(23 * DEFAULT_CELL_WIDTH);
+    expect(shifted.row[23].startDateUTC?.toISOString()).toBe('2026-10-29T21:00:00.000Z');
+    expect(appointmentCell.startDateUTC?.toISOString()).toBe('2026-10-29T20:00:00.000Z');
+    expect(shifted.POM.getAppointment('A').getGeometry().left).toBe(22 * DEFAULT_CELL_WIDTH);
   });
 });
