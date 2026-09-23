@@ -32,6 +32,8 @@ const getUnreachableShiftRecurrence = (
   }
 };
 
+// Ending exactly on a fall-back jump is the end of the first pass.
+// Extending that end by an hour would also cover the repeated hour.
 const getUnreachableShift = (
   startDateInfo: DateInformation,
   endDateInfo: DateInformation,
@@ -43,8 +45,6 @@ const getUnreachableShift = (
       return [startDateInfo.deltaMs, 0];
     case endDateInfo.isUnreachableTime:
       return [0, endDateInfo.deltaMs];
-    case endDateInfo.isDoubleTimeStart:
-      return [0, -endDateInfo.deltaMs];
     default:
       return [0, 0];
   }
