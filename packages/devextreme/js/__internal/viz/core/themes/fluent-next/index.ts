@@ -9,11 +9,13 @@ const VIZ_BORDER_ACTIVE = '--dx-viz-border-active';
 const VIZ_BORDER_HOVERED = '--dx-viz-border-hovered';
 const VIZ_CONTENT = '--dx-viz-content';
 const VIZ_CONTENT_ORANGE = '--dx-viz-content-orange';
+const VIZ_CYAN_SUBTLE = '--dx-viz-cyan-subtle';
 const VIZ_CONTENT_SUBTLE = '--dx-viz-content-subtle';
 const VIZ_GRAY_SUBTLE = '--dx-viz-gray-subtle';
 const VIZ_GRID = '--dx-viz-grid';
 const VIZ_INDIGO_SUBTLE = '--dx-viz-indigo-subtle';
 const VIZ_ORANGE_SUBTLE = '--dx-viz-orange-subtle';
+const VIZ_PURPLE_SUBTLE = '--dx-viz-purple-subtle';
 const VIZ_RED_SUBTLE = '--dx-viz-red-subtle';
 const VIZ_TOOLTIP_BG = '--dx-viz-tooltip-bg';
 const VIZ_TOOLTIP_CONTENT = '--dx-viz-tooltip-content';
@@ -39,11 +41,13 @@ const LIGHT = {
   [VIZ_BORDER_HOVERED]: '#c0c0c0',
   [VIZ_CONTENT]: '#161616',
   [VIZ_CONTENT_ORANGE]: '#ad4100',
+  [VIZ_CYAN_SUBTLE]: '#acd7e6',
   [VIZ_CONTENT_SUBTLE]: '#444444',
   [VIZ_GRAY_SUBTLE]: '#cfcfcf',
   [VIZ_GRID]: '#e1e1e1',
   [VIZ_INDIGO_SUBTLE]: '#becefc',
   [VIZ_ORANGE_SUBTLE]: '#f9c1aa',
+  [VIZ_PURPLE_SUBTLE]: '#d5c7f0',
   [VIZ_RED_SUBTLE]: '#f9bfb9',
   [VIZ_TOOLTIP_BG]: '#242424',
   [VIZ_TOOLTIP_CONTENT]: '#ffffff',
@@ -73,11 +77,13 @@ const DARK: Record<PublishedName, string> = {
   [VIZ_BORDER_HOVERED]: '#ababab',
   [VIZ_CONTENT]: '#ffffff',
   [VIZ_CONTENT_ORANGE]: '#f57d48',
+  [VIZ_CYAN_SUBTLE]: '#00576d',
   [VIZ_CONTENT_SUBTLE]: '#cbcbcb',
   [VIZ_GRAY_SUBTLE]: '#4a4a4a',
   [VIZ_GRID]: '#4c4c4c',
   [VIZ_INDIGO_SUBTLE]: '#2e4195',
   [VIZ_ORANGE_SUBTLE]: '#893200',
+  [VIZ_PURPLE_SUBTLE]: '#563780',
   [VIZ_RED_SUBTLE]: '#861e20',
   [VIZ_TOOLTIP_BG]: '#ffffff',
   [VIZ_TOOLTIP_CONTENT]: '#161616',
@@ -249,9 +255,13 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
         border: {
           color: paint(VIZ_TILE_BORDER),
         },
+        color: paint(VIZ_CYAN_SUBTLE),
       },
     },
     rangeSelector: {
+      background: {
+        color: paint(VIZ_PURPLE_SUBTLE),
+      },
       selectedRangeColor: paint(VIZ_PRIMARY),
       sliderMarker: {
         color: paint(VIZ_PRIMARY),

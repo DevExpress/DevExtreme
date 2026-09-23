@@ -39,6 +39,12 @@
       "paints": "text at full strength - titles, export menu, map labels - and the marks that have to stand out against the surface: constant lines, error bars, map selection borders, range selector ticks and the bullet target"
     },
     {
+      "name": "--dx-viz-cyan-subtle",
+      "role": "color-bg-cyan-subtle",
+      "declaredPerMode": true,
+      "paints": "a tree map tile with no colour of its own - the fill a tile falls back to when the palette is not colouring the leaves"
+    },
+    {
       "name": "--dx-viz-content-orange",
       "role": "color-content-orange",
       "declaredPerMode": true,
@@ -85,6 +91,12 @@
       "role": "color-bg-orange-subtle",
       "declaredPerMode": true,
       "paints": "a map line at rest"
+    },
+    {
+      "name": "--dx-viz-purple-subtle",
+      "role": "color-bg-purple-subtle",
+      "declaredPerMode": true,
+      "paints": "the plate behind the unselected part of a range selector, drawn only when an application asks for it"
     },
     {
       "name": "--dx-viz-red-subtle",

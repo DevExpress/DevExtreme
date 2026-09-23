@@ -178,6 +178,18 @@ if (getThemeName() === 'fluent-next') {
     await shoot(t, 'Viz bar gauge shelf');
   });
 
+  test('a tree map tile with no palette colour takes the published cyan', async (t) => {
+    await inBothScopes('dxTreeMap', {
+      dataSource: TILE_DATA,
+      valueField: 'value',
+      colorizer: { type: 'none' },
+      tile: { label: { visible: false } },
+      tooltip: { enabled: false },
+    }, { width: 240, height: 120 });
+
+    await shoot(t, 'Viz tree map tile fill');
+  });
+
   test('a map area takes the published quiet grey', async (t) => {
     await inBothScopes('dxVectorMap', {
       layers: [{ dataSource: AREAS, type: 'area' }],
