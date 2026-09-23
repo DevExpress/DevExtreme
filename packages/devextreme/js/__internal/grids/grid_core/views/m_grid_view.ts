@@ -349,7 +349,7 @@ export class ResizingController extends modules.ViewController {
     }
   }
 
-  private _setMaxWidth(value: number): void {
+  private setMaxWidth(value: number): void {
     this.isMaxWidthSet = true;
     this.component.$element().css('maxWidth', value);
   }
@@ -559,7 +559,7 @@ export class ResizingController extends modules.ViewController {
           if (hasWidth === false && !hasPercentWidth) {
             const borderWidth = gridCoreUtils.getComponentBorderWidth(this, $rowsViewElement);
 
-            that._setMaxWidth(totalWidth + scrollbarWidth + borderWidth);
+            that.setMaxWidth(totalWidth + scrollbarWidth + borderWidth);
           }
         }
       }
