@@ -1061,12 +1061,6 @@ export type ColumnHeaderFilter = {
   search?: ColumnHeaderFilterSearchConfig;
   /**
    * @docid
-   * @default 'contains'
-   * @deprecated
-   */
-  searchMode?: SearchMode;
-  /**
-   * @docid
    * @default undefined
    */
   width?: number | string | undefined;
@@ -1620,12 +1614,6 @@ export type HeaderFilter = {
    * @docid
    */
   search?: HeaderFilterSearchConfig;
-  /**
-   * @docid
-   * @default 500
-   * @deprecated
-   */
-  searchTimeout?: number;
   /**
    * @docid
    */
@@ -2990,12 +2978,6 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    * @default "indicate"
    */
   dropFeedbackMode?: DragHighlight;
-  /**
-   * @docid GridBaseOptions.rowDragging.filter
-   * @deprecated
-   * @default "> *"
-   */
-  filter?: string;
   /**
    * @docid GridBaseOptions.rowDragging.group
    * @default undefined

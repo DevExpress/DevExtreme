@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
@@ -6,7 +7,6 @@ import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { isFunction } from '@js/core/utils/type';
-import type DOMComponent from '@ts/core/widget/dom_component';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
 // T422022
@@ -14,6 +14,7 @@ import BaseWidget from '@ts/viz/core/base_widget';
 import { plugin } from '@ts/viz/core/export';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 // PLUGINS_SECTION
+import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
 import { pointInCanvas } from '@ts/viz/core/utils';
 import { Translator2D } from '@ts/viz/translators/translator2d';
@@ -136,11 +137,9 @@ function createAxis(isHorizontal?: boolean): SparklineAxis {
   };
 }
 
+interface BaseSparkline extends TooltipPluginMembers {}
+
 abstract class BaseSparkline extends BaseWidget {
-  static addPlugin: (plugin: ThemeValue) => void;
-
-  static getInstance: typeof DOMComponent.getInstance;
-
   _tooltipTracker;
 
   _argumentAxis!: SparklineAxis;
@@ -292,7 +291,7 @@ abstract class BaseSparkline extends BaseWidget {
   _getTooltip(): ThemeValue {
     if (!this._tooltip) {
       initTooltip.call(this);
-      this._setTooltipRendererOptions(this._tooltipRendererOptions);
+      this._setTooltipRendererOptions();
       this._tooltipRendererOptions = null;
       this._setTooltipOptions();
     }
@@ -347,9 +346,9 @@ BaseSparkline.addPlugin(tooltipPlugin);
 // tooltip laziness.
 const { _disposeTooltip: disposeTooltip } = BaseSparkline.prototype;
 
-function disposeLazyTooltip(this: BaseSparkline, ...args: unknown[]): void {
+function disposeLazyTooltip(this: BaseSparkline): void {
   if (this._tooltip) {
-    disposeTooltip.apply(this, args);
+    disposeTooltip.call(this);
     this._tooltipShown = false;
   }
 }

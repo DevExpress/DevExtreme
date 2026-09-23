@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 // PLUGINS_SECTION
 import componentRegistrator from '@js/core/component_registrator';
 import { noop } from '@js/core/utils/common';
-import type DOMComponent from '@ts/core/widget/dom_component';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import BaseWidget from '@ts/viz/core/base_widget';
+import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 
@@ -58,11 +59,9 @@ function getLegendItemState(itemState: ThemeValue): LegendItemState {
   };
 }
 
+interface Funnel extends DataSourcePluginMembers {}
+
 class Funnel extends BaseWidget {
-  static addPlugin: (plugin: ThemeValue) => void;
-
-  static getInstance: typeof DOMComponent.getInstance;
-
   _group;
 
   _items!: FunnelItem[];

@@ -29,6 +29,7 @@ import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
 
+import type { ThemeValue } from './base_theme_manager';
 import { Plaque } from './plaque';
 import { Renderer } from './renderers/renderer';
 import { normalizeEnum, patchFontOptions } from './utils';
@@ -450,6 +451,14 @@ Tooltip.prototype = {
     return box;
   },
 };
+
+export interface TooltipPluginMembers {
+  _tooltip: ThemeValue;
+  _disposeTooltip: () => void;
+  _initTooltip: () => void;
+  _setTooltipOptions: () => void;
+  _setTooltipRendererOptions: () => void;
+}
 
 export const plugin = {
   name: 'tooltip',

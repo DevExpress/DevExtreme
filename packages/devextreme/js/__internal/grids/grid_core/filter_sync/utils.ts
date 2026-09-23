@@ -34,6 +34,12 @@ export const getColumnIdentifier = (
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 ): string | undefined => column.name || column.dataField;
 
+export const parseColumnPropertyName = (fullName: string): string | null => {
+  const matched = /.*\.(.*)/.exec(fullName);
+
+  return matched ? matched[1] : null;
+};
+
 const canSyncHeaderFilterWithFilterRow = (column: FilterSyncColumn): boolean => {
   const { filterValues } = column;
   const isOnlyNullFilterValue = filterValues?.length === 1 && filterValues[0] === null;

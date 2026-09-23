@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 /* eslint-disable @stylistic/max-len */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -31,11 +32,15 @@ import { LayoutManager } from '@ts/viz/chart_components/layout_manager';
 import { ThemeManager } from '@ts/viz/components/chart_theme_manager';
 import { validateData } from '@ts/viz/components/data_validator';
 import { Legend } from '@ts/viz/components/legend';
+import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 // PLUGINS_SECTION
+import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin as dataSourcePlugin } from '@ts/viz/core/data_source';
 import { plugin as exportPlugin } from '@ts/viz/core/export';
+import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { plugin as loadingIndicatorPlugin } from '@ts/viz/core/loading_indicator';
 import { plugin as titlePlugin } from '@ts/viz/core/title';
+import type { TooltipPluginMembers } from '@ts/viz/core/tooltip';
 import { plugin as tooltipPlugin } from '@ts/viz/core/tooltip';
 import { map as _map, processSeriesTemplate, setCanvasValues as _setCanvasValues } from '@ts/viz/core/utils';
 import { Series } from '@ts/viz/series/base_series';
@@ -55,6 +60,10 @@ const RESIZE_REFRESH_ACTION = '_resize';
 const ACTIONS_BY_PRIORITY = [REINIT_REFRESH_ACTION, REINIT_DATA_SOURCE_REFRESH_ACTION,
   DATA_INIT_REFRESH_ACTION, FORCE_RENDER_REFRESH_ACTION, RESIZE_REFRESH_ACTION];
 const DEFAULT_OPACITY = 0.3;
+
+function acceptAllFilter(): () => boolean {
+  return () => true;
+}
 
 const REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS = [
   'series',
@@ -294,37 +303,98 @@ export const overlapping = {
   resolveLabelOverlappingInOneDirection,
 };
 
-export const BaseChart = BaseWidget.inherit({
-  _eventsMap: {
-    onSeriesClick: { name: 'seriesClick' },
-    onPointClick: { name: 'pointClick' },
-    onArgumentAxisClick: { name: 'argumentAxisClick' },
-    onLegendClick: { name: 'legendClick' },
-    onSeriesSelectionChanged: { name: 'seriesSelectionChanged' },
-    onPointSelectionChanged: { name: 'pointSelectionChanged' },
-    onSeriesHoverChanged: { name: 'seriesHoverChanged' },
-    onPointHoverChanged: { name: 'pointHoverChanged' },
-    onDone: { name: 'done', actionSettings: { excludeValidators: ['disabled'] } },
-    onZoomStart: { name: 'zoomStart' },
-    onZoomEnd: { name: 'zoomEnd' },
-  },
+/* eslint-disable @typescript-eslint/method-signature-style */
+export interface BaseChart extends DataSourcePluginMembers, TooltipPluginMembers {
+  DEBUG_canvas: ThemeValue;
+  DEBUG_dirtyCanvas: ThemeValue;
+  __currentCanvas: ThemeValue;
+  __originalCanvas: ThemeValue;
+  __renderOptions: ThemeValue;
+  _argumentAxes: ThemeValue[];
+  _axesGroup: ThemeValue;
+  _backgroundRect: ThemeValue;
+  _canvasClipRect: ThemeValue;
+  _constantLinesGroup: ThemeValue;
+  _crosshairCursorGroup: ThemeValue;
+  _currentRefreshData: ThemeValue;
+  _gridGroup: ThemeValue;
+  _groupsData: ThemeValue;
+  _labelsAxesGroup: ThemeValue;
+  _labelsGroup: ThemeValue;
+  _lastRenderingTime: number;
+  _legendDataField: string;
+  _legendGroup: ThemeValue;
+  _legendItemTextField: string;
+  _needHandleRenderComplete: boolean;
+  _panesBackgroundGroup: ThemeValue;
+  _panesBorderGroup: ThemeValue;
+  _rect: number[];
+  _scaleBreaksGroup: ThemeValue;
+  _scrollBar: ThemeValue;
+  _scrollBarGroup: ThemeValue;
+  _seriesElementsDrawn: boolean;
+  _seriesGroup: ThemeValue;
+  _stripLabelAxesGroup: ThemeValue;
+  _stripsGroup: ThemeValue;
+  _title: ThemeValue;
+  _tracker: ThemeValue;
+  _trackerType: string;
+  _userOptions: ThemeValue;
+  eventType: string;
+  layoutManager: ThemeValue;
+  needToPopulateSeries: boolean;
+  series: ThemeValue[];
+  seriesFamilies: ThemeValue[];
 
-  _fontFields: [`legend.${FONT}`, `legend.title.${FONT}`, `legend.title.subtitle.${FONT}`, `commonSeriesSettings.label.${FONT}`],
+  _adjustSeriesLabels(moveLabelsFromCenter?): void;
+  _appendAdditionalSeriesGroups(): void;
+  _applyClipRects(panesBorderOptions?): void;
+  _applyExtraSettings(series, drawOptions?): void;
+  _executeAppendAfterSeries(append?): void;
+  _executeAppendBeforeSeries(append?): void;
+  _getArgFilter(series?): (value?) => ThemeValue;
+  _getValFilter(series?): (value?) => ThemeValue;
+  _applyPointMarkersAutoHiding(): void;
+  _change_TITLE(): void;
+  _checkPaneName(seriesTheme?): boolean;
+  _correctAxes(): void;
+  _createCrosshairCursor(): void;
+  _createScrollBar(): void;
+  _getExtraOptions(): ThemeValue;
+  _getLayoutTargets(): ThemeValue[];
+  _getLegendCallBack(series?): ThemeValue;
+  _getLegendTargets(): ThemeValue[];
+  _getValueAxis(paneName?, axisName?): ThemeValue;
+  _groupSeries(): void;
+  _isLegendInside(): boolean;
+  _isRotated(): boolean;
+  _layoutAxes(drawAxes?): void;
+  _populateBusinessRange(updatedAxis?, keepRange?): void;
+  _populateMarginOptions(): void;
+  _prepareToRender(drawOptions?): ThemeValue;
+  _processSeriesFamilies(): void;
+  _reinitAxes(): void;
+  _renderAxes(drawOptions?, panesBorderOptions?): ThemeValue;
+  _renderTrackers(isLegendInside?): void;
+  _resetAxesAnimation(isFirstDrawing?, isHorizontal?): void;
+  _resolveLabelOverlappingShift(): void;
+  _resolveLabelOverlappingStack(): void;
+  _seriesPopulatedHandlerCore(): void;
+  _shrinkAxes(sizeShortage?, panesCanvases?): void;
+  _specialProcessSeries(): void;
+  _updateLegendPosition(drawOptions?, legendHasInsidePosition?): void;
+  _updateSeriesDimensions(drawOptions?): void;
+  getAllSeries(): ThemeValue[];
+  getArgumentAxis(): ThemeValue;
+}
 
-  _rootClassPrefix: 'dxc',
-
-  _rootClass: 'dxc-chart',
-
-  _initialChanges: ['INIT'],
-
-  _themeDependentChanges: ['REFRESH_SERIES_REINIT'],
-
+export class BaseChart extends BaseWidget {
   _getThemeManagerOptions() {
-    const themeOptions = this.callBase.apply(this, arguments);
+    const themeOptions = super._getThemeManagerOptions();
 
     themeOptions.options = this.option();
     return themeOptions;
-  },
+  }
 
   _createThemeManager() {
     const chartOption = this.option();
@@ -332,7 +402,7 @@ export const BaseChart = BaseWidget.inherit({
 
     themeManager.setTheme(chartOption.theme, chartOption.rtlEnabled);
     return themeManager;
-  },
+  }
 
   _initCore() {
     this._canvasClipRect = this._renderer.clipRect();
@@ -358,15 +428,14 @@ export const BaseChart = BaseWidget.inherit({
       /// #ENDDEBUG
       event.preventDefault();
     });
-  },
+  }
 
   // Common functionality is overridden because Chart has its own layout logic.
   // Nevertheless common logic should be used.
-  _getLayoutItems: noop,
 
   _layoutManagerOptions() {
     return this._themeManager.getOptions('adaptiveLayout');
-  },
+  }
 
   _reinit() {
     _setCanvasValues(this._canvas);
@@ -378,9 +447,7 @@ export const BaseChart = BaseWidget.inherit({
       'CORRECT_AXIS',
       'FULL_RENDER',
     ]);
-  },
-
-  _correctAxes: noop,
+  }
 
   _createHtmlStructure() {
     const renderer = this._renderer;
@@ -433,13 +500,9 @@ export const BaseChart = BaseWidget.inherit({
     this._legendGroup = renderer.g().attr({ class: 'dxc-legend', 'clip-path': this._getCanvasClipRectID() }).linkOn(root, 'legend').linkAppend(root)
       .enableLinks();
     this._scrollBarGroup = renderer.g().attr({ class: 'dxc-scroll-bar' }).linkOn(root, 'scroll-bar');
-  },
+  }
 
-  _executeAppendBeforeSeries() {},
-
-  _executeAppendAfterSeries() {},
-
-  _disposeObjectsInArray(propName: string, fieldNames: string[]) {
+  _disposeObjectsInArray(propName: string, fieldNames?: string[]) {
     (this[propName] || []).forEach((item) => {
       if (fieldNames && item) {
         fieldNames.forEach((field) => {
@@ -450,7 +513,7 @@ export const BaseChart = BaseWidget.inherit({
       }
     });
     this[propName] = null;
-  },
+  }
 
   _disposeCore() {
     const disposeObject = (propName: string): void => {
@@ -472,7 +535,9 @@ export const BaseChart = BaseWidget.inherit({
     disposeObject('_tracker');
     disposeObject('_crosshair');
 
-    this.layoutManager = this._userOptions = this._canvas = this._groupsData = null;
+    Object.assign(this, {
+      layoutManager: null, _userOptions: null, _canvas: null, _groupsData: null,
+    });
 
     unlinkGroup('_stripsGroup');
     unlinkGroup('_gridGroup');
@@ -507,20 +572,21 @@ export const BaseChart = BaseWidget.inherit({
     disposeObject('_legendGroup');
     disposeObject('_scrollBarGroup');
     disposeObject('_scaleBreaksGroup');
-  },
+  }
 
   _getAnimationOptions() {
     return this._themeManager.getOptions('animation');
-  },
+  }
 
   _getDefaultSize() {
     return { width: 400, height: 400 };
-  },
+  }
 
   // TODO: Theme manager should stop knowing about user options then this method can be removed
+
   _getOption(name) {
     return this._themeManager.getOptions(name);
-  },
+  }
 
   _applySize(rect) {
     this._rect = rect.slice();
@@ -528,7 +594,7 @@ export const BaseChart = BaseWidget.inherit({
     if (!this._changes.has('FULL_RENDER')) {
       this._processRefreshData(RESIZE_REFRESH_ACTION);
     }
-  },
+  }
 
   // _resize: function () {
   //    if (this._updateLockCount) {// T244164
@@ -536,13 +602,11 @@ export const BaseChart = BaseWidget.inherit({
   //    } else {
   //        this._render(this.__renderOptions || { animate: false, isResize: true });
   //    }
-  // },
+  // }
 
   _resize() {
     this._doRender(this.__renderOptions || { animate: false, isResize: true });
-  },
-
-  _trackerType: 'ChartTracker',
+  }
 
   _createTracker() {
     this._tracker = new trackerModule[this._trackerType]({
@@ -552,11 +616,11 @@ export const BaseChart = BaseWidget.inherit({
       legend: this._legend,
       eventTrigger: this._eventTrigger,
     });
-  },
+  }
 
   _getTrackerSettings() {
     return extend({ chart: this }, this._getSelectionModes());
-  },
+  }
 
   _getSelectionModes() {
     const themeManager = this._themeManager;
@@ -565,7 +629,7 @@ export const BaseChart = BaseWidget.inherit({
       seriesSelectionMode: themeManager.getOptions('seriesSelectionMode'),
       pointSelectionMode: themeManager.getOptions('pointSelectionMode'),
     };
-  },
+  }
 
   _updateTracker(trackerCanvases) {
     this._tracker.update(this._getTrackerSettings());
@@ -575,7 +639,7 @@ export const BaseChart = BaseWidget.inherit({
       top: 0,
       bottom: this._canvas.height,
     }, trackerCanvases);
-  },
+  }
 
   _createCanvasFromRect(rect) {
     const currentCanvas = this._canvas;
@@ -587,7 +651,7 @@ export const BaseChart = BaseWidget.inherit({
       width: currentCanvas.width,
       height: currentCanvas.height,
     });
-  },
+  }
 
   _doRender(_options) {
     if (this._canvas.width === 0 && this._canvas.height === 0) return;
@@ -620,14 +684,12 @@ export const BaseChart = BaseWidget.inherit({
     this._renderElements(drawOptions);
 
     this._lastRenderingTime = Number(new Date()) - Number(startTime);
-  },
+  }
 
   _preserveOriginalCanvas() {
     this.__originalCanvas = this._canvas;
     this._canvas = extend({}, this._canvas); // NOTE: Instance of the original canvas must be preserved
-  },
-
-  _layoutAxes: noop,
+  }
 
   _renderElements(drawOptions) {
     const preparedOptions = this._prepareToRender(drawOptions);
@@ -682,7 +744,11 @@ export const BaseChart = BaseWidget.inherit({
         zoomMaxArg = argBusinessRange.maxVisible;
       }
 
-      this._scrollBar.init(argBusinessRange, !this._argumentAxes[0].getOptions().valueMarginsEnabled).setPosition(zoomMinArg, zoomMaxArg);
+      const argumentAxis = this._argumentAxes[0];
+
+      this._scrollBar
+        .init(argBusinessRange, !argumentAxis.getOptions().valueMarginsEnabled, argumentAxis.getWholeRangeBreaks())
+        .setPosition(zoomMinArg, zoomMaxArg);
     }
 
     this._updateTracker(trackerCanvases);
@@ -693,37 +759,25 @@ export const BaseChart = BaseWidget.inherit({
     this._renderGraphicObjects();
 
     this._renderer.unlock();
-  },
-
-  _updateLegendPosition: noop,
-
-  _createCrosshairCursor: noop,
+  }
 
   _appendSeriesGroups() {
     this._seriesGroup.linkAppend();
     this._labelsGroup.linkAppend();
     this._appendAdditionalSeriesGroups();
-  },
+  }
 
   _renderSeries(drawOptions, isRotated, isLegendInside) {
     this._calculateSeriesLayout(drawOptions, isRotated);
     this._renderSeriesElements(drawOptions, isLegendInside);
-  },
+  }
 
   _calculateSeriesLayout(drawOptions, isRotated) {
     drawOptions.hideLayoutLabels = this.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), isRotated)
             && !this._themeManager.getOptions('adaptiveLayout').keepLabels;
 
     this._updateSeriesDimensions(drawOptions);
-  },
-
-  _getArgFilter() {
-    return () => true;
-  },
-
-  _getValFilter() {
-    return () => true;
-  },
+  }
 
   _getPointsToAnimation(series) {
     const argViewPortFilter = this._getArgFilter();
@@ -734,7 +788,7 @@ export const BaseChart = BaseWidget.inherit({
       return s.getPoints().filter((p) => p.getOptions().visible && argViewPortFilter(p.argument)
                     && (valViewPortFilter(p.getMinValue(true)) || valViewPortFilter(p.getMaxValue(true)))).length;
     });
-  },
+  }
 
   _renderSeriesElements(drawOptions, isLegendInside) {
     const { series } = this;
@@ -766,7 +820,7 @@ export const BaseChart = BaseWidget.inherit({
     this._renderExtraElements();
     this._clearCanvas();
     this._seriesElementsDrawn = true;
-  },
+  }
 
   _changesApplied() {
     if (this._seriesElementsDrawn) {
@@ -774,18 +828,18 @@ export const BaseChart = BaseWidget.inherit({
       this._drawn();
       this._renderCompleteHandler();
     }
-  },
+  }
 
   _locateLabels(resolveLabelOverlapping) {
     this._resolveLabelOverlapping(resolveLabelOverlapping);
-  },
+  }
 
-  _renderExtraElements() {},
+  _renderExtraElements() {}
 
   _clearCanvas() {
     // T207665, T336349, T503616
     this._canvas = this.__originalCanvas;
-  },
+  }
 
   _resolveLabelOverlapping(resolveLabelOverlapping) {
     let func;
@@ -803,11 +857,11 @@ export const BaseChart = BaseWidget.inherit({
         break;
     }
     return isFunction(func) && func.call(this);
-  },
+  }
 
   _getVisibleSeries() {
     return grep(this.getAllSeries(), (series) => series.isVisible());
-  },
+  }
 
   _resolveLabelOverlappingHide() {
     const labels = [];
@@ -844,7 +898,7 @@ export const BaseChart = BaseWidget.inherit({
         }
       }
     }
-  },
+  }
 
   _cleanGroups() {
     this._stripsGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
@@ -856,11 +910,11 @@ export const BaseChart = BaseWidget.inherit({
     this._labelsGroup.linkRemove().clear();
     this._crosshairCursorGroup.linkRemove().clear();
     this._scaleBreaksGroup.linkRemove().clear();
-  },
+  }
 
   _allowLegendInsidePosition() {
     return false;
-  },
+  }
 
   _createLegend() {
     const legendSettings = getLegendSettings(this._legendDataField);
@@ -880,7 +934,7 @@ export const BaseChart = BaseWidget.inherit({
     this._updateLegend();
 
     this._layout.add(this._legend);
-  },
+  }
 
   _updateLegend() {
     const themeManager = this._themeManager;
@@ -891,7 +945,7 @@ export const BaseChart = BaseWidget.inherit({
     legendOptions._incidentOccurred = this._incidentOccurred; // TODO: Why is `_` used?
     this._legend.update(legendData, legendOptions, themeManager.theme('legend').title);
     this._change(['LAYOUT']);
-  },
+  }
 
   _prepareDrawOptions(drawOptions) {
     const animationOptions = this._getAnimationOptions();
@@ -912,7 +966,7 @@ export const BaseChart = BaseWidget.inherit({
       options.recreateCanvas = options.adjustAxes && options.drawLegend && options.drawTitle;
     }
     return options;
-  },
+  }
 
   _processRefreshData(newRefreshAction) {
     const currentRefreshActionPosition = ACTIONS_BY_PRIORITY.indexOf(this._currentRefreshData);
@@ -923,7 +977,7 @@ export const BaseChart = BaseWidget.inherit({
     }
 
     this._requestChange(['REFRESH']);
-  },
+  }
 
   _getLegendData() {
     return _map(this._getLegendTargets(), (item) => {
@@ -946,9 +1000,9 @@ export const BaseChart = BaseWidget.inherit({
 
       return legendData;
     });
-  },
+  }
 
-  _getLegendOptions(item) {
+  _getLegendOptions(item): ThemeValue {
     return {
       legendData: {
         text: item[this._legendItemTextField],
@@ -958,9 +1012,9 @@ export const BaseChart = BaseWidget.inherit({
       getLegendStyles: item.getLegendStyles(),
       visible: item.isVisible(),
     };
-  },
+  }
 
-  _disposeSeries(seriesIndex) {
+  _disposeSeries(seriesIndex?) {
     if (this.series) {
       if (_isDefined(seriesIndex)) {
         this.series[seriesIndex].dispose();
@@ -973,107 +1027,74 @@ export const BaseChart = BaseWidget.inherit({
     if (!this.series?.length) {
       this.series = [];
     }
-  },
+  }
 
   _disposeSeriesFamilies() {
     (this.seriesFamilies || []).forEach((family) => { family.dispose(); });
-    this.seriesFamilies = null;
+    Object.assign(this, { seriesFamilies: null });
     this._needHandleRenderComplete = true;
-  },
+  }
 
   _optionChanged(arg) {
     this._themeManager.resetOptions(arg.name);
-    this.callBase.apply(this, arguments);
-  },
+    super._optionChanged(arg);
+  }
 
-  _applyChanges(...params) {
+  _applyChanges(): void {
     this._themeManager.update(this._options.silent());
-    this.callBase(...params);
-  },
-
-  _optionChangesMap: {
-    animation: 'ANIMATION',
-    dataSource: 'DATA_SOURCE',
-    palette: 'PALETTE',
-    paletteExtensionMode: 'PALETTE',
-
-    legend: 'FORCE_DATA_INIT',
-    seriesTemplate: 'FORCE_DATA_INIT',
-
-    export: 'FORCE_RENDER',
-
-    valueAxis: 'AXES_AND_PANES',
-    argumentAxis: 'AXES_AND_PANES',
-    commonAxisSettings: 'AXES_AND_PANES',
-    panes: 'AXES_AND_PANES',
-    commonPaneSettings: 'AXES_AND_PANES',
-    defaultPane: 'AXES_AND_PANES',
-    containerBackgroundColor: 'AXES_AND_PANES',
-
-    rotated: 'ROTATED',
-
-    autoHidePointMarkers: 'REFRESH_SERIES_REINIT',
-    customizePoint: 'REFRESH_SERIES_REINIT',
-    customizeLabel: 'REFRESH_SERIES_REINIT',
-
-    scrollBar: 'SCROLL_BAR',
-  },
-
-  _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'USE_SPIDER_WEB', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
-
-  _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES', 'FORCE_FIRST_DRAWING', 'FORCE_DRAWING',
-    'FORCE_RENDER', 'VISUAL_RANGE', 'SCROLL_BAR', 'REINIT', 'REFRESH', 'FULL_RENDER'],
+    super._applyChanges();
+  }
 
   _change_ANIMATION() {
     this._renderer.updateAnimationOptions(this._getAnimationOptions());
-  },
+  }
 
   _change_DATA_SOURCE() {
     this._needHandleRenderComplete = true;
     this._updateDataSource();
-  },
+  }
 
   _change_PALETTE() {
     this._themeManager.updatePalette();
     this._refreshSeries('DATA_INIT');
-  },
+  }
 
   _change_REFRESH_SERIES_DATA_INIT() {
     this._refreshSeries('DATA_INIT');
-  },
+  }
 
   _change_DATA_INIT() {
     if ((!this.series || this.needToPopulateSeries) && !this._changes.has('FORCE_DATA_INIT')) {
       this._dataInit();
     }
-  },
+  }
 
   _change_FORCE_DATA_INIT() {
     this._dataInit();
-  },
+  }
 
   _change_REFRESH_SERIES_FAMILIES() {
     this._processSeriesFamilies();
     this._populateBusinessRange();
     this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
-  },
+  }
 
   _change_FORCE_RENDER() {
     this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
-  },
+  }
 
   _change_AXES_AND_PANES() {
     this._refreshSeries('INIT');
-  },
+  }
 
   _change_ROTATED() {
     this._createScrollBar();
     this._refreshSeries('INIT');
-  },
+  }
 
   _change_REFRESH_SERIES_REINIT() {
     this._refreshSeries('INIT');
-  },
+  }
 
   _change_REFRESH_AXES() {
     _setCanvasValues(this._canvas);
@@ -1083,40 +1104,38 @@ export const BaseChart = BaseWidget.inherit({
       'CORRECT_AXIS',
       'FULL_RENDER',
     ]);
-  },
+  }
 
   _change_SCROLL_BAR() {
     this._createScrollBar();
     this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
-  },
+  }
 
   _change_REINIT() {
     this._processRefreshData(REINIT_REFRESH_ACTION);
-  },
+  }
 
   _change_FORCE_DRAWING() {
     this._resetComponentsAnimation();
-  },
+  }
 
   _change_FORCE_FIRST_DRAWING() {
     this._resetComponentsAnimation(true);
-  },
+  }
 
-  _resetComponentsAnimation(isFirstDrawing) {
+  _resetComponentsAnimation(isFirstDrawing?) {
     this.series.forEach((s) => { s.resetApplyingAnimation(isFirstDrawing); });
     this._resetAxesAnimation(isFirstDrawing);
-  },
-
-  _resetAxesAnimation: noop,
+  }
 
   _refreshSeries(actionName) {
     this.needToPopulateSeries = true;
     this._requestChange([actionName]);
-  },
+  }
 
   _change_CORRECT_AXIS() {
     this._correctAxes();
-  },
+  }
 
   _doRefresh() {
     const methodName = this._currentRefreshData;
@@ -1125,7 +1144,7 @@ export const BaseChart = BaseWidget.inherit({
       this._renderer.stopAllAnimations(true);
       this[methodName]();
     }
-  },
+  }
 
   _updateCanvasClipRect(canvas) {
     const width = Math.max(canvas.width - canvas.left - canvas.right, 0);
@@ -1137,11 +1156,11 @@ export const BaseChart = BaseWidget.inherit({
     this._backgroundRect.attr({
       x: canvas.left, y: canvas.top, width, height,
     });
-  },
+  }
 
   _getCanvasClipRectID() {
     return this._canvasClipRect.id;
-  },
+  }
 
   _dataSourceChangedHandler() {
     if (this._changes.has('INIT')) {
@@ -1149,15 +1168,15 @@ export const BaseChart = BaseWidget.inherit({
     } else {
       this._requestChange(['FORCE_DATA_INIT']);
     }
-  },
+  }
 
   _dataInit() {
     this._dataSpecificInit(true);
-  },
+  }
 
   _processSingleSeries(singleSeries) {
     singleSeries.createPoints(false);
-  },
+  }
 
   _handleSeriesDataUpdated() {
     if (this._getVisibleSeries().some((s) => s.useAggregation())) {
@@ -1165,7 +1184,7 @@ export const BaseChart = BaseWidget.inherit({
     }
 
     this.series.forEach((s) => this._processSingleSeries(s), this);
-  },
+  }
 
   _dataSpecificInit(needRedraw) {
     if (!this.series || this.needToPopulateSeries) {
@@ -1180,11 +1199,11 @@ export const BaseChart = BaseWidget.inherit({
       this._requestChange(['FULL_RENDER']);
     }
     // needRedraw && that._forceRender();
-  },
+  }
 
   _forceRender() {
     this._doRender({ force: true });
-  },
+  }
 
   _repopulateSeries() {
     const themeManager = this._themeManager;
@@ -1205,7 +1224,7 @@ export const BaseChart = BaseWidget.inherit({
     });
 
     this._handleSeriesDataUpdated();
-  },
+  }
 
   _renderCompleteHandler() {
     let allSeriesInited = true;
@@ -1218,13 +1237,13 @@ export const BaseChart = BaseWidget.inherit({
         this._eventTrigger('done', { target: this });
       }
     }
-  },
+  }
 
   _dataIsReady() {
     // In order to support scenario when chart is created without "dataSource" and it is considered
     // as data is being loaded the check for state of "dataSource" option is added
     return _isDefined(this.option('dataSource')) && this._dataIsLoaded();
-  },
+  }
 
   _populateSeriesOptions(data) {
     const themeManager = this._themeManager;
@@ -1264,12 +1283,12 @@ export const BaseChart = BaseWidget.inherit({
     }
 
     return seriesThemes;
-  },
+  }
 
-  _populateSeries(data) {
-    const seriesBasis = [];
+  _populateSeries(data?) {
+    const seriesBasis: ThemeValue[] = [];
     const incidentOccurred = this._incidentOccurred;
-    const seriesThemes = this._populateSeriesOptions(data);
+    const seriesThemes: ThemeValue[] = this._populateSeriesOptions(data);
     let particularSeries;
     let disposeSeriesFamilies = false;
 
@@ -1338,7 +1357,7 @@ export const BaseChart = BaseWidget.inherit({
     });
 
     return this.series;
-  },
+  }
 
   getStackedPoints(point) {
     const stackName = point.series.getStackName();
@@ -1348,9 +1367,141 @@ export const BaseChart = BaseWidget.inherit({
       }
       return stackPoints;
     }, []);
-  },
+  }
 
   // API
+
+  hideTooltip() {
+    this._tracker._hideTooltip();
+  }
+
+  clearHover() {
+    this._tracker.clearHover();
+  }
+
+  render(renderOptions?): this {
+    this.__renderOptions = renderOptions;
+    this.__forceRender = renderOptions && renderOptions.force;
+    super.render();
+    Object.assign(this, { __renderOptions: null, __forceRender: null });
+    return this;
+  }
+
+  refresh() {
+    this._disposeSeries();
+    this._disposeSeriesFamilies();
+    this._requestChange(['CONTAINER_SIZE', 'REFRESH_SERIES_REINIT']);
+  }
+
+  _getMinSize() {
+    const adaptiveLayout = this._layoutManagerOptions();
+    return [adaptiveLayout.width, adaptiveLayout.height];
+  }
+
+  _change_REFRESH() {
+    if (!this._changes.has('INIT')) {
+      this._doRefresh();
+    } else {
+      this._currentRefreshData = null;
+    }
+  }
+
+  _change_FULL_RENDER() {
+    this._forceRender();
+  }
+
+  _change_INIT() {
+    this._reinit();
+  }
+
+  _stopCurrentHandling() {
+    if (this._disposed) {
+      return;
+    }
+    this._tracker.stopCurrentHandling();
+  }
+}
+
+setupWidgetPrototype(BaseChart, {
+  _executeAppendBeforeSeries: noop,
+
+  _executeAppendAfterSeries: noop,
+
+  _getArgFilter: acceptAllFilter,
+
+  _getValFilter: acceptAllFilter,
+
+  _eventsMap: {
+    onSeriesClick: { name: 'seriesClick' },
+    onPointClick: { name: 'pointClick' },
+    onArgumentAxisClick: { name: 'argumentAxisClick' },
+    onLegendClick: { name: 'legendClick' },
+    onSeriesSelectionChanged: { name: 'seriesSelectionChanged' },
+    onPointSelectionChanged: { name: 'pointSelectionChanged' },
+    onSeriesHoverChanged: { name: 'seriesHoverChanged' },
+    onPointHoverChanged: { name: 'pointHoverChanged' },
+    onDone: { name: 'done', actionSettings: { excludeValidators: ['disabled'] } },
+    onZoomStart: { name: 'zoomStart' },
+    onZoomEnd: { name: 'zoomEnd' },
+  },
+
+  _fontFields: [`legend.${FONT}`, `legend.title.${FONT}`, `legend.title.subtitle.${FONT}`, `commonSeriesSettings.label.${FONT}`],
+
+  _rootClassPrefix: 'dxc',
+
+  _rootClass: 'dxc-chart',
+
+  _initialChanges: ['INIT'],
+
+  _themeDependentChanges: ['REFRESH_SERIES_REINIT'],
+
+  _getLayoutItems: noop,
+
+  _correctAxes: noop,
+
+  _trackerType: 'ChartTracker',
+
+  _layoutAxes: noop,
+
+  _updateLegendPosition: noop,
+
+  _createCrosshairCursor: noop,
+
+  _optionChangesMap: {
+    animation: 'ANIMATION',
+    dataSource: 'DATA_SOURCE',
+    palette: 'PALETTE',
+    paletteExtensionMode: 'PALETTE',
+
+    legend: 'FORCE_DATA_INIT',
+    seriesTemplate: 'FORCE_DATA_INIT',
+
+    export: 'FORCE_RENDER',
+
+    valueAxis: 'AXES_AND_PANES',
+    argumentAxis: 'AXES_AND_PANES',
+    commonAxisSettings: 'AXES_AND_PANES',
+    panes: 'AXES_AND_PANES',
+    commonPaneSettings: 'AXES_AND_PANES',
+    defaultPane: 'AXES_AND_PANES',
+    containerBackgroundColor: 'AXES_AND_PANES',
+
+    rotated: 'ROTATED',
+
+    autoHidePointMarkers: 'REFRESH_SERIES_REINIT',
+    customizePoint: 'REFRESH_SERIES_REINIT',
+    customizeLabel: 'REFRESH_SERIES_REINIT',
+
+    scrollBar: 'SCROLL_BAR',
+  },
+
+  _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'USE_SPIDER_WEB', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
+
+  _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES', 'FORCE_FIRST_DRAWING', 'FORCE_DRAWING',
+    'FORCE_RENDER', 'VISUAL_RANGE', 'SCROLL_BAR', 'REINIT', 'REFRESH', 'FULL_RENDER'],
+
+  _resetAxesAnimation: noop,
+
   getAllSeries: function getAllSeries() {
     return (this.series || []).slice();
   },
@@ -1367,58 +1518,7 @@ export const BaseChart = BaseWidget.inherit({
   clearSelection: function clearSelection() {
     this._tracker.clearSelection();
   },
-
-  hideTooltip() {
-    this._tracker._hideTooltip();
-  },
-
-  clearHover() {
-    this._tracker.clearHover();
-  },
-
-  render(renderOptions) {
-    this.__renderOptions = renderOptions;
-    this.__forceRender = renderOptions && renderOptions.force;
-    this.callBase.apply(this, arguments);
-    this.__renderOptions = this.__forceRender = null;
-    return this;
-  },
-
-  refresh() {
-    this._disposeSeries();
-    this._disposeSeriesFamilies();
-    this._requestChange(['CONTAINER_SIZE', 'REFRESH_SERIES_REINIT']);
-  },
-
-  _getMinSize() {
-    const adaptiveLayout = this._layoutManagerOptions();
-    return [adaptiveLayout.width, adaptiveLayout.height];
-  },
-
-  _change_REFRESH() {
-    if (!this._changes.has('INIT')) {
-      this._doRefresh();
-    } else {
-      this._currentRefreshData = null;
-    }
-  },
-
-  _change_FULL_RENDER() {
-    this._forceRender();
-  },
-
-  _change_INIT() {
-    this._reinit();
-  },
-
-  _stopCurrentHandling() {
-    if (this._disposed) {
-      return;
-    }
-    this._tracker.stopCurrentHandling();
-  },
 });
-
 REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS.forEach((name) => {
   BaseChart.prototype._optionChangesMap[name] = 'REFRESH_SERIES_DATA_INIT';
 });
@@ -1441,6 +1541,6 @@ BaseChart.addPlugin(loadingIndicatorPlugin);
 // eslint-disable-next-line
 const { _change_TITLE } = BaseChart.prototype;
 BaseChart.prototype._change_TITLE = function () {
-  _change_TITLE.apply(this, arguments);
+  _change_TITLE.call(this);
   this._change(['FORCE_RENDER']);
 };

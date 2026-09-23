@@ -383,17 +383,17 @@ QUnit.module('Sync with FilterValue', {
 
         this.filterSyncController.syncHeaderFilter = spy;
 
-        this.dataController.optionChanged({ name: 'columns', fullName: 'columns[0].filterType', previousValue: 'include', value: undefined });
+        this.filterSyncController.optionChanged({ name: 'columns', fullName: 'columns[0].filterType', previousValue: 'include', value: undefined });
         // assert
         assert.deepEqual(spy.callCount, 0);
 
         // act
-        this.dataController.optionChanged({ name: 'columns', fullName: 'columns[0].filterType', previousValue: undefined, value: 'include' });
+        this.filterSyncController.optionChanged({ name: 'columns', fullName: 'columns[0].filterType', previousValue: undefined, value: 'include' });
         // assert
         assert.deepEqual(spy.callCount, 0);
 
         // act
-        this.dataController.optionChanged({ name: 'columns', fullName: 'columns[0].filterType', previousValue: 'include', value: 'exclude' });
+        this.filterSyncController.optionChanged({ name: 'columns', fullName: 'columns[0].filterType', previousValue: 'include', value: 'exclude' });
         // assert
         assert.deepEqual(spy.callCount, 1);
     });

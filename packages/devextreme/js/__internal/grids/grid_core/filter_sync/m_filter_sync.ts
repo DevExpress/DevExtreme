@@ -15,6 +15,8 @@ import type {
 } from '@ts/grids/grid_core/filter/types';
 import modules from '@ts/grids/grid_core/m_modules';
 
+import type { OptionChanged } from '../m_types';
+import { FILTER_TYPES_EXCLUDE } from './const';
 import {
   checkForErrors,
   getColumnIdentifier,
@@ -24,6 +26,7 @@ import {
   getFilterValueWithFilterRow,
   getFilterValueWithHeaderFilter,
   getHeaderFilterFromCondition,
+  parseColumnPropertyName,
 } from './utils';
 
 export class FilterSyncController extends modules.Controller {
@@ -128,6 +131,30 @@ export class FilterSyncController extends modules.Controller {
     this.dataController.pageIndex(pageIndex);
   }
 
+  private syncColumnOptionCore(
+    column: Column,
+    propertyName: string | null,
+    value: unknown,
+    previousValue: unknown,
+  ): void {
+    const hasExcludeFilterType = value === FILTER_TYPES_EXCLUDE
+      || previousValue === FILTER_TYPES_EXCLUDE;
+    const isExcludeFilterTypeToggled = propertyName === 'filterType' && hasExcludeFilterType;
+    const needSyncHeaderFilter = isExcludeFilterTypeToggled || propertyName === 'filterValues';
+    const needSyncFilterRow = propertyName === 'filterValue'
+      || propertyName === 'selectedFilterOperation';
+
+    if (needSyncHeaderFilter) {
+      this.syncHeaderFilter(column);
+
+      return;
+    }
+
+    if (needSyncFilterRow) {
+      this.syncFilterRow(column);
+    }
+  }
+
   public getFilterValueFromColumns(
     columns: ColumnUserState[] | undefined,
   ): FilterValue {
@@ -152,6 +179,18 @@ export class FilterSyncController extends modules.Controller {
     return getNormalizedFilter(filterValue) as FilterValue;
   }
 
+  public syncColumnOption(fullName: string, value: unknown, previousValue: unknown): void {
+    const column: Column = this.columnsController.getColumnByPath(fullName);
+
+    if (!column || !this.filterController.isFilterSyncActive() || this.isSyncingColumnOptions()) {
+      return;
+    }
+
+    this.filterController.suspendColumnSources(() => {
+      this.syncColumnOptionCore(column, parseColumnPropertyName(fullName), value, previousValue);
+    });
+  }
+
   public syncFilterRow(column: Column): void {
     const filterValue = this.option('filterValue');
     const syncedFilterValue = getFilterValueWithFilterRow(filterValue, column);
@@ -164,5 +203,16 @@ export class FilterSyncController extends modules.Controller {
     const syncedFilterValue = getFilterValueWithHeaderFilter(filterValue, column);
 
     this.option('filterValue', syncedFilterValue);
+  }
+
+  public optionChanged(args: OptionChanged): void {
+    switch (args.name) {
+      case 'columns':
+        this.syncColumnOption(args.fullName, args.value, args.previousValue);
+        super.optionChanged(args);
+        break;
+      default:
+        super.optionChanged(args);
+    }
   }
 }

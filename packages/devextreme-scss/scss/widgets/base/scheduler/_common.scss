@@ -2,7 +2,6 @@
 @use "../../base/mixins" as *;
 
 $scheduler-appointment-collector-margin: 3px !default;
-$scheduler-appointment-collector-height: 22px !default;
 
 .dx-scheduler {
   .dx-empty-message {
@@ -19,9 +18,7 @@ $scheduler-appointment-collector-height: 22px !default;
 .dx-scheduler-appointment-collector {
   position: absolute;
   display: block;
-  height: $scheduler-appointment-collector-height;
   cursor: pointer;
-  margin: $scheduler-appointment-collector-margin;
 
   .dx-scheduler-appointment-collector-content,
   .dx-button-content {
@@ -44,10 +41,6 @@ $scheduler-appointment-collector-height: 22px !default;
     padding: 0;
     max-width: none;
   }
-}
-
-.dx-scheduler-adaptive .dx-scheduler-appointment-collector {
-  margin: 0 3px;
 }
 
 .dx-scheduler-work-space-mouse-selection {

@@ -56,14 +56,6 @@ export class DxoDataGridDataGridHeaderFilterComponent extends NestedOption imple
     }
 
     @Input()
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
-    }
-
-    @Input()
     get texts(): HeaderFilterTexts {
         return this._getOption('texts');
     }

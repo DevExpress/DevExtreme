@@ -13,14 +13,11 @@ $scheduler-workspace-accent-color: null !default;
 $scheduler-first-month-cell-background-color: null !default;
 $scheduler-panel-text-color: null !default;
 $scheduler-left-column-width: null !default;
-$scheduler-workspace-active-cell-color: null !default;
-$scheduler-workspace-hovered-cell-color: null !default;
 $scheduler-workspace-focused-cell-color: null !default;
 $scheduler-droppable-cell-background-color: null !default;
 $scheduler-appointment-text-color: null !default;
 $scheduler-fill-focused-appointment: null !default;
 $scheduler-is-shadow-color-for-focused-state: null !default;
-$scheduler-dd-appointment-hover-text-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-tooltip-list-focused-bg: null !default;
 $scheduler-timeline-cell-height: null !default;
@@ -30,8 +27,6 @@ $agenda-appointment-hover-bg: null !default;
 $agenda-appointment-active-bg: null !default;
 $agenda-appointment-text-color: null !default;
 $agenda-appointment-title-font-size: null !default;
-
-$scheduler-header-panel-table-cell-height: null !default;
 
 $scheduler-appointment-popup-icon-margin-top: null !default;
 $scheduler-appointment-popup-repeat-end-item-height: null !default;
@@ -53,7 +48,6 @@ $agenda-appointment-recurrence-icon-color: null !default;
 );
 
 $scheduler-appointment-min-size: 4px !default;
-$scheduler-appointment-content-padding: 5px 7px !default;
 $scheduler-appointment-reduced-content-padding: 40px !default;
 
 $scheduler-hovered-appointment-top-shadow-size: 5px !default;
@@ -135,8 +129,6 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
   $scheduler-current-time-cell-color: $scheduler-current-time-cell-color,
   $scheduler-time-indicator-color: $scheduler-time-indicator-color,
 
-  $scheduler-workspace-active-cell-color: $scheduler-workspace-active-cell-color,
-  $scheduler-workspace-hovered-cell-color: $scheduler-workspace-hovered-cell-color,
   $scheduler-workspace-focused-cell-color: $scheduler-workspace-focused-cell-color,
   $scheduler-focused-cell-shadow: $scheduler-focused-cell-shadow,
   $scheduler-droppable-cell-background-color: $scheduler-droppable-cell-background-color,
@@ -429,7 +421,6 @@ $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1p
   }
 
   .dx-scheduler-appointment-content {
-    padding: $scheduler-appointment-content-padding;
     cursor: pointer;
     height: 100%;
 

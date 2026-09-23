@@ -140,7 +140,6 @@ const DxHeaderFilterConfig = {
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
-    "update:searchTimeout": null,
     "update:showRelevantValues": null,
     "update:texts": null,
     "update:width": null,
@@ -149,7 +148,6 @@ const DxHeaderFilterConfig = {
     allowSelectAll: Boolean,
     height: Number,
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
-    searchTimeout: Number,
     showRelevantValues: Boolean,
     texts: Object as PropType<Record<string, any>>,
     width: Number

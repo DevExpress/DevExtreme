@@ -5195,11 +5195,6 @@ declare module DevExpress.common.grids {
      */
     search?: ColumnHeaderFilterSearchConfig;
     /**
-     * [descr:ColumnHeaderFilter.searchMode]
-     * @deprecated [depNote:ColumnHeaderFilter.searchMode]
-     */
-    searchMode?: SearchMode;
-    /**
      * [descr:ColumnHeaderFilter.width]
      */
     width?: number | string | undefined;
@@ -6367,11 +6362,6 @@ declare module DevExpress.common.grids {
      */
     search?: HeaderFilterSearchConfig;
     /**
-     * [descr:HeaderFilter.searchTimeout]
-     * @deprecated [depNote:HeaderFilter.searchTimeout]
-     */
-    searchTimeout?: number;
-    /**
      * [descr:HeaderFilter.texts]
      */
     texts?: HeaderFilterTexts;
@@ -6719,11 +6709,6 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.rowDragging.dropFeedbackMode]
      */
     dropFeedbackMode?: DragHighlight;
-    /**
-     * [descr:GridBaseOptions.rowDragging.filter]
-     * @deprecated [depNote:GridBaseOptions.rowDragging.filter]
-     */
-    filter?: string;
     /**
      * [descr:GridBaseOptions.rowDragging.group]
      */
@@ -21142,11 +21127,6 @@ declare module DevExpress.ui {
      */
     search?: DevExpress.common.grids.HeaderFilterSearchConfig;
     /**
-     * [descr:dxGanttHeaderFilter.searchTimeout]
-     * @deprecated [depNote:dxGanttHeaderFilter.searchTimeout]
-     */
-    searchTimeout?: number;
-    /**
      * [descr:dxGanttHeaderFilter.texts]
      */
     texts?: dxGanttHeaderFilterTexts;
@@ -24932,11 +24912,6 @@ declare module DevExpress.ui {
        */
       search?: DevExpress.common.grids.HeaderFilterSearchConfig;
       /**
-       * [descr:dxPivotGridFieldChooserOptions.headerFilter.searchTimeout]
-       * @deprecated [depNote:dxPivotGridFieldChooserOptions.headerFilter.searchTimeout]
-       */
-      searchTimeout?: number;
-      /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.showRelevantValues]
        */
       showRelevantValues?: boolean;
@@ -25187,11 +25162,6 @@ declare module DevExpress.ui {
        * [descr:dxPivotGridOptions.headerFilter.search]
        */
       search?: DevExpress.common.grids.HeaderFilterSearchConfig;
-      /**
-       * [descr:dxPivotGridOptions.headerFilter.searchTimeout]
-       * @deprecated [depNote:dxPivotGridOptions.headerFilter.searchTimeout]
-       */
-      searchTimeout?: number;
       /**
        * [descr:dxPivotGridOptions.headerFilter.showRelevantValues]
        */

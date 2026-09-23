@@ -896,7 +896,6 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
   height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig;
-  searchMode?: SearchMode;
   width?: number | string | undefined;
 }>
 const _componentColumnHeaderFilter = (props: IColumnHeaderFilterProps) => {
@@ -1074,7 +1073,6 @@ type IDataGridHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   height?: number | string;
   search?: HeaderFilterSearchConfig;
-  searchTimeout?: number;
   texts?: HeaderFilterTexts;
   visible?: boolean;
   width?: number | string;
@@ -2256,9 +2254,7 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   groupInterval?: Array<number | string> | HeaderFilterGroupInterval | number | undefined;
   height?: number | string | undefined;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
-  searchMode?: SearchMode;
   width?: number | string | undefined;
-  searchTimeout?: number;
   texts?: HeaderFilterTexts;
   visible?: boolean;
 }>
@@ -3085,7 +3081,6 @@ type IRowDraggingProps = React.PropsWithChildren<{
   dragDirection?: DragDirection;
   dragTemplate?: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template | undefined;
   dropFeedbackMode?: DragHighlight;
-  filter?: string;
   group?: string | undefined;
   handle?: string;
   onAdd?: ((e: RowDraggingAddEvent) => void);

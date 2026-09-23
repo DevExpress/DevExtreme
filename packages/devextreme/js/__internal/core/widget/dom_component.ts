@@ -53,7 +53,7 @@ class DOMComponent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _customClass: any;
 
-  private _$element!: dxElementWrapper;
+  protected _$element!: dxElementWrapper;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _windowResizeCallBack: any;
