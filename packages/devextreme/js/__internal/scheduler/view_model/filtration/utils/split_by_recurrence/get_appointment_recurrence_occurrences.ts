@@ -6,7 +6,6 @@ import type { DateInformation } from './get_date_information';
 import {
   getDateInformation,
   getDateOffsetMs,
-  isCoveredByDaylightPlan,
   resolveFirstPass,
 } from './get_date_information';
 
@@ -19,8 +18,6 @@ interface Options {
 
 // NOTE: When DST+1, then 2 AM equal 3 AM and interval [2 AM, 3 AM) is unreachable
 // Recurrence is different because each occurrence has to have the same time in any timezone shift
-const noShift = (): number[] => [0, 0];
-
 const getUnreachableShiftRecurrence = (
   startDateInfo: DateInformation,
   endDateInfo: DateInformation,
@@ -59,7 +56,6 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
     firstDayOfWeek,
     interval,
     timeZone,
-    daylightPlan,
   }: Options,
 ): (T & UTCDates)[] => {
   const {
