@@ -323,7 +323,7 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  private _setRequireResize(): void {
+  private setRequireResize(): void {
     if (!this.component._updateLockCount || !this._updateLockCount) {
       return;
     }
@@ -334,7 +334,7 @@ export class ColumnsController extends modules.Controller {
 
   private _updateRequireResize(args) {
     if (args.fullName.replace(COLUMN_OPTION_REGEXP, '') === 'width') {
-      this._setRequireResize();
+      this.setRequireResize();
     }
   }
 
@@ -1509,7 +1509,7 @@ export class ColumnsController extends modules.Controller {
       that.component.beginUpdate();
       try {
         applyOptions();
-        that._setRequireResize();
+        that.setRequireResize();
       } finally {
         that.component.endUpdate();
       }
@@ -1517,7 +1517,7 @@ export class ColumnsController extends modules.Controller {
       applyOptions();
 
       if (isWidthChanging) {
-        that._setRequireResize();
+        that.setRequireResize();
       }
     }
 
