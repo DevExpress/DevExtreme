@@ -34,6 +34,11 @@ export interface Coordinates {
   y: number;
 }
 
+export interface SelectionRange {
+  selectionStart: number;
+  selectionEnd: number;
+}
+
 // todo: move to upper .d.ts
 type OptionsMethod<TOptions> = (() => TOptions)
   & ((options: TOptions) => void)

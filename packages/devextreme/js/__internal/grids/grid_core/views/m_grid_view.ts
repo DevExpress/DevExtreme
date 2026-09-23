@@ -28,8 +28,10 @@ import type { DataController } from '../data_controller/data_controller';
 import type { DataChange } from '../data_controller/types';
 import type { DataSourceController } from '../data_source/data_source_controller';
 import modules from '../m_modules';
-import gridCoreUtils, { type SelectionRange } from '../m_utils';
+import type { SelectionRange } from '../m_types';
+import gridCoreUtils from '../m_utils';
 import type { RowsView } from './m_rows_view';
+import type { ColumnWidth } from './types';
 
 const BORDERS_CLASS = 'borders';
 const TABLE_FIXED_CLASS = 'table-fixed';
@@ -38,8 +40,6 @@ const GRIDBASE_CONTAINER_CLASS = 'dx-gridbase-container';
 const GROUP_ROW_SELECTOR = 'tr.dx-group-row';
 
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
-
-type ColumnWidth = number | string | undefined;
 
 const VIEW_NAMES = [
   'columnsSeparatorView',
@@ -129,7 +129,7 @@ export class ResizingController extends modules.ViewController {
 
   public resizeCompleted!: Callback;
 
-  private _isMaxWidthSet = false;
+  private isMaxWidthSet = false;
 
   protected callbackNames() {
     return ['resizeCompleted'];
@@ -350,16 +350,16 @@ export class ResizingController extends modules.ViewController {
   }
 
   private _setMaxWidth(value: number): void {
-    this._isMaxWidthSet = true;
+    this.isMaxWidthSet = true;
     this.component.$element().css('maxWidth', value);
   }
 
   private _clearMaxWidth(): void {
-    if (!this._isMaxWidthSet) {
+    if (!this.isMaxWidthSet) {
       return;
     }
 
-    this._isMaxWidthSet = false;
+    this.isMaxWidthSet = false;
 
     const element = this.component.$element().get(0) as HTMLElement | undefined;
 
