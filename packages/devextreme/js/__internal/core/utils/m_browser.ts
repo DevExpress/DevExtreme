@@ -1,42 +1,43 @@
+import type { BrowserInfo } from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
 import { getNavigator } from '@js/core/utils/window';
+
+export type BrowserName = Exclude<keyof BrowserInfo, 'version'>;
+
+export type Browser = BrowserInfo & {
+  _fromUA: (userAgent: string) => BrowserInfo;
+};
 
 const navigator = getNavigator();
 
 const webkitRegExp = /(webkit)[ /]([\w.]+)/;
 const mozillaRegExp = /(mozilla)(?:.*? rv:([\w.]+))/;
 
-const browserFromUA = (ua) => {
-  ua = ua.toLowerCase();
+const browserFromUA = (userAgent: string): BrowserInfo => {
+  const ua = userAgent.toLowerCase();
 
-  const result: any = {};
+  const result: BrowserInfo = {};
   const matches = webkitRegExp.exec(ua)
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            || ua.indexOf('compatible') < 0 && mozillaRegExp.exec(ua)
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            || [];
-  let browserName = matches[1];
-  let browserVersion: any = matches[2];
+    ?? (!ua.includes('compatible') ? mozillaRegExp.exec(ua) : null)
+    ?? [];
+  let browserName = matches[1] as BrowserName | undefined;
+  let browserVersion = matches[2] as string | undefined;
 
   if (browserName === 'webkit') {
     result.webkit = true;
 
-    if (ua.indexOf('chrome') >= 0 || ua.indexOf('crios') >= 0) {
+    if (ua.includes('chrome') || ua.includes('crios')) {
       browserName = 'chrome';
-      browserVersion = /(?:chrome|crios)\/(\d+\.\d+)/.exec(ua);
-      browserVersion = browserVersion && browserVersion[1];
-    } else if (ua.indexOf('fxios') >= 0) {
+      browserVersion = /(?:chrome|crios)\/(\d+\.\d+)/.exec(ua)?.[1];
+    } else if (ua.includes('fxios')) {
       browserName = 'mozilla';
-      browserVersion = /fxios\/(\d+\.\d+)/.exec(ua);
-      browserVersion = browserVersion && browserVersion[1];
-    } else if (ua.indexOf('safari') >= 0 && /version|phantomjs/.test(ua)) {
+      browserVersion = /fxios\/(\d+\.\d+)/.exec(ua)?.[1];
+    } else if (ua.includes('safari') && /version|phantomjs/.test(ua)) {
       browserName = 'safari';
-      browserVersion = /(?:version|phantomjs)\/([0-9.]+)/.exec(ua);
-      browserVersion = browserVersion && browserVersion[1];
+      browserVersion = /(?:version|phantomjs)\/([0-9.]+)/.exec(ua)?.[1];
     } else {
       browserName = 'unknown';
-      browserVersion = /applewebkit\/([0-9.]+)/.exec(ua);
-      browserVersion = browserVersion && browserVersion[1];
+      browserVersion = /applewebkit\/([0-9.]+)/.exec(ua)?.[1];
     }
   }
 
@@ -47,5 +48,7 @@ const browserFromUA = (ua) => {
 
   return result;
 };
-const browser = extend({ _fromUA: browserFromUA }, browserFromUA(navigator.userAgent));
+
+const browser: Browser = extend({ _fromUA: browserFromUA }, browserFromUA(navigator.userAgent));
+
 export { browser };
