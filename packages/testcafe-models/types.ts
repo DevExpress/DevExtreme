@@ -6,6 +6,7 @@ export type WidgetName =
   'dxAccordion'
   | 'dxActionSheet'
   | 'dxAutocomplete'
+  | 'dxBarGauge'
   | 'dxBullet'
   | 'dxButton'
   | 'dxBarGauge'

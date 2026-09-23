@@ -2323,6 +2323,7 @@
   "--dx-validation-summary-margin-block-start",
   "--dx-viz-bg",
   "--dx-viz-bg-active",
+  "--dx-viz-bg-higher",
   "--dx-viz-bg-hovered",
   "--dx-viz-blue",
   "--dx-viz-border",

@@ -62,7 +62,7 @@ if (getThemeName() === 'fluent-next') {
   });
 
   const inBothScopes = async (
-    widget: 'dxSparkline' | 'dxBullet' | 'dxChart' | 'dxTreeMap' | 'dxSankey',
+    widget: 'dxSparkline' | 'dxBullet' | 'dxChart' | 'dxTreeMap' | 'dxBarGauge' | 'dxSankey',
     options: unknown,
     size: { width: number; height: number },
   ): Promise<void> => {
@@ -144,6 +144,20 @@ if (getThemeName() === 'fluent-next') {
     }, { width: 240, height: 40 });
 
     await shoot(t, 'Viz bullet target');
+  });
+
+  test('the bar gauge shelf is lifted off the surface', async (t) => {
+    await inBothScopes('dxBarGauge', {
+      startValue: 0,
+      endValue: 100,
+      values: [72, 54, 38],
+      label: { visible: false },
+      legend: { visible: false },
+      animation: { enabled: false },
+      tooltip: { enabled: false },
+    }, { width: 240, height: 130 });
+
+    await shoot(t, 'Viz bar gauge shelf');
   });
 
   test('a sankey link takes the published grey', async (t) => {

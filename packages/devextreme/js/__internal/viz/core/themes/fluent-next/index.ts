@@ -2,6 +2,7 @@ const FONT_FAMILY = '\'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir n
 
 const VIZ_BG = '--dx-viz-bg';
 const VIZ_BG_ACTIVE = '--dx-viz-bg-active';
+const VIZ_BG_HIGHER = '--dx-viz-bg-higher';
 const VIZ_BG_HOVERED = '--dx-viz-bg-hovered';
 const VIZ_BORDER = '--dx-viz-border';
 const VIZ_BORDER_ACTIVE = '--dx-viz-border-active';
@@ -26,6 +27,7 @@ const VIZ_TILE_BORDER = '--dx-viz-tile-border';
 const LIGHT = {
   [VIZ_BG]: '#ffffff',
   [VIZ_BG_ACTIVE]: '#e1e1e1',
+  [VIZ_BG_HIGHER]: '#ebebeb',
   [VIZ_BG_HOVERED]: '#f5f5f5',
   [VIZ_BORDER]: '#cbcbcb',
   [VIZ_BORDER_ACTIVE]: '#b6b6b6',
@@ -54,6 +56,7 @@ const DARK: Record<PublishedName, string> = {
   ...LIGHT,
   [VIZ_BG]: '#242424',
   [VIZ_BG_ACTIVE]: '#1d1d1d',
+  [VIZ_BG_HIGHER]: '#333333',
   [VIZ_BG_HOVERED]: '#3b3b3b',
   [VIZ_BORDER]: '#767676',
   [VIZ_BORDER_ACTIVE]: '#656565',
@@ -192,7 +195,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
       },
     },
     barGauge: {
-      backgroundColor: paint(VIZ_BG_HOVERED),
+      backgroundColor: paint(VIZ_BG_HIGHER),
     },
     bullet: {
       color: paint(VIZ_BLUE),

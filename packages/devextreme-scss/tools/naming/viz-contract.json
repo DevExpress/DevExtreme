@@ -18,7 +18,13 @@
       "name": "--dx-viz-bg-hovered",
       "role": "color-bg-hovered",
       "declaredPerMode": true,
-      "paints": "the export menu button under the pointer, and the shelf behind a bar gauge and a tree map group"
+      "paints": "the export menu button under the pointer, and the shelf behind a tree map group"
+    },
+    {
+      "name": "--dx-viz-bg-higher",
+      "role": "color-bg-higher",
+      "declaredPerMode": true,
+      "paints": "the shelf a bar gauge draws its bars on: a plate lifted off the surface, far enough from it to read in a light page"
     },
     {
       "name": "--dx-viz-bg-active",
