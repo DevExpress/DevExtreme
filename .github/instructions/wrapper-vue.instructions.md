@@ -18,10 +18,13 @@ wrapper change is required and what the reviewer checks.
 
 ## Adding a new component
 
-Fastest path: **clone the closest existing wrapper and rename**, rather than writing a file
-from scratch. For a plain Widget-based component copy `load-indicator.ts`; for one with a
-`template` copy `button.ts`; for a container with nested options copy `data-grid.ts` (it
-contains the configuration-component pattern).
+Use the template at
+[`.github/templates/wrapper-vue/`](../templates/wrapper-vue/README.md). Fill
+`component.ts.tmpl` from the component's `.d.ts` by following the README's rules. They are
+the exact rules of the retired generator: which options become props, how their runtime
+types are mapped to `PropType`, what becomes a configuration component, and how imports are
+aliased. You don't need to read other wrappers. Never open the large ones (`data-grid.ts`,
+`tree-list.ts`, `card-view.ts`, `chart.ts`) to learn the pattern.
 
 Files to create and register (keep every list alphabetical):
 
@@ -50,7 +53,7 @@ The widget's `Properties` type (alias of `dx<Widget>Options`) is the source of t
      subscribable options such as `"update:isActive"`), enabling `v-model:prop`.
    - **`computed.instance`** returning `(this as any).$_instance`.
    - **`beforeCreate`** setting `$_WidgetClass = <Widget>` and `$_hasAsyncTemplate = true`
-     (when the widget has templates).
+     (always; only DataGrid, Scheduler and TreeList use `false`).
 4. **`prepareComponentConfig(componentConfig);`** then
    `const Dx<Name> = defineComponent(componentConfig);`.
 5. **Exports** — `export default Dx<Name>;`, `export { Dx<Name> };`, then

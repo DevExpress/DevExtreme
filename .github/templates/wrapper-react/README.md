@@ -181,6 +181,10 @@ and all nested blocks.
 
 ### 6.3 `I<Nested>Props` fields
 
+- Fields can also be hidden in the widget's **`.js`** file (`js/ui/<module>.js`), by a
+  JSDoc block such as `@name dxTabsItem.<field>` followed by `@hidden`. The same applies
+  to root options (`@name dxTabsOptions.activeStateEnabled @hidden`), but root options
+  reach React only through `Properties`. Leave those fields out.
 - List **every** public field of the type, including inherited ones, sorted alphabetically.
   Every field is optional (`?:`), even if it is required in the `.d.ts`. `@hidden` fields
   and methods are left out.
