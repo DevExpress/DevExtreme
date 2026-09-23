@@ -39,6 +39,12 @@
       "paints": "text at full strength - titles, export menu, map labels - and the marks that have to stand out against the surface: constant lines, error bars, map selection borders, range selector ticks and the bullet target"
     },
     {
+      "name": "--dx-viz-crosshair",
+      "role": "color-content-red",
+      "declaredPerMode": true,
+      "paints": "the crosshair a chart draws under the pointer: a reading instrument laid over the plot, red so it is never mistaken for a series"
+    },
+    {
       "name": "--dx-viz-cyan-subtle",
       "role": "color-bg-cyan-subtle",
       "declaredPerMode": true,

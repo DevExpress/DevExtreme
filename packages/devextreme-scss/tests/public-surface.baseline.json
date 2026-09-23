@@ -2332,6 +2332,7 @@
   "--dx-viz-content",
   "--dx-viz-content-orange",
   "--dx-viz-content-subtle",
+  "--dx-viz-crosshair",
   "--dx-viz-cyan-subtle",
   "--dx-viz-danger",
   "--dx-viz-font-family",

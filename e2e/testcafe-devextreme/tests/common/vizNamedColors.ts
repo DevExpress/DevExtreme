@@ -281,6 +281,24 @@ if (getThemeName() === 'fluent-next') {
   });
 
   ['light', 'dark'].forEach((mode) => {
+    test(`the crosshair is drawn with its own published name: ${mode}`, async (t) => {
+      await drawScope(mode, 240, 140);
+      await createWidget('dxChart', {
+        dataSource: [4, 7, 5, 9].map((val, index) => ({ arg: index + 1, val })),
+        series: [{ type: 'line', argumentField: 'arg', valueField: 'val' }],
+        legend: { visible: false },
+        animation: { enabled: false },
+        crosshair: { enabled: true },
+        tooltip: { enabled: false },
+      }, `#${mode}`);
+
+      await dragWithDisabledMouseUp(t, Selector(`#${mode}`), { offsetX: 30, offsetY: 0 });
+
+      await shoot(t, `Viz chart crosshair ${mode}`);
+    });
+  });
+
+  ['light', 'dark'].forEach((mode) => {
     test(`a range that is not allowed marks the slider with the published danger: ${mode}`, async (t) => {
       await drawScope(mode, 400, 90);
       await createWidget('dxRangeSelector', {
