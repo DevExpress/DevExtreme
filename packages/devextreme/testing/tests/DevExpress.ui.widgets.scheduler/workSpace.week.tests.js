@@ -269,14 +269,19 @@ module('Work Space Week', () => {
             const pacificFallBack = new Date(2016, 10, 6).getTimezoneOffset() === 420;
 
             if(pacificFallBack) {
-                // The repeated 1:00 is row 1. 1:30 AM PDT is the next row, and it ends at the jump.
-                const cellData = this.instance.getCellData(row(2));
+                // First 1:30 follows the first 1:00 and still ends at the jump.
+                // The second 1:00 is the next row, and 2:00 follows both passes.
+                const firstHalfHour = this.instance.getCellData(row(1));
+                const secondOneOClock = this.instance.getCellData(row(2));
                 const twoOClock = this.instance.getCellData(row(4));
                 const fallBackJump = new Date(2016, 10, 6, 1, 30);
                 fallBackJump.setTime(fallBackJump.getTime() + 30 * 60 * 1000);
+                const secondHalfHour = new Date(fallBackJump.getTime() + 30 * 60 * 1000);
 
-                assert.equal(cellData.startDate.toString(), new Date(2016, 10, 6, 1, 30).toString(), 'Start date is OK');
-                assert.equal(cellData.endDate.toString(), fallBackJump.toString(), 'End date is the fall-back jump');
+                assert.equal(firstHalfHour.startDate.toString(), new Date(2016, 10, 6, 1, 30).toString(), '1:30 AM starts before the jump');
+                assert.equal(firstHalfHour.endDate.toString(), fallBackJump.toString(), '1:30 AM ends at the fall-back jump');
+                assert.equal(secondOneOClock.startDate.toString(), fallBackJump.toString(), 'Second 1:00 starts at the jump');
+                assert.equal(secondOneOClock.endDate.toString(), secondHalfHour.toString(), 'Second 1:00 ends at 1:30 AM');
                 assert.equal(twoOClock.startDate.toString(), new Date(2016, 10, 6, 2).toString(), '2:00 AM is OK');
             } else {
                 const cellData = this.instance.getCellData(row(1));
