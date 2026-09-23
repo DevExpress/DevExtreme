@@ -60,12 +60,6 @@
     .dx-checkbox-icon {
       border-color: var(--dx-check-box-border-active);
     }
-
-    &.dx-invalid {
-      .dx-checkbox-icon {
-        border-color: var(--dx-check-box-invalid-border-active);
-      }
-    }
   }
 
   &.dx-state-focused {

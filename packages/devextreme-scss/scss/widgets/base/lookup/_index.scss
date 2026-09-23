@@ -1,7 +1,6 @@
 @use "./mixins" as *;
 @use "../mixins" as *;
 
-$lookup-popup-search-list-height: 90% !default; // dx-relative-%
 .dx-lookup {
   margin: 0;
 
@@ -73,12 +72,6 @@ $lookup-popup-search-list-height: 90% !default; // dx-relative-%
 .dx-lookup-popup-wrapper {
   .dx-list-item {
     cursor: pointer;
-  }
-}
-
-.dx-lookup-popup-search {
-  .dx-list {
-    height: $lookup-popup-search-list-height;
   }
 }
 

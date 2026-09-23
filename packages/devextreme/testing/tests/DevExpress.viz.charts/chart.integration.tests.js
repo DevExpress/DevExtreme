@@ -5152,3 +5152,103 @@ QUnit.test('encodeHtml is applied on option changing (T1334517)', function(asser
         tooltip: '<North America> | Total - 850'
     });
 });
+
+QUnit.module('ScrollBar with scale breaks', $.extend({}, moduleSetup, {
+    beforeEach() {
+        moduleSetup.beforeEach.call(this);
+
+        const workdays = [];
+        for(let day = 1; day <= 31; day++) {
+            const date = new Date(1994, 2, day);
+            if(date.getDay() !== 0 && date.getDay() !== 6) {
+                workdays.push({ date: date, val: day });
+            }
+        }
+
+        this.options = {
+            dataSource: workdays,
+            series: [{ argumentField: 'date', valueField: 'val' }],
+            scrollBar: { visible: true },
+            legend: { visible: false },
+            argumentAxis: {
+                visualRange: {
+                    startValue: new Date(1994, 2, 9),
+                    endValue: new Date(1994, 2, 18)
+                }
+            }
+        };
+    },
+    createChart(options) {
+        return moduleSetup.createChart.call(this, $.extend(true, {}, this.options, options));
+    },
+    setVisualRange(chart, firstDay) {
+        const axis = chart.getArgumentAxis();
+
+        axis.visualRange({
+            startValue: new Date(1994, 2, firstDay),
+            endValue: new Date(1994, 2, firstDay + 9)
+        });
+
+        const $thumb = this.$container.find('.dxc-scroll-bar rect');
+        const barArea = chart._scrollBar._translator.getCanvasVisibleArea();
+        const wholeRange = axis.getTranslator().getBusinessRange();
+
+        return {
+            position: parseFloat($thumb.attr('y')),
+            barShare: parseFloat($thumb.attr('height')) / (barArea.max - barArea.min),
+            contentShare: axis.getVisualRangeLengthWithoutBreaks()
+                / axis.getVisualRangeLengthWithoutBreaks({ minVisible: wholeRange.min, maxVisible: wholeRange.max })
+        };
+    },
+    checkThumbSlidesSmoothly(assert, chart) {
+        const thumbs = [];
+
+        for(let firstDay = 1; firstDay <= 22; firstDay++) {
+            thumbs.push(this.setVisualRange(chart, firstDay));
+        }
+
+        for(let i = 1; i < thumbs.length; i++) {
+            assert.ok(thumbs[i].position >= thumbs[i - 1].position,
+                `thumb never moves back on March ${i + 1} (${thumbs[i - 1].position} -> ${thumbs[i].position})`);
+            assert.roughEqual(thumbs[i].barShare, thumbs[i].contentShare, 0.005,
+                `thumb size matches the rendered content on March ${i + 1}`);
+        }
+
+        assert.ok(thumbs[thumbs.length - 1].position > thumbs[0].position, 'the thumb did move');
+    }
+}), () => {
+    QUnit.test('Thumb must not jump when the visual range starts inside a weekend break', function(assert) {
+        const chart = this.createChart({ argumentAxis: { workdaysOnly: true } });
+
+        const beforeBreak = this.setVisualRange(chart, 11);
+        const insideBreak = this.setVisualRange(chart, 12);
+
+        assert.ok(insideBreak.position > beforeBreak.position,
+            `thumb moves forward instead of jumping to the beginning of the scroll bar (${beforeBreak.position} -> ${insideBreak.position})`);
+        assert.roughEqual(insideBreak.barShare, insideBreak.contentShare, 0.005,
+            'thumb size matches the rendered content');
+    });
+
+    QUnit.test('Thumb must slide smoothly over weekend breaks (workdaysOnly)', function(assert) {
+        this.checkThumbSlidesSmoothly(assert, this.createChart({ argumentAxis: { workdaysOnly: true } }));
+    });
+
+    QUnit.test('Thumb must slide smoothly over a user-defined scale break', function(assert) {
+        const chart = this.createChart({
+            argumentAxis: {
+                breaks: [{
+                    startValue: new Date(1994, 2, 12),
+                    endValue: new Date(1994, 2, 14)
+                }]
+            }
+        });
+
+        assert.ok(this.$container.find('.dxc-arg-breaks path').length > 0, 'the scale break is applied');
+
+        this.checkThumbSlidesSmoothly(assert, chart);
+    });
+
+    QUnit.test('Thumb must slide smoothly when there are no scale breaks', function(assert) {
+        this.checkThumbSlidesSmoothly(assert, this.createChart({}));
+    });
+});

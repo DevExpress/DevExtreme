@@ -4,7 +4,6 @@
 @use "sass:selector";
 
 $htmleditor-code-block-bg: rgba(191, 191, 191, 0.15) !default;
-$htmleditor-placeholder-color: rgba(0, 0, 0, 0.6) !default;
 $htmleditor-aidialog-title-font-weight: 600 !default;
 
 $list-style: decimal lower-alpha lower-roman !default;
@@ -337,7 +336,6 @@ $table-resizer-highlight-thickness: 3px !default;
 
   &.ql-blank {
     &::before {
-      color: $htmleditor-placeholder-color;
       content: attr(data-placeholder);
       font-style: italic;
       left: $placeholder-inset-inline;
@@ -367,8 +365,6 @@ $table-resizer-highlight-thickness: 3px !default;
 
 .dx-suggestion-list-wrapper {
   .dx-list {
-    min-height: 35px; // dx-fixed-size: the mention suggestion list keeps a row of space while filtering
-
     .dx-scrollable-content {
       margin: 0;
     }

@@ -9,7 +9,6 @@
 @use "../../base/list" as baseList with (
   $list-item-badge-container-width: var(--dx-list-item-badge-container-width),
   $list-slide-menu-button-padding: var(--dx-list-slide-menu-button-padding),
-  $list-static-delete-button-padding: var(--dx-list-delete-button-static-padding),
   $list-next-button-padding: var(--dx-list-next-button-padding),
   $list-response-wait-opacity: var(--dx-list-response-wait-opacity),
   $list-searchbox-margin-bottom: var(--dx-list-search-box-margin-block-end),

@@ -71,8 +71,6 @@ $pivotgrid-expand-icon-text-offset: 0;
 
 .dx-pivotgrid-fields-container {
   .dx-position-indicator {
-    background-color: gray;
-
     &.dx-position-indicator-vertical {
       margin-top: -4px; // dx-fixed-size: pulls the element onto the grid line
       margin-left: -1px; // dx-fixed-size: pulls the element onto the grid line

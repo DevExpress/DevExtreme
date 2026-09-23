@@ -467,14 +467,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px !default;
     }
   }
 
-  .dx-scheduler-header-panel-current-time-cell {
-    .dx-scheduler-header-panel-cell-date343 {
-      border-radius: initial;
-      background-color: initial;
-      color: $scheduler-current-time-cell-color;
-    }
-  }
-
   .dx-scheduler-header-panel-cell { // stylelint-disable-line no-duplicate-selectors
     padding-left: $fluent-scheduler-workspace-month-cell-left-offset;
 

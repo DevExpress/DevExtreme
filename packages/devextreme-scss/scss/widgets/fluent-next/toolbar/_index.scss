@@ -72,8 +72,6 @@
       @include dx-icon-margin(calc(#{buttonSizes.$button-icon-size} / 2));
 
       .dx-icon {
-        font-size: buttonSizes.$button-icon-size;
-
         @include dx-icon-sizing(buttonSizes.$button-icon-size);
       }
     }

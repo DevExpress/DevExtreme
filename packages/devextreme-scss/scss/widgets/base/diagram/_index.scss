@@ -116,7 +116,6 @@ $diagram-toolbox-input-font-size: 0.9em !default; // dx-relative
     .dx-diagram-toolbox-panel {
       position: relative;
       height: 100%;
-      width: 100%;
       overflow-y: auto;
 
       & > * {
