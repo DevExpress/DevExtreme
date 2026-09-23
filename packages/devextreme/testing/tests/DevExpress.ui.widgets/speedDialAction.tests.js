@@ -1170,7 +1170,7 @@ QUnit.module('direction: auto', {
     });
 
     QUnit.test('actions take their distances from the theme when it declares them', function(assert) {
-        const $style = $('<style>').text(`.dx-fa-button {
+        const $style = $('<style nonce="qunit-test">').text(`.dx-fa-button {
             --dx-speed-dial-action-fa-button-offset: 70px;
             --dx-speed-dial-action-fa-button-spacing: 30px;
         }`).appendTo('head');

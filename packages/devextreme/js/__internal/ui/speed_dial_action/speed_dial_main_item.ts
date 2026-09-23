@@ -418,7 +418,8 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
 
     const actionOffsetYValue = indent + childIndent * index;
     const { direction } = this.option();
-    const actionOffsetY = this._getDirectionIndex(actions, direction, geometry) * actionOffsetYValue;
+    const directionIndex = this._getDirectionIndex(actions, direction, geometry);
+    const actionOffsetY = directionIndex * actionOffsetYValue;
 
     let actionPositionAtMy: HorizontalAlignment = 'center';
 

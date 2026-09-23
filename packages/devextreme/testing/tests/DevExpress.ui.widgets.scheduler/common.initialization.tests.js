@@ -167,7 +167,7 @@ QUnit.module('Initialization', {
 
     QUnit.test('Minimum appointment height comes from the theme', async function(assert) {
         // .dx-scheduler is the scope the tier declares this on, and the view model reads it from there
-        const $style = $('<style>')
+        const $style = $('<style nonce="qunit-test">')
             .text('.dx-scheduler { --dx-scheduler-appointment-min-height: 44px; }')
             .appendTo('head');
 

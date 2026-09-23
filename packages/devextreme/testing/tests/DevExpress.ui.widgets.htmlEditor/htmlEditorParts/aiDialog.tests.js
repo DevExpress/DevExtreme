@@ -1499,7 +1499,7 @@ QUnit.module('AIDialog', () => {
 
     QUnit.module('sizes declared by the theme', {
         beforeEach() {
-            this.$style = $('<style>')
+            this.$style = $('<style nonce="qunit-test">')
                 .text('#htmlEditor { --dx-html-editor-ai-dialog-button-width: 123px; }')
                 .appendTo('head');
 
