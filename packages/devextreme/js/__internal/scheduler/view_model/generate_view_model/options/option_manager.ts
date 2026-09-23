@@ -79,16 +79,16 @@ export class OptionManager {
       return items;
     }
 
-    const { viewOffset } = this.options;
-
     return items.map((entity) => ({
       ...entity,
-      layoutStartMs: entity.startDateUTC + viewOffset + getStretchShiftMs(
+      // Cell ranges are already shifted by viewOffset. Adding it here places the
+      // appointment on its wall-clock row instead of the offset row.
+      layoutStartMs: entity.startDateUTC + getStretchShiftMs(
         plan,
         entity.startDateUTC,
         entity.source.startDate,
       ),
-      layoutEndMs: entity.endDateUTC + viewOffset + getStretchShiftMs(
+      layoutEndMs: entity.endDateUTC + getStretchShiftMs(
         plan,
         entity.endDateUTC,
         entity.source.endDate,
