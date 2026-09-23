@@ -15,6 +15,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DropLocationNames } from '../columns_controller/types';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
@@ -577,7 +578,12 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ColumnChooserHeader
 };
 
 const columns = (Base: ModuleType<ColumnsController>) => class ColumnsChooserColumnsControllerExtender extends Base {
-  public allowMoveColumn(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
+  public allowMoveColumn(
+    fromVisibleIndex,
+    toVisibleIndex,
+    sourceLocation: DropLocationNames,
+    targetLocation: DropLocationNames,
+  ) {
     const isSelectMode = this.option('columnChooser.mode') === 'select';
     const isMoveColumnDisallowed = isSelectMode && targetLocation === 'columnChooser';
 
