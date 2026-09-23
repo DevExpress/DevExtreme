@@ -55,7 +55,26 @@ export interface VerticalSlot {
 
 const wallMinutesOf = (date: Date): number => date.getHours() * 60 + date.getMinutes();
 
+const MINUTES_IN_DAY = 24 * 60;
+
 const slotKey = (slot: VerticalSlot): string => `${slot.wallMinutes}:${slot.occurrence}`;
+
+// The second pass follows the whole first pass of the repeated hour
+// (23:00, 23:15, 23:30, 23:45, then 23:00 again), not each minute twice in a row.
+const elapsedSlotKey = (slot: VerticalSlot, plan: DaylightPlan): number => {
+  const transition = plan.days.find((day) => (
+    day.transition && day.transition.deltaMs < 0
+  ))?.transition;
+
+  if (!transition || slot.occurrence === 0) {
+    return slot.wallMinutes;
+  }
+
+  const afterMinutes = transition.wallBeforeMinutes + transition.deltaMs / toMs('minute');
+  const offset = slot.wallMinutes - afterMinutes;
+
+  return (transition.wallBeforeMinutes - 1) + (offset + 1) / MINUTES_IN_DAY;
+};
 
 const unionVerticalSlots = (plan: DaylightPlan): VerticalSlot[] => {
   const slots: VerticalSlot[] = [];
@@ -77,8 +96,7 @@ const unionVerticalSlots = (plan: DaylightPlan): VerticalSlot[] => {
     });
   });
 
-  return slots.sort((left, right) => left.wallMinutes - right.wallMinutes
-    || left.occurrence - right.occurrence);
+  return slots.sort((left, right) => elapsedSlotKey(left, plan) - elapsedSlotKey(right, plan));
 };
 
 const cellForSlot = (cells: DaylightCell[], slot: VerticalSlot): DaylightCell | undefined => {
