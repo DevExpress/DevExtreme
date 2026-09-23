@@ -575,6 +575,12 @@ const corePlugin = {
   fontFields: ['commonAnnotationSettings.font'],
 };
 
+export interface AnnotationsPluginMembers {
+  _createHtmlStructure: () => void;
+  _prepareExtraElements: () => void;
+  _renderExtraElements: () => void;
+}
+
 export const plugins = {
   core: corePlugin,
   chart: chartPlugin,

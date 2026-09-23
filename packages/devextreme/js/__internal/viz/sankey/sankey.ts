@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 // PLUGINS_SECTION
 import componentRegistrator from '@js/core/component_registrator';
 import { noop } from '@js/core/utils/common';
 import { isNumeric, isString } from '@js/core/utils/type';
-import type DOMComponent from '@ts/core/widget/dom_component';
 import type { ThemeValue } from '@ts/viz/core/base_theme_manager';
 import BaseWidget from '@ts/viz/core/base_widget';
+import type { DataSourcePluginMembers } from '@ts/viz/core/data_source';
 import { plugin as pluginDataSource } from '@ts/viz/core/data_source';
 import { setupWidgetPrototype } from '@ts/viz/core/helpers';
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from '@ts/viz/sankey/constants';
@@ -75,11 +76,9 @@ function getConnectedLinks(
   return result;
 }
 
+interface Sankey extends DataSourcePluginMembers {}
+
 class Sankey extends BaseWidget {
-  static addPlugin: (plugin: ThemeValue) => void;
-
-  static getInstance: typeof DOMComponent.getInstance;
-
   _groupLinks;
 
   _groupNodes;
