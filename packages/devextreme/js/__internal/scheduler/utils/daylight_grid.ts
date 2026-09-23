@@ -350,11 +350,20 @@ export const buildDaylightPlan = (
       calculator,
     );
     const elapsedMs = cells.reduce((sum, cell) => sum + (cell.endUTC - cell.startUTC), 0);
+    const { hours, minutes } = dateUtils.dateTimeFromDecimal(startDayHour);
     const day: DaylightPlanDay = {
       transition,
       cells,
       anchorUTC,
-      wallStartMs: toWallMs(origin),
+      // The origin Date rolls forward when startDayHour is the skipped hour.
+      // Keep the requested hour, not the local fields of that rolled date.
+      wallStartMs: Date.UTC(
+        origin.getFullYear(),
+        origin.getMonth(),
+        origin.getDate(),
+        hours,
+        minutes,
+      ),
       elapsedMs,
       shiftBeforeMs,
       firstCellIndex,
