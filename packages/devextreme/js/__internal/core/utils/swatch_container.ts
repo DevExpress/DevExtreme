@@ -36,6 +36,8 @@ const getContainerClasses = (
   $viewport: dxElementWrapper,
 ): string[] => {
   const classes = scopeClasses($element);
+  // A scope the viewport already resolves to needs no container of its own: it would be a wrapper
+  // that repaints nothing.
   const sorted = (cssClasses: string[]): string => [...cssClasses].sort().join(' ');
 
   return sorted(classes) === sorted(scopeClasses($viewport)) ? [] : classes;
