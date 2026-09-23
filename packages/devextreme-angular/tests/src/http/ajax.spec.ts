@@ -123,6 +123,45 @@ describe('Ajax request using DxHttpModule', () => {
     httpTestingControllerMock.expectOne(url);
   });
 
+  it('FormData without the upload option is sent as is', () => {
+    const url = 'http://somefakedomain1221.com/form-data-url';
+    const formData = new FormData();
+    formData.append('name', 'test');
+
+    ajax.sendRequest({
+      url,
+      method: 'POST',
+      data: formData,
+    });
+
+    const req = httpTestingControllerMock.expectOne(url);
+
+    expect(req.request.body).toBe(formData);
+    expect(req.request.headers.get('Content-Type')).toBeNull();
+
+    req.flush({});
+  });
+
+  it('a GET with FormData and cache: false does not modify the caller FormData', () => {
+    const url = 'http://somefakedomain1221.com/form-data-get';
+    const formData = new FormData();
+    formData.append('name', 'test');
+
+    ajax.sendRequest({
+      url,
+      method: 'GET',
+      cache: false,
+      data: formData,
+    });
+
+    const req = httpTestingControllerMock.expectOne((r) => r.url === url);
+
+    expect('_' in formData).toBe(false);
+    expect(req.request.params.keys()).toEqual([]);
+
+    req.flush({});
+  });
+
   it('remote provider should upload a file', (done) => {
     const url = 'http://somefakedomain1221.com/json-url';
 

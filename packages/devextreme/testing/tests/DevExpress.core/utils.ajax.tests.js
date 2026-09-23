@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import ajax from 'core/utils/ajax';
 import { compare as compareVersion } from 'core/utils/version';
+import { getRequestOptions } from 'core/utils/ajax_utils';
 
 QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
 
@@ -229,6 +230,71 @@ QUnit.test('Default Content-Type', function(assert) {
 
     assert.equal(xhr3.method, 'POST');
     assert.equal(xhr3.requestHeaders['Content-Type'], 'application/x-www-form-urlencoded;charset=utf-8');
+});
+
+QUnit.test('FormData is sent as is when the upload option is omitted', function(assert) {
+    const formData = new FormData();
+    formData.append('name', 'test');
+
+    ajax.sendRequest({
+        url: '/some-url',
+        method: 'POST',
+        data: formData
+    });
+
+    const xhr = this.requests[0];
+
+    assert.strictEqual(xhr.requestBody, formData, 'FormData reaches send untouched');
+    assert.strictEqual(xhr.requestHeaders['Content-Type'], undefined,
+        'no content type is set, so the browser can add the boundary itself');
+});
+
+if(!QUnit.urlParams['nojquery']) {
+    QUnit.test('a FormData response is converted by jQuery, like any other request', function(assert) {
+        const formData = new FormData();
+        formData.append('name', 'test');
+        let result;
+
+        ajax.sendRequest({
+            url: '/some-url',
+            method: 'POST',
+            data: formData
+        }).done(function(data) {
+            result = data;
+        });
+
+        this.requests[0].respond(200, { 'Content-Type': 'application/json' }, JSON.stringify({ ok: true }));
+
+        assert.deepEqual(result, { ok: true }, 'the response is parsed, not resolved as a string');
+    });
+}
+
+QUnit.test('FormData created in another window is recognized', function(assert) {
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    try {
+        const foreignFormData = new iframe.contentWindow.FormData();
+        foreignFormData.append('name', 'test');
+
+        assert.notOk(foreignFormData instanceof FormData, 'it comes from another realm, so instanceof does not see it');
+
+        ajax.sendRequest({
+            url: '/some-url',
+            method: 'POST',
+            data: foreignFormData
+        });
+
+        const xhr = this.requests[0];
+
+        // NOTE: no content type assertion here - the fake XHR checks
+        // `data instanceof globalObject.FormData`, which a foreign realm fails, so it sets
+        // text/plain itself. The body is what this test is about.
+        assert.strictEqual(xhr.requestBody, foreignFormData, 'FormData reaches send untouched');
+    } finally {
+        iframe.remove();
+    }
 });
 
 QUnit.test('abort request', function(assert) {
@@ -734,4 +800,35 @@ QUnit.test('Script request (cross domain)', function(assert) {
         fail();
     });
 
+});
+
+QUnit.module('getRequestOptions');
+
+QUnit.test('only own properties of the data object are converted', function(assert) {
+    const data = Object.create({ inherited: 'yes' });
+    data.own = 1;
+
+    const { parameters } = getRequestOptions({ url: '/some-url', method: 'POST', data, cache: true }, {});
+
+    assert.strictEqual(parameters, 'own=1', 'inherited properties are skipped');
+});
+
+QUnit.test('FormData is returned as is and the caller object is not modified', function(assert) {
+    const formData = new FormData();
+    formData.append('name', 'test');
+
+    const { parameters } = getRequestOptions({ url: '/some-url', method: 'POST', data: formData, cache: false }, {});
+
+    assert.strictEqual(parameters, formData, 'the FormData is passed through');
+    assert.notOk('_' in formData, 'no cache-busting property is written onto it');
+});
+
+QUnit.test('a GET request with FormData puts nothing into the url', function(assert) {
+    const formData = new FormData();
+    formData.append('name', 'test');
+
+    const { url, parameters } = getRequestOptions({ url: '/some-url', method: 'GET', data: formData, cache: true }, {});
+
+    assert.strictEqual(url, '/some-url', 'the fields do not reach the url');
+    assert.strictEqual(parameters, formData, 'the FormData is returned, and a GET ignores a body');
 });
