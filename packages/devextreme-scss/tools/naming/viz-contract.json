@@ -51,6 +51,12 @@
       "paints": "a tree map tile with no colour of its own - the fill a tile falls back to when the palette is not colouring the leaves"
     },
     {
+      "name": "--dx-viz-content-subtler",
+      "role": "color-content-subtler",
+      "declaredPerMode": true,
+      "paints": "the axis and everything that reads with it: the widget font colour that axis and legend labels take, the axis line and its ticks, and the subtitle under the chart title. A step quieter than the rest of the text on purpose - the numbers along a scale are there to be read past, not at"
+    },
+    {
       "name": "--dx-viz-content-orange",
       "role": "color-content-orange",
       "declaredPerMode": true,
@@ -60,7 +66,7 @@
       "name": "--dx-viz-content-subtle",
       "role": "color-content-subtle",
       "declaredPerMode": true,
-      "paints": "the quieter text and the axis: the widget font colour that axis and legend labels take, the axis line and its ticks, the subtitle under the chart title, tree map group labels, the map control bar border"
+      "paints": "what is quieter than the title but not the axis: tree map group labels and the map control bar border"
     },
     {
       "name": "--dx-viz-border",

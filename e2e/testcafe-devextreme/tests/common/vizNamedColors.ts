@@ -215,6 +215,19 @@ if (getThemeName() === 'fluent-next') {
     await shoot(t, 'Viz gauge indicating set');
   });
 
+  test('the axis, its labels and the subtitle read a step quieter', async (t) => {
+    await inBothScopes('dxChart', {
+      dataSource: [4, 7, 5, 9].map((val, index) => ({ arg: index + 1, val })),
+      series: [{ type: 'line', argumentField: 'arg', valueField: 'val' }],
+      title: { text: 'Title', subtitle: { text: 'Subtitle' } },
+      legend: { visible: false },
+      animation: { enabled: false },
+      tooltip: { enabled: false },
+    }, { width: 240, height: 170 });
+
+    await shoot(t, 'Viz axis and subtitle');
+  });
+
   test('a tree map tile with no palette colour takes the published cyan', async (t) => {
     await inBothScopes('dxTreeMap', {
       dataSource: TILE_DATA,

@@ -11,6 +11,7 @@ const VIZ_CONTENT = '--dx-viz-content';
 const VIZ_CONTENT_ORANGE = '--dx-viz-content-orange';
 const VIZ_CYAN_SUBTLE = '--dx-viz-cyan-subtle';
 const VIZ_CONTENT_SUBTLE = '--dx-viz-content-subtle';
+const VIZ_CONTENT_SUBTLER = '--dx-viz-content-subtler';
 const VIZ_CROSSHAIR = '--dx-viz-crosshair';
 const VIZ_GRAY_SUBTLE = '--dx-viz-gray-subtle';
 const VIZ_GRID = '--dx-viz-grid';
@@ -46,6 +47,7 @@ const LIGHT = {
   [VIZ_CONTENT_ORANGE]: '#ad4100',
   [VIZ_CYAN_SUBTLE]: '#acd7e6',
   [VIZ_CONTENT_SUBTLE]: '#444444',
+  [VIZ_CONTENT_SUBTLER]: '#656565',
   [VIZ_CROSSHAIR]: '#b33133',
   [VIZ_GRAY_SUBTLE]: '#cfcfcf',
   [VIZ_GRID]: '#e1e1e1',
@@ -85,6 +87,7 @@ const DARK: Record<PublishedName, string> = {
   [VIZ_CONTENT_ORANGE]: '#f57d48',
   [VIZ_CYAN_SUBTLE]: '#00576d',
   [VIZ_CONTENT_SUBTLE]: '#cbcbcb',
+  [VIZ_CONTENT_SUBTLER]: '#a1a1a1',
   [VIZ_CROSSHAIR]: '#e87e78',
   [VIZ_GRAY_SUBTLE]: '#4a4a4a',
   [VIZ_GRID]: '#4c4c4c',
@@ -105,7 +108,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
     defaultPalette: 'Fluent Next',
     font: {
       family: paint(VIZ_FONT_FAMILY),
-      color: paint(VIZ_CONTENT_SUBTLE),
+      color: paint(VIZ_CONTENT_SUBTLER),
     },
     title: {
       font: {
@@ -114,8 +117,8 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
     },
     backgroundColor: paint(VIZ_BG),
     primaryTitleColor: paint(VIZ_CONTENT),
-    secondaryTitleColor: paint(VIZ_CONTENT_SUBTLE),
-    axisColor: paint(VIZ_CONTENT_SUBTLE),
+    secondaryTitleColor: paint(VIZ_CONTENT_SUBTLER),
+    axisColor: paint(VIZ_CONTENT_SUBTLER),
     gridColor: paint(VIZ_GRID),
     tooltip: {
       color: paint(VIZ_TOOLTIP_BG),
