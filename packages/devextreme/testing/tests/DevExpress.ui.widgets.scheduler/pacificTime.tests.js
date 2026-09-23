@@ -169,7 +169,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
         [{
             cellDuration: 120,
-            appointmentTop: 76,
+            // 4:00 sits halfway through the 3:00–5:00 cell: the 2:00 cell does not exist.
+            appointmentTop: 95,
             view: 'week',
             startDate: new Date(2020, 2, 8, 4),
         }, {
@@ -254,22 +255,53 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             { view: 'timelineWeek', times: expectedAllTimes, dates: expectedDateResults }
         ];
 
-        // A spring-forward timeline has no 2:00 or 2:30 cell. Vertical views still
-        // label that hour through the legacy date correction.
+        // A spring-forward day has no 2:00 or 2:30 cell. A week still has that row,
+        // taken from Monday, because Sunday is a hole there.
         const withoutSkippedHour = (items) => items.filter((_, itemIndex) => itemIndex !== 4 && itemIndex !== 5);
-        const viewItems = (view, items) => (
-            view === 'timelineDay' || view === 'timelineWeek'
-                ? withoutSkippedHour(items)
-                : items
-        );
+        const skipsMissingHour = (view) => view === 'day' || view === 'timelineDay' || view === 'timelineWeek';
+        const viewTimes = (view, times) => (skipsMissingHour(view) ? withoutSkippedHour(times) : times);
+        const viewDates = (view, dates) => {
+            if(skipsMissingHour(view)) {
+                return withoutSkippedHour(dates);
+            }
+
+            if(view === 'week') {
+                return dates.map((date, index) => {
+                    if(index === 4) {
+                        return new Date(2020, 2, 9, 2, 0);
+                    }
+                    if(index === 5) {
+                        return new Date(2020, 2, 9, 2, 30);
+                    }
+                    return date;
+                });
+            }
+
+            return dates;
+        };
+        const dataCellDates = (view, dates) => {
+            if(view !== 'week') {
+                return viewDates(view, dates);
+            }
+
+            return dates.map((date, index) => {
+                if(index === 4) {
+                    return new Date(2020, 2, 8, 2, 0);
+                }
+                if(index === 5) {
+                    return new Date(2020, 2, 8, 2, 30);
+                }
+                return date;
+            });
+        };
 
         {
             module('timeCellTemplate', () => {
                 testCases.forEach(testCase => {
                     test(`arguments should be valid in '${testCase.view}' view`, async function(assert) {
                         let index = 0;
-                        const dates = viewItems(testCase.view, testCase.dates);
-                        const times = viewItems(testCase.view, testCase.times);
+                        const dates = viewDates(testCase.view, testCase.dates);
+                        const times = viewTimes(testCase.view, testCase.times);
 
                         await createWrapper({
                             dataSource: [],
@@ -295,8 +327,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, async function(assert) {
                         let index = 0;
 
-                        const validExpectedDateResults = viewItems(testCase.view, testCase.dates).slice(4);
-                        const times = viewItems(testCase.view, testCase.times).slice(4);
+                        const validExpectedDateResults = viewDates(testCase.view, testCase.dates).slice(4);
+                        const times = viewTimes(testCase.view, testCase.times).slice(4);
 
                         await createWrapper({
                             dataSource: [],
@@ -333,7 +365,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                         test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, async function(assert) {
                             let index = 0;
 
-                            const validExpectedDateResults = viewItems(testCase.view, expectedDateResults).slice(4);
+                            const validExpectedDateResults = dataCellDates(testCase.view, expectedDateResults).slice(4);
 
                             await createWrapper({
                                 dataSource: [],
@@ -381,7 +413,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     });
 
                     const currentTimeResults = scheduler.timePanel.getTimeValues();
-                    const times = viewItems(testCase.view, testCase.times);
+                    const times = viewTimes(testCase.view, testCase.times);
 
                     assert.ok(currentTimeResults.length >= times.length, 'Count of current values should not less expected values');
                     for(let i = 0; i < times.length; i++) {
@@ -392,7 +424,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                 });
 
                 test(`Time value in time panel should be correct in ${testCase.view} when startViewDate is during DST change`, async function(assert) {
-                    const times = viewItems(testCase.view, testCase.times).slice(4);
+                    const times = viewTimes(testCase.view, testCase.times).slice(4);
 
                     const scheduler = await createWrapper({
                         dataSource: [],
