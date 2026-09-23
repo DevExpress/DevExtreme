@@ -81,8 +81,6 @@ export const toWallMs = (date: Date): number => Date.UTC(
   date.getMilliseconds(),
 );
 
-const wallMinutes = (date: Date): number => date.getHours() * 60 + date.getMinutes();
-
 const isSameCalendarDay = (first: Date, second: Date): boolean => (
   first.getFullYear() === second.getFullYear()
   && first.getMonth() === second.getMonth()
@@ -146,12 +144,15 @@ const detectTransition = (
       const offsetAfter = getOffsetMs(new Date(instantMs), calculator);
       const deltaMs = offsetAfter - previousOffset;
       const wallAfter = toGrid(instantMs, calculator);
+      // Local fields of the grid date skip an hour when this addition crosses
+      // the browser's own transition. The zone offset does not.
+      const wallClock = new Date(instantMs + offsetAfter);
+      const wallAfterMinutes = wallClock.getUTCHours() * 60 + wallClock.getUTCMinutes();
+      const wallBeforeMinutes = wallAfterMinutes - deltaMs / MINUTE_MS;
 
       // The day that shows the new wall clock owns the jump. A midnight fall-back
       // is shown as 23:00 on the previous day, so the day of the nominal date does not.
       if (isSameCalendarDay(wallAfter, day)) {
-        const wallBeforeMinutes = wallMinutes(wallAfter) - deltaMs / MINUTE_MS;
-
         return {
           instant: new Date(instantMs),
           deltaMs,
