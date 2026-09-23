@@ -1840,7 +1840,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       endDate,
       allDay,
       groups: cellData.groups,
-      isDaylightHole: cellData.isDaylightHole,
+      ...(cellData.isDaylightHole ? { isDaylightHole: true } : {}),
     };
   }
 
