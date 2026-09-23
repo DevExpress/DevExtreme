@@ -57,7 +57,7 @@ if (getThemeName() === 'fluent-next') {
   });
 
   const inBothScopes = async (
-    widget: 'dxSparkline' | 'dxChart' | 'dxSankey',
+    widget: 'dxSparkline' | 'dxBullet' | 'dxChart' | 'dxSankey',
     options: unknown,
     size: { width: number; height: number },
   ): Promise<void> => {
@@ -127,6 +127,18 @@ if (getThemeName() === 'fluent-next') {
     }, { width: 240, height: 140 });
 
     await shoot(t, 'Viz candlestick reduction');
+  });
+
+  test('the bullet target takes the published content colour', async (t) => {
+    await inBothScopes('dxBullet', {
+      value: 68,
+      target: 82,
+      startScaleValue: 0,
+      endScaleValue: 100,
+      tooltip: { enabled: false },
+    }, { width: 240, height: 40 });
+
+    await shoot(t, 'Viz bullet target');
   });
 
   test('a sankey link takes the published grey', async (t) => {

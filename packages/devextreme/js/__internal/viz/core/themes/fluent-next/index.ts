@@ -192,6 +192,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
     },
     bullet: {
       color: paint(VIZ_BLUE),
+      targetColor: paint(VIZ_CONTENT),
     },
     sankey: {
       label: {

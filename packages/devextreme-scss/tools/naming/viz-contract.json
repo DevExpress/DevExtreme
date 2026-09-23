@@ -30,7 +30,7 @@
       "name": "--dx-viz-content",
       "role": "color-content",
       "declaredPerMode": true,
-      "paints": "text at full strength - titles, export menu, map labels - and the marks that have to stand out against the surface: constant lines, error bars, map selection borders, range selector ticks"
+      "paints": "text at full strength - titles, export menu, map labels - and the marks that have to stand out against the surface: constant lines, error bars, map selection borders, range selector ticks and the bullet target"
     },
     {
       "name": "--dx-viz-content-subtle",
