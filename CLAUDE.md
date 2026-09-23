@@ -129,7 +129,7 @@ Framework wrappers (`devextreme-angular/src/`, `devextreme-react/src/`, `devextr
 When updating public API in `js/{ui,viz}/**/*.d.ts`, apply the same change to all three wrappers in the same PR, then validate:
 ```bash
 cd packages/devextreme
-pnpm run update-ts-reexports   # if reexports changed
+pnpm run regenerate
 pnpm run lint-dts
 ```
 Follow the per-framework anatomy and rules in `.github/instructions/wrapper-{angular,react,vue}.instructions.md`, and the propagation/breaking-change checklist in `.github/instructions/public-api-wrappers.instructions.md`. The reusable workflow lives in `.github/prompts/update-wrappers.prompt.md`.
