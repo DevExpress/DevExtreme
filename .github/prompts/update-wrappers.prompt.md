@@ -36,6 +36,5 @@ Follow the anatomy and rules in:
      `emits` `update:<prop>`.
    Keep option/event order and imports aligned with the `.d.ts`.
 4. **Do not touch** `src/core/**` in any wrapper package.
-5. **Verify.** From `packages/devextreme` run `pnpm run lint-dts` and, if reexports changed,
-   `pnpm run update-ts-reexports`. Type-check/build the affected wrapper package(s).
+5. **Verify.** From `packages/devextreme`, run `pnpm run regenerate` and then `pnpm run lint-dts`. Type-check/build the affected wrapper package(s).
 6. **Report** the applied changes per framework and call out any breaking changes explicitly.
