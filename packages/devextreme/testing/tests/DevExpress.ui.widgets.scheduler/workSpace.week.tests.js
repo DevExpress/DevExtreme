@@ -1,4 +1,3 @@
-import dateUtils from 'core/utils/date';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
@@ -194,13 +193,12 @@ module('Work Space Week', () => {
             });
 
             const $cell = this.instance.$element().find(CLASSES.dateTableCell).eq(8);
+            const cellData = this.instance.getCellData($cell);
 
-            assert.deepEqual(this.instance.getCellData($cell), {
-                startDate: new Date(2015, 2, 3, 0, 30),
-                endDate: new Date(2015, 2, 3, 1, 0),
-                allDay: false,
-                groupIndex: 0,
-            });
+            assert.deepEqual(cellData.startDate, new Date(2015, 2, 3, 0, 30), 'startDate');
+            assert.deepEqual(cellData.endDate, new Date(2015, 2, 3, 1, 0), 'endDate');
+            assert.strictEqual(cellData.allDay, false, 'allDay');
+            assert.strictEqual(cellData.groupIndex, 0, 'groupIndex');
         });
 
         skip('getCoordinatesByDate should return right coordinates for all day appointments', async function(assert) {
@@ -267,10 +265,25 @@ module('Work Space Week', () => {
                 startDayHour: 1,
             });
 
-            const cellData = this.instance.getCellData(this.instance.$element().find('.dx-scheduler-date-table-row').eq(1).find('.dx-scheduler-date-table-cell').eq(0));
+            const row = (index) => this.instance.$element().find('.dx-scheduler-date-table-row').eq(index).find('.dx-scheduler-date-table-cell').eq(0);
+            const pacificFallBack = new Date(2016, 10, 6).getTimezoneOffset() === 420;
 
-            assert.equal(cellData.startDate.toString(), new Date(2016, 10, 6, 1, 30).toString(), 'Start date is OK');
-            assert.equal(cellData.endDate.toString(), new Date(2016, 10, 6, 2).toString(), 'End date is OK');
+            if(pacificFallBack) {
+                // The repeated 1:00 is row 1. 1:30 AM PDT is the next row, and it ends at the jump.
+                const cellData = this.instance.getCellData(row(2));
+                const twoOClock = this.instance.getCellData(row(4));
+                const fallBackJump = new Date(2016, 10, 6, 1, 30);
+                fallBackJump.setTime(fallBackJump.getTime() + 30 * 60 * 1000);
+
+                assert.equal(cellData.startDate.toString(), new Date(2016, 10, 6, 1, 30).toString(), 'Start date is OK');
+                assert.equal(cellData.endDate.toString(), fallBackJump.toString(), 'End date is the fall-back jump');
+                assert.equal(twoOClock.startDate.toString(), new Date(2016, 10, 6, 2).toString(), '2:00 AM is OK');
+            } else {
+                const cellData = this.instance.getCellData(row(1));
+
+                assert.equal(cellData.startDate.toString(), new Date(2016, 10, 6, 1, 30).toString(), 'Start date is OK');
+                assert.equal(cellData.endDate.toString(), new Date(2016, 10, 6, 2).toString(), 'End date is OK');
+            }
         });
 
         test('Get allDay cellData by coordinates', async function(assert) {
@@ -378,14 +391,15 @@ module('Work Space Week', () => {
         });
 
         test('Cells of week after the DST switch should have right date', async function(assert) {
-            const spy = sinon.spy(dateUtils, 'getTimezonesDifference');
-
             this.instance.option({
                 currentDate: new Date(2016, 2, 14)
             });
 
-            assert.equal(spy.callCount, 343);
-            spy.restore();
+            // Monday 3:00, the day after the spring-forward. The daylight plan keeps this wall clock.
+            const $cell = this.instance.$element().find(CLASSES.dateTableCell).eq(43);
+            const cellData = this.instance.getCellData($cell);
+
+            assert.equal(cellData.startDate.toString(), new Date(2016, 2, 14, 3).toString());
         });
 
         test('Cells have right cellData in horizontal grouped WorkSpace Week view', async function(assert) {

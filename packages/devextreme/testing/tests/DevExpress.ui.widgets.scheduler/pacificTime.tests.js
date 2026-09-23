@@ -525,7 +525,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
         [{
             view: 'day',
             left: 0,
-            top: 76,
+            // startDayHour 2 on the spring day is 3:00, so the appointment starts on the first row.
+            top: 0,
         }, {
             view: 'week',
             left: 0,
@@ -697,7 +698,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
             [
                 {
-                    cell: 28,
+                    // Sunday 2:00 is a hole. 3:00 is the first real cell in that column.
+                    cell: 42,
                     currentView: 'week'
                 }, {
                     cell: 5,
@@ -734,16 +736,18 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                 }, {
                     firstCell: 21,
                     lastCell: 56,
-                    selectedCellCount: 6,
+                    // Sunday 2:00 and 2:30 are holes, so the range keeps the four real cells.
+                    selectedCellCount: 4,
                     currentView: 'week',
-                    mustBeSelectedCells: [28, 35, 42, 49],
+                    mustBeSelectedCells: [42, 49],
                     testDescription: 'Cells that cover dead zone of DST'
                 }, {
-                    firstCell: 28,
+                    // The range used to start on Sunday 2:00. That cell is a hole, so it starts at 3:00.
+                    firstCell: 42,
                     lastCell: 29,
-                    selectedCellCount: 21,
+                    selectedCellCount: 19,
                     currentView: 'week',
-                    mustBeSelectedCells: [28, 35, 42, 56],
+                    mustBeSelectedCells: [42, 56],
                     testDescription: 'Cells that cover dead zone of DST and part of next week'
                 }, {
                     firstCell: 3,
@@ -769,10 +773,11 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     testDescription: 'Cells of dead zone of DST'
                 }, {
                     firstCell: 14,
-                    lastCell: 28,
-                    selectedCellCount: 3,
+                    // Sunday 2:00 is a hole. The selection ends on 1:30, the last real cell before it.
+                    lastCell: 21,
+                    selectedCellCount: 2,
                     currentView: 'week',
-                    mustBeSelectedCells: [14, 21, 28],
+                    mustBeSelectedCells: [14, 21],
                     testDescription: 'Cells that end on dead zone of DST'
                 }, {
                     firstCell: 3,
