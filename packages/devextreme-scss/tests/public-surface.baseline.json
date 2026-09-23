@@ -2337,6 +2337,7 @@
   "--dx-viz-cyan-subtle",
   "--dx-viz-danger",
   "--dx-viz-font-family",
+  "--dx-viz-font-weight-title",
   "--dx-viz-gray",
   "--dx-viz-gray-subtle",
   "--dx-viz-green",

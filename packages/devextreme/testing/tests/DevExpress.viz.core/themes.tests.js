@@ -360,6 +360,7 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
     });
 });
 
+const PUBLISHED_TITLE_WEIGHT = 'var(--dx-viz-font-weight-title, 600)';
 const PUBLISHED_FONT = 'var(--dx-viz-font-family, \'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif)';
 const PUBLISHED_BLUE = 'var(--dx-viz-blue, #0078d4)';
 const PUBLISHED_DANGER = 'var(--dx-viz-danger, #c50f1f)';
@@ -397,7 +398,8 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         assert.strictEqual(registeredTheme.chart.title.font.family, PUBLISHED_FONT, 'chart title font');
         assert.strictEqual(registeredTheme.gauge.title.font.family, PUBLISHED_FONT, 'gauge title font');
         assert.strictEqual(registeredTheme.title.font.size, 20, 'title font size is inherited');
-        assert.strictEqual(registeredTheme.title.font.weight, 500, 'title font weight is inherited');
+        assert.strictEqual(registeredTheme.title.font.weight, PUBLISHED_TITLE_WEIGHT, 'title font weight');
+        assert.strictEqual(registeredTheme.title.subtitle.font.weight, PUBLISHED_TITLE_WEIGHT, 'subtitle mirrors it');
     });
 
     QUnit.test(`fluent-next theme should paint the background with the published surface: ${theme}`, function(assert) {

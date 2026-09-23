@@ -22,6 +22,7 @@ const VIZ_RED_SUBTLE = '--dx-viz-red-subtle';
 const VIZ_TOOLTIP_BG = '--dx-viz-tooltip-bg';
 const VIZ_TOOLTIP_CONTENT = '--dx-viz-tooltip-content';
 const VIZ_FONT_FAMILY = '--dx-viz-font-family';
+const VIZ_FONT_WEIGHT_TITLE = '--dx-viz-font-weight-title';
 
 const VIZ_PRIMARY = '--dx-viz-primary';
 
@@ -58,6 +59,7 @@ const LIGHT = {
   [VIZ_TOOLTIP_BG]: '#242424',
   [VIZ_TOOLTIP_CONTENT]: '#ffffff',
   [VIZ_FONT_FAMILY]: FONT_FAMILY,
+  [VIZ_FONT_WEIGHT_TITLE]: '600',
 
   [VIZ_PRIMARY]: '#0f6cbd',
 
@@ -113,6 +115,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
     title: {
       font: {
         family: paint(VIZ_FONT_FAMILY),
+        weight: paint(VIZ_FONT_WEIGHT_TITLE),
       },
     },
     backgroundColor: paint(VIZ_BG),

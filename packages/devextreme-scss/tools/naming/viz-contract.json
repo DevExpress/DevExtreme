@@ -3,6 +3,7 @@
   "declaredIn": {
     "perMode": "fluent-next/common/_colors.scss",
     "onRootOnly": "fluent-next/viz/_colors.scss",
+    "onRootOnlySizes": "fluent-next/viz/_sizes.scss",
     "linked": "fluent-next/common/_public-links.scss"
   },
   "readBy": "packages/devextreme/js/__internal/viz/core/themes/fluent-next/index.ts",
@@ -211,6 +212,13 @@
       "role": "color-content-inverted",
       "declaredPerMode": true,
       "paints": "the text on those plates"
+    },
+    {
+      "name": "--dx-viz-font-weight-title",
+      "role": "font-weight-title-default",
+      "declaredIn": "onRootOnlySizes",
+      "declaredPerMode": false,
+      "paints": "the weight of a chart title, and of the subtitle that mirrors it. The charts inherited 500 from the material theme, a face Segoe UI does not have; the component titles of this theme have always read this role instead"
     },
     {
       "name": "--dx-viz-font-family",
