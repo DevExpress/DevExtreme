@@ -6710,11 +6710,6 @@ declare module DevExpress.common.grids {
      */
     dropFeedbackMode?: DragHighlight;
     /**
-     * [descr:GridBaseOptions.rowDragging.filter]
-     * @deprecated [depNote:GridBaseOptions.rowDragging.filter]
-     */
-    filter?: string;
-    /**
      * [descr:GridBaseOptions.rowDragging.group]
      */
     group?: string | undefined;

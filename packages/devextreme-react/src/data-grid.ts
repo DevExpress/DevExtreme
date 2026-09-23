@@ -3081,7 +3081,6 @@ type IRowDraggingProps = React.PropsWithChildren<{
   dragDirection?: DragDirection;
   dragTemplate?: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template | undefined;
   dropFeedbackMode?: DragHighlight;
-  filter?: string;
   group?: string | undefined;
   handle?: string;
   onAdd?: ((e: RowDraggingAddEvent) => void);
