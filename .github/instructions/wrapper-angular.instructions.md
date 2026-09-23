@@ -21,10 +21,14 @@ wrapper change is required and what the reviewer checks.
 
 ## Adding a new component
 
-Fastest path: **clone the closest existing wrapper and rename**, rather than writing a file
-from scratch. For a plain Widget-based component copy `ui/load-indicator/index.ts`; for one
-with many options/events copy `ui/button/index.ts`; for a container with nested options copy
-`ui/sortable/` (the component plus its `nested/` folder).
+Use the templates at
+[`.github/templates/wrapper-angular/`](../templates/wrapper-angular/README.md):
+`component.ts.tmpl` for `ui/<name>/index.ts` and `nested.ts.tmpl` for each file in
+`ui/<name>/nested/`. Fill them from the component's `.d.ts` by following the README's rules.
+They are the exact rules of the retired generator: property and output lists, type
+strings, doc IDs, editor/collection flags, nested naming, tokens, and the exact whitespace.
+You don't need to read other wrappers. Never open the large ones (`data-grid`, `tree-list`,
+`card-view`, `chart`) to learn the pattern.
 
 Files to create and register (keep every list alphabetical):
 
@@ -37,8 +41,12 @@ Files to create and register (keep every list alphabetical):
   to **both** the declarations and exports arrays (the two arrays are identical; anchor on the
   neighboring entries to place it in each).
 - For a component with nested/object options, also create the `ui/<name>/nested/` folder
-  (cloning `ui/sortable/nested/` is the fastest way) and wire its module into the component's
-  `@NgModule` plus `export * from 'devextreme-angular/ui/<name>/nested';`.
+  (one file per nested component, plus `index.ts` and `ng-package.json`; see the template
+  README §0 and §5). Wire every nested module into the component's `@NgModule` and add
+  `export * from 'devextreme-angular/ui/<name>/nested';`.
+- If a new collection option name has no `PROPERTY_TOKEN_<name>` in
+  `src/core/tokens/index.ts`, add one. It is the single exception to "Do not edit
+  `src/core/**`", because that file used to be generator output.
 
 Do **not** create anything under `src/metadata/generated/**` — it is gitignored generated
 output, not source.
@@ -58,8 +66,8 @@ the source of truth. A component file contains, in order:
    `providers` (`DxTemplateHost`, `WatcherHelper`, `NestedOptionHost`).
 3. **Class** `Dx<Name>Component extends DxComponent implements OnDestroy` with
    `instance: Dx<Name> = null;`.
-4. **One `@Input()` getter/setter pair per option**, in the same order as the options
-   interface (including inherited `WidgetOptions`/`DOMComponentOptions`):
+4. **One `@Input()` getter/setter pair per non-event option**, own and inherited
+   (`WidgetOptions`/`DOMComponentOptions`), sorted **alphabetically**:
    ```ts
    @Input()
    get text(): string { return this._getOption('text'); }
@@ -90,7 +98,7 @@ the source of truth. A component file contains, in order:
 - **Option removed/renamed** → remove/rename all three (input, change output, emitter entry).
 - **Event added** → add the `@Output() onX`, and a `{ subscribe, emit }` entry.
 - **Nested/collection option** → do **not** touch `ui/nested/**` (deprecated, see "Do not
-  edit"). Leave nested option handling to the parallel removal PR.
+  edit"). Update the component's own `ui/<name>/nested/` files instead (template README §5).
 
-Keep import lists, option order, and emitter order aligned with the options interface so
-diffs stay reviewable.
+Keep options, events, and emitter entries in the generator's order (alphabetical within
+each group; see template README §3–§4) so diffs stay reviewable.
