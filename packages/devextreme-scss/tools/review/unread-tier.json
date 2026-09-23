@@ -99,6 +99,7 @@
     "--dx-pagination-page-padding-inline",
     "--dx-pagination-separator-padding-inline-end",
     "--dx-pagination-separator-padding-inline-start",
+    "--dx-pivot-grid-drag-header-border",
     "--dx-popup-dialog-message-padding",
     "--dx-popup-toolbar-item-padding-inline",
     "--dx-progress-bar-range-indeterminate-bg",

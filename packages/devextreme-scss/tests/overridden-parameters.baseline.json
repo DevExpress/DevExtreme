@@ -1,0 +1,2241 @@
+{
+  "comment": [
+    "Parameters a theme sets and then paints over: the base layer reads a variable, the theme feeds it",
+    "a value, and a later declaration on the same selector paints the property again with something",
+    "else. The parameter stays published and setting it moves nothing.",
+    "",
+    "Not listed here, by design: a declaration the theme paints over where the base layer spells a",
+    "literal (no parameter exists, painting over is the only way to theme it), and two declarations",
+    "that carry the same value (bytes, not behaviour).",
+    "",
+    "  UPDATE_OVERRIDDEN_BASELINE=1 pnpm test -- overridden-parameters   # after a reviewed change"
+  ],
+  "entries": [
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_fileUploader.scss",
+      "property": "margin-top",
+      "selector": ".dx-fileuploader-invalid .dx-fileuploader-cancel-button",
+      "paintedOverBy": "scss/widgets/fluent-next/fileUploader/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_form.scss",
+      "property": "margin-top",
+      "selector": ".dx-form-group-with-caption > .dx-form-group-content",
+      "paintedOverBy": "scss/widgets/fluent-next/form/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_form.scss",
+      "property": "padding-top",
+      "selector": ".dx-form-group-with-caption > .dx-form-group-content",
+      "paintedOverBy": "scss/widgets/fluent-next/form/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_form.scss",
+      "property": "padding-top",
+      "selector": ".dx-layout-manager .dx-field-item:not(.dx-first-row)",
+      "paintedOverBy": "scss/widgets/fluent-next/form/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_form.scss",
+      "property": "padding",
+      "selector": ".dx-layout-manager .dx-tabpanel .dx-multiview-item-content",
+      "paintedOverBy": "scss/widgets/fluent-next/form/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-position",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-position",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-position",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-position",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "content",
+      "selector": ".dx-tag-remove-button::before",
+      "paintedOverBy": "scss/widgets/fluent-next/tagBox/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-tab .dx-icon",
+      "paintedOverBy": "scss/widgets/fluent-next/tabs/layout/tab/_base.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-tab .dx-icon",
+      "paintedOverBy": "scss/widgets/fluent-next/tabs/layout/tab/_base.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "padding",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "padding",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "padding",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "padding",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-tab .dx-icon",
+      "paintedOverBy": "scss/widgets/fluent-next/tabs/layout/tab/_base.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_loadPanel.scss",
+      "property": "padding",
+      "selector": ".dx-loadpanel-content",
+      "paintedOverBy": "scss/widgets/fluent-next/loadPanel/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_pagination.scss",
+      "property": "margin-left",
+      "selector": ".dx-pager .dx-page-sizes .dx-page-size:first-child, .dx-pager .dx-page-sizes .dx-page-size.dx-first-child, .dx-pagination .dx-page-sizes .dx-page-size:first-child, .dx-pagination .dx-page-sizes .dx-page-size.dx-first-child",
+      "paintedOverBy": "scss/widgets/fluent-next/pagination/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_scrollView.scss",
+      "property": "width",
+      "selector": ".dx-scrollview-pull-down-indicator",
+      "paintedOverBy": "scss/widgets/fluent-next/scrollView/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_toast.scss",
+      "property": "gap",
+      "selector": ".dx-toast-stack",
+      "paintedOverBy": "scss/widgets/fluent-next/toast/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_tooltip.scss",
+      "property": "font-size",
+      "selector": ".dx-tooltip-wrapper .dx-overlay-content .dx-popup-content",
+      "paintedOverBy": "scss/widgets/fluent-next/tooltip/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_tooltip.scss",
+      "property": "min-height",
+      "selector": ".dx-tooltip-wrapper .dx-overlay-content",
+      "paintedOverBy": "scss/widgets/fluent-next/tooltip/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_tooltip.scss",
+      "property": "padding",
+      "selector": ".dx-tooltip-wrapper .dx-overlay-content .dx-popup-content",
+      "paintedOverBy": "scss/widgets/fluent-next/tooltip/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_validation.scss",
+      "property": "font-size",
+      "selector": ".dx-invalid-message > .dx-overlay-content",
+      "paintedOverBy": "scss/widgets/base/_validation.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/_validation.scss",
+      "property": "padding",
+      "selector": ".dx-invalid-message > .dx-overlay-content",
+      "paintedOverBy": "scss/widgets/base/_validation.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/fileManager/_index.scss",
+      "property": "padding",
+      "selector": ".dx-filemanager-file-actions-button .dx-button .dx-button-content",
+      "paintedOverBy": "scss/widgets/fluent-next/fileManager/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/filterBuilder/_common.scss",
+      "property": "padding",
+      "selector": ".dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-group-item .dx-filterbuilder-action.dx-filterbuilder-action-icon",
+      "paintedOverBy": "scss/widgets/fluent-next/filterBuilder/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-datagrid-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-treelist-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "margin-left",
+      "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "margin-left",
+      "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-bottom",
+      "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-top",
+      "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "min-width",
+      "selector": ".dx-command-adaptive",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "padding",
+      "selector": ".dx-cell-modified, .dx-datagrid-invalid",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "padding",
+      "selector": ".dx-cell-modified, .dx-treelist-invalid",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "width",
+      "selector": ".dx-command-adaptive",
+      "paintedOverBy": "scss/widgets/fluent-next/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/list/_index.scss",
+      "property": "min-height",
+      "selector": ".dx-list .dx-empty-message",
+      "paintedOverBy": "scss/widgets/fluent-next/list/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "background-color",
+      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/fluent-next/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "border-color",
+      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/fluent-next/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "border",
+      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/fluent-next/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "border",
+      "selector": ".dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/fluent-next/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/fluent-next/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-pivotgrid-fields-container .dx-header-filter",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "margin-top",
+      "selector": ".dx-pivotgridfieldchooser .dx-area .dx-area-fields",
+      "paintedOverBy": "scss/widgets/fluent-next/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "padding",
+      "selector": ".dx-pivotgrid .dx-pivotgrid-area td",
+      "paintedOverBy": "scss/widgets/fluent-next/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "width",
+      "selector": ".dx-pivotgrid-fields-container .dx-header-filter",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/radioGroup/_index.scss",
+      "property": "column-gap",
+      "selector": ".dx-radiogroup-horizontal .dx-collection",
+      "paintedOverBy": "scss/widgets/fluent-next/radioGroup/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-appointment-content-details",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "property": "height",
+      "selector": ".dx-scheduler-work-space-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-work-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-day .dx-scheduler-date-time-indicator",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "property": "padding",
+      "selector": ".dx-scheduler-work-space-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-work-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-day .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment.dx-state-active, .dx-scheduler-appointment.dx-resizable-resizing",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment.dx-state-hover",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment.dx-state-hover.dx-resizable",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-appointment",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "border-bottom",
+      "selector": ".dx-scheduler-all-day-panel .dx-scheduler-all-day-table-cell",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "border-bottom",
+      "selector": ".dx-scheduler-all-day-title",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-all-day-table-cell.dx-scheduler-focused-cell, .dx-scheduler-date-table-cell.dx-scheduler-focused-cell",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "color",
+      "selector": ".dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "padding-left",
+      "selector": ".dx-rtl .dx-scheduler-time-panel-cell",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-scheduler-small .dx-scheduler-time-panel-cell",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-scheduler-time-panel-cell",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent-next",
+      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
+      "property": "padding-top",
+      "selector": ".dx-scheduler-agenda .dx-scheduler-date-table-scrollable",
+      "paintedOverBy": "scss/widgets/fluent-next/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_contextMenu.scss",
+      "property": "padding",
+      "selector": ".dx-context-menu .dx-menu-items-container",
+      "paintedOverBy": "scss/widgets/fluent/contextMenu/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_fileUploader.scss",
+      "property": "margin-top",
+      "selector": ".dx-fileuploader-invalid .dx-fileuploader-cancel-button",
+      "paintedOverBy": "scss/widgets/fluent/fileUploader/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_form.scss",
+      "property": "margin-top",
+      "selector": ".dx-form-group-with-caption > .dx-form-group-content",
+      "paintedOverBy": "scss/widgets/fluent/form/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_form.scss",
+      "property": "padding-top",
+      "selector": ".dx-form-group-with-caption > .dx-form-group-content",
+      "paintedOverBy": "scss/widgets/fluent/form/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_form.scss",
+      "property": "padding-top",
+      "selector": ".dx-layout-manager .dx-field-item:not(.dx-first-row)",
+      "paintedOverBy": "scss/widgets/fluent/form/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_form.scss",
+      "property": "padding",
+      "selector": ".dx-layout-manager .dx-tabpanel .dx-multiview-item-content",
+      "paintedOverBy": "scss/widgets/fluent/form/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_gallery.scss",
+      "property": "margin",
+      "selector": ".dx-gallery-indicator-item",
+      "paintedOverBy": "scss/widgets/fluent/gallery/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_htmlEditor.scss",
+      "property": "padding",
+      "selector": ".dx-htmleditor-content",
+      "paintedOverBy": "scss/widgets/fluent/htmlEditor/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "content",
+      "selector": ".dx-tag-remove-button::before",
+      "paintedOverBy": "scss/widgets/fluent/tagBox/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-tab .dx-icon",
+      "paintedOverBy": "scss/widgets/fluent/tabs/layout/tab/_base.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-tab .dx-icon",
+      "paintedOverBy": "scss/widgets/fluent/tabs/layout/tab/_base.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-tab .dx-icon",
+      "paintedOverBy": "scss/widgets/fluent/tabs/layout/tab/_base.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_loadPanel.scss",
+      "property": "padding",
+      "selector": ".dx-loadpanel-content",
+      "paintedOverBy": "scss/widgets/fluent/loadPanel/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_numberBox.scss",
+      "property": "opacity",
+      "selector": ".dx-state-disabled .dx-numberbox-spin-container",
+      "paintedOverBy": "scss/widgets/fluent/numberBox/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_pagination.scss",
+      "property": "margin-left",
+      "selector": ".dx-pager .dx-page-sizes .dx-page-size:first-child, .dx-pager .dx-page-sizes .dx-page-size.dx-first-child, .dx-pagination .dx-page-sizes .dx-page-size:first-child, .dx-pagination .dx-page-sizes .dx-page-size.dx-first-child",
+      "paintedOverBy": "scss/widgets/fluent/pagination/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_recurrenceEditor.scss",
+      "property": "margin-top",
+      "selector": ".dx-recurrence-numberbox-interval-label",
+      "paintedOverBy": "scss/widgets/fluent/recurrenceEditor/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_recurrenceEditor.scss",
+      "property": "padding",
+      "selector": ".dx-recurrence-button-group .dx-button-content",
+      "paintedOverBy": "scss/widgets/fluent/recurrenceEditor/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_scrollView.scss",
+      "property": "width",
+      "selector": ".dx-scrollview-pull-down-indicator",
+      "paintedOverBy": "scss/widgets/fluent/scrollView/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_toast.scss",
+      "property": "gap",
+      "selector": ".dx-toast-stack",
+      "paintedOverBy": "scss/widgets/fluent/toast/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_tooltip.scss",
+      "property": "font-size",
+      "selector": ".dx-tooltip-wrapper .dx-overlay-content .dx-popup-content",
+      "paintedOverBy": "scss/widgets/fluent/tooltip/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_tooltip.scss",
+      "property": "min-height",
+      "selector": ".dx-tooltip-wrapper .dx-overlay-content",
+      "paintedOverBy": "scss/widgets/fluent/tooltip/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_tooltip.scss",
+      "property": "padding",
+      "selector": ".dx-tooltip-wrapper .dx-overlay-content .dx-popup-content",
+      "paintedOverBy": "scss/widgets/fluent/tooltip/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_validation.scss",
+      "property": "font-size",
+      "selector": ".dx-invalid-message > .dx-overlay-content",
+      "paintedOverBy": "scss/widgets/base/_validation.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/_validation.scss",
+      "property": "padding",
+      "selector": ".dx-invalid-message > .dx-overlay-content",
+      "paintedOverBy": "scss/widgets/base/_validation.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/checkBox/_index.scss",
+      "property": "padding-inline-start",
+      "selector": ".dx-checkbox-text",
+      "paintedOverBy": "scss/widgets/fluent/checkBox/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "margin-right",
+      "selector": ".dx-rtl .dx-colorview-container label.dx-colorview-alpha-channel-label",
+      "paintedOverBy": "scss/widgets/fluent/colorView/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "margin-right",
+      "selector": ".dx-rtl .dx-colorview-controls-container",
+      "paintedOverBy": "scss/widgets/fluent/colorView/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "margin",
+      "selector": ".dx-colorview-container label .dx-texteditor",
+      "paintedOverBy": "scss/widgets/fluent/colorView/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "margin",
+      "selector": ".dx-colorview-container label.dx-colorview-label-hex",
+      "paintedOverBy": "scss/widgets/fluent/colorView/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "width",
+      "selector": ".dx-colorview-color-preview",
+      "paintedOverBy": "scss/widgets/fluent/colorView/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/fileManager/_index.scss",
+      "property": "padding",
+      "selector": ".dx-filemanager-file-actions-button .dx-button .dx-button-content",
+      "paintedOverBy": "scss/widgets/fluent/fileManager/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/filterBuilder/_common.scss",
+      "property": "padding",
+      "selector": ".dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-group-item .dx-filterbuilder-action.dx-filterbuilder-action-icon",
+      "paintedOverBy": "scss/widgets/fluent/filterBuilder/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-datagrid-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-treelist-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "margin-left",
+      "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "margin-left",
+      "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-bottom",
+      "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-top",
+      "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding",
+      "selector": ".dx-datagrid-filter-panel",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding",
+      "selector": ".dx-treelist-filter-panel",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "min-width",
+      "selector": ".dx-command-adaptive",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "padding",
+      "selector": ".dx-cell-modified, .dx-datagrid-invalid",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "padding",
+      "selector": ".dx-cell-modified, .dx-treelist-invalid",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "width",
+      "selector": ".dx-command-adaptive",
+      "paintedOverBy": "scss/widgets/fluent/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/list/_index.scss",
+      "property": "min-height",
+      "selector": ".dx-list .dx-empty-message",
+      "paintedOverBy": "scss/widgets/fluent/list/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "background-color",
+      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "border-color",
+      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "border-color",
+      "selector": ".dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-pivotgrid-fields-container .dx-header-filter",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "margin-top",
+      "selector": ".dx-pivotgridfieldchooser .dx-area .dx-area-fields",
+      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "padding",
+      "selector": ".dx-pivotgrid .dx-pivotgrid-area td",
+      "paintedOverBy": "scss/widgets/fluent/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "width",
+      "selector": ".dx-pivotgrid-fields-container .dx-header-filter",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/radioButton/_mixins.scss",
+      "property": "border-color",
+      "selector": ".dx-state-readonly .dx-radiobutton-icon",
+      "paintedOverBy": "scss/widgets/fluent/radioButton/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/radioGroup/_index.scss",
+      "property": "column-gap",
+      "selector": ".dx-radiogroup-horizontal .dx-collection",
+      "paintedOverBy": "scss/widgets/fluent/radioGroup/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/radioGroup/_index.scss",
+      "property": "padding-inline-end",
+      "selector": ".dx-radio-value-container",
+      "paintedOverBy": "scss/widgets/fluent/radioButton/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-appointment-content-details",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "property": "height",
+      "selector": ".dx-scheduler-work-space-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-work-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-day .dx-scheduler-date-time-indicator",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "property": "padding",
+      "selector": ".dx-scheduler-work-space-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-work-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-day .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment.dx-state-active, .dx-scheduler-appointment.dx-resizable-resizing",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment.dx-state-hover",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment.dx-state-hover.dx-resizable",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-appointment",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "border-bottom",
+      "selector": ".dx-scheduler-all-day-panel .dx-scheduler-all-day-table-cell",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "border-bottom",
+      "selector": ".dx-scheduler-all-day-title",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-all-day-table-cell.dx-scheduler-focused-cell, .dx-scheduler-date-table-cell.dx-scheduler-focused-cell",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "color",
+      "selector": ".dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-header-panel",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-time-panel",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "padding-left",
+      "selector": ".dx-rtl .dx-scheduler-time-panel-cell",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-scheduler-small .dx-scheduler-time-panel-cell",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-scheduler-time-panel-cell",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-agenda-nodata",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "fluent",
+      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
+      "property": "padding-top",
+      "selector": ".dx-scheduler-agenda .dx-scheduler-date-table-scrollable",
+      "paintedOverBy": "scss/widgets/fluent/scheduler/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_gallery.scss",
+      "property": "margin",
+      "selector": ".dx-gallery-indicator-item",
+      "paintedOverBy": "scss/widgets/generic/gallery/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-searchbox .dx-icon-search",
+      "paintedOverBy": "scss/widgets/generic/textBox/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-datagrid .dx-command-drag .dx-datagrid-drag-icon",
+      "paintedOverBy": "scss/widgets/generic/gridBase/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-treelist .dx-command-drag .dx-treelist-drag-icon",
+      "paintedOverBy": "scss/widgets/generic/gridBase/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-datagrid-group-closed",
+      "paintedOverBy": "scss/widgets/generic/dataGrid/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-datagrid-group-opened",
+      "paintedOverBy": "scss/widgets/generic/dataGrid/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_pagination.scss",
+      "property": "padding-bottom",
+      "selector": ".dx-pager .dx-page-sizes .dx-page-size, .dx-pagination .dx-page-sizes .dx-page-size",
+      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_pagination.scss",
+      "property": "padding-bottom",
+      "selector": ".dx-pager, .dx-pagination",
+      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_pagination.scss",
+      "property": "padding-left",
+      "selector": ".dx-pager .dx-page-sizes .dx-page-size, .dx-pagination .dx-page-sizes .dx-page-size",
+      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_pagination.scss",
+      "property": "padding-right",
+      "selector": ".dx-pager .dx-page-sizes .dx-page-size, .dx-pagination .dx-page-sizes .dx-page-size",
+      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_pagination.scss",
+      "property": "padding-top",
+      "selector": ".dx-pager .dx-page-sizes .dx-page-size, .dx-pagination .dx-page-sizes .dx-page-size",
+      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_pagination.scss",
+      "property": "padding-top",
+      "selector": ".dx-pager, .dx-pagination",
+      "paintedOverBy": "scss/widgets/generic/pagination/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_recurrenceEditor.scss",
+      "property": "margin-top",
+      "selector": ".dx-recurrence-numberbox-interval-label",
+      "paintedOverBy": "scss/widgets/generic/recurrenceEditor/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_toast.scss",
+      "property": "height",
+      "selector": ".dx-toast-icon",
+      "paintedOverBy": "scss/widgets/generic/toast/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/_toast.scss",
+      "property": "width",
+      "selector": ".dx-toast-icon",
+      "paintedOverBy": "scss/widgets/generic/toast/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "height",
+      "selector": ".dx-colorview-color-preview",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "height",
+      "selector": ".dx-colorview-hue-scale",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "height",
+      "selector": ".dx-colorview-hue-scale-wrapper",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "height",
+      "selector": ".dx-colorview-palette",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "margin-top",
+      "selector": ".dx-colorview-container-row.dx-colorview-alpha-channel-row",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "margin",
+      "selector": ".dx-colorview-container label .dx-texteditor",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "margin",
+      "selector": ".dx-colorview-container label.dx-colorview-label-hex",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "width",
+      "selector": ".dx-colorview-alpha-channel-cell",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "width",
+      "selector": ".dx-colorview-alpha-channel-scale",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "width",
+      "selector": ".dx-colorview-color-preview",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "width",
+      "selector": ".dx-colorview-container",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "width",
+      "selector": ".dx-colorview-container label .dx-texteditor",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "width",
+      "selector": ".dx-colorview-container label.dx-colorview-alpha-channel-label",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "width",
+      "selector": ".dx-colorview-controls-container",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "width",
+      "selector": ".dx-colorview-palette",
+      "paintedOverBy": "scss/widgets/generic/colorView/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "margin-bottom",
+      "selector": ".dx-datagrid-column-chooser .dx-overlay-content .dx-popup-content .dx-column-chooser-item",
+      "paintedOverBy": "scss/widgets/generic/gridBase/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "margin-bottom",
+      "selector": ".dx-treelist-column-chooser .dx-overlay-content .dx-popup-content .dx-column-chooser-item",
+      "paintedOverBy": "scss/widgets/generic/gridBase/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-bottom",
+      "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+      "paintedOverBy": "scss/widgets/generic/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-top",
+      "selector": ".dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before",
+      "paintedOverBy": "scss/widgets/generic/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "padding",
+      "selector": ".dx-cell-modified, .dx-datagrid-invalid",
+      "paintedOverBy": "scss/widgets/generic/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "padding",
+      "selector": ".dx-cell-modified, .dx-treelist-invalid",
+      "paintedOverBy": "scss/widgets/generic/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/list/_index.scss",
+      "property": "margin-bottom",
+      "selector": ".dx-list-search",
+      "paintedOverBy": "scss/widgets/generic/list/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-header-panel",
+      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-time-panel",
+      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "height",
+      "selector": ".dx-scheduler-header-panel-cell",
+      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "top",
+      "selector": ".dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell::before",
+      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-agenda-nodata",
+      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
+      "property": "width",
+      "selector": ".dx-scheduler-agenda .dx-scheduler-group-header-content",
+      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
+    },
+    {
+      "theme": "generic",
+      "file": "scss/widgets/base/scheduler/views/month/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-work-space-month .dx-scheduler-date-table-cell",
+      "paintedOverBy": "scss/widgets/generic/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_contextMenu.scss",
+      "property": "padding",
+      "selector": ".dx-context-menu .dx-menu-items-container",
+      "paintedOverBy": "scss/widgets/material/contextMenu/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_fileUploader.scss",
+      "property": "margin-top",
+      "selector": ".dx-fileuploader-invalid .dx-fileuploader-cancel-button",
+      "paintedOverBy": "scss/widgets/material/fileUploader/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_form.scss",
+      "property": "margin-top",
+      "selector": ".dx-form-group-with-caption > .dx-form-group-content",
+      "paintedOverBy": "scss/widgets/material/form/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_form.scss",
+      "property": "padding-top",
+      "selector": ".dx-form-group-with-caption > .dx-form-group-content",
+      "paintedOverBy": "scss/widgets/material/form/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_gallery.scss",
+      "property": "margin",
+      "selector": ".dx-gallery-indicator-item",
+      "paintedOverBy": "scss/widgets/material/gallery/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "background-size",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-show-clear-button .dx-icon-clear",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "font-size",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "height",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-show-clear-button .dx-icon-clear",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "line-height",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-datagrid-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-datagrid.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-treelist-adaptive-more",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_icon_fonts.scss",
+      "property": "width",
+      "selector": ".dx-treelist-container.dx-filter-menu .dx-menu-item-content .dx-icon",
+      "paintedOverBy": "scss/widgets/base/_icon_fonts.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_loadPanel.scss",
+      "property": "padding",
+      "selector": ".dx-loadpanel-content",
+      "paintedOverBy": "scss/widgets/material/loadPanel/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_numberBox.scss",
+      "property": "opacity",
+      "selector": ".dx-state-disabled .dx-numberbox-spin-container",
+      "paintedOverBy": "scss/widgets/material/numberBox/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_pagination.scss",
+      "property": "margin-left",
+      "selector": ".dx-pager .dx-page-sizes .dx-page-size:first-child, .dx-pager .dx-page-sizes .dx-page-size.dx-first-child, .dx-pagination .dx-page-sizes .dx-page-size:first-child, .dx-pagination .dx-page-sizes .dx-page-size.dx-first-child",
+      "paintedOverBy": "scss/widgets/material/pagination/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_recurrenceEditor.scss",
+      "property": "margin-top",
+      "selector": ".dx-recurrence-numberbox-interval-label",
+      "paintedOverBy": "scss/widgets/material/recurrenceEditor/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_recurrenceEditor.scss",
+      "property": "padding",
+      "selector": ".dx-recurrence-button-group .dx-button-content",
+      "paintedOverBy": "scss/widgets/material/recurrenceEditor/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_scrollView.scss",
+      "property": "width",
+      "selector": ".dx-scrollview-pull-down-indicator",
+      "paintedOverBy": "scss/widgets/material/scrollView/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_tooltip.scss",
+      "property": "font-size",
+      "selector": ".dx-tooltip-wrapper .dx-overlay-content .dx-popup-content",
+      "paintedOverBy": "scss/widgets/material/tooltip/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_tooltip.scss",
+      "property": "min-height",
+      "selector": ".dx-tooltip-wrapper .dx-overlay-content",
+      "paintedOverBy": "scss/widgets/material/tooltip/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_tooltip.scss",
+      "property": "padding",
+      "selector": ".dx-tooltip-wrapper .dx-overlay-content .dx-popup-content",
+      "paintedOverBy": "scss/widgets/material/tooltip/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_validation.scss",
+      "property": "font-size",
+      "selector": ".dx-invalid-message > .dx-overlay-content",
+      "paintedOverBy": "scss/widgets/base/_validation.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/_validation.scss",
+      "property": "padding",
+      "selector": ".dx-invalid-message > .dx-overlay-content",
+      "paintedOverBy": "scss/widgets/base/_validation.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "margin",
+      "selector": ".dx-colorview-container label .dx-texteditor",
+      "paintedOverBy": "scss/widgets/material/colorView/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "margin",
+      "selector": ".dx-colorview-container label.dx-colorview-label-hex",
+      "paintedOverBy": "scss/widgets/material/colorView/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/colorView/_index.scss",
+      "property": "width",
+      "selector": ".dx-colorview-color-preview",
+      "paintedOverBy": "scss/widgets/material/colorView/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/fileManager/_index.scss",
+      "property": "padding",
+      "selector": ".dx-filemanager-file-actions-button .dx-button .dx-button-content",
+      "paintedOverBy": "scss/widgets/material/fileManager/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/filterBuilder/_common.scss",
+      "property": "padding",
+      "selector": ".dx-filterbuilder .dx-filterbuilder-group .dx-filterbuilder-group-item .dx-filterbuilder-action.dx-filterbuilder-action-icon",
+      "paintedOverBy": "scss/widgets/material/filterBuilder/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-datagrid-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
+      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-treelist-column-chooser .dx-overlay-content .dx-popup-title .dx-toolbar-label",
+      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "margin-left",
+      "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "margin-left",
+      "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-datagrid .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-treelist .dx-column-indicators .dx-sort-index-icon",
+      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding",
+      "selector": ".dx-datagrid-filter-panel",
+      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/gridBase/_index.scss",
+      "property": "padding",
+      "selector": ".dx-treelist-filter-panel",
+      "paintedOverBy": "scss/widgets/material/gridBase/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "min-width",
+      "selector": ".dx-command-adaptive",
+      "paintedOverBy": "scss/widgets/material/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/gridBase/layout/cell.scss",
+      "property": "width",
+      "selector": ".dx-command-adaptive",
+      "paintedOverBy": "scss/widgets/material/gridBase/layout/cell.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/list/_index.scss",
+      "property": "padding",
+      "selector": ".dx-list-next-button .dx-button",
+      "paintedOverBy": "scss/widgets/material/list/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "background-color",
+      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "border",
+      "selector": ".dx-pivotgrid-fields-container .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "border",
+      "selector": ".dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-pivotgrid-fields-container.dx-drag .dx-area-field.dx-area-box",
+      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "margin-top",
+      "selector": ".dx-pivotgridfieldchooser .dx-area .dx-area-fields",
+      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/pivotGrid/_index.scss",
+      "property": "padding",
+      "selector": ".dx-pivotgrid .dx-pivotgrid-area td",
+      "paintedOverBy": "scss/widgets/material/pivotGrid/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-appointment-content-details",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "property": "height",
+      "selector": ".dx-scheduler-work-space-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-work-week .dx-scheduler-date-time-indicator, .dx-scheduler-work-space-day .dx-scheduler-date-time-indicator",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/_index.scss",
+      "property": "padding",
+      "selector": ".dx-scheduler-work-space-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-work-week .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content, .dx-scheduler-work-space-day .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment.dx-state-active, .dx-scheduler-appointment.dx-resizable-resizing",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment.dx-state-hover",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-appointment.dx-state-hover.dx-resizable",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/appointment/regular/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-appointment",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "border-bottom",
+      "selector": ".dx-scheduler-all-day-panel .dx-scheduler-all-day-table-cell",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "border-bottom",
+      "selector": ".dx-scheduler-all-day-title",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "box-shadow",
+      "selector": ".dx-scheduler-all-day-table-cell.dx-scheduler-focused-cell, .dx-scheduler-date-table-cell.dx-scheduler-focused-cell",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-header-panel",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-time-panel",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "height",
+      "selector": ".dx-scheduler-header-panel-cell",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "padding-left",
+      "selector": ".dx-rtl .dx-scheduler-time-panel-cell",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-scheduler-small .dx-scheduler-time-panel-cell",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/_index.scss",
+      "property": "padding-right",
+      "selector": ".dx-scheduler-time-panel-cell",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
+      "property": "font-size",
+      "selector": ".dx-scheduler-agenda-nodata",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/base/scheduler/views/agenda/_index.scss",
+      "property": "padding-top",
+      "selector": ".dx-scheduler-agenda .dx-scheduler-date-table-scrollable",
+      "paintedOverBy": "scss/widgets/material/scheduler/_index.scss"
+    },
+    {
+      "theme": "material",
+      "file": "scss/widgets/material/button/_mixins.scss",
+      "property": "background-color",
+      "selector": ".dx-tabs-nav-button.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) .dx-inkripple-wave",
+      "paintedOverBy": "scss/widgets/material/tabs/layout/navigation-button/_base.scss"
+    }
+  ]
+}
