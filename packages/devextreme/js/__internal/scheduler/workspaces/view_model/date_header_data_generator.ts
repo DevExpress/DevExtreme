@@ -1,4 +1,5 @@
 import dateUtils from '@js/core/utils/date';
+import { dateUtilsTs } from '@ts/core/utils/date';
 import type { DateHeaderCellData, DateHeaderData, ViewCellData } from '@ts/scheduler/types';
 
 import {
@@ -237,12 +238,21 @@ export class DateHeaderDataGenerator {
       if (plan && !isTimelineView(viewType) && normalizedViewOffset < 0 && columnDate) {
         shiftedStartDate = columnDate;
       }
-      const shiftedStartDateForHeaderText = shouldShiftDatesForHeaderText
+      const headerIndex = idx % cellCountInGroupRow;
+      const offsetHeaderDate = dateUtilsTs.addOffsets(
+        new Date(2000, 0, 1, startDayHour),
+        normalizedViewOffset,
+        interval * headerIndex,
+      );
+      let shiftedStartDateForHeaderText = shouldShiftDatesForHeaderText
         ? shiftedStartDate
         : startDate;
+      if (plan && isTimelineView(viewType) && viewOffset !== 0) {
+        shiftedStartDateForHeaderText = offsetHeaderDate;
+      }
 
       const text = getHeaderCellText(
-        idx % cellCountInGroupRow,
+        headerIndex,
         shiftedStartDateForHeaderText,
         headerCellTextFormat,
         plan ? keepHeaderDate : getDateForHeaderText,
