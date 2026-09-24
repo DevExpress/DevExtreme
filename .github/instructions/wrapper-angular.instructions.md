@@ -37,9 +37,9 @@ Files to create and register (keep every list alphabetical):
   `{ "lib": { "entryFile": "index.ts" } }`.
 - `packages/devextreme-angular/src/index.ts` — add
   `export { Dx<Name>Component, Dx<Name>Module } from 'devextreme-angular/ui/<name>';`.
-- `packages/devextreme-angular/src/ui/all.ts` — add the `import` **and** add `Dx<Name>Module`
-  to **both** the declarations and exports arrays (the two arrays are identical; anchor on the
-  neighboring entries to place it in each).
+- `packages/devextreme-angular/src/ui/all.ts`: add the `import`, **and** add
+  `Dx<Name>Module` to **both** the `imports` and the `exports` array of `DevExtremeModule`.
+  The two arrays are identical; anchor on the neighboring entries to place it in each.
 - For a component with nested/object options, also create the `ui/<name>/nested/` folder
   (one file per nested component, plus `index.ts` and `ng-package.json`; see the template
   README §0 and §5). Wire every nested module into the component's `@NgModule` and add
@@ -88,7 +88,9 @@ the source of truth. A component file contains, in order:
    `{ emit: '<option>Change' }` for every option.
 8. **`_createInstance(element, options)`** — returns `new Dx<Name>(element, options)`.
 9. **`ngOnDestroy()`** — `this._destroyWidget();`.
-10. **`@NgModule`** exporting the component (and `DxTemplateModule`).
+10. **`@NgModule`** with an `imports` array (`Dx<Name>Component`, each nested
+    `Dxo…Module`/`Dxi…Module`, `DxIntegrationModule`, `DxTemplateModule`) and an `exports`
+    array (`Dx<Name>Component`, each nested module, `DxTemplateModule`).
 11. **Types reexport** — `import type * as Dx<Name>Types from "devextreme/ui/<widget>_types"; export { Dx<Name>Types };`
 
 ## Applying an API change
