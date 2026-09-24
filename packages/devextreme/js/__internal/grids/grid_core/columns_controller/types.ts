@@ -89,6 +89,8 @@ export interface ColumnsChanges {
   appliedFilters?: DataFilter[];
 }
 
+export type ColumnChangeType = Exclude<keyof ColumnsChanges['changeTypes'], 'length'>;
+
 export type ColumnsOptionChanged = Extract<OptionChanged, { name: 'columns' }>;
 
 type ColumnOptions = NonNullable<ColumnsOptionChanged['value']>[number];

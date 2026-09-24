@@ -34,7 +34,7 @@ import {
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 import type {
-  Column, ColumnIdentifier, ColumnIndex, ColumnsChanges, DropLocationNames,
+  Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnsChanges, DropLocationNames,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
@@ -134,14 +134,16 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
   return result;
 };
 
-export const getParentBandColumns = function (columnIndex, columnParentByIndex) {
-  const result: any = [];
-  let parent = columnParentByIndex[columnIndex];
+export const getParentBandColumns = function (
+  columnIndex: number | undefined,
+  columnParentByIndex: Record<number, Column>,
+): Column[] {
+  const result: Column[] = [];
+  let parent = isDefined(columnIndex) ? columnParentByIndex[columnIndex] : undefined;
 
   while (parent) {
     result.unshift(parent);
-    columnIndex = parent.index;
-    parent = columnParentByIndex[columnIndex];
+    parent = isDefined(parent.index) ? columnParentByIndex[parent.index] : undefined;
   }
 
   return result;
@@ -592,7 +594,11 @@ export const applyUserState = function (that: ColumnsController) {
   }
 };
 
-export const updateIndexes = function (that: ColumnsController, column?) {
+export const resetBandColumnsCache = (that: ColumnsController): void => {
+  that._bandColumnsCache = undefined;
+};
+
+export const updateIndexes = (that: ColumnsController, column?: Column): void => {
   updateColumnIndexes(that);
   updateColumnGroupIndexes(that, column);
   updateColumnSortIndexes(that, column);
@@ -605,7 +611,7 @@ export const resetColumnsCache = function (that: ColumnsController) {
   that.resetColumnsCache();
 };
 
-export function assignColumns(that, columns) {
+export function assignColumns(that: ColumnsController, columns: Column[]): void {
   that._previousColumns = that._columns;
   that._columns = columns;
   resetColumnsCache(that);
@@ -614,7 +620,7 @@ export function assignColumns(that, columns) {
 
 export const updateColumnChanges = (
   that: ColumnsController,
-  changeType: Exclude<keyof ColumnsChanges['changeTypes'], 'length'>,
+  changeType: ColumnChangeType,
   optionName?: string,
   columnIndex?: number,
 ): void => {
@@ -626,19 +632,18 @@ export const updateColumnChanges = (
 
   const normalizedOptionName = (optionName ?? 'all').split('.')[0] as keyof Column | 'all';
 
-  const { changeTypes } = columnChanges;
+  const { changeTypes, optionNames } = columnChanges;
 
   if (changeType && !changeTypes[changeType]) {
     changeTypes[changeType] = true;
-    changeTypes.length++;
+    changeTypes.length += 1;
   }
-
-  const { optionNames } = columnChanges;
 
   if (normalizedOptionName && !optionNames[normalizedOptionName]) {
     optionNames[normalizedOptionName] = true;
-    optionNames.length++;
+    optionNames.length += 1;
   }
+
   if (columnIndex === undefined || columnIndex !== columnChanges.columnIndex) {
     if (isDefined(columnIndex)) {
       columnChanges.columnIndices ??= [];
@@ -652,6 +657,7 @@ export const updateColumnChanges = (
 
     delete columnChanges.columnIndex;
   }
+
   that._columnChanges = columnChanges;
   resetColumnsCache(that);
 };
@@ -719,7 +725,7 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
   const optionGetter = compileGetter(optionName);
   const columnIndex = column.index;
   let columns;
-  let changeType;
+  let changeType: ColumnChangeType;
   let initialColumn;
 
   if (arguments.length === 3) {
@@ -974,10 +980,6 @@ export const convertOwnerBandToColumnReference = (columns) => {
   });
 };
 
-export const resetBandColumnsCache = (that: ColumnsController) => {
-  that._bandColumnsCache = undefined;
-};
-
 export const findColumn = (columns, identifier: ColumnIdentifier | undefined) => {
   const identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(':'));
   let column;
@@ -1084,9 +1086,11 @@ export const isFirstOrLastColumn = function (
 ): boolean {
   const targetColumnIndex = targetColumn.index;
   const bandColumnsCache = that.getBandColumnsCache();
-  const parentBandColumns = !isDefined(targetColumn.type) && getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
+  const parentBandColumns = isDefined(targetColumn.type)
+    ? []
+    : getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
 
-  if (parentBandColumns?.length) {
+  if (parentBandColumns.length) {
     return isFirstOrLastBandColumn(that, parentBandColumns.concat([targetColumn]), onlyWithinBandColumn, isLast, fixedPosition);
   }
 
