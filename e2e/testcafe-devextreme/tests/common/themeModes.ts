@@ -144,6 +144,38 @@ if (getThemeName() === 'fluent-next') {
     });
   });
 
+  const DECLARED_IN_OKLCH = 'oklch(0.55 0.15 250)';
+
+  const declaredAsRgb = ClientFunction((declared: string) => {
+    const probe = document.createElement('div');
+
+    document.body.appendChild(probe);
+    probe.style.color = `color-mix(in srgb, ${declared} 100%, transparent)`;
+
+    const channels = (getComputedStyle(probe).color.match(/-?[\d.]+(?:e-?\d+)?/g) ?? [])
+      .slice(0, 3)
+      .map((value) => Math.round(Math.min(1, Math.max(0, Number(value))) * 255));
+
+    probe.remove();
+
+    return `#${channels.map((value) => value.toString(16).padStart(2, '0')).join('')}`;
+  });
+
+  test('dxChart hands out a name declared in another colour space as the sRGB colour it paints', async (t) => {
+    const expected = await declaredAsRgb(DECLARED_IN_OKLCH);
+
+    await t.expect(await colorsHandedOutByTheWidget())
+      .eql([expected, expected], 'getColor brings the colour to sRGB instead of reading its channels as red, green and blue');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_IN_OKLCH, DECLARED_BG);
+    await createWidget('dxChart', {
+      dataSource: [{ a: 'x', v: 1 }],
+      series: [{ argumentField: 'a', valueField: 'v' }],
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
   test('dxPieChart paints from a name the page declared, leaving no reference behind', async (t) => {
     const { svg, unresolved } = await markupOfTheWidget();
 
