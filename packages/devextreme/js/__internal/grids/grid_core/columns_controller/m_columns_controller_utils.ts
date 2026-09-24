@@ -37,7 +37,7 @@ import {
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 import type {
-  Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnsChanges, DropLocationNames,
+  AddedColumn, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnsChanges, DropLocationNames,
   ValueSerializers,
 } from './types';
 
@@ -108,34 +108,47 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
   }
 };
 
-export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?, createdColumnCount?) {
-  let result: any = [];
+function checkUserStateColumn(column, userStateColumn) {
+  return column && userStateColumn && (userStateColumn.name === (column.name || column.dataField)) && (userStateColumn.dataField === column.dataField || column.name);
+}
 
-  if (columnsOptions) {
-    each(columnsOptions, (index, columnOptions) => {
-      const currentIndex = (createdColumnCount ?? 0) + result.length;
-      const userStateColumnOptions = that._columnsUserState
-        && checkUserStateColumn(columnOptions, that._columnsUserState[currentIndex])
-        && that._columnsUserState[currentIndex];
-      const column: any = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
-
-      if (column) {
-        if (bandColumn) {
-          column.ownerBand = bandColumn;
-        }
-        result.push(column);
-
-        if (column.columns) {
-          warnFixedInChildColumnsOnce(that, column.columns);
-          result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
-          delete column.columns;
-          column.hasColumns = true;
-        }
-      }
-    });
+export const createColumnsFromOptions = (
+  that: ColumnsController,
+  columnsOptions: AddedColumn[] | undefined,
+  bandColumn?: Column,
+  createdColumnCount = 0,
+): Column[] => {
+  if (!columnsOptions) {
+    return [];
   }
 
-  return result;
+  return columnsOptions.reduce((result: Column[], columnOptions: AddedColumn): Column[] => {
+    const currentIndex = createdColumnCount + result.length;
+    const userStateColumnOptions = that._columnsUserState
+      && checkUserStateColumn(columnOptions, that._columnsUserState[currentIndex])
+      && that._columnsUserState[currentIndex];
+    const column: Column = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
+
+    if (!column) {
+      return result;
+    }
+
+    if (bandColumn) {
+      // @ts-expect-error ownerBand holds the band column until updateColumnIndexes sets its index
+      column.ownerBand = bandColumn;
+    }
+
+    if (!column.columns) {
+      return [...result, column];
+    }
+
+    warnFixedInChildColumnsOnce(that, column.columns);
+    const childColumns = createColumnsFromOptions(that, column.columns, column, result.length + 1);
+    delete column.columns;
+    column.hasColumns = true;
+
+    return [...result, column, ...childColumns];
+  }, []);
 };
 
 export const getParentBandColumns = function (
@@ -531,10 +544,6 @@ export const moveColumnToGroup = function (that: ColumnsController, column, grou
 
   return groupIndex;
 };
-
-function checkUserStateColumn(column, userStateColumn) {
-  return column && userStateColumn && (userStateColumn.name === (column.name || column.dataField)) && (userStateColumn.dataField === column.dataField || column.name);
-}
 
 export const applyUserState = function (that: ColumnsController) {
   const columnsUserState = that._columnsUserState;

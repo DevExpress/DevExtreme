@@ -32,7 +32,7 @@ export type FilterField = Omit<Column, 'filterOperations'> & { filterOperations?
 
 export type ColumnUserState = Pick<Column, typeof USER_STATE_FIELD_NAMES[number]>;
 
-export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
+export type AddedColumn = string | Column;
 
 export type ColumnSelector = ((data: RawItemData) => unknown) & {
   columnIndex?: number;
@@ -68,6 +68,8 @@ export interface InternalColumnOptions extends ValueSerializers {
   bufferedSelectedFilterOperation?: ColumnBase['selectedFilterOperation'];
   added?: AddedColumn;
   lookup?: InternalColumnLookup;
+  columns?: AddedColumn[];
+  hasColumns?: boolean;
 }
 
 export type Column = ColumnBase & InternalColumnOptions;
