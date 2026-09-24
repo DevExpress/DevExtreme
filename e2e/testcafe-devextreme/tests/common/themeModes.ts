@@ -364,32 +364,56 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(await vizWidgetsExposed()).eql([...WIDGETS_UNDER_TEST].sort());
   });
 
-  const gradientStopsExportedToTheCanvas = ClientFunction(() => {
+  const gradientStopsExportedToTheCanvas = ClientFunction(() => new Promise<{
+    stops: string[];
+    stopColorAttribute: string;
+    failure: string;
+  }>((resolve) => {
+    const { widget } = (window as any);
+    const nativeAddColorStop = CanvasGradient.prototype.addColorStop;
     const stops: string[] = [];
-    const nativeStop = CanvasGradient.prototype.addColorStop;
+    const stopColorAttribute = document.querySelector('#container stop')?.getAttribute('stop-color') ?? '';
+    let settled = false;
+
+    const settle = (failure = ''): void => {
+      if (settled) {
+        return;
+      }
+
+      settled = true;
+      CanvasGradient.prototype.addColorStop = nativeAddColorStop;
+      resolve({ stops, stopColorAttribute, failure });
+    };
 
     CanvasGradient.prototype.addColorStop = function watchedAddColorStop(offset, color) {
       stops.push(String(color));
-      return nativeStop.call(this, offset, color);
+
+      try {
+        nativeAddColorStop.call(this, offset, color);
+      } catch (error) {
+        settle(String(error));
+        throw error;
+      }
     };
 
-    const { widget } = (window as any);
-    const stopColorAttribute = document.querySelector('#container stop')?.getAttribute('stop-color') ?? '';
-
-    widget.exportTo('probe', 'PNG');
-
-    return new Promise<{ stops: string[]; stopColorAttribute: string }>((resolve) => {
-      setTimeout(() => {
-        CanvasGradient.prototype.addColorStop = nativeStop;
-        resolve({ stops, stopColorAttribute });
-      }, 3000);
+    widget.on('fileSaving', (e: { cancel: boolean }) => {
+      e.cancel = true;
+      settle();
     });
-  });
+
+    try {
+      widget.exportTo('probe', 'PNG');
+    } catch (error) {
+      settle(String(error));
+    }
+  }));
 
   test('exportTo hands a gradient stop the colour the name resolved to', async (t) => {
-    const { stops, stopColorAttribute } = await gradientStopsExportedToTheCanvas();
+    const { stops, stopColorAttribute, failure } = await gradientStopsExportedToTheCanvas();
 
     await t.expect(stopColorAttribute).eql('var(--dx-viz-blue, #0078d4)', 'the widget writes the name into the attribute, so the exporter is the one that has to resolve it');
+    await t.expect(failure).eql('', 'the export reaches onFileSaving instead of failing in addColorStop');
+    await t.expect(stops.filter((stop) => stop.includes('var('))).eql([], 'no stop reaches the canvas as a reference');
     await t.expect(stops[0]).eql(DECLARED_BLUE, 'the first stop carries what the page declared, neither the name nor the literal beside it');
   }).before(async () => {
     await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
