@@ -317,8 +317,10 @@ export const updateSerializers = (
 
   if (gridCoreUtils.isDateType(dataType)) {
     options.deserializeValue = dateSerialization.deserializeDate;
-    // eslint-disable-next-line func-names
-    options.serializeValue = function (this: ValueSerializers, value: unknown): unknown {
+    options.serializeValue = function serializeDateValue(
+      this: ValueSerializers,
+      value: unknown,
+    ): unknown {
       return isString(value)
         ? value
         : dateSerialization.serializeDate(value, this.serializationFormat);
@@ -329,8 +331,7 @@ export const updateSerializers = (
       const parsedValue = parseFloat(value as string);
       return isNaN(parsedValue) ? value : parsedValue;
     };
-    // eslint-disable-next-line func-names
-    options.serializeValue = function (
+    options.serializeValue = function serializeNumberValue(
       this: ValueSerializers,
       value: unknown,
       target: string | undefined,
