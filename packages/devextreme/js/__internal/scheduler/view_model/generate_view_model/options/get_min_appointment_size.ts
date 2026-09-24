@@ -8,6 +8,8 @@ interface Options {
   isAdaptivityEnabled: boolean;
   isMonthView?: boolean;
   isAllDayAppointment?: boolean;
+  // From the theme when it declares one; otherwise the legacy literals below apply
+  appointmentMinHeight?: number;
 }
 
 const COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
@@ -20,16 +22,19 @@ const APPOINTMENT_MIN_WIDTH = 40;
 const TIMELINE_APPOINTMENT_DEFAULT_HEIGHT = 60;
 const ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH = 30; // used for vertical view
 
-// TODO get rid of depending from themes
-const getMinAppointmentHeightByTheme = (): number => (
-  isCompact(currentTheme())
+const getMinAppointmentHeight = (appointmentMinHeight?: number): number => {
+  if (appointmentMinHeight !== undefined) {
+    return appointmentMinHeight;
+  }
+
+  return isCompact(currentTheme())
     ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT
-    : APPOINTMENT_DEFAULT_HEIGHT
-);
+    : APPOINTMENT_DEFAULT_HEIGHT;
+};
 
 export const getMinAppointmentSize = (options: Options): RealSize => {
   const {
-    isTimelineView, isAdaptivityEnabled, isMonthView, isAllDayAppointment,
+    isTimelineView, isAdaptivityEnabled, isMonthView, isAllDayAppointment, appointmentMinHeight,
   } = options;
 
   if (isAdaptivityEnabled) {
@@ -48,7 +53,7 @@ export const getMinAppointmentSize = (options: Options): RealSize => {
 
   const width = APPOINTMENT_MIN_WIDTH;
   const height = isMonthView || isAllDayAppointment
-    ? getMinAppointmentHeightByTheme()
+    ? getMinAppointmentHeight(appointmentMinHeight)
     : DAY_VIEW_APPOINTMENT_MIN_HEIGHT;
 
   return { width, height };
@@ -58,6 +63,7 @@ export const getDefaultAppointmentSize = ({
   isTimelineView,
   isAdaptivityEnabled,
   viewOrientation,
+  appointmentMinHeight,
 }: Options & {
   viewOrientation: Orientation;
 }): RealSize => {
@@ -72,6 +78,8 @@ export const getDefaultAppointmentSize = ({
     width: viewOrientation === 'vertical'
       ? APPOINTMENT_DEFAULT_VERTICAL_WIDTH
       : APPOINTMENT_DEFAULT_HORIZONTAL_WIDTH,
-    height: isTimelineView ? TIMELINE_APPOINTMENT_DEFAULT_HEIGHT : getMinAppointmentHeightByTheme(),
+    height: isTimelineView
+      ? TIMELINE_APPOINTMENT_DEFAULT_HEIGHT
+      : getMinAppointmentHeight(appointmentMinHeight),
   };
 };

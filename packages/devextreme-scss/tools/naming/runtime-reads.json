@@ -1,0 +1,53 @@
+{
+  "comment": "The CSS -> JS contract, the mirror of runtime-contract.json: --dx-* names the tier declares for the runtime to read back with getComputedStyle. No stylesheet reads them, so reachability.mjs counts them live from this file instead of pinning them as dead API, and tests/runtime-reads.test.ts holds every end - the tier still declares each name, the file named in readBy still reads it, no other file in js/__internal reads a --dx-* name without being listed here, and every `length` value resolves to a plain length in the built bundles (themeLength parses px and rem only, so a calc() or a keyword would read as 'not declared' and the runtime would silently keep its legacy literal).",
+  "variables": [
+    {
+      "name": "--dx-speed-dial-action-fa-button-offset",
+      "kind": "length",
+      "readBy": "packages/devextreme/js/__internal/ui/speed_dial_action/speed_dial_main_item.ts",
+      "meaning": "distance from the main button to the first action button"
+    },
+    {
+      "name": "--dx-speed-dial-action-fa-button-spacing",
+      "kind": "length",
+      "readBy": "packages/devextreme/js/__internal/ui/speed_dial_action/speed_dial_main_item.ts",
+      "meaning": "distance between two neighbouring action buttons"
+    },
+    {
+      "name": "--dx-speed-dial-action-fa-button-with-label-inset-inline",
+      "kind": "length",
+      "readBy": "packages/devextreme/js/__internal/ui/speed_dial_action/speed_dial_main_item.ts",
+      "meaning": "horizontal shift of a labelled action button when the main button has no label"
+    },
+    {
+      "name": "--dx-html-editor-ai-dialog-button-width",
+      "kind": "length",
+      "readBy": "packages/devextreme/js/__internal/ui/html_editor/ui/aiDialog.ts",
+      "meaning": "width of the Generate and Cancel buttons of the AI dialog"
+    },
+    {
+      "name": "--dx-file-manager-toolbar-viewmode-popup-width",
+      "kind": "length",
+      "readBy": "packages/devextreme/js/__internal/ui/file_manager/ui.file_manager.toolbar.ts",
+      "meaning": "width of the view-mode switcher popup"
+    },
+    {
+      "name": "--dx-grid-ai-confirm-dialog-width",
+      "kind": "length",
+      "readBy": "packages/devextreme/js/__internal/grids/grid_core/ai_assistant/utils.ts",
+      "meaning": "width of the dialog that confirms aborting an AI request"
+    },
+    {
+      "name": "--dx-scheduler-appointment-min-height",
+      "kind": "length",
+      "readBy": "packages/devextreme/js/__internal/scheduler/view_model/generate_view_model/options/get_view_model_options.ts",
+      "meaning": "minimum height of an appointment in the month and all-day layouts"
+    },
+    {
+      "name": "--dx-theme-mode",
+      "kind": "keyword",
+      "readBy": "packages/devextreme/js/__internal/core/utils/theme_mode.ts",
+      "meaning": "the colour mode an element resolves to; a style query reads the same name from CSS"
+    }
+  ]
+}

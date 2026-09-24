@@ -15,6 +15,7 @@ $html-editor-ai-dialog-selects-gap: null !default;
 $html-editor-ai-dialog-content-gap: null !default;
 $html-editor-ai-dialog-content-padding: null !default;
 $html-editor-ai-dialog-border-radius: null !default;
+$html-editor-ai-dialog-button-width: null !default;
 
 @if $size == "default" {
   $html-editor-toolbar-size-editor-width: ds.$spacing-1200 !default;
@@ -26,6 +27,7 @@ $html-editor-ai-dialog-border-radius: null !default;
   $html-editor-ai-dialog-content-gap: ds.$spacing-160 !default;
   $html-editor-ai-dialog-content-padding: ds.$spacing-160 ds.$spacing-240 !default;
   $html-editor-ai-dialog-border-radius: ds.$border-radius-80 !default;
+  $html-editor-ai-dialog-button-width: 110px !default; // dx-offscale: 110px
 }
 
 @else if $size == "compact" {
@@ -38,6 +40,7 @@ $html-editor-ai-dialog-border-radius: null !default;
   $html-editor-ai-dialog-content-gap: ds.$spacing-120 !default;
   $html-editor-ai-dialog-content-padding: ds.$spacing-120 ds.$spacing-160 !default;
   $html-editor-ai-dialog-border-radius: $global-border-radius !default;
+  $html-editor-ai-dialog-button-width: ds.$spacing-1000 !default;
 }
 
 $html-editor-toolbar-wrapper-inset-block-start: ds.$spacing-10 !default;
