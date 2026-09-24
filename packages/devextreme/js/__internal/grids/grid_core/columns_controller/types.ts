@@ -8,7 +8,13 @@ import type {
   COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
 } from './const';
 
-type InternalColumnLookup = ColumnLookup & {
+export interface ValueSerializers {
+  serializationFormat?: string | null;
+  deserializeValue?: (value: unknown) => unknown;
+  serializeValue?: (value: unknown, target?: string) => unknown;
+}
+
+type InternalColumnLookup = ColumnLookup & ValueSerializers & {
   items?: RawItemData[];
   dataType?: string;
 };
@@ -37,10 +43,8 @@ export type ColumnSelector = ((data: RawItemData) => unknown) & {
 
 type FilterTargets = 'filterRow' | 'headerFilter' | 'filterBuilder' | 'search';
 
-export interface InternalColumnOptions {
+export interface InternalColumnOptions extends ValueSerializers {
   parseValue?: (text: string) => unknown;
-  deserializeValue?: (value: unknown) => unknown;
-  serializeValue?: (value: unknown, target?: string) => unknown;
   selector?: ColumnSelector;
   createFilterExpression?: (
     filterValue: unknown,
@@ -88,6 +92,8 @@ export interface ColumnsChanges {
   columnIndices?: number[];
   appliedFilters?: DataFilter[];
 }
+
+export type ColumnChangeType = Exclude<keyof ColumnsChanges['changeTypes'], 'length'>;
 
 export type ColumnsOptionChanged = Extract<OptionChanged, { name: 'columns' }>;
 
