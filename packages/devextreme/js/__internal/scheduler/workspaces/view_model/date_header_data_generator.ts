@@ -223,8 +223,8 @@ export class DateHeaderDataGenerator {
         wallDate.getUTCDate(),
       );
       let shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
-      if (plan && !isTimelineView(viewType)) {
-        shiftedStartDate = viewOffset < 0 && columnDate ? columnDate : startDate;
+      if (plan && !isTimelineView(viewType) && viewOffset < 0 && columnDate) {
+        shiftedStartDate = columnDate;
       }
       const shiftedStartDateForHeaderText = shouldShiftDatesForHeaderText
         ? shiftedStartDate

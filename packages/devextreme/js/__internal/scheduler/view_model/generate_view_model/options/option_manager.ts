@@ -154,6 +154,8 @@ export class OptionManager {
         panelName,
       });
 
+      const daylightPlan = this.schedulerStore.getWorkSpace()
+        .viewDataProvider?.viewDataGenerator.getDaylightPlan();
       const {
         cells,
         dayIntervals,
@@ -165,8 +167,7 @@ export class OptionManager {
         isTimelineView || panelName === 'allDayPanel',
         isMonthView,
         panelName,
-        this.schedulerStore.getWorkSpace()
-          .viewDataProvider?.viewDataGenerator.getDaylightPlan(),
+        daylightPlan,
         this.schedulerStore.getWorkSpace()
           .viewDataProvider?.viewDataGenerator.getVerticalSlots(),
       );
@@ -206,7 +207,9 @@ export class OptionManager {
         minLevel,
         maxLevel,
         collectBy: viewOrientation === 'horizontal' ? 'byOccupation' : 'byStartDate',
-        stackByRow: viewOrientation === 'vertical',
+        stackByRow: viewOrientation === 'vertical'
+          && Boolean(daylightPlan)
+          && viewOffset !== 0,
         isCompact: isCompactCollector,
       };
 
