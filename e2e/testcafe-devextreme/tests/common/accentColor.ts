@@ -24,6 +24,13 @@ interface MeasuredStep {
   oklch: Oklch | null;
 }
 
+interface PaintedAccent {
+  name: string;
+  painted: { selectedRange: string; handles: string[]; markers: string[] };
+  primary: string;
+  inPlace: boolean;
+}
+
 const asHex = (value: string): string => {
   const probe = document.createElement('div');
   document.body.appendChild(probe);
@@ -87,6 +94,10 @@ const measurePalette = ClientFunction((accent: string | null, steps: number[]) =
 
 const PALETTE_STRIP = 'accent-palette';
 const ACCENT_GRID = 'accent-grid';
+const ACCENT_RANGE = 'accent-range';
+const SELECTED_RANGE = `#${ACCENT_RANGE} .dxrs-slidersContainer > path`;
+const SLIDER_HANDLES = `#${ACCENT_RANGE} .slider > path`;
+const SLIDER_MARKERS = `#${ACCENT_RANGE} .slider-marker > path`;
 const GRID_DATA = getData(5, 2);
 const SHIPPED_ACCENTS = [
   { palette: 'blue', color: '#0f6cbd' },
@@ -150,6 +161,71 @@ const accentThroughApi = ClientFunction((color: string | null) => {
 const declareBrandColor = ClientFunction((color: string) => {
   document.documentElement.style.setProperty('--brand', color);
 });
+
+const createAccentRange = async (): Promise<void> => {
+  await appendElementTo('#container', 'div', ACCENT_RANGE, { marginTop: '8px' });
+  await createWidget('dxRangeSelector', {
+    scale: {
+      startValue: 0, endValue: 100, tickInterval: 10, minorTickInterval: 2,
+    },
+    value: [20, 60],
+    behavior: { animationEnabled: false },
+    size: { width: 1080, height: 80 },
+  }, `#${ACCENT_RANGE}`);
+};
+
+const rememberAccentRange = ClientFunction(() => {
+  const { DevExpress } = window as any;
+  const host = document.getElementById(ACCENT_RANGE);
+
+  (window as any).accentRangeAsCreated = {
+    instance: DevExpress.viz.dxRangeSelector.getInstance(host),
+    selectedRange: document.querySelector(SELECTED_RANGE),
+  };
+}, { dependencies: { ACCENT_RANGE, SELECTED_RANGE } });
+
+const paintAccentRange = ClientFunction((color: string, throughApi: boolean) => {
+  const { DevExpress, accentRangeAsCreated } = window as any;
+
+  if (throughApi) {
+    DevExpress.ui.themes.customAccentColor(color);
+  } else {
+    document.documentElement.style.setProperty('--dx-accent-color', color);
+  }
+
+  const host = document.getElementById(ACCENT_RANGE);
+  const selectedRange = document.querySelector(SELECTED_RANGE)!;
+  const paintOf = (selector: string, property: 'fill' | 'stroke'): string[] => Array.from(
+    document.querySelectorAll(selector),
+    (element) => asHex(getComputedStyle(element)[property]),
+  );
+  const probe = document.createElement('div');
+  document.body.appendChild(probe);
+  probe.style.backgroundColor = 'var(--dxds-primary-100)';
+  const primary = asHex(getComputedStyle(probe).backgroundColor);
+  probe.remove();
+
+  return {
+    painted: {
+      selectedRange: asHex(getComputedStyle(selectedRange).stroke),
+      handles: paintOf(SLIDER_HANDLES, 'stroke'),
+      markers: paintOf(SLIDER_MARKERS, 'fill'),
+    },
+    primary,
+    inPlace: selectedRange === accentRangeAsCreated?.selectedRange
+      && DevExpress.viz.dxRangeSelector.getInstance(host) === accentRangeAsCreated?.instance,
+  };
+}, {
+  dependencies: {
+    ACCENT_RANGE, SELECTED_RANGE, SLIDER_HANDLES, SLIDER_MARKERS, asHex,
+  },
+});
+
+const RANGE_ACCENTS = [
+  ...SHIPPED_ACCENTS.map(({ palette, color }) => ({ name: palette, color, throughApi: false })),
+  { name: 'custom', color: '#a703ff', throughApi: false },
+  { name: 'custom through themes.customAccentColor', color: '#107c10', throughApi: true },
+];
 
 const rounded = (value: number): number => Math.round(value * 1000) / 1000;
 const stepOf = (measured: MeasuredStep[], step: number): Oklch => measured
@@ -233,7 +309,35 @@ fixture`Custom accent color`
     focusedRowKey: GRID_DATA[2].field_0,
     showBorders: true,
   }, `#${ACCENT_GRID}`);
+  await createAccentRange();
 });
+
+(isFluentNext() ? test : test.skip)('a range selector paints its selected range, handles and markers in the accent, repainting in place', async (t) => {
+  await rememberAccentRange();
+
+  const results: PaintedAccent[] = [];
+
+  for (const { name, color, throughApi } of RANGE_ACCENTS) {
+    results.push({ name, ...await paintAccentRange(color, throughApi) });
+  }
+
+  await t
+    .expect(results.map(({ name, painted }) => ({ name, ...painted })))
+    .eql(
+      results.map(({ name, primary }) => ({
+        name, selectedRange: primary, handles: [primary, primary], markers: [primary, primary],
+      })),
+      'the selected range, both slider handles and both marker plates are painted in --dxds-primary-100 of every accent',
+    );
+
+  await t
+    .expect(new Set(results.map(({ painted }) => painted.selectedRange)).size)
+    .eql(RANGE_ACCENTS.length, 'no two accents paint the selected range alike');
+
+  await t
+    .expect(results.filter(({ inPlace }) => !inPlace).map(({ name }) => name))
+    .eql([], 'every accent repaints the widget drawn first, neither re-created nor reloaded');
+}).before(createAccentRange);
 
 (isFluentNext() ? test : test.skip)('a translucent accent still gives an opaque palette', async (t) => {
   const translucentAccent = '#a703ff80';
