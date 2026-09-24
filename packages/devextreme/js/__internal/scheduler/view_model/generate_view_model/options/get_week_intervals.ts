@@ -27,6 +27,7 @@ export const getWeekIntervals = (
     durationMinutes: cellDurationMinutes,
     daylightPlan,
     verticalSlots: isTimeline ? undefined : verticalSlots,
+    viewOffset,
   });
   // Vertical rows already start at the offset hour. Shifting their layout
   // again puts the appointment on a different row from its label.
