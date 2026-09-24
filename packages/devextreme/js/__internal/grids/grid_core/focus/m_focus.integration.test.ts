@@ -252,6 +252,33 @@ describe('GridCore focus', () => {
     });
   });
 
+  describe('when focusedRowKey is set before the grid is created', () => {
+    it('should resolve the focused row index from the initial data change', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: {
+          store: {
+            type: 'array',
+            key: 'id',
+            data: [
+              { id: 1, name: 'Item 1' },
+              { id: 2, name: 'Item 2' },
+              { id: 3, name: 'Item 3' },
+            ],
+          },
+        },
+        focusedRowEnabled: true,
+        focusedRowKey: 3,
+        columns: [
+          { dataField: 'id', width: 80 },
+          { dataField: 'name', caption: 'Name', sortOrder: 'desc' },
+        ],
+      });
+
+      expect(instance.option('focusedRowKey')).toBe(3);
+      expect(instance.option('focusedRowIndex')).toBe(0);
+    });
+  });
+
   describe('when focusedRowKey is set to a row inside a collapsed group with repaintChangesOnly', () => {
     const countFocusedRows = (): number => document
       .querySelectorAll(`#${GRID_CONTAINER_ID} .dx-row.dx-row-focused`).length;
