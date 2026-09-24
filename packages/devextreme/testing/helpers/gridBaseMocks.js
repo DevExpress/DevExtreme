@@ -295,6 +295,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             skipProcessingPagingChange: commonUtils.noop,
             changed: $.Callbacks(),
+            afterChanged: $.Callbacks(),
+            getLastChange: commonUtils.noop,
             loadingChanged: $.Callbacks(),
             dataErrorOccurred: $.Callbacks('stopOnFalse'),
             pageChanged: $.Callbacks(),

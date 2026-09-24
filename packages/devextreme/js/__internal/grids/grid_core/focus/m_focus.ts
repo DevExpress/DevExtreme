@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
+import type { Callback } from '@js/core/utils/callbacks';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
@@ -22,6 +23,7 @@ import type { RowsView } from '../views/m_rows_view';
 import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
 import type { FocusDataSourceControllerExtension } from './extenders/focus_data_source_controller';
 import { UiGridCoreFocusUtils } from './m_focus_utils';
+import type { FocusDataControllerExtension } from './types';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
 const FOCUSED_ROW_SELECTOR = `.dx-row.${ROW_FOCUSED_CLASS}`;
@@ -53,11 +55,20 @@ export class FocusController extends core.ViewController {
     return this.getController('dataSource');
   }
 
-  public init() {
+  public init(): void {
     this.component._optionsByReference.focusedRowKey = true;
+
+    const dataController = this.getDataController();
+    dataController.afterChanged.remove(this.handleDataChanged);
+    dataController.afterChanged.add(this.handleDataChanged);
+
+    const lastChange = dataController.getLastChange();
+    if (lastChange) {
+      this.handleDataChanged(lastChange);
+    }
   }
 
-  public handleDataChanged(e): void {
+  public handleDataChanged = (e: DataChange): void => {
     const dataController = this.getDataController();
     const dataSourceController = this.getDataSourceController();
     const forceUpdateFocusedRow = dataSourceController.consumeDataPushed();
@@ -67,8 +78,8 @@ export class FocusController extends core.ViewController {
     }
 
     const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
-    const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
-    const isRefreshWithItems = e.changeType === 'refresh' && !!e.items.length;
+    const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.includes('remove');
+    const isRefreshWithItems = e.changeType === 'refresh' && !!e.items?.length;
     const isAppendOrPrepend = e.changeType === 'append' || e.changeType === 'prepend';
 
     if (forceUpdateFocusedRow && dataController.isEmpty()) {
@@ -82,7 +93,7 @@ export class FocusController extends core.ViewController {
       this.updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
       this.resetStaleFocusedRowAfterPartialUpdate(e);
     }
-  }
+  };
 
   private resetStaleFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
     const focusedRowKey = this.option('focusedRowKey');
@@ -676,10 +687,6 @@ export const columns = (Base: ModuleType<ColumnsController>) => class FocusColum
   }
 };
 
-export interface FocusDataControllerExtension {
-  _updatePageIndexes: () => void;
-}
-
 export const focusDataControllerExtender = (
   Base: ModuleType<DataController & Partial<VirtualScrollingDataControllerExtension>>,
 ) => class FocusDataControllerExtender extends Base {
@@ -687,11 +694,12 @@ export const focusDataControllerExtender = (
 
   private _isPagingByRendering?: boolean;
 
-  protected _focusController!: FocusController;
+  private lastChange?: DataChange;
 
-  public init(): void {
-    this._focusController = this.getController('focus');
-    super.init();
+  public afterChanged!: Callback<[DataChange]>;
+
+  protected callbackNames(): string[] {
+    return [...super.callbackNames(), 'afterChanged'];
   }
 
   protected _applyChange(change) {
@@ -703,7 +711,12 @@ export const focusDataControllerExtender = (
 
   protected _fireChanged(e: DataChange): void {
     super._fireChanged(e);
-    this._focusController.handleDataChanged(e);
+    this.lastChange = e;
+    this.afterChanged.fire(e);
+  }
+
+  public getLastChange(): DataChange | undefined {
+    return this.lastChange;
   }
 
   public _updatePageIndexes() {

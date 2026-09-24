@@ -121,6 +121,7 @@ export type DataChange = | UpdateChange
   | FocusedRowChange
   | (DataChangeBase & ChangedEvent)
   | (DataChangeBase & { changeType: 'refresh' })
+  | (DataChangeBase & { changeType: 'append' | 'prepend' })
   | (DataChangeBase & { changeType: 'pageIndex' })
   | (DataChangeBase & { changeType: 'loadingAll' })
   | (DataChangeBase & { changeType: 'refresh', isLiveUpdate: boolean; isOptionChanged: boolean })
