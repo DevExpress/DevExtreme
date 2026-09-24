@@ -6,6 +6,7 @@ import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
+import { equalByValue } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -328,12 +329,31 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  private _updateRequireResize(args: ColumnsOptionChanged | ColumnOptionChanged): void {
-    const { component } = this;
-
-    if (args.fullName.replace(COLUMN_OPTION_REGEXP, '') === 'width' && component._updateLockCount) {
-      component._requireResize = true;
+  private setRequireResize(): void {
+    if (!this.component._updateLockCount || !this._updateLockCount) {
+      return;
     }
+
+    this.component._requireResize = true;
+    this.getController('resizing')?.resetLastResizeTime?.();
+  }
+
+  private _updateRequireResize(args: ColumnsOptionChanged | ColumnOptionChanged): void {
+    if (args.fullName.replace(COLUMN_OPTION_REGEXP, '') === 'width') {
+      this.setRequireResize();
+    }
+  }
+
+  private _isWidthChanging(column, option, value, notFireEvent): boolean {
+    if (notFireEvent) {
+      return false;
+    }
+
+    if (isObject(option)) {
+      return 'width' in option && !equalByValue(column.width, option.width);
+    }
+
+    return option === 'width' && !equalByValue(column.width, value);
   }
 
   public publicMethods() {
@@ -1472,14 +1492,20 @@ export class ColumnsController extends modules.Controller {
     const columns = that._columns.concat(that._commandColumns);
     const column = findColumn(columns, identifier);
 
-    if (column) {
-      if (arguments.length === 1) {
-        return extend({}, column);
-      }
+    if (!column) {
+      return undefined;
+    }
+
+    if (arguments.length === 1) {
+      return extend({}, column);
+    }
+
+    if (isString(option) && arguments.length === 2) {
+      return columnOptionCore(that, column, option);
+    }
+
+    const applyOptions = (): void => {
       if (isString(option)) {
-        if (arguments.length === 2) {
-          return columnOptionCore(that, column, option);
-        }
         columnOptionCore(that, column, option, value, notFireEvent);
       } else if (isObject(option)) {
         each(option, (optionName, optionValue) => {
@@ -1488,7 +1514,30 @@ export class ColumnsController extends modules.Controller {
       }
 
       fireColumnsChanged(that);
+    };
+
+    const isWidthChanging = that._isWidthChanging(column, option, value, notFireEvent);
+    const needOwnUpdateCycle = isWidthChanging
+      && !that._updateLockCount
+      && !that.component._updateLockCount;
+
+    if (needOwnUpdateCycle) {
+      that.component.beginUpdate();
+      try {
+        applyOptions();
+        that.setRequireResize();
+      } finally {
+        that.component.endUpdate();
+      }
+    } else {
+      applyOptions();
+
+      if (isWidthChanging) {
+        that.setRequireResize();
+      }
     }
+
+    return undefined;
   }
 
   private clearSorting() {
