@@ -6,6 +6,8 @@ const LEFT_TO_THE_BROWSER = /var\(|color-mix\(|\(from /;
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 const REFERENCED_NAME = /var\(\s*(--[a-z0-9-]+)/i;
 const REFERENCE_FALLBACK = /var\(\s*--[a-z0-9-]+\s*,\s*([^)]*)\)/i;
+const SRGB_COLOR = /^(?:rgba?\(|color\(srgb )/;
+const NUMBER = /-?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?/gi;
 
 export function isCssVariableReference(value: unknown): value is string {
   return typeof value === 'string' && REFERENCE.test(value);
@@ -30,14 +32,20 @@ export function resolvedInScope(value: string, element: Element | null | undefin
   return carried || fallbackOf(value);
 }
 
-function asColorString(painted: string): string | undefined {
-  const numbers = (painted.match(/-?[\d.]+/g) ?? []).map(Number);
+export function portableColor(painted: string): string | undefined {
+  if (!SRGB_COLOR.test(painted) || LEFT_TO_THE_BROWSER.test(painted)) {
+    return undefined;
+  }
+
+  const isColorFunction = painted.startsWith('color(');
+  const channels = isColorFunction ? painted.slice(painted.indexOf(' ')) : painted;
+  const numbers = (channels.match(NUMBER) ?? []).map(Number);
 
   if (numbers.length < 3) {
     return undefined;
   }
 
-  const scale = painted.startsWith('color(') ? 255 : 1;
+  const scale = isColorFunction ? 255 : 1;
   const [red, green, blue] = numbers
     .slice(0, 3)
     .map((value) => Math.round(Math.min(255, Math.max(0, value * scale))));
@@ -48,8 +56,12 @@ function asColorString(painted: string): string | undefined {
     : `#${[red, green, blue].map((value) => value.toString(16).padStart(2, '0')).join('')}`;
 }
 
+export function asRgb(value: string): string {
+  return `color-mix(in srgb, ${value} 100%, transparent)`;
+}
+
 function portableValue(carried: string): string {
-  return carried.startsWith('color(srgb ') ? asColorString(carried) ?? carried : carried;
+  return carried.startsWith('color(srgb ') ? portableColor(carried) ?? carried : carried;
 }
 
 export function paintedColor(value: string, element: Element | null | undefined): string {
@@ -63,15 +75,19 @@ export function paintedColor(value: string, element: Element | null | undefined)
 
   // @ts-expect-error createElementNS is on the strategy, not on the exported adapter type
   const probe = domAdapter.createElementNS(SVG_NAMESPACE, 'rect') as SVGElement;
+  const paintedAs = (fill: string): string | undefined => {
+    probe.style.setProperty('fill', fill);
 
-  probe.style.setProperty('fill', value);
+    return portableColor(getWindow().getComputedStyle(probe).fill);
+  };
+
   element.appendChild(probe);
 
-  const painted = getWindow().getComputedStyle(probe).fill;
+  const painted = paintedAs(value) ?? paintedAs(asRgb(value));
 
   probe.remove();
 
-  return asColorString(painted) ?? fallbackOf(value);
+  return painted ?? fallbackOf(value);
 }
 
 function inlineStyleOf(element: Element): CSSStyleDeclaration | undefined {

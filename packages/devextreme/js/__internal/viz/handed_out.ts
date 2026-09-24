@@ -1,13 +1,13 @@
 import { isPlainObject } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import domAdapter from '@ts/core/dom_adapter';
-import { fallbackOf, isCssVariableReference, resolvedInScope } from '@ts/core/utils/css_variables';
+import {
+  asRgb, fallbackOf, isCssVariableReference, portableColor, resolvedInScope,
+} from '@ts/core/utils/css_variables';
 import * as raw from '@ts/viz/palette';
 
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 const LEFT_TO_THE_BROWSER = /var\(|color-mix\(|\(from /;
-const PAINTED = /^(?:rgba?\(|color\(srgb )/;
-const NUMBER = /-?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?/gi;
 
 type Page = HTMLElement | undefined;
 
@@ -43,34 +43,6 @@ export function paintingPage(): Page {
     : undefined;
 }
 
-function asHandedOut(painted: string): string | undefined {
-  if (!PAINTED.test(painted) || LEFT_TO_THE_BROWSER.test(painted)) {
-    return undefined;
-  }
-
-  const isColorFunction = painted.startsWith('color(');
-  const channels = isColorFunction ? painted.slice(painted.indexOf(' ')) : painted;
-  const numbers = (channels.match(NUMBER) ?? []).map(Number);
-
-  if (numbers.length < 3) {
-    return undefined;
-  }
-
-  const scale = isColorFunction ? 255 : 1;
-  const [red, green, blue] = numbers
-    .slice(0, 3)
-    .map((value) => Math.round(Math.min(255, Math.max(0, value * scale))));
-  const alpha = numbers.length > 3 ? numbers[3] : 1;
-
-  return alpha < 1
-    ? `rgba(${red}, ${green}, ${blue}, ${alpha})`
-    : `#${[red, green, blue].map((value) => value.toString(16).padStart(2, '0')).join('')}`;
-}
-
-function asRgb(value: string): string {
-  return `color-mix(in srgb, ${value} 100%, transparent)`;
-}
-
 function paintedOn(page: HTMLElement, values: string[]): (string | undefined)[] {
   const probe = domAdapter.createElementNS(SVG_NAMESPACE, 'svg') as SVGElement;
   const swatchOf = (fill: string): SVGElement => {
@@ -88,7 +60,7 @@ function paintedOn(page: HTMLElement, values: string[]): (string | undefined)[] 
   page.appendChild(probe);
 
   const painted = swatches.map((pair) => pair
-    .map((swatch) => asHandedOut(getWindow().getComputedStyle(swatch).fill))
+    .map((swatch) => portableColor(getWindow().getComputedStyle(swatch).fill))
     .find((color) => color !== undefined));
 
   probe.remove();

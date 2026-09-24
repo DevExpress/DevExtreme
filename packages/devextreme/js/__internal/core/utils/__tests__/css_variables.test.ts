@@ -5,6 +5,8 @@ import {
   copyResolvedStyles,
   fallbackOf,
   isCssVariableReference,
+  paintedColor,
+  portableColor,
   resolvedInScope,
 } from '@ts/core/utils/css_variables';
 
@@ -53,6 +55,70 @@ describe('resolving a value against the scope it is painted in', () => {
 
   it('falls back to the literal when there is no element to ask', () => {
     expect(resolvedInScope('var(--dx-viz-blue, #0078d4)', undefined)).toBe('#0078d4');
+  });
+});
+
+describe('a painted value in a form any reader takes', () => {
+  it.each([
+    ['rgb(11, 7, 3)', '#0b0703'],
+    ['rgba(1, 2, 3, 0.5)', 'rgba(1, 2, 3, 0.5)'],
+    ['color(srgb 0 0.5 0.4)', '#008066'],
+    ['color(srgb 1.02745 -0.2 0.5 / 0.25)', 'rgba(255, 0, 128, 0.25)'],
+  ])('turns %s into %s', (painted, handedOut) => {
+    expect(portableColor(painted)).toBe(handedOut);
+  });
+
+  it.each([
+    'oklch(0.55 0.15 250)',
+    'color(display-p3 1 0 0)',
+    'none',
+    'rgb(from var(--dx-viz-blue, #0078d4) r g b)',
+  ])('does not read %s as channels', (painted) => {
+    expect(portableColor(painted)).toBeUndefined();
+  });
+});
+
+describe('the colour a value is painted with, handed out', () => {
+  const paintedWith = (...answers: string[]): { element: HTMLElement; restore: () => void } => {
+    const element = document.createElement('div');
+    const computed = jest.spyOn(window, 'getComputedStyle');
+
+    answers.forEach((fill) => {
+      computed.mockReturnValueOnce({ fill } as unknown as CSSStyleDeclaration);
+    });
+    document.body.appendChild(element);
+
+    return {
+      element,
+      restore: (): void => {
+        computed.mockRestore();
+        element.remove();
+      },
+    };
+  };
+
+  it('is what the browser painted, when it answers in sRGB', () => {
+    const { element, restore } = paintedWith('rgb(11, 7, 3)');
+
+    expect(paintedColor('var(--dx-viz-blue, #0078d4)', element)).toBe('#0b0703');
+
+    restore();
+  });
+
+  it('is brought to sRGB when the page declared the name in another colour space', () => {
+    const { element, restore } = paintedWith('oklch(0.55 0.15 250)', 'color(srgb 0.0595434 0.455324 0.770876)');
+
+    expect(paintedColor('var(--dx-viz-blue, #0078d4)', element)).toBe('#0f74c5');
+
+    restore();
+  });
+
+  it('is the literal written beside the name when the browser answers no colour at all', () => {
+    const { element, restore } = paintedWith('none', 'none');
+
+    expect(paintedColor('var(--dx-viz-blue, #0078d4)', element)).toBe('#0078d4');
+
+    restore();
   });
 });
 
