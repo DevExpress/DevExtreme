@@ -203,7 +203,7 @@ export class ColumnsController extends modules.Controller {
     };
   }
 
-  public _getFirstItems(dataSourceAdapter) {
+  public _getFirstItems(dataSourceAdapter?: DataSourceAdapter) {
     let groupsCount;
     let items: any = [];
 
@@ -234,10 +234,10 @@ export class ColumnsController extends modules.Controller {
     return ['columnsChanged', 'aiColumnOptionChanged'];
   }
 
-  public getColumnByPath(path, columns?) {
+  public getColumnByPath(path: string, columns?) {
     const that = this;
     let column;
-    const columnIndexes: any = [];
+    const columnIndexes: number[] = [];
 
     path.replace(COLUMN_OPTION_REGEXP, (_, columnIndex) => {
       // eslint-disable-next-line radix
@@ -447,7 +447,7 @@ export class ColumnsController extends modules.Controller {
     }, commonColumnSettings);
   }
 
-  public isColumnOptionUsed(optionName): any {
+  public isColumnOptionUsed(optionName: string): any {
     for (let i = 0; i < this._columns.length; i++) {
       if (this._columns[i][optionName]) {
         return true;
@@ -743,11 +743,11 @@ export class ColumnsController extends modules.Controller {
   /**
    * @extended: adaptivity
    */
-  protected _isColumnVisible(column) {
+  protected _isColumnVisible(column: Column) {
     return column.visible && this.isParentColumnVisible(column.index);
   }
 
-  private _isColumnInGroupPanel(column) {
+  private _isColumnInGroupPanel(column: Column) {
     return isDefined(column.groupIndex) && !column.showWhenGrouped;
   }
 
@@ -1898,7 +1898,7 @@ export class ColumnsController extends modules.Controller {
     return this._rowCount;
   }
 
-  public getRowIndex(columnIndex, alwaysGetRowIndex?) {
+  public getRowIndex(columnIndex, alwaysGetRowIndex?: boolean) {
     const column = this._columns[columnIndex];
     if (!column) {
       return 0;
@@ -1914,7 +1914,7 @@ export class ColumnsController extends modules.Controller {
     return getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex).length;
   }
 
-  public getChildrenByBandColumn(bandColumnIndex, onlyVisibleDirectChildren?) {
+  public getChildrenByBandColumn(bandColumnIndex: number, onlyVisibleDirectChildren?: boolean) {
     const that = this;
     const bandColumnsCache = that.getBandColumnsCache();
     const result = getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex, !onlyVisibleDirectChildren);
@@ -1937,7 +1937,7 @@ export class ColumnsController extends modules.Controller {
       .filter((column) => !column.isBand && column.visible);
   }
 
-  public isParentBandColumn(columnIndex, bandColumnIndex) {
+  public isParentBandColumn(columnIndex: number, bandColumnIndex: number) {
     let result = false;
     const column = this._columns[columnIndex];
     const bandColumnsCache = this.getBandColumnsCache();
@@ -1998,7 +1998,7 @@ export class ColumnsController extends modules.Controller {
     return gridCoreUtils.isCustomCommandColumn(this._columns, commandColumn);
   }
 
-  public getColumnId(column) {
+  public getColumnId(column: Column) {
     if (column.command && column.type === GROUP_COMMAND_COLUMN_NAME) {
       if (gridCoreUtils.isCustomCommandColumn(this._columns, column)) {
         return `type:${column.type}`;
@@ -2014,7 +2014,7 @@ export class ColumnsController extends modules.Controller {
     return getCustomizeTextByDataType(dataType);
   }
 
-  public getHeaderContentAlignment(columnAlignment) {
+  public getHeaderContentAlignment(columnAlignment: string | undefined) {
     const rtlEnabled = this.option('rtlEnabled');
 
     if (rtlEnabled) {
