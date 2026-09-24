@@ -32,10 +32,10 @@ change types or names) do **not** require a wrapper change.
 
 | Public API element | Angular | React | Vue |
 |---|---|---|---|
-| Option `foo?: T` | `@Input() get foo()/set foo()` in `ui/<comp>/index.ts` | field in the component's options type (`IXOptions`) | entry in `props` (correct runtime type + `PropType<T>`) and `emits` `update:foo` |
+| Option `foo?: T` | `@Input() get foo()/set foo()` in `ui/<comp>/index.ts`, plus `@Output() fooChange` and a `{ emit: 'fooChange' }` entry | **nothing** for an ordinary option: it arrives through `Properties`. Only if it is two-way bindable (`@fires`): `defaultFoo`/`onFooChange` in the `& { … }` block of `IXOptions` plus `subscribableOptions`/`defaults` entries; see [template README](../templates/wrapper-react/README.md) §4 | entry in `props` (correct runtime type + `PropType<T>`) and `emits` `update:foo` |
 | Event `onX?: (e: XEvent) => void` | `@Output() onX: EventEmitter<XEvent>` + `{ subscribe, emit }` entry | entry in `independentEvents` (unless the name contains `Changed` without `Value`, e.g. `onOptionChanged`) + narrowed field in `IXOptionsNarrowedEvents` if its JSDoc is `e:{module:XEvent}`; see [template README](../templates/wrapper-react/README.md) §2–§3 | `onX` prop typed `Function as PropType<(e: XEvent) => void>` |
 | Nested option type | the component's own `ui/<component>/nested/*` files; do **not** edit the shared `ui/nested/**` (deprecated, removed in a parallel PR) | `NestedOption` config component | configuration component via `prepareConfigurationComponentConfig` |
-| Template option | template input | entry in `templateProps` | `template` prop |
+| Template option | template input | entry in `templateProps` plus `<x>Render`/`<x>Component` fields in `IXOptions`; see [template README](../templates/wrapper-react/README.md) §5 | `template` prop |
 
 The per-framework anatomy and rules live in
 [wrapper-angular.instructions.md](./wrapper-angular.instructions.md),
@@ -49,8 +49,10 @@ missing:
 
 1. **Completeness** — every added, removed, or renamed option/event is reflected in
    **all three** wrappers (`devextreme-angular/src`, `devextreme-react/src`,
-   `devextreme-vue/src`). A change present in one or two wrappers but not the third is a
-   defect — flag the missing wrapper(s) by name.
+   `devextreme-vue/src`), as the table above requires. A change present in one or two
+   wrappers but not the third is a defect — flag the missing wrapper(s) by name.
+   Exception: an ordinary React option (not two-way bindable, not a template, not an event,
+   not nested) needs **no** React change, because it arrives through `Properties`.
 2. **Type fidelity** — the wrapper carries the same type as the API (including union
    members, generics, and the correct Vue runtime type + `PropType`).
 3. **Breaking changes** — explicitly label these as **breaking** in a review comment:
