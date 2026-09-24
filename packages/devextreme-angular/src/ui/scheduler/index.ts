@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -81,12 +80,12 @@ import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/n
 import { DxiSchedulerValidationRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_resources,
-           PROPERTY_TOKEN_tabs,
-           PROPERTY_TOKEN_views,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_resources,
+    PROPERTY_TOKEN_tabs,
+    PROPERTY_TOKEN_views,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -135,7 +134,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -148,7 +146,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.adaptivityEnabled]
-    
      */
     @Input()
     get adaptivityEnabled(): boolean {
@@ -161,7 +158,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.allDayExpr]
-    
      */
     @Input()
     get allDayExpr(): string {
@@ -174,7 +170,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.allDayPanelMode]
-    
      */
     @Input()
     get allDayPanelMode(): AllDayPanelMode {
@@ -187,7 +182,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.appointmentCollectorTemplate]
-    
      */
     @Input()
     get appointmentCollectorTemplate(): any {
@@ -200,7 +194,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.appointmentDragging]
-    
      */
     @Input()
     get appointmentDragging(): { autoScroll?: boolean, data?: any | undefined, group?: string | undefined, onAdd?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragEnd?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void), onDragMove?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragStart?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromData: any, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable }) => void), scrollSensitivity?: number, scrollSpeed?: number } {
@@ -213,7 +206,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.appointmentTemplate]
-    
      */
     @Input()
     get appointmentTemplate(): any {
@@ -226,7 +218,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.appointmentTooltipTemplate]
-    
      */
     @Input()
     get appointmentTooltipTemplate(): any {
@@ -239,7 +230,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.cellDuration]
-    
      */
     @Input()
     get cellDuration(): number {
@@ -252,7 +242,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.crossScrollingEnabled]
-    
      */
     @Input()
     get crossScrollingEnabled(): boolean {
@@ -265,7 +254,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.currentDate]
-    
      */
     @Input()
     get currentDate(): Date | number | string {
@@ -278,7 +266,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.currentView]
-    
      */
     @Input()
     get currentView(): string | ViewType {
@@ -291,7 +278,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.customizeDateNavigatorText]
-    
      */
     @Input()
     get customizeDateNavigatorText(): ((info: { endDate: Date, startDate: Date, text: string }) => string) | undefined {
@@ -304,7 +290,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.dataCellTemplate]
-    
      */
     @Input()
     get dataCellTemplate(): any {
@@ -317,7 +302,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<dxSchedulerAppointment> | DataSource | DataSourceOptions | null | Store | string {
@@ -330,7 +314,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.dateCellTemplate]
-    
      */
     @Input()
     get dateCellTemplate(): any {
@@ -343,7 +326,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.dateSerializationFormat]
-    
      */
     @Input()
     get dateSerializationFormat(): string | undefined {
@@ -356,7 +338,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.descriptionExpr]
-    
      */
     @Input()
     get descriptionExpr(): string {
@@ -369,7 +350,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -382,7 +362,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.editing]
-    
      */
     @Input()
     get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: AppointmentFormProperties, popup?: Record<string, any> } {
@@ -395,7 +374,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -408,7 +386,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
-    
      */
     @Input()
     get endDateExpr(): string {
@@ -421,7 +398,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.endDateTimeZoneExpr]
-    
      */
     @Input()
     get endDateTimeZoneExpr(): string {
@@ -434,7 +410,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.endDayHour]
-    
      */
     @Input()
     get endDayHour(): number {
@@ -447,7 +422,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.firstDayOfWeek]
-    
      */
     @Input()
     get firstDayOfWeek(): DayOfWeek | undefined {
@@ -460,7 +434,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -473,7 +446,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.groupByDate]
-    
      */
     @Input()
     get groupByDate(): boolean {
@@ -486,7 +458,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.groups]
-    
      */
     @Input()
     get groups(): Array<string> {
@@ -499,7 +470,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -522,7 +492,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -535,7 +504,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.indicatorUpdateInterval]
-    
      */
     @Input()
     get indicatorUpdateInterval(): number {
@@ -548,7 +516,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.max]
-    
      */
     @Input()
     get max(): Date | number | string | undefined {
@@ -561,7 +528,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.maxAppointmentsPerCell]
-    
      */
     @Input()
     get maxAppointmentsPerCell(): CellAppointmentsLimit | number {
@@ -574,7 +540,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.min]
-    
      */
     @Input()
     get min(): Date | number | string | undefined {
@@ -587,7 +552,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -600,7 +564,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.offset]
-    
      */
     @Input()
     get offset(): number {
@@ -613,7 +576,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.recurrenceEditMode]
-    
      */
     @Input()
     get recurrenceEditMode(): RecurrenceEditMode {
@@ -626,7 +588,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.recurrenceExceptionExpr]
-    
      */
     @Input()
     get recurrenceExceptionExpr(): string {
@@ -639,7 +600,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.recurrenceRuleExpr]
-    
      */
     @Input()
     get recurrenceRuleExpr(): string {
@@ -652,7 +612,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.remoteFiltering]
-    
      */
     @Input()
     get remoteFiltering(): boolean {
@@ -665,7 +624,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.resourceCellTemplate]
-    
      */
     @Input()
     get resourceCellTemplate(): any {
@@ -678,7 +636,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.resources]
-    
      */
     @Input()
     get resources(): { allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, icon?: string, label?: string, parentIdExpr?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }[] {
@@ -691,7 +648,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -704,7 +660,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.scrolling]
-    
      */
     @Input()
     get scrolling(): dxSchedulerScrolling {
@@ -717,7 +672,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.selectedCellData]
-    
      */
     @Input()
     get selectedCellData(): Array<any> {
@@ -730,7 +684,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.shadeUntilCurrentTime]
-    
      */
     @Input()
     get shadeUntilCurrentTime(): boolean {
@@ -743,7 +696,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.showAllDayPanel]
-    
      */
     @Input()
     get showAllDayPanel(): boolean {
@@ -756,7 +708,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.showCurrentTimeIndicator]
-    
      */
     @Input()
     get showCurrentTimeIndicator(): boolean {
@@ -779,7 +730,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.startDateExpr]
-    
      */
     @Input()
     get startDateExpr(): string {
@@ -792,7 +742,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.startDateTimeZoneExpr]
-    
      */
     @Input()
     get startDateTimeZoneExpr(): string {
@@ -805,7 +754,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.startDayHour]
-    
      */
     @Input()
     get startDayHour(): number {
@@ -818,7 +766,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -831,7 +778,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.textExpr]
-    
      */
     @Input()
     get textExpr(): string {
@@ -844,7 +790,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.timeCellTemplate]
-    
      */
     @Input()
     get timeCellTemplate(): any {
@@ -857,7 +802,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.timeZone]
-    
      */
     @Input()
     get timeZone(): string {
@@ -870,7 +814,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxSchedulerToolbar | undefined {
@@ -883,7 +826,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.useDropDownViewSwitcher]
-    
      */
     @Input()
     get useDropDownViewSwitcher(): boolean {
@@ -896,7 +838,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.views]
-    
      */
     @Input()
     get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: DayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, hiddenWeekDays?: Array<DayOfWeek> | undefined, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, snapToCellsMode?: SnapToCellsMode, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[] {
@@ -909,7 +850,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -922,7 +862,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

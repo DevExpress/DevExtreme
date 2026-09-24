@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -51,7 +50,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadIndicatorOptions.animationType]
-    
      */
     @Input()
     get animationType(): LoadingAnimationType {
@@ -64,7 +62,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -77,7 +74,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -90,7 +86,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -103,7 +98,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadIndicatorOptions.indicatorSrc]
-    
      */
     @Input()
     get indicatorSrc(): string {
@@ -116,7 +110,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -129,7 +122,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -142,7 +134,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

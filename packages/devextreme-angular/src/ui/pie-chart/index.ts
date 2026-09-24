@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -105,9 +104,9 @@ import { DxoPieChartTitleModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipBorderModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { 
-           PROPERTY_TOKEN_annotations,
-           PROPERTY_TOKEN_series,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_annotations,
+    PROPERTY_TOKEN_series,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -142,7 +141,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.adaptiveLayout]
-    
      */
     @Input()
     get adaptiveLayout(): { height?: number, keepLabels?: boolean, width?: number } {
@@ -155,7 +153,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseChartOptions.animation]
-    
      */
     @Input()
     get animation(): boolean | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean, maxPointCountSupported?: number } {
@@ -168,7 +165,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.annotations]
-    
      */
     @Input()
     get annotations(): Array<any | dxPieChartAnnotationConfig> {
@@ -181,7 +177,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.centerTemplate]
-    
      */
     @Input()
     get centerTemplate(): any {
@@ -194,7 +189,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.commonAnnotationSettings]
-    
      */
     @Input()
     get commonAnnotationSettings(): dxPieChartCommonAnnotationConfig {
@@ -207,7 +201,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.commonSeriesSettings]
-    
      */
     @Input()
     get commonSeriesSettings(): any | { argumentField?: string, argumentType?: ChartsDataType | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hoverMode?: PieChartSeriesInteractionMode, hoverStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }, label?: { argumentFormat?: Format | undefined, backgroundColor?: string | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string | undefined, font?: Font, format?: Format | undefined, position?: LabelPosition, radialOffset?: number, rotationAngle?: number, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxLabelCount?: number | undefined, minSegmentSize?: number | undefined, selectionMode?: PieChartSeriesInteractionMode, selectionStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }, smallValuesGrouping?: { groupName?: string, mode?: SmallValuesGroupingMode, threshold?: number | undefined, topCount?: number | undefined }, tagField?: string, valueField?: string } {
@@ -220,7 +213,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.customizeAnnotation]
-    
      */
     @Input()
     get customizeAnnotation(): ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig) | undefined {
@@ -233,7 +225,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseChartOptions.customizeLabel]
-    
      */
     @Input()
     get customizeLabel(): ((pointInfo: any) => SeriesLabel) {
@@ -246,7 +237,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseChartOptions.customizePoint]
-    
      */
     @Input()
     get customizePoint(): ((pointInfo: any) => SeriesPoint) {
@@ -259,7 +249,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseChartOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
@@ -272,7 +261,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.diameter]
-    
      */
     @Input()
     get diameter(): number | undefined {
@@ -285,7 +273,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -298,7 +285,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -311,7 +297,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -324,7 +309,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -337,7 +321,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.innerRadius]
-    
      */
     @Input()
     get innerRadius(): number {
@@ -350,7 +333,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.legend]
-    
      */
     @Input()
     get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>), customizeText?: ((pointInfo: { pointColor: string, pointIndex: number, pointName: any }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: PieChartLegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined }, text?: string | undefined, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
@@ -363,7 +345,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
@@ -376,7 +357,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -389,7 +369,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.minDiameter]
-    
      */
     @Input()
     get minDiameter(): number {
@@ -402,7 +381,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.palette]
-    
      */
     @Input()
     get palette(): Array<string> | Palette {
@@ -415,7 +393,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseChartOptions.paletteExtensionMode]
-    
      */
     @Input()
     get paletteExtensionMode(): PaletteExtensionMode {
@@ -428,7 +405,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -441,7 +417,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseChartOptions.pointSelectionMode]
-    
      */
     @Input()
     get pointSelectionMode(): SingleOrMultiple {
@@ -454,7 +429,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -467,7 +441,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.resolveLabelOverlapping]
-    
      */
     @Input()
     get resolveLabelOverlapping(): ShiftLabelOverlap {
@@ -480,7 +453,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -493,7 +465,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.segmentsDirection]
-    
      */
     @Input()
     get segmentsDirection(): PieChartSegmentDirection {
@@ -506,7 +477,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.series]
-    
      */
     @Input()
     get series(): Array<PieChartSeries> | PieChartSeries | undefined {
@@ -519,7 +489,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.seriesTemplate]
-    
      */
     @Input()
     get seriesTemplate(): any {
@@ -532,7 +501,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -545,7 +513,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.sizeGroup]
-    
      */
     @Input()
     get sizeGroup(): string | undefined {
@@ -558,7 +525,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.startAngle]
-    
      */
     @Input()
     get startAngle(): number {
@@ -571,7 +537,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -584,7 +549,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -597,7 +561,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: dxPieChartPointInfo) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined } {
@@ -610,7 +573,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxPieChartOptions.type]
-    
      */
     @Input()
     get type(): PieChartType {

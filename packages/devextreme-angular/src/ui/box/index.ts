@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -43,8 +42,8 @@ import { DxoBoxModule } from 'devextreme-angular/ui/nested';
 
 import { DxiBoxItemModule } from 'devextreme-angular/ui/box/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -73,7 +72,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:dxBoxOptions.align]
-    
      */
     @Input()
     get align(): Distribution {
@@ -86,7 +84,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:dxBoxOptions.crossAlign]
-    
      */
     @Input()
     get crossAlign(): CrosswiseDistribution {
@@ -99,7 +96,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:dxBoxOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxBoxItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -112,7 +108,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:dxBoxOptions.direction]
-    
      */
     @Input()
     get direction(): BoxDirection {
@@ -125,7 +120,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -138,7 +132,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -151,7 +144,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -164,7 +156,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -177,7 +168,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -190,7 +180,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:dxBoxOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxBoxItem | string> {
@@ -203,7 +192,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -216,7 +204,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -229,7 +216,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -242,7 +228,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

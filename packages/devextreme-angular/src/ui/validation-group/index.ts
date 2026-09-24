@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -51,7 +50,6 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -64,7 +62,6 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -77,7 +74,6 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

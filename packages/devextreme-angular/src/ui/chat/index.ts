@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -68,11 +67,11 @@ import { DxiChatSuggestionsItemModule } from 'devextreme-angular/ui/chat/nested'
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 import { 
-           PROPERTY_TOKEN_alerts,
-           PROPERTY_TOKEN_attachments,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_typingUsers,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_alerts,
+    PROPERTY_TOKEN_attachments,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_typingUsers,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -116,7 +115,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -129,7 +127,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -142,7 +139,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.alerts]
-    
      */
     @Input()
     get alerts(): Array<Alert> {
@@ -155,7 +151,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<Message> | DataSource | DataSourceOptions | null | Store | string {
@@ -168,7 +163,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.dayHeaderFormat]
-    
      */
     @Input()
     get dayHeaderFormat(): Format {
@@ -181,7 +175,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -194,7 +187,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.editing]
-    
      */
     @Input()
     get editing(): { allowDeleting?: boolean | ((options: { component: dxChat, message: Message }) => boolean), allowUpdating?: boolean | ((options: { component: dxChat, message: Message }) => boolean) } {
@@ -207,7 +199,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -220,7 +211,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.emptyViewTemplate]
-    
      */
     @Input()
     get emptyViewTemplate(): any {
@@ -243,7 +233,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -256,7 +245,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -269,7 +257,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -282,7 +269,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -305,7 +291,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.items]
-    
      */
     @Input()
     get items(): Array<Message> {
@@ -318,7 +303,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.messageTemplate]
-    
      */
     @Input()
     get messageTemplate(): any {
@@ -331,7 +315,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.messageTimestampFormat]
-    
      */
     @Input()
     get messageTimestampFormat(): Format {
@@ -344,7 +327,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.reloadOnChange]
-    
      */
     @Input()
     get reloadOnChange(): boolean {
@@ -357,7 +339,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -380,7 +361,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.showAvatar]
-    
      */
     @Input()
     get showAvatar(): boolean {
@@ -393,7 +373,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.showDayHeaders]
-    
      */
     @Input()
     get showDayHeaders(): boolean {
@@ -406,7 +385,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.showMessageTimestamp]
-    
      */
     @Input()
     get showMessageTimestamp(): boolean {
@@ -419,7 +397,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.showUserName]
-    
      */
     @Input()
     get showUserName(): boolean {
@@ -432,7 +409,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.speechToTextEnabled]
-    
      */
     @Input()
     get speechToTextEnabled(): boolean {
@@ -465,7 +441,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.typingUsers]
-    
      */
     @Input()
     get typingUsers(): Array<User> {
@@ -478,7 +453,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxChatOptions.user]
-    
      */
     @Input()
     get user(): User {
@@ -491,7 +465,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -504,7 +477,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

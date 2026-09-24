@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -80,10 +79,10 @@ import { DxoDropDownBoxShowModule } from 'devextreme-angular/ui/drop-down-box/ne
 import { DxoDropDownBoxToModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxiDropDownBoxToolbarItemModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_toolbarItems,
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_toolbarItems,
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -128,7 +127,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownBoxOptions.acceptCustomValue]
-    
      */
     @Input()
     get acceptCustomValue(): boolean {
@@ -141,7 +139,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -154,7 +151,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -167,7 +163,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownEditorOptions.buttons]
-    
      */
     @Input()
     get buttons(): Array<DropDownPredefinedButton | TextEditorButton> | undefined {
@@ -180,7 +175,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownBoxOptions.contentTemplate]
-    
      */
     @Input()
     get contentTemplate(): any {
@@ -193,7 +187,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownBoxOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
@@ -206,7 +199,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -219,7 +211,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -232,7 +223,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string | undefined {
@@ -245,7 +235,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownBoxOptions.displayValueFormatter]
-    
      */
     @Input()
     get displayValueFormatter(): ((value: string | Array<any>) => string) {
@@ -258,7 +247,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
-    
      */
     @Input()
     get dropDownButtonTemplate(): any {
@@ -271,7 +259,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownBoxOptions.dropDownOptions]
-    
      */
     @Input()
     get dropDownOptions(): dxPopupOptions<any> {
@@ -284,7 +271,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -297,7 +283,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownEditorOptions.fieldAddons]
-    
      */
     @Input()
     get fieldAddons(): FieldAddons | null {
@@ -310,7 +295,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownBoxOptions.fieldTemplate]
-    
      * @deprecated [depNote:dxDropDownBoxOptions.fieldTemplate]
     
      */
@@ -325,7 +309,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -338,7 +321,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -351,7 +333,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -364,7 +345,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -377,7 +357,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -390,7 +369,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -403,7 +381,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -416,7 +393,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownBoxOptions.items]
-    
      */
     @Input()
     get items(): Array<any> {
@@ -429,7 +405,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextEditorOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -442,7 +417,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -455,7 +429,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextBoxOptions.maxLength]
-    
      */
     @Input()
     get maxLength(): null | number | string {
@@ -468,7 +441,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -481,7 +453,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownEditorOptions.opened]
-    
      */
     @Input()
     get opened(): boolean {
@@ -494,7 +465,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownBoxOptions.openOnFieldClick]
-    
      */
     @Input()
     get openOnFieldClick(): boolean {
@@ -507,7 +477,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextEditorOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -520,7 +489,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -533,7 +501,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -546,7 +513,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -559,7 +525,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownEditorOptions.showDropDownButton]
-    
      */
     @Input()
     get showDropDownButton(): boolean {
@@ -572,7 +537,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -585,7 +549,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -598,7 +561,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTextEditorOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -611,7 +573,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -624,7 +585,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -637,7 +597,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -650,7 +609,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Mode | Position {
@@ -663,7 +621,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -676,7 +633,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DataExpressionMixinOptions.value]
-    
      */
     @Input()
     get value(): any | null {
@@ -689,7 +645,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxDropDownBoxOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -702,7 +657,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
-    
      */
     @Input()
     get valueExpr(): ((item: any) => string | number | boolean) | string {
@@ -715,7 +669,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -728,7 +681,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -41,8 +40,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiValidationSummaryItemModule } from 'devextreme-angular/ui/validation-summary/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -71,7 +70,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -84,7 +82,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -97,7 +94,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
     /**
      * [descr:CollectionWidgetOptions.items]
-    
      */
     @Input()
     get items(): Array<any | CollectionWidgetItem | string> {
@@ -110,7 +106,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -123,7 +118,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
     /**
      * [descr:dxValidationSummaryOptions.validationGroup]
-    
      */
     @Input()
     get validationGroup(): string {

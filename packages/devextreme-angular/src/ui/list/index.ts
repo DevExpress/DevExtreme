@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -56,10 +55,10 @@ import { DxiListMenuItemModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListOptionsModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_menuItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_menuItems,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -98,7 +97,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -111,7 +109,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -124,7 +121,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.allowItemDeleting]
-    
      */
     @Input()
     get allowItemDeleting(): boolean {
@@ -137,7 +133,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.bounceEnabled]
-    
      */
     @Input()
     get bounceEnabled(): boolean {
@@ -150,7 +145,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.collapsibleGroups]
-    
      */
     @Input()
     get collapsibleGroups(): boolean {
@@ -163,7 +157,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxListItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -176,7 +169,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -189,7 +181,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string | undefined {
@@ -202,7 +193,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -215,7 +205,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -228,7 +217,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.grouped]
-    
      */
     @Input()
     get grouped(): boolean {
@@ -241,7 +229,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.groupTemplate]
-    
      */
     @Input()
     get groupTemplate(): any {
@@ -254,7 +241,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -267,7 +253,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -280,7 +265,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -293,7 +277,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.indicateLoading]
-    
      */
     @Input()
     get indicateLoading(): boolean {
@@ -306,7 +289,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.itemDeleteMode]
-    
      */
     @Input()
     get itemDeleteMode(): ItemDeleteMode {
@@ -319,7 +301,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.itemDragging]
-    
      */
     @Input()
     get itemDragging(): dxSortableOptions {
@@ -332,7 +313,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -345,7 +325,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxListItem | string> {
@@ -358,7 +337,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -371,7 +349,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any) => any) | null | string {
@@ -384,7 +361,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.menuItems]
-    
      */
     @Input()
     get menuItems(): { action?: ((itemElement: any, itemData: any) => void), text?: string }[] {
@@ -397,7 +373,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.menuMode]
-    
      */
     @Input()
     get menuMode(): ListMenuMode {
@@ -410,7 +385,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.nextButtonText]
-    
      */
     @Input()
     get nextButtonText(): string {
@@ -423,7 +397,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -436,7 +409,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.pageLoadingText]
-    
      */
     @Input()
     get pageLoadingText(): string {
@@ -449,7 +421,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.pageLoadMode]
-    
      */
     @Input()
     get pageLoadMode(): PageLoadMode {
@@ -462,7 +433,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.pulledDownText]
-    
      */
     @Input()
     get pulledDownText(): string {
@@ -475,7 +445,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.pullingDownText]
-    
      */
     @Input()
     get pullingDownText(): string {
@@ -488,7 +457,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.pullRefreshEnabled]
-    
      */
     @Input()
     get pullRefreshEnabled(): boolean {
@@ -501,7 +469,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.refreshingText]
-    
      */
     @Input()
     get refreshingText(): string {
@@ -514,7 +481,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.repaintChangesOnly]
-    
      */
     @Input()
     get repaintChangesOnly(): boolean {
@@ -527,7 +493,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -540,7 +505,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.scrollByContent]
-    
      */
     @Input()
     get scrollByContent(): boolean {
@@ -553,7 +517,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.scrollByThumb]
-    
      */
     @Input()
     get scrollByThumb(): boolean {
@@ -566,7 +529,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.scrollingEnabled]
-    
      */
     @Input()
     get scrollingEnabled(): boolean {
@@ -579,7 +541,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:SearchBoxMixinOptions.searchEditorOptions]
-    
      */
     @Input()
     get searchEditorOptions(): dxTextBoxOptions<any> {
@@ -592,7 +553,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:SearchBoxMixinOptions.searchEnabled]
-    
      */
     @Input()
     get searchEnabled(): boolean {
@@ -605,7 +565,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:SearchBoxMixinOptions.searchExpr]
-    
      */
     @Input()
     get searchExpr(): Array<Function | string> | Function | string {
@@ -618,7 +577,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:SearchBoxMixinOptions.searchMode]
-    
      */
     @Input()
     get searchMode(): SearchMode {
@@ -631,7 +589,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:SearchBoxMixinOptions.searchTimeout]
-    
      */
     @Input()
     get searchTimeout(): number | undefined {
@@ -644,7 +601,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:SearchBoxMixinOptions.searchValue]
-    
      */
     @Input()
     get searchValue(): string {
@@ -657,7 +613,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.selectAllMode]
-    
      */
     @Input()
     get selectAllMode(): SelectAllMode {
@@ -670,7 +625,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.selectAllText]
-    
      */
     @Input()
     get selectAllText(): string {
@@ -683,7 +637,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.selectByClick]
-    
      */
     @Input()
     get selectByClick(): boolean {
@@ -696,7 +649,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:CollectionWidgetOptions.selectedItemKeys]
-    
      */
     @Input()
     get selectedItemKeys(): Array<any> {
@@ -709,7 +661,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:CollectionWidgetOptions.selectedItems]
-    
      */
     @Input()
     get selectedItems(): Array<any> {
@@ -722,7 +673,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleMultipleAllOrNone {
@@ -735,7 +685,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.showScrollbar]
-    
      */
     @Input()
     get showScrollbar(): ScrollbarMode {
@@ -748,7 +697,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.showSelectionControls]
-    
      */
     @Input()
     get showSelectionControls(): boolean {
@@ -761,7 +709,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -774,7 +721,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxListOptions.useNativeScrolling]
-    
      */
     @Input()
     get useNativeScrolling(): boolean {
@@ -787,7 +733,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -800,7 +745,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

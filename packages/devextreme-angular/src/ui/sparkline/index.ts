@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -75,7 +74,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.argumentField]
-    
      */
     @Input()
     get argumentField(): string {
@@ -88,7 +86,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.barNegativeColor]
-    
      */
     @Input()
     get barNegativeColor(): string {
@@ -101,7 +98,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.barPositiveColor]
-    
      */
     @Input()
     get barPositiveColor(): string {
@@ -114,7 +110,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
@@ -127,7 +122,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -140,7 +134,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -153,7 +146,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -166,7 +158,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.firstLastColor]
-    
      */
     @Input()
     get firstLastColor(): string {
@@ -179,7 +170,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.ignoreEmptyPoints]
-    
      */
     @Input()
     get ignoreEmptyPoints(): boolean {
@@ -192,7 +182,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.lineColor]
-    
      */
     @Input()
     get lineColor(): string {
@@ -205,7 +194,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.lineWidth]
-    
      */
     @Input()
     get lineWidth(): number {
@@ -218,7 +206,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.lossColor]
-    
      */
     @Input()
     get lossColor(): string {
@@ -231,7 +218,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -244,7 +230,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.maxColor]
-    
      */
     @Input()
     get maxColor(): string {
@@ -257,7 +242,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.maxValue]
-    
      */
     @Input()
     get maxValue(): number | undefined {
@@ -270,7 +254,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.minColor]
-    
      */
     @Input()
     get minColor(): string {
@@ -283,7 +266,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.minValue]
-    
      */
     @Input()
     get minValue(): number | undefined {
@@ -296,7 +278,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -309,7 +290,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.pointColor]
-    
      */
     @Input()
     get pointColor(): string {
@@ -322,7 +302,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.pointSize]
-    
      */
     @Input()
     get pointSize(): number {
@@ -335,7 +314,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.pointSymbol]
-    
      */
     @Input()
     get pointSymbol(): PointSymbol {
@@ -348,7 +326,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -361,7 +338,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.showFirstLast]
-    
      */
     @Input()
     get showFirstLast(): boolean {
@@ -374,7 +350,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.showMinMax]
-    
      */
     @Input()
     get showMinMax(): boolean {
@@ -387,7 +362,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -400,7 +374,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -413,7 +386,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:BaseSparklineOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -426,7 +398,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.type]
-    
      */
     @Input()
     get type(): SparklineType {
@@ -439,7 +410,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.valueField]
-    
      */
     @Input()
     get valueField(): string {
@@ -452,7 +422,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.winColor]
-    
      */
     @Input()
     get winColor(): string {
@@ -465,7 +434,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSparklineOptions.winlossThreshold]
-    
      */
     @Input()
     get winlossThreshold(): number {

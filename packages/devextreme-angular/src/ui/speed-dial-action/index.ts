@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -51,7 +50,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -64,7 +62,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -77,7 +74,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -90,7 +86,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -103,7 +98,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -116,7 +110,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -129,7 +122,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:dxSpeedDialActionOptions.icon]
-    
      */
     @Input()
     get icon(): string {
@@ -142,7 +134,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:dxSpeedDialActionOptions.index]
-    
      */
     @Input()
     get index(): number {
@@ -155,7 +146,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:dxSpeedDialActionOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -168,7 +158,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -181,7 +170,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -194,7 +182,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
     /**
      * [descr:dxSpeedDialActionOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {

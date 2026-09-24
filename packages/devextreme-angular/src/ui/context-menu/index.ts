@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -73,8 +72,8 @@ import { DxoContextMenuShowEventModule } from 'devextreme-angular/ui/context-men
 import { DxoContextMenuShowSubmenuModeModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuToModule } from 'devextreme-angular/ui/context-menu/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -103,7 +102,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -116,7 +114,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxMenuBaseOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -129,7 +126,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxMenuBaseOptions.animation]
-    
      */
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
@@ -142,7 +138,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxMenuBaseOptions.cssClass]
-    
      */
     @Input()
     get cssClass(): string {
@@ -155,7 +150,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxContextMenuOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<dxContextMenuItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -168,7 +162,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -181,7 +174,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
-    
      */
     @Input()
     get disabledExpr(): ((item: any) => boolean | undefined) | string {
@@ -194,7 +186,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string {
@@ -207,7 +198,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -220,7 +210,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -233,7 +222,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -246,7 +234,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxContextMenuOptions.hideOnOutsideClick]
-    
      */
     @Input()
     get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
@@ -259,7 +246,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -272,7 +258,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -285,7 +270,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxContextMenuOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxContextMenuItem> {
@@ -298,7 +282,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.itemsExpr]
-    
      */
     @Input()
     get itemsExpr(): ((item: any) => Array<any> | undefined) | string {
@@ -311,7 +294,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -324,7 +306,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxContextMenuOptions.position]
-    
      */
     @Input()
     get position(): PositionConfig {
@@ -337,7 +318,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -350,7 +330,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxMenuBaseOptions.selectByClick]
-    
      */
     @Input()
     get selectByClick(): boolean {
@@ -363,7 +342,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
-    
      */
     @Input()
     get selectedExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
@@ -376,7 +354,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -389,7 +366,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxMenuBaseOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleOrNone {
@@ -402,7 +378,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxContextMenuOptions.showEvent]
-    
      */
     @Input()
     get showEvent(): string | { delay?: number | undefined, name?: string | undefined } {
@@ -415,7 +390,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxMenuBaseOptions.showSubmenuMode]
-    
      */
     @Input()
     get showSubmenuMode(): SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode } {
@@ -428,7 +402,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxContextMenuOptions.submenuDirection]
-    
      */
     @Input()
     get submenuDirection(): ContextSubmenuDirection {
@@ -441,7 +414,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -454,7 +426,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxContextMenuOptions.target]
-    
      */
     @Input()
     get target(): any | string | undefined {
@@ -467,7 +438,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxContextMenuOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -480,7 +450,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

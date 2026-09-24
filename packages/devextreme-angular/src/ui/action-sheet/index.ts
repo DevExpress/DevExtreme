@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -42,8 +41,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiActionSheetItemModule } from 'devextreme-angular/ui/action-sheet/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -72,7 +71,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxActionSheetOptions.cancelText]
-    
      */
     @Input()
     get cancelText(): string {
@@ -85,7 +83,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxActionSheetOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxActionSheetItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -98,7 +95,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -111,7 +107,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -124,7 +119,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -137,7 +131,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -150,7 +143,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -163,7 +155,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -176,7 +167,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxActionSheetOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxActionSheetItem | string> {
@@ -189,7 +179,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -202,7 +191,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -215,7 +203,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxActionSheetOptions.showCancelButton]
-    
      */
     @Input()
     get showCancelButton(): boolean {
@@ -228,7 +215,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxActionSheetOptions.showTitle]
-    
      */
     @Input()
     get showTitle(): boolean {
@@ -241,7 +227,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxActionSheetOptions.target]
-    
      */
     @Input()
     get target(): any | string {
@@ -254,7 +239,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxActionSheetOptions.title]
-    
      */
     @Input()
     get title(): string {
@@ -267,7 +251,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxActionSheetOptions.usePopover]
-    
      */
     @Input()
     get usePopover(): boolean {
@@ -280,7 +263,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxActionSheetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -293,7 +275,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

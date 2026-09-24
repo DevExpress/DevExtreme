@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -91,8 +90,8 @@ import { DxoLinearGaugeTooltipModule } from 'devextreme-angular/ui/linear-gauge/
 import { DxoLinearGaugeValueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { 
-           PROPERTY_TOKEN_ranges,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_ranges,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -122,7 +121,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseGaugeOptions.animation]
-    
      */
     @Input()
     get animation(): { duration?: number, easing?: AnimationEaseMode, enabled?: boolean } {
@@ -135,7 +133,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseGaugeOptions.containerBackgroundColor]
-    
      */
     @Input()
     get containerBackgroundColor(): string {
@@ -148,7 +145,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -161,7 +157,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -174,7 +169,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -187,7 +181,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -200,7 +193,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxLinearGaugeOptions.geometry]
-    
      */
     @Input()
     get geometry(): { orientation?: Orientation } {
@@ -213,7 +205,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseGaugeOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, font?: Font, show?: boolean, text?: string } {
@@ -226,7 +217,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -239,7 +229,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -252,7 +241,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxLinearGaugeOptions.rangeContainer]
-    
      */
     @Input()
     get rangeContainer(): { backgroundColor?: ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, ranges?: { color?: ChartsColor | string, endValue?: number, startValue?: number }[], verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } } {
@@ -265,7 +253,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -278,7 +265,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -291,7 +277,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxLinearGaugeOptions.scale]
-    
      */
     @Input()
     get scale(): { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number> | undefined, customTicks?: Array<number> | undefined, endValue?: number, horizontalOrientation?: HorizontalAlignment, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined, verticalOrientation?: VerticalAlignment } {
@@ -304,7 +289,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -317,7 +301,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxLinearGaugeOptions.subvalueIndicator]
-    
      */
     @Input()
     get subvalueIndicator(): GaugeIndicator | { type?: "rectangle" | "circle" | "rhombus" | "rangeBar" | "triangleMarker" | "textCloud" } {
@@ -330,7 +313,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseGaugeOptions.subvalues]
-    
      */
     @Input()
     get subvalues(): Array<number> | undefined {
@@ -343,7 +325,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -356,7 +337,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -369,7 +349,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseGaugeOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -382,7 +361,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:BaseGaugeOptions.value]
-    
      */
     @Input()
     get value(): number | undefined {
@@ -395,7 +373,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxLinearGaugeOptions.valueIndicator]
-    
      */
     @Input()
     get valueIndicator(): GaugeIndicator | { type?: "rectangle" | "circle" | "rhombus" | "rangeBar" | "triangleMarker" | "textCloud" } {

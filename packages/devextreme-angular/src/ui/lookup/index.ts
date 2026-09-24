@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -80,9 +79,9 @@ import { DxoLookupShowEventModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupToModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxiLookupToolbarItemModule } from 'devextreme-angular/ui/lookup/nested';
 import { 
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -122,7 +121,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -135,7 +133,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -148,7 +145,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.applyButtonText]
-    
      */
     @Input()
     get applyButtonText(): string {
@@ -161,7 +157,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.applyValueMode]
-    
      */
     @Input()
     get applyValueMode(): ApplyValueMode {
@@ -174,7 +169,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.cancelButtonText]
-    
      */
     @Input()
     get cancelButtonText(): string {
@@ -187,7 +181,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.cleanSearchOnOpening]
-    
      */
     @Input()
     get cleanSearchOnOpening(): boolean {
@@ -200,7 +193,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.clearButtonText]
-    
      */
     @Input()
     get clearButtonText(): string {
@@ -213,7 +205,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -226,7 +217,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -239,7 +229,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -252,7 +241,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string | undefined {
@@ -265,7 +253,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.displayValue]
-    
      */
     @Input()
     get displayValue(): string | undefined {
@@ -278,7 +265,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.dropDownCentered]
-    
      */
     @Input()
     get dropDownCentered(): boolean {
@@ -291,7 +277,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.dropDownOptions]
-    
      */
     @Input()
     get dropDownOptions(): dxPopoverOptions<any> {
@@ -304,7 +289,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -317,7 +301,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.fieldTemplate]
-    
      */
     @Input()
     get fieldTemplate(): any {
@@ -330,7 +313,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -343,7 +325,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.grouped]
-    
      */
     @Input()
     get grouped(): boolean {
@@ -356,7 +337,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.groupTemplate]
-    
      */
     @Input()
     get groupTemplate(): any {
@@ -369,7 +349,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -382,7 +361,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -395,7 +373,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -408,7 +385,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -421,7 +397,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -434,7 +409,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -447,7 +421,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DataExpressionMixinOptions.items]
-    
      */
     @Input()
     get items(): Array<any | CollectionWidgetItem> {
@@ -460,7 +433,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -473,7 +445,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -486,7 +457,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -499,7 +469,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.minSearchLength]
-    
      */
     @Input()
     get minSearchLength(): number {
@@ -512,7 +481,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -525,7 +493,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.nextButtonText]
-    
      */
     @Input()
     get nextButtonText(): string {
@@ -538,7 +505,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -551,7 +517,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownEditorOptions.opened]
-    
      */
     @Input()
     get opened(): boolean {
@@ -564,7 +529,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.pageLoadingText]
-    
      */
     @Input()
     get pageLoadingText(): string {
@@ -577,7 +541,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.pageLoadMode]
-    
      */
     @Input()
     get pageLoadMode(): PageLoadMode {
@@ -590,7 +553,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -603,7 +565,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.pulledDownText]
-    
      */
     @Input()
     get pulledDownText(): string {
@@ -616,7 +577,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.pullingDownText]
-    
      */
     @Input()
     get pullingDownText(): string {
@@ -629,7 +589,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.pullRefreshEnabled]
-    
      */
     @Input()
     get pullRefreshEnabled(): boolean {
@@ -642,7 +601,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.refreshingText]
-    
      */
     @Input()
     get refreshingText(): string {
@@ -655,7 +613,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -668,7 +625,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.searchEnabled]
-    
      */
     @Input()
     get searchEnabled(): boolean {
@@ -681,7 +637,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.searchExpr]
-    
      */
     @Input()
     get searchExpr(): Array<Function | string> | Function | string {
@@ -694,7 +649,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.searchMode]
-    
      */
     @Input()
     get searchMode(): SimplifiedSearchMode {
@@ -707,7 +661,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.searchPlaceholder]
-    
      */
     @Input()
     get searchPlaceholder(): string {
@@ -720,7 +673,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.searchStartEvent]
-    
      */
     @Input()
     get searchStartEvent(): string {
@@ -733,7 +685,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.searchTimeout]
-    
      */
     @Input()
     get searchTimeout(): number {
@@ -746,7 +697,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -759,7 +709,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.showCancelButton]
-    
      */
     @Input()
     get showCancelButton(): boolean {
@@ -772,7 +721,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -785,7 +733,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.showDataBeforeSearch]
-    
      */
     @Input()
     get showDataBeforeSearch(): boolean {
@@ -798,7 +745,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -811,7 +757,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -824,7 +769,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -837,7 +781,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.useItemTextAsTitle]
-    
      */
     @Input()
     get useItemTextAsTitle(): boolean {
@@ -850,7 +793,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.useNativeScrolling]
-    
      */
     @Input()
     get useNativeScrolling(): boolean {
@@ -863,7 +805,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxLookupOptions.usePopover]
-    
      */
     @Input()
     get usePopover(): boolean {
@@ -876,7 +817,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -889,7 +829,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -902,7 +841,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -915,7 +853,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Mode | Position {
@@ -928,7 +865,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -941,7 +877,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.value]
-    
      */
     @Input()
     get value(): any {
@@ -954,7 +889,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -967,7 +901,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
-    
      */
     @Input()
     get valueExpr(): ((item: any) => string | number | boolean) | string {
@@ -980,7 +913,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -993,7 +925,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -1006,7 +937,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.wrapItemText]
-    
      */
     @Input()
     get wrapItemText(): boolean {

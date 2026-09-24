@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -182,9 +181,9 @@ import { DxoRangeSelectorValueAxisModule } from 'devextreme-angular/ui/range-sel
 import { DxoRangeSelectorValueErrorBarModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorWidthModule } from 'devextreme-angular/ui/range-selector/nested';
 import { 
-           PROPERTY_TOKEN_breaks,
-           PROPERTY_TOKEN_series,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_breaks,
+    PROPERTY_TOKEN_series,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -225,7 +224,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.background]
-    
      */
     @Input()
     get background(): { color?: string, image?: { location?: BackgroundImageLocation, url?: string | undefined }, visible?: boolean } {
@@ -238,7 +236,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.behavior]
-    
      */
     @Input()
     get behavior(): { allowSlidersSwap?: boolean, animationEnabled?: boolean, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode } {
@@ -251,7 +248,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.chart]
-    
      */
     @Input()
     get chart(): { barGroupPadding?: number, barGroupWidth?: number | undefined, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, series?: Array<ChartSeries> | ChartSeries | undefined, seriesTemplate?: any, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } } {
@@ -264,7 +260,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.containerBackgroundColor]
-    
      */
     @Input()
     get containerBackgroundColor(): string {
@@ -277,7 +272,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
@@ -290,7 +284,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.dataSourceField]
-    
      */
     @Input()
     get dataSourceField(): string {
@@ -303,7 +296,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -316,7 +308,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -329,7 +320,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -342,7 +332,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -355,7 +344,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.indent]
-    
      */
     @Input()
     get indent(): { left?: number | undefined, right?: number | undefined } {
@@ -368,7 +356,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
@@ -381,7 +368,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -394,7 +380,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -407,7 +392,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -420,7 +404,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -433,7 +416,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.scale]
-    
      */
     @Input()
     get scale(): { aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak> | undefined | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string> | Array<number> | undefined, label?: { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number> | undefined, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> } {
@@ -446,7 +428,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.selectedRangeColor]
-    
      */
     @Input()
     get selectedRangeColor(): string {
@@ -459,7 +440,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.selectedRangeUpdateMode]
-    
      */
     @Input()
     get selectedRangeUpdateMode(): VisualRangeUpdateMode {
@@ -472,7 +452,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.shutter]
-    
      */
     @Input()
     get shutter(): { color?: string | undefined, opacity?: number } {
@@ -485,7 +464,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -498,7 +476,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.sliderHandle]
-    
      */
     @Input()
     get sliderHandle(): { color?: string, opacity?: number, width?: number } {
@@ -511,7 +488,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.sliderMarker]
-    
      */
     @Input()
     get sliderMarker(): { color?: string, customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number | undefined, visible?: boolean } {
@@ -524,7 +500,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -537,7 +512,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -550,7 +524,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxRangeSelectorOptions.value]
-    
      */
     @Input()
     get value(): Array<Date | number | string> | CommonChartTypes.VisualRange {

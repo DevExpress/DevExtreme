@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -195,16 +194,16 @@ import { DxoTreeListTreeListSelectionModule } from 'devextreme-angular/ui/tree-l
 import { DxiTreeListTreeListToolbarItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_changes,
-           PROPERTY_TOKEN_columns,
-           PROPERTY_TOKEN_customOperations,
-           PROPERTY_TOKEN_fields,
-           PROPERTY_TOKEN_tabs,
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_changes,
+    PROPERTY_TOKEN_columns,
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+    PROPERTY_TOKEN_tabs,
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -273,7 +272,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -286,7 +284,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -309,7 +306,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.aiIntegration]
-    
      */
     @Input()
     get aiIntegration(): AIIntegration | undefined {
@@ -322,7 +318,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
-    
      */
     @Input()
     get allowColumnReordering(): boolean {
@@ -335,7 +330,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.allowColumnResizing]
-    
      */
     @Input()
     get allowColumnResizing(): boolean {
@@ -348,7 +342,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
-    
      */
     @Input()
     get autoExpandAll(): boolean {
@@ -361,7 +354,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.autoNavigateToFocusedRow]
-    
      */
     @Input()
     get autoNavigateToFocusedRow(): boolean {
@@ -374,7 +366,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.cacheEnabled]
-    
      */
     @Input()
     get cacheEnabled(): boolean {
@@ -387,7 +378,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.cellHintEnabled]
-    
      */
     @Input()
     get cellHintEnabled(): boolean {
@@ -400,7 +390,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnAutoWidth]
-    
      */
     @Input()
     get columnAutoWidth(): boolean {
@@ -413,7 +402,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnChooser]
-    
      */
     @Input()
     get columnChooser(): ColumnChooser {
@@ -426,7 +414,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnFixing]
-    
      */
     @Input()
     get columnFixing(): { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } } {
@@ -439,7 +426,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnHidingEnabled]
-    
      */
     @Input()
     get columnHidingEnabled(): boolean {
@@ -452,7 +438,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnMinWidth]
-    
      */
     @Input()
     get columnMinWidth(): number | undefined {
@@ -465,7 +450,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnResizingMode]
-    
      */
     @Input()
     get columnResizingMode(): ColumnResizeMode {
@@ -478,7 +462,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.columns]
-    
      */
     @Input()
     get columns(): Array<dxTreeListColumn | string> {
@@ -491,7 +474,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnWidth]
-    
      */
     @Input()
     get columnWidth(): Mode | number | undefined {
@@ -504,7 +486,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.customizeColumns]
-    
      */
     @Input()
     get customizeColumns(): ((columns: Array<dxTreeListColumn>) => void) {
@@ -517,7 +498,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | Store | string | undefined {
@@ -530,7 +510,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.dataStructure]
-    
      */
     @Input()
     get dataStructure(): DataStructure {
@@ -543,7 +522,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.dateSerializationFormat]
-    
      */
     @Input()
     get dateSerializationFormat(): string {
@@ -556,7 +534,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -569,7 +546,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.editing]
-    
      */
     @Input()
     get editing(): { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string | undefined, editRowKey?: any | undefined, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
@@ -582,7 +558,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -595,7 +570,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.errorRowEnabled]
-    
      */
     @Input()
     get errorRowEnabled(): boolean {
@@ -608,7 +582,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.expandedRowKeys]
-    
      */
     @Input()
     get expandedRowKeys(): Array<any> {
@@ -621,7 +594,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.expandNodesOnFiltering]
-    
      */
     @Input()
     get expandNodesOnFiltering(): boolean {
@@ -634,7 +606,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterBuilder]
-    
      */
     @Input()
     get filterBuilder(): dxFilterBuilderOptions {
@@ -647,7 +618,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterBuilderPopup]
-    
      */
     @Input()
     get filterBuilderPopup(): dxPopupOptions<any> {
@@ -660,7 +630,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.filterMode]
-    
      */
     @Input()
     get filterMode(): TreeListFilterMode {
@@ -673,7 +642,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterPanel]
-    
      */
     @Input()
     get filterPanel(): FilterPanel {
@@ -686,7 +654,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterRow]
-    
      */
     @Input()
     get filterRow(): { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean } {
@@ -699,7 +666,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterSyncEnabled]
-    
      */
     @Input()
     get filterSyncEnabled(): boolean | Mode {
@@ -712,7 +678,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterValue]
-    
      */
     @Input()
     get filterValue(): Array<any> | Function | string {
@@ -725,7 +690,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedColumnIndex]
-    
      */
     @Input()
     get focusedColumnIndex(): number {
@@ -738,7 +702,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedRowEnabled]
-    
      */
     @Input()
     get focusedRowEnabled(): boolean {
@@ -751,7 +714,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedRowIndex]
-    
      */
     @Input()
     get focusedRowIndex(): number {
@@ -764,7 +726,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedRowKey]
-    
      */
     @Input()
     get focusedRowKey(): any | undefined {
@@ -777,7 +738,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
-    
      */
     @Input()
     get hasItemsExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
@@ -790,7 +750,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.headerFilter]
-    
      */
     @Input()
     get headerFilter(): HeaderFilter {
@@ -803,7 +762,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -816,7 +774,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.highlightChanges]
-    
      */
     @Input()
     get highlightChanges(): boolean {
@@ -829,7 +786,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -842,7 +798,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -855,7 +810,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.itemsExpr]
-    
      */
     @Input()
     get itemsExpr(): ((item: any, value: Array<any> | undefined) => Array<any> | undefined) | string {
@@ -868,7 +822,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.keyboardNavigation]
-    
      */
     @Input()
     get keyboardNavigation(): { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection } {
@@ -881,7 +834,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any, value: any) => any) | string {
@@ -894,7 +846,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.loadPanel]
-    
      */
     @Input()
     get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
@@ -907,7 +858,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -920,7 +870,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.pager]
-    
      */
     @Input()
     get pager(): Pager {
@@ -933,7 +882,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.paging]
-    
      */
     @Input()
     get paging(): { enabled?: boolean, pageIndex?: number, pageSize?: number } {
@@ -946,7 +894,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.parentIdExpr]
-    
      */
     @Input()
     get parentIdExpr(): ((item: any, value: any) => any | undefined) | string {
@@ -959,7 +906,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.remoteOperations]
-    
      */
     @Input()
     get remoteOperations(): Mode | { filtering?: boolean, grouping?: boolean, sorting?: boolean } {
@@ -972,7 +918,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.renderAsync]
-    
      */
     @Input()
     get renderAsync(): boolean {
@@ -985,7 +930,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.repaintChangesOnly]
-    
      */
     @Input()
     get repaintChangesOnly(): boolean {
@@ -998,7 +942,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.rootValue]
-    
      */
     @Input()
     get rootValue(): any {
@@ -1011,7 +954,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.rowAlternationEnabled]
-    
      */
     @Input()
     get rowAlternationEnabled(): boolean {
@@ -1024,7 +966,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.rowDragging]
-    
      */
     @Input()
     get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, group?: string | undefined, handle?: string, onAdd?: ((e: RowDraggingAddEvent) => void), onDragChange?: ((e: RowDraggingChangeEvent) => void), onDragEnd?: ((e: RowDraggingEndEvent) => void), onDragMove?: ((e: RowDraggingMoveEvent) => void), onDragStart?: ((e: RowDraggingStartEvent) => void), onRemove?: ((e: RowDraggingRemoveEvent) => void), onReorder?: ((e: RowDraggingReorderEvent) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
@@ -1037,7 +978,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -1050,7 +990,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.scrolling]
-    
      */
     @Input()
     get scrolling(): { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode } {
@@ -1063,7 +1002,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.searchPanel]
-    
      */
     @Input()
     get searchPanel(): SearchPanel {
@@ -1076,7 +1014,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.selectedRowKeys]
-    
      */
     @Input()
     get selectedRowKeys(): Array<any> {
@@ -1089,7 +1026,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.selection]
-    
      */
     @Input()
     get selection(): { allowSelectAll?: boolean, mode?: SingleMultipleOrNone, recursive?: boolean } {
@@ -1102,7 +1038,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showBorders]
-    
      */
     @Input()
     get showBorders(): boolean {
@@ -1115,7 +1050,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showColumnHeaders]
-    
      */
     @Input()
     get showColumnHeaders(): boolean {
@@ -1128,7 +1062,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showColumnLines]
-    
      */
     @Input()
     get showColumnLines(): boolean {
@@ -1141,7 +1074,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showRowLines]
-    
      */
     @Input()
     get showRowLines(): boolean {
@@ -1154,7 +1086,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.sorting]
-    
      */
     @Input()
     get sorting(): Sorting {
@@ -1167,7 +1098,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.stateStoring]
-    
      */
     @Input()
     get stateStoring(): { customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType } {
@@ -1180,7 +1110,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.syncLookupFilterValues]
-    
      */
     @Input()
     get syncLookupFilterValues(): boolean {
@@ -1193,7 +1122,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -1206,7 +1134,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxTreeListOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxTreeListToolbar | undefined {
@@ -1219,7 +1146,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.twoWayBindingEnabled]
-    
      */
     @Input()
     get twoWayBindingEnabled(): boolean {
@@ -1232,7 +1158,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -1245,7 +1170,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -1258,7 +1182,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.wordWrapEnabled]
-    
      */
     @Input()
     get wordWrapEnabled(): boolean {

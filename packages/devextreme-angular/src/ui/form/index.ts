@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -69,10 +68,10 @@ import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested'
 import { DxiFormTabPanelOptionsItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_tabs,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -111,7 +110,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -124,7 +122,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -147,7 +144,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.alignItemLabels]
-    
      */
     @Input()
     get alignItemLabels(): boolean {
@@ -160,7 +156,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.alignItemLabelsInAllGroups]
-    
      */
     @Input()
     get alignItemLabelsInAllGroups(): boolean {
@@ -173,7 +168,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.colCount]
-    
      */
     @Input()
     get colCount(): Mode | number {
@@ -186,7 +180,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.colCountByScreen]
-    
      */
     @Input()
     get colCountByScreen(): { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined } {
@@ -199,7 +192,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.customizeItem]
-    
      */
     @Input()
     get customizeItem(): ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void) {
@@ -212,7 +204,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -225,7 +216,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -238,7 +228,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -251,7 +240,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.formData]
-    
      */
     @Input()
     get formData(): any {
@@ -264,7 +252,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -277,7 +264,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -290,7 +276,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -303,7 +288,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -316,7 +300,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.items]
-    
      */
     @Input()
     get items(): Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem> {
@@ -329,7 +312,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.labelLocation]
-    
      */
     @Input()
     get labelLocation(): LabelLocation {
@@ -342,7 +324,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): FormLabelMode {
@@ -355,7 +336,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.minColWidth]
-    
      */
     @Input()
     get minColWidth(): number {
@@ -368,7 +348,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.optionalMark]
-    
      */
     @Input()
     get optionalMark(): string {
@@ -381,7 +360,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -394,7 +372,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.requiredMark]
-    
      */
     @Input()
     get requiredMark(): string {
@@ -407,7 +384,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.requiredMessage]
-    
      */
     @Input()
     get requiredMessage(): string {
@@ -420,7 +396,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -433,7 +408,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.screenByWidth]
-    
      */
     @Input()
     get screenByWidth(): Function {
@@ -446,7 +420,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.scrollingEnabled]
-    
      */
     @Input()
     get scrollingEnabled(): boolean {
@@ -459,7 +432,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.showColonAfterLabel]
-    
      */
     @Input()
     get showColonAfterLabel(): boolean {
@@ -472,7 +444,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.showOptionalMark]
-    
      */
     @Input()
     get showOptionalMark(): boolean {
@@ -485,7 +456,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.showRequiredMark]
-    
      */
     @Input()
     get showRequiredMark(): boolean {
@@ -498,7 +468,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.showValidationSummary]
-    
      */
     @Input()
     get showValidationSummary(): boolean {
@@ -511,7 +480,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -524,7 +492,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:dxFormOptions.validationGroup]
-    
      */
     @Input()
     get validationGroup(): string | undefined {
@@ -537,7 +504,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -550,7 +516,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

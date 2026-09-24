@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -52,7 +51,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -65,7 +63,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.animationDuration]
-    
      */
     @Input()
     get animationDuration(): number {
@@ -78,7 +75,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.animationEnabled]
-    
      */
     @Input()
     get animationEnabled(): boolean {
@@ -91,7 +87,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.closeOnOutsideClick]
-    
      */
     @Input()
     get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
@@ -104,7 +99,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -117,7 +111,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -130,7 +123,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -143,7 +135,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -156,7 +147,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -169,7 +159,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.maxSize]
-    
      */
     @Input()
     get maxSize(): null | number {
@@ -182,7 +171,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.minSize]
-    
      */
     @Input()
     get minSize(): null | number {
@@ -195,7 +183,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.opened]
-    
      */
     @Input()
     get opened(): boolean {
@@ -208,7 +195,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.openedStateMode]
-    
      */
     @Input()
     get openedStateMode(): OpenedStateMode {
@@ -221,7 +207,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.position]
-    
      */
     @Input()
     get position(): PanelLocation {
@@ -234,7 +219,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.revealMode]
-    
      */
     @Input()
     get revealMode(): RevealMode {
@@ -247,7 +231,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -260,7 +243,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.shading]
-    
      */
     @Input()
     get shading(): boolean {
@@ -273,7 +255,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxDrawerOptions.template]
-    
      */
     @Input()
     get template(): any {
@@ -286,7 +267,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -299,7 +279,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -42,8 +41,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/toolbar/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -72,7 +71,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxToolbarOptions.allowKeyboardNavigation]
-    
      */
     @Input()
     get allowKeyboardNavigation(): boolean {
@@ -85,7 +83,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxToolbarOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxToolbarItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -98,7 +95,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -111,7 +107,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -124,7 +119,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -137,7 +131,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -150,7 +143,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -163,7 +155,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxToolbarOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxToolbarItem | string> {
@@ -176,7 +167,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -189,7 +179,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxToolbarOptions.menuItemTemplate]
-    
      */
     @Input()
     get menuItemTemplate(): any {
@@ -202,7 +191,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxToolbarOptions.multiline]
-    
      */
     @Input()
     get multiline(): boolean {
@@ -215,7 +203,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -228,7 +215,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -241,7 +227,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -254,7 +239,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -72,11 +71,11 @@ import { DxoHtmlEditorToolbarModule } from 'devextreme-angular/ui/html-editor/ne
 import { DxiHtmlEditorToolbarItemModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorVariablesModule } from 'devextreme-angular/ui/html-editor/nested';
 import { 
-           PROPERTY_TOKEN_commands,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_mentions,
-           PROPERTY_TOKEN_tabs,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_mentions,
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -126,7 +125,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -139,7 +137,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -152,7 +149,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.aiIntegration]
-    
      */
     @Input()
     get aiIntegration(): AIIntegration | undefined {
@@ -165,7 +161,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.allowSoftLineBreak]
-    
      */
     @Input()
     get allowSoftLineBreak(): boolean {
@@ -178,7 +173,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.converter]
-    
      */
     @Input()
     get converter(): Converter | undefined {
@@ -191,7 +185,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.customizeModules]
-    
      */
     @Input()
     get customizeModules(): ((config: any) => void) {
@@ -204,7 +197,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -217,7 +209,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -230,7 +221,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -243,7 +233,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -256,7 +245,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -269,7 +257,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -282,7 +269,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.imageUpload]
-    
      */
     @Input()
     get imageUpload(): dxHtmlEditorImageUpload {
@@ -295,7 +281,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -308,7 +293,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -321,7 +305,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.mediaResizing]
-    
      */
     @Input()
     get mediaResizing(): dxHtmlEditorMediaResizing | null {
@@ -334,7 +317,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.mentions]
-    
      */
     @Input()
     get mentions(): Array<dxHtmlEditorMention> | null {
@@ -347,7 +329,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -360,7 +341,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -373,7 +353,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -386,7 +365,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -399,7 +377,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -412,7 +389,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -425,7 +401,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.tableContextMenu]
-    
      */
     @Input()
     get tableContextMenu(): dxHtmlEditorTableContextMenu | null {
@@ -438,7 +413,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.tableResizing]
-    
      */
     @Input()
     get tableResizing(): dxHtmlEditorTableResizing | null {
@@ -451,7 +425,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxHtmlEditorToolbar | null {
@@ -464,7 +437,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -477,7 +449,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -490,7 +461,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -503,7 +473,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -516,7 +485,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -529,7 +497,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.value]
-    
      */
     @Input()
     get value(): any | null {
@@ -542,7 +509,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxHtmlEditorOptions.variables]
-    
      */
     @Input()
     get variables(): dxHtmlEditorVariables | null {
@@ -555,7 +521,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -568,7 +533,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

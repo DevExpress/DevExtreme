@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -77,7 +76,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -90,7 +88,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxSliderBaseOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -103,7 +100,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -116,7 +112,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -129,7 +124,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxRangeSliderOptions.end]
-    
      */
     @Input()
     get end(): number {
@@ -142,7 +136,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxRangeSliderOptions.endName]
-    
      */
     @Input()
     get endName(): string {
@@ -155,7 +148,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxSliderBaseOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -168,7 +160,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -181,7 +172,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -194,7 +184,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxSliderBaseOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -207,7 +196,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -220,7 +208,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -233,7 +220,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxSliderBaseOptions.keyStep]
-    
      */
     @Input()
     get keyStep(): number {
@@ -246,7 +232,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxSliderBaseOptions.label]
-    
      */
     @Input()
     get label(): { format?: Format, position?: VerticalEdge, visible?: boolean } {
@@ -259,7 +244,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTrackBarOptions.max]
-    
      */
     @Input()
     get max(): number {
@@ -272,7 +256,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTrackBarOptions.min]
-    
      */
     @Input()
     get min(): number {
@@ -285,7 +268,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -298,7 +280,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -311,7 +292,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxSliderBaseOptions.showRange]
-    
      */
     @Input()
     get showRange(): boolean {
@@ -324,7 +304,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxRangeSliderOptions.start]
-    
      */
     @Input()
     get start(): number {
@@ -337,7 +316,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxRangeSliderOptions.startName]
-    
      */
     @Input()
     get startName(): string {
@@ -350,7 +328,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxSliderBaseOptions.step]
-    
      */
     @Input()
     get step(): number {
@@ -363,7 +340,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -376,7 +352,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxSliderBaseOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode } {
@@ -389,7 +364,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -402,7 +376,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -415,7 +388,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -428,7 +400,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -441,7 +412,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -454,7 +424,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxRangeSliderOptions.value]
-    
      */
     @Input()
     get value(): Array<number> {
@@ -467,7 +436,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxSliderBaseOptions.valueChangeMode]
-    
      */
     @Input()
     get valueChangeMode(): SliderValueChangeMode {
@@ -480,7 +448,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -493,7 +460,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -71,7 +70,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.abortUpload]
-    
      */
     @Input()
     get abortUpload(): ((file: any, uploadInfo?: UploadInfo) => any) {
@@ -84,7 +82,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.accept]
-    
      */
     @Input()
     get accept(): string {
@@ -97,7 +94,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -110,7 +106,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -123,7 +118,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.allowCanceling]
-    
      */
     @Input()
     get allowCanceling(): boolean {
@@ -136,7 +130,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.allowedFileExtensions]
-    
      */
     @Input()
     get allowedFileExtensions(): Array<string> {
@@ -149,7 +142,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.chunkSize]
-    
      */
     @Input()
     get chunkSize(): number {
@@ -162,7 +154,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.dialogTrigger]
-    
      */
     @Input()
     get dialogTrigger(): any | string | undefined {
@@ -175,7 +166,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -188,7 +178,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.dropZone]
-    
      */
     @Input()
     get dropZone(): any | string | undefined {
@@ -201,7 +190,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -214,7 +202,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -227,7 +214,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -240,7 +226,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -253,7 +238,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -266,7 +250,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -279,7 +262,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.invalidFileExtensionMessage]
-    
      */
     @Input()
     get invalidFileExtensionMessage(): string {
@@ -292,7 +274,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.invalidMaxFileSizeMessage]
-    
      */
     @Input()
     get invalidMaxFileSizeMessage(): string {
@@ -305,7 +286,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.invalidMinFileSizeMessage]
-    
      */
     @Input()
     get invalidMinFileSizeMessage(): string {
@@ -318,7 +298,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -331,7 +310,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -344,7 +322,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.labelText]
-    
      */
     @Input()
     get labelText(): string {
@@ -357,7 +334,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.maxFileSize]
-    
      */
     @Input()
     get maxFileSize(): number {
@@ -370,7 +346,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.minFileSize]
-    
      */
     @Input()
     get minFileSize(): number {
@@ -383,7 +358,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.multiple]
-    
      */
     @Input()
     get multiple(): boolean {
@@ -396,7 +370,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -409,7 +382,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.progress]
-    
      */
     @Input()
     get progress(): number {
@@ -422,7 +394,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -435,7 +406,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.readyToUploadMessage]
-    
      */
     @Input()
     get readyToUploadMessage(): string {
@@ -448,7 +418,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -461,7 +430,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.selectButtonText]
-    
      */
     @Input()
     get selectButtonText(): string {
@@ -474,7 +442,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.showFileList]
-    
      */
     @Input()
     get showFileList(): boolean {
@@ -487,7 +454,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -500,7 +466,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadAbortedMessage]
-    
      */
     @Input()
     get uploadAbortedMessage(): string {
@@ -513,7 +478,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadButtonText]
-    
      */
     @Input()
     get uploadButtonText(): string {
@@ -526,7 +490,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadChunk]
-    
      */
     @Input()
     get uploadChunk(): ((file: any, uploadInfo: UploadInfo) => any) {
@@ -539,7 +502,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadCustomData]
-    
      */
     @Input()
     get uploadCustomData(): any {
@@ -552,7 +514,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadedMessage]
-    
      */
     @Input()
     get uploadedMessage(): string {
@@ -565,7 +526,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadFailedMessage]
-    
      */
     @Input()
     get uploadFailedMessage(): string {
@@ -578,7 +538,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadFile]
-    
      */
     @Input()
     get uploadFile(): ((file: any, progressCallback: Function) => any) {
@@ -591,7 +550,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadHeaders]
-    
      */
     @Input()
     get uploadHeaders(): any {
@@ -604,7 +562,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadMethod]
-    
      */
     @Input()
     get uploadMethod(): UploadHttpMethod {
@@ -617,7 +574,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadMode]
-    
      */
     @Input()
     get uploadMode(): FileUploadMode {
@@ -630,7 +586,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.uploadUrl]
-    
      */
     @Input()
     get uploadUrl(): string {
@@ -643,7 +598,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -656,7 +610,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -669,7 +622,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -682,7 +634,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxFileUploaderOptions.value]
-    
      */
     @Input()
     get value(): Array<any> {
@@ -695,7 +646,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -708,7 +658,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

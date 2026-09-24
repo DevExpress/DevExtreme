@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -50,8 +49,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiRadioGroupItemModule } from 'devextreme-angular/ui/radio-group/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -86,7 +85,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -99,7 +97,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxRadioGroupOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -112,7 +109,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -125,7 +121,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -138,7 +133,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string | undefined {
@@ -151,7 +145,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -164,7 +157,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxRadioGroupOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -177,7 +169,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -190,7 +181,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -203,7 +193,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxRadioGroupOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -216,7 +205,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -229,7 +217,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -242,7 +229,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DataExpressionMixinOptions.items]
-    
      */
     @Input()
     get items(): Array<any | CollectionWidgetItem> {
@@ -255,7 +241,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -268,7 +253,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxRadioGroupOptions.layout]
-    
      */
     @Input()
     get layout(): Orientation {
@@ -281,7 +265,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxRadioGroupOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -294,7 +277,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -307,7 +289,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -320,7 +301,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -333,7 +313,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -346,7 +325,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -359,7 +337,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -372,7 +349,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -385,7 +361,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -398,7 +373,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:dxRadioGroupOptions.value]
-    
      */
     @Input()
     get value(): any {
@@ -411,7 +385,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
-    
      */
     @Input()
     get valueExpr(): ((item: any) => string | number | boolean) | string {
@@ -424,7 +397,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -437,7 +409,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

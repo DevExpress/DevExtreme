@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -70,7 +69,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -83,7 +81,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -96,7 +93,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -109,7 +105,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -122,7 +117,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -135,7 +129,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -148,7 +141,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -161,7 +153,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTrackBarOptions.max]
-    
      */
     @Input()
     get max(): number {
@@ -174,7 +165,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxTrackBarOptions.min]
-    
      */
     @Input()
     get min(): number {
@@ -187,7 +177,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -200,7 +189,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -213,7 +201,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxProgressBarOptions.showStatus]
-    
      */
     @Input()
     get showStatus(): boolean {
@@ -226,7 +213,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxProgressBarOptions.statusFormat]
-    
      */
     @Input()
     get statusFormat(): ((ratio: number, value: number) => string) | string {
@@ -239,7 +225,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -252,7 +237,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -265,7 +249,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -278,7 +261,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -291,7 +273,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -304,7 +285,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:dxProgressBarOptions.value]
-    
      */
     @Input()
     get value(): false | number {
@@ -317,7 +297,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -330,7 +309,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

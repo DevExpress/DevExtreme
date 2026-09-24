@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -100,7 +99,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.childrenField]
-    
      */
     @Input()
     get childrenField(): string {
@@ -113,7 +111,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.colorField]
-    
      */
     @Input()
     get colorField(): string {
@@ -126,7 +123,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.colorizer]
-    
      */
     @Input()
     get colorizer(): { colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number> | undefined, type?: TreeMapColorizerType | undefined } {
@@ -139,7 +135,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
@@ -152,7 +147,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -165,7 +159,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -178,7 +171,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -191,7 +183,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -204,7 +195,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.group]
-    
      */
     @Input()
     get group(): { border?: { color?: string | undefined, width?: number | undefined }, color?: string, headerHeight?: number | undefined, hoverEnabled?: boolean | undefined, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } } {
@@ -217,7 +207,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.hoverEnabled]
-    
      */
     @Input()
     get hoverEnabled(): boolean | undefined {
@@ -230,7 +219,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.idField]
-    
      */
     @Input()
     get idField(): string | undefined {
@@ -243,7 +231,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.interactWithGroup]
-    
      */
     @Input()
     get interactWithGroup(): boolean {
@@ -256,7 +243,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.labelField]
-    
      */
     @Input()
     get labelField(): string {
@@ -269,7 +255,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.layoutAlgorithm]
-    
      */
     @Input()
     get layoutAlgorithm(): ((e: { items: Array<any>, rect: Array<number>, sum: number }) => void) | TreeMapLayoutAlgorithm {
@@ -282,7 +267,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.layoutDirection]
-    
      */
     @Input()
     get layoutDirection(): TreeMapLayoutDirection {
@@ -295,7 +279,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
@@ -308,7 +291,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.maxDepth]
-    
      */
     @Input()
     get maxDepth(): number | undefined {
@@ -321,7 +303,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.parentField]
-    
      */
     @Input()
     get parentField(): string | undefined {
@@ -334,7 +315,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -347,7 +327,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -360,7 +339,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -373,7 +351,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleMultipleOrNone | undefined {
@@ -386,7 +363,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -399,7 +375,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -412,7 +387,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.tile]
-    
      */
     @Input()
     get tile(): { border?: { color?: string | undefined, width?: number | undefined }, color?: string, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } } {
@@ -425,7 +399,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -438,7 +411,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -451,7 +423,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.valueField]
-    
      */
     @Input()
     get valueField(): string {

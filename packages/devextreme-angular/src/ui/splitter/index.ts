@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -44,8 +43,8 @@ import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 
 import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -74,7 +73,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxSplitterOptions.allowKeyboardNavigation]
-    
      */
     @Input()
     get allowKeyboardNavigation(): boolean {
@@ -87,7 +85,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxSplitterOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -100,7 +97,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -113,7 +109,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -126,7 +121,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -139,7 +133,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -152,7 +145,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxSplitterOptions.items]
-    
      */
     @Input()
     get items(): Array<dxSplitterItem> {
@@ -165,7 +157,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -178,7 +169,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxSplitterOptions.orientation]
-    
      */
     @Input()
     get orientation(): Orientation {
@@ -191,7 +181,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -204,7 +193,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxSplitterOptions.separatorSize]
-    
      */
     @Input()
     get separatorSize(): number {
@@ -217,7 +205,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -230,7 +217,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

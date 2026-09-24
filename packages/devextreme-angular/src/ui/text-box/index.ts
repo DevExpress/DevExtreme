@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -49,8 +48,8 @@ import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiTextBoxButtonModule } from 'devextreme-angular/ui/text-box/nested';
 import { DxoTextBoxOptionsModule } from 'devextreme-angular/ui/text-box/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -85,7 +84,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -98,7 +96,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -111,7 +108,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.buttons]
-    
      */
     @Input()
     get buttons(): Array<string | TextBoxPredefinedButton | TextEditorButton> | undefined {
@@ -124,7 +120,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -137,7 +132,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -150,7 +144,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -163,7 +156,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -176,7 +168,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -189,7 +180,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -202,7 +192,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -215,7 +204,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -228,7 +216,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -241,7 +228,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -254,7 +240,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -267,7 +252,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.mask]
-    
      */
     @Input()
     get mask(): string {
@@ -280,7 +264,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.maskChar]
-    
      */
     @Input()
     get maskChar(): string {
@@ -293,7 +276,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.maskInvalidMessage]
-    
      */
     @Input()
     get maskInvalidMessage(): string {
@@ -306,7 +288,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.maskRules]
-    
      */
     @Input()
     get maskRules(): any {
@@ -319,7 +300,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextBoxOptions.maxLength]
-    
      */
     @Input()
     get maxLength(): null | number | string {
@@ -332,7 +312,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextBoxOptions.mode]
-    
      */
     @Input()
     get mode(): TextBoxType {
@@ -345,7 +324,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -358,7 +336,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -371,7 +348,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -384,7 +360,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -397,7 +372,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -410,7 +384,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.showMaskMode]
-    
      */
     @Input()
     get showMaskMode(): MaskMode {
@@ -423,7 +396,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.spellcheck]
-    
      */
     @Input()
     get spellcheck(): boolean {
@@ -436,7 +408,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -449,7 +420,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -462,7 +432,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -475,7 +444,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.useMaskedValue]
-    
      */
     @Input()
     get useMaskedValue(): boolean {
@@ -488,7 +456,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -501,7 +468,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -514,7 +480,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -527,7 +492,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -540,7 +504,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -553,7 +516,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextBoxOptions.value]
-    
      */
     @Input()
     get value(): string {
@@ -566,7 +528,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -579,7 +540,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -592,7 +552,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

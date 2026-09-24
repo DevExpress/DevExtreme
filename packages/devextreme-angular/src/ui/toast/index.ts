@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -75,7 +74,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -88,7 +86,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.animation]
-    
      */
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
@@ -101,7 +98,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.closeOnClick]
-    
      */
     @Input()
     get closeOnClick(): boolean {
@@ -114,7 +110,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.closeOnSwipe]
-    
      */
     @Input()
     get closeOnSwipe(): boolean {
@@ -127,7 +122,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.contentTemplate]
-    
      */
     @Input()
     get contentTemplate(): any {
@@ -140,7 +134,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -153,7 +146,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.displayTime]
-    
      */
     @Input()
     get displayTime(): number {
@@ -166,7 +158,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -179,7 +170,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -192,7 +182,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.hideOnOutsideClick]
-    
      */
     @Input()
     get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
@@ -205,7 +194,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.hideOnParentScroll]
-    
      */
     @Input()
     get hideOnParentScroll(): boolean {
@@ -218,7 +206,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -231,7 +218,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -244,7 +230,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.maxHeight]
-    
      */
     @Input()
     get maxHeight(): number | string {
@@ -257,7 +242,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.maxWidth]
-    
      */
     @Input()
     get maxWidth(): number | string {
@@ -270,7 +254,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.message]
-    
      */
     @Input()
     get message(): string {
@@ -283,7 +266,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.minHeight]
-    
      */
     @Input()
     get minHeight(): number | string {
@@ -296,7 +278,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.minWidth]
-    
      */
     @Input()
     get minWidth(): number | string {
@@ -309,7 +290,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.position]
-    
      */
     @Input()
     get position(): PositionConfig | string {
@@ -322,7 +302,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -335,7 +314,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.shading]
-    
      */
     @Input()
     get shading(): boolean {
@@ -348,7 +326,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.shadingColor]
-    
      */
     @Input()
     get shadingColor(): string {
@@ -361,7 +338,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -374,7 +350,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.type]
-    
      */
     @Input()
     get type(): ToastType {
@@ -387,7 +362,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -400,7 +374,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxToastOptions.width]
-    
      */
     @Input()
     get width(): number | string {
@@ -413,7 +386,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
-    
      */
     @Input()
     get wrapperAttr(): any {

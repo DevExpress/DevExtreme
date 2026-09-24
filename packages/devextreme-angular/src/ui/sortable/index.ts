@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -54,7 +53,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxSortableOptions.allowDropInsideItem]
-    
      */
     @Input()
     get allowDropInsideItem(): boolean {
@@ -67,7 +65,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxSortableOptions.allowReordering]
-    
      */
     @Input()
     get allowReordering(): boolean {
@@ -80,7 +77,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.autoScroll]
-    
      */
     @Input()
     get autoScroll(): boolean {
@@ -93,7 +89,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.boundary]
-    
      */
     @Input()
     get boundary(): any | string | undefined {
@@ -106,7 +101,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.container]
-    
      */
     @Input()
     get container(): any | string | undefined {
@@ -119,7 +113,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.cursorOffset]
-    
      */
     @Input()
     get cursorOffset(): string | { x?: number, y?: number } {
@@ -132,7 +125,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.data]
-    
      */
     @Input()
     get data(): any | undefined {
@@ -145,7 +137,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.dragDirection]
-    
      */
     @Input()
     get dragDirection(): DragDirection {
@@ -158,7 +149,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxSortableOptions.dragTemplate]
-    
      */
     @Input()
     get dragTemplate(): any {
@@ -171,7 +161,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxSortableOptions.dropFeedbackMode]
-    
      */
     @Input()
     get dropFeedbackMode(): DragHighlight {
@@ -184,7 +173,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -197,7 +185,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxSortableOptions.filter]
-    
      */
     @Input()
     get filter(): string {
@@ -210,7 +197,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.group]
-    
      */
     @Input()
     get group(): string | undefined {
@@ -223,7 +209,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.handle]
-    
      */
     @Input()
     get handle(): string {
@@ -236,7 +221,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -249,7 +233,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxSortableOptions.itemOrientation]
-    
      */
     @Input()
     get itemOrientation(): Orientation {
@@ -262,7 +245,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxSortableOptions.moveItemOnDrop]
-    
      */
     @Input()
     get moveItemOnDrop(): boolean {
@@ -275,7 +257,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -288,7 +269,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.scrollSensitivity]
-    
      */
     @Input()
     get scrollSensitivity(): number {
@@ -301,7 +281,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DraggableBaseOptions.scrollSpeed]
-    
      */
     @Input()
     get scrollSpeed(): number {
@@ -314,7 +293,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

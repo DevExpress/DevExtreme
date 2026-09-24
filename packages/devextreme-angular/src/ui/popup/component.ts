@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -64,8 +63,8 @@ import { DxoPopupShowModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoPopupToModule } from 'devextreme-angular/ui/popup/nested';
 import { DxiPopupToolbarItemModule } from 'devextreme-angular/ui/popup/nested';
 import { 
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -94,7 +93,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -107,7 +105,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.animation]
-    
      */
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
@@ -120,7 +117,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.container]
-    
      */
     @Input()
     get container(): any | string | undefined {
@@ -133,7 +129,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.contentTemplate]
-    
      */
     @Input()
     get contentTemplate(): any {
@@ -146,7 +141,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -159,7 +153,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -172,7 +165,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.dragAndResizeArea]
-    
      */
     @Input()
     get dragAndResizeArea(): any | string | undefined {
@@ -185,7 +177,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.dragEnabled]
-    
      */
     @Input()
     get dragEnabled(): boolean {
@@ -198,7 +189,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.dragOutsideBoundary]
-    
      */
     @Input()
     get dragOutsideBoundary(): boolean {
@@ -211,7 +201,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.enableBodyScroll]
-    
      */
     @Input()
     get enableBodyScroll(): boolean {
@@ -224,7 +213,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -237,7 +225,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.fullScreen]
-    
      */
     @Input()
     get fullScreen(): boolean {
@@ -250,7 +237,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -263,7 +249,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.hideOnOutsideClick]
-    
      */
     @Input()
     get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
@@ -276,7 +261,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.hideOnParentScroll]
-    
      */
     @Input()
     get hideOnParentScroll(): boolean {
@@ -289,7 +273,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -302,7 +285,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -315,7 +297,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.maxHeight]
-    
      */
     @Input()
     get maxHeight(): number | string {
@@ -328,7 +309,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.maxWidth]
-    
      */
     @Input()
     get maxWidth(): number | string {
@@ -341,7 +321,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.minHeight]
-    
      */
     @Input()
     get minHeight(): number | string {
@@ -354,7 +333,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.minWidth]
-    
      */
     @Input()
     get minWidth(): number | string {
@@ -367,7 +345,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.position]
-    
      */
     @Input()
     get position(): Function | PositionAlignment | PositionConfig {
@@ -380,7 +357,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.resizeEnabled]
-    
      */
     @Input()
     get resizeEnabled(): boolean {
@@ -393,7 +369,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.restorePosition]
-    
      */
     @Input()
     get restorePosition(): boolean {
@@ -406,7 +381,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -419,7 +393,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.shading]
-    
      */
     @Input()
     get shading(): boolean {
@@ -432,7 +405,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.shadingColor]
-    
      */
     @Input()
     get shadingColor(): string {
@@ -445,7 +417,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.showCloseButton]
-    
      */
     @Input()
     get showCloseButton(): boolean {
@@ -458,7 +429,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.showTitle]
-    
      */
     @Input()
     get showTitle(): boolean {
@@ -481,7 +451,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -494,7 +463,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.title]
-    
      */
     @Input()
     get title(): string {
@@ -507,7 +475,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.titleTemplate]
-    
      */
     @Input()
     get titleTemplate(): any {
@@ -520,7 +487,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.toolbarItems]
-    
      */
     @Input()
     get toolbarItems(): Array<dxPopupToolbarItem> {
@@ -533,7 +499,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -546,7 +511,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxPopupOptions.width]
-    
      */
     @Input()
     get width(): number | string {
@@ -559,7 +523,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
-    
      */
     @Input()
     get wrapperAttr(): any {

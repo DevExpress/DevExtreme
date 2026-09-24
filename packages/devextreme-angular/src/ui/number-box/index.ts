@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -52,8 +51,8 @@ import { DxiNumberBoxButtonModule } from 'devextreme-angular/ui/number-box/neste
 import { DxoNumberBoxFormatModule } from 'devextreme-angular/ui/number-box/nested';
 import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -88,7 +87,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -101,7 +99,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -114,7 +111,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxNumberBoxOptions.buttons]
-    
      */
     @Input()
     get buttons(): Array<NumberBoxPredefinedButton | TextEditorButton> | undefined {
@@ -127,7 +123,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -140,7 +135,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -153,7 +147,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -166,7 +159,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxNumberBoxOptions.format]
-    
      */
     @Input()
     get format(): Format {
@@ -179,7 +171,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -192,7 +183,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -205,7 +195,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -218,7 +207,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -231,7 +219,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxNumberBoxOptions.invalidValueMessage]
-    
      */
     @Input()
     get invalidValueMessage(): string {
@@ -244,7 +231,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -257,7 +243,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -270,7 +255,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -283,7 +267,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -296,7 +279,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxNumberBoxOptions.max]
-    
      */
     @Input()
     get max(): number | undefined {
@@ -309,7 +291,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxNumberBoxOptions.min]
-    
      */
     @Input()
     get min(): number | undefined {
@@ -322,7 +303,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxNumberBoxOptions.mode]
-    
      */
     @Input()
     get mode(): NumberBoxType {
@@ -335,7 +315,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -348,7 +327,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -361,7 +339,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -374,7 +351,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -387,7 +363,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -400,7 +375,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxNumberBoxOptions.showSpinButtons]
-    
      */
     @Input()
     get showSpinButtons(): boolean {
@@ -413,7 +387,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxNumberBoxOptions.step]
-    
      */
     @Input()
     get step(): number {
@@ -426,7 +399,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -439,7 +411,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -452,7 +423,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -465,7 +435,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxNumberBoxOptions.useLargeSpinButtons]
-    
      */
     @Input()
     get useLargeSpinButtons(): boolean {
@@ -478,7 +447,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -491,7 +459,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -504,7 +471,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -517,7 +483,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -530,7 +495,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -543,7 +507,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxNumberBoxOptions.value]
-    
      */
     @Input()
     get value(): number {
@@ -556,7 +519,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -569,7 +531,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -582,7 +543,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -77,9 +76,9 @@ import { DxoColorBoxShowModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxToModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxiColorBoxToolbarItemModule } from 'devextreme-angular/ui/color-box/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -119,7 +118,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxDropDownEditorOptions.acceptCustomValue]
-    
      */
     @Input()
     get acceptCustomValue(): boolean {
@@ -132,7 +130,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -145,7 +142,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -158,7 +154,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxColorBoxOptions.applyButtonText]
-    
      */
     @Input()
     get applyButtonText(): string {
@@ -171,7 +166,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxColorBoxOptions.applyValueMode]
-    
      */
     @Input()
     get applyValueMode(): ApplyValueMode {
@@ -184,7 +178,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxDropDownEditorOptions.buttons]
-    
      */
     @Input()
     get buttons(): Array<DropDownPredefinedButton | TextEditorButton> | undefined {
@@ -197,7 +190,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxColorBoxOptions.cancelButtonText]
-    
      */
     @Input()
     get cancelButtonText(): string {
@@ -210,7 +202,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -223,7 +214,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -236,7 +226,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
-    
      */
     @Input()
     get dropDownButtonTemplate(): any {
@@ -249,7 +238,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxColorBoxOptions.dropDownOptions]
-    
      */
     @Input()
     get dropDownOptions(): dxPopupOptions<any> {
@@ -262,7 +250,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxColorBoxOptions.editAlphaChannel]
-    
      */
     @Input()
     get editAlphaChannel(): boolean {
@@ -275,7 +262,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -288,7 +274,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxDropDownEditorOptions.fieldAddons]
-    
      */
     @Input()
     get fieldAddons(): FieldAddons | null {
@@ -301,7 +286,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxColorBoxOptions.fieldTemplate]
-    
      * @deprecated [depNote:dxColorBoxOptions.fieldTemplate]
     
      */
@@ -316,7 +300,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -329,7 +312,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -342,7 +324,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -355,7 +336,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -368,7 +348,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -381,7 +360,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -394,7 +372,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -407,7 +384,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxColorBoxOptions.keyStep]
-    
      */
     @Input()
     get keyStep(): number {
@@ -420,7 +396,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -433,7 +408,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -446,7 +420,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -459,7 +432,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxDropDownEditorOptions.opened]
-    
      */
     @Input()
     get opened(): boolean {
@@ -472,7 +444,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxDropDownEditorOptions.openOnFieldClick]
-    
      */
     @Input()
     get openOnFieldClick(): boolean {
@@ -485,7 +456,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -498,7 +468,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -511,7 +480,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -524,7 +492,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -537,7 +504,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxDropDownEditorOptions.showDropDownButton]
-    
      */
     @Input()
     get showDropDownButton(): boolean {
@@ -550,7 +516,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -563,7 +528,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -576,7 +540,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -589,7 +552,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -602,7 +564,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -615,7 +576,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -628,7 +588,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Mode | Position {
@@ -641,7 +600,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -654,7 +612,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxColorBoxOptions.value]
-    
      */
     @Input()
     get value(): null | string {
@@ -667,7 +624,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -680,7 +636,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

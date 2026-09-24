@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -82,10 +81,10 @@ import { DxoSelectBoxShowModule } from 'devextreme-angular/ui/select-box/nested'
 import { DxoSelectBoxToModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxiSelectBoxToolbarItemModule } from 'devextreme-angular/ui/select-box/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -130,7 +129,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxSelectBoxOptions.acceptCustomValue]
-    
      */
     @Input()
     get acceptCustomValue(): boolean {
@@ -143,7 +141,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -156,7 +153,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -169,7 +165,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownEditorOptions.buttons]
-    
      */
     @Input()
     get buttons(): Array<DropDownPredefinedButton | TextEditorButton> | undefined {
@@ -182,7 +177,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxSelectBoxOptions.customItemCreateEvent]
-    
      */
     @Input()
     get customItemCreateEvent(): string {
@@ -195,7 +189,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -208,7 +201,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -221,7 +213,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -234,7 +225,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string | undefined {
@@ -247,7 +237,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.displayValue]
-    
      */
     @Input()
     get displayValue(): string | undefined {
@@ -260,7 +249,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
-    
      */
     @Input()
     get dropDownButtonTemplate(): any {
@@ -273,7 +261,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxSelectBoxOptions.dropDownOptions]
-    
      */
     @Input()
     get dropDownOptions(): dxPopupOptions<any> {
@@ -286,7 +273,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -299,7 +285,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxSelectBoxOptions.fieldAddons]
-    
      */
     @Input()
     get fieldAddons(): FieldAddons | null {
@@ -312,7 +297,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxSelectBoxOptions.fieldTemplate]
-    
      * @deprecated [depNote:dxSelectBoxOptions.fieldTemplate]
     
      */
@@ -327,7 +311,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -340,7 +323,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.grouped]
-    
      */
     @Input()
     get grouped(): boolean {
@@ -353,7 +335,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.groupTemplate]
-    
      */
     @Input()
     get groupTemplate(): any {
@@ -366,7 +347,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -379,7 +359,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -392,7 +371,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -405,7 +383,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -418,7 +395,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -431,7 +407,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -444,7 +419,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DataExpressionMixinOptions.items]
-    
      */
     @Input()
     get items(): Array<any | CollectionWidgetItem> {
@@ -457,7 +431,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -470,7 +443,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -483,7 +455,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -496,7 +467,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextBoxOptions.maxLength]
-    
      */
     @Input()
     get maxLength(): null | number | string {
@@ -509,7 +479,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.minSearchLength]
-    
      */
     @Input()
     get minSearchLength(): number {
@@ -522,7 +491,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -535,7 +503,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -548,7 +515,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownEditorOptions.opened]
-    
      */
     @Input()
     get opened(): boolean {
@@ -561,7 +527,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxSelectBoxOptions.openOnFieldClick]
-    
      */
     @Input()
     get openOnFieldClick(): boolean {
@@ -574,7 +539,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxSelectBoxOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -587,7 +551,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -600,7 +563,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -613,7 +575,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.searchEnabled]
-    
      */
     @Input()
     get searchEnabled(): boolean {
@@ -626,7 +587,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.searchExpr]
-    
      */
     @Input()
     get searchExpr(): Array<Function | string> | Function | string {
@@ -639,7 +599,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.searchMode]
-    
      */
     @Input()
     get searchMode(): SimplifiedSearchMode {
@@ -652,7 +611,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.searchTimeout]
-    
      */
     @Input()
     get searchTimeout(): number {
@@ -665,7 +623,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -678,7 +635,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -691,7 +647,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.showDataBeforeSearch]
-    
      */
     @Input()
     get showDataBeforeSearch(): boolean {
@@ -704,7 +659,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxSelectBoxOptions.showDropDownButton]
-    
      */
     @Input()
     get showDropDownButton(): boolean {
@@ -717,7 +671,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxSelectBoxOptions.showSelectionControls]
-    
      */
     @Input()
     get showSelectionControls(): boolean {
@@ -730,7 +683,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.spellcheck]
-    
      */
     @Input()
     get spellcheck(): boolean {
@@ -743,7 +695,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -756,7 +707,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -769,7 +719,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxTextEditorOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -782,7 +731,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.useItemTextAsTitle]
-    
      */
     @Input()
     get useItemTextAsTitle(): boolean {
@@ -795,7 +743,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -808,7 +755,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -821,7 +767,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -834,7 +779,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Mode | Position {
@@ -847,7 +791,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -860,7 +803,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.value]
-    
      */
     @Input()
     get value(): any {
@@ -873,7 +815,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -886,7 +827,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
-    
      */
     @Input()
     get valueExpr(): ((item: any) => string | number | boolean) | string {
@@ -899,7 +839,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -912,7 +851,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -925,7 +863,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
      * [descr:dxDropDownListOptions.wrapItemText]
-    
      */
     @Input()
     get wrapItemText(): boolean {

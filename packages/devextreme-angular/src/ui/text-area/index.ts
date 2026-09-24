@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -70,7 +69,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -83,7 +81,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -96,7 +93,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextAreaOptions.autoResizeEnabled]
-    
      */
     @Input()
     get autoResizeEnabled(): boolean {
@@ -109,7 +105,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -122,7 +117,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -135,7 +129,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -148,7 +141,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -161,7 +153,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -174,7 +165,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -187,7 +177,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -200,7 +189,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -213,7 +201,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -226,7 +213,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -239,7 +225,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -252,7 +237,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextAreaOptions.maxHeight]
-    
      */
     @Input()
     get maxHeight(): number | string | undefined {
@@ -265,7 +249,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextBoxOptions.maxLength]
-    
      */
     @Input()
     get maxLength(): null | number | string {
@@ -278,7 +261,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextAreaOptions.minHeight]
-    
      */
     @Input()
     get minHeight(): number | string | undefined {
@@ -291,7 +273,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -304,7 +285,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -317,7 +297,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -330,7 +309,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -343,7 +321,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextAreaOptions.spellcheck]
-    
      */
     @Input()
     get spellcheck(): boolean {
@@ -356,7 +333,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -369,7 +345,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -382,7 +357,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -395,7 +369,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -408,7 +381,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -421,7 +393,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -434,7 +405,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -447,7 +417,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -460,7 +429,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextBoxOptions.value]
-    
      */
     @Input()
     get value(): string {
@@ -473,7 +441,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxTextEditorOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -486,7 +453,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -499,7 +465,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

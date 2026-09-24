@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -40,8 +39,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiButtonGroupItemModule } from 'devextreme-angular/ui/button-group/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -70,7 +69,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -83,7 +81,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -96,7 +93,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxButtonGroupOptions.buttonTemplate]
-    
      */
     @Input()
     get buttonTemplate(): any {
@@ -109,7 +105,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -122,7 +117,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -135,7 +129,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxButtonGroupOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -148,7 +141,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -161,7 +153,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -174,7 +165,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxButtonGroupOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -187,7 +177,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxButtonGroupOptions.items]
-    
      */
     @Input()
     get items(): Array<dxButtonGroupItem> {
@@ -200,7 +189,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxButtonGroupOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any) => any) | string {
@@ -213,7 +201,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -226,7 +213,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxButtonGroupOptions.selectedItemKeys]
-    
      */
     @Input()
     get selectedItemKeys(): Array<any> {
@@ -239,7 +225,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxButtonGroupOptions.selectedItems]
-    
      */
     @Input()
     get selectedItems(): Array<any> {
@@ -252,7 +237,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxButtonGroupOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleMultipleOrNone {
@@ -265,7 +249,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxButtonGroupOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): ButtonStyle {
@@ -278,7 +261,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -291,7 +273,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -304,7 +285,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

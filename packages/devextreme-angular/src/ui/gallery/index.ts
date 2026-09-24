@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -42,8 +41,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiGalleryItemModule } from 'devextreme-angular/ui/gallery/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -72,7 +71,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -85,7 +83,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.animationDuration]
-    
      */
     @Input()
     get animationDuration(): number {
@@ -98,7 +95,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.animationEnabled]
-    
      */
     @Input()
     get animationEnabled(): boolean {
@@ -111,7 +107,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxGalleryItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -124,7 +119,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -137,7 +131,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -150,7 +143,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -163,7 +155,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -176,7 +167,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -189,7 +179,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -202,7 +191,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.indicatorEnabled]
-    
      */
     @Input()
     get indicatorEnabled(): boolean {
@@ -215,7 +203,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.initialItemWidth]
-    
      */
     @Input()
     get initialItemWidth(): number | undefined {
@@ -228,7 +215,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -241,7 +227,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxGalleryItem | string> {
@@ -254,7 +239,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -267,7 +251,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.loop]
-    
      */
     @Input()
     get loop(): boolean {
@@ -280,7 +263,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -293,7 +275,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -306,7 +287,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.selectedIndex]
-    
      */
     @Input()
     get selectedIndex(): number {
@@ -319,7 +299,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -332,7 +311,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.showIndicator]
-    
      */
     @Input()
     get showIndicator(): boolean {
@@ -345,7 +323,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.showNavButtons]
-    
      */
     @Input()
     get showNavButtons(): boolean {
@@ -358,7 +335,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.slideshowDelay]
-    
      */
     @Input()
     get slideshowDelay(): number {
@@ -371,7 +347,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.stretchImages]
-    
      */
     @Input()
     get stretchImages(): boolean {
@@ -384,7 +359,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.swipeEnabled]
-    
      */
     @Input()
     get swipeEnabled(): boolean {
@@ -397,7 +371,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -410,7 +383,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -423,7 +395,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -436,7 +407,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
      * [descr:dxGalleryOptions.wrapAround]
-    
      */
     @Input()
     get wrapAround(): boolean {

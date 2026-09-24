@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -85,10 +84,10 @@ import { DxoGanttToolbarModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttToolbarItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
 import { 
-           PROPERTY_TOKEN_columns,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_stripLines,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_columns,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_stripLines,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -127,7 +126,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -140,7 +138,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -153,7 +150,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.allowSelection]
-    
      */
     @Input()
     get allowSelection(): boolean {
@@ -166,7 +162,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.columns]
-    
      */
     @Input()
     get columns(): Array<dxGanttColumn | string> {
@@ -179,7 +174,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.contextMenu]
-    
      */
     @Input()
     get contextMenu(): dxGanttContextMenu {
@@ -192,7 +186,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.dependencies]
-    
      */
     @Input()
     get dependencies(): { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((dependency: any) => any) | string, predecessorIdExpr?: ((dependency: any, value: any) => any) | string, successorIdExpr?: ((dependency: any, value: any) => any) | string, typeExpr?: ((dependency: any, value: any) => any) | string } {
@@ -205,7 +198,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -218,7 +210,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.editing]
-    
      */
     @Input()
     get editing(): { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean } {
@@ -231,7 +222,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -244,7 +234,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.endDateRange]
-    
      */
     @Input()
     get endDateRange(): Date | undefined {
@@ -257,7 +246,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.filterRow]
-    
      */
     @Input()
     get filterRow(): dxGanttFilterRow {
@@ -270,7 +258,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.firstDayOfWeek]
-    
      */
     @Input()
     get firstDayOfWeek(): DayOfWeek | undefined {
@@ -283,7 +270,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -296,7 +282,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.headerFilter]
-    
      */
     @Input()
     get headerFilter(): dxGanttHeaderFilter {
@@ -309,7 +294,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -322,7 +306,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -335,7 +318,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -348,7 +330,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.resourceAssignments]
-    
      */
     @Input()
     get resourceAssignments(): { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((resourceAssignment: any) => any) | string, resourceIdExpr?: ((resourceAssignment: any, value: any) => any) | string, taskIdExpr?: ((resourceAssignment: any, value: any) => any) | string } {
@@ -361,7 +342,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.resources]
-    
      */
     @Input()
     get resources(): { colorExpr?: ((resource: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((resource: any) => any) | string, textExpr?: ((resource: any, value: any) => string) | string } {
@@ -374,7 +354,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.rootValue]
-    
      */
     @Input()
     get rootValue(): any {
@@ -387,7 +366,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.scaleType]
-    
      */
     @Input()
     get scaleType(): GanttScaleType {
@@ -400,7 +378,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.scaleTypeRange]
-    
      */
     @Input()
     get scaleTypeRange(): { max?: GanttScaleType, min?: GanttScaleType } {
@@ -413,7 +390,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.selectedRowKey]
-    
      */
     @Input()
     get selectedRowKey(): any | undefined {
@@ -426,7 +402,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.showDependencies]
-    
      */
     @Input()
     get showDependencies(): boolean {
@@ -439,7 +414,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.showResources]
-    
      */
     @Input()
     get showResources(): boolean {
@@ -452,7 +426,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.showRowLines]
-    
      */
     @Input()
     get showRowLines(): boolean {
@@ -465,7 +438,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.sorting]
-    
      */
     @Input()
     get sorting(): dxGanttSorting {
@@ -478,7 +450,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.startDateRange]
-    
      */
     @Input()
     get startDateRange(): Date | undefined {
@@ -491,7 +462,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.stripLines]
-    
      */
     @Input()
     get stripLines(): Array<dxGanttStripLine> {
@@ -504,7 +474,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -517,7 +486,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.taskContentTemplate]
-    
      */
     @Input()
     get taskContentTemplate(): any {
@@ -530,7 +498,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.taskListWidth]
-    
      */
     @Input()
     get taskListWidth(): number {
@@ -543,7 +510,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.taskProgressTooltipContentTemplate]
-    
      */
     @Input()
     get taskProgressTooltipContentTemplate(): any {
@@ -556,7 +522,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.tasks]
-    
      */
     @Input()
     get tasks(): { colorExpr?: ((task: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: ((task: any, value: any) => any) | string, keyExpr?: ((task: any) => any) | string, parentIdExpr?: ((task: any, value: any) => any) | string, progressExpr?: ((task: any, value: any) => any) | string, startExpr?: ((task: any, value: any) => any) | string, titleExpr?: ((task: any, value: any) => any) | string } {
@@ -569,7 +534,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.taskTimeTooltipContentTemplate]
-    
      */
     @Input()
     get taskTimeTooltipContentTemplate(): any {
@@ -582,7 +546,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.taskTitlePosition]
-    
      */
     @Input()
     get taskTitlePosition(): GanttTaskTitlePosition {
@@ -595,7 +558,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.taskTooltipContentTemplate]
-    
      */
     @Input()
     get taskTooltipContentTemplate(): any {
@@ -608,7 +570,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxGanttToolbar {
@@ -621,7 +582,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:dxGanttOptions.validation]
-    
      */
     @Input()
     get validation(): { autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean } {
@@ -634,7 +594,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -647,7 +606,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

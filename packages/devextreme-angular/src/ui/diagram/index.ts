@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -88,13 +87,13 @@ import { DxiDiagramToolboxGroupModule } from 'devextreme-angular/ui/diagram/nest
 import { DxoDiagramViewToolbarModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramZoomLevelModule } from 'devextreme-angular/ui/diagram/nested';
 import { 
-           PROPERTY_TOKEN_commands,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_connectionPoints,
-           PROPERTY_TOKEN_customShapes,
-           PROPERTY_TOKEN_groups,
-           PROPERTY_TOKEN_tabs,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_connectionPoints,
+    PROPERTY_TOKEN_customShapes,
+    PROPERTY_TOKEN_groups,
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -148,7 +147,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.autoZoomMode]
-    
      */
     @Input()
     get autoZoomMode(): AutoZoomMode {
@@ -161,7 +159,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.contextMenu]
-    
      */
     @Input()
     get contextMenu(): { commands?: Array<Command | CustomCommand>, enabled?: boolean } {
@@ -174,7 +171,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.contextToolbox]
-    
      */
     @Input()
     get contextToolbox(): { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<ShapeType | string>, width?: number } {
@@ -187,7 +183,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.customShapes]
-    
      */
     @Input()
     get customShapes(): { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[] {
@@ -200,7 +195,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.customShapeTemplate]
-    
      */
     @Input()
     get customShapeTemplate(): any {
@@ -213,7 +207,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.customShapeToolboxTemplate]
-    
      */
     @Input()
     get customShapeToolboxTemplate(): any {
@@ -226,7 +219,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.defaultItemProperties]
-    
      */
     @Input()
     get defaultItemProperties(): { connectorLineEnd?: ConnectorLineEnd, connectorLineStart?: ConnectorLineEnd, connectorLineType?: ConnectorLineType, shapeMaxHeight?: number | undefined, shapeMaxWidth?: number | undefined, shapeMinHeight?: number | undefined, shapeMinWidth?: number | undefined, style?: Record<string, any>, textStyle?: Record<string, any> } {
@@ -239,7 +231,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -252,7 +243,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.edges]
-    
      */
     @Input()
     get edges(): { customDataExpr?: ((data: any, value: any) => any) | string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, fromExpr?: ((data: any, value: any) => any) | string, fromLineEndExpr?: ((data: any, value: any) => any) | string | undefined, fromPointIndexExpr?: ((data: any, value: any) => any) | string | undefined, keyExpr?: ((data: any, value: any) => any) | string, lineTypeExpr?: ((data: any, value: any) => any) | string | undefined, lockedExpr?: ((data: any, value: any) => any) | string | undefined, pointsExpr?: ((data: any, value: any) => any) | string | undefined, styleExpr?: ((data: any, value: any) => any) | string | undefined, textExpr?: ((data: any, value: any) => any) | string | undefined, textStyleExpr?: ((data: any, value: any) => any) | string | undefined, toExpr?: ((data: any, value: any) => any) | string, toLineEndExpr?: ((data: any, value: any) => any) | string | undefined, toPointIndexExpr?: ((data: any, value: any) => any) | string | undefined, zIndexExpr?: ((data: any, value: any) => any) | string | undefined } {
@@ -265,7 +255,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.editing]
-    
      */
     @Input()
     get editing(): { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowMoveShape?: boolean, allowResizeShape?: boolean } {
@@ -278,7 +267,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -291,7 +279,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.export]
-    
      */
     @Input()
     get export(): { fileName?: string } {
@@ -304,7 +291,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.fullScreen]
-    
      */
     @Input()
     get fullScreen(): boolean {
@@ -317,7 +303,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.gridSize]
-    
      */
     @Input()
     get gridSize(): number | { items?: Array<number>, value?: number } {
@@ -330,7 +315,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.hasChanges]
-    
      */
     @Input()
     get hasChanges(): boolean {
@@ -343,7 +327,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -356,7 +339,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.historyToolbar]
-    
      */
     @Input()
     get historyToolbar(): { commands?: Array<Command | CustomCommand>, visible?: boolean } {
@@ -369,7 +351,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.mainToolbar]
-    
      */
     @Input()
     get mainToolbar(): { commands?: Array<Command | CustomCommand>, visible?: boolean } {
@@ -382,7 +363,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.nodes]
-    
      */
     @Input()
     get nodes(): { autoLayout?: DataLayoutType | { orientation?: Orientation, type?: DataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: ((data: any, value: any) => any) | string | undefined, containerKeyExpr?: ((data: any, value: any) => any) | string, customDataExpr?: ((data: any, value: any) => any) | string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, heightExpr?: ((data: any, value: any) => any) | string | undefined, imageUrlExpr?: ((data: any, value: any) => any) | string | undefined, itemsExpr?: ((data: any, value: any) => any) | string | undefined, keyExpr?: ((data: any, value: any) => any) | string, leftExpr?: ((data: any, value: any) => any) | string | undefined, lockedExpr?: ((data: any, value: any) => any) | string | undefined, parentKeyExpr?: ((data: any, value: any) => any) | string | undefined, styleExpr?: ((data: any, value: any) => any) | string | undefined, textExpr?: ((data: any, value: any) => any) | string, textStyleExpr?: ((data: any, value: any) => any) | string | undefined, topExpr?: ((data: any, value: any) => any) | string | undefined, typeExpr?: ((data: any, value: any) => any) | string, widthExpr?: ((data: any, value: any) => any) | string | undefined, zIndexExpr?: ((data: any, value: any) => any) | string | undefined } {
@@ -395,7 +375,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.pageColor]
-    
      */
     @Input()
     get pageColor(): string {
@@ -408,7 +387,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.pageOrientation]
-    
      */
     @Input()
     get pageOrientation(): PageOrientation {
@@ -421,7 +399,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.pageSize]
-    
      */
     @Input()
     get pageSize(): { height?: number, items?: { height?: number, text?: string, width?: number }[], width?: number } {
@@ -434,7 +411,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.propertiesPanel]
-    
      */
     @Input()
     get propertiesPanel(): { tabs?: { commands?: Array<Command | CustomCommand>, groups?: { commands?: Array<Command | CustomCommand>, title?: string }[], title?: string }[], visibility?: PanelVisibility } {
@@ -447,7 +423,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -460,7 +435,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -473,7 +447,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.showGrid]
-    
      */
     @Input()
     get showGrid(): boolean {
@@ -486,7 +459,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.simpleView]
-    
      */
     @Input()
     get simpleView(): boolean {
@@ -499,7 +471,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.snapToGrid]
-    
      */
     @Input()
     get snapToGrid(): boolean {
@@ -512,7 +483,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.toolbox]
-    
      */
     @Input()
     get toolbox(): { groups?: { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }[], shapeIconsPerRow?: number, showSearch?: boolean, visibility?: PanelVisibility, width?: number | undefined } {
@@ -525,7 +495,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.units]
-    
      */
     @Input()
     get units(): Units {
@@ -538,7 +507,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.useNativeScrolling]
-    
      */
     @Input()
     get useNativeScrolling(): boolean {
@@ -551,7 +519,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.viewToolbar]
-    
      */
     @Input()
     get viewToolbar(): { commands?: Array<Command | CustomCommand>, visible?: boolean } {
@@ -564,7 +531,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.viewUnits]
-    
      */
     @Input()
     get viewUnits(): Units {
@@ -577,7 +543,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -590,7 +555,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -603,7 +567,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.zoomLevel]
-    
      */
     @Input()
     get zoomLevel(): number | { items?: Array<number>, value?: number | undefined } {

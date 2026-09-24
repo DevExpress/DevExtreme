@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -43,8 +42,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTileViewItemModule } from 'devextreme-angular/ui/tile-view/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -73,7 +72,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -86,7 +84,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -99,7 +96,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.baseItemHeight]
-    
      */
     @Input()
     get baseItemHeight(): number {
@@ -112,7 +108,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.baseItemWidth]
-    
      */
     @Input()
     get baseItemWidth(): number {
@@ -125,7 +120,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxTileViewItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -138,7 +132,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.direction]
-    
      */
     @Input()
     get direction(): Orientation {
@@ -151,7 +144,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -164,7 +156,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -177,7 +168,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -190,7 +180,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -203,7 +192,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -216,7 +204,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -229,7 +216,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -242,7 +228,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.itemMargin]
-    
      */
     @Input()
     get itemMargin(): number {
@@ -255,7 +240,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxTileViewItem | string> {
@@ -268,7 +252,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -281,7 +264,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -294,7 +276,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -307,7 +288,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTileViewOptions.showScrollbar]
-    
      */
     @Input()
     get showScrollbar(): ScrollbarMode {
@@ -320,7 +300,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -333,7 +312,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -346,7 +324,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

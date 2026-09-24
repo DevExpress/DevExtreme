@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -52,11 +51,11 @@ import { DxiMapRouteModule } from 'devextreme-angular/ui/map/nested';
 import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
 import { 
-           PROPERTY_TOKEN_markers,
-           PROPERTY_TOKEN_routes,
-           PROPERTY_TOKEN_locations,
-           PROPERTY_TOKEN_center,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_markers,
+    PROPERTY_TOKEN_routes,
+    PROPERTY_TOKEN_locations,
+    PROPERTY_TOKEN_center,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -100,7 +99,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -113,7 +111,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -126,7 +123,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.apiKey]
-    
      */
     @Input()
     get apiKey(): string | { azure?: string, bing?: string, google?: string, googleStatic?: string } {
@@ -139,7 +135,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.autoAdjust]
-    
      */
     @Input()
     get autoAdjust(): boolean {
@@ -152,7 +147,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.center]
-    
      */
     @Input()
     get center(): Array<number> | string | { lat?: number, lng?: number }[] {
@@ -165,7 +159,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.controls]
-    
      */
     @Input()
     get controls(): boolean {
@@ -178,7 +171,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -191,7 +183,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -204,7 +195,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -217,7 +207,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -230,7 +219,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -243,7 +231,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -256,7 +243,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.markerIconSrc]
-    
      */
     @Input()
     get markerIconSrc(): string {
@@ -269,7 +255,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.markers]
-    
      */
     @Input()
     get markers(): { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[] {
@@ -282,7 +267,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.provider]
-    
      */
     @Input()
     get provider(): MapProvider {
@@ -295,7 +279,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.providerConfig]
-    
      */
     @Input()
     get providerConfig(): { mapId?: string, useAdvancedMarkers?: boolean } {
@@ -308,7 +291,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.routes]
-    
      */
     @Input()
     get routes(): { color?: string, locations?: { lat?: number, lng?: number }[], mode?: RouteMode | string, opacity?: number, weight?: number }[] {
@@ -321,7 +303,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -334,7 +315,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -347,7 +327,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.type]
-    
      */
     @Input()
     get type(): MapType {
@@ -360,7 +339,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -373,7 +351,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.width]
-    
      */
     @Input()
     get width(): number | string {
@@ -386,7 +363,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     /**
      * [descr:dxMapOptions.zoom]
-    
      */
     @Input()
     get zoom(): number {

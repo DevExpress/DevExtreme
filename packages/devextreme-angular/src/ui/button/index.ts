@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -52,7 +51,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -65,7 +63,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxButtonOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -78,7 +75,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -91,7 +87,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -104,7 +99,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxButtonOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -117,7 +111,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -130,7 +123,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -143,7 +135,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxButtonOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -156,7 +147,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxButtonOptions.icon]
-    
      */
     @Input()
     get icon(): string {
@@ -169,7 +159,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -182,7 +171,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxButtonOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): ButtonStyle {
@@ -195,7 +183,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -208,7 +195,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxButtonOptions.template]
-    
      */
     @Input()
     get template(): any {
@@ -221,7 +207,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxButtonOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -234,7 +219,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxButtonOptions.type]
-    
      */
     @Input()
     get type(): ButtonType | string {
@@ -247,7 +231,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxButtonOptions.useSubmitBehavior]
-    
      */
     @Input()
     get useSubmitBehavior(): boolean {
@@ -260,7 +243,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxButtonOptions.validationGroup]
-    
      */
     @Input()
     get validationGroup(): string | undefined {
@@ -273,7 +255,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -286,7 +267,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

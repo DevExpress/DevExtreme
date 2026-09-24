@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -52,7 +51,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollableOptions.bounceEnabled]
-    
      */
     @Input()
     get bounceEnabled(): boolean {
@@ -65,7 +63,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollableOptions.direction]
-    
      */
     @Input()
     get direction(): ScrollDirection {
@@ -78,7 +75,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollableOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -91,7 +87,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -104,7 +99,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -117,7 +111,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollViewOptions.pulledDownText]
-    
      */
     @Input()
     get pulledDownText(): string {
@@ -130,7 +123,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollViewOptions.pullingDownText]
-    
      */
     @Input()
     get pullingDownText(): string {
@@ -143,7 +135,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollViewOptions.reachBottomText]
-    
      */
     @Input()
     get reachBottomText(): string {
@@ -156,7 +147,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollViewOptions.refreshingText]
-    
      */
     @Input()
     get refreshingText(): string {
@@ -169,7 +159,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -182,7 +171,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollableOptions.scrollByContent]
-    
      */
     @Input()
     get scrollByContent(): boolean {
@@ -195,7 +183,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollableOptions.scrollByThumb]
-    
      */
     @Input()
     get scrollByThumb(): boolean {
@@ -208,7 +195,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollableOptions.showScrollbar]
-    
      */
     @Input()
     get showScrollbar(): "onScroll" | "onHover" | "always" | "never" {
@@ -221,7 +207,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxScrollableOptions.useNative]
-    
      */
     @Input()
     get useNative(): boolean {
@@ -234,7 +219,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

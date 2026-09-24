@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -68,7 +67,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxBulletOptions.color]
-    
      */
     @Input()
     get color(): string {
@@ -81,7 +79,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -94,7 +91,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -107,7 +103,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -120,7 +115,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxBulletOptions.endScaleValue]
-    
      */
     @Input()
     get endScaleValue(): number | undefined {
@@ -133,7 +127,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -146,7 +139,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -159,7 +151,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -172,7 +163,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxBulletOptions.showTarget]
-    
      */
     @Input()
     get showTarget(): boolean {
@@ -185,7 +175,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxBulletOptions.showZeroLevel]
-    
      */
     @Input()
     get showZeroLevel(): boolean {
@@ -198,7 +187,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -211,7 +199,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxBulletOptions.startScaleValue]
-    
      */
     @Input()
     get startScaleValue(): number {
@@ -224,7 +211,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxBulletOptions.target]
-    
      */
     @Input()
     get target(): number {
@@ -237,7 +223,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxBulletOptions.targetColor]
-    
      */
     @Input()
     get targetColor(): string {
@@ -250,7 +235,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxBulletOptions.targetWidth]
-    
      */
     @Input()
     get targetWidth(): number {
@@ -263,7 +247,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -276,7 +259,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:BaseSparklineOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -289,7 +271,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxBulletOptions.value]
-    
      */
     @Input()
     get value(): number {

@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -108,7 +107,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.adaptiveLayout]
-    
      */
     @Input()
     get adaptiveLayout(): { height?: number, keepLabels?: boolean, width?: number } {
@@ -121,7 +119,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.algorithm]
-    
      */
     @Input()
     get algorithm(): FunnelAlgorithm {
@@ -134,7 +131,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.argumentField]
-    
      */
     @Input()
     get argumentField(): string {
@@ -147,7 +143,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.colorField]
-    
      */
     @Input()
     get colorField(): string {
@@ -160,7 +155,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
@@ -173,7 +167,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -186,7 +179,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -199,7 +191,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -212,7 +203,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -225,7 +215,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.hoverEnabled]
-    
      */
     @Input()
     get hoverEnabled(): boolean {
@@ -238,7 +227,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.inverted]
-    
      */
     @Input()
     get inverted(): boolean {
@@ -251,7 +239,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.item]
-    
      */
     @Input()
     get item(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } } {
@@ -264,7 +251,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.label]
-    
      */
     @Input()
     get label(): { backgroundColor?: string, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, horizontalAlignment?: HorizontalEdge, horizontalOffset?: number, position?: LabelPosition, showForZeroValues?: boolean, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
@@ -277,7 +263,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.legend]
-    
      */
     @Input()
     get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>), customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined }, text?: string | undefined, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
@@ -290,7 +275,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
@@ -303,7 +287,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -316,7 +299,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.neckHeight]
-    
      */
     @Input()
     get neckHeight(): number {
@@ -329,7 +311,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.neckWidth]
-    
      */
     @Input()
     get neckWidth(): number {
@@ -342,7 +323,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.palette]
-    
      */
     @Input()
     get palette(): Array<string> | Palette {
@@ -355,7 +335,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.paletteExtensionMode]
-    
      */
     @Input()
     get paletteExtensionMode(): PaletteExtensionMode {
@@ -368,7 +347,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -381,7 +359,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -394,7 +371,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
-    
      */
     @Input()
     get resolveLabelOverlapping(): ShiftLabelOverlap {
@@ -407,7 +383,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -420,7 +395,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleMultipleOrNone {
@@ -433,7 +407,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -446,7 +419,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.sortData]
-    
      */
     @Input()
     get sortData(): boolean {
@@ -459,7 +431,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -472,7 +443,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -485,7 +455,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -498,7 +467,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxFunnelOptions.valueField]
-    
      */
     @Input()
     get valueField(): string {

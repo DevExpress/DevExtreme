@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -70,7 +69,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -83,7 +81,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSwitchOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -96,7 +93,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -109,7 +105,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -122,7 +117,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSwitchOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -135,7 +129,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -148,7 +141,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -161,7 +153,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSwitchOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -174,7 +165,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -187,7 +177,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -200,7 +189,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSwitchOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -213,7 +201,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -226,7 +213,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -239,7 +225,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSwitchOptions.switchedOffText]
-    
      */
     @Input()
     get switchedOffText(): string {
@@ -252,7 +237,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSwitchOptions.switchedOnText]
-    
      */
     @Input()
     get switchedOnText(): string {
@@ -265,7 +249,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -278,7 +261,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -291,7 +273,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -304,7 +285,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -317,7 +297,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -330,7 +309,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -343,7 +321,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSwitchOptions.value]
-    
      */
     @Input()
     get value(): boolean {
@@ -356,7 +333,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -369,7 +345,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

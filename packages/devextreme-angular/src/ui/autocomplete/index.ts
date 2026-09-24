@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -81,10 +80,10 @@ import { DxoAutocompleteShowModule } from 'devextreme-angular/ui/autocomplete/ne
 import { DxoAutocompleteToModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxiAutocompleteToolbarItemModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -129,7 +128,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -142,7 +140,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -155,7 +152,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownEditorOptions.buttons]
-    
      */
     @Input()
     get buttons(): Array<DropDownPredefinedButton | TextEditorButton> | undefined {
@@ -168,7 +164,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -181,7 +176,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -194,7 +188,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -207,7 +200,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownListOptions.displayValue]
-    
      */
     @Input()
     get displayValue(): string | undefined {
@@ -220,7 +212,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
-    
      */
     @Input()
     get dropDownButtonTemplate(): any {
@@ -233,7 +224,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxAutocompleteOptions.dropDownOptions]
-    
      */
     @Input()
     get dropDownOptions(): dxPopupOptions<any> {
@@ -246,7 +236,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -259,7 +248,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -272,7 +260,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownListOptions.grouped]
-    
      */
     @Input()
     get grouped(): boolean {
@@ -285,7 +272,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownListOptions.groupTemplate]
-    
      */
     @Input()
     get groupTemplate(): any {
@@ -298,7 +284,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -311,7 +296,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -324,7 +308,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -337,7 +320,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -350,7 +332,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -363,7 +344,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -376,7 +356,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DataExpressionMixinOptions.items]
-    
      */
     @Input()
     get items(): Array<any | CollectionWidgetItem> {
@@ -389,7 +368,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -402,7 +380,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -415,7 +392,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -428,7 +404,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxAutocompleteOptions.maxItemCount]
-    
      */
     @Input()
     get maxItemCount(): number {
@@ -441,7 +416,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextBoxOptions.maxLength]
-    
      */
     @Input()
     get maxLength(): null | number | string {
@@ -454,7 +428,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxAutocompleteOptions.minSearchLength]
-    
      */
     @Input()
     get minSearchLength(): number {
@@ -467,7 +440,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -480,7 +452,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownEditorOptions.opened]
-    
      */
     @Input()
     get opened(): boolean {
@@ -493,7 +464,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownEditorOptions.openOnFieldClick]
-    
      */
     @Input()
     get openOnFieldClick(): boolean {
@@ -506,7 +476,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -519,7 +488,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -532,7 +500,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -545,7 +512,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownListOptions.searchExpr]
-    
      */
     @Input()
     get searchExpr(): Array<Function | string> | Function | string {
@@ -558,7 +524,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownListOptions.searchMode]
-    
      */
     @Input()
     get searchMode(): SimplifiedSearchMode {
@@ -571,7 +536,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownListOptions.searchTimeout]
-    
      */
     @Input()
     get searchTimeout(): number {
@@ -584,7 +548,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownListOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -597,7 +560,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -610,7 +572,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxAutocompleteOptions.showDropDownButton]
-    
      */
     @Input()
     get showDropDownButton(): boolean {
@@ -623,7 +584,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.spellcheck]
-    
      */
     @Input()
     get spellcheck(): boolean {
@@ -636,7 +596,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -649,7 +608,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -662,7 +620,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxTextEditorOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -675,7 +632,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownListOptions.useItemTextAsTitle]
-    
      */
     @Input()
     get useItemTextAsTitle(): boolean {
@@ -688,7 +644,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -701,7 +656,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -714,7 +668,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -727,7 +680,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Mode | Position {
@@ -740,7 +692,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -753,7 +704,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxAutocompleteOptions.value]
-    
      */
     @Input()
     get value(): null | string {
@@ -766,7 +716,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownListOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -779,7 +728,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
-    
      */
     @Input()
     get valueExpr(): ((item: any) => string | number | boolean) | string {
@@ -792,7 +740,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -805,7 +752,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -818,7 +764,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
      * [descr:dxDropDownListOptions.wrapItemText]
-    
      */
     @Input()
     get wrapItemText(): boolean {

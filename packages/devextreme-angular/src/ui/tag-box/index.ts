@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -82,10 +81,10 @@ import { DxoTagBoxShowModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxToModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxiTagBoxToolbarItemModule } from 'devextreme-angular/ui/tag-box/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -130,7 +129,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSelectBoxOptions.acceptCustomValue]
-    
      */
     @Input()
     get acceptCustomValue(): boolean {
@@ -143,7 +141,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -156,7 +153,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -169,7 +165,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
-    
      */
     @Input()
     get applyValueMode(): ApplyValueMode {
@@ -182,7 +177,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownEditorOptions.buttons]
-    
      */
     @Input()
     get buttons(): Array<DropDownPredefinedButton | TextEditorButton> | undefined {
@@ -195,7 +189,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSelectBoxOptions.customItemCreateEvent]
-    
      */
     @Input()
     get customItemCreateEvent(): string {
@@ -208,7 +201,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -221,7 +213,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -234,7 +225,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -247,7 +237,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string | undefined {
@@ -260,7 +249,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
-    
      */
     @Input()
     get dropDownButtonTemplate(): any {
@@ -273,7 +261,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSelectBoxOptions.dropDownOptions]
-    
      */
     @Input()
     get dropDownOptions(): dxPopupOptions<any> {
@@ -286,7 +273,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -299,7 +285,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSelectBoxOptions.fieldAddons]
-    
      */
     @Input()
     get fieldAddons(): FieldAddons | null {
@@ -312,7 +297,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSelectBoxOptions.fieldTemplate]
-    
      * @deprecated [depNote:dxSelectBoxOptions.fieldTemplate]
     
      */
@@ -327,7 +311,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -340,7 +323,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.grouped]
-    
      */
     @Input()
     get grouped(): boolean {
@@ -353,7 +335,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.groupTemplate]
-    
      */
     @Input()
     get groupTemplate(): any {
@@ -366,7 +347,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -379,7 +359,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.hideSelectedItems]
-    
      */
     @Input()
     get hideSelectedItems(): boolean {
@@ -392,7 +371,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -405,7 +383,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -418,7 +395,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -431,7 +407,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -444,7 +419,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -457,7 +431,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DataExpressionMixinOptions.items]
-    
      */
     @Input()
     get items(): Array<any | CollectionWidgetItem> {
@@ -470,7 +443,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -483,7 +455,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -496,7 +467,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -509,7 +479,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.maxDisplayedTags]
-    
      */
     @Input()
     get maxDisplayedTags(): number | undefined {
@@ -522,7 +491,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.maxFilterQueryLength]
-    
      */
     @Input()
     get maxFilterQueryLength(): number {
@@ -535,7 +503,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextBoxOptions.maxLength]
-    
      */
     @Input()
     get maxLength(): null | number | string {
@@ -548,7 +515,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.minSearchLength]
-    
      */
     @Input()
     get minSearchLength(): number {
@@ -561,7 +527,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.multiline]
-    
      */
     @Input()
     get multiline(): boolean {
@@ -574,7 +539,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -587,7 +551,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -600,7 +563,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownEditorOptions.opened]
-    
      */
     @Input()
     get opened(): boolean {
@@ -613,7 +575,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSelectBoxOptions.openOnFieldClick]
-    
      */
     @Input()
     get openOnFieldClick(): boolean {
@@ -626,7 +587,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSelectBoxOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -639,7 +599,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -652,7 +611,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -665,7 +623,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.searchEnabled]
-    
      */
     @Input()
     get searchEnabled(): boolean {
@@ -678,7 +635,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.searchExpr]
-    
      */
     @Input()
     get searchExpr(): Array<Function | string> | Function | string {
@@ -691,7 +647,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.searchMode]
-    
      */
     @Input()
     get searchMode(): SimplifiedSearchMode {
@@ -704,7 +659,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.searchTimeout]
-    
      */
     @Input()
     get searchTimeout(): number {
@@ -717,7 +671,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.selectAllMode]
-    
      */
     @Input()
     get selectAllMode(): SelectAllMode {
@@ -730,7 +683,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.selectAllText]
-    
      */
     @Input()
     get selectAllText(): string {
@@ -743,7 +695,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.selectedItems]
-    
      */
     @Input()
     get selectedItems(): Array<any | number | string> {
@@ -756,7 +707,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -769,7 +719,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.showDataBeforeSearch]
-    
      */
     @Input()
     get showDataBeforeSearch(): boolean {
@@ -782,7 +731,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.showDropDownButton]
-    
      */
     @Input()
     get showDropDownButton(): boolean {
@@ -795,7 +743,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.showMultiTagOnly]
-    
      */
     @Input()
     get showMultiTagOnly(): boolean {
@@ -808,7 +755,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxSelectBoxOptions.showSelectionControls]
-    
      */
     @Input()
     get showSelectionControls(): boolean {
@@ -821,7 +767,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -834,7 +779,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -847,7 +791,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.tagTemplate]
-    
      */
     @Input()
     get tagTemplate(): any {
@@ -860,7 +803,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTextEditorOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -873,7 +815,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.useItemTextAsTitle]
-    
      */
     @Input()
     get useItemTextAsTitle(): boolean {
@@ -886,7 +827,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -899,7 +839,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -912,7 +851,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -925,7 +863,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Mode | Position {
@@ -938,7 +875,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -951,7 +887,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxTagBoxOptions.value]
-    
      */
     @Input()
     get value(): Array<any | number | string> {
@@ -964,7 +899,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -977,7 +911,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
-    
      */
     @Input()
     get valueExpr(): ((item: any) => string | number | boolean) | string {
@@ -990,7 +923,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -1003,7 +935,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -1016,7 +947,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
      * [descr:dxDropDownListOptions.wrapItemText]
-    
      */
     @Input()
     get wrapItemText(): boolean {

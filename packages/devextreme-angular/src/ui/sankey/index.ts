@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -98,7 +97,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.adaptiveLayout]
-    
      */
     @Input()
     get adaptiveLayout(): { height?: number, keepLabels?: boolean, width?: number } {
@@ -111,7 +109,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.alignment]
-    
      */
     @Input()
     get alignment(): Array<VerticalAlignment> | VerticalAlignment {
@@ -124,7 +121,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
@@ -137,7 +133,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -150,7 +145,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -163,7 +157,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -176,7 +169,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -189,7 +181,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.hoverEnabled]
-    
      */
     @Input()
     get hoverEnabled(): boolean {
@@ -202,7 +193,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.label]
-    
      */
     @Input()
     get label(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: ((itemInfo: dxSankeyNode) => string), font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean } {
@@ -215,7 +205,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.link]
-    
      */
     @Input()
     get link(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string, colorMode?: SankeyColorMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number } {
@@ -228,7 +217,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
@@ -241,7 +229,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -254,7 +241,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.node]
-    
      */
     @Input()
     get node(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number, padding?: number, width?: number } {
@@ -267,7 +253,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.palette]
-    
      */
     @Input()
     get palette(): Array<string> | Palette {
@@ -280,7 +265,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.paletteExtensionMode]
-    
      */
     @Input()
     get paletteExtensionMode(): PaletteExtensionMode {
@@ -293,7 +277,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -306,7 +289,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -319,7 +301,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -332,7 +313,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -345,7 +325,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.sortData]
-    
      */
     @Input()
     get sortData(): any | undefined {
@@ -358,7 +337,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.sourceField]
-    
      */
     @Input()
     get sourceField(): string {
@@ -371,7 +349,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.targetField]
-    
      */
     @Input()
     get targetField(): string {
@@ -384,7 +361,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -397,7 +373,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -410,7 +385,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, cornerRadius?: number, customizeLinkTooltip?: ((info: { source: string, target: string, weight: number }) => Record<string, any>) | undefined, customizeNodeTooltip?: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, linkTooltipTemplate?: any, nodeTooltipTemplate?: any, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -423,7 +397,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
     /**
      * [descr:dxSankeyOptions.weightField]
-    
      */
     @Input()
     get weightField(): string {

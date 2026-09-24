@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -42,8 +41,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiAccordionItemModule } from 'devextreme-angular/ui/accordion/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -72,7 +71,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -85,7 +83,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -98,7 +95,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.animationDuration]
-    
      */
     @Input()
     get animationDuration(): number {
@@ -111,7 +107,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.collapsible]
-    
      */
     @Input()
     get collapsible(): boolean {
@@ -124,7 +119,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxAccordionItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -137,7 +131,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -150,7 +143,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -163,7 +155,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -176,7 +167,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -189,7 +179,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -202,7 +191,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -215,7 +203,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -228,7 +215,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -241,7 +227,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxAccordionItem | string> {
@@ -254,7 +239,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -267,7 +251,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.itemTitleTemplate]
-    
      */
     @Input()
     get itemTitleTemplate(): any {
@@ -280,7 +263,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any) => any) | null | string {
@@ -293,7 +275,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.multiple]
-    
      */
     @Input()
     get multiple(): boolean {
@@ -306,7 +287,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -319,7 +299,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.repaintChangesOnly]
-    
      */
     @Input()
     get repaintChangesOnly(): boolean {
@@ -332,7 +311,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -345,7 +323,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxAccordionOptions.selectedIndex]
-    
      */
     @Input()
     get selectedIndex(): number {
@@ -358,7 +335,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -371,7 +347,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:CollectionWidgetOptions.selectedItemKeys]
-    
      */
     @Input()
     get selectedItemKeys(): Array<any> {
@@ -384,7 +359,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:CollectionWidgetOptions.selectedItems]
-    
      */
     @Input()
     get selectedItems(): Array<any> {
@@ -397,7 +371,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -410,7 +383,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -423,7 +395,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

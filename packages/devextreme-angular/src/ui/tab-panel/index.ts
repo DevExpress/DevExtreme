@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -43,8 +42,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTabPanelItemModule } from 'devextreme-angular/ui/tab-panel/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -73,7 +72,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -86,7 +84,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -99,7 +96,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.animationEnabled]
-    
      */
     @Input()
     get animationEnabled(): boolean {
@@ -112,7 +108,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxTabPanelItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -125,7 +120,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxMultiViewOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -138,7 +132,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -151,7 +144,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -164,7 +156,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxMultiViewOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -177,7 +168,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -190,7 +180,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -203,7 +192,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -216,7 +204,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.iconPosition]
-    
      */
     @Input()
     get iconPosition(): TabsIconPosition {
@@ -229,7 +216,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -242,7 +228,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxTabPanelItem | string> {
@@ -255,7 +240,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -268,7 +252,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.itemTitleTemplate]
-    
      */
     @Input()
     get itemTitleTemplate(): any {
@@ -281,7 +264,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any) => any) | string {
@@ -294,7 +276,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxMultiViewOptions.loop]
-    
      */
     @Input()
     get loop(): boolean {
@@ -307,7 +288,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -320,7 +300,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.repaintChangesOnly]
-    
      */
     @Input()
     get repaintChangesOnly(): boolean {
@@ -333,7 +312,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -346,7 +324,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.scrollByContent]
-    
      */
     @Input()
     get scrollByContent(): boolean {
@@ -359,7 +336,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.scrollingEnabled]
-    
      */
     @Input()
     get scrollingEnabled(): boolean {
@@ -372,7 +348,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxMultiViewOptions.selectedIndex]
-    
      */
     @Input()
     get selectedIndex(): number {
@@ -385,7 +360,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -398,7 +372,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.showNavButtons]
-    
      */
     @Input()
     get showNavButtons(): boolean {
@@ -411,7 +384,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): TabsStyle {
@@ -424,7 +396,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.swipeEnabled]
-    
      */
     @Input()
     get swipeEnabled(): boolean {
@@ -437,7 +408,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -450,7 +420,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTabPanelOptions.tabsPosition]
-    
      */
     @Input()
     get tabsPosition(): Position {
@@ -463,7 +432,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -476,7 +444,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

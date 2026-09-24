@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -54,8 +53,8 @@ import { DxiValidatorRequiredRuleModule } from 'devextreme-angular/ui/validator/
 import { DxiValidatorStringLengthRuleModule } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -84,7 +83,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.adapter]
-    
      */
     @Input()
     get adapter(): { applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<Function> } {
@@ -97,7 +95,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -110,7 +107,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -123,7 +119,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -136,7 +131,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.validationGroup]
-    
      */
     @Input()
     get validationGroup(): string {
@@ -149,7 +143,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.validationRules]
-    
      */
     @Input()
     get validationRules(): Array<CommonTypes.ValidationRule> {
@@ -162,7 +155,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

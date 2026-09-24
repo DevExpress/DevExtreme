@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -42,8 +41,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiMultiViewItemModule } from 'devextreme-angular/ui/multi-view/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -72,7 +71,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -85,7 +83,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -98,7 +95,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxMultiViewOptions.animationEnabled]
-    
      */
     @Input()
     get animationEnabled(): boolean {
@@ -111,7 +107,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxMultiViewOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxMultiViewItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -124,7 +119,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxMultiViewOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -137,7 +131,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -150,7 +143,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -163,7 +155,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxMultiViewOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -176,7 +167,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -189,7 +179,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -202,7 +191,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -215,7 +203,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -228,7 +215,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxMultiViewOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxMultiViewItem | string> {
@@ -241,7 +227,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -254,7 +239,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxMultiViewOptions.loop]
-    
      */
     @Input()
     get loop(): boolean {
@@ -267,7 +251,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -280,7 +263,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -293,7 +275,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxMultiViewOptions.selectedIndex]
-    
      */
     @Input()
     get selectedIndex(): number {
@@ -306,7 +287,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -319,7 +299,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:dxMultiViewOptions.swipeEnabled]
-    
      */
     @Input()
     get swipeEnabled(): boolean {
@@ -332,7 +311,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -345,7 +323,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -358,7 +335,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

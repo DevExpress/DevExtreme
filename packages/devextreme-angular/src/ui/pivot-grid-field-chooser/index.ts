@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -67,7 +66,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -80,7 +78,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -93,7 +90,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.allowSearch]
-    
      */
     @Input()
     get allowSearch(): boolean {
@@ -106,7 +102,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.applyChangesMode]
-    
      */
     @Input()
     get applyChangesMode(): ApplyChangesMode {
@@ -119,7 +114,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): null | PivotGridDataSource {
@@ -132,7 +126,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -145,7 +138,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -158,7 +150,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -171,7 +162,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -184,7 +174,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.headerFilter]
-    
      */
     @Input()
     get headerFilter(): { allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number } {
@@ -197,7 +186,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -210,7 +198,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -223,7 +210,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -236,7 +222,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.layout]
-    
      */
     @Input()
     get layout(): FieldChooserLayout {
@@ -249,7 +234,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -262,7 +246,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.searchTimeout]
-    
      */
     @Input()
     get searchTimeout(): number {
@@ -275,7 +258,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.state]
-    
      */
     @Input()
     get state(): any | undefined {
@@ -288,7 +270,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -301,7 +282,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.texts]
-    
      */
     @Input()
     get texts(): { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string } {
@@ -314,7 +294,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -327,7 +306,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

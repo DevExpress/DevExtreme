@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -77,7 +76,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.animation]
-    
      */
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
@@ -90,7 +88,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.container]
-    
      */
     @Input()
     get container(): any | string | undefined {
@@ -103,7 +100,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -116,7 +112,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.delay]
-    
      */
     @Input()
     get delay(): number {
@@ -129,7 +124,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -142,7 +136,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -155,7 +148,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.hideOnOutsideClick]
-    
      */
     @Input()
     get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
@@ -168,7 +160,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.hideOnParentScroll]
-    
      */
     @Input()
     get hideOnParentScroll(): boolean {
@@ -181,7 +172,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -194,7 +184,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -217,7 +206,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.indicatorSrc]
-    
      * @deprecated [depNote:dxLoadPanelOptions.indicatorSrc]
     
      */
@@ -232,7 +220,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.maxHeight]
-    
      */
     @Input()
     get maxHeight(): number | string {
@@ -245,7 +232,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.maxWidth]
-    
      */
     @Input()
     get maxWidth(): number | string {
@@ -258,7 +244,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.message]
-    
      */
     @Input()
     get message(): string {
@@ -271,7 +256,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.minHeight]
-    
      */
     @Input()
     get minHeight(): number | string {
@@ -284,7 +268,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.minWidth]
-    
      */
     @Input()
     get minWidth(): number | string {
@@ -297,7 +280,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.position]
-    
      */
     @Input()
     get position(): Function | PositionAlignment | PositionConfig {
@@ -310,7 +292,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -323,7 +304,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.shading]
-    
      */
     @Input()
     get shading(): boolean {
@@ -336,7 +316,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.shadingColor]
-    
      */
     @Input()
     get shadingColor(): string {
@@ -349,7 +328,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.showIndicator]
-    
      */
     @Input()
     get showIndicator(): boolean {
@@ -362,7 +340,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.showPane]
-    
      */
     @Input()
     get showPane(): boolean {
@@ -375,7 +352,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -388,7 +364,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxLoadPanelOptions.width]
-    
      */
     @Input()
     get width(): number | string {
@@ -401,7 +376,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
-    
      */
     @Input()
     get wrapperAttr(): any {

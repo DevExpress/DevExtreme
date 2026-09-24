@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -217,19 +216,19 @@ import { DxiDataGridTotalItemModule } from 'devextreme-angular/ui/data-grid/nest
 import { DxiDataGridValidationRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_changes,
-           PROPERTY_TOKEN_columns,
-           PROPERTY_TOKEN_customOperations,
-           PROPERTY_TOKEN_fields,
-           PROPERTY_TOKEN_groupItems,
-           PROPERTY_TOKEN_sortByGroupSummaryInfo,
-           PROPERTY_TOKEN_tabs,
-           PROPERTY_TOKEN_toolbarItems,
-           PROPERTY_TOKEN_totalItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_changes,
+    PROPERTY_TOKEN_columns,
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+    PROPERTY_TOKEN_groupItems,
+    PROPERTY_TOKEN_sortByGroupSummaryInfo,
+    PROPERTY_TOKEN_tabs,
+    PROPERTY_TOKEN_toolbarItems,
+    PROPERTY_TOKEN_totalItems,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -313,7 +312,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -326,7 +324,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -339,7 +336,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.aiAssistant]
-    
      */
     @Input()
     get aiAssistant(): AIAssistant {
@@ -352,7 +348,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.aiIntegration]
-    
      */
     @Input()
     get aiIntegration(): AIIntegration | undefined {
@@ -365,7 +360,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
-    
      */
     @Input()
     get allowColumnReordering(): boolean {
@@ -378,7 +372,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.allowColumnResizing]
-    
      */
     @Input()
     get allowColumnResizing(): boolean {
@@ -391,7 +384,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.autoNavigateToFocusedRow]
-    
      */
     @Input()
     get autoNavigateToFocusedRow(): boolean {
@@ -404,7 +396,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.cacheEnabled]
-    
      */
     @Input()
     get cacheEnabled(): boolean {
@@ -417,7 +408,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.cellHintEnabled]
-    
      */
     @Input()
     get cellHintEnabled(): boolean {
@@ -430,7 +420,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnAutoWidth]
-    
      */
     @Input()
     get columnAutoWidth(): boolean {
@@ -443,7 +432,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnChooser]
-    
      */
     @Input()
     get columnChooser(): ColumnChooser {
@@ -456,7 +444,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnFixing]
-    
      */
     @Input()
     get columnFixing(): { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } } {
@@ -469,7 +456,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnHidingEnabled]
-    
      */
     @Input()
     get columnHidingEnabled(): boolean {
@@ -482,7 +468,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnMinWidth]
-    
      */
     @Input()
     get columnMinWidth(): number | undefined {
@@ -495,7 +480,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnResizingMode]
-    
      */
     @Input()
     get columnResizingMode(): ColumnResizeMode {
@@ -508,7 +492,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.columns]
-    
      */
     @Input()
     get columns(): Array<dxDataGridColumn | string> {
@@ -521,7 +504,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnWidth]
-    
      */
     @Input()
     get columnWidth(): Mode | number | undefined {
@@ -534,7 +516,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.customizeColumns]
-    
      */
     @Input()
     get customizeColumns(): ((columns: Array<dxDataGridColumn>) => void) {
@@ -547,7 +528,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.dataRowTemplate]
-    
      */
     @Input()
     get dataRowTemplate(): any {
@@ -560,7 +540,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | Store | string | undefined {
@@ -573,7 +552,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.dateSerializationFormat]
-    
      */
     @Input()
     get dateSerializationFormat(): string {
@@ -586,7 +564,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -599,7 +576,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.editing]
-    
      */
     @Input()
     get editing(): { allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string | undefined, editRowKey?: any | undefined, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
@@ -612,7 +588,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -625,7 +600,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.errorRowEnabled]
-    
      */
     @Input()
     get errorRowEnabled(): boolean {
@@ -638,7 +612,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.export]
-    
      */
     @Input()
     get export(): { allowExportSelectedData?: boolean, enabled?: boolean, formats?: Array<DataGridExportFormat | string>, texts?: { exportAll?: string, exportSelectedRows?: string, exportTo?: string } } {
@@ -651,7 +624,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterBuilder]
-    
      */
     @Input()
     get filterBuilder(): dxFilterBuilderOptions {
@@ -664,7 +636,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterBuilderPopup]
-    
      */
     @Input()
     get filterBuilderPopup(): dxPopupOptions<any> {
@@ -677,7 +648,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterPanel]
-    
      */
     @Input()
     get filterPanel(): FilterPanel {
@@ -690,7 +660,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterRow]
-    
      */
     @Input()
     get filterRow(): { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean } {
@@ -703,7 +672,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterSyncEnabled]
-    
      */
     @Input()
     get filterSyncEnabled(): boolean | Mode {
@@ -716,7 +684,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterValue]
-    
      */
     @Input()
     get filterValue(): Array<any> | Function | string {
@@ -729,7 +696,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedColumnIndex]
-    
      */
     @Input()
     get focusedColumnIndex(): number {
@@ -742,7 +708,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedRowEnabled]
-    
      */
     @Input()
     get focusedRowEnabled(): boolean {
@@ -755,7 +720,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedRowIndex]
-    
      */
     @Input()
     get focusedRowIndex(): number {
@@ -768,7 +732,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedRowKey]
-    
      */
     @Input()
     get focusedRowKey(): any | undefined {
@@ -781,7 +744,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.grouping]
-    
      */
     @Input()
     get grouping(): { allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: GroupExpandMode, texts?: { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } } {
@@ -794,7 +756,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.groupPanel]
-    
      */
     @Input()
     get groupPanel(): { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | Mode } {
@@ -807,7 +768,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.headerFilter]
-    
      */
     @Input()
     get headerFilter(): HeaderFilter {
@@ -820,7 +780,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -833,7 +792,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.highlightChanges]
-    
      */
     @Input()
     get highlightChanges(): boolean {
@@ -846,7 +804,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -859,7 +816,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -872,7 +828,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.keyboardNavigation]
-    
      */
     @Input()
     get keyboardNavigation(): { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection } {
@@ -885,7 +840,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): Array<string> | string | undefined {
@@ -898,7 +852,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.loadPanel]
-    
      */
     @Input()
     get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
@@ -911,7 +864,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.masterDetail]
-    
      */
     @Input()
     get masterDetail(): { autoExpandAll?: boolean, enabled?: boolean, template?: any } {
@@ -924,7 +876,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -937,7 +888,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.pager]
-    
      */
     @Input()
     get pager(): Pager {
@@ -950,7 +900,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.paging]
-    
      */
     @Input()
     get paging(): { enabled?: boolean, pageIndex?: number, pageSize?: number } {
@@ -963,7 +912,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.remoteOperations]
-    
      */
     @Input()
     get remoteOperations(): boolean | Mode | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } {
@@ -976,7 +924,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.renderAsync]
-    
      */
     @Input()
     get renderAsync(): boolean {
@@ -989,7 +936,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.repaintChangesOnly]
-    
      */
     @Input()
     get repaintChangesOnly(): boolean {
@@ -1002,7 +948,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.rowAlternationEnabled]
-    
      */
     @Input()
     get rowAlternationEnabled(): boolean {
@@ -1015,7 +960,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.rowDragging]
-    
      */
     @Input()
     get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, group?: string | undefined, handle?: string, onAdd?: ((e: RowDraggingAddEvent) => void), onDragChange?: ((e: RowDraggingChangeEvent) => void), onDragEnd?: ((e: RowDraggingEndEvent) => void), onDragMove?: ((e: RowDraggingMoveEvent) => void), onDragStart?: ((e: RowDraggingStartEvent) => void), onRemove?: ((e: RowDraggingRemoveEvent) => void), onReorder?: ((e: RowDraggingReorderEvent) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
@@ -1028,7 +972,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.rowTemplate]
-    
      * @deprecated [depNote:dxDataGridOptions.rowTemplate]
     
      */
@@ -1043,7 +986,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -1056,7 +998,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.scrolling]
-    
      */
     @Input()
     get scrolling(): { columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode } {
@@ -1069,7 +1010,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.searchPanel]
-    
      */
     @Input()
     get searchPanel(): SearchPanel {
@@ -1082,7 +1022,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.selectedRowKeys]
-    
      */
     @Input()
     get selectedRowKeys(): Array<any> {
@@ -1095,7 +1034,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.selection]
-    
      */
     @Input()
     get selection(): { allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, sensitivity?: SelectionSensitivity, showCheckBoxesMode?: SelectionColumnDisplayMode } {
@@ -1108,7 +1046,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.selectionFilter]
-    
      */
     @Input()
     get selectionFilter(): Array<any> | Function | string {
@@ -1121,7 +1058,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showBorders]
-    
      */
     @Input()
     get showBorders(): boolean {
@@ -1134,7 +1070,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showColumnHeaders]
-    
      */
     @Input()
     get showColumnHeaders(): boolean {
@@ -1147,7 +1082,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showColumnLines]
-    
      */
     @Input()
     get showColumnLines(): boolean {
@@ -1160,7 +1094,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showRowLines]
-    
      */
     @Input()
     get showRowLines(): boolean {
@@ -1173,7 +1106,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.sortByGroupSummaryInfo]
-    
      */
     @Input()
     get sortByGroupSummaryInfo(): { groupColumn?: string | undefined, sortOrder?: SortOrder | undefined, summaryItem?: number | string | undefined }[] {
@@ -1186,7 +1118,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.sorting]
-    
      */
     @Input()
     get sorting(): Sorting {
@@ -1199,7 +1130,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.stateStoring]
-    
      */
     @Input()
     get stateStoring(): { customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType } {
@@ -1212,7 +1142,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.summary]
-    
      */
     @Input()
     get summary(): { calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: { alignByColumn?: boolean, column?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[] } {
@@ -1225,7 +1154,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.syncLookupFilterValues]
-    
      */
     @Input()
     get syncLookupFilterValues(): boolean {
@@ -1238,7 +1166,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -1251,7 +1178,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxDataGridToolbar | undefined {
@@ -1264,7 +1190,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.twoWayBindingEnabled]
-    
      */
     @Input()
     get twoWayBindingEnabled(): boolean {
@@ -1277,7 +1202,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -1290,7 +1214,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -1303,7 +1226,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.wordWrapEnabled]
-    
      */
     @Input()
     get wordWrapEnabled(): boolean {

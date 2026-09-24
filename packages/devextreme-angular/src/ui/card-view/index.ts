@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -122,14 +121,14 @@ import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested
 import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_changes,
-           PROPERTY_TOKEN_columns,
-           PROPERTY_TOKEN_customOperations,
-           PROPERTY_TOKEN_fields,
-           PROPERTY_TOKEN_tabs,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_changes,
+    PROPERTY_TOKEN_columns,
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/core/tokens';
 
 
 

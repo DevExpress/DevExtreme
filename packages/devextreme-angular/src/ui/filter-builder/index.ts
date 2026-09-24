@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -56,9 +55,9 @@ import { DxoFilterBuilderFormatModule } from 'devextreme-angular/ui/filter-build
 import { DxoFilterBuilderGroupOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { 
-           PROPERTY_TOKEN_customOperations,
-           PROPERTY_TOKEN_fields,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -98,7 +97,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -111,7 +109,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -124,7 +121,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxFilterBuilderOptions.allowHierarchicalFields]
-    
      */
     @Input()
     get allowHierarchicalFields(): boolean {
@@ -137,7 +133,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxFilterBuilderOptions.customOperations]
-    
      */
     @Input()
     get customOperations(): Array<dxFilterBuilderCustomOperation> {
@@ -150,7 +145,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -163,7 +157,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -176,7 +169,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxFilterBuilderOptions.fields]
-    
      */
     @Input()
     get fields(): Array<dxFilterBuilderField> {
@@ -189,7 +181,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxFilterBuilderOptions.filterOperationDescriptions]
-    
      */
     @Input()
     get filterOperationDescriptions(): { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string } {
@@ -202,7 +193,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -215,7 +205,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxFilterBuilderOptions.groupOperationDescriptions]
-    
      */
     @Input()
     get groupOperationDescriptions(): { and?: string, notAnd?: string, notOr?: string, or?: string } {
@@ -228,7 +217,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxFilterBuilderOptions.groupOperations]
-    
      */
     @Input()
     get groupOperations(): Array<GroupOperation> {
@@ -241,7 +229,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -254,7 +241,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -267,7 +253,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -280,7 +265,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxFilterBuilderOptions.maxGroupLevel]
-    
      */
     @Input()
     get maxGroupLevel(): number | undefined {
@@ -293,7 +277,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -306,7 +289,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -319,7 +301,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxFilterBuilderOptions.value]
-    
      */
     @Input()
     get value(): Array<any> | Function | string {
@@ -332,7 +313,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -345,7 +325,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

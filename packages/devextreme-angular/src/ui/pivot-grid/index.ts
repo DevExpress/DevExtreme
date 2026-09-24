@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -81,7 +80,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.allowExpandAll]
-    
      */
     @Input()
     get allowExpandAll(): boolean {
@@ -94,7 +92,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.allowFiltering]
-    
      */
     @Input()
     get allowFiltering(): boolean {
@@ -107,7 +104,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.allowSorting]
-    
      */
     @Input()
     get allowSorting(): boolean {
@@ -120,7 +116,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.allowSortingBySummary]
-    
      */
     @Input()
     get allowSortingBySummary(): boolean {
@@ -133,7 +128,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.dataFieldArea]
-    
      */
     @Input()
     get dataFieldArea(): PivotGridDataFieldArea {
@@ -146,7 +140,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | null | PivotGridDataSource | PivotGridDataSourceOptions {
@@ -159,7 +152,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -172,7 +164,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -185,7 +176,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -198,7 +188,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.export]
-    
      */
     @Input()
     get export(): { enabled?: boolean } {
@@ -211,7 +200,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.fieldChooser]
-    
      */
     @Input()
     get fieldChooser(): { allowSearch?: boolean, applyChangesMode?: ApplyChangesMode, enabled?: boolean, height?: number | string, layout?: FieldChooserLayout, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number | string } {
@@ -224,7 +212,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.fieldPanel]
-    
      */
     @Input()
     get fieldPanel(): { allowFieldDragging?: boolean, showColumnFields?: boolean, showDataFields?: boolean, showFilterFields?: boolean, showRowFields?: boolean, texts?: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }, visible?: boolean } {
@@ -237,7 +224,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.headerFilter]
-    
      */
     @Input()
     get headerFilter(): { allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number } {
@@ -250,7 +236,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -263,7 +248,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.hideEmptySummaryCells]
-    
      */
     @Input()
     get hideEmptySummaryCells(): boolean {
@@ -276,7 +260,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -289,7 +272,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.loadPanel]
-    
      */
     @Input()
     get loadPanel(): { enabled?: boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number } {
@@ -302,7 +284,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.rowHeaderLayout]
-    
      */
     @Input()
     get rowHeaderLayout(): PivotGridRowHeaderLayout {
@@ -315,7 +296,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -328,7 +308,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.scrolling]
-    
      */
     @Input()
     get scrolling(): { mode?: ScrollMode, useNative?: boolean | Mode } {
@@ -341,7 +320,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.showBorders]
-    
      */
     @Input()
     get showBorders(): boolean {
@@ -354,7 +332,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.showColumnGrandTotals]
-    
      */
     @Input()
     get showColumnGrandTotals(): boolean {
@@ -367,7 +344,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.showColumnTotals]
-    
      */
     @Input()
     get showColumnTotals(): boolean {
@@ -380,7 +356,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.showRowGrandTotals]
-    
      */
     @Input()
     get showRowGrandTotals(): boolean {
@@ -393,7 +368,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.showRowTotals]
-    
      */
     @Input()
     get showRowTotals(): boolean {
@@ -406,7 +380,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.showTotalsPrior]
-    
      */
     @Input()
     get showTotalsPrior(): PivotGridTotalDisplayMode {
@@ -419,7 +392,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.stateStoring]
-    
      */
     @Input()
     get stateStoring(): { customLoad?: Function, customSave?: ((state: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType } {
@@ -432,7 +404,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -445,7 +416,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.texts]
-    
      */
     @Input()
     get texts(): { collapseAll?: string, dataNotAvailable?: string, expandAll?: string, exportToExcel?: string, grandTotal?: string, noData?: string, removeAllSorting?: string, showFieldChooser?: string, sortColumnBySummary?: string, sortRowBySummary?: string, total?: string } {
@@ -458,7 +428,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -471,7 +440,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -484,7 +452,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxPivotGridOptions.wordWrapEnabled]
-    
      */
     @Input()
     get wordWrapEnabled(): boolean {

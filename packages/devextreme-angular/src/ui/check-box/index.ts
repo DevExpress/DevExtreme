@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -70,7 +69,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -83,7 +81,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCheckBoxOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -96,7 +93,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -109,7 +105,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -122,7 +117,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCheckBoxOptions.enableThreeStateBehavior]
-    
      */
     @Input()
     get enableThreeStateBehavior(): boolean {
@@ -135,7 +129,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCheckBoxOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -148,7 +141,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -161,7 +153,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -174,7 +165,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCheckBoxOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -187,7 +177,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCheckBoxOptions.iconSize]
-    
      */
     @Input()
     get iconSize(): number | string | undefined {
@@ -200,7 +189,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -213,7 +201,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -226,7 +213,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCheckBoxOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -239,7 +225,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -252,7 +237,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -265,7 +249,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -278,7 +261,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCheckBoxOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -291,7 +273,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -304,7 +285,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -317,7 +297,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -330,7 +309,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -343,7 +321,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -356,7 +333,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCheckBoxOptions.value]
-    
      */
     @Input()
     get value(): boolean | null {
@@ -369,7 +345,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -382,7 +357,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

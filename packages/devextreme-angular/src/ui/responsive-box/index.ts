@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -48,11 +47,11 @@ import { DxiResponsiveBoxItemModule } from 'devextreme-angular/ui/responsive-box
 import { DxiResponsiveBoxLocationModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiResponsiveBoxRowModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { 
-           PROPERTY_TOKEN_cols,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_location,
-           PROPERTY_TOKEN_rows,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_cols,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_location,
+    PROPERTY_TOKEN_rows,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -96,7 +95,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:dxResponsiveBoxOptions.cols]
-    
      */
     @Input()
     get cols(): { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }[] {
@@ -109,7 +107,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:dxResponsiveBoxOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxResponsiveBoxItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -122,7 +119,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -135,7 +131,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -148,7 +143,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:dxResponsiveBoxOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -161,7 +155,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -174,7 +167,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -187,7 +179,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:dxResponsiveBoxOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxResponsiveBoxItem | string> {
@@ -200,7 +191,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -213,7 +203,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:dxResponsiveBoxOptions.rows]
-    
      */
     @Input()
     get rows(): { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }[] {
@@ -226,7 +215,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -239,7 +227,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:dxResponsiveBoxOptions.screenByWidth]
-    
      */
     @Input()
     get screenByWidth(): Function | undefined {
@@ -252,7 +239,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:dxResponsiveBoxOptions.singleColumnScreen]
-    
      */
     @Input()
     get singleColumnScreen(): string {
@@ -265,7 +251,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -278,7 +263,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     /**
      * [descr:dxResponsiveBoxOptions.width]
-    
      */
     @Input()
     get width(): number | string {

@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -61,10 +60,10 @@ import { DxoFileManagerToolbarModule } from 'devextreme-angular/ui/file-manager/
 import { DxiFileManagerToolbarItemModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/nested';
 import { 
-           PROPERTY_TOKEN_columns,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_fileSelectionItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_columns,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_fileSelectionItems,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -103,7 +102,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -116,7 +114,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -129,7 +126,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.allowedFileExtensions]
-    
      */
     @Input()
     get allowedFileExtensions(): Array<string> {
@@ -142,7 +138,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.contextMenu]
-    
      */
     @Input()
     get contextMenu(): dxFileManagerContextMenu {
@@ -155,7 +150,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.currentPath]
-    
      */
     @Input()
     get currentPath(): string {
@@ -168,7 +162,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.currentPathKeys]
-    
      */
     @Input()
     get currentPathKeys(): Array<string> {
@@ -181,7 +174,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.customizeDetailColumns]
-    
      */
     @Input()
     get customizeDetailColumns(): ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>) {
@@ -194,7 +186,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.customizeThumbnail]
-    
      */
     @Input()
     get customizeThumbnail(): ((fileSystemItem: FileSystemItem) => string) {
@@ -207,7 +198,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -220,7 +210,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -233,7 +222,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.fileSystemProvider]
-    
      */
     @Input()
     get fileSystemProvider(): any | null {
@@ -246,7 +234,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.focusedItemKey]
-    
      */
     @Input()
     get focusedItemKey(): string | undefined {
@@ -259,7 +246,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -272,7 +258,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -285,7 +270,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -298,7 +282,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -311,7 +294,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.itemView]
-    
      */
     @Input()
     get itemView(): { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean } {
@@ -324,7 +306,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.notifications]
-    
      */
     @Input()
     get notifications(): { showPanel?: boolean, showPopup?: boolean } {
@@ -337,7 +318,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.permissions]
-    
      */
     @Input()
     get permissions(): { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean } {
@@ -350,7 +330,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.rootFolderName]
-    
      */
     @Input()
     get rootFolderName(): string {
@@ -363,7 +342,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -376,7 +354,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.selectedItemKeys]
-    
      */
     @Input()
     get selectedItemKeys(): Array<string> {
@@ -389,7 +366,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleOrMultiple {
@@ -402,7 +378,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -415,7 +390,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxFileManagerToolbar {
@@ -428,7 +402,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:dxFileManagerOptions.upload]
-    
      */
     @Input()
     get upload(): { chunkSize?: number, maxFileSize?: number } {
@@ -441,7 +414,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -454,7 +426,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

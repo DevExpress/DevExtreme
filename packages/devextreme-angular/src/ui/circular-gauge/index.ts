@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -89,8 +88,8 @@ import { DxoCircularGaugeTitleModule } from 'devextreme-angular/ui/circular-gaug
 import { DxoCircularGaugeTooltipModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { 
-           PROPERTY_TOKEN_ranges,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_ranges,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -120,7 +119,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseGaugeOptions.animation]
-    
      */
     @Input()
     get animation(): { duration?: number, easing?: AnimationEaseMode, enabled?: boolean } {
@@ -133,7 +131,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxCircularGaugeOptions.centerTemplate]
-    
      */
     @Input()
     get centerTemplate(): any {
@@ -146,7 +143,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseGaugeOptions.containerBackgroundColor]
-    
      */
     @Input()
     get containerBackgroundColor(): string {
@@ -159,7 +155,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -172,7 +167,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -185,7 +179,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -198,7 +191,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -211,7 +203,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxCircularGaugeOptions.geometry]
-    
      */
     @Input()
     get geometry(): { endAngle?: number, startAngle?: number } {
@@ -224,7 +215,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseGaugeOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, font?: Font, show?: boolean, text?: string } {
@@ -237,7 +227,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -250,7 +239,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -263,7 +251,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer]
-    
      */
     @Input()
     get rangeContainer(): { backgroundColor?: ChartsColor | string, offset?: number, orientation?: CircularGaugeElementOrientation, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, ranges?: { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number } {
@@ -276,7 +263,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -289,7 +275,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -302,7 +287,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxCircularGaugeOptions.scale]
-    
      */
     @Input()
     get scale(): { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number> | undefined, customTicks?: Array<number> | undefined, endValue?: number, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, orientation?: CircularGaugeElementOrientation, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined } {
@@ -315,7 +299,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -328,7 +311,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxCircularGaugeOptions.subvalueIndicator]
-    
      */
     @Input()
     get subvalueIndicator(): GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" } {
@@ -341,7 +323,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseGaugeOptions.subvalues]
-    
      */
     @Input()
     get subvalues(): Array<number> | undefined {
@@ -354,7 +335,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -367,7 +347,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -380,7 +359,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseGaugeOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -393,7 +371,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:BaseGaugeOptions.value]
-    
      */
     @Input()
     get value(): number | undefined {
@@ -406,7 +383,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
     /**
      * [descr:dxCircularGaugeOptions.valueIndicator]
-    
      */
     @Input()
     get valueIndicator(): GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" } {

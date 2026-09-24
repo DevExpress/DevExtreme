@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -50,9 +49,9 @@ import { DxiTreeViewItemModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -86,7 +85,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -99,7 +97,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -112,7 +109,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.animationEnabled]
-    
      */
     @Input()
     get animationEnabled(): boolean {
@@ -125,7 +121,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.collapseIcon]
-    
      */
     @Input()
     get collapseIcon(): null | string {
@@ -138,7 +133,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.createChildren]
-    
      */
     @Input()
     get createChildren(): ((parentNode: dxTreeViewNode) => any | Array<Record<string, any>>) {
@@ -151,7 +145,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<dxTreeViewItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -164,7 +157,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.dataStructure]
-    
      */
     @Input()
     get dataStructure(): DataStructure {
@@ -177,7 +169,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -190,7 +181,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
-    
      */
     @Input()
     get disabledExpr(): ((item: any) => boolean | undefined) | string {
@@ -203,7 +193,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.disabledNodeSelectionMode]
-    
      */
     @Input()
     get disabledNodeSelectionMode(): DisabledNodeSelectionMode {
@@ -216,7 +205,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string {
@@ -229,7 +217,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -242,7 +229,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.expandAllEnabled]
-    
      */
     @Input()
     get expandAllEnabled(): boolean {
@@ -255,7 +241,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.expandedExpr]
-    
      */
     @Input()
     get expandedExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
@@ -268,7 +253,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.expandEvent]
-    
      */
     @Input()
     get expandEvent(): TreeViewExpandEvent {
@@ -281,7 +265,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.expandIcon]
-    
      */
     @Input()
     get expandIcon(): null | string {
@@ -294,7 +277,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.expandNodesRecursive]
-    
      */
     @Input()
     get expandNodesRecursive(): boolean {
@@ -307,7 +289,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -320,7 +301,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.hasItemsExpr]
-    
      */
     @Input()
     get hasItemsExpr(): ((item: any) => boolean | undefined) | string {
@@ -333,7 +313,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -346,7 +325,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -359,7 +337,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -372,7 +349,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -385,7 +361,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxTreeViewItem> {
@@ -398,7 +373,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.itemsExpr]
-    
      */
     @Input()
     get itemsExpr(): ((item: any) => Array<any> | undefined) | string {
@@ -411,7 +385,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -424,7 +397,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any) => any) | string {
@@ -437,7 +409,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:CollectionWidgetOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -450,7 +421,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.parentIdExpr]
-    
      */
     @Input()
     get parentIdExpr(): ((item: any) => any | undefined) | string {
@@ -463,7 +433,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.rootValue]
-    
      */
     @Input()
     get rootValue(): any {
@@ -476,7 +445,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -489,7 +457,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.scrollDirection]
-    
      */
     @Input()
     get scrollDirection(): ScrollDirection {
@@ -502,7 +469,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:SearchBoxMixinOptions.searchEditorOptions]
-    
      */
     @Input()
     get searchEditorOptions(): dxTextBoxOptions<any> {
@@ -515,7 +481,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:SearchBoxMixinOptions.searchEnabled]
-    
      */
     @Input()
     get searchEnabled(): boolean {
@@ -528,7 +493,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:SearchBoxMixinOptions.searchExpr]
-    
      */
     @Input()
     get searchExpr(): Array<Function | string> | Function | string {
@@ -541,7 +505,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:SearchBoxMixinOptions.searchMode]
-    
      */
     @Input()
     get searchMode(): SearchMode {
@@ -554,7 +517,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:SearchBoxMixinOptions.searchTimeout]
-    
      */
     @Input()
     get searchTimeout(): number | undefined {
@@ -567,7 +529,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:SearchBoxMixinOptions.searchValue]
-    
      */
     @Input()
     get searchValue(): string {
@@ -580,7 +541,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.selectAllText]
-    
      */
     @Input()
     get selectAllText(): string {
@@ -593,7 +553,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.selectByClick]
-    
      */
     @Input()
     get selectByClick(): boolean {
@@ -606,7 +565,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
-    
      */
     @Input()
     get selectedExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
@@ -619,7 +577,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleOrMultiple {
@@ -632,7 +589,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.selectNodesRecursive]
-    
      */
     @Input()
     get selectNodesRecursive(): boolean {
@@ -645,7 +601,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.showCheckBoxesMode]
-    
      */
     @Input()
     get showCheckBoxesMode(): TreeViewCheckBoxMode {
@@ -658,7 +613,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -671,7 +625,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.useNativeScrolling]
-    
      */
     @Input()
     get useNativeScrolling(): boolean {
@@ -684,7 +637,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxTreeViewOptions.virtualModeEnabled]
-    
      */
     @Input()
     get virtualModeEnabled(): boolean {
@@ -697,7 +649,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -710,7 +661,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

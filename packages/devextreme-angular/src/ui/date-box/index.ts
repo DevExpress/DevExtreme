@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -82,9 +81,9 @@ import { DxoDateBoxShowModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxToModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxiDateBoxToolbarItemModule } from 'devextreme-angular/ui/date-box/nested';
 import { 
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -124,7 +123,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.acceptCustomValue]
-    
      */
     @Input()
     get acceptCustomValue(): boolean {
@@ -137,7 +135,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -150,7 +147,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -163,7 +159,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.adaptivityEnabled]
-    
      */
     @Input()
     get adaptivityEnabled(): boolean {
@@ -176,7 +171,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DateBoxBaseOptions.applyButtonText]
-    
      */
     @Input()
     get applyButtonText(): string {
@@ -189,7 +183,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.applyValueMode]
-    
      */
     @Input()
     get applyValueMode(): ApplyValueMode {
@@ -202,7 +195,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.buttons]
-    
      */
     @Input()
     get buttons(): Array<DropDownPredefinedButton | TextEditorButton> | undefined {
@@ -215,7 +207,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DateBoxBaseOptions.calendarOptions]
-    
      */
     @Input()
     get calendarOptions(): dxCalendarOptions {
@@ -228,7 +219,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DateBoxBaseOptions.cancelButtonText]
-    
      */
     @Input()
     get cancelButtonText(): string {
@@ -241,7 +231,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.dateOutOfRangeMessage]
-    
      */
     @Input()
     get dateOutOfRangeMessage(): string {
@@ -254,7 +243,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DateBoxBaseOptions.dateSerializationFormat]
-    
      */
     @Input()
     get dateSerializationFormat(): string | undefined {
@@ -267,7 +255,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
-    
      */
     @Input()
     get deferRendering(): boolean {
@@ -280,7 +267,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -293,7 +279,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.disabledDates]
-    
      */
     @Input()
     get disabledDates(): Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean) | null {
@@ -306,7 +291,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DateBoxBaseOptions.displayFormat]
-    
      */
     @Input()
     get displayFormat(): Format | null {
@@ -319,7 +303,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
-    
      */
     @Input()
     get dropDownButtonTemplate(): any {
@@ -332,7 +315,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DateBoxBaseOptions.dropDownOptions]
-    
      */
     @Input()
     get dropDownOptions(): dxPopupOptions<any> {
@@ -345,7 +327,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -358,7 +339,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -371,7 +351,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -384,7 +363,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -397,7 +375,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -410,7 +387,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.inputAttr]
-    
      */
     @Input()
     get inputAttr(): any {
@@ -423,7 +399,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.interval]
-    
      */
     @Input()
     get interval(): number {
@@ -436,7 +411,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.invalidDateMessage]
-    
      */
     @Input()
     get invalidDateMessage(): string {
@@ -449,7 +423,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -462,7 +435,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -475,7 +447,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.label]
-    
      */
     @Input()
     get label(): string {
@@ -488,7 +459,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
-    
      */
     @Input()
     get labelMode(): LabelMode {
@@ -501,7 +471,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DateBoxBaseOptions.max]
-    
      */
     @Input()
     get max(): Date | null | number | string | undefined {
@@ -514,7 +483,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.maxLength]
-    
      */
     @Input()
     get maxLength(): null | number | string {
@@ -527,7 +495,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DateBoxBaseOptions.min]
-    
      */
     @Input()
     get min(): Date | null | number | string | undefined {
@@ -540,7 +507,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -553,7 +519,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.opened]
-    
      */
     @Input()
     get opened(): boolean {
@@ -566,7 +531,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.openOnFieldClick]
-    
      */
     @Input()
     get openOnFieldClick(): boolean {
@@ -579,7 +543,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.pickerType]
-    
      */
     @Input()
     get pickerType(): DatePickerType {
@@ -592,7 +555,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.placeholder]
-    
      */
     @Input()
     get placeholder(): string {
@@ -605,7 +567,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -618,7 +579,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -631,7 +591,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.showAnalogClock]
-    
      */
     @Input()
     get showAnalogClock(): boolean {
@@ -644,7 +603,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
-    
      */
     @Input()
     get showClearButton(): boolean {
@@ -657,7 +615,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.showDropDownButton]
-    
      */
     @Input()
     get showDropDownButton(): boolean {
@@ -670,7 +627,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.spellcheck]
-    
      */
     @Input()
     get spellcheck(): boolean {
@@ -683,7 +639,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
-    
      */
     @Input()
     get stylingMode(): EditorStyle {
@@ -696,7 +651,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -709,7 +663,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.text]
-    
      */
     @Input()
     get text(): string {
@@ -722,7 +675,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DateBoxBaseOptions.todayButtonText]
-    
      */
     @Input()
     get todayButtonText(): string {
@@ -735,7 +687,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.type]
-    
      */
     @Input()
     get type(): DateType {
@@ -748,7 +699,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DateBoxBaseOptions.useMaskBehavior]
-    
      */
     @Input()
     get useMaskBehavior(): boolean {
@@ -761,7 +711,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -774,7 +723,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -787,7 +735,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -800,7 +747,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Mode | Position {
@@ -813,7 +759,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -826,7 +771,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxDateBoxOptions.value]
-    
      */
     @Input()
     get value(): Date | null | number | string {
@@ -839,7 +783,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:dxTextEditorOptions.valueChangeEvent]
-    
      */
     @Input()
     get valueChangeEvent(): string {
@@ -852,7 +795,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -865,7 +807,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -98,7 +97,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.animation]
-    
      */
     @Input()
     get animation(): any | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean } {
@@ -111,7 +109,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.backgroundColor]
-    
      */
     @Input()
     get backgroundColor(): string {
@@ -124,7 +121,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.barSpacing]
-    
      */
     @Input()
     get barSpacing(): number {
@@ -137,7 +133,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.baseValue]
-    
      */
     @Input()
     get baseValue(): number {
@@ -150,7 +145,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.centerTemplate]
-    
      */
     @Input()
     get centerTemplate(): any {
@@ -163,7 +157,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -176,7 +169,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -189,7 +181,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -202,7 +193,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.endValue]
-    
      */
     @Input()
     get endValue(): number {
@@ -215,7 +205,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -228,7 +217,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.geometry]
-    
      */
     @Input()
     get geometry(): { endAngle?: number, startAngle?: number } {
@@ -241,7 +229,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.label]
-    
      */
     @Input()
     get label(): { connectorColor?: string | undefined, connectorWidth?: number, customizeText?: ((barValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indent?: number, visible?: boolean } {
@@ -254,7 +241,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.legend]
-    
      */
     @Input()
     get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>), customizeText?: ((arg: { item: BarGaugeBarInfo, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextFormat?: Format | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined }, text?: string | undefined, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
@@ -267,7 +253,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, font?: Font, show?: boolean, text?: string } {
@@ -280,7 +265,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -293,7 +277,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.palette]
-    
      */
     @Input()
     get palette(): Array<string> | Palette {
@@ -306,7 +289,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.paletteExtensionMode]
-    
      */
     @Input()
     get paletteExtensionMode(): PaletteExtensionMode {
@@ -319,7 +301,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -332,7 +313,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -345,7 +325,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.relativeInnerRadius]
-    
      */
     @Input()
     get relativeInnerRadius(): number {
@@ -358,7 +337,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.resolveLabelOverlapping]
-    
      */
     @Input()
     get resolveLabelOverlapping(): ShiftLabelOverlap {
@@ -371,7 +349,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -384,7 +361,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -397,7 +373,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.startValue]
-    
      */
     @Input()
     get startValue(): number {
@@ -410,7 +385,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -423,7 +397,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -436,7 +409,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -449,7 +421,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
     /**
      * [descr:dxBarGaugeOptions.values]
-    
      */
     @Input()
     get values(): Array<number> {

@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -72,8 +71,8 @@ import { DxoMenuShowFirstSubmenuModeModule } from 'devextreme-angular/ui/menu/ne
 import { DxoMenuShowSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -102,7 +101,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -115,7 +113,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuBaseOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -128,7 +125,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuOptions.adaptivityEnabled]
-    
      */
     @Input()
     get adaptivityEnabled(): boolean {
@@ -141,7 +137,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuBaseOptions.animation]
-    
      */
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
@@ -154,7 +149,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuBaseOptions.cssClass]
-    
      */
     @Input()
     get cssClass(): string {
@@ -167,7 +161,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<dxMenuItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -180,7 +173,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -193,7 +185,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
-    
      */
     @Input()
     get disabledExpr(): ((item: any) => boolean | undefined) | string {
@@ -206,7 +197,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string {
@@ -219,7 +209,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -232,7 +221,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -245,7 +233,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -258,7 +245,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuOptions.hideSubmenuOnMouseLeave]
-    
      */
     @Input()
     get hideSubmenuOnMouseLeave(): boolean {
@@ -271,7 +257,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -284,7 +269,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -297,7 +281,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxMenuItem> {
@@ -310,7 +293,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.itemsExpr]
-    
      */
     @Input()
     get itemsExpr(): ((item: any) => Array<any> | undefined) | string {
@@ -323,7 +305,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -336,7 +317,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuOptions.orientation]
-    
      */
     @Input()
     get orientation(): Orientation {
@@ -349,7 +329,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -362,7 +341,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuBaseOptions.selectByClick]
-    
      */
     @Input()
     get selectByClick(): boolean {
@@ -375,7 +353,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
-    
      */
     @Input()
     get selectedExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
@@ -388,7 +365,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
-    
      */
     @Input()
     get selectedItem(): any | null {
@@ -401,7 +377,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuBaseOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleOrNone {
@@ -414,7 +389,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuOptions.showFirstSubmenuMode]
-    
      */
     @Input()
     get showFirstSubmenuMode(): SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode } {
@@ -427,7 +401,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuBaseOptions.showSubmenuMode]
-    
      */
     @Input()
     get showSubmenuMode(): SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode } {
@@ -440,7 +413,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:dxMenuOptions.submenuDirection]
-    
      */
     @Input()
     get submenuDirection(): SubmenuDirection {
@@ -453,7 +425,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -466,7 +437,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -479,7 +449,6 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {

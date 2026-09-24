@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -51,7 +50,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxResizableOptions.area]
-    
      */
     @Input()
     get area(): any | string | undefined {
@@ -64,7 +62,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -77,7 +74,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxResizableOptions.handles]
-    
      */
     @Input()
     get handles(): ResizeHandle | string {
@@ -90,7 +86,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxResizableOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -103,7 +98,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxResizableOptions.keepAspectRatio]
-    
      */
     @Input()
     get keepAspectRatio(): boolean {
@@ -116,7 +110,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxResizableOptions.maxHeight]
-    
      */
     @Input()
     get maxHeight(): number {
@@ -129,7 +122,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxResizableOptions.maxWidth]
-    
      */
     @Input()
     get maxWidth(): number {
@@ -142,7 +134,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxResizableOptions.minHeight]
-    
      */
     @Input()
     get minHeight(): number {
@@ -155,7 +146,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxResizableOptions.minWidth]
-    
      */
     @Input()
     get minWidth(): number {
@@ -168,7 +158,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -181,7 +170,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxResizableOptions.width]
-    
      */
     @Input()
     get width(): number | string {

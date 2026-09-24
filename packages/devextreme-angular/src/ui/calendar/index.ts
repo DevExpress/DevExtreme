@@ -7,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -70,7 +69,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -83,7 +81,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -96,7 +93,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.cellTemplate]
-    
      */
     @Input()
     get cellTemplate(): any {
@@ -109,7 +105,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.dateSerializationFormat]
-    
      */
     @Input()
     get dateSerializationFormat(): string | undefined {
@@ -122,7 +117,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -135,7 +129,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.disabledDates]
-    
      */
     @Input()
     get disabledDates(): Array<Date> | ((data: DisabledDate) => boolean) | null {
@@ -148,7 +141,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -161,7 +153,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.firstDayOfWeek]
-    
      */
     @Input()
     get firstDayOfWeek(): DayOfWeek | undefined {
@@ -174,7 +165,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -187,7 +177,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -200,7 +189,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -213,7 +201,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -226,7 +213,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -239,7 +225,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -252,7 +237,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.max]
-    
      */
     @Input()
     get max(): Date | null | number | string {
@@ -265,7 +249,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.maxZoomLevel]
-    
      */
     @Input()
     get maxZoomLevel(): CalendarZoomLevel {
@@ -278,7 +261,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.min]
-    
      */
     @Input()
     get min(): Date | null | number | string {
@@ -291,7 +273,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.minZoomLevel]
-    
      */
     @Input()
     get minZoomLevel(): CalendarZoomLevel {
@@ -304,7 +285,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -317,7 +297,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -330,7 +309,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -343,7 +321,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): CalendarSelectionMode {
@@ -356,7 +333,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.selectWeekOnClick]
-    
      */
     @Input()
     get selectWeekOnClick(): boolean {
@@ -369,7 +345,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.showTodayButton]
-    
      */
     @Input()
     get showTodayButton(): boolean {
@@ -382,7 +357,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.showWeekNumbers]
-    
      */
     @Input()
     get showWeekNumbers(): boolean {
@@ -395,7 +369,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -418,7 +391,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -431,7 +403,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -444,7 +415,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -457,7 +427,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -470,7 +439,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -483,7 +451,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.value]
-    
      */
     @Input()
     get value(): Array<Date | null | number | string> | Date | null | number | string {
@@ -496,7 +463,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -509,7 +475,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.weekNumberRule]
-    
      */
     @Input()
     get weekNumberRule(): WeekNumberRule {
@@ -522,7 +487,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -535,7 +499,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     /**
      * [descr:dxCalendarOptions.zoomLevel]
-    
      */
     @Input()
     get zoomLevel(): CalendarZoomLevel {
