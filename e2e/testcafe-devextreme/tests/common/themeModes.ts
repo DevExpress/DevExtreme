@@ -378,7 +378,7 @@ if (getThemeName() === 'fluent-next') {
       ...{
         scale: { startValue: 0, endValue: 10 },
       },
-      animation: { enabled: false },
+      behavior: { animationEnabled: false },
       size: { width: 220, height: 160 },
     });
   });
