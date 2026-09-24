@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DragDirection, DragHighlight } from 'devextreme/common';
 import type { RowDraggingAddEvent, RowDraggingChangeEvent, RowDraggingEndEvent, RowDraggingMoveEvent, RowDraggingStartEvent, RowDraggingRemoveEvent, RowDraggingReorderEvent } from 'devextreme/ui/tree_list';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-list-row-dragging',
@@ -213,7 +206,6 @@ export class DxoTreeListRowDraggingComponent extends NestedOption implements OnD
         return 'rowDragging';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -229,7 +221,6 @@ export class DxoTreeListRowDraggingComponent extends NestedOption implements OnD
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

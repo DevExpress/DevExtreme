@@ -15,6 +15,9 @@ engineStrict: true
 # Need a fresher version? Add a targeted minimumReleaseAgeExclude entry with the exact version.
 minimumReleaseAge: 1440 # ⚠️ Do NOT modify this.
 
+minimumReleaseAgeExclude:
+  - "devextreme-internal-tools@22.1.0"
+
 overrides:
   "basic-ftp@<5.3.1": ">=5.3.1"
   "js-yaml@<4.3.2": "^4.3.2"
@@ -127,7 +130,7 @@ catalogs:
     "typescript": ~5.9.3
     "zone.js": ~0.15.1
   tools:
-    "devextreme-internal-tools": 22.0.0
+    "devextreme-internal-tools": 22.1.0
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "typescript": 5.9.3

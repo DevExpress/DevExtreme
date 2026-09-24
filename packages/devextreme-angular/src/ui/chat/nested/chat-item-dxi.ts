@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -10,10 +8,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { Attachment, User, MessageType } from 'devextreme/ui/chat';
 
 import {
@@ -23,6 +17,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_attachments,
 } from 'devextreme-angular/core/tokens';
@@ -131,7 +126,6 @@ export class DxiChatChatItemComponent extends CollectionNestedOption {
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -144,7 +138,6 @@ export class DxiChatChatItemComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

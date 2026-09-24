@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { PositionAlignment, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import type { CollisionResolutionCombination, CollisionResolution } from 'devextreme/common/core/animation';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-lookup-position',
@@ -93,7 +86,6 @@ export class DxoLookupPositionComponent extends NestedOption implements OnDestro
         return 'position';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -109,7 +101,6 @@ export class DxoLookupPositionComponent extends NestedOption implements OnDestro
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

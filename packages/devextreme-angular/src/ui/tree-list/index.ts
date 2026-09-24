@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -35,7 +32,6 @@ import type { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
 import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import DxTreeList from 'devextreme/ui/tree_list';
-
 
 import {
     DxComponent,
@@ -198,21 +194,20 @@ import { DxoTreeListTreeListSelectionModule } from 'devextreme-angular/ui/tree-l
 import { DxiTreeListTreeListToolbarItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-           PROPERTY_TOKEN_buttons,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_changes,
-           PROPERTY_TOKEN_columns,
-           PROPERTY_TOKEN_customOperations,
-           PROPERTY_TOKEN_fields,
-           PROPERTY_TOKEN_tabs,
-           PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_changes,
+    PROPERTY_TOKEN_columns,
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+    PROPERTY_TOKEN_tabs,
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxTreeList]
-
  */
 @Component({
     selector: 'dx-tree-list',
@@ -277,7 +272,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -287,10 +281,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -299,7 +291,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     
     @Input()
@@ -310,10 +301,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('aiAssistant', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.aiIntegration]
-    
      */
     @Input()
     get aiIntegration(): AIIntegration | undefined {
@@ -323,10 +312,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('aiIntegration', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
-    
      */
     @Input()
     get allowColumnReordering(): boolean {
@@ -336,10 +323,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('allowColumnReordering', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.allowColumnResizing]
-    
      */
     @Input()
     get allowColumnResizing(): boolean {
@@ -349,10 +334,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('allowColumnResizing', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
-    
      */
     @Input()
     get autoExpandAll(): boolean {
@@ -362,10 +345,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('autoExpandAll', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.autoNavigateToFocusedRow]
-    
      */
     @Input()
     get autoNavigateToFocusedRow(): boolean {
@@ -375,10 +356,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('autoNavigateToFocusedRow', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.cacheEnabled]
-    
      */
     @Input()
     get cacheEnabled(): boolean {
@@ -388,10 +367,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('cacheEnabled', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.cellHintEnabled]
-    
      */
     @Input()
     get cellHintEnabled(): boolean {
@@ -401,10 +378,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('cellHintEnabled', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.columnAutoWidth]
-    
      */
     @Input()
     get columnAutoWidth(): boolean {
@@ -414,10 +389,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnAutoWidth', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.columnChooser]
-    
      */
     @Input()
     get columnChooser(): ColumnChooser {
@@ -427,10 +400,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnChooser', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.columnFixing]
-    
      */
     @Input()
     get columnFixing(): { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } } {
@@ -440,10 +411,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnFixing', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.columnHidingEnabled]
-    
      */
     @Input()
     get columnHidingEnabled(): boolean {
@@ -453,10 +422,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnHidingEnabled', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.columnMinWidth]
-    
      */
     @Input()
     get columnMinWidth(): number | undefined {
@@ -466,10 +433,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnMinWidth', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.columnResizingMode]
-    
      */
     @Input()
     get columnResizingMode(): ColumnResizeMode {
@@ -479,10 +444,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnResizingMode', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.columns]
-    
      */
     @Input()
     get columns(): Array<dxTreeListColumn | string> {
@@ -492,10 +455,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columns', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.columnWidth]
-    
      */
     @Input()
     get columnWidth(): Mode | number | undefined {
@@ -505,10 +466,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnWidth', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.customizeColumns]
-    
      */
     @Input()
     get customizeColumns(): ((columns: Array<dxTreeListColumn>) => void) {
@@ -518,10 +477,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('customizeColumns', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | Store | string | undefined {
@@ -531,10 +488,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.dataStructure]
-    
      */
     @Input()
     get dataStructure(): DataStructure {
@@ -544,10 +499,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('dataStructure', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.dateSerializationFormat]
-    
      */
     @Input()
     get dateSerializationFormat(): string {
@@ -557,10 +510,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('dateSerializationFormat', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -570,10 +521,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.editing]
-    
      */
     @Input()
     get editing(): { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string | undefined, editRowKey?: any | undefined, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
@@ -583,10 +532,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('editing', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -596,10 +543,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.errorRowEnabled]
-    
      */
     @Input()
     get errorRowEnabled(): boolean {
@@ -609,10 +554,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('errorRowEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.expandedRowKeys]
-    
      */
     @Input()
     get expandedRowKeys(): Array<any> {
@@ -622,10 +565,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('expandedRowKeys', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.expandNodesOnFiltering]
-    
      */
     @Input()
     get expandNodesOnFiltering(): boolean {
@@ -635,10 +576,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('expandNodesOnFiltering', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.filterBuilder]
-    
      */
     @Input()
     get filterBuilder(): dxFilterBuilderOptions {
@@ -648,10 +587,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('filterBuilder', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.filterBuilderPopup]
-    
      */
     @Input()
     get filterBuilderPopup(): dxPopupOptions<any> {
@@ -661,10 +598,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('filterBuilderPopup', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.filterMode]
-    
      */
     @Input()
     get filterMode(): TreeListFilterMode {
@@ -674,10 +609,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('filterMode', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.filterPanel]
-    
      */
     @Input()
     get filterPanel(): FilterPanel {
@@ -687,10 +620,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('filterPanel', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.filterRow]
-    
      */
     @Input()
     get filterRow(): { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean } {
@@ -700,10 +631,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('filterRow', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.filterSyncEnabled]
-    
      */
     @Input()
     get filterSyncEnabled(): boolean | Mode {
@@ -713,10 +642,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('filterSyncEnabled', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.filterValue]
-    
      */
     @Input()
     get filterValue(): Array<any> | Function | string {
@@ -726,10 +653,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('filterValue', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.focusedColumnIndex]
-    
      */
     @Input()
     get focusedColumnIndex(): number {
@@ -739,10 +664,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('focusedColumnIndex', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.focusedRowEnabled]
-    
      */
     @Input()
     get focusedRowEnabled(): boolean {
@@ -752,10 +675,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('focusedRowEnabled', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.focusedRowIndex]
-    
      */
     @Input()
     get focusedRowIndex(): number {
@@ -765,10 +686,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('focusedRowIndex', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.focusedRowKey]
-    
      */
     @Input()
     get focusedRowKey(): any | undefined {
@@ -778,10 +697,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('focusedRowKey', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
-    
      */
     @Input()
     get hasItemsExpr(): ((item: any, value: boolean | undefined) => boolean | undefined) | string {
@@ -791,10 +708,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('hasItemsExpr', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.headerFilter]
-    
      */
     @Input()
     get headerFilter(): HeaderFilter {
@@ -804,10 +719,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('headerFilter', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -817,10 +730,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.highlightChanges]
-    
      */
     @Input()
     get highlightChanges(): boolean {
@@ -830,10 +741,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('highlightChanges', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -843,10 +752,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -856,10 +763,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.itemsExpr]
-    
      */
     @Input()
     get itemsExpr(): ((item: any, value: Array<any> | undefined) => Array<any> | undefined) | string {
@@ -869,10 +774,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('itemsExpr', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.keyboardNavigation]
-    
      */
     @Input()
     get keyboardNavigation(): { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection } {
@@ -882,10 +785,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('keyboardNavigation', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.keyExpr]
-    
      */
     @Input()
     get keyExpr(): ((item: any, value: any) => any) | string {
@@ -895,10 +796,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.loadPanel]
-    
      */
     @Input()
     get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
@@ -908,10 +807,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('loadPanel', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.noDataText]
-    
      */
     @Input()
     get noDataText(): string {
@@ -921,10 +818,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.pager]
-    
      */
     @Input()
     get pager(): Pager {
@@ -934,10 +829,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('pager', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.paging]
-    
      */
     @Input()
     get paging(): { enabled?: boolean, pageIndex?: number, pageSize?: number } {
@@ -947,10 +840,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('paging', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.parentIdExpr]
-    
      */
     @Input()
     get parentIdExpr(): ((item: any, value: any) => any | undefined) | string {
@@ -960,10 +851,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('parentIdExpr', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.remoteOperations]
-    
      */
     @Input()
     get remoteOperations(): Mode | { filtering?: boolean, grouping?: boolean, sorting?: boolean } {
@@ -973,10 +862,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('remoteOperations', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.renderAsync]
-    
      */
     @Input()
     get renderAsync(): boolean {
@@ -986,10 +873,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('renderAsync', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.repaintChangesOnly]
-    
      */
     @Input()
     get repaintChangesOnly(): boolean {
@@ -999,10 +884,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('repaintChangesOnly', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.rootValue]
-    
      */
     @Input()
     get rootValue(): any {
@@ -1012,10 +895,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('rootValue', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.rowAlternationEnabled]
-    
      */
     @Input()
     get rowAlternationEnabled(): boolean {
@@ -1025,10 +906,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('rowAlternationEnabled', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.rowDragging]
-    
      */
     @Input()
     get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, group?: string | undefined, handle?: string, onAdd?: ((e: RowDraggingAddEvent) => void), onDragChange?: ((e: RowDraggingChangeEvent) => void), onDragEnd?: ((e: RowDraggingEndEvent) => void), onDragMove?: ((e: RowDraggingMoveEvent) => void), onDragStart?: ((e: RowDraggingStartEvent) => void), onRemove?: ((e: RowDraggingRemoveEvent) => void), onReorder?: ((e: RowDraggingReorderEvent) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
@@ -1038,10 +917,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('rowDragging', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -1051,10 +928,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.scrolling]
-    
      */
     @Input()
     get scrolling(): { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode } {
@@ -1064,10 +939,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('scrolling', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.searchPanel]
-    
      */
     @Input()
     get searchPanel(): SearchPanel {
@@ -1077,10 +950,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('searchPanel', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.selectedRowKeys]
-    
      */
     @Input()
     get selectedRowKeys(): Array<any> {
@@ -1090,10 +961,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('selectedRowKeys', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.selection]
-    
      */
     @Input()
     get selection(): { allowSelectAll?: boolean, mode?: SingleMultipleOrNone, recursive?: boolean } {
@@ -1103,10 +972,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('selection', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.showBorders]
-    
      */
     @Input()
     get showBorders(): boolean {
@@ -1116,10 +983,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('showBorders', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.showColumnHeaders]
-    
      */
     @Input()
     get showColumnHeaders(): boolean {
@@ -1129,10 +994,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('showColumnHeaders', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.showColumnLines]
-    
      */
     @Input()
     get showColumnLines(): boolean {
@@ -1142,10 +1005,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('showColumnLines', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.showRowLines]
-    
      */
     @Input()
     get showRowLines(): boolean {
@@ -1155,10 +1016,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('showRowLines', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.sorting]
-    
      */
     @Input()
     get sorting(): Sorting {
@@ -1168,10 +1027,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('sorting', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.stateStoring]
-    
      */
     @Input()
     get stateStoring(): { customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType } {
@@ -1181,10 +1038,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('stateStoring', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.syncLookupFilterValues]
-    
      */
     @Input()
     get syncLookupFilterValues(): boolean {
@@ -1194,10 +1049,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('syncLookupFilterValues', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -1207,10 +1060,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.toolbar]
-    
      */
     @Input()
     get toolbar(): dxTreeListToolbar | undefined {
@@ -1220,10 +1071,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('toolbar', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.twoWayBindingEnabled]
-    
      */
     @Input()
     get twoWayBindingEnabled(): boolean {
@@ -1233,10 +1082,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('twoWayBindingEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -1246,10 +1093,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -1259,10 +1104,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('width', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.wordWrapEnabled]
-    
      */
     @Input()
     get wordWrapEnabled(): boolean {
@@ -1273,890 +1116,604 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     }
 
     /**
-    
      * [descr:dxTreeListOptions.onAdaptiveDetailRowPreparing]
-    
-    
      */
     @Output() onAdaptiveDetailRowPreparing: EventEmitter<AdaptiveDetailRowPreparingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onAIAssistantRequestCreating]
-    
-    
      */
     @Output() onAIAssistantRequestCreating: EventEmitter<AIAssistantRequestCreatingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onAIColumnRequestCreating]
-    
-    
      */
     @Output() onAIColumnRequestCreating: EventEmitter<AIColumnRequestCreatingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onCellClick]
-    
-    
      */
     @Output() onCellClick: EventEmitter<CellClickEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onCellDblClick]
-    
-    
      */
     @Output() onCellDblClick: EventEmitter<CellDblClickEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onCellHoverChanged]
-    
-    
      */
     @Output() onCellHoverChanged: EventEmitter<CellHoverChangedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onCellPrepared]
-    
-    
      */
     @Output() onCellPrepared: EventEmitter<CellPreparedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onContextMenuPreparing]
-    
-    
      */
     @Output() onContextMenuPreparing: EventEmitter<ContextMenuPreparingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onDataErrorOccurred]
-    
-    
      */
     @Output() onDataErrorOccurred: EventEmitter<DataErrorOccurredEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onEditCanceled]
-    
-    
      */
     @Output() onEditCanceled: EventEmitter<EditCanceledEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onEditCanceling]
-    
-    
      */
     @Output() onEditCanceling: EventEmitter<EditCancelingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onEditingStart]
-    
-    
      */
     @Output() onEditingStart: EventEmitter<EditingStartEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onEditorPrepared]
-    
-    
      */
     @Output() onEditorPrepared: EventEmitter<EditorPreparedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onEditorPreparing]
-    
-    
      */
     @Output() onEditorPreparing: EventEmitter<EditorPreparingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onFocusedCellChanged]
-    
-    
      */
     @Output() onFocusedCellChanged: EventEmitter<FocusedCellChangedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onFocusedCellChanging]
-    
-    
      */
     @Output() onFocusedCellChanging: EventEmitter<FocusedCellChangingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onFocusedRowChanged]
-    
-    
      */
     @Output() onFocusedRowChanged: EventEmitter<FocusedRowChangedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onFocusedRowChanging]
-    
-    
      */
     @Output() onFocusedRowChanging: EventEmitter<FocusedRowChangingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onInitNewRow]
-    
-    
      */
     @Output() onInitNewRow: EventEmitter<InitNewRowEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onKeyDown]
-    
-    
      */
     @Output() onKeyDown: EventEmitter<KeyDownEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onNodesInitialized]
-    
-    
      */
     @Output() onNodesInitialized: EventEmitter<NodesInitializedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowClick]
-    
-    
      */
     @Output() onRowClick: EventEmitter<RowClickEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowCollapsed]
-    
-    
      */
     @Output() onRowCollapsed: EventEmitter<RowCollapsedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowCollapsing]
-    
-    
      */
     @Output() onRowCollapsing: EventEmitter<RowCollapsingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowDblClick]
-    
-    
      */
     @Output() onRowDblClick: EventEmitter<RowDblClickEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowExpanded]
-    
-    
      */
     @Output() onRowExpanded: EventEmitter<RowExpandedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowExpanding]
-    
-    
      */
     @Output() onRowExpanding: EventEmitter<RowExpandingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowInserted]
-    
-    
      */
     @Output() onRowInserted: EventEmitter<RowInsertedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowInserting]
-    
-    
      */
     @Output() onRowInserting: EventEmitter<RowInsertingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowPrepared]
-    
-    
      */
     @Output() onRowPrepared: EventEmitter<RowPreparedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowRemoved]
-    
-    
      */
     @Output() onRowRemoved: EventEmitter<RowRemovedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowRemoving]
-    
-    
      */
     @Output() onRowRemoving: EventEmitter<RowRemovingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowUpdated]
-    
-    
      */
     @Output() onRowUpdated: EventEmitter<RowUpdatedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowUpdating]
-    
-    
      */
     @Output() onRowUpdating: EventEmitter<RowUpdatingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onRowValidating]
-    
-    
      */
     @Output() onRowValidating: EventEmitter<RowValidatingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onSaved]
-    
-    
      */
     @Output() onSaved: EventEmitter<SavedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onSaving]
-    
-    
      */
     @Output() onSaving: EventEmitter<SavingEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:dxTreeListOptions.onToolbarPreparing]
-    
-    
      */
     @Output() onToolbarPreparing: EventEmitter<ToolbarPreparingEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() aiAssistantChange: EventEmitter<AIAssistant>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() aiIntegrationChange: EventEmitter<AIIntegration | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowColumnReorderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowColumnResizingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() autoExpandAllChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() autoNavigateToFocusedRowChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cacheEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cellHintEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnAutoWidthChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnChooserChange: EventEmitter<ColumnChooser>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnFixingChange: EventEmitter<{ enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnHidingEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnMinWidthChange: EventEmitter<number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnResizingModeChange: EventEmitter<ColumnResizeMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnsChange: EventEmitter<Array<dxTreeListColumn | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnWidthChange: EventEmitter<Mode | number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customizeColumnsChange: EventEmitter<((columns: Array<dxTreeListColumn>) => void)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | Store | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataStructureChange: EventEmitter<DataStructure>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dateSerializationFormatChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<{ allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string | undefined, editRowKey?: any | undefined, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() errorRowEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() expandedRowKeysChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() expandNodesOnFilteringChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterBuilderChange: EventEmitter<dxFilterBuilderOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterBuilderPopupChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterModeChange: EventEmitter<TreeListFilterMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterPanelChange: EventEmitter<FilterPanel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterRowChange: EventEmitter<{ applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterSyncEnabledChange: EventEmitter<boolean | Mode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterValueChange: EventEmitter<Array<any> | Function | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusedColumnIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusedRowEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusedRowIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusedRowKeyChange: EventEmitter<any | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hasItemsExprChange: EventEmitter<((item: any, value: boolean | undefined) => boolean | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() headerFilterChange: EventEmitter<HeaderFilter>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() highlightChangesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsExprChange: EventEmitter<((item: any, value: Array<any> | undefined) => Array<any> | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keyboardNavigationChange: EventEmitter<{ editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keyExprChange: EventEmitter<((item: any, value: any) => any) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pagerChange: EventEmitter<Pager>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pagingChange: EventEmitter<{ enabled?: boolean, pageIndex?: number, pageSize?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() parentIdExprChange: EventEmitter<((item: any, value: any) => any | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() remoteOperationsChange: EventEmitter<Mode | { filtering?: boolean, grouping?: boolean, sorting?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() renderAsyncChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() repaintChangesOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rootValueChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rowAlternationEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rowDraggingChange: EventEmitter<{ allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, group?: string | undefined, handle?: string, onAdd?: ((e: RowDraggingAddEvent) => void), onDragChange?: ((e: RowDraggingChangeEvent) => void), onDragEnd?: ((e: RowDraggingEndEvent) => void), onDragMove?: ((e: RowDraggingMoveEvent) => void), onDragStart?: ((e: RowDraggingStartEvent) => void), onRemove?: ((e: RowDraggingRemoveEvent) => void), onReorder?: ((e: RowDraggingReorderEvent) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollingChange: EventEmitter<{ columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchPanelChange: EventEmitter<SearchPanel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedRowKeysChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionChange: EventEmitter<{ allowSelectAll?: boolean, mode?: SingleMultipleOrNone, recursive?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showBordersChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showColumnHeadersChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showColumnLinesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showRowLinesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sortingChange: EventEmitter<Sorting>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() syncLookupFilterValuesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarChange: EventEmitter<dxTreeListToolbar | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() twoWayBindingEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

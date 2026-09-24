@@ -1,17 +1,11 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     NgModule,
     Host,
     SkipSelf
 } from '@angular/core';
-
-
-
-
 
 import {
     DxIntegrationModule,
@@ -86,7 +80,6 @@ export class DxiSeriesComponent extends DxiChartSeries {
         return 'series';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -99,7 +92,6 @@ export class DxiSeriesComponent extends DxiChartSeries {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

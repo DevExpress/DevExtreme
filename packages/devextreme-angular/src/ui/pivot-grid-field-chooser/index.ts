@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -26,7 +23,6 @@ import type { FieldChooserLayout } from 'devextreme/common';
 import type { ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/pivot_grid_field_chooser';
 
 import DxPivotGridFieldChooser from 'devextreme/ui/pivot_grid_field_chooser';
-
 
 import {
     DxComponent,
@@ -51,7 +47,6 @@ import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot
 
 /**
  * [descr:dxPivotGridFieldChooser]
-
  */
 @Component({
     selector: 'dx-pivot-grid-field-chooser',
@@ -71,7 +66,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -81,10 +75,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -94,10 +86,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.allowSearch]
-    
      */
     @Input()
     get allowSearch(): boolean {
@@ -107,10 +97,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('allowSearch', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.applyChangesMode]
-    
      */
     @Input()
     get applyChangesMode(): ApplyChangesMode {
@@ -120,10 +108,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('applyChangesMode', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): null | PivotGridDataSource {
@@ -133,10 +119,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -146,10 +130,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -159,10 +141,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -172,10 +152,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:WidgetOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -185,10 +163,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.headerFilter]
-    
      */
     @Input()
     get headerFilter(): { allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number } {
@@ -198,10 +174,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('headerFilter', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.height]
-    
      */
     @Input()
     get height(): number | string {
@@ -211,10 +185,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -224,10 +196,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -237,10 +207,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.layout]
-    
      */
     @Input()
     get layout(): FieldChooserLayout {
@@ -250,10 +218,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('layout', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -263,10 +229,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.searchTimeout]
-    
      */
     @Input()
     get searchTimeout(): number {
@@ -276,10 +240,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('searchTimeout', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.state]
-    
      */
     @Input()
     get state(): any | undefined {
@@ -289,10 +251,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('state', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -302,10 +262,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.texts]
-    
      */
     @Input()
     get texts(): { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string } {
@@ -315,10 +273,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('texts', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -328,10 +284,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -342,194 +296,134 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     }
 
     /**
-    
      * [descr:dxPivotGridFieldChooserOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxPivotGridFieldChooserOptions.onContextMenuPreparing]
-    
-    
      */
     @Output() onContextMenuPreparing: EventEmitter<ContextMenuPreparingEvent>;
 
     /**
-    
      * [descr:dxPivotGridFieldChooserOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxPivotGridFieldChooserOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxPivotGridFieldChooserOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowSearchChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() applyChangesModeChange: EventEmitter<ApplyChangesMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<null | PivotGridDataSource>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() encodeHtmlChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() headerFilterChange: EventEmitter<{ allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() layoutChange: EventEmitter<FieldChooserLayout>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchTimeoutChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stateChange: EventEmitter<any | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() textsChange: EventEmitter<{ allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

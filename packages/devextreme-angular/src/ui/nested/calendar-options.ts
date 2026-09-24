@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     Output,
     EventEmitter
 } from '@angular/core';
-
-
-
-
 import type { CalendarZoomLevel } from 'devextreme/ui/calendar';
 
 import {
@@ -23,7 +17,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoCalendarOptions } from './base/calendar-options';
-
 
 @Component({
     selector: 'dxo-calendar-options',
@@ -93,7 +86,6 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
         return 'calendarOptions';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -114,7 +106,6 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

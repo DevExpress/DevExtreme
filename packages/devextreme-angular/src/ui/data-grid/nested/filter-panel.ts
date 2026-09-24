@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     Output,
     EventEmitter
 } from '@angular/core';
-
-
-
-
 import type { FilterPanel, FilterPanelTexts } from 'devextreme/common/grids';
 
 import {
@@ -23,7 +17,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-filter-panel',
@@ -76,7 +69,6 @@ export class DxoDataGridFilterPanelComponent extends NestedOption implements OnD
         return 'filterPanel';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -96,7 +88,6 @@ export class DxoDataGridFilterPanelComponent extends NestedOption implements OnD
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 
