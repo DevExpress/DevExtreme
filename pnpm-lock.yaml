@@ -165,8 +165,8 @@ catalogs:
       specifier: 20.19.37
       version: 20.19.37
     devextreme-internal-tools:
-      specifier: 22.0.0
-      version: 22.0.0
+      specifier: 22.1.0
+      version: 22.1.0
     prettier:
       specifier: 3.5.3
       version: 3.5.3
@@ -270,7 +270,7 @@ importers:
         version: 5.0.0
       devextreme-internal-tools:
         specifier: catalog:tools
-        version: 22.0.0
+        version: 22.1.0
       devextreme-metadata:
         specifier: workspace:*
         version: link:packages/devextreme-metadata
@@ -1747,7 +1747,7 @@ importers:
         version: 20.19.37
       devextreme-internal-tools:
         specifier: catalog:tools
-        version: 22.0.0
+        version: 22.1.0
       prettier:
         specifier: catalog:tools
         version: 3.5.3
@@ -10235,8 +10235,8 @@ packages:
     resolution: {integrity: sha512-YqDhWIs4QGLdDcdmBifhj0DXSXsdoDdNvOuWCy1n8lLz7oviIf1UTcijXcwX5ak6sq5FruFavgRrKdlr86U/eg==}
     engines: {node: '>=22.21.1'}
 
-  devextreme-internal-tools@22.0.0:
-    resolution: {integrity: sha512-L8WIA1uEFVr9ICv3EUKMIa8WVu+r24e1/CCynmgEbi/jFYm7Gm6eW+NnCW/ow/sgrVg8D82AOD5QR3hXyYaO0Q==}
+  devextreme-internal-tools@22.1.0:
+    resolution: {integrity: sha512-Kz02vZPa90CfM2YjZ1T+tOMDcflfX5zI8t4xECWjU3RrRR3GV5ZKl3/H+j6yHLgyD/jgcBzJb4acB7bzZdjXIg==}
     engines: {node: ^24.16.0}
     hasBin: true
 
@@ -27483,7 +27483,7 @@ snapshots:
       - bare-buffer
       - react-native-b4a
 
-  devextreme-internal-tools@22.0.0:
+  devextreme-internal-tools@22.1.0:
     dependencies:
       '@prettier/sync': 0.6.1(prettier@3.8.1)
       dot: 1.1.3
