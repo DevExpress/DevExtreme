@@ -214,9 +214,18 @@ export class DateHeaderDataGenerator {
 
       // A vertical daylight column is already dated on its own day. Undoing the
       // offset across a fall-back moves Sunday onto Saturday.
-      const shiftedStartDate = plan && !isTimelineView(viewType)
-        ? startDate
-        : timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
+      const columnDay = plan?.days[idx];
+      const wallMs = columnDay?.wallStartMs;
+      const wallDate = wallMs === undefined ? undefined : new Date(wallMs);
+      const columnDate = wallDate && new Date(
+        wallDate.getUTCFullYear(),
+        wallDate.getUTCMonth(),
+        wallDate.getUTCDate(),
+      );
+      let shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
+      if (plan && !isTimelineView(viewType)) {
+        shiftedStartDate = viewOffset < 0 && columnDate ? columnDate : startDate;
+      }
       const shiftedStartDateForHeaderText = shouldShiftDatesForHeaderText
         ? shiftedStartDate
         : startDate;

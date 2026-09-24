@@ -115,6 +115,32 @@ const rotateSlots = (slots: VerticalSlot[], viewOffset: number): VerticalSlot[] 
   ];
 };
 
+// A column is one offset-length window. Hours past midnight belong to the
+// previous column; evening hours of a negative offset belong to the next one.
+export const sourceColumnDayIndex = (
+  columnIndex: number,
+  wallMinutes: number,
+  viewOffset: number,
+  dayCount: number,
+): number => {
+  if (dayCount < 2 || !viewOffset) {
+    return columnIndex;
+  }
+
+  const offsetMinutes = Math.round(viewOffset / toMs('minute'));
+  const start = ((offsetMinutes % MINUTES_IN_DAY) + MINUTES_IN_DAY) % MINUTES_IN_DAY;
+
+  if (!start) {
+    return columnIndex;
+  }
+
+  if (viewOffset > 0) {
+    return wallMinutes < start ? columnIndex + 1 : columnIndex;
+  }
+
+  return wallMinutes >= start ? columnIndex - 1 : columnIndex;
+};
+
 const cellForSlot = (cells: DaylightCell[], slot: VerticalSlot): DaylightCell | undefined => {
   const seenInDay = new Map<number, number>();
 
@@ -1081,10 +1107,21 @@ export class ViewDataGenerator {
 
   private verticalCell(rowIndex: number, columnIndex: number): DaylightCell | 'hole' | undefined {
     const slot = this.verticalSlots?.[rowIndex];
-    const day = this.daylightPlan?.days[columnIndex];
+    const plan = this.daylightPlan;
 
-    if (!slot || !day) {
+    if (!slot || !plan) {
       return undefined;
+    }
+
+    const day = plan.days[sourceColumnDayIndex(
+      columnIndex,
+      slot.wallMinutes,
+      this.extendedOptions?.viewOffset ?? 0,
+      plan.days.length,
+    )];
+
+    if (!day) {
+      return 'hole';
     }
 
     return cellForSlot(day.cells, slot) ?? 'hole';
