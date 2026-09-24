@@ -167,7 +167,7 @@ export class TimePanelDataGenerator {
         startDayHour,
         viewOffset,
       );
-      if (repeatedHour || directPlanLabel) {
+      if ((repeatedHour && viewOffset === 0) || directPlanLabel) {
         text = formatImplicitSchedulerTime(startDate);
       } else if (offsetPlanLabel) {
         text = formatImplicitSchedulerTime(offsetLabelDate);

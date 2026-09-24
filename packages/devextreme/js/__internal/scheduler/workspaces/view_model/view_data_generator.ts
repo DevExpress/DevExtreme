@@ -762,6 +762,7 @@ export class ViewDataGenerator {
       interval,
       firstDayOfWeek,
       viewOffset,
+      viewType,
     } = options;
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
 
@@ -782,8 +783,11 @@ export class ViewDataGenerator {
 
     const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
     let startViewDateTime = startViewDate.getTime();
+    const normalizedViewOffset = viewType === VIEWS.MONTH || viewType === VIEWS.TIMELINE_MONTH
+      ? viewOffset % toMs('day')
+      : viewOffset;
     let currentDate = new Date(
-      startViewDateTime + millisecondsOffset + offsetByCount + viewOffset,
+      startViewDateTime + millisecondsOffset + offsetByCount + normalizedViewOffset,
     );
     const isMidnightDSTViewStart = timezoneUtils.isLocalTimeMidnightDST(startViewDate);
     const isMidnightDST = timezoneUtils.isLocalTimeMidnightDST(currentDate);
@@ -793,7 +797,7 @@ export class ViewDataGenerator {
         const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate, startDayHour);
         startViewDateTime = dateWithCorrectHours.getTime() - toMs('day');
         currentDate = new Date(
-          startViewDateTime + millisecondsOffset + offsetByCount + viewOffset,
+          startViewDateTime + millisecondsOffset + offsetByCount + normalizedViewOffset,
         );
       } else {
         const timeZoneDifference = dateUtils.getTimezonesDifference(startViewDate, currentDate);

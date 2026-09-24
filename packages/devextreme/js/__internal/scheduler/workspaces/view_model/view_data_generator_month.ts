@@ -39,7 +39,8 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
       options,
       false,
     ) as MonthViewCellDataSimple;
-    const startDate = timezoneUtils.addOffsetsWithoutDST(data.startDate, -viewOffset);
+    const normalizedViewOffset = viewOffset % toMs('day');
+    const startDate = timezoneUtils.addOffsetsWithoutDST(data.startDate, -normalizedViewOffset);
 
     data.today = this.isCurrentDate(
       startDate,
