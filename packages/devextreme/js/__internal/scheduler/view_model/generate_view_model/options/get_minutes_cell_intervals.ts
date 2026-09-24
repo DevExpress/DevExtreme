@@ -44,7 +44,11 @@ const verticalDayCells = (
 ): CellInterval[] => {
   const cells: CellInterval[] = [];
 
-  plan.days.forEach((columnDay, columnIndex) => {
+  const columnCount = viewOffset > 0 && plan.days.length > 1
+    ? plan.days.length - 1
+    : plan.days.length;
+
+  plan.days.slice(0, columnCount).forEach((columnDay, columnIndex) => {
     if (!columnDay) {
       return;
     }

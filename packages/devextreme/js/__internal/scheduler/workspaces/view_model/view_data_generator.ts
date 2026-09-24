@@ -1066,7 +1066,11 @@ export class ViewDataGenerator {
       return;
     }
 
-    const dayCount = this.daysInInterval * options.intervalCount;
+    const visibleDays = this.daysInInterval * options.intervalCount;
+    const extraMorning = options.viewOffset > 0
+      && !isHorizontalView(this.viewType)
+      && visibleDays > 1;
+    const dayCount = visibleDays + (extraMorning ? 1 : 0);
     const origins = visibleDayOrigins(
       options.startViewDate,
       dayCount,

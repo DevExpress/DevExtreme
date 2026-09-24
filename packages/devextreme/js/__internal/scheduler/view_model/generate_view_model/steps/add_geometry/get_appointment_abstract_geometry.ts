@@ -29,7 +29,8 @@ export const getAppointmentX = (
   // The spring-forward hole is a row with no cell, so the slot span is wider
   // than the number of real cells and the bar has to reach the end label.
   const offsetX = startCell.columnIndex * cellSize.sizeX + startX;
-  const sizeX = (endCell.columnIndex - startCell.columnIndex) * cellSize.sizeX + endX - startX;
+  const span = (endCell.columnIndex - startCell.columnIndex) * cellSize.sizeX + endX - startX;
+  const sizeX = span > 0 ? span : 0;
 
   return { offsetX, sizeX };
 };

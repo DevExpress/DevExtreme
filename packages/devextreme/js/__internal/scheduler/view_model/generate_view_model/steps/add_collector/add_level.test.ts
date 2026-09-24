@@ -183,6 +183,27 @@ describe('addLevel', () => {
     ]);
   });
 
+  it('should not keep a level from the previous time row', () => {
+    const items = [{
+      startDateUTC: 0,
+      endDateUTC: 10,
+      columnIndex: 18,
+    }, {
+      startDateUTC: 5,
+      endDateUTC: 10,
+      columnIndex: 19,
+    }];
+
+    expect(addLevel(items, { ...collectorOptions, maxLevel: -1, stackByRow: true })).toEqual([
+      {
+        ...items[0], level: 0, maxLevel: 0, inStackWithCollector: false,
+      },
+      {
+        ...items[1], level: 0, maxLevel: 0, inStackWithCollector: false,
+      },
+    ]);
+  });
+
   it('should add levels for overlapping appointments with zero duration', () => {
     const items = [{
       id: 1,

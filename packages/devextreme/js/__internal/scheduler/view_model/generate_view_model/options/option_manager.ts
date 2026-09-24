@@ -206,6 +206,7 @@ export class OptionManager {
         minLevel,
         maxLevel,
         collectBy: viewOrientation === 'horizontal' ? 'byOccupation' : 'byStartDate',
+        stackByRow: viewOrientation === 'vertical',
         isCompact: isCompactCollector,
       };
 
