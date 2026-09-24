@@ -1,8 +1,11 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 
+import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
 import {
   afterTest,
   beforeTest,
@@ -136,6 +139,223 @@ describe('Bugs', () => {
 
       expect(headerCellsArray.length).toBe(1);
       expect(dataCellsArray.length).toBe(1);
+    });
+  });
+
+  describe('T1329677 - DataGrid - Column width changes are not applied immediately', () => {
+    const spyOnResize = (instance: DataGridInstance): jest.Mock => jest
+      .spyOn(instance.getController('resizing'), 'resize') as unknown as jest.Mock;
+
+    it('should recalculate dimensions when a column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption(1, 'width', 150);
+
+      expect(resize).toHaveBeenCalledTimes(1);
+      expect(instance.columnOption(1, 'width')).toBe(150);
+    });
+
+    it('should recalculate dimensions when a width changes through the object form', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption(1, { caption: 'Updated', width: 150 });
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should recalculate dimensions when a command column width changes through columnOption', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1' }],
+        columnAutoWidth: true,
+        selection: { mode: 'multiple' },
+        columns: ['field1'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption('command:select', 'width', 80);
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should recalculate dimensions when a command column width changes inside a component update cycle', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1' }],
+        columnAutoWidth: true,
+        selection: { mode: 'multiple' },
+        columns: ['field1'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.beginUpdate();
+      instance.columnOption('command:select', 'width', 80);
+      instance.endUpdate();
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not recalculate dimensions when an internal layout batch applies widths', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const columnsController = instance.getController('columns');
+      const resize = spyOnResize(instance);
+
+      columnsController.beginUpdate();
+      columnsController.columnOption(0, 'width', 120);
+      columnsController.columnOption(1, 'width', 150);
+      columnsController.endUpdate();
+
+      expect(resize).not.toHaveBeenCalled();
+    });
+
+    it('should drop the virtual scrolling resize throttle on a width change', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        scrolling: { mode: 'virtual' },
+        columns: ['field1', 'field2'],
+      });
+      const resizingController = instance.getController('resizing');
+      const resetLastResizeTime = jest.spyOn(resizingController, 'resetLastResizeTime');
+
+      instance.columnOption(1, 'width', 150);
+
+      expect(resetLastResizeTime).toHaveBeenCalled();
+    });
+
+    it('should not recalculate dimensions when the width is set to its current value', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: [{ dataField: 'field1' }, { dataField: 'field2', width: 150 }],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption(1, 'width', 150);
+      instance.columnOption(1, { width: 150 });
+
+      expect(resize).not.toHaveBeenCalled();
+    });
+
+    it('should leave no postponed resize when onInitialized changes a width', async () => {
+      const onInitialized = (e: { component: DataGridInstance }): void => {
+        e.component.columnOption('command:expand', 'width', 15);
+        e.component.columnOption('field2', 'width', 150);
+      };
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        masterDetail: { enabled: true },
+        columns: ['field1', 'field2'],
+        onInitialized,
+      } as DataGridProperties);
+
+      // A flag set during onInitialized would never be consumed, and
+      // ResizingController.resize bails out while it is set.
+      expect((instance as unknown as InternalGrid)._requireResize).toBeFalsy();
+
+      const resize = spyOnResize(instance);
+      instance.columnOption('field2', 'width', 200);
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not recalculate dimensions when a non-width option changes', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columns: ['field1', 'field2'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.columnOption(1, 'caption', 'Updated');
+
+      expect(resize).not.toHaveBeenCalled();
+    });
+
+    it('should not recalculate dimensions when the width change does not fire events', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columns: ['field1', 'field2'],
+      });
+      const columnsController = instance.getController('columns');
+      const resize = spyOnResize(instance);
+
+      columnsController.columnOption(1, 'width', 150, true);
+
+      expect(resize).not.toHaveBeenCalled();
+    });
+
+    it('should recalculate dimensions once when a width changes inside a component update cycle', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.beginUpdate();
+      instance.columnOption(0, 'width', 120);
+      instance.columnOption(1, 'width', 150);
+      instance.endUpdate();
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should recalculate dimensions once when the columns option sets a width', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
+      });
+      const resize = spyOnResize(instance);
+
+      instance.option('columns[1].width', 150);
+
+      expect(resize).toHaveBeenCalledTimes(1);
+    });
+
+    it('should leave no postponed resize after a width change', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columnAutoWidth: true,
+        columns: ['field1', 'field2'],
+      });
+
+      instance.columnOption(1, 'width', 150);
+
+      expect((instance as unknown as InternalGrid)._requireResize).toBeFalsy();
+    });
+
+    it('should not recurse when onColumnsChanging changes a width', async () => {
+      const onColumnsChanging = (e: {
+        optionNames: Record<string, unknown>;
+        component: DataGridInstance;
+      }): void => {
+        if (e.optionNames.width && e.component.columnOption(1, 'width') === 100) {
+          e.component.columnOption(1, 'width', 150);
+        }
+      };
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 'value 1', field2: 'value 2' }],
+        columns: ['field1', 'field2'],
+        onColumnsChanging,
+      } as DataGridProperties);
+
+      instance.columnOption(1, 'width', 100);
+
+      expect(instance.columnOption(1, 'width')).toBe(150);
     });
   });
 });
