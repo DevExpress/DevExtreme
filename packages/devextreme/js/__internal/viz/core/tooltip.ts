@@ -104,14 +104,19 @@ Tooltip.prototype = {
     this._options = this._widgetRoot = null;
   },
 
-  _getContainer() {
+  _getUserContainer() {
     const options = this._options;
     let container = $(this._widgetRoot).closest(options.container);
     if (container.length === 0) {
       container = $(options.container);
     }
-    if (container.length) {
-      return container.get(0);
+    return container.get(0);
+  },
+
+  _getContainer() {
+    const container = this._getUserContainer();
+    if (container) {
+      return container;
     }
 
     const scope = swatchContainer.getSwatchContainer(this._widgetRoot);
@@ -419,8 +424,7 @@ Tooltip.prototype = {
   },
 
   _getCanvas() {
-    const container = this._getContainer();
-    const containerBox = container.getBoundingClientRect();
+    const container = this._getUserContainer();
     const html = domAdapter.getDocumentElement();
     const document = domAdapter.getDocument();
     let left = window.pageXOffset || html.scrollLeft || 0;
@@ -443,7 +447,8 @@ Tooltip.prototype = {
       bottom: 0,
     };
 
-    if (container !== domAdapter.getBody()) {
+    if (container && container !== domAdapter.getBody()) {
+      const containerBox = container.getBoundingClientRect();
       left = mathMax(box.left, box.left + containerBox.left);
       top = mathMax(box.top, box.top + containerBox.top);
 
