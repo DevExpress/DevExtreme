@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable consistent-return */
@@ -28,6 +27,8 @@ import { normalizeStyleProp } from '@js/core/utils/style';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
+import { Color } from '@ts/color';
+import { isCssVariableReference } from '@ts/core/utils/css_variables';
 import swatchContainer from '@ts/core/utils/swatch_container';
 
 import { Plaque } from './plaque';
@@ -41,6 +42,25 @@ const mathMax = Math.max;
 const mathMin = Math.min;
 const window = getWindow();
 const DEFAULT_HTML_GROUP_WIDTH = 3000;
+const PERCENT = 100;
+
+function foldOpacityIntoFill(styles) {
+  const { fill, 'fill-opacity': opacity } = styles;
+
+  if (!isDefined(fill) || !isDefined(opacity)) {
+    return;
+  }
+
+  delete styles['fill-opacity'];
+
+  if (isCssVariableReference(fill)) {
+    styles.fill = `color-mix(in srgb, ${fill} ${Number((opacity * PERCENT).toFixed(2))}%, transparent)`;
+  } else {
+    const { r, g, b } = new Color(fill);
+
+    styles.fill = `rgba(${r},${g},${b},${opacity})`;
+  }
+}
 
 function hideElement($element) {
   $element.css({ left: '-9999px' }).detach();
@@ -136,6 +156,7 @@ Tooltip.prototype = {
 
     that._options = options;
     that._textFontStyles = patchFontOptions(options.font);
+    foldOpacityIntoFill(that._textFontStyles);
     that._textFontStyles.color = that._textFontStyles.fill;
     that._wrapper.css({ zIndex: options.zIndex });
 
@@ -275,8 +296,10 @@ Tooltip.prototype = {
     // text area
     const normalizedCSS = {};
     for (const name in that._textFontStyles) {
-      const normalizedName = camelize(name === 'fill-opacity' ? 'opacity' : name);
-      normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, that._textFontStyles[name]);
+      if (name !== 'fill-opacity') {
+        const normalizedName = camelize(name);
+        normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, that._textFontStyles[name]);
+      }
     }
     that._textGroupHtml.css(normalizedCSS);
     that._text.css(that._textFontStyles);

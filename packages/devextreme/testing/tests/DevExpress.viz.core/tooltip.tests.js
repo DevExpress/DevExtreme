@@ -143,8 +143,7 @@ QUnit.test('Set options. All options', function(assert) {
     assert.equal(this.patchFontOptions.callCount, 1, 'font');
     assert.deepEqual(this.patchFontOptions.firstCall.args, [this.options.font]);
     assert.equal(tooltip._textFontStyles, this.patchFontOptions.firstCall.returnValue); // reference
-    assert.equal(tooltip._textFontStyles.color, this.options.font.color); // the colour is left for the cascade
-    assert.equal(tooltip._textFontStyles['fill-opacity'], this.options.font.opacity); // and the opacity stays apart
+    assert.notEqual(tooltip._textFontStyles.color, this.options.font.color); // additional value
     assert.equal(tooltip._textFontStyles.color, tooltip._textFontStyles.fill); // T879069
     assert.notOk(tooltip._textFontStyles.color.opacity); // T879069
 
@@ -439,14 +438,50 @@ QUnit.test('Update', function(assert) {
     // for html text ↓
     assert.equal(tooltip._textGroupHtml.css.callCount, 1, 'textGroupHtml styles');
     assert.deepEqual(tooltip._textGroupHtml.css.firstCall.args[0], {
-        color: '#939393',
-        fill: '#939393',
+        color: 'rgba(147,147,147,0.7)',
+        fill: 'rgba(147,147,147,0.7)',
         fontFamily: '-apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', \'adwaita sans\', cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
         fontSize: '14px',
-        fontWeight: 400,
-        opacity: 0.7
+        fontWeight: 400
     });
     // for html text ↑
+});
+
+QUnit.test('Update. The font opacity is carried by the text colour, not by the html text group', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: { event: 'trigger' } });
+
+    tooltip.update(this.options);
+
+    const textGroup = tooltip._textGroupHtml.get(0);
+
+    assert.strictEqual(textGroup.style.opacity, '', 'the html content of the tooltip is not made translucent');
+    assert.strictEqual(textGroup.style.color, 'rgba(147, 147, 147, 0.7)', 'only the colour of its text is');
+    assert.strictEqual(tooltip._textFontStyles['fill-opacity'], undefined, 'the svg text takes the opacity from the colour as well');
+});
+
+QUnit.test('Update. A published name carries the font opacity in a mix of its own', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: { event: 'trigger' } });
+    const mixed = 'color-mix(in srgb, var(--dx-viz-tooltip-content, #ffffff) 70%, transparent)';
+
+    this.options.font.color = 'var(--dx-viz-tooltip-content, #ffffff)';
+    tooltip._textGroupHtml.css = sinon.spy();
+    tooltip.update(this.options);
+
+    const htmlStyles = tooltip._textGroupHtml.css.firstCall.args[0];
+
+    assert.strictEqual(tooltip._textFontStyles.fill, mixed, 'the svg text is filled with the name mixed toward transparent');
+    assert.strictEqual(htmlStyles.color, mixed, 'the html text is coloured the same way');
+    assert.notOk('opacity' in htmlStyles, 'and the html text group keeps no opacity of its own');
+});
+
+QUnit.test('Update. A font opacity without a colour stays on the svg text only', function(assert) {
+    const tooltip = new Tooltip({ eventTrigger: { event: 'trigger' } });
+
+    this.options.font = { opacity: 0.5 };
+    tooltip.update(this.options);
+
+    assert.strictEqual(tooltip._textFontStyles['fill-opacity'], 0.5, 'the svg text keeps the opacity');
+    assert.strictEqual(tooltip._textGroupHtml.get(0).style.opacity, '', 'the html content of the tooltip is not made translucent');
 });
 
 QUnit.test('Disposing', function(assert) {
@@ -770,7 +805,7 @@ QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         eventData: 'eventData',
         formatObject: formatObject,
         text: 'some-text',
@@ -827,7 +862,7 @@ QUnit.test('Show preparations. W/o customize, w/ text from \'description\' filed
         color: '#ffffff',
         borderColor: '#252525',
         eventData: 'eventData',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
         formatObject: formatObject,
         templateCallback: undefined
@@ -1180,7 +1215,7 @@ QUnit.skipInShadowDomMode('Show preparations. Certain container', function(asser
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
         eventData: 'eventData',
         formatObject,
@@ -1231,7 +1266,7 @@ QUnit.test('Show. W/o params', function(assert) {
         assert.deepEqual(this.tooltip._state, {
             color: '#ffffff',
             borderColor: '#252525',
-            textColor: '#939393',
+            textColor: 'rgba(147,147,147,0.7)',
             text: 'some-text',
             eventData,
             formatObject,
@@ -1243,7 +1278,7 @@ QUnit.test('Show. W/o params', function(assert) {
         assert.equal(cloud._stored_settings.stroke, '#252525');
 
         assert.equal(this.tooltip._text.css.callCount, 1, 'text styles');
-        assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: '#939393' }]);
+        assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: 'rgba(147,147,147,0.7)' }]);
 
         assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
         assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class', 'pointer-events': 'none' }]);
@@ -1284,7 +1319,7 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         eventData,
         html: 'some-html',
         formatObject,
@@ -1296,7 +1331,7 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     assert.equal(cloud._stored_settings.stroke, '#252525');
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: '#939393', width: 3000, 'pointerEvents': 'none', }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointerEvents': 'none', }]);
 
     assert.ok(this.tooltip._textHtml.html.calledOnce, 'textHtml html');
     assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, ['some-html'], 'textHtml html');
@@ -1340,7 +1375,7 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         eventData,
         html: 'custom html',
         text: 'some-text',
@@ -1354,7 +1389,7 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     assert.equal(cloud._stored_settings['pointer-events'], 'none');
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: '#939393', width: 3000, 'pointerEvents': 'none', }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointerEvents': 'none', }]);
 
     assert.deepEqual(this.tooltip._textGroupHtml[0].children[0].innerHTML, 'custom html', 'textHtml html');
 
@@ -1483,7 +1518,7 @@ QUnit.test('Html text, tooltip is interactive', function(assert) {
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
     assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{
-        color: '#939393',
+        color: 'rgba(147,147,147,0.7)',
         width: 3000,
         'pointerEvents': 'auto'
     }], 'text is clickable');
@@ -1579,7 +1614,7 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
         assert.deepEqual(this.tooltip._state, {
             color: '#ffffff',
             borderColor: '#252525',
-            textColor: '#939393',
+            textColor: 'rgba(147,147,147,0.7)',
             eventData,
             text: 'some-text',
             formatObject,
@@ -1591,7 +1626,7 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
         assert.equal(cloud._stored_settings.stroke, '#252525');
 
         assert.equal(this.tooltip._text.css.callCount, 1, 'text styles');
-        assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: '#939393' }]);
+        assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: 'rgba(147,147,147,0.7)' }]);
 
         assert.equal(this.tooltip._text.attr.callCount, 1, 'text attrs');
         assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: 'some-text', 'class': 'tooltip_class', 'pointer-events': 'none' }]);
@@ -1667,7 +1702,7 @@ QUnit.test('Show. W/ params', function(assert) {
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
-        textColor: '#939393',
+        textColor: 'rgba(147,147,147,0.7)',
         eventData: 'eventData',
         text: 'some-text',
         formatObject,
