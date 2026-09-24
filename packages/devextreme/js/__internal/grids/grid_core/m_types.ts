@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 
 import type {
-  GridBase, GridBaseOptions, SelectionBase, StateStoring,
+  GridBase, GridBaseOptions, SelectionBase,
 } from '@js/common/grids';
 import type { Component } from '@js/core/component';
 import type { PropertyType } from '@js/core/index';
@@ -11,7 +11,6 @@ import type { Properties as DataGridOptions, Scrolling as DataGridScrolling } fr
 import type { Properties as TreeListdOptions, Scrolling as TreeListScrolling } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
-import type { Column, ColumnsChanges } from './columns_controller/types';
 import type { EditingController } from './editing/m_editing';
 import type { FilterValue } from './filter/types';
 import type { ModuleItem } from './m_modules';
@@ -124,8 +123,6 @@ type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
 | 'keyExpr'
 | 'selectionFilter'
 | 'sortByGroupSummaryInfo'
-| 'grouping'
-| 'groupPanel'
 >;
 
 type TemporarlyOptionsTakenFromTreeList = Pick<TreeListdOptions,
@@ -154,18 +151,6 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   scrolling?: DataGridScrolling | TreeListScrolling;
 
   filterValue?: FilterValue;
-
-  customizeColumns?: DataGridOptions['customizeColumns'] | null;
-
-  adaptColumnWidthByRatio?: boolean;
-
-  commonColumnSettings?: Partial<Column>;
-
-  regenerateColumnsByVisibleItems?: boolean;
-
-  onColumnsChanging?: (e: ColumnsChanges & { component: InternalGrid }) => void;
-
-  stateStoring?: StateStoring & { ignoreColumnOptionNames?: string[] };
 }
 
 // todo: move to upper .d.ts files

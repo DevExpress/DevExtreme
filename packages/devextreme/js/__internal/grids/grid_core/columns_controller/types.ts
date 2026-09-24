@@ -1,8 +1,9 @@
 import type { ColumnAIOptions, ColumnBase, ColumnLookup } from '@js/common/grids';
+import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import type { RawItemData } from '@ts/grids/grid_core/data_source_adapter/types';
 
 import type { DataFilter } from '../filter/types';
-import type { OptionChanged } from '../m_types';
+import type { OptionChanged, OptionChangedFor } from '../m_types';
 import type {
   COLUMN_CHOOSER_LOCATION, GROUP_LOCATION, HEADERS_LOCATION, USER_STATE_FIELD_NAMES,
 } from './const';
@@ -107,3 +108,15 @@ type ColumnFieldOptionChanged = Omit<ColumnsOptionChanged, 'fullName' | 'value' 
 export type ColumnOptionChanged = WholeColumnOptionChanged | ColumnFieldOptionChanged;
 
 export type ColumnIdentifier = number | string;
+
+export interface ColumnsControllerOptions {
+  adaptColumnWidthByRatio?: boolean;
+  commonColumnSettings?: Partial<Column>;
+  customizeColumns?: ((columns: Column[]) => void) | null;
+  regenerateColumnsByVisibleItems?: boolean;
+}
+
+export type ColumnsControllerOptionChanged = OptionChanged
+  | OptionChangedFor<ColumnsControllerOptions>
+  | OptionChangedFor<Pick<DataGridProperties, 'grouping' | 'groupPanel'>>
+  | ColumnOptionChanged;
