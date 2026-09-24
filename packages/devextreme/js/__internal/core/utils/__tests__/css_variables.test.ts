@@ -1,4 +1,6 @@
-import { describe, expect, it } from '@jest/globals';
+import {
+  describe, expect, it, jest,
+} from '@jest/globals';
 import {
   copyResolvedStyles,
   fallbackOf,
@@ -105,6 +107,26 @@ describe('copying resolved styles onto a detached copy', () => {
 
     expect(copiedRect.style.getPropertyValue('fill')).toBe('#00ff00');
     expect(copiedRect.getAttribute('stroke')).toBe('#0000ff');
+  });
+
+  it('hands a colour the browser worked out over in a form any SVG reader takes', () => {
+    const source = svgWith('<rect></rect>');
+    const copy = source.cloneNode(true) as SVGElement;
+    const copiedRect = copy.firstElementChild as SVGElement;
+    const computed = jest.spyOn(window, 'getComputedStyle').mockReturnValue({
+      getPropertyValue: (property: string) => ({
+        stroke: 'color(srgb 0 0.5 0.4)',
+        fill: 'color(srgb 0 0.5 0.4 / 0.5)',
+      })[property] ?? '',
+    } as unknown as CSSStyleDeclaration);
+
+    copiedRect.setAttribute('stroke', 'color-mix(in srgb, var(--dx-viz-blue, #0078d4) 50%, #008f04)');
+    copiedRect.style.setProperty('fill', 'var(--dx-viz-blue, #0078d4)');
+    copyResolvedStyles(source, copy);
+    computed.mockRestore();
+
+    expect(copiedRect.getAttribute('stroke')).toBe('#008066');
+    expect(copiedRect.style.getPropertyValue('fill')).toBe('rgba(0, 128, 102, 0.5)');
   });
 
   it('steps over a node that carries no style at all', () => {

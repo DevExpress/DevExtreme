@@ -48,12 +48,10 @@ function asColorString(painted: string): string | undefined {
     : `#${[red, green, blue].map((value) => value.toString(16).padStart(2, '0')).join('')}`;
 }
 
-/*
- * What an element is actually painted with, for a value the browser has to work out: a published
- * name, a mix of two of them, a channel shift. A widget hands this outward - point.getColor() and
- * the like - because an application draws with the answer on its own canvas, where a var() means
- * nothing.
- */
+function portableValue(carried: string): string {
+  return carried.startsWith('color(srgb ') ? asColorString(carried) ?? carried : carried;
+}
+
 export function paintedColor(value: string, element: Element | null | undefined): string {
   if (typeof value !== 'string' || !LEFT_TO_THE_BROWSER.test(value)) {
     return value;
@@ -121,7 +119,7 @@ export function copyResolvedStyles(source: Element, copy: Element): void {
       const carried = computed.getPropertyValue(property);
 
       if (carried) {
-        style?.setProperty(property, carried);
+        style?.setProperty(property, portableValue(carried));
       }
     });
 
@@ -129,7 +127,7 @@ export function copyResolvedStyles(source: Element, copy: Element): void {
       const carried = computed.getPropertyValue(attribute);
 
       if (carried) {
-        node.setAttribute(attribute, carried);
+        node.setAttribute(attribute, portableValue(carried));
       }
     });
   });
