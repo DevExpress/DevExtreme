@@ -6,4 +6,6 @@ export interface CollectorOptions {
   maxLevel: number;
   isCompact: boolean;
   collectBy: 'byStartDate' | 'byOccupation';
+  // Vertical rows are separate cells. Overlapping layout times on different rows stay full width.
+  stackByRow?: boolean;
 }
