@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -30,7 +28,6 @@ import type { Store } from 'devextreme/data/store';
 import type { Orientation, SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 
 import DxMenu from 'devextreme/ui/menu';
-
 
 import {
     DxComponent,
@@ -81,7 +78,6 @@ import {
 
 /**
  * [descr:dxMenu]
-
  */
 @Component({
     selector: 'dx-menu',
@@ -494,308 +490,212 @@ export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implem
     }
 
     /**
-    
      * [descr:dxMenuOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onSubmenuHidden]
-    
-    
      */
     @Output() onSubmenuHidden: EventEmitter<SubmenuHiddenEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onSubmenuHiding]
-    
-    
      */
     @Output() onSubmenuHiding: EventEmitter<SubmenuHidingEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onSubmenuShowing]
-    
-    
      */
     @Output() onSubmenuShowing: EventEmitter<SubmenuShowingEvent>;
 
     /**
-    
      * [descr:dxMenuOptions.onSubmenuShown]
-    
-    
      */
     @Output() onSubmenuShown: EventEmitter<SubmenuShownEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() adaptivityEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cssClassChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<dxMenuItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledExprChange: EventEmitter<((item: any) => boolean | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() displayExprChange: EventEmitter<((item: any) => string) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideSubmenuOnMouseLeaveChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxMenuItem>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsExprChange: EventEmitter<((item: any) => Array<any> | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() orientationChange: EventEmitter<Orientation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectByClickChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedExprChange: EventEmitter<((item: any, value: boolean | undefined) => boolean | undefined) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionModeChange: EventEmitter<SingleOrNone>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showFirstSubmenuModeChange: EventEmitter<SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showSubmenuModeChange: EventEmitter<SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() submenuDirectionChange: EventEmitter<SubmenuDirection>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 

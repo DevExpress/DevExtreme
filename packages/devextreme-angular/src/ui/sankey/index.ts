@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -28,7 +26,6 @@ import type { Font, TextOverflow, HatchDirection, Palette, PaletteExtensionMode,
 import type { Format } from 'devextreme/common/core/localization';
 
 import DxSankey from 'devextreme/viz/sankey';
-
 
 import {
     DxComponent,
@@ -81,7 +78,6 @@ import { DxoSankeyTooltipBorderModule } from 'devextreme-angular/ui/sankey/neste
 
 /**
  * [descr:dxSankey]
-
  */
 @Component({
     selector: 'dx-sankey',
@@ -438,280 +434,192 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     }
 
     /**
-    
      * [descr:dxSankeyOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onDrawn]
-    
-    
      */
     @Output() onDrawn: EventEmitter<DrawnEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onExported]
-    
-    
      */
     @Output() onExported: EventEmitter<ExportedEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onExporting]
-    
-    
      */
     @Output() onExporting: EventEmitter<ExportingEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onFileSaving]
-    
-    
      */
     @Output() onFileSaving: EventEmitter<FileSavingEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onIncidentOccurred]
-    
-    
      */
     @Output() onIncidentOccurred: EventEmitter<IncidentOccurredEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onLinkClick]
-    
-    
      */
     @Output() onLinkClick: EventEmitter<LinkClickEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onLinkHoverChanged]
-    
-    
      */
     @Output() onLinkHoverChanged: EventEmitter<LinkHoverEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onNodeClick]
-    
-    
      */
     @Output() onNodeClick: EventEmitter<NodeClickEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onNodeHoverChanged]
-    
-    
      */
     @Output() onNodeHoverChanged: EventEmitter<NodeHoverEvent>;
 
     /**
-    
      * [descr:dxSankeyOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() adaptiveLayoutChange: EventEmitter<{ height?: number, keepLabels?: boolean, width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() alignmentChange: EventEmitter<Array<VerticalAlignment> | VerticalAlignment>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() encodeHtmlChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelChange: EventEmitter<{ border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, customizeText?: ((itemInfo: dxSankeyNode) => string), font?: Font, horizontalOffset?: number, overlappingBehavior?: TextOverflow, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() linkChange: EventEmitter<{ border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string, colorMode?: SankeyColorMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() loadingIndicatorChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() marginChange: EventEmitter<{ bottom?: number, left?: number, right?: number, top?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nodeChange: EventEmitter<{ border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number, padding?: number, width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() paletteChange: EventEmitter<Array<string> | Palette>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() paletteExtensionModeChange: EventEmitter<PaletteExtensionMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pathModifiedChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() redrawOnResizeChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sizeChange: EventEmitter<{ height?: number | undefined, width?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sortDataChange: EventEmitter<any | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sourceFieldChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() targetFieldChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() themeChange: EventEmitter<Theme>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, cornerRadius?: number, customizeLinkTooltip?: ((info: { source: string, target: string, weight: number }) => Record<string, any>) | undefined, customizeNodeTooltip?: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, linkTooltipTemplate?: any, nodeTooltipTemplate?: any, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() weightFieldChange: EventEmitter<string>;
 

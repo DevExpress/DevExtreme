@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -28,7 +26,6 @@ import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEven
 
 import DxValidationSummary from 'devextreme/ui/validation_summary';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -50,7 +47,6 @@ import {
 
 /**
  * [descr:dxValidationSummary]
-
  */
 @Component({
     selector: 'dx-validation-summary',
@@ -138,77 +134,52 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     }
 
     /**
-    
      * [descr:dxValidationSummaryOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxValidationSummaryOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxValidationSummaryOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxValidationSummaryOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxValidationSummaryOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | CollectionWidgetItem | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationGroupChange: EventEmitter<string>;
 

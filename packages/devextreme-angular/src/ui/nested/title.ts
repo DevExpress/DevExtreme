@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import type { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-title',
@@ -117,7 +110,6 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
         return 'title';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -133,7 +125,6 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

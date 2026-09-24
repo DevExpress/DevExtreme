@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -30,7 +28,6 @@ import type { Orientation } from 'devextreme/common';
 
 import DxSplitter from 'devextreme/ui/splitter';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -53,7 +50,6 @@ import {
 
 /**
  * [descr:dxSplitter]
-
  */
 @Component({
     selector: 'dx-splitter',
@@ -245,189 +241,127 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     }
 
     /**
-    
      * [descr:dxSplitterOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onItemCollapsed]
-    
-    
      */
     @Output() onItemCollapsed: EventEmitter<ItemCollapsedEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onItemExpanded]
-    
-    
      */
     @Output() onItemExpanded: EventEmitter<ItemExpandedEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onResize]
-    
-    
      */
     @Output() onResize: EventEmitter<ResizeEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onResizeEnd]
-    
-    
      */
     @Output() onResizeEnd: EventEmitter<ResizeEndEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onResizeStart]
-    
-    
      */
     @Output() onResizeStart: EventEmitter<ResizeStartEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowKeyboardNavigationChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<dxSplitterItem>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() orientationChange: EventEmitter<Orientation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() separatorSizeChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 

@@ -1,17 +1,11 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     NgModule,
     Host,
     SkipSelf
 } from '@angular/core';
-
-
-
-
 
 import {
     DxIntegrationModule,
@@ -53,7 +47,6 @@ export class DxiButtonComponent extends DxiTextEditorButton {
         return 'buttons';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -66,7 +59,6 @@ export class DxiButtonComponent extends DxiTextEditorButton {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

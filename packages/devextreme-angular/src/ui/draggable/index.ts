@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -22,7 +20,6 @@ import type { DisposingEvent, DragEndEvent, DragMoveEvent, DragStartEvent, Initi
 
 import DxDraggable from 'devextreme/ui/draggable';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -39,7 +36,6 @@ import { DxoDraggableCursorOffsetModule } from 'devextreme-angular/ui/draggable/
 
 /**
  * [descr:dxDraggable]
-
  */
 @Component({
     selector: 'dx-draggable',
@@ -264,162 +260,112 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:dxDraggableOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxDraggableOptions.onDragEnd]
-    
-    
      */
     @Output() onDragEnd: EventEmitter<DragEndEvent>;
 
     /**
-    
      * [descr:dxDraggableOptions.onDragMove]
-    
-    
      */
     @Output() onDragMove: EventEmitter<DragMoveEvent>;
 
     /**
-    
      * [descr:dxDraggableOptions.onDragStart]
-    
-    
      */
     @Output() onDragStart: EventEmitter<DragStartEvent>;
 
     /**
-    
      * [descr:dxDraggableOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxDraggableOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() autoScrollChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() boundaryChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cloneChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() containerChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cursorOffsetChange: EventEmitter<string | { x?: number, y?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataChange: EventEmitter<any | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dragDirectionChange: EventEmitter<DragDirection>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dragTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() handleChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollSensitivityChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollSpeedChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 

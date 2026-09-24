@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -29,7 +27,6 @@ import type { Format } from 'devextreme/common/core/localization';
 import type { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
 
 import DxCircularGauge from 'devextreme/viz/circular_gauge';
-
 
 import {
     DxComponent,
@@ -98,7 +95,6 @@ import {
 
 /**
  * [descr:dxCircularGauge]
-
  */
 @Component({
     selector: 'dx-circular-gauge',
@@ -421,243 +417,167 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     }
 
     /**
-    
      * [descr:dxCircularGaugeOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxCircularGaugeOptions.onDrawn]
-    
-    
      */
     @Output() onDrawn: EventEmitter<DrawnEvent>;
 
     /**
-    
      * [descr:dxCircularGaugeOptions.onExported]
-    
-    
      */
     @Output() onExported: EventEmitter<ExportedEvent>;
 
     /**
-    
      * [descr:dxCircularGaugeOptions.onExporting]
-    
-    
      */
     @Output() onExporting: EventEmitter<ExportingEvent>;
 
     /**
-    
      * [descr:dxCircularGaugeOptions.onFileSaving]
-    
-    
      */
     @Output() onFileSaving: EventEmitter<FileSavingEvent>;
 
     /**
-    
      * [descr:dxCircularGaugeOptions.onIncidentOccurred]
-    
-    
      */
     @Output() onIncidentOccurred: EventEmitter<IncidentOccurredEvent>;
 
     /**
-    
      * [descr:dxCircularGaugeOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxCircularGaugeOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxCircularGaugeOptions.onTooltipHidden]
-    
-    
      */
     @Output() onTooltipHidden: EventEmitter<TooltipHiddenEvent>;
 
     /**
-    
      * [descr:dxCircularGaugeOptions.onTooltipShown]
-    
-    
      */
     @Output() onTooltipShown: EventEmitter<TooltipShownEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationChange: EventEmitter<{ duration?: number, easing?: AnimationEaseMode, enabled?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() centerTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() containerBackgroundColorChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() encodeHtmlChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() geometryChange: EventEmitter<{ endAngle?: number, startAngle?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() loadingIndicatorChange: EventEmitter<{ backgroundColor?: string, font?: Font, show?: boolean, text?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() marginChange: EventEmitter<{ bottom?: number, left?: number, right?: number, top?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pathModifiedChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rangeContainerChange: EventEmitter<{ backgroundColor?: ChartsColor | string, offset?: number, orientation?: CircularGaugeElementOrientation, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, ranges?: { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() redrawOnResizeChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scaleChange: EventEmitter<{ allowDecimals?: boolean | undefined, customMinorTicks?: Array<number> | undefined, customTicks?: Array<number> | undefined, endValue?: number, label?: { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, orientation?: CircularGaugeElementOrientation, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sizeChange: EventEmitter<{ height?: number | undefined, width?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() subvalueIndicatorChange: EventEmitter<GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() subvaluesChange: EventEmitter<Array<number> | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() themeChange: EventEmitter<Theme>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChange: EventEmitter<number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueIndicatorChange: EventEmitter<GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" }>;
 

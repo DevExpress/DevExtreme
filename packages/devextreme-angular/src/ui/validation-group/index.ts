@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -21,7 +19,6 @@ import type { DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devex
 
 import DxValidationGroup from 'devextreme/ui/validation_group';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -36,7 +33,6 @@ import {
 
 /**
  * [descr:dxValidationGroup]
-
  */
 @Component({
     selector: 'dx-validation-group',
@@ -92,47 +88,32 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
     }
 
     /**
-    
      * [descr:dxValidationGroupOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxValidationGroupOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxValidationGroupOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 

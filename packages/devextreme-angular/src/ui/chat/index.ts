@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -31,7 +29,6 @@ import type { dxSpeechToTextOptions } from 'devextreme/ui/speech_to_text';
 import type { dxButtonGroupOptions } from 'devextreme/ui/button_group';
 
 import DxChat from 'devextreme/ui/chat';
-
 
 import {
     DxComponent,
@@ -80,7 +77,6 @@ import {
 
 /**
  * [descr:dxChat]
-
  */
 @Component({
     selector: 'dx-chat',
@@ -519,338 +515,232 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onAttachmentDownloadClick: EventEmitter<AttachmentDownloadClickEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onInputFieldTextChanged]
-    
-    
      */
     @Output() onInputFieldTextChanged: EventEmitter<InputFieldTextChangedEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageDeleted]
-    
-    
      */
     @Output() onMessageDeleted: EventEmitter<MessageDeletedEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageDeleting]
-    
-    
      */
     @Output() onMessageDeleting: EventEmitter<MessageDeletingEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageEditCanceled]
-    
-    
      */
     @Output() onMessageEditCanceled: EventEmitter<MessageEditCanceledEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageEditingStart]
-    
-    
      */
     @Output() onMessageEditingStart: EventEmitter<MessageEditingStartEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageEntered]
-    
-    
      */
     @Output() onMessageEntered: EventEmitter<MessageEnteredEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageUpdated]
-    
-    
      */
     @Output() onMessageUpdated: EventEmitter<MessageUpdatedEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onMessageUpdating]
-    
-    
      */
     @Output() onMessageUpdating: EventEmitter<MessageUpdatingEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onTypingEnd]
-    
-    
      */
     @Output() onTypingEnd: EventEmitter<TypingEndEvent>;
 
     /**
-    
      * [descr:dxChatOptions.onTypingStart]
-    
-    
      */
     @Output() onTypingStart: EventEmitter<TypingStartEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() alertsChange: EventEmitter<Array<Alert>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<Message> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dayHeaderFormatChange: EventEmitter<Format>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<{ allowDeleting?: boolean | ((options: { component: dxChat, message: Message }) => boolean), allowUpdating?: boolean | ((options: { component: dxChat, message: Message }) => boolean) }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() emptyViewTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fileUploaderOptionsChange: EventEmitter<dxFileUploaderOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() inputFieldTextChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<Message>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() messageTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() messageTimestampFormatChange: EventEmitter<Format>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() reloadOnChangeChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sendButtonOptionsChange: EventEmitter<SendButtonProperties>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showAvatarChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showDayHeadersChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showMessageTimestampChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showUserNameChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() speechToTextEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() speechToTextOptionsChange: EventEmitter<dxSpeechToTextOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() suggestionsChange: EventEmitter<dxButtonGroupOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() typingUsersChange: EventEmitter<Array<User>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() userChange: EventEmitter<User>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 

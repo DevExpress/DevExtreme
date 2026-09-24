@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -28,7 +26,6 @@ import type { Store } from 'devextreme/data/store';
 import type { DayOfWeek } from 'devextreme/common';
 
 import DxGantt from 'devextreme/ui/gantt';
-
 
 import {
     DxComponent,
@@ -96,7 +93,6 @@ import {
 
 /**
  * [descr:dxGantt]
-
  */
 @Component({
     selector: 'dx-gantt',
@@ -662,537 +658,362 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     }
 
     /**
-    
      * [descr:dxGanttOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onContextMenuPreparing]
-    
-    
      */
     @Output() onContextMenuPreparing: EventEmitter<ContextMenuPreparingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onCustomCommand]
-    
-    
      */
     @Output() onCustomCommand: EventEmitter<CustomCommandEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onDependencyDeleted]
-    
-    
      */
     @Output() onDependencyDeleted: EventEmitter<DependencyDeletedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onDependencyDeleting]
-    
-    
      */
     @Output() onDependencyDeleting: EventEmitter<DependencyDeletingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onDependencyInserted]
-    
-    
      */
     @Output() onDependencyInserted: EventEmitter<DependencyInsertedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onDependencyInserting]
-    
-    
      */
     @Output() onDependencyInserting: EventEmitter<DependencyInsertingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceAssigned]
-    
-    
      */
     @Output() onResourceAssigned: EventEmitter<ResourceAssignedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceAssigning]
-    
-    
      */
     @Output() onResourceAssigning: EventEmitter<ResourceAssigningEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceDeleted]
-    
-    
      */
     @Output() onResourceDeleted: EventEmitter<ResourceDeletedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceDeleting]
-    
-    
      */
     @Output() onResourceDeleting: EventEmitter<ResourceDeletingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceInserted]
-    
-    
      */
     @Output() onResourceInserted: EventEmitter<ResourceInsertedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceInserting]
-    
-    
      */
     @Output() onResourceInserting: EventEmitter<ResourceInsertingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceManagerDialogShowing]
-    
-    
      */
     @Output() onResourceManagerDialogShowing: EventEmitter<ResourceManagerDialogShowingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceUnassigned]
-    
-    
      */
     @Output() onResourceUnassigned: EventEmitter<ResourceUnassignedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onResourceUnassigning]
-    
-    
      */
     @Output() onResourceUnassigning: EventEmitter<ResourceUnassigningEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onScaleCellPrepared]
-    
-    
      */
     @Output() onScaleCellPrepared: EventEmitter<ScaleCellPreparedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskClick]
-    
-    
      */
     @Output() onTaskClick: EventEmitter<TaskClickEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskDblClick]
-    
-    
      */
     @Output() onTaskDblClick: EventEmitter<TaskDblClickEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskDeleted]
-    
-    
      */
     @Output() onTaskDeleted: EventEmitter<TaskDeletedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskDeleting]
-    
-    
      */
     @Output() onTaskDeleting: EventEmitter<TaskDeletingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskEditDialogShowing]
-    
-    
      */
     @Output() onTaskEditDialogShowing: EventEmitter<TaskEditDialogShowingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskInserted]
-    
-    
      */
     @Output() onTaskInserted: EventEmitter<TaskInsertedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskInserting]
-    
-    
      */
     @Output() onTaskInserting: EventEmitter<TaskInsertingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskMoving]
-    
-    
      */
     @Output() onTaskMoving: EventEmitter<TaskMovingEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskUpdated]
-    
-    
      */
     @Output() onTaskUpdated: EventEmitter<TaskUpdatedEvent>;
 
     /**
-    
      * [descr:dxGanttOptions.onTaskUpdating]
-    
-    
      */
     @Output() onTaskUpdating: EventEmitter<TaskUpdatingEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowSelectionChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnsChange: EventEmitter<Array<dxGanttColumn | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contextMenuChange: EventEmitter<dxGanttContextMenu>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dependenciesChange: EventEmitter<{ dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((dependency: any) => any) | string, predecessorIdExpr?: ((dependency: any, value: any) => any) | string, successorIdExpr?: ((dependency: any, value: any) => any) | string, typeExpr?: ((dependency: any, value: any) => any) | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<{ allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() endDateRangeChange: EventEmitter<Date | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterRowChange: EventEmitter<dxGanttFilterRow>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() firstDayOfWeekChange: EventEmitter<DayOfWeek | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() headerFilterChange: EventEmitter<dxGanttHeaderFilter>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() resourceAssignmentsChange: EventEmitter<{ dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((resourceAssignment: any) => any) | string, resourceIdExpr?: ((resourceAssignment: any, value: any) => any) | string, taskIdExpr?: ((resourceAssignment: any, value: any) => any) | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() resourcesChange: EventEmitter<{ colorExpr?: ((resource: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((resource: any) => any) | string, textExpr?: ((resource: any, value: any) => string) | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rootValueChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scaleTypeChange: EventEmitter<GanttScaleType>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scaleTypeRangeChange: EventEmitter<{ max?: GanttScaleType, min?: GanttScaleType }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedRowKeyChange: EventEmitter<any | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showDependenciesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showResourcesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showRowLinesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sortingChange: EventEmitter<dxGanttSorting>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() startDateRangeChange: EventEmitter<Date | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stripLinesChange: EventEmitter<Array<dxGanttStripLine>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskContentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskListWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskProgressTooltipContentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tasksChange: EventEmitter<{ colorExpr?: ((task: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: ((task: any, value: any) => any) | string, keyExpr?: ((task: any) => any) | string, parentIdExpr?: ((task: any, value: any) => any) | string, progressExpr?: ((task: any, value: any) => any) | string, startExpr?: ((task: any, value: any) => any) | string, titleExpr?: ((task: any, value: any) => any) | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskTimeTooltipContentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskTitlePositionChange: EventEmitter<GanttTaskTitlePosition>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() taskTooltipContentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarChange: EventEmitter<dxGanttToolbar>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationChange: EventEmitter<{ autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean, validateDependencies?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 

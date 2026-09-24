@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { dxCardViewToolbarItem, PredefinedToolbarItem } from 'devextreme/ui/card_view';
 
 import {
@@ -79,7 +73,6 @@ export class DxoCardViewToolbarComponent extends NestedOption implements OnDestr
         return 'toolbar';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -95,7 +88,6 @@ export class DxoCardViewToolbarComponent extends NestedOption implements OnDestr
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -22,7 +20,6 @@ import type { DisposingEvent, InitializedEvent, OptionChangedEvent, PullDownEven
 
 import DxScrollView from 'devextreme/ui/scroll_view';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -37,7 +34,6 @@ import {
 
 /**
  * [descr:dxScrollView]
-
  */
 @Component({
     selector: 'dx-scroll-view',
@@ -249,163 +245,112 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:dxScrollViewOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxScrollViewOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxScrollViewOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxScrollViewOptions.onPullDown]
-    
-    
      */
     @Output() onPullDown: EventEmitter<PullDownEvent>;
 
     /**
-    
      * [descr:dxScrollViewOptions.onReachBottom]
-    
-    
      */
     @Output() onReachBottom: EventEmitter<ReachBottomEvent>;
 
     /**
-    
      * [descr:dxScrollViewOptions.onScroll]
-    
-    
      */
     @Output() onScroll: EventEmitter<ScrollEvent>;
 
     /**
-    
      * [descr:dxScrollViewOptions.onUpdated]
-    
-    
      */
     @Output() onUpdated: EventEmitter<UpdatedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() bounceEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() directionChange: EventEmitter<ScrollDirection>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pulledDownTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pullingDownTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() reachBottomTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() refreshingTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollByContentChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollByThumbChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showScrollbarChange: EventEmitter<"onScroll" | "onHover" | "always" | "never">;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() useNativeChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 

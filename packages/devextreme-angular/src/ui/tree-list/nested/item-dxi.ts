@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -14,10 +12,7 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type * as CommonTypes from 'devextreme/common';
 import type { FormItemComponent, FormItemType, LabelLocation, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 import type { HorizontalAlignment, VerticalAlignment, ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
@@ -390,7 +385,6 @@ export class DxiTreeListItemComponent extends CollectionNestedOption implements 
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -411,11 +405,9 @@ export class DxiTreeListItemComponent extends CollectionNestedOption implements 
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

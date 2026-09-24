@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -27,7 +25,6 @@ import type { dxFileManagerContextMenu, dxFileManagerDetailsColumn, FileManagerI
 import type { SingleOrMultiple } from 'devextreme/common';
 
 import DxFileManager from 'devextreme/ui/file_manager';
-
 
 import {
     DxComponent,
@@ -72,7 +69,6 @@ import {
 
 /**
  * [descr:dxFileManager]
-
  */
 @Component({
     selector: 'dx-file-manager',
@@ -469,398 +465,267 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     }
 
     /**
-    
      * [descr:dxFileManagerOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onContextMenuItemClick]
-    
-    
      */
     @Output() onContextMenuItemClick: EventEmitter<ContextMenuItemClickEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onContextMenuShowing]
-    
-    
      */
     @Output() onContextMenuShowing: EventEmitter<ContextMenuShowingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onCurrentDirectoryChanged]
-    
-    
      */
     @Output() onCurrentDirectoryChanged: EventEmitter<CurrentDirectoryChangedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onDirectoryCreated]
-    
-    
      */
     @Output() onDirectoryCreated: EventEmitter<DirectoryCreatedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onDirectoryCreating]
-    
-    
      */
     @Output() onDirectoryCreating: EventEmitter<DirectoryCreatingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onErrorOccurred]
-    
-    
      */
     @Output() onErrorOccurred: EventEmitter<ErrorOccurredEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onFileUploaded]
-    
-    
      */
     @Output() onFileUploaded: EventEmitter<FileUploadedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onFileUploading]
-    
-    
      */
     @Output() onFileUploading: EventEmitter<FileUploadingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onFocusedItemChanged]
-    
-    
      */
     @Output() onFocusedItemChanged: EventEmitter<FocusedItemChangedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemCopied]
-    
-    
      */
     @Output() onItemCopied: EventEmitter<ItemCopiedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemCopying]
-    
-    
      */
     @Output() onItemCopying: EventEmitter<ItemCopyingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemDeleted]
-    
-    
      */
     @Output() onItemDeleted: EventEmitter<ItemDeletedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemDeleting]
-    
-    
      */
     @Output() onItemDeleting: EventEmitter<ItemDeletingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemDownloading]
-    
-    
      */
     @Output() onItemDownloading: EventEmitter<ItemDownloadingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemMoved]
-    
-    
      */
     @Output() onItemMoved: EventEmitter<ItemMovedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemMoving]
-    
-    
      */
     @Output() onItemMoving: EventEmitter<ItemMovingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemRenamed]
-    
-    
      */
     @Output() onItemRenamed: EventEmitter<ItemRenamedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onItemRenaming]
-    
-    
      */
     @Output() onItemRenaming: EventEmitter<ItemRenamingEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onSelectedFileOpened]
-    
-    
      */
     @Output() onSelectedFileOpened: EventEmitter<SelectedFileOpenedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:dxFileManagerOptions.onToolbarItemClick]
-    
-    
      */
     @Output() onToolbarItemClick: EventEmitter<ToolbarItemClickEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowedFileExtensionsChange: EventEmitter<Array<string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contextMenuChange: EventEmitter<dxFileManagerContextMenu>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() currentPathChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() currentPathKeysChange: EventEmitter<Array<string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customizeDetailColumnsChange: EventEmitter<((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customizeThumbnailChange: EventEmitter<((fileSystemItem: FileSystemItem) => string)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fileSystemProviderChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusedItemKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemViewChange: EventEmitter<{ details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() notificationsChange: EventEmitter<{ showPanel?: boolean, showPopup?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() permissionsChange: EventEmitter<{ copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rootFolderNameChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedItemKeysChange: EventEmitter<Array<string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarChange: EventEmitter<dxFileManagerToolbar>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() uploadChange: EventEmitter<{ chunkSize?: number, maxFileSize?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 

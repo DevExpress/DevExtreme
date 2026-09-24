@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -28,7 +26,6 @@ import type { Store } from 'devextreme/data/store';
 import type { Orientation, PageOrientation } from 'devextreme/common';
 
 import DxDiagram from 'devextreme/ui/diagram';
-
 
 import {
     DxComponent,
@@ -102,7 +99,6 @@ import {
 
 /**
  * [descr:dxDiagram]
-
  */
 @Component({
     selector: 'dx-diagram',
@@ -618,334 +614,232 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     }
 
     /**
-    
      * [descr:dxDiagramOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onCustomCommand]
-    
-    
      */
     @Output() onCustomCommand: EventEmitter<CustomCommandEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onItemDblClick]
-    
-    
      */
     @Output() onItemDblClick: EventEmitter<ItemDblClickEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onRequestEditOperation]
-    
-    
      */
     @Output() onRequestEditOperation: EventEmitter<RequestEditOperationEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onRequestLayoutUpdate]
-    
-    
      */
     @Output() onRequestLayoutUpdate: EventEmitter<RequestLayoutUpdateEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() autoZoomModeChange: EventEmitter<AutoZoomMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contextMenuChange: EventEmitter<{ commands?: Array<Command | CustomCommand>, enabled?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contextToolboxChange: EventEmitter<{ category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<ShapeType | string>, width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customShapesChange: EventEmitter<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customShapeTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customShapeToolboxTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() defaultItemPropertiesChange: EventEmitter<{ connectorLineEnd?: ConnectorLineEnd, connectorLineStart?: ConnectorLineEnd, connectorLineType?: ConnectorLineType, shapeMaxHeight?: number | undefined, shapeMaxWidth?: number | undefined, shapeMinHeight?: number | undefined, shapeMinWidth?: number | undefined, style?: Record<string, any>, textStyle?: Record<string, any> }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() edgesChange: EventEmitter<{ customDataExpr?: ((data: any, value: any) => any) | string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, fromExpr?: ((data: any, value: any) => any) | string, fromLineEndExpr?: ((data: any, value: any) => any) | string | undefined, fromPointIndexExpr?: ((data: any, value: any) => any) | string | undefined, keyExpr?: ((data: any, value: any) => any) | string, lineTypeExpr?: ((data: any, value: any) => any) | string | undefined, lockedExpr?: ((data: any, value: any) => any) | string | undefined, pointsExpr?: ((data: any, value: any) => any) | string | undefined, styleExpr?: ((data: any, value: any) => any) | string | undefined, textExpr?: ((data: any, value: any) => any) | string | undefined, textStyleExpr?: ((data: any, value: any) => any) | string | undefined, toExpr?: ((data: any, value: any) => any) | string, toLineEndExpr?: ((data: any, value: any) => any) | string | undefined, toPointIndexExpr?: ((data: any, value: any) => any) | string | undefined, zIndexExpr?: ((data: any, value: any) => any) | string | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<{ allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowMoveShape?: boolean, allowResizeShape?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() exportChange: EventEmitter<{ fileName?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fullScreenChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() gridSizeChange: EventEmitter<number | { items?: Array<number>, value?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hasChangesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() historyToolbarChange: EventEmitter<{ commands?: Array<Command | CustomCommand>, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() mainToolbarChange: EventEmitter<{ commands?: Array<Command | CustomCommand>, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nodesChange: EventEmitter<{ autoLayout?: DataLayoutType | { orientation?: Orientation, type?: DataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: ((data: any, value: any) => any) | string | undefined, containerKeyExpr?: ((data: any, value: any) => any) | string, customDataExpr?: ((data: any, value: any) => any) | string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, heightExpr?: ((data: any, value: any) => any) | string | undefined, imageUrlExpr?: ((data: any, value: any) => any) | string | undefined, itemsExpr?: ((data: any, value: any) => any) | string | undefined, keyExpr?: ((data: any, value: any) => any) | string, leftExpr?: ((data: any, value: any) => any) | string | undefined, lockedExpr?: ((data: any, value: any) => any) | string | undefined, parentKeyExpr?: ((data: any, value: any) => any) | string | undefined, styleExpr?: ((data: any, value: any) => any) | string | undefined, textExpr?: ((data: any, value: any) => any) | string, textStyleExpr?: ((data: any, value: any) => any) | string | undefined, topExpr?: ((data: any, value: any) => any) | string | undefined, typeExpr?: ((data: any, value: any) => any) | string, widthExpr?: ((data: any, value: any) => any) | string | undefined, zIndexExpr?: ((data: any, value: any) => any) | string | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pageColorChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pageOrientationChange: EventEmitter<PageOrientation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pageSizeChange: EventEmitter<{ height?: number, items?: { height?: number, text?: string, width?: number }[], width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() propertiesPanelChange: EventEmitter<{ tabs?: { commands?: Array<Command | CustomCommand>, groups?: { commands?: Array<Command | CustomCommand>, title?: string }[], title?: string }[], visibility?: PanelVisibility }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showGridChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() simpleViewChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() snapToGridChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolboxChange: EventEmitter<{ groups?: { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }[], shapeIconsPerRow?: number, showSearch?: boolean, visibility?: PanelVisibility, width?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() unitsChange: EventEmitter<Units>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() useNativeScrollingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() viewToolbarChange: EventEmitter<{ commands?: Array<Command | CustomCommand>, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() viewUnitsChange: EventEmitter<Units>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() zoomLevelChange: EventEmitter<number | { items?: Array<number>, value?: number | undefined }>;
 

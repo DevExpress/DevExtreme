@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { FieldChooserLayout } from 'devextreme/common';
 import type { ApplyChangesMode } from 'devextreme/common/grids';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-field-chooser',
@@ -109,7 +102,6 @@ export class DxoFieldChooserComponent extends NestedOption implements OnDestroy,
         return 'fieldChooser';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -125,7 +117,6 @@ export class DxoFieldChooserComponent extends NestedOption implements OnDestroy,
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

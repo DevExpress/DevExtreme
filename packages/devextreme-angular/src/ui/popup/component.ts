@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -29,7 +27,6 @@ import type { PositionAlignment } from 'devextreme/common';
 import type { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import DxPopup from 'devextreme/ui/popup';
-
 
 import {
     DxComponent,
@@ -73,7 +70,6 @@ import {
 
 /**
  * [descr:dxPopup]
-
  */
 @Component({
     selector: 'dx-popup',
@@ -574,357 +570,247 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     }
 
     /**
-    
      * [descr:WidgetOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<EventInfo<any>>;
 
     /**
-    
      * [descr:DOMComponentOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
-    
      * [descr:dxOverlayOptions.onHidden]
-    
-    
      */
     @Output() onHidden: EventEmitter<EventInfo<any>>;
 
     /**
-    
      * [descr:dxOverlayOptions.onHiding]
-    
-    
      */
     @Output() onHiding: EventEmitter<Object>;
 
     /**
-    
      * [descr:ComponentOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<Object>;
 
     /**
-    
      * [descr:DOMComponentOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<Object>;
 
     /**
-    
      * [descr:dxPopupOptions.onResize]
-    
-    
      */
     @Output() onResize: EventEmitter<Object>;
 
     /**
-    
      * [descr:dxPopupOptions.onResizeEnd]
-    
-    
      */
     @Output() onResizeEnd: EventEmitter<Object>;
 
     /**
-    
      * [descr:dxPopupOptions.onResizeStart]
-    
-    
      */
     @Output() onResizeStart: EventEmitter<Object>;
 
     /**
-    
      * [descr:dxOverlayOptions.onShowing]
-    
-    
      */
     @Output() onShowing: EventEmitter<Object>;
 
     /**
-    
      * [descr:dxOverlayOptions.onShown]
-    
-    
      */
     @Output() onShown: EventEmitter<EventInfo<any>>;
 
     /**
-    
      * [descr:dxPopupOptions.onTitleRendered]
-    
-    
      */
     @Output() onTitleRendered: EventEmitter<Object>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() containerChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dragAndResizeAreaChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dragEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dragOutsideBoundaryChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() enableBodyScrollChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fullScreenChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hideOnParentScrollChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxHeightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxWidthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minHeightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minWidthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() positionChange: EventEmitter<Function | PositionAlignment | PositionConfig>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() resizeEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() restorePositionChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() shadingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() shadingColorChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showCloseButtonChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showTitleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() titleChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() titleTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarItemsChange: EventEmitter<Array<dxPopupToolbarItem>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
 

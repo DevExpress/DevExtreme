@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -36,7 +34,6 @@ import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 import type { Format } from 'devextreme/common/core/localization';
 
 import DxDataGrid from 'devextreme/ui/data_grid';
-
 
 import {
     DxComponent,
@@ -237,7 +234,6 @@ import {
 
 /**
  * [descr:dxDataGrid]
-
  */
 @Component({
     selector: 'dx-data-grid',
@@ -1318,885 +1314,602 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     }
 
     /**
-    
      * [descr:dxDataGridOptions.onAdaptiveDetailRowPreparing]
-    
-    
      */
     @Output() onAdaptiveDetailRowPreparing: EventEmitter<AdaptiveDetailRowPreparingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onAIAssistantRequestCreating]
-    
-    
      */
     @Output() onAIAssistantRequestCreating: EventEmitter<AIAssistantRequestCreatingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onAIColumnRequestCreating]
-    
-    
      */
     @Output() onAIColumnRequestCreating: EventEmitter<AIColumnRequestCreatingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onCellClick]
-    
-    
      */
     @Output() onCellClick: EventEmitter<CellClickEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onCellDblClick]
-    
-    
      */
     @Output() onCellDblClick: EventEmitter<CellDblClickEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onCellHoverChanged]
-    
-    
      */
     @Output() onCellHoverChanged: EventEmitter<CellHoverChangedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onCellPrepared]
-    
-    
      */
     @Output() onCellPrepared: EventEmitter<CellPreparedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onContextMenuPreparing]
-    
-    
      */
     @Output() onContextMenuPreparing: EventEmitter<ContextMenuPreparingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onDataErrorOccurred]
-    
-    
      */
     @Output() onDataErrorOccurred: EventEmitter<DataErrorOccurredEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onEditCanceled]
-    
-    
      */
     @Output() onEditCanceled: EventEmitter<EditCanceledEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onEditCanceling]
-    
-    
      */
     @Output() onEditCanceling: EventEmitter<EditCancelingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onEditingStart]
-    
-    
      */
     @Output() onEditingStart: EventEmitter<EditingStartEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onEditorPrepared]
-    
-    
      */
     @Output() onEditorPrepared: EventEmitter<EditorPreparedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onEditorPreparing]
-    
-    
      */
     @Output() onEditorPreparing: EventEmitter<EditorPreparingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onExporting]
-    
-    
      */
     @Output() onExporting: EventEmitter<ExportingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onFocusedCellChanged]
-    
-    
      */
     @Output() onFocusedCellChanged: EventEmitter<FocusedCellChangedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onFocusedCellChanging]
-    
-    
      */
     @Output() onFocusedCellChanging: EventEmitter<FocusedCellChangingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onFocusedRowChanged]
-    
-    
      */
     @Output() onFocusedRowChanged: EventEmitter<FocusedRowChangedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onFocusedRowChanging]
-    
-    
      */
     @Output() onFocusedRowChanging: EventEmitter<FocusedRowChangingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onInitNewRow]
-    
-    
      */
     @Output() onInitNewRow: EventEmitter<InitNewRowEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onKeyDown]
-    
-    
      */
     @Output() onKeyDown: EventEmitter<KeyDownEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowClick]
-    
-    
      */
     @Output() onRowClick: EventEmitter<RowClickEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowCollapsed]
-    
-    
      */
     @Output() onRowCollapsed: EventEmitter<RowCollapsedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowCollapsing]
-    
-    
      */
     @Output() onRowCollapsing: EventEmitter<RowCollapsingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowDblClick]
-    
-    
      */
     @Output() onRowDblClick: EventEmitter<RowDblClickEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowExpanded]
-    
-    
      */
     @Output() onRowExpanded: EventEmitter<RowExpandedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowExpanding]
-    
-    
      */
     @Output() onRowExpanding: EventEmitter<RowExpandingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowInserted]
-    
-    
      */
     @Output() onRowInserted: EventEmitter<RowInsertedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowInserting]
-    
-    
      */
     @Output() onRowInserting: EventEmitter<RowInsertingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowPrepared]
-    
-    
      */
     @Output() onRowPrepared: EventEmitter<RowPreparedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowRemoved]
-    
-    
      */
     @Output() onRowRemoved: EventEmitter<RowRemovedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowRemoving]
-    
-    
      */
     @Output() onRowRemoving: EventEmitter<RowRemovingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowUpdated]
-    
-    
      */
     @Output() onRowUpdated: EventEmitter<RowUpdatedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowUpdating]
-    
-    
      */
     @Output() onRowUpdating: EventEmitter<RowUpdatingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onRowValidating]
-    
-    
      */
     @Output() onRowValidating: EventEmitter<RowValidatingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onSaved]
-    
-    
      */
     @Output() onSaved: EventEmitter<SavedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onSaving]
-    
-    
      */
     @Output() onSaving: EventEmitter<SavingEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * [descr:dxDataGridOptions.onToolbarPreparing]
-    
-    
      */
     @Output() onToolbarPreparing: EventEmitter<ToolbarPreparingEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() aiAssistantChange: EventEmitter<AIAssistant>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() aiIntegrationChange: EventEmitter<AIIntegration | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowColumnReorderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowColumnResizingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() autoNavigateToFocusedRowChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cacheEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cellHintEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnAutoWidthChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnChooserChange: EventEmitter<ColumnChooser>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnFixingChange: EventEmitter<{ enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnHidingEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnMinWidthChange: EventEmitter<number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnResizingModeChange: EventEmitter<ColumnResizeMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnsChange: EventEmitter<Array<dxDataGridColumn | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnWidthChange: EventEmitter<Mode | number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customizeColumnsChange: EventEmitter<((columns: Array<dxDataGridColumn>) => void)>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataRowTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | Store | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dateSerializationFormatChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<{ allowAdding?: boolean, allowDeleting?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxDataGrid, row: dxDataGridRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string | undefined, editRowKey?: any | undefined, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions<any>, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: any | { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() errorRowEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() exportChange: EventEmitter<{ allowExportSelectedData?: boolean, enabled?: boolean, formats?: Array<DataGridExportFormat | string>, texts?: { exportAll?: string, exportSelectedRows?: string, exportTo?: string } }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterBuilderChange: EventEmitter<dxFilterBuilderOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterBuilderPopupChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterPanelChange: EventEmitter<FilterPanel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterRowChange: EventEmitter<{ applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterSyncEnabledChange: EventEmitter<boolean | Mode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterValueChange: EventEmitter<Array<any> | Function | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusedColumnIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusedRowEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusedRowIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusedRowKeyChange: EventEmitter<any | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupingChange: EventEmitter<{ allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: GroupExpandMode, texts?: { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupPanelChange: EventEmitter<{ allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | Mode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() headerFilterChange: EventEmitter<HeaderFilter>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() highlightChangesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keyboardNavigationChange: EventEmitter<{ editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keyExprChange: EventEmitter<Array<string> | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() masterDetailChange: EventEmitter<{ autoExpandAll?: boolean, enabled?: boolean, template?: any }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pagerChange: EventEmitter<Pager>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pagingChange: EventEmitter<{ enabled?: boolean, pageIndex?: number, pageSize?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() remoteOperationsChange: EventEmitter<boolean | Mode | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() renderAsyncChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() repaintChangesOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rowAlternationEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rowDraggingChange: EventEmitter<{ allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, group?: string | undefined, handle?: string, onAdd?: ((e: RowDraggingAddEvent) => void), onDragChange?: ((e: RowDraggingChangeEvent) => void), onDragEnd?: ((e: RowDraggingEndEvent) => void), onDragMove?: ((e: RowDraggingMoveEvent) => void), onDragStart?: ((e: RowDraggingStartEvent) => void), onRemove?: ((e: RowDraggingRemoveEvent) => void), onReorder?: ((e: RowDraggingReorderEvent) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rowTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollingChange: EventEmitter<{ columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchPanelChange: EventEmitter<SearchPanel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedRowKeysChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionChange: EventEmitter<{ allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, sensitivity?: SelectionSensitivity, showCheckBoxesMode?: SelectionColumnDisplayMode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionFilterChange: EventEmitter<Array<any> | Function | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showBordersChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showColumnHeadersChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showColumnLinesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showRowLinesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sortByGroupSummaryInfoChange: EventEmitter<{ groupColumn?: string | undefined, sortOrder?: SortOrder | undefined, summaryItem?: number | string | undefined }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sortingChange: EventEmitter<Sorting>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string | undefined, type?: StateStoreType }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() summaryChange: EventEmitter<{ calculateCustomSummary?: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void), groupItems?: { alignByColumn?: boolean, column?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[], recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: string | SummaryType | undefined, valueFormat?: Format | undefined }[] }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() syncLookupFilterValuesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarChange: EventEmitter<dxDataGridToolbar | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() twoWayBindingEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
 

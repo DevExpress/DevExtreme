@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -21,7 +19,6 @@ import type { ResizeHandle, DisposingEvent, InitializedEvent, OptionChangedEvent
 
 import DxResizable from 'devextreme/ui/resizable';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -36,7 +33,6 @@ import {
 
 /**
  * [descr:dxResizable]
-
  */
 @Component({
     selector: 'dx-resizable',
@@ -196,127 +192,87 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:dxResizableOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxResizableOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxResizableOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxResizableOptions.onResize]
-    
-    
      */
     @Output() onResize: EventEmitter<ResizeEvent>;
 
     /**
-    
      * [descr:dxResizableOptions.onResizeEnd]
-    
-    
      */
     @Output() onResizeEnd: EventEmitter<ResizeEndEvent>;
 
     /**
-    
      * [descr:dxResizableOptions.onResizeStart]
-    
-    
      */
     @Output() onResizeStart: EventEmitter<ResizeStartEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() areaChange: EventEmitter<any | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() handlesChange: EventEmitter<ResizeHandle | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keepAspectRatioChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxHeightChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minHeightChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() minWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string>;
 

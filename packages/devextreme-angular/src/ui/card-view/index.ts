@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -33,7 +31,6 @@ import type { dxLoadPanelOptions } from 'devextreme/ui/load_panel';
 import type { EventInfo } from 'devextreme/common/core/events';
 
 import DxCardView from 'devextreme/ui/card_view';
-
 
 import {
     DxComponent,
@@ -657,571 +654,387 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardClick: EventEmitter<CardClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardDblClick: EventEmitter<CardDblClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardHoverChanged: EventEmitter<CardHoverChangedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardInserted: EventEmitter<CardInsertedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardInserting: EventEmitter<CardInsertingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardPrepared: EventEmitter<CardPreparedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardRemoved: EventEmitter<CardRemovedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardRemoving: EventEmitter<CardRemovingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardUpdated: EventEmitter<CardUpdatedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onCardUpdating: EventEmitter<CardUpdatingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onContentReady: EventEmitter<EventInfo<any>>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onContextMenuPreparing: EventEmitter<ContextMenuPreparingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onDataErrorOccurred: EventEmitter<Object>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onEditCanceled: EventEmitter<EditCanceledEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onEditCanceling: EventEmitter<EditCancelingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onEditingStart: EventEmitter<EditingStartEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldCaptionClick: EventEmitter<FieldCaptionClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldCaptionDblClick: EventEmitter<FieldCaptionDblClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldCaptionPrepared: EventEmitter<FieldCaptionPreparedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldValueClick: EventEmitter<FieldValueClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldValueDblClick: EventEmitter<FieldValueDblClickEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFieldValuePrepared: EventEmitter<FieldValuePreparedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onFocusedCardChanged: EventEmitter<FocusedCardChanged>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onInitialized: EventEmitter<Object>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onInitNewCard: EventEmitter<InitNewCardEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onSaved: EventEmitter<SavedEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onSaving: EventEmitter<SavingEvent>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowColumnReorderingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardContentTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardCoverChange: EventEmitter<CardCover>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardFooterTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardHeaderChange: EventEmitter<CardHeader>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardMaxWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardMinWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardsPerRowChange: EventEmitter<Mode | number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cardTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnChooserChange: EventEmitter<ColumnChooser>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() columnsChange: EventEmitter<Array<ColumnProperties | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | Store | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<dxCardViewEditing>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() errorRowEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fieldHintEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterBuilderChange: EventEmitter<dxFilterBuilderOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterBuilderPopupChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterPanelChange: EventEmitter<FilterPanel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() filterValueChange: EventEmitter<Array<any> | Function | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() headerFilterChange: EventEmitter<HeaderFilter>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() headerPanelChange: EventEmitter<HeaderPanel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() keyExprChange: EventEmitter<Array<string> | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() loadPanelChange: EventEmitter<dxLoadPanelOptions>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pagerChange: EventEmitter<Pager>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pagingChange: EventEmitter<Paging>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() remoteOperationsChange: EventEmitter<boolean | Mode | RemoteOperations>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() scrollingChange: EventEmitter<{ scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() searchPanelChange: EventEmitter<SearchPanel>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectedCardKeysChange: EventEmitter<Array<any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionChange: EventEmitter<SelectionConfiguration>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sortingChange: EventEmitter<Sorting>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolbarChange: EventEmitter<dxCardViewToolbar>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
 

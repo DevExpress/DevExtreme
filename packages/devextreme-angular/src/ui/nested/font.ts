@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoVizFont } from './base/viz-font';
-
 
 @Component({
     selector: 'dxo-font',
@@ -42,7 +35,6 @@ export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit  {
         return 'font';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -58,7 +50,6 @@ export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit  {
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

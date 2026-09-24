@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { Orientation } from 'devextreme/common';
 import type { Store } from 'devextreme/data';
 import type { default as DataSource, Options as DataSourceOptions } from 'devextreme/data/data_source';
@@ -24,7 +18,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-nodes',
@@ -199,7 +192,6 @@ export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit
         return 'nodes';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -215,7 +207,6 @@ export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 
