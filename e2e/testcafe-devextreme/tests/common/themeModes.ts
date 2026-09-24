@@ -515,6 +515,80 @@ if (getThemeName() === 'fluent-next') {
       .eql(await valueAt('#owner', '--dxds-color-bg'), 'the overlay resolves the same roles as its owner');
   });
 
+  const TOOLTIP = '.dxc-tooltip';
+  const CLOUD = `${TOOLTIP} path`;
+  const TALLEST_BAR = Selector('#chart .dxc-series rect').filter((bar) => {
+    const heights = Array.from(document.querySelectorAll('#chart .dxc-series rect'))
+      .map((rect) => rect.getBoundingClientRect().height);
+
+    return bar.getBoundingClientRect().height === Math.max(...heights);
+  });
+
+  const chartWithTooltipInTheOtherMode = async (): Promise<void> => {
+    await render(`<div id="scope" class="dx-theme-mode-${oppositeMode}"><div id="chart"></div></div>`);
+    await createWidget('dxChart', { ...CHART, tooltip: { enabled: true } }, '#chart');
+  };
+
+  const colorOfTheNameIn = ClientFunction((selector: string, name: string) => {
+    const probe = document.createElement('div');
+
+    probe.style.color = `var(${name})`;
+    document.querySelector(selector)?.appendChild(probe);
+
+    const { color } = window.getComputedStyle(probe);
+
+    probe.remove();
+
+    return color;
+  });
+
+  const cloudPlacement = ClientFunction(() => {
+    const cloud = document.querySelector('.dxc-tooltip path');
+    const box = cloud?.getBoundingClientRect();
+
+    return {
+      left: box?.left,
+      top: box?.top,
+      width: box?.width,
+      height: box?.height,
+      outline: cloud?.getAttribute('d'),
+    };
+  });
+
+  const putTheTooltipInBody = ClientFunction(() => {
+    (window as any).widget.option('tooltip.container', 'body');
+  });
+
+  test('a chart tooltip is painted in the mode of the scope its chart is in', async (t) => {
+    await t.hover(TALLEST_BAR);
+
+    await t.expect(Selector(CLOUD).exists).ok('the tooltip is drawn');
+
+    const painted = await valueAt(CLOUD, 'fill');
+
+    await t.expect(painted)
+      .eql(await colorOfTheNameIn('#scope', '--dx-viz-tooltip-bg'), 'the cloud takes --dx-viz-tooltip-bg from the scope of its chart');
+    await t.expect(painted)
+      .notEql(await colorOfTheNameIn('#container', '--dx-viz-tooltip-bg'), 'not from the page around the scope');
+    await t.expect(Selector(TOOLTIP).parent(`.dx-theme-mode-${oppositeMode}`).exists)
+      .ok('the tooltip is attached inside a scope of that mode');
+  }).before(chartWithTooltipInTheOtherMode);
+
+  test('a chart tooltip in a mode scope lands where the same tooltip lands in body', async (t) => {
+    await t.hover(TALLEST_BAR);
+
+    await t.expect(Selector(CLOUD).exists).ok('the tooltip is drawn');
+
+    const inTheScope = await cloudPlacement();
+
+    await putTheTooltipInBody();
+    await t.hover('html', { offsetX: 1, offsetY: 1 }).hover(TALLEST_BAR);
+
+    await t.expect(Selector(`body > ${CLOUD}`).exists).ok('the same tooltip, now drawn in body');
+    await t.expect(await cloudPlacement())
+      .eql(inTheScope, 'the scope neither moves the cloud nor turns its arrow');
+  }).before(chartWithTooltipInTheOtherMode);
+
   test('an open overlay follows its scope once the application says the mode changed', async (t) => {
     await render(`<div id="scope" class="dx-theme-mode-${oppositeMode}"><div id="owner"></div></div>`);
 
