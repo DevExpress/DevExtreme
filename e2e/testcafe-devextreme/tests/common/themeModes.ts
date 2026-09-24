@@ -364,6 +364,216 @@ if (getThemeName() === 'fluent-next') {
     await t.expect(await vizWidgetsExposed()).eql([...WIDGETS_UNDER_TEST].sort());
   });
 
+  const HANDED_OUT_BG = '#160703';
+  const FLUENT_NEXT_THEMES = [
+    'fluent-next.blue.light', 'fluent-next.blue.light.compact',
+    'fluent-next.blue.dark', 'fluent-next.blue.dark.compact',
+  ];
+  const EXTENSION_MODES = ['blend', 'alternate', 'extrapolate'];
+  const FINAL_COLOR = /^(#[0-9a-f]{6}|rgba\()/;
+
+  const declareTheNames = async (): Promise<void> => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+  };
+
+  const colorsHandedOutByTheNamespace = ClientFunction(() => {
+    const { viz } = (window as any).DevExpress;
+    const theme = viz.getTheme('fluent-next.blue.light');
+
+    return {
+      simpleSet: viz.getPalette('Fluent Next').simpleSet[0],
+      gradientSet: viz.getPalette('Fluent Next').gradientSet[0],
+      generated: viz.generateColors('Fluent Next', 6)[0],
+      marker: theme.map['layer:marker:dot'].color,
+      bullet: theme.bullet.color,
+      rangebar: theme.gauge.valueIndicators.rangebar.color,
+      background: theme.backgroundColor,
+      findTheme: viz.findTheme('fluent-next.blue.light').bullet.color,
+    };
+  });
+
+  const valuesLeftToTheBrowser = ClientFunction((names: string[]) => {
+    const { viz } = (window as any).DevExpress;
+    const leaves: string[] = [];
+    const walk = (value: unknown): void => {
+      if (typeof value === 'string') {
+        leaves.push(value);
+      } else if (value && typeof value === 'object') {
+        Object.values(value).forEach(walk);
+      }
+    };
+
+    names.forEach((name) => walk(viz.getTheme(name)));
+
+    return { leaves: leaves.length, left: leaves.filter((leaf) => /var\(|color-mix\(|from /.test(leaf)) };
+  });
+
+  const generatedPastThePalette = ClientFunction((mode: string) => (window as any).DevExpress.viz
+    .generateColors('Fluent Next', 20, { paletteExtensionMode: mode, useHighlight: true }) as string[]);
+
+  test('the palette and theme functions hand out the colour the page declared, not the name', async (t) => {
+    await t.expect(await colorsHandedOutByTheNamespace()).eql({
+      simpleSet: HANDED_OUT_BLUE,
+      gradientSet: HANDED_OUT_BLUE,
+      generated: HANDED_OUT_BLUE,
+      marker: HANDED_OUT_BLUE,
+      bullet: HANDED_OUT_BLUE,
+      rangebar: HANDED_OUT_BLUE,
+      background: HANDED_OUT_BG,
+      findTheme: HANDED_OUT_BLUE,
+    });
+  }).before(declareTheNames);
+
+  test('no fluent-next theme hands out a name, a mix or a relative colour', async (t) => {
+    const { leaves, left } = await valuesLeftToTheBrowser(FLUENT_NEXT_THEMES);
+
+    await t.expect(leaves).gt(FLUENT_NEXT_THEMES.length * 100, 'the walk reached the whole of every theme');
+    await t.expect(left).eql([], 'every value is one an application can use as it is');
+  }).before(declareTheNames);
+
+  test('generateColors extends the palette past its size into final colours only', async (t) => {
+    for (const mode of EXTENSION_MODES) {
+      const colors = await generatedPastThePalette(mode);
+
+      await t.expect(colors.length).eql(20, `${mode} hands out every colour asked for`);
+      await t.expect(colors.filter((color) => !FINAL_COLOR.test(color)))
+        .eql([], `${mode} hands out only colours an application can parse`);
+      await t.expect(new Set(colors).size).gt(6, `${mode} extends the palette with colours of its own`);
+    }
+  }).before(declareTheNames);
+
+  const CUSTOM_ACCENT = '#b02e0c';
+
+  const accentHandedOutByThePalette = ClientFunction((accent: string) => {
+    const { ui, viz } = (window as any).DevExpress;
+
+    ui.themes.customAccentColor(accent);
+
+    return viz.getPalette('Fluent Next').accentColor;
+  });
+
+  test('a custom accent is handed out as the colour it paints, not the relative colour it is derived with', async (t) => {
+    await t.expect(await accentHandedOutByThePalette(CUSTOM_ACCENT)).eql(CUSTOM_ACCENT);
+    await t.expect((await valuesLeftToTheBrowser(FLUENT_NEXT_THEMES)).left)
+      .eql([], 'no theme hands the accent out as a relative colour either');
+  });
+
+  const watchTheCallbacks = ClientFunction(() => {
+    (window as any).handedToTheCallbacks = {};
+  });
+
+  const colorsHandedToTheCallbacks = ClientFunction(() => (window as any).handedToTheCallbacks);
+
+  test('the legend and tooltip callbacks hand out the colour a widget paints, not the name', async (t) => {
+    await t.hover('#linear-gauge .dxg-tracker path');
+
+    await t.expect(colorsHandedToTheCallbacks()).eql({
+      seriesColor: HANDED_OUT_BLUE,
+      pointColor: HANDED_OUT_BLUE,
+      barColor: HANDED_OUT_BLUE,
+      groupColor: HANDED_OUT_BLUE,
+      indicatorColor: HANDED_OUT_BLUE,
+    });
+  }).before(async () => {
+    await declareTheNames();
+    await watchTheCallbacks();
+    await render('<div id="chart"></div><div id="pie"></div><div id="bar-gauge"></div><div id="map"></div><div id="linear-gauge"></div>');
+    await createWidget('dxChart', () => ({
+      dataSource: [{ a: 'x', v: 1 }],
+      series: [{ argumentField: 'a', valueField: 'v' }],
+      legend: {
+        customizeText(info) {
+          if (info.seriesIndex === 0) {
+            (window as any).handedToTheCallbacks.seriesColor = info.seriesColor;
+          }
+          return String(info.seriesName);
+        },
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    }), '#chart');
+    await createWidget('dxPieChart', () => ({
+      dataSource: [{ a: 'x', v: 1 }, { a: 'y', v: 2 }],
+      series: [{ argumentField: 'a', valueField: 'v' }],
+      legend: {
+        customizeText(info) {
+          if (info.pointIndex === 0) {
+            (window as any).handedToTheCallbacks.pointColor = info.pointColor;
+          }
+          return String(info.pointName);
+        },
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    }), '#pie');
+    await createWidget('dxBarGauge', () => ({
+      values: [30, 60],
+      legend: {
+        visible: true,
+        customizeText(info) {
+          if (info.item.index === 0) {
+            (window as any).handedToTheCallbacks.barColor = info.item.color;
+          }
+          return String(info.text);
+        },
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    }), '#bar-gauge');
+    await createWidget('dxVectorMap', () => ({
+      layers: [{
+        name: 'markers',
+        type: 'marker',
+        elementType: 'bubble',
+        dataField: 'value',
+        colorGroupingField: 'value',
+        colorGroups: [0, 5, 10],
+        dataSource: {
+          type: 'FeatureCollection',
+          features: [
+            { type: 'Feature', geometry: { type: 'Point', coordinates: [0, 0] }, properties: { value: 1 } },
+            { type: 'Feature', geometry: { type: 'Point', coordinates: [20, 20] }, properties: { value: 8 } },
+          ],
+        },
+      }],
+      legends: [{
+        source: { layer: 'markers', grouping: 'color' },
+        customizeText(info) {
+          if (info.index === 0) {
+            (window as any).handedToTheCallbacks.groupColor = info.color;
+          }
+          return String(info.index);
+        },
+      }],
+      size: { width: 220, height: 160 },
+    }), '#map');
+    await createWidget('dxLinearGauge', () => ({
+      value: 40,
+      valueIndicator: { type: 'rangeBar' },
+      tooltip: {
+        enabled: true,
+        customizeTooltip(info) {
+          (window as any).handedToTheCallbacks.indicatorColor = info.color;
+          return { text: String(info.valueText) };
+        },
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    }), '#linear-gauge');
+  });
+
+  test('a chart exported from a mode scope keeps the background of the scope', async (t) => {
+    const { painted } = await exportedFrom('#scoped-chart', 'dxChart', 'svg', 'data-backgroundcolor');
+
+    await t.expect(painted)
+      .eql(await valueAt('#scoped-chart', '--dx-viz-bg'), 'the markup carries the background the chart is painted on');
+    await t.expect(painted)
+      .notEql(await valueAt('html', '--dx-viz-bg'), 'not the background of the page around the scope');
+  }).before(async () => {
+    await render(`<div class="dx-theme-mode-${oppositeMode}"><div id="scoped-chart"></div></div>`);
+    await createWidget('dxChart', CHART, '#scoped-chart');
+  });
+
   const gradientStopsExportedToTheCanvas = ClientFunction(() => new Promise<{
     stops: string[];
     stopColorAttribute: string;
