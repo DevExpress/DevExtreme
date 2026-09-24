@@ -82,7 +82,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('allowKeyboardNavigation', value);
     }
 
-
     /**
      * [descr:dxSplitterOptions.dataSource]
      */
@@ -93,7 +92,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     set dataSource(value: Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -106,7 +104,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -117,7 +114,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -130,7 +126,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -141,7 +136,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxSplitterOptions.items]
@@ -154,7 +148,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
      */
@@ -165,7 +158,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
-
 
     /**
      * [descr:dxSplitterOptions.orientation]
@@ -178,7 +170,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('orientation', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -189,7 +180,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxSplitterOptions.separatorSize]
@@ -202,7 +192,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('separatorSize', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -213,7 +202,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -350,9 +338,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

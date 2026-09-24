@@ -219,7 +219,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('adaptiveLayout', value);
     }
 
-
     /**
      * [descr:BaseChartOptions.animation]
      */
@@ -230,7 +229,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set animation(value: boolean | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean, maxPointCountSupported?: number }) {
         this._setOption('animation', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.annotations]
@@ -243,7 +241,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('annotations', value);
     }
 
-
     /**
      * [descr:dxPolarChartOptions.argumentAxis]
      */
@@ -254,7 +251,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set argumentAxis(value: { allowDecimals?: boolean | undefined, argumentType?: ChartsDataType | undefined, axisDivisionFactor?: number, categories?: Array<Date | number | string>, color?: string, constantLines?: { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }[], constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, firstPointOnStartAngle?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, hoverMode?: ArgumentAxisHoverMode, inverted?: boolean, label?: { customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, linearThreshold?: number | undefined, logarithmBase?: number, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number | undefined, originValue?: number | undefined, period?: number | undefined, startAngle?: number, strips?: { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }[], stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScaleType | undefined, visible?: boolean, width?: number }) {
         this._setOption('argumentAxis', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.barGroupPadding]
@@ -267,7 +263,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('barGroupPadding', value);
     }
 
-
     /**
      * [descr:dxPolarChartOptions.barGroupWidth]
      */
@@ -278,7 +273,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set barGroupWidth(value: number | undefined) {
         this._setOption('barGroupWidth', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.commonAnnotationSettings]
@@ -291,7 +285,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('commonAnnotationSettings', value);
     }
 
-
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings]
      */
@@ -302,7 +295,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set commonAxisSettings(value: { allowDecimals?: boolean | undefined, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, opacity?: number | undefined, stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }, visible?: boolean, width?: number }) {
         this._setOption('commonAxisSettings', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.commonSeriesSettings]
@@ -315,7 +307,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('commonSeriesSettings', value);
     }
 
-
     /**
      * [descr:dxPolarChartOptions.containerBackgroundColor]
      */
@@ -326,7 +317,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set containerBackgroundColor(value: string) {
         this._setOption('containerBackgroundColor', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.customizeAnnotation]
@@ -339,7 +329,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('customizeAnnotation', value);
     }
 
-
     /**
      * [descr:BaseChartOptions.customizeLabel]
      */
@@ -350,7 +339,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set customizeLabel(value: ((pointInfo: any) => SeriesLabel)) {
         this._setOption('customizeLabel', value);
     }
-
 
     /**
      * [descr:BaseChartOptions.customizePoint]
@@ -363,7 +351,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('customizePoint', value);
     }
 
-
     /**
      * [descr:dxPolarChartOptions.dataPrepareSettings]
      */
@@ -374,7 +361,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set dataPrepareSettings(value: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }) {
         this._setOption('dataPrepareSettings', value);
     }
-
 
     /**
      * [descr:BaseChartOptions.dataSource]
@@ -387,7 +373,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
      */
@@ -398,7 +383,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -411,7 +395,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
      */
@@ -422,7 +405,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set encodeHtml(value: boolean) {
         this._setOption('encodeHtml', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.export]
@@ -435,7 +417,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxPolarChartOptions.legend]
      */
@@ -446,7 +427,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set legend(value: { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>), customizeText?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: LegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined }, text?: string | undefined, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }) {
         this._setOption('legend', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
@@ -459,7 +439,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('loadingIndicator', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.margin]
      */
@@ -470,7 +449,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set margin(value: { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.negativesAsZeroes]
@@ -483,7 +461,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('negativesAsZeroes', value);
     }
 
-
     /**
      * [descr:BaseChartOptions.palette]
      */
@@ -494,7 +471,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
-
 
     /**
      * [descr:BaseChartOptions.paletteExtensionMode]
@@ -507,7 +483,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('paletteExtensionMode', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.pathModified]
      */
@@ -518,7 +493,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set pathModified(value: boolean) {
         this._setOption('pathModified', value);
     }
-
 
     /**
      * [descr:BaseChartOptions.pointSelectionMode]
@@ -531,7 +505,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('pointSelectionMode', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
      */
@@ -542,7 +515,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set redrawOnResize(value: boolean) {
         this._setOption('redrawOnResize', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.resolveLabelOverlapping]
@@ -555,7 +527,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('resolveLabelOverlapping', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
      */
@@ -566,7 +537,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.series]
@@ -579,7 +549,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('series', value);
     }
 
-
     /**
      * [descr:dxPolarChartOptions.seriesSelectionMode]
      */
@@ -590,7 +559,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set seriesSelectionMode(value: SingleOrMultiple) {
         this._setOption('seriesSelectionMode', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.seriesTemplate]
@@ -603,7 +571,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('seriesTemplate', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.size]
      */
@@ -614,7 +581,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set size(value: { height?: number | undefined, width?: number | undefined }) {
         this._setOption('size', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.theme]
@@ -627,7 +593,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('theme', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.title]
      */
@@ -638,7 +603,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.tooltip]
@@ -651,7 +615,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('tooltip', value);
     }
 
-
     /**
      * [descr:dxPolarChartOptions.useSpiderWeb]
      */
@@ -662,7 +625,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     set useSpiderWeb(value: boolean) {
         this._setOption('useSpiderWeb', value);
     }
-
 
     /**
      * [descr:dxPolarChartOptions.valueAxis]
@@ -974,9 +936,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() valueAxisChange: EventEmitter<{ allowDecimals?: boolean | undefined, axisDivisionFactor?: number, categories?: Array<Date | number | string>, color?: string, constantLines?: { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }[], constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, linearThreshold?: number | undefined, logarithmBase?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: number | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number | undefined, showZero?: boolean | undefined, strips?: { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }[], stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode, wholeRange?: Array<Date | number | string> | undefined | CommonChartTypes.VisualRange, width?: number }>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

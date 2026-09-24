@@ -96,7 +96,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -107,7 +106,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxNumberBoxOptions.buttons]
@@ -120,7 +118,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('buttons', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -131,7 +128,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -144,7 +140,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
      */
@@ -155,7 +150,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:dxNumberBoxOptions.format]
@@ -168,7 +162,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('format', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -179,7 +172,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -192,7 +184,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
      */
@@ -203,7 +194,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
@@ -216,7 +206,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('inputAttr', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.invalidValueMessage]
      */
@@ -227,7 +216,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set invalidValueMessage(value: string) {
         this._setOption('invalidValueMessage', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -240,7 +228,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -251,7 +238,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.label]
@@ -264,7 +250,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.labelMode]
      */
@@ -275,7 +260,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
-
 
     /**
      * [descr:dxNumberBoxOptions.max]
@@ -288,7 +272,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('max', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.min]
      */
@@ -299,7 +282,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set min(value: number | undefined) {
         this._setOption('min', value);
     }
-
 
     /**
      * [descr:dxNumberBoxOptions.mode]
@@ -312,7 +294,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('mode', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.name]
      */
@@ -323,7 +304,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set name(value: string) {
         this._setOption('name', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.placeholder]
@@ -336,7 +316,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -347,7 +326,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -360,7 +338,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.showClearButton]
      */
@@ -371,7 +348,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set showClearButton(value: boolean) {
         this._setOption('showClearButton', value);
     }
-
 
     /**
      * [descr:dxNumberBoxOptions.showSpinButtons]
@@ -384,7 +360,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('showSpinButtons', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.step]
      */
@@ -395,7 +370,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set step(value: number) {
         this._setOption('step', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
@@ -408,7 +382,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -419,7 +392,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.text]
@@ -432,7 +404,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('text', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.useLargeSpinButtons]
      */
@@ -443,7 +414,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set useLargeSpinButtons(value: boolean) {
         this._setOption('useLargeSpinButtons', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationError]
@@ -456,7 +426,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
      */
@@ -467,7 +436,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessageMode]
@@ -480,7 +448,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessagePosition]
      */
@@ -491,7 +458,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationStatus]
@@ -504,7 +470,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxNumberBoxOptions.value]
      */
@@ -515,7 +480,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set value(value: number) {
         this._setOption('value', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.valueChangeEvent]
@@ -528,7 +492,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('valueChangeEvent', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -539,7 +502,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -826,11 +788,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

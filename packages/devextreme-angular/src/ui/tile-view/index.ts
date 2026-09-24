@@ -81,7 +81,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.activeStateEnabled]
      */
@@ -92,7 +91,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTileViewOptions.baseItemHeight]
@@ -105,7 +103,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('baseItemHeight', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.baseItemWidth]
      */
@@ -116,7 +113,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     set baseItemWidth(value: number) {
         this._setOption('baseItemWidth', value);
     }
-
 
     /**
      * [descr:dxTileViewOptions.dataSource]
@@ -129,7 +125,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.direction]
      */
@@ -140,7 +135,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     set direction(value: Orientation) {
         this._setOption('direction', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -153,7 +147,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -164,7 +157,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxTileViewOptions.focusStateEnabled]
@@ -177,7 +169,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.height]
      */
@@ -188,7 +179,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     set height(value: number | string) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -201,7 +191,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.hoverStateEnabled]
      */
@@ -212,7 +201,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
@@ -225,7 +213,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxTileViewOptions.itemMargin]
      */
@@ -236,7 +223,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     set itemMargin(value: number) {
         this._setOption('itemMargin', value);
     }
-
 
     /**
      * [descr:dxTileViewOptions.items]
@@ -249,7 +235,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
      */
@@ -260,7 +245,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.noDataText]
@@ -273,7 +257,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -284,7 +267,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxTileViewOptions.showScrollbar]
@@ -297,7 +279,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('showScrollbar', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -309,7 +290,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -320,7 +300,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -482,9 +461,6 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

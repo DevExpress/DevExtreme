@@ -124,7 +124,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxChatOptions.activeStateEnabled]
      */
@@ -135,7 +134,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxChatOptions.alerts]
@@ -148,7 +146,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('alerts', value);
     }
 
-
     /**
      * [descr:dxChatOptions.dataSource]
      */
@@ -159,7 +156,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set dataSource(value: Array<Message> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:dxChatOptions.dayHeaderFormat]
@@ -172,7 +168,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('dayHeaderFormat', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -183,7 +178,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:dxChatOptions.editing]
@@ -196,7 +190,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('editing', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -207,7 +200,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxChatOptions.emptyViewTemplate]
@@ -220,7 +212,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('emptyViewTemplate', value);
     }
 
-
     
     @Input()
     get fileUploaderOptions(): dxFileUploaderOptions {
@@ -229,7 +220,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set fileUploaderOptions(value: dxFileUploaderOptions) {
         this._setOption('fileUploaderOptions', value);
     }
-
 
     /**
      * [descr:dxChatOptions.focusStateEnabled]
@@ -242,7 +232,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -253,7 +242,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -266,7 +254,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxChatOptions.hoverStateEnabled]
      */
@@ -278,7 +265,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('hoverStateEnabled', value);
     }
 
-
     
     @Input()
     get inputFieldText(): string | undefined {
@@ -287,7 +273,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set inputFieldText(value: string | undefined) {
         this._setOption('inputFieldText', value);
     }
-
 
     /**
      * [descr:dxChatOptions.items]
@@ -300,7 +285,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:dxChatOptions.messageTemplate]
      */
@@ -311,7 +295,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set messageTemplate(value: any) {
         this._setOption('messageTemplate', value);
     }
-
 
     /**
      * [descr:dxChatOptions.messageTimestampFormat]
@@ -324,7 +307,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('messageTimestampFormat', value);
     }
 
-
     /**
      * [descr:dxChatOptions.reloadOnChange]
      */
@@ -335,7 +317,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set reloadOnChange(value: boolean) {
         this._setOption('reloadOnChange', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -348,7 +329,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('rtlEnabled', value);
     }
 
-
     
     @Input()
     get sendButtonOptions(): SendButtonProperties {
@@ -357,7 +337,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set sendButtonOptions(value: SendButtonProperties) {
         this._setOption('sendButtonOptions', value);
     }
-
 
     /**
      * [descr:dxChatOptions.showAvatar]
@@ -370,7 +349,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showAvatar', value);
     }
 
-
     /**
      * [descr:dxChatOptions.showDayHeaders]
      */
@@ -381,7 +359,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set showDayHeaders(value: boolean) {
         this._setOption('showDayHeaders', value);
     }
-
 
     /**
      * [descr:dxChatOptions.showMessageTimestamp]
@@ -394,7 +371,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showMessageTimestamp', value);
     }
 
-
     /**
      * [descr:dxChatOptions.showUserName]
      */
@@ -405,7 +381,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set showUserName(value: boolean) {
         this._setOption('showUserName', value);
     }
-
 
     /**
      * [descr:dxChatOptions.speechToTextEnabled]
@@ -418,7 +393,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('speechToTextEnabled', value);
     }
 
-
     
     @Input()
     get speechToTextOptions(): dxSpeechToTextOptions {
@@ -428,7 +402,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('speechToTextOptions', value);
     }
 
-
     
     @Input()
     get suggestions(): dxButtonGroupOptions {
@@ -437,7 +410,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set suggestions(value: dxButtonGroupOptions) {
         this._setOption('suggestions', value);
     }
-
 
     /**
      * [descr:dxChatOptions.typingUsers]
@@ -450,7 +422,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('typingUsers', value);
     }
 
-
     /**
      * [descr:dxChatOptions.user]
      */
@@ -462,7 +433,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('user', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -473,7 +443,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -715,9 +684,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -80,7 +80,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('cancelText', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.dataSource]
      */
@@ -91,7 +90,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     set dataSource(value: Array<any | dxActionSheetItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -104,7 +102,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -115,7 +112,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -128,7 +124,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -139,7 +134,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
@@ -152,7 +146,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
      */
@@ -163,7 +156,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     set itemHoldTimeout(value: number) {
         this._setOption('itemHoldTimeout', value);
     }
-
 
     /**
      * [descr:dxActionSheetOptions.items]
@@ -176,7 +168,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
      */
@@ -187,7 +178,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -200,7 +190,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.showCancelButton]
      */
@@ -211,7 +200,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     set showCancelButton(value: boolean) {
         this._setOption('showCancelButton', value);
     }
-
 
     /**
      * [descr:dxActionSheetOptions.showTitle]
@@ -224,7 +212,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('showTitle', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.target]
      */
@@ -235,7 +222,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     set target(value: any | string) {
         this._setOption('target', value);
     }
-
 
     /**
      * [descr:dxActionSheetOptions.title]
@@ -248,7 +234,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.usePopover]
      */
@@ -260,7 +245,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('usePopover', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.visible]
      */
@@ -271,7 +255,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -418,9 +401,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

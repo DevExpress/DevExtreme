@@ -83,7 +83,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxToastOptions.animation]
      */
@@ -94,7 +93,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
     }
-
 
     /**
      * [descr:dxToastOptions.closeOnClick]
@@ -107,7 +105,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('closeOnClick', value);
     }
 
-
     /**
      * [descr:dxToastOptions.closeOnSwipe]
      */
@@ -118,7 +115,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set closeOnSwipe(value: boolean) {
         this._setOption('closeOnSwipe', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.contentTemplate]
@@ -131,7 +127,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('contentTemplate', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.deferRendering]
      */
@@ -142,7 +137,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set deferRendering(value: boolean) {
         this._setOption('deferRendering', value);
     }
-
 
     /**
      * [descr:dxToastOptions.displayTime]
@@ -155,7 +149,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('displayTime', value);
     }
 
-
     /**
      * [descr:WidgetOptions.focusStateEnabled]
      */
@@ -166,7 +159,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:dxToastOptions.height]
@@ -179,7 +171,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxToastOptions.hideOnOutsideClick]
      */
@@ -190,7 +181,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.hideOnParentScroll]
@@ -203,7 +193,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('hideOnParentScroll', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -214,7 +203,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
@@ -227,7 +215,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.maxHeight]
      */
@@ -238,7 +225,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set maxHeight(value: number | string) {
         this._setOption('maxHeight', value);
     }
-
 
     /**
      * [descr:dxToastOptions.maxWidth]
@@ -251,7 +237,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('maxWidth', value);
     }
 
-
     /**
      * [descr:dxToastOptions.message]
      */
@@ -262,7 +247,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set message(value: string) {
         this._setOption('message', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.minHeight]
@@ -275,7 +259,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('minHeight', value);
     }
 
-
     /**
      * [descr:dxToastOptions.minWidth]
      */
@@ -286,7 +269,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set minWidth(value: number | string) {
         this._setOption('minWidth', value);
     }
-
 
     /**
      * [descr:dxToastOptions.position]
@@ -299,7 +281,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('position', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -310,7 +291,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxToastOptions.shading]
@@ -323,7 +303,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('shading', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.shadingColor]
      */
@@ -334,7 +313,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set shadingColor(value: string) {
         this._setOption('shadingColor', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -347,7 +325,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxToastOptions.type]
      */
@@ -358,7 +335,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set type(value: ToastType) {
         this._setOption('type', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.visible]
@@ -371,7 +347,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxToastOptions.width]
      */
@@ -382,7 +357,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     set width(value: number | string) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
@@ -569,9 +543,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

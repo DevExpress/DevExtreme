@@ -150,7 +150,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('adaptiveLayout', value);
     }
 
-
     /**
      * [descr:BaseChartOptions.animation]
      */
@@ -161,7 +160,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set animation(value: boolean | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean, maxPointCountSupported?: number }) {
         this._setOption('animation', value);
     }
-
 
     /**
      * [descr:dxPieChartOptions.annotations]
@@ -174,7 +172,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('annotations', value);
     }
 
-
     /**
      * [descr:dxPieChartOptions.centerTemplate]
      */
@@ -185,7 +182,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set centerTemplate(value: any) {
         this._setOption('centerTemplate', value);
     }
-
 
     /**
      * [descr:dxPieChartOptions.commonAnnotationSettings]
@@ -198,7 +194,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('commonAnnotationSettings', value);
     }
 
-
     /**
      * [descr:dxPieChartOptions.commonSeriesSettings]
      */
@@ -209,7 +204,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set commonSeriesSettings(value: any | { argumentField?: string, argumentType?: ChartsDataType | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hoverMode?: PieChartSeriesInteractionMode, hoverStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }, label?: { argumentFormat?: Format | undefined, backgroundColor?: string | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string | undefined, font?: Font, format?: Format | undefined, position?: LabelPosition, radialOffset?: number, rotationAngle?: number, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxLabelCount?: number | undefined, minSegmentSize?: number | undefined, selectionMode?: PieChartSeriesInteractionMode, selectionStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }, smallValuesGrouping?: { groupName?: string, mode?: SmallValuesGroupingMode, threshold?: number | undefined, topCount?: number | undefined }, tagField?: string, valueField?: string }) {
         this._setOption('commonSeriesSettings', value);
     }
-
 
     /**
      * [descr:dxPieChartOptions.customizeAnnotation]
@@ -222,7 +216,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('customizeAnnotation', value);
     }
 
-
     /**
      * [descr:BaseChartOptions.customizeLabel]
      */
@@ -233,7 +226,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set customizeLabel(value: ((pointInfo: any) => SeriesLabel)) {
         this._setOption('customizeLabel', value);
     }
-
 
     /**
      * [descr:BaseChartOptions.customizePoint]
@@ -246,7 +238,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('customizePoint', value);
     }
 
-
     /**
      * [descr:BaseChartOptions.dataSource]
      */
@@ -257,7 +248,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:dxPieChartOptions.diameter]
@@ -270,7 +260,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('diameter', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
      */
@@ -281,7 +270,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -294,7 +282,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
      */
@@ -305,7 +292,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set encodeHtml(value: boolean) {
         this._setOption('encodeHtml', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.export]
@@ -318,7 +304,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxPieChartOptions.innerRadius]
      */
@@ -329,7 +314,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set innerRadius(value: number) {
         this._setOption('innerRadius', value);
     }
-
 
     /**
      * [descr:dxPieChartOptions.legend]
@@ -342,7 +326,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('legend', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
      */
@@ -353,7 +336,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set loadingIndicator(value: { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }) {
         this._setOption('loadingIndicator', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.margin]
@@ -366,7 +348,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('margin', value);
     }
 
-
     /**
      * [descr:dxPieChartOptions.minDiameter]
      */
@@ -377,7 +358,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set minDiameter(value: number) {
         this._setOption('minDiameter', value);
     }
-
 
     /**
      * [descr:dxPieChartOptions.palette]
@@ -390,7 +370,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('palette', value);
     }
 
-
     /**
      * [descr:BaseChartOptions.paletteExtensionMode]
      */
@@ -401,7 +380,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
@@ -414,7 +392,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('pathModified', value);
     }
 
-
     /**
      * [descr:BaseChartOptions.pointSelectionMode]
      */
@@ -425,7 +402,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set pointSelectionMode(value: SingleOrMultiple) {
         this._setOption('pointSelectionMode', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
@@ -438,7 +414,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('redrawOnResize', value);
     }
 
-
     /**
      * [descr:dxPieChartOptions.resolveLabelOverlapping]
      */
@@ -449,7 +424,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set resolveLabelOverlapping(value: ShiftLabelOverlap) {
         this._setOption('resolveLabelOverlapping', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
@@ -462,7 +436,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxPieChartOptions.segmentsDirection]
      */
@@ -473,7 +446,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set segmentsDirection(value: PieChartSegmentDirection) {
         this._setOption('segmentsDirection', value);
     }
-
 
     /**
      * [descr:dxPieChartOptions.series]
@@ -486,7 +458,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('series', value);
     }
 
-
     /**
      * [descr:dxPieChartOptions.seriesTemplate]
      */
@@ -497,7 +468,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set seriesTemplate(value: any) {
         this._setOption('seriesTemplate', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.size]
@@ -510,7 +480,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:dxPieChartOptions.sizeGroup]
      */
@@ -521,7 +490,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set sizeGroup(value: string | undefined) {
         this._setOption('sizeGroup', value);
     }
-
 
     /**
      * [descr:dxPieChartOptions.startAngle]
@@ -534,7 +502,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('startAngle', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
      */
@@ -545,7 +512,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set theme(value: Theme) {
         this._setOption('theme', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.title]
@@ -558,7 +524,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxPieChartOptions.tooltip]
      */
@@ -569,7 +534,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set tooltip(value: { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: dxPieChartPointInfo) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
-
 
     /**
      * [descr:dxPieChartOptions.type]
@@ -841,9 +805,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() typeChange: EventEmitter<PieChartType>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

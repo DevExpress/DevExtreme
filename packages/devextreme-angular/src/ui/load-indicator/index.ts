@@ -59,7 +59,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
         this._setOption('animationType', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -70,7 +69,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -83,7 +81,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -94,7 +91,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxLoadIndicatorOptions.indicatorSrc]
@@ -107,7 +103,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
         this._setOption('indicatorSrc', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -119,7 +114,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -130,7 +124,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -202,9 +195,6 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

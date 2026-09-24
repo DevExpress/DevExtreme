@@ -108,7 +108,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('childrenField', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.colorField]
      */
@@ -119,7 +118,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set colorField(value: string) {
         this._setOption('colorField', value);
     }
-
 
     /**
      * [descr:dxTreeMapOptions.colorizer]
@@ -132,7 +130,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('colorizer', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.dataSource]
      */
@@ -143,7 +140,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.disabled]
@@ -156,7 +152,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -167,7 +162,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
@@ -180,7 +174,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.export]
      */
@@ -191,7 +184,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }) {
         this._setOption('export', value);
     }
-
 
     /**
      * [descr:dxTreeMapOptions.group]
@@ -204,7 +196,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('group', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.hoverEnabled]
      */
@@ -215,7 +206,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set hoverEnabled(value: boolean | undefined) {
         this._setOption('hoverEnabled', value);
     }
-
 
     /**
      * [descr:dxTreeMapOptions.idField]
@@ -228,7 +218,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('idField', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.interactWithGroup]
      */
@@ -239,7 +228,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set interactWithGroup(value: boolean) {
         this._setOption('interactWithGroup', value);
     }
-
 
     /**
      * [descr:dxTreeMapOptions.labelField]
@@ -252,7 +240,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('labelField', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.layoutAlgorithm]
      */
@@ -263,7 +250,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set layoutAlgorithm(value: ((e: { items: Array<any>, rect: Array<number>, sum: number }) => void) | TreeMapLayoutAlgorithm) {
         this._setOption('layoutAlgorithm', value);
     }
-
 
     /**
      * [descr:dxTreeMapOptions.layoutDirection]
@@ -276,7 +262,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('layoutDirection', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
      */
@@ -287,7 +272,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set loadingIndicator(value: { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }) {
         this._setOption('loadingIndicator', value);
     }
-
 
     /**
      * [descr:dxTreeMapOptions.maxDepth]
@@ -300,7 +284,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('maxDepth', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.parentField]
      */
@@ -311,7 +294,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set parentField(value: string | undefined) {
         this._setOption('parentField', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
@@ -324,7 +306,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('pathModified', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
      */
@@ -335,7 +316,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set redrawOnResize(value: boolean) {
         this._setOption('redrawOnResize', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
@@ -348,7 +328,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.selectionMode]
      */
@@ -359,7 +338,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set selectionMode(value: SingleMultipleOrNone | undefined) {
         this._setOption('selectionMode', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.size]
@@ -372,7 +350,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
      */
@@ -383,7 +360,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set theme(value: Theme) {
         this._setOption('theme', value);
     }
-
 
     /**
      * [descr:dxTreeMapOptions.tile]
@@ -396,7 +372,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('tile', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.title]
      */
@@ -408,7 +383,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.tooltip]
      */
@@ -419,7 +393,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
-
 
     /**
      * [descr:dxTreeMapOptions.valueField]
@@ -641,9 +614,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() valueFieldChange: EventEmitter<string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

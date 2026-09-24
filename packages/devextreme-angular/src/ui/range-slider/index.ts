@@ -85,7 +85,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxSliderBaseOptions.activeStateEnabled]
      */
@@ -96,7 +95,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -109,7 +107,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -120,7 +117,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxRangeSliderOptions.end]
@@ -133,7 +129,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('end', value);
     }
 
-
     /**
      * [descr:dxRangeSliderOptions.endName]
      */
@@ -144,7 +139,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set endName(value: string) {
         this._setOption('endName', value);
     }
-
 
     /**
      * [descr:dxSliderBaseOptions.focusStateEnabled]
@@ -157,7 +151,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -168,7 +161,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -181,7 +173,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxSliderBaseOptions.hoverStateEnabled]
      */
@@ -192,7 +183,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -205,7 +195,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -216,7 +205,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:dxSliderBaseOptions.keyStep]
@@ -229,7 +217,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('keyStep', value);
     }
 
-
     /**
      * [descr:dxSliderBaseOptions.label]
      */
@@ -240,7 +227,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set label(value: { format?: Format, position?: VerticalEdge, visible?: boolean }) {
         this._setOption('label', value);
     }
-
 
     /**
      * [descr:dxTrackBarOptions.max]
@@ -253,7 +239,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('max', value);
     }
 
-
     /**
      * [descr:dxTrackBarOptions.min]
      */
@@ -264,7 +249,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set min(value: number) {
         this._setOption('min', value);
     }
-
 
     /**
      * [descr:EditorOptions.readOnly]
@@ -277,7 +261,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -288,7 +271,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxSliderBaseOptions.showRange]
@@ -301,7 +283,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('showRange', value);
     }
 
-
     /**
      * [descr:dxRangeSliderOptions.start]
      */
@@ -312,7 +293,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set start(value: number) {
         this._setOption('start', value);
     }
-
 
     /**
      * [descr:dxRangeSliderOptions.startName]
@@ -325,7 +305,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('startName', value);
     }
 
-
     /**
      * [descr:dxSliderBaseOptions.step]
      */
@@ -336,7 +315,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set step(value: number) {
         this._setOption('step', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -349,7 +327,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxSliderBaseOptions.tooltip]
      */
@@ -360,7 +337,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set tooltip(value: { enabled?: boolean, format?: Format, position?: VerticalEdge, showMode?: TooltipShowMode }) {
         this._setOption('tooltip', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationError]
@@ -373,7 +349,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
      */
@@ -384,7 +359,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessageMode]
@@ -397,7 +371,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessagePosition]
      */
@@ -408,7 +381,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationStatus]
@@ -421,7 +393,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxRangeSliderOptions.value]
      */
@@ -432,7 +403,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set value(value: Array<number>) {
         this._setOption('value', value);
     }
-
 
     /**
      * [descr:dxSliderBaseOptions.valueChangeMode]
@@ -445,7 +415,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
         this._setOption('valueChangeMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -456,7 +425,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -663,11 +631,8 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

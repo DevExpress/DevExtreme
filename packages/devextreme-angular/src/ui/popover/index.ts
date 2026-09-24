@@ -106,7 +106,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.container]
      */
@@ -117,7 +116,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.contentTemplate]
@@ -130,7 +128,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('contentTemplate', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.deferRendering]
      */
@@ -141,7 +138,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set deferRendering(value: boolean) {
         this._setOption('deferRendering', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -154,7 +150,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.enableBodyScroll]
      */
@@ -165,7 +160,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set enableBodyScroll(value: boolean) {
         this._setOption('enableBodyScroll', value);
     }
-
 
     /**
      * [descr:dxPopoverOptions.height]
@@ -178,7 +172,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.hideEvent]
      */
@@ -189,7 +182,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set hideEvent(value: string | undefined | { delay?: number | undefined, name?: string | undefined }) {
         this._setOption('hideEvent', value);
     }
-
 
     /**
      * [descr:dxPopoverOptions.hideOnOutsideClick]
@@ -202,7 +194,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('hideOnOutsideClick', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.hideOnParentScroll]
      */
@@ -213,7 +204,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set hideOnParentScroll(value: boolean) {
         this._setOption('hideOnParentScroll', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -226,7 +216,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -237,7 +226,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.maxHeight]
@@ -250,7 +238,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('maxHeight', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.maxWidth]
      */
@@ -261,7 +248,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set maxWidth(value: number | string) {
         this._setOption('maxWidth', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.minHeight]
@@ -274,7 +260,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('minHeight', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.minWidth]
      */
@@ -285,7 +270,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set minWidth(value: number | string) {
         this._setOption('minWidth', value);
     }
-
 
     /**
      * [descr:dxPopoverOptions.position]
@@ -298,7 +282,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('position', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -309,7 +292,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxPopoverOptions.shading]
@@ -322,7 +304,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('shading', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.shadingColor]
      */
@@ -333,7 +314,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set shadingColor(value: string) {
         this._setOption('shadingColor', value);
     }
-
 
     /**
      * [descr:dxPopupOptions.showCloseButton]
@@ -346,7 +326,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('showCloseButton', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.showEvent]
      */
@@ -357,7 +336,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set showEvent(value: string | undefined | { delay?: number | undefined, name?: string | undefined }) {
         this._setOption('showEvent', value);
     }
-
 
     /**
      * [descr:dxPopoverOptions.showTitle]
@@ -370,7 +348,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('showTitle', value);
     }
 
-
     
     @Input()
     get tabFocusLoopEnabled(): boolean {
@@ -379,7 +356,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set tabFocusLoopEnabled(value: boolean) {
         this._setOption('tabFocusLoopEnabled', value);
     }
-
 
     /**
      * [descr:dxPopoverOptions.target]
@@ -392,7 +368,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('target', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.title]
      */
@@ -403,7 +378,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set title(value: string) {
         this._setOption('title', value);
     }
-
 
     /**
      * [descr:dxPopupOptions.titleTemplate]
@@ -416,7 +390,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('titleTemplate', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.toolbarItems]
      */
@@ -427,7 +400,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set toolbarItems(value: Array<dxPopupToolbarItem>) {
         this._setOption('toolbarItems', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.visible]
@@ -440,7 +412,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.width]
      */
@@ -451,7 +422,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     set width(value: number | string) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
@@ -663,9 +633,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

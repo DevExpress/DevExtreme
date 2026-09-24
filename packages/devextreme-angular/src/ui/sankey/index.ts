@@ -106,7 +106,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('adaptiveLayout', value);
     }
 
-
     /**
      * [descr:dxSankeyOptions.alignment]
      */
@@ -117,7 +116,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set alignment(value: Array<VerticalAlignment> | VerticalAlignment) {
         this._setOption('alignment', value);
     }
-
 
     /**
      * [descr:dxSankeyOptions.dataSource]
@@ -130,7 +128,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
      */
@@ -141,7 +138,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -154,7 +150,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
      */
@@ -165,7 +160,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set encodeHtml(value: boolean) {
         this._setOption('encodeHtml', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.export]
@@ -178,7 +172,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxSankeyOptions.hoverEnabled]
      */
@@ -189,7 +182,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set hoverEnabled(value: boolean) {
         this._setOption('hoverEnabled', value);
     }
-
 
     /**
      * [descr:dxSankeyOptions.label]
@@ -202,7 +194,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxSankeyOptions.link]
      */
@@ -213,7 +204,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set link(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string, colorMode?: SankeyColorMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number | undefined }, opacity?: number }) {
         this._setOption('link', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
@@ -226,7 +216,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('loadingIndicator', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.margin]
      */
@@ -237,7 +226,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set margin(value: { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
-
 
     /**
      * [descr:dxSankeyOptions.node]
@@ -250,7 +238,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('node', value);
     }
 
-
     /**
      * [descr:dxSankeyOptions.palette]
      */
@@ -261,7 +248,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
-
 
     /**
      * [descr:dxSankeyOptions.paletteExtensionMode]
@@ -274,7 +260,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('paletteExtensionMode', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.pathModified]
      */
@@ -285,7 +270,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set pathModified(value: boolean) {
         this._setOption('pathModified', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
@@ -298,7 +282,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('redrawOnResize', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
      */
@@ -309,7 +292,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.size]
@@ -322,7 +304,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:dxSankeyOptions.sortData]
      */
@@ -333,7 +314,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set sortData(value: any | undefined) {
         this._setOption('sortData', value);
     }
-
 
     /**
      * [descr:dxSankeyOptions.sourceField]
@@ -346,7 +326,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('sourceField', value);
     }
 
-
     /**
      * [descr:dxSankeyOptions.targetField]
      */
@@ -357,7 +336,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set targetField(value: string) {
         this._setOption('targetField', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.theme]
@@ -370,7 +348,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('theme', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.title]
      */
@@ -382,7 +359,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxSankeyOptions.tooltip]
      */
@@ -393,7 +369,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, cornerRadius?: number, customizeLinkTooltip?: ((info: { source: string, target: string, weight: number }) => Record<string, any>) | undefined, customizeNodeTooltip?: ((info: { label: string, title: string, weightIn: number, weightOut: number }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, linkTooltipTemplate?: any, nodeTooltipTemplate?: any, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
-
 
     /**
      * [descr:dxSankeyOptions.weightField]
@@ -595,9 +570,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() weightFieldChange: EventEmitter<string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

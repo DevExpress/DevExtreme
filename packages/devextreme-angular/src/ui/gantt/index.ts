@@ -135,7 +135,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -146,7 +145,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.allowSelection]
@@ -159,7 +157,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('allowSelection', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.columns]
      */
@@ -170,7 +167,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set columns(value: Array<dxGanttColumn | string>) {
         this._setOption('columns', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.contextMenu]
@@ -183,7 +179,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('contextMenu', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.dependencies]
      */
@@ -194,7 +189,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set dependencies(value: { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((dependency: any) => any) | string, predecessorIdExpr?: ((dependency: any, value: any) => any) | string, successorIdExpr?: ((dependency: any, value: any) => any) | string, typeExpr?: ((dependency: any, value: any) => any) | string }) {
         this._setOption('dependencies', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -207,7 +201,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.editing]
      */
@@ -218,7 +211,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set editing(value: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean }) {
         this._setOption('editing', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -231,7 +223,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.endDateRange]
      */
@@ -242,7 +233,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set endDateRange(value: Date | undefined) {
         this._setOption('endDateRange', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.filterRow]
@@ -255,7 +245,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('filterRow', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.firstDayOfWeek]
      */
@@ -266,7 +255,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set firstDayOfWeek(value: DayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
-
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
@@ -279,7 +267,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.headerFilter]
      */
@@ -290,7 +277,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set headerFilter(value: dxGanttHeaderFilter) {
         this._setOption('headerFilter', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -303,7 +289,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -314,7 +299,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
@@ -327,7 +311,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.resourceAssignments]
      */
@@ -338,7 +321,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set resourceAssignments(value: { dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, keyExpr?: ((resourceAssignment: any) => any) | string, resourceIdExpr?: ((resourceAssignment: any, value: any) => any) | string, taskIdExpr?: ((resourceAssignment: any, value: any) => any) | string }) {
         this._setOption('resourceAssignments', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.resources]
@@ -351,7 +333,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('resources', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.rootValue]
      */
@@ -362,7 +343,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set rootValue(value: any) {
         this._setOption('rootValue', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.scaleType]
@@ -375,7 +355,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('scaleType', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.scaleTypeRange]
      */
@@ -386,7 +365,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set scaleTypeRange(value: { max?: GanttScaleType, min?: GanttScaleType }) {
         this._setOption('scaleTypeRange', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.selectedRowKey]
@@ -399,7 +377,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('selectedRowKey', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.showDependencies]
      */
@@ -410,7 +387,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set showDependencies(value: boolean) {
         this._setOption('showDependencies', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.showResources]
@@ -423,7 +399,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('showResources', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.showRowLines]
      */
@@ -434,7 +409,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set showRowLines(value: boolean) {
         this._setOption('showRowLines', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.sorting]
@@ -447,7 +421,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('sorting', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.startDateRange]
      */
@@ -458,7 +431,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set startDateRange(value: Date | undefined) {
         this._setOption('startDateRange', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.stripLines]
@@ -471,7 +443,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('stripLines', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -482,7 +453,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.taskContentTemplate]
@@ -495,7 +465,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('taskContentTemplate', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.taskListWidth]
      */
@@ -506,7 +475,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set taskListWidth(value: number) {
         this._setOption('taskListWidth', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.taskProgressTooltipContentTemplate]
@@ -519,7 +487,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('taskProgressTooltipContentTemplate', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.tasks]
      */
@@ -530,7 +497,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set tasks(value: { colorExpr?: ((task: any, value: any) => any) | string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, endExpr?: ((task: any, value: any) => any) | string, keyExpr?: ((task: any) => any) | string, parentIdExpr?: ((task: any, value: any) => any) | string, progressExpr?: ((task: any, value: any) => any) | string, startExpr?: ((task: any, value: any) => any) | string, titleExpr?: ((task: any, value: any) => any) | string }) {
         this._setOption('tasks', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.taskTimeTooltipContentTemplate]
@@ -543,7 +509,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('taskTimeTooltipContentTemplate', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.taskTitlePosition]
      */
@@ -554,7 +519,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set taskTitlePosition(value: GanttTaskTitlePosition) {
         this._setOption('taskTitlePosition', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.taskTooltipContentTemplate]
@@ -567,7 +531,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('taskTooltipContentTemplate', value);
     }
 
-
     /**
      * [descr:dxGanttOptions.toolbar]
      */
@@ -578,7 +541,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set toolbar(value: dxGanttToolbar) {
         this._setOption('toolbar', value);
     }
-
 
     /**
      * [descr:dxGanttOptions.validation]
@@ -591,7 +553,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('validation', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -602,7 +563,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -974,9 +934,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

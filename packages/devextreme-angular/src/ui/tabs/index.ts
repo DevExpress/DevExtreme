@@ -81,7 +81,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.dataSource]
      */
@@ -92,7 +91,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set dataSource(value: Array<any | dxTabsItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -105,7 +103,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -116,7 +113,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxTabsOptions.focusStateEnabled]
@@ -129,7 +125,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -140,7 +135,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -153,7 +147,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.hoverStateEnabled]
      */
@@ -164,7 +157,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTabsOptions.iconPosition]
@@ -177,7 +169,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('iconPosition', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
      */
@@ -188,7 +179,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set itemHoldTimeout(value: number) {
         this._setOption('itemHoldTimeout', value);
     }
-
 
     /**
      * [descr:dxTabsOptions.items]
@@ -201,7 +191,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
      */
@@ -212,7 +201,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
@@ -225,7 +213,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
      */
@@ -236,7 +223,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set noDataText(value: string) {
         this._setOption('noDataText', value);
     }
-
 
     /**
      * [descr:dxTabsOptions.orientation]
@@ -249,7 +235,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('orientation', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.repaintChangesOnly]
      */
@@ -260,7 +245,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set repaintChangesOnly(value: boolean) {
         this._setOption('repaintChangesOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -273,7 +257,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.scrollByContent]
      */
@@ -284,7 +267,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set scrollByContent(value: boolean) {
         this._setOption('scrollByContent', value);
     }
-
 
     /**
      * [descr:dxTabsOptions.scrollingEnabled]
@@ -297,7 +279,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('scrollingEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedIndex]
      */
@@ -308,7 +289,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set selectedIndex(value: number) {
         this._setOption('selectedIndex', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
@@ -321,7 +301,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedItem', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItemKeys]
      */
@@ -332,7 +311,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set selectedItemKeys(value: Array<any>) {
         this._setOption('selectedItemKeys', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.selectedItems]
@@ -345,7 +323,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedItems', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.selectionMode]
      */
@@ -356,7 +333,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set selectionMode(value: SingleOrMultiple) {
         this._setOption('selectionMode', value);
     }
-
 
     /**
      * [descr:dxTabsOptions.showNavButtons]
@@ -369,7 +345,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('showNavButtons', value);
     }
 
-
     /**
      * [descr:dxTabsOptions.stylingMode]
      */
@@ -380,7 +355,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set stylingMode(value: TabsStyle) {
         this._setOption('stylingMode', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -393,7 +367,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -404,7 +377,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -611,9 +583,6 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -94,7 +94,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxRadioGroupOptions.activeStateEnabled]
      */
@@ -105,7 +104,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
@@ -118,7 +116,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -129,7 +126,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
@@ -142,7 +138,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('displayExpr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -153,7 +148,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxRadioGroupOptions.focusStateEnabled]
@@ -166,7 +160,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -177,7 +170,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -190,7 +182,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxRadioGroupOptions.hoverStateEnabled]
      */
@@ -201,7 +192,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -214,7 +204,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -225,7 +214,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.items]
@@ -238,7 +226,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
      */
@@ -249,7 +236,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
-
 
     /**
      * [descr:dxRadioGroupOptions.layout]
@@ -262,7 +248,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('layout', value);
     }
 
-
     /**
      * [descr:dxRadioGroupOptions.name]
      */
@@ -273,7 +258,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set name(value: string) {
         this._setOption('name', value);
     }
-
 
     /**
      * [descr:EditorOptions.readOnly]
@@ -286,7 +270,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -297,7 +280,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -310,7 +292,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
      */
@@ -321,7 +302,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationErrors]
@@ -334,7 +314,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
      */
@@ -345,7 +324,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
@@ -358,7 +336,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
      */
@@ -369,7 +346,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
-
 
     /**
      * [descr:dxRadioGroupOptions.value]
@@ -382,7 +358,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
      */
@@ -394,7 +369,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('valueExpr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -405,7 +379,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -587,11 +560,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -132,7 +132,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('acceptCustomValue', value);
     }
 
-
     /**
      * [descr:WidgetOptions.accessKey]
      */
@@ -143,7 +142,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set accessKey(value: string | undefined) {
         this._setOption('accessKey', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
@@ -156,7 +154,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.adaptivityEnabled]
      */
@@ -167,7 +164,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set adaptivityEnabled(value: boolean) {
         this._setOption('adaptivityEnabled', value);
     }
-
 
     /**
      * [descr:DateBoxBaseOptions.applyButtonText]
@@ -180,7 +176,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('applyButtonText', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.applyValueMode]
      */
@@ -191,7 +186,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set applyValueMode(value: ApplyValueMode) {
         this._setOption('applyValueMode', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.buttons]
@@ -204,7 +198,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('buttons', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.calendarOptions]
      */
@@ -215,7 +208,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set calendarOptions(value: dxCalendarOptions) {
         this._setOption('calendarOptions', value);
     }
-
 
     /**
      * [descr:DateBoxBaseOptions.cancelButtonText]
@@ -228,7 +220,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('cancelButtonText', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.dateOutOfRangeMessage]
      */
@@ -239,7 +230,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set dateOutOfRangeMessage(value: string) {
         this._setOption('dateOutOfRangeMessage', value);
     }
-
 
     /**
      * [descr:DateBoxBaseOptions.dateSerializationFormat]
@@ -252,7 +242,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('dateSerializationFormat', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
      */
@@ -263,7 +252,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set deferRendering(value: boolean) {
         this._setOption('deferRendering', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -276,7 +264,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.disabledDates]
      */
@@ -287,7 +274,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set disabledDates(value: Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean) | null) {
         this._setOption('disabledDates', value);
     }
-
 
     /**
      * [descr:DateBoxBaseOptions.displayFormat]
@@ -300,7 +286,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('displayFormat', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
      */
@@ -311,7 +296,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set dropDownButtonTemplate(value: any) {
         this._setOption('dropDownButtonTemplate', value);
     }
-
 
     /**
      * [descr:DateBoxBaseOptions.dropDownOptions]
@@ -324,7 +308,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('dropDownOptions', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -335,7 +318,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
@@ -348,7 +330,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -359,7 +340,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -372,7 +352,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
      */
@@ -383,7 +362,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxDateBoxOptions.inputAttr]
@@ -396,7 +374,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('inputAttr', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.interval]
      */
@@ -407,7 +384,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set interval(value: number) {
         this._setOption('interval', value);
     }
-
 
     /**
      * [descr:dxDateBoxOptions.invalidDateMessage]
@@ -420,7 +396,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('invalidDateMessage', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
      */
@@ -431,7 +406,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set isDirty(value: boolean) {
         this._setOption('isDirty', value);
     }
-
 
     /**
      * [descr:EditorOptions.isValid]
@@ -444,7 +418,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.label]
      */
@@ -455,7 +428,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set label(value: string) {
         this._setOption('label', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
@@ -468,7 +440,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('labelMode', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.max]
      */
@@ -479,7 +450,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set max(value: Date | null | number | string | undefined) {
         this._setOption('max', value);
     }
-
 
     /**
      * [descr:dxDateBoxOptions.maxLength]
@@ -492,7 +462,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('maxLength', value);
     }
 
-
     /**
      * [descr:DateBoxBaseOptions.min]
      */
@@ -503,7 +472,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set min(value: Date | null | number | string | undefined) {
         this._setOption('min', value);
     }
-
 
     /**
      * [descr:dxDateBoxOptions.name]
@@ -516,7 +484,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.opened]
      */
@@ -527,7 +494,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set opened(value: boolean) {
         this._setOption('opened', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.openOnFieldClick]
@@ -540,7 +506,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('openOnFieldClick', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.pickerType]
      */
@@ -551,7 +516,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set pickerType(value: DatePickerType) {
         this._setOption('pickerType', value);
     }
-
 
     /**
      * [descr:dxDateBoxOptions.placeholder]
@@ -564,7 +528,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -575,7 +538,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -588,7 +550,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.showAnalogClock]
      */
@@ -599,7 +560,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set showAnalogClock(value: boolean) {
         this._setOption('showAnalogClock', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
@@ -612,7 +572,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('showClearButton', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.showDropDownButton]
      */
@@ -623,7 +582,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set showDropDownButton(value: boolean) {
         this._setOption('showDropDownButton', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.spellcheck]
@@ -636,7 +594,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('spellcheck', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.stylingMode]
      */
@@ -647,7 +604,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -660,7 +616,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.text]
      */
@@ -671,7 +626,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set text(value: string) {
         this._setOption('text', value);
     }
-
 
     /**
      * [descr:DateBoxBaseOptions.todayButtonText]
@@ -684,7 +638,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('todayButtonText', value);
     }
 
-
     /**
      * [descr:dxDateBoxOptions.type]
      */
@@ -695,7 +648,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set type(value: DateType) {
         this._setOption('type', value);
     }
-
 
     /**
      * [descr:DateBoxBaseOptions.useMaskBehavior]
@@ -708,7 +660,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('useMaskBehavior', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
      */
@@ -719,7 +670,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationErrors]
@@ -732,7 +682,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
      */
@@ -743,7 +692,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
@@ -756,7 +704,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
      */
@@ -767,7 +714,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
-
 
     /**
      * [descr:dxDateBoxOptions.value]
@@ -780,7 +726,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.valueChangeEvent]
      */
@@ -792,7 +737,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('valueChangeEvent', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -803,7 +747,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -1195,11 +1138,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -138,7 +138,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('acceptCustomValue', value);
     }
 
-
     /**
      * [descr:WidgetOptions.accessKey]
      */
@@ -149,7 +148,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set accessKey(value: string | undefined) {
         this._setOption('accessKey', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
@@ -162,7 +160,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
      */
@@ -173,7 +170,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set applyValueMode(value: ApplyValueMode) {
         this._setOption('applyValueMode', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.buttons]
@@ -186,7 +182,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('buttons', value);
     }
 
-
     /**
      * [descr:dxSelectBoxOptions.customItemCreateEvent]
      */
@@ -197,7 +192,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set customItemCreateEvent(value: string) {
         this._setOption('customItemCreateEvent', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
@@ -210,7 +204,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
      */
@@ -221,7 +214,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set deferRendering(value: boolean) {
         this._setOption('deferRendering', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -234,7 +226,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
      */
@@ -245,7 +236,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set displayExpr(value: ((item: any) => string) | string | undefined) {
         this._setOption('displayExpr', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
@@ -258,7 +248,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('dropDownButtonTemplate', value);
     }
 
-
     /**
      * [descr:dxSelectBoxOptions.dropDownOptions]
      */
@@ -269,7 +258,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set dropDownOptions(value: dxPopupOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -282,7 +270,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxSelectBoxOptions.fieldAddons]
      */
@@ -293,7 +280,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set fieldAddons(value: FieldAddons | null) {
         this._setOption('fieldAddons', value);
     }
-
 
     /**
      * [descr:dxSelectBoxOptions.fieldTemplate]
@@ -308,7 +294,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('fieldTemplate', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
      */
@@ -319,7 +304,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.grouped]
@@ -332,7 +316,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('grouped', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.groupTemplate]
      */
@@ -343,7 +326,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set groupTemplate(value: any) {
         this._setOption('groupTemplate', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -356,7 +338,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxTagBoxOptions.hideSelectedItems]
      */
@@ -367,7 +348,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set hideSelectedItems(value: boolean) {
         this._setOption('hideSelectedItems', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -380,7 +360,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
      */
@@ -391,7 +370,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
@@ -404,7 +382,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('inputAttr', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
      */
@@ -415,7 +392,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set isDirty(value: boolean) {
         this._setOption('isDirty', value);
     }
-
 
     /**
      * [descr:EditorOptions.isValid]
@@ -428,7 +404,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.items]
      */
@@ -439,7 +414,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set items(value: Array<any | CollectionWidgetItem>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
@@ -452,7 +426,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.label]
      */
@@ -463,7 +436,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set label(value: string) {
         this._setOption('label', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
@@ -476,7 +448,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('labelMode', value);
     }
 
-
     /**
      * [descr:dxTagBoxOptions.maxDisplayedTags]
      */
@@ -487,7 +458,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set maxDisplayedTags(value: number | undefined) {
         this._setOption('maxDisplayedTags', value);
     }
-
 
     /**
      * [descr:dxTagBoxOptions.maxFilterQueryLength]
@@ -500,7 +470,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('maxFilterQueryLength', value);
     }
 
-
     /**
      * [descr:dxTextBoxOptions.maxLength]
      */
@@ -511,7 +480,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set maxLength(value: null | number | string) {
         this._setOption('maxLength', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.minSearchLength]
@@ -524,7 +492,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('minSearchLength', value);
     }
 
-
     /**
      * [descr:dxTagBoxOptions.multiline]
      */
@@ -535,7 +502,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set multiline(value: boolean) {
         this._setOption('multiline', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.name]
@@ -548,7 +514,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.noDataText]
      */
@@ -559,7 +524,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set noDataText(value: string) {
         this._setOption('noDataText', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.opened]
@@ -572,7 +536,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('opened', value);
     }
 
-
     /**
      * [descr:dxSelectBoxOptions.openOnFieldClick]
      */
@@ -583,7 +546,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set openOnFieldClick(value: boolean) {
         this._setOption('openOnFieldClick', value);
     }
-
 
     /**
      * [descr:dxSelectBoxOptions.placeholder]
@@ -596,7 +558,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -607,7 +568,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -620,7 +580,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.searchEnabled]
      */
@@ -631,7 +590,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set searchEnabled(value: boolean) {
         this._setOption('searchEnabled', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.searchExpr]
@@ -644,7 +602,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('searchExpr', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.searchMode]
      */
@@ -655,7 +612,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set searchMode(value: SimplifiedSearchMode) {
         this._setOption('searchMode', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.searchTimeout]
@@ -668,7 +624,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('searchTimeout', value);
     }
 
-
     /**
      * [descr:dxTagBoxOptions.selectAllMode]
      */
@@ -679,7 +634,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set selectAllMode(value: SelectAllMode) {
         this._setOption('selectAllMode', value);
     }
-
 
     /**
      * [descr:dxTagBoxOptions.selectAllText]
@@ -692,7 +646,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('selectAllText', value);
     }
 
-
     /**
      * [descr:dxTagBoxOptions.selectedItems]
      */
@@ -703,7 +656,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set selectedItems(value: Array<any | number | string>) {
         this._setOption('selectedItems', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
@@ -716,7 +668,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('showClearButton', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.showDataBeforeSearch]
      */
@@ -727,7 +678,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set showDataBeforeSearch(value: boolean) {
         this._setOption('showDataBeforeSearch', value);
     }
-
 
     /**
      * [descr:dxTagBoxOptions.showDropDownButton]
@@ -740,7 +690,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('showDropDownButton', value);
     }
 
-
     /**
      * [descr:dxTagBoxOptions.showMultiTagOnly]
      */
@@ -751,7 +700,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set showMultiTagOnly(value: boolean) {
         this._setOption('showMultiTagOnly', value);
     }
-
 
     /**
      * [descr:dxSelectBoxOptions.showSelectionControls]
@@ -764,7 +712,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('showSelectionControls', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.stylingMode]
      */
@@ -775,7 +722,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -788,7 +734,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxTagBoxOptions.tagTemplate]
      */
@@ -799,7 +744,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set tagTemplate(value: any) {
         this._setOption('tagTemplate', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.text]
@@ -812,7 +756,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('text', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.useItemTextAsTitle]
      */
@@ -823,7 +766,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set useItemTextAsTitle(value: boolean) {
         this._setOption('useItemTextAsTitle', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationError]
@@ -836,7 +778,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
      */
@@ -847,7 +788,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessageMode]
@@ -860,7 +800,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
      */
@@ -871,7 +810,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set validationMessagePosition(value: Mode | Position) {
         this._setOption('validationMessagePosition', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationStatus]
@@ -884,7 +822,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxTagBoxOptions.value]
      */
@@ -895,7 +832,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set value(value: Array<any | number | string>) {
         this._setOption('value', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.valueChangeEvent]
@@ -908,7 +844,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('valueChangeEvent', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
      */
@@ -919,7 +854,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set valueExpr(value: ((item: any) => string | number | boolean) | string) {
         this._setOption('valueExpr', value);
     }
-
 
     /**
      * [descr:WidgetOptions.visible]
@@ -932,7 +866,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
      */
@@ -943,7 +876,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.wrapItemText]
@@ -1400,11 +1332,8 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

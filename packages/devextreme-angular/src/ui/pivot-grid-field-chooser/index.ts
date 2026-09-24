@@ -75,7 +75,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -86,7 +85,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.allowSearch]
@@ -99,7 +97,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('allowSearch', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.applyChangesMode]
      */
@@ -110,7 +107,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     set applyChangesMode(value: ApplyChangesMode) {
         this._setOption('applyChangesMode', value);
     }
-
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.dataSource]
@@ -123,7 +119,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -134,7 +129,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -147,7 +141,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.encodeHtml]
      */
@@ -158,7 +151,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     set encodeHtml(value: boolean) {
         this._setOption('encodeHtml', value);
     }
-
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
@@ -171,7 +163,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.headerFilter]
      */
@@ -182,7 +173,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     set headerFilter(value: { allowSelectAll?: boolean, height?: number, search?: HeaderFilterSearchConfig, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number }) {
         this._setOption('headerFilter', value);
     }
-
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.height]
@@ -195,7 +185,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -206,7 +195,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
@@ -219,7 +207,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.layout]
      */
@@ -230,7 +217,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     set layout(value: FieldChooserLayout) {
         this._setOption('layout', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -243,7 +229,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxPivotGridFieldChooserOptions.searchTimeout]
      */
@@ -254,7 +239,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     set searchTimeout(value: number) {
         this._setOption('searchTimeout', value);
     }
-
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.state]
@@ -267,7 +251,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('state', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -278,7 +261,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxPivotGridFieldChooserOptions.texts]
@@ -291,7 +273,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
         this._setOption('texts', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -302,7 +283,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -444,9 +424,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

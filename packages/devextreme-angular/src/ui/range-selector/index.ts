@@ -233,7 +233,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('background', value);
     }
 
-
     /**
      * [descr:dxRangeSelectorOptions.behavior]
      */
@@ -244,7 +243,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set behavior(value: { allowSlidersSwap?: boolean, animationEnabled?: boolean, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode }) {
         this._setOption('behavior', value);
     }
-
 
     /**
      * [descr:dxRangeSelectorOptions.chart]
@@ -257,7 +255,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('chart', value);
     }
 
-
     /**
      * [descr:dxRangeSelectorOptions.containerBackgroundColor]
      */
@@ -268,7 +265,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set containerBackgroundColor(value: string) {
         this._setOption('containerBackgroundColor', value);
     }
-
 
     /**
      * [descr:dxRangeSelectorOptions.dataSource]
@@ -281,7 +277,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxRangeSelectorOptions.dataSourceField]
      */
@@ -292,7 +287,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set dataSourceField(value: string) {
         this._setOption('dataSourceField', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.disabled]
@@ -305,7 +299,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -316,7 +309,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
@@ -329,7 +321,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.export]
      */
@@ -340,7 +331,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }) {
         this._setOption('export', value);
     }
-
 
     /**
      * [descr:dxRangeSelectorOptions.indent]
@@ -353,7 +343,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('indent', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
      */
@@ -364,7 +353,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set loadingIndicator(value: { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }) {
         this._setOption('loadingIndicator', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.margin]
@@ -377,7 +365,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('margin', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.pathModified]
      */
@@ -388,7 +375,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set pathModified(value: boolean) {
         this._setOption('pathModified', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
@@ -401,7 +387,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('redrawOnResize', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
      */
@@ -412,7 +397,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxRangeSelectorOptions.scale]
@@ -425,7 +409,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('scale', value);
     }
 
-
     /**
      * [descr:dxRangeSelectorOptions.selectedRangeColor]
      */
@@ -436,7 +419,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set selectedRangeColor(value: string) {
         this._setOption('selectedRangeColor', value);
     }
-
 
     /**
      * [descr:dxRangeSelectorOptions.selectedRangeUpdateMode]
@@ -449,7 +431,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('selectedRangeUpdateMode', value);
     }
 
-
     /**
      * [descr:dxRangeSelectorOptions.shutter]
      */
@@ -460,7 +441,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set shutter(value: { color?: string | undefined, opacity?: number }) {
         this._setOption('shutter', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.size]
@@ -473,7 +453,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:dxRangeSelectorOptions.sliderHandle]
      */
@@ -484,7 +463,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set sliderHandle(value: { color?: string, opacity?: number, width?: number }) {
         this._setOption('sliderHandle', value);
     }
-
 
     /**
      * [descr:dxRangeSelectorOptions.sliderMarker]
@@ -497,7 +475,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('sliderMarker', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
      */
@@ -509,7 +486,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
         this._setOption('theme', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.title]
      */
@@ -520,7 +496,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
-
 
     /**
      * [descr:dxRangeSelectorOptions.value]
@@ -712,11 +687,8 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

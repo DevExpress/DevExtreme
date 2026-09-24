@@ -93,7 +93,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -104,7 +103,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.buttons]
@@ -117,7 +115,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('buttons', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -128,7 +125,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -141,7 +137,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
      */
@@ -152,7 +147,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -165,7 +159,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -176,7 +169,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
@@ -189,7 +181,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.inputAttr]
      */
@@ -200,7 +191,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set inputAttr(value: any) {
         this._setOption('inputAttr', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -213,7 +203,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -224,7 +213,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.label]
@@ -237,7 +225,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.labelMode]
      */
@@ -248,7 +235,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.mask]
@@ -261,7 +247,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('mask', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.maskChar]
      */
@@ -272,7 +257,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set maskChar(value: string) {
         this._setOption('maskChar', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.maskInvalidMessage]
@@ -285,7 +269,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('maskInvalidMessage', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.maskRules]
      */
@@ -296,7 +279,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set maskRules(value: any) {
         this._setOption('maskRules', value);
     }
-
 
     /**
      * [descr:dxTextBoxOptions.maxLength]
@@ -309,7 +291,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('maxLength', value);
     }
 
-
     /**
      * [descr:dxTextBoxOptions.mode]
      */
@@ -320,7 +301,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set mode(value: TextBoxType) {
         this._setOption('mode', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.name]
@@ -333,7 +313,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.placeholder]
      */
@@ -344,7 +323,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set placeholder(value: string) {
         this._setOption('placeholder', value);
     }
-
 
     /**
      * [descr:EditorOptions.readOnly]
@@ -357,7 +335,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -368,7 +345,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
@@ -381,7 +357,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('showClearButton', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.showMaskMode]
      */
@@ -392,7 +367,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set showMaskMode(value: MaskMode) {
         this._setOption('showMaskMode', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.spellcheck]
@@ -405,7 +379,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('spellcheck', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.stylingMode]
      */
@@ -416,7 +389,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -429,7 +401,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.text]
      */
@@ -440,7 +411,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set text(value: string) {
         this._setOption('text', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.useMaskedValue]
@@ -453,7 +423,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('useMaskedValue', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
      */
@@ -464,7 +433,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationErrors]
@@ -477,7 +445,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
      */
@@ -488,7 +455,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
@@ -501,7 +467,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
      */
@@ -512,7 +477,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
-
 
     /**
      * [descr:dxTextBoxOptions.value]
@@ -525,7 +489,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.valueChangeEvent]
      */
@@ -537,7 +500,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
         this._setOption('valueChangeEvent', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -548,7 +510,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -840,11 +801,8 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

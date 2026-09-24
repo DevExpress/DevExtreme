@@ -108,7 +108,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -119,7 +118,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxMapOptions.apiKey]
@@ -132,7 +130,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('apiKey', value);
     }
 
-
     /**
      * [descr:dxMapOptions.autoAdjust]
      */
@@ -143,7 +140,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set autoAdjust(value: boolean) {
         this._setOption('autoAdjust', value);
     }
-
 
     /**
      * [descr:dxMapOptions.center]
@@ -156,7 +152,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('center', value);
     }
 
-
     /**
      * [descr:dxMapOptions.controls]
      */
@@ -167,7 +162,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set controls(value: boolean) {
         this._setOption('controls', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -180,7 +174,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -191,7 +184,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxMapOptions.focusStateEnabled]
@@ -204,7 +196,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxMapOptions.height]
      */
@@ -215,7 +206,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set height(value: number | string) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -228,7 +218,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -239,7 +228,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxMapOptions.markerIconSrc]
@@ -252,7 +240,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('markerIconSrc', value);
     }
 
-
     /**
      * [descr:dxMapOptions.markers]
      */
@@ -263,7 +250,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set markers(value: { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[]) {
         this._setOption('markers', value);
     }
-
 
     /**
      * [descr:dxMapOptions.provider]
@@ -276,7 +262,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('provider', value);
     }
 
-
     /**
      * [descr:dxMapOptions.providerConfig]
      */
@@ -287,7 +272,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set providerConfig(value: { mapId?: string, useAdvancedMarkers?: boolean }) {
         this._setOption('providerConfig', value);
     }
-
 
     /**
      * [descr:dxMapOptions.routes]
@@ -300,7 +284,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('routes', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -311,7 +294,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -324,7 +306,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxMapOptions.type]
      */
@@ -335,7 +316,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set type(value: MapType) {
         this._setOption('type', value);
     }
-
 
     /**
      * [descr:WidgetOptions.visible]
@@ -348,7 +328,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxMapOptions.width]
      */
@@ -359,7 +338,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     set width(value: number | string) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxMapOptions.zoom]
@@ -531,9 +509,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() zoomChange: EventEmitter<number>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

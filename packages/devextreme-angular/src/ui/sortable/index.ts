@@ -62,7 +62,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
         this._setOption('allowDropInsideItem', value);
     }
 
-
     /**
      * [descr:dxSortableOptions.allowReordering]
      */
@@ -73,7 +72,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     set allowReordering(value: boolean) {
         this._setOption('allowReordering', value);
     }
-
 
     /**
      * [descr:DraggableBaseOptions.autoScroll]
@@ -86,7 +84,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
         this._setOption('autoScroll', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.boundary]
      */
@@ -97,7 +94,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     set boundary(value: any | string | undefined) {
         this._setOption('boundary', value);
     }
-
 
     /**
      * [descr:DraggableBaseOptions.container]
@@ -110,7 +106,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
         this._setOption('container', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.cursorOffset]
      */
@@ -121,7 +116,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     set cursorOffset(value: string | { x?: number, y?: number }) {
         this._setOption('cursorOffset', value);
     }
-
 
     /**
      * [descr:DraggableBaseOptions.data]
@@ -134,7 +128,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
         this._setOption('data', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.dragDirection]
      */
@@ -145,7 +138,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     set dragDirection(value: DragDirection) {
         this._setOption('dragDirection', value);
     }
-
 
     /**
      * [descr:dxSortableOptions.dragTemplate]
@@ -158,7 +150,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
         this._setOption('dragTemplate', value);
     }
 
-
     /**
      * [descr:dxSortableOptions.dropFeedbackMode]
      */
@@ -169,7 +160,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     set dropFeedbackMode(value: DragHighlight) {
         this._setOption('dropFeedbackMode', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -182,7 +172,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxSortableOptions.filter]
      */
@@ -193,7 +182,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     set filter(value: string) {
         this._setOption('filter', value);
     }
-
 
     /**
      * [descr:DraggableBaseOptions.group]
@@ -206,7 +194,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
         this._setOption('group', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.handle]
      */
@@ -217,7 +204,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     set handle(value: string) {
         this._setOption('handle', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -230,7 +216,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxSortableOptions.itemOrientation]
      */
@@ -241,7 +226,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     set itemOrientation(value: Orientation) {
         this._setOption('itemOrientation', value);
     }
-
 
     /**
      * [descr:dxSortableOptions.moveItemOnDrop]
@@ -254,7 +238,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
         this._setOption('moveItemOnDrop', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -265,7 +248,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:DraggableBaseOptions.scrollSensitivity]
@@ -278,7 +260,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
         this._setOption('scrollSensitivity', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.scrollSpeed]
      */
@@ -289,7 +270,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     set scrollSpeed(value: number) {
         this._setOption('scrollSpeed', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -456,9 +436,6 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

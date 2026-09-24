@@ -106,7 +106,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -117,7 +116,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxFilterBuilderOptions.allowHierarchicalFields]
@@ -130,7 +128,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('allowHierarchicalFields', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.customOperations]
      */
@@ -141,7 +138,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     set customOperations(value: Array<dxFilterBuilderCustomOperation>) {
         this._setOption('customOperations', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -154,7 +150,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -165,7 +160,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxFilterBuilderOptions.fields]
@@ -178,7 +172,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('fields', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.filterOperationDescriptions]
      */
@@ -189,7 +182,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     set filterOperationDescriptions(value: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }) {
         this._setOption('filterOperationDescriptions', value);
     }
-
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
@@ -202,7 +194,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.groupOperationDescriptions]
      */
@@ -213,7 +204,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     set groupOperationDescriptions(value: { and?: string, notAnd?: string, notOr?: string, or?: string }) {
         this._setOption('groupOperationDescriptions', value);
     }
-
 
     /**
      * [descr:dxFilterBuilderOptions.groupOperations]
@@ -226,7 +216,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('groupOperations', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -237,7 +226,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -250,7 +238,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -261,7 +248,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxFilterBuilderOptions.maxGroupLevel]
@@ -274,7 +260,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('maxGroupLevel', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -285,7 +270,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -298,7 +282,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxFilterBuilderOptions.value]
      */
@@ -310,7 +293,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -321,7 +303,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -473,11 +454,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

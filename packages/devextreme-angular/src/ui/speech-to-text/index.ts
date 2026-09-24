@@ -58,7 +58,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('accessKey', value);
     }
 
-
     
     @Input()
     get activeStateEnabled(): boolean {
@@ -67,7 +66,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     
     @Input()
@@ -78,7 +76,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('customSpeechRecognizer', value);
     }
 
-
     
     @Input()
     get disabled(): boolean {
@@ -87,7 +84,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     
     @Input()
@@ -98,7 +94,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('elementAttr', value);
     }
 
-
     
     @Input()
     get focusStateEnabled(): boolean {
@@ -107,7 +102,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     
     @Input()
@@ -118,7 +112,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     
     @Input()
     get hint(): string | undefined {
@@ -127,7 +120,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     
     @Input()
@@ -138,7 +130,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('hoverStateEnabled', value);
     }
 
-
     
     @Input()
     get rtlEnabled(): boolean {
@@ -147,7 +138,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     
     @Input()
@@ -158,7 +148,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('speechRecognitionConfig', value);
     }
 
-
     
     @Input()
     get startIcon(): string {
@@ -167,7 +156,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set startIcon(value: string) {
         this._setOption('startIcon', value);
     }
-
 
     
     @Input()
@@ -178,7 +166,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('startText', value);
     }
 
-
     
     @Input()
     get stopIcon(): string {
@@ -187,7 +174,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set stopIcon(value: string) {
         this._setOption('stopIcon', value);
     }
-
 
     
     @Input()
@@ -198,7 +184,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('stopText', value);
     }
 
-
     
     @Input()
     get stylingMode(): ButtonStyle {
@@ -207,7 +192,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set stylingMode(value: ButtonStyle) {
         this._setOption('stylingMode', value);
     }
-
 
     
     @Input()
@@ -218,7 +202,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('tabIndex', value);
     }
 
-
     
     @Input()
     get type(): ButtonType | string {
@@ -228,7 +211,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._setOption('type', value);
     }
 
-
     
     @Input()
     get visible(): boolean {
@@ -237,7 +219,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     
     @Input()
@@ -392,9 +373,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

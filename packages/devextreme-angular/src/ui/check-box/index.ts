@@ -78,7 +78,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxCheckBoxOptions.activeStateEnabled]
      */
@@ -89,7 +88,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -102,7 +100,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -113,7 +110,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxCheckBoxOptions.enableThreeStateBehavior]
@@ -126,7 +122,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('enableThreeStateBehavior', value);
     }
 
-
     /**
      * [descr:dxCheckBoxOptions.focusStateEnabled]
      */
@@ -137,7 +132,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -150,7 +144,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -161,7 +154,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxCheckBoxOptions.hoverStateEnabled]
@@ -174,7 +166,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxCheckBoxOptions.iconSize]
      */
@@ -185,7 +176,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set iconSize(value: number | string | undefined) {
         this._setOption('iconSize', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -198,7 +188,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -209,7 +198,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:dxCheckBoxOptions.name]
@@ -222,7 +210,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -233,7 +220,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -246,7 +232,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -257,7 +242,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxCheckBoxOptions.text]
@@ -270,7 +254,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('text', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
      */
@@ -281,7 +264,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationErrors]
@@ -294,7 +276,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
      */
@@ -305,7 +286,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
@@ -318,7 +298,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
      */
@@ -329,7 +308,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
-
 
     /**
      * [descr:dxCheckBoxOptions.value]
@@ -342,7 +320,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -353,7 +330,6 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -520,11 +496,8 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

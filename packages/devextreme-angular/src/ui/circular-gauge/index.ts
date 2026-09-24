@@ -128,7 +128,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxCircularGaugeOptions.centerTemplate]
      */
@@ -139,7 +138,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set centerTemplate(value: any) {
         this._setOption('centerTemplate', value);
     }
-
 
     /**
      * [descr:BaseGaugeOptions.containerBackgroundColor]
@@ -152,7 +150,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('containerBackgroundColor', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
      */
@@ -163,7 +160,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -176,7 +172,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
      */
@@ -187,7 +182,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set encodeHtml(value: boolean) {
         this._setOption('encodeHtml', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.export]
@@ -200,7 +194,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxCircularGaugeOptions.geometry]
      */
@@ -211,7 +204,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set geometry(value: { endAngle?: number, startAngle?: number }) {
         this._setOption('geometry', value);
     }
-
 
     /**
      * [descr:BaseGaugeOptions.loadingIndicator]
@@ -224,7 +216,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('loadingIndicator', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.margin]
      */
@@ -235,7 +226,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set margin(value: { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
@@ -248,7 +238,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('pathModified', value);
     }
 
-
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer]
      */
@@ -259,7 +248,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set rangeContainer(value: { backgroundColor?: ChartsColor | string, offset?: number, orientation?: CircularGaugeElementOrientation, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, ranges?: { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number }) {
         this._setOption('rangeContainer', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
@@ -272,7 +260,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('redrawOnResize', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
      */
@@ -283,7 +270,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxCircularGaugeOptions.scale]
@@ -296,7 +282,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('scale', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.size]
      */
@@ -307,7 +292,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set size(value: { height?: number | undefined, width?: number | undefined }) {
         this._setOption('size', value);
     }
-
 
     /**
      * [descr:dxCircularGaugeOptions.subvalueIndicator]
@@ -320,7 +304,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('subvalueIndicator', value);
     }
 
-
     /**
      * [descr:BaseGaugeOptions.subvalues]
      */
@@ -331,7 +314,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set subvalues(value: Array<number> | undefined) {
         this._setOption('subvalues', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.theme]
@@ -344,7 +326,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('theme', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.title]
      */
@@ -355,7 +336,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
         this._setOption('title', value);
     }
-
 
     /**
      * [descr:BaseGaugeOptions.tooltip]
@@ -368,7 +348,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
         this._setOption('tooltip', value);
     }
 
-
     /**
      * [descr:BaseGaugeOptions.value]
      */
@@ -379,7 +358,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     set value(value: number | undefined) {
         this._setOption('value', value);
     }
-
 
     /**
      * [descr:dxCircularGaugeOptions.valueIndicator]
@@ -556,9 +534,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() valueIndicatorChange: EventEmitter<GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" }>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

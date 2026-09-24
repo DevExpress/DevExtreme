@@ -130,7 +130,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
      */
@@ -141,7 +140,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.applyButtonText]
@@ -154,7 +152,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('applyButtonText', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.applyValueMode]
      */
@@ -165,7 +162,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set applyValueMode(value: ApplyValueMode) {
         this._setOption('applyValueMode', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.cancelButtonText]
@@ -178,7 +174,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('cancelButtonText', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.cleanSearchOnOpening]
      */
@@ -189,7 +184,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set cleanSearchOnOpening(value: boolean) {
         this._setOption('cleanSearchOnOpening', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.clearButtonText]
@@ -202,7 +196,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('clearButtonText', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
      */
@@ -213,7 +206,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set dataSource(value: Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
@@ -226,7 +218,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -237,7 +228,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
@@ -250,7 +240,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('displayExpr', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.displayValue]
      */
@@ -261,7 +250,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set displayValue(value: string | undefined) {
         this._setOption('displayValue', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.dropDownCentered]
@@ -274,7 +262,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('dropDownCentered', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.dropDownOptions]
      */
@@ -285,7 +272,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set dropDownOptions(value: dxPopoverOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -298,7 +284,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.fieldTemplate]
      */
@@ -309,7 +294,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set fieldTemplate(value: any) {
         this._setOption('fieldTemplate', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.focusStateEnabled]
@@ -322,7 +306,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.grouped]
      */
@@ -333,7 +316,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set grouped(value: boolean) {
         this._setOption('grouped', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.groupTemplate]
@@ -346,7 +328,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('groupTemplate', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -357,7 +338,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -370,7 +350,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
      */
@@ -381,7 +360,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.inputAttr]
@@ -394,7 +372,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('inputAttr', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
      */
@@ -405,7 +382,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set isDirty(value: boolean) {
         this._setOption('isDirty', value);
     }
-
 
     /**
      * [descr:EditorOptions.isValid]
@@ -418,7 +394,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.items]
      */
@@ -429,7 +404,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set items(value: Array<any | CollectionWidgetItem>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
@@ -442,7 +416,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.label]
      */
@@ -453,7 +426,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set label(value: string) {
         this._setOption('label', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
@@ -466,7 +438,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('labelMode', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.minSearchLength]
      */
@@ -477,7 +448,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set minSearchLength(value: number) {
         this._setOption('minSearchLength', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.name]
@@ -490,7 +460,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.nextButtonText]
      */
@@ -501,7 +470,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set nextButtonText(value: string) {
         this._setOption('nextButtonText', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.noDataText]
@@ -514,7 +482,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.opened]
      */
@@ -525,7 +492,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set opened(value: boolean) {
         this._setOption('opened', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.pageLoadingText]
@@ -538,7 +504,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('pageLoadingText', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.pageLoadMode]
      */
@@ -549,7 +514,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set pageLoadMode(value: PageLoadMode) {
         this._setOption('pageLoadMode', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.placeholder]
@@ -562,7 +526,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.pulledDownText]
      */
@@ -573,7 +536,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set pulledDownText(value: string) {
         this._setOption('pulledDownText', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.pullingDownText]
@@ -586,7 +548,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('pullingDownText', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.pullRefreshEnabled]
      */
@@ -597,7 +558,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set pullRefreshEnabled(value: boolean) {
         this._setOption('pullRefreshEnabled', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.refreshingText]
@@ -610,7 +570,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('refreshingText', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -621,7 +580,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.searchEnabled]
@@ -634,7 +592,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('searchEnabled', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.searchExpr]
      */
@@ -645,7 +602,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set searchExpr(value: Array<Function | string> | Function | string) {
         this._setOption('searchExpr', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.searchMode]
@@ -658,7 +614,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('searchMode', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.searchPlaceholder]
      */
@@ -669,7 +624,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set searchPlaceholder(value: string) {
         this._setOption('searchPlaceholder', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.searchStartEvent]
@@ -682,7 +636,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('searchStartEvent', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.searchTimeout]
      */
@@ -693,7 +646,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set searchTimeout(value: number) {
         this._setOption('searchTimeout', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.selectedItem]
@@ -706,7 +658,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('selectedItem', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.showCancelButton]
      */
@@ -717,7 +668,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set showCancelButton(value: boolean) {
         this._setOption('showCancelButton', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.showClearButton]
@@ -730,7 +680,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('showClearButton', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.showDataBeforeSearch]
      */
@@ -741,7 +690,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set showDataBeforeSearch(value: boolean) {
         this._setOption('showDataBeforeSearch', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
@@ -754,7 +702,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -765,7 +712,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.text]
@@ -778,7 +724,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('text', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.useItemTextAsTitle]
      */
@@ -789,7 +734,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set useItemTextAsTitle(value: boolean) {
         this._setOption('useItemTextAsTitle', value);
     }
-
 
     /**
      * [descr:dxLookupOptions.useNativeScrolling]
@@ -802,7 +746,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('useNativeScrolling', value);
     }
 
-
     /**
      * [descr:dxLookupOptions.usePopover]
      */
@@ -813,7 +756,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set usePopover(value: boolean) {
         this._setOption('usePopover', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationError]
@@ -826,7 +768,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
      */
@@ -837,7 +778,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessageMode]
@@ -850,7 +790,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
      */
@@ -861,7 +800,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set validationMessagePosition(value: Mode | Position) {
         this._setOption('validationMessagePosition', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationStatus]
@@ -874,7 +812,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.value]
      */
@@ -885,7 +822,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set value(value: any) {
         this._setOption('value', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.valueChangeEvent]
@@ -898,7 +834,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('valueChangeEvent', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
      */
@@ -909,7 +844,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set valueExpr(value: ((item: any) => string | number | boolean) | string) {
         this._setOption('valueExpr', value);
     }
-
 
     /**
      * [descr:WidgetOptions.visible]
@@ -922,7 +856,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
      */
@@ -933,7 +866,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.wrapItemText]
@@ -1355,11 +1287,8 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -94,7 +94,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -105,7 +104,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.animationEnabled]
@@ -118,7 +116,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('animationEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.collapseIcon]
      */
@@ -129,7 +126,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set collapseIcon(value: null | string) {
         this._setOption('collapseIcon', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.createChildren]
@@ -142,7 +138,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('createChildren', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.dataSource]
      */
@@ -153,7 +148,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set dataSource(value: Array<dxTreeViewItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.dataStructure]
@@ -166,7 +160,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('dataStructure', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -177,7 +170,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
@@ -190,7 +182,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('disabledExpr', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.disabledNodeSelectionMode]
      */
@@ -201,7 +192,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set disabledNodeSelectionMode(value: DisabledNodeSelectionMode) {
         this._setOption('disabledNodeSelectionMode', value);
     }
-
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
@@ -214,7 +204,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('displayExpr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -225,7 +214,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.expandAllEnabled]
@@ -238,7 +226,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('expandAllEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.expandedExpr]
      */
@@ -249,7 +236,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set expandedExpr(value: ((item: any, value: boolean | undefined) => boolean | undefined) | string) {
         this._setOption('expandedExpr', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.expandEvent]
@@ -262,7 +248,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('expandEvent', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.expandIcon]
      */
@@ -273,7 +258,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set expandIcon(value: null | string) {
         this._setOption('expandIcon', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.expandNodesRecursive]
@@ -286,7 +270,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('expandNodesRecursive', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.focusStateEnabled]
      */
@@ -297,7 +280,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.hasItemsExpr]
@@ -310,7 +292,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('hasItemsExpr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -321,7 +302,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -334,7 +314,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.hoverStateEnabled]
      */
@@ -345,7 +324,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
@@ -358,7 +336,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.items]
      */
@@ -369,7 +346,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set items(value: Array<any | dxTreeViewItem>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.itemsExpr]
@@ -382,7 +358,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemsExpr', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
      */
@@ -393,7 +368,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
-
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.keyExpr]
@@ -406,7 +380,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
      */
@@ -417,7 +390,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set noDataText(value: string) {
         this._setOption('noDataText', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.parentIdExpr]
@@ -430,7 +402,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('parentIdExpr', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.rootValue]
      */
@@ -441,7 +412,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set rootValue(value: any) {
         this._setOption('rootValue', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -454,7 +424,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.scrollDirection]
      */
@@ -465,7 +434,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set scrollDirection(value: ScrollDirection) {
         this._setOption('scrollDirection', value);
     }
-
 
     /**
      * [descr:SearchBoxMixinOptions.searchEditorOptions]
@@ -478,7 +446,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('searchEditorOptions', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchEnabled]
      */
@@ -489,7 +456,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set searchEnabled(value: boolean) {
         this._setOption('searchEnabled', value);
     }
-
 
     /**
      * [descr:SearchBoxMixinOptions.searchExpr]
@@ -502,7 +468,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('searchExpr', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchMode]
      */
@@ -513,7 +478,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set searchMode(value: SearchMode) {
         this._setOption('searchMode', value);
     }
-
 
     /**
      * [descr:SearchBoxMixinOptions.searchTimeout]
@@ -526,7 +490,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('searchTimeout', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchValue]
      */
@@ -537,7 +500,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set searchValue(value: string) {
         this._setOption('searchValue', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.selectAllText]
@@ -550,7 +512,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('selectAllText', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.selectByClick]
      */
@@ -561,7 +522,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set selectByClick(value: boolean) {
         this._setOption('selectByClick', value);
     }
-
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
@@ -574,7 +534,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('selectedExpr', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.selectionMode]
      */
@@ -585,7 +544,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set selectionMode(value: SingleOrMultiple) {
         this._setOption('selectionMode', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.selectNodesRecursive]
@@ -598,7 +556,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('selectNodesRecursive', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.showCheckBoxesMode]
      */
@@ -609,7 +566,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set showCheckBoxesMode(value: TreeViewCheckBoxMode) {
         this._setOption('showCheckBoxesMode', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -622,7 +578,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxTreeViewOptions.useNativeScrolling]
      */
@@ -633,7 +588,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set useNativeScrolling(value: boolean) {
         this._setOption('useNativeScrolling', value);
     }
-
 
     /**
      * [descr:dxTreeViewOptions.virtualModeEnabled]
@@ -646,7 +600,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('virtualModeEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -657,7 +610,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -979,9 +931,6 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

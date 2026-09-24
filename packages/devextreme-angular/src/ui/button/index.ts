@@ -60,7 +60,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.activeStateEnabled]
      */
@@ -71,7 +70,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -84,7 +82,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -95,7 +92,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxButtonOptions.focusStateEnabled]
@@ -108,7 +104,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -119,7 +114,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -132,7 +126,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.hoverStateEnabled]
      */
@@ -143,7 +136,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxButtonOptions.icon]
@@ -156,7 +148,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('icon', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -167,7 +158,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxButtonOptions.stylingMode]
@@ -180,7 +170,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -191,7 +180,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxButtonOptions.template]
@@ -204,7 +192,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('template', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.text]
      */
@@ -215,7 +202,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     set text(value: string) {
         this._setOption('text', value);
     }
-
 
     /**
      * [descr:dxButtonOptions.type]
@@ -228,7 +214,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('type', value);
     }
 
-
     /**
      * [descr:dxButtonOptions.useSubmitBehavior]
      */
@@ -239,7 +224,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     set useSubmitBehavior(value: boolean) {
         this._setOption('useSubmitBehavior', value);
     }
-
 
     /**
      * [descr:dxButtonOptions.validationGroup]
@@ -252,7 +236,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
         this._setOption('validationGroup', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -263,7 +246,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -395,9 +377,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

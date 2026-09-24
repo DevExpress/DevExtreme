@@ -80,7 +80,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -91,7 +90,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxMultiViewOptions.animationEnabled]
@@ -104,7 +102,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('animationEnabled', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.dataSource]
      */
@@ -115,7 +112,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set dataSource(value: Array<any | dxMultiViewItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:dxMultiViewOptions.deferRendering]
@@ -128,7 +124,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -139,7 +134,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -152,7 +146,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.focusStateEnabled]
      */
@@ -163,7 +156,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -176,7 +168,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -187,7 +178,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
@@ -200,7 +190,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
      */
@@ -211,7 +200,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set itemHoldTimeout(value: number) {
         this._setOption('itemHoldTimeout', value);
     }
-
 
     /**
      * [descr:dxMultiViewOptions.items]
@@ -224,7 +212,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
      */
@@ -235,7 +222,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
-
 
     /**
      * [descr:dxMultiViewOptions.loop]
@@ -248,7 +234,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('loop', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
      */
@@ -259,7 +244,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set noDataText(value: string) {
         this._setOption('noDataText', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -272,7 +256,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.selectedIndex]
      */
@@ -283,7 +266,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set selectedIndex(value: number) {
         this._setOption('selectedIndex', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
@@ -296,7 +278,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('selectedItem', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.swipeEnabled]
      */
@@ -307,7 +288,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set swipeEnabled(value: boolean) {
         this._setOption('swipeEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -320,7 +300,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -331,7 +310,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -503,9 +481,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

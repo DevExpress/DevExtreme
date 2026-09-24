@@ -81,7 +81,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -92,7 +91,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTabPanelOptions.animationEnabled]
@@ -105,7 +103,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('animationEnabled', value);
     }
 
-
     /**
      * [descr:dxTabPanelOptions.dataSource]
      */
@@ -116,7 +113,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set dataSource(value: Array<any | dxTabPanelItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:dxMultiViewOptions.deferRendering]
@@ -129,7 +125,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -140,7 +135,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -153,7 +147,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.focusStateEnabled]
      */
@@ -164,7 +157,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -177,7 +169,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -188,7 +179,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxTabPanelOptions.hoverStateEnabled]
@@ -201,7 +191,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTabPanelOptions.iconPosition]
      */
@@ -212,7 +201,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set iconPosition(value: TabsIconPosition) {
         this._setOption('iconPosition', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
@@ -225,7 +213,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxTabPanelOptions.items]
      */
@@ -236,7 +223,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set items(value: Array<any | dxTabPanelItem | string>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
@@ -249,7 +235,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxTabPanelOptions.itemTitleTemplate]
      */
@@ -260,7 +245,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set itemTitleTemplate(value: any) {
         this._setOption('itemTitleTemplate', value);
     }
-
 
     /**
      * [descr:dxTabPanelOptions.keyExpr]
@@ -273,7 +257,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.loop]
      */
@@ -284,7 +267,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set loop(value: boolean) {
         this._setOption('loop', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.noDataText]
@@ -297,7 +279,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:dxTabPanelOptions.repaintChangesOnly]
      */
@@ -308,7 +289,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set repaintChangesOnly(value: boolean) {
         this._setOption('repaintChangesOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -321,7 +301,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTabPanelOptions.scrollByContent]
      */
@@ -332,7 +311,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set scrollByContent(value: boolean) {
         this._setOption('scrollByContent', value);
     }
-
 
     /**
      * [descr:dxTabPanelOptions.scrollingEnabled]
@@ -345,7 +323,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('scrollingEnabled', value);
     }
 
-
     /**
      * [descr:dxMultiViewOptions.selectedIndex]
      */
@@ -356,7 +333,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set selectedIndex(value: number) {
         this._setOption('selectedIndex', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
@@ -369,7 +345,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('selectedItem', value);
     }
 
-
     /**
      * [descr:dxTabPanelOptions.showNavButtons]
      */
@@ -380,7 +355,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set showNavButtons(value: boolean) {
         this._setOption('showNavButtons', value);
     }
-
 
     /**
      * [descr:dxTabPanelOptions.stylingMode]
@@ -393,7 +367,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:dxTabPanelOptions.swipeEnabled]
      */
@@ -404,7 +377,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set swipeEnabled(value: boolean) {
         this._setOption('swipeEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -417,7 +389,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxTabPanelOptions.tabsPosition]
      */
@@ -429,7 +400,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('tabsPosition', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -440,7 +410,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -677,9 +646,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

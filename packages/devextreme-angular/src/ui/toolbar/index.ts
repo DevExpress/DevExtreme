@@ -80,7 +80,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('allowKeyboardNavigation', value);
     }
 
-
     /**
      * [descr:dxToolbarOptions.dataSource]
      */
@@ -91,7 +90,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     set dataSource(value: Array<any | dxToolbarItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -104,7 +102,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -115,7 +112,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -128,7 +124,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -139,7 +134,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
@@ -152,7 +146,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxToolbarOptions.items]
      */
@@ -163,7 +156,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     set items(value: Array<any | dxToolbarItem | string>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
@@ -176,7 +168,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxToolbarOptions.menuItemTemplate]
      */
@@ -187,7 +178,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     set menuItemTemplate(value: any) {
         this._setOption('menuItemTemplate', value);
     }
-
 
     /**
      * [descr:dxToolbarOptions.multiline]
@@ -200,7 +190,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('multiline', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
      */
@@ -211,7 +200,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     set noDataText(value: string) {
         this._setOption('noDataText', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -224,7 +212,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -235,7 +222,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -362,9 +348,6 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

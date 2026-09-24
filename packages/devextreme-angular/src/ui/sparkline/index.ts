@@ -83,7 +83,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('argumentField', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.barNegativeColor]
      */
@@ -94,7 +93,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set barNegativeColor(value: string) {
         this._setOption('barNegativeColor', value);
     }
-
 
     /**
      * [descr:dxSparklineOptions.barPositiveColor]
@@ -107,7 +105,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('barPositiveColor', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.dataSource]
      */
@@ -118,7 +115,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.disabled]
@@ -131,7 +127,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -142,7 +137,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
@@ -155,7 +149,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.firstLastColor]
      */
@@ -166,7 +159,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set firstLastColor(value: string) {
         this._setOption('firstLastColor', value);
     }
-
 
     /**
      * [descr:dxSparklineOptions.ignoreEmptyPoints]
@@ -179,7 +171,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('ignoreEmptyPoints', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.lineColor]
      */
@@ -190,7 +181,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set lineColor(value: string) {
         this._setOption('lineColor', value);
     }
-
 
     /**
      * [descr:dxSparklineOptions.lineWidth]
@@ -203,7 +193,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('lineWidth', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.lossColor]
      */
@@ -214,7 +203,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set lossColor(value: string) {
         this._setOption('lossColor', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.margin]
@@ -227,7 +215,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('margin', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.maxColor]
      */
@@ -238,7 +225,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set maxColor(value: string) {
         this._setOption('maxColor', value);
     }
-
 
     /**
      * [descr:dxSparklineOptions.maxValue]
@@ -251,7 +237,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('maxValue', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.minColor]
      */
@@ -262,7 +247,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set minColor(value: string) {
         this._setOption('minColor', value);
     }
-
 
     /**
      * [descr:dxSparklineOptions.minValue]
@@ -275,7 +259,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('minValue', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.pathModified]
      */
@@ -286,7 +269,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set pathModified(value: boolean) {
         this._setOption('pathModified', value);
     }
-
 
     /**
      * [descr:dxSparklineOptions.pointColor]
@@ -299,7 +281,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('pointColor', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.pointSize]
      */
@@ -310,7 +291,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set pointSize(value: number) {
         this._setOption('pointSize', value);
     }
-
 
     /**
      * [descr:dxSparklineOptions.pointSymbol]
@@ -323,7 +303,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('pointSymbol', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
      */
@@ -334,7 +313,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxSparklineOptions.showFirstLast]
@@ -347,7 +325,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showFirstLast', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.showMinMax]
      */
@@ -358,7 +335,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set showMinMax(value: boolean) {
         this._setOption('showMinMax', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.size]
@@ -371,7 +347,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
      */
@@ -382,7 +357,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set theme(value: Theme) {
         this._setOption('theme', value);
     }
-
 
     /**
      * [descr:BaseSparklineOptions.tooltip]
@@ -395,7 +369,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('tooltip', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.type]
      */
@@ -406,7 +379,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set type(value: SparklineType) {
         this._setOption('type', value);
     }
-
 
     /**
      * [descr:dxSparklineOptions.valueField]
@@ -419,7 +391,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('valueField', value);
     }
 
-
     /**
      * [descr:dxSparklineOptions.winColor]
      */
@@ -430,7 +401,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     set winColor(value: string) {
         this._setOption('winColor', value);
     }
-
 
     /**
      * [descr:dxSparklineOptions.winlossThreshold]
@@ -647,9 +617,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() winlossThresholdChange: EventEmitter<number>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

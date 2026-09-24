@@ -80,7 +80,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -91,7 +90,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxAccordionOptions.animationDuration]
@@ -104,7 +102,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('animationDuration', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.collapsible]
      */
@@ -115,7 +112,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set collapsible(value: boolean) {
         this._setOption('collapsible', value);
     }
-
 
     /**
      * [descr:dxAccordionOptions.dataSource]
@@ -128,7 +124,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.deferRendering]
      */
@@ -139,7 +134,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set deferRendering(value: boolean) {
         this._setOption('deferRendering', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -152,7 +146,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -163,7 +156,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxAccordionOptions.focusStateEnabled]
@@ -176,7 +168,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.height]
      */
@@ -187,7 +178,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -200,7 +190,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.hoverStateEnabled]
      */
@@ -211,7 +200,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
@@ -224,7 +212,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.items]
      */
@@ -235,7 +222,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set items(value: Array<any | dxAccordionItem | string>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:dxAccordionOptions.itemTemplate]
@@ -248,7 +234,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.itemTitleTemplate]
      */
@@ -259,7 +244,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set itemTitleTemplate(value: any) {
         this._setOption('itemTitleTemplate', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
@@ -272,7 +256,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.multiple]
      */
@@ -283,7 +266,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set multiple(value: boolean) {
         this._setOption('multiple', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.noDataText]
@@ -296,7 +278,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.repaintChangesOnly]
      */
@@ -307,7 +288,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set repaintChangesOnly(value: boolean) {
         this._setOption('repaintChangesOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -320,7 +300,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxAccordionOptions.selectedIndex]
      */
@@ -331,7 +310,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set selectedIndex(value: number) {
         this._setOption('selectedIndex', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
@@ -344,7 +322,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('selectedItem', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItemKeys]
      */
@@ -355,7 +332,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set selectedItemKeys(value: Array<any>) {
         this._setOption('selectedItemKeys', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.selectedItems]
@@ -368,7 +344,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('selectedItems', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -380,7 +355,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -391,7 +365,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -593,9 +566,6 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

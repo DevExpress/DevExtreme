@@ -78,7 +78,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -89,7 +88,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTextAreaOptions.autoResizeEnabled]
@@ -102,7 +100,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('autoResizeEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -113,7 +110,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -126,7 +122,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
      */
@@ -137,7 +132,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -150,7 +144,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -161,7 +154,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
@@ -174,7 +166,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.inputAttr]
      */
@@ -185,7 +176,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set inputAttr(value: any) {
         this._setOption('inputAttr', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -198,7 +188,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -209,7 +198,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.label]
@@ -222,7 +210,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.labelMode]
      */
@@ -233,7 +220,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
-
 
     /**
      * [descr:dxTextAreaOptions.maxHeight]
@@ -246,7 +232,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('maxHeight', value);
     }
 
-
     /**
      * [descr:dxTextBoxOptions.maxLength]
      */
@@ -257,7 +242,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set maxLength(value: null | number | string) {
         this._setOption('maxLength', value);
     }
-
 
     /**
      * [descr:dxTextAreaOptions.minHeight]
@@ -270,7 +254,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('minHeight', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.name]
      */
@@ -281,7 +264,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set name(value: string) {
         this._setOption('name', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.placeholder]
@@ -294,7 +276,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -305,7 +286,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -318,7 +298,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTextAreaOptions.spellcheck]
      */
@@ -329,7 +308,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set spellcheck(value: boolean) {
         this._setOption('spellcheck', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
@@ -342,7 +320,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -353,7 +330,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.text]
@@ -366,7 +342,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('text', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
      */
@@ -377,7 +352,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationErrors]
@@ -390,7 +364,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
      */
@@ -401,7 +374,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
@@ -414,7 +386,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
      */
@@ -425,7 +396,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
-
 
     /**
      * [descr:dxTextBoxOptions.value]
@@ -438,7 +408,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.valueChangeEvent]
      */
@@ -450,7 +419,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('valueChangeEvent', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -461,7 +429,6 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -723,11 +690,8 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

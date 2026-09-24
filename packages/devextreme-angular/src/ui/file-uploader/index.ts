@@ -79,7 +79,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('abortUpload', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.accept]
      */
@@ -90,7 +89,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set accept(value: string) {
         this._setOption('accept', value);
     }
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -103,7 +101,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -114,7 +111,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.allowCanceling]
@@ -127,7 +123,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('allowCanceling', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.allowedFileExtensions]
      */
@@ -138,7 +133,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set allowedFileExtensions(value: Array<string>) {
         this._setOption('allowedFileExtensions', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.chunkSize]
@@ -151,7 +145,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('chunkSize', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.dialogTrigger]
      */
@@ -162,7 +155,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set dialogTrigger(value: any | string | undefined) {
         this._setOption('dialogTrigger', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -175,7 +167,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.dropZone]
      */
@@ -186,7 +177,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set dropZone(value: any | string | undefined) {
         this._setOption('dropZone', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -199,7 +189,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.focusStateEnabled]
      */
@@ -210,7 +199,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -223,7 +211,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -234,7 +221,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.hoverStateEnabled]
@@ -247,7 +233,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.inputAttr]
      */
@@ -258,7 +243,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set inputAttr(value: any) {
         this._setOption('inputAttr', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.invalidFileExtensionMessage]
@@ -271,7 +255,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('invalidFileExtensionMessage', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.invalidMaxFileSizeMessage]
      */
@@ -282,7 +265,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set invalidMaxFileSizeMessage(value: string) {
         this._setOption('invalidMaxFileSizeMessage', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.invalidMinFileSizeMessage]
@@ -295,7 +277,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('invalidMinFileSizeMessage', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
      */
@@ -306,7 +287,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set isDirty(value: boolean) {
         this._setOption('isDirty', value);
     }
-
 
     /**
      * [descr:EditorOptions.isValid]
@@ -319,7 +299,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.labelText]
      */
@@ -330,7 +309,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set labelText(value: string) {
         this._setOption('labelText', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.maxFileSize]
@@ -343,7 +321,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('maxFileSize', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.minFileSize]
      */
@@ -354,7 +331,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set minFileSize(value: number) {
         this._setOption('minFileSize', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.multiple]
@@ -367,7 +343,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('multiple', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.name]
      */
@@ -378,7 +353,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set name(value: string) {
         this._setOption('name', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.progress]
@@ -391,7 +365,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('progress', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -402,7 +375,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.readyToUploadMessage]
@@ -415,7 +387,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('readyToUploadMessage', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -426,7 +397,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.selectButtonText]
@@ -439,7 +409,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('selectButtonText', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.showFileList]
      */
@@ -450,7 +419,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set showFileList(value: boolean) {
         this._setOption('showFileList', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -463,7 +431,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadAbortedMessage]
      */
@@ -474,7 +441,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set uploadAbortedMessage(value: string) {
         this._setOption('uploadAbortedMessage', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.uploadButtonText]
@@ -487,7 +453,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadButtonText', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadChunk]
      */
@@ -498,7 +463,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set uploadChunk(value: ((file: any, uploadInfo: UploadInfo) => any)) {
         this._setOption('uploadChunk', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.uploadCustomData]
@@ -511,7 +475,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadCustomData', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadedMessage]
      */
@@ -522,7 +485,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set uploadedMessage(value: string) {
         this._setOption('uploadedMessage', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.uploadFailedMessage]
@@ -535,7 +497,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadFailedMessage', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadFile]
      */
@@ -546,7 +507,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set uploadFile(value: ((file: any, progressCallback: Function) => any)) {
         this._setOption('uploadFile', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.uploadHeaders]
@@ -559,7 +519,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadHeaders', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadMethod]
      */
@@ -570,7 +529,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set uploadMethod(value: UploadHttpMethod) {
         this._setOption('uploadMethod', value);
     }
-
 
     /**
      * [descr:dxFileUploaderOptions.uploadMode]
@@ -583,7 +541,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('uploadMode', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.uploadUrl]
      */
@@ -594,7 +551,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set uploadUrl(value: string) {
         this._setOption('uploadUrl', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationError]
@@ -607,7 +563,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
      */
@@ -618,7 +573,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationStatus]
@@ -631,7 +585,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxFileUploaderOptions.value]
      */
@@ -643,7 +596,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -654,7 +606,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -991,11 +942,8 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

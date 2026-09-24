@@ -136,7 +136,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('acceptCustomValue', value);
     }
 
-
     /**
      * [descr:WidgetOptions.accessKey]
      */
@@ -147,7 +146,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set accessKey(value: string | undefined) {
         this._setOption('accessKey', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
@@ -160,7 +158,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.buttons]
      */
@@ -171,7 +168,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set buttons(value: Array<DropDownPredefinedButton | TextEditorButton> | undefined) {
         this._setOption('buttons', value);
     }
-
 
     /**
      * [descr:dxDropDownBoxOptions.contentTemplate]
@@ -184,7 +180,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('contentTemplate', value);
     }
 
-
     /**
      * [descr:dxDropDownBoxOptions.dataSource]
      */
@@ -195,7 +190,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
@@ -208,7 +202,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -219,7 +212,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
@@ -232,7 +224,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('displayExpr', value);
     }
 
-
     /**
      * [descr:dxDropDownBoxOptions.displayValueFormatter]
      */
@@ -243,7 +234,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set displayValueFormatter(value: ((value: string | Array<any>) => string)) {
         this._setOption('displayValueFormatter', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
@@ -256,7 +246,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('dropDownButtonTemplate', value);
     }
 
-
     /**
      * [descr:dxDropDownBoxOptions.dropDownOptions]
      */
@@ -267,7 +256,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set dropDownOptions(value: dxPopupOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -280,7 +268,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.fieldAddons]
      */
@@ -291,7 +278,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set fieldAddons(value: FieldAddons | null) {
         this._setOption('fieldAddons', value);
     }
-
 
     /**
      * [descr:dxDropDownBoxOptions.fieldTemplate]
@@ -306,7 +292,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('fieldTemplate', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
      */
@@ -317,7 +302,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -330,7 +314,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -341,7 +324,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
@@ -354,7 +336,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.inputAttr]
      */
@@ -365,7 +346,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set inputAttr(value: any) {
         this._setOption('inputAttr', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -378,7 +358,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -389,7 +368,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:dxDropDownBoxOptions.items]
@@ -402,7 +380,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.label]
      */
@@ -413,7 +390,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set label(value: string) {
         this._setOption('label', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
@@ -426,7 +402,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('labelMode', value);
     }
 
-
     /**
      * [descr:dxTextBoxOptions.maxLength]
      */
@@ -437,7 +412,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set maxLength(value: null | number | string) {
         this._setOption('maxLength', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.name]
@@ -450,7 +424,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.opened]
      */
@@ -461,7 +434,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set opened(value: boolean) {
         this._setOption('opened', value);
     }
-
 
     /**
      * [descr:dxDropDownBoxOptions.openOnFieldClick]
@@ -474,7 +446,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('openOnFieldClick', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.placeholder]
      */
@@ -485,7 +456,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set placeholder(value: string) {
         this._setOption('placeholder', value);
     }
-
 
     /**
      * [descr:EditorOptions.readOnly]
@@ -498,7 +468,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -509,7 +478,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
@@ -522,7 +490,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('showClearButton', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.showDropDownButton]
      */
@@ -533,7 +500,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set showDropDownButton(value: boolean) {
         this._setOption('showDropDownButton', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.stylingMode]
@@ -546,7 +512,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -557,7 +522,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.text]
@@ -570,7 +534,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('text', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
      */
@@ -581,7 +544,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationErrors]
@@ -594,7 +556,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
      */
@@ -605,7 +566,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
@@ -618,7 +578,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
      */
@@ -629,7 +588,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.value]
@@ -642,7 +600,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:dxDropDownBoxOptions.valueChangeEvent]
      */
@@ -653,7 +610,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set valueChangeEvent(value: string) {
         this._setOption('valueChangeEvent', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
@@ -666,7 +622,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
         this._setOption('valueExpr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -677,7 +632,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -1009,11 +963,8 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

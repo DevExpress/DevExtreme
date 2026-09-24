@@ -192,7 +192,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('accessKey', value);
     }
 
-
     
     @Input()
     get activeStateEnabled(): boolean {
@@ -201,7 +200,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     
     @Input()
@@ -212,7 +210,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('allowColumnReordering', value);
     }
 
-
     
     @Input()
     get cardContentTemplate(): any {
@@ -221,7 +218,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set cardContentTemplate(value: any) {
         this._setOption('cardContentTemplate', value);
     }
-
 
     
     @Input()
@@ -232,7 +228,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('cardCover', value);
     }
 
-
     
     @Input()
     get cardFooterTemplate(): any {
@@ -241,7 +236,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set cardFooterTemplate(value: any) {
         this._setOption('cardFooterTemplate', value);
     }
-
 
     
     @Input()
@@ -252,7 +246,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('cardHeader', value);
     }
 
-
     
     @Input()
     get cardMaxWidth(): number {
@@ -261,7 +254,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set cardMaxWidth(value: number) {
         this._setOption('cardMaxWidth', value);
     }
-
 
     
     @Input()
@@ -272,7 +264,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('cardMinWidth', value);
     }
 
-
     
     @Input()
     get cardsPerRow(): Mode | number {
@@ -281,7 +272,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set cardsPerRow(value: Mode | number) {
         this._setOption('cardsPerRow', value);
     }
-
 
     
     @Input()
@@ -292,7 +282,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('cardTemplate', value);
     }
 
-
     
     @Input()
     get columnChooser(): ColumnChooser {
@@ -301,7 +290,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set columnChooser(value: ColumnChooser) {
         this._setOption('columnChooser', value);
     }
-
 
     
     @Input()
@@ -312,7 +300,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('columns', value);
     }
 
-
     
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | Store | string | undefined {
@@ -321,7 +308,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set dataSource(value: Array<any> | DataSource | DataSourceOptions | Store | string | undefined) {
         this._setOption('dataSource', value);
     }
-
 
     
     @Input()
@@ -332,7 +318,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('disabled', value);
     }
 
-
     
     @Input()
     get editing(): dxCardViewEditing {
@@ -341,7 +326,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set editing(value: dxCardViewEditing) {
         this._setOption('editing', value);
     }
-
 
     
     @Input()
@@ -352,7 +336,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('elementAttr', value);
     }
 
-
     
     @Input()
     get errorRowEnabled(): boolean {
@@ -361,7 +344,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set errorRowEnabled(value: boolean) {
         this._setOption('errorRowEnabled', value);
     }
-
 
     
     @Input()
@@ -372,7 +354,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('fieldHintEnabled', value);
     }
 
-
     
     @Input()
     get filterBuilder(): dxFilterBuilderOptions {
@@ -381,7 +362,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set filterBuilder(value: dxFilterBuilderOptions) {
         this._setOption('filterBuilder', value);
     }
-
 
     
     @Input()
@@ -392,7 +372,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('filterBuilderPopup', value);
     }
 
-
     
     @Input()
     get filterPanel(): FilterPanel {
@@ -401,7 +380,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set filterPanel(value: FilterPanel) {
         this._setOption('filterPanel', value);
     }
-
 
     
     @Input()
@@ -412,7 +390,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('filterValue', value);
     }
 
-
     
     @Input()
     get focusStateEnabled(): boolean {
@@ -421,7 +398,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     
     @Input()
@@ -432,7 +408,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('headerFilter', value);
     }
 
-
     
     @Input()
     get headerPanel(): HeaderPanel {
@@ -441,7 +416,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set headerPanel(value: HeaderPanel) {
         this._setOption('headerPanel', value);
     }
-
 
     
     @Input()
@@ -452,7 +426,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('height', value);
     }
 
-
     
     @Input()
     get hint(): string | undefined {
@@ -461,7 +434,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     
     @Input()
@@ -472,7 +444,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('hoverStateEnabled', value);
     }
 
-
     
     @Input()
     get keyExpr(): Array<string> | string | undefined {
@@ -481,7 +452,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set keyExpr(value: Array<string> | string | undefined) {
         this._setOption('keyExpr', value);
     }
-
 
     
     @Input()
@@ -492,7 +462,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('loadPanel', value);
     }
 
-
     
     @Input()
     get noDataTemplate(): any {
@@ -501,7 +470,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set noDataTemplate(value: any) {
         this._setOption('noDataTemplate', value);
     }
-
 
     
     @Input()
@@ -512,7 +480,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('noDataText', value);
     }
 
-
     
     @Input()
     get pager(): Pager {
@@ -521,7 +488,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set pager(value: Pager) {
         this._setOption('pager', value);
     }
-
 
     
     @Input()
@@ -532,7 +498,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('paging', value);
     }
 
-
     
     @Input()
     get remoteOperations(): boolean | Mode | RemoteOperations {
@@ -541,7 +506,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set remoteOperations(value: boolean | Mode | RemoteOperations) {
         this._setOption('remoteOperations', value);
     }
-
 
     
     @Input()
@@ -552,7 +516,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('rtlEnabled', value);
     }
 
-
     
     @Input()
     get scrolling(): { scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode } {
@@ -561,7 +524,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set scrolling(value: { scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }) {
         this._setOption('scrolling', value);
     }
-
 
     
     @Input()
@@ -572,7 +534,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('searchPanel', value);
     }
 
-
     
     @Input()
     get selectedCardKeys(): Array<any> {
@@ -581,7 +542,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set selectedCardKeys(value: Array<any>) {
         this._setOption('selectedCardKeys', value);
     }
-
 
     
     @Input()
@@ -592,7 +552,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('selection', value);
     }
 
-
     
     @Input()
     get sorting(): Sorting {
@@ -601,7 +560,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set sorting(value: Sorting) {
         this._setOption('sorting', value);
     }
-
 
     
     @Input()
@@ -612,7 +570,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('tabIndex', value);
     }
 
-
     
     @Input()
     get toolbar(): dxCardViewToolbar {
@@ -621,7 +578,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set toolbar(value: dxCardViewToolbar) {
         this._setOption('toolbar', value);
     }
-
 
     
     @Input()
@@ -632,7 +588,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
         this._setOption('visible', value);
     }
 
-
     
     @Input()
     get width(): number | string | undefined {
@@ -641,7 +596,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     
     @Input()
@@ -1036,9 +990,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

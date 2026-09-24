@@ -76,7 +76,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('color', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
      */
@@ -87,7 +86,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -100,7 +98,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
      */
@@ -111,7 +108,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     set encodeHtml(value: boolean) {
         this._setOption('encodeHtml', value);
     }
-
 
     /**
      * [descr:dxBulletOptions.endScaleValue]
@@ -124,7 +120,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('endScaleValue', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.margin]
      */
@@ -135,7 +130,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     set margin(value: { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
@@ -148,7 +142,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('pathModified', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
      */
@@ -159,7 +152,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxBulletOptions.showTarget]
@@ -172,7 +164,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('showTarget', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.showZeroLevel]
      */
@@ -183,7 +174,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     set showZeroLevel(value: boolean) {
         this._setOption('showZeroLevel', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.size]
@@ -196,7 +186,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.startScaleValue]
      */
@@ -207,7 +196,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     set startScaleValue(value: number) {
         this._setOption('startScaleValue', value);
     }
-
 
     /**
      * [descr:dxBulletOptions.target]
@@ -220,7 +208,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('target', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.targetColor]
      */
@@ -231,7 +218,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     set targetColor(value: string) {
         this._setOption('targetColor', value);
     }
-
 
     /**
      * [descr:dxBulletOptions.targetWidth]
@@ -244,7 +230,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('targetWidth', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
      */
@@ -256,7 +241,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('theme', value);
     }
 
-
     /**
      * [descr:BaseSparklineOptions.tooltip]
      */
@@ -267,7 +251,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
-
 
     /**
      * [descr:dxBulletOptions.value]
@@ -419,9 +402,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() valueChange: EventEmitter<number>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

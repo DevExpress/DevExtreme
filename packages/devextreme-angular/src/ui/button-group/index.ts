@@ -78,7 +78,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -89,7 +88,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxButtonGroupOptions.buttonTemplate]
@@ -102,7 +100,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         this._setOption('buttonTemplate', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -113,7 +110,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -126,7 +122,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxButtonGroupOptions.focusStateEnabled]
      */
@@ -137,7 +132,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -150,7 +144,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -161,7 +154,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxButtonGroupOptions.hoverStateEnabled]
@@ -174,7 +166,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxButtonGroupOptions.items]
      */
@@ -185,7 +176,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     set items(value: Array<dxButtonGroupItem>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:dxButtonGroupOptions.keyExpr]
@@ -198,7 +188,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -209,7 +198,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxButtonGroupOptions.selectedItemKeys]
@@ -222,7 +210,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         this._setOption('selectedItemKeys', value);
     }
 
-
     /**
      * [descr:dxButtonGroupOptions.selectedItems]
      */
@@ -233,7 +220,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     set selectedItems(value: Array<any>) {
         this._setOption('selectedItems', value);
     }
-
 
     /**
      * [descr:dxButtonGroupOptions.selectionMode]
@@ -246,7 +232,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:dxButtonGroupOptions.stylingMode]
      */
@@ -257,7 +242,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     set stylingMode(value: ButtonStyle) {
         this._setOption('stylingMode', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -270,7 +254,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -281,7 +264,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -418,9 +400,6 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -78,7 +78,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -89,7 +88,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -102,7 +100,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -113,7 +110,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
@@ -126,7 +122,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
      */
@@ -137,7 +132,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     set isDirty(value: boolean) {
         this._setOption('isDirty', value);
     }
-
 
     /**
      * [descr:EditorOptions.isValid]
@@ -150,7 +144,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:dxTrackBarOptions.max]
      */
@@ -161,7 +154,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     set max(value: number) {
         this._setOption('max', value);
     }
-
 
     /**
      * [descr:dxTrackBarOptions.min]
@@ -174,7 +166,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
         this._setOption('min', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -185,7 +176,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -198,7 +188,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxProgressBarOptions.showStatus]
      */
@@ -209,7 +198,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     set showStatus(value: boolean) {
         this._setOption('showStatus', value);
     }
-
 
     /**
      * [descr:dxProgressBarOptions.statusFormat]
@@ -222,7 +210,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
         this._setOption('statusFormat', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
      */
@@ -233,7 +220,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationErrors]
@@ -246,7 +232,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
      */
@@ -257,7 +242,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessagePosition]
@@ -270,7 +254,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
      */
@@ -281,7 +264,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
-
 
     /**
      * [descr:dxProgressBarOptions.value]
@@ -294,7 +276,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -305,7 +286,6 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -457,11 +437,8 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

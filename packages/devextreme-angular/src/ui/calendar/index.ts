@@ -78,7 +78,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.activeStateEnabled]
      */
@@ -89,7 +88,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxCalendarOptions.cellTemplate]
@@ -102,7 +100,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('cellTemplate', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.dateSerializationFormat]
      */
@@ -113,7 +110,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set dateSerializationFormat(value: string | undefined) {
         this._setOption('dateSerializationFormat', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -126,7 +122,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.disabledDates]
      */
@@ -137,7 +132,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set disabledDates(value: Array<Date> | ((data: DisabledDate) => boolean) | null) {
         this._setOption('disabledDates', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -150,7 +144,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.firstDayOfWeek]
      */
@@ -161,7 +154,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set firstDayOfWeek(value: DayOfWeek | undefined) {
         this._setOption('firstDayOfWeek', value);
     }
-
 
     /**
      * [descr:dxCalendarOptions.focusStateEnabled]
@@ -174,7 +166,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -185,7 +176,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -198,7 +188,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.hoverStateEnabled]
      */
@@ -209,7 +198,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -222,7 +210,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -233,7 +220,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:dxCalendarOptions.max]
@@ -246,7 +232,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('max', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.maxZoomLevel]
      */
@@ -257,7 +242,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set maxZoomLevel(value: CalendarZoomLevel) {
         this._setOption('maxZoomLevel', value);
     }
-
 
     /**
      * [descr:dxCalendarOptions.min]
@@ -270,7 +254,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('min', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.minZoomLevel]
      */
@@ -281,7 +264,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set minZoomLevel(value: CalendarZoomLevel) {
         this._setOption('minZoomLevel', value);
     }
-
 
     /**
      * [descr:dxCalendarOptions.name]
@@ -294,7 +276,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -305,7 +286,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -318,7 +298,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.selectionMode]
      */
@@ -329,7 +308,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set selectionMode(value: CalendarSelectionMode) {
         this._setOption('selectionMode', value);
     }
-
 
     /**
      * [descr:dxCalendarOptions.selectWeekOnClick]
@@ -342,7 +320,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('selectWeekOnClick', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.showTodayButton]
      */
@@ -353,7 +330,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set showTodayButton(value: boolean) {
         this._setOption('showTodayButton', value);
     }
-
 
     /**
      * [descr:dxCalendarOptions.showWeekNumbers]
@@ -366,7 +342,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('showWeekNumbers', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -378,7 +353,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('tabIndex', value);
     }
 
-
     
     @Input()
     get todayButtonText(): string {
@@ -387,7 +361,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set todayButtonText(value: string) {
         this._setOption('todayButtonText', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationError]
@@ -400,7 +373,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
      */
@@ -411,7 +383,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessageMode]
@@ -424,7 +395,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessagePosition]
      */
@@ -435,7 +405,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationStatus]
@@ -448,7 +417,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.value]
      */
@@ -459,7 +427,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set value(value: Array<Date | null | number | string> | Date | null | number | string) {
         this._setOption('value', value);
     }
-
 
     /**
      * [descr:WidgetOptions.visible]
@@ -472,7 +439,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxCalendarOptions.weekNumberRule]
      */
@@ -484,7 +450,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('weekNumberRule', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
      */
@@ -495,7 +460,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxCalendarOptions.zoomLevel]
@@ -717,11 +681,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

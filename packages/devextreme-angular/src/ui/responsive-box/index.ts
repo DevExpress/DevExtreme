@@ -104,7 +104,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('cols', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.dataSource]
      */
@@ -115,7 +114,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     set dataSource(value: Array<any | dxResponsiveBoxItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -128,7 +126,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -139,7 +136,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxResponsiveBoxOptions.height]
@@ -152,7 +148,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -163,7 +158,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
@@ -176,7 +170,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.items]
      */
@@ -187,7 +180,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     set items(value: Array<any | dxResponsiveBoxItem | string>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
@@ -200,7 +192,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.rows]
      */
@@ -211,7 +202,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     set rows(value: { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }[]) {
         this._setOption('rows', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -224,7 +214,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxResponsiveBoxOptions.screenByWidth]
      */
@@ -235,7 +224,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     set screenByWidth(value: Function | undefined) {
         this._setOption('screenByWidth', value);
     }
-
 
     /**
      * [descr:dxResponsiveBoxOptions.singleColumnScreen]
@@ -248,7 +236,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         this._setOption('singleColumnScreen', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -259,7 +246,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:dxResponsiveBoxOptions.width]
@@ -386,9 +372,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -143,7 +143,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.adaptivityEnabled]
      */
@@ -154,7 +153,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set adaptivityEnabled(value: boolean) {
         this._setOption('adaptivityEnabled', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.allDayExpr]
@@ -167,7 +165,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('allDayExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.allDayPanelMode]
      */
@@ -178,7 +175,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set allDayPanelMode(value: AllDayPanelMode) {
         this._setOption('allDayPanelMode', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.appointmentCollectorTemplate]
@@ -191,7 +187,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('appointmentCollectorTemplate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.appointmentDragging]
      */
@@ -202,7 +197,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set appointmentDragging(value: { autoScroll?: boolean, data?: any | undefined, group?: string | undefined, onAdd?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragEnd?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void), onDragMove?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragStart?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromData: any, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable }) => void), scrollSensitivity?: number, scrollSpeed?: number }) {
         this._setOption('appointmentDragging', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.appointmentTemplate]
@@ -215,7 +209,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('appointmentTemplate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.appointmentTooltipTemplate]
      */
@@ -226,7 +219,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set appointmentTooltipTemplate(value: any) {
         this._setOption('appointmentTooltipTemplate', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.cellDuration]
@@ -239,7 +231,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('cellDuration', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.crossScrollingEnabled]
      */
@@ -250,7 +241,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set crossScrollingEnabled(value: boolean) {
         this._setOption('crossScrollingEnabled', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.currentDate]
@@ -263,7 +253,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('currentDate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.currentView]
      */
@@ -274,7 +263,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set currentView(value: string | ViewType) {
         this._setOption('currentView', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.customizeDateNavigatorText]
@@ -287,7 +275,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('customizeDateNavigatorText', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.dataCellTemplate]
      */
@@ -298,7 +285,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set dataCellTemplate(value: any) {
         this._setOption('dataCellTemplate', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.dataSource]
@@ -311,7 +297,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.dateCellTemplate]
      */
@@ -322,7 +307,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set dateCellTemplate(value: any) {
         this._setOption('dateCellTemplate', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.dateSerializationFormat]
@@ -335,7 +319,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('dateSerializationFormat', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.descriptionExpr]
      */
@@ -346,7 +329,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set descriptionExpr(value: string) {
         this._setOption('descriptionExpr', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -359,7 +341,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.editing]
      */
@@ -370,7 +351,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: AppointmentFormProperties, popup?: Record<string, any> }) {
         this._setOption('editing', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -383,7 +363,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
      */
@@ -394,7 +373,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set endDateExpr(value: string) {
         this._setOption('endDateExpr', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.endDateTimeZoneExpr]
@@ -407,7 +385,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('endDateTimeZoneExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.endDayHour]
      */
@@ -418,7 +395,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set endDayHour(value: number) {
         this._setOption('endDayHour', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.firstDayOfWeek]
@@ -431,7 +407,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('firstDayOfWeek', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.focusStateEnabled]
      */
@@ -442,7 +417,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.groupByDate]
@@ -455,7 +429,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('groupByDate', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.groups]
      */
@@ -466,7 +439,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set groups(value: Array<string>) {
         this._setOption('groups', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -479,7 +451,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('height', value);
     }
 
-
     
     @Input()
     get hiddenWeekDays(): Array<DayOfWeek> | undefined {
@@ -488,7 +459,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set hiddenWeekDays(value: Array<DayOfWeek> | undefined) {
         this._setOption('hiddenWeekDays', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -501,7 +471,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.indicatorUpdateInterval]
      */
@@ -512,7 +481,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set indicatorUpdateInterval(value: number) {
         this._setOption('indicatorUpdateInterval', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.max]
@@ -525,7 +493,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('max', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.maxAppointmentsPerCell]
      */
@@ -536,7 +503,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set maxAppointmentsPerCell(value: CellAppointmentsLimit | number) {
         this._setOption('maxAppointmentsPerCell', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.min]
@@ -549,7 +515,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('min', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.noDataText]
      */
@@ -560,7 +525,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set noDataText(value: string) {
         this._setOption('noDataText', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.offset]
@@ -573,7 +537,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('offset', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.recurrenceEditMode]
      */
@@ -584,7 +547,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set recurrenceEditMode(value: RecurrenceEditMode) {
         this._setOption('recurrenceEditMode', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.recurrenceExceptionExpr]
@@ -597,7 +559,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('recurrenceExceptionExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.recurrenceRuleExpr]
      */
@@ -608,7 +569,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set recurrenceRuleExpr(value: string) {
         this._setOption('recurrenceRuleExpr', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.remoteFiltering]
@@ -621,7 +581,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('remoteFiltering', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.resourceCellTemplate]
      */
@@ -632,7 +591,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set resourceCellTemplate(value: any) {
         this._setOption('resourceCellTemplate', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.resources]
@@ -645,7 +603,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('resources', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -656,7 +613,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.scrolling]
@@ -669,7 +625,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('scrolling', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.selectedCellData]
      */
@@ -680,7 +635,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set selectedCellData(value: Array<any>) {
         this._setOption('selectedCellData', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.shadeUntilCurrentTime]
@@ -693,7 +647,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('shadeUntilCurrentTime', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.showAllDayPanel]
      */
@@ -704,7 +657,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set showAllDayPanel(value: boolean) {
         this._setOption('showAllDayPanel', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.showCurrentTimeIndicator]
@@ -717,7 +669,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showCurrentTimeIndicator', value);
     }
 
-
     
     @Input()
     get snapToCellsMode(): SnapToCellsMode {
@@ -726,7 +677,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set snapToCellsMode(value: SnapToCellsMode) {
         this._setOption('snapToCellsMode', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.startDateExpr]
@@ -739,7 +689,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('startDateExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.startDateTimeZoneExpr]
      */
@@ -750,7 +699,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set startDateTimeZoneExpr(value: string) {
         this._setOption('startDateTimeZoneExpr', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.startDayHour]
@@ -763,7 +711,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('startDayHour', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -774,7 +721,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.textExpr]
@@ -787,7 +733,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('textExpr', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.timeCellTemplate]
      */
@@ -798,7 +743,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set timeCellTemplate(value: any) {
         this._setOption('timeCellTemplate', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.timeZone]
@@ -811,7 +755,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('timeZone', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.toolbar]
      */
@@ -822,7 +765,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set toolbar(value: dxSchedulerToolbar | undefined) {
         this._setOption('toolbar', value);
     }
-
 
     /**
      * [descr:dxSchedulerOptions.useDropDownViewSwitcher]
@@ -835,7 +777,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('useDropDownViewSwitcher', value);
     }
 
-
     /**
      * [descr:dxSchedulerOptions.views]
      */
@@ -847,7 +788,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('views', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -858,7 +798,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -1275,9 +1214,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

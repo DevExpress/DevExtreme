@@ -89,7 +89,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('allowExpandAll', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.allowFiltering]
      */
@@ -100,7 +99,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set allowFiltering(value: boolean) {
         this._setOption('allowFiltering', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.allowSorting]
@@ -113,7 +111,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('allowSorting', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.allowSortingBySummary]
      */
@@ -124,7 +121,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set allowSortingBySummary(value: boolean) {
         this._setOption('allowSortingBySummary', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.dataFieldArea]
@@ -137,7 +133,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('dataFieldArea', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.dataSource]
      */
@@ -148,7 +143,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set dataSource(value: Array<any> | null | PivotGridDataSource | PivotGridDataSourceOptions) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -161,7 +155,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -172,7 +165,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.encodeHtml]
@@ -185,7 +177,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.export]
      */
@@ -196,7 +187,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set export(value: { enabled?: boolean }) {
         this._setOption('export', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.fieldChooser]
@@ -209,7 +199,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('fieldChooser', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.fieldPanel]
      */
@@ -220,7 +209,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set fieldPanel(value: { allowFieldDragging?: boolean, showColumnFields?: boolean, showDataFields?: boolean, showFilterFields?: boolean, showRowFields?: boolean, texts?: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }, visible?: boolean }) {
         this._setOption('fieldPanel', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.headerFilter]
@@ -233,7 +221,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('headerFilter', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -244,7 +231,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.hideEmptySummaryCells]
@@ -257,7 +243,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('hideEmptySummaryCells', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -268,7 +253,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.loadPanel]
@@ -281,7 +265,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('loadPanel', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.rowHeaderLayout]
      */
@@ -292,7 +275,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set rowHeaderLayout(value: PivotGridRowHeaderLayout) {
         this._setOption('rowHeaderLayout', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -305,7 +287,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.scrolling]
      */
@@ -316,7 +297,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set scrolling(value: { mode?: ScrollMode, useNative?: boolean | Mode }) {
         this._setOption('scrolling', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.showBorders]
@@ -329,7 +309,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showBorders', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.showColumnGrandTotals]
      */
@@ -340,7 +319,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set showColumnGrandTotals(value: boolean) {
         this._setOption('showColumnGrandTotals', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.showColumnTotals]
@@ -353,7 +331,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showColumnTotals', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.showRowGrandTotals]
      */
@@ -364,7 +341,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set showRowGrandTotals(value: boolean) {
         this._setOption('showRowGrandTotals', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.showRowTotals]
@@ -377,7 +353,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('showRowTotals', value);
     }
 
-
     /**
      * [descr:dxPivotGridOptions.showTotalsPrior]
      */
@@ -388,7 +363,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set showTotalsPrior(value: PivotGridTotalDisplayMode) {
         this._setOption('showTotalsPrior', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.stateStoring]
@@ -401,7 +375,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('stateStoring', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -412,7 +385,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.texts]
@@ -425,7 +397,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('texts', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -437,7 +408,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
      */
@@ -448,7 +418,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxPivotGridOptions.wordWrapEnabled]
@@ -660,9 +629,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -65,7 +65,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -76,7 +75,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxPaginationOptions.allowedPageSizes]
@@ -89,7 +87,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('allowedPageSizes', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -100,7 +97,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:PagerBase.displayMode]
@@ -113,7 +109,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('displayMode', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -124,7 +119,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
@@ -137,7 +131,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -148,7 +141,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -161,7 +153,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -172,7 +163,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:PagerBase.infoText]
@@ -185,7 +175,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('infoText', value);
     }
 
-
     /**
      * [descr:dxPaginationOptions.itemCount]
      */
@@ -196,7 +185,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     set itemCount(value: number) {
         this._setOption('itemCount', value);
     }
-
 
     /**
      * [descr:PagerBase.label]
@@ -209,7 +197,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxPaginationOptions.pageIndex]
      */
@@ -220,7 +207,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     set pageIndex(value: number) {
         this._setOption('pageIndex', value);
     }
-
 
     /**
      * [descr:dxPaginationOptions.pageSize]
@@ -233,7 +219,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('pageSize', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -244,7 +229,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:PagerBase.showInfo]
@@ -257,7 +241,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('showInfo', value);
     }
 
-
     /**
      * [descr:PagerBase.showNavigationButtons]
      */
@@ -268,7 +251,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     set showNavigationButtons(value: boolean) {
         this._setOption('showNavigationButtons', value);
     }
-
 
     /**
      * [descr:PagerBase.showPageSizeSelector]
@@ -281,7 +263,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('showPageSizeSelector', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -293,7 +274,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -304,7 +284,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -446,9 +425,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

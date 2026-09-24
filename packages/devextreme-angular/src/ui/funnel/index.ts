@@ -116,7 +116,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('adaptiveLayout', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.algorithm]
      */
@@ -127,7 +126,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set algorithm(value: FunnelAlgorithm) {
         this._setOption('algorithm', value);
     }
-
 
     /**
      * [descr:dxFunnelOptions.argumentField]
@@ -140,7 +138,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('argumentField', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.colorField]
      */
@@ -151,7 +148,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set colorField(value: string) {
         this._setOption('colorField', value);
     }
-
 
     /**
      * [descr:dxFunnelOptions.dataSource]
@@ -164,7 +160,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
      */
@@ -175,7 +170,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -188,7 +182,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
      */
@@ -199,7 +192,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set encodeHtml(value: boolean) {
         this._setOption('encodeHtml', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.export]
@@ -212,7 +204,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.hoverEnabled]
      */
@@ -223,7 +214,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set hoverEnabled(value: boolean) {
         this._setOption('hoverEnabled', value);
     }
-
 
     /**
      * [descr:dxFunnelOptions.inverted]
@@ -236,7 +226,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('inverted', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.item]
      */
@@ -247,7 +236,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set item(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } }) {
         this._setOption('item', value);
     }
-
 
     /**
      * [descr:dxFunnelOptions.label]
@@ -260,7 +248,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.legend]
      */
@@ -271,7 +258,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set legend(value: { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>), customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string), font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined }, text?: string | undefined, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }) {
         this._setOption('legend', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
@@ -284,7 +270,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('loadingIndicator', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.margin]
      */
@@ -295,7 +280,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set margin(value: { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
-
 
     /**
      * [descr:dxFunnelOptions.neckHeight]
@@ -308,7 +292,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('neckHeight', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.neckWidth]
      */
@@ -319,7 +302,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set neckWidth(value: number) {
         this._setOption('neckWidth', value);
     }
-
 
     /**
      * [descr:dxFunnelOptions.palette]
@@ -332,7 +314,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('palette', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.paletteExtensionMode]
      */
@@ -343,7 +324,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
@@ -356,7 +336,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('pathModified', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
      */
@@ -367,7 +346,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set redrawOnResize(value: boolean) {
         this._setOption('redrawOnResize', value);
     }
-
 
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
@@ -380,7 +358,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('resolveLabelOverlapping', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
      */
@@ -391,7 +368,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxFunnelOptions.selectionMode]
@@ -404,7 +380,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.size]
      */
@@ -415,7 +390,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set size(value: { height?: number | undefined, width?: number | undefined }) {
         this._setOption('size', value);
     }
-
 
     /**
      * [descr:dxFunnelOptions.sortData]
@@ -428,7 +402,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('sortData', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
      */
@@ -439,7 +412,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set theme(value: Theme) {
         this._setOption('theme', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.title]
@@ -452,7 +424,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxFunnelOptions.tooltip]
      */
@@ -463,7 +434,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
-
 
     /**
      * [descr:dxFunnelOptions.valueField]
@@ -690,9 +660,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() valueFieldChange: EventEmitter<string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

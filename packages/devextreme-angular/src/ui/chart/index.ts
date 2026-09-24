@@ -295,7 +295,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('adaptiveLayout', value);
     }
 
-
     /**
      * [descr:dxChartOptions.adjustOnZoom]
      */
@@ -306,7 +305,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set adjustOnZoom(value: boolean) {
         this._setOption('adjustOnZoom', value);
     }
-
 
     /**
      * [descr:BaseChartOptions.animation]
@@ -319,7 +317,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxChartOptions.annotations]
      */
@@ -330,7 +327,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set annotations(value: Array<any | dxChartAnnotationConfig>) {
         this._setOption('annotations', value);
     }
-
 
     /**
      * [descr:dxChartOptions.argumentAxis]
@@ -343,7 +339,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('argumentAxis', value);
     }
 
-
     /**
      * [descr:dxChartOptions.autoHidePointMarkers]
      */
@@ -354,7 +349,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set autoHidePointMarkers(value: boolean) {
         this._setOption('autoHidePointMarkers', value);
     }
-
 
     /**
      * [descr:dxChartOptions.barGroupPadding]
@@ -367,7 +361,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('barGroupPadding', value);
     }
 
-
     /**
      * [descr:dxChartOptions.barGroupWidth]
      */
@@ -378,7 +371,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set barGroupWidth(value: number | undefined) {
         this._setOption('barGroupWidth', value);
     }
-
 
     /**
      * [descr:dxChartOptions.commonAnnotationSettings]
@@ -391,7 +383,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('commonAnnotationSettings', value);
     }
 
-
     /**
      * [descr:dxChartOptions.commonAxisSettings]
      */
@@ -402,7 +393,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set commonAxisSettings(value: { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, displayMode?: ChartLabelDisplayMode, font?: Font, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minValueMargin?: number | undefined, opacity?: number | undefined, placeholderSize?: null | number, stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, title?: { alignment?: HorizontalAlignment, font?: Font, margin?: number, textOverflow?: TextOverflow, wordWrap?: WordWrap }, valueMarginsEnabled?: boolean, visible?: boolean, width?: number }) {
         this._setOption('commonAxisSettings', value);
     }
-
 
     /**
      * [descr:dxChartOptions.commonPaneSettings]
@@ -415,7 +405,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('commonPaneSettings', value);
     }
 
-
     /**
      * [descr:dxChartOptions.commonSeriesSettings]
      */
@@ -426,7 +415,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set commonSeriesSettings(value: { aggregation?: { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod }, area?: any, argumentField?: string, axis?: string | undefined, bar?: any, barOverlapGroup?: string | undefined, barPadding?: number | undefined, barWidth?: number | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, bubble?: any, candlestick?: any, closeValueField?: string, color?: ChartsColor | string | undefined, cornerRadius?: number, dashStyle?: DashStyle, fullstackedarea?: any, fullstackedbar?: any, fullstackedline?: any, fullstackedspline?: any, fullstackedsplinearea?: any, highValueField?: string, hoverMode?: SeriesHoverMode, hoverStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, ignoreEmptyPoints?: boolean, innerColor?: string, label?: { alignment?: HorizontalAlignment, argumentFormat?: Format | undefined, backgroundColor?: string | undefined, border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string | undefined, font?: Font, format?: Format | undefined, horizontalOffset?: number, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean }, line?: any, lowValueField?: string, maxLabelCount?: number | undefined, minBarSize?: number | undefined, opacity?: number, openValueField?: string, pane?: string, point?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hoverMode?: PointInteractionMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }, image?: string | undefined | { height?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }, url?: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }, width?: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } }, selectionMode?: PointInteractionMode, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined }, size?: number, symbol?: PointSymbol, visible?: boolean }, rangearea?: any, rangebar?: any, rangeValue1Field?: string, rangeValue2Field?: string, reduction?: { color?: string, level?: FinancialChartReductionLevel }, scatter?: any, selectionMode?: SeriesSelectionMode, selectionStyle?: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, showInLegend?: boolean, sizeField?: string, spline?: any, splinearea?: any, stack?: string, stackedarea?: any, stackedbar?: any, stackedline?: any, stackedspline?: any, stackedsplinearea?: any, steparea?: any, stepline?: any, stock?: any, tagField?: string, type?: SeriesType, valueErrorBar?: { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: undefined | ValueErrorBarType, value?: number }, valueField?: string, visible?: boolean, width?: number }) {
         this._setOption('commonSeriesSettings', value);
     }
-
 
     /**
      * [descr:dxChartOptions.containerBackgroundColor]
@@ -439,7 +427,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('containerBackgroundColor', value);
     }
 
-
     /**
      * [descr:dxChartOptions.crosshair]
      */
@@ -450,7 +437,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set crosshair(value: { color?: string, dashStyle?: DashStyle, enabled?: boolean, horizontalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, verticalLine?: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }, width?: number }) {
         this._setOption('crosshair', value);
     }
-
 
     /**
      * [descr:dxChartOptions.customizeAnnotation]
@@ -463,7 +449,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('customizeAnnotation', value);
     }
 
-
     /**
      * [descr:BaseChartOptions.customizeLabel]
      */
@@ -474,7 +459,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set customizeLabel(value: ((pointInfo: any) => SeriesLabel)) {
         this._setOption('customizeLabel', value);
     }
-
 
     /**
      * [descr:BaseChartOptions.customizePoint]
@@ -487,7 +471,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('customizePoint', value);
     }
 
-
     /**
      * [descr:dxChartOptions.dataPrepareSettings]
      */
@@ -498,7 +481,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set dataPrepareSettings(value: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) }) {
         this._setOption('dataPrepareSettings', value);
     }
-
 
     /**
      * [descr:BaseChartOptions.dataSource]
@@ -511,7 +493,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxChartOptions.defaultPane]
      */
@@ -522,7 +503,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set defaultPane(value: string | undefined) {
         this._setOption('defaultPane', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.disabled]
@@ -535,7 +515,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -546,7 +525,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
@@ -559,7 +537,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.export]
      */
@@ -570,7 +547,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }) {
         this._setOption('export', value);
     }
-
 
     /**
      * [descr:dxChartOptions.legend]
@@ -583,7 +559,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('legend', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
      */
@@ -594,7 +569,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set loadingIndicator(value: { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }) {
         this._setOption('loadingIndicator', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.margin]
@@ -607,7 +581,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('margin', value);
     }
 
-
     /**
      * [descr:dxChartOptions.maxBubbleSize]
      */
@@ -618,7 +591,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set maxBubbleSize(value: number) {
         this._setOption('maxBubbleSize', value);
     }
-
 
     /**
      * [descr:dxChartOptions.minBubbleSize]
@@ -631,7 +603,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('minBubbleSize', value);
     }
 
-
     /**
      * [descr:dxChartOptions.negativesAsZeroes]
      */
@@ -642,7 +613,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set negativesAsZeroes(value: boolean) {
         this._setOption('negativesAsZeroes', value);
     }
-
 
     /**
      * [descr:BaseChartOptions.palette]
@@ -655,7 +625,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('palette', value);
     }
 
-
     /**
      * [descr:BaseChartOptions.paletteExtensionMode]
      */
@@ -666,7 +635,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set paletteExtensionMode(value: PaletteExtensionMode) {
         this._setOption('paletteExtensionMode', value);
     }
-
 
     /**
      * [descr:dxChartOptions.panes]
@@ -679,7 +647,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('panes', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.pathModified]
      */
@@ -690,7 +657,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set pathModified(value: boolean) {
         this._setOption('pathModified', value);
     }
-
 
     /**
      * [descr:BaseChartOptions.pointSelectionMode]
@@ -703,7 +669,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('pointSelectionMode', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
      */
@@ -714,7 +679,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set redrawOnResize(value: boolean) {
         this._setOption('redrawOnResize', value);
     }
-
 
     /**
      * [descr:dxChartOptions.resizePanesOnZoom]
@@ -727,7 +691,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('resizePanesOnZoom', value);
     }
 
-
     /**
      * [descr:dxChartOptions.resolveLabelOverlapping]
      */
@@ -738,7 +701,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set resolveLabelOverlapping(value: ChartsLabelOverlap) {
         this._setOption('resolveLabelOverlapping', value);
     }
-
 
     /**
      * [descr:dxChartOptions.rotated]
@@ -751,7 +713,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('rotated', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
      */
@@ -762,7 +723,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxChartOptions.scrollBar]
@@ -775,7 +735,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('scrollBar', value);
     }
 
-
     /**
      * [descr:dxChartOptions.series]
      */
@@ -786,7 +745,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set series(value: Array<ChartSeries> | ChartSeries | undefined) {
         this._setOption('series', value);
     }
-
 
     /**
      * [descr:dxChartOptions.seriesSelectionMode]
@@ -799,7 +757,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('seriesSelectionMode', value);
     }
 
-
     /**
      * [descr:dxChartOptions.seriesTemplate]
      */
@@ -810,7 +767,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set seriesTemplate(value: any) {
         this._setOption('seriesTemplate', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.size]
@@ -823,7 +779,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:dxChartOptions.stickyHovering]
      */
@@ -834,7 +789,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set stickyHovering(value: boolean) {
         this._setOption('stickyHovering', value);
     }
-
 
     /**
      * [descr:dxChartOptions.synchronizeMultiAxes]
@@ -847,7 +801,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('synchronizeMultiAxes', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
      */
@@ -858,7 +811,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set theme(value: Theme) {
         this._setOption('theme', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.title]
@@ -871,7 +823,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxChartOptions.tooltip]
      */
@@ -883,7 +834,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('tooltip', value);
     }
 
-
     /**
      * [descr:dxChartOptions.valueAxis]
      */
@@ -894,7 +844,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     set valueAxis(value: { aggregatedPointsPosition?: AggregatedPointsPosition, allowDecimals?: boolean | undefined, autoBreaksEnabled?: boolean, axisDivisionFactor?: number, breaks?: Array<ScaleBreak> | undefined | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, color?: string, constantLines?: { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }[], constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }, customPosition?: Date | number | string | undefined, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { alignment?: HorizontalAlignment | undefined, customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: Position | RelativePosition, rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, linearThreshold?: number | undefined, logarithmBase?: number, maxAutoBreakCount?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: number | TimeInterval | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, multipleAxesSpacing?: number, name?: string | undefined, offset?: number | undefined, opacity?: number | undefined, pane?: string | undefined, placeholderSize?: null | number, position?: Position, showZero?: boolean | undefined, strips?: { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }[], stripStyle?: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }, synchronizedValue?: number | undefined, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, title?: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode, wholeRange?: Array<Date | number | string> | undefined | CommonChartTypes.VisualRange, width?: number }[]) {
         this._setOption('valueAxis', value);
     }
-
 
     /**
      * [descr:dxChartOptions.zoomAndPan]
@@ -1271,9 +1220,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() zoomAndPanChange: EventEmitter<{ allowMouseWheel?: boolean, allowTouchGestures?: boolean, argumentAxis?: ChartZoomAndPanMode, dragBoxStyle?: { color?: string | undefined, opacity?: number | undefined }, dragToZoom?: boolean, panKey?: EventKeyModifier, valueAxis?: ChartZoomAndPanMode }>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

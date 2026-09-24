@@ -59,7 +59,6 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -70,7 +69,6 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -112,9 +110,6 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

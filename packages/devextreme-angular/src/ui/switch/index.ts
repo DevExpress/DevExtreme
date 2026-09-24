@@ -78,7 +78,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.activeStateEnabled]
      */
@@ -89,7 +88,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -102,7 +100,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -113,7 +110,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxSwitchOptions.focusStateEnabled]
@@ -126,7 +122,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -137,7 +132,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -150,7 +144,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.hoverStateEnabled]
      */
@@ -161,7 +154,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -174,7 +166,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -185,7 +176,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:dxSwitchOptions.name]
@@ -198,7 +188,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -209,7 +198,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -222,7 +210,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.switchedOffText]
      */
@@ -233,7 +220,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set switchedOffText(value: string) {
         this._setOption('switchedOffText', value);
     }
-
 
     /**
      * [descr:dxSwitchOptions.switchedOnText]
@@ -246,7 +232,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('switchedOnText', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -257,7 +242,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationError]
@@ -270,7 +254,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
      */
@@ -281,7 +264,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessageMode]
@@ -294,7 +276,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessagePosition]
      */
@@ -305,7 +286,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationStatus]
@@ -318,7 +298,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxSwitchOptions.value]
      */
@@ -330,7 +309,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -341,7 +319,6 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -503,11 +480,8 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

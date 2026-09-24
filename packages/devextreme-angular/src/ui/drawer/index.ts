@@ -60,7 +60,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.animationDuration]
      */
@@ -71,7 +70,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     set animationDuration(value: number) {
         this._setOption('animationDuration', value);
     }
-
 
     /**
      * [descr:dxDrawerOptions.animationEnabled]
@@ -84,7 +82,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('animationEnabled', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.closeOnOutsideClick]
      */
@@ -95,7 +92,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('closeOnOutsideClick', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -108,7 +104,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -119,7 +114,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -132,7 +126,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -143,7 +136,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
@@ -156,7 +148,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.maxSize]
      */
@@ -167,7 +158,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     set maxSize(value: null | number) {
         this._setOption('maxSize', value);
     }
-
 
     /**
      * [descr:dxDrawerOptions.minSize]
@@ -180,7 +170,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('minSize', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.opened]
      */
@@ -191,7 +180,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     set opened(value: boolean) {
         this._setOption('opened', value);
     }
-
 
     /**
      * [descr:dxDrawerOptions.openedStateMode]
@@ -204,7 +192,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('openedStateMode', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.position]
      */
@@ -215,7 +202,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     set position(value: PanelLocation) {
         this._setOption('position', value);
     }
-
 
     /**
      * [descr:dxDrawerOptions.revealMode]
@@ -228,7 +214,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('revealMode', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -239,7 +224,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxDrawerOptions.shading]
@@ -252,7 +236,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('shading', value);
     }
 
-
     /**
      * [descr:dxDrawerOptions.template]
      */
@@ -264,7 +247,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
         this._setOption('template', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -275,7 +257,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -402,9 +383,6 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

@@ -59,7 +59,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('area', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -70,7 +69,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxResizableOptions.handles]
@@ -83,7 +81,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('handles', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.height]
      */
@@ -94,7 +91,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     set height(value: number | string) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:dxResizableOptions.keepAspectRatio]
@@ -107,7 +103,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('keepAspectRatio', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.maxHeight]
      */
@@ -118,7 +113,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     set maxHeight(value: number) {
         this._setOption('maxHeight', value);
     }
-
 
     /**
      * [descr:dxResizableOptions.maxWidth]
@@ -131,7 +125,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('maxWidth', value);
     }
 
-
     /**
      * [descr:dxResizableOptions.minHeight]
      */
@@ -142,7 +135,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     set minHeight(value: number) {
         this._setOption('minHeight', value);
     }
-
 
     /**
      * [descr:dxResizableOptions.minWidth]
@@ -155,7 +147,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
         this._setOption('minWidth', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -166,7 +157,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxResizableOptions.width]
@@ -263,9 +253,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

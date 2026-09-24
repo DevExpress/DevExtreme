@@ -88,7 +88,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.container]
      */
@@ -99,7 +98,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.contentTemplate]
@@ -112,7 +110,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('contentTemplate', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.deferRendering]
      */
@@ -123,7 +120,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set deferRendering(value: boolean) {
         this._setOption('deferRendering', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -136,7 +132,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.height]
      */
@@ -147,7 +142,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set height(value: number | string) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:dxPopoverOptions.hideEvent]
@@ -160,7 +154,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('hideEvent', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.hideOnOutsideClick]
      */
@@ -171,7 +164,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
-
 
     /**
      * [descr:dxPopoverOptions.hideOnParentScroll]
@@ -184,7 +176,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('hideOnParentScroll', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -195,7 +186,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
@@ -208,7 +198,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.maxHeight]
      */
@@ -219,7 +208,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set maxHeight(value: number | string) {
         this._setOption('maxHeight', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.maxWidth]
@@ -232,7 +220,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('maxWidth', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.minHeight]
      */
@@ -243,7 +230,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set minHeight(value: number | string) {
         this._setOption('minHeight', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.minWidth]
@@ -256,7 +242,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('minWidth', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.position]
      */
@@ -267,7 +252,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set position(value: Position | PositionConfig) {
         this._setOption('position', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -280,7 +264,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.shading]
      */
@@ -291,7 +274,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set shading(value: boolean) {
         this._setOption('shading', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.shadingColor]
@@ -304,7 +286,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('shadingColor', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.showEvent]
      */
@@ -316,7 +297,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('showEvent', value);
     }
 
-
     
     @Input()
     get tabFocusLoopEnabled(): boolean {
@@ -325,7 +305,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set tabFocusLoopEnabled(value: boolean) {
         this._setOption('tabFocusLoopEnabled', value);
     }
-
 
     /**
      * [descr:dxPopoverOptions.target]
@@ -338,7 +317,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('target', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.visible]
      */
@@ -350,7 +328,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxPopoverOptions.width]
      */
@@ -361,7 +338,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     set width(value: number | string) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
@@ -538,9 +514,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

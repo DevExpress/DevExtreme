@@ -111,7 +111,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxMenuBaseOptions.activeStateEnabled]
      */
@@ -122,7 +121,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxMenuBaseOptions.animation]
@@ -135,7 +133,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxMenuBaseOptions.cssClass]
      */
@@ -146,7 +143,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set cssClass(value: string) {
         this._setOption('cssClass', value);
     }
-
 
     /**
      * [descr:dxContextMenuOptions.dataSource]
@@ -159,7 +155,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -170,7 +165,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
@@ -183,7 +177,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('disabledExpr', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
      */
@@ -194,7 +187,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set displayExpr(value: ((item: any) => string) | string) {
         this._setOption('displayExpr', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -207,7 +199,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.focusStateEnabled]
      */
@@ -218,7 +209,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -231,7 +221,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxContextMenuOptions.hideOnOutsideClick]
      */
@@ -242,7 +231,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -255,7 +243,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.hoverStateEnabled]
      */
@@ -266,7 +253,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxContextMenuOptions.items]
@@ -279,7 +265,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:HierarchicalCollectionWidgetOptions.itemsExpr]
      */
@@ -290,7 +275,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set itemsExpr(value: ((item: any) => Array<any> | undefined) | string) {
         this._setOption('itemsExpr', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
@@ -303,7 +287,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxContextMenuOptions.position]
      */
@@ -314,7 +297,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set position(value: PositionConfig) {
         this._setOption('position', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -327,7 +309,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxMenuBaseOptions.selectByClick]
      */
@@ -338,7 +319,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set selectByClick(value: boolean) {
         this._setOption('selectByClick', value);
     }
-
 
     /**
      * [descr:HierarchicalCollectionWidgetOptions.selectedExpr]
@@ -351,7 +331,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('selectedExpr', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
      */
@@ -362,7 +341,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set selectedItem(value: any | null) {
         this._setOption('selectedItem', value);
     }
-
 
     /**
      * [descr:dxMenuBaseOptions.selectionMode]
@@ -375,7 +353,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:dxContextMenuOptions.showEvent]
      */
@@ -386,7 +363,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set showEvent(value: string | { delay?: number | undefined, name?: string | undefined }) {
         this._setOption('showEvent', value);
     }
-
 
     /**
      * [descr:dxMenuBaseOptions.showSubmenuMode]
@@ -399,7 +375,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('showSubmenuMode', value);
     }
 
-
     /**
      * [descr:dxContextMenuOptions.submenuDirection]
      */
@@ -410,7 +385,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set submenuDirection(value: ContextSubmenuDirection) {
         this._setOption('submenuDirection', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -423,7 +397,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxContextMenuOptions.target]
      */
@@ -435,7 +408,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('target', value);
     }
 
-
     /**
      * [descr:dxContextMenuOptions.visible]
      */
@@ -446,7 +418,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -673,9 +644,6 @@ export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

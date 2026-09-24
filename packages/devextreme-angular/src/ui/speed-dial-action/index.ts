@@ -59,7 +59,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -70,7 +69,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -83,7 +81,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.focusStateEnabled]
      */
@@ -94,7 +91,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -107,7 +103,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -118,7 +113,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxSpeedDialActionOptions.icon]
@@ -131,7 +125,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('icon', value);
     }
 
-
     /**
      * [descr:dxSpeedDialActionOptions.index]
      */
@@ -142,7 +135,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
     set index(value: number) {
         this._setOption('index', value);
     }
-
 
     /**
      * [descr:dxSpeedDialActionOptions.label]
@@ -155,7 +147,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -167,7 +158,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -178,7 +168,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxSpeedDialActionOptions.visible]
@@ -275,9 +264,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() visibleChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

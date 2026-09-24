@@ -85,7 +85,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.container]
      */
@@ -96,7 +95,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.deferRendering]
@@ -109,7 +107,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.delay]
      */
@@ -120,7 +117,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set delay(value: number) {
         this._setOption('delay', value);
     }
-
 
     /**
      * [descr:dxLoadPanelOptions.focusStateEnabled]
@@ -133,7 +129,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.height]
      */
@@ -144,7 +139,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set height(value: number | string) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.hideOnOutsideClick]
@@ -157,7 +151,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('hideOnOutsideClick', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.hideOnParentScroll]
      */
@@ -168,7 +161,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set hideOnParentScroll(value: boolean) {
         this._setOption('hideOnParentScroll', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -181,7 +173,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -193,7 +184,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('hoverStateEnabled', value);
     }
 
-
     
     @Input()
     get indicatorOptions(): LoadPanelIndicatorProperties {
@@ -202,7 +192,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set indicatorOptions(value: LoadPanelIndicatorProperties) {
         this._setOption('indicatorOptions', value);
     }
-
 
     /**
      * [descr:dxLoadPanelOptions.indicatorSrc]
@@ -217,7 +206,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('indicatorSrc', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.maxHeight]
      */
@@ -228,7 +216,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set maxHeight(value: number | string) {
         this._setOption('maxHeight', value);
     }
-
 
     /**
      * [descr:dxLoadPanelOptions.maxWidth]
@@ -241,7 +228,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('maxWidth', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.message]
      */
@@ -252,7 +238,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set message(value: string) {
         this._setOption('message', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.minHeight]
@@ -265,7 +250,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('minHeight', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.minWidth]
      */
@@ -276,7 +260,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set minWidth(value: number | string) {
         this._setOption('minWidth', value);
     }
-
 
     /**
      * [descr:dxLoadPanelOptions.position]
@@ -289,7 +272,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('position', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -300,7 +282,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.shading]
@@ -313,7 +294,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('shading', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.shadingColor]
      */
@@ -324,7 +304,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set shadingColor(value: string) {
         this._setOption('shadingColor', value);
     }
-
 
     /**
      * [descr:dxLoadPanelOptions.showIndicator]
@@ -337,7 +316,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('showIndicator', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.showPane]
      */
@@ -348,7 +326,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set showPane(value: boolean) {
         this._setOption('showPane', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.visible]
@@ -361,7 +338,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxLoadPanelOptions.width]
      */
@@ -372,7 +348,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     set width(value: number | string) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
@@ -554,9 +529,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

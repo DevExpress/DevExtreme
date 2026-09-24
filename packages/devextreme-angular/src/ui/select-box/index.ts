@@ -138,7 +138,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('acceptCustomValue', value);
     }
 
-
     /**
      * [descr:WidgetOptions.accessKey]
      */
@@ -149,7 +148,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set accessKey(value: string | undefined) {
         this._setOption('accessKey', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
@@ -162,7 +160,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.buttons]
      */
@@ -173,7 +170,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set buttons(value: Array<DropDownPredefinedButton | TextEditorButton> | undefined) {
         this._setOption('buttons', value);
     }
-
 
     /**
      * [descr:dxSelectBoxOptions.customItemCreateEvent]
@@ -186,7 +182,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('customItemCreateEvent', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
      */
@@ -197,7 +192,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set dataSource(value: Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
@@ -210,7 +204,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -221,7 +214,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
@@ -234,7 +226,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('displayExpr', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.displayValue]
      */
@@ -245,7 +236,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set displayValue(value: string | undefined) {
         this._setOption('displayValue', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
@@ -258,7 +248,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('dropDownButtonTemplate', value);
     }
 
-
     /**
      * [descr:dxSelectBoxOptions.dropDownOptions]
      */
@@ -269,7 +258,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set dropDownOptions(value: dxPopupOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -282,7 +270,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxSelectBoxOptions.fieldAddons]
      */
@@ -293,7 +280,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set fieldAddons(value: FieldAddons | null) {
         this._setOption('fieldAddons', value);
     }
-
 
     /**
      * [descr:dxSelectBoxOptions.fieldTemplate]
@@ -308,7 +294,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('fieldTemplate', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
      */
@@ -319,7 +304,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.grouped]
@@ -332,7 +316,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('grouped', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.groupTemplate]
      */
@@ -343,7 +326,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set groupTemplate(value: any) {
         this._setOption('groupTemplate', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -356,7 +338,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -367,7 +348,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
@@ -380,7 +360,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.inputAttr]
      */
@@ -391,7 +370,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set inputAttr(value: any) {
         this._setOption('inputAttr', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -404,7 +382,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -415,7 +392,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.items]
@@ -428,7 +404,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
      */
@@ -439,7 +414,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.label]
@@ -452,7 +426,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('label', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.labelMode]
      */
@@ -463,7 +436,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set labelMode(value: LabelMode) {
         this._setOption('labelMode', value);
     }
-
 
     /**
      * [descr:dxTextBoxOptions.maxLength]
@@ -476,7 +448,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('maxLength', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.minSearchLength]
      */
@@ -487,7 +458,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set minSearchLength(value: number) {
         this._setOption('minSearchLength', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.name]
@@ -500,7 +470,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.noDataText]
      */
@@ -511,7 +480,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set noDataText(value: string) {
         this._setOption('noDataText', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.opened]
@@ -524,7 +492,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('opened', value);
     }
 
-
     /**
      * [descr:dxSelectBoxOptions.openOnFieldClick]
      */
@@ -535,7 +502,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set openOnFieldClick(value: boolean) {
         this._setOption('openOnFieldClick', value);
     }
-
 
     /**
      * [descr:dxSelectBoxOptions.placeholder]
@@ -548,7 +514,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -559,7 +524,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -572,7 +536,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.searchEnabled]
      */
@@ -583,7 +546,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set searchEnabled(value: boolean) {
         this._setOption('searchEnabled', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.searchExpr]
@@ -596,7 +558,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('searchExpr', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.searchMode]
      */
@@ -607,7 +568,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set searchMode(value: SimplifiedSearchMode) {
         this._setOption('searchMode', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.searchTimeout]
@@ -620,7 +580,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('searchTimeout', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.selectedItem]
      */
@@ -631,7 +590,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set selectedItem(value: any | null) {
         this._setOption('selectedItem', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.showClearButton]
@@ -644,7 +602,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('showClearButton', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.showDataBeforeSearch]
      */
@@ -655,7 +612,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set showDataBeforeSearch(value: boolean) {
         this._setOption('showDataBeforeSearch', value);
     }
-
 
     /**
      * [descr:dxSelectBoxOptions.showDropDownButton]
@@ -668,7 +624,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('showDropDownButton', value);
     }
 
-
     /**
      * [descr:dxSelectBoxOptions.showSelectionControls]
      */
@@ -679,7 +634,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set showSelectionControls(value: boolean) {
         this._setOption('showSelectionControls', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.spellcheck]
@@ -692,7 +646,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('spellcheck', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.stylingMode]
      */
@@ -703,7 +656,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -716,7 +668,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.text]
      */
@@ -727,7 +678,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set text(value: string) {
         this._setOption('text', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.useItemTextAsTitle]
@@ -740,7 +690,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('useItemTextAsTitle', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
      */
@@ -751,7 +700,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set validationError(value: any | null) {
         this._setOption('validationError', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationErrors]
@@ -764,7 +712,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
      */
@@ -775,7 +722,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set validationMessageMode(value: ValidationMessageMode) {
         this._setOption('validationMessageMode', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
@@ -788,7 +734,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
      */
@@ -799,7 +744,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set validationStatus(value: ValidationStatus) {
         this._setOption('validationStatus', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.value]
@@ -812,7 +756,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:dxDropDownListOptions.valueChangeEvent]
      */
@@ -823,7 +766,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set valueChangeEvent(value: string) {
         this._setOption('valueChangeEvent', value);
     }
-
 
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
@@ -836,7 +778,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('valueExpr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -848,7 +789,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
      */
@@ -859,7 +799,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxDropDownListOptions.wrapItemText]
@@ -1286,11 +1225,8 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

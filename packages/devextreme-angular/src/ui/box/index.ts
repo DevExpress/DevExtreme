@@ -81,7 +81,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('align', value);
     }
 
-
     /**
      * [descr:dxBoxOptions.crossAlign]
      */
@@ -92,7 +91,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     set crossAlign(value: CrosswiseDistribution) {
         this._setOption('crossAlign', value);
     }
-
 
     /**
      * [descr:dxBoxOptions.dataSource]
@@ -105,7 +103,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxBoxOptions.direction]
      */
@@ -116,7 +113,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     set direction(value: BoxDirection) {
         this._setOption('direction', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -129,7 +125,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -140,7 +135,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -153,7 +147,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -164,7 +157,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
@@ -177,7 +169,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxBoxOptions.items]
      */
@@ -188,7 +179,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     set items(value: Array<any | dxBoxItem | string>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
@@ -201,7 +191,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -213,7 +202,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -224,7 +212,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -346,9 +333,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

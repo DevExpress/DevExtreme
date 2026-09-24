@@ -60,7 +60,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
         this._setOption('bounceEnabled', value);
     }
 
-
     /**
      * [descr:dxScrollableOptions.direction]
      */
@@ -71,7 +70,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     set direction(value: ScrollDirection) {
         this._setOption('direction', value);
     }
-
 
     /**
      * [descr:dxScrollableOptions.disabled]
@@ -84,7 +82,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -95,7 +92,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -108,7 +104,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxScrollViewOptions.pulledDownText]
      */
@@ -119,7 +114,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     set pulledDownText(value: string) {
         this._setOption('pulledDownText', value);
     }
-
 
     /**
      * [descr:dxScrollViewOptions.pullingDownText]
@@ -132,7 +126,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
         this._setOption('pullingDownText', value);
     }
 
-
     /**
      * [descr:dxScrollViewOptions.reachBottomText]
      */
@@ -143,7 +136,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     set reachBottomText(value: string) {
         this._setOption('reachBottomText', value);
     }
-
 
     /**
      * [descr:dxScrollViewOptions.refreshingText]
@@ -156,7 +148,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
         this._setOption('refreshingText', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -167,7 +158,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxScrollableOptions.scrollByContent]
@@ -180,7 +170,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
         this._setOption('scrollByContent', value);
     }
 
-
     /**
      * [descr:dxScrollableOptions.scrollByThumb]
      */
@@ -191,7 +180,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     set scrollByThumb(value: boolean) {
         this._setOption('scrollByThumb', value);
     }
-
 
     /**
      * [descr:dxScrollableOptions.showScrollbar]
@@ -204,7 +192,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
         this._setOption('showScrollbar', value);
     }
 
-
     /**
      * [descr:dxScrollableOptions.useNative]
      */
@@ -215,7 +202,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     set useNative(value: boolean) {
         this._setOption('useNative', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -337,9 +323,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

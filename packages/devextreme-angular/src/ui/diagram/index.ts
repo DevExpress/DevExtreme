@@ -156,7 +156,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('autoZoomMode', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.contextMenu]
      */
@@ -167,7 +166,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set contextMenu(value: { commands?: Array<Command | CustomCommand>, enabled?: boolean }) {
         this._setOption('contextMenu', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.contextToolbox]
@@ -180,7 +178,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('contextToolbox', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.customShapes]
      */
@@ -191,7 +188,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set customShapes(value: { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[]) {
         this._setOption('customShapes', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.customShapeTemplate]
@@ -204,7 +200,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('customShapeTemplate', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.customShapeToolboxTemplate]
      */
@@ -215,7 +210,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set customShapeToolboxTemplate(value: any) {
         this._setOption('customShapeToolboxTemplate', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.defaultItemProperties]
@@ -228,7 +222,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('defaultItemProperties', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -239,7 +232,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.edges]
@@ -252,7 +244,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('edges', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.editing]
      */
@@ -263,7 +254,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set editing(value: { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowMoveShape?: boolean, allowResizeShape?: boolean }) {
         this._setOption('editing', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -276,7 +266,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.export]
      */
@@ -287,7 +276,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set export(value: { fileName?: string }) {
         this._setOption('export', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.fullScreen]
@@ -300,7 +288,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('fullScreen', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.gridSize]
      */
@@ -311,7 +298,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set gridSize(value: number | { items?: Array<number>, value?: number }) {
         this._setOption('gridSize', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.hasChanges]
@@ -324,7 +310,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('hasChanges', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -335,7 +320,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.historyToolbar]
@@ -348,7 +332,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('historyToolbar', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.mainToolbar]
      */
@@ -359,7 +342,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set mainToolbar(value: { commands?: Array<Command | CustomCommand>, visible?: boolean }) {
         this._setOption('mainToolbar', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.nodes]
@@ -372,7 +354,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('nodes', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.pageColor]
      */
@@ -383,7 +364,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set pageColor(value: string) {
         this._setOption('pageColor', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.pageOrientation]
@@ -396,7 +376,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('pageOrientation', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.pageSize]
      */
@@ -407,7 +386,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set pageSize(value: { height?: number, items?: { height?: number, text?: string, width?: number }[], width?: number }) {
         this._setOption('pageSize', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.propertiesPanel]
@@ -420,7 +398,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('propertiesPanel', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.readOnly]
      */
@@ -431,7 +408,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -444,7 +420,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.showGrid]
      */
@@ -455,7 +430,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set showGrid(value: boolean) {
         this._setOption('showGrid', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.simpleView]
@@ -468,7 +442,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('simpleView', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.snapToGrid]
      */
@@ -479,7 +452,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set snapToGrid(value: boolean) {
         this._setOption('snapToGrid', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.toolbox]
@@ -492,7 +464,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('toolbox', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.units]
      */
@@ -503,7 +474,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set units(value: Units) {
         this._setOption('units', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.useNativeScrolling]
@@ -516,7 +486,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('useNativeScrolling', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.viewToolbar]
      */
@@ -527,7 +496,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set viewToolbar(value: { commands?: Array<Command | CustomCommand>, visible?: boolean }) {
         this._setOption('viewToolbar', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.viewUnits]
@@ -540,7 +508,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('viewUnits', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -552,7 +519,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
      */
@@ -563,7 +529,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxDiagramOptions.zoomLevel]
@@ -805,9 +770,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() zoomLevelChange: EventEmitter<number | { items?: Array<number>, value?: number | undefined }>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

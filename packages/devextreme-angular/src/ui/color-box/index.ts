@@ -127,7 +127,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('acceptCustomValue', value);
     }
 
-
     /**
      * [descr:WidgetOptions.accessKey]
      */
@@ -138,7 +137,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set accessKey(value: string | undefined) {
         this._setOption('accessKey', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.activeStateEnabled]
@@ -151,7 +149,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:dxColorBoxOptions.applyButtonText]
      */
@@ -162,7 +159,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set applyButtonText(value: string) {
         this._setOption('applyButtonText', value);
     }
-
 
     /**
      * [descr:dxColorBoxOptions.applyValueMode]
@@ -175,7 +171,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('applyValueMode', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.buttons]
      */
@@ -186,7 +181,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set buttons(value: Array<DropDownPredefinedButton | TextEditorButton> | undefined) {
         this._setOption('buttons', value);
     }
-
 
     /**
      * [descr:dxColorBoxOptions.cancelButtonText]
@@ -199,7 +193,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('cancelButtonText', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
      */
@@ -210,7 +203,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set deferRendering(value: boolean) {
         this._setOption('deferRendering', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -223,7 +215,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.dropDownButtonTemplate]
      */
@@ -234,7 +225,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set dropDownButtonTemplate(value: any) {
         this._setOption('dropDownButtonTemplate', value);
     }
-
 
     /**
      * [descr:dxColorBoxOptions.dropDownOptions]
@@ -247,7 +237,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('dropDownOptions', value);
     }
 
-
     /**
      * [descr:dxColorBoxOptions.editAlphaChannel]
      */
@@ -258,7 +247,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set editAlphaChannel(value: boolean) {
         this._setOption('editAlphaChannel', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -271,7 +259,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.fieldAddons]
      */
@@ -282,7 +269,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set fieldAddons(value: FieldAddons | null) {
         this._setOption('fieldAddons', value);
     }
-
 
     /**
      * [descr:dxColorBoxOptions.fieldTemplate]
@@ -297,7 +283,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('fieldTemplate', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
      */
@@ -308,7 +293,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -321,7 +305,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -332,7 +315,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.hoverStateEnabled]
@@ -345,7 +327,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.inputAttr]
      */
@@ -356,7 +337,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set inputAttr(value: any) {
         this._setOption('inputAttr', value);
     }
-
 
     /**
      * [descr:EditorOptions.isDirty]
@@ -369,7 +349,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
      */
@@ -380,7 +359,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set isValid(value: boolean) {
         this._setOption('isValid', value);
     }
-
 
     /**
      * [descr:dxColorBoxOptions.keyStep]
@@ -393,7 +371,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('keyStep', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.label]
      */
@@ -404,7 +381,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set label(value: string) {
         this._setOption('label', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.labelMode]
@@ -417,7 +393,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('labelMode', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.name]
      */
@@ -428,7 +403,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set name(value: string) {
         this._setOption('name', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.opened]
@@ -441,7 +415,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('opened', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.openOnFieldClick]
      */
@@ -452,7 +425,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set openOnFieldClick(value: boolean) {
         this._setOption('openOnFieldClick', value);
     }
-
 
     /**
      * [descr:dxTextEditorOptions.placeholder]
@@ -465,7 +437,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -476,7 +447,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -489,7 +459,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.showClearButton]
      */
@@ -500,7 +469,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set showClearButton(value: boolean) {
         this._setOption('showClearButton', value);
     }
-
 
     /**
      * [descr:dxDropDownEditorOptions.showDropDownButton]
@@ -513,7 +481,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('showDropDownButton', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.stylingMode]
      */
@@ -524,7 +491,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -537,7 +503,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxTextEditorOptions.text]
      */
@@ -548,7 +513,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set text(value: string) {
         this._setOption('text', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationError]
@@ -561,7 +525,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
      */
@@ -572,7 +535,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessageMode]
@@ -585,7 +547,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:dxDropDownEditorOptions.validationMessagePosition]
      */
@@ -596,7 +557,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set validationMessagePosition(value: Mode | Position) {
         this._setOption('validationMessagePosition', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationStatus]
@@ -609,7 +569,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxColorBoxOptions.value]
      */
@@ -621,7 +580,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -632,7 +590,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -949,11 +906,8 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -106,7 +106,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxListOptions.activeStateEnabled]
      */
@@ -117,7 +116,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxListOptions.allowItemDeleting]
@@ -130,7 +128,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('allowItemDeleting', value);
     }
 
-
     /**
      * [descr:dxListOptions.bounceEnabled]
      */
@@ -141,7 +138,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set bounceEnabled(value: boolean) {
         this._setOption('bounceEnabled', value);
     }
-
 
     /**
      * [descr:dxListOptions.collapsibleGroups]
@@ -154,7 +150,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('collapsibleGroups', value);
     }
 
-
     /**
      * [descr:dxListOptions.dataSource]
      */
@@ -165,7 +160,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set dataSource(value: Array<any | dxListItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -178,7 +172,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxListOptions.displayExpr]
      */
@@ -189,7 +182,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set displayExpr(value: ((item: any) => string) | string | undefined) {
         this._setOption('displayExpr', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -202,7 +194,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxListOptions.focusStateEnabled]
      */
@@ -213,7 +204,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:dxListOptions.grouped]
@@ -226,7 +216,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('grouped', value);
     }
 
-
     /**
      * [descr:dxListOptions.groupTemplate]
      */
@@ -237,7 +226,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set groupTemplate(value: any) {
         this._setOption('groupTemplate', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -250,7 +238,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -261,7 +248,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxListOptions.hoverStateEnabled]
@@ -274,7 +260,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxListOptions.indicateLoading]
      */
@@ -285,7 +270,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set indicateLoading(value: boolean) {
         this._setOption('indicateLoading', value);
     }
-
 
     /**
      * [descr:dxListOptions.itemDeleteMode]
@@ -298,7 +282,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemDeleteMode', value);
     }
 
-
     /**
      * [descr:dxListOptions.itemDragging]
      */
@@ -309,7 +292,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set itemDragging(value: dxSortableOptions) {
         this._setOption('itemDragging', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
@@ -322,7 +304,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxListOptions.items]
      */
@@ -333,7 +314,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set items(value: Array<any | dxListItem | string>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
@@ -346,7 +326,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
      */
@@ -357,7 +336,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set keyExpr(value: ((item: any) => any) | null | string) {
         this._setOption('keyExpr', value);
     }
-
 
     /**
      * [descr:dxListOptions.menuItems]
@@ -370,7 +348,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('menuItems', value);
     }
 
-
     /**
      * [descr:dxListOptions.menuMode]
      */
@@ -381,7 +358,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set menuMode(value: ListMenuMode) {
         this._setOption('menuMode', value);
     }
-
 
     /**
      * [descr:dxListOptions.nextButtonText]
@@ -394,7 +370,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('nextButtonText', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.noDataText]
      */
@@ -405,7 +380,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set noDataText(value: string) {
         this._setOption('noDataText', value);
     }
-
 
     /**
      * [descr:dxListOptions.pageLoadingText]
@@ -418,7 +392,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('pageLoadingText', value);
     }
 
-
     /**
      * [descr:dxListOptions.pageLoadMode]
      */
@@ -429,7 +402,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set pageLoadMode(value: PageLoadMode) {
         this._setOption('pageLoadMode', value);
     }
-
 
     /**
      * [descr:dxListOptions.pulledDownText]
@@ -442,7 +414,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('pulledDownText', value);
     }
 
-
     /**
      * [descr:dxListOptions.pullingDownText]
      */
@@ -453,7 +424,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set pullingDownText(value: string) {
         this._setOption('pullingDownText', value);
     }
-
 
     /**
      * [descr:dxListOptions.pullRefreshEnabled]
@@ -466,7 +436,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('pullRefreshEnabled', value);
     }
 
-
     /**
      * [descr:dxListOptions.refreshingText]
      */
@@ -477,7 +446,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set refreshingText(value: string) {
         this._setOption('refreshingText', value);
     }
-
 
     /**
      * [descr:dxListOptions.repaintChangesOnly]
@@ -490,7 +458,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('repaintChangesOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -501,7 +468,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxListOptions.scrollByContent]
@@ -514,7 +480,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('scrollByContent', value);
     }
 
-
     /**
      * [descr:dxListOptions.scrollByThumb]
      */
@@ -525,7 +490,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set scrollByThumb(value: boolean) {
         this._setOption('scrollByThumb', value);
     }
-
 
     /**
      * [descr:dxListOptions.scrollingEnabled]
@@ -538,7 +502,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('scrollingEnabled', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchEditorOptions]
      */
@@ -549,7 +512,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set searchEditorOptions(value: dxTextBoxOptions<any>) {
         this._setOption('searchEditorOptions', value);
     }
-
 
     /**
      * [descr:SearchBoxMixinOptions.searchEnabled]
@@ -562,7 +524,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('searchEnabled', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchExpr]
      */
@@ -573,7 +534,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set searchExpr(value: Array<Function | string> | Function | string) {
         this._setOption('searchExpr', value);
     }
-
 
     /**
      * [descr:SearchBoxMixinOptions.searchMode]
@@ -586,7 +546,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('searchMode', value);
     }
 
-
     /**
      * [descr:SearchBoxMixinOptions.searchTimeout]
      */
@@ -597,7 +556,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set searchTimeout(value: number | undefined) {
         this._setOption('searchTimeout', value);
     }
-
 
     /**
      * [descr:SearchBoxMixinOptions.searchValue]
@@ -610,7 +568,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('searchValue', value);
     }
 
-
     /**
      * [descr:dxListOptions.selectAllMode]
      */
@@ -621,7 +578,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set selectAllMode(value: SelectAllMode) {
         this._setOption('selectAllMode', value);
     }
-
 
     /**
      * [descr:dxListOptions.selectAllText]
@@ -634,7 +590,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectAllText', value);
     }
 
-
     /**
      * [descr:dxListOptions.selectByClick]
      */
@@ -645,7 +600,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set selectByClick(value: boolean) {
         this._setOption('selectByClick', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.selectedItemKeys]
@@ -658,7 +612,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectedItemKeys', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItems]
      */
@@ -669,7 +622,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set selectedItems(value: Array<any>) {
         this._setOption('selectedItems', value);
     }
-
 
     /**
      * [descr:dxListOptions.selectionMode]
@@ -682,7 +634,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:dxListOptions.showScrollbar]
      */
@@ -693,7 +644,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set showScrollbar(value: ScrollbarMode) {
         this._setOption('showScrollbar', value);
     }
-
 
     /**
      * [descr:dxListOptions.showSelectionControls]
@@ -706,7 +656,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('showSelectionControls', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -717,7 +666,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxListOptions.useNativeScrolling]
@@ -730,7 +678,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         this._setOption('useNativeScrolling', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -741,7 +688,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -1123,9 +1069,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

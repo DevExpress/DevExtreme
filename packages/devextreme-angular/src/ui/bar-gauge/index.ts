@@ -106,7 +106,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('animation', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.backgroundColor]
      */
@@ -117,7 +116,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set backgroundColor(value: string) {
         this._setOption('backgroundColor', value);
     }
-
 
     /**
      * [descr:dxBarGaugeOptions.barSpacing]
@@ -130,7 +128,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('barSpacing', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.baseValue]
      */
@@ -141,7 +138,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set baseValue(value: number) {
         this._setOption('baseValue', value);
     }
-
 
     /**
      * [descr:dxBarGaugeOptions.centerTemplate]
@@ -154,7 +150,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('centerTemplate', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
      */
@@ -165,7 +160,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -178,7 +172,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
      */
@@ -189,7 +182,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set encodeHtml(value: boolean) {
         this._setOption('encodeHtml', value);
     }
-
 
     /**
      * [descr:dxBarGaugeOptions.endValue]
@@ -202,7 +194,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('endValue', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.export]
      */
@@ -213,7 +204,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }) {
         this._setOption('export', value);
     }
-
 
     /**
      * [descr:dxBarGaugeOptions.geometry]
@@ -226,7 +216,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('geometry', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.label]
      */
@@ -237,7 +226,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set label(value: { connectorColor?: string | undefined, connectorWidth?: number, customizeText?: ((barValue: { value: number, valueText: string }) => string), font?: Font, format?: Format | undefined, indent?: number, visible?: boolean }) {
         this._setOption('label', value);
     }
-
 
     /**
      * [descr:dxBarGaugeOptions.legend]
@@ -250,7 +238,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('legend', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.loadingIndicator]
      */
@@ -261,7 +248,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set loadingIndicator(value: { backgroundColor?: string, font?: Font, show?: boolean, text?: string }) {
         this._setOption('loadingIndicator', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.margin]
@@ -274,7 +260,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('margin', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.palette]
      */
@@ -285,7 +270,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set palette(value: Array<string> | Palette) {
         this._setOption('palette', value);
     }
-
 
     /**
      * [descr:dxBarGaugeOptions.paletteExtensionMode]
@@ -298,7 +282,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('paletteExtensionMode', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.pathModified]
      */
@@ -309,7 +292,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set pathModified(value: boolean) {
         this._setOption('pathModified', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
@@ -322,7 +304,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('redrawOnResize', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.relativeInnerRadius]
      */
@@ -333,7 +314,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set relativeInnerRadius(value: number) {
         this._setOption('relativeInnerRadius', value);
     }
-
 
     /**
      * [descr:dxBarGaugeOptions.resolveLabelOverlapping]
@@ -346,7 +326,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('resolveLabelOverlapping', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
      */
@@ -357,7 +336,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.size]
@@ -370,7 +348,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.startValue]
      */
@@ -381,7 +358,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set startValue(value: number) {
         this._setOption('startValue', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.theme]
@@ -394,7 +370,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('theme', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.title]
      */
@@ -406,7 +381,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxBarGaugeOptions.tooltip]
      */
@@ -417,7 +391,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
-
 
     /**
      * [descr:dxBarGaugeOptions.values]
@@ -619,9 +592,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() valuesChange: EventEmitter<Array<number>>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

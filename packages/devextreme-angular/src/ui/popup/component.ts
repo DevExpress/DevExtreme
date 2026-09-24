@@ -102,7 +102,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.animation]
      */
@@ -113,7 +112,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
     }
-
 
     /**
      * [descr:dxPopupOptions.container]
@@ -126,7 +124,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('container', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.contentTemplate]
      */
@@ -137,7 +134,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.deferRendering]
@@ -150,7 +146,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('deferRendering', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -161,7 +156,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:dxPopupOptions.dragAndResizeArea]
@@ -174,7 +168,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('dragAndResizeArea', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.dragEnabled]
      */
@@ -185,7 +178,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set dragEnabled(value: boolean) {
         this._setOption('dragEnabled', value);
     }
-
 
     /**
      * [descr:dxPopupOptions.dragOutsideBoundary]
@@ -198,7 +190,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('dragOutsideBoundary', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.enableBodyScroll]
      */
@@ -209,7 +200,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set enableBodyScroll(value: boolean) {
         this._setOption('enableBodyScroll', value);
     }
-
 
     /**
      * [descr:dxPopupOptions.focusStateEnabled]
@@ -222,7 +212,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.fullScreen]
      */
@@ -233,7 +222,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set fullScreen(value: boolean) {
         this._setOption('fullScreen', value);
     }
-
 
     /**
      * [descr:dxPopupOptions.height]
@@ -246,7 +234,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.hideOnOutsideClick]
      */
@@ -257,7 +244,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.hideOnParentScroll]
@@ -270,7 +256,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('hideOnParentScroll', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -281,7 +266,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
@@ -294,7 +278,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.maxHeight]
      */
@@ -305,7 +288,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set maxHeight(value: number | string) {
         this._setOption('maxHeight', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.maxWidth]
@@ -318,7 +300,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('maxWidth', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.minHeight]
      */
@@ -329,7 +310,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set minHeight(value: number | string) {
         this._setOption('minHeight', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.minWidth]
@@ -342,7 +322,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('minWidth', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.position]
      */
@@ -353,7 +332,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set position(value: Function | PositionAlignment | PositionConfig) {
         this._setOption('position', value);
     }
-
 
     /**
      * [descr:dxPopupOptions.resizeEnabled]
@@ -366,7 +344,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('resizeEnabled', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.restorePosition]
      */
@@ -377,7 +354,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set restorePosition(value: boolean) {
         this._setOption('restorePosition', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -390,7 +366,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxOverlayOptions.shading]
      */
@@ -401,7 +376,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set shading(value: boolean) {
         this._setOption('shading', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.shadingColor]
@@ -414,7 +388,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('shadingColor', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.showCloseButton]
      */
@@ -425,7 +398,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set showCloseButton(value: boolean) {
         this._setOption('showCloseButton', value);
     }
-
 
     /**
      * [descr:dxPopupOptions.showTitle]
@@ -438,7 +410,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('showTitle', value);
     }
 
-
     
     @Input()
     get tabFocusLoopEnabled(): boolean {
@@ -447,7 +418,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set tabFocusLoopEnabled(value: boolean) {
         this._setOption('tabFocusLoopEnabled', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -460,7 +430,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.title]
      */
@@ -471,7 +440,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set title(value: string) {
         this._setOption('title', value);
     }
-
 
     /**
      * [descr:dxPopupOptions.titleTemplate]
@@ -484,7 +452,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('titleTemplate', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.toolbarItems]
      */
@@ -495,7 +462,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set toolbarItems(value: Array<dxPopupToolbarItem>) {
         this._setOption('toolbarItems', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.visible]
@@ -508,7 +474,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:dxPopupOptions.width]
      */
@@ -519,7 +484,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     set width(value: number | string) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
@@ -776,9 +740,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

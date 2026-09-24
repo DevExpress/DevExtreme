@@ -281,7 +281,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -293,7 +292,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('activeStateEnabled', value);
     }
 
-
     
     @Input()
     get aiAssistant(): AIAssistant {
@@ -302,7 +300,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set aiAssistant(value: AIAssistant) {
         this._setOption('aiAssistant', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.aiIntegration]
@@ -315,7 +312,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('aiIntegration', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
      */
@@ -326,7 +322,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set allowColumnReordering(value: boolean) {
         this._setOption('allowColumnReordering', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.allowColumnResizing]
@@ -339,7 +334,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('allowColumnResizing', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
      */
@@ -350,7 +344,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set autoExpandAll(value: boolean) {
         this._setOption('autoExpandAll', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.autoNavigateToFocusedRow]
@@ -363,7 +356,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('autoNavigateToFocusedRow', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.cacheEnabled]
      */
@@ -374,7 +366,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set cacheEnabled(value: boolean) {
         this._setOption('cacheEnabled', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.cellHintEnabled]
@@ -387,7 +378,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('cellHintEnabled', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.columnAutoWidth]
      */
@@ -398,7 +388,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set columnAutoWidth(value: boolean) {
         this._setOption('columnAutoWidth', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.columnChooser]
@@ -411,7 +400,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnChooser', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.columnFixing]
      */
@@ -422,7 +410,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set columnFixing(value: { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } }) {
         this._setOption('columnFixing', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.columnHidingEnabled]
@@ -435,7 +422,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnHidingEnabled', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.columnMinWidth]
      */
@@ -446,7 +432,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set columnMinWidth(value: number | undefined) {
         this._setOption('columnMinWidth', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.columnResizingMode]
@@ -459,7 +444,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnResizingMode', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.columns]
      */
@@ -470,7 +454,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set columns(value: Array<dxTreeListColumn | string>) {
         this._setOption('columns', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.columnWidth]
@@ -483,7 +466,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('columnWidth', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.customizeColumns]
      */
@@ -494,7 +476,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set customizeColumns(value: ((columns: Array<dxTreeListColumn>) => void)) {
         this._setOption('customizeColumns', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.dataSource]
@@ -507,7 +488,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.dataStructure]
      */
@@ -518,7 +498,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set dataStructure(value: DataStructure) {
         this._setOption('dataStructure', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.dateSerializationFormat]
@@ -531,7 +510,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('dateSerializationFormat', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -542,7 +520,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:dxTreeListOptions.editing]
@@ -555,7 +532,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('editing', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -566,7 +542,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.errorRowEnabled]
@@ -579,7 +554,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('errorRowEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.expandedRowKeys]
      */
@@ -590,7 +564,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set expandedRowKeys(value: Array<any>) {
         this._setOption('expandedRowKeys', value);
     }
-
 
     /**
      * [descr:dxTreeListOptions.expandNodesOnFiltering]
@@ -603,7 +576,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('expandNodesOnFiltering', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.filterBuilder]
      */
@@ -614,7 +586,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set filterBuilder(value: dxFilterBuilderOptions) {
         this._setOption('filterBuilder', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.filterBuilderPopup]
@@ -627,7 +598,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('filterBuilderPopup', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.filterMode]
      */
@@ -638,7 +608,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set filterMode(value: TreeListFilterMode) {
         this._setOption('filterMode', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.filterPanel]
@@ -651,7 +620,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('filterPanel', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.filterRow]
      */
@@ -662,7 +630,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set filterRow(value: { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }) {
         this._setOption('filterRow', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.filterSyncEnabled]
@@ -675,7 +642,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('filterSyncEnabled', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.filterValue]
      */
@@ -686,7 +652,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set filterValue(value: Array<any> | Function | string) {
         this._setOption('filterValue', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.focusedColumnIndex]
@@ -699,7 +664,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('focusedColumnIndex', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.focusedRowEnabled]
      */
@@ -710,7 +674,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set focusedRowEnabled(value: boolean) {
         this._setOption('focusedRowEnabled', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.focusedRowIndex]
@@ -723,7 +686,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('focusedRowIndex', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.focusedRowKey]
      */
@@ -734,7 +696,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set focusedRowKey(value: any | undefined) {
         this._setOption('focusedRowKey', value);
     }
-
 
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
@@ -747,7 +708,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('hasItemsExpr', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.headerFilter]
      */
@@ -758,7 +718,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set headerFilter(value: HeaderFilter) {
         this._setOption('headerFilter', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -771,7 +730,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.highlightChanges]
      */
@@ -782,7 +740,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set highlightChanges(value: boolean) {
         this._setOption('highlightChanges', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -795,7 +752,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -806,7 +762,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxTreeListOptions.itemsExpr]
@@ -819,7 +774,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('itemsExpr', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.keyboardNavigation]
      */
@@ -830,7 +784,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set keyboardNavigation(value: { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection }) {
         this._setOption('keyboardNavigation', value);
     }
-
 
     /**
      * [descr:dxTreeListOptions.keyExpr]
@@ -843,7 +796,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.loadPanel]
      */
@@ -854,7 +806,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
         this._setOption('loadPanel', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.noDataText]
@@ -867,7 +818,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.pager]
      */
@@ -878,7 +828,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set pager(value: Pager) {
         this._setOption('pager', value);
     }
-
 
     /**
      * [descr:dxTreeListOptions.paging]
@@ -891,7 +840,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('paging', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.parentIdExpr]
      */
@@ -902,7 +850,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set parentIdExpr(value: ((item: any, value: any) => any | undefined) | string) {
         this._setOption('parentIdExpr', value);
     }
-
 
     /**
      * [descr:dxTreeListOptions.remoteOperations]
@@ -915,7 +862,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('remoteOperations', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.renderAsync]
      */
@@ -926,7 +872,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set renderAsync(value: boolean) {
         this._setOption('renderAsync', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.repaintChangesOnly]
@@ -939,7 +884,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('repaintChangesOnly', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.rootValue]
      */
@@ -950,7 +894,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set rootValue(value: any) {
         this._setOption('rootValue', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.rowAlternationEnabled]
@@ -963,7 +906,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('rowAlternationEnabled', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.rowDragging]
      */
@@ -974,7 +916,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set rowDragging(value: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string | undefined, container?: any | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any, dropFeedbackMode?: DragHighlight, group?: string | undefined, handle?: string, onAdd?: ((e: RowDraggingAddEvent) => void), onDragChange?: ((e: RowDraggingChangeEvent) => void), onDragEnd?: ((e: RowDraggingEndEvent) => void), onDragMove?: ((e: RowDraggingMoveEvent) => void), onDragStart?: ((e: RowDraggingStartEvent) => void), onRemove?: ((e: RowDraggingRemoveEvent) => void), onReorder?: ((e: RowDraggingReorderEvent) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
         this._setOption('rowDragging', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -987,7 +928,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.scrolling]
      */
@@ -998,7 +938,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set scrolling(value: { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }) {
         this._setOption('scrolling', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.searchPanel]
@@ -1011,7 +950,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('searchPanel', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.selectedRowKeys]
      */
@@ -1022,7 +960,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set selectedRowKeys(value: Array<any>) {
         this._setOption('selectedRowKeys', value);
     }
-
 
     /**
      * [descr:dxTreeListOptions.selection]
@@ -1035,7 +972,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('selection', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.showBorders]
      */
@@ -1046,7 +982,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set showBorders(value: boolean) {
         this._setOption('showBorders', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.showColumnHeaders]
@@ -1059,7 +994,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('showColumnHeaders', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.showColumnLines]
      */
@@ -1070,7 +1004,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set showColumnLines(value: boolean) {
         this._setOption('showColumnLines', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.showRowLines]
@@ -1083,7 +1016,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('showRowLines', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.sorting]
      */
@@ -1094,7 +1026,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set sorting(value: Sorting) {
         this._setOption('sorting', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.stateStoring]
@@ -1107,7 +1038,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('stateStoring', value);
     }
 
-
     /**
      * [descr:GridBaseOptions.syncLookupFilterValues]
      */
@@ -1118,7 +1048,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set syncLookupFilterValues(value: boolean) {
         this._setOption('syncLookupFilterValues', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -1131,7 +1060,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxTreeListOptions.toolbar]
      */
@@ -1142,7 +1070,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set toolbar(value: dxTreeListToolbar | undefined) {
         this._setOption('toolbar', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.twoWayBindingEnabled]
@@ -1155,7 +1082,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('twoWayBindingEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -1167,7 +1093,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
      */
@@ -1178,7 +1103,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:GridBaseOptions.wordWrapEnabled]
@@ -1790,9 +1714,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

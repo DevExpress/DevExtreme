@@ -79,7 +79,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -90,7 +89,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.items]
@@ -103,7 +101,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
      */
@@ -114,7 +111,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
-
 
     /**
      * [descr:dxValidationSummaryOptions.validationGroup]
@@ -176,9 +172,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() validationGroupChange: EventEmitter<string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

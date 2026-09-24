@@ -62,7 +62,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('autoScroll', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.boundary]
      */
@@ -73,7 +72,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     set boundary(value: any | string | undefined) {
         this._setOption('boundary', value);
     }
-
 
     /**
      * [descr:dxDraggableOptions.clone]
@@ -86,7 +84,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('clone', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.container]
      */
@@ -97,7 +94,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     set container(value: any | string | undefined) {
         this._setOption('container', value);
     }
-
 
     /**
      * [descr:DraggableBaseOptions.cursorOffset]
@@ -110,7 +106,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('cursorOffset', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.data]
      */
@@ -121,7 +116,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     set data(value: any | undefined) {
         this._setOption('data', value);
     }
-
 
     /**
      * [descr:DraggableBaseOptions.dragDirection]
@@ -134,7 +128,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('dragDirection', value);
     }
 
-
     /**
      * [descr:dxDraggableOptions.dragTemplate]
      */
@@ -145,7 +138,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     set dragTemplate(value: any) {
         this._setOption('dragTemplate', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -158,7 +150,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.group]
      */
@@ -169,7 +160,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     set group(value: string | undefined) {
         this._setOption('group', value);
     }
-
 
     /**
      * [descr:DraggableBaseOptions.handle]
@@ -182,7 +172,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('handle', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -193,7 +182,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -206,7 +194,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.scrollSensitivity]
      */
@@ -218,7 +205,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
         this._setOption('scrollSensitivity', value);
     }
 
-
     /**
      * [descr:DraggableBaseOptions.scrollSpeed]
      */
@@ -229,7 +215,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     set scrollSpeed(value: number) {
         this._setOption('scrollSpeed', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -351,9 +336,6 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

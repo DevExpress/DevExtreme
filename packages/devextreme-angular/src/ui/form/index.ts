@@ -119,7 +119,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -131,7 +130,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('activeStateEnabled', value);
     }
 
-
     
     @Input()
     get aiIntegration(): AIIntegration | undefined {
@@ -140,7 +138,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set aiIntegration(value: AIIntegration | undefined) {
         this._setOption('aiIntegration', value);
     }
-
 
     /**
      * [descr:dxFormOptions.alignItemLabels]
@@ -153,7 +150,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('alignItemLabels', value);
     }
 
-
     /**
      * [descr:dxFormOptions.alignItemLabelsInAllGroups]
      */
@@ -164,7 +160,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set alignItemLabelsInAllGroups(value: boolean) {
         this._setOption('alignItemLabelsInAllGroups', value);
     }
-
 
     /**
      * [descr:dxFormOptions.colCount]
@@ -177,7 +172,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('colCount', value);
     }
 
-
     /**
      * [descr:dxFormOptions.colCountByScreen]
      */
@@ -188,7 +182,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set colCountByScreen(value: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }) {
         this._setOption('colCountByScreen', value);
     }
-
 
     /**
      * [descr:dxFormOptions.customizeItem]
@@ -201,7 +194,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('customizeItem', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
      */
@@ -212,7 +204,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -225,7 +216,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.focusStateEnabled]
      */
@@ -236,7 +226,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:dxFormOptions.formData]
@@ -249,7 +238,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('formData', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -260,7 +248,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -273,7 +260,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -284,7 +270,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxFormOptions.isDirty]
@@ -297,7 +282,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:dxFormOptions.items]
      */
@@ -308,7 +292,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set items(value: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:dxFormOptions.labelLocation]
@@ -321,7 +304,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('labelLocation', value);
     }
 
-
     /**
      * [descr:dxFormOptions.labelMode]
      */
@@ -332,7 +314,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set labelMode(value: FormLabelMode) {
         this._setOption('labelMode', value);
     }
-
 
     /**
      * [descr:dxFormOptions.minColWidth]
@@ -345,7 +326,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('minColWidth', value);
     }
 
-
     /**
      * [descr:dxFormOptions.optionalMark]
      */
@@ -356,7 +336,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set optionalMark(value: string) {
         this._setOption('optionalMark', value);
     }
-
 
     /**
      * [descr:dxFormOptions.readOnly]
@@ -369,7 +348,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:dxFormOptions.requiredMark]
      */
@@ -380,7 +358,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set requiredMark(value: string) {
         this._setOption('requiredMark', value);
     }
-
 
     /**
      * [descr:dxFormOptions.requiredMessage]
@@ -393,7 +370,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('requiredMessage', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -404,7 +380,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxFormOptions.screenByWidth]
@@ -417,7 +392,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('screenByWidth', value);
     }
 
-
     /**
      * [descr:dxFormOptions.scrollingEnabled]
      */
@@ -428,7 +402,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set scrollingEnabled(value: boolean) {
         this._setOption('scrollingEnabled', value);
     }
-
 
     /**
      * [descr:dxFormOptions.showColonAfterLabel]
@@ -441,7 +414,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showColonAfterLabel', value);
     }
 
-
     /**
      * [descr:dxFormOptions.showOptionalMark]
      */
@@ -452,7 +424,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set showOptionalMark(value: boolean) {
         this._setOption('showOptionalMark', value);
     }
-
 
     /**
      * [descr:dxFormOptions.showRequiredMark]
@@ -465,7 +436,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('showRequiredMark', value);
     }
 
-
     /**
      * [descr:dxFormOptions.showValidationSummary]
      */
@@ -476,7 +446,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set showValidationSummary(value: boolean) {
         this._setOption('showValidationSummary', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -489,7 +458,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxFormOptions.validationGroup]
      */
@@ -501,7 +469,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
         this._setOption('validationGroup', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -512,7 +479,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -739,9 +705,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

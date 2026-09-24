@@ -139,7 +139,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('annotations', value);
     }
 
-
     /**
      * [descr:dxVectorMapOptions.background]
      */
@@ -150,7 +149,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set background(value: { borderColor?: string, color?: string }) {
         this._setOption('background', value);
     }
-
 
     /**
      * [descr:dxVectorMapOptions.bounds]
@@ -163,7 +161,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('bounds', value);
     }
 
-
     /**
      * [descr:dxVectorMapOptions.center]
      */
@@ -174,7 +171,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set center(value: Array<number>) {
         this._setOption('center', value);
     }
-
 
     /**
      * [descr:dxVectorMapOptions.commonAnnotationSettings]
@@ -187,7 +183,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('commonAnnotationSettings', value);
     }
 
-
     /**
      * [descr:dxVectorMapOptions.controlBar]
      */
@@ -198,7 +193,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set controlBar(value: { borderColor?: string, color?: string, enabled?: boolean, horizontalAlignment?: HorizontalAlignment, margin?: number, opacity?: number, panVisible?: boolean, verticalAlignment?: VerticalEdge, zoomVisible?: boolean }) {
         this._setOption('controlBar', value);
     }
-
 
     /**
      * [descr:dxVectorMapOptions.customizeAnnotation]
@@ -211,7 +205,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('customizeAnnotation', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
      */
@@ -222,7 +215,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set disabled(value: boolean) {
         this._setOption('disabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -235,7 +227,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
      */
@@ -246,7 +237,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set encodeHtml(value: boolean) {
         this._setOption('encodeHtml', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.export]
@@ -259,7 +249,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxVectorMapOptions.layers]
      */
@@ -270,7 +259,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set layers(value: { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number> | undefined, customize?: ((elements: Array<MapLayerElement>) => void), dataField?: string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | Palette, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number> | undefined, type?: VectorMapLayerType }[]) {
         this._setOption('layers', value);
     }
-
 
     /**
      * [descr:dxVectorMapOptions.legends]
@@ -283,7 +271,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('legends', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
      */
@@ -294,7 +281,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set loadingIndicator(value: { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }) {
         this._setOption('loadingIndicator', value);
     }
-
 
     /**
      * [descr:dxVectorMapOptions.maxZoomFactor]
@@ -307,7 +293,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('maxZoomFactor', value);
     }
 
-
     /**
      * [descr:dxVectorMapOptions.panningEnabled]
      */
@@ -318,7 +303,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set panningEnabled(value: boolean) {
         this._setOption('panningEnabled', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.pathModified]
@@ -331,7 +315,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('pathModified', value);
     }
 
-
     /**
      * [descr:dxVectorMapOptions.projection]
      */
@@ -342,7 +325,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set projection(value: Record<string, any> | string | VectorMapProjection | VectorMapProjectionConfig) {
         this._setOption('projection', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
@@ -355,7 +337,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('redrawOnResize', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
      */
@@ -366,7 +347,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.size]
@@ -379,7 +359,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
      */
@@ -390,7 +369,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set theme(value: Theme) {
         this._setOption('theme', value);
     }
-
 
     /**
      * [descr:BaseWidgetOptions.title]
@@ -403,7 +381,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxVectorMapOptions.tooltip]
      */
@@ -414,7 +391,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: MapLayerElement) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
-
 
     /**
      * [descr:dxVectorMapOptions.touchEnabled]
@@ -427,7 +403,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('touchEnabled', value);
     }
 
-
     /**
      * [descr:dxVectorMapOptions.wheelEnabled]
      */
@@ -439,7 +414,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         this._setOption('wheelEnabled', value);
     }
 
-
     /**
      * [descr:dxVectorMapOptions.zoomFactor]
      */
@@ -450,7 +424,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set zoomFactor(value: number) {
         this._setOption('zoomFactor', value);
     }
-
 
     /**
      * [descr:dxVectorMapOptions.zoomingEnabled]
@@ -672,9 +645,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() zoomingEnabledChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

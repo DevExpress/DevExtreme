@@ -80,7 +80,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxGalleryOptions.animationDuration]
      */
@@ -91,7 +90,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set animationDuration(value: number) {
         this._setOption('animationDuration', value);
     }
-
 
     /**
      * [descr:dxGalleryOptions.animationEnabled]
@@ -104,7 +102,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('animationEnabled', value);
     }
 
-
     /**
      * [descr:dxGalleryOptions.dataSource]
      */
@@ -115,7 +112,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set dataSource(value: Array<any | dxGalleryItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -128,7 +124,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -139,7 +134,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxGalleryOptions.focusStateEnabled]
@@ -152,7 +146,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -163,7 +156,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -176,7 +168,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -187,7 +178,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxGalleryOptions.indicatorEnabled]
@@ -200,7 +190,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('indicatorEnabled', value);
     }
 
-
     /**
      * [descr:dxGalleryOptions.initialItemWidth]
      */
@@ -211,7 +200,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set initialItemWidth(value: number | undefined) {
         this._setOption('initialItemWidth', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
@@ -224,7 +212,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxGalleryOptions.items]
      */
@@ -235,7 +222,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set items(value: Array<any | dxGalleryItem | string>) {
         this._setOption('items', value);
     }
-
 
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
@@ -248,7 +234,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxGalleryOptions.loop]
      */
@@ -259,7 +244,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set loop(value: boolean) {
         this._setOption('loop', value);
     }
-
 
     /**
      * [descr:dxGalleryOptions.noDataText]
@@ -272,7 +256,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('noDataText', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -283,7 +266,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxGalleryOptions.selectedIndex]
@@ -296,7 +278,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('selectedIndex', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
      */
@@ -307,7 +288,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set selectedItem(value: any | null) {
         this._setOption('selectedItem', value);
     }
-
 
     /**
      * [descr:dxGalleryOptions.showIndicator]
@@ -320,7 +300,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('showIndicator', value);
     }
 
-
     /**
      * [descr:dxGalleryOptions.showNavButtons]
      */
@@ -331,7 +310,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set showNavButtons(value: boolean) {
         this._setOption('showNavButtons', value);
     }
-
 
     /**
      * [descr:dxGalleryOptions.slideshowDelay]
@@ -344,7 +322,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('slideshowDelay', value);
     }
 
-
     /**
      * [descr:dxGalleryOptions.stretchImages]
      */
@@ -355,7 +332,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set stretchImages(value: boolean) {
         this._setOption('stretchImages', value);
     }
-
 
     /**
      * [descr:dxGalleryOptions.swipeEnabled]
@@ -368,7 +344,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('swipeEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -379,7 +354,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:WidgetOptions.visible]
@@ -392,7 +366,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
      */
@@ -403,7 +376,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxGalleryOptions.wrapAround]
@@ -605,9 +577,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() wrapAroundChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

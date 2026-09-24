@@ -112,7 +112,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -123,7 +122,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.dataSource]
@@ -136,7 +134,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.deferRendering]
      */
@@ -147,7 +144,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set deferRendering(value: boolean) {
         this._setOption('deferRendering', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -160,7 +156,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.displayExpr]
      */
@@ -171,7 +166,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set displayExpr(value: ((itemData: any) => string) | string | undefined) {
         this._setOption('displayExpr', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.dropDownContentTemplate]
@@ -184,7 +178,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('dropDownContentTemplate', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.dropDownOptions]
      */
@@ -195,7 +188,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set dropDownOptions(value: dxPopupOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -208,7 +200,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.focusStateEnabled]
      */
@@ -219,7 +210,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -232,7 +222,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
      */
@@ -243,7 +232,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set hint(value: string | undefined) {
         this._setOption('hint', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.hoverStateEnabled]
@@ -256,7 +244,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.icon]
      */
@@ -267,7 +254,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set icon(value: string | undefined) {
         this._setOption('icon', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.items]
@@ -280,7 +266,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.itemTemplate]
      */
@@ -291,7 +276,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.keyExpr]
@@ -304,7 +288,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('keyExpr', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.noDataText]
      */
@@ -315,7 +298,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set noDataText(value: string) {
         this._setOption('noDataText', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.opened]
@@ -328,7 +310,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('opened', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -339,7 +320,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.selectedItem]
@@ -352,7 +332,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('selectedItem', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.selectedItemKey]
      */
@@ -363,7 +342,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set selectedItemKey(value: null | number | string) {
         this._setOption('selectedItemKey', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.showArrowIcon]
@@ -376,7 +354,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('showArrowIcon', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.splitButton]
      */
@@ -387,7 +364,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set splitButton(value: boolean) {
         this._setOption('splitButton', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.stylingMode]
@@ -400,7 +376,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('stylingMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -411,7 +386,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.template]
@@ -424,7 +398,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('template', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.text]
      */
@@ -435,7 +408,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set text(value: string) {
         this._setOption('text', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.type]
@@ -448,7 +420,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('type', value);
     }
 
-
     /**
      * [descr:dxDropDownButtonOptions.useItemTextAsTitle]
      */
@@ -459,7 +430,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set useItemTextAsTitle(value: boolean) {
         this._setOption('useItemTextAsTitle', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.useSelectMode]
@@ -472,7 +442,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('useSelectMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -484,7 +453,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
      */
@@ -495,7 +463,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
-
 
     /**
      * [descr:dxDropDownButtonOptions.wrapItemText]
@@ -712,9 +679,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() wrapItemTextChange: EventEmitter<boolean>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

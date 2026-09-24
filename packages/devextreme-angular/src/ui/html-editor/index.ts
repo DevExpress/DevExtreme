@@ -134,7 +134,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -145,7 +144,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxHtmlEditorOptions.aiIntegration]
@@ -158,7 +156,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('aiIntegration', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.allowSoftLineBreak]
      */
@@ -169,7 +166,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set allowSoftLineBreak(value: boolean) {
         this._setOption('allowSoftLineBreak', value);
     }
-
 
     /**
      * [descr:dxHtmlEditorOptions.converter]
@@ -182,7 +178,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('converter', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.customizeModules]
      */
@@ -193,7 +188,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set customizeModules(value: ((config: any) => void)) {
         this._setOption('customizeModules', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -206,7 +200,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -217,7 +210,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxHtmlEditorOptions.focusStateEnabled]
@@ -230,7 +222,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -241,7 +232,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -254,7 +244,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -265,7 +254,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxHtmlEditorOptions.imageUpload]
@@ -278,7 +266,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('imageUpload', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
      */
@@ -289,7 +276,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set isDirty(value: boolean) {
         this._setOption('isDirty', value);
     }
-
 
     /**
      * [descr:EditorOptions.isValid]
@@ -302,7 +288,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.mediaResizing]
      */
@@ -313,7 +298,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set mediaResizing(value: dxHtmlEditorMediaResizing | null) {
         this._setOption('mediaResizing', value);
     }
-
 
     /**
      * [descr:dxHtmlEditorOptions.mentions]
@@ -326,7 +310,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('mentions', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.name]
      */
@@ -337,7 +320,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set name(value: string) {
         this._setOption('name', value);
     }
-
 
     /**
      * [descr:dxHtmlEditorOptions.placeholder]
@@ -350,7 +332,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('placeholder', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
      */
@@ -361,7 +342,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set readOnly(value: boolean) {
         this._setOption('readOnly', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -374,7 +354,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.stylingMode]
      */
@@ -385,7 +364,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set stylingMode(value: EditorStyle) {
         this._setOption('stylingMode', value);
     }
-
 
     /**
      * [descr:WidgetOptions.tabIndex]
@@ -398,7 +376,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.tableContextMenu]
      */
@@ -409,7 +386,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set tableContextMenu(value: dxHtmlEditorTableContextMenu | null) {
         this._setOption('tableContextMenu', value);
     }
-
 
     /**
      * [descr:dxHtmlEditorOptions.tableResizing]
@@ -422,7 +398,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('tableResizing', value);
     }
 
-
     /**
      * [descr:dxHtmlEditorOptions.toolbar]
      */
@@ -433,7 +408,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set toolbar(value: dxHtmlEditorToolbar | null) {
         this._setOption('toolbar', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationError]
@@ -446,7 +420,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
      */
@@ -457,7 +430,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set validationErrors(value: Array<any> | null) {
         this._setOption('validationErrors', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationMessageMode]
@@ -470,7 +442,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessagePosition]
      */
@@ -481,7 +452,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set validationMessagePosition(value: Position) {
         this._setOption('validationMessagePosition', value);
     }
-
 
     /**
      * [descr:EditorOptions.validationStatus]
@@ -494,7 +464,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:EditorOptions.value]
      */
@@ -505,7 +474,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set value(value: any | null) {
         this._setOption('value', value);
     }
-
 
     /**
      * [descr:dxHtmlEditorOptions.variables]
@@ -518,7 +486,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         this._setOption('variables', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -529,7 +496,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -756,11 +722,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * [descr:undefined]
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -111,7 +111,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:WidgetOptions.activeStateEnabled]
      */
@@ -122,7 +121,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
     }
-
 
     /**
      * [descr:dxFileManagerOptions.allowedFileExtensions]
@@ -135,7 +133,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('allowedFileExtensions', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.contextMenu]
      */
@@ -146,7 +143,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set contextMenu(value: dxFileManagerContextMenu) {
         this._setOption('contextMenu', value);
     }
-
 
     /**
      * [descr:dxFileManagerOptions.currentPath]
@@ -159,7 +155,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('currentPath', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.currentPathKeys]
      */
@@ -170,7 +165,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set currentPathKeys(value: Array<string>) {
         this._setOption('currentPathKeys', value);
     }
-
 
     /**
      * [descr:dxFileManagerOptions.customizeDetailColumns]
@@ -183,7 +177,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('customizeDetailColumns', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.customizeThumbnail]
      */
@@ -194,7 +187,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set customizeThumbnail(value: ((fileSystemItem: FileSystemItem) => string)) {
         this._setOption('customizeThumbnail', value);
     }
-
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -207,7 +199,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -218,7 +209,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:dxFileManagerOptions.fileSystemProvider]
@@ -231,7 +221,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('fileSystemProvider', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.focusedItemKey]
      */
@@ -242,7 +231,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set focusedItemKey(value: string | undefined) {
         this._setOption('focusedItemKey', value);
     }
-
 
     /**
      * [descr:WidgetOptions.focusStateEnabled]
@@ -255,7 +243,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
      */
@@ -266,7 +253,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
-
 
     /**
      * [descr:WidgetOptions.hint]
@@ -279,7 +265,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
      */
@@ -290,7 +275,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
     }
-
 
     /**
      * [descr:dxFileManagerOptions.itemView]
@@ -303,7 +287,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('itemView', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.notifications]
      */
@@ -314,7 +297,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set notifications(value: { showPanel?: boolean, showPopup?: boolean }) {
         this._setOption('notifications', value);
     }
-
 
     /**
      * [descr:dxFileManagerOptions.permissions]
@@ -327,7 +309,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('permissions', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.rootFolderName]
      */
@@ -338,7 +319,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set rootFolderName(value: string) {
         this._setOption('rootFolderName', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
@@ -351,7 +331,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.selectedItemKeys]
      */
@@ -362,7 +341,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set selectedItemKeys(value: Array<string>) {
         this._setOption('selectedItemKeys', value);
     }
-
 
     /**
      * [descr:dxFileManagerOptions.selectionMode]
@@ -375,7 +353,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
      */
@@ -386,7 +363,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
     }
-
 
     /**
      * [descr:dxFileManagerOptions.toolbar]
@@ -399,7 +375,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('toolbar', value);
     }
 
-
     /**
      * [descr:dxFileManagerOptions.upload]
      */
@@ -411,7 +386,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
         this._setOption('upload', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
      */
@@ -422,7 +396,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     set visible(value: boolean) {
         this._setOption('visible', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -699,9 +672,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

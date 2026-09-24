@@ -92,7 +92,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         this._setOption('adapter', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
      */
@@ -103,7 +102,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.height]
@@ -116,7 +114,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxValidatorOptions.name]
      */
@@ -127,7 +124,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     set name(value: string) {
         this._setOption('name', value);
     }
-
 
     /**
      * [descr:dxValidatorOptions.validationGroup]
@@ -140,7 +136,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         this._setOption('validationGroup', value);
     }
 
-
     /**
      * [descr:dxValidatorOptions.validationRules]
      */
@@ -151,7 +146,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     set validationRules(value: Array<CommonTypes.ValidationRule>) {
         this._setOption('validationRules', value);
     }
-
 
     /**
      * [descr:DOMComponentOptions.width]
@@ -218,11 +212,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
     parentElement: any;
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
