@@ -24,12 +24,13 @@ import type {
   ColumnIdentifier,
   ColumnOptionChanged,
   ColumnsChanges,
+  ColumnsControllerOptionChanged,
   ColumnsOptionChanged,
   DropLocationNames,
   FilterField,
 } from '@ts/grids/grid_core/columns_controller/types';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
-import type { Module, OptionChanged } from '@ts/grids/grid_core/m_types';
+import type { Module } from '@ts/grids/grid_core/m_types';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
@@ -143,7 +144,7 @@ export class ColumnsController extends modules.Controller {
   private getCommonColumnSettings(column): Partial<Column> {
     switch (true) {
       case !column?.type:
-        return this.option('commonColumnSettings') ?? {};
+        return this.option('commonColumnSettings');
       case column?.type === AI_COLUMN_NAME:
         return this.getAIColumnSettings();
       default:
@@ -254,7 +255,7 @@ export class ColumnsController extends modules.Controller {
     return column;
   }
 
-  public optionChanged(args: OptionChanged | ColumnOptionChanged): void {
+  public optionChanged(args: ColumnsControllerOptionChanged): void {
     let needUpdateRequireResize;
 
     switch (args.name) {
