@@ -1,0 +1,46 @@
+{
+  "name": "devextreme-playwright-tests",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2e/playwright",
+  "projectType": "application",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint"
+      },
+      "inputs": [
+        "{projectRoot}/**/*.mjs",
+        "{projectRoot}/**/*.ts"
+      ]
+    },
+    "type-check": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "type-check"
+      },
+      "inputs": [
+        "{projectRoot}/**/*.ts",
+        "{projectRoot}/tsconfig.json"
+      ]
+    },
+    "test": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test"
+      },
+      "inputs": [
+        "^default",
+        "{projectRoot}/helpers/**/*",
+        "{projectRoot}/models/**/*",
+        "{projectRoot}/tests/**/*",
+        "{projectRoot}/fixtures.ts",
+        "{projectRoot}/playwright.config.ts",
+        "{projectRoot}/runner.mjs",
+        "{projectRoot}/serve.mjs",
+        "{projectRoot}/tsconfig.json"
+      ]
+    }
+  },
+  "tags": []
+}

@@ -172,6 +172,8 @@
 /packages/devextreme/testing/tests/*/pivotGrid.*                      @DevExpress/devextreme-scheduler
 /packages/testcafe-models/pivotGrid/**                                @DevExpress/devextreme-scheduler
 /e2e/testcafe-devextreme/tests/common/pivotGrid/**                    @DevExpress/devextreme-scheduler
+/e2e/playwright/models/pivotGrid/**                                   @DevExpress/devextreme-scheduler
+/e2e/playwright/tests/common/pivotGrid/**                             @DevExpress/devextreme-scheduler
 
 /packages/devextreme-scss/scss/widgets/*/pivotGrid/**        @DevExpress/devextreme-scheduler
 
