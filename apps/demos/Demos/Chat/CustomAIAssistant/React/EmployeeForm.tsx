@@ -1,14 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Form, Item, ButtonItem } from 'devextreme-react/form';
+import { Form, SimpleItem, ButtonItem } from 'devextreme-react/form';
 import type { FormTypes } from 'devextreme-react/form';
+import type { ButtonTypes } from 'devextreme-react/button';
 
 import { Toast } from 'devextreme-react/toast';
 import { employee, formFieldsConfig } from './data.ts';
 import type { EmployeeFormProps } from './data.ts';
 
-const saveButtonOptions = {
+const saveButtonOptions: ButtonTypes.Properties = {
   text: 'Save',
-  type: 'default' as const,
+  type: 'default',
   disabled: true,
   useSubmitBehavior: true,
   width: 120,
@@ -25,9 +26,9 @@ export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormPro
 
   const onOptionChanged = useCallback((event: FormTypes.OptionChangedEvent): void => {
     if (event.name === 'isDirty') {
-      formRef.current?.instance().getButton('Save')?.option('disabled', !event.value);
+      event.component.getButton('Save')?.option('disabled', !event.value);
     }
-  }, [formRef]);
+  }, []);
 
   const onSave = useCallback((): void => setToastVisible(true), []);
   const onToastHiding = useCallback((): void => setToastVisible(false), []);
@@ -43,7 +44,7 @@ export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormPro
         aiIntegration={aiIntegration}
         onOptionChanged={onOptionChanged}
       >
-        {formFieldsConfig.map((field) => <Item key={field.dataField} {...field} />)}
+        {formFieldsConfig.map((field) => <SimpleItem key={field.dataField} {...field} />)}
         <ButtonItem name="Save" colSpan={3} cssClass="save-button" buttonOptions={buttonOptions} />
       </Form>
       <Toast

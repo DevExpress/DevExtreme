@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Form, Item, ButtonItem } from 'devextreme-react/form';
+import { Form, SimpleItem, ButtonItem } from 'devextreme-react/form';
 import { Toast } from 'devextreme-react/toast';
 import { employee, formFieldsConfig } from './data.js';
 
@@ -18,14 +18,11 @@ const toastPosition = {
 };
 export default function EmployeeForm({ aiIntegration, formRef }) {
   const [toastVisible, setToastVisible] = useState(false);
-  const onOptionChanged = useCallback(
-    (event) => {
-      if (event.name === 'isDirty') {
-        formRef.current?.instance().getButton('Save')?.option('disabled', !event.value);
-      }
-    },
-    [formRef],
-  );
+  const onOptionChanged = useCallback((event) => {
+    if (event.name === 'isDirty') {
+      event.component.getButton('Save')?.option('disabled', !event.value);
+    }
+  }, []);
   const onSave = useCallback(() => setToastVisible(true), []);
   const onToastHiding = useCallback(() => setToastVisible(false), []);
   const buttonOptions = useMemo(() => ({ ...saveButtonOptions, onClick: onSave }), [onSave]);
@@ -40,7 +37,7 @@ export default function EmployeeForm({ aiIntegration, formRef }) {
         onOptionChanged={onOptionChanged}
       >
         {formFieldsConfig.map((field) => (
-          <Item
+          <SimpleItem
             key={field.dataField}
             {...field}
           />
