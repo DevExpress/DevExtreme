@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import themeModule from 'viz/themes';
-import { createPalette, getGradientPalette } from 'viz/palette';
+import { getTheme as getRegisteredTheme } from '__internal/viz/themes';
+import { createPalette, getGradientPalette } from '__internal/viz/palette';
 import uiThemeModule from 'ui/themes';
 
 uiThemeModule.setDefaultTimeout(0);
@@ -377,7 +378,7 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
     });
 
     QUnit.test(`fluent-next theme should render text with the published font: ${theme}`, function(assert) {
-        const registeredTheme = themeModule.getTheme(theme);
+        const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.font.family, PUBLISHED_FONT, 'font');
         assert.strictEqual(registeredTheme.title.font.family, PUBLISHED_FONT, 'title font');
@@ -389,7 +390,7 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
     });
 
     QUnit.test(`fluent-next theme should paint the background with the published surface: ${theme}`, function(assert) {
-        const registeredTheme = themeModule.getTheme(theme);
+        const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.backgroundColor, surface, 'backgroundColor');
         assert.strictEqual(registeredTheme.chart.containerBackgroundColor, surface, 'chart container');
@@ -408,14 +409,14 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
     });
 
     QUnit.test(`fluent-next theme should cut shapes out with the published surface: ${theme}`, function(assert) {
-        const registeredTheme = themeModule.getTheme(theme);
+        const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.font.color, surface, 'rangeSelector slider marker text');
         assert.strictEqual(registeredTheme.funnel.item.border.color, surface, 'funnel item border');
     });
 
     QUnit.test(`fluent-next theme should light the export button with the hovered and pressed names: ${theme}`, function(assert) {
-        const registeredTheme = themeModule.getTheme(theme);
+        const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.export.button.hover.backgroundColor, hovered, 'export button hover');
         assert.strictEqual(registeredTheme.export.button.focus.backgroundColor, pressed, 'export button focus');
@@ -423,7 +424,7 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
     });
 
     QUnit.test(`fluent-next theme should lay a tooltip and an annotation over the page, not into it: ${theme}`, function(assert) {
-        const registeredTheme = themeModule.getTheme(theme);
+        const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.tooltip.color, plate, 'tooltip plate');
         assert.strictEqual(registeredTheme.tooltip.font.color, onPlate, 'tooltip text');
@@ -434,7 +435,7 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
     });
 
     QUnit.test(`fluent-next theme should color series with the Fluent Next palette: ${theme}`, function(assert) {
-        const defaultPalette = themeModule.getTheme(theme).defaultPalette;
+        const defaultPalette = getRegisteredTheme(theme).defaultPalette;
 
         const simpleSet = createPalette(undefined, {}, defaultPalette).generateColors(6);
         const indicatingSet = createPalette(undefined, { type: 'indicatingSet' }, defaultPalette).generateColors(3);
@@ -456,7 +457,7 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
     });
 
     QUnit.test(`fluent-next theme should let the range selector follow the accent: ${theme}`, function(assert) {
-        const registeredTheme = themeModule.getTheme(theme);
+        const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.rangeSelector.selectedRangeColor, PUBLISHED_PRIMARY, 'rangeSelector selected range');
         assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.color, PUBLISHED_PRIMARY, 'rangeSelector slider marker');
@@ -464,7 +465,7 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
     });
 
     QUnit.test(`fluent-next theme should paint the shapes that are data with the published blue: ${theme}`, function(assert) {
-        const registeredTheme = themeModule.getTheme(theme);
+        const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.map['layer:marker:dot'].color, PUBLISHED_BLUE, 'map dot marker');
         assert.strictEqual(registeredTheme.map['layer:marker:bubble'].color, PUBLISHED_BLUE, 'map bubble marker');

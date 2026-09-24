@@ -28,10 +28,10 @@ import { getWindow } from '@js/core/utils/window';
 import {
   export as _export, image as imageExporter, pdf as pdfExporter, svg as svgExporter,
 } from '@js/exporter';
-import { getTheme } from '@js/viz/themes';
 import { copyResolvedStyles, fallbackOf, resolvedInScope } from '@ts/core/utils/css_variables';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
 import { patchFontOptions } from '@ts/viz/core/utils';
+import { getTheme } from '@ts/viz/themes';
 
 const pointerActions = [pointerEvents.down, pointerEvents.move].join(' ');
 
