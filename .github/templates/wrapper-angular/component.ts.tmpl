@@ -4,19 +4,13 @@
 //# How to fill it: see README.md next to this file.
 //#
 //# Every line starting with "//#" is a template directive or note — delete ALL
-//# of them in the output. Keep every other line byte-for-byte, only replacing
-//# __PLACEHOLDERS__. WHITESPACE MATTERS: several lines below consist of exactly
-//# four spaces ("    ") — keep them; do not let an editor strip them.
+//# of them in the output, and replace the __PLACEHOLDERS__.
 //#
 //#   //#if FLAG … //#else … //#endif   keep the branch whose FLAG holds
 //#   //#each ITEM … //#endeach         repeat the body once per ITEM (0..n times)
-//#   //#each … //#sep … //#endeach     lines after //#sep are emitted only BETWEEN items
-//#
-//# Blank lines are content, exactly like code lines. Removing a skipped block
-//# removes only the lines INSIDE it — never merge or collapse the blank lines
-//# around it. Count the output's blank lines against the README §7 table.
 //#
 //# Lists have any length; a single line in an //#each is repeated per item.
+//# Never leave two blank lines in a row: if skipping a block does that, keep one.
 //#
 //# Flags:  GENERIC      Properties has type params
 //#         EDITOR       the options include `onValueChanged` (README §1)
@@ -38,7 +32,6 @@
 //# ─────────────────────────────────────────────────────────────────────────────
 /* tslint:disable:max-line-length */
 
-
 import {
     TransferState,
     Component,
@@ -47,7 +40,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -74,15 +66,13 @@ import {
     ContentChildren,
     QueryList
 //#else
-    SimpleChanges,
+    SimpleChanges
 //#endif
 //#endif
 } from '@angular/core';
 
 //#if GENERIC
 export type { ExplicitTypes } from 'devextreme/__module__';
-
-//#else
 
 //#endif
 //#each TYPE_IMPORT   (README §6: one line per module, first-use order)
@@ -96,11 +86,8 @@ import {
     ControlValueAccessor,
     NG_VALUE_ACCESSOR
 } from '@angular/forms';
-
-//#else
-
-
 //#endif
+
 import {
     DxComponent,
     DxTemplateHost,
@@ -117,38 +104,28 @@ import {
 } from 'devextreme-angular/core';
 //#if NESTED
 
-
 //#each NESTED_COMPONENT   (same A→Z order as in @NgModule)
 import { __NestedClass__Module } from 'devextreme-angular/ui/__path__/nested';
 //#endeach
-//#if CO
-//# NOTE: "import { " has a trailing space.
-import { 
-//#each CO_PROPERTY   (distinct option names of collection-item nested components, same order)
-           PROPERTY_TOKEN___coProp__,
-//#endeach
-     } from 'devextreme-angular/core/tokens';
 //#endif
-
-//#else
-
-
-
+//#if CO
+import {
+//#each CO_PROPERTY   (distinct option names of collection-item nested components, same order)
+    PROPERTY_TOKEN___coProp__,
+//#endeach
+} from 'devextreme-angular/core/tokens';
 //#endif
 //#if EDITOR
-
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => Dx__Name__Component),
     multi: true
 };
-//#else
-
 //#endif
+
 /**
  * [descr:dx__Name__]
-
  */
 @Component({
     selector: 'dx-__path__',
@@ -179,22 +156,19 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 //# implements: OnDestroy [, ControlValueAccessor (EDITOR)] [, OnChanges, DoCheck (COLL)]
 export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEMENTS__ {
 //#each CO_PROPERTY
-
     @ContentChildren(PROPERTY_TOKEN___coProp__)
     set ___coProp__ContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('__coProp__', value);
     }
-//#endeach
 
+//#endeach
     instance: Dx__Name____TP__ = null;
 
 //#each PROPERTY   (README §2–§3: every non-event option, A→Z)
-//#   Doc block: omit it entirely if the option has no docID. For a @deprecated
-//#   option insert, right after the "[descr:…]" line:
-//#     "     * @deprecated [depNote:__docId__]"  and then a "    " line.
+//#   Omit the doc block if the option has no docID. For a @deprecated option add
+//#   "     * @deprecated [depNote:__docId__]" right after the [descr:…] line.
     /**
      * [descr:__docId__]
-    
      */
     @Input()
     get __prop__(): __PropType__ {
@@ -203,33 +177,23 @@ export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEME
     set __prop__(value: __PropType__) {
         this._setOption('__prop__', value);
     }
-//#sep
-
 
 //#endeach
-
 //#each OUTPUT   (README §4: events A→Z, then one <prop>Change per PROPERTY, then onBlur if EDITOR)
-//#   event:        descr line = "     * [descr:__docId__]", then TWO "    " lines
-//#   <prop>Change: descr line = "     * This member supports the internal infrastructure and is not intended to be used directly from your code.", then ONE "    " line
-//#   onBlur:       descr line = "     * [descr:undefined]", then TWO "    " lines;  type EventEmitter<any>
+//#   event:        descr line = "     * [descr:__docId__]"
+//#   <prop>Change: descr line = "     * This member supports the internal infrastructure and is not intended to be used directly from your code."
+//#   onBlur:       descr line = "     * [descr:undefined]";  type EventEmitter<any>
     /**
-    
      * [descr:__docId__]
-    
-    
      */
     @Output() __emit__: EventEmitter<__EventType__>;
-//#sep
 
 //#endeach
-
-
 //#if EDITOR
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
+
 //#endif
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
 //#if COLL
             private _watcherHelper: WatcherHelper,
@@ -240,7 +204,6 @@ export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEME
             optionHost: NestedOptionHost,
             transferState: TransferState,
             @Inject(PLATFORM_ID) platformId: any) {
-
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
@@ -251,17 +214,14 @@ export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEME
 //#endeach
         ]);
 //#if COLL
-
         this._idh.setHost(this);
 //#endif
         optionHost.setHost(this);
     }
 
     protected _createInstance(element, options) {
-
         return new Dx__Name__(element, options);
     }
-
 //#if EDITOR
 
     writeValue(value: any): void {
@@ -269,13 +229,13 @@ export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEME
         this.value = value;
         this.eventHelper.lockedValueChangeEvent = false;
     }
-
 //#if !NO_DISABLED
+
     setDisabledState(isDisabled: boolean): void {
         this.disabled = isDisabled;
     }
-
 //#endif
+
     registerOnChange(fn: (_: any) => void): void { this.change = fn; }
     registerOnTouched(fn: () => void): void { this.touched = fn; }
 
@@ -285,15 +245,13 @@ export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEME
             this.eventHelper.fireNgEvent('onBlur', [e]);
         });
     }
-
-//#else
-
 //#endif
+
     ngOnDestroy() {
         this._destroyWidget();
     }
-
 //#if COLL
+
     ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
 //#each COLL_PROPERTY   (README §3, A→Z)
@@ -345,14 +303,10 @@ export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEME
   ]
 })
 export class Dx__Name__Module { }
-
 //#if NESTED
+
 export * from 'devextreme-angular/ui/__path__/nested';
-
-//#else
-
 //#endif
+
 import type * as Dx__Name__Types from "devextreme/__module___types";
 export { Dx__Name__Types };
-
-

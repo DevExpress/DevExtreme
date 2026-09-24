@@ -8,11 +8,7 @@ them. The rules below are that generator's rules. Fill the templates from the co
 
 **Budget:** read the component's `.d.ts` (and, when needed, the base `.d.ts` files it
 extends) and this folder. You don't need to open other wrappers. If a case is unclear, open
-**one** reference from §9. Never open `data-grid`, `tree-list`, `card-view`, `chart`, etc.
-
-**Whitespace:** the generated files contain lines made of exactly four spaces, inside doc
-comments and after some blocks. The templates contain them too. Copy them, and don't run a
-"trim trailing whitespace" step on the output.
+**one** reference from §8. Never open `data-grid`, `tree-list`, `card-view`, `chart`, etc.
 
 The Angular wrapper doesn't use the legacy shared `ui/nested/**` modules for new
 components. That folder is deprecated and is being removed. Older components import from
@@ -36,7 +32,7 @@ For a component `dxTabPanel` (`__Name__` = `TabPanel`, `__path__` = `tab-panel`,
    - `src/ui/<path>/nested/<file>.ts`: one file per nested component, from
      `nested.ts.tmpl`.
    - `src/ui/<path>/nested/index.ts`: one `export * from './<file>';` line per file, sorted
-     by file name, followed by one empty line (the file ends in `\n\n`).
+     by file name.
    - `src/ui/<path>/nested/ng-package.json`: same as step 2.
 4. `src/index.ts`: add
    `export { Dx<Name>Component, Dx<Name>Module } from 'devextreme-angular/ui/<path>';`, in
@@ -50,7 +46,7 @@ For a component `dxTabPanel` (`__Name__` = `TabPanel`, `__path__` = `tab-panel`,
    `export const PROPERTY_TOKEN_<optionName> = new InjectionToken<string>('property-token-<optionName>');`.
    This file used to be generator output, and it is the only allowed edit under
    `src/core/`. Mention it to the developer.
-7. Verify (§8).
+7. Verify (§7).
 
 The folder, the selector (`dx-<path>`) and the file names are all kebab-case. The widget
 import is `Dx<Name>` (`import DxTabPanel from 'devextreme/ui/tab_panel'`).
@@ -134,8 +130,7 @@ position: Function | PositionAlignment | PositionConfig
   `dxTextBoxOptions.value`.
 - For a `@deprecated` option (only an **option-level** `@deprecated` counts; a deprecated
   options *interface* such as `dxTextBoxOptions` doesn't), add
-  `     * @deprecated [depNote:<docID>]` and then a four-space line after the
-  `[descr:…]` line.
+  `     * @deprecated [depNote:<docID>]` right after the `[descr:…]` line.
 - **COLLECTION PROPERTY**: the option is `dataSource`, or its (JSDoc) type **starts with**
   `Array<`, e.g. `items`, `selectedItemKeys`, `buttons`, `validationErrors`. These go into
   COLL_PROPERTY (`ngOnChanges`/`ngDoCheck`), sorted A→Z.
@@ -218,8 +213,7 @@ In the root component, NESTED_COMPONENT is sorted A→Z by the base name (`Anima
 ### 5.4 PredefinedProps
 
 This applies only to typed collection variants (`validationRules` with `type`, form items
-with `itemType`). Each variant sets `this.type = 'required';` in the constructor, followed
-by a four-space line. This is rare in new components.
+with `itemType`). Each variant sets `this.type = 'required';` in the constructor. This is rare in new components.
 
 ### 5.5 Root CO_PROPERTY / tokens
 
@@ -241,25 +235,9 @@ TextBox has `buttons` and Tabs has `items`. Each one gets a `@ContentChildren` b
   and `import type { Store } from 'devextreme/data/store';`.
 - The root file needs no aliases. In nested files, the one alias is
   `Component as CoreComponent`.
-- If a file has no type imports, leave out the lines. The surrounding blank lines stay as
-  the template has them. For example, a TMPL nested file without type imports has **three**
-  empty lines between the `DOCUMENT` import and `import {`.
+- If a file has no type imports, leave out the lines.
 
-**Blank lines are content.** Skipping a `//#if` block removes only the lines inside it,
-never the blank lines around it. Some spacing looks odd but is intended: four empty lines
-before the `constructor` in non-editors, the trailing space in `import { ` before the
-tokens, and two spaces in `implements OnDestroy, OnInit  {`.
-
-## 7. File endings
-
-| File | Ends with |
-|---|---|
-| `ui/<path>/index.ts` | `export { Dx<Name>Types };` + `\n\n\n` |
-| nested `<file>.ts` | `export class …Module { }` + `\n` |
-| `nested/index.ts` | last export line + `\n\n` |
-| `ng-package.json` | `}` (no newline) |
-
-## 8. Verify
+## 7. Verify
 
 The Angular library is built with ng-packagr, and `tsconfig.lib.json` has `"files": []`,
 so a plain `tsc -p` checks nothing. Ask the developer to run the build, which needs the
@@ -269,14 +247,14 @@ built `devextreme` artifacts:
 pnpm nx build devextreme-angular
 ```
 
-Check that there are no leftover placeholders, directives, or stripped four-space lines:
+Check that there are no leftover placeholders or directives:
 
 ```bash
 grep -rnE "__[A-Za-z_]+__|^//#" src/ui/<path>
 git diff --stat   # index.ts, ui/all.ts (2 array entries + 1 import), core/tokens only if needed
 ```
 
-## 9. Reference wrappers (open at most one, only if unsure)
+## 8. Reference wrappers (open at most one, only if unsure)
 
 | Case | File |
 |---|---|
@@ -287,9 +265,11 @@ git diff --stat   # index.ts, ui/all.ts (2 array entries + 1 import), core/token
 | Nested with `<field>Change` outputs | `ui/bar-gauge/nested/loading-indicator.ts` |
 
 Ignore the `import { Dx…Module } from 'devextreme-angular/ui/nested'` lines and the
-matching `@NgModule` entries in these files. They're legacy.
+matching `@NgModule` entries in these files. They're legacy. Also ignore their extra blank
+lines and whitespace-only lines, which are leftovers of the old generator; the templates
+use normal formatting.
 
-## 10. Known mistakes
+## 9. Known mistakes
 
 - Importing from, or adding files to, `ui/nested/**`.
 - Using Vue's `@isEditor` rule for EDITOR. Angular uses "has `onValueChanged`".
@@ -298,5 +278,4 @@ matching `@NgModule` entries in these files. They're legacy.
 - Registering the module in only one of the two arrays in `ui/all.ts`.
 - Forgetting `ng-package.json` in `ui/<path>/` or in `ui/<path>/nested/`.
 - A missing `PROPERTY_TOKEN_<name>` for a new collection option name.
-- Trimming the four-space lines.
 - Adding `export type { ExplicitTypes }` to a non-generic component.

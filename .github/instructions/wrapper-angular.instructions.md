@@ -26,7 +26,7 @@ Use the templates at
 `component.ts.tmpl` for `ui/<name>/index.ts` and `nested.ts.tmpl` for each file in
 `ui/<name>/nested/`. Fill them from the component's `.d.ts` by following the README's rules.
 They are the exact rules of the retired generator: property and output lists, type
-strings, doc IDs, editor/collection flags, nested naming, tokens, and the exact whitespace.
+strings, doc IDs, editor/collection flags, nested naming, and tokens.
 You don't need to read other wrappers. Never open the large ones (`data-grid`, `tree-list`,
 `card-view`, `chart`) to learn the pattern.
 
