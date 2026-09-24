@@ -27,6 +27,10 @@ interface DateHeaderDataRowConfig {
   rightVirtualCellWidth: number | undefined;
 }
 
+const normalizeViewOffset = (viewOffset: number): number => (
+  viewOffset % dateUtils.dateToMilliseconds('day')
+);
+
 export class DateHeaderDataGenerator {
   constructor(private readonly viewDataGenerator: ViewDataGenerator) {
   }
@@ -94,7 +98,10 @@ export class DateHeaderDataGenerator {
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
       const { startDate, endDate, ...restProps } = completeViewDataMap[index][dayIndex * colSpan];
-      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
+      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(
+        startDate,
+        -normalizeViewOffset(viewOffset),
+      );
 
       weekDaysRow.push({
         ...restProps,
@@ -133,7 +140,10 @@ export class DateHeaderDataGenerator {
       ));
       const colSpan = day?.cells.length ?? 1;
       const { startDate, endDate, ...restProps } = cell;
-      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -options.viewOffset);
+      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(
+        startDate,
+        -normalizeViewOffset(options.viewOffset),
+      );
 
       weekDaysRow.push({
         ...restProps,
@@ -222,7 +232,7 @@ export class DateHeaderDataGenerator {
         wallDate.getUTCMonth(),
         wallDate.getUTCDate(),
       );
-      const normalizedViewOffset = viewOffset % dateUtils.dateToMilliseconds('day');
+      const normalizedViewOffset = normalizeViewOffset(viewOffset);
       let shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -normalizedViewOffset);
       if (plan && !isTimelineView(viewType) && normalizedViewOffset < 0 && columnDate) {
         shiftedStartDate = columnDate;
