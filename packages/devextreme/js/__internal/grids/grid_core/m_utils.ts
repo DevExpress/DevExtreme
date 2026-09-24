@@ -23,7 +23,7 @@ import sharedFiltering from '@js/ui/shared/filtering';
 import { getGlobalFormatByDataType } from '@ts/core/global_format_config';
 import { isNumeric } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
-import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
+import type { ColumnPoint, SelectionRange } from '@ts/grids/grid_core/m_types';
 
 import { AI_COLUMN_NAME } from './ai_column/const';
 import type DataSourceAdapter from './data_source_adapter/m_data_source_adapter';
@@ -504,22 +504,25 @@ export default {
 
   isDateType,
 
-  getSelectionRange(focusedElement) {
+  getSelectionRange(focusedElement): SelectionRange {
     try {
       if (focusedElement) {
         return {
-          selectionStart: focusedElement.selectionStart,
-          selectionEnd: focusedElement.selectionEnd,
+          selectionStart: isNumeric(focusedElement.selectionStart) ? focusedElement.selectionStart : -1,
+          selectionEnd: isNumeric(focusedElement.selectionEnd) ? focusedElement.selectionEnd : -1,
         };
       }
     } catch (e) { /* empty */ }
 
-    return {};
+    return {
+      selectionStart: -1,
+      selectionEnd: -1,
+    };
   },
 
-  setSelectionRange(focusedElement, selectionRange) {
+  setSelectionRange(focusedElement, selectionRange: SelectionRange): void {
     try {
-      if (focusedElement && focusedElement.setSelectionRange) {
+      if (focusedElement && focusedElement.setSelectionRange && selectionRange.selectionStart >= 0 && selectionRange.selectionEnd >= 0) {
         focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
       }
     } catch (e) { /* empty */ }
