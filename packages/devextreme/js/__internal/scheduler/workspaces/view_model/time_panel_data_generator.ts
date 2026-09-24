@@ -89,15 +89,16 @@ export class TimePanelDataGenerator {
       + cell.startDate.getMinutes();
     const labeled = (rowCells: ViewCellData[]): ViewCellData => rowCells
       .find((cell) => !cell.isDaylightHole) ?? rowCells[0];
-    const wallCounts = new Map<number, number>();
+    const wallKey = (cell: ViewCellData): string => `${cell.groupIndex ?? 0}:${wallMinutes(cell)}`;
+    const wallCounts = new Map<string, number>();
 
     completeViewDataMap.forEach((rowCells) => {
       if (rowCells[0]?.allDay) {
         return;
       }
 
-      const wall = wallMinutes(labeled(rowCells));
-      wallCounts.set(wall, (wallCounts.get(wall) ?? 0) + 1);
+      const key = wallKey(labeled(rowCells));
+      wallCounts.set(key, (wallCounts.get(key) ?? 0) + 1);
     });
 
     return completeViewDataMap.map((row, index) => {
@@ -149,7 +150,7 @@ export class TimePanelDataGenerator {
       const timeIndex = (index - allDayRowsCount) % rowCountInGroup;
       // The second pass of a repeated hour is a block after the first pass,
       // so it is not always the neighboring row.
-      const repeatedHour = (wallCounts.get(wallMinutes(labelCell)) ?? 0) > 1;
+      const repeatedHour = (wallCounts.get(wallKey(labelCell)) ?? 0) > 1;
       const text = repeatedHour
         ? formatImplicitSchedulerTime(startDate)
         : weekUtils.getTimePanelCellText(
