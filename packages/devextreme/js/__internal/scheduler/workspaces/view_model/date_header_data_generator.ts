@@ -222,7 +222,8 @@ export class DateHeaderDataGenerator {
         wallDate.getUTCMonth(),
         wallDate.getUTCDate(),
       );
-      let shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
+      const normalizedViewOffset = viewOffset % dateUtils.dateToMilliseconds('day');
+      let shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -normalizedViewOffset);
       if (plan && !isTimelineView(viewType) && viewOffset < 0 && columnDate) {
         shiftedStartDate = columnDate;
       }
