@@ -17,6 +17,8 @@ import accent from '../tools/naming/accent-contract.json';
 /* JS writes these, so they are the other direction and are governed by their own file. */
 import written from '../tools/naming/runtime-contract.json';
 import contract from '../tools/naming/runtime-reads.json';
+/* The viz widgets paint with these, so they are the other direction as well. */
+import painted from '../tools/naming/viz-contract.json';
 
 const packageRoot = process.cwd();
 const repoRoot = join(packageRoot, '..', '..');
@@ -65,6 +67,7 @@ test('no other place in the runtime reads a --dx-* name', () => {
   const known = new Set([
     ...contract.variables.map(({ name }) => name),
     ...written.variables.map(({ name }) => name),
+    ...painted.variables.map(({ name }) => name),
     accent.input.name,
     accent.source.name,
     ...accent.settings.map(({ name }) => name),
