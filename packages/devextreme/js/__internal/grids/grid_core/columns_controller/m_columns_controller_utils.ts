@@ -1,5 +1,8 @@
 /* eslint-disable prefer-destructuring */
+import type { DataType, HorizontalAlignment } from '@js/common';
+import type { Format } from '@js/common/core/localization';
 import numberLocalization from '@js/common/core/localization/number';
+import type { ColumnBase, ColumnCustomizeTextArg } from '@js/common/grids';
 import { normalizeIndexes } from '@js/core/utils/array';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
@@ -35,6 +38,7 @@ import {
 import type { ColumnsController } from './m_columns_controller';
 import type {
   Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnsChanges, DropLocationNames,
+  ValueSerializers,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
@@ -61,7 +65,7 @@ const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns
   }
 };
 
-export const setFilterOperationsAsDefaultValues = function (column) {
+export const setFilterOperationsAsDefaultValues = (column: Column): void => {
   column.filterOperations = column.defaultFilterOperations;
 };
 
@@ -264,20 +268,30 @@ export const processBandColumns = function (that: ColumnsController, columns, ba
   }
 };
 
-export const getValueDataType = function (value) {
-  let dataType: any = type(value);
-  if (dataType !== 'string' && dataType !== 'boolean' && dataType !== 'number' && dataType !== 'date' && dataType !== 'object') {
-    dataType = undefined;
+export const getValueDataType = (value: unknown): Exclude<DataType, 'datetime'> | undefined => {
+  const dataType = type(value);
+
+  if (
+    dataType === 'string'
+    || dataType === 'boolean'
+    || dataType === 'number'
+    || dataType === 'date'
+    || dataType === 'object'
+  ) {
+    return dataType;
   }
-  return dataType;
+
+  return undefined;
 };
 
-export const getSerializationFormat = function (dataType, value): any {
-  // eslint-disable-next-line default-case
+export const getSerializationFormat = (
+  dataType: string | undefined,
+  value: unknown,
+): string | null | undefined => {
   switch (dataType) {
     case 'date':
     case 'datetime':
-      return dateSerialization.getDateSerializationFormat(value);
+      return dateSerialization.getDateSerializationFormat(value) as string;
     case 'number':
       if (isString(value)) {
         return 'string';
@@ -286,33 +300,53 @@ export const getSerializationFormat = function (dataType, value): any {
       if (isNumeric(value)) {
         return null;
       }
+
+      return undefined;
+    default:
+      return undefined;
   }
 };
 
-export const updateSerializers = function (options, dataType) {
-  if (!options.deserializeValue) {
-    if (gridCoreUtils.isDateType(dataType)) {
-      options.deserializeValue = function (value) {
-        return dateSerialization.deserializeDate(value);
-      };
-      options.serializeValue = function (value) {
-        return isString(value) ? value : dateSerialization.serializeDate(value, this.serializationFormat);
-      };
-    }
-    if (dataType === 'number') {
-      options.deserializeValue = function (value) {
-        const parsedValue = parseFloat(value);
-        return isNaN(parsedValue) ? value : parsedValue;
-      };
-      options.serializeValue = function (value, target) {
-        if (target === 'filter') return value;
-        return isDefined(value) && this.serializationFormat === 'string' ? value.toString() : value;
-      };
-    }
+export const updateSerializers = (
+  options: ValueSerializers,
+  dataType: string | undefined,
+): void => {
+  if (options.deserializeValue) {
+    return;
+  }
+
+  if (gridCoreUtils.isDateType(dataType)) {
+    options.deserializeValue = dateSerialization.deserializeDate;
+    // eslint-disable-next-line func-names
+    options.serializeValue = function (this: ValueSerializers, value: unknown): unknown {
+      return isString(value)
+        ? value
+        : dateSerialization.serializeDate(value, this.serializationFormat);
+    };
+  }
+  if (dataType === 'number') {
+    options.deserializeValue = (value): unknown => {
+      const parsedValue = parseFloat(value as string);
+      return isNaN(parsedValue) ? value : parsedValue;
+    };
+    // eslint-disable-next-line func-names
+    options.serializeValue = function (
+      this: ValueSerializers,
+      value: unknown,
+      target: string | undefined,
+    ): unknown {
+      if (target === 'filter') {
+        return value;
+      }
+      return isDefined(value) && this.serializationFormat === 'string' ? (value as number | string).toString() : value;
+    };
   }
 };
 
-export const getAlignmentByDataType = function (dataType, isRTL) {
+export const getAlignmentByDataType = (
+  dataType: string | undefined,
+  isRTL?: boolean,
+): HorizontalAlignment => {
   switch (dataType) {
     case 'number':
       return 'right';
@@ -323,7 +357,7 @@ export const getAlignmentByDataType = function (dataType, isRTL) {
   }
 };
 
-export const customizeTextForBooleanDataType = function (e) {
+export const customizeTextForBooleanDataType = function (this: ColumnBase, e: ColumnCustomizeTextArg): string {
   if (e.value === true) {
     return this.trueText || 'true';
   } if (e.value === false) {
@@ -332,10 +366,12 @@ export const customizeTextForBooleanDataType = function (e) {
   return e.valueText || '';
 };
 
-export const getCustomizeTextByDataType = function (dataType): any {
+export const getCustomizeTextByDataType = (dataType: string | undefined): ColumnBase['customizeText'] => {
   if (dataType === 'boolean') {
     return customizeTextForBooleanDataType;
   }
+
+  return undefined;
 };
 
 export const createColumnsFromDataSourceAdapter = function (that: ColumnsController, dataSourceAdapter) {
@@ -1019,7 +1055,7 @@ export const sortColumns = (columns, sortOrder) => {
   return columns;
 };
 
-export const strictParseNumber = function (text, format): any {
+export const strictParseNumber = (text: string, format: Format): number | undefined => {
   const parsedValue = numberLocalization.parse(text);
 
   if (isNumeric(parsedValue)) {
@@ -1030,6 +1066,8 @@ export const strictParseNumber = function (text, format): any {
       return parsedValue;
     }
   }
+
+  return undefined;
 };
 
 const isFirstOrLastBandColumn = function (
