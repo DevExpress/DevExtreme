@@ -126,7 +126,7 @@ export class ColumnsController extends modules.Controller {
 
   public _reinitAfterLookupChanges: any;
 
-  private readonly _previousColumns: any;
+  public _previousColumns: any;
 
   public _hasUserState: any;
 
@@ -1228,7 +1228,7 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  public updateColumnDataTypes(dataSourceAdapter) {
+  public updateColumnDataTypes(dataSourceAdapter?) {
     const that = this;
     const dateSerializationFormat = that.option('dateSerializationFormat');
     const firstItems = that._getFirstItems(dataSourceAdapter);
@@ -1968,7 +1968,7 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
-  public getParentColumn(column: Column, needDirectParent = false): Column {
+  public getParentColumn(column: Column, needDirectParent = false): Column | undefined {
     const bandColumnsCache = this.getBandColumnsCache();
     const parentColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex);
     const parentColumnIndex = needDirectParent ? -1 : 0;
