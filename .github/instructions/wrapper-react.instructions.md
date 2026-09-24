@@ -49,9 +49,15 @@ The widget's `Properties` type (alias of `dx<Widget>Options`) is the source of t
    is narrowed: `onOptionChanged` never is, and neither is an event with
    `@type_function_param1 e:object`. If nothing is narrowed, `ReplaceFieldTypes` and this
    type are left out. See template README §3.
-4. **`I<Name>Options`** — `React.PropsWithChildren<ReplaceFieldTypes<Properties,
-   I<Name>OptionsNarrowedEvents> & IHtmlOptions & { render?...; component?... }>` (template
-   props included only if the widget has a `template`).
+4. **`I<Name>Options`**: `React.PropsWithChildren<ReplaceFieldTypes<Properties,
+   I<Name>OptionsNarrowedEvents> & IHtmlOptions & { … }>`. The `& { … }` block holds:
+   - `<x>Render?` / `<x>Component?` for **every template option**, meaning any option named
+     `template` or ending in `Template` (`template` gives `render`/`component`,
+     `itemTemplate` gives `itemRender`/`itemComponent`; see template README §5);
+   - `default<Opt>?` / `on<Opt>Change?` for every two-way–bindable option (README §4);
+   - `dataSource?: Properties<…>["dataSource"]` for a generic component.
+
+   Leave out `& { … }` when all three are empty.
 5. **`<Name>Ref`** interface exposing `instance: () => dx<Widget>`.
 6. **Component** — `memo(forwardRef((props, ref) => { … }))`. Inside:
    - `useImperativeHandle` returning `{ instance() { return baseRef.current?.getInstance(); } }`;
@@ -61,7 +67,8 @@ The widget's `Properties` type (alias of `dx<Widget>Options`) is the source of t
        `onSelectionChanged` are not. See template README §2.
      - `subscribableOptions` / `defaults` — for two-way–bindable options (`defaultX` maps to `x`);
      - `expectedChildren` — nested option components (`{ optionName, isCollectionItem }`);
-     - `templateProps` — `{ tmplOption, render, component }` per `template` option;
+     - `templateProps`: one `{ tmplOption, render, component }` entry per template option
+       (`template`, `itemTemplate`, `contentTemplate`, …);
    - `React.createElement(BaseComponent<…>, { WidgetClass: dx<Widget>, ref: baseRef, …arrays, ...props })`.
 7. **Exports** — `export default <Name>;`, `export { <Name>, I<Name>Options, <Name>Ref };`,
    then `import type * as <Name>Types from 'devextreme/ui/<widget>_types'; export { <Name>Types };`.
@@ -84,8 +91,10 @@ const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_comp
 
 ## Applying an API change
 
-- **Option added** → it flows in through `Properties`; add it to `subscribableOptions`/
-  `defaults` only if it is two-way bindable, and to `templateProps` if it is a template.
+- **Option added** → it flows in through `Properties`. If it is two-way bindable, add it to
+  `subscribableOptions`/`defaults` and add `default<Opt>`/`on<Opt>Change` to `I<Name>Options`.
+  If it is a template option (`template` or `…Template`), add a `templateProps` entry and
+  the `<x>Render`/`<x>Component` fields.
 - **Event added/removed/renamed**: update the `independentEvents` array if the event
   qualifies (README §2). Update `I<Name>OptionsNarrowedEvents` only if it is also narrowed
   (README §3).
