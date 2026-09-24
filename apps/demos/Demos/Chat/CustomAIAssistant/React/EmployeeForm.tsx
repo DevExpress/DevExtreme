@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Form, Item, ButtonItem } from 'devextreme-react/form';
-import type { FormRef, FormTypes } from 'devextreme-react/form';
+import type { FormTypes } from 'devextreme-react/form';
 
 import { Toast } from 'devextreme-react/toast';
 import { employee, formFieldsConfig } from './data.ts';
@@ -23,10 +23,6 @@ const toastPosition = {
 export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormProps) {
   const [toastVisible, setToastVisible] = useState(false);
 
-  const setFormRef = useCallback((instance: FormRef | null): void => {
-    formRef.current = instance;
-  }, [formRef]);
-
   const onOptionChanged = useCallback((event: FormTypes.OptionChangedEvent): void => {
     if (event.name === 'isDirty') {
       formRef.current?.instance().getButton('Save')?.option('disabled', !event.value);
@@ -40,7 +36,7 @@ export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormPro
   return (
     <div id="form-container">
       <Form
-        ref={setFormRef}
+        ref={formRef}
         formData={employee}
         colCount={3}
         labelLocation="top"

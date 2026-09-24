@@ -19,19 +19,19 @@ config({
   },
 });
 export default function App() {
-  const formRef = useRef({ current: null });
-  const gridRef = useRef({ current: null });
+  const formRef = useRef(null);
+  const gridRef = useRef(null);
   const [aiIntegration] = useState(createAiIntegration);
   return (
     <>
       <EmployeeForm
         aiIntegration={aiIntegration}
-        formRef={formRef.current}
+        formRef={formRef}
       />
-      <TaskGrid gridRef={gridRef.current} />
+      <TaskGrid gridRef={gridRef} />
       <AiAssistant
-        formRef={formRef.current}
-        gridRef={gridRef.current}
+        formRef={formRef}
+        gridRef={gridRef}
         aiIntegration={aiIntegration}
       />
     </>

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import DataGrid, {
   Column, FilterRow, HeaderFilter, LoadPanel,
 } from 'devextreme-react/data-grid';
@@ -18,16 +18,10 @@ const calculateFilterExpression = (filterValue, operation) => {
   return [rawCompletion, wantsCompleted ? '=' : '<', 100];
 };
 export default function TaskGrid({ gridRef }) {
-  const setGridRef = useCallback(
-    (instance) => {
-      gridRef.current = instance;
-    },
-    [gridRef],
-  );
   return (
     <div id="grid-container">
       <DataGrid
-        ref={setGridRef}
+        ref={gridRef}
         dataSource={tasks}
         keyExpr="ID"
         height={360}

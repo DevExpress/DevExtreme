@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import DataGrid, {
   Column, FilterRow, HeaderFilter, LoadPanel,
 } from 'devextreme-react/data-grid';
-import type { DataGridRef, DataGridTypes } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import type { ColumnFilterExpression, Task, TaskGridProps } from './data.ts';
 import { colors, tasks } from './data.ts';
 
@@ -25,14 +25,10 @@ const calculateFilterExpression = (filterValue: boolean, operation: string | nul
 };
 
 export default function TaskGrid({ gridRef }: TaskGridProps) {
-  const setGridRef = useCallback((instance: DataGridRef | null): void => {
-    gridRef.current = instance;
-  }, [gridRef]);
-
   return (
     <div id="grid-container">
       <DataGrid
-        ref={setGridRef}
+        ref={gridRef}
         dataSource={tasks}
         keyExpr="ID"
         height={360}

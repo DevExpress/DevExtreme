@@ -18,12 +18,6 @@ const toastPosition = {
 };
 export default function EmployeeForm({ aiIntegration, formRef }) {
   const [toastVisible, setToastVisible] = useState(false);
-  const setFormRef = useCallback(
-    (instance) => {
-      formRef.current = instance;
-    },
-    [formRef],
-  );
   const onOptionChanged = useCallback(
     (event) => {
       if (event.name === 'isDirty') {
@@ -38,7 +32,7 @@ export default function EmployeeForm({ aiIntegration, formRef }) {
   return (
     <div id="form-container">
       <Form
-        ref={setFormRef}
+        ref={formRef}
         formData={employee}
         colCount={3}
         labelLocation="top"
