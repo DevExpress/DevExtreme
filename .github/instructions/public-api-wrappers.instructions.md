@@ -34,7 +34,7 @@ change types or names) do **not** require a wrapper change.
 |---|---|---|---|
 | Option `foo?: T` | `@Input() get foo()/set foo()` in `ui/<comp>/index.ts` | field in the component's options type (`IXOptions`) | entry in `props` (correct runtime type + `PropType<T>`) and `emits` `update:foo` |
 | Event `onX?: (e: XEvent) => void` | `@Output() onX: EventEmitter<XEvent>` + `{ subscribe, emit }` entry | entry in `independentEvents` (unless the name contains `Changed` without `Value`, e.g. `onOptionChanged`) + narrowed field in `IXOptionsNarrowedEvents` if its JSDoc is `e:{module:XEvent}`; see [template README](../templates/wrapper-react/README.md) §2–§3 | `onX` prop typed `Function as PropType<(e: XEvent) => void>` |
-| Nested option type | do **not** edit `ui/nested/**` (deprecated, removed in a parallel PR) | `NestedOption` config component | configuration component via `prepareConfigurationComponentConfig` |
+| Nested option type | the component's own `ui/<component>/nested/*` files; do **not** edit the shared `ui/nested/**` (deprecated, removed in a parallel PR) | `NestedOption` config component | configuration component via `prepareConfigurationComponentConfig` |
 | Template option | template input | entry in `templateProps` | `template` prop |
 
 The per-framework anatomy and rules live in

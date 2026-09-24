@@ -23,12 +23,15 @@ Follow the anatomy and rules in:
    option types. List every option/event/type that was **added, removed, renamed, or
    retyped**, and flag removals/renames/incompatible retypes as **breaking**.
 2. **Locate the wrapper files** for the same component in each package:
-   - Angular: `packages/devextreme-angular/src/ui/<component>/index.ts` (+ `ui/nested/*`)
+   - Angular: `packages/devextreme-angular/src/ui/<component>/index.ts`, plus the
+     component's own nested option files in `src/ui/<component>/nested/*`. Never edit the
+     deprecated shared `src/ui/nested/**`.
    - React: `packages/devextreme-react/src/<component>.ts`
    - Vue: `packages/devextreme-vue/src/<component>.ts`
 3. **Apply the change in all three wrappers**, using each framework's mapping:
    - Angular: `@Input` getter/setter, `<option>Change` output, `_createEventEmitters` entry;
-     `@Output() onX` for events.
+     `@Output() onX` for events. Nested option types are updated in
+     `ui/<component>/nested/*`.
    - React: `Properties` flows automatically; update `I<Name>OptionsNarrowedEvents`,
      `independentEvents`, `subscribableOptions`/`defaults`, `templateProps`, nested
      `_component*`/`expectedChildren` as needed.
