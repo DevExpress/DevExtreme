@@ -183,16 +183,28 @@ export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEME
     }
 
 //#endeach
-//#each OUTPUT   (README §4: events A→Z, then one <prop>Change per PROPERTY, then onBlur if EDITOR)
-//#   event:        descr line = "     * [descr:__docId__]"
-//#   <prop>Change: descr line = "     * This member supports the internal infrastructure and is not intended to be used directly from your code."
-//#   onBlur:       descr line = "     * [descr:undefined]";  type EventEmitter<any>
+//# Outputs come in three groups, in this order (README §4).
+//#each EVENT   (every event option, A→Z)
     /**
      * [descr:__docId__]
      */
-    @Output() __emit__: EventEmitter<__EventType__>;
+    @Output() __onEvent__: EventEmitter<__EventType__>;
 
 //#endeach
+//#each PROPERTY   (same list and order as the @Input section above)
+    /**
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+     */
+    @Output() __prop__Change: EventEmitter<__PropType__>;
+
+//#endeach
+//#if EDITOR
+    /**
+     * [descr:undefined]
+     */
+    @Output() onBlur: EventEmitter<any>;
+
+//#endif
 //#if EDITOR
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
@@ -211,11 +223,17 @@ export class Dx__Name__Component__TPD__ extends DxComponent implements __IMPLEME
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
-//#each OUTPUT   (same order; drop the comma on the LAST entry)
-//#   event:  "{ subscribe: '<eventName>', emit: 'onX' },"   <eventName> = X with a lower-case first letter
-//#   others: "{ emit: '<prop>Change' },"  /  "{ emit: 'onBlur' }"
-            { subscribe: '__eventName__', emit: '__emit__' },
+//# Same three groups and order as the outputs above. Drop the comma on the very
+//# last entry of the array (whichever group it is in).
+//#each EVENT   (__eventName__ = the event name without "on", first letter lower-cased: onItemClick → itemClick)
+            { subscribe: '__eventName__', emit: '__onEvent__' },
 //#endeach
+//#each PROPERTY
+            { emit: '__prop__Change' },
+//#endeach
+//#if EDITOR
+            { emit: 'onBlur' },
+//#endif
         ]);
 //#if COLL
         this._idh.setHost(this);
