@@ -14,7 +14,9 @@ wrapper change is required and what the reviewer checks.
 
 - `packages/devextreme-angular/src/core/**` — hand-written base classes
   (`DxComponent`, `NestedOptionHost`, template/integration modules). Never change these to
-  accommodate a single component.
+  accommodate a single component. **One exception:** `src/core/tokens/index.ts`, where a
+  new collection option name gets its `PROPERTY_TOKEN_<name>` (see "Adding a new
+  component").
 - `packages/devextreme-angular/src/ui/nested/**` — the legacy nested option components
   ("old nesteds"). This folder is **deprecated and being removed in a parallel PR**. Do not
   add, edit, or reference files here, even when a nested/collection option changes.
@@ -101,6 +103,8 @@ the source of truth. A component file contains, in order:
 - **Event added** → add the `@Output() onX`, and a `{ subscribe, emit }` entry.
 - **Nested/collection option** → do **not** touch `ui/nested/**` (deprecated, see "Do not
   edit"). Update the component's own `ui/<name>/nested/` files instead (template README §5).
+  A **new collection-item** option also needs its `PROPERTY_TOKEN_<name>` in
+  `src/core/tokens/index.ts` if that name isn't there yet (the one allowed `src/core` edit).
 
 Keep options, events, and emitter entries in the generator's order (alphabetical within
 each group; see template README §3–§4) so diffs stay reviewable.

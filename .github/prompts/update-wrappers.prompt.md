@@ -38,6 +38,9 @@ Follow the anatomy and rules in:
    - Vue: `AccessibleOptions` `Pick`, `props` (correct runtime type + `PropType`), and
      `emits` `update:<prop>`.
    Keep option/event order and imports aligned with the `.d.ts`.
-4. **Do not touch** `src/core/**` in any wrapper package.
+4. **Do not touch** `src/core/**` in any wrapper package, with one exception: if an
+   Angular change introduces a new collection option name, add its
+   `PROPERTY_TOKEN_<name>` to `packages/devextreme-angular/src/core/tokens/index.ts` (see
+   [wrapper-angular.instructions.md](../instructions/wrapper-angular.instructions.md)).
 5. **Verify.** From `packages/devextreme`, run `pnpm run regenerate` and then `pnpm run lint-dts`. Type-check/build the affected wrapper package(s).
 6. **Report** the applied changes per framework and call out any breaking changes explicitly.

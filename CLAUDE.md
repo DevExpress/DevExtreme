@@ -135,7 +135,7 @@ pnpm run lint-dts
 Follow the per-framework anatomy and rules in `.github/instructions/wrapper-{angular,react,vue}.instructions.md`, and the propagation/breaking-change checklist in `.github/instructions/public-api-wrappers.instructions.md`. The reusable workflow lives in `.github/prompts/update-wrappers.prompt.md`.
 
 Do not edit directly:
-- `packages/devextreme-angular/src/core/**`
+- `packages/devextreme-angular/src/core/**` (exception: add a `PROPERTY_TOKEN_<name>` to `src/core/tokens/index.ts` for a new collection option; see `wrapper-angular.instructions.md`)
 - `packages/devextreme-react/src/core/**`
 - `packages/devextreme-vue/src/core/**`
 - `packages/devextreme/js/__internal/core/localization/default_messages.ts`

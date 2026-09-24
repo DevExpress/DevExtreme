@@ -209,7 +209,7 @@ clean (`devextreme-nx-infra-plugin:clean` preserving CSS and npm metadata) → l
 - Use `pnpm nx <target> <project>` rather than raw npm scripts so Nx caching and the dependency graph stay correct.
 - Build before testing: `pnpm nx build:dev devextreme`; QUnit and TestCafe both require an up-to-date build.
 - The Angular/React/Vue wrappers are maintained by hand (with AI agents), not regenerated from metadata. When public API in `packages/devextreme/js/{ui,viz}/**/*.d.ts` changes, update all three wrappers in the same PR following `.github/instructions/wrapper-{angular,react,vue}.instructions.md` and `.github/instructions/public-api-wrappers.instructions.md`.
-- Edit source files under `packages/devextreme/js/**`, `packages/devextreme-scss/scss/**`, `packages/devextreme-metadata/**`, and the wrapper `packages/devextreme-{angular,react,vue}/src/**` (except each package's `src/core/**`).
+- Edit source files under `packages/devextreme/js/**`, `packages/devextreme-scss/scss/**`, `packages/devextreme-metadata/**`, and the wrapper `packages/devextreme-{angular,react,vue}/src/**` (except each package's `src/core/**`; the one exception is adding a `PROPERTY_TOKEN_<name>` to `devextreme-angular/src/core/tokens/index.ts` for a new collection option).
 - Match the Node and pnpm versions declared in `package.json` (`engines`, `packageManager`); mismatched versions cause CI failure.
 - Set `DEVEXTREME_TEST_CI=true` for test-mode builds and `BUILD_TEST_INTERNAL_PACKAGE=true` for wrapper test prep.
 
@@ -223,7 +223,7 @@ clean (`devextreme-nx-infra-plugin:clean` preserving CSS and npm metadata) → l
 
 - Always install with `pnpm install --frozen-lockfile`; never plain `pnpm install`.
 - Build before test: `pnpm nx build:dev devextreme`.
-- Wrappers under `packages/devextreme-{angular,react,vue}/src/` are hand/AI-maintained — update them per the wrapper instructions when public API changes; leave each `src/core/**` alone.
+- Wrappers under `packages/devextreme-{angular,react,vue}/src/` are hand/AI-maintained — update them per the wrapper instructions when public API changes; leave each `src/core/**` alone (except Angular's `src/core/tokens/index.ts`, see the Angular wrapper instructions).
 - Prefer `pnpm nx <target>` over direct npm scripts for caching.
 - Consult @.github/instructions/ for file-specific coding rules before editing.
 
