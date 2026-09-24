@@ -1,6 +1,6 @@
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { setStrategy } from '@ts/core/utils/m_deferred';
-import { compare as compareVersion } from '@ts/core/utils/m_version';
+import { compare as compareVersion } from '@ts/core/utils/version';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import jQuery from 'jquery';
 

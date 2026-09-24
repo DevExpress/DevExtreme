@@ -34,7 +34,7 @@ import {
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 import type {
-  Column, ColumnIndex, ColumnsChanges, DropLocationNames,
+  Column, ColumnIdentifier, ColumnIndex, ColumnsChanges, DropLocationNames,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
@@ -978,13 +978,13 @@ export const resetBandColumnsCache = (that: ColumnsController) => {
   that._bandColumnsCache = undefined;
 };
 
-export const findColumn = (columns, identifier) => {
+export const findColumn = (columns, identifier: ColumnIdentifier | undefined) => {
   const identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(':'));
   let column;
 
   if (identifier === undefined) return;
 
-  if (identifierOptionName) {
+  if (isString(identifier) && identifierOptionName) {
     identifier = identifier.substr(identifierOptionName.length + 1);
   }
 
