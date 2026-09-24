@@ -181,7 +181,8 @@ and all nested blocks.
 
 ### 6.3 `I<Nested>Props` fields
 
-- Fields can also be hidden in the widget's **`.js`** file (`js/ui/<module>.js`), by a
+- Fields can also be hidden in the **`.js`** files of the widget or of a base class
+  (`js/ui/<module>.js`, `js/ui/widget/ui.widget.js`, …), by a
   JSDoc block such as `@name dxTabsItem.<field>` followed by `@hidden`. The same applies
   to root options (`@name dxTabsOptions.activeStateEnabled @hidden`), but root options
   reach React only through `Properties`. Leave those fields out.

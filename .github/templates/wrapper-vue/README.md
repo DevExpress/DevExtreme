@@ -38,9 +38,12 @@ Include every option of `Properties`, own and inherited (`WidgetOptions`, `Edito
   option**, by its most-derived declaration: `DOMComponentOptions` is `@hidden` as an
   interface, but its fields are public. The most-derived declaration also decides the type
   (`value?: string` in `dxTextBoxOptions`, not the base `any`).
-- **Also check the widget's `.js` file** (`js/ui/<module>.js`). It can hide inherited
-  options with JSDoc blocks such as `@name dxTabsOptions.activeStateEnabled` followed by
-  `@hidden`, so Tabs has no `activeStateEnabled` prop. The same applies to nested types
+- **Also check the `.js` files**, of the widget **and of each base class**
+  (`js/ui/<module>.js`, `js/ui/editor/editor.js`, `js/ui/widget/ui.widget.js`, …). They can
+  hide options with JSDoc blocks such as `@name dxTabsOptions.activeStateEnabled` followed
+  by `@hidden`, so Tabs has no `activeStateEnabled` prop. Such a block applies only to the
+  interface it names. A more-derived `.d.ts` redeclaration, or `@hidden false`, makes the
+  option public again. The same applies to nested types
   (`@name dxTabsItem.<field>`).
 - `readonly` / `@readonly` options (`isDirty`, `text`) are **included**.
 - Leave out the option named `key` (reserved in Vue).
