@@ -96,6 +96,311 @@ if (getThemeName() === 'fluent-next') {
 
   const exportedHaloFrom = (selector: string): Exported => exportedFrom(selector, 'dxVectorMap', '[stroke-linejoin="round"]', 'stroke');
 
+  const DECLARED_BLUE = 'rgb(11, 7, 3)';
+  const DECLARED_BG = 'rgb(22, 7, 3)';
+  const HANDED_OUT_BLUE = '#0b0703';
+
+  const declareTheNamesTheWidgetsRead = ClientFunction((blue: string, background: string) => {
+    document.documentElement.style.setProperty('--dx-viz-blue', blue);
+    document.documentElement.style.setProperty('--dx-viz-bg', background);
+  });
+
+  const colorsHandedOutByTheWidget = ClientFunction(() => {
+    const { widget } = (window as any);
+    const series = widget.getAllSeries?.() ?? [];
+    const items = widget.getAllItems?.() ?? [];
+
+    return [
+      ...series.flatMap((one) => [
+        one.getColor(),
+        ...one.getAllPoints().map((point) => point.getColor()),
+      ]),
+      ...items.map((item) => item.getColor()),
+    ];
+  });
+
+  const markupOfTheWidget = ClientFunction(() => {
+    const svg = (window as any).widget.svg();
+    const left = (svg.match(/var\(--dx-[a-z-]+/g) ?? []) as string[];
+
+    return { svg, unresolved: left.filter((value, index) => left.indexOf(value) === index) };
+  });
+
+  test('dxChart paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(await colorsHandedOutByTheWidget()).eql([HANDED_OUT_BLUE, HANDED_OUT_BLUE], 'getColor answers with the colour the cascade resolved, normalised to hex');
+    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxChart', {
+      ...{
+        dataSource: [{ a: 'x', v: 1 }],
+        series: [{ argumentField: 'a', valueField: 'v' }],
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxPieChart paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(await colorsHandedOutByTheWidget()).eql([undefined, HANDED_OUT_BLUE], 'getColor answers with the colour the cascade resolved, normalised to hex');
+    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxPieChart', {
+      ...{
+        dataSource: [{ a: 'x', v: 1 }],
+        series: [{ argumentField: 'a', valueField: 'v' }],
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxPolarChart paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(await colorsHandedOutByTheWidget()).eql([HANDED_OUT_BLUE, HANDED_OUT_BLUE], 'getColor answers with the colour the cascade resolved, normalised to hex');
+    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxPolarChart', {
+      ...{
+        dataSource: [{ a: 'x', v: 1 }],
+        series: [{ argumentField: 'a', valueField: 'v' }],
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxFunnel paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(await colorsHandedOutByTheWidget()).eql([HANDED_OUT_BLUE], 'getColor answers with the colour the cascade resolved, normalised to hex');
+    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxFunnel', {
+      ...{
+        dataSource: [{ a: 'x', v: 3 }],
+        argumentField: 'a',
+        valueField: 'v',
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxSankey paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxSankey', {
+      ...{
+        dataSource: [{ source: 'A', target: 'X', weight: 1 }],
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxTreeMap paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxTreeMap', {
+      ...{
+        dataSource: [{ name: 'a', value: 1 }],
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxVectorMap paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxVectorMap', {
+      ...{
+        layers: [{
+          type: 'marker',
+          dataSource: {
+            type: 'FeatureCollection',
+            features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: [0, 0] }, properties: { text: 'a' } }],
+          },
+          label: { enabled: true, dataField: 'text' },
+        }],
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxSparkline paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(svg).contains(DECLARED_BG, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxSparkline', {
+      ...{
+        dataSource: [1, 4, 2],
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxBullet paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxBullet', {
+      ...{
+        value: 40,
+        target: 60,
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxBarGauge paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxBarGauge', {
+      ...{
+        values: [30],
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxCircularGauge paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(svg).contains(DECLARED_BG, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxCircularGauge', {
+      ...{
+        value: 40,
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxLinearGauge paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(svg).contains(DECLARED_BLUE, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxLinearGauge', {
+      ...{
+        value: 40,
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  test('dxRangeSelector paints from a name the page declared, leaving no reference behind', async (t) => {
+    const { svg, unresolved } = await markupOfTheWidget();
+
+    await t.expect(svg).contains(DECLARED_BG, 'the markup carries what the cascade resolved, not the literal the theme writes beside the name');
+    await t.expect(unresolved).eql([], 'and no reference survives into the markup');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxRangeSelector', {
+      ...{
+        scale: { startValue: 0, endValue: 10 },
+      },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
+  const WIDGETS_UNDER_TEST = [
+    'dxChart', 'dxPieChart', 'dxPolarChart', 'dxFunnel', 'dxSankey', 'dxTreeMap', 'dxVectorMap',
+    'dxSparkline', 'dxBullet', 'dxBarGauge', 'dxCircularGauge', 'dxLinearGauge', 'dxRangeSelector',
+  ];
+
+  const vizWidgetsExposed = ClientFunction(() => Object.keys((window as any).DevExpress.viz)
+    .filter((name) => /^dx[A-Z]/.test(name))
+    .sort());
+
+  test('every viz widget the namespace exposes has a test of its own', async (t) => {
+    await t.expect(await vizWidgetsExposed()).eql([...WIDGETS_UNDER_TEST].sort());
+  });
+
+  const gradientStopsExportedToTheCanvas = ClientFunction(() => {
+    const stops: string[] = [];
+    const nativeStop = CanvasGradient.prototype.addColorStop;
+
+    CanvasGradient.prototype.addColorStop = function watchedAddColorStop(offset, color) {
+      stops.push(String(color));
+      return nativeStop.call(this, offset, color);
+    };
+
+    const { widget } = (window as any);
+    const stopColorAttribute = document.querySelector('#container stop')?.getAttribute('stop-color') ?? '';
+
+    widget.exportTo('probe', 'PNG');
+
+    return new Promise<{ stops: string[]; stopColorAttribute: string }>((resolve) => {
+      setTimeout(() => {
+        CanvasGradient.prototype.addColorStop = nativeStop;
+        resolve({ stops, stopColorAttribute });
+      }, 3000);
+    });
+  });
+
+  test('exportTo hands a gradient stop the colour the name resolved to', async (t) => {
+    const { stops, stopColorAttribute } = await gradientStopsExportedToTheCanvas();
+
+    await t.expect(stopColorAttribute).eql('var(--dx-viz-blue, #0078d4)', 'the widget writes the name into the attribute, so the exporter is the one that has to resolve it');
+    await t.expect(stops[0]).eql(DECLARED_BLUE, 'the first stop carries what the page declared, neither the name nor the literal beside it');
+  }).before(async () => {
+    await declareTheNamesTheWidgetsRead(DECLARED_BLUE, DECLARED_BG);
+    await createWidget('dxSankey', {
+      dataSource: [{ source: 'A', target: 'X', weight: 1 }],
+      link: { colorMode: 'gradient' },
+      animation: { enabled: false },
+      size: { width: 220, height: 160 },
+    });
+  });
+
   test('a named mode class re-resolves the roles under it', async (t) => {
     await render(`
       <div id="plain"></div>
