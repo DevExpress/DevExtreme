@@ -151,16 +151,27 @@ export class TimePanelDataGenerator {
       // The second pass of a repeated hour is a block after the first pass,
       // so it is not always the neighboring row.
       const repeatedHour = (wallCounts.get(wallKey(labelCell)) ?? 0) > 1;
-      const text = repeatedHour
-        ? formatImplicitSchedulerTime(startDate)
-        : weekUtils.getTimePanelCellText(
-          timeIndex,
-          startDate,
-          startViewDate,
-          cellDuration,
-          startDayHour,
-          viewOffset,
-        );
+      const planLabel = Boolean(labelCell.startDateUTC) || row.some((cell) => cell.isDaylightHole);
+      const directPlanLabel = planLabel && viewOffset === 0 && timeIndex % 2 === 0;
+      const offsetPlanLabel = planLabel && viewOffset !== 0 && timeIndex % 2 === 0;
+      const offsetLabelDate = dateUtilsTs.addOffsets(
+        new Date(2000, 0, 1, startDayHour),
+        viewOffset,
+        cellDuration * timeIndex,
+      );
+      let text = weekUtils.getTimePanelCellText(
+        timeIndex,
+        startDate,
+        startViewDate,
+        cellDuration,
+        startDayHour,
+        viewOffset,
+      );
+      if (repeatedHour || directPlanLabel) {
+        text = formatImplicitSchedulerTime(startDate);
+      } else if (offsetPlanLabel) {
+        text = formatImplicitSchedulerTime(offsetLabelDate);
+      }
 
       return {
         ...restCellProps,
