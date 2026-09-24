@@ -1,5 +1,5 @@
 ---
-applyTo: "**/packages/devextreme/js/{ui,viz}/**/*.d.ts"
+applyTo: "**/packages/devextreme/js/{ui,viz}/**/*.{d.ts,js}"
 ---
 
 # Public API changes must be propagated to the framework wrappers
@@ -7,10 +7,14 @@ applyTo: "**/packages/devextreme/js/{ui,viz}/**/*.d.ts"
 The Angular, React, and Vue wrappers are **no longer regenerated** from
 `devextreme-metadata` / `devextreme-internal-tools`. They are maintained by hand (with the
 help of local AI agents). This means **every public API change in a wrapped component's
-`.d.ts` must be applied, in the same pull request, to all three wrappers**.
+`.d.ts` or public `.js` JSDoc must be applied, in the same pull request, to all three
+wrappers**.
 
-This file applies to the public API surface (`js/ui/**/*.d.ts`, `js/viz/**/*.d.ts`). Use it
-both when editing the API and when reviewing an API change.
+This file applies to the public API surface: the `.d.ts` files in `js/ui/**` and
+`js/viz/**`, and the public `.js` entry files next to them. Those `.js` files contain only
+re-exports and JSDoc blocks such as `@name dxTabsOptions.activeStateEnabled` + `@hidden`,
+which also decide the wrapper surface. Use this file both when editing the API and when
+reviewing an API change.
 
 ## What counts as a wrapper-affecting change
 
@@ -24,9 +28,24 @@ wrappers:
 - **Nested option types** — a collection/object option type (e.g. `columns`, `items`,
   `toolbar`) added, removed, renamed, or restructured.
 - **Template options** — a `template` option added or removed.
+- **Visibility** — an option or nested field hidden or un-hidden: `@hidden` added or removed
+  (including `@hidden false`) in a `.d.ts`, **or** in a `@name <Interface>.<option>` block
+  of the widget's or a base class's `.js` file (e.g. `ui/tabs.js`, `ui/editor/editor.js`,
+  `ui/widget/ui.widget.js`). A base-class change affects **every** widget that inherits
+  the option.
+- **Wrapper-relevant JSDoc tags** — the templates read these, so changing them changes the
+  wrappers:
+  - `@type` (overrides the TS type);
+  - `@fires` (two-way binding in React/Angular);
+  - `@type_function_param1 e:{module:XEvent}` (narrowed/typed events);
+  - `@docid` (Angular doc IDs);
+  - `@deprecated` on an option;
+  - `@isEditor` (Vue `model`);
+  - `@hasTranscludedContent` (Angular `<ng-content>`).
 
-Purely internal changes (implementation in `js/__internal/**`, JSDoc-only edits that do not
-change types or names) do **not** require a wrapper change.
+Purely internal changes do **not** require a wrapper change: implementation in
+`js/__internal/**`, changes to the import/re-export lines of a public `.js` file, and JSDoc
+edits that touch only descriptions or other tags not listed above.
 
 ## Where each change lands in the wrappers
 
@@ -44,19 +63,22 @@ The per-framework anatomy and rules live in
 
 ## Reviewer checklist
 
-When a PR changes a wrapped component's public `.d.ts`, verify and comment inline if any is
-missing:
+When a PR changes a wrapped component's public `.d.ts`, or a wrapper-relevant JSDoc block in
+a public `.js` file (see "What counts"), verify and comment inline if any is missing:
 
 1. **Completeness** — every added, removed, or renamed option/event is reflected in
    **all three** wrappers (`devextreme-angular/src`, `devextreme-react/src`,
    `devextreme-vue/src`), as the table above requires. A change present in one or two
    wrappers but not the third is a defect — flag the missing wrapper(s) by name.
+   This includes visibility changes made only in a `.js` file (see "What counts"): check
+   the widget and all widgets that inherit from a changed base class.
    Exception: an ordinary React option (not two-way bindable, not a template, not an event,
    not nested) needs **no** React change, because it arrives through `Properties`.
 2. **Type fidelity** — the wrapper carries the same type as the API (including union
    members, generics, and the correct Vue runtime type + `PropType`).
 3. **Breaking changes** — explicitly label these as **breaking** in a review comment:
-   - an option or event **removed** or **renamed**;
+   - an option or event **removed** or **renamed**, including one newly `@hidden` in a
+     `.d.ts` or `.js` file (it disappears from all three wrappers);
    - an option/event **type narrowed** or otherwise changed incompatibly;
    - a nested option type removed or restructured.
    Confirm the wrappers reflect the same removal/rename so they stay in sync; do not let a

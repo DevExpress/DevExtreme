@@ -20,8 +20,13 @@ Follow the anatomy and rules in:
 
 1. **Identify the change.** For the changed component's `.d.ts`, diff the options interface
    (e.g. `dxButtonOptions` / `Properties`), its events (`onX` + `*Event` types), and nested
-   option types. List every option/event/type that was **added, removed, renamed, or
-   retyped**, and flag removals/renames/incompatible retypes as **breaking**.
+   option types. Also diff the wrapper-relevant JSDoc in the `.d.ts` **and** in the public
+   `.js` files of the widget and its base classes, such as `@name … @hidden` blocks and
+   `@type`/`@fires`/`@docid` (see "What counts" in
+   [public-api-wrappers.instructions.md](../instructions/public-api-wrappers.instructions.md)).
+   List every option/event/type that was **added, removed, renamed, retyped, hidden, or
+   un-hidden**, and flag removals/renames/newly hidden options/incompatible retypes as
+   **breaking**.
 2. **Locate the wrapper files** for the same component in each package:
    - Angular: `packages/devextreme-angular/src/ui/<component>/index.ts`, plus the
      component's own nested option files in `src/ui/<component>/nested/*`. Never edit the
