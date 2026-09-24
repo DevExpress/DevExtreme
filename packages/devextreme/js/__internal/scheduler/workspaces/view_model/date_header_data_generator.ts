@@ -235,7 +235,7 @@ export class DateHeaderDataGenerator {
       );
       const normalizedViewOffset = normalizeViewOffset(viewOffset);
       let shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -normalizedViewOffset);
-      if (plan && !isTimelineView(viewType) && normalizedViewOffset < 0 && columnDate) {
+      if (plan && !isTimelineView(viewType) && normalizedViewOffset <= 0 && columnDate) {
         shiftedStartDate = columnDate;
       }
       const headerIndex = idx % cellCountInGroupRow;
