@@ -1,0 +1,126 @@
+{
+  "comment": "The CSS -> SVG contract of the data-visualization widgets, the third category outside the component tier and the mirror image of runtime-contract.json. A chart is drawn in SVG from JS, so the theme publishes what those widgets paint with and the chart themes in packages/devextreme/js/__internal/viz write the reference itself into the markup: `fill: var(--dx-viz-bg, #ffffff)`. Nothing is read back from the document while painting, which is why a chart repaints the moment one of these names changes, and why a chart inside a mode scope paints in that scope's mode. Only what is handed to the application - getColor(), the public palette and theme functions, an export - is read back, at the moment it is asked for. The literal beside each reference is the fallback for a page that loaded another theme; it is the value the name itself carries, and tests/viz-contract.test.ts holds it to the built bundle so the two cannot drift. tests/fluent-next-naming.test.ts excludes the names from the public-surface checks because the reader is not this package.",
+  "declaredIn": {
+    "perMode": "fluent-next/common/_colors.scss",
+    "onRootOnly": "fluent-next/viz/_colors.scss",
+    "linked": "fluent-next/common/_public-links.scss"
+  },
+  "readBy": "packages/devextreme/js/__internal/viz/core/themes/fluent-next/index.ts",
+  "palette": "packages/devextreme/js/__internal/viz/palette.ts",
+  "variables": [
+    {
+      "name": "--dx-viz-bg",
+      "role": "color-bg",
+      "declaredPerMode": true,
+      "paints": "the surface every widget draws on: chart background, loading panel, export menu, map background, candlestick body, sparkline point, the gap between funnel sections"
+    },
+    {
+      "name": "--dx-viz-bg-hovered",
+      "role": "color-bg-hovered",
+      "declaredPerMode": true,
+      "paints": "the export menu button under the pointer, and the shelf behind a bar gauge and a tree map group"
+    },
+    {
+      "name": "--dx-viz-bg-active",
+      "role": "color-bg-active",
+      "declaredPerMode": true,
+      "paints": "the export menu button while pressed or focused"
+    },
+    {
+      "name": "--dx-viz-content",
+      "role": "color-content",
+      "declaredPerMode": true,
+      "paints": "text at full strength - titles, export menu, map labels - and the marks that have to stand out against the surface: constant lines, error bars, map selection borders, range selector ticks"
+    },
+    {
+      "name": "--dx-viz-content-subtle",
+      "role": "color-content-subtle",
+      "declaredPerMode": true,
+      "paints": "the quieter text and the axis: the widget font colour that axis and legend labels take, the axis line and its ticks, the subtitle under the chart title, tree map group labels, the map control bar border"
+    },
+    {
+      "name": "--dx-viz-border",
+      "role": "color-border",
+      "declaredPerMode": true,
+      "paints": "lines that frame something: pane and label borders, annotation border, gauge range container, axis breaks, map background border"
+    },
+    {
+      "name": "--dx-viz-border-hovered",
+      "role": "color-border-hovered",
+      "declaredPerMode": true,
+      "paints": "the export menu button outline under the pointer"
+    },
+    {
+      "name": "--dx-viz-border-active",
+      "role": "color-border-active",
+      "declaredPerMode": true,
+      "paints": "the export menu button outline while pressed or focused"
+    },
+    {
+      "name": "--dx-viz-grid",
+      "role": "color-border-subtle",
+      "declaredPerMode": true,
+      "paints": "the grid: major and minor grid lines, legend border, tree map group border"
+    },
+    {
+      "name": "--dx-viz-blue",
+      "role": "color-bg-blue",
+      "declaredPerMode": false,
+      "paints": "the first series colour, the near end of the gradient set the tree map and the map mix their scales from, and the shapes that are data rather than chrome: bullet bar, gauge range bar, map markers and the map legend marker"
+    },
+    {
+      "name": "--dx-viz-red",
+      "role": "color-bg-red",
+      "declaredPerMode": false,
+      "paints": "the second series colour, and the falling half of an indicating set"
+    },
+    {
+      "name": "--dx-viz-green",
+      "role": "color-bg-green",
+      "declaredPerMode": false,
+      "paints": "the third series colour, the rising half of an indicating set, and the far end of the gradient set"
+    },
+    {
+      "name": "--dx-viz-yellow",
+      "role": "color-bg-yellow",
+      "declaredPerMode": false,
+      "paints": "the fourth series colour and the middle of an indicating set"
+    },
+    {
+      "name": "--dx-viz-pink",
+      "role": "color-bg-pink",
+      "declaredPerMode": false,
+      "paints": "the fifth series colour"
+    },
+    {
+      "name": "--dx-viz-purple",
+      "role": "color-bg-purple",
+      "declaredPerMode": false,
+      "paints": "the sixth series colour"
+    },
+    {
+      "name": "--dx-viz-primary",
+      "role": "color-bg-primary",
+      "declaredPerMode": false,
+      "paints": "the range selector: the selected range, the slider handle and its marker. The one place a chart follows --dx-accent-color, because the range selector is an editor and its selection is the accented control of the page it sits on"
+    },
+    {
+      "name": "--dx-viz-tooltip-bg",
+      "role": "color-bg-inverted",
+      "declaredPerMode": true,
+      "paints": "the tooltip plate and the annotation plate, inverted against the page so they read as something laid over it"
+    },
+    {
+      "name": "--dx-viz-tooltip-content",
+      "role": "color-content-inverted",
+      "declaredPerMode": true,
+      "paints": "the text on those plates"
+    },
+    {
+      "name": "--dx-viz-font-family",
+      "from": "--dx-global-font-family",
+      "declaredPerMode": true,
+      "paints": "every text the widget draws, titles included. It reads the page's own font name, so a chart is typeset like the widgets around it, and it is declared on the mode scopes because the name it reads is"
+    }
+  ]
+}

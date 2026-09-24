@@ -55,11 +55,11 @@ const OVERRIDES = {
    * earlier in the load order and shifted `--dx-line-height` inside its :root block, i.e. it
    * changed the emitted CSS.
    */
-  systemFolders: ['common', 'typography'],
+  systemFolders: ['common', 'typography', 'viz'],
 
   // System folders whose declarations join the --dx tier (published from <folder>/_public.scss
   // onto rootSelectors[folder]); grammar stays the systemConcerns path, not the component one.
-  systemTier: ['common', 'typography'],
+  systemTier: ['common', 'typography', 'viz'],
 
   // component -> folder that is allowed to declare it (exactly one declaration home).
   // Only needed where more than one folder currently declares the component's variables.
@@ -221,6 +221,7 @@ const OVERRIDES = {
      * mode scope already.
      */
     common: [':root', ...THEME_MODE_SELECTORS],
+    viz: [':root'],
     /*
      * The drop-down editor's inner button is a dxButton whose root carries dx-button-normal +
      * dx-dropdowneditor-button but NOT dx-button (found by the F12 runtime reachability audit:
@@ -443,6 +444,7 @@ const OVERRIDES = {
     'surface', // ds.$color-surface-neutral-*
     'state', // ds.$opacity-* for disabled/readonly conventions
     'motion',
+    'viz',
   ],
 
   /*

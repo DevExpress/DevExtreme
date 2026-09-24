@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
 /* eslint-disable consistent-return */
@@ -28,6 +27,9 @@ import { normalizeStyleProp } from '@js/core/utils/style';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
+import { Color } from '@ts/color';
+import { isCssVariableReference } from '@ts/core/utils/css_variables';
+import swatchContainer from '@ts/core/utils/swatch_container';
 
 import { Plaque } from './plaque';
 import { Renderer } from './renderers/renderer';
@@ -40,6 +42,25 @@ const mathMax = Math.max;
 const mathMin = Math.min;
 const window = getWindow();
 const DEFAULT_HTML_GROUP_WIDTH = 3000;
+const PERCENT = 100;
+
+function foldOpacityIntoFill(styles) {
+  const { fill, 'fill-opacity': opacity } = styles;
+
+  if (!isDefined(fill) || !isDefined(opacity)) {
+    return;
+  }
+
+  delete styles['fill-opacity'];
+
+  if (isCssVariableReference(fill)) {
+    styles.fill = `color-mix(in srgb, ${fill} ${Number((opacity * PERCENT).toFixed(2))}%, transparent)`;
+  } else {
+    const { r, g, b } = new Color(fill);
+
+    styles.fill = `rgba(${r},${g},${b},${opacity})`;
+  }
+}
 
 function hideElement($element) {
   $element.css({ left: '-9999px' }).detach();
@@ -103,13 +124,24 @@ Tooltip.prototype = {
     this._options = this._widgetRoot = null;
   },
 
-  _getContainer() {
+  _getUserContainer() {
     const options = this._options;
     let container = $(this._widgetRoot).closest(options.container);
     if (container.length === 0) {
       container = $(options.container);
     }
-    return (container.length ? container : $('body')).get(0);
+    return container.get(0);
+  },
+
+  _getContainer() {
+    const container = this._getUserContainer();
+    if (container) {
+      return container;
+    }
+
+    const scope = swatchContainer.getSwatchContainer(this._widgetRoot);
+
+    return (scope?.length ? scope : $('body')).get(0);
   },
 
   setTemplate(contentTemplate) {
@@ -124,6 +156,7 @@ Tooltip.prototype = {
 
     that._options = options;
     that._textFontStyles = patchFontOptions(options.font);
+    foldOpacityIntoFill(that._textFontStyles);
     that._textFontStyles.color = that._textFontStyles.fill;
     that._wrapper.css({ zIndex: options.zIndex });
 
@@ -263,8 +296,10 @@ Tooltip.prototype = {
     // text area
     const normalizedCSS = {};
     for (const name in that._textFontStyles) {
-      const normalizedName = camelize(name);
-      normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, that._textFontStyles[name]);
+      if (name !== 'fill-opacity') {
+        const normalizedName = camelize(name);
+        normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, that._textFontStyles[name]);
+      }
     }
     that._textGroupHtml.css(normalizedCSS);
     that._text.css(that._textFontStyles);
@@ -412,8 +447,7 @@ Tooltip.prototype = {
   },
 
   _getCanvas() {
-    const container = this._getContainer();
-    const containerBox = container.getBoundingClientRect();
+    const container = this._getUserContainer();
     const html = domAdapter.getDocumentElement();
     const document = domAdapter.getDocument();
     let left = window.pageXOffset || html.scrollLeft || 0;
@@ -436,7 +470,8 @@ Tooltip.prototype = {
       bottom: 0,
     };
 
-    if (container !== domAdapter.getBody()) {
+    if (container && container !== domAdapter.getBody()) {
+      const containerBox = container.getBoundingClientRect();
       left = mathMax(box.left, box.left + containerBox.left);
       top = mathMax(box.top, box.top + containerBox.top);
 

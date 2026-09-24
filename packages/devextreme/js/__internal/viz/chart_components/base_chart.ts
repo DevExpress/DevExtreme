@@ -27,6 +27,7 @@ import { extend } from '@js/core/utils/extend';
 import { reverseEach as _reverseEach } from '@js/core/utils/iterator';
 import { isDefined as _isDefined, isFunction } from '@js/core/utils/type';
 import trackerModule from '@js/viz/chart_components/tracker';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { LayoutManager } from '@ts/viz/chart_components/layout_manager';
 import { ThemeManager } from '@ts/viz/components/chart_theme_manager';
 import { validateData } from '@ts/viz/components/data_validator';
@@ -269,13 +270,13 @@ function getLegendFields(name) {
   };
 }
 
-function getLegendSettings(legendDataField) {
+function getLegendSettings(legendDataField, element) {
   const formatObjectFields = getLegendFields(legendDataField);
   return {
     getFormatObject(data) {
       const res = {};
       res[formatObjectFields.indexField] = data.id;
-      res[formatObjectFields.colorField] = data.states.normal.fill;
+      res[formatObjectFields.colorField] = paintedColor(data.states.normal.fill, element);
       res[formatObjectFields.nameField] = data.text;
       return res;
     },
@@ -867,7 +868,7 @@ export const BaseChart = BaseWidget.inherit({
   },
 
   _createLegend() {
-    const legendSettings = getLegendSettings(this._legendDataField);
+    const legendSettings = getLegendSettings(this._legendDataField, this._renderer.root.element);
 
     this._legend = new Legend({
       renderer: this._renderer,

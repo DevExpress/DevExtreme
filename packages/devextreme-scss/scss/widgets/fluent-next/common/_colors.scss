@@ -18,6 +18,18 @@ $palette-text: ds.$color-content !default;
 $global-bg: ds.$color-bg !default;
 $global-content: ds.$color-content !default;
 
+$viz-bg: ds.$color-bg !default;
+$viz-bg-active: ds.$color-bg-active !default;
+$viz-bg-hovered: ds.$color-bg-hovered !default;
+$viz-border: ds.$color-border !default;
+$viz-border-active: ds.$color-border-active !default;
+$viz-border-hovered: ds.$color-border-hovered !default;
+$viz-content: ds.$color-content !default;
+$viz-content-subtle: ds.$color-content-subtle !default;
+$viz-grid: ds.$color-border-subtle !default;
+$viz-tooltip-bg: ds.$color-bg-inverted !default;
+$viz-tooltip-content: ds.$color-content-inverted !default;
+
 $mention-bg: ds.$color-bg-selected !default;
 
 $global-content-disabled: ds.$color-content-disabled !default;

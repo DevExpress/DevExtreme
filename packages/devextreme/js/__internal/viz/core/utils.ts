@@ -18,7 +18,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-plusplus */
 
-import Color from '@js/color';
 import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -284,13 +283,9 @@ export let patchFontOptions = function (options) {
     if (/^(cursor)$/i.test(key)) {
       // TODO check other properties, add tests
     } else if (key === 'opacity') {
-      value = null;
+      key = 'fill-opacity';
     } else if (key === 'color') {
       key = 'fill';
-      if ('opacity' in options) {
-        const color = new Color(value);
-        value = `rgba(${color.r},${color.g},${color.b},${options.opacity})`;
-      }
     } else {
       key = `font-${key}`;
     }

@@ -7,6 +7,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import { isDefined } from '@js/core/utils/type';
+import { paintedColor } from '@ts/core/utils/css_variables';
 
 const states = ['normal', 'hover', 'selection', 'selection'];
 
@@ -100,7 +101,7 @@ Item.prototype = {
   },
 
   getColor() {
-    return this.color;
+    return paintedColor(this.color, this.widget._renderer?.root?.element);
   },
 
   isHovered() {

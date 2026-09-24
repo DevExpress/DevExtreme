@@ -131,6 +131,25 @@
     "--dx-tree-view-container-with-border-offset",
     "--dx-tree-view-item-padding-inline",
     "--dx-validation-message-content-padding",
-    "--dx-validation-summary-margin-block-start"
+    "--dx-validation-summary-margin-block-start",
+    "--dx-viz-bg",
+    "--dx-viz-bg-active",
+    "--dx-viz-bg-hovered",
+    "--dx-viz-blue",
+    "--dx-viz-border",
+    "--dx-viz-border-active",
+    "--dx-viz-border-hovered",
+    "--dx-viz-content",
+    "--dx-viz-content-subtle",
+    "--dx-viz-font-family",
+    "--dx-viz-green",
+    "--dx-viz-grid",
+    "--dx-viz-pink",
+    "--dx-viz-primary",
+    "--dx-viz-purple",
+    "--dx-viz-red",
+    "--dx-viz-tooltip-bg",
+    "--dx-viz-tooltip-content",
+    "--dx-viz-yellow"
   ]
 }
