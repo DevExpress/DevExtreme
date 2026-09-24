@@ -1209,7 +1209,7 @@ QUnit.test('lineargradient with a published name in stop-color', function(assert
     const markup = testingMarkupStart +
         '<defs>' +
 
-        '<linearGradient id="testlineargradientname" style="--dx-viz-blue: rgb(1, 2, 3)">' +
+        '<linearGradient id="testlineargradientname">' +
         '<stop offset="0%" stop-color="var(--dx-viz-blue, #0078d4)"></stop>' +
         '<stop offset="100%" stop-color="blue"></stop>' +
         '</linearGradient>' +
@@ -1217,6 +1217,8 @@ QUnit.test('lineargradient with a published name in stop-color', function(assert
         '</defs>' +
         '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradientname)"></path>' +
         testingMarkupEnd;
+
+    document.documentElement.style.setProperty('--dx-viz-blue', 'rgb(1, 2, 3)');
 
     const imageBlob = getData(markup);
 
@@ -1228,6 +1230,7 @@ QUnit.test('lineargradient with a published name in stop-color', function(assert
             assert.deepEqual(gradient.addColorStop.getCall(0).args, [0, 'rgb(1, 2, 3)'], 'a name is exported as what the cascade resolved, not as the literal written beside it');
             assert.deepEqual(gradient.addColorStop.getCall(1).args, [1, 'blue'], 'a literal is left as it is written');
         } finally {
+            document.documentElement.style.removeProperty('--dx-viz-blue');
             done();
         }
     });
@@ -1240,7 +1243,7 @@ QUnit.test('lineargradient with a published name in stop-color, exported from a 
     host.html(testingMarkupStart +
         '<defs>' +
 
-        '<linearGradient id="testlineargradientlive" style="--dx-viz-blue: rgb(4, 5, 6)">' +
+        '<linearGradient id="testlineargradientlive">' +
         '<stop offset="0%" stop-color="var(--dx-viz-blue, #0078d4)"></stop>' +
         '<stop offset="100%" stop-color="blue"></stop>' +
         '</linearGradient>' +
@@ -1248,6 +1251,8 @@ QUnit.test('lineargradient with a published name in stop-color, exported from a 
         '</defs>' +
         '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradientlive)"></path>' +
         testingMarkupEnd);
+
+    host.get(0).querySelector('#testlineargradientlive').style.setProperty('--dx-viz-blue', 'rgb(4, 5, 6)');
 
     const imageBlob = imageCreator.getData(host.children().get(0), { width: 500, height: 250, format: 'png', margin: 10 }, true);
 
