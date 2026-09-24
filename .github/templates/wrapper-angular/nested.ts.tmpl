@@ -4,6 +4,7 @@
 //#         (one file per nested component; README §5)
 //#
 //# Same directive syntax as component.ts.tmpl. Delete every "//#" line.
+//# Lists have any length; __X_LIST__ is one placeholder for a whole comma-joined list.
 //# Never leave two blank lines in a row: if skipping a block does that, keep one.
 //#
 //# Flags:  ITEM      collection item (array option): Dxi… class, CollectionNestedOption
@@ -56,8 +57,11 @@ import {
 import { DOCUMENT } from '@angular/common';
 //#endif
 
-//#each TYPE_IMPORT   (README §6; the type `Component` is imported as `Component as CoreComponent`)
-import type { __Type__, __OtherType__ } from '__typeModule__';
+//#each TYPE_IMPORT   (README §6: one line per module, first-use order)
+//#   __TYPES_LIST__  all type names from that module, joined with ", " — any number, e.g.
+//#                   PositionAlignment, HorizontalAlignment, VerticalAlignment
+//#                   The type `Component` is written "Component as CoreComponent".
+import type { __TYPES_LIST__ } from '__typeModule__';
 //#endeach
 
 import {

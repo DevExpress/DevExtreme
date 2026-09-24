@@ -10,6 +10,7 @@
 //#   //#each ITEM … //#endeach         repeat the body once per ITEM (0..n times)
 //#
 //# Lists have any length; a single line in an //#each is repeated per item.
+//# __X_LIST__ is one placeholder for a whole comma-joined list of any length.
 //# Never leave two blank lines in a row: if skipping a block does that, keep one.
 //#
 //# Flags:  GENERIC      Properties has type params
@@ -76,7 +77,10 @@ export type { ExplicitTypes } from 'devextreme/__module__';
 
 //#endif
 //#each TYPE_IMPORT   (README §6: one line per module, first-use order)
-import type { __Type__, __OtherType__ } from '__typeModule__';
+//#   __TYPES_LIST__  all type names from that module, joined with ", " — any number, e.g.
+//#                   TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent
+//#                   A default export is written "default as DataSource, DataSourceOptions".
+import type { __TYPES_LIST__ } from '__typeModule__';
 //#endeach
 
 import Dx__Name__ from 'devextreme/__module__';
