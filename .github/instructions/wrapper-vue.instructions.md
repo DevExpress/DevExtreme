@@ -43,14 +43,26 @@ The widget's `Properties` type (alias of `dx<Widget>Options`) is the source of t
 2. **`AccessibleOptions`** — `Pick<Properties, "opt1" | "opt2" | …>` listing every exposed
    option and event, followed by `interface Dx<Name> extends AccessibleOptions { readonly instance?: <Widget>; }`.
 3. **`componentConfig`** object:
-   - **`props`** — one entry per option, mapped to the Vue runtime type:
-     - `string` → `String`; `boolean` → `Boolean`; `number` → `Number`;
-     - `number | string` → `[Number, String]`; object → `Object as PropType<T>`;
-     - union/enum → `String as PropType<ButtonType | string>`;
-     - callback → `Function as PropType<((e: XEvent) => void)>`;
-     - `template` → `{}`.
-   - **`emits`** — `"update:<prop>": null` for **every** prop (plus widget read-only
-     subscribable options such as `"update:isActive"`), enabling `v-model:prop`.
+   - **`props`**: one entry per option. Each **member** of the option's type union maps to
+     its own runtime constructor, and the prop lists all of them. See template README §2 for
+     ordering and the exact `PropType` rules.
+     - `string`, a string-literal union, or a string alias (`LabelMode`, `ButtonType`)
+       → `String`. Only a union whose members are **all** string-valued becomes a single
+       `String`: `type: String as PropType<ButtonType | string>`.
+     - `number` → `Number`, `boolean` → `Boolean`, array → `Array`, function → `Function`,
+       object/interface → `Object`. `null` and `undefined` are dropped.
+     - Mixed unions give one constructor per member kind:
+       `height: [Number, String]`,
+       `position: [Function, String, Object] as PropType<…>`,
+       `dataSource: [Array, Object, String] as PropType<…>`.
+     - Add `as PropType<…>` unless the TS members are exactly the plain primitives
+       (`hint: String`, `height: [Number, String]`). A documented object type also gets
+       `| Record<string, any>` at the end:
+       `options: Object as PropType<dxButtonOptions | Record<string, any>>`.
+     - Events → `Function as PropType<((e: XEvent) => void)>`.
+     - A top-level `any`, a template, or an element type → `{}`.
+   - **`emits`**: `"update:isActive": null` and `"update:hoveredElement": null` first, then
+     `"update:<prop>": null` for **every** prop. This enables `v-model:prop`.
    - **`computed.instance`** returning `(this as any).$_instance`.
    - **`beforeCreate`** setting `$_WidgetClass = <Widget>` and `$_hasAsyncTemplate = true`
      (always; only DataGrid, Scheduler and TreeList use `false`).
