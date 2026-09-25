@@ -14,7 +14,7 @@ if (!/localhost/.test(document.location.host)) {
   templateUrl: './app.component.html',
   imports: [
     DxDataGridModule,
-    DetailGridComponent
+    DetailGridComponent,
   ],
 })
 export class AppComponent {
