@@ -183,7 +183,16 @@ describe('getSwatchContainer', () => {
       expect($viewport.children).toHaveLength(1);
     });
 
-    it.each(['overflow: hidden', 'overflow: auto', 'overflow-y: auto'])('does not reuse a viewport child that clips with %s', (style) => {
+    it.each([
+      'overflow: hidden',
+      'overflow: auto',
+      'overflow-y: auto',
+      'clip-path: inset(0)',
+      'contain: paint',
+      'transform: translateX(1px)',
+      'filter: blur(1px)',
+      'perspective: 100px',
+    ])('does not reuse a viewport child that clips or traps a positioned descendant with %s', (style) => {
       const scope = scopeInViewport(`<div class="dx-theme-mode-dark" style="${style}"><div class="target mode-dark"></div></div>`);
       const container = containerOf(scope);
 
