@@ -3,7 +3,7 @@ import { Form, SimpleItem, ButtonItem } from 'devextreme-react/form';
 import type { FormTypes } from 'devextreme-react/form';
 import type { ButtonTypes } from 'devextreme-react/button';
 
-import { Toast } from 'devextreme-react/toast';
+import { Position, Toast } from 'devextreme-react/toast';
 import { employee, formFieldsConfig } from './data.ts';
 import type { EmployeeFormProps } from './data.ts';
 
@@ -14,12 +14,7 @@ const saveButtonOptions: ButtonTypes.Properties = {
   useSubmitBehavior: true,
   width: 120,
 };
-const toastPosition = {
-  of: '#form-container',
-  at: { x: 'center', y: 'bottom' },
-  my: { x: 'center', y: 'bottom' },
-  offset: { x: 0, y: -20 },
-} as const;
+const bottomCenterPosition = { x: 'center', y: 'bottom' } as const;
 
 export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormProps) {
   const [toastVisible, setToastVisible] = useState(false);
@@ -53,9 +48,15 @@ export default function EmployeeForm({ aiIntegration, formRef }: EmployeeFormPro
         type="success"
         displayTime={600}
         closeOnClick={true}
-        position={toastPosition}
         onHiding={onToastHiding}
-      />
+      >
+        <Position
+          of="#form-container"
+          at={bottomCenterPosition}
+          my={bottomCenterPosition}
+          offset="0 -20"
+        />
+      </Toast>
     </div>
   );
 }

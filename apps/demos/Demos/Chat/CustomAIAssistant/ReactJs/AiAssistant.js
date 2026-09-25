@@ -2,7 +2,7 @@ import React, {
   useCallback, useMemo, useRef, useState,
 } from 'react';
 import Chat from 'devextreme-react/chat';
-import Popup from 'devextreme-react/popup';
+import Popup, { Position } from 'devextreme-react/popup';
 import SpeedDialAction from 'devextreme-react/speed-dial-action';
 import { ArrayStore, DataSource } from 'devextreme-react/common/data';
 import { routeMessage } from './chat-router.js';
@@ -15,12 +15,7 @@ const chatSuggestionItems = [
   { text: 'Change State to Texas', prompt: 'Change State to Texas' },
 ];
 const chatUser = { id: 'user' };
-const popupPosition = {
-  my: 'right top',
-  at: 'right top',
-  of: '.demo-container',
-  offset: '-20 20',
-};
+const rightTopPosition = { x: 'right', y: 'top' };
 const popupWrapperAttr = { class: 'chat-popup' };
 const emptyViewHtml = { __html: emptyViewPrompt };
 function EmptyView() {
@@ -155,11 +150,16 @@ export default function AiAssistant({ formRef, gridRef, aiIntegration }) {
         showCloseButton={true}
         shading={false}
         wrapperAttr={popupWrapperAttr}
-        position={popupPosition}
         onShowing={onPopupShowing}
         onHiding={onPopupHiding}
         toolbarItems={toolbarItems}
       >
+        <Position
+          my={rightTopPosition}
+          at={rightTopPosition}
+          of=".demo-container"
+          offset="-20 20"
+        />
         <Chat
           height="100%"
           showAvatar={false}
