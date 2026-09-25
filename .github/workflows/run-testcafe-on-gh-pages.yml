@@ -54,7 +54,7 @@ jobs:
             - name: Setup Chrome
               uses: ./devextreme/.github/actions/setup-chrome
               with:
-                chrome-version: '150.0.7871.181'
+                chrome-version: '153.0.8010.52'
 
             - uses: pnpm/action-setup@v6
               with:
@@ -126,7 +126,7 @@ jobs:
               working-directory: devextreme/apps/demos
               env:
                 CHANGEDFILEINFOSPATH: changed-files.json
-                BROWSERS: chrome:headless --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+                BROWSERS: chrome:headless --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning --disable-blink-features=MergeStickyLayers
                 #DEBUG: hammerhead:*,testcafe:*
                 CONCURRENCY: 4
                 TCQUARANTINE: true
