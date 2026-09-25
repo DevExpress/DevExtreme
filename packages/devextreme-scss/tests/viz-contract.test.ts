@@ -4,10 +4,12 @@ import { join } from 'path';
 import vizContract from '../tools/naming/viz-contract.json';
 
 const contract = vizContract as {
-  declaredIn: { perMode: string; onRootOnly: string; linked: string };
+  declaredIn: Record<string, string>;
   readBy: string;
   palette: string;
-  variables: { name: string; role?: string; from?: string; declaredPerMode: boolean }[];
+  variables: {
+    name: string; role?: string; from?: string; declaredIn?: string; declaredPerMode: boolean;
+  }[];
 };
 
 const packageRoot = process.cwd();
@@ -76,12 +78,14 @@ const sameValue = (first: string, second: string): boolean => {
 
 test('every contract name is declared from the role, or from the name, the contract states', () => {
   const offenders = contract.variables.flatMap(({
-    name, role, from, declaredPerMode,
+    name, role, from, declaredIn: where, declaredPerMode,
   }) => {
     const declaredFromRole = declaredPerMode
       ? contract.declaredIn.perMode
       : contract.declaredIn.onRootOnly;
-    const declaredIn = from ? contract.declaredIn.linked : declaredFromRole;
+    const declaredIn = from
+      ? contract.declaredIn.linked
+      : contract.declaredIn[where ?? ''] ?? declaredFromRole;
     const declaration = from
       ? `${name}: var(${from});`
       : `${variableOf(name)}: ds.$${role} !default;`;

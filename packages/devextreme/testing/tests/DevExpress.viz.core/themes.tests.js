@@ -360,17 +360,33 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
     });
 });
 
+const PUBLISHED_TITLE_WEIGHT = 'var(--dx-viz-title-font-weight, 600)';
+const PUBLISHED_WEIGHT = 'var(--dx-viz-font-weight, 400)';
+const PUBLISHED_EXPORT_WEIGHT = 'var(--dx-viz-export-font-weight, 400)';
+const PUBLISHED_LEGEND_TITLE_WEIGHT = 'var(--dx-viz-legend-title-font-weight, 200)';
+const PUBLISHED_LABEL_WEIGHT = 'var(--dx-viz-label-font-weight, 600)';
 const PUBLISHED_FONT = 'var(--dx-viz-font-family, \'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif)';
 const PUBLISHED_BLUE = 'var(--dx-viz-blue, #0078d4)';
+const PUBLISHED_DANGER = 'var(--dx-viz-danger, #c50f1f)';
+const PUBLISHED_GRAY = 'var(--dx-viz-gray, #757575)';
+const PUBLISHED_ORANGE = 'var(--dx-viz-orange, #f7630c)';
+const PUBLISHED_SUCCESS = 'var(--dx-viz-success, #107c10)';
+const PUBLISHED_WARNING = 'var(--dx-viz-warning, #f7630c)';
+const PUBLISHED_TILE_BORDER = 'var(--dx-viz-tile-border, #ffffff)';
 const PUBLISHED_GREEN = 'var(--dx-viz-green, #008f04)';
 const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
+const PUBLISHED_RED = 'var(--dx-viz-red, #c83d3d)';
+const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
 
 [
-    { theme: 'fluent-next.blue.light', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)' },
-    { theme: 'fluent-next.blue.light.compact', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)' },
-    { theme: 'fluent-next.blue.dark', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)' },
-    { theme: 'fluent-next.blue.dark.compact', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)' },
-].forEach(({ theme, surface, hovered, pressed, plate, onPlate }) => {
+    { theme: 'fluent-next.blue.light', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', needle: 'var(--dx-viz-content-subtle, #444444)', crosshair: 'var(--dx-viz-crosshair, #b33133)', mapLineHovered: 'var(--dx-viz-content-orange, #ad4100)', rangePlate: 'var(--dx-viz-purple-subtle, #d5c7f0)', axis: 'var(--dx-viz-content-subtler, #656565)', frame: 'var(--dx-viz-border, #cbcbcb)' },
+    { theme: 'fluent-next.blue.light.compact', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', needle: 'var(--dx-viz-content-subtle, #444444)', crosshair: 'var(--dx-viz-crosshair, #b33133)', mapLineHovered: 'var(--dx-viz-content-orange, #ad4100)', rangePlate: 'var(--dx-viz-purple-subtle, #d5c7f0)', axis: 'var(--dx-viz-content-subtler, #656565)', frame: 'var(--dx-viz-border, #cbcbcb)' },
+    { theme: 'fluent-next.blue.dark', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', needle: 'var(--dx-viz-content-subtle, #cbcbcb)', crosshair: 'var(--dx-viz-crosshair, #e87e78)', mapLineHovered: 'var(--dx-viz-content-orange, #f57d48)', rangePlate: 'var(--dx-viz-purple-subtle, #563780)', axis: 'var(--dx-viz-content-subtler, #a1a1a1)', frame: 'var(--dx-viz-border, #767676)' },
+    { theme: 'fluent-next.blue.dark.compact', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', needle: 'var(--dx-viz-content-subtle, #cbcbcb)', crosshair: 'var(--dx-viz-crosshair, #e87e78)', mapLineHovered: 'var(--dx-viz-content-orange, #f57d48)', rangePlate: 'var(--dx-viz-purple-subtle, #563780)', axis: 'var(--dx-viz-content-subtler, #a1a1a1)', frame: 'var(--dx-viz-border, #767676)' },
+].forEach(({
+    theme, surface, hovered, pressed, plate, onPlate, ink, shelf, quiet, needle, crosshair,
+    mapLineHovered, rangePlate, axis, frame,
+}) => {
     QUnit.test(`fluent-next theme should be registered: ${theme}`, function(assert) {
         themeModule.currentTheme(theme);
 
@@ -386,7 +402,47 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
         assert.strictEqual(registeredTheme.chart.title.font.family, PUBLISHED_FONT, 'chart title font');
         assert.strictEqual(registeredTheme.gauge.title.font.family, PUBLISHED_FONT, 'gauge title font');
         assert.strictEqual(registeredTheme.title.font.size, 20, 'title font size is inherited');
-        assert.strictEqual(registeredTheme.title.font.weight, 500, 'title font weight is inherited');
+        assert.strictEqual(registeredTheme.title.font.weight, PUBLISHED_TITLE_WEIGHT, 'title font weight');
+        assert.strictEqual(registeredTheme.title.subtitle.font.weight, PUBLISHED_TITLE_WEIGHT, 'subtitle mirrors it');
+    });
+
+    QUnit.test(`fluent-next theme should weigh the rest of the text with the published names: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.font.weight, PUBLISHED_WEIGHT, 'widget font, which axis and legend labels take');
+        assert.strictEqual(registeredTheme.export.font.weight, PUBLISHED_EXPORT_WEIGHT, 'export menu');
+        assert.strictEqual(registeredTheme.bullet.export.font.weight, PUBLISHED_EXPORT_WEIGHT, 'bullet export menu');
+        assert.strictEqual(registeredTheme.legend.title.font.weight, PUBLISHED_LEGEND_TITLE_WEIGHT, 'legend title');
+        assert.strictEqual(registeredTheme.map.legend.title.font.weight, PUBLISHED_LEGEND_TITLE_WEIGHT, 'map legend title');
+        assert.strictEqual(registeredTheme.sankey.label.font.weight, PUBLISHED_LABEL_WEIGHT, 'sankey label');
+        assert.strictEqual(registeredTheme.treeMap.tile.label.font.weight, PUBLISHED_LABEL_WEIGHT, 'tree map tile label');
+        assert.strictEqual(registeredTheme.treeMap.group.label.font.weight, PUBLISHED_LABEL_WEIGHT, 'tree map group label');
+    });
+
+    QUnit.test(`fluent-next theme should take every font weight it sets from a published name: ${theme}`, function(assert) {
+        const weights = new Set();
+        const collectWeights = (node) => {
+            Object.keys(node).forEach((key) => {
+                const value = node[key];
+                if(!value || typeof value !== 'object') {
+                    return;
+                }
+                if(key === 'font' && value.weight !== undefined) {
+                    weights.add(value.weight);
+                }
+                collectWeights(value);
+            });
+        };
+
+        collectWeights(getRegisteredTheme(theme));
+
+        assert.deepEqual(Array.from(weights).sort(), [
+            PUBLISHED_EXPORT_WEIGHT,
+            PUBLISHED_WEIGHT,
+            PUBLISHED_LABEL_WEIGHT,
+            PUBLISHED_LEGEND_TITLE_WEIGHT,
+            PUBLISHED_TITLE_WEIGHT,
+        ]);
     });
 
     QUnit.test(`fluent-next theme should paint the background with the published surface: ${theme}`, function(assert) {
@@ -396,6 +452,8 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
         assert.strictEqual(registeredTheme.chart.containerBackgroundColor, surface, 'chart container');
         assert.strictEqual(registeredTheme.gauge.containerBackgroundColor, surface, 'gauge container');
         assert.strictEqual(registeredTheme.rangeSelector.containerBackgroundColor, surface, 'rangeSelector container');
+        assert.strictEqual(registeredTheme.rangeSelector.shutter.color, surface, 'rangeSelector shutter');
+        assert.strictEqual(registeredTheme.rangeSelector.shutter.opacity, 0.75, 'rangeSelector shutter opacity, the same in both modes');
         assert.strictEqual(registeredTheme.chart.commonSeriesSettings.candlestick.innerColor, surface, 'candlestick inner color');
         assert.strictEqual(registeredTheme.gauge.scale.tick.color, surface, 'gauge tick');
         assert.strictEqual(registeredTheme.map.background.color, surface, 'map background');
@@ -412,6 +470,9 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
         const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.font.color, surface, 'rangeSelector slider marker text');
+        assert.strictEqual(registeredTheme.chart.crosshair.label.font.color, surface, 'crosshair label text');
+        assert.strictEqual(registeredTheme.map['layer:marker:dot'].borderColor, surface, 'map dot marker ring');
+        assert.strictEqual(registeredTheme.map['layer:marker:dot'].backColor, surface, 'map dot marker back disc');
         assert.strictEqual(registeredTheme.funnel.item.border.color, surface, 'funnel item border');
     });
 
@@ -423,11 +484,19 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
         assert.strictEqual(registeredTheme.export.button.active.backgroundColor, pressed, 'export button active');
     });
 
+    QUnit.test(`fluent-next theme should lift the bar gauge shelf off the surface: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.barGauge.backgroundColor, shelf, 'bar gauge shelf');
+    });
+
     QUnit.test(`fluent-next theme should lay a tooltip and an annotation over the page, not into it: ${theme}`, function(assert) {
         const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.tooltip.color, plate, 'tooltip plate');
         assert.strictEqual(registeredTheme.tooltip.font.color, onPlate, 'tooltip text');
+        assert.strictEqual(registeredTheme.tooltip.border.color, frame, 'tooltip border, drawn once an application shows it');
+        assert.strictEqual(registeredTheme.chart.tooltip.border.color, frame, 'chart tooltip border');
         assert.strictEqual(registeredTheme.chart.commonAnnotationSettings.color, plate, 'annotation plate');
         assert.strictEqual(registeredTheme.chart.commonAnnotationSettings.border.color, plate, 'annotation border');
         assert.strictEqual(registeredTheme.chart.commonAnnotationSettings.font.color, onPlate, 'annotation text');
@@ -443,13 +512,13 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
 
         assert.deepEqual(simpleSet, [
             PUBLISHED_BLUE,
-            'var(--dx-viz-red, #c83d3d)',
+            PUBLISHED_RED,
             PUBLISHED_GREEN,
-            'var(--dx-viz-yellow, #eaa300)',
+            PUBLISHED_YELLOW,
             'var(--dx-viz-pink, #e43ba6)',
             'var(--dx-viz-purple, #865cbf)',
         ], 'simpleSet');
-        assert.deepEqual(indicatingSet, [PUBLISHED_GREEN, 'var(--dx-viz-yellow, #eaa300)', 'var(--dx-viz-red, #c83d3d)'], 'indicatingSet');
+        assert.deepEqual(indicatingSet, [PUBLISHED_SUCCESS, PUBLISHED_WARNING, PUBLISHED_DANGER], 'indicatingSet');
         assert.deepEqual([gradientSet.getColor(0), gradientSet.getColor(1)], [
             `color-mix(in srgb, ${PUBLISHED_BLUE} 100%, ${PUBLISHED_GREEN})`,
             `color-mix(in srgb, ${PUBLISHED_BLUE} 0%, ${PUBLISHED_GREEN})`,
@@ -464,6 +533,12 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
         assert.strictEqual(registeredTheme.rangeSelector.sliderHandle.color, PUBLISHED_PRIMARY, 'rangeSelector slider handle');
     });
 
+    QUnit.test(`fluent-next theme should mark a range that is not allowed with the published danger: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.invalidRangeColor, PUBLISHED_DANGER, 'rangeSelector invalid range');
+    });
+
     QUnit.test(`fluent-next theme should paint the shapes that are data with the published blue: ${theme}`, function(assert) {
         const registeredTheme = getRegisteredTheme(theme);
 
@@ -473,6 +548,103 @@ const PUBLISHED_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
         assert.strictEqual(registeredTheme.bullet.color, PUBLISHED_BLUE, 'bullet');
         assert.strictEqual(registeredTheme.gauge.valueIndicators.rangebar.color, PUBLISHED_BLUE, 'gauge rangebar');
         assert.strictEqual(registeredTheme.gauge.valueIndicators['textcloud'].color, PUBLISHED_BLUE, 'gauge textcloud');
+        assert.strictEqual(registeredTheme.sparkline.lineColor, PUBLISHED_BLUE, 'sparkline line');
+        assert.strictEqual(registeredTheme.sparkline.firstLastColor, PUBLISHED_BLUE, 'sparkline first and last point');
+    });
+
+    QUnit.test(`fluent-next theme should paint a falling value with the published red: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.chart.commonSeriesSettings.candlestick.reduction.color, PUBLISHED_RED, 'candlestick reduction');
+        assert.strictEqual(registeredTheme.chart.commonSeriesSettings.stock.reduction.color, PUBLISHED_RED, 'stock reduction');
+        assert.strictEqual(registeredTheme.rangeSelector.chart.commonSeriesSettings.candlestick.reduction.color, PUBLISHED_RED, 'rangeSelector candlestick reduction');
+        assert.strictEqual(registeredTheme.rangeSelector.chart.commonSeriesSettings.stock.reduction.color, PUBLISHED_RED, 'rangeSelector stock reduction');
+    });
+
+    QUnit.test(`fluent-next theme should mark the extremes of a sparkline with the published yellow and red: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.sparkline.minColor, PUBLISHED_YELLOW, 'sparkline minimum');
+        assert.strictEqual(registeredTheme.sparkline.maxColor, PUBLISHED_RED, 'sparkline maximum');
+    });
+
+    QUnit.test(`fluent-next theme should keep a win and a loss grey, from the published pair: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.sparkline.winColor, PUBLISHED_GRAY, 'sparkline win');
+        assert.strictEqual(registeredTheme.sparkline.barPositiveColor, PUBLISHED_GRAY, 'sparkline bar above zero');
+        assert.strictEqual(registeredTheme.sparkline.lossColor, quiet, 'sparkline loss');
+        assert.strictEqual(registeredTheme.sparkline.barNegativeColor, quiet, 'sparkline bar below zero');
+    });
+
+    QUnit.test(`fluent-next theme should leave a sankey link without a meaning, in the published grey: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.sankey.link.color, PUBLISHED_GRAY, 'sankey link');
+    });
+
+    QUnit.test(`fluent-next theme should draw the marks that stand out with the published content: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.bullet.targetColor, ink, 'bullet target');
+    });
+
+    QUnit.test(`fluent-next theme should name the fills an application can switch on: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.treeMap.tile.color, PUBLISHED_BLUE, 'tree map tile fill');
+        assert.strictEqual(registeredTheme.rangeSelector.background.color, rangePlate, 'range selector plate');
+        assert.strictEqual(registeredTheme.map['layer:area'].color, quiet, 'map area fill');
+    });
+
+    QUnit.test(`fluent-next theme should keep a mark that lies on a data colour out of the mode: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.treeMap.tile.border.color, PUBLISHED_TILE_BORDER, 'tree map tile border');
+    });
+
+    QUnit.test(`fluent-next theme should read the axis a step quieter than the rest of the text: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.font.color, axis, 'widget font, which axis and legend labels take');
+        assert.strictEqual(registeredTheme.axisColor, axis, 'axis line and its ticks');
+        assert.strictEqual(registeredTheme.secondaryTitleColor, axis, 'legend labels and axis titles');
+        assert.strictEqual(registeredTheme.title.subtitle.font.color, ink, 'the subtitle stays with the title');
+    });
+
+    QUnit.test(`fluent-next theme should draw a map line in the published orange: ${theme}`, function(assert) {
+        const line = getRegisteredTheme(theme).map['layer:line'];
+
+        assert.strictEqual(line.color, PUBLISHED_ORANGE, 'map line at rest');
+        assert.strictEqual(line.hoveredColor, mapLineHovered, 'map line under the pointer');
+        assert.strictEqual(line.selectedColor, ink, 'map line selected');
+    });
+
+    QUnit.test(`fluent-next theme should draw the crosshair with its own published name: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.chart.crosshair.color, crosshair, 'chart crosshair');
+    });
+
+    QUnit.test(`fluent-next theme should name every gauge indicator the theme draws: ${theme}`, function(assert) {
+        const { valueIndicators } = getRegisteredTheme(theme).gauge;
+
+        const painted = {};
+        Object.keys(valueIndicators).forEach((indicator) => {
+            ['color', 'secondColor'].forEach((slot) => {
+                if(valueIndicators[indicator][slot] !== undefined) {
+                    painted[`${indicator}.${slot}`] = valueIndicators[indicator][slot];
+                }
+            });
+        });
+
+        assert.deepEqual(painted, {
+            '_default.color': needle,
+            'rangebar.color': PUBLISHED_BLUE,
+            'textcloud.color': PUBLISHED_BLUE,
+            'trianglemarker.color': PUBLISHED_BLUE,
+            'twocolorneedle.secondColor': PUBLISHED_RED,
+        });
     });
 });
 

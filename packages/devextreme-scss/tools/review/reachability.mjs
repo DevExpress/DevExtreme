@@ -246,6 +246,13 @@ const STYLE_QUERY_READ = /style\(\s*(--dx-[a-z0-9-]+)/g;
  */
 const runtimeReads = JSON.parse(readFileSync(join(packageRoot, 'tools', 'naming', 'runtime-reads.json'), 'utf8'))
   .variables.map(({ name }) => name);
+/*
+ * And the chart themes: js/__internal/viz writes the --dx-viz-* names listed in
+ * tools/naming/viz-contract.json into SVG markup as var() references, so the stylesheet never
+ * reads them; tests/viz-contract.test.ts keeps that file honest.
+ */
+const vizReads = JSON.parse(readFileSync(join(packageRoot, 'tools', 'naming', 'viz-contract.json'), 'utf8'))
+  .variables.map(({ name }) => name);
 
 const live = new Set();
 const frontier = [];
@@ -262,7 +269,7 @@ root.walkAtRules('container', (rule) => {
   [...rule.params.matchAll(STYLE_QUERY_READ)]
     .map(([, name]) => name).filter(isTierName).forEach(wake);
 });
-runtimeReads.forEach(wake);
+[...runtimeReads, ...vizReads].forEach(wake);
 while (frontier.length) {
   (declaredValues.get(frontier.pop()) ?? []).forEach((value) => readsOf(value).forEach(wake));
 }

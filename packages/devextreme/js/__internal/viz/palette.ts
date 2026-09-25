@@ -23,13 +23,20 @@ import { fallbackOf } from '@ts/core/utils/css_variables';
 import { mixColors, shiftChannels, shiftLightness } from '@ts/viz/color_math';
 import { normalizeEnum } from '@ts/viz/core/utils';
 
-const FLUENT_NEXT_VIZ_BLUE = 'var(--dx-viz-blue, #0078d4)';
-const FLUENT_NEXT_VIZ_GREEN = 'var(--dx-viz-green, #008f04)';
-const FLUENT_NEXT_VIZ_PINK = 'var(--dx-viz-pink, #e43ba6)';
-const FLUENT_NEXT_VIZ_PRIMARY = 'var(--dx-viz-primary, #0f6cbd)';
-const FLUENT_NEXT_VIZ_PURPLE = 'var(--dx-viz-purple, #865cbf)';
-const FLUENT_NEXT_VIZ_RED = 'var(--dx-viz-red, #c83d3d)';
-const FLUENT_NEXT_VIZ_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
+const FLUENT_NEXT_VIZ = {
+  primary: 'var(--dx-viz-primary, #0f6cbd)',
+
+  blue: 'var(--dx-viz-blue, #0078d4)',
+  red: 'var(--dx-viz-red, #c83d3d)',
+  green: 'var(--dx-viz-green, #008f04)',
+  yellow: 'var(--dx-viz-yellow, #eaa300)',
+  pink: 'var(--dx-viz-pink, #e43ba6)',
+  purple: 'var(--dx-viz-purple, #865cbf)',
+
+  success: 'var(--dx-viz-success, #107c10)',
+  warning: 'var(--dx-viz-warning, #f7630c)',
+  danger: 'var(--dx-viz-danger, #c50f1f)',
+};
 
 const HIGHLIGHTING_STEP = 50;
 const DEFAULT_PALETTE = 'material';
@@ -53,16 +60,16 @@ const palettes = {
 
   'fluent next': {
     simpleSet: [
-      FLUENT_NEXT_VIZ_BLUE,
-      FLUENT_NEXT_VIZ_RED,
-      FLUENT_NEXT_VIZ_GREEN,
-      FLUENT_NEXT_VIZ_YELLOW,
-      FLUENT_NEXT_VIZ_PINK,
-      FLUENT_NEXT_VIZ_PURPLE,
+      FLUENT_NEXT_VIZ.blue,
+      FLUENT_NEXT_VIZ.red,
+      FLUENT_NEXT_VIZ.green,
+      FLUENT_NEXT_VIZ.yellow,
+      FLUENT_NEXT_VIZ.pink,
+      FLUENT_NEXT_VIZ.purple,
     ],
-    indicatingSet: [FLUENT_NEXT_VIZ_GREEN, FLUENT_NEXT_VIZ_YELLOW, FLUENT_NEXT_VIZ_RED],
-    gradientSet: [FLUENT_NEXT_VIZ_BLUE, FLUENT_NEXT_VIZ_GREEN],
-    accentColor: FLUENT_NEXT_VIZ_PRIMARY,
+    indicatingSet: [FLUENT_NEXT_VIZ.success, FLUENT_NEXT_VIZ.warning, FLUENT_NEXT_VIZ.danger],
+    gradientSet: [FLUENT_NEXT_VIZ.blue, FLUENT_NEXT_VIZ.green],
+    accentColor: FLUENT_NEXT_VIZ.primary,
   },
 
   'harmony light': {

@@ -2140,6 +2140,56 @@ QUnit.test('Process items return nothing - get original items', function(assert)
     });
 });
 
+QUnit.test('customizeItems receives the painted fill, the marker keeps the name', function(assert) {
+    const handed = [];
+    this.data[0].states.normal.fill = 'var(--probe-fill, #123456)';
+    this.options.customizeItems = function(items) {
+        handed.push(items[0].marker.fill, items[0].states.normal.fill);
+    };
+
+    this.createAndDrawLegend();
+
+    assert.deepEqual(handed, ['#123456', '#123456']);
+    assert.deepEqual(this.createMarker.getCall(0).returnValue.attr.getCall(0).args, [{ fill: 'var(--probe-fill, #123456)', opacity: 1, filter: undefined }]);
+});
+
+QUnit.test('customizeItems keeps the marker fill the application sets', function(assert) {
+    this.data[0].states.normal.fill = 'var(--probe-fill, #123456)';
+    this.options.customizeItems = function(items) {
+        items[0].marker.fill = '#abcdef';
+    };
+
+    this.createAndDrawLegend();
+
+    assert.deepEqual(this.createMarker.getCall(0).returnValue.attr.getCall(0).args, [{ fill: '#abcdef', opacity: 1, filter: undefined }]);
+});
+
+QUnit.test('customizeItems receives the painted hover fill, the hovered marker keeps the name', function(assert) {
+    const handed = [];
+    this.data[0].states.hover = { fill: 'var(--probe-fill, #123456)', hatching: { direction: 'none' } };
+    this.options.customizeItems = function(items) {
+        handed.push(items[0].states.hover.fill);
+    };
+
+    this.createAndDrawLegend();
+    this.legend.applyHover(0);
+
+    assert.deepEqual(handed, ['#123456']);
+    assert.deepEqual(this.createMarker.lastCall.returnValue.attr.getCall(0).args, [{ fill: 'var(--probe-fill, #123456)', opacity: 1, filter: undefined }]);
+});
+
+QUnit.test('customizeItems keeps the hover fill the application sets', function(assert) {
+    this.data[0].states.hover = { fill: 'var(--probe-fill, #123456)', hatching: { direction: 'none' } };
+    this.options.customizeItems = function(items) {
+        items[0].states.hover.fill = '#abcdef';
+    };
+
+    this.createAndDrawLegend();
+    this.legend.applyHover(0);
+
+    assert.deepEqual(this.createMarker.lastCall.returnValue.attr.getCall(0).args, [{ fill: '#abcdef', opacity: 1, filter: undefined }]);
+});
+
 QUnit.test('Do not render hidden items', function(assert) {
     this.data[1].visible = false;
     this.createAndDrawLegend();
@@ -2690,6 +2740,22 @@ QUnit.test('Call second time when state changed', function(assert) {
     assert.equal(this.options.markerTemplate.callCount, 1);
     assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.state, 'hovered');
     assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.opacity, 0.2);
+});
+
+QUnit.test('Template receives the painted fills, the item keeps the names', function(assert) {
+    this.data[0].states.normal.fill = 'var(--probe-fill, #123456)';
+    this.data[0].states.hover.fill = 'var(--probe-hover, #abcdef)';
+
+    this.createAndDrawLegend();
+
+    const model = this.options.markerTemplate.lastCall.args[0];
+
+    assert.equal(model.marker.fill, '#123456');
+    assert.equal(model.states.normal.fill, '#123456');
+    assert.equal(model.states.hover.fill, '#abcdef');
+    assert.equal(this.data[0].marker.fill, 'var(--probe-fill, #123456)');
+    assert.equal(this.data[0].states.normal.fill, 'var(--probe-fill, #123456)');
+    assert.equal(this.data[0].states.hover.fill, 'var(--probe-hover, #abcdef)');
 });
 
 QUnit.test('can customize legendItem.marker.size', function(assert) {

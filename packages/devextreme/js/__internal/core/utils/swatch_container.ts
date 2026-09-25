@@ -1,6 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { value } from '@js/core/utils/view_port';
+import { getWindow, hasWindow } from '@js/core/utils/window';
 import { resolvedThemeMode } from '@ts/core/utils/theme_mode';
 
 const SWATCH_CONTAINER_CLASS_PREFIX = 'dx-swatch-';
@@ -36,8 +37,6 @@ const getContainerClasses = (
   $viewport: dxElementWrapper,
 ): string[] => {
   const classes = scopeClasses($element);
-  // A scope the viewport already resolves to needs no container of its own: it would be a wrapper
-  // that repaints nothing.
   const sorted = (cssClasses: string[]): string => [...cssClasses].sort().join(' ');
 
   return sorted(classes) === sorted(scopeClasses($viewport)) ? [] : classes;
@@ -49,6 +48,24 @@ const isExactScope = (
 ): boolean => [SWATCH_CONTAINER_CLASS_PREFIX, THEME_MODE_CLASS_PREFIX]
   .every((prefix) => classesByPrefix(node, prefix)
     .every((cssClass) => containerClasses.includes(cssClass)));
+
+const HOST_NEUTRAL_VALUES: Record<string, string> = {
+  overflow: 'visible',
+  'overflow-x': 'visible',
+  'overflow-y': 'visible',
+  'clip-path': 'none',
+  contain: 'none',
+  transform: 'none',
+  filter: 'none',
+  perspective: 'none',
+};
+
+const hostsWithoutClipping = (node: Element): boolean => {
+  const style = hasWindow() ? getWindow().getComputedStyle(node) : undefined;
+
+  return Object.entries(HOST_NEUTRAL_VALUES)
+    .every(([property, neutral]) => ['', neutral].includes(style?.getPropertyValue(property) ?? ''));
+};
 
 const getSwatchContainer = (
   element: Element | dxElementWrapper,
@@ -69,7 +86,7 @@ const getSwatchContainer = (
   let $container = $($viewport
     .children(selector)
     .toArray()
-    .filter((node) => isExactScope(node, containerClasses)));
+    .filter((node) => isExactScope(node, containerClasses) && hostsWithoutClipping(node)));
 
   if (!$container.length) {
     $container = $('<div>').addClass(containerClasses.join(' ')).appendTo($viewport);
