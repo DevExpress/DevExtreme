@@ -126,3 +126,11 @@ export type ColumnsControllerOptionChanged = OptionChanged
   | OptionChangedFor<ColumnsControllerOptions>
   | OptionChangedFor<Pick<DataGridProperties, 'grouping' | 'groupPanel'>>
   | ColumnOptionChanged;
+
+export type ColumnOptionGetter = (column: Column, options?: { functionsAsIs: boolean }) => unknown;
+
+export type ColumnOptionSetter = (
+  column: Column,
+  value: unknown,
+  options: { functionsAsIs: boolean },
+) => void;

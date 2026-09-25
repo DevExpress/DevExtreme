@@ -1,4 +1,3 @@
-/* eslint-disable prefer-destructuring */
 import type { DataType, HorizontalAlignment } from '@js/common';
 import type { Format } from '@js/common/core/localization';
 import numberLocalization from '@js/common/core/localization/number';
@@ -37,8 +36,8 @@ import {
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 import type {
-  Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnsChanges, DropLocationNames,
-  ValueSerializers,
+  Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionGetter, ColumnOptionSetter,
+  ColumnsChanges, DropLocationNames, ValueSerializers,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
@@ -758,39 +757,50 @@ export const fireOptionChanged = function (that: ColumnsController, options) {
   }
 };
 
-export const columnOptionCore = function (that: ColumnsController, column, optionName, value?, notFireEvent?) {
-  const optionGetter = compileGetter(optionName);
-  const columnIndex = column.index;
-  let columns;
-  let changeType: ColumnChangeType;
-  let initialColumn;
+export const resolveChangeType = (optionName: string): ColumnChangeType => {
+  switch (optionName) {
+    case 'groupIndex':
+    case 'calculateGroupValue':
+      return 'grouping';
+    case 'sortIndex':
+    case 'sortOrder':
+    case 'calculateSortValue':
+      return 'sorting';
+    default:
+      return 'columns';
+  }
+};
+
+// will be converted to method, no need to create special name for func
+// eslint-disable-next-line func-names
+export const columnOptionCore = function (
+  that: ColumnsController,
+  column: Column,
+  optionName: string,
+  value?: unknown,
+  notFireEvent?: boolean,
+): unknown {
+  const optionGetter = compileGetter(optionName) as ColumnOptionGetter;
 
   if (arguments.length === 3) {
-    // @ts-expect-error
     return optionGetter(column, { functionsAsIs: true });
   }
-  // @ts-expect-error
   const prevValue = optionGetter(column, { functionsAsIs: true });
   if (!equalByValue(prevValue, value, { maxDepth: 5 })) {
+    const changeType = resolveChangeType(optionName);
+    const columnIndex = column.index;
+
     if (optionName === 'groupIndex') {
-      changeType = 'grouping';
       updateSortOrderWhenGrouping(that, column, value, prevValue);
-    } else if (optionName === 'calculateGroupValue') {
-      changeType = 'grouping';
-    } else if (optionName === 'sortIndex' || optionName === 'sortOrder' || optionName === 'calculateSortValue') {
-      changeType = 'sorting';
-    } else {
-      changeType = 'columns';
     }
 
-    const optionSetter = compileSetter(optionName);
-    // @ts-expect-error
+    const optionSetter = compileSetter(optionName) as ColumnOptionSetter;
     optionSetter(column, value, { functionsAsIs: true });
     const fullOptionName = getColumnFullPath(that, column);
 
     if (COLUMN_INDEX_OPTIONS[optionName]) {
       updateIndexes(that, column);
-      // @ts-expect-error
+      // eslint-disable-next-line no-param-reassign
       value = optionGetter(column);
     }
 
@@ -798,20 +808,21 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
       that._checkColumns();
     }
 
-    if (!isDefined(prevValue) && !isDefined(value) && optionName.indexOf('buffer') !== 0 && notFireEvent !== false) {
+    if (!isDefined(prevValue) && !isDefined(value) && !optionName.startsWith('buffer') && notFireEvent !== false) {
+      // eslint-disable-next-line no-param-reassign
       notFireEvent = true;
     }
 
     if (!notFireEvent) {
       // T346972
-      if (!USER_STATE_FIELD_NAMES.includes(optionName) && optionName !== 'visibleWidth') {
-        columns = that.option('columns');
-        initialColumn = that.getColumnByPath(fullOptionName, columns);
-        if (isString(initialColumn)) {
-          initialColumn = columns[columnIndex] = { dataField: initialColumn };
+      if (!(USER_STATE_FIELD_NAMES as readonly string[]).includes(optionName) && optionName !== 'visibleWidth') {
+        const columns = that.option('columns');
+        let initialColumn = that.getColumnByPath(fullOptionName, columns);
+        if (columns && isString(initialColumn)) {
+          initialColumn = { dataField: initialColumn };
+          columns[columnIndex as number] = initialColumn;
         }
         if (initialColumn && checkUserStateColumn(initialColumn, column)) {
-          // @ts-expect-error
           optionSetter(initialColumn, value, { functionsAsIs: true });
         }
       }
@@ -820,17 +831,21 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
       resetColumnsCache(that);
     }
 
-    fullOptionName && fireOptionChanged(that, {
-      fullOptionName,
-      optionName,
-      value,
-      prevValue,
-    });
+    if (fullOptionName) {
+      fireOptionChanged(that, {
+        fullOptionName,
+        optionName,
+        value,
+        prevValue,
+      });
+    }
 
     if (column.type === AI_COLUMN_NAME) {
       that.aiColumnOptionChanged.fire(column, optionName, value);
     }
   }
+
+  return undefined;
 };
 
 export function isSortOrderValid(sortOrder) {
