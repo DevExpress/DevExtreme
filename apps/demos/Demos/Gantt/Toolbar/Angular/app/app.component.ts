@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxGanttModule, DxPopupModule } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import {
@@ -38,10 +40,11 @@ export class AppComponent {
     stylingMode: 'text',
     onClick: () => {
       this.popupVisible = true;
+      this.changeDetectorRef.detectChanges();
     },
   };
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.tasks = service.getTasks();
     this.dependencies = service.getDependencies();
     this.resources = service.getResources();

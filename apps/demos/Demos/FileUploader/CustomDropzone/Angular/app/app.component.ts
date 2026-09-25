@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxFileUploaderModule, DxProgressBarModule } from 'devextreme-angular';
 import 'anti-forgery';
 
@@ -29,7 +31,7 @@ export class AppComponent {
 
   allowedFileExtensions: string[] = ['.jpg', '.jpeg', '.gif', '.png'];
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     this.onDropZoneEnter = this.onDropZoneEnter.bind(this);
     this.onDropZoneLeave = this.onDropZoneLeave.bind(this);
     this.onUploaded = this.onUploaded.bind(this);
@@ -63,6 +65,7 @@ export class AppComponent {
     fileReader.onload = () => {
       this.isDropZoneActive = false;
       this.imageSource = fileReader.result as string;
+      this.changeDetectorRef.detectChanges();
     };
     fileReader.readAsDataURL(file);
     this.textVisible = false;

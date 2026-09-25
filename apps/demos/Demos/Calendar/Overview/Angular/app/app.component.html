@@ -7,6 +7,7 @@
       [disabled]="false"
       [firstDayOfWeek]="0"
       [zoomLevel]="zoomLevels[0]"
+      (zoomLevelChange)="onZoomLevelChange()"
       [cellTemplate]="cellTemplate"
       weekNumberRule="auto"
     >

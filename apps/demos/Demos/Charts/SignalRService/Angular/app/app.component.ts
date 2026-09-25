@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DecimalPipe, CurrencyPipe } from '@angular/common';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import { CustomStore } from 'devextreme-angular/common/data';
@@ -25,7 +27,11 @@ export class AppComponent {
 
   connectionStarted = false;
 
-  constructor(private decimalPipe: DecimalPipe, private currencyPipe: CurrencyPipe) {
+  constructor(
+    private decimalPipe: DecimalPipe,
+    private currencyPipe: CurrencyPipe,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {
     const hubConnection = new HubConnectionBuilder()
       .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub', {
         skipNegotiation: true,
@@ -46,6 +52,7 @@ export class AppComponent {
         });
         this.dataSource = store;
         this.connectionStarted = true;
+        this.changeDetectorRef.detectChanges();
       });
   }
 
