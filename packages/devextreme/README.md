@@ -10,7 +10,7 @@ Other packages in the repository include:
 * [devextreme-themebuilder](/packages/devextreme-themebuilder)
 
 ## Playground
-For a testing components manually, developers can use internal playground. It runs by a script:
+To test components manually, developers can use the internal playground. It runs via the following script:
 ```
 pnpm dev:playground
 ```
