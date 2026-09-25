@@ -568,6 +568,7 @@
   "--dx-data-grid-group-row-font-weight",
   "--dx-data-grid-outline-offset-focused",
   "--dx-data-grid-sticky-column-border",
+  "--dx-datagrid-row-alternation-bg",
   "--dx-date-box-apply-button-margin-inline-end",
   "--dx-date-box-button-margin-inline-end",
   "--dx-date-box-button-min-width",

@@ -122,6 +122,11 @@
       "since": "2026-09-26"
     },
     {
+      "name": "--dx-datagrid-row-alternation-bg",
+      "reason": "Declared identically in all four themes, never read via var() by any of them internally - a read-only mirror of the row-alternation colour, not a knob. Read directly by ~30 theme-agnostic demo files (DataGrid/TreeList/Scheduler/TreeView, 5 frameworks) with no fallback. A same-value component-tier name, --dx-grid-row-alternation-bg, exists but is fluent-next-only; pointing the demos at it (tried 2026-09-25, commit 749ed160) broke rendering under fluent/material - the property came back undefined there, and its transparent background let a hidden AI-suggestion layer under .ai__cell bleed through (caught by CI screenshot diffs on fluent.blue.light and material.blue.light). Reverted; kept under its original name.",
+      "since": "2026-09-26"
+    },
+    {
       "name": "--dx-file-manager-file-actions-button-top-bottom-padding",
       "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $file-manager-button-content-padding, live via --dx-file-manager-button-content-padding)",
       "since": "2026-09-26"
