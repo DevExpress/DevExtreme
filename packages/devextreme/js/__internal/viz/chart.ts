@@ -51,7 +51,6 @@ import { AdvancedChart } from './chart_components/advanced_chart';
 import { overlapping } from './chart_components/base_chart';
 
 const DEFAULT_PANE_NAME = 'default';
-const VISUAL_RANGE = 'VISUAL_RANGE';
 const DEFAULT_PANES = [{
   name: DEFAULT_PANE_NAME,
   border: {},
@@ -1628,13 +1627,6 @@ class Chart extends AdvancedChart {
       minVisible: isDiscrete ? range.minVisible || categories[0] : range.minVisible,
       maxVisible: isDiscrete ? range.maxVisible || categories[categories.length - 1] : range.maxVisible,
     };
-  }
-
-  _change_FULL_RENDER(): void {
-    super._change_FULL_RENDER();
-    if (this._changes.has(VISUAL_RANGE)) {
-      this._raiseZoomEndHandlers();
-    }
   }
 
   _getAxesForScaling(): ThemeValue {
