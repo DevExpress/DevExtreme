@@ -6,7 +6,6 @@
 @mixin publish {
   --dx-switch-bg: #{$switch-bg};
   --dx-switch-border-disabled: #{$switch-border-disabled};
-  --dx-switch-box-shadow: #{$switch-box-shadow};
   --dx-switch-container-border-radius: #{$switch-container-border-radius};
   --dx-switch-container-margin-block: #{$switch-container-margin-block};
   --dx-switch-container-rtl-offset: #{$switch-container-rtl-offset};
@@ -18,9 +17,6 @@
   --dx-switch-handle-off-bg-active: #{$switch-handle-off-bg-active};
   --dx-switch-handle-off-bg-hovered: #{$switch-handle-off-bg-hovered};
   --dx-switch-handle-on-bg: #{$switch-handle-on-bg};
-  --dx-switch-handle-on-box-shadow: #{$switch-handle-on-box-shadow};
-  --dx-switch-handle-on-box-shadow-blur: #{$switch-handle-on-box-shadow-blur};
-  --dx-switch-handle-on-shadow: #{$switch-handle-on-shadow};
   --dx-switch-height: #{$switch-height};
   --dx-switch-invalid-bg: #{$switch-invalid-bg};
   --dx-switch-invalid-bg-focused: #{$switch-invalid-bg-focused};

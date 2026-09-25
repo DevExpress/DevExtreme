@@ -3,7 +3,6 @@
 @use "../../../_design-system/variables/ds" as ds;
 
 $switch-transition: all 0.2s cubic-bezier(0.33, 0, 0.67, 1) !default;
-$switch-box-shadow: none !default;
 
 $switch-handle-border-radius: 50% !default;
 
@@ -14,9 +13,6 @@ $switch-container-margin-block: 0 !default;
 $switch-height: null !default;
 $switch-handle-height: null !default;
 
-$switch-handle-on-box-shadow-blur: 0 !default;
-
-$switch-handle-on-box-shadow: 0 0 0 $switch-handle-on-box-shadow-blur $switch-handle-on-shadow !default;
 $switch-container-rtl-offset: ds.$spacing-60 !default;
 
 @if $size == "default" {

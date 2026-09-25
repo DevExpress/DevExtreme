@@ -40,12 +40,7 @@ $popup-content-box-shadow-focused: ds.$box-shadow-2xl !default;
   $popup-toolbar-height: ds.$spacing-360 !default;
 }
 
-:root {
-  --dx-popup-toolbar-item-padding-inline: #{$popup-toolbar-item-spacing};
-}
-
 $popup-title-border-block-end: ds.$border-width-10 solid !default;
 $popup-title-min-height: ds.$spacing-280 !default;
 
 $popup-title-padding: ds.$spacing-100 !default;
-$popup-dialog-message-padding: ds.$spacing-100 ds.$spacing-100 ds.$spacing-50 ds.$spacing-100 !default;

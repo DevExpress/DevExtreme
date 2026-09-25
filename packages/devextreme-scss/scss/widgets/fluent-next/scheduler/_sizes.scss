@@ -281,13 +281,11 @@ $scheduler-timeline-group-header-width: ds.$spacing-800 !default;
 $scheduler-timeline-group-three-empty-cell-width: 240px !default; // dx-offscale: 240px
 $scheduler-timeline-cell-width: 200px !default; // dx-offscale: 200px
 $scheduler-agenda-left-column-width: ds.$spacing-720 !default;
-$scheduler-group-header-agenda-font-size: ds.$font-size-180 !default; // dx-no-semantic-role: 18px has no font-size role
 $scheduler-agenda-date-table-padding-block-start: ds.$spacing-100 !default;
 $scheduler-virtual-row-height: ds.$spacing-480 !default;
 
 $scheduler-all-day-table-cell-height: calc(#{$scheduler-workspace-date-table-cell-height} * 1.5) !default;
 
-$scheduler-appointment-collector-height: ds.$spacing-220 !default;
 $scheduler-appointment-min-size: ds.$spacing-40 !default;
 $scheduler-appointment-reduced-content-padding: ds.$spacing-400 !default;
 $scheduler-appointment-month-text-font-size: ds.$font-size-base-sm !default;
