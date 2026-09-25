@@ -56,6 +56,7 @@
     "--dx-color-warning",
     "--dx-component-color-bg",
     "--dx-data-grid-group-panel-item-padding-block",
+    "--dx-datagrid-row-alternation-bg",
     "--dx-file-manager-file-actions-button-top-bottom-padding",
     "--dx-font-size",
     "--dx-font-size-heading-1",
