@@ -144,6 +144,20 @@ QUnit.test('Label color if useNodeColors set to true', function(assert) {
     assert.equal(nodes[2].attr.lastCall.args[0].fill, this.label(2).css.firstCall.args[0].fill);
 });
 
+QUnit.test('Label with useNodeColors takes the node fill by name', function(assert) {
+    createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
+        node: {
+            color: 'var(--probe-fill, #123456)'
+        },
+        label: {
+            useNodeColors: true
+        }
+    });
+
+    assert.equal(this.label(0).css.firstCall.args[0].fill, 'var(--probe-fill, #123456)');
+});
+
 QUnit.test('Labels customize text', function(assert) {
     const customizeText = function(node) {
         return 'test text ' + node.label;

@@ -383,7 +383,7 @@ export const plugin = {
           strategy: connectorStrategy,
         });
 
-        label.setOptions(getLabelOptions(labelOptions, item.color, that._defaultLabelTextAlignment()));
+        label.setOptions(getLabelOptions(labelOptions, item.fill, that._defaultLabelTextAlignment()));
 
         label.setData({
           item,

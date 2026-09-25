@@ -39,7 +39,7 @@ function Item(widget, options) {
   that.percent = options.percent;
 
   that.id = options.id;
-  that.color = options.color;
+  that.fill = options.color;
 
   that.states = {
     normal: parseStyles(options.color, options.itemOptions, options.itemOptions),
@@ -49,6 +49,14 @@ function Item(widget, options) {
 }
 
 Item.prototype = {
+  get color() {
+    return this.getColor();
+  },
+
+  set color(value) {
+    this.fill = value;
+  },
+
   getState() {
     return states[this.code];
   },
@@ -101,7 +109,7 @@ Item.prototype = {
   },
 
   getColor() {
-    return paintedColor(this.color, this.widget._renderer?.root?.element);
+    return paintedColor(this.fill, this.widget._renderer?.root?.element);
   },
 
   isHovered() {
