@@ -60,6 +60,7 @@ export interface InternalColumnOptions extends ValueSerializers {
   hidingPriority?: number;
   ai?: ColumnAIOptions;
   command?: string;
+  headerId?: string;
   showWhenGrouped?: boolean;
   rowspan?: number;
   colspan?: number;
@@ -127,3 +128,9 @@ export type ColumnsControllerOptionChanged = OptionChanged
   | OptionChangedFor<ColumnsControllerOptions>
   | OptionChangedFor<Pick<DataGridProperties, 'grouping' | 'groupPanel'>>
   | ColumnOptionChanged;
+
+export interface BandColumnsCache {
+  isPlain: boolean;
+  columnChildrenByIndex: Record<number, Column[]>;
+  columnParentByIndex: Record<number, Column>;
+}

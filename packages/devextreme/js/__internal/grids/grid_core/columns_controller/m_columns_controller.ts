@@ -1619,7 +1619,7 @@ export class ColumnsController extends modules.Controller {
 
       if (column.isBand) {
         const childIndexes = that.getChildrenByBandColumn(column.index).map((column) => column.index);
-        that._columns = that._columns.filter((column) => childIndexes.indexOf(column.index) < 0);
+        that._columns = that._columns.filter((column) => !childIndexes.includes(column.index));
       }
 
       updateIndexes(that);
@@ -1924,7 +1924,9 @@ export class ColumnsController extends modules.Controller {
     if (onlyVisibleDirectChildren) {
       return result
         .filter((column) => column.visible && !column.command)
-        .sort((column1, column2) => column1.visibleIndex - column2.visibleIndex);
+        .sort((column1, column2) => (
+          (column1.visibleIndex as number) - (column2.visibleIndex as number)
+        ));
     }
 
     return result;
