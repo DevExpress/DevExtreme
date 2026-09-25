@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import type { DataType, HorizontalAlignment } from '@js/common';
 import type { Format } from '@js/common/core/localization';
 import numberLocalization from '@js/common/core/localization/number';
@@ -37,8 +38,8 @@ import {
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 import type {
-  Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionGetter, ColumnOptionSetter,
-  ColumnsChanges, ColumnUserState, DropLocationNames, ValueSerializers,
+  BandColumnsCache, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionGetter,
+  ColumnOptionSetter, ColumnsChanges, ColumnUserState, DropLocationNames, ValueSerializers,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
@@ -280,30 +281,34 @@ export const calculateColspan = function (that: ColumnsController, columnID) {
   return colspan;
 };
 
-export const processBandColumns = function (that: ColumnsController, columns, bandColumnsCache) {
-  let rowspan;
-
-  for (let i = 0; i < columns.length; i++) {
-    const column = columns[i];
-
-    if (column.visible || column.command) {
-      if (column.isBand) {
-        column.colspan = column.colspan || calculateColspan(that, column.index);
-      }
-
-      if (!column.isBand || !column.colspan) {
-        rowspan = that.getRowCount();
-
-        if (!column.command && (!isDefined(column.groupIndex) || column.showWhenGrouped)) {
-          rowspan -= getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex).length;
-        }
-
-        if (rowspan > 1) {
-          column.rowspan = rowspan;
-        }
-      }
+export const processBandColumns = (
+  that: ColumnsController,
+  columns: Column[],
+  bandColumnsCache: BandColumnsCache,
+): void => {
+  columns.forEach((column) => {
+    if (!column.visible && !column.command) {
+      return;
     }
-  }
+
+    if (column.isBand && !column.colspan) {
+      column.colspan = calculateColspan(that, column.index);
+    }
+
+    if (column.isBand && column.colspan) {
+      return;
+    }
+
+    let rowspan: number = that.getRowCount();
+
+    if (!column.command && (!isDefined(column.groupIndex) || column.showWhenGrouped)) {
+      rowspan -= getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex).length;
+    }
+
+    if (rowspan > 1) {
+      column.rowspan = rowspan;
+    }
+  });
 };
 
 export const getValueDataType = (value: unknown): Exclude<DataType, 'datetime'> | undefined => {
