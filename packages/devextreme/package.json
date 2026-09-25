@@ -160,7 +160,7 @@
     "update-ts-bundle": "dx-tools generate-ts-bundle --sources ./js --output-path ./ts/dx.all.d.ts",
     "regenerate": "pnpm run update-ts-bundle && pnpm run update-ts-reexports",
     "validate-ts": "pnpm nx run devextreme:validate:ts",
-    "check-types": "tsc --noEmit -p js/__internal/tsconfig.json",
+    "check-types": "tsc --noEmit -p js/__internal/tsconfig.json && tsc --noEmit -p js/viz/vector_map.utils/tsconfig.json",
     "validate-declarations": "dx-tools validate-declarations --sources ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "test-jest": "cross-env NODE_OPTIONS='--expose-gc' jest --no-coverage --runInBand --selectProjects jsdom-tests",
     "test-jest:watch": "jest --watch",
