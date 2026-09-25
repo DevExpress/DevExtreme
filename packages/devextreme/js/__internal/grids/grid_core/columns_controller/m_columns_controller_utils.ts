@@ -19,6 +19,7 @@ import type { DataGridCommandColumnType } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
+import type DataSourceAdapter from '../data_source_adapter/m_data_source_adapter';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
@@ -37,7 +38,7 @@ import {
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 import type {
-  Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnsChanges, DropLocationNames,
+  Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnsChanges, ColumnUserState, DropLocationNames,
   ValueSerializers,
 } from './types';
 
@@ -71,69 +72,97 @@ export const setFilterOperationsAsDefaultValues = (column: Column): void => {
 
 let globalColumnId = 1;
 
-export const createColumn = function (that: ColumnsController, columnOptions, userStateColumnOptions?, bandColumn?): any {
-  let commonColumnOptions = {};
-
-  if (columnOptions) {
-    if (isString(columnOptions)) {
-      columnOptions = {
-        dataField: columnOptions,
-      };
-    }
-
-    that.setName(columnOptions);
-
-    let result = {};
-    if (columnOptions.command) {
-      result = deepExtendArraySafe(commonColumnOptions, columnOptions);
-    } else {
-      commonColumnOptions = that.getCommonSettings(columnOptions);
-      if (userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
-        columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
-      }
-      const calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
-      if (!columnOptions.type) {
-        result = { headerId: `dx-col-${globalColumnId++}` };
-      }
-      result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS, false, true);
-      deepExtendArraySafe(result, commonColumnOptions, false, true);
-      deepExtendArraySafe(result, calculatedColumnOptions, false, true);
-      deepExtendArraySafe(result, columnOptions, false, true);
-      deepExtendArraySafe(result, { selector: null }, false, true);
-    }
-    if (columnOptions.filterOperations === columnOptions.defaultFilterOperations) {
-      setFilterOperationsAsDefaultValues(result);
-    }
-    return result;
+export const createColumn = (
+  that: ColumnsController,
+  columnOptions: Column | string | undefined,
+  userStateColumnOptions?: ColumnUserState,
+  bandColumn?: Column,
+): Column | undefined => {
+  if (!columnOptions) {
+    return undefined;
   }
+
+  const options: Column = isString(columnOptions) ? { dataField: columnOptions } : columnOptions;
+  let result: Column = {};
+
+  that.setName(options);
+
+  if (options.command) {
+    result = deepExtendArraySafe({}, options);
+  } else {
+    const commonColumnOptions = that.getCommonSettings(options);
+    const userStateDataField = userStateColumnOptions?.name && userStateColumnOptions.dataField;
+    const optionsWithUserState: Column = userStateDataField
+      ? extend({}, options, { dataField: userStateDataField })
+      : options;
+    const calculatedColumnOptions = that._createCalculatedColumnOptions(
+      optionsWithUserState,
+      bandColumn,
+    );
+
+    if (!optionsWithUserState.type) {
+      result = { headerId: `dx-col-${globalColumnId}` };
+      globalColumnId += 1;
+    }
+
+    deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS, false, true);
+    deepExtendArraySafe(result, commonColumnOptions, false, true);
+    deepExtendArraySafe(result, calculatedColumnOptions, false, true);
+    deepExtendArraySafe(result, optionsWithUserState, false, true);
+    deepExtendArraySafe(result, { selector: null }, false, true);
+  }
+
+  if (options.filterOperations === options.defaultFilterOperations) {
+    setFilterOperationsAsDefaultValues(result);
+  }
+
+  return result;
 };
 
-export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?, createdColumnCount?) {
-  let result: any = [];
+function checkUserStateColumn(column, userStateColumn) {
+  return column && userStateColumn && (userStateColumn.name === (column.name || column.dataField)) && (userStateColumn.dataField === column.dataField || column.name);
+}
 
-  if (columnsOptions) {
-    each(columnsOptions, (index, columnOptions) => {
-      const currentIndex = (createdColumnCount ?? 0) + result.length;
-      const userStateColumnOptions = that._columnsUserState
-        && checkUserStateColumn(columnOptions, that._columnsUserState[currentIndex])
-        && that._columnsUserState[currentIndex];
-      const column: any = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
-
-      if (column) {
-        if (bandColumn) {
-          column.ownerBand = bandColumn;
-        }
-        result.push(column);
-
-        if (column.columns) {
-          warnFixedInChildColumnsOnce(that, column.columns);
-          result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
-          delete column.columns;
-          column.hasColumns = true;
-        }
-      }
-    });
+export const createColumnsFromOptions = (
+  that: ColumnsController,
+  columnsOptions: (Column | string)[] | undefined,
+  bandColumn?: Column,
+  createdColumnCount = 0,
+): Column[] => {
+  if (!columnsOptions) {
+    return [];
   }
+
+  const result: Column[] = [];
+
+  columnsOptions.forEach((columnOptions) => {
+    const currentIndex = createdColumnCount + result.length;
+    const userStateColumnOptions = that._columnsUserState
+      && checkUserStateColumn(columnOptions, that._columnsUserState[currentIndex])
+      && that._columnsUserState[currentIndex];
+    const column = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
+
+    if (!column) {
+      return;
+    }
+
+    if (bandColumn) {
+      // @ts-expect-error ownerBand holds the band column until updateColumnIndexes sets its index
+      column.ownerBand = bandColumn;
+    }
+
+    result.push(column);
+
+    if (!column.columns) {
+      return;
+    }
+
+    warnFixedInChildColumnsOnce(that, column.columns);
+    const childColumns = createColumnsFromOptions(that, column.columns, column, result.length);
+    delete column.columns;
+    column.hasColumns = true;
+    result.push(...childColumns);
+  });
 
   return result;
 };
@@ -375,29 +404,30 @@ export const getCustomizeTextByDataType = (dataType: string | undefined): Column
   return undefined;
 };
 
-export const createColumnsFromDataSourceAdapter = function (that: ColumnsController, dataSourceAdapter) {
-  const firstItems = that._getFirstItems(dataSourceAdapter);
-  let fieldName;
-  const processedFields = {};
-  const result: any = [];
+export const createColumnsFromDataSourceAdapter = (
+  that: ColumnsController,
+  dataSourceAdapter: DataSourceAdapter,
+): Column[] => {
+  const fieldNames: Record<string, true> = {};
 
-  for (let i = 0; i < firstItems.length; i++) {
-    if (firstItems[i]) {
-      for (fieldName in firstItems[i]) {
-        if (!isFunction(firstItems[i][fieldName]) || variableWrapper.isWrapped(firstItems[i][fieldName])) {
-          processedFields[fieldName] = true;
-        }
+  that._getFirstItems(dataSourceAdapter).forEach((item) => {
+    if (!item) {
+      return;
+    }
+
+    // eslint-disable-next-line guard-for-in -- inherited fields become columns too
+    for (const fieldName in item) {
+      const value = item[fieldName];
+
+      if (!isFunction(value) || variableWrapper.isWrapped(value)) {
+        fieldNames[fieldName] = true;
       }
     }
-  }
+  });
 
-  for (fieldName in processedFields) {
-    if (fieldName.indexOf('__') !== 0) {
-      const column = createColumn(that, fieldName);
-      result.push(column);
-    }
-  }
-  return result;
+  return Object.keys(fieldNames)
+    .filter((fieldName) => !fieldName.startsWith('__'))
+    .map((fieldName) => createColumn(that, fieldName) as Column);
 };
 
 export const updateColumnIndexes = function (that: ColumnsController) {
@@ -531,10 +561,6 @@ export const moveColumnToGroup = function (that: ColumnsController, column, grou
 
   return groupIndex;
 };
-
-function checkUserStateColumn(column, userStateColumn) {
-  return column && userStateColumn && (userStateColumn.name === (column.name || column.dataField)) && (userStateColumn.dataField === column.dataField || column.name);
-}
 
 export const applyUserState = function (that: ColumnsController) {
   const columnsUserState = that._columnsUserState;
