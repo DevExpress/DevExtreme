@@ -1372,28 +1372,6 @@
       "why": "Answered 15.09 by validation, confirmed as the reading proposed. Three members, three correct roles: list-base-select-all-separator-bg paints background-color with border-subtle, which is the hairline idiom and exactly what the package calls separator.color; scheduler-appointment-base-bg is the appointment fill on bg-primary-subtle, the role Blazor gives the same element; stepper-step-base-bg is a plain surface on bg. The word base means a different thing in each, which is what made them one group. Nothing to change."
     },
     {
-      "concept": "base content rest",
-      "roles": [
-        "color-content-subtle",
-        "color-content"
-      ],
-      "families": [
-        "content"
-      ],
-      "members": [
-        {
-          "folder": "diagram",
-          "role": "color-content-subtle"
-        },
-        {
-          "folder": "stepper",
-          "role": "color-content"
-        }
-      ],
-      "decision": "shade",
-      "why": "Answered 15.09 by validation, confirmed. After the scheduler member was renamed to -base-bg and left for the bg group, two remain: diagram-image-icon-base-content on content-subtle and stepper-step-base-content on content. Both are content roles on content slots painting color:, and they differ by shade - which is a divergence components are entitled to. The naming point this group carried belonged to the scheduler member and is fixed."
-    },
-    {
       "concept": "checked bg active",
       "roles": [
         "color-bg-primary-shared-active",
@@ -2129,6 +2107,7 @@
       "color-content-on-color-subtler",
       "color-content-primary-active",
       "color-content-static-light-disabled",
+      "color-content-subtler",
       "color-content-success-shared",
       "color-content-success-shared-active",
       "color-content-success-shared-hovered",
