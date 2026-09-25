@@ -149,7 +149,7 @@ class DataGrid extends GridCoreWidget<Properties> {
 
     // @ts-expect-error
     extend(this._deprecatedOptions, {
-      useKeyboard: { since: '19.2', alias: 'keyboardNavigation.enabled' },
+      // NOTE: add deprecated options here
     });
   }
 
