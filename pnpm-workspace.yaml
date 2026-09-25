@@ -15,7 +15,7 @@ engineStrict: true
 # Need a fresher version? Add a targeted minimumReleaseAgeExclude entry with the exact version.
 minimumReleaseAge: 1440 # ⚠️ Do NOT modify this.
 minimumReleaseAgeExclude:
-  - '@devexpress/design-tokens-internal@262.23.0'
+  - '@devexpress/design-tokens-internal@262.26.0'
 
 overrides:
   "basic-ftp@<5.3.1": ">=5.3.1"
