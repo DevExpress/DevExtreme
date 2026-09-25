@@ -30,7 +30,6 @@ import { AdvancedChart } from './chart_components/m_advanced_chart';
 import { overlapping } from './chart_components/m_base_chart';
 
 const DEFAULT_PANE_NAME = 'default';
-const VISUAL_RANGE = 'VISUAL_RANGE';
 const DEFAULT_PANES = [{
   name: DEFAULT_PANE_NAME,
   border: {},
@@ -1603,13 +1602,6 @@ const dxChart = AdvancedChart.inherit({
       minVisible: isDiscrete ? range.minVisible || categories[0] : range.minVisible,
       maxVisible: isDiscrete ? range.maxVisible || categories[categories.length - 1] : range.maxVisible,
     };
-  },
-
-  _change_FULL_RENDER() {
-    this.callBase();
-    if (this._changes.has(VISUAL_RANGE)) {
-      this._raiseZoomEndHandlers();
-    }
   },
 
   _getAxesForScaling() {
