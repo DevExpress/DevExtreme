@@ -140,8 +140,6 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
 
   useLegacyKeyboardNavigation?: boolean;
 
-  rowTemplate?: any;
-
   forceApplyBindings?: any;
 
   loadItemsOnExportingSelectedItems?: boolean | undefined;

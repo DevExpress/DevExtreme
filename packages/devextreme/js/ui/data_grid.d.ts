@@ -1183,20 +1183,6 @@ export type MasterDetailTemplateData<TRowData = any, TKey = any> = {
 };
 
 /** @public */
-export type RowTemplateData<TRowData = any, TKey = any> = {
-  readonly key: TKey;
-  readonly data: TRowData;
-  readonly component: dxDataGrid<TRowData, TKey>;
-  readonly values: Array<any>;
-  readonly rowIndex: number;
-  readonly columns: Array<Column<TRowData, TKey>>;
-  readonly isSelected?: boolean;
-  readonly rowType: string;
-  readonly groupIndex?: number;
-  readonly isExpanded?: boolean;
-};
-
-/** @public */
 export type DataRowTemplateData<TRowData = any, TKey = any> = {
   readonly key: TKey;
   readonly data: TRowData;
@@ -1208,7 +1194,7 @@ export type DataRowTemplateData<TRowData = any, TKey = any> = {
   readonly isExpanded?: boolean;
 };
 
-type OverriddenKeys = 'aiAssistant' | 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'editing' | 'export' | 'grouping' | 'groupPanel' | 'keyExpr' | 'masterDetail' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'remoteOperations' | 'rowDragging' | 'rowTemplate' | 'scrolling' | 'selection' | 'selectionFilter' | 'sortByGroupSummaryInfo' | 'summary' | 'toolbar';
+type OverriddenKeys = 'aiAssistant' | 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'editing' | 'export' | 'grouping' | 'groupPanel' | 'keyExpr' | 'masterDetail' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'remoteOperations' | 'rowDragging' | 'scrolling' | 'selection' | 'selectionFilter' | 'sortByGroupSummaryInfo' | 'summary' | 'toolbar';
 
 /**
  * @deprecated use Properties instead
@@ -1428,17 +1414,6 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      */
     rowDragging?: RowDragging<TRowData, TKey>;
     /**
-     * @docid
-     * @type_function_param2 rowInfo:object
-     * @type_function_param2_field key:any
-     * @type_function_param2_field data:any
-     * @type_function_param2_field values:Array<any>
-     * @type_function_param2_field columns:Array<dxDataGridColumn>
-     * @public
-     * @deprecated dxDataGridOptions.dataRowTemplate
-     */
-    rowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData<TRowData, TKey>) => any);
-        /**
      * @docid
      * @type_function_param2 rowInfo:object
      * @type_function_param2_field key:any
@@ -2643,7 +2618,6 @@ export type ExplicitTypes<TRowData, TKey> = {
   RowPreparedEvent: RowPreparedEvent<TRowData, TKey>;
   RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
   RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
-  RowTemplateData: RowTemplateData<TRowData, TKey>;
   RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
   RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
   RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;

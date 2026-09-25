@@ -318,12 +318,12 @@ moduleWithoutCsp('Work with knockout', {
         assert.equal($rows.eq(1).children().eq(0).text(), '3');
     });
 
-    QUnit.test('$root model in rowTemplate', function(assert) {
+    QUnit.test('$root model in dataRowTemplate', function(assert) {
         // arrange, act
 
         this.viewModel.rowClick = sinon.spy();
         this.viewModel.gridOptions = {
-            rowTemplate: 'testRowTemplate',
+            dataRowTemplate: 'testRowTemplate',
             dataSource: [{ id: 1 }, { id: 2 }]
         };
 

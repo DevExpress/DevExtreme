@@ -378,7 +378,6 @@ type AccessibleOptions = Pick<Properties,
   "repaintChangesOnly" |
   "rowAlternationEnabled" |
   "rowDragging" |
-  "rowTemplate" |
   "rtlEnabled" |
   "scrolling" |
   "searchPanel" |
@@ -506,7 +505,6 @@ const componentConfig = {
     repaintChangesOnly: Boolean,
     rowAlternationEnabled: Boolean,
     rowDragging: Object as PropType<Record<string, any>>,
-    rowTemplate: {},
     rtlEnabled: Boolean,
     scrolling: Object as PropType<Record<string, any>>,
     searchPanel: Object as PropType<SearchPanel | Record<string, any>>,
@@ -630,7 +628,6 @@ const componentConfig = {
     "update:repaintChangesOnly": null,
     "update:rowAlternationEnabled": null,
     "update:rowDragging": null,
-    "update:rowTemplate": null,
     "update:rtlEnabled": null,
     "update:scrolling": null,
     "update:searchPanel": null,

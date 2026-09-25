@@ -3718,14 +3718,14 @@ QUnit.module('Selection with views', {
     });
 
     // T642034
-    QUnit.test('selecting of row when rowTemplate contains several tr tags', function(assert) {
+    QUnit.test('selecting of row when dataRowTemplate contains several tr tags', function(assert) {
         const testElement = $('#container');
 
         this.setup();
         this.options.selection = { mode: 'single' };
-        this.options.rowTemplate = function(container, options) {
+        this.options.dataRowTemplate = function(container, options) {
             const data = options.data;
-            $(container).append('<tbody class=\'dx-row\'><tr><td id=\'' + data.name + '\'>' + data.name + '</td></tr><tr><td>' + data.age + '</td></tr></tbody>');
+            $(container).append('<tr><td id=\'' + data.name + '\'>' + data.name + '</td></tr><tr><td>' + data.age + '</td></tr>');
         };
         this.rowsView.render(testElement);
 

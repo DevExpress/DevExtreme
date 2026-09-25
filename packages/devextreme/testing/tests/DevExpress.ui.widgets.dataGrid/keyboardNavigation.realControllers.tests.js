@@ -1136,19 +1136,17 @@ QUnit.module('Real DataController and ColumnsController', {
         };
 
         that.options = {
-            rowTemplate: function(container, item) {
+            dataRowTemplate: function(container, item) {
                 const data = item.data;
 
-                const tbodyElement = $('<tbody>').addClass('dx-row template');
-                const trElement = $('<tr>').addClass('dx-data-row');
-                tbodyElement.append(trElement);
+                const trElement = $('<tr>').addClass('template');
                 const cellElement = $('<td>');
                 trElement.append($(cellElement));
 
                 $(cellElement).dxTextBox({
                     value: data.name
                 });
-                $(container).append(tbodyElement);
+                $(container).append(trElement);
             }
         };
         this.setupModule();

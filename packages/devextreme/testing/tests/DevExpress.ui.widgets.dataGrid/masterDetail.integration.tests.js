@@ -14,7 +14,6 @@ QUnit.testStart(function() {
         <div id="container">
             <div id="dataGrid">
                 <div data-options="dxTemplate: { name: 'testDetail' }"><p>Test Details</p></div>
-                <table data-options="dxTemplate: { name: 'testRowWithExpand' }"><tr class="dx-row"><td colspan="2">Row Content <em class="dx-command-expand dx-datagrid-expand">More info</em></td></tr></table>
                 <table data-options="dxTemplate: { name: 'testDataRowWithExpand' }"><tr><td colspan="2">Row Content <em class="dx-command-expand dx-datagrid-expand">More info</em></td></tr></table>
             </div>
         </div>
@@ -807,37 +806,6 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
     });
 
     // T484419
-    QUnit.test('rowTemplate via dxTemplate should works with masterDetail template', function(assert) {
-        // arrange, act
-        const dataGrid = createDataGrid({
-            loadingTimeout: null,
-            dataSource: [
-                { name: 'First Grid Item' },
-                { name: 'Second Grid Item' },
-                { name: 'Third Grid Item' }
-            ],
-            columns: ['name'],
-            masterDetail: {
-                enabled: true,
-                template: 'testDetail'
-            },
-            rowTemplate: 'testRowWithExpand'
-        });
-
-
-        // act
-        $($(dataGrid.$element()).find('.dx-datagrid-expand').eq(0)).trigger('dxclick');
-
-        // assert
-        const $rowElements = $($(dataGrid.$element()).find('.dx-datagrid-rowsview').find('table > tbody').find('.dx-row'));
-        assert.strictEqual($rowElements.length, 5, 'row element count');
-        assert.strictEqual($rowElements.eq(0).text(), 'Row Content More info', 'row 0 content');
-        assert.strictEqual($rowElements.eq(1).children().first().text(), 'Test Details', 'row 1 content');
-        assert.strictEqual($rowElements.eq(2).text(), 'Row Content More info', 'row 2 content');
-        assert.strictEqual($rowElements.eq(3).text(), 'Row Content More info', 'row 3 content');
-    });
-
-    // T484419
     QUnit.test('dataRowTemplate via dxTemplate should works with masterDetail template', function(assert) {
     // arrange, act
         const dataGrid = createDataGrid({
@@ -877,7 +845,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             ],
             keyExpr: 'id',
             columns: ['text'],
-            dataRowTemplate: 'rowTemplate',
+            dataRowTemplate: 'dataRowTemplate',
             masterDetail: {
                 enabled: true,
                 template: 'masterDetail'
@@ -885,7 +853,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             templatesRenderAsynchronously: true,
             integrationOptions: {
                 templates: {
-                    rowTemplate: {
+                    dataRowTemplate: {
                         render({ container, model, onRendered }) {
                             const data = model.data;
                             const markup = '<tr class="my-row">' +

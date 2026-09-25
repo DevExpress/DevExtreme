@@ -165,7 +165,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
 
         // act
         const options = rowsView._getDraggableGridOptions({ data: this.options.dataSource[0] });
-        const processedOptions = processOptionsForCompare(options, ['customizeColumns', 'rowTemplate', 'onCellPrepared', 'onRowPrepared']);
+        const processedOptions = processOptionsForCompare(options, ['customizeColumns', 'onCellPrepared', 'onRowPrepared']);
 
         // assert
         assert.deepEqual(processedOptions, {
@@ -205,28 +205,6 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
             },
             loadingTimeout: null
         }, 'options');
-    });
-
-    QUnit.test('Dragging row when rowTemplate is specified', function(assert) {
-        // arrange
-        const $testElement = $('#container');
-
-        $.extend(this.options, {
-            rowTemplate: function() {
-                return $('<tr class=\'dx-row dx-data-row my-row\'><td>Test</td></tr>');
-            }
-        });
-
-        const rowsView = this.createRowsView();
-        rowsView.render($testElement);
-
-        // act
-        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
-
-        // assert
-        const $draggableElement = $('body').children('.dx-sortable-dragging');
-        assert.strictEqual($draggableElement.find('.dx-data-row').length, 1, 'data row count');
-        assert.ok($draggableElement.find('.dx-data-row').hasClass('my-row'), 'custom row');
     });
 
     QUnit.test('Dragging row when dataRowTemplate is specified', function(assert) {

@@ -3086,7 +3086,7 @@ QUnit.module('Editing with real dataController', {
     });
 
     // T677605
-    QUnit.test('The "Cancel" button of the Editing form should be clicked once to close it when rowTemplate is used', function(assert) {
+    QUnit.test('The "Cancel" button of the Editing form should be clicked once to close it when dataRowTemplate is used', function(assert) {
         // arrange
         const that = this;
         const rowsView = this.rowsView;
@@ -3097,8 +3097,8 @@ QUnit.module('Editing with real dataController', {
             mode: 'form'
         });
 
-        that.options.rowTemplate = function(container) {
-            const markup = $('<tbody class=\'dx-row\'></tbody>');
+        that.options.dataRowTemplate = function(container) {
+            const markup = $('<tr><td></td></tr>');
             markup.appendTo(container);
         };
 
@@ -18603,8 +18603,8 @@ QUnit.module('Edit Form', {
         that.options.editing.form = {
             colCount: 4
         };
-        that.options.rowTemplate = function(container, options) {
-            $('<tbody class="dx-row dx-data-row"><tr><td></td></tr></tbody>').appendTo(container);
+        that.options.dataRowTemplate = function(container, options) {
+            $('<tr><td></td></tr>').appendTo(container);
         };
         rowsView.render($testElement);
 
@@ -18632,8 +18632,8 @@ QUnit.module('Edit Form', {
         that.options.editing.form = {
             colCount: 4
         };
-        that.options.rowTemplate = function(container, options) {
-            $('<tbody class="dx-row dx-data-row"><tr><td></td></tr></tbody>').appendTo(container);
+        that.options.dataRowTemplate = function(container, options) {
+            $('<tr><td></td></tr>').appendTo(container);
         };
         rowsView.render($testElement);
 
@@ -18828,8 +18828,8 @@ QUnit.module('Edit Form', {
         const onRowClick = this.options.onRowClick = sinon.spy((e) => {
             this.editRow(e.rowIndex);
         });
-        this.options.rowTemplate = function(container) {
-            $('<tbody class="dx-row dx-data-row"><tr><td></td></tr></tbody>').appendTo(container);
+        this.options.dataRowTemplate = function(container) {
+            $('<tr><td></td></tr>').appendTo(container);
         };
         this.setupModules(this);
         this.clock.tick(30);

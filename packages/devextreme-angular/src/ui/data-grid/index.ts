@@ -916,19 +916,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     }
 
     /**
-     * [descr:dxDataGridOptions.rowTemplate]
-     * @deprecated [depNote:dxDataGridOptions.rowTemplate]
-    
-     */
-    @Input()
-    get rowTemplate(): any {
-        return this._getOption('rowTemplate');
-    }
-    set rowTemplate(value: any) {
-        this._setOption('rowTemplate', value);
-    }
-
-    /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
     @Input()
@@ -1652,11 +1639,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
-    @Output() rowTemplateChange: EventEmitter<any>;
-
-    /**
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -1867,7 +1849,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
             { emit: 'repaintChangesOnlyChange' },
             { emit: 'rowAlternationEnabledChange' },
             { emit: 'rowDraggingChange' },
-            { emit: 'rowTemplateChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'scrollingChange' },
             { emit: 'searchPanelChange' },
