@@ -187,8 +187,6 @@ class BaseWidget extends DOMComponent<any, any> {
 
   static addPlugin: (plugin: ThemeValue) => void;
 
-  static inherit: (members: ThemeValue) => ThemeValue;
-
   _$prevRootParents;
 
   _applyingChanges?: boolean;
