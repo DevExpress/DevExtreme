@@ -1,5 +1,5 @@
 {
-  "$comment": "Journal of retired component-tier names — the `--dx-*` custom properties the theme publishes. A published name is the one thing a user can rely on without rebuilding the SCSS, so removing or renaming one is a public change, and this file is where that change is recorded. Add the entry in the SAME change that retires the name — which change that was is a question for `git log -- tools/naming/public-renames.json`, so the journal does not repeat it; tests/public-renames.test.ts then enforces that the name never appears in a built fluent-next bundle again, which is what forbids a quiet compatibility alias in _public-links.scss.",
+  "$comment": "Journal of retired component-tier names \u2014 the `--dx-*` custom properties the theme publishes. A published name is the one thing a user can rely on without rebuilding the SCSS, so removing or renaming one is a public change, and this file is where that change is recorded. Add the entry in the SAME change that retires the name \u2014 which change that was is a question for `git log -- tools/naming/public-renames.json`, so the journal does not repeat it; tests/public-renames.test.ts then enforces that the name never appears in a built fluent-next bundle again, which is what forbids a quiet compatibility alias in _public-links.scss.",
   "fields": {
     "name": "The retired name, exactly as it shipped.",
     "replacement": "The name that takes over the role, or null when the role itself disappeared.",
@@ -355,7 +355,7 @@
       "replacement": "--dx-calendar-element-gap",
       "release": "26.2",
       "pr": 35107,
-      "note": "It is the gap between the calendar’s parts - the rule writes gap - not padding inside anything."
+      "note": "It is the gap between the calendar\u2019s parts - the rule writes gap - not padding inside anything."
     },
     {
       "name": "--dx-chat-message-editing-preview-border-width",
@@ -397,7 +397,7 @@
       "replacement": "--dx-text-editor-spin-button-margin-inline-end",
       "release": "26.2",
       "pr": 35107,
-      "note": "The rule writes margin-inline-end between the editor’s buttons."
+      "note": "The rule writes margin-inline-end between the editor\u2019s buttons."
     },
     {
       "name": "--dx-scheduler-workspace-cell-content-active",
@@ -405,6 +405,60 @@
       "release": "26.2",
       "pr": 35107,
       "note": "It fills a pressed cell - the rule writes background-color - and the name said content while aliasing a border name."
+    },
+    {
+      "name": "--dx-switch-box-shadow",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob the switch never actually applies \u2014 any value you set had no visual effect."
+    },
+    {
+      "name": "--dx-switch-handle-on-box-shadow",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob the switch never actually applies \u2014 any value you set had no visual effect."
+    },
+    {
+      "name": "--dx-switch-handle-on-box-shadow-blur",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob the switch never actually applies \u2014 any value you set had no visual effect."
+    },
+    {
+      "name": "--dx-switch-handle-on-shadow",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob the switch never actually applies \u2014 any value you set had no visual effect."
+    },
+    {
+      "name": "--dx-scheduler-appointment-collector-height",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing in the Scheduler ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-color-shadow",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing in the theme ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-component-height",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing in the theme ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-texteditor-color-text",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a leftover of an earlier naming convention; the text editor's text colour is not customizable through this name."
+    },
+    {
+      "name": "--dx-popup-toolbar-item-padding-inline",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a leftover of an earlier naming convention; the popup toolbar item spacing is not customizable through this name."
     }
   ]
 }

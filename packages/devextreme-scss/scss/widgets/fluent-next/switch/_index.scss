@@ -21,12 +21,12 @@
 @include dx-switch-states-fluent(
   var(--dx-switch-on-bg-disabled),
   var(--dx-switch-handle-bg-disabled),
-  var(--dx-switch-box-shadow),
+  null, // dx-switch-states-fluent never reads its $switch-shadow parameter
   var(--dx-switch-bg),
   var(--dx-switch-on-bg),
   var(--dx-switch-on-border-hovered),
   var(--dx-switch-on-border-focused),
-  var(--dx-switch-handle-on-box-shadow),
+  null, // dx-switch-states-fluent never reads its $switch-handle-on-shadow parameter
   var(--dx-switch-handle-off-bg),
   var(--dx-switch-handle-on-bg),
   1px solid, // dx-line-width: 1px, the off-state border
@@ -52,7 +52,7 @@
 );
 @include dx-switch-rtl(
   calc(var(--dx-switch-handle-height) - var(--dx-switch-handle-margin)),
-  var(--dx-switch-handle-on-box-shadow-blur),
+  null, // dx-switch-rtl never reads its $switch-padding parameter
   var(--dx-switch-container-rtl-offset),
 );
 
