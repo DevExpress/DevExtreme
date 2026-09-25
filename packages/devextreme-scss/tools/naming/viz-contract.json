@@ -49,7 +49,7 @@
       "name": "--dx-viz-content-subtler",
       "role": "color-content-subtler",
       "declaredPerMode": true,
-      "paints": "the axis and everything that reads with it: the widget font colour that axis and legend labels take, the axis line and its ticks, and the subtitle under the chart title. A step quieter than the rest of the text on purpose - the numbers along a scale are there to be read past, not at"
+      "paints": "the axis and everything that reads with it: the widget font colour that axis and legend labels take, the axis line and its ticks, and the titles of the axes. A step quieter than the rest of the text on purpose - the numbers along a scale are there to be read past, not at. The subtitle under the chart title is not among them: it inherits the colour of the title"
     },
     {
       "name": "--dx-viz-content-orange",

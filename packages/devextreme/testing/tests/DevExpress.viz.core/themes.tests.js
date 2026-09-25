@@ -606,7 +606,8 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
 
         assert.strictEqual(registeredTheme.font.color, axis, 'widget font, which axis and legend labels take');
         assert.strictEqual(registeredTheme.axisColor, axis, 'axis line and its ticks');
-        assert.strictEqual(registeredTheme.secondaryTitleColor, axis, 'subtitle');
+        assert.strictEqual(registeredTheme.secondaryTitleColor, axis, 'legend labels and axis titles');
+        assert.strictEqual(registeredTheme.title.subtitle.font.color, ink, 'the subtitle stays with the title');
     });
 
     QUnit.test(`fluent-next theme should draw a map line in the published orange: ${theme}`, function(assert) {
