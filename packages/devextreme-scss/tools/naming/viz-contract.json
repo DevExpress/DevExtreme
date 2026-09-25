@@ -214,7 +214,7 @@
       "paints": "the text on those plates"
     },
     {
-      "name": "--dx-viz-font-weight-title",
+      "name": "--dx-viz-title-font-weight",
       "role": "font-weight-title-default",
       "declaredIn": "onRootOnlySizes",
       "declaredPerMode": false,

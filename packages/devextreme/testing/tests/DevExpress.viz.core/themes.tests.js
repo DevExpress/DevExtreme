@@ -360,7 +360,7 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
     });
 });
 
-const PUBLISHED_TITLE_WEIGHT = 'var(--dx-viz-font-weight-title, 600)';
+const PUBLISHED_TITLE_WEIGHT = 'var(--dx-viz-title-font-weight, 600)';
 const PUBLISHED_WEIGHT = 'var(--dx-viz-font-weight, 400)';
 const PUBLISHED_EXPORT_WEIGHT = 'var(--dx-viz-export-font-weight, 400)';
 const PUBLISHED_LEGEND_TITLE_WEIGHT = 'var(--dx-viz-legend-title-font-weight, 200)';
@@ -439,9 +439,9 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         assert.deepEqual(Array.from(weights).sort(), [
             PUBLISHED_EXPORT_WEIGHT,
             PUBLISHED_WEIGHT,
-            PUBLISHED_TITLE_WEIGHT,
             PUBLISHED_LABEL_WEIGHT,
             PUBLISHED_LEGEND_TITLE_WEIGHT,
+            PUBLISHED_TITLE_WEIGHT,
         ]);
     });
 
