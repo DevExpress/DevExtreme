@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 
 import {
     DxIntegrationModule,
@@ -85,7 +79,6 @@ export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnI
         return 'pageSize';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -106,7 +99,6 @@ export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnI
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

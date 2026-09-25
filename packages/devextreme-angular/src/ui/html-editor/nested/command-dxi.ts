@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -8,10 +6,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { AICommandNameExtended } from 'devextreme/ui/html_editor';
 
 import {
@@ -73,7 +67,6 @@ export class DxiHtmlEditorCommandComponent extends CollectionNestedOption {
         return 'commands';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -86,7 +79,6 @@ export class DxiHtmlEditorCommandComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

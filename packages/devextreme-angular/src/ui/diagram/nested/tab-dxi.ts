@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -10,10 +8,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
@@ -23,6 +17,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_commands,
     PROPERTY_TOKEN_groups,
@@ -81,7 +76,6 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
         return 'tabs';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -94,7 +88,6 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

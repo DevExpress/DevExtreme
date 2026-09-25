@@ -9,7 +9,8 @@ const userAgents = {
     chrome_ios: 'Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/74.0.3729.157 Mobile/13B143 Safari/601.1.46',
     mozilla_ios: 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/18.2b15817 Mobile/15E148 Safari/605.1.15',
     phantom: 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1',
-    google_app_ios: 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) GSA/88.0.281793270 Mobile/15E148 Safari/604.1'
+    google_app_ios: 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) GSA/88.0.281793270 Mobile/15E148 Safari/604.1',
+    chrome_without_version: 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome Safari/537.36'
 };
 
 QUnit.module('browser');
@@ -67,6 +68,13 @@ QUnit.test('browser is mozilla (mobile)', function(assert) {
     assert.notOk(browserObject.safari, 'firefox is not safari');
     assert.notOk(browserObject.chrome, 'firefox is not chrome');
     assert.equal(browserObject.version, '18.2', 'version was detect correctly');
+});
+
+QUnit.test('version is undefined when the inner regexp does not match', function(assert) {
+    const browserObject = browser._fromUA(userAgents.chrome_without_version);
+
+    assert.ok(browserObject.chrome, 'chrome detected');
+    assert.strictEqual(browserObject.version, undefined, 'version is undefined, as browser.d.ts declares it optional');
 });
 
 QUnit.test('google app is chrome (mobile)', function(assert) {

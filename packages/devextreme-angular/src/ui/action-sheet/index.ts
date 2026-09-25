@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -29,7 +26,6 @@ import type { Store } from 'devextreme/data/store';
 
 import DxActionSheet from 'devextreme/ui/action_sheet';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -45,13 +41,12 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiActionSheetItemModule } from 'devextreme-angular/ui/action-sheet/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxActionSheet]
-
  */
 @Component({
     selector: 'dx-action-sheet',
@@ -76,7 +71,6 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxActionSheetOptions.cancelText]
-    
      */
     @Input()
     get cancelText(): string {
@@ -86,10 +80,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('cancelText', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxActionSheetItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -99,10 +91,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -112,10 +102,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -125,10 +113,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -138,10 +124,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -151,10 +135,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -164,10 +146,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -177,10 +157,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxActionSheetItem | string> {
@@ -190,10 +168,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -203,10 +179,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -216,10 +190,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.showCancelButton]
-    
      */
     @Input()
     get showCancelButton(): boolean {
@@ -229,10 +201,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('showCancelButton', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.showTitle]
-    
      */
     @Input()
     get showTitle(): boolean {
@@ -242,10 +212,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('showTitle', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.target]
-    
      */
     @Input()
     get target(): any | string {
@@ -255,10 +223,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('target', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.title]
-    
      */
     @Input()
     get title(): string {
@@ -268,10 +234,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.usePopover]
-    
      */
     @Input()
     get usePopover(): boolean {
@@ -281,10 +245,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('usePopover', value);
     }
 
-
     /**
      * [descr:dxActionSheetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -294,10 +256,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -308,205 +268,139 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     }
 
     /**
-    
      * [descr:dxActionSheetOptions.onCancelClick]
-    
-    
      */
     @Output() onCancelClick: EventEmitter<CancelClickEvent>;
 
     /**
-    
      * [descr:dxActionSheetOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxActionSheetOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxActionSheetOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxActionSheetOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxActionSheetOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxActionSheetOptions.onItemHold]
-    
-    
      */
     @Output() onItemHold: EventEmitter<ItemHoldEvent>;
 
     /**
-    
      * [descr:dxActionSheetOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxActionSheetOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() cancelTextChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any | dxActionSheetItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxActionSheetItem | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showCancelButtonChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showTitleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() targetChange: EventEmitter<any | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() titleChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() usePopoverChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

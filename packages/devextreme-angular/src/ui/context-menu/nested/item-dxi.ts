@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -14,10 +12,7 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { dxContextMenuItem } from 'devextreme/ui/context_menu';
 
 import {
@@ -140,7 +135,6 @@ export class DxiContextMenuItemComponent extends CollectionNestedOption implemen
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -161,11 +155,9 @@ export class DxiContextMenuItemComponent extends CollectionNestedOption implemen
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

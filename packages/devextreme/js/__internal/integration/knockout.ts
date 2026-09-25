@@ -1,6 +1,6 @@
 /* eslint-disable import/first */
 import errors from '@ts/core/utils/m_error';
-import { compare as compareVersion } from '@ts/core/utils/m_version';
+import { compare as compareVersion } from '@ts/core/utils/version';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ko from 'knockout';
 

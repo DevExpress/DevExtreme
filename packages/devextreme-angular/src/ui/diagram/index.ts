@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -28,7 +25,6 @@ import type { Store } from 'devextreme/data/store';
 import type { Orientation, PageOrientation } from 'devextreme/common';
 
 import DxDiagram from 'devextreme/ui/diagram';
-
 
 import {
     DxComponent,
@@ -91,18 +87,17 @@ import { DxiDiagramToolboxGroupModule } from 'devextreme-angular/ui/diagram/nest
 import { DxoDiagramViewToolbarModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramZoomLevelModule } from 'devextreme-angular/ui/diagram/nested';
 import { 
-           PROPERTY_TOKEN_commands,
-           PROPERTY_TOKEN_items,
-           PROPERTY_TOKEN_connectionPoints,
-           PROPERTY_TOKEN_customShapes,
-           PROPERTY_TOKEN_groups,
-           PROPERTY_TOKEN_tabs,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_connectionPoints,
+    PROPERTY_TOKEN_customShapes,
+    PROPERTY_TOKEN_groups,
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxDiagram]
-
  */
 @Component({
     selector: 'dx-diagram',
@@ -152,7 +147,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxDiagramOptions.autoZoomMode]
-    
      */
     @Input()
     get autoZoomMode(): AutoZoomMode {
@@ -162,10 +156,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('autoZoomMode', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.contextMenu]
-    
      */
     @Input()
     get contextMenu(): { commands?: Array<Command | CustomCommand>, enabled?: boolean } {
@@ -175,10 +167,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('contextMenu', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.contextToolbox]
-    
      */
     @Input()
     get contextToolbox(): { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<ShapeType | string>, width?: number } {
@@ -188,10 +178,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('contextToolbox', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.customShapes]
-    
      */
     @Input()
     get customShapes(): { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[] {
@@ -201,10 +189,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('customShapes', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.customShapeTemplate]
-    
      */
     @Input()
     get customShapeTemplate(): any {
@@ -214,10 +200,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('customShapeTemplate', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.customShapeToolboxTemplate]
-    
      */
     @Input()
     get customShapeToolboxTemplate(): any {
@@ -227,10 +211,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('customShapeToolboxTemplate', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.defaultItemProperties]
-    
      */
     @Input()
     get defaultItemProperties(): { connectorLineEnd?: ConnectorLineEnd, connectorLineStart?: ConnectorLineEnd, connectorLineType?: ConnectorLineType, shapeMaxHeight?: number | undefined, shapeMaxWidth?: number | undefined, shapeMinHeight?: number | undefined, shapeMinWidth?: number | undefined, style?: Record<string, any>, textStyle?: Record<string, any> } {
@@ -240,10 +222,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('defaultItemProperties', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -253,10 +233,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.edges]
-    
      */
     @Input()
     get edges(): { customDataExpr?: ((data: any, value: any) => any) | string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, fromExpr?: ((data: any, value: any) => any) | string, fromLineEndExpr?: ((data: any, value: any) => any) | string | undefined, fromPointIndexExpr?: ((data: any, value: any) => any) | string | undefined, keyExpr?: ((data: any, value: any) => any) | string, lineTypeExpr?: ((data: any, value: any) => any) | string | undefined, lockedExpr?: ((data: any, value: any) => any) | string | undefined, pointsExpr?: ((data: any, value: any) => any) | string | undefined, styleExpr?: ((data: any, value: any) => any) | string | undefined, textExpr?: ((data: any, value: any) => any) | string | undefined, textStyleExpr?: ((data: any, value: any) => any) | string | undefined, toExpr?: ((data: any, value: any) => any) | string, toLineEndExpr?: ((data: any, value: any) => any) | string | undefined, toPointIndexExpr?: ((data: any, value: any) => any) | string | undefined, zIndexExpr?: ((data: any, value: any) => any) | string | undefined } {
@@ -266,10 +244,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('edges', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.editing]
-    
      */
     @Input()
     get editing(): { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowMoveShape?: boolean, allowResizeShape?: boolean } {
@@ -279,10 +255,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('editing', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -292,10 +266,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.export]
-    
      */
     @Input()
     get export(): { fileName?: string } {
@@ -305,10 +277,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.fullScreen]
-    
      */
     @Input()
     get fullScreen(): boolean {
@@ -318,10 +288,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('fullScreen', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.gridSize]
-    
      */
     @Input()
     get gridSize(): number | { items?: Array<number>, value?: number } {
@@ -331,10 +299,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('gridSize', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.hasChanges]
-    
      */
     @Input()
     get hasChanges(): boolean {
@@ -344,10 +310,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('hasChanges', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -357,10 +321,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.historyToolbar]
-    
      */
     @Input()
     get historyToolbar(): { commands?: Array<Command | CustomCommand>, visible?: boolean } {
@@ -370,10 +332,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('historyToolbar', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.mainToolbar]
-    
      */
     @Input()
     get mainToolbar(): { commands?: Array<Command | CustomCommand>, visible?: boolean } {
@@ -383,10 +343,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('mainToolbar', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.nodes]
-    
      */
     @Input()
     get nodes(): { autoLayout?: DataLayoutType | { orientation?: Orientation, type?: DataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: ((data: any, value: any) => any) | string | undefined, containerKeyExpr?: ((data: any, value: any) => any) | string, customDataExpr?: ((data: any, value: any) => any) | string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, heightExpr?: ((data: any, value: any) => any) | string | undefined, imageUrlExpr?: ((data: any, value: any) => any) | string | undefined, itemsExpr?: ((data: any, value: any) => any) | string | undefined, keyExpr?: ((data: any, value: any) => any) | string, leftExpr?: ((data: any, value: any) => any) | string | undefined, lockedExpr?: ((data: any, value: any) => any) | string | undefined, parentKeyExpr?: ((data: any, value: any) => any) | string | undefined, styleExpr?: ((data: any, value: any) => any) | string | undefined, textExpr?: ((data: any, value: any) => any) | string, textStyleExpr?: ((data: any, value: any) => any) | string | undefined, topExpr?: ((data: any, value: any) => any) | string | undefined, typeExpr?: ((data: any, value: any) => any) | string, widthExpr?: ((data: any, value: any) => any) | string | undefined, zIndexExpr?: ((data: any, value: any) => any) | string | undefined } {
@@ -396,10 +354,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('nodes', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.pageColor]
-    
      */
     @Input()
     get pageColor(): string {
@@ -409,10 +365,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('pageColor', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.pageOrientation]
-    
      */
     @Input()
     get pageOrientation(): PageOrientation {
@@ -422,10 +376,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('pageOrientation', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.pageSize]
-    
      */
     @Input()
     get pageSize(): { height?: number, items?: { height?: number, text?: string, width?: number }[], width?: number } {
@@ -435,10 +387,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('pageSize', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.propertiesPanel]
-    
      */
     @Input()
     get propertiesPanel(): { tabs?: { commands?: Array<Command | CustomCommand>, groups?: { commands?: Array<Command | CustomCommand>, title?: string }[], title?: string }[], visibility?: PanelVisibility } {
@@ -448,10 +398,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('propertiesPanel', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -461,10 +409,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -474,10 +420,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.showGrid]
-    
      */
     @Input()
     get showGrid(): boolean {
@@ -487,10 +431,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('showGrid', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.simpleView]
-    
      */
     @Input()
     get simpleView(): boolean {
@@ -500,10 +442,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('simpleView', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.snapToGrid]
-    
      */
     @Input()
     get snapToGrid(): boolean {
@@ -513,10 +453,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('snapToGrid', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.toolbox]
-    
      */
     @Input()
     get toolbox(): { groups?: { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }[], shapeIconsPerRow?: number, showSearch?: boolean, visibility?: PanelVisibility, width?: number | undefined } {
@@ -526,10 +464,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('toolbox', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.units]
-    
      */
     @Input()
     get units(): Units {
@@ -539,10 +475,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('units', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.useNativeScrolling]
-    
      */
     @Input()
     get useNativeScrolling(): boolean {
@@ -552,10 +486,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('useNativeScrolling', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.viewToolbar]
-    
      */
     @Input()
     get viewToolbar(): { commands?: Array<Command | CustomCommand>, visible?: boolean } {
@@ -565,10 +497,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('viewToolbar', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.viewUnits]
-    
      */
     @Input()
     get viewUnits(): Units {
@@ -578,10 +508,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('viewUnits', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -591,10 +519,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -604,10 +530,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('width', value);
     }
 
-
     /**
      * [descr:dxDiagramOptions.zoomLevel]
-    
      */
     @Input()
     get zoomLevel(): number | { items?: Array<number>, value?: number | undefined } {
@@ -618,339 +542,234 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     }
 
     /**
-    
      * [descr:dxDiagramOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onCustomCommand]
-    
-    
      */
     @Output() onCustomCommand: EventEmitter<CustomCommandEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onItemDblClick]
-    
-    
      */
     @Output() onItemDblClick: EventEmitter<ItemDblClickEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onRequestEditOperation]
-    
-    
      */
     @Output() onRequestEditOperation: EventEmitter<RequestEditOperationEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onRequestLayoutUpdate]
-    
-    
      */
     @Output() onRequestLayoutUpdate: EventEmitter<RequestLayoutUpdateEvent>;
 
     /**
-    
      * [descr:dxDiagramOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() autoZoomModeChange: EventEmitter<AutoZoomMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contextMenuChange: EventEmitter<{ commands?: Array<Command | CustomCommand>, enabled?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() contextToolboxChange: EventEmitter<{ category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<ShapeType | string>, width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customShapesChange: EventEmitter<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: { x?: number, y?: number }[], defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: any, templateLeft?: any, templateTop?: any, templateWidth?: any, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }[]>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customShapeTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() customShapeToolboxTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() defaultItemPropertiesChange: EventEmitter<{ connectorLineEnd?: ConnectorLineEnd, connectorLineStart?: ConnectorLineEnd, connectorLineType?: ConnectorLineType, shapeMaxHeight?: number | undefined, shapeMaxWidth?: number | undefined, shapeMinHeight?: number | undefined, shapeMinWidth?: number | undefined, style?: Record<string, any>, textStyle?: Record<string, any> }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() edgesChange: EventEmitter<{ customDataExpr?: ((data: any, value: any) => any) | string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, fromExpr?: ((data: any, value: any) => any) | string, fromLineEndExpr?: ((data: any, value: any) => any) | string | undefined, fromPointIndexExpr?: ((data: any, value: any) => any) | string | undefined, keyExpr?: ((data: any, value: any) => any) | string, lineTypeExpr?: ((data: any, value: any) => any) | string | undefined, lockedExpr?: ((data: any, value: any) => any) | string | undefined, pointsExpr?: ((data: any, value: any) => any) | string | undefined, styleExpr?: ((data: any, value: any) => any) | string | undefined, textExpr?: ((data: any, value: any) => any) | string | undefined, textStyleExpr?: ((data: any, value: any) => any) | string | undefined, toExpr?: ((data: any, value: any) => any) | string, toLineEndExpr?: ((data: any, value: any) => any) | string | undefined, toPointIndexExpr?: ((data: any, value: any) => any) | string | undefined, zIndexExpr?: ((data: any, value: any) => any) | string | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() editingChange: EventEmitter<{ allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowMoveShape?: boolean, allowResizeShape?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() exportChange: EventEmitter<{ fileName?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() fullScreenChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() gridSizeChange: EventEmitter<number | { items?: Array<number>, value?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hasChangesChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() historyToolbarChange: EventEmitter<{ commands?: Array<Command | CustomCommand>, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() mainToolbarChange: EventEmitter<{ commands?: Array<Command | CustomCommand>, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nodesChange: EventEmitter<{ autoLayout?: DataLayoutType | { orientation?: Orientation, type?: DataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: ((data: any, value: any) => any) | string | undefined, containerKeyExpr?: ((data: any, value: any) => any) | string, customDataExpr?: ((data: any, value: any) => any) | string | undefined, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, heightExpr?: ((data: any, value: any) => any) | string | undefined, imageUrlExpr?: ((data: any, value: any) => any) | string | undefined, itemsExpr?: ((data: any, value: any) => any) | string | undefined, keyExpr?: ((data: any, value: any) => any) | string, leftExpr?: ((data: any, value: any) => any) | string | undefined, lockedExpr?: ((data: any, value: any) => any) | string | undefined, parentKeyExpr?: ((data: any, value: any) => any) | string | undefined, styleExpr?: ((data: any, value: any) => any) | string | undefined, textExpr?: ((data: any, value: any) => any) | string, textStyleExpr?: ((data: any, value: any) => any) | string | undefined, topExpr?: ((data: any, value: any) => any) | string | undefined, typeExpr?: ((data: any, value: any) => any) | string, widthExpr?: ((data: any, value: any) => any) | string | undefined, zIndexExpr?: ((data: any, value: any) => any) | string | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pageColorChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pageOrientationChange: EventEmitter<PageOrientation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pageSizeChange: EventEmitter<{ height?: number, items?: { height?: number, text?: string, width?: number }[], width?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() propertiesPanelChange: EventEmitter<{ tabs?: { commands?: Array<Command | CustomCommand>, groups?: { commands?: Array<Command | CustomCommand>, title?: string }[], title?: string }[], visibility?: PanelVisibility }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showGridChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() simpleViewChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() snapToGridChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() toolboxChange: EventEmitter<{ groups?: { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }[], shapeIconsPerRow?: number, showSearch?: boolean, visibility?: PanelVisibility, width?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() unitsChange: EventEmitter<Units>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() useNativeScrollingChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() viewToolbarChange: EventEmitter<{ commands?: Array<Command | CustomCommand>, visible?: boolean }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() viewUnitsChange: EventEmitter<Units>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() zoomLevelChange: EventEmitter<number | { items?: Array<number>, value?: number | undefined }>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

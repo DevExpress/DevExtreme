@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -28,7 +25,6 @@ import type { ExportFormat, SingleMultipleOrNone, HorizontalAlignment, VerticalE
 import type { Format } from 'devextreme/common/core/localization';
 
 import DxTreeMap from 'devextreme/viz/tree_map';
-
 
 import {
     DxComponent,
@@ -83,7 +79,6 @@ import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/ne
 
 /**
  * [descr:dxTreeMap]
-
  */
 @Component({
     selector: 'dx-tree-map',
@@ -104,7 +99,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
     /**
      * [descr:dxTreeMapOptions.childrenField]
-    
      */
     @Input()
     get childrenField(): string {
@@ -114,10 +108,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('childrenField', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.colorField]
-    
      */
     @Input()
     get colorField(): string {
@@ -127,10 +119,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('colorField', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.colorizer]
-    
      */
     @Input()
     get colorizer(): { colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number> | undefined, type?: TreeMapColorizerType | undefined } {
@@ -140,10 +130,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('colorizer', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
@@ -153,10 +141,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -166,10 +152,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -179,10 +163,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -192,10 +174,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.export]
-    
      */
     @Input()
     get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined } {
@@ -205,10 +185,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('export', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.group]
-    
      */
     @Input()
     get group(): { border?: { color?: string | undefined, width?: number | undefined }, color?: string, headerHeight?: number | undefined, hoverEnabled?: boolean | undefined, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } } {
@@ -218,10 +196,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('group', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.hoverEnabled]
-    
      */
     @Input()
     get hoverEnabled(): boolean | undefined {
@@ -231,10 +207,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('hoverEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.idField]
-    
      */
     @Input()
     get idField(): string | undefined {
@@ -244,10 +218,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('idField', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.interactWithGroup]
-    
      */
     @Input()
     get interactWithGroup(): boolean {
@@ -257,10 +229,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('interactWithGroup', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.labelField]
-    
      */
     @Input()
     get labelField(): string {
@@ -270,10 +240,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('labelField', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.layoutAlgorithm]
-    
      */
     @Input()
     get layoutAlgorithm(): ((e: { items: Array<any>, rect: Array<number>, sum: number }) => void) | TreeMapLayoutAlgorithm {
@@ -283,10 +251,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('layoutAlgorithm', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.layoutDirection]
-    
      */
     @Input()
     get layoutDirection(): TreeMapLayoutDirection {
@@ -296,10 +262,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('layoutDirection', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
-    
      */
     @Input()
     get loadingIndicator(): { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
@@ -309,10 +273,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('loadingIndicator', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.maxDepth]
-    
      */
     @Input()
     get maxDepth(): number | undefined {
@@ -322,10 +284,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('maxDepth', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.parentField]
-    
      */
     @Input()
     get parentField(): string | undefined {
@@ -335,10 +295,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('parentField', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -348,10 +306,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('pathModified', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.redrawOnResize]
-    
      */
     @Input()
     get redrawOnResize(): boolean {
@@ -361,10 +317,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('redrawOnResize', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -374,10 +328,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.selectionMode]
-    
      */
     @Input()
     get selectionMode(): SingleMultipleOrNone | undefined {
@@ -387,10 +339,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('selectionMode', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -400,10 +350,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -413,10 +361,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('theme', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.tile]
-    
      */
     @Input()
     get tile(): { border?: { color?: string | undefined, width?: number | undefined }, color?: string, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } } {
@@ -426,10 +372,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('tile', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.title]
-    
      */
     @Input()
     get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
@@ -439,10 +383,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('title', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -452,10 +394,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
         this._setOption('tooltip', value);
     }
 
-
     /**
      * [descr:dxTreeMapOptions.valueField]
-    
      */
     @Input()
     get valueField(): string {
@@ -466,315 +406,214 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     }
 
     /**
-    
      * [descr:dxTreeMapOptions.onClick]
-    
-    
      */
     @Output() onClick: EventEmitter<ClickEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onDrawn]
-    
-    
      */
     @Output() onDrawn: EventEmitter<DrawnEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onDrill]
-    
-    
      */
     @Output() onDrill: EventEmitter<DrillEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onExported]
-    
-    
      */
     @Output() onExported: EventEmitter<ExportedEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onExporting]
-    
-    
      */
     @Output() onExporting: EventEmitter<ExportingEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onFileSaving]
-    
-    
      */
     @Output() onFileSaving: EventEmitter<FileSavingEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onHoverChanged]
-    
-    
      */
     @Output() onHoverChanged: EventEmitter<HoverChangedEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onIncidentOccurred]
-    
-    
      */
     @Output() onIncidentOccurred: EventEmitter<IncidentOccurredEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onNodesInitialized]
-    
-    
      */
     @Output() onNodesInitialized: EventEmitter<NodesInitializedEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onNodesRendering]
-    
-    
      */
     @Output() onNodesRendering: EventEmitter<NodesRenderingEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxTreeMapOptions.onSelectionChanged]
-    
-    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() childrenFieldChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() colorFieldChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() colorizerChange: EventEmitter<{ colorCodeField?: string | undefined, colorizeGroups?: boolean, palette?: Array<string> | Palette, paletteExtensionMode?: PaletteExtensionMode, range?: Array<number> | undefined, type?: TreeMapColorizerType | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() encodeHtmlChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() groupChange: EventEmitter<{ border?: { color?: string | undefined, width?: number | undefined }, color?: string, headerHeight?: number | undefined, hoverEnabled?: boolean | undefined, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }, padding?: number, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverEnabledChange: EventEmitter<boolean | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() idFieldChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() interactWithGroupChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() labelFieldChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() layoutAlgorithmChange: EventEmitter<((e: { items: Array<any>, rect: Array<number>, sum: number }) => void) | TreeMapLayoutAlgorithm>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() layoutDirectionChange: EventEmitter<TreeMapLayoutDirection>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() loadingIndicatorChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() maxDepthChange: EventEmitter<number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() parentFieldChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pathModifiedChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() redrawOnResizeChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() selectionModeChange: EventEmitter<SingleMultipleOrNone | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sizeChange: EventEmitter<{ height?: number | undefined, width?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() themeChange: EventEmitter<Theme>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tileChange: EventEmitter<{ border?: { color?: string | undefined, width?: number | undefined }, color?: string, hoverStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }, label?: { font?: Font, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }, selectionStyle?: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string | undefined, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((info: { node: dxTreeMapNode, value: number, valueText: string }) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueFieldChange: EventEmitter<string>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

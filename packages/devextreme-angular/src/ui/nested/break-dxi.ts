@@ -1,17 +1,11 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     NgModule,
     Host,
     SkipSelf
 } from '@angular/core';
-
-
-
-
 
 import {
     DxIntegrationModule,
@@ -44,7 +38,6 @@ export class DxiBreakComponent extends DxiVizScaleBreak {
         return 'breaks';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -57,7 +50,6 @@ export class DxiBreakComponent extends DxiVizScaleBreak {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

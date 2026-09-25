@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -30,7 +27,6 @@ import type { Orientation } from 'devextreme/common';
 
 import DxSplitter from 'devextreme/ui/splitter';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -47,13 +43,12 @@ import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 
 import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxSplitter]
-
  */
 @Component({
     selector: 'dx-splitter',
@@ -78,7 +73,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
      * [descr:dxSplitterOptions.allowKeyboardNavigation]
-    
      */
     @Input()
     get allowKeyboardNavigation(): boolean {
@@ -88,10 +82,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('allowKeyboardNavigation', value);
     }
 
-
     /**
      * [descr:dxSplitterOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -101,10 +93,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -114,10 +104,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -127,10 +115,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -140,10 +126,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -153,10 +137,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:dxSplitterOptions.items]
-    
      */
     @Input()
     get items(): Array<dxSplitterItem> {
@@ -166,10 +148,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -179,10 +159,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxSplitterOptions.orientation]
-    
      */
     @Input()
     get orientation(): Orientation {
@@ -192,10 +170,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('orientation', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -205,10 +181,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxSplitterOptions.separatorSize]
-    
      */
     @Input()
     get separatorSize(): number {
@@ -218,10 +192,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('separatorSize', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -231,10 +203,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -245,194 +215,129 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     }
 
     /**
-    
      * [descr:dxSplitterOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onItemCollapsed]
-    
-    
      */
     @Output() onItemCollapsed: EventEmitter<ItemCollapsedEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onItemExpanded]
-    
-    
      */
     @Output() onItemExpanded: EventEmitter<ItemExpandedEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onResize]
-    
-    
      */
     @Output() onResize: EventEmitter<ResizeEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onResizeEnd]
-    
-    
      */
     @Output() onResizeEnd: EventEmitter<ResizeEndEvent>;
 
     /**
-    
      * [descr:dxSplitterOptions.onResizeStart]
-    
-    
      */
     @Output() onResizeStart: EventEmitter<ResizeStartEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() allowKeyboardNavigationChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<dxSplitterItem>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() orientationChange: EventEmitter<Orientation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() separatorSizeChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

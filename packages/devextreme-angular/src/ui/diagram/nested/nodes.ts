@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DataLayoutType } from 'devextreme/ui/diagram';
 import type { Orientation } from 'devextreme/common';
 import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
@@ -24,7 +18,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-diagram-nodes',
@@ -199,7 +192,6 @@ export class DxoDiagramNodesComponent extends NestedOption implements OnDestroy,
         return 'nodes';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -215,7 +207,6 @@ export class DxoDiagramNodesComponent extends NestedOption implements OnDestroy,
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 
