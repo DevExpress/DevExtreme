@@ -852,6 +852,13 @@ export const AdvancedChart = BaseChart.inherit({
     this.callBase(arg);
   },
 
+  _change_FULL_RENDER() {
+    this.callBase();
+    if (this._changes.has(VISUAL_RANGE)) {
+      this._raiseZoomEndHandlers();
+    }
+  },
+
   _change_VISUAL_RANGE() {
     this._recreateSizeDependentObjects(false);
     if (!this._changes.has('FULL_RENDER')) {

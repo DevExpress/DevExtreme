@@ -1384,6 +1384,7 @@ export const BaseChart = BaseWidget.inherit({
 
   _change_FULL_RENDER() {
     this._forceRender();
+    this._changes.remove('FULL_RENDER');
   },
 
   _change_INIT() {
