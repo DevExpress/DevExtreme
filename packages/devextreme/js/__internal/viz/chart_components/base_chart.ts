@@ -1408,7 +1408,6 @@ export class BaseChart extends BaseWidget {
 
   _change_FULL_RENDER() {
     this._forceRender();
-    // a visualRange change requested from now on (e.g. a canceled zoomEnd) has to render itself
     this._changes.remove('FULL_RENDER');
   }
 
