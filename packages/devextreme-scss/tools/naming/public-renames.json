@@ -407,12 +407,6 @@
       "note": "It fills a pressed cell - the rule writes background-color - and the name said content while aliasing a border name."
     },
     {
-      "name": "--dx-datagrid-row-alternation-bg",
-      "replacement": "--dx-grid-row-alternation-bg",
-      "release": "26.2",
-      "note": "The row-stripe colour handle was renamed to match the gridBase naming convention; demos that read it directly should switch names."
-    },
-    {
       "name": "--dx-switch-box-shadow",
       "replacement": null,
       "release": "26.2",

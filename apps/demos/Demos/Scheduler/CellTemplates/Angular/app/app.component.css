@@ -21,8 +21,8 @@
   background-image:
     repeating-linear-gradient(
       135deg,
-      var(--dx-grid-row-alternation-bg),
-      var(--dx-grid-row-alternation-bg) 2px,
+      var(--dx-datagrid-row-alternation-bg),
+      var(--dx-datagrid-row-alternation-bg) 2px,
       transparent 2px,
       transparent 6px
     );
@@ -43,7 +43,7 @@
 }
 
 .dinner {
-  background: var(--dx-grid-row-alternation-bg);
+  background: var(--dx-datagrid-row-alternation-bg);
 }
 
 ::ng-deep .dx-scheduler-time-panel-cell .dinner {
