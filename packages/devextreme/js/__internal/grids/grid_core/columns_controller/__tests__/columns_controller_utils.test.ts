@@ -4,6 +4,7 @@ import {
 import config from '@js/core/config';
 import {
   customizeTextForBooleanDataType,
+  findColumn,
   getAlignmentByDataType,
   getCustomizeTextByDataType,
   getSerializationFormat,
@@ -295,5 +296,85 @@ describe('strictParseNumber', () => {
     ['a text that matches neither the column format nor the decimal format', '12.30', { type: 'fixedPoint', precision: 1 }],
   ])('should return undefined for %s', (_, text, format) => {
     expect(strictParseNumber(text, format)).toBeUndefined();
+  });
+});
+
+describe('findColumn', () => {
+  it('should return undefined when the identifier is undefined', () => {
+    expect(findColumn([{ index: 0 }], undefined)).toBeUndefined();
+  });
+
+  it('should find a column by index', () => {
+    const columns: Column[] = [{ index: 0 }, { index: 1 }];
+
+    expect(findColumn(columns, 1)).toBe(columns[1]);
+  });
+
+  it.each(['name', 'dataField', 'caption'] as const)('should find a column by %s', (optionName) => {
+    const columns: Column[] = [{ index: 0 }, { index: 1, [optionName]: 'value' }];
+
+    expect(findColumn(columns, 'value')).toBe(columns[1]);
+  });
+
+  it('should prefer name over dataField and dataField over caption', () => {
+    const columns: Column[] = [
+      { index: 0, caption: 'value' },
+      { index: 1, dataField: 'value' },
+      { index: 2, name: 'value' },
+    ];
+
+    expect(findColumn(columns, 'value')).toBe(columns[2]);
+    expect(findColumn(columns.slice(0, 2), 'value')).toBe(columns[1]);
+  });
+
+  it('should return the first column when several columns match', () => {
+    const columns: Column[] = [{ index: 0, caption: 'value' }, { index: 1, caption: 'value' }];
+
+    expect(findColumn(columns, 'value')).toBe(columns[0]);
+  });
+
+  it('should not match a numeric string to an index', () => {
+    expect(findColumn([{ index: 1 }], '1')).toBeUndefined();
+  });
+
+  it('should return undefined when no column matches', () => {
+    expect(findColumn([{ index: 0, dataField: 'id' }], 'name')).toBeUndefined();
+  });
+
+  describe('when the identifier has the "optionName:value" form', () => {
+    it('should find a column by the given option', () => {
+      const columns: Column[] = [{ index: 0, name: 'id' }, { index: 1, dataField: 'id' }];
+
+      expect(findColumn(columns, 'dataField:id')).toBe(columns[1]);
+    });
+
+    it('should compare the option as a string', () => {
+      const columns: Column[] = [{ index: 0, visible: true }, { index: 1, visible: false }];
+
+      expect(findColumn(columns, 'index:1')).toBe(columns[1]);
+      expect(findColumn(columns, 'visible:false')).toBe(columns[1]);
+    });
+
+    it('should return the first column when several columns match', () => {
+      const columns: Column[] = [{ index: 0, dataField: 'id' }, { index: 1, dataField: 'id' }];
+
+      expect(findColumn(columns, 'dataField:id')).toBe(columns[0]);
+    });
+
+    it('should not fall back to other options', () => {
+      expect(findColumn([{ index: 0, caption: 'id' }], 'dataField:id')).toBeUndefined();
+    });
+
+    it('should keep colons in the value', () => {
+      const columns: Column[] = [{ index: 0, caption: 'a:b' }];
+
+      expect(findColumn(columns, 'caption:a:b')).toBe(columns[0]);
+    });
+
+    it('should search the whole identifier when it starts with a colon', () => {
+      const columns: Column[] = [{ index: 0, caption: ':value' }];
+
+      expect(findColumn(columns, ':value')).toBe(columns[0]);
+    });
   });
 });

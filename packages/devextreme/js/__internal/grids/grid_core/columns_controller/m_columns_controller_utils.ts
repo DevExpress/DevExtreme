@@ -1017,26 +1017,34 @@ export const convertOwnerBandToColumnReference = (columns) => {
   });
 };
 
-export const findColumn = (columns, identifier: ColumnIdentifier | undefined) => {
-  const identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(':'));
-  let column;
-
-  if (identifier === undefined) return;
-
-  if (isString(identifier) && identifierOptionName) {
-    identifier = identifier.substr(identifierOptionName.length + 1);
+export const findColumn = (
+  columns: Column[],
+  identifier: ColumnIdentifier | undefined,
+): Column | undefined => {
+  if (identifier === undefined) {
+    return undefined;
   }
 
-  if (identifierOptionName) {
-    column = columns.filter((column) => `${column[identifierOptionName]}` === identifier)[0];
-  } else {
-    ['index', 'name', 'dataField', 'caption'].some((optionName) => {
-      column = columns.filter((column) => column[optionName] === identifier)[0];
-      return !!column;
-    });
+  if (isString(identifier)) {
+    const separatorIndex = identifier.indexOf(':');
+
+    if (separatorIndex > 0) {
+      const optionName = identifier.slice(0, separatorIndex);
+      const optionValue = identifier.slice(separatorIndex + 1);
+
+      return columns.find((column) => `${column[optionName]}` === optionValue);
+    }
   }
 
-  return column;
+  for (const optionName of ['index', 'name', 'dataField', 'caption'] as const) {
+    const foundColumn = columns.find((column) => column[optionName] === identifier);
+
+    if (foundColumn) {
+      return foundColumn;
+    }
+  }
+
+  return undefined;
 };
 
 export const sortColumns = (columns, sortOrder) => {
