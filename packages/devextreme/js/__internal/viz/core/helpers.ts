@@ -38,8 +38,12 @@ Flags.prototype = {
     return this._flags[code] > 0;
   },
 
+  remove(code) {
+    this._flags[code] = 0;
+  },
+
   count() {
-    return Object.keys(this._flags).length;
+    return Object.keys(this._flags).filter((code) => this.has(code)).length;
   },
 
   reset() {
