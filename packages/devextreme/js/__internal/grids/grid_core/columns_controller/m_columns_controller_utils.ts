@@ -945,58 +945,92 @@ export const numberToString = function (number, digitsCount) {
   return str;
 };
 
-export const mergeColumns = (that: ColumnsController, columns, commandColumns, needToExtend?) => {
-  let column;
-  let commandColumnIndex;
-  let result = columns.slice().map((column) => extend({}, column));
-  const isColumnFixing = that._isColumnFixing();
-  let defaultCommandColumns = commandColumns.slice().map((column) => extend({ fixed: isColumnFixing }, column));
-  const getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
-    const columnType = needToExtend && column.type === GROUP_COMMAND_COLUMN_NAME ? 'expand' : column.type;
-    return commandColumn.type === columnType || commandColumn.command === column.command ? index : result;
-  }, -1);
-  const callbackFilter = (commandColumn) => commandColumn.command !== commandColumns[commandColumnIndex].command;
-
-  for (let i = 0; i < columns.length; i++) {
-    column = columns[i];
-
-    commandColumnIndex = column && (column.type || column.command) ? getCommandColumnIndex(column) : -1;
-    if (commandColumnIndex >= 0) {
-      if (needToExtend) {
-        result[i] = extend(
-          { fixed: isColumnFixing },
-          commandColumns[commandColumnIndex],
-          column,
-          {
-            calculateCellValue: commandColumns[commandColumnIndex].calculateCellValue,
-            cssClass: [
-              commandColumns[commandColumnIndex].cssClass ?? '',
-              column.cssClass ?? '',
-            ].join(' ').trim(),
-          },
-        );
-        if (column.type !== GROUP_COMMAND_COLUMN_NAME) {
-          defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
-        }
-      } else {
-        const columnOptions = {
-          visibleIndex: column.visibleIndex,
-          index: column.index,
-          headerId: column.headerId,
-          allowFixing: column.groupIndex === 0,
-          allowReordering: column.groupIndex === 0,
-          groupIndex: column.groupIndex,
-        };
-        result[i] = extend({}, column, commandColumns[commandColumnIndex], column.type === GROUP_COMMAND_COLUMN_NAME && columnOptions);
-      }
-    }
+export const getCommandColumnIndex = (
+  column: Column,
+  commandColumns: Column[],
+  asExpandColumn = false,
+): number => {
+  if (!column.type && !column.command) {
+    return -1;
   }
+
+  const columnType = asExpandColumn ? 'expand' : column.type;
+
+  return commandColumns.reduce(
+    (foundIndex, commandColumn, index) => (
+      commandColumn.type === columnType || commandColumn.command === column.command
+        ? index
+        : foundIndex
+    ),
+    -1,
+  );
+};
+
+export const mergeColumns = (
+  that: ColumnsController,
+  columns: Column[],
+  commandColumns: Column[],
+  needToExtend?: boolean,
+): Column[] => {
+  const isColumnFixing = that._isColumnFixing();
+  let defaultCommandColumns = commandColumns.map(
+    (commandColumn) => extend({ fixed: isColumnFixing }, commandColumn) as Column,
+  );
+
+  const mergedColumns = columns.map((column): Column => {
+    const isGroupExpandColumn = column.type === GROUP_COMMAND_COLUMN_NAME;
+    const commandColumnIndex = getCommandColumnIndex(
+      column,
+      commandColumns,
+      needToExtend && isGroupExpandColumn,
+    );
+
+    if (commandColumnIndex < 0) {
+      return extend({}, column) as Column;
+    }
+
+    const commandColumn = commandColumns[commandColumnIndex];
+
+    if (needToExtend) {
+      if (!isGroupExpandColumn) {
+        defaultCommandColumns = defaultCommandColumns.filter(
+          ({ command }) => command !== commandColumn.command,
+        );
+      }
+
+      return extend(
+        { fixed: isColumnFixing },
+        commandColumn,
+        column,
+        {
+          calculateCellValue: commandColumn.calculateCellValue,
+          cssClass: [commandColumn.cssClass ?? '', column.cssClass ?? ''].join(' ').trim(),
+        },
+      ) as Column;
+    }
+
+    const columnOptions = {
+      visibleIndex: column.visibleIndex,
+      index: column.index,
+      headerId: column.headerId,
+      allowFixing: column.groupIndex === 0,
+      allowReordering: column.groupIndex === 0,
+      groupIndex: column.groupIndex,
+    };
+
+    return extend(
+      {},
+      column,
+      commandColumn,
+      isGroupExpandColumn && columnOptions,
+    ) as Column;
+  });
 
   if (columns.length && needToExtend && defaultCommandColumns.length) {
-    result = result.concat(defaultCommandColumns);
+    return mergedColumns.concat(defaultCommandColumns);
   }
 
-  return result;
+  return mergedColumns;
 };
 
 export const isColumnFixed = (that: ColumnsController, column) => {

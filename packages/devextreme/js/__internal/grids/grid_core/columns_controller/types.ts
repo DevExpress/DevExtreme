@@ -60,6 +60,7 @@ export interface InternalColumnOptions extends ValueSerializers {
   hidingPriority?: number;
   ai?: ColumnAIOptions;
   command?: string;
+  headerId?: string;
   showWhenGrouped?: boolean;
   rowspan?: number;
   colspan?: number;
