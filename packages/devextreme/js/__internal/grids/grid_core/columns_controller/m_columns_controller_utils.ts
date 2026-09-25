@@ -541,6 +541,14 @@ export const moveColumnToGroup = function (that: ColumnsController, column, grou
   return groupIndex;
 };
 
+function copyColumnStateField<T extends keyof ColumnUserState>(
+  column: Column,
+  columnState: ColumnUserState,
+  fieldName: T,
+): void {
+  column[fieldName] = columnState[fieldName];
+}
+
 export function applyColumnStateFields(
   column: Column,
   columnState: ColumnUserState | undefined,
@@ -559,13 +567,13 @@ export function applyColumnStateFields(
       column.dataType = column.dataType || columnState.dataType;
     } else if ((USER_STATE_FIELD_NAMES_15_1 as readonly string[]).includes(fieldName)) {
       if (fieldName in columnState) {
-        column[fieldName] = columnState[fieldName];
+        copyColumnStateField(column, columnState, fieldName);
       }
     } else {
       if (fieldName === 'selectedFilterOperation' && columnState.selectedFilterOperation) {
         column.defaultSelectedFilterOperation = column.selectedFilterOperation || null;
       }
-      column[fieldName] = columnState[fieldName];
+      copyColumnStateField(column, columnState, fieldName);
     }
   });
 }
