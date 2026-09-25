@@ -31,7 +31,6 @@ $theme-marker-mode: null !default;
   --dx-color-icon: #{ds.$color-content-subtle};
   --dx-color-spin-icon: #{ds.$color-content-subtle};
   --dx-color-link: #{ds.$color-content-primary};
-  --dx-color-shadow: #{ds.$color-shadow-key};
   --dx-color-separator: #{ds.$color-border-subtle};
   --dx-color-options-panel-bg: color-mix(in srgb, #{ds.$color-bg-inverted} calc(#{ds.$opacity-5} * 100%), transparent);
 }

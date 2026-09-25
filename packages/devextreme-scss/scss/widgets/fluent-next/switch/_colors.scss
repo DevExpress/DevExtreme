@@ -30,5 +30,3 @@ $switch-invalid-border-focused: ds.$color-border-danger-shared-active !default;
 $switch-invalid-bg: ds.$color-bg-danger-shared !default;
 $switch-invalid-bg-hovered: ds.$color-bg-danger-shared-hovered !default;
 $switch-invalid-bg-focused: ds.$color-bg-danger-shared-active !default;
-
-$switch-handle-on-shadow: rgb(from #{ds.$color-content-inverted} r g b / 0.1) !default;
