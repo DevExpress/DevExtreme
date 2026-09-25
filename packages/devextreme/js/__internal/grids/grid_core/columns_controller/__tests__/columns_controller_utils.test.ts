@@ -1,18 +1,33 @@
 import {
-  afterEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { Response as SendRequestResult } from '@js/common/ai-integration';
 import config from '@js/core/config';
+import type { Properties as DataGridProperties } from '@js/ui/data_grid';
+import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import {
+  columnOptionCore,
   customizeTextForBooleanDataType,
+  findColumn,
+  fireColumnsChanged,
   getAlignmentByDataType,
   getCustomizeTextByDataType,
   getSerializationFormat,
   getValueDataType,
+  resolveChangeType,
   setFilterOperationsAsDefaultValues,
   strictParseNumber,
   updateSerializers,
 } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+
+import type { DataGridInstance } from '../../__tests__/__mock__/helpers/utils';
+import {
+  afterTest,
+  beforeTest,
+  createDataGrid,
+} from '../../__tests__/__mock__/helpers/utils';
 
 describe('getValueDataType', () => {
   it.each([
@@ -295,5 +310,452 @@ describe('strictParseNumber', () => {
     ['a text that matches neither the column format nor the decimal format', '12.30', { type: 'fixedPoint', precision: 1 }],
   ])('should return undefined for %s', (_, text, format) => {
     expect(strictParseNumber(text, format)).toBeUndefined();
+  });
+});
+
+describe('findColumn', () => {
+  it('should return undefined when the identifier is undefined', () => {
+    expect(findColumn([{ index: 0 }], undefined)).toBeUndefined();
+  });
+
+  it('should find a column by index', () => {
+    const columns: Column[] = [{ index: 0 }, { index: 1 }];
+
+    expect(findColumn(columns, 1)).toBe(columns[1]);
+  });
+
+  it.each(['name', 'dataField', 'caption'] as const)('should find a column by %s', (optionName) => {
+    const columns: Column[] = [{ index: 0 }, { index: 1, [optionName]: 'value' }];
+
+    expect(findColumn(columns, 'value')).toBe(columns[1]);
+  });
+
+  it('should prefer name over dataField and dataField over caption', () => {
+    const columns: Column[] = [
+      { index: 0, caption: 'value' },
+      { index: 1, dataField: 'value' },
+      { index: 2, name: 'value' },
+    ];
+
+    expect(findColumn(columns, 'value')).toBe(columns[2]);
+    expect(findColumn(columns.slice(0, 2), 'value')).toBe(columns[1]);
+  });
+
+  it('should return the first column when several columns match', () => {
+    const columns: Column[] = [{ index: 0, caption: 'value' }, { index: 1, caption: 'value' }];
+
+    expect(findColumn(columns, 'value')).toBe(columns[0]);
+  });
+
+  it('should not match a numeric string to an index', () => {
+    expect(findColumn([{ index: 1 }], '1')).toBeUndefined();
+  });
+
+  it('should return undefined when no column matches', () => {
+    expect(findColumn([{ index: 0, dataField: 'id' }], 'name')).toBeUndefined();
+  });
+
+  describe('when the identifier has the "optionName:value" form', () => {
+    it('should find a column by the given option', () => {
+      const columns: Column[] = [{ index: 0, name: 'id' }, { index: 1, dataField: 'id' }];
+
+      expect(findColumn(columns, 'dataField:id')).toBe(columns[1]);
+    });
+
+    it('should compare the option as a string', () => {
+      const columns: Column[] = [{ index: 0, visible: true }, { index: 1, visible: false }];
+
+      expect(findColumn(columns, 'index:1')).toBe(columns[1]);
+      expect(findColumn(columns, 'visible:false')).toBe(columns[1]);
+    });
+
+    it('should return the first column when several columns match', () => {
+      const columns: Column[] = [{ index: 0, dataField: 'id' }, { index: 1, dataField: 'id' }];
+
+      expect(findColumn(columns, 'dataField:id')).toBe(columns[0]);
+    });
+
+    it('should not fall back to other options', () => {
+      expect(findColumn([{ index: 0, caption: 'id' }], 'dataField:id')).toBeUndefined();
+    });
+
+    it('should keep colons in the value', () => {
+      const columns: Column[] = [{ index: 0, caption: 'a:b' }];
+
+      expect(findColumn(columns, 'caption:a:b')).toBe(columns[0]);
+    });
+
+    it('should search the whole identifier when it starts with a colon', () => {
+      const columns: Column[] = [{ index: 0, caption: ':value' }];
+
+      expect(findColumn(columns, ':value')).toBe(columns[0]);
+    });
+  });
+});
+
+describe('resolveChangeType', () => {
+  it.each([
+    ['groupIndex', 'grouping'],
+    ['calculateGroupValue', 'grouping'],
+    ['sortIndex', 'sorting'],
+    ['sortOrder', 'sorting'],
+    ['calculateSortValue', 'sorting'],
+    ['caption', 'columns'],
+    ['visible', 'columns'],
+  ])('should return the change type of %s', (optionName, expected) => {
+    expect(resolveChangeType(optionName)).toBe(expected);
+  });
+});
+
+describe('columnOptionCore', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  interface Grid {
+    instance: DataGridInstance;
+    columnsController: ColumnsController;
+    columnsChanged: jest.Mock;
+    optionChanged: jest.Mock;
+  }
+
+  const createGrid = async (options: DataGridProperties): Promise<Grid> => {
+    const { instance } = await createDataGrid({ dataSource: [], ...options });
+    const columnsController = instance.getController('columns');
+    const columnsChanged = jest.fn();
+    const optionChanged = jest.fn();
+
+    columnsController.columnsChanged.add(columnsChanged);
+    instance.on('optionChanged', ({ fullName, value, previousValue }) => {
+      optionChanged({ fullName, value, previousValue });
+    });
+
+    return {
+      instance, columnsController, columnsChanged, optionChanged,
+    };
+  };
+
+  describe('when reading an option', () => {
+    it('should return the option value', async () => {
+      const { columnsController } = await createGrid({ columns: [{ dataField: 'a', caption: 'A' }] });
+      const [column] = columnsController.getColumns();
+
+      expect(columnOptionCore(columnsController, column, 'caption')).toBe('A');
+    });
+
+    it('should return a nested option value', async () => {
+      const { columnsController } = await createGrid({ columns: [{ dataField: 'a', format: { type: 'fixedPoint' } }] });
+      const [column] = columnsController.getColumns();
+
+      expect(columnOptionCore(columnsController, column, 'format.type')).toBe('fixedPoint');
+    });
+
+    it('should return a function option as is', async () => {
+      const customizeText = jest.fn(() => 'text');
+      const { columnsController } = await createGrid({ columns: [{ dataField: 'a', customizeText }] });
+      const [column] = columnsController.getColumns();
+
+      expect(columnOptionCore(columnsController, column, 'customizeText')).toBe(customizeText);
+      expect(customizeText).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when writing an option', () => {
+    it('should set the option and return undefined', async () => {
+      const { columnsController } = await createGrid({ columns: [{ dataField: 'a', caption: 'A' }] });
+      const [column] = columnsController.getColumns();
+
+      expect(columnOptionCore(columnsController, column, 'caption', 'New')).toBeUndefined();
+      expect(column.caption).toBe('New');
+    });
+
+    it('should replace a function option instead of calling it', async () => {
+      const oldCustomizeText = jest.fn(() => 'old');
+      const newCustomizeText = (): string => 'new';
+      const { columnsController } = await createGrid({
+        columns: [{ dataField: 'a', customizeText: oldCustomizeText }],
+      });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'customizeText', newCustomizeText);
+
+      expect(column.customizeText).toBe(newCustomizeText);
+      expect(oldCustomizeText).not.toHaveBeenCalled();
+    });
+
+    it('should do nothing when the new value is deeply equal to the old one', async () => {
+      const { columnsController, columnsChanged, optionChanged } = await createGrid({
+        columns: [{ dataField: 'a', format: { type: 'fixedPoint' } }],
+      });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'format', { type: 'fixedPoint' });
+      fireColumnsChanged(columnsController);
+
+      expect(columnsChanged).not.toHaveBeenCalled();
+      expect(optionChanged).not.toHaveBeenCalled();
+    });
+
+    it.each([
+      ['groupIndex', 0, 'grouping'],
+      ['calculateGroupValue', 'b', 'grouping'],
+      ['sortOrder', 'asc', 'sorting'],
+      ['calculateSortValue', 'b', 'sorting'],
+      ['caption', 'New', 'columns'],
+    ])('should record a %s change as a %s change', async (optionName, value, changeType) => {
+      const { columnsController, columnsChanged } = await createGrid({ columns: [{ dataField: 'a' }] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, optionName, value);
+      fireColumnsChanged(columnsController);
+
+      expect(columnsChanged).toHaveBeenCalledTimes(1);
+      expect(columnsChanged).toHaveBeenCalledWith({
+        changeTypes: { [changeType]: true, length: 1 },
+        optionNames: { [optionName]: true, length: 1 },
+        columnIndex: 0,
+      });
+    });
+
+    it('should record a sortIndex change as a sorting change', async () => {
+      const { columnsController, columnsChanged } = await createGrid({
+        columns: [{ dataField: 'a', sortOrder: 'asc' }],
+      });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'sortIndex', 1);
+      fireColumnsChanged(columnsController);
+
+      expect(columnsChanged).toHaveBeenCalledWith({
+        changeTypes: { sorting: true, length: 1 },
+        optionNames: { sortIndex: true, length: 1 },
+        columnIndex: 0,
+      });
+    });
+
+    it('should record the column index from before the change', async () => {
+      const { columnsController, columnsChanged } = await createGrid({ columns: [{ dataField: 'a' }] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'index', 5);
+      fireColumnsChanged(columnsController);
+
+      expect(columnsChanged).toHaveBeenCalledWith(expect.objectContaining({ columnIndex: 0 }));
+    });
+
+    it('should keep the sort order of a column that becomes grouped', async () => {
+      const { columnsController } = await createGrid({ columns: [{ dataField: 'a', sortOrder: 'desc' }] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'groupIndex', 0);
+
+      expect(column.lastSortOrder).toBe('desc');
+    });
+
+    it('should keep the sort order when another option changes', async () => {
+      const { columnsController } = await createGrid({ columns: [{ dataField: 'a', sortOrder: 'asc' }] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'caption', 'New');
+
+      expect(column.sortOrder).toBe('asc');
+    });
+
+    it('should normalize an index option and report the normalized value', async () => {
+      const { columnsController, optionChanged } = await createGrid({
+        columns: [{ dataField: 'a' }, { dataField: 'b' }],
+      });
+      const [, column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'visibleIndex', 10);
+
+      expect(column.visibleIndex).toBe(1);
+      expect(optionChanged).toHaveBeenCalledWith(expect.objectContaining({
+        fullName: 'columns[1].visibleIndex',
+        value: 1,
+      }));
+    });
+
+    it.each(['name', 'allowEditing'])('should check the columns when %s changes', async (optionName) => {
+      const { columnsController } = await createGrid({ columns: [{ dataField: 'a' }] });
+      const [column] = columnsController.getColumns();
+      const checkColumns = jest.spyOn(columnsController, '_checkColumns');
+
+      columnOptionCore(columnsController, column, optionName, optionName === 'name' ? 'b' : false);
+
+      expect(checkColumns).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not check the columns when another option changes', async () => {
+      const { columnsController } = await createGrid({ columns: [{ dataField: 'a' }] });
+      const [column] = columnsController.getColumns();
+      const checkColumns = jest.spyOn(columnsController, '_checkColumns');
+
+      columnOptionCore(columnsController, column, 'caption', 'New');
+
+      expect(checkColumns).not.toHaveBeenCalled();
+    });
+
+    it('should fire optionChanged with the full option path', async () => {
+      const { columnsController, optionChanged } = await createGrid({
+        columns: [{ dataField: 'a' }, { dataField: 'b', caption: 'B' }],
+      });
+      const [, column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'caption', 'New');
+
+      expect(optionChanged).toHaveBeenCalledWith(expect.objectContaining({
+        fullName: 'columns[1].caption',
+        value: 'New',
+        previousValue: 'B',
+      }));
+    });
+
+    it('should not fire optionChanged for a command column', async () => {
+      const { columnsController, optionChanged } = await createGrid({
+        columns: [{ dataField: 'a' }],
+        selection: { mode: 'multiple', showCheckBoxesMode: 'always' },
+      });
+      const column = columnsController._commandColumns.find(({ type }) => type === 'selection');
+
+      columnOptionCore(columnsController, column, 'caption', 'New');
+
+      expect(column.caption).toBe('New');
+      expect(optionChanged).not.toHaveBeenCalled();
+    });
+
+    it('should write the option to the columns option', async () => {
+      const { instance, columnsController } = await createGrid({ columns: [{ dataField: 'a', caption: 'A' }] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'caption', 'New');
+
+      expect(instance.option('columns')).toEqual([{ dataField: 'a', caption: 'New', name: 'a' }]);
+    });
+
+    it('should not write to the columns option item of another column', async () => {
+      const { instance, columnsController } = await createGrid({
+        columns: [{ dataField: 'a', caption: 'A' }],
+        customizeColumns: (columns) => {
+          columns.unshift({ dataField: 'b' });
+        },
+      });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'caption', 'New');
+
+      expect(column.dataField).toBe('b');
+      expect(instance.option('columns')).toEqual([{ dataField: 'a', caption: 'A', name: 'a' }]);
+    });
+
+    it('should replace a string column in the columns option with an object', async () => {
+      const { instance, columnsController } = await createGrid({ columns: ['a'] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'caption', 'New');
+
+      expect(instance.option('columns')).toEqual([{ dataField: 'a', caption: 'New' }]);
+    });
+
+    it.each([
+      ['width', 100],
+      ['visibleWidth', 50],
+    ])('should not write %s to the columns option', async (optionName, value) => {
+      const { instance, columnsController } = await createGrid({ columns: [{ dataField: 'a' }] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, optionName, value);
+
+      expect(column[optionName]).toBe(value);
+      expect(instance.option('columns')).toEqual([{ dataField: 'a', name: 'a' }]);
+    });
+
+    it('should neither record changes nor write the columns option when notFireEvent is true', async () => {
+      const {
+        instance, columnsController, columnsChanged, optionChanged,
+      } = await createGrid({ columns: [{ dataField: 'a', caption: 'A' }] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'caption', 'New', true);
+      fireColumnsChanged(columnsController);
+
+      expect(columnsChanged).not.toHaveBeenCalled();
+      expect(instance.option('columns')).toEqual([{ dataField: 'a', caption: 'A', name: 'a' }]);
+      expect(optionChanged).toHaveBeenCalledWith(expect.objectContaining({ fullName: 'columns[0].caption' }));
+    });
+
+    it('should reset the columns cache when notFireEvent is true', async () => {
+      const { columnsController } = await createGrid({ columns: [{ dataField: 'a' }, { dataField: 'b' }] });
+      const [, column] = columnsController.getColumns();
+
+      columnsController.getVisibleColumns();
+      columnOptionCore(columnsController, column, 'visible', false, true);
+
+      expect(columnsController.getVisibleColumns()).toEqual([expect.objectContaining({ dataField: 'a' })]);
+    });
+
+    it('should not record a change from undefined to null', async () => {
+      const { columnsController, columnsChanged, optionChanged } = await createGrid({ columns: [{ dataField: 'a' }] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'filterValue', null);
+      fireColumnsChanged(columnsController);
+
+      expect(column.filterValue).toBeNull();
+      expect(columnsChanged).not.toHaveBeenCalled();
+      expect(optionChanged).toHaveBeenCalledWith(expect.objectContaining({ fullName: 'columns[0].filterValue' }));
+    });
+
+    it('should record a change from undefined to null when notFireEvent is false', async () => {
+      const { columnsController, columnsChanged } = await createGrid({ columns: [{ dataField: 'a' }] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'filterValue', null, false);
+      fireColumnsChanged(columnsController);
+
+      expect(columnsChanged).toHaveBeenCalledTimes(1);
+    });
+
+    it('should record a change from undefined to null of a buffered option', async () => {
+      const { columnsController, columnsChanged } = await createGrid({ columns: [{ dataField: 'a' }] });
+      const [column] = columnsController.getColumns();
+
+      columnOptionCore(columnsController, column, 'bufferedFilterValue', null);
+      fireColumnsChanged(columnsController);
+
+      expect(columnsChanged).toHaveBeenCalledTimes(1);
+    });
+
+    it('should notify about an option change of an AI column', async () => {
+      const { columnsController } = await createGrid({
+        columns: [{
+          type: 'ai',
+          name: 'ai',
+          caption: 'AI',
+          ai: {
+            aiIntegration: new AIIntegration({
+              sendRequest: (): SendRequestResult => ({ promise: Promise.resolve('{}'), abort: (): void => {} }),
+            }),
+          },
+        }],
+      });
+      const [column] = columnsController.getColumns();
+      const aiColumnOptionChanged = jest.fn();
+      columnsController.aiColumnOptionChanged.add(aiColumnOptionChanged);
+
+      columnOptionCore(columnsController, column, 'caption', 'New');
+
+      expect(aiColumnOptionChanged).toHaveBeenCalledWith(column, 'caption', 'New');
+    });
+
+    it('should not notify about an option change of a regular column', async () => {
+      const { columnsController } = await createGrid({ columns: [{ dataField: 'a' }] });
+      const [column] = columnsController.getColumns();
+      const aiColumnOptionChanged = jest.fn();
+      columnsController.aiColumnOptionChanged.add(aiColumnOptionChanged);
+
+      columnOptionCore(columnsController, column, 'caption', 'New');
+
+      expect(aiColumnOptionChanged).not.toHaveBeenCalled();
+    });
   });
 });
