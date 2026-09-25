@@ -665,6 +665,24 @@ QUnit.test('With a .dx-viewport, a widget in a theme mode scope attaches the too
     assert.strictEqual(tooltip._wrapper.parent().get(0), $scope.get(0), 'and its wrapper is appended there');
 });
 
+QUnit.test('With a .dx-viewport, a widget in a theme mode scope that clips attaches the tooltip to the view port\'s container for that mode', function(assert) {
+    const $viewPort = $('<div>').addClass('dx-viewport').appendTo('#qunit-fixture');
+    const $scope = themeModeScope('dark').css('overflow', 'hidden').appendTo($viewPort);
+
+    viewPort($viewPort);
+
+    const tooltip = this.createTooltip($('<div>').appendTo($scope).get(0));
+
+    tooltip.show({ valueText: 'text' }, {});
+
+    const container = tooltip._getContainer();
+
+    assert.notStrictEqual(container, $scope.get(0), 'the scope would clip the tooltip, so it does not host it');
+    assert.strictEqual(container.parentNode, $viewPort.get(0), 'the container is a child of the view port');
+    assert.ok($(container).hasClass('dx-theme-mode-dark'), 'that carries the mode of the scope');
+    assert.strictEqual(tooltip._wrapper.parent().get(0), container, 'and the wrapper is appended there');
+});
+
 QUnit.test('With a .dx-viewport, a widget deeper in a theme mode scope attaches the tooltip to the view port\'s container for that mode', function(assert) {
     const $viewPort = $('<div>').addClass('dx-viewport').appendTo('#qunit-fixture');
     const $scope = themeModeScope('dark').appendTo($('<div>').appendTo($viewPort));

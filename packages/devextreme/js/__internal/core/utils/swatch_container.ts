@@ -1,6 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { value } from '@js/core/utils/view_port';
+import { getWindow, hasWindow } from '@js/core/utils/window';
 import { resolvedThemeMode } from '@ts/core/utils/theme_mode';
 
 const SWATCH_CONTAINER_CLASS_PREFIX = 'dx-swatch-';
@@ -50,6 +51,13 @@ const isExactScope = (
   .every((prefix) => classesByPrefix(node, prefix)
     .every((cssClass) => containerClasses.includes(cssClass)));
 
+const showsOverflow = (node: Element): boolean => {
+  const style = hasWindow() ? getWindow().getComputedStyle(node) : undefined;
+
+  return ['overflow', 'overflow-x', 'overflow-y']
+    .every((property) => ['', 'visible'].includes(style?.getPropertyValue(property) ?? ''));
+};
+
 const getSwatchContainer = (
   element: Element | dxElementWrapper,
 ): dxElementWrapper | undefined => {
@@ -69,7 +77,7 @@ const getSwatchContainer = (
   let $container = $($viewport
     .children(selector)
     .toArray()
-    .filter((node) => isExactScope(node, containerClasses)));
+    .filter((node) => isExactScope(node, containerClasses) && showsOverflow(node)));
 
   if (!$container.length) {
     $container = $('<div>').addClass(containerClasses.join(' ')).appendTo($viewport);

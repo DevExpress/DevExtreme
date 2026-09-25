@@ -165,6 +165,43 @@ describe('getSwatchContainer', () => {
       expect(containerFor('<div class="dx-swatch-custom"><div class="target"></div></div>')).toBe(first);
       expect($viewport.children).toHaveLength(1);
     });
+
+    const scopeInViewport = (markup: string): Element => {
+      $viewport.innerHTML = markup;
+
+      return $viewport.firstElementChild as Element;
+    };
+
+    const containerOf = (scope: Element): Element => getSwatchContainer(
+      scope.querySelector('.target') as Element,
+    )?.get(0) as Element;
+
+    it('reuses a scope that is a child of the viewport', () => {
+      const scope = scopeInViewport('<div class="dx-theme-mode-dark"><div class="target mode-dark"></div></div>');
+
+      expect(containerOf(scope)).toBe(scope);
+      expect($viewport.children).toHaveLength(1);
+    });
+
+    it.each(['overflow: hidden', 'overflow: auto', 'overflow-y: auto'])('does not reuse a viewport child that clips with %s', (style) => {
+      const scope = scopeInViewport(`<div class="dx-theme-mode-dark" style="${style}"><div class="target mode-dark"></div></div>`);
+      const container = containerOf(scope);
+
+      expect(container).not.toBe(scope);
+      expect(container.parentElement).toBe($viewport);
+      expect(classesOf(container)).toEqual(['dx-theme-mode-dark']);
+      expect(containerOf(scope)).toBe(container);
+      expect($viewport.children).toHaveLength(2);
+    });
+
+    it('does not reuse a swatch that clips either', () => {
+      const scope = scopeInViewport('<div class="dx-swatch-custom" style="overflow: hidden"><div class="target"></div></div>');
+      const container = containerOf(scope);
+
+      expect(container).not.toBe(scope);
+      expect(container.parentElement).toBe($viewport);
+      expect(classesOf(container)).toEqual(['dx-swatch-custom']);
+    });
   });
 
   describe('before the viewport is set', () => {
