@@ -1869,8 +1869,8 @@ importers:
   packages/devextreme-scss:
     devDependencies:
       '@devexpress/design-tokens-internal':
-        specifier: 262.25.0
-        version: 262.25.0
+        specifier: 262.26.0
+        version: 262.26.0
       '@eslint/eslintrc':
         specifier: 'catalog:'
         version: 3.3.5
@@ -4480,8 +4480,8 @@ packages:
   '@devexpress/callsite-record@4.1.7':
     resolution: {integrity: sha512-qr3VQYc0KopduFkEY6SxaOIi1Xhm0jIWQfrxxMVboI/p2rjF/Mj/iqaiUxQQP6F3ujpW/7l0mzhf17uwcFZhBA==}
 
-  '@devexpress/design-tokens-internal@262.25.0':
-    resolution: {integrity: sha512-xusrjp84YeLqfUsU8KszcWvQy6TlqYQeMZEgIV+AoS5Cy1GnQMscADBXQK12yaTeoOnn/trq/VxzhXGXn3Sflg==}
+  '@devexpress/design-tokens-internal@262.26.0':
+    resolution: {integrity: sha512-01quVuRR+y1QzxCsW5u5DICs07T3kzdtXukqJIRxjxTtknrpUIca7gpnrxJz4nPLR2V95nYrsWWIOCJV8Yy6Yw==}
 
   '@devexpress/utils@2.1.1':
     resolution: {integrity: sha512-hlemXR3L0yDPsMdhTQl9EtjiEYxIHklH7I4RKPkOhfrF5+jb4f3kkfvbKT7nA9aoFEHPPF0/hll43gOBpUpY0g==}
@@ -20482,7 +20482,7 @@ snapshots:
       lodash: 4.18.1
       pinkie-promise: 2.0.1
 
-  '@devexpress/design-tokens-internal@262.25.0': {}
+  '@devexpress/design-tokens-internal@262.26.0': {}
 
   '@devexpress/utils@2.1.1':
     dependencies:
