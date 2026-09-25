@@ -166,7 +166,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '150.0.7871.181'
+        chrome-version: '153.0.8010.52'
 
     - name: Run QUnit tests
       uses: ./.github/actions/run-qunit-tests
@@ -202,7 +202,7 @@ jobs:
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '150.0.7871.181'
+          chrome-version: '153.0.8010.52'
 
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
