@@ -35,8 +35,4 @@ $button-box-shadow: ds.$box-shadow-xs !default;
 
 $button-content-padding: calc((#{$button-height} - #{$button-icon-size} - #{$global-border-width} * 2) / 2) !default;
 
-:root {
-  --dx-button-padding-inline: #{$button-padding-inline};
-}
-
 $button-border-width: ds.$border-width-10 !default;
