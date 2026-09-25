@@ -513,7 +513,8 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
         }
 
         visibleColumns.forEach((column) => {
-          const rowIndex = index ?? columnsController.getRowIndex(column.index);
+          const rowIndex = index
+            ?? (isDefined(column.index) ? columnsController.getRowIndex(column.index) : 0);
           const visibleIndex = columnsController.getVisibleIndex(column.index, rowIndex);
           $cellElement = this._getCellElement(rowIndex, visibleIndex);
           if ($cellElement) {
