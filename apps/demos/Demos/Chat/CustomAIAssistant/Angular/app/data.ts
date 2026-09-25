@@ -230,15 +230,7 @@ export const chatSuggestions = [
   { text: 'Change State to Texas', prompt: 'Change State to Texas' },
 ];
 
-export interface FormFieldDescriptor {
-  dataField: string;
-  label: { text: string };
-  editorType?: DxFormTypes.FormItemComponent;
-  editorOptions?: Record<string, unknown>;
-  aiOptions: { instruction: string };
-}
-
-export const formFieldsConfig: FormFieldDescriptor[] = [
+export const formFieldsConfig: DxFormTypes.SimpleItem[] = [
   {
     dataField: 'Prefix',
     label: { text: 'Title' },

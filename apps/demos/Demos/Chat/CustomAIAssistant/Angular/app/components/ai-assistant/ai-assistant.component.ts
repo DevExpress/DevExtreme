@@ -40,13 +40,6 @@ export class AiAssistantComponent {
 
   readonly suggestions = chatSuggestions;
 
-  readonly popupPosition = {
-    my: 'right top',
-    at: 'right top',
-    of: '.demo-container',
-    offset: '-20 20',
-  };
-
   popupVisible = false;
 
   fabVisible = true;
@@ -76,10 +69,6 @@ export class AiAssistantComponent {
     this.popupVisible = !this.popupVisible;
   }
 
-  // Tried a plain [disabled] input bound to `AppComponent.isAssistantBusy` instead of this imperative
-  // setter, but change detection didn't reliably pick up the reset once a chat-driven request touched
-  // the DataGrid (repro: click a suggestion that runs a grid action) - the chat stayed disabled.
-  // detectChanges() here is what makes the reset trigger consistently.
   setDisabled(value: boolean): void {
     this.disabled = value;
     this.changeDetectorRef.detectChanges();

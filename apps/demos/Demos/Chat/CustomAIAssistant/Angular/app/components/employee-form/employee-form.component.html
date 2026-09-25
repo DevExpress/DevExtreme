@@ -28,5 +28,12 @@
   [closeOnClick]="true"
   message="Form data is saved."
   type="success"
-  [position]="toastPosition"
-></dx-toast>
+>
+  <dxo-toast-position
+    of="#form-container"
+    at="bottom center"
+    my="bottom center"
+    offset="0 -20"
+  >
+  </dxo-toast-position>
+</dx-toast>
