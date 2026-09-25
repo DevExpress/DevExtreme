@@ -59,13 +59,6 @@ $grid-text-stub-bg: rgb(from #{ds.$color-bg-inverted} r g b / 0.1) !default;
 $grid-filter-panel-content: ds.$color-content-primary !default;
 $grid-draggable-column-content: ds.$color-content !default;
 
-:root,
-.dx-theme-mode-light,
-.dx-theme-mode-dark,
-.dx-theme-mode-inverted {
-  --dx-datagrid-row-alternation-bg: #{$grid-row-alternation-bg};
-}
-
 $grid-ai-chat-empty-icon-bg: ds.$color-bg-primary-subtler !default;
 $grid-ai-chat-empty-icon-content: ds.$color-content-primary !default;
 $grid-ai-chat-message-pending-content: ds.$color-content-primary !default;
