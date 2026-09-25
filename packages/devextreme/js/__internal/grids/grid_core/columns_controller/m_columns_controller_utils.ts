@@ -153,23 +153,27 @@ export const getParentBandColumns = function (
   return result;
 };
 
-export const getChildrenByBandColumn = function (columnIndex, columnChildrenByIndex, recursive) {
-  let result: any = [];
-  const children = columnChildrenByIndex[columnIndex];
+export const getChildrenByBandColumn = (
+  columnIndex: number | undefined,
+  columnChildrenByIndex: BandColumnsCache['columnChildrenByIndex'],
+  recursive: boolean,
+): Column[] => {
+  const children: Column[] = [];
+  const directChildren = isDefined(columnIndex) ? columnChildrenByIndex[columnIndex] : undefined;
 
-  if (children) {
-    for (let i = 0; i < children.length; i++) {
-      const column = children[i];
-      if (!isDefined(column.groupIndex) || column.showWhenGrouped) {
-        result.push(column);
-        if (recursive && column.isBand) {
-          result = result.concat(getChildrenByBandColumn(column.index, columnChildrenByIndex, recursive));
-        }
-      }
+  directChildren?.forEach((column) => {
+    if (isDefined(column.groupIndex) && !column.showWhenGrouped) {
+      return;
     }
-  }
 
-  return result;
+    children.push(column);
+
+    if (recursive && column.isBand) {
+      children.push(...getChildrenByBandColumn(column.index, columnChildrenByIndex, recursive));
+    }
+  });
+
+  return children;
 };
 
 export const getColumnByIndexes = function (that: ColumnsController, columnIndexes) {

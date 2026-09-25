@@ -7,6 +7,7 @@ import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m
 import {
   customizeTextForBooleanDataType,
   getAlignmentByDataType,
+  getChildrenByBandColumn,
   getCommandColumnIndex,
   getCustomizeTextByDataType,
   getSerializationFormat,
@@ -17,7 +18,7 @@ import {
   strictParseNumber,
   updateSerializers,
 } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
-import type { Column, ColumnsControllerOptions } from '@ts/grids/grid_core/columns_controller/types';
+import type { BandColumnsCache, Column, ColumnsControllerOptions } from '@ts/grids/grid_core/columns_controller/types';
 
 import {
   afterTest,
@@ -870,6 +871,48 @@ describe('processBandColumns', () => {
       processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
 
       expect(getSpans(columns).buttons).toEqual({ rowspan: 2 });
+    });
+  });
+});
+
+describe('getChildrenByBandColumn', () => {
+  const band: Column = { index: 0, isBand: true };
+  const b: Column = { index: 1, dataField: 'b' };
+  const nestedBand: Column = { index: 2, isBand: true };
+  const c: Column = { index: 3, dataField: 'c' };
+  const d: Column = { index: 4, dataField: 'd' };
+  const e: Column = { index: 5, dataField: 'e' };
+  const columnChildrenByIndex: BandColumnsCache['columnChildrenByIndex'] = {
+    [-1]: [band],
+    0: [b, nestedBand, e],
+    2: [c, d],
+  };
+
+  it.each([false, true])('should return no children for a column that is not a band (recursive: %s)', (recursive) => {
+    expect(getChildrenByBandColumn(1, columnChildrenByIndex, recursive)).toEqual([]);
+  });
+
+  it('should return only the direct children of a band', () => {
+    expect(getChildrenByBandColumn(0, columnChildrenByIndex, false)).toEqual([b, nestedBand, e]);
+  });
+
+  it('should return the children of a nested band right after that band when recursive', () => {
+    expect(getChildrenByBandColumn(0, columnChildrenByIndex, true))
+      .toEqual([b, nestedBand, c, d, e]);
+  });
+
+  describe('when a child is grouped', () => {
+    it('should skip the grouped child', () => {
+      const groupedColumn: Column = { ...b, groupIndex: 0 };
+
+      expect(getChildrenByBandColumn(0, { 0: [groupedColumn, e] }, false)).toEqual([e]);
+    });
+
+    it('should keep the grouped child when showWhenGrouped is set', () => {
+      const groupedColumn: Column = { ...b, groupIndex: 0, showWhenGrouped: true };
+
+      expect(getChildrenByBandColumn(0, { 0: [groupedColumn, e] }, false))
+        .toEqual([groupedColumn, e]);
     });
   });
 });
