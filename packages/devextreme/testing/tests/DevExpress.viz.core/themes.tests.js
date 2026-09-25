@@ -573,6 +573,11 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         assert.strictEqual(registeredTheme.sparkline.barPositiveColor, PUBLISHED_GRAY, 'sparkline bar above zero');
         assert.strictEqual(registeredTheme.sparkline.lossColor, quiet, 'sparkline loss');
         assert.strictEqual(registeredTheme.sparkline.barNegativeColor, quiet, 'sparkline bar below zero');
+    });
+
+    QUnit.test(`fluent-next theme should leave a sankey link without a meaning, in the published grey: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
         assert.strictEqual(registeredTheme.sankey.link.color, PUBLISHED_GRAY, 'sankey link');
     });
 
@@ -587,6 +592,7 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
 
         assert.strictEqual(registeredTheme.treeMap.tile.color, PUBLISHED_BLUE, 'tree map tile fill');
         assert.strictEqual(registeredTheme.rangeSelector.background.color, rangePlate, 'range selector plate');
+        assert.strictEqual(registeredTheme.map['layer:area'].color, quiet, 'map area fill');
     });
 
     QUnit.test(`fluent-next theme should keep a mark that lies on a data colour out of the mode: ${theme}`, function(assert) {
@@ -620,10 +626,22 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
     QUnit.test(`fluent-next theme should name every gauge indicator the theme draws: ${theme}`, function(assert) {
         const { valueIndicators } = getRegisteredTheme(theme).gauge;
 
-        assert.strictEqual(valueIndicators._default.color, quiet, 'default needle');
-        assert.strictEqual(getRegisteredTheme(theme).map['layer:area'].color, quiet, 'map area fill');
-        assert.strictEqual(valueIndicators['trianglemarker'].color, marker, 'triangle marker');
-        assert.strictEqual(valueIndicators['twocolorneedle'].secondColor, secondHalf, 'two-colour needle');
+        const painted = {};
+        Object.keys(valueIndicators).forEach((indicator) => {
+            ['color', 'secondColor'].forEach((slot) => {
+                if(valueIndicators[indicator][slot] !== undefined) {
+                    painted[`${indicator}.${slot}`] = valueIndicators[indicator][slot];
+                }
+            });
+        });
+
+        assert.deepEqual(painted, {
+            '_default.color': needle,
+            'rangebar.color': PUBLISHED_BLUE,
+            'textcloud.color': PUBLISHED_BLUE,
+            'trianglemarker.color': PUBLISHED_BLUE,
+            'twocolorneedle.secondColor': PUBLISHED_RED,
+        });
     });
 });
 
