@@ -379,13 +379,13 @@ const PUBLISHED_RED = 'var(--dx-viz-red, #c83d3d)';
 const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
 
 [
-    { theme: 'fluent-next.blue.light', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', crosshair: 'var(--dx-viz-crosshair, #b33133)', marker: 'var(--dx-viz-indigo-subtle, #becefc)', secondHalf: 'var(--dx-viz-red-subtle, #f9bfb9)', mapLine: 'var(--dx-viz-orange-subtle, #f9c1aa)', mapLineSelected: 'var(--dx-viz-content-orange, #ad4100)', tileFill: 'var(--dx-viz-cyan-subtle, #acd7e6)', rangePlate: 'var(--dx-viz-purple-subtle, #d5c7f0)', axis: 'var(--dx-viz-content-subtler, #656565)' },
-    { theme: 'fluent-next.blue.light.compact', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', crosshair: 'var(--dx-viz-crosshair, #b33133)', marker: 'var(--dx-viz-indigo-subtle, #becefc)', secondHalf: 'var(--dx-viz-red-subtle, #f9bfb9)', mapLine: 'var(--dx-viz-orange-subtle, #f9c1aa)', mapLineSelected: 'var(--dx-viz-content-orange, #ad4100)', tileFill: 'var(--dx-viz-cyan-subtle, #acd7e6)', rangePlate: 'var(--dx-viz-purple-subtle, #d5c7f0)', axis: 'var(--dx-viz-content-subtler, #656565)' },
-    { theme: 'fluent-next.blue.dark', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', crosshair: 'var(--dx-viz-crosshair, #e87e78)', marker: 'var(--dx-viz-indigo-subtle, #2e4195)', secondHalf: 'var(--dx-viz-red-subtle, #861e20)', mapLine: 'var(--dx-viz-orange-subtle, #893200)', mapLineSelected: 'var(--dx-viz-content-orange, #f57d48)', tileFill: 'var(--dx-viz-cyan-subtle, #00576d)', rangePlate: 'var(--dx-viz-purple-subtle, #563780)', axis: 'var(--dx-viz-content-subtler, #a1a1a1)' },
-    { theme: 'fluent-next.blue.dark.compact', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', crosshair: 'var(--dx-viz-crosshair, #e87e78)', marker: 'var(--dx-viz-indigo-subtle, #2e4195)', secondHalf: 'var(--dx-viz-red-subtle, #861e20)', mapLine: 'var(--dx-viz-orange-subtle, #893200)', mapLineSelected: 'var(--dx-viz-content-orange, #f57d48)', tileFill: 'var(--dx-viz-cyan-subtle, #00576d)', rangePlate: 'var(--dx-viz-purple-subtle, #563780)', axis: 'var(--dx-viz-content-subtler, #a1a1a1)' },
+    { theme: 'fluent-next.blue.light', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', needle: 'var(--dx-viz-content-subtle, #444444)', crosshair: 'var(--dx-viz-crosshair, #b33133)', mapLineHovered: 'var(--dx-viz-content-orange, #ad4100)', rangePlate: 'var(--dx-viz-purple-subtle, #d5c7f0)', axis: 'var(--dx-viz-content-subtler, #656565)' },
+    { theme: 'fluent-next.blue.light.compact', surface: 'var(--dx-viz-bg, #ffffff)', hovered: 'var(--dx-viz-bg-hovered, #f5f5f5)', pressed: 'var(--dx-viz-bg-active, #e1e1e1)', plate: 'var(--dx-viz-tooltip-bg, #242424)', onPlate: 'var(--dx-viz-tooltip-content, #ffffff)', ink: 'var(--dx-viz-content, #161616)', shelf: 'var(--dx-viz-bg-higher, #ebebeb)', quiet: 'var(--dx-viz-gray-subtle, #cfcfcf)', needle: 'var(--dx-viz-content-subtle, #444444)', crosshair: 'var(--dx-viz-crosshair, #b33133)', mapLineHovered: 'var(--dx-viz-content-orange, #ad4100)', rangePlate: 'var(--dx-viz-purple-subtle, #d5c7f0)', axis: 'var(--dx-viz-content-subtler, #656565)' },
+    { theme: 'fluent-next.blue.dark', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', needle: 'var(--dx-viz-content-subtle, #cbcbcb)', crosshair: 'var(--dx-viz-crosshair, #e87e78)', mapLineHovered: 'var(--dx-viz-content-orange, #f57d48)', rangePlate: 'var(--dx-viz-purple-subtle, #563780)', axis: 'var(--dx-viz-content-subtler, #a1a1a1)' },
+    { theme: 'fluent-next.blue.dark.compact', surface: 'var(--dx-viz-bg, #242424)', hovered: 'var(--dx-viz-bg-hovered, #3b3b3b)', pressed: 'var(--dx-viz-bg-active, #1d1d1d)', plate: 'var(--dx-viz-tooltip-bg, #ffffff)', onPlate: 'var(--dx-viz-tooltip-content, #161616)', ink: 'var(--dx-viz-content, #ffffff)', shelf: 'var(--dx-viz-bg-higher, #333333)', quiet: 'var(--dx-viz-gray-subtle, #4a4a4a)', needle: 'var(--dx-viz-content-subtle, #cbcbcb)', crosshair: 'var(--dx-viz-crosshair, #e87e78)', mapLineHovered: 'var(--dx-viz-content-orange, #f57d48)', rangePlate: 'var(--dx-viz-purple-subtle, #563780)', axis: 'var(--dx-viz-content-subtler, #a1a1a1)' },
 ].forEach(({
-    theme, surface, hovered, pressed, plate, onPlate, ink, shelf, quiet, crosshair, marker,
-    secondHalf, mapLine, mapLineSelected, tileFill, rangePlate, axis,
+    theme, surface, hovered, pressed, plate, onPlate, ink, shelf, quiet, needle, crosshair,
+    mapLineHovered, rangePlate, axis,
 }) => {
     QUnit.test(`fluent-next theme should be registered: ${theme}`, function(assert) {
         themeModule.currentTheme(theme);
@@ -580,7 +580,7 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
     QUnit.test(`fluent-next theme should name the fills an application can switch on: ${theme}`, function(assert) {
         const registeredTheme = getRegisteredTheme(theme);
 
-        assert.strictEqual(registeredTheme.treeMap.tile.color, tileFill, 'tree map tile fill');
+        assert.strictEqual(registeredTheme.treeMap.tile.color, PUBLISHED_BLUE, 'tree map tile fill');
         assert.strictEqual(registeredTheme.rangeSelector.background.color, rangePlate, 'range selector plate');
     });
 
@@ -601,9 +601,9 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
     QUnit.test(`fluent-next theme should draw a map line in the published orange: ${theme}`, function(assert) {
         const line = getRegisteredTheme(theme).map['layer:line'];
 
-        assert.strictEqual(line.color, mapLine, 'map line at rest');
-        assert.strictEqual(line.hoveredColor, PUBLISHED_ORANGE, 'map line under the pointer');
-        assert.strictEqual(line.selectedColor, mapLineSelected, 'map line selected');
+        assert.strictEqual(line.color, PUBLISHED_ORANGE, 'map line at rest');
+        assert.strictEqual(line.hoveredColor, mapLineHovered, 'map line under the pointer');
+        assert.strictEqual(line.selectedColor, ink, 'map line selected');
     });
 
     QUnit.test(`fluent-next theme should draw the crosshair with its own published name: ${theme}`, function(assert) {

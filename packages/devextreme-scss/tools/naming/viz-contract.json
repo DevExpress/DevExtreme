@@ -37,19 +37,13 @@
       "name": "--dx-viz-content",
       "role": "color-content",
       "declaredPerMode": true,
-      "paints": "text at full strength - titles, export menu, map labels - and the marks that have to stand out against the surface: constant lines, error bars, map selection borders, range selector ticks and the bullet target"
+      "paints": "text at full strength - titles, export menu, map labels - and the marks that have to stand out against the surface: constant lines, error bars, map selection borders, a selected map line, range selector ticks and the bullet target"
     },
     {
       "name": "--dx-viz-crosshair",
       "role": "color-content-red",
       "declaredPerMode": true,
-      "paints": "the crosshair a chart draws under the pointer: a reading instrument laid over the plot, red so it is never mistaken for a series"
-    },
-    {
-      "name": "--dx-viz-cyan-subtle",
-      "role": "color-bg-cyan-subtle",
-      "declaredPerMode": true,
-      "paints": "a tree map tile with no colour of its own - the fill a tile falls back to when the palette is not colouring the leaves"
+      "paints": "the crosshair a chart draws under the pointer, and the plate behind its label: a reading instrument laid over the plot, red so it is never mistaken for a series"
     },
     {
       "name": "--dx-viz-content-subtler",
@@ -61,13 +55,13 @@
       "name": "--dx-viz-content-orange",
       "role": "color-content-orange",
       "declaredPerMode": true,
-      "paints": "a map line that is selected: the strongest step of the orange the line family is drawn in"
+      "paints": "a map line under the pointer: the strongest step of the orange the line family is drawn in"
     },
     {
       "name": "--dx-viz-content-subtle",
       "role": "color-content-subtle",
       "declaredPerMode": true,
-      "paints": "what is quieter than the title but not the axis: tree map group labels and the map control bar border"
+      "paints": "what is quieter than the title but not the axis: tree map group labels, the map control bar border, and the gauge needle the theme falls back to - a thin mark, so it takes a content role and not a tinted surface, which would sink into the dial"
     },
     {
       "name": "--dx-viz-border",
@@ -91,31 +85,13 @@
       "name": "--dx-viz-gray-subtle",
       "role": "color-bg-gray-subtle",
       "declaredPerMode": true,
-      "paints": "the quieter half of a pair that carries no meaning of its own: a losing bar of a win-loss sparkline, a bar below zero, the gauge needle the theme falls back to, and the fill of a map area"
-    },
-    {
-      "name": "--dx-viz-indigo-subtle",
-      "role": "color-bg-indigo-subtle",
-      "declaredPerMode": true,
-      "paints": "the triangle marker a gauge puts on its scale for a subvalue"
-    },
-    {
-      "name": "--dx-viz-orange-subtle",
-      "role": "color-bg-orange-subtle",
-      "declaredPerMode": true,
-      "paints": "a map line at rest"
+      "paints": "the quieter half of a pair that carries no meaning of its own: a losing bar of a win-loss sparkline, a bar below zero, and the fill of a map area"
     },
     {
       "name": "--dx-viz-purple-subtle",
       "role": "color-bg-purple-subtle",
       "declaredPerMode": true,
       "paints": "the plate behind the unselected part of a range selector, drawn only when an application asks for it"
-    },
-    {
-      "name": "--dx-viz-red-subtle",
-      "role": "color-bg-red-subtle",
-      "declaredPerMode": true,
-      "paints": "the second half of a two-colour gauge needle"
     },
     {
       "name": "--dx-viz-grid",
@@ -133,7 +109,7 @@
       "name": "--dx-viz-blue",
       "role": "color-bg-blue",
       "declaredPerMode": false,
-      "paints": "the first series colour, the near end of the gradient set the tree map and the map mix their scales from, and the shapes that are data rather than chrome: bullet bar, gauge range bar, sparkline line, map markers and the map legend marker"
+      "paints": "the first series colour, the near end of the gradient set the tree map and the map mix their scales from, and the shapes that are data rather than chrome: bullet bar, gauge range bar, the triangle marker a gauge puts on its scale for a subvalue, sparkline line, map markers and the map legend marker, and a tree map tile with no colour of its own - the fill a tile falls back to when the palette is not colouring the leaves"
     },
     {
       "name": "--dx-viz-gray",
@@ -145,7 +121,7 @@
       "name": "--dx-viz-red",
       "role": "color-bg-red",
       "declaredPerMode": false,
-      "paints": "the second series colour, the falling bar of a candlestick or a stock series, and the highest point of a sparkline"
+      "paints": "the second series colour, the falling bar of a candlestick or a stock series, the highest point of a sparkline, and the second half of a two-colour gauge needle"
     },
     {
       "name": "--dx-viz-green",
@@ -163,7 +139,7 @@
       "name": "--dx-viz-orange",
       "role": "color-bg-orange",
       "declaredPerMode": false,
-      "paints": "a map line under the pointer"
+      "paints": "a map line at rest"
     },
     {
       "name": "--dx-viz-pink",

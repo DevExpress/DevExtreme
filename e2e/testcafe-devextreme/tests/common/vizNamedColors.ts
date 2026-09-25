@@ -228,7 +228,7 @@ if (getThemeName() === 'fluent-next') {
     await shoot(t, 'Viz axis and subtitle');
   });
 
-  test('a tree map tile with no palette colour takes the published cyan', async (t) => {
+  test('a tree map tile with no palette colour takes the published blue', async (t) => {
     await inBothScopes('dxTreeMap', {
       dataSource: TILE_DATA,
       valueField: 'value',
@@ -280,7 +280,7 @@ if (getThemeName() === 'fluent-next') {
     await shoot(t, 'Viz sankey link');
   });
 
-  test('every gauge indicator the theme draws takes a published name', async (t) => {
+  test('the two-colour needle and the subvalue marker take the published names', async (t) => {
     await inBothScopes('dxCircularGauge', {
       scale: { startValue: 0, endValue: 100, label: { visible: false } },
       value: 62,
