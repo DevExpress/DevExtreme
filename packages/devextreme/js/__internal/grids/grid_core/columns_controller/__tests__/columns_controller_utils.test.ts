@@ -11,6 +11,7 @@ import {
   createColumnsFromDataSourceAdapter,
   createColumnsFromOptions,
   customizeTextForBooleanDataType,
+  findColumn,
   getAlignmentByDataType,
   getCustomizeTextByDataType,
   getSerializationFormat,
@@ -26,6 +27,14 @@ import {
   beforeTest,
   createDataGrid,
 } from '../../__tests__/__mock__/helpers/utils';
+
+const getColumnsController = async (
+  options: DataGridProperties & ColumnsControllerOptions = {},
+): Promise<ColumnsController> => {
+  const { instance } = await createDataGrid({ dataSource: [], columns: [], ...options });
+
+  return instance.getController('columns');
+};
 
 describe('getValueDataType', () => {
   it.each([
@@ -310,14 +319,6 @@ describe('strictParseNumber', () => {
     expect(strictParseNumber(text, format)).toBeUndefined();
   });
 });
-
-const getColumnsController = async (
-  options: DataGridProperties & ColumnsControllerOptions = {},
-): Promise<ColumnsController> => {
-  const { instance } = await createDataGrid({ dataSource: [], columns: [], ...options });
-
-  return instance.getController('columns');
-};
 
 describe('createColumn', () => {
   beforeEach(beforeTest);
