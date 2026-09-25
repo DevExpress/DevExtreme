@@ -145,7 +145,7 @@ export const assignees = [
   {
     text: 'Todd Hoffman',
     id: 3,
-    color: '#2E7D32',
+    color: '#2D7C31',
   },
   {
     text: 'Sandra Johnson',
@@ -162,7 +162,7 @@ export const rooms = [
   {
     text: 'Room 2',
     id: 2,
-    color: '#2E7D32',
+    color: '#2D7C31',
   },
   {
     text: 'Room 3',
@@ -179,6 +179,6 @@ export const priorities = [
   {
     text: 'Low',
     id: 2,
-    color: '#DD2C00',
+    color: '#CD2900',
   },
 ];
