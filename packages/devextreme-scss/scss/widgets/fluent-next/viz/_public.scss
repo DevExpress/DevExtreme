@@ -5,9 +5,13 @@
 @mixin publish {
   --dx-viz-blue: #{$viz-blue};
   --dx-viz-danger: #{$viz-danger};
+  --dx-viz-export-font-weight: #{$viz-export-font-weight};
+  --dx-viz-font-weight: #{$viz-font-weight};
   --dx-viz-font-weight-title: #{$viz-font-weight-title};
   --dx-viz-gray: #{$viz-gray};
   --dx-viz-green: #{$viz-green};
+  --dx-viz-label-font-weight: #{$viz-label-font-weight};
+  --dx-viz-legend-title-font-weight: #{$viz-legend-title-font-weight};
   --dx-viz-orange: #{$viz-orange};
   --dx-viz-pink: #{$viz-pink};
   --dx-viz-primary: #{$viz-primary};

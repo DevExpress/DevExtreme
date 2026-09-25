@@ -22,7 +22,11 @@ const VIZ_RED_SUBTLE = '--dx-viz-red-subtle';
 const VIZ_TOOLTIP_BG = '--dx-viz-tooltip-bg';
 const VIZ_TOOLTIP_CONTENT = '--dx-viz-tooltip-content';
 const VIZ_FONT_FAMILY = '--dx-viz-font-family';
+const VIZ_FONT_WEIGHT = '--dx-viz-font-weight';
 const VIZ_FONT_WEIGHT_TITLE = '--dx-viz-font-weight-title';
+const VIZ_EXPORT_FONT_WEIGHT = '--dx-viz-export-font-weight';
+const VIZ_LABEL_FONT_WEIGHT = '--dx-viz-label-font-weight';
+const VIZ_LEGEND_TITLE_FONT_WEIGHT = '--dx-viz-legend-title-font-weight';
 
 const VIZ_PRIMARY = '--dx-viz-primary';
 
@@ -59,7 +63,11 @@ const LIGHT = {
   [VIZ_TOOLTIP_BG]: '#242424',
   [VIZ_TOOLTIP_CONTENT]: '#ffffff',
   [VIZ_FONT_FAMILY]: FONT_FAMILY,
+  [VIZ_FONT_WEIGHT]: '400',
   [VIZ_FONT_WEIGHT_TITLE]: '600',
+  [VIZ_EXPORT_FONT_WEIGHT]: '400',
+  [VIZ_LABEL_FONT_WEIGHT]: '600',
+  [VIZ_LEGEND_TITLE_FONT_WEIGHT]: '200',
 
   [VIZ_PRIMARY]: '#0f6cbd',
 
@@ -110,6 +118,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
     defaultPalette: 'Fluent Next',
     font: {
       family: paint(VIZ_FONT_FAMILY),
+      weight: paint(VIZ_FONT_WEIGHT),
       color: paint(VIZ_CONTENT_SUBTLER),
     },
     title: {
@@ -133,6 +142,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
       backgroundColor: paint(VIZ_BG),
       font: {
         color: paint(VIZ_CONTENT),
+        weight: paint(VIZ_EXPORT_FONT_WEIGHT),
       },
       button: {
         default: {
@@ -154,6 +164,13 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
           backgroundColor: paint(VIZ_BG_ACTIVE),
           borderColor: paint(VIZ_BORDER_ACTIVE),
           color: paint(VIZ_CONTENT),
+        },
+      },
+    },
+    legend: {
+      title: {
+        font: {
+          weight: paint(VIZ_LEGEND_TITLE_FONT_WEIGHT),
         },
       },
     },
@@ -252,6 +269,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
       label: {
         font: {
           color: paint(VIZ_CONTENT),
+          weight: paint(VIZ_LABEL_FONT_WEIGHT),
         },
       },
       link: {
@@ -264,6 +282,7 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
         label: {
           font: {
             color: paint(VIZ_CONTENT_SUBTLE),
+            weight: paint(VIZ_LABEL_FONT_WEIGHT),
           },
         },
       },
@@ -272,6 +291,11 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
           color: paint(VIZ_TILE_BORDER),
         },
         color: paint(VIZ_CYAN_SUBTLE),
+        label: {
+          font: {
+            weight: paint(VIZ_LABEL_FONT_WEIGHT),
+          },
+        },
       },
     },
     rangeSelector: {

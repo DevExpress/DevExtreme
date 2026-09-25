@@ -221,6 +221,34 @@
       "paints": "the weight of a chart title, and of the subtitle that mirrors it. The charts inherited 500 from the material theme, a face Segoe UI does not have; the component titles of this theme have always read this role instead"
     },
     {
+      "name": "--dx-viz-font-weight",
+      "role": "font-weight-caption-default",
+      "declaredIn": "onRootOnlySizes",
+      "declaredPerMode": false,
+      "paints": "the weight of the widget font, which every text that sets no weight of its own takes: axis labels and titles, legend items, series labels, the tooltip"
+    },
+    {
+      "name": "--dx-viz-export-font-weight",
+      "role": "font-weight-base-default",
+      "declaredIn": "onRootOnlySizes",
+      "declaredPerMode": false,
+      "paints": "the weight of the export menu text"
+    },
+    {
+      "name": "--dx-viz-legend-title-font-weight",
+      "role": "font-weight-200",
+      "declaredIn": "onRootOnlySizes",
+      "declaredPerMode": false,
+      "paints": "the weight of a legend title. No role carries 200, the weight the charts have always drawn it in, so it takes the value from the scale"
+    },
+    {
+      "name": "--dx-viz-label-font-weight",
+      "role": "font-weight-caption-strong",
+      "declaredIn": "onRootOnlySizes",
+      "declaredPerMode": false,
+      "paints": "the weight of the labels drawn on the data: sankey node labels, tree map tile and group labels. The sankey labels inherited 500 from the generic theme and the group labels 500 from the material theme, a face Segoe UI does not have; the tile labels were 600 already"
+    },
+    {
       "name": "--dx-viz-font-family",
       "from": "--dx-global-font-family",
       "declaredPerMode": true,

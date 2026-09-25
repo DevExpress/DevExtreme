@@ -361,6 +361,10 @@ QUnit.test('Invalid input data (with color scheme)', function(assert) {
 });
 
 const PUBLISHED_TITLE_WEIGHT = 'var(--dx-viz-font-weight-title, 600)';
+const PUBLISHED_WEIGHT = 'var(--dx-viz-font-weight, 400)';
+const PUBLISHED_EXPORT_WEIGHT = 'var(--dx-viz-export-font-weight, 400)';
+const PUBLISHED_LEGEND_TITLE_WEIGHT = 'var(--dx-viz-legend-title-font-weight, 200)';
+const PUBLISHED_LABEL_WEIGHT = 'var(--dx-viz-label-font-weight, 600)';
 const PUBLISHED_FONT = 'var(--dx-viz-font-family, \'segoe ui\', -apple-system, BlinkMacSystemFont, \'avenir next\', avenir, \'segoe ui\', \'helvetica neue\', helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif)';
 const PUBLISHED_BLUE = 'var(--dx-viz-blue, #0078d4)';
 const PUBLISHED_DANGER = 'var(--dx-viz-danger, #c50f1f)';
@@ -400,6 +404,45 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         assert.strictEqual(registeredTheme.title.font.size, 20, 'title font size is inherited');
         assert.strictEqual(registeredTheme.title.font.weight, PUBLISHED_TITLE_WEIGHT, 'title font weight');
         assert.strictEqual(registeredTheme.title.subtitle.font.weight, PUBLISHED_TITLE_WEIGHT, 'subtitle mirrors it');
+    });
+
+    QUnit.test(`fluent-next theme should weigh the rest of the text with the published names: ${theme}`, function(assert) {
+        const registeredTheme = getRegisteredTheme(theme);
+
+        assert.strictEqual(registeredTheme.font.weight, PUBLISHED_WEIGHT, 'widget font, which axis and legend labels take');
+        assert.strictEqual(registeredTheme.export.font.weight, PUBLISHED_EXPORT_WEIGHT, 'export menu');
+        assert.strictEqual(registeredTheme.bullet.export.font.weight, PUBLISHED_EXPORT_WEIGHT, 'bullet export menu');
+        assert.strictEqual(registeredTheme.legend.title.font.weight, PUBLISHED_LEGEND_TITLE_WEIGHT, 'legend title');
+        assert.strictEqual(registeredTheme.map.legend.title.font.weight, PUBLISHED_LEGEND_TITLE_WEIGHT, 'map legend title');
+        assert.strictEqual(registeredTheme.sankey.label.font.weight, PUBLISHED_LABEL_WEIGHT, 'sankey label');
+        assert.strictEqual(registeredTheme.treeMap.tile.label.font.weight, PUBLISHED_LABEL_WEIGHT, 'tree map tile label');
+        assert.strictEqual(registeredTheme.treeMap.group.label.font.weight, PUBLISHED_LABEL_WEIGHT, 'tree map group label');
+    });
+
+    QUnit.test(`fluent-next theme should take every font weight it sets from a published name: ${theme}`, function(assert) {
+        const weights = new Set();
+        const collectWeights = (node) => {
+            Object.keys(node).forEach((key) => {
+                const value = node[key];
+                if(!value || typeof value !== 'object') {
+                    return;
+                }
+                if(key === 'font' && value.weight !== undefined) {
+                    weights.add(value.weight);
+                }
+                collectWeights(value);
+            });
+        };
+
+        collectWeights(getRegisteredTheme(theme));
+
+        assert.deepEqual(Array.from(weights).sort(), [
+            PUBLISHED_EXPORT_WEIGHT,
+            PUBLISHED_WEIGHT,
+            PUBLISHED_TITLE_WEIGHT,
+            PUBLISHED_LABEL_WEIGHT,
+            PUBLISHED_LEGEND_TITLE_WEIGHT,
+        ]);
     });
 
     QUnit.test(`fluent-next theme should paint the background with the published surface: ${theme}`, function(assert) {
