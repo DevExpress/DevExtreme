@@ -30,6 +30,7 @@ Commits (oldest first):
 15. Viz: take the remaining font weights from the design system
 16. Viz: name the chart title weight like the other weights (`--dx-viz-font-weight-title` -> `--dx-viz-title-font-weight`)
 17. this handoff file
+18. Drop the widget names the base already lists (P3 item B2)
 
 Font weights now all come from names: `--dx-viz-font-weight` (caption-default, 400, root font), `--dx-viz-export-font-weight` (base-default, 400), `--dx-viz-legend-title-font-weight` (numeric step `font-weight-200`, marked `// dx-no-semantic-role: ...` because the roles gate `tests/roles.test.ts` requires a marker for a step read; no weight role carries 200), `--dx-viz-label-font-weight` (caption-strong, 600; sankey label and tree map group label went 500 -> 600 on purpose), `--dx-viz-title-font-weight` (title-default, 600).
 
@@ -59,7 +60,7 @@ Last local verification on head `ecc722b74c`: `packages/devextreme-scss` jest 27
 ### B. P3 from the review (requested by the user)
 
 1. Tests whose names claim completeness but hold a hand-written list. QUnit `fluent-next theme should name every gauge indicator the theme draws` (`themes.tests.js`) lists three indicators by hand and also asserts the map area fill, which belongs elsewhere; e2e `every gauge indicator the theme draws takes a published name` (`vizNamedColors.ts`). Either derive the set from `gauge.valueIndicators` of the raw theme (keys: `_default`, `rangebar`, `twocolorneedle`, `trianglemarker`, `textcloud`; `textcloud.text.font.color` stays `#ffffff` on purpose) or rename the test to the subset it covers. Also `should keep a win and a loss grey, from the published pair` asserts the sankey link; move that assertion.
-2. `packages/testcafe-models/types.ts`: the branch adds `dxBarGauge`, `dxBullet`, `dxCircularGauge`, `dxVectorMap`, which the base already has (a leftover of a rebase). The branch diff for this file must end up empty.
+2. Done in commit 18: `packages/testcafe-models/types.ts` is identical to the base again.
 3. Name order: in `scss/widgets/fluent-next/common/_colors.scss` and in the `LIGHT`/`DARK` tables of `index.ts`, `crosshair` and `cyan-subtle` sit among the `content-*` names and `grid` comes after `red-subtle`. Restore alphabetical order (the generated `_public.scss` is already sorted).
 4. Commit subjects longer than 60 characters: commits 2 (65), 4 (61), 8 (62), 10 (61). Shortening them rewrites history and needs a force push; ask the user first.
 5. No code comments are allowed. The only comment-like lines left are the `// eslint-disable-next-line spellcheck/spell-checker` lint directives in `index.ts` and the `// dx-no-semantic-role:` marker the roles gate reads. The alternative to the marker is an entry in `typographyUnmarked` of `packages/devextreme-scss/tests/roles.baseline.json`; the user has not chosen.
