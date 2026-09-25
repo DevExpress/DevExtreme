@@ -11,7 +11,6 @@ $diagram-normal-format-bg-active: ds.$color-bg-alpha-active !default;
 $diagram-default-format-bg-active: ds.$color-bg-primary-active !default;
 $diagram-danger-format-bg-active: ds.$color-bg-danger-active !default;
 $diagram-success-format-bg-active: ds.$color-bg-success-active !default;
-$diagram-image-icon-base-content: ds.$color-content-subtle !default;
 
 $diagram-image-icon-muted-content: rgb(from #{ds.$color-content-subtle} r g b / 0.5) !default;
 $diagram-image-icon-accent-border: ds.$color-content-primary !default;

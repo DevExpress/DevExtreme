@@ -2,7 +2,6 @@
 @use "accordion/public" as accordionPublic;
 @use "actionSheet/public" as actionSheetPublic;
 @use "badge/public" as badgePublic;
-@use "box/public" as boxPublic;
 @use "button/public" as buttonPublic;
 @use "buttonGroup/public" as buttonGroupPublic;
 @use "calendar/public" as calendarPublic;
@@ -22,7 +21,6 @@
 @use "drawer/public" as drawerPublic;
 @use "dropDownButton/public" as dropDownButtonPublic;
 @use "dropDownEditor/public" as dropDownEditorPublic;
-@use "dropDownList/public" as dropDownListPublic;
 @use "dropDownMenu/public" as dropDownMenuPublic;
 @use "fieldset/public" as fieldsetPublic;
 @use "fileManager/public" as fileManagerPublic;
@@ -101,10 +99,6 @@
 
 .dx-badge {
   @include badgePublic.publish();
-}
-
-.dx-box-item-content {
-  @include boxPublic.publish();
 }
 
 .dx-button,
@@ -193,10 +187,6 @@
 .dx-dropdowneditor,
 .dx-dropdowneditor-overlay {
   @include dropDownEditorPublic.publish();
-}
-
-.dx-dropdownlist-popup-wrapper {
-  @include dropDownListPublic.publish();
 }
 
 .dx-dropdownmenu-popup-wrapper {
