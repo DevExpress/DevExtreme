@@ -13,6 +13,11 @@ themeModule.registerTheme({
     backgroundColor: 'some_theme_color'
 });
 
+themeModule.registerTheme({
+    name: 'namedBackground.light',
+    backgroundColor: 'var(--dx-viz-bg, #0a0b0c)'
+});
+
 function createMockWidget(size, option) {
     const root = $('<div>').append($('<svg>'));
 
@@ -700,6 +705,37 @@ QUnit.test('exportFromMarkup. backgroundColor from current theme', function(asse
         exportModule.exportFromMarkup(markup, options);
 
         assert.equal(clientExporter.export.getCall(0).args[1].backgroundColor, 'some_theme_color');
+    } finally {
+        themeModule.currentTheme(currentTheme);
+    }
+});
+
+QUnit.test('exportFromMarkup. Theme background named, the page declares the name', function(assert) {
+    const currentTheme = themeModule.currentTheme();
+
+    themeModule.currentTheme('namedBackground.light');
+    document.documentElement.style.setProperty('--dx-viz-bg', '#010203');
+
+    try {
+        exportModule.exportFromMarkup('testMarkup', { width: 600, height: 400 });
+
+        assert.equal(clientExporter.export.getCall(0).args[1].backgroundColor, '#010203');
+    } finally {
+        document.documentElement.style.removeProperty('--dx-viz-bg');
+        themeModule.currentTheme(currentTheme);
+    }
+});
+
+QUnit.test('exportFromMarkup. Theme background named, the page declares nothing', function(assert) {
+    const currentTheme = themeModule.currentTheme();
+
+    themeModule.currentTheme('namedBackground.light');
+
+    try {
+        exportModule.exportFromMarkup('testMarkup', { width: 600, height: 400 });
+
+        assert.strictEqual(getComputedStyle(document.documentElement).getPropertyValue('--dx-viz-bg'), '');
+        assert.equal(clientExporter.export.getCall(0).args[1].backgroundColor, '#0a0b0c');
     } finally {
         themeModule.currentTheme(currentTheme);
     }

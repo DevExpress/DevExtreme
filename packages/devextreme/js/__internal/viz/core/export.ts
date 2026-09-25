@@ -28,7 +28,8 @@ import { getWindow } from '@js/core/utils/window';
 import {
   export as _export, image as imageExporter, pdf as pdfExporter, svg as svgExporter,
 } from '@js/exporter';
-import { copyResolvedStyles, fallbackOf, resolvedInScope } from '@ts/core/utils/css_variables';
+import domAdapter from '@ts/core/dom_adapter';
+import { copyResolvedStyles, resolvedInScope } from '@ts/core/utils/css_variables';
 import { Renderer } from '@ts/viz/core/renderers/renderer';
 import { patchFontOptions } from '@ts/viz/core/utils';
 import { getTheme } from '@ts/viz/themes';
@@ -309,7 +310,7 @@ export const exportFromMarkup = function (markup, options) {
   options.fileSavingAction = options.onFileSaving;
   options.margin = isDefined(options.margin) ? options.margin : MARGIN;
   // @ts-expect-error
-  options.backgroundColor = fallbackOf(isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor);
+  options.backgroundColor = resolvedInScope(isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor, domAdapter.getDocumentElement());
   _export(markup, options, getCreatorFunc(options.format));
 };
 
