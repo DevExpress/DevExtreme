@@ -35,15 +35,21 @@
     :close-on-click="true"
     message="Form data is saved."
     type="success"
-    :position="toastPosition"
+  >
+  <DxPosition
+    of="#form-container"
+    :at="bottomCenterPosition"
+    :my="bottomCenterPosition"
+    offset="0 -20"
   />
+  </DxToast>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { DxForm, DxSimpleItem, DxButtonItem } from 'devextreme-vue/form';
 import type { DxFormTypes } from 'devextreme-vue/form';
-import { DxToast } from 'devextreme-vue/toast';
+import { DxPosition, DxToast, type DxToastTypes } from 'devextreme-vue/toast';
 import type { AIIntegration } from 'devextreme-vue/common/ai-integration';
 import { employee, formFieldsConfig } from './data.ts';
 import type { Employee } from './data.ts';
@@ -56,12 +62,7 @@ const toastRef = ref<InstanceType<typeof DxToast>>();
 const formData: Employee = { ...employee };
 const formFields = formFieldsConfig;
 
-const toastPosition = {
-  of: '#form-container',
-  at: 'bottom center',
-  my: 'bottom center',
-  offset: '0 -20',
-};
+const bottomCenterPosition = { x: 'center', y: 'bottom' } as const;
 
 const saveButtonOptions = {
   text: 'Save',

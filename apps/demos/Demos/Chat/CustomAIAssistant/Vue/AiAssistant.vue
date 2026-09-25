@@ -9,10 +9,15 @@
     :resize-enabled="true"
     :show-close-button="true"
     :shading="false"
-    :position="popupPosition"
     @hiding="onPopupHiding"
     @showing="onPopupShowing"
   >
+   <DxPosition
+      my="right top"
+      at="right top"
+      of=".demo-container"
+      offset="-20 20"
+    />
     <DxToolbarItem
       toolbar="top"
       location="after"
@@ -61,7 +66,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { DxPopup, type DxPopupTypes, DxToolbarItem } from 'devextreme-vue/popup';
+import { DxPopup, DxPosition, DxToolbarItem } from 'devextreme-vue/popup';
 import DxChat, { DxSuggestions } from 'devextreme-vue/chat';
 import type { DxChatTypes } from 'devextreme-vue/chat';
 import { DxSpeedDialAction } from 'devextreme-vue/speed-dial-action';
@@ -83,13 +88,6 @@ const emptyViewPromptHtml = EMPTY_VIEW_PROMPT;
 const suggestions = chatSuggestions;
 const chatUser = { id: 'user' };
 const popupClass = { class: 'chat-popup' };
-
-const popupPosition: DxPopupTypes.Properties['position'] = {
-  my: 'right top',
-  at: 'right top',
-  of: '.demo-container',
-  offset: '-20 20',
-};
 
 const popupVisible = ref(false);
 const fabVisible = ref(true);
