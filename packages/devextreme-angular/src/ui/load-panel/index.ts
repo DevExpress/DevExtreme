@@ -194,19 +194,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-     * [descr:dxLoadPanelOptions.indicatorSrc]
-     * @deprecated [depNote:dxLoadPanelOptions.indicatorSrc]
-    
-     */
-    @Input()
-    get indicatorSrc(): string {
-        return this._getOption('indicatorSrc');
-    }
-    set indicatorSrc(value: string) {
-        this._setOption('indicatorSrc', value);
-    }
-
-    /**
      * [descr:dxLoadPanelOptions.maxHeight]
      */
     @Input()
@@ -458,11 +445,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
-    @Output() indicatorSrcChange: EventEmitter<string>;
-
-    /**
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-     */
     @Output() maxHeightChange: EventEmitter<number | string>;
 
     /**
@@ -558,7 +540,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'indicatorOptionsChange' },
-            { emit: 'indicatorSrcChange' },
             { emit: 'maxHeightChange' },
             { emit: 'maxWidthChange' },
             { emit: 'messageChange' },

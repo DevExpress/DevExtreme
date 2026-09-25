@@ -50,14 +50,6 @@ export class DxoTreeListLoadPanelComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get indicatorSrc(): string {
-        return this._getOption('indicatorSrc');
-    }
-    set indicatorSrc(value: string) {
-        this._setOption('indicatorSrc', value);
-    }
-
-    @Input()
     get shading(): boolean {
         return this._getOption('shading');
     }

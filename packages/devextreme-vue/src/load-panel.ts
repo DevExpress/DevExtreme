@@ -47,7 +47,6 @@ type AccessibleOptions = Pick<Properties,
   "hint" |
   "hoverStateEnabled" |
   "indicatorOptions" |
-  "indicatorSrc" |
   "maxHeight" |
   "maxWidth" |
   "message" |
@@ -89,7 +88,6 @@ const componentConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     indicatorOptions: Object as PropType<LoadPanelIndicatorProperties | Record<string, any>>,
-    indicatorSrc: String,
     maxHeight: [Number, String],
     maxWidth: [Number, String],
     message: String,
@@ -127,7 +125,6 @@ const componentConfig = {
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:indicatorOptions": null,
-    "update:indicatorSrc": null,
     "update:maxHeight": null,
     "update:maxWidth": null,
     "update:message": null,

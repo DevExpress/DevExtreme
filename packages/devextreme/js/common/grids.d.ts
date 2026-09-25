@@ -2781,12 +2781,6 @@ export type LoadPanel = {
    */
   height?: number | string;
   /**
-   * @docid GridBaseOptions.loadPanel.indicatorSrc
-   * @default ""
-   * @deprecated GridBaseOptions.loadPanel.indicatorOptions
-   */
-  indicatorSrc?: string;
-  /**
    * @docid GridBaseOptions.loadPanel.indicatorOptions
    */
   indicatorOptions?: LoadPanelIndicatorProperties;

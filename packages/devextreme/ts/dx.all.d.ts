@@ -760,11 +760,6 @@ declare module DevExpress {
      */
     showIndicator?: boolean;
     /**
-     * [descr:ExportLoadPanel.indicatorSrc]
-     * @deprecated [depNote:ExportLoadPanel.indicatorSrc]
-     */
-    indicatorSrc?: string;
-    /**
      * [descr:ExportLoadPanel.indicatorOptions]
      */
     indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
@@ -6463,11 +6458,6 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.loadPanel.height]
      */
     height?: number | string;
-    /**
-     * [descr:GridBaseOptions.loadPanel.indicatorSrc]
-     * @deprecated [depNote:GridBaseOptions.loadPanel.indicatorSrc]
-     */
-    indicatorSrc?: string;
     /**
      * [descr:GridBaseOptions.loadPanel.indicatorOptions]
      */
@@ -23080,11 +23070,6 @@ declare module DevExpress.ui {
      */
     height?: number | string;
     /**
-     * [descr:dxLoadPanelOptions.indicatorSrc]
-     * @deprecated [depNote:dxLoadPanelOptions.indicatorSrc]
-     */
-    indicatorSrc?: string;
-    /**
      * [descr:dxLoadPanelOptions.indicatorOptions]
      */
     indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
@@ -25181,9 +25166,9 @@ declare module DevExpress.ui {
        */
       height?: number;
       /**
-       * [descr:dxPivotGridOptions.loadPanel.indicatorSrc]
+       * [descr:dxPivotGridOptions.loadPanel.indicatorOptions]
        */
-      indicatorSrc?: string;
+      indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
       /**
        * [descr:dxPivotGridOptions.loadPanel.shading]
        */
