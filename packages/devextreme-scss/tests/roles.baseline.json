@@ -218,26 +218,6 @@
       "slot": "bg",
       "decision": "confirmed",
       "why": "the handle is the switch's TRIGGER - the package names it as its own slot and gives it content roles: switch.color.unchecked.trigger.rest = content-subtle, .hovered and .active = content. The name keeps the -bg slot word because it paints background-color (NAMING M3) and only the family follows what the element is, the same judgment call as the radio dot and check-box-invalid-mark-bg. Before 15.09 these two did not exist and the handle was painted from the TRACK BORDER colour, one variable across two elements - D21"
-    },
-    {
-      "name": "switch-handle-on-box-shadow",
-      "verdict": "cross-family",
-      "roles": [
-        "color-content-inverted"
-      ],
-      "slot": "shadow",
-      "decision": "bridge",
-      "why": "The composite half of `switch-handle-on-shadow`, which is banked a few rows up as a bridge: `0 0 0 <blur> <colour>` with the blur at 0, so the \"shadow\" is a ring drawn around the handle rather than a drop shadow, and its colour is the bridged content-inverted at 10%. Visible only since 17.09, when the pass started reading declarations outside the `_colors.scss` files - this one lives in `switch/_sizes.scss`, because it carries geometry as well as a colour."
-    },
-    {
-      "name": "switch-handle-on-shadow",
-      "verdict": "cross-family",
-      "roles": [
-        "color-content-inverted"
-      ],
-      "slot": "shadow",
-      "decision": "bridge",
-      "why": "rgb(from color-content-inverted / .1) - the foundation names no switch shadow role, recorded in DIVERGENCES and inventoried in BRIDGES.md"
     }
   ],
   "typographyUnmarked": [

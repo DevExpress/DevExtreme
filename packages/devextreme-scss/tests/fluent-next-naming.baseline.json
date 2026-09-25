@@ -495,6 +495,7 @@
     "--dx-button-padding-inline",
     "--dx-color-shadow",
     "--dx-component-height",
+    "--dx-datagrid-row-alternation-bg",
     "--dx-font-size",
     "--dx-font-size-heading-1",
     "--dx-font-size-heading-2",
@@ -510,8 +511,16 @@
     "--dx-texteditor-color-text",
     "--dx-toolbar-height"
   ],
-  "publicSurfaceUndeclared": [],
+  "publicSurfaceUndeclared": [
+    "--dx-grid-row-alternation-bg"
+  ],
   "publicSurfaceDifferences": [
+    "--dx-button-padding-inline: only in generic, material, fluent",
+    "--dx-color-shadow: only in generic, material, fluent",
+    "--dx-component-height: only in generic, material, fluent",
+    "--dx-datagrid-row-alternation-bg: only in generic, material, fluent",
+    "--dx-popup-toolbar-item-padding-inline: only in generic, material, fluent",
+    "--dx-texteditor-color-text: only in generic, material, fluent",
     "--dx-theme-mode: only in fluent-next"
   ],
   "publicTierManualDeclarations": [
@@ -523,7 +532,6 @@
     "fluent-next/_colors.scss: --dx-color-options-panel-bg",
     "fluent-next/_colors.scss: --dx-color-primary",
     "fluent-next/_colors.scss: --dx-color-separator",
-    "fluent-next/_colors.scss: --dx-color-shadow",
     "fluent-next/_colors.scss: --dx-color-spin-icon",
     "fluent-next/_colors.scss: --dx-color-success",
     "fluent-next/_colors.scss: --dx-color-text",
@@ -532,16 +540,11 @@
     "fluent-next/_design-system.scss: --dx-theme-mode",
     "fluent-next/_sizes.scss: --dx-border-radius",
     "fluent-next/_sizes.scss: --dx-border-width",
-    "fluent-next/_sizes.scss: --dx-component-height",
     "fluent-next/_sizes.scss: --dx-font-size",
     "fluent-next/_sizes.scss: --dx-font-size-icon",
-    "fluent-next/button/_sizes.scss: --dx-button-padding-inline",
-    "fluent-next/gridBase/_colors.scss: --dx-datagrid-row-alternation-bg",
     "fluent-next/list/_sizes.scss: --dx-list-item-padding-block",
     "fluent-next/list/_sizes.scss: --dx-list-item-padding-inline",
-    "fluent-next/popup/_sizes.scss: --dx-popup-toolbar-item-padding-inline",
     "fluent-next/textEditor/_colors.scss: --dx-texteditor-color-label",
-    "fluent-next/textEditor/_colors.scss: --dx-texteditor-color-text",
     "fluent-next/toolbar/_sizes.scss: --dx-toolbar-height",
     "fluent-next/typography/_sizes.scss: --dx-font-size-heading-1",
     "fluent-next/typography/_sizes.scss: --dx-font-size-heading-2",
