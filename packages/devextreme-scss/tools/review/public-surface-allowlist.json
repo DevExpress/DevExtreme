@@ -17,9 +17,39 @@
       "since": "2026-09-25"
     },
     {
+      "name": "--dx-button-icon-margin",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (feeds dx-icon-margin() via dx-button-sizing())",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-button-icon-size",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (feeds width/height/font-size of the button icon via dx-button-sizing(), reused across button/toolbar/calendar/scheduler/dropDownButton)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-button-padding-block",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (feeds padding-block via dx-button-sizing())",
+      "since": "2026-09-26"
+    },
+    {
       "name": "--dx-button-padding-inline",
       "reason": "The Sass value ($button-padding-inline) is genuinely needed internally (feeds the $button-content-padding calc()), so the component-tier generator (tools/naming/publish.mjs) necessarily keeps publishing this name regardless. A stale duplicate manual declaration at :root (predating the component-tier refactor) was deleted 2026-09-25; the remaining, generator-owned declaration on .dx-button cannot be un-published without extending tools/naming/tier.ts, which was deliberately not done in this pass.",
       "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-calendar-legacy-width",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (feeds width via dx-calendar-mixin())",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-check-box-indeterminate-icon-height",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (feeds width/height via dx-checkbox-icon-centered())",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-check-box-indeterminate-icon-width",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (feeds width/height via dx-checkbox-icon-centered())",
+      "since": "2026-09-26"
     },
     {
       "name": "--dx-color-border",
@@ -87,6 +117,16 @@
       "since": "2026-09-25"
     },
     {
+      "name": "--dx-data-grid-group-panel-item-padding-block",
+      "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $data-grid-group-panel-item-padding, live via --dx-data-grid-group-panel-item-padding)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-file-manager-file-actions-button-top-bottom-padding",
+      "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $file-manager-button-content-padding, live via --dx-file-manager-button-content-padding)",
+      "since": "2026-09-26"
+    },
+    {
       "name": "--dx-font-size",
       "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
       "since": "2026-09-25"
@@ -152,6 +192,41 @@
       "since": "2026-09-25"
     },
     {
+      "name": "--dx-global-inline-widget-inner-height",
+      "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $invalid-badge-padding-inline, which itself feeds the live --dx-invalid-badge-offset / --dx-drop-down-editor-invalid-badge-size / --dx-text-editor-invalid-badge-size chain)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-grid-column-chooser-item-margin",
+      "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $grid-column-chooser-list-item-margin, live via --dx-grid-column-chooser-list-item-margin)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-grid-group-panel-item-margin-inline",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (applied as margin-right in dataGrid/_index.scss)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-grid-group-panel-message-line-height",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (applied as line-height in dataGrid/_index.scss)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-grid-hidden-border",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (applied as border-top/border-bottom in dataGrid/_index.scss)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-list-item-border-width",
+      "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $list-item-border, live via --dx-list-item-border)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-list-item-margin-inline",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (applied as margin-inline in common/_mixins.scss)",
+      "since": "2026-09-26"
+    },
+    {
       "name": "--dx-list-item-padding-block",
       "reason": "Working component-tier customization hook (scoped --dx-<widget>-* variable actually read via var() inside the fluent-next bundle) \u2014 just not yet exercised by any demo. Not the same situation as a variable no rule reads at all.",
       "since": "2026-09-25"
@@ -160,6 +235,31 @@
       "name": "--dx-list-item-padding-inline",
       "reason": "Working component-tier customization hook (scoped --dx-<widget>-* variable actually read via var() inside the fluent-next bundle) \u2014 just not yet exercised by any demo. Not the same situation as a variable no rule reads at all.",
       "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-map-marker-tooltip-margin",
+      "reason": "Parameterizes scss/widgets/base/** through @use ... with (...) \u2014 the base layer reads it as a plain Sass number (including arithmetic var() cannot do) and applies it to real CSS there. Setting this specific --dx-* name at runtime has no effect. (parameterizes base/_map.scss, applied as margin there)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-menu-item-bg-hovered",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (applied as background-color in menuBase/_index.scss)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-menu-item-line-height",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (applied as line-height in menuBase/_index.scss)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-menu-item-with-icon-padding-inline",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (applied as padding-inline-end in contextMenu/_index.scss)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-progress-bar-range-indeterminate-bg",
+      "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into the $progress-bar-indeterminate-bg gradient stop list, live via --dx-progress-bar-indeterminate-bg)",
+      "since": "2026-09-26"
     },
     {
       "name": "--dx-scheduler-appointment-15min-height",
@@ -177,6 +277,26 @@
       "since": "2026-09-25"
     },
     {
+      "name": "--dx-scheduler-left-column-width",
+      "reason": "Parameterizes scss/widgets/base/** through @use ... with (...) \u2014 the base layer reads it as a plain Sass number (including arithmetic var() cannot do) and applies it to real CSS there. Setting this specific --dx-* name at runtime has no effect. (parameterizes base/scheduler (Sass arithmetic multiplies it by a size factor) \u2014 has an explicit dx-literal-required comment in source explaining why)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-scheduler-workspace-cell-bg-active",
+      "reason": "A pre-existing tools/naming/public-renames.json entry (added before this pass, release 26.2) names this as the replacement for the retired --dx-scheduler-workspace-cell-content-active \u2014 deleting it too would break that documented migration path. Nothing currently reads it via var() (it's a link to --dx-scheduler-accent-border), but the name itself must keep shipping.",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-slider-height",
+      "reason": "Sass-interpolated into a calc()/gradient/mixin argument that IS applied to real CSS, just not through this custom property. Setting this specific --dx-* name at runtime has no effect. (interpolated into a calc() in fieldset/_index.scss that centers the slider)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-tabs-item-padding-inline",
+      "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $tabs-item-padding, live via --dx-tabs-item-padding)",
+      "since": "2026-09-26"
+    },
+    {
       "name": "--dx-texteditor-color-label",
       "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
       "since": "2026-09-25"
@@ -185,6 +305,41 @@
       "name": "--dx-toolbar-height",
       "reason": "Working component-tier customization hook (scoped --dx-<widget>-* variable actually read via var() inside the fluent-next bundle) \u2014 just not yet exercised by any demo. Not the same situation as a variable no rule reads at all.",
       "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-tree-list-expand-icon-size",
+      "reason": "Parameterizes scss/widgets/base/** through @use ... with (...) \u2014 the base layer reads it as a plain Sass number (including arithmetic var() cannot do) and applies it to real CSS there. Setting this specific --dx-* name at runtime has no effect. (parameterizes base/treeList (width/font-size of the expand icon))",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-tree-view-border-padding",
+      "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $tree-view-container-padding, live via a mixin argument that dx-treeview-item-container reads as padding)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-tree-view-checkbox-offset",
+      "reason": "The Sass value is applied directly as a real CSS property (not through this custom property) \u2014 verified by tracing the mixin argument to the declaration that reads it. Setting this specific --dx-* name at runtime has no effect; the widget already renders correctly from the Sass value. (applied directly as `left` in pivotGrid/_index.scss (a cross-widget reference), and also folds into $tree-view-select-all-item-padding)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-tree-view-container-with-border-offset",
+      "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $tree-view-container-padding, same chain as --dx-tree-view-border-padding)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-tree-view-item-padding-inline",
+      "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $tree-view-item-padding, applied as padding in base/treeView's treeview-item() mixin)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-validation-message-content-padding",
+      "reason": "Parameterizes scss/widgets/base/** through @use ... with (...) \u2014 the base layer reads it as a plain Sass number (including arithmetic var() cannot do) and applies it to real CSS there. Setting this specific --dx-* name at runtime has no effect. (parameterizes base/_validation.scss, applied as padding there)",
+      "since": "2026-09-26"
+    },
+    {
+      "name": "--dx-validation-summary-margin-block-start",
+      "reason": "Parameterizes scss/widgets/base/** through @use ... with (...) \u2014 the base layer reads it as a plain Sass number (including arithmetic var() cannot do) and applies it to real CSS there. Setting this specific --dx-* name at runtime has no effect. (parameterizes base/_validation.scss, applied as margin-top there)",
+      "since": "2026-09-26"
     },
     {
       "name": "--dx-viz-bg",
@@ -282,67 +437,5 @@
       "since": "2026-09-25"
     }
   ],
-  "pending": [
-    "--dx-box-item-content-font-size",
-    "--dx-button-icon-margin",
-    "--dx-button-icon-size",
-    "--dx-button-icon-text-padding-inline-start",
-    "--dx-button-padding-block",
-    "--dx-calendar-legacy-width",
-    "--dx-check-box-indeterminate-icon-height",
-    "--dx-check-box-indeterminate-icon-width",
-    "--dx-color-box-overlay-padding",
-    "--dx-data-grid-group-panel-item-margin-inline-end",
-    "--dx-data-grid-group-panel-item-padding-block",
-    "--dx-data-grid-group-panel-item-rtl-margin-inline-end",
-    "--dx-diagram-image-icon-base-content",
-    "--dx-drop-down-list-min-height",
-    "--dx-file-manager-file-actions-button-top-bottom-padding",
-    "--dx-file-manager-progress-box-close-button-margin-block-start",
-    "--dx-form-group-content-padding-block-end",
-    "--dx-global-inline-widget-inner-height",
-    "--dx-grid-column-chooser-item-margin",
-    "--dx-grid-group-panel-item-margin-inline",
-    "--dx-grid-group-panel-message-line-height",
-    "--dx-grid-group-row-content",
-    "--dx-grid-hidden-border",
-    "--dx-grid-summary-bg",
-    "--dx-html-editor-placeholder-content",
-    "--dx-list-delete-button-static-padding",
-    "--dx-list-item-border-width",
-    "--dx-list-item-margin-inline",
-    "--dx-load-panel-content-border",
-    "--dx-load-panel-content-border-radius",
-    "--dx-map-marker-tooltip-margin",
-    "--dx-menu-item-bg-hovered",
-    "--dx-menu-item-expanded-content",
-    "--dx-menu-item-line-height",
-    "--dx-menu-item-with-icon-padding-inline",
-    "--dx-pagination-navigate-button-height",
-    "--dx-pagination-page-padding-inline",
-    "--dx-pagination-separator-padding-inline-end",
-    "--dx-pagination-separator-padding-inline-start",
-    "--dx-pivot-grid-drag-header-border",
-    "--dx-popup-dialog-message-padding",
-    "--dx-progress-bar-range-indeterminate-bg",
-    "--dx-scheduler-dd-appointment-content-hovered",
-    "--dx-scheduler-group-header-agenda-font-size",
-    "--dx-scheduler-left-column-width",
-    "--dx-scheduler-workspace-cell-bg-active",
-    "--dx-scrollable-scroll-height",
-    "--dx-scrollable-scroll-width",
-    "--dx-slider-height",
-    "--dx-stepper-step-accent-bg-hovered",
-    "--dx-tabs-item-padding-inline",
-    "--dx-time-view-field-number-box-spin-touch-friendly-width",
-    "--dx-time-view-field-number-box-width",
-    "--dx-toast-content-padding",
-    "--dx-tree-list-expand-icon-size",
-    "--dx-tree-view-border-padding",
-    "--dx-tree-view-checkbox-offset",
-    "--dx-tree-view-container-with-border-offset",
-    "--dx-tree-view-item-padding-inline",
-    "--dx-validation-message-content-padding",
-    "--dx-validation-summary-margin-block-start"
-  ]
+  "pending": []
 }
