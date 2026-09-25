@@ -871,6 +871,13 @@ export class AdvancedChart extends BaseChart {
     super._optionChanged(arg);
   }
 
+  _change_FULL_RENDER(): void {
+    super._change_FULL_RENDER();
+    if (this._changes.has(VISUAL_RANGE)) {
+      this._raiseZoomEndHandlers();
+    }
+  }
+
   _change_VISUAL_RANGE(): void {
     this._recreateSizeDependentObjects(false);
     if (!this._changes.has('FULL_RENDER')) {

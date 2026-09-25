@@ -1408,6 +1408,7 @@ export class BaseChart extends BaseWidget {
 
   _change_FULL_RENDER() {
     this._forceRender();
+    this._changes.remove('FULL_RENDER');
   }
 
   _change_INIT() {
