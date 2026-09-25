@@ -452,6 +452,8 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         assert.strictEqual(registeredTheme.chart.containerBackgroundColor, surface, 'chart container');
         assert.strictEqual(registeredTheme.gauge.containerBackgroundColor, surface, 'gauge container');
         assert.strictEqual(registeredTheme.rangeSelector.containerBackgroundColor, surface, 'rangeSelector container');
+        assert.strictEqual(registeredTheme.rangeSelector.shutter.color, surface, 'rangeSelector shutter');
+        assert.strictEqual(registeredTheme.rangeSelector.shutter.opacity, 0.75, 'rangeSelector shutter opacity, the same in both modes');
         assert.strictEqual(registeredTheme.chart.commonSeriesSettings.candlestick.innerColor, surface, 'candlestick inner color');
         assert.strictEqual(registeredTheme.gauge.scale.tick.color, surface, 'gauge tick');
         assert.strictEqual(registeredTheme.map.background.color, surface, 'map background');
@@ -468,6 +470,9 @@ const PUBLISHED_YELLOW = 'var(--dx-viz-yellow, #eaa300)';
         const registeredTheme = getRegisteredTheme(theme);
 
         assert.strictEqual(registeredTheme.rangeSelector.sliderMarker.font.color, surface, 'rangeSelector slider marker text');
+        assert.strictEqual(registeredTheme.chart.crosshair.label.font.color, surface, 'crosshair label text');
+        assert.strictEqual(registeredTheme.map['layer:marker:dot'].borderColor, surface, 'map dot marker ring');
+        assert.strictEqual(registeredTheme.map['layer:marker:dot'].backColor, surface, 'map dot marker back disc');
         assert.strictEqual(registeredTheme.funnel.item.border.color, surface, 'funnel item border');
     });
 

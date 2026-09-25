@@ -13,7 +13,7 @@
       "name": "--dx-viz-bg",
       "role": "color-bg",
       "declaredPerMode": true,
-      "paints": "the surface every widget draws on: chart background, loading panel, export menu, map background, candlestick body, sparkline point, the gap between funnel sections"
+      "paints": "the surface every widget draws on: chart background, loading panel, export menu, map background, candlestick body, sparkline point, the gap between funnel sections - and what is cut out of a mark with it: the text on a crosshair label, the ring and the back disc of a dot marker, and the shutter a range selector lays over the range it did not select, the surface at its own opacity"
     },
     {
       "name": "--dx-viz-bg-hovered",

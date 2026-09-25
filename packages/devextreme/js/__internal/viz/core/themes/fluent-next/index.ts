@@ -211,6 +211,11 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
       },
       crosshair: {
         color: paint(VIZ_CROSSHAIR),
+        label: {
+          font: {
+            color: paint(VIZ_BG),
+          },
+        },
       },
       scrollBar: {
         color: paint(VIZ_BORDER),
@@ -301,6 +306,10 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
       sliderHandle: {
         color: paint(VIZ_PRIMARY),
       },
+      shutter: {
+        color: paint(VIZ_BG),
+        opacity: 0.75,
+      },
       scale: {
         tick: {
           color: paint(VIZ_CONTENT),
@@ -335,6 +344,8 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
       },
       'layer:marker:dot': {
         color: paint(VIZ_BLUE),
+        borderColor: paint(VIZ_BG),
+        backColor: paint(VIZ_BG),
       },
       'layer:marker:bubble': {
         color: paint(VIZ_BLUE),
