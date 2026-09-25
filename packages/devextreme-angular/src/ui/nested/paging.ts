@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -13,16 +11,11 @@ import {
     EventEmitter
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-paging',
@@ -74,7 +67,6 @@ export class DxoPagingComponent extends NestedOption implements OnDestroy, OnIni
         return 'paging';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -95,7 +87,6 @@ export class DxoPagingComponent extends NestedOption implements OnDestroy, OnIni
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

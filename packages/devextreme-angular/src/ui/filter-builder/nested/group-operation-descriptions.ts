@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     Input
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-filter-builder-group-operation-descriptions',
@@ -67,7 +60,6 @@ export class DxoFilterBuilderGroupOperationDescriptionsComponent extends NestedO
         return 'groupOperationDescriptions';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -83,7 +75,6 @@ export class DxoFilterBuilderGroupOperationDescriptionsComponent extends NestedO
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

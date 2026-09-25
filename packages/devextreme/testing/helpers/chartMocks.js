@@ -1,6 +1,5 @@
 /* global currentAssert */
 import $ from 'jquery';
-import Class from 'core/class';
 import commonUtils from '__internal/core/utils/m_common';
 import typeUtils from '__internal/core/utils/m_type';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
@@ -307,18 +306,18 @@ function restoreItem(itemKey, moduleName) {
     sourceItemsToMocking[itemKey] = null;
 }
 
-const MockSeriesFamily = Class.inherit({
-    ctor: function(options) {
+class MockSeriesFamily {
+    constructor(options) {
         this.options = options;
         this.addedSeries = [];
-    },
-    updateOptions: function(options) {
+    }
+    updateOptions(options) {
         this.options = options;
-    },
-    dispose: function() {
+    }
+    dispose() {
         this.disposed = true;
-    },
-    adjustSeriesValues: function() {
+    }
+    adjustSeriesValues() {
         this.adjustedValues = true;
 
         this.allSeriesHavePoints = (this.addedSeries || [])
@@ -327,24 +326,25 @@ const MockSeriesFamily = Class.inherit({
 
                 return r && (s.getAllPoints ? !!s.getAllPoints().length : true);
             }, true);
-    },
-    adjustSeriesDimensions: function() {
+    }
+    adjustSeriesDimensions() {
         this.adjustedDimensions = true;
-    },
-    add: function(series) {
+    }
+    add(series) {
         this.addedSeries.push(series);
         series.parentFamily = this;
-    },
-    updateSeriesValues: function() {
+    }
+    updateSeriesValues() {
         this.updatedValues = true;
-    },
-    resetMock: function() {
+    }
+    resetMock() {
         this.disposed = null;
         this.adjustedValues = null;
         this.adjustedDimensions = null;
         this.updatedValues = null;
     }
-});
+}
+
 
 export const insertMockFactory = function insertMockFactory() {
     resetMockFactory();
@@ -695,235 +695,235 @@ export const MockSeries = function MockSeries(options) {
     };
 };
 
-export const MockPoint = Class.inherit(
-    {
-        ctor: function(options) {
-            this.update(options);
-        },
+export class MockPoint {
+    constructor(options) {
+        this.update(options);
+    }
+    update(options) {
+        this._options = options || {};
+        this.argument = options.argument;
+        this.value = options.value !== undefined ? options.value : 0;
+        this.size = options.size;
+        this.originalValue = this.value;
+        this.minValue = options.minValue !== undefined ? options.minValue : 0;
+        this.initialValue = this.value;
+        this.rotated = !!options.rotated;
+        this.tag = options.tag;
 
-        update: function(options) {
-            this._options = options || {};
-            this.argument = options.argument;
-            this.value = options.value !== undefined ? options.value : 0;
-            this.size = options.size;
-            this.originalValue = this.value;
-            this.minValue = options.minValue !== undefined ? options.minValue : 0;
-            this.initialValue = this.value;
-            this.rotated = !!options.rotated;
-            this.tag = options.tag;
+        this.translatorPassed = false;
 
-            this.translatorPassed = false;
+        this.openValue = options.openValue;
+        this.highValue = options.highValue;
+        this.lowValue = options.lowValue;
+        this.closeValue = options.closeValue;
+        if(this.openValue || this.highValue || this.lowValue || this.closeValue) {
+            this.value = options.reductionValue;
+        }
+        this.labelFormatObject = {};
+        this.series = options.series || { type: '' };
 
-            this.openValue = options.openValue;
-            this.highValue = options.highValue;
-            this.lowValue = options.lowValue;
-            this.closeValue = options.closeValue;
-            if(this.openValue || this.highValue || this.lowValue || this.closeValue) {
-                this.value = options.reductionValue;
-            }
-            this.labelFormatObject = {};
-            this.series = options.series || { type: '' };
+        this.pointClassName = options.pointClassName;
 
-            this.pointClassName = options.pointClassName;
-
-            this.x = options.x;
-            this.minX = options.minX;
-            this.y = options.y;
-            this.minY = options.minY;
-            this._visible = options.visible;
-            this._label = {
-                draw: sinon.spy()
-            };
-            this.highError = options.highError;
-            this.lowError = options.lowError;
-        },
-        dispose: function() {
-            delete this.options;
-            delete this.series;
-            this.disposed = true;
-        },
-        isInVisibleArea: function() {
-            return true;
-        },
-        correctValue: function(val, percent, base) {
-            // store value for comparison in tests
+        this.x = options.x;
+        this.minX = options.minX;
+        this.y = options.y;
+        this.minY = options.minY;
+        this._visible = options.visible;
+        this._label = {
+            draw: sinon.spy()
+        };
+        this.highError = options.highError;
+        this.lowError = options.lowError;
+    }
+    dispose() {
+        delete this.options;
+        delete this.series;
+        this.disposed = true;
+    }
+    isInVisibleArea() {
+        return true;
+    }
+    correctValue(val, percent, base) {
+        // store value for comparison in tests
+        if(this.hasValue()) {
+            this.correctedValue = val;
+            // emulate real point behavior
             if(this.hasValue()) {
-                this.correctedValue = val;
-                // emulate real point behavior
-                if(this.hasValue()) {
-                    this.value = (base || this.initialValue) + val;
-                    this.minValue = val;
-                }
-
-                if(percent) {
-                    this.percent = percent;
-                    this.labelFormatObject.percent = percent;
-                }
-                this.correctionWasReset = false;
+                this.value = (base || this.initialValue) + val;
+                this.minValue = val;
             }
-        },
-        getMinValue() {
-            return this.minValue;
-        },
-        resetCorrection: function() {
-            this.correctionWasReset = true;
-        },
 
-        isSelected: function() {
-            return this.fullState & 2;
-        },
-
-        isHovered: function() {
-            return this.fullState & 1;
-        },
-        correctLabel: function() {
-
-        },
-        correctPosition: function(correction) {
-            // correct angles?...
-            const that = this;
-            that.radiusInner = correction.radiusInner;
-            that.radiusOuter = correction.radiusOuter;
-            that.centerX = correction.centerX;
-            that.centerY = correction.centerY;
-        },
-        setPercentValue: function(total, fullStacked) {
-            if(this.hasValue()) {
-                this.total = total;
-                this.percent = this.value / total;
-                const isFullStackedSeries = this.series.type === '' || this.series.type.indexOf('fullstacked') === 0;
-                if(fullStacked && isFullStackedSeries) {
-                    this.value = this.value / total;
-                    this.minValue = this.minValue / total;
-                }
+            if(percent) {
+                this.percent = percent;
+                this.labelFormatObject.percent = percent;
             }
-        },
-        setOptions: function(pointOptions) {
-            pointOptions.wereSet = true;
+            this.correctionWasReset = false;
+        }
+    }
+    getMinValue() {
+        return this.minValue;
+    }
+    resetCorrection() {
+        this.correctionWasReset = true;
+    }
+    isSelected() {
+        return this.fullState & 2;
+    }
+    isHovered() {
+        return this.fullState & 1;
+    }
+    correctLabel() {
 
-            this.options = pointOptions;
-        },
-        translate: function(translator) {
-            this.translatorPassed = true;
-        },
-        clearVisibility: function() {
-
-        },
-        hide: function() {
-            this._visible = false;
-        },
-        getCoords: function(min) {
-            if(min) {
-                return this.rotated ? { x: this.minX || 0, y: this.y } : { x: this.x, y: this.minY || 0 };
+    }
+    correctPosition(correction) {
+        // correct angles?...
+        const that = this;
+        that.radiusInner = correction.radiusInner;
+        that.radiusOuter = correction.radiusOuter;
+        that.centerX = correction.centerX;
+        that.centerY = correction.centerY;
+    }
+    setPercentValue(total, fullStacked) {
+        if(this.hasValue()) {
+            this.total = total;
+            this.percent = this.value / total;
+            const isFullStackedSeries = this.series.type === '' || this.series.type.indexOf('fullstacked') === 0;
+            if(fullStacked && isFullStackedSeries) {
+                this.value = this.value / total;
+                this.minValue = this.minValue / total;
             }
-            return { x: this.x, y: this.y };
-        },
-        drawMarker: function(renderer, group) {
-            this.markerRendered = {
-                renderer: renderer,
-                group: group
-            };
-        },
-        draw: function(renderer, group) {
-            this.markerRendered = {
-                renderer: renderer,
-                group: group
-            };
-        },
-        drawTrackerMarker: function(renderer, group) {
-            this.trackerMarkerRendered = {
-                renderer: renderer,
-                group: group
-            };
-        },
-        drawTracker: function(renderer, group) {
-            this.trackerMarkerRendered = {
-                renderer: renderer,
-                group: group
-            };
-        },
-        drawLabel: function(renderer, group) {
-            this.labelRendered = {
-                renderer: renderer,
-                group: group
-            };
-        },
-        correctCoordinates: function(correction) {
-            this.coordinatesCorrected = true;
-            this.coordinatesCorrection = correction;
-        },
-        setHoverState: function() {
-            this.hoverStateWasSet = true;
-        },
-        releaseHoverState: function() {
-            this.hoverStateWasReleased = true;
-        },
-        setSelectedState: function() {
-            this.selectedStateWasSet = true;
-        },
-        releaseSelectedState: function() {
-            this.selectedStateWasReleased = true;
-        },
-        applyNormalStyle: function() {
-            this.currentStyle = 'normal';
-        },
-        applyHoverStyle: function() {
-            this.currentStyle = 'hovered';
-        },
-        applySelectionStyle: function() {
-            this.currentStyle = 'selected';
-        },
-        select: function() {
-            this.selected = true;
-        },
-        hasValue: function() {
-            return this.value !== null && this.minValue !== null && this.highValue !== null && this.lowValue !== null;
-        },
-        hasCoords: function() {
-            return true;
-        },
-        getDefaultCoords: function() {
-            return $.extend({ defaultCoords: true }, this);
-        },
-        animate: function() {
-            this.animation = true;
-            this.animationArguments = arguments;
-        },
-        getTooltipFormatObject: function() {
-            return { valueText: NaN };
-        },
-        getTooltipParams: function(location) {
-            return location === 'edge' ? { x: 'edge', y: 'edge', offset: 0 } : {
-                x: this.argument, y: this.value, offset: 0
-            };
-        },
-        getColor: function() {
-            return this;
-        },
-        getClassName: function() {
-            return 'pointClass';
-        },
-        updateOptions: sinon.spy(function() { }),
-        isVisible: function() {
-            return this._visible !== undefined ? this._visible : true;
-        },
-        getOptions: function() {
-            return this._options;
-        },
-        getLegendStyles: function() {
-            return {
-                hover: {},
-                selection: {},
-                normal: {
-                }
-            };
-        },
-        setHole: function() { },
-        resetHoles: function() { },
-        setInvisibility: sinon.spy(),
-        setDefaultCoords: sinon.spy(),
-        clearSelection: function() { },
-    });
+        }
+    }
+    setOptions(pointOptions) {
+        pointOptions.wereSet = true;
+
+        this.options = pointOptions;
+    }
+    translate(translator) {
+        this.translatorPassed = true;
+    }
+    clearVisibility() {
+
+    }
+    hide() {
+        this._visible = false;
+    }
+    getCoords(min) {
+        if(min) {
+            return this.rotated ? { x: this.minX || 0, y: this.y } : { x: this.x, y: this.minY || 0 };
+        }
+        return { x: this.x, y: this.y };
+    }
+    drawMarker(renderer, group) {
+        this.markerRendered = {
+            renderer: renderer,
+            group: group
+        };
+    }
+    draw(renderer, group) {
+        this.markerRendered = {
+            renderer: renderer,
+            group: group
+        };
+    }
+    drawTrackerMarker(renderer, group) {
+        this.trackerMarkerRendered = {
+            renderer: renderer,
+            group: group
+        };
+    }
+    drawTracker(renderer, group) {
+        this.trackerMarkerRendered = {
+            renderer: renderer,
+            group: group
+        };
+    }
+    drawLabel(renderer, group) {
+        this.labelRendered = {
+            renderer: renderer,
+            group: group
+        };
+    }
+    correctCoordinates(correction) {
+        this.coordinatesCorrected = true;
+        this.coordinatesCorrection = correction;
+    }
+    setHoverState() {
+        this.hoverStateWasSet = true;
+    }
+    releaseHoverState() {
+        this.hoverStateWasReleased = true;
+    }
+    setSelectedState() {
+        this.selectedStateWasSet = true;
+    }
+    releaseSelectedState() {
+        this.selectedStateWasReleased = true;
+    }
+    applyNormalStyle() {
+        this.currentStyle = 'normal';
+    }
+    applyHoverStyle() {
+        this.currentStyle = 'hovered';
+    }
+    applySelectionStyle() {
+        this.currentStyle = 'selected';
+    }
+    select() {
+        this.selected = true;
+    }
+    hasValue() {
+        return this.value !== null && this.minValue !== null && this.highValue !== null && this.lowValue !== null;
+    }
+    hasCoords() {
+        return true;
+    }
+    getDefaultCoords() {
+        return $.extend({ defaultCoords: true }, this);
+    }
+    animate() {
+        this.animation = true;
+        this.animationArguments = arguments;
+    }
+    getTooltipFormatObject() {
+        return { valueText: NaN };
+    }
+    getTooltipParams(location) {
+        return location === 'edge' ? { x: 'edge', y: 'edge', offset: 0 } : {
+            x: this.argument, y: this.value, offset: 0
+        };
+    }
+    getColor() {
+        return this;
+    }
+    getClassName() {
+        return 'pointClass';
+    }
+    isVisible() {
+        return this._visible !== undefined ? this._visible : true;
+    }
+    getOptions() {
+        return this._options;
+    }
+    getLegendStyles() {
+        return {
+            hover: {},
+            selection: {},
+            normal: {
+            }
+        };
+    }
+    setHole() { }
+    resetHoles() { }
+    clearSelection() { }
+}
+
+Object.assign(MockPoint.prototype, {
+    updateOptions: sinon.spy(function() { }),
+    setInvisibility: sinon.spy(),
+    setDefaultCoords: sinon.spy(),
+});
+
 
 export const MockAxis = function(renderOptions) {
     const renderer = renderOptions.renderer;

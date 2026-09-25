@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DragDirection, DragHighlight } from 'devextreme/common';
 import type { UserDefinedElement } from 'devextreme/core/element';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-row-dragging',
@@ -110,14 +103,6 @@ export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, 
     }
     set dropFeedbackMode(value: DragHighlight) {
         this._setOption('dropFeedbackMode', value);
-    }
-
-    @Input()
-    get filter(): string {
-        return this._getOption('filter');
-    }
-    set filter(value: string) {
-        this._setOption('filter', value);
     }
 
     @Input()
@@ -221,7 +206,6 @@ export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, 
         return 'rowDragging';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -237,7 +221,6 @@ export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, 
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -12,10 +10,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 import type { NativeEventInfo } from 'devextreme/common/core/events';
 import type { ButtonStyle, ButtonType } from 'devextreme/common';
 
@@ -108,7 +103,6 @@ export class DxiActionSheetItemComponent extends CollectionNestedOption implemen
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -129,11 +123,9 @@ export class DxiActionSheetItemComponent extends CollectionNestedOption implemen
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

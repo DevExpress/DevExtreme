@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { Font } from 'devextreme/common/charts';
 import type { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 
@@ -22,7 +16,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-vector-map-legend-title',
@@ -93,7 +86,6 @@ export class DxoVectorMapLegendTitleComponent extends NestedOption implements On
         return 'title';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -109,7 +101,6 @@ export class DxoVectorMapLegendTitleComponent extends NestedOption implements On
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

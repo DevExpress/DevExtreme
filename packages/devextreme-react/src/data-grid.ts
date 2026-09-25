@@ -88,8 +88,6 @@ type IDataGridOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   dataSource?: Properties<TRowData, TKey>["dataSource"];
   dataRowRender?: (...params: any) => React.ReactNode;
   dataRowComponent?: React.ComponentType<any>;
-  rowRender?: (...params: any) => React.ReactNode;
-  rowComponent?: React.ComponentType<any>;
   defaultColumns?: Array<dxDataGridColumn | string>;
   defaultEditing?: Record<string, any>;
   defaultFilterValue?: Array<any> | (() => any) | string;
@@ -183,11 +181,6 @@ const DataGrid = memo(
           tmplOption: "dataRowTemplate",
           render: "dataRowRender",
           component: "dataRowComponent"
-        },
-        {
-          tmplOption: "rowTemplate",
-          render: "rowRender",
-          component: "rowComponent"
         },
       ]), []);
 
@@ -3081,7 +3074,6 @@ type IRowDraggingProps = React.PropsWithChildren<{
   dragDirection?: DragDirection;
   dragTemplate?: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template | undefined;
   dropFeedbackMode?: DragHighlight;
-  filter?: string;
   group?: string | undefined;
   handle?: string;
   onAdd?: ((e: RowDraggingAddEvent) => void);

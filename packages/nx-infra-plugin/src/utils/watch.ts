@@ -71,9 +71,11 @@ export async function watchWithChokidar(options: WatchWithChokidarOptions): Prom
       const events = batch;
       batch = [];
       busy = true;
+      const changedFiles = [...new Set(events.map((e) => path.relative(projectRoot, e.filePath)))];
+      logger.info(`${label}: change detected in ${changedFiles.join(', ')}, rebuilding...`);
       try {
         await onRebuild(events);
-        logger.verbose(`${label}: rebuild complete`);
+        logger.info(`${label}: rebuild complete`);
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         logger.error(`${label} rebuild failed: ${message}`);

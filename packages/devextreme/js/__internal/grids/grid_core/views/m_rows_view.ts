@@ -568,10 +568,10 @@ export class RowsView extends ColumnsView {
     }
   }
 
-  private _renderFreeSpaceRow($tableElement, change) {
+  private _renderFreeSpaceRow($tableElement) {
     let $freeSpaceRowElement = this._createEmptyRow(FREE_SPACE_CLASS);
 
-    $freeSpaceRowElement = this._wrapRowIfNeed($tableElement, $freeSpaceRowElement, change?.changeType === 'refresh');
+    $freeSpaceRowElement = this._wrapRowIfNeed($freeSpaceRowElement);
 
     this._appendEmptyRow($tableElement, $freeSpaceRowElement);
   }
@@ -702,7 +702,7 @@ export class RowsView extends ColumnsView {
   }
 
   protected _needWrapRow() {
-    return super._needWrapRow.apply(this, arguments as any) || !!this.option('dataRowTemplate');
+    return !!this.option('dataRowTemplate');
   }
 
   /**
@@ -795,7 +795,7 @@ export class RowsView extends ColumnsView {
 
     that._checkRowKeys(options.change);
 
-    that._renderFreeSpaceRow($table, options.change);
+    that._renderFreeSpaceRow($table);
     if (!that._hasHeight) {
       that.updateFreeSpaceRowHeight($table);
     }
@@ -815,16 +815,14 @@ export class RowsView extends ColumnsView {
    */
   protected _renderRow($table, options) {
     const { row } = options;
-    const { rowTemplate } = this.option();
     const dataRowTemplate = this.option('dataRowTemplate');
 
     if (row.rowType === 'data' && dataRowTemplate) {
       this._renderDataRowByTemplate($table, options, dataRowTemplate);
-    } else if ((row.rowType === 'data' || row.rowType === 'group') && !isDefined(row.groupIndex) && rowTemplate) {
-      this.renderTemplate($table, rowTemplate, extend({ columns: options.columns }, row), true);
-    } else {
-      super._renderRow($table, options);
+      return;
     }
+
+    super._renderRow($table, options);
   }
 
   /**
@@ -858,7 +856,7 @@ export class RowsView extends ColumnsView {
   protected _createTable() {
     const $table = super._createTable.apply(this, arguments as any);
 
-    if (this.option().rowTemplate || this.option().dataRowTemplate) {
+    if (this.option().dataRowTemplate) {
       $table.appendTo(this.component.$element());
     }
 
@@ -1369,7 +1367,6 @@ export class RowsView extends ColumnsView {
       case 'showColumnLines':
       case 'showRowLines':
       case 'rowAlternationEnabled':
-      case 'rowTemplate':
       case 'dataRowTemplate':
       case 'twoWayBindingEnabled':
         that._invalidate(true, true);

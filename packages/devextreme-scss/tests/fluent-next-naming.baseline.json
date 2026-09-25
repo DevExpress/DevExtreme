@@ -494,7 +494,6 @@
   "publicSurfaceUnused": [
     "--dx-button-padding-inline",
     "--dx-color-shadow",
-    "--dx-component-height",
     "--dx-font-size",
     "--dx-font-size-heading-1",
     "--dx-font-size-heading-2",

@@ -124,7 +124,6 @@ export {
   ColumnGroupCellTemplateData,
   ColumnHeaderCellTemplateData,
   MasterDetailTemplateData,
-  RowTemplateData,
   DataRowTemplateData,
   dxDataGridOptions,
   Export,

@@ -4352,24 +4352,6 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     // T312012
-    QUnit.test('Setting rowTemplate via dxTemplate', function(assert) {
-        // arrange, act
-        const dataGrid = createDataGrid({
-            loadingTimeout: null,
-            rowTemplate: 'testRow',
-            dataSource: [{ column1: 'test1', column2: 'test2' }],
-            columns: [{ dataField: 'column1' }, { dataField: 'column2' }]
-        });
-
-        // assert
-        const $rowElements = $($(dataGrid.$element()).find('.dx-datagrid-rowsview').find('table > tbody').find('tr.test'));
-        assert.strictEqual($rowElements.length, 1, 'row element count');
-        assert.strictEqual($rowElements.eq(0).text(), 'Row Content', 'row element content');
-        assert.strictEqual($(dataGrid.$element()).find('table').length, 2, 'table count');
-        assert.strictEqual($(dataGrid.$element()).find('[data-options]').length, 0, 'no elements with data-options attribute');
-    });
-
-    // T312012
     QUnit.test('Setting dataRowTemplate via dxTemplate', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
@@ -4385,39 +4367,6 @@ QUnit.module('templates', baseModuleConfig, () => {
         assert.strictEqual($rowElements.eq(0).text(), 'Row Content', 'row element content');
         assert.strictEqual($(dataGrid.$element()).find('table').length, 2, 'table count');
         assert.strictEqual($(dataGrid.$element()).find('[data-options]').length, 0, 'no elements with data-options attribute');
-    });
-
-    // T952701
-    QUnit.test('Add row when DataGrid is empty and rowTemplate is used', function(assert) {
-        const dataGrid = createDataGrid({
-            width: 1000,
-            dataSource: [],
-            loadingTimeout: null,
-            columns: ['field1', {
-                dataField: 'field2',
-                width: 100
-            }],
-            rowTemplate: (container, options) => {
-                $(container).append(
-                    `<tbody class='dx-row'>
-                        <tr>
-                            <td>new</td>
-                            <td>new</td>
-                        </tr>
-                    </tbody>`
-                );
-            }
-        });
-
-        // act
-        dataGrid.addRow();
-
-        // assert
-        const $row = $(dataGrid.getRowElement(0));
-        const $cells = $row.find('td');
-        assert.equal(getOuterWidth($cells.eq(0)), 900, 'first cell width');
-        assert.equal(getOuterWidth($cells.eq(1)), 100, 'second cell width');
-        assert.equal(getOuterWidth(dataGrid.$element()), 1000, 'dataGrid width');
     });
 
     // T952701
@@ -4452,19 +4401,17 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     // T952701
-    QUnit.test('Add row when DataGrid is empty and rowTemplate is used (with columnAutoWidth and editing)', function(assert) {
+    QUnit.test('Add row when DataGrid is empty and dataRowTemplate is used (with columnAutoWidth and editing)', function(assert) {
         const dataGrid = createDataGrid({
             width: 1000,
             dataSource: [],
             loadingTimeout: null,
-            rowTemplate: (container, options) => {
+            dataRowTemplate: (container, options) => {
                 $(container).append(
-                    `<tbody class='dx-row'>
-                        <tr>
-                            <td>new</td>
-                            <td>new</td>
-                        </tr>
-                    </tbody>`
+                    `<tr>
+                        <td>new</td>
+                        <td>new</td>
+                    </tr>`
                 );
             },
             editing: { allowAdding: true },
@@ -4493,22 +4440,6 @@ QUnit.module('templates', baseModuleConfig, () => {
         assert.equal(getOuterWidth($cells.eq(0)), 900, 'first cell width');
         assert.equal(getOuterWidth($cells.eq(1)), 100, 'second cell width');
         assert.equal(getOuterWidth(dataGrid.$element()), 1000, 'dataGrid width');
-    });
-
-    QUnit.test('rowElement argument of rowTemplate option is correct', function(assert) {
-        assert.expect(2);
-
-        // arrange, act
-        $('#dataGrid').dxDataGrid({
-            rowTemplate: function(rowElement) {
-                assert.equal(typeUtils.isRenderer(rowElement), !!config().useJQuery, 'rowElement is correct');
-                assert.ok($(rowElement).closest(findShadowHostOrDocument(rowElement)).length, 'rowElement is attached to DOM');
-            },
-            dataSource: [{ column1: 'test1', column2: 'test2' }],
-            columns: [{ dataField: 'column1' }, { dataField: 'column2' }]
-        });
-
-        this.clock.tick(10);
     });
 
     QUnit.test('rowElement argument of dataRowTemplate option is correct', function(assert) {
@@ -4546,30 +4477,6 @@ QUnit.module('templates', baseModuleConfig, () => {
         log.restore();
     });
 
-    QUnit.test('deprecate warnings should be fired for rowTemplate', function(assert) {
-        const log = sinon.spy(errors, 'log');
-
-        createDataGrid({
-            rowTemplate: function(rowElement) {
-                rowElement.append('<tr>');
-            },
-            dataSource: [{ id: 1 }],
-        });
-
-        this.clock.tick(10);
-
-        assert.strictEqual(log.callCount, 1, 'error.log is called once');
-        assert.deepEqual(log.getCall(0).args, [
-            'W0001',
-            'dxDataGrid',
-            'rowTemplate',
-            '21.2',
-            'Use the "dataRowTemplate" option instead'
-        ], 'error.log args');
-
-        log.restore();
-    });
-
     ['deferUpdate', 'setTimeout'].forEach(asyncMethod => {
         QUnit.test(`freespace row should be rendered correctly on last page if async dataRowTemplate is defined with ${asyncMethod} in react (T1031218)`, function(assert) {
             // arrange, act
@@ -4583,11 +4490,11 @@ QUnit.module('templates', baseModuleConfig, () => {
                     pageSize: 2
                 },
                 columns: ['text'],
-                dataRowTemplate: 'rowTemplate',
+                dataRowTemplate: 'dataRowTemplate',
                 templatesRenderAsynchronously: true,
                 integrationOptions: {
                     templates: {
-                        rowTemplate: {
+                        dataRowTemplate: {
                             render({ container, model, onRendered }) {
                                 const data = model.data;
                                 const markup = '<tr class="my-row">' +
@@ -4631,11 +4538,11 @@ QUnit.module('templates', baseModuleConfig, () => {
             ],
             keyExpr: 'id',
             repaintChangesOnly: true,
-            dataRowTemplate: 'rowTemplate',
+            dataRowTemplate: 'dataRowTemplate',
             templatesRenderAsynchronously: true,
             integrationOptions: {
                 templates: {
-                    rowTemplate: {
+                    dataRowTemplate: {
                         render({ container, model, onRendered }) {
                             const data = model.data;
                             const markup = '<tr>' +

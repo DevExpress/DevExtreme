@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -29,7 +26,6 @@ import type * as CommonTypes from 'devextreme/common';
 import type { DisposingEvent, InitializedEvent, OptionChangedEvent, ValidatedEvent } from 'devextreme/ui/validator';
 
 import DxValidator from 'devextreme/ui/validator';
-
 
 import {
     DxComponentExtension,
@@ -57,13 +53,12 @@ import { DxiValidatorRequiredRuleModule } from 'devextreme-angular/ui/validator/
 import { DxiValidatorStringLengthRuleModule } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
 import { 
-           PROPERTY_TOKEN_validationRules,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxValidator]
-
  */
 @Component({
     selector: 'dx-validator',
@@ -88,7 +83,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.adapter]
-    
      */
     @Input()
     get adapter(): { applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<Function> } {
@@ -98,10 +92,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         this._setOption('adapter', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -111,10 +103,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -124,10 +114,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:dxValidatorOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -137,10 +125,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:dxValidatorOptions.validationGroup]
-    
      */
     @Input()
     get validationGroup(): string {
@@ -150,10 +136,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         this._setOption('validationGroup', value);
     }
 
-
     /**
      * [descr:dxValidatorOptions.validationRules]
-    
      */
     @Input()
     get validationRules(): Array<CommonTypes.ValidationRule> {
@@ -163,10 +147,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         this._setOption('validationRules', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -177,90 +159,60 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     }
 
     /**
-    
      * [descr:dxValidatorOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxValidatorOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxValidatorOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxValidatorOptions.onValidated]
-    
-    
      */
     @Output() onValidated: EventEmitter<ValidatedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() adapterChange: EventEmitter<{ applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<Function> }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationGroupChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationRulesChange: EventEmitter<Array<CommonTypes.ValidationRule>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
     parentElement: any;
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

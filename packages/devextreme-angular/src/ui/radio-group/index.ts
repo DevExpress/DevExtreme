@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -52,9 +49,8 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiRadioGroupItemModule } from 'devextreme-angular/ui/radio-group/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
-
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -64,7 +60,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 };
 /**
  * [descr:dxRadioGroup]
-
  */
 @Component({
     selector: 'dx-radio-group',
@@ -90,7 +85,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 
     /**
      * [descr:WidgetOptions.accessKey]
-    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -100,10 +94,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('accessKey', value);
     }
 
-
     /**
      * [descr:dxRadioGroupOptions.activeStateEnabled]
-    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -113,10 +105,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('activeStateEnabled', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string {
@@ -126,10 +116,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -139,10 +127,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
-    
      */
     @Input()
     get displayExpr(): ((item: any) => string) | string | undefined {
@@ -152,10 +138,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('displayExpr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -165,10 +149,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:dxRadioGroupOptions.focusStateEnabled]
-    
      */
     @Input()
     get focusStateEnabled(): boolean {
@@ -178,10 +160,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('focusStateEnabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -191,10 +171,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hint]
-    
      */
     @Input()
     get hint(): string | undefined {
@@ -204,10 +182,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('hint', value);
     }
 
-
     /**
      * [descr:dxRadioGroupOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -217,10 +193,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:EditorOptions.isDirty]
-    
      */
     @Input()
     get isDirty(): boolean {
@@ -230,10 +204,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('isDirty', value);
     }
 
-
     /**
      * [descr:EditorOptions.isValid]
-    
      */
     @Input()
     get isValid(): boolean {
@@ -243,10 +215,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('isValid', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.items]
-    
      */
     @Input()
     get items(): Array<any | CollectionWidgetItem> {
@@ -256,10 +226,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -269,10 +237,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:dxRadioGroupOptions.layout]
-    
      */
     @Input()
     get layout(): Orientation {
@@ -282,10 +248,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('layout', value);
     }
 
-
     /**
      * [descr:dxRadioGroupOptions.name]
-    
      */
     @Input()
     get name(): string {
@@ -295,10 +259,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('name', value);
     }
 
-
     /**
      * [descr:EditorOptions.readOnly]
-    
      */
     @Input()
     get readOnly(): boolean {
@@ -308,10 +270,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('readOnly', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -321,10 +281,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.tabIndex]
-    
      */
     @Input()
     get tabIndex(): number {
@@ -334,10 +292,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('tabIndex', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationError]
-    
      */
     @Input()
     get validationError(): any | null {
@@ -347,10 +303,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationError', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationErrors]
-    
      */
     @Input()
     get validationErrors(): Array<any> | null {
@@ -360,10 +314,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationErrors', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessageMode]
-    
      */
     @Input()
     get validationMessageMode(): ValidationMessageMode {
@@ -373,10 +325,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationMessageMode', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationMessagePosition]
-    
      */
     @Input()
     get validationMessagePosition(): Position {
@@ -386,10 +336,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationMessagePosition', value);
     }
 
-
     /**
      * [descr:EditorOptions.validationStatus]
-    
      */
     @Input()
     get validationStatus(): ValidationStatus {
@@ -399,10 +347,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('validationStatus', value);
     }
 
-
     /**
      * [descr:dxRadioGroupOptions.value]
-    
      */
     @Input()
     get value(): any {
@@ -412,10 +358,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('value', value);
     }
 
-
     /**
      * [descr:DataExpressionMixinOptions.valueExpr]
-    
      */
     @Input()
     get valueExpr(): ((item: any) => string | number | boolean) | string {
@@ -425,10 +369,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('valueExpr', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -438,10 +380,8 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -452,253 +392,176 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     }
 
     /**
-    
      * [descr:dxRadioGroupOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxRadioGroupOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxRadioGroupOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxRadioGroupOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxRadioGroupOptions.onValueChanged]
-    
-    
      */
     @Output() onValueChanged: EventEmitter<ValueChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() displayExprChange: EventEmitter<((item: any) => string) | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isDirtyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() isValidChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | CollectionWidgetItem>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() layoutChange: EventEmitter<Orientation>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() readOnlyChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorChange: EventEmitter<any | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationErrorsChange: EventEmitter<Array<any> | null>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationMessagePositionChange: EventEmitter<Position>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() validationStatusChange: EventEmitter<ValidationStatus>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueExprChange: EventEmitter<((item: any) => string | number | boolean) | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * [descr:undefined]
-    
-    
      */
     @Output() onBlur: EventEmitter<any>;
-
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

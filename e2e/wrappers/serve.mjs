@@ -39,10 +39,12 @@ if(!fs.existsSync(indexPath)) {
     process.exit(1);
 }
 
+const indexHtml = fs.readFileSync(indexPath, 'utf8');
+
 const app = express();
 
 app.use(express.static(root));
-app.get('*', (_, res) => res.sendFile(indexPath));
+app.get('*', (_, res) => res.type('html').send(indexHtml));
 
 app.listen(port, () => {
     console.log(`✅ Server for ${framework} running at http://localhost:${port}`);

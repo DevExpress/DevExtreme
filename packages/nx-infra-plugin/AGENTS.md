@@ -34,7 +34,7 @@ Each cross-executor concern (license banner, glob-aware copy, file concatenation
 - Collapse `src/utils/X.ts` files that exist only because an executor's logic was needed elsewhere — move into the owner executor's impl.
 - Throw inside `resolve` and `run`; the wrapper converts to `{ success: false }`.
 - Keep the default export shape `PromiseExecutor<T>`. Tests import `from './executor'`.
-- Use `logger.verbose(...)` from `@nx/devkit` for diagnostic output in executors. Never use `console.log` or `logger.info` for routine progress messages — they pollute every run; `logger.verbose` surfaces only when callers pass `--verbose`.
+- Use `logger.verbose(...)` from `@nx/devkit` for diagnostic output in executors. Never use `console.log` or `logger.info` for routine progress messages — they pollute every run; `logger.verbose` surfaces only when callers pass `--verbose`. Exception: watch-mode rebuild notifications (which file changed, that a rebuild ran) use `logger.info` deliberately — `pnpm dev`'s console feedback loop depends on seeing them without `--verbose`. See `watchWithChokidar`'s `runRebuild` in `src/utils/watch.ts` and `reportWatchStatus` in `build-typescript.impl.ts`.
 - For long-running `watch` executors, reuse `src/utils/watch.ts` (`loadChokidar` + `watchWithChokidar`): it owns chokidar resolution from the project root, the debounced non-reentrant rebuild loop, and SIGINT/SIGTERM shutdown. Do not reimplement a watch loop. TypeScript watch is the exception — it uses `ts.createWatchProgram` directly (own file watching) rather than chokidar.
 
 ## Constraints

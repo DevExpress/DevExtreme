@@ -299,7 +299,7 @@ const rowsView = (
     const deferred = super._renderCore.apply(this, arguments as any);
 
     // T103538
-    if (this.option().rowTemplate || this.option('dataRowTemplate')) {
+    if (this.option('dataRowTemplate')) {
       if (this.option('templatesRenderAsynchronously')) {
         clearTimeout(this._highlightTimer);
 

@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -11,16 +9,11 @@ import {
     SkipSelf
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
-
 
 @Component({
     selector: 'dxo-scrolling',
@@ -46,7 +39,6 @@ export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDe
         return 'scrolling';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -62,7 +54,6 @@ export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDe
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

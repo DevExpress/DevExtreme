@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     NgModule,
@@ -14,10 +12,7 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
 import { DOCUMENT } from '@angular/common';
-
-
 
 import {
     DxIntegrationModule,
@@ -30,6 +25,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
+
 import {
     PROPERTY_TOKEN_location,
 } from 'devextreme-angular/core/tokens';
@@ -108,7 +104,6 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
         return 'items';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -129,11 +124,9 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
     }
 
 
-
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

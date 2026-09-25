@@ -1413,26 +1413,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok($(dataGrid.getRowElement(0)).find('.dx-editor-cell').eq(0).hasClass('dx-focused'), 'first editable cell is active');
     });
 
-    QUnit.test('Test mutual influence of the useKeyboard and keyboardNavigation.enabled options', function(assert) {
-        // arrange, act
-        const dataGrid = createDataGrid();
-
-        // assert
-        assert.ok(dataGrid._deprecatedOptions.useKeyboard, 'useKeyboard deprecated');
-        assert.equal(dataGrid.option('useKeyboard'), true);
-        assert.equal(dataGrid.option('keyboardNavigation.enabled'), true);
-
-        // act
-        dataGrid.option('useKeyboard', false);
-        // assert
-        assert.equal(dataGrid.option('keyboardNavigation.enabled'), false, 'keyboardNavigation.enabled mapping');
-
-        // act
-        dataGrid.option('keyboardNavigation.enabled', true);
-        // assert
-        assert.equal(dataGrid.option('useKeyboard'), true, 'useKeyboard mapping');
-    });
-
     QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady (T827960)', function(assert) {
         // arrange
         const onFocusedRowChangedSpy = sinon.spy();

@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
+import type { Callback } from '@js/core/utils/callbacks';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
@@ -22,6 +23,7 @@ import type { RowsView } from '../views/m_rows_view';
 import type { VirtualScrollingDataControllerExtension } from '../virtual_scrolling/index';
 import type { FocusDataSourceControllerExtension } from './extenders/focus_data_source_controller';
 import { UiGridCoreFocusUtils } from './m_focus_utils';
+import type { FocusDataControllerExtension } from './types';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
 const FOCUSED_ROW_SELECTOR = `.dx-row.${ROW_FOCUSED_CLASS}`;
@@ -53,11 +55,20 @@ export class FocusController extends core.ViewController {
     return this.getController('dataSource');
   }
 
-  public init() {
+  public init(): void {
     this.component._optionsByReference.focusedRowKey = true;
+
+    const dataController = this.getDataController();
+    dataController.afterChanged.remove(this.handleDataChanged);
+    dataController.afterChanged.add(this.handleDataChanged);
+
+    const lastChange = dataController.getLastChange();
+    if (lastChange) {
+      this.handleDataChanged(lastChange);
+    }
   }
 
-  public handleDataChanged(e): void {
+  public handleDataChanged = (e: DataChange): void => {
     const dataController = this.getDataController();
     const dataSourceController = this.getDataSourceController();
     const forceUpdateFocusedRow = dataSourceController.consumeDataPushed();
@@ -67,22 +78,22 @@ export class FocusController extends core.ViewController {
     }
 
     const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
-    const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
-    const isRefreshWithItems = e.changeType === 'refresh' && !!e.items.length;
+    const isPartialUpdateWithDeleting = isPartialUpdate && !!e.changeTypes && e.changeTypes.includes('remove');
+    const isRefreshWithItems = e.changeType === 'refresh' && !!e.items?.length;
     const isAppendOrPrepend = e.changeType === 'append' || e.changeType === 'prepend';
 
     if (forceUpdateFocusedRow && dataController.isEmpty()) {
       this._resetFocusedRow();
     } else if (isRefreshWithItems || isPartialUpdateWithDeleting) {
       dataController._updatePageIndexes();
-      dataController._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
+      this.updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
     } else if (isAppendOrPrepend) {
       dataController._updatePageIndexes();
     } else if (isPartialUpdate) {
-      dataController._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
+      this.updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
       this.resetStaleFocusedRowAfterPartialUpdate(e);
     }
-  }
+  };
 
   private resetStaleFocusedRowAfterPartialUpdate(e: { rowIndices?: number[] }): void {
     const focusedRowKey = this.option('focusedRowKey');
@@ -97,6 +108,57 @@ export class FocusController extends core.ViewController {
 
     if (isFocusedRowVisible && isFocusedRowInChange) {
       this.updateFocusedRow({ focusedRowKey, preventScroll: true });
+    }
+  }
+
+  private updateFocusedRowIfNeeded(e: DataChange, forceUpdate = false): void {
+    const operationTypes = e.operationTypes || {};
+    const {
+      reload, fullReload, pageIndex, paging,
+    } = operationTypes;
+    const isVirtualScrolling = this.getKeyboardController()._isVirtualScrolling();
+    const pagingWithoutVirtualScrolling = paging && !isVirtualScrolling;
+    const focusedRowKey = this.option('focusedRowKey');
+    const isAutoNavigate = this.isAutoNavigateToFocusedRow();
+    const isReload = reload && pageIndex === false;
+    const rowIndexByKey = this.getDataController().getRowIndexByKey(focusedRowKey);
+
+    switch (true) {
+      case forceUpdate: {
+        this._focusRowByKeyOrIndex();
+        break;
+      }
+      case isReload && !fullReload && isDefined(focusedRowKey): {
+        this._navigateToRow(focusedRowKey, true)
+          .done((focusedRowIndex) => {
+            if (focusedRowIndex < 0) {
+              this._focusRowByIndex(undefined, operationTypes);
+            }
+          });
+        break;
+      }
+      case pagingWithoutVirtualScrolling && isAutoNavigate: {
+        const focusedRowIndex = this.option('focusedRowIndex')!;
+        const isValidRowIndexByKey = rowIndexByKey >= 0;
+        const isValidFocusedRowIndex = focusedRowIndex >= 0;
+        const isSameRowIndex = focusedRowIndex === rowIndexByKey;
+
+        if (isValidFocusedRowIndex && (isSameRowIndex || !isValidRowIndexByKey)) {
+          this._focusRowByIndex(focusedRowIndex, operationTypes);
+        }
+        break;
+      }
+      case pagingWithoutVirtualScrolling && !isAutoNavigate && (rowIndexByKey < 0): {
+        this.option('focusedRowIndex', -1);
+        break;
+      }
+      case operationTypes.fullReload: {
+        this._focusRowByKeyOrIndex();
+        break;
+      }
+      default: {
+        break;
+      }
     }
   }
 
@@ -625,11 +687,6 @@ export const columns = (Base: ModuleType<ColumnsController>) => class FocusColum
   }
 };
 
-export interface FocusDataControllerExtension {
-  _updatePageIndexes: () => void;
-  _updateFocusedRowIfNeeded: (e: DataChange, forceUpdate?: boolean) => void;
-}
-
 export const focusDataControllerExtender = (
   Base: ModuleType<DataController & Partial<VirtualScrollingDataControllerExtension>>,
 ) => class FocusDataControllerExtender extends Base {
@@ -637,14 +694,12 @@ export const focusDataControllerExtender = (
 
   private _isPagingByRendering?: boolean;
 
-  protected _focusController!: FocusController;
+  private lastChange?: DataChange;
 
-  protected keyboardNavigationController!: KeyboardNavigationController;
+  public afterChanged!: Callback<[DataChange]>;
 
-  public init(): void {
-    this._focusController = this.getController('focus');
-    this.keyboardNavigationController = this.getController('keyboardNavigation');
-    super.init();
+  protected callbackNames(): string[] {
+    return [...super.callbackNames(), 'afterChanged'];
   }
 
   protected _applyChange(change) {
@@ -656,7 +711,12 @@ export const focusDataControllerExtender = (
 
   protected _fireChanged(e: DataChange): void {
     super._fireChanged(e);
-    this._focusController.handleDataChanged(e);
+    this.lastChange = e;
+    this.afterChanged.fire(e);
+  }
+
+  public getLastChange(): DataChange | undefined {
+    return this.lastChange;
   }
 
   public _updatePageIndexes() {
@@ -669,57 +729,6 @@ export const focusDataControllerExtender = (
 
   private isPagingByRendering() {
     return this._isPagingByRendering;
-  }
-
-  public _updateFocusedRowIfNeeded(e, forceUpdate = false) {
-    const operationTypes = e.operationTypes || {};
-    const {
-      reload, fullReload, pageIndex, paging,
-    } = operationTypes;
-    const isVirtualScrolling = this.keyboardNavigationController._isVirtualScrolling();
-    const pagingWithoutVirtualScrolling = paging && !isVirtualScrolling;
-    const focusedRowKey = this.option('focusedRowKey');
-    const isAutoNavigate = this._focusController.isAutoNavigateToFocusedRow();
-    const isReload = reload && pageIndex === false;
-    const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
-
-    switch (true) {
-      case forceUpdate: {
-        this._focusController._focusRowByKeyOrIndex();
-        break;
-      }
-      case isReload && !fullReload && isDefined(focusedRowKey): {
-        this._focusController._navigateToRow(focusedRowKey, true)
-          .done((focusedRowIndex) => {
-            if (focusedRowIndex < 0) {
-              this._focusController._focusRowByIndex(undefined, operationTypes);
-            }
-          });
-        break;
-      }
-      case pagingWithoutVirtualScrolling && isAutoNavigate: {
-        const focusedRowIndex = this.option('focusedRowIndex')!;
-        const isValidRowIndexByKey = rowIndexByKey >= 0;
-        const isValidFocusedRowIndex = focusedRowIndex >= 0;
-        const isSameRowIndex = focusedRowIndex === rowIndexByKey;
-
-        if (isValidFocusedRowIndex && (isSameRowIndex || !isValidRowIndexByKey)) {
-          this._focusController._focusRowByIndex(focusedRowIndex, operationTypes);
-        }
-        break;
-      }
-      case pagingWithoutVirtualScrolling && !isAutoNavigate && (rowIndexByKey < 0): {
-        this.option('focusedRowIndex', -1);
-        break;
-      }
-      case operationTypes.fullReload: {
-        this._focusController._focusRowByKeyOrIndex();
-        break;
-      }
-      default: {
-        break;
-      }
-    }
   }
 
   /**

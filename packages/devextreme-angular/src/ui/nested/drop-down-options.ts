@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -14,10 +12,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 import type { PositionAlignment } from 'devextreme/common';
 import type { PositionConfig } from 'devextreme/common/core/animation';
 
@@ -130,7 +124,6 @@ export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDe
         return 'dropDownOptions';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -153,7 +146,6 @@ export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDe
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

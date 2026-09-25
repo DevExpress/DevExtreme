@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { DashStyle, Font } from 'devextreme/common/charts';
 import type { BarGaugeBarInfo, BarGaugeLegendItem } from 'devextreme/viz/bar_gauge';
 import type { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
@@ -24,7 +18,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-bar-gauge-legend',
@@ -223,7 +216,6 @@ export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestro
         return 'legend';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -239,7 +231,6 @@ export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestro
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

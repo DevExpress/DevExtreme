@@ -1,17 +1,11 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     NgModule,
     Host,
     SkipSelf
 } from '@angular/core';
-
-
-
-
 
 import {
     DxIntegrationModule,
@@ -55,7 +49,6 @@ export class DxiFieldComponent extends DxiFilterBuilderField {
         return 'fields';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -68,7 +61,6 @@ export class DxiFieldComponent extends DxiFilterBuilderField {
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
-
 }
 
 @NgModule({

@@ -31,6 +31,7 @@ import { Color } from '@ts/color';
 import { isCssVariableReference } from '@ts/core/utils/css_variables';
 import swatchContainer from '@ts/core/utils/swatch_container';
 
+import type { ThemeValue } from './base_theme_manager';
 import { Plaque } from './plaque';
 import { Renderer } from './renderers/renderer';
 import { normalizeEnum, patchFontOptions } from './utils';
@@ -485,6 +486,14 @@ Tooltip.prototype = {
     return box;
   },
 };
+
+export interface TooltipPluginMembers {
+  _tooltip: ThemeValue;
+  _disposeTooltip: () => void;
+  _initTooltip: () => void;
+  _setTooltipOptions: () => void;
+  _setTooltipRendererOptions: () => void;
+}
 
 export const plugin = {
   name: 'tooltip',

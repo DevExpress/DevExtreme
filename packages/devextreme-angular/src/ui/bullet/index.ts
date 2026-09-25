@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -22,7 +19,6 @@ import type { Theme, DashStyle, Font } from 'devextreme/common/charts';
 import type { Format } from 'devextreme/common/core/localization';
 
 import DxBullet from 'devextreme/viz/bullet';
-
 
 import {
     DxComponent,
@@ -52,7 +48,6 @@ import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
 
 /**
  * [descr:dxBullet]
-
  */
 @Component({
     selector: 'dx-bullet',
@@ -72,7 +67,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
     /**
      * [descr:dxBulletOptions.color]
-    
      */
     @Input()
     get color(): string {
@@ -82,10 +76,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('color', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -95,10 +87,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -108,10 +98,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.encodeHtml]
-    
      */
     @Input()
     get encodeHtml(): boolean {
@@ -121,10 +109,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('encodeHtml', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.endScaleValue]
-    
      */
     @Input()
     get endScaleValue(): number | undefined {
@@ -134,10 +120,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('endScaleValue', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.margin]
-    
      */
     @Input()
     get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
@@ -147,10 +131,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('margin', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.pathModified]
-    
      */
     @Input()
     get pathModified(): boolean {
@@ -160,10 +142,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('pathModified', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -173,10 +153,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.showTarget]
-    
      */
     @Input()
     get showTarget(): boolean {
@@ -186,10 +164,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('showTarget', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.showZeroLevel]
-    
      */
     @Input()
     get showZeroLevel(): boolean {
@@ -199,10 +175,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('showZeroLevel', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.size]
-    
      */
     @Input()
     get size(): { height?: number | undefined, width?: number | undefined } {
@@ -212,10 +186,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('size', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.startScaleValue]
-    
      */
     @Input()
     get startScaleValue(): number {
@@ -225,10 +197,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('startScaleValue', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.target]
-    
      */
     @Input()
     get target(): number {
@@ -238,10 +208,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('target', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.targetColor]
-    
      */
     @Input()
     get targetColor(): string {
@@ -251,10 +219,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('targetColor', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.targetWidth]
-    
      */
     @Input()
     get targetWidth(): number {
@@ -264,10 +230,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('targetWidth', value);
     }
 
-
     /**
      * [descr:BaseWidgetOptions.theme]
-    
      */
     @Input()
     get theme(): Theme {
@@ -277,10 +241,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('theme', value);
     }
 
-
     /**
      * [descr:BaseSparklineOptions.tooltip]
-    
      */
     @Input()
     get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
@@ -290,10 +252,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
         this._setOption('tooltip', value);
     }
 
-
     /**
      * [descr:dxBulletOptions.value]
-    
      */
     @Input()
     get value(): number {
@@ -304,213 +264,144 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     }
 
     /**
-    
      * [descr:dxBulletOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxBulletOptions.onDrawn]
-    
-    
      */
     @Output() onDrawn: EventEmitter<DrawnEvent>;
 
     /**
-    
      * [descr:dxBulletOptions.onExported]
-    
-    
      */
     @Output() onExported: EventEmitter<ExportedEvent>;
 
     /**
-    
      * [descr:dxBulletOptions.onExporting]
-    
-    
      */
     @Output() onExporting: EventEmitter<ExportingEvent>;
 
     /**
-    
      * [descr:dxBulletOptions.onFileSaving]
-    
-    
      */
     @Output() onFileSaving: EventEmitter<FileSavingEvent>;
 
     /**
-    
      * [descr:dxBulletOptions.onIncidentOccurred]
-    
-    
      */
     @Output() onIncidentOccurred: EventEmitter<IncidentOccurredEvent>;
 
     /**
-    
      * [descr:dxBulletOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxBulletOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * [descr:dxBulletOptions.onTooltipHidden]
-    
-    
      */
     @Output() onTooltipHidden: EventEmitter<TooltipHiddenEvent>;
 
     /**
-    
      * [descr:dxBulletOptions.onTooltipShown]
-    
-    
      */
     @Output() onTooltipShown: EventEmitter<TooltipShownEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() colorChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() encodeHtmlChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() endScaleValueChange: EventEmitter<number | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() marginChange: EventEmitter<{ bottom?: number, left?: number, right?: number, top?: number }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() pathModifiedChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showTargetChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() showZeroLevelChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() sizeChange: EventEmitter<{ height?: number | undefined, width?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() startScaleValueChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() targetChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() targetColorChange: EventEmitter<string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() targetWidthChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() themeChange: EventEmitter<Theme>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointsInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() valueChange: EventEmitter<number>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,

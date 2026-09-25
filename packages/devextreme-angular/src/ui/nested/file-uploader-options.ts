@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -13,16 +11,11 @@ import {
     EventEmitter
 } from '@angular/core';
 
-
-
-
-
 import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFileUploaderOptions } from './base/file-uploader-options';
-
 
 @Component({
     selector: 'dxo-file-uploader-options',
@@ -109,7 +102,6 @@ export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions impl
         return 'fileUploaderOptions';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -129,7 +121,6 @@ export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions impl
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

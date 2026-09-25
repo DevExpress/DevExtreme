@@ -1,7 +1,5 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
-
 import {
     Component,
     OnInit,
@@ -12,10 +10,6 @@ import {
     ContentChildren,
     QueryList
 } from '@angular/core';
-
-
-
-
 
 import {
     DxIntegrationModule,
@@ -53,7 +47,6 @@ export class DxoImageUploadComponent extends DxoHtmlEditorImageUpload implements
         return 'imageUpload';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -69,7 +62,6 @@ export class DxoImageUploadComponent extends DxoHtmlEditorImageUpload implements
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

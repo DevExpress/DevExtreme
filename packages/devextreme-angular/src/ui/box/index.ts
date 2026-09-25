@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     TransferState,
     Component,
@@ -9,7 +7,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -29,7 +26,6 @@ import type { Store } from 'devextreme/data/store';
 
 import DxBox from 'devextreme/ui/box';
 
-
 import {
     DxComponent,
     DxTemplateHost,
@@ -46,13 +42,12 @@ import { DxoBoxModule } from 'devextreme-angular/ui/nested';
 
 import { DxiBoxItemModule } from 'devextreme-angular/ui/box/nested';
 import { 
-           PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/core/tokens';
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 
 /**
  * [descr:dxBox]
-
  */
 @Component({
     selector: 'dx-box',
@@ -77,7 +72,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
      * [descr:dxBoxOptions.align]
-    
      */
     @Input()
     get align(): Distribution {
@@ -87,10 +81,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('align', value);
     }
 
-
     /**
      * [descr:dxBoxOptions.crossAlign]
-    
      */
     @Input()
     get crossAlign(): CrosswiseDistribution {
@@ -100,10 +92,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('crossAlign', value);
     }
 
-
     /**
      * [descr:dxBoxOptions.dataSource]
-    
      */
     @Input()
     get dataSource(): Array<any | dxBoxItem | string> | DataSource | DataSourceOptions | null | Store | string {
@@ -113,10 +103,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('dataSource', value);
     }
 
-
     /**
      * [descr:dxBoxOptions.direction]
-    
      */
     @Input()
     get direction(): BoxDirection {
@@ -126,10 +114,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('direction', value);
     }
 
-
     /**
      * [descr:WidgetOptions.disabled]
-    
      */
     @Input()
     get disabled(): boolean {
@@ -139,10 +125,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('disabled', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -152,10 +136,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('elementAttr', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.height]
-    
      */
     @Input()
     get height(): number | string | undefined {
@@ -165,10 +147,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('height', value);
     }
 
-
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -178,10 +158,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('hoverStateEnabled', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
-    
      */
     @Input()
     get itemHoldTimeout(): number {
@@ -191,10 +169,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('itemHoldTimeout', value);
     }
 
-
     /**
      * [descr:dxBoxOptions.items]
-    
      */
     @Input()
     get items(): Array<any | dxBoxItem | string> {
@@ -204,10 +180,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('items', value);
     }
 
-
     /**
      * [descr:CollectionWidgetOptions.itemTemplate]
-    
      */
     @Input()
     get itemTemplate(): any {
@@ -217,10 +191,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('itemTemplate', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -230,10 +202,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('rtlEnabled', value);
     }
 
-
     /**
      * [descr:WidgetOptions.visible]
-    
      */
     @Input()
     get visible(): boolean {
@@ -243,10 +213,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
         this._setOption('visible', value);
     }
 
-
     /**
      * [descr:DOMComponentOptions.width]
-    
      */
     @Input()
     get width(): number | string | undefined {
@@ -257,169 +225,114 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     }
 
     /**
-    
      * [descr:dxBoxOptions.onContentReady]
-    
-    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-    
      * [descr:dxBoxOptions.onDisposing]
-    
-    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
      * [descr:dxBoxOptions.onInitialized]
-    
-    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
      * [descr:dxBoxOptions.onItemClick]
-    
-    
      */
     @Output() onItemClick: EventEmitter<ItemClickEvent>;
 
     /**
-    
      * [descr:dxBoxOptions.onItemContextMenu]
-    
-    
      */
     @Output() onItemContextMenu: EventEmitter<ItemContextMenuEvent>;
 
     /**
-    
      * [descr:dxBoxOptions.onItemHold]
-    
-    
      */
     @Output() onItemHold: EventEmitter<ItemHoldEvent>;
 
     /**
-    
      * [descr:dxBoxOptions.onItemRendered]
-    
-    
      */
     @Output() onItemRendered: EventEmitter<ItemRenderedEvent>;
 
     /**
-    
      * [descr:dxBoxOptions.onOptionChanged]
-    
-    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() alignChange: EventEmitter<Distribution>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() crossAlignChange: EventEmitter<CrosswiseDistribution>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() dataSourceChange: EventEmitter<Array<any | dxBoxItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() directionChange: EventEmitter<BoxDirection>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemHoldTimeoutChange: EventEmitter<number>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemsChange: EventEmitter<Array<any | dxBoxItem | string>>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

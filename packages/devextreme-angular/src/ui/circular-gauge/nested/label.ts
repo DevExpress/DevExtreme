@@ -1,6 +1,4 @@
 /* tslint:disable:max-line-length */
-
-
 import {
     Component,
     OnInit,
@@ -10,10 +8,6 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
-
-
-
-
 import type { Font, LabelOverlap } from 'devextreme/common/charts';
 import type { Format } from 'devextreme/common/core/localization';
 import type { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
@@ -23,7 +17,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-circular-gauge-label',
@@ -102,7 +95,6 @@ export class DxoCircularGaugeLabelComponent extends NestedOption implements OnDe
         return 'label';
     }
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -118,7 +110,6 @@ export class DxoCircularGaugeLabelComponent extends NestedOption implements OnDe
     ngOnDestroy() {
         this._addRemovedOption(this._getOptionPath());
     }
-
 
 }
 

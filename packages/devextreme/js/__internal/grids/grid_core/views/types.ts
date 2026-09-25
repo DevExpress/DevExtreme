@@ -6,3 +6,5 @@ export type RowsViewScrollEvent = Partial<ScrollEventInfo<dxScrollable>> & {
   scrollOffset: { top: number; left: number };
   forceUpdateScrollPosition?: boolean;
 };
+
+export type ColumnWidth = number | string | undefined;
