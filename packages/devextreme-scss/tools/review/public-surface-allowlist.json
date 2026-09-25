@@ -1,0 +1,348 @@
+{
+  "$comment": "Registry of decisions for public --dx-* custom properties flagged by tools/review/reachability.mjs (declared and never read inside the built fluent-next bundle \u2014 tools/review/unread-tier.json) or by publicSurfaceUnused in tests/fluent-next-naming.test.ts (declared in some theme's source, never referenced by apps/demos/Demos, packages/devextreme/js or scss/widgets/base). A flagged name that stays public goes in `kept` here, with the reason a human decided to keep it despite the gate not seeing a consumer. A name retired instead is recorded in tools/naming/public-renames.json, not here \u2014 the two files are mutually exclusive. `pending` lists flagged names still under individual review (see the ticket's own working notes) \u2014 every name either gate flags must end up in exactly one of `kept`, `pending`, or public-renames.json's `retired`; tests/public-surface-allowlist.test.ts enforces that.",
+  "fields": {
+    "name": "The kept name, exactly as it ships.",
+    "reason": "Why a human decided to keep publishing it despite the gate finding no consumer.",
+    "since": "The date the decision was recorded."
+  },
+  "kept": [
+    {
+      "name": "--dx-border-radius",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-border-width",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-button-padding-inline",
+      "reason": "The Sass value ($button-padding-inline) is genuinely needed internally (feeds the $button-content-padding calc()), so the component-tier generator (tools/naming/publish.mjs) necessarily keeps publishing this name regardless. A stale duplicate manual declaration at :root (predating the component-tier refactor) was deleted 2026-09-25; the remaining, generator-owned declaration on .dx-button cannot be un-published without extending tools/naming/tier.ts, which was deliberately not done in this pass.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-border",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-danger",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-icon",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-link",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-main-bg",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-options-panel-bg",
+      "reason": "Deliberately introduced across all four themes in PR #34698 (task 4828) as the demo options-panel background handle; ~116 demos read it.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-primary",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-separator",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-spin-icon",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-success",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-text",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-color-warning",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-component-color-bg",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size",
+      "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-heading-1",
+      "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-heading-2",
+      "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-heading-3",
+      "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-heading-4",
+      "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-heading-5",
+      "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-heading-6",
+      "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-icon",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-lg",
+      "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-md",
+      "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-sm",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-xl",
+      "reason": "Published app-markup constant for the typography scale (--dx-font-size / --dx-font-size-{lg,md,xl} / --dx-font-size-heading-{1,2,3,4,6}), the same family as --dx-font-size-heading-5 which Chat demos already read. The theme itself never needs to read its own scale constants; consumers read them.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-font-size-xs",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-list-item-padding-block",
+      "reason": "Working component-tier customization hook (scoped --dx-<widget>-* variable actually read via var() inside the fluent-next bundle) \u2014 just not yet exercised by any demo. Not the same situation as a variable no rule reads at all.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-list-item-padding-inline",
+      "reason": "Working component-tier customization hook (scoped --dx-<widget>-* variable actually read via var() inside the fluent-next bundle) \u2014 just not yet exercised by any demo. Not the same situation as a variable no rule reads at all.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-scheduler-appointment-15min-height",
+      "reason": "Published for API symmetry with the rest of the appointment sizing scale, but a runtime override has no visual effect: the value is baked at build time into a Sass-only @container (max-height: ...) breakpoint in scheduler/_index.scss, which CSS does not allow to reference a custom property.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-scheduler-appointment-20min-height",
+      "reason": "Published for API symmetry with the rest of the appointment sizing scale, but a runtime override has no visual effect: the value is baked at build time into a Sass-only @container (max-height: ...) breakpoint in scheduler/_index.scss, which CSS does not allow to reference a custom property.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-scheduler-appointment-25min-height",
+      "reason": "Published for API symmetry with the rest of the appointment sizing scale, but a runtime override has no visual effect: the value is baked at build time into a Sass-only @container (max-height: ...) breakpoint in scheduler/_index.scss, which CSS does not allow to reference a custom property.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-texteditor-color-label",
+      "reason": "Pre-existing documented --dx-color-*/--dx-border-*/--dx-component-color-bg/--dx-texteditor-color-label app-markup handle, declared identically in all four themes before fluent-next and read by apps/demos/Demos/** today. Kept for API parity with the legacy themes.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-toolbar-height",
+      "reason": "Working component-tier customization hook (scoped --dx-<widget>-* variable actually read via var() inside the fluent-next bundle) \u2014 just not yet exercised by any demo. Not the same situation as a variable no rule reads at all.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-bg",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-bg-active",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-bg-hovered",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-blue",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-border",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-border-active",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-border-hovered",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-content",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-content-subtle",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-font-family",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-green",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-grid",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-pink",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-primary",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-purple",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-red",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-tooltip-bg",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-tooltip-content",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    },
+    {
+      "name": "--dx-viz-yellow",
+      "reason": "Read from packages/devextreme/js/__internal/viz/core/themes/fluent-next (Viz palette/theme registration), not from CSS inside the SCSS bundle \u2014 Viz never emits var() reads, so the JS<->SCSS contract is the only consumer by design.",
+      "since": "2026-09-25"
+    }
+  ],
+  "pending": [
+    "--dx-box-item-content-font-size",
+    "--dx-button-icon-margin",
+    "--dx-button-icon-size",
+    "--dx-button-icon-text-padding-inline-start",
+    "--dx-button-padding-block",
+    "--dx-calendar-legacy-width",
+    "--dx-check-box-indeterminate-icon-height",
+    "--dx-check-box-indeterminate-icon-width",
+    "--dx-color-box-overlay-padding",
+    "--dx-data-grid-group-panel-item-margin-inline-end",
+    "--dx-data-grid-group-panel-item-padding-block",
+    "--dx-data-grid-group-panel-item-rtl-margin-inline-end",
+    "--dx-diagram-image-icon-base-content",
+    "--dx-drop-down-list-min-height",
+    "--dx-file-manager-file-actions-button-top-bottom-padding",
+    "--dx-file-manager-progress-box-close-button-margin-block-start",
+    "--dx-form-group-content-padding-block-end",
+    "--dx-global-inline-widget-inner-height",
+    "--dx-grid-column-chooser-item-margin",
+    "--dx-grid-group-panel-item-margin-inline",
+    "--dx-grid-group-panel-message-line-height",
+    "--dx-grid-group-row-content",
+    "--dx-grid-hidden-border",
+    "--dx-grid-summary-bg",
+    "--dx-html-editor-placeholder-content",
+    "--dx-list-delete-button-static-padding",
+    "--dx-list-item-border-width",
+    "--dx-list-item-margin-inline",
+    "--dx-load-panel-content-border",
+    "--dx-load-panel-content-border-radius",
+    "--dx-map-marker-tooltip-margin",
+    "--dx-menu-item-bg-hovered",
+    "--dx-menu-item-expanded-content",
+    "--dx-menu-item-line-height",
+    "--dx-menu-item-with-icon-padding-inline",
+    "--dx-pagination-navigate-button-height",
+    "--dx-pagination-page-padding-inline",
+    "--dx-pagination-separator-padding-inline-end",
+    "--dx-pagination-separator-padding-inline-start",
+    "--dx-pivot-grid-drag-header-border",
+    "--dx-popup-dialog-message-padding",
+    "--dx-progress-bar-range-indeterminate-bg",
+    "--dx-scheduler-dd-appointment-content-hovered",
+    "--dx-scheduler-group-header-agenda-font-size",
+    "--dx-scheduler-left-column-width",
+    "--dx-scheduler-workspace-cell-bg-active",
+    "--dx-scrollable-scroll-height",
+    "--dx-scrollable-scroll-width",
+    "--dx-slider-height",
+    "--dx-stepper-step-accent-bg-hovered",
+    "--dx-tabs-item-padding-inline",
+    "--dx-time-view-field-number-box-spin-touch-friendly-width",
+    "--dx-time-view-field-number-box-width",
+    "--dx-toast-content-padding",
+    "--dx-tree-list-expand-icon-size",
+    "--dx-tree-view-border-padding",
+    "--dx-tree-view-checkbox-offset",
+    "--dx-tree-view-container-with-border-offset",
+    "--dx-tree-view-item-padding-inline",
+    "--dx-validation-message-content-padding",
+    "--dx-validation-summary-margin-block-start"
+  ]
+}
