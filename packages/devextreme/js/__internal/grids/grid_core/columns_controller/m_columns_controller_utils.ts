@@ -133,7 +133,9 @@ export const createColumnsFromOptions = (
     return [];
   }
 
-  return columnsOptions.reduce((result: Column[], columnOptions: Column | string): Column[] => {
+  const result: Column[] = [];
+
+  columnsOptions.forEach((columnOptions) => {
     const currentIndex = createdColumnCount + result.length;
     const userStateColumnOptions = that._columnsUserState
       && checkUserStateColumn(columnOptions, that._columnsUserState[currentIndex])
@@ -141,7 +143,7 @@ export const createColumnsFromOptions = (
     const column = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
 
     if (!column) {
-      return result;
+      return;
     }
 
     if (bandColumn) {
@@ -149,17 +151,20 @@ export const createColumnsFromOptions = (
       column.ownerBand = bandColumn;
     }
 
+    result.push(column);
+
     if (!column.columns) {
-      return [...result, column];
+      return;
     }
 
     warnFixedInChildColumnsOnce(that, column.columns);
-    const childColumns = createColumnsFromOptions(that, column.columns, column, result.length + 1);
+    const childColumns = createColumnsFromOptions(that, column.columns, column, result.length);
     delete column.columns;
     column.hasColumns = true;
+    result.push(...childColumns);
+  });
 
-    return [...result, column, ...childColumns];
-  }, []);
+  return result;
 };
 
 export const getParentBandColumns = function (
