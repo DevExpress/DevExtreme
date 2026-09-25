@@ -122,6 +122,9 @@ function buildTheme(name: string, fallback: Record<PublishedName, string>): any 
     gridColor: paint(VIZ_GRID),
     tooltip: {
       color: paint(VIZ_TOOLTIP_BG),
+      border: {
+        color: paint(VIZ_BORDER),
+      },
       font: {
         color: paint(VIZ_TOOLTIP_CONTENT),
       },

@@ -67,7 +67,7 @@
       "name": "--dx-viz-border",
       "role": "color-border",
       "declaredPerMode": true,
-      "paints": "lines that frame something: pane and label borders, annotation border, gauge range container, axis breaks, map background border"
+      "paints": "lines that frame something: pane and label borders, annotation border, gauge range container, axis breaks, map background border, and the tooltip border once an application shows it"
     },
     {
       "name": "--dx-viz-border-hovered",
