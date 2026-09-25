@@ -37,7 +37,7 @@ import {
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 import type {
-  AddedColumn, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnsChanges, DropLocationNames,
+  Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnsChanges, ColumnUserState, DropLocationNames,
   ValueSerializers,
 } from './types';
 
@@ -71,41 +71,51 @@ export const setFilterOperationsAsDefaultValues = (column: Column): void => {
 
 let globalColumnId = 1;
 
-export const createColumn = function (that: ColumnsController, columnOptions, userStateColumnOptions?, bandColumn?): any {
-  let commonColumnOptions = {};
-
-  if (columnOptions) {
-    if (isString(columnOptions)) {
-      columnOptions = {
-        dataField: columnOptions,
-      };
-    }
-
-    that.setName(columnOptions);
-
-    let result = {};
-    if (columnOptions.command) {
-      result = deepExtendArraySafe(commonColumnOptions, columnOptions);
-    } else {
-      commonColumnOptions = that.getCommonSettings(columnOptions);
-      if (userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
-        columnOptions = extend({}, columnOptions, { dataField: userStateColumnOptions.dataField });
-      }
-      const calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
-      if (!columnOptions.type) {
-        result = { headerId: `dx-col-${globalColumnId++}` };
-      }
-      result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS, false, true);
-      deepExtendArraySafe(result, commonColumnOptions, false, true);
-      deepExtendArraySafe(result, calculatedColumnOptions, false, true);
-      deepExtendArraySafe(result, columnOptions, false, true);
-      deepExtendArraySafe(result, { selector: null }, false, true);
-    }
-    if (columnOptions.filterOperations === columnOptions.defaultFilterOperations) {
-      setFilterOperationsAsDefaultValues(result);
-    }
-    return result;
+export const createColumn = (
+  that: ColumnsController,
+  columnOptions: Column | string | undefined,
+  userStateColumnOptions?: ColumnUserState,
+  bandColumn?: Column,
+): Column | undefined => {
+  if (!columnOptions) {
+    return undefined;
   }
+
+  const options: Column = isString(columnOptions) ? { dataField: columnOptions } : columnOptions;
+  let result: Column = {};
+
+  that.setName(options);
+
+  if (options.command) {
+    result = deepExtendArraySafe({}, options);
+  } else {
+    const commonColumnOptions = that.getCommonSettings(options);
+    const userStateDataField = userStateColumnOptions?.name && userStateColumnOptions.dataField;
+    const optionsWithUserState: Column = userStateDataField
+      ? extend({}, options, { dataField: userStateDataField })
+      : options;
+    const calculatedColumnOptions = that._createCalculatedColumnOptions(
+      optionsWithUserState,
+      bandColumn,
+    );
+
+    if (!optionsWithUserState.type) {
+      result = { headerId: `dx-col-${globalColumnId}` };
+      globalColumnId += 1;
+    }
+
+    deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS, false, true);
+    deepExtendArraySafe(result, commonColumnOptions, false, true);
+    deepExtendArraySafe(result, calculatedColumnOptions, false, true);
+    deepExtendArraySafe(result, optionsWithUserState, false, true);
+    deepExtendArraySafe(result, { selector: null }, false, true);
+  }
+
+  if (options.filterOperations === options.defaultFilterOperations) {
+    setFilterOperationsAsDefaultValues(result);
+  }
+
+  return result;
 };
 
 function checkUserStateColumn(column, userStateColumn) {
@@ -114,7 +124,7 @@ function checkUserStateColumn(column, userStateColumn) {
 
 export const createColumnsFromOptions = (
   that: ColumnsController,
-  columnsOptions: AddedColumn[] | undefined,
+  columnsOptions: (Column | string)[] | undefined,
   bandColumn?: Column,
   createdColumnCount = 0,
 ): Column[] => {
@@ -122,12 +132,12 @@ export const createColumnsFromOptions = (
     return [];
   }
 
-  return columnsOptions.reduce((result: Column[], columnOptions: AddedColumn): Column[] => {
+  return columnsOptions.reduce((result: Column[], columnOptions: Column | string): Column[] => {
     const currentIndex = createdColumnCount + result.length;
     const userStateColumnOptions = that._columnsUserState
       && checkUserStateColumn(columnOptions, that._columnsUserState[currentIndex])
       && that._columnsUserState[currentIndex];
-    const column: Column = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
+    const column = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
 
     if (!column) {
       return result;

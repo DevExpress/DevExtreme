@@ -2,9 +2,11 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import config from '@js/core/config';
+import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import {
+  createColumn,
   createColumnsFromOptions,
   customizeTextForBooleanDataType,
   getAlignmentByDataType,
@@ -15,7 +17,7 @@ import {
   strictParseNumber,
   updateSerializers,
 } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
-import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+import type { Column, ColumnsControllerOptions } from '@ts/grids/grid_core/columns_controller/types';
 
 import {
   afterTest,
@@ -307,15 +309,169 @@ describe('strictParseNumber', () => {
   });
 });
 
-describe('createColumnsFromOptions', () => {
+const getColumnsController = async (
+  options: DataGridProperties & ColumnsControllerOptions = {},
+): Promise<ColumnsController> => {
+  const { instance } = await createDataGrid({ dataSource: [], columns: [], ...options });
+
+  return instance.getController('columns');
+};
+
+describe('createColumn', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
-  const getColumnsController = async (): Promise<ColumnsController> => {
-    const { instance } = await createDataGrid({ dataSource: [], columns: [] });
+  it.each([
+    ['undefined', undefined],
+    ['an empty string', ''],
+  ])('should return undefined for %s', async (_, columnOptions) => {
+    const columnsController = await getColumnsController();
 
-    return instance.getController('columns');
-  };
+    expect(createColumn(columnsController, columnOptions)).toBeUndefined();
+  });
+
+  it('should create a column from a data field string', async () => {
+    const columnsController = await getColumnsController();
+
+    const column = createColumn(columnsController, 'firstName');
+
+    expect(column).toMatchObject({ dataField: 'firstName', name: 'firstName', caption: 'First Name' });
+  });
+
+  it('should set the name on the passed column options', async () => {
+    const columnsController = await getColumnsController();
+    const columnOptions: Column = { dataField: 'age' };
+
+    createColumn(columnsController, columnOptions);
+
+    expect(columnOptions.name).toBe('age');
+  });
+
+  it('should give each column its own header id', async () => {
+    const columnsController = await getColumnsController();
+
+    const first = createColumn(columnsController, 'a');
+    const second = createColumn(columnsController, 'b');
+
+    expect(first?.headerId).toMatch(/^dx-col-\d+$/);
+    expect(second?.headerId).toMatch(/^dx-col-\d+$/);
+    expect(first?.headerId).not.toBe(second?.headerId);
+  });
+
+  it('should not give a header id to a column with a type', async () => {
+    const columnsController = await getColumnsController();
+
+    expect(createColumn(columnsController, { type: 'buttons' })?.headerId).toBeUndefined();
+  });
+
+  it('should apply the default column options', async () => {
+    const columnsController = await getColumnsController();
+
+    expect(createColumn(columnsController, 'a')).toMatchObject({ visible: true, showInColumnChooser: true });
+  });
+
+  it('should apply the grid-level column settings', async () => {
+    const columnsController = await getColumnsController({ columnMinWidth: 50 });
+
+    expect(createColumn(columnsController, 'a')?.minWidth).toBe(50);
+  });
+
+  it.each([
+    ['the default options', { visible: false }, 'visible', false],
+    ['the grid-level settings', { minWidth: 10 }, 'minWidth', 10],
+    ['the calculated options', { caption: 'Name' }, 'caption', 'Name'],
+  ])('should let the column options override %s', async (_, columnOptions, optionName, expected) => {
+    const columnsController = await getColumnsController({ columnMinWidth: 50 });
+
+    const column = createColumn(columnsController, { dataField: 'firstName', ...columnOptions });
+
+    expect(column).toHaveProperty(optionName, expected);
+  });
+
+  it('should reset the selector', async () => {
+    const columnsController = await getColumnsController();
+
+    const column = createColumn(columnsController, { dataField: 'a', selector: (): number => 1 });
+
+    expect(column?.selector).toBeNull();
+  });
+
+  it('should disable fixing for a band child', async () => {
+    const columnsController = await getColumnsController({ columnFixing: { enabled: true } });
+    const bandColumn: Column = { caption: 'Band' };
+
+    expect(createColumn(columnsController, 'a')?.allowFixing).toBe(true);
+    expect(createColumn(columnsController, 'a', undefined, bandColumn)?.allowFixing).toBe(false);
+  });
+
+  it('should copy a command column without the default and grid-level settings', async () => {
+    const columnsController = await getColumnsController({ columnMinWidth: 50 });
+    const columnOptions: Column = { type: 'expand', command: 'expand' };
+
+    const column = createColumn(columnsController, columnOptions);
+
+    expect(column).toEqual(columnOptions);
+    expect(column).not.toBe(columnOptions);
+  });
+
+  it('should take the data field from the user state of a named column', async () => {
+    const columnsController = await getColumnsController();
+    const columnOptions: Column = { name: 'n', dataField: 'original' };
+
+    const column = createColumn(columnsController, columnOptions, { name: 'n', dataField: 'renamed' });
+
+    expect(column?.dataField).toBe('renamed');
+    expect(column?.caption).toBe('Renamed');
+    expect(columnOptions.dataField).toBe('original');
+  });
+
+  it('should keep inherited column options when the user state changes the data field', async () => {
+    const columnsController = await getColumnsController();
+    const columnOptions = Object.create({ width: 100 }) as Column;
+    columnOptions.name = 'n';
+    columnOptions.dataField = 'original';
+
+    const column = createColumn(columnsController, columnOptions, { name: 'n', dataField: 'renamed' });
+
+    expect(column?.width).toBe(100);
+  });
+
+  it.each([
+    ['has no name', { dataField: 'renamed' }],
+    ['has no data field', { name: 'n' }],
+  ])('should keep the data field when the user state %s', async (_, userState) => {
+    const columnsController = await getColumnsController();
+
+    const column = createColumn(columnsController, { name: 'n', dataField: 'original' }, userState);
+
+    expect(column?.dataField).toBe('original');
+  });
+
+  it('should link the filter operations to the default ones when the column options set neither', async () => {
+    const columnsController = await getColumnsController({
+      commonColumnSettings: { defaultFilterOperations: ['=', '<>'] },
+    });
+
+    const column = createColumn(columnsController, 'a');
+
+    expect(column?.filterOperations).toEqual(['=', '<>']);
+    expect(column?.filterOperations).toBe(column?.defaultFilterOperations);
+  });
+
+  it('should keep the filter operations the column options set', async () => {
+    const columnsController = await getColumnsController({
+      commonColumnSettings: { defaultFilterOperations: ['=', '<>'] },
+    });
+
+    const column = createColumn(columnsController, { dataField: 'a', filterOperations: ['contains'] });
+
+    expect(column?.filterOperations).toEqual(['contains']);
+  });
+});
+
+describe('createColumnsFromOptions', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
 
   it('should return an empty array when there are no column options', async () => {
     const columnsController = await getColumnsController();
