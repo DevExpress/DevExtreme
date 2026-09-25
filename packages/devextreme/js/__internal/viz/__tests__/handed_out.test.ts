@@ -98,6 +98,15 @@ describe.each([
     expect(registered.backgroundColor).toMatch(/^var\(--dx-viz-bg, /);
   });
 
+  it('hands a font weight out as the number every other theme gives', () => {
+    const theme = getTheme('fluent-next.blue.light');
+    const registered: Theme = getRawTheme('fluent-next.blue.light');
+
+    expect(registered.font.weight).toBe('var(--dx-viz-font-weight, 400)');
+    expect(theme.font.weight).toBe(400);
+    expect(theme.title.font.weight).toBe(600);
+  });
+
   it('leaves every other palette and theme exactly as it was', () => {
     expect(palette.getPalette('Material', undefined)).toBe(rawPalette.getPalette('Material', undefined));
     expect(palette.generateColors('Soft Pastel', 20, {}))
@@ -110,13 +119,14 @@ describe.each([
 
 describe('handing the Fluent Next colours out on a page that paints the names', () => {
   const DECLARED_FONT = 'Inter, sans-serif';
+  const DECLARED_TITLE_WEIGHT = '700';
   const MIXED = 'color(srgb 0.2 0.4 0.6)';
   const PRIMARY_IN_SRGB = 'color(srgb -0.186828 0.505925 0.943796)';
   let declaredBlue = 'rgb(11, 7, 3)';
   let declaredPrimary = 'rgb(15, 108, 189)';
 
   const paint = (written: string): string => {
-    if (written.includes('--dx-viz-font-family')) {
+    if (/--dx-viz-font-family|font-weight/.test(written)) {
       return 'none';
     }
 
@@ -146,7 +156,10 @@ describe('handing the Fluent Next colours out on a page that paints the names', 
     declaredPrimary = 'rgb(15, 108, 189)';
     jest.spyOn(window, 'getComputedStyle').mockImplementation((element) => ({
       fill: paint((element as SVGElement).style.getPropertyValue('fill')),
-      getPropertyValue: (name: string): string => (name === '--dx-viz-font-family' ? DECLARED_FONT : ''),
+      getPropertyValue: (name: string): string => ({
+        '--dx-viz-font-family': DECLARED_FONT,
+        '--dx-viz-title-font-weight': DECLARED_TITLE_WEIGHT,
+      })[name] ?? '',
     }) as unknown as CSSStyleDeclaration);
   });
 
@@ -187,6 +200,13 @@ describe('handing the Fluent Next colours out on a page that paints the names', 
 
   it('reads a name that is not a colour from what the page declares for it', () => {
     expect(getTheme('fluent-next.blue.light').font.family).toBe(DECLARED_FONT);
+  });
+
+  it('hands a font weight the page declares out as a number', () => {
+    const theme = getTheme('fluent-next.blue.light');
+
+    expect(theme.title.font.weight).toBe(700);
+    expect(theme.font.weight).toBe(400);
   });
 
   it('resolves a whole theme with one probe, each distinct value once, and leaves nothing behind', () => {

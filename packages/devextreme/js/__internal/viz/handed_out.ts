@@ -8,10 +8,11 @@ import * as raw from '@ts/viz/palette';
 
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 const LEFT_TO_THE_BROWSER = /var\(|color-mix\(|\(from /;
+const PLAIN_NUMBER = /^-?(?:\d+\.?\d*|\.\d+)$/;
 
 type Page = HTMLElement | undefined;
 
-type Resolved = Map<string, string | undefined>;
+type Resolved = Map<string, string | number | undefined>;
 
 interface Source {
   source: unknown;
@@ -68,10 +69,14 @@ function paintedOn(page: HTMLElement, values: string[]): (string | undefined)[] 
   return painted;
 }
 
-function literalOf(value: string, page: Page): string | undefined {
+function literalOf(value: string, page: Page): string | number | undefined {
   const literal = value.startsWith('var(') ? resolvedInScope(value, page) : fallbackOf(value);
 
-  return isCssVariableReference(literal) ? undefined : literal;
+  if (isCssVariableReference(literal)) {
+    return undefined;
+  }
+
+  return PLAIN_NUMBER.test(literal) ? Number(literal) : literal;
 }
 
 function collectNames(value: unknown, names: Set<string>): Set<string> {
