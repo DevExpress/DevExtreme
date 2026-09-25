@@ -1410,6 +1410,7 @@ QUnit.test('T1335913. Chart is redrawn with the restored visualRange when a rang
     const ticks = chart.getArgumentAxis().getTicksValues().majorTicksValues;
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 20, endValue: 60 }, 'visualRange is restored');
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), [20, 60], 'visualRange option is restored');
     assert.equal(onZoomEnd.callCount, 1);
     assert.ok(onZoomEnd.firstCall.args[0].cancel, 'zoomEnd is canceled');
     assert.deepEqual(ticks, [20, 25, 30, 35, 40, 45, 50, 55, 60], 'axis is drawn for the restored visualRange with the new tickInterval');
@@ -1463,6 +1464,17 @@ QUnit.test('T1335913. Points and trackers are recreated when a range rejected by
         clock.tick(50);
 
         assert.ok(series.isHovered(), 'series is hovered');
+
+        chart.option({
+            dataSource: createData(1002),
+            'argumentAxis.visualRange': [610, 660]
+        });
+        pointerMock(this.$container.find('.dxc-trackers > path').eq(0)).start().move(rootOffset.left + 300, rootOffset.top + 200);
+        clock.tick(50);
+
+        assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 500, endValue: 700 }, 'visualRange is restored after the next update');
+        assert.equal(onZoomEnd.callCount, 2);
+        assert.ok(series.getVisiblePoints().every((p) => p.getOptions()), 'drawn points are not disposed after the next update');
     } finally {
         clock.restore();
     }
