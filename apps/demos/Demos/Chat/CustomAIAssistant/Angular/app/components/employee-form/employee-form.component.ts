@@ -3,6 +3,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { DxFormModule, DxFormComponent, DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxToastModule, DxToastComponent } from 'devextreme-angular/ui/toast';
 import type { AIIntegration } from 'devextreme-angular/common/ai-integration';
+import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { employee, formFieldsConfig, type Employee } from '../../data';
 
 let modulePrefix = '';
@@ -26,16 +27,9 @@ export class EmployeeFormComponent {
 
   formData: Employee = { ...employee };
 
-  readonly toastPosition = {
-    of: '#form-container',
-    at: 'bottom center',
-    my: 'bottom center',
-    offset: '0 -20',
-  };
-
   readonly formFields = formFieldsConfig;
 
-  readonly saveButtonOptions = {
+  readonly saveButtonOptions: DxButtonTypes.Properties = {
     text: 'Save',
     type: 'default',
     disabled: true,
