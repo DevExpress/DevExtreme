@@ -19,6 +19,7 @@ import type { DataGridCommandColumnType } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 
 import { AI_COLUMN_NAME } from '../ai_column/const';
+import type DataSourceAdapter from '../data_source_adapter/m_data_source_adapter';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
@@ -398,29 +399,30 @@ export const getCustomizeTextByDataType = (dataType: string | undefined): Column
   return undefined;
 };
 
-export const createColumnsFromDataSourceAdapter = function (that: ColumnsController, dataSourceAdapter) {
-  const firstItems = that._getFirstItems(dataSourceAdapter);
-  let fieldName;
-  const processedFields = {};
-  const result: any = [];
+export const createColumnsFromDataSourceAdapter = (
+  that: ColumnsController,
+  dataSourceAdapter: DataSourceAdapter,
+): Column[] => {
+  const fieldNames: Record<string, true> = {};
 
-  for (let i = 0; i < firstItems.length; i++) {
-    if (firstItems[i]) {
-      for (fieldName in firstItems[i]) {
-        if (!isFunction(firstItems[i][fieldName]) || variableWrapper.isWrapped(firstItems[i][fieldName])) {
-          processedFields[fieldName] = true;
-        }
+  that._getFirstItems(dataSourceAdapter).forEach((item) => {
+    if (!item) {
+      return;
+    }
+
+    // eslint-disable-next-line guard-for-in -- inherited fields become columns too
+    for (const fieldName in item) {
+      const value = item[fieldName];
+
+      if (!isFunction(value) || variableWrapper.isWrapped(value)) {
+        fieldNames[fieldName] = true;
       }
     }
-  }
+  });
 
-  for (fieldName in processedFields) {
-    if (fieldName.indexOf('__') !== 0) {
-      const column = createColumn(that, fieldName);
-      result.push(column);
-    }
-  }
-  return result;
+  return Object.keys(fieldNames)
+    .filter((fieldName) => !fieldName.startsWith('__'))
+    .map((fieldName) => createColumn(that, fieldName) as Column);
 };
 
 export const updateColumnIndexes = function (that: ColumnsController) {

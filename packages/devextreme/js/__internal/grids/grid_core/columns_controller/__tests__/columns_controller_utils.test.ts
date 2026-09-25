@@ -4,9 +4,11 @@ import {
 import config from '@js/core/config';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import { variableWrapper } from '@ts/core/utils/m_variable_wrapper';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import {
   createColumn,
+  createColumnsFromDataSourceAdapter,
   createColumnsFromOptions,
   customizeTextForBooleanDataType,
   getAlignmentByDataType,
@@ -567,5 +569,88 @@ describe('createColumnsFromOptions', () => {
 
     expect(log).toHaveBeenCalledTimes(1);
     expect(log).toHaveBeenCalledWith('W1028', 'fixed');
+  });
+});
+
+describe('createColumnsFromDataSourceAdapter', () => {
+  beforeEach(beforeTest);
+  afterEach(() => {
+    variableWrapper.resetInjection();
+    afterTest();
+  });
+
+  const getDataFields = async (
+    dataSource: DataGridProperties['dataSource'],
+  ): Promise<(string | undefined)[]> => {
+    const { instance } = await createDataGrid({ dataSource, columns: [] });
+    const dataSourceAdapter = instance.getController('dataSource').getAdapter();
+
+    if (!dataSourceAdapter) {
+      throw new Error('The grid has no data source adapter');
+    }
+
+    return createColumnsFromDataSourceAdapter(instance.getController('columns'), dataSourceAdapter)
+      .map((column) => column.dataField);
+  };
+
+  it('should create a column for each field of the loaded items', async () => {
+    expect(await getDataFields([{ id: 1, name: 'Alex' }])).toEqual(['id', 'name']);
+  });
+
+  it('should take each field once, in the order it first appears', async () => {
+    const dataFields = await getDataFields([{ id: 1, name: 'Alex' }, { id: 2, age: 30 }]);
+
+    expect(dataFields).toEqual(['id', 'name', 'age']);
+  });
+
+  it('should put integer-like field names first, as object keys do', async () => {
+    expect(await getDataFields([{ b: 1 }, { 1: 'x' }])).toEqual(['1', 'b']);
+  });
+
+  it('should include inherited fields', async () => {
+    const item = Object.create({ inherited: 1 }) as Record<string, unknown>;
+    item.own = 2;
+
+    expect(await getDataFields([item])).toEqual(['own', 'inherited']);
+  });
+
+  it('should skip function fields', async () => {
+    expect(await getDataFields([{ id: 1, getName: (): string => 'Alex' }])).toEqual(['id']);
+  });
+
+  it('should keep wrapped function fields', async () => {
+    const observable = (): string => 'Alex';
+    variableWrapper.inject({ isWrapped: (value) => value === observable });
+
+    expect(await getDataFields([{ id: 1, name: observable }])).toEqual(['id', 'name']);
+  });
+
+  it('should skip service fields that start with a double underscore', async () => {
+    expect(await getDataFields([{ __KEY__: 1, id: 1, a__b: 2 }])).toEqual(['id', 'a__b']);
+  });
+
+  it('should skip empty items', async () => {
+    expect(await getDataFields([null, { id: 1 }])).toEqual(['id']);
+  });
+
+  it('should skip falsy primitive items even when their prototype has enumerable fields', async () => {
+    // eslint-disable-next-line no-extend-native -- the test needs a polluted prototype
+    Object.defineProperty(Number.prototype, 'polluted', { value: 'x', enumerable: true, configurable: true });
+
+    try {
+      expect(await getDataFields([0, { id: 1 }])).toEqual(['id']);
+    } finally {
+      Reflect.deleteProperty(Number.prototype, 'polluted');
+    }
+  });
+
+  it('should take the fields of the items in the first group', async () => {
+    const dataFields = await getDataFields({ store: [{ city: 'Rome', id: 1 }], group: 'city' });
+
+    expect(dataFields).toEqual(['city', 'id']);
+  });
+
+  it('should return no columns when there are no items', async () => {
+    expect(await getDataFields([])).toEqual([]);
   });
 });
