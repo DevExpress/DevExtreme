@@ -18,11 +18,11 @@ const VIZ_PURPLE_SUBTLE = '--dx-viz-purple-subtle';
 const VIZ_TOOLTIP_BG = '--dx-viz-tooltip-bg';
 const VIZ_TOOLTIP_CONTENT = '--dx-viz-tooltip-content';
 const VIZ_FONT_FAMILY = '--dx-viz-font-family';
-const VIZ_FONT_WEIGHT = '--dx-viz-font-weight';
-const VIZ_TITLE_FONT_WEIGHT = '--dx-viz-title-font-weight';
 const VIZ_EXPORT_FONT_WEIGHT = '--dx-viz-export-font-weight';
+const VIZ_FONT_WEIGHT = '--dx-viz-font-weight';
 const VIZ_LABEL_FONT_WEIGHT = '--dx-viz-label-font-weight';
 const VIZ_LEGEND_TITLE_FONT_WEIGHT = '--dx-viz-legend-title-font-weight';
+const VIZ_TITLE_FONT_WEIGHT = '--dx-viz-title-font-weight';
 
 const VIZ_PRIMARY = '--dx-viz-primary';
 
@@ -55,11 +55,11 @@ const LIGHT = {
   [VIZ_TOOLTIP_BG]: '#242424',
   [VIZ_TOOLTIP_CONTENT]: '#ffffff',
   [VIZ_FONT_FAMILY]: FONT_FAMILY,
-  [VIZ_FONT_WEIGHT]: '400',
-  [VIZ_TITLE_FONT_WEIGHT]: '600',
   [VIZ_EXPORT_FONT_WEIGHT]: '400',
+  [VIZ_FONT_WEIGHT]: '400',
   [VIZ_LABEL_FONT_WEIGHT]: '600',
   [VIZ_LEGEND_TITLE_FONT_WEIGHT]: '200',
+  [VIZ_TITLE_FONT_WEIGHT]: '600',
 
   [VIZ_PRIMARY]: '#0f6cbd',
 
