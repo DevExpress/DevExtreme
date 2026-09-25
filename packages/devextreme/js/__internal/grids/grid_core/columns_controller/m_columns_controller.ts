@@ -50,7 +50,6 @@ import {
 } from './const';
 import {
   addExpandColumn,
-  applyUserState,
   assignColumns,
   columnOptionCore,
   convertOwnerBandToColumnReference,
@@ -88,9 +87,11 @@ import {
   strictParseNumber,
   updateColumnChanges,
   updateColumnGroupIndexes,
+  updateColumnIndexes,
   updateIndexes,
   updateSerializers,
 } from './m_columns_controller_utils';
+import { UserStateApplier } from './user_state_applier';
 
 interface IndexedColumns {
   positiveIndexedColumns: Record<string, Column[]>[][];
@@ -172,7 +173,7 @@ export class ColumnsController extends modules.Controller {
 
     if (this._isColumnsFromOptions) {
       assignColumns(this, columns ? createColumnsFromOptions(this, columns) : []);
-      applyUserState(this);
+      this.applyUserState();
     } else {
       assignColumns(this, this._columnsUserState ? createColumnsFromOptions(this, this._columnsUserState) : this._columns);
     }
@@ -377,7 +378,7 @@ export class ColumnsController extends modules.Controller {
           if (columnsFromDataSourceAdapter.length) {
             assignColumns(that, columnsFromDataSourceAdapter);
             that.generatedColumnsCount = that._columns.length;
-            applyUserState(that);
+            that.applyUserState();
           }
         }
         return that.updateColumns(dataSourceAdapter, forceApplying, isApplyingUserState);
@@ -1631,6 +1632,29 @@ export class ColumnsController extends modules.Controller {
     if (!commandColumn) {
       commandColumn = options;
       this._commandColumns.push(commandColumn);
+    }
+  }
+
+  private applyUserState(): void {
+    const columnsUserState = this._columnsUserState;
+
+    if (!columnsUserState) {
+      return;
+    }
+
+    const { columns, hasAddedBands } = new UserStateApplier({
+      columns: this._columns,
+      columnsUserState,
+      ignoreColumnOptionNames: this._ignoreColumnOptionNames || [],
+      hasUserState: this._hasUserState,
+      createColumn: (columnOptions) => createColumn(this, columnOptions),
+    }).apply();
+
+    if (hasAddedBands) {
+      updateColumnIndexes(this);
+      assignColumns(this, createColumnsFromOptions(this, columns));
+    } else {
+      assignColumns(this, columns);
     }
   }
 

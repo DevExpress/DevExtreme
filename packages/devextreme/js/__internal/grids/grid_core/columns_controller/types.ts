@@ -32,7 +32,27 @@ export type FilterField = Omit<Column, 'filterOperations'> & { filterOperations?
 
 export type ColumnUserState = Pick<Column, typeof USER_STATE_FIELD_NAMES[number]>;
 
+export type SavedColumnState = ColumnUserState & { initialIndex?: number };
+
 export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
+
+export interface UserStateApplierOptions {
+  columns: Column[];
+  columnsUserState: SavedColumnState[];
+  ignoreColumnOptionNames: string[];
+  hasUserState: boolean;
+  createColumn: (columnOptions: AddedColumn) => Column;
+}
+
+export interface ColumnsStateMatch {
+  stateIndexes: number[];
+  allColumnsHaveState: boolean;
+}
+
+export interface UserStateApplyResult {
+  columns: Column[];
+  hasAddedBands: boolean;
+}
 
 export type ColumnSelector = ((data: RawItemData) => unknown) & {
   columnIndex?: number;
@@ -56,6 +76,7 @@ export interface InternalColumnOptions extends ValueSerializers {
   type?: string;
   defaultFilterOperations?: string[];
   defaultFilterOperation?: string;
+  defaultSelectedFilterOperation?: ColumnBase['selectedFilterOperation'] | null;
   visibleWidth?: string | number;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
