@@ -3,7 +3,7 @@
 }
 
 #treeList .ai__cell {
-  background-color: var(--dx-datagrid-row-alternation-bg);
+  background-color: var(--dx-grid-row-alternation-bg);
 }
 
 #treeList .name_cell > div {
