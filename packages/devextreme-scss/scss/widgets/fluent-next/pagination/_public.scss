@@ -15,7 +15,6 @@
   --dx-pagination-info-margin-inline: #{$pagination-info-margin-inline};
   --dx-pagination-nav-button-height: #{$pagination-nav-button-height};
   --dx-pagination-nav-button-icon-size: #{$pagination-nav-button-icon-size};
-  --dx-pagination-navigate-button-height: #{$pagination-navigate-button-height};
   --dx-pagination-navigate-button-width: #{$pagination-navigate-button-width};
   --dx-pagination-padding: #{$pagination-padding};
   --dx-pagination-page-bg-hovered: #{$pagination-page-bg-hovered};
@@ -30,13 +29,10 @@
   --dx-pagination-page-margin-inline-end: #{$pagination-page-margin-inline-end};
   --dx-pagination-page-margin-inline-start: #{$pagination-page-margin-inline-start};
   --dx-pagination-page-padding: #{$pagination-page-padding};
-  --dx-pagination-page-padding-inline: #{$pagination-page-padding-inline};
   --dx-pagination-page-size-margin-inline-start: #{$pagination-page-size-margin-inline-start};
   --dx-pagination-page-sizes-compact-min-width: #{$pagination-page-sizes-compact-min-width};
   --dx-pagination-pages-count-padding-inline-start: #{$pagination-pages-count-padding-inline-start};
   --dx-pagination-separator-padding: #{$pagination-separator-padding};
-  --dx-pagination-separator-padding-inline-end: #{$pagination-separator-padding-inline-end};
-  --dx-pagination-separator-padding-inline-start: #{$pagination-separator-padding-inline-start};
 
   @include links.publish();
 }

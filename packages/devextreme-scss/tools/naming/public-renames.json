@@ -465,6 +465,186 @@
       "replacement": null,
       "release": "26.2",
       "note": "This was a leftover of an earlier naming convention; the popup toolbar item spacing is not customizable through this name."
+    },
+    {
+      "name": "--dx-button-icon-text-padding-inline-start",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-grid-group-row-content",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-grid-summary-bg",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-menu-item-expanded-content",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-box-item-content-font-size",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-color-box-overlay-padding",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-data-grid-group-panel-item-margin-inline-end",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-data-grid-group-panel-item-rtl-margin-inline-end",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-diagram-image-icon-base-content",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-drop-down-list-min-height",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-file-manager-progress-box-close-button-margin-block-start",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-form-group-content-padding-block-end",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-html-editor-placeholder-content",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-list-delete-button-static-padding",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-load-panel-content-border",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-load-panel-content-border-radius",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-pagination-navigate-button-height",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-pagination-page-padding-inline",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-pagination-separator-padding-inline-end",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-pagination-separator-padding-inline-start",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-pivot-grid-drag-header-border",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-popup-dialog-message-padding",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-scheduler-dd-appointment-content-hovered",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-scheduler-group-header-agenda-font-size",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-scrollable-scroll-height",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-scrollable-scroll-width",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-stepper-step-accent-bg-hovered",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-time-view-field-number-box-spin-touch-friendly-width",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-time-view-field-number-box-width",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
+    },
+    {
+      "name": "--dx-toast-content-padding",
+      "replacement": null,
+      "release": "26.2",
+      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
     }
   ]
 }
