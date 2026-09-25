@@ -12,6 +12,7 @@ import {
   getSerializationFormat,
   getValueDataType,
   mergeColumns,
+  processBandColumns,
   setFilterOperationsAsDefaultValues,
   strictParseNumber,
   updateSerializers,
@@ -675,6 +676,200 @@ describe('mergeColumns', () => {
       );
 
       expect(column).toEqual({ type: 'groupExpand', command: 'expand', index: 1 });
+    });
+  });
+});
+
+describe('processBandColumns', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  const copyColumns = (columnsController: ColumnsController): Column[] => {
+    const columns: Column[] = columnsController.getColumns();
+
+    return columns.map((column) => ({ ...column }));
+  };
+
+  const getSpans = (columns: Column[]): Record<string, Pick<Column, 'colspan' | 'rowspan'>> => Object.fromEntries(
+    columns.map(({
+      dataField, caption, type, colspan, rowspan,
+    }) => [String(dataField ?? caption ?? type), { colspan, rowspan }]),
+  );
+
+  it('should not set spans when there are no bands', async () => {
+    const columnsController = await getColumnsController({ columns: ['a', 'b'] });
+    const columns = copyColumns(columnsController);
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns)).toEqual({ a: {}, b: {} });
+  });
+
+  it('should span a band over its children and a plain column over all header rows', async () => {
+    const columnsController = await getColumnsController({
+      columns: ['a', { caption: 'Band', columns: ['b', 'c'] }],
+    });
+    const columns = copyColumns(columnsController);
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns)).toEqual({
+      a: { rowspan: 2 },
+      Band: { colspan: 2 },
+      b: {},
+      c: {},
+    });
+  });
+
+  it('should skip the hidden columns', async () => {
+    const columnsController = await getColumnsController({
+      columns: [
+        'a',
+        { dataField: 'd', visible: false },
+        { caption: 'Band', columns: ['b', { dataField: 'c', visible: false }] },
+      ],
+    });
+    const columns = copyColumns(columnsController);
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns)).toEqual({
+      a: { rowspan: 2 },
+      d: {},
+      Band: { colspan: 1 },
+      b: {},
+      c: {},
+    });
+  });
+
+  it('should subtract the parent bands from the rowspan of a nested column', async () => {
+    const columnsController = await getColumnsController({
+      columns: ['a', {
+        caption: 'Band',
+        columns: ['b', { caption: 'Nested band', columns: ['c', 'd'] }],
+      }],
+    });
+    const columns = copyColumns(columnsController);
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns)).toEqual({
+      a: { rowspan: 3 },
+      Band: { colspan: 3 },
+      b: { rowspan: 2 },
+      'Nested band': { colspan: 2 },
+      c: {},
+      d: {},
+    });
+  });
+
+  it('should keep the colspan a band already has', async () => {
+    const columnsController = await getColumnsController({
+      columns: ['a', { caption: 'Band', columns: ['b', 'c'] }],
+    });
+    const columns = copyColumns(columnsController)
+      .map((column) => (column.isBand ? { ...column, colspan: 5 } : column));
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns).Band).toEqual({ colspan: 5 });
+  });
+
+  it('should recalculate a zero colspan of a band', async () => {
+    const columnsController = await getColumnsController({
+      columns: ['a', { caption: 'Band', columns: ['b', 'c'] }],
+    });
+    const columns = copyColumns(columnsController)
+      .map((column) => (column.isBand ? { ...column, colspan: 0 } : column));
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns).Band).toEqual({ colspan: 2 });
+  });
+
+  it('should span a band without visible children over all header rows', async () => {
+    const columnsController = await getColumnsController({
+      columns: [
+        { caption: 'Empty band', columns: [{ dataField: 'a', visible: false }] },
+        { caption: 'Band', columns: ['b'] },
+      ],
+    });
+    const columns = copyColumns(columnsController);
+
+    processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+    expect(getSpans(columns)).toEqual({
+      'Empty band': { colspan: 0, rowspan: 2 },
+      a: {},
+      Band: { colspan: 1 },
+      b: {},
+    });
+  });
+
+  describe('when a column of a band is grouped', () => {
+    it('should span the grouped column over all header rows', async () => {
+      const columnsController = await getColumnsController({
+        columns: ['a', { caption: 'Band', columns: [{ dataField: 'b', groupIndex: 0 }, 'c'] }],
+      });
+      const columns = copyColumns(columnsController);
+
+      processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+      expect(getSpans(columns)).toEqual({
+        a: { rowspan: 2 },
+        Band: { colspan: 1 },
+        b: { rowspan: 2 },
+        c: {},
+      });
+    });
+
+    it('should keep the grouped column in the band when showWhenGrouped is set', async () => {
+      const columnsController = await getColumnsController({
+        columns: ['a', {
+          caption: 'Band',
+          columns: [{ dataField: 'b', groupIndex: 0, showWhenGrouped: true }, 'c'],
+        }],
+      });
+      const columns = copyColumns(columnsController);
+
+      processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+      expect(getSpans(columns)).toEqual({
+        a: { rowspan: 2 },
+        Band: { colspan: 2 },
+        b: {},
+        c: {},
+      });
+    });
+  });
+
+  describe('when processing the command columns', () => {
+    it('should span a command column over all header rows even without the visible option', async () => {
+      const columnsController = await getColumnsController({
+        columns: ['a', { caption: 'Band', columns: ['b'] }],
+      });
+      const columns = [...copyColumns(columnsController), { type: 'expand', command: 'expand' }];
+
+      processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+      expect(getSpans(columns).expand).toEqual({ rowspan: 2 });
+    });
+
+    it('should not subtract the parent bands from the rowspan of a command column in a band', async () => {
+      const columnsController = await getColumnsController({
+        editing: { mode: 'row', allowUpdating: true },
+        columns: ['a', { caption: 'Band', columns: ['b', { type: 'buttons' }] }],
+      });
+      const columns = mergeColumns(
+        columnsController,
+        columnsController.getColumns(),
+        columnsController._commandColumns,
+        true,
+      );
+
+      processBandColumns(columnsController, columns, columnsController.getBandColumnsCache());
+
+      expect(getSpans(columns).buttons).toEqual({ rowspan: 2 });
     });
   });
 });

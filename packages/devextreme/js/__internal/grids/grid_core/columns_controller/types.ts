@@ -128,3 +128,9 @@ export type ColumnsControllerOptionChanged = OptionChanged
   | OptionChangedFor<ColumnsControllerOptions>
   | OptionChangedFor<Pick<DataGridProperties, 'grouping' | 'groupPanel'>>
   | ColumnOptionChanged;
+
+export interface BandColumnsCache {
+  isPlain: boolean;
+  columnChildrenByIndex: Record<number, Column[]>;
+  columnParentByIndex: Record<number, Column>;
+}
