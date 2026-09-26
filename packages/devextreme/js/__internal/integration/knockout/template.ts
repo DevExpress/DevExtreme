@@ -1,7 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { domAdapter } from '@ts/core/dom_adapter';
-import { TemplateBase } from '@ts/core/templates/m_template_base';
+import { TemplateBase } from '@ts/core/templates/template_base';
 import { normalizeTemplateElement } from '@ts/core/utils/m_dom';
 import { isDefined } from '@ts/core/utils/m_type';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -60,7 +60,6 @@ export const KoTemplate = class extends TemplateBase {
     return getParentContext(data).createChildContext(data);
   }
 
-  // @ts-expect-error
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/explicit-module-boundary-types
   _renderCore(options) {

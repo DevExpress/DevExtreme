@@ -7,4 +7,4 @@ export {
     getParentName,
     getNestedOptionValue,
     createDefaultOptionRules,
-} from '../../__internal/core/options/m_utils';
+} from '../../__internal/core/options/utils';
