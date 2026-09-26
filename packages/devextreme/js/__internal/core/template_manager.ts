@@ -58,6 +58,12 @@ interface WatchOptions {
   skipImmediate?: boolean;
 }
 
+export type WatchMethod = (
+  fn: () => unknown,
+  callback: (value: unknown) => void,
+  options?: WatchOptions,
+) => () => void;
+
 interface PolymorphWidgetModel {
   widget?: string;
   options?: Record<string, unknown>;
@@ -111,11 +117,7 @@ export class TemplateManager {
 
   static createDefaultOptions(): {
     integrationOptions: {
-      watchMethod: (
-        fn: () => unknown,
-        callback: (value: unknown) => void,
-        options?: WatchOptions,
-      ) => () => void;
+      watchMethod: WatchMethod;
       templates: Record<string, TemplateLike>;
       useDeferUpdateForTemplates: boolean;
     };

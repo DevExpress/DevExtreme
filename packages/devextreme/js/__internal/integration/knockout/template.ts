@@ -60,7 +60,6 @@ export const KoTemplate = class extends TemplateBase {
     return getParentContext(data).createChildContext(data);
   }
 
-  // @ts-expect-error
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/explicit-module-boundary-types
   _renderCore(options) {
