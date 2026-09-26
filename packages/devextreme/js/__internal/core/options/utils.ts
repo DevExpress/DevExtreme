@@ -1,12 +1,26 @@
+import type { Device } from '@js/core/devices';
 import devices from '@js/core/devices';
+import type { DefaultOptionsRule } from '@js/core/options';
 import { findBestMatches } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { isEmptyObject, isFunction } from '@js/core/utils/type';
 
-const cachedGetters = {};
+export interface GetterOptions {
+  functionsAsIs: boolean;
+  unwrapObservables?: boolean;
+}
 
-export const convertRulesToOptions = (rules) => {
+export type Getter = (obj: object, options: GetterOptions) => unknown;
+
+const cachedGetters: Record<string, Getter> = {};
+
+export const deviceMatch = (
+  device: Device,
+  filter: Device | Device[],
+): boolean => isEmptyObject(filter) || findBestMatches(device, [filter]).length > 0;
+
+export const convertRulesToOptions = <T>(rules: DefaultOptionsRule<T>[]): Partial<T> => {
   const currentDevice = devices.current();
   return rules.reduce((options, { device, options: ruleOptions }) => {
     const deviceFilter = device || {};
@@ -21,9 +35,10 @@ export const convertRulesToOptions = (rules) => {
   }, {});
 };
 
-export const normalizeOptions = (options, value) => (typeof options !== 'string' ? options : { [options]: value });
-
-export const deviceMatch = (device, filter) => isEmptyObject(filter) || findBestMatches(device, [filter]).length > 0;
+export const normalizeOptions = (
+  options: string | Record<string, unknown>,
+  value: unknown,
+): Record<string, unknown> => (typeof options !== 'string' ? options : { [options]: value });
 
 type FieldName<T extends string> = T extends `${string}.${infer TRest}` ? FieldName<TRest> : T;
 
@@ -32,11 +47,15 @@ export function getFieldName(fullName: string): string {
   return fullName.substr(fullName.lastIndexOf('.') + 1);
 }
 
-export const getParentName = (fullName) => fullName.substr(0, fullName.lastIndexOf('.'));
+export const getParentName = (
+  fullName: string,
+): string => fullName.substr(0, fullName.lastIndexOf('.'));
 
-export const getNestedOptionValue = function (optionsObject, name) {
+export const getNestedOptionValue = function (optionsObject: object, name: string): unknown {
   cachedGetters[name] = cachedGetters[name] || compileGetter(name);
   return cachedGetters[name](optionsObject, { functionsAsIs: true });
 };
 
-export const createDefaultOptionRules = (options = []) => options;
+export const createDefaultOptionRules = <T>(
+  options: DefaultOptionsRule<T>[] = [],
+): DefaultOptionsRule<T>[] => options;
