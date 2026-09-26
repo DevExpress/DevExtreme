@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxPopupModule, DxButtonModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Employee, Service } from './app.service';
@@ -34,7 +36,7 @@ export class AppComponent {
 
   positionOf: string;
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.employees = service.getEmployees();
     this.moreInfoButtonOptions = {
       text: 'More info',
@@ -70,6 +72,7 @@ export class AppComponent {
       type: 'normal',
       onClick: () => {
         this.popupVisible = false;
+        this.changeDetectorRef.detectChanges();
       },
     };
   }

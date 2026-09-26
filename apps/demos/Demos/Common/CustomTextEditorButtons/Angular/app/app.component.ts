@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { enableProdMode, Component, provideZoneChangeDetection } from '@angular/core';
+import {
+  enableProdMode, ChangeDetectorRef, Component, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxNumberBoxModule, DxDateBoxModule } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { DxTextBoxModule, DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
@@ -37,6 +39,7 @@ export class AppComponent {
     stylingMode: 'text',
     onClick: () => {
       this.passwordMode = this.passwordMode === 'text' ? 'password' : 'text';
+      this.changeDetectorRef.detectChanges();
     },
   };
 
@@ -57,6 +60,7 @@ export class AppComponent {
         this.currencyFormat = '€ #.##';
         this.priceValue *= 0.836;
       }
+      this.changeDetectorRef.detectChanges();
     },
   };
 
@@ -65,6 +69,7 @@ export class AppComponent {
     stylingMode: 'text',
     onClick: () => {
       this.dateValue = new Date().getTime();
+      this.changeDetectorRef.detectChanges();
     },
   };
 
@@ -73,6 +78,7 @@ export class AppComponent {
     stylingMode: 'text',
     onClick: () => {
       this.dateValue -= this.millisecondsInDay;
+      this.changeDetectorRef.detectChanges();
     },
   };
 
@@ -81,8 +87,11 @@ export class AppComponent {
     stylingMode: 'text',
     onClick: () => {
       this.dateValue += this.millisecondsInDay;
+      this.changeDetectorRef.detectChanges();
     },
   };
+
+  constructor(private changeDetectorRef: ChangeDetectorRef) {}
 }
 
 bootstrapApplication(AppComponent, {

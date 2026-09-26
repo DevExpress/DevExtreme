@@ -12,7 +12,7 @@
     id="progress-bar-status"
     width="90%"
     [elementAttr]="{ 'aria-label': 'Progress Bar' }"
-    [class.complete]="progressBar.value == maxValue"
+    [class.complete]="seconds === 0"
     [min]="0"
     [max]="maxValue"
     [statusFormat]="format"
