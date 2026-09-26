@@ -38,7 +38,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
   protected _handleScroll(e: RowsViewScrollEvent): void {
     const left = this.normalizeScrollLeft(e.scrollOffset.left);
 
-    this._scrollLeft = left;
+    this._scrollLeft = e.scrollOffset.left;
 
     // @ts-expect-error
     super._handleScroll.apply(this, arguments);
