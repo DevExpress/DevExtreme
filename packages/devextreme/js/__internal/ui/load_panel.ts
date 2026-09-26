@@ -51,7 +51,6 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
       // @ts-expect-error 'null' is not assignable
       animation: null,
       showIndicator: true,
-      indicatorSrc: '',
       showPane: true,
       delay: 0,
       templatesRenderAsynchronously: false,
@@ -104,15 +103,6 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     this.$element().addClass(LOADPANEL_CLASS);
     this.$wrapper()?.addClass(LOADPANEL_WRAPPER_CLASS);
     this._updateWrapperAria();
-  }
-
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    this._deprecatedOptions = {
-      ...this._deprecatedOptions,
-      // @ts-expect-error ts-error
-      indicatorSrc: { since: '25.2', alias: 'indicatorOptions.src' },
-    };
   }
 
   _updateWrapperAria(): void {
@@ -228,12 +218,12 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
         .appendTo(this._$loadPanelContentWrapper);
     }
 
-    const { indicatorOptions = {}, indicatorSrc } = this.option();
+    const { indicatorOptions = {} } = this.option();
     const { src, ...restIndicatorOptions } = indicatorOptions;
 
     this._createComponent(this._$indicator, LoadIndicator, {
       elementAttr: this._getAriaAttributes(),
-      indicatorSrc: src ?? indicatorSrc,
+      indicatorSrc: src,
       ...restIndicatorOptions,
     });
   }
@@ -263,7 +253,6 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
       case 'showPane':
         this._togglePaneVisible();
         break;
-      case 'indicatorSrc':
       case 'indicatorOptions':
         this._renderLoadIndicator();
         break;

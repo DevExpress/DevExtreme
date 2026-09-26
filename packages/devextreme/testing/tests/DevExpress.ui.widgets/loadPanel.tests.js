@@ -457,23 +457,6 @@ QUnit.module('options changed callbacks', {
         assert.ok(!instance.$content().hasClass(LOADPANEL_PANE_HIDDEN_CLASS));
     });
 
-    QUnit.test('LoadPanel with custom indicator (deprecated from 25.2)', function(assert) {
-        const url = '../../testing/content/customLoadIndicator.png';
-        const instance = this.element
-            .dxLoadPanel({
-                showIndicator: true,
-                indicatorSrc: url
-            })
-            .dxLoadPanel('instance');
-        instance.show();
-
-        const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');
-
-        assert.equal(loadIndicatorInstance.option('indicatorSrc'), url, 'custom indicator option installed successfully');
-        instance.option('indicatorSrc', '');
-        assert.equal(instance.option('indicatorSrc'), loadIndicatorInstance.option('indicatorSrc'), 'custom indicator option changed successfully');
-    });
-
     QUnit.test('LoadPanel with custom indicator', function(assert) {
         const url = '../../testing/content/customLoadIndicator.png';
         const customSize = 120;

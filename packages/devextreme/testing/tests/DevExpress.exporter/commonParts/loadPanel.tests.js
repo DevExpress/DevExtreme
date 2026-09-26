@@ -43,7 +43,7 @@ const LoadPanelTests = {
                 },
             ].forEach((loadPanelOptions) => {
                 QUnit.test(`loadPanel: ${JSON.stringify(loadPanelOptions)}`, function(assert) {
-                    assert.expect(15);
+                    assert.expect(14);
                     const done = assert.async();
                     const component = getComponent(componentOptions);
                     const initialComponentLoadPanelValue = component.option('loadPanel');
@@ -57,7 +57,6 @@ const LoadPanelTests = {
                         animation = null,
                         enabled = true,
                         height = 90,
-                        indicatorSrc = '',
                         indicatorOptions,
                         showIndicator = true,
                         showPane = true,
@@ -65,7 +64,7 @@ const LoadPanelTests = {
                         width = 200,
                     } = initialOptions;
 
-                    const expectedOptions = { message: text, animation, enabled, height, indicatorSrc, indicatorOptions, showIndicator, showPane, width };
+                    const expectedOptions = { message: text, animation, enabled, height, indicatorOptions, showIndicator, showPane, width };
 
                     let isFirstCall = true;
                     let exportLoadPanel;

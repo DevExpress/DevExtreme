@@ -163,13 +163,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     height?: number | string;
     /**
      * @docid
-     * @default ""
-     * @public
-     * @deprecated dxLoadPanelOptions.indicatorOptions
-     */
-    indicatorSrc?: string;
-    /**
-     * @docid
      * @public
      */
     indicatorOptions?: LoadPanelIndicatorProperties;

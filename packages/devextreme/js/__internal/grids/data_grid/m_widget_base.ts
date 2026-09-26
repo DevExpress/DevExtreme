@@ -14,7 +14,6 @@ import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { logger } from '@js/core/utils/console';
-import { extend } from '@js/core/utils/extend';
 import { isString } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
@@ -141,16 +140,6 @@ class DataGrid extends GridCoreWidget<Properties> {
     // @ts-expect-error
     super._initMarkup.apply(this, arguments);
     this.getView('gridView').render(this.$element());
-  }
-
-  protected _setDeprecatedOptions() {
-    // @ts-expect-error
-    super._setDeprecatedOptions();
-
-    // @ts-expect-error
-    extend(this._deprecatedOptions, {
-      // NOTE: add deprecated options here
-    });
   }
 
   private static registerModule(name, module) {
