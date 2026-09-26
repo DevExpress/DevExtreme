@@ -1,7 +1,9 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { TemplateBase } from '@js/core/templates/template_base';
-import { getCurrentTemplateEngine, registerTemplateEngine, setTemplateEngine } from '@js/core/templates/template_engine_registry';
 import { normalizeTemplateElement } from '@js/core/utils/dom';
+import type { TemplateElement, TemplateRenderOptions } from '@ts/core/templates/template_base';
+import { TemplateBase } from '@ts/core/templates/template_base';
+import { getCurrentTemplateEngine, registerTemplateEngine, setTemplateEngine } from '@ts/core/templates/template_engine_registry';
 
 registerTemplateEngine('default', {
   compile: (element) => normalizeTemplateElement(element),
@@ -12,26 +14,29 @@ registerTemplateEngine('default', {
 setTemplateEngine('default');
 
 export class Template extends TemplateBase {
-  _compiledTemplate: any;
+  declare _element: TemplateElement;
 
-  constructor(element) {
+  _compiledTemplate: unknown;
+
+  constructor(element: TemplateElement) {
     super();
     this._element = element;
   }
 
-  // @ts-expect-error need type overload
-  _renderCore(options) {
+  _renderCore(options: TemplateRenderOptions): dxElementWrapper {
     const { transclude } = options;
     if (!transclude && !this._compiledTemplate) {
       this._compiledTemplate = getCurrentTemplateEngine().compile(this._element);
     }
 
     return $('<div>').append(
-      transclude ? this._element : getCurrentTemplateEngine().render(this._compiledTemplate, options.model, options.index),
+      transclude
+        ? this._element
+        : getCurrentTemplateEngine().render(this._compiledTemplate, options.model, options.index),
     ).contents();
   }
 
-  source() {
+  source(): dxElementWrapper {
     return $(this._element).clone();
   }
 }
