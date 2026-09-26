@@ -70,6 +70,7 @@ export const generateGridViewModel = (
     isTimelineView,
     hasAllDayPanel,
     isVirtualScrolling,
+    appointmentMinHeight,
   } = optionManager.options;
   const { viewDataProvider } = schedulerStore._workSpace;
 
@@ -85,7 +86,9 @@ export const generateGridViewModel = (
   const step6 = cropByVirtualScreen(step5, optionManager.getVirtualCropOptions());
 
   const step7 = addDirection(step6, 'horizontal', viewOrientation);
-  const step8 = addEmptiness(step7, { isTimelineView, isAdaptivityEnabled, isMonthView });
+  const step8 = addEmptiness(step7, {
+    isTimelineView, isAdaptivityEnabled, isMonthView, appointmentMinHeight,
+  });
 
   return step8;
 };

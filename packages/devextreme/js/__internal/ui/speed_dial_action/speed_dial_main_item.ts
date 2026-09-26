@@ -17,6 +17,7 @@ import {
 } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import swatchContainer from '@ts/core/utils/swatch_container';
+import { themeLength } from '@ts/core/utils/theme_length';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 import type SpeedDialAction from './speed_dial_action';
@@ -34,6 +35,12 @@ const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 type SpeedDialActionPosition = Omit<PositionConfig, 'of'> & {
   of?: PositionConfig['of'] | dxElementWrapper | null;
 };
+
+interface ActionsGeometry {
+  indent: number;
+  childIndent: number;
+  childOffset: number;
+}
 
 let speedDialMainItem: SpeedDialMainItem | null = null;
 
@@ -314,7 +321,7 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
 
     for (const action of actions) {
       const $actionElement = $('<div>')
-        .appendTo(getSwatchContainer(action.$element()));
+        .appendTo(getSwatchContainer(action.$element()) ?? $());
 
       eventsEngine.off($actionElement, 'click');
       eventsEngine.on($actionElement, 'click', () => {
@@ -351,13 +358,13 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
   _getDirectionIndex(
     actions: SpeedDialItem[],
     direction: SpeedDialItemProperties['direction'],
+    geometry: ActionsGeometry,
   ): number {
     const directionIndex = 1;
 
     if (direction === 'auto') {
       const contentHeight = getHeight(this.$content());
-      const indent = this.initialOption('indent') as unknown as number;
-      const childIndent = this.initialOption('childIndent') as unknown as number;
+      const { indent, childIndent } = geometry;
       const actionsHeight = indent + childIndent * actions.length - contentHeight;
       const offsetTop = this.$content()?.offset()?.top ?? 0;
 
@@ -375,24 +382,44 @@ class SpeedDialMainItem extends SpeedDialItem<SpeedDialMainItemProperties> {
     return direction !== 'down' ? -directionIndex : directionIndex;
   }
 
+  /*
+   * Where the action buttons go, relative to the main button: the theme declares these lengths on
+   * the FAB root and the runtime reads them back (fluent-next); a theme that declares nothing keeps
+   * the per-theme literals from the default options.
+   */
+  _getActionsGeometry(): ActionsGeometry {
+    const $element = this.$element();
+    const length = (
+      property: string,
+      option: keyof ActionsGeometry,
+    ): number => themeLength($element, property)
+      ?? (this.initialOption(option) as unknown as number);
+
+    return {
+      indent: length('--dx-speed-dial-action-fa-button-offset', 'indent'),
+      childIndent: length('--dx-speed-dial-action-fa-button-spacing', 'childIndent'),
+      childOffset: length('--dx-speed-dial-action-fa-button-with-label-inset-inline', 'childOffset'),
+    };
+  }
+
   _getActionPosition(actions: SpeedDialItem[], index: number): SpeedDialActionPosition {
     const action = actions[index];
     const hasActionLabel = Boolean(action._options.silent('label'));
+    const geometry = this._getActionsGeometry();
+    const { indent, childIndent, childOffset } = geometry;
 
-    const actionOffsetXValue = this.initialOption('childOffset') as unknown as number;
     let actionOffsetX = 0;
 
     if (hasActionLabel && !this._$label) {
       actionOffsetX = this._isPositionLeft(this._getPosition())
-        ? actionOffsetXValue
-        : -actionOffsetXValue;
+        ? childOffset
+        : -childOffset;
     }
 
-    const indent = this.initialOption('indent') as unknown as number;
-    const childIndent = this.initialOption('childIndent') as unknown as number;
     const actionOffsetYValue = indent + childIndent * index;
     const { direction } = this.option();
-    const actionOffsetY = this._getDirectionIndex(actions, direction) * actionOffsetYValue;
+    const directionIndex = this._getDirectionIndex(actions, direction, geometry);
+    const actionOffsetY = directionIndex * actionOffsetYValue;
 
     let actionPositionAtMy: HorizontalAlignment = 'center';
 
@@ -483,7 +510,7 @@ export function initAction(newAction: SpeedDialAction): void {
 
   if (!speedDialMainItem) {
     const $fabMainElement = $('<div>')
-      .appendTo(getSwatchContainer(newAction.$element()));
+      .appendTo(getSwatchContainer(newAction.$element()) ?? $());
 
     speedDialMainItem = newAction._createComponent(
       $fabMainElement,

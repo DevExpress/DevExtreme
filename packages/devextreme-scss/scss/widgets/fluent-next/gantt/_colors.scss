@@ -1,0 +1,23 @@
+@use "../colors" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$gantt-collapsable-row-bg: ds.$color-bg-low !default;
+
+$gantt-content-disabled: ds.$color-content-disabled !default;
+
+$gantt-task-bg: ds.$color-bg-primary-shared !default;
+$gantt-parent-task-bg: ds.$color-bg-success !default;
+$gantt-task-res-content: ds.$color-content-inverted !default;
+$gantt-task-res-bg: ds.$color-bg-inverted !default;
+$gantt-task-progress-bg: rgb(from #{ds.$color-bg-inverted} r g b / 0.2) !default;
+
+$gantt-bg: ds.$color-bg !default;
+$gantt-border: ds.$color-border !default;
+$gantt-content: ds.$color-content !default;
+
+$gantt-accent-border: ds.$color-border-primary !default;
+$gantt-ti-bg: ds.$color-bg-primary-alpha-hovered !default;
+
+$gantt-successor-bg: ds.$color-bg-static-light !default;
+
+$gantt-selection-bg: ds.$color-bg-primary-subtler !default;

@@ -2144,7 +2144,8 @@ declare module DevExpress.common.charts {
     | 'Green Mist'
     | 'Soft Blue'
     | 'Material'
-    | 'Office';
+    | 'Office'
+    | 'Fluent Next';
   export type PaletteColorSet = 'simpleSet' | 'indicatingSet' | 'gradientSet';
   export type PaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
   export type PointInteractionMode =
@@ -34191,6 +34192,22 @@ declare module DevExpress.ui {
      * [descr:ui.themes.initialized(callback)]
      */
     static initialized(callback: Function): void;
+    /**
+     * [descr:ui.themes.mode(element)]
+     */
+    static mode(element: DevExpress.core.UserDefinedElement): 'light' | 'dark';
+    /**
+     * [descr:ui.themes.refreshMode()]
+     */
+    static refreshMode(): void;
+    /**
+     * [descr:ui.themes.customAccentColor()]
+     */
+    static customAccentColor(): string;
+    /**
+     * [descr:ui.themes.customAccentColor(color)]
+     */
+    static customAccentColor(color: string | null): void;
   }
   /**
    * [descr:Widget]

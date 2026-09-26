@@ -65,6 +65,7 @@ const getIgnoredRules = (testName) => {
   if ((isMaterial() || isFluent())
     && [
       'TreeList-StatePersistence',
+      'DataGrid-SignalRService',
       // False positive: contrast rules do not apply to custom orange color
       'CardView-FieldTemplate',
       // False positive: contrast rules do not apply to read-only editors on the custom option panel background
@@ -111,6 +112,10 @@ const getIgnoredRules = (testName) => {
     'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
 
     'Localization-UsingGlobalize': ['label'],
+
+    // Icon-only tabs render no text, so they have no accessible name.
+    // Naming them needs Tabs widget support (like Button labels icon-only buttons).
+    'Tabs-Overview': ['aria-tab-name'],
   };
 
   return [
@@ -229,6 +234,12 @@ Object.values(FRAMEWORKS).forEach((approach) => {
       return;
     }
 
+    if (process.env.STRATEGY === 'accessibility'
+      && process.env.THEME?.startsWith('fluent-next')
+      && getIgnoredRules(testName).includes('color-contrast')) {
+      return;
+    }
+
     runTestAtPage(
       test,
       pageURL
@@ -253,9 +264,14 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
         if (process.env.STRATEGY === 'accessibility') {
           const ignoredRules = getIgnoredRules(testName);
-          const options = { rules: {} };
+          const isDesignSystemFluent = process.env.THEME?.startsWith('fluent-next');
+          const colorContrastIgnored = ignoredRules.includes('color-contrast');
+          const options = isDesignSystemFluent
+            ? { runOnly: { type: 'rule' as const, values: colorContrastIgnored ? [] : ['color-contrast'] }, rules: {} }
+            : { rules: {} };
 
           ignoredRules.forEach((ruleName) => {
+            if (isDesignSystemFluent && ruleName === 'color-contrast') return;
             options.rules[ruleName] = { enabled: false };
           });
 

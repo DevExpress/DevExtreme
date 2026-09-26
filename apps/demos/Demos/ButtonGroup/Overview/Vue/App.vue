@@ -63,6 +63,6 @@ function itemClick(e: DxButtonGroupTypes.ItemClickEvent) {
   .multiple-selection-styling-mode {
     border-left-width: 1px;
     border-left-style: solid;
-    border-color: #ddd;
+    border-color: var(--dxds-color-border-subtle, #ddd);
   }
 </style>

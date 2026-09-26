@@ -1,0 +1,31 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$toast-border-radius: $global-border-radius !default;
+$toast-height: null !default;
+$toast-item-gap: null !default;
+$toast-content-padding-block: null !default;
+$toast-content-padding-inline: ds.$spacing-120 !default;
+
+@if $size == "default" {
+  $toast-content-padding-block: ds.$spacing-120 !default;
+  $toast-height: ds.$spacing-440 !default;
+  $toast-item-gap: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $toast-content-padding-block: ds.$spacing-80 !default;
+  $toast-height: ds.$spacing-360 !default;
+  $toast-item-gap: ds.$spacing-80 !default;
+}
+
+$toast-content-font-weight: ds.$font-weight-base-default !default;
+
+$toast-content-padding: ds.$spacing-100 !default;
+$toast-icon-width: ds.$spacing-360 !default;
+$toast-icon-height: ds.$spacing-360 !default;
+$toast-icon-margin-inline-end: ds.$spacing-100 !default;
+$toast-icon-rtl-margin-inline-end: ds.$spacing-100 !default;
+$toast-stack-gap: ds.$spacing-30 !default;
+
+$toast-box-shadow: ds.$box-shadow-lg !default;

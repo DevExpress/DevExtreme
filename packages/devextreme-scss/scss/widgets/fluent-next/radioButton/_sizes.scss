@@ -1,0 +1,16 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$radio-button-size: ds.$spacing-160 !default;
+$radio-button-dot-size: ds.$spacing-100 !default;
+
+$radio-button-border-width: ds.$border-width-10 !default;
+$radio-button-value-container-padding-inline-end: null !default;
+
+@if $size == "default" {
+  $radio-button-value-container-padding-inline-end: ds.$spacing-120 !default;
+}
+
+@else if $size == "compact" {
+  $radio-button-value-container-padding-inline-end: ds.$spacing-80 !default;
+}

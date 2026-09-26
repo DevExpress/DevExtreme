@@ -17,6 +17,7 @@ minimumReleaseAge: 1440 # ⚠️ Do NOT modify this.
 
 minimumReleaseAgeExclude:
   - "devextreme-internal-tools@22.1.0"
+  - "@devexpress/design-tokens-internal@262.26.0"
 
 overrides:
   "basic-ftp@<5.3.1": ">=5.3.1"

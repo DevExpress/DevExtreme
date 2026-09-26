@@ -49,7 +49,7 @@ const removeAllCommentsFromContent = (content: string): string => content
 
 const variableRegex = new RegExp(`\\$[${VAR_NAME_CHARS}]+`, 'y');
 
-type VariableUsage = { declared: Set<string>; read: Set<string> };
+interface VariableUsage { declared: Set<string>; read: Set<string> }
 
 const collectVariableUsage = (filePath: string, usage: VariableUsage): void => {
   const content = removeAllCommentsFromContent(readFileSync(filePath, 'utf8'));
@@ -59,20 +59,18 @@ const collectVariableUsage = (filePath: string, usage: VariableUsage): void => {
     const char = content[index];
     if (char === '(') depth += 1;
     if (char === ')') depth -= 1;
+    let step = 1;
     if (char === '$') {
       variableRegex.lastIndex = index;
       const [variable] = variableRegex.exec(content) ?? [];
-      if (!variable) {
-        index += 1;
-        continue;
+      if (variable) {
+        const assigned = /^\s*:/.test(content.slice(index + variable.length));
+        if (assigned && depth === 0) usage.declared.add(variable);
+        if (!assigned) usage.read.add(variable);
+        step = variable.length;
       }
-      const assigned = /^\s*:/.test(content.slice(index + variable.length));
-      if (assigned && depth === 0) usage.declared.add(variable);
-      if (!assigned) usage.read.add(variable);
-      index += variable.length;
-      continue;
     }
-    index += 1;
+    index += step;
   }
 };
 
@@ -102,7 +100,7 @@ test('There are no unused images in repository', () => {
   expect(fullImagesFileList).toEqual(usedImagesFileList);
 });
 
-const themes = ['generic', 'material', 'fluent'];
+const themes = ['generic', 'material', 'fluent', 'fluent-next'];
 const readAnywhere = variableUsageOf(['base', ...themes]).read;
 
 themes.forEach((themeName) => {

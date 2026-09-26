@@ -1,0 +1,42 @@
+@use "../sizes" as *;
+@use "../../../_design-system/variables/ds" as ds;
+
+$button-border-radius: $global-border-radius !default;
+
+$button-padding-inline: null !default;
+$button-padding-block: null !default;
+$button-content-line-height: 0 !default;
+$button-text-line-height: normal !default;
+$button-text-transform: none !default;
+$button-text-font-weight: ds.$font-weight-base-strong !default;
+$button-text-letter-spacing: normal !default;
+
+$button-height: null !default;
+$button-icon-size: null !default;
+$button-icon-margin: null !default;
+
+$button-box-shadow: ds.$box-shadow-xs !default;
+
+@if $size == "default" {
+  $button-height: ds.$spacing-320 !default;
+  $button-icon-size: ds.$spacing-200 !default;
+  $button-icon-margin: ds.$spacing-80 !default;
+  $button-padding-inline: ds.$spacing-120 !default;
+  $button-padding-block: ds.$spacing-60 !default;
+}
+
+@else if $size == "compact" {
+  $button-height: ds.$spacing-240 !default;
+  $button-icon-size: ds.$spacing-160 !default;
+  $button-icon-margin: ds.$spacing-40 !default;
+  $button-padding-inline: ds.$spacing-80 !default;
+  $button-padding-block: ds.$spacing-40 !default;
+}
+
+$button-content-padding: calc((#{$button-height} - #{$button-icon-size} - #{$global-border-width} * 2) / 2) !default;
+
+:root {
+  --dx-button-padding-inline: #{$button-padding-inline};
+}
+
+$button-border-width: ds.$border-width-10 !default;

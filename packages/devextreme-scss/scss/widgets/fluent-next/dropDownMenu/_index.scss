@@ -1,0 +1,28 @@
+@use "sizes" as *;
+@use "../../base/dropDownMenu/mixins" as *;
+@use "../../base/dropDownMenu" with (
+  $dropdownmenu-list-min-width: var(--dx-drop-down-menu-list-min-width),
+  $dropdownmenu-list-border-radius: var(--dx-drop-down-menu-list-border-radius),
+  $dropdownmenu-popup-content-padding: var(--dx-drop-down-menu-popup-content-padding),
+);
+
+.dx-dropdownmenu-popup-wrapper {
+  .dx-toolbar-menu-section {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--dx-drop-down-menu-section-row-gap);
+    margin-inline: var(--dx-drop-down-menu-section-margin-inline);
+  }
+
+  .dx-overlay-content {
+    box-shadow: var(--dx-global-dropdown-box-shadow);
+  }
+}
+
+@include dx-dropdownmenu-focus-outline(
+  var(--dx-focus-rect-outline),
+  var(--dx-focus-rect-border-radius),
+  var(--dx-drop-down-menu-section-margin-inline),
+  $outline-width: var(--dx-focus-rect-outline-width),
+  $outline-offset: var(--dx-focus-rect-outline-offset),
+);

@@ -34,6 +34,7 @@ import {
   isDefined, isFunction, isPromise, isRenderer,
 } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import { isCssVariableReference } from '@ts/core/utils/css_variables';
 import svgUtils from '@ts/core/utils/m_svg';
 
 const window = getWindow();
@@ -555,11 +556,16 @@ function hex2rgba(hexColor, alpha) {
 function createGradient(element) {
   const options = { colors: [], transform: element.attributes.gradientTransform?.textContent };
 
-  _each(element.childNodes, (_, { attributes }) => {
+  _each(element.childNodes, (_, node) => {
+    const { attributes } = node;
+    const declared = attributes['stop-color']?.value;
+
     // @ts-expect-error
     options.colors.push({
       offset: attributes.offset.value,
-      stopColor: attributes['stop-color'].value,
+      stopColor: declared && !isCssVariableReference(declared)
+        ? declared
+        : window.getComputedStyle(node).getPropertyValue('stop-color'),
     });
   });
   return options;

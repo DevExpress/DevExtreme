@@ -1,0 +1,5 @@
+@use "../../../_design-system/variables/ds" as ds;
+
+$tile-view-tile-border: ds.$border-width-10 solid !default;
+
+$tile-view-wrapper-height: ds.$spacing-10 !default;

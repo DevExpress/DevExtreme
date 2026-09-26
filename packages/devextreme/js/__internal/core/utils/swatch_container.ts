@@ -1,29 +1,98 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { value } from '@js/core/utils/view_port';
+import { getWindow, hasWindow } from '@js/core/utils/window';
+import { resolvedThemeMode } from '@ts/core/utils/theme_mode';
 
 const SWATCH_CONTAINER_CLASS_PREFIX = 'dx-swatch-';
+const THEME_MODE_CLASS_PREFIX = 'dx-theme-mode-';
+
+const classesByPrefix = (
+  element: Element,
+  prefix: string,
+): string[] => [...element.classList].filter((cssClass) => cssClass.startsWith(prefix));
+
+const closestClassesByPrefix = (
+  $element: dxElementWrapper,
+  prefix: string,
+): string[] => {
+  const $scope = $element.closest(`[class^="${prefix}"], [class*=" ${prefix}"]`);
+
+  return $scope.length ? classesByPrefix($scope.get(0), prefix) : [];
+};
+
+const themeModeClasses = ($element: dxElementWrapper): string[] => {
+  const mode = resolvedThemeMode($element);
+
+  return mode ? [`${THEME_MODE_CLASS_PREFIX}${mode}`] : [];
+};
+
+const scopeClasses = ($element: dxElementWrapper): string[] => [
+  ...closestClassesByPrefix($element, SWATCH_CONTAINER_CLASS_PREFIX),
+  ...themeModeClasses($element),
+];
+
+const getContainerClasses = (
+  $element: dxElementWrapper,
+  $viewport: dxElementWrapper,
+): string[] => {
+  const classes = scopeClasses($element);
+  const sorted = (cssClasses: string[]): string => [...cssClasses].sort().join(' ');
+
+  return sorted(classes) === sorted(scopeClasses($viewport)) ? [] : classes;
+};
+
+const isExactScope = (
+  node: Element,
+  containerClasses: string[],
+): boolean => [SWATCH_CONTAINER_CLASS_PREFIX, THEME_MODE_CLASS_PREFIX]
+  .every((prefix) => classesByPrefix(node, prefix)
+    .every((cssClass) => containerClasses.includes(cssClass)));
+
+const HOST_NEUTRAL_VALUES: Record<string, string> = {
+  overflow: 'visible',
+  'overflow-x': 'visible',
+  'overflow-y': 'visible',
+  'clip-path': 'none',
+  contain: 'none',
+  transform: 'none',
+  filter: 'none',
+  perspective: 'none',
+};
+
+const hostsWithoutClipping = (node: Element): boolean => {
+  const style = hasWindow() ? getWindow().getComputedStyle(node) : undefined;
+
+  return Object.entries(HOST_NEUTRAL_VALUES)
+    .every(([property, neutral]) => ['', neutral].includes(style?.getPropertyValue(property) ?? ''));
+};
 
 const getSwatchContainer = (
   element: Element | dxElementWrapper,
-): dxElementWrapper => {
-  const $element = $(element);
-  const swatchContainer = $element.closest(`[class^="${SWATCH_CONTAINER_CLASS_PREFIX}"], [class*=" ${SWATCH_CONTAINER_CLASS_PREFIX}"]`);
-  const viewport: dxElementWrapper = value();
+): dxElementWrapper | undefined => {
+  const $viewport = value() as dxElementWrapper | undefined;
 
-  if (!swatchContainer.length) {
-    return viewport;
+  if (!$viewport?.length) {
+    return $viewport;
   }
 
-  const swatchClassRegex = new RegExp(`(\\s|^)(${SWATCH_CONTAINER_CLASS_PREFIX}.*?)(\\s|$)`);
-  const swatchClass = swatchContainer[0].className.match(swatchClassRegex)[2];
-  let viewportSwatchContainer = viewport.children(`.${swatchClass}`);
+  const containerClasses = getContainerClasses($(element), $viewport);
 
-  if (!viewportSwatchContainer.length) {
-    viewportSwatchContainer = $('<div>').addClass(swatchClass).appendTo(viewport);
+  if (!containerClasses.length) {
+    return $viewport;
   }
 
-  return viewportSwatchContainer;
+  const selector = containerClasses.map((cssClass) => `.${cssClass}`).join('');
+  let $container = $($viewport
+    .children(selector)
+    .toArray()
+    .filter((node) => isExactScope(node, containerClasses) && hostsWithoutClipping(node)));
+
+  if (!$container.length) {
+    $container = $('<div>').addClass(containerClasses.join(' ')).appendTo($viewport);
+  }
+
+  return $container;
 };
 
 export default { getSwatchContainer };

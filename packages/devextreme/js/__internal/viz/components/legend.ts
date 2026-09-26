@@ -32,6 +32,7 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { clone } from '@js/core/utils/object';
 import { isDefined, isFunction } from '@js/core/utils/type';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import { LayoutElement, WrapperLayoutElement } from '@ts/viz/core/layout_element';
 import { getFuncIri, processHatchingAttrs } from '@ts/viz/core/renderers/renderer';
 import { Title } from '@ts/viz/core/title';
@@ -91,6 +92,49 @@ function getState(state, color, stateName) {
       width: DEFAULT_MARKER_HATCHING_WIDTH,
     }),
   });
+}
+
+function statesOf(item) {
+  const { normal, hover, selection } = item.states;
+
+  return [normal, hover, selection].filter(isDefined);
+}
+
+function painter(element) {
+  const painted = new Map();
+
+  return (fill) => {
+    if (!painted.has(fill)) {
+      painted.set(fill, paintedColor(fill, element));
+    }
+
+    return painted.get(fill);
+  };
+}
+
+function paintFills(items, paint) {
+  const handed = items
+    .flatMap((item) => statesOf(item).map((state) => ({ state, name: state.fill, painted: paint(state.fill) })))
+    .filter(({ name, painted }) => painted !== name);
+
+  handed.forEach(({ state, painted }) => {
+    state.fill = painted;
+  });
+
+  return () => {
+    handed.forEach(({ state, name, painted }) => {
+      if (state.fill === painted) {
+        state.fill = name;
+      }
+    });
+  };
+}
+
+function paintedItem(item, paint) {
+  const withPaintedFill = (holder) => (holder ? { ...holder, fill: paint(holder.fill) } : holder);
+  const states = Object.fromEntries(Object.entries(item.states).map(([name, state]) => [name, withPaintedFill(state)]));
+
+  return { ...item, marker: withPaintedFill(item.marker), states };
 }
 
 function getAttributes(item, state, size) {
@@ -446,12 +490,26 @@ extend(legendPrototype, {
           dataItem.states.normal.opacity = dataItem.states.hover.opacity = dataItem.states.selection.opacity = value;
         },
       });
+      // @ts-expect-error
+      Object.defineProperty(dataItem.marker, 'fill', {
+        get() {
+          // @ts-expect-error
+          return dataItem.states.normal.fill;
+        },
+        set(value) {
+          // @ts-expect-error
+          dataItem.states.normal.fill = value;
+        },
+      });
 
       return dataItem;
     });
 
     if (options.customizeItems) {
+      const restoreNames = paintFills(data, painter(that._renderer.root.element));
+
       that._data = options.customizeItems(data.slice()) || data;
+      restoreNames();
     }
 
     that._boundingRect = {
@@ -565,6 +623,9 @@ extend(legendPrototype, {
     } : options.markerTemplate;
 
     const template = that._widget._getTemplate(templateFunction);
+    const modelOf = options.markerTemplate
+      ? (dataItem) => paintedItem(dataItem, painter(renderer.root.element))
+      : (dataItem) => dataItem;
 
     const markersGroup = that._markersGroup;
 
@@ -607,7 +668,7 @@ extend(legendPrototype, {
           dataItem.marker = getAttributes(item, state, dataItem.size);
           markerGroup.clear();
           template.render({
-            model: dataItem,
+            model: modelOf(dataItem),
             container: markerGroup.element,
             onRendered: that._deferredItems[i].resolve,
           });

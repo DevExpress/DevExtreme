@@ -1,5 +1,7 @@
 $scheduler-timeline-cell-height: null !default;
 
+$scheduler-renovation-virtual-row-height: null !default;
+
 .dx-scheduler.dx-scheduler-native .dx-scheduler-timeline.dx-scheduler-work-space-both-scrollbar {
   .dx-scheduler-date-table-scrollable .dx-scrollable-content,
   .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
@@ -36,7 +38,7 @@ $scheduler-timeline-cell-height: null !default;
 
   &.dx-scheduler-work-space-virtual {
     .dx-scheduler-date-table-row {
-      height: 50px;
+      height: $scheduler-renovation-virtual-row-height;
     }
   }
 

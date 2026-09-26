@@ -1,0 +1,37 @@
+@forward "./variables";
+@use "./variables" as *;
+@use "../../_design-system/variables/ds" as ds;
+
+$color: null !default;
+$mode: null !default;
+
+$theme-marker-color: $color !default;
+$theme-marker-mode: null !default;
+
+@if $mode == "light" {
+  $theme-marker-mode: "light" !default;
+}
+
+@if $mode == "dark" {
+  $theme-marker-mode: "dark" !default;
+}
+
+:root,
+.dx-theme-mode-light,
+.dx-theme-mode-dark,
+.dx-theme-mode-inverted {
+  --dx-component-color-bg: #{ds.$color-bg};
+  --dx-color-main-bg: #{ds.$color-bg-canvas};
+  --dx-color-primary: #{ds.$color-content-primary};
+  --dx-color-danger: #{ds.$color-content-danger};
+  --dx-color-success: #{ds.$color-content-success};
+  --dx-color-warning: #{ds.$color-content-warning};
+  --dx-color-border: #{ds.$color-border};
+  --dx-color-text: #{ds.$color-content};
+  --dx-color-icon: #{ds.$color-content-subtle};
+  --dx-color-spin-icon: #{ds.$color-content-subtle};
+  --dx-color-link: #{ds.$color-content-primary};
+  --dx-color-shadow: #{ds.$color-shadow-key};
+  --dx-color-separator: #{ds.$color-border-subtle};
+  --dx-color-options-panel-bg: color-mix(in srgb, #{ds.$color-bg-inverted} calc(#{ds.$opacity-5} * 100%), transparent);
+}

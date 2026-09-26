@@ -173,7 +173,6 @@ export class OverlayPositionController<
   }
 
   get $container(): dxElementWrapper | undefined {
-    // NOTE: swatch classes can be updated runtime
     this.updateContainer();
 
     return this._$markupContainer;

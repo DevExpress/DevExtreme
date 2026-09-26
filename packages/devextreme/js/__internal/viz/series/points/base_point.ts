@@ -17,6 +17,7 @@
 import { noop as _noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { isDefined as _isDefined } from '@js/core/utils/type';
+import { paintedColor } from '@ts/core/utils/css_variables';
 import consts from '@ts/viz/components/consts';
 import { normalizeEnum as _normalizeEnum } from '@ts/viz/core/utils';
 import barPoint from '@ts/viz/series/points/bar_point';
@@ -134,7 +135,9 @@ Point.prototype = {
     if (!this.hasValue() && !this._styles.usePointCustomOptions) {
       this.series.customizePoint(this, this._dataItem);
     }
-    return this._styles.normal.fill || this.series.getColor();
+    const fill = paintedColor(this._styles.normal.fill, this.series.getRenderer?.()?.root?.element);
+
+    return fill || this.series.getColor();
   },
 
   _getStyle() {

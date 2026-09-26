@@ -159,3 +159,9 @@ const getCellContextMenuItems = (
 };
 
 </script>
+
+<style>
+.dx-scheduler-appointment-title {
+  color: var(--dxds-color-content-static-dark, unset);
+}
+</style>

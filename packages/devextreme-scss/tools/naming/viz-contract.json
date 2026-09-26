@@ -1,0 +1,234 @@
+{
+  "comment": "The CSS -> SVG contract of the data-visualization widgets, the third category outside the component tier and the mirror image of runtime-contract.json. A chart is drawn in SVG from JS, so the theme publishes what those widgets paint with and the chart themes in packages/devextreme/js/__internal/viz write the reference itself into the markup: `fill: var(--dx-viz-bg, #ffffff)`. Nothing is read back from the document while painting, which is why a chart repaints the moment one of these names changes, and why a chart inside a mode scope paints in that scope's mode. Only what is handed to the application - getColor(), the public palette and theme functions, an export - is read back, at the moment it is asked for. The literal beside each reference is the fallback for a page that loaded another theme; it is the value the name itself carries, and tests/viz-contract.test.ts holds it to the built bundle so the two cannot drift. tests/fluent-next-naming.test.ts excludes the names from the public-surface checks because the reader is not this package.",
+  "declaredIn": {
+    "perMode": "fluent-next/common/_colors.scss",
+    "onRootOnly": "fluent-next/viz/_colors.scss",
+    "onRootOnlySizes": "fluent-next/viz/_sizes.scss",
+    "linked": "fluent-next/common/_public-links.scss"
+  },
+  "readBy": "packages/devextreme/js/__internal/viz/core/themes/fluent-next/index.ts",
+  "palette": "packages/devextreme/js/__internal/viz/palette.ts",
+  "variables": [
+    {
+      "name": "--dx-viz-bg",
+      "role": "color-bg",
+      "declaredPerMode": true,
+      "paints": "the surface every widget draws on: chart background, loading panel, export menu, map background, candlestick body, sparkline point, the gap between funnel sections - and what is cut out of a mark with it: the text on a crosshair label, the ring and the back disc of a dot marker, and the shutter a range selector lays over the range it did not select, the surface at its own opacity"
+    },
+    {
+      "name": "--dx-viz-bg-hovered",
+      "role": "color-bg-hovered",
+      "declaredPerMode": true,
+      "paints": "the export menu button under the pointer, and the shelf behind a tree map group"
+    },
+    {
+      "name": "--dx-viz-bg-higher",
+      "role": "color-bg-higher",
+      "declaredPerMode": true,
+      "paints": "the shelf a bar gauge draws its bars on: a plate lifted off the surface, far enough from it to read in a light page"
+    },
+    {
+      "name": "--dx-viz-bg-active",
+      "role": "color-bg-active",
+      "declaredPerMode": true,
+      "paints": "the export menu button while pressed or focused"
+    },
+    {
+      "name": "--dx-viz-content",
+      "role": "color-content",
+      "declaredPerMode": true,
+      "paints": "text at full strength - titles, export menu, map labels - and the marks that have to stand out against the surface: constant lines, error bars, map selection borders, a selected map line, range selector ticks and the bullet target"
+    },
+    {
+      "name": "--dx-viz-crosshair",
+      "role": "color-content-red",
+      "declaredPerMode": true,
+      "paints": "the crosshair a chart draws under the pointer, and the plate behind its label: a reading instrument laid over the plot, red so it is never mistaken for a series"
+    },
+    {
+      "name": "--dx-viz-content-subtler",
+      "role": "color-content-subtler",
+      "declaredPerMode": true,
+      "paints": "the axis and everything that reads with it: the widget font colour that axis and legend labels take, the axis line and its ticks, and the titles of the axes. A step quieter than the rest of the text on purpose - the numbers along a scale are there to be read past, not at. The subtitle under the chart title is not among them: it inherits the colour of the title"
+    },
+    {
+      "name": "--dx-viz-content-orange",
+      "role": "color-content-orange",
+      "declaredPerMode": true,
+      "paints": "a map line under the pointer: the strongest step of the orange the line family is drawn in"
+    },
+    {
+      "name": "--dx-viz-content-subtle",
+      "role": "color-content-subtle",
+      "declaredPerMode": true,
+      "paints": "what is quieter than the title but not the axis: tree map group labels, the map control bar border, and the gauge needle the theme falls back to - a thin mark, so it takes a content role and not a tinted surface, which would sink into the dial"
+    },
+    {
+      "name": "--dx-viz-border",
+      "role": "color-border",
+      "declaredPerMode": true,
+      "paints": "lines that frame something: pane and label borders, annotation border, gauge range container, axis breaks, map background border, and the tooltip border once an application shows it"
+    },
+    {
+      "name": "--dx-viz-border-hovered",
+      "role": "color-border-hovered",
+      "declaredPerMode": true,
+      "paints": "the export menu button outline under the pointer"
+    },
+    {
+      "name": "--dx-viz-border-active",
+      "role": "color-border-active",
+      "declaredPerMode": true,
+      "paints": "the export menu button outline while pressed or focused"
+    },
+    {
+      "name": "--dx-viz-gray-subtle",
+      "role": "color-bg-gray-subtle",
+      "declaredPerMode": true,
+      "paints": "the quieter half of a pair that carries no meaning of its own: a losing bar of a win-loss sparkline, a bar below zero, and the fill of a map area"
+    },
+    {
+      "name": "--dx-viz-purple-subtle",
+      "role": "color-bg-purple-subtle",
+      "declaredPerMode": true,
+      "paints": "the plate behind the unselected part of a range selector, drawn only when an application asks for it"
+    },
+    {
+      "name": "--dx-viz-grid",
+      "role": "color-border-subtle",
+      "declaredPerMode": true,
+      "paints": "the grid: major and minor grid lines, legend border, tree map group border"
+    },
+    {
+      "name": "--dx-viz-tile-border",
+      "role": "color-content-static-dark",
+      "declaredPerMode": false,
+      "paints": "the hairline that separates two tree map tiles. It is drawn on top of the tiles, not on the surface, so it does not follow the mode: the tile under it is a palette colour in both"
+    },
+    {
+      "name": "--dx-viz-blue",
+      "role": "color-bg-blue",
+      "declaredPerMode": false,
+      "paints": "the first series colour, the near end of the gradient set the tree map and the map mix their scales from, and the shapes that are data rather than chrome: bullet bar, gauge range bar, the triangle marker a gauge puts on its scale for a subvalue, sparkline line, map markers and the map legend marker, and a tree map tile with no colour of its own - the fill a tile falls back to when the palette is not colouring the leaves"
+    },
+    {
+      "name": "--dx-viz-gray",
+      "role": "color-bg-gray",
+      "declaredPerMode": false,
+      "paints": "a data shape the design deliberately leaves without meaning: a winning bar of a win-loss sparkline, a bar above zero, and the link between two sankey nodes, grey rather than green on purpose"
+    },
+    {
+      "name": "--dx-viz-red",
+      "role": "color-bg-red",
+      "declaredPerMode": false,
+      "paints": "the second series colour, the falling bar of a candlestick or a stock series, the highest point of a sparkline, and the second half of a two-colour gauge needle"
+    },
+    {
+      "name": "--dx-viz-green",
+      "role": "color-bg-green",
+      "declaredPerMode": false,
+      "paints": "the third series colour and the far end of the gradient set"
+    },
+    {
+      "name": "--dx-viz-yellow",
+      "role": "color-bg-yellow",
+      "declaredPerMode": false,
+      "paints": "the fourth series colour and the lowest point of a sparkline"
+    },
+    {
+      "name": "--dx-viz-orange",
+      "role": "color-bg-orange",
+      "declaredPerMode": false,
+      "paints": "a map line at rest"
+    },
+    {
+      "name": "--dx-viz-pink",
+      "role": "color-bg-pink",
+      "declaredPerMode": false,
+      "paints": "the fifth series colour"
+    },
+    {
+      "name": "--dx-viz-purple",
+      "role": "color-bg-purple",
+      "declaredPerMode": false,
+      "paints": "the sixth series colour"
+    },
+    {
+      "name": "--dx-viz-success",
+      "role": "color-bg-success",
+      "declaredPerMode": false,
+      "paints": "the good end of an indicating set: the first range of a gauge range container"
+    },
+    {
+      "name": "--dx-viz-warning",
+      "role": "color-bg-warning",
+      "declaredPerMode": false,
+      "paints": "the middle of an indicating set"
+    },
+    {
+      "name": "--dx-viz-danger",
+      "role": "color-bg-danger",
+      "declaredPerMode": false,
+      "paints": "the bad end of an indicating set, and the slider marker of a range selector while the range being dragged is not allowed"
+    },
+    {
+      "name": "--dx-viz-primary",
+      "role": "color-bg-primary",
+      "declaredPerMode": false,
+      "paints": "the range selector: the selected range, the slider handle and its marker. The one place a chart follows --dx-accent-color, because the range selector is an editor and its selection is the accented control of the page it sits on"
+    },
+    {
+      "name": "--dx-viz-tooltip-bg",
+      "role": "color-bg-inverted",
+      "declaredPerMode": true,
+      "paints": "the tooltip plate and the annotation plate, inverted against the page so they read as something laid over it"
+    },
+    {
+      "name": "--dx-viz-tooltip-content",
+      "role": "color-content-inverted",
+      "declaredPerMode": true,
+      "paints": "the text on those plates"
+    },
+    {
+      "name": "--dx-viz-title-font-weight",
+      "role": "font-weight-title-default",
+      "declaredIn": "onRootOnlySizes",
+      "declaredPerMode": false,
+      "paints": "the weight of a chart title, and of the subtitle that mirrors it. The charts inherited 500 from the material theme, a face Segoe UI does not have; the component titles of this theme have always read this role instead"
+    },
+    {
+      "name": "--dx-viz-font-weight",
+      "role": "font-weight-caption-default",
+      "declaredIn": "onRootOnlySizes",
+      "declaredPerMode": false,
+      "paints": "the weight of the widget font, which every text that sets no weight of its own takes: axis labels and titles, legend items, series labels, the tooltip"
+    },
+    {
+      "name": "--dx-viz-export-font-weight",
+      "role": "font-weight-base-default",
+      "declaredIn": "onRootOnlySizes",
+      "declaredPerMode": false,
+      "paints": "the weight of the export menu text"
+    },
+    {
+      "name": "--dx-viz-legend-title-font-weight",
+      "role": "font-weight-200",
+      "declaredIn": "onRootOnlySizes",
+      "declaredPerMode": false,
+      "paints": "the weight of a legend title. No role carries 200, the weight the charts have always drawn it in, so it takes the value from the scale"
+    },
+    {
+      "name": "--dx-viz-label-font-weight",
+      "role": "font-weight-caption-strong",
+      "declaredIn": "onRootOnlySizes",
+      "declaredPerMode": false,
+      "paints": "the weight of the labels drawn on the data: sankey node labels, tree map tile and group labels. The sankey labels inherited 500 from the generic theme and the group labels 500 from the material theme, a face Segoe UI does not have; the tile labels were 600 already"
+    },
+    {
+      "name": "--dx-viz-font-family",
+      "from": "--dx-global-font-family",
+      "declaredPerMode": true,
+      "paints": "every text the widget draws, titles included. It reads the page's own font name, so a chart is typeset like the widgets around it, and it is declared on the mode scopes because the name it reads is"
+    }
+  ]
+}

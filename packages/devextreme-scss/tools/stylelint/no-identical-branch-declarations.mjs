@@ -80,7 +80,8 @@ const identicalDeclarations = (branches) => {
   for (const [name, decl] of first) {
     const declarations = [decl, ...rest.map((byName) => byName.get(name))];
     const value = normalise(decl.value);
-    if (declarations.every((other) => other && normalise(other.value) === value)) identical.set(name, declarations);
+    const sameEverywhere = declarations.every((other) => other && normalise(other.value) === value);
+    if (sameEverywhere) identical.set(name, declarations);
   }
   return identical;
 };
@@ -111,7 +112,8 @@ const planMoves = (branches, identical) => {
     }
   };
   const readByStaying = (name) => walkFinds(branches, (decl, branch) => (
-    !(movable.has(decl.prop) && decl.parent === branch) && localReferences(decl.value).includes(name)
+    !(movable.has(decl.prop) && decl.parent === branch)
+      && localReferences(decl.value).includes(name)
   ));
 
   for (let changed = true; changed;) {
@@ -139,6 +141,17 @@ const earlierDeclaration = (parent, ifRule, name) => {
 const declaredBetween = (parent, after, before, name) => parent.nodes
   .slice(parent.index(after) + 1, parent.index(before))
   .some((node) => isVariable(node) && node.prop === name);
+
+const trailingComment = (decl) => {
+  const next = decl.next();
+  const sameLine = next?.type === 'comment' && next.source?.start?.line === decl.source?.end?.line;
+  return sameLine ? next : undefined;
+};
+
+const trailersAgree = (declarations) => {
+  const texts = declarations.map((decl) => trailingComment(decl)?.text);
+  return texts.every((text) => text === texts[0]);
+};
 
 const attachedComment = (decl) => {
   const previous = decl.prev();
@@ -171,7 +184,10 @@ const ruleFunction = (primary) => (root, result) => {
       const [first] = declarations;
       const earlier = earlierDeclaration(parent, ifRule, name);
       const overridden = earlier !== undefined && !isNull(earlier.value);
-      const fixable = overridden ? declarations.every((decl) => hasDefaultFlag(decl.value)) : movable.has(name);
+      const fixable = trailersAgree(declarations)
+        && (overridden
+          ? declarations.every((decl) => hasDefaultFlag(decl.value))
+          : movable.has(name));
 
       const fix = () => {
         const live = branches.filter((branch) => branch.parent);
@@ -184,16 +200,23 @@ const ruleFunction = (primary) => (root, result) => {
           if (parent.type === 'root' && parent.first) parent.first.raws.before = '';
         };
 
+        const dropDeclarations = () => declarations.forEach((decl) => {
+          trailingComment(decl)?.remove();
+          decl.remove();
+        });
+
         if (overridden) {
-          declarations.forEach((decl) => decl.remove());
+          dropDeclarations();
           tidy();
           return;
         }
 
         const hoisted = first.clone();
+        const trailerSource = trailingComment(first);
+        const trailer = trailerSource?.clone({ raws: { ...trailerSource.raws, before: ' ' } });
         const references = localReferences(first.value);
         const comment = earlier && attachedComment(earlier);
-        declarations.forEach((decl) => decl.remove());
+        dropDeclarations();
 
         const relocate = (insert, gap) => {
           const indent = indentOf(ifRule);
@@ -201,6 +224,7 @@ const ruleFunction = (primary) => (root, result) => {
           hoisted.raws.before = moved ? `\n${indent}` : `${gap}${indent}`;
           if (moved) insert(moved);
           insert(hoisted, moved);
+          if (trailer) parent.insertAfter(hoisted, trailer);
           comment?.remove();
           earlier?.remove();
         };
@@ -209,9 +233,11 @@ const ruleFunction = (primary) => (root, result) => {
           const anchor = lastHoisted.get(ifRule) ?? live[live.length - 1];
           relocate((node, previous) => parent.insertAfter(previous ?? anchor, node), lastHoisted.has(ifRule) ? '\n' : '\n\n');
           lastHoisted.set(ifRule, hoisted);
-        } else if (earlier && !references.some((ref) => declaredBetween(parent, earlier, ifRule, ref))) {
+        } else if (earlier
+          && !references.some((ref) => declaredBetween(parent, earlier, ifRule, ref))) {
           hoisted.raws.before = earlier.raws.before;
           earlier.replaceWith(hoisted);
+          if (trailer) parent.insertAfter(hoisted, trailer);
         } else {
           relocate((node, previous) => (previous ? parent.insertAfter(previous, node) : parent.insertBefore(ifRule, node)), '\n');
         }
