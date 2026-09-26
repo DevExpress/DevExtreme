@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import domUtils from '__internal/core/utils/m_dom';
-import { EmptyTemplate } from '__internal/core/templates/m_empty_template';
+import { EmptyTemplate } from '__internal/core/templates/empty_template';
 import support from '__internal/core/utils/m_support';
 import styleUtils from 'core/utils/style';
 import devices from '__internal/core/devices';

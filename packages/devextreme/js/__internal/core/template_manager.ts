@@ -12,8 +12,8 @@ import {
   validateTemplateSource,
 } from '@js/core/utils/template_manager';
 import { isDefined, isFunction, isRenderer } from '@js/core/utils/type';
-import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
-import { FunctionTemplate } from '@ts/core/templates/m_function_template';
+import { EmptyTemplate } from '@ts/core/templates/empty_template';
+import { FunctionTemplate } from '@ts/core/templates/function_template';
 
 const TEXT_NODE = 3;
 const ANONYMOUS_TEMPLATE_NAME = 'template';

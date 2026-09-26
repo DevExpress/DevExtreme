@@ -15,7 +15,7 @@ import {
   waitWebFont,
 } from '@js/ui/themes';
 import type { Item, Properties } from '@js/ui/toolbar';
-import { BindableTemplate } from '@ts/core/templates/m_bindable_template';
+import { BindableTemplate } from '@ts/core/templates/bindable_template';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
