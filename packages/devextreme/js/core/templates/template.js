@@ -1,1 +1,1 @@
-export { Template } from '../../__internal/core/templates/m_template';
+export { Template } from '../../__internal/core/templates/template';
