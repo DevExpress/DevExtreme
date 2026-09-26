@@ -1,37 +1,50 @@
 import { triggerShownEvent } from '@js/common/core/events/visibility_change';
 import domAdapter from '@js/core/dom_adapter';
 import errors from '@js/core/errors';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { contains } from '@js/core/utils/dom';
 
-export const renderedCallbacks = Callbacks({ syncStrategy: true });
+export type TemplateElement = Element | dxElementWrapper;
+
+export interface TemplateRenderOptions {
+  container?: TemplateElement;
+  model?: unknown;
+  index?: number;
+  transclude?: boolean;
+  renovated?: boolean;
+  onRendered?: () => void;
+}
+
+type RenderedCallbackArgs = [dxElementWrapper, TemplateElement | undefined];
+
+export const renderedCallbacks = Callbacks<RenderedCallbackArgs>({ syncStrategy: true });
 
 export class TemplateBase {
-  _element: any;
+  _element?: TemplateElement;
 
-  render(options) {
-    options = options || {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  render(options: unknown): any {
+    const renderOptions: TemplateRenderOptions = options || {};
 
-    const { onRendered } = options;
-    delete options.onRendered;
+    const { onRendered } = renderOptions;
+    delete renderOptions.onRendered;
 
-    let $result;
-    if (options.renovated && options.transclude && this._element) {
-      $result = $('<div>').append(this._element).contents();
-    } else {
-      // @ts-expect-error need type overload
-      $result = this._renderCore(options);
+    const $result = renderOptions.renovated && renderOptions.transclude && this._element
+      ? $('<div>').append(this._element).contents()
+      : this._renderCore(renderOptions);
+
+    this._ensureResultInContainer($result, renderOptions.container);
+    renderedCallbacks.fire($result, renderOptions.container);
+
+    if (onRendered) {
+      onRendered();
     }
-
-    this._ensureResultInContainer($result, options.container);
-    renderedCallbacks.fire($result, options.container);
-
-    onRendered && onRendered();
     return $result;
   }
 
-  _ensureResultInContainer($result, container) {
+  _ensureResultInContainer($result: dxElementWrapper, container?: TemplateElement): void {
     if (!container) {
       return;
     }
@@ -51,7 +64,8 @@ export class TemplateBase {
     triggerShownEvent($result);
   }
 
-  _renderCore() {
+  _renderCore(options: TemplateRenderOptions): dxElementWrapper;
+  _renderCore(): dxElementWrapper {
     throw errors.Error('E0001');
   }
 }
