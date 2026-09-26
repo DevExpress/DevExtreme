@@ -1,21 +1,40 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { TemplateBase } from '@js/core/templates/template_base';
 import { isPrimitive } from '@js/core/utils/type';
+import type { TemplateRenderOptions } from '@ts/core/templates/template_base';
+import { TemplateBase } from '@ts/core/templates/template_base';
+
+type WatchDispose = () => void;
+
+type WatchCallback = (value: unknown) => void;
+
+type WatchMethod = (fn: () => unknown, callback: WatchCallback) => WatchDispose;
 
 const watchChanges = (function () {
-  const globalWatch = (data, watchMethod, callback) => watchMethod(() => data, callback);
+  const globalWatch = (
+    data: unknown,
+    watchMethod: WatchMethod,
+    callback: WatchCallback,
+  ): WatchDispose => watchMethod(() => data, callback);
 
-  const fieldsWatch = function (data, watchMethod, fields, fieldsMap, callback) {
-    const resolvedData = {};
+  const fieldsWatch = function (
+    data: unknown,
+    watchMethod: WatchMethod,
+    fields: string[],
+    fieldsMap: Record<string, unknown>,
+    callback: WatchCallback,
+  ): WatchDispose {
+    const resolvedData: Record<string, unknown> = {};
     const missedFields = fields.slice();
 
     const watchHandlers = fields.map((name) => {
       const fieldGetter = fieldsMap[name];
 
       return watchMethod(
-        fieldGetter ? () => fieldGetter(data) : () => data[name],
+        // @ts-expect-error fieldGetter is not callable and data is of type unknown
+        fieldGetter ? (): unknown => fieldGetter(data) : (): unknown => data[name],
         (value) => {
           resolvedData[name] = value;
 
@@ -33,16 +52,24 @@ const watchChanges = (function () {
       );
     });
 
-    return function () {
+    return function (): void {
       watchHandlers.forEach((dispose) => dispose());
     };
   };
 
-  return function (rawData, watchMethod, fields, fieldsMap, callback) {
-    let fieldsDispose;
+  return function (
+    rawData: unknown,
+    watchMethod: WatchMethod,
+    fields: string[],
+    fieldsMap: Record<string, unknown>,
+    callback: WatchCallback,
+  ): WatchDispose {
+    let fieldsDispose: WatchDispose | null = null;
 
     const globalDispose = globalWatch(rawData, watchMethod, (dataWithRawFields) => {
-      fieldsDispose && fieldsDispose();
+      if (fieldsDispose) {
+        fieldsDispose();
+      }
 
       if (isPrimitive(dataWithRawFields)) {
         callback(dataWithRawFields);
@@ -52,38 +79,53 @@ const watchChanges = (function () {
       fieldsDispose = fieldsWatch(dataWithRawFields, watchMethod, fields, fieldsMap, callback);
     });
 
-    return function () {
-      fieldsDispose && fieldsDispose();
-      globalDispose && globalDispose();
+    return function (): void {
+      if (fieldsDispose) {
+        fieldsDispose();
+      }
+      if (globalDispose) {
+        globalDispose();
+      }
     };
   };
 }());
 
 export class BindableTemplate extends TemplateBase {
-  _render: any;
+  _render: Function;
 
-  _fields: any;
+  _fields: string[];
 
-  _fieldsMap: any;
+  _fieldsMap: Record<string, unknown>;
 
-  _watchMethod: any;
+  _watchMethod: WatchMethod;
 
-  constructor(render, fields, watchMethod, fieldsMap?) {
+  constructor(
+    render: Function,
+    fields: string[],
+    watchMethod: unknown,
+    fieldsMap?: Record<string, unknown>,
+  ) {
     super();
     this._render = render;
     this._fields = fields;
     this._fieldsMap = fieldsMap || {};
+    // @ts-expect-error unknown watchMethod is not assignable to WatchMethod
     this._watchMethod = watchMethod;
   }
 
-  // @ts-expect-error renderCore differs from baseTemplate
-  _renderCore(options) {
+  _renderCore(options: TemplateRenderOptions): dxElementWrapper {
     const $container = $(options.container);
 
-    const dispose = watchChanges(options.model, this._watchMethod, this._fields, this._fieldsMap, (data) => {
-      $container.empty();
-      this._render($container, data, options.model);
-    });
+    const dispose = watchChanges(
+      options.model,
+      this._watchMethod,
+      this._fields,
+      this._fieldsMap,
+      (data) => {
+        $container.empty();
+        this._render($container, data, options.model);
+      },
+    );
     eventsEngine.on($container, removeEvent, dispose);
 
     return $container.contents();
