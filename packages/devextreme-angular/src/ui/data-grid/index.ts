@@ -809,10 +809,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * [descr:GridBaseOptions.loadPanel]
      */
     @Input()
-    get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
+    get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
+    set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
         this._setOption('loadPanel', value);
     }
 
@@ -1589,7 +1589,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
      */
-    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
+    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
      * This member supports the internal infrastructure and is not intended to be used directly from your code.

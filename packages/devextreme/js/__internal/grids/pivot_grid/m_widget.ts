@@ -310,15 +310,6 @@ class PivotGrid extends Widget {
     });
   }
 
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    this._deprecatedOptions = {
-      ...this._deprecatedOptions,
-      // @ts-expect-error ts-error
-      'loadPanel.indicatorSrc': { since: '25.2', alias: 'loadPanel.indicatorOptions.src' },
-    };
-  }
-
   _updateCalculatedOptions(fields) {
     const that = this;
     each(fields, (_, field) => {

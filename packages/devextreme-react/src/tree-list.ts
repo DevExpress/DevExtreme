@@ -2202,7 +2202,6 @@ type ILoadPanelProps = React.PropsWithChildren<{
   enabled?: boolean | Mode;
   height?: number | string;
   indicatorOptions?: LoadPanelIndicatorProperties;
-  indicatorSrc?: string;
   shading?: boolean;
   shadingColor?: string;
   showIndicator?: boolean;

@@ -30,6 +30,12 @@ import {
  Mode,
  SearchMode,
 } from "devextreme/common";
+import {
+ LoadingAnimationType,
+} from "devextreme/ui/load_indicator";
+import {
+ LoadPanelIndicatorProperties,
+} from "devextreme/ui/load_panel";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -381,13 +387,36 @@ const DxHeaderFilterTexts = defineComponent(DxHeaderFilterTextsConfig);
 
 (DxHeaderFilterTexts as any).$_optionName = "texts";
 
+const DxIndicatorOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:animationType": null,
+    "update:height": null,
+    "update:src": null,
+    "update:width": null,
+  },
+  props: {
+    animationType: String as PropType<LoadingAnimationType>,
+    height: [Number, String],
+    src: String,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxIndicatorOptionsConfig);
+
+const DxIndicatorOptions = defineComponent(DxIndicatorOptionsConfig);
+
+(DxIndicatorOptions as any).$_optionName = "indicatorOptions";
+
 const DxLoadPanelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:enabled": null,
     "update:height": null,
-    "update:indicatorSrc": null,
+    "update:indicatorOptions": null,
     "update:shading": null,
     "update:shadingColor": null,
     "update:showIndicator": null,
@@ -398,7 +427,7 @@ const DxLoadPanelConfig = {
   props: {
     enabled: Boolean,
     height: Number,
-    indicatorSrc: String,
+    indicatorOptions: Object as PropType<LoadPanelIndicatorProperties | Record<string, any>>,
     shading: Boolean,
     shadingColor: String,
     showIndicator: Boolean,
@@ -413,6 +442,9 @@ prepareConfigurationComponentConfig(DxLoadPanelConfig);
 const DxLoadPanel = defineComponent(DxLoadPanelConfig);
 
 (DxLoadPanel as any).$_optionName = "loadPanel";
+(DxLoadPanel as any).$_expectedChildren = {
+  indicatorOptions: { isCollectionItem: false, optionName: "indicatorOptions" }
+};
 
 const DxPivotGridTextsConfig = {
   emits: {
@@ -591,6 +623,7 @@ export {
   DxFieldPanelTexts,
   DxHeaderFilter,
   DxHeaderFilterTexts,
+  DxIndicatorOptions,
   DxLoadPanel,
   DxPivotGridTexts,
   DxScrolling,

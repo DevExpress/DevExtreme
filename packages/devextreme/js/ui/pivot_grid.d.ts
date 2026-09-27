@@ -16,6 +16,8 @@ import PivotGridDataSource, {
     dxPivotGridSummaryCell as SummaryCell,
 } from './pivot_grid/data_source';
 
+import { LoadPanelIndicatorProperties } from './load_panel';
+
 import dxPopup from './popup';
 
 import Widget, {
@@ -467,9 +469,8 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       height?: number;
       /**
        * @docid
-       * @default ""
        */
-      indicatorSrc?: string;
+      indicatorOptions?: LoadPanelIndicatorProperties;
       /**
        * @docid
        * @default false

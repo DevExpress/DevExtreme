@@ -1856,7 +1856,6 @@ type ILoadPanelProps = React.PropsWithChildren<{
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   indicatorOptions?: LoadPanelIndicatorProperties;
-  indicatorSrc?: string;
   maxHeight?: number | string;
   maxWidth?: number | string;
   message?: string;

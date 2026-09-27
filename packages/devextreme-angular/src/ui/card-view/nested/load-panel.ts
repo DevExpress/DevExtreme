@@ -118,14 +118,6 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get indicatorSrc(): string {
-        return this._getOption('indicatorSrc');
-    }
-    set indicatorSrc(value: string) {
-        this._setOption('indicatorSrc', value);
-    }
-
-    @Input()
     get maxHeight(): number | string {
         return this._getOption('maxHeight');
     }

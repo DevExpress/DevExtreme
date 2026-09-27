@@ -7389,7 +7389,7 @@ QUnit.module('Bottom Load Panel', {
             showIndicator: false,
             showPane: true,
             text: 'Test',
-            indicatorSrc: 'test'
+            indicatorOptions: { src: 'test' }
         };
 
         // act
@@ -7402,7 +7402,7 @@ QUnit.module('Bottom Load Panel', {
         assert.equal(rowsView._loadPanel.option('message'), 'Test');
         assert.equal(rowsView._loadPanel.option('showIndicator'), false);
         assert.equal(rowsView._loadPanel.option('showPane'), true);
-        assert.equal(rowsView._loadPanel.option('indicatorSrc'), 'test');
+        assert.equal(rowsView._loadPanel.option('indicatorOptions.src'), 'test');
         assert.deepEqual(rowsView._loadPanel.option('container'), rowsView.element().parent());
     });
 

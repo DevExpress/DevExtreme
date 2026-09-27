@@ -11,6 +11,8 @@ import NestedOption from "./core/nested-option";
 import type { CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent } from "devextreme/ui/pivot_grid";
 import type { ApplyChangesMode, HeaderFilterSearchConfig, StateStoreType } from "devextreme/common/grids";
 import type { FieldChooserLayout, ScrollMode, Mode, SearchMode } from "devextreme/common";
+import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
+import type { LoadPanelIndicatorProperties } from "devextreme/ui/load_panel";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -256,11 +258,32 @@ const HeaderFilterTexts = Object.assign<typeof _componentHeaderFilterTexts, Nest
 });
 
 // owners:
+// LoadPanel
+type IIndicatorOptionsProps = React.PropsWithChildren<{
+  animationType?: LoadingAnimationType;
+  height?: number | string | undefined;
+  src?: string;
+  width?: number | string | undefined;
+}>
+const _componentIndicatorOptions = (props: IIndicatorOptionsProps) => {
+  return React.createElement(NestedOption<IIndicatorOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "indicatorOptions",
+    },
+  });
+};
+
+const IndicatorOptions = Object.assign<typeof _componentIndicatorOptions, NestedComponentMeta>(_componentIndicatorOptions, {
+  componentType: "option",
+});
+
+// owners:
 // PivotGrid
 type ILoadPanelProps = React.PropsWithChildren<{
   enabled?: boolean;
   height?: number;
-  indicatorSrc?: string;
+  indicatorOptions?: LoadPanelIndicatorProperties;
   shading?: boolean;
   shadingColor?: string;
   showIndicator?: boolean;
@@ -273,6 +296,9 @@ const _componentLoadPanel = (props: ILoadPanelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "loadPanel",
+      ExpectedChildren: {
+        indicatorOptions: { optionName: "indicatorOptions", isCollectionItem: false }
+      },
     },
   });
 };
@@ -434,6 +460,8 @@ export {
   IHeaderFilterProps,
   HeaderFilterTexts,
   IHeaderFilterTextsProps,
+  IndicatorOptions,
+  IIndicatorOptionsProps,
   LoadPanel,
   ILoadPanelProps,
   PivotGridTexts,

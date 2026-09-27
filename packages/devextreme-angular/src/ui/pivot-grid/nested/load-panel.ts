@@ -8,6 +8,7 @@ import {
     SkipSelf,
     Input
 } from '@angular/core';
+import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import {
     DxIntegrationModule,
@@ -40,11 +41,11 @@ export class DxoPivotGridLoadPanelComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get indicatorSrc(): string {
-        return this._getOption('indicatorSrc');
+    get indicatorOptions(): LoadPanelIndicatorProperties {
+        return this._getOption('indicatorOptions');
     }
-    set indicatorSrc(value: string) {
-        this._setOption('indicatorSrc', value);
+    set indicatorOptions(value: LoadPanelIndicatorProperties) {
+        this._setOption('indicatorOptions', value);
     }
 
     @Input()
