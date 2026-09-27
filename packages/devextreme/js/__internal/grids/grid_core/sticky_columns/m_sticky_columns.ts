@@ -537,15 +537,24 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
 
     if (hasStickyColumns) {
       const $container = $(this._columnHeadersView.getContent());
+      const addWidgetPrefix = this.addWidgetPrefix.bind(this);
       const isFixedCellPinnedToRight = GridCoreStickyColumnsDom.isFixedCellPinnedToRight(
         $cell,
         $container,
-        this.addWidgetPrefix.bind(this),
+        addWidgetPrefix,
       );
       const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
 
       if (isWidgetResizingMode && isFixedCellPinnedToRight) {
         return $cell.offset()?.left ?? 0;
+      }
+
+      const $nextCell = $cell.next();
+      const isNextCellPinnedToRight = $nextCell.length > 0
+        && GridCoreStickyColumnsDom.isFixedCellPinnedToRight($nextCell, $container, addWidgetPrefix);
+
+      if (isNextCellPinnedToRight) {
+        return $nextCell.offset()?.left ?? 0;
       }
     }
 
