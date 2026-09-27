@@ -443,12 +443,6 @@
       "note": "This was a published knob nothing in the theme ever read \u2014 setting it had no visual effect."
     },
     {
-      "name": "--dx-component-height",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing in the theme ever read \u2014 setting it had no visual effect."
-    },
-    {
       "name": "--dx-texteditor-color-text",
       "replacement": null,
       "release": "26.2",

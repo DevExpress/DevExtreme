@@ -533,6 +533,7 @@
   "--dx-color-view-preview-container-margin",
   "--dx-color-warning",
   "--dx-component-color-bg",
+  "--dx-component-height",
   "--dx-context-menu-border-radius",
   "--dx-context-menu-content-disabled",
   "--dx-context-menu-icon",

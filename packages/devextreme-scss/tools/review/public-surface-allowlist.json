@@ -117,6 +117,11 @@
       "since": "2026-09-25"
     },
     {
+      "name": "--dx-component-height",
+      "reason": "Pre-existing app-markup handle, declared identically in all four themes before fluent-next. apps/demos/Demos/DataGrid/AIPoweredDetailView (all five frameworks, from main #34775) sizes its prompt editor and submit row with it, so it is read outside the bundle. Kept for API parity with the legacy themes.",
+      "since": "2026-09-27"
+    },
+    {
       "name": "--dx-data-grid-group-panel-item-padding-block",
       "reason": "The Sass value is folded at build time into a sibling variable's default, which IS the one actually read via var() for real rendering. Setting this specific --dx-* name at runtime has no effect \u2014 the fold already happened during compilation. (folds into $data-grid-group-panel-item-padding, live via --dx-data-grid-group-panel-item-padding)",
       "since": "2026-09-26"

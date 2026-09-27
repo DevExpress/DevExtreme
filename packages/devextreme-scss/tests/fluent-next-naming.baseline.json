@@ -513,7 +513,6 @@
   "publicSurfaceDifferences": [
     "--dx-button-padding-inline: only in generic, material, fluent",
     "--dx-color-shadow: only in generic, material, fluent",
-    "--dx-component-height: only in generic, material, fluent",
     "--dx-popup-toolbar-item-padding-inline: only in generic, material, fluent",
     "--dx-texteditor-color-text: only in generic, material, fluent",
     "--dx-theme-mode: only in fluent-next"
@@ -535,6 +534,7 @@
     "fluent-next/_design-system.scss: --dx-theme-mode",
     "fluent-next/_sizes.scss: --dx-border-radius",
     "fluent-next/_sizes.scss: --dx-border-width",
+    "fluent-next/_sizes.scss: --dx-component-height",
     "fluent-next/_sizes.scss: --dx-font-size",
     "fluent-next/_sizes.scss: --dx-font-size-icon",
     "fluent-next/gridBase/_colors.scss: --dx-datagrid-row-alternation-bg",
