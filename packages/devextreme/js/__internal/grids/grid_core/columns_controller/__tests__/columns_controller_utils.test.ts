@@ -19,6 +19,7 @@ import {
   fireColumnsChanged,
   getAlignmentByDataType,
   getChildrenByBandColumn,
+  getColumnByIndexes,
   getCommandColumnIndex,
   getCustomizeTextByDataType,
   getDataColumns,
@@ -1895,6 +1896,62 @@ describe('reserveGroupIndex', () => {
       const columnsController = await getColumnsController({ columns: ['a'] });
 
       expect(reserveGroupIndex(columnsController, groupIndex)).toBe(0);
+    });
+  });
+});
+
+describe('getColumnByIndexes', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  const getDataField = async (
+    columns: DataGridProperties['columns'],
+    columnIndexes: number[],
+  ): Promise<string | undefined> => {
+    const columnsController = await getColumnsController({ columns });
+
+    return getColumnByIndexes(columnsController, columnIndexes)?.dataField;
+  };
+
+  describe('when there are no band columns', () => {
+    it('should return the column at the index', async () => {
+      expect(await getDataField(['a', 'b', 'c'], [1])).toBe('b');
+    });
+
+    it('should take the position in the columns, not the visible index', async () => {
+      const columns = [{ dataField: 'a', visibleIndex: 1 }, { dataField: 'b', visibleIndex: 0 }];
+
+      expect(await getDataField(columns, [0])).toBe('a');
+    });
+
+    it('should return undefined for an index out of range', async () => {
+      expect(await getDataField(['a', 'b'], [5])).toBeUndefined();
+    });
+  });
+
+  describe('when there are band columns', () => {
+    const columns = ['a', { caption: 'Band', columns: ['b', 'c'] }, 'd'];
+
+    it('should count only the top-level columns for the first index', async () => {
+      expect(await getDataField(columns, [2])).toBe('d');
+    });
+
+    it('should return a band child by the band index and the child index', async () => {
+      expect(await getDataField(columns, [1, 1])).toBe('c');
+    });
+
+    it('should return a child of a nested band', async () => {
+      const nestedColumns = ['a', { caption: 'Outer', columns: ['b', { caption: 'Inner', columns: ['c', 'd'] }] }];
+
+      expect(await getDataField(nestedColumns, [1, 1, 1])).toBe('d');
+    });
+
+    it('should return undefined for a child index out of range', async () => {
+      expect(await getDataField(columns, [1, 5])).toBeUndefined();
+    });
+
+    it('should return undefined when there are no indexes', async () => {
+      expect(await getDataField(columns, [])).toBeUndefined();
     });
   });
 });

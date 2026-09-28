@@ -214,30 +214,37 @@ export const getChildrenByBandColumn = (
   return children;
 };
 
-export const getColumnByIndexes = function (that: ColumnsController, columnIndexes) {
-  let result;
-  let columns;
+const hasOwnerBand = (
+  column: Column,
+  ownerBand: number | undefined,
+): boolean => column.ownerBand === ownerBand;
+
+export const getColumnByIndexes = (
+  that: ColumnsController,
+  columnIndexes: number[],
+): Column | undefined => {
   const bandColumnsCache = that.getBandColumnsCache();
-  const callbackFilter = function (column) {
-    const ownerBand = result ? result.index : undefined;
-    return column.ownerBand === ownerBand;
-  };
 
   if (bandColumnsCache.isPlain) {
-    result = that._columns[columnIndexes[0]];
-  } else {
-    columns = that._columns.filter(callbackFilter);
-
-    for (let i = 0; i < columnIndexes.length; i++) {
-      result = columns[columnIndexes[i]];
-
-      if (result) {
-        columns = that._columns.filter(callbackFilter);
-      }
-    }
+    return (that._columns as Column[])[columnIndexes[0]];
   }
 
-  return result;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
+  let targetColumn: Column | undefined;
+  let columns: Column[] = that._columns
+    .filter((column: Column) => hasOwnerBand(column, undefined));
+
+  columnIndexes.forEach((columnIndex) => {
+    targetColumn = columns[columnIndex];
+
+    if (targetColumn) {
+      const ownerBand = targetColumn.index;
+
+      columns = that._columns.filter((column: Column) => hasOwnerBand(column, ownerBand));
+    }
+  });
+
+  return targetColumn;
 };
 
 export const getColumnFullPath = function (that: ColumnsController, column) {
