@@ -162,7 +162,6 @@ export function createPagesRenderer({
       'jspdf-autotable': '/packages/devextreme/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js',
       rrule: '/packages/devextreme/node_modules/rrule/dist/es5/rrule.js',
       inferno: '/packages/devextreme/node_modules/inferno/dist/inferno.js',
-      'inferno-hydrate': '/packages/devextreme/node_modules/inferno-hydrate/dist/inferno-hydrate.js',
       'inferno-compat': '/packages/devextreme/node_modules/inferno-compat/dist/inferno-compat.js',
       'inferno-clone-vnode': '/packages/devextreme/node_modules/inferno-clone-vnode/dist/index.cjs.js',
       'inferno-create-element': '/packages/devextreme/node_modules/inferno-create-element/dist/index.cjs.js',
