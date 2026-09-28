@@ -1,7 +1,7 @@
 import type { DataType, HorizontalAlignment, SortOrder } from '@js/common';
 import type { Format } from '@js/common/core/localization';
 import numberLocalization from '@js/common/core/localization/number';
-import type { ColumnBase, ColumnCustomizeTextArg } from '@js/common/grids';
+import type { ColumnBase, ColumnCustomizeTextArg, FixedPosition } from '@js/common/grids';
 import { normalizeIndexes } from '@js/core/utils/array';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
@@ -908,10 +908,13 @@ export const getRowCount = function (that: ColumnsController) {
   return rowCount;
 };
 
-export const getFixedPosition = function (that: ColumnsController, column) {
-  const rtlEnabled = that.option('rtlEnabled');
+export const getFixedPosition = (that: ColumnsController, column: Column): FixedPosition => {
+  const isDefaultCommandColumn = column.command
+    && !gridCoreUtils.isCustomCommandColumn(that._columns, column);
 
-  if (column.command && !gridCoreUtils.isCustomCommandColumn(that._columns, column) || !column.fixedPosition) {
+  if (isDefaultCommandColumn || !column.fixedPosition) {
+    const rtlEnabled = that.option('rtlEnabled');
+
     return rtlEnabled ? 'right' : 'left';
   }
 
