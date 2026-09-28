@@ -60,7 +60,7 @@ immutable-js (Open Source - MIT License)
 Copyright (c) 2014-present, Lee Byron and other contributors.
 https://github.com/immutable-js/immutable-js/blob/main/LICENSE
 
-infernojs/inferno (inferno, inferno-create-element) (Open Source - MIT License)
+infernojs/inferno (inferno, inferno-create-element, inferno-hydrate) (Open Source - MIT License)
 Copyright (c) 2015-2022 Dominic Gannaway
 https://github.com/infernojs/inferno/blob/master/LICENSE.md
 
