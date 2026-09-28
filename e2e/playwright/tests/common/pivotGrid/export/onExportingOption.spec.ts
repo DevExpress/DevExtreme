@@ -3,7 +3,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import PivotGrid from '../../../../models/pivotGrid';
 
 test('Should call \'onExporting\' when export button clicked', async ({ page }) => {
-  await createWidget(page, 'dxPivotGrid', {
+  await createWidget(page, 'dxPivotGrid', () => ({
     dataSource: {
       fields: [{
         caption: 'data A',
@@ -18,7 +18,7 @@ test('Should call \'onExporting\' when export button clicked', async ({ page }) 
       // eslint-disable-next-line no-underscore-dangle
       (window as any).__exportCalled = true;
     },
-  });
+  }));
 
   const pivotGrid = new PivotGrid(page, '#container');
 

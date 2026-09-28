@@ -8,7 +8,7 @@ const FIELD_CHOOSER_AREA_FIELDS_CLASS = 'dx-area-fields';
 test('ContextMenu width should be adjusted to the width of the item text (T1106236)', {
   tag: ['@generic.light'],
 }, async ({ page }) => {
-  await createWidget(page, 'dxPivotGrid', {
+  await createWidget(page, 'dxPivotGrid', () => ({
     width: 1000,
     allowSortingBySummary: true,
     allowSorting: true,
@@ -83,7 +83,7 @@ test('ContextMenu width should be adjusted to the width of the item text (T11062
         date: '2015-05-07',
       }],
     },
-  });
+  }));
 
   await page.locator(`.${FIELD_CHOOSER_AREA_FIELDS_CLASS}`).nth(1).click({ button: 'right' });
 
