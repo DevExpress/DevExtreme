@@ -15,7 +15,7 @@ class TreeListColumnsController extends ColumnsController {
 
     for (let i = 0; i <= visibleColumnsLength - 1; i++) {
       if (!isDefined(visibleColumns[i].command)) {
-        firstDataColumnIndex = visibleColumns[i].index;
+        firstDataColumnIndex = visibleColumns[i].index ?? 0;
         break;
       }
     }

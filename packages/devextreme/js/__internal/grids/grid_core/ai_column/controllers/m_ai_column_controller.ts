@@ -277,7 +277,7 @@ export class AIColumnController extends Controller {
   }
 
   public getAIColumns(): Column[] {
-    return this.columnsController.getColumns().filter((col) => col.type === 'ai') as Column[];
+    return this.columnsController.getColumns().filter((col) => col.type === 'ai');
   }
 
   // API methods
