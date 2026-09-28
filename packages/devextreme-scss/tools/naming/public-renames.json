@@ -1,5 +1,5 @@
 {
-  "$comment": "Journal of retired component-tier names — the `--dx-*` custom properties the theme publishes. A published name is the one thing a user can rely on without rebuilding the SCSS, so removing or renaming one is a public change, and this file is where that change is recorded. Add the entry in the SAME change that retires the name — which change that was is a question for `git log -- tools/naming/public-renames.json`, so the journal does not repeat it; tests/public-renames.test.ts then enforces that the name never appears in a built fluent-next bundle again, which is what forbids a quiet compatibility alias in _public-links.scss.",
+  "$comment": "Journal of retired component-tier names \u2014 the `--dx-*` custom properties the theme publishes. A published name is the one thing a user can rely on without rebuilding the SCSS, so removing or renaming one is a public change, and this file is where that change is recorded. Add the entry in the SAME change that retires the name \u2014 which change that was is a question for `git log -- tools/naming/public-renames.json`, so the journal does not repeat it; tests/public-renames.test.ts then enforces that the name never appears in a built fluent-next bundle again, which is what forbids a quiet compatibility alias in _public-links.scss.",
   "fields": {
     "name": "The retired name, exactly as it shipped.",
     "replacement": "The name that takes over the role, or null when the role itself disappeared.",
@@ -127,13 +127,6 @@
       "note": "The filter chips are backgrounds; the name said content and had never painted text."
     },
     {
-      "name": "--dx-list-border-disabled",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The disabled list border is painted by the shared disabled border name; the list no longer carries one of its own."
-    },
-    {
       "name": "--dx-pivot-grid-accent-content",
       "replacement": "--dx-pivot-grid-accent-outline",
       "release": "26.2",
@@ -160,13 +153,6 @@
       "release": "26.2",
       "pr": 35107,
       "note": "The read-only dot is drawn with background-color; the pair is now split into the dot and the ring."
-    },
-    {
-      "name": "--dx-radio-button-icon-bg-focused",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "Fed the ripple, which this theme switches off - the name painted nothing."
     },
     {
       "name": "--dx-radio-button-icon-border-read-only",
@@ -216,13 +202,6 @@
       "release": "26.2",
       "pr": 35107,
       "note": "The same split in the danger hue; the ring is --dx-slider-invalid-border-focused."
-    },
-    {
-      "name": "--dx-splitter-resize-handle-content-hovered",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "Was read and never declared, so the hover rule was invalid and the grip kept its rest colour. The rule now reads the rest name."
     },
     {
       "name": "--dx-tabs-tab-basic-border-selected",
@@ -281,62 +260,6 @@
       "note": "A hovered tile is marked by its edge; the fill does not move."
     },
     {
-      "name": "--dx-tree-view-checkbox-accent-content-focused",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-bg-disabled",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-bg-focused",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-border-disabled",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-border-focused",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-checked-border-focused",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-icon-disabled",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-indeterminate-bg-disabled",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
       "name": "--dx-chat-message-box-file-cancel-button-secondary-content",
       "replacement": "--dx-chat-message-box-file-cancel-button-bg-hovered",
       "release": "26.2",
@@ -355,7 +278,7 @@
       "replacement": "--dx-calendar-element-gap",
       "release": "26.2",
       "pr": 35107,
-      "note": "It is the gap between the calendar’s parts - the rule writes gap - not padding inside anything."
+      "note": "It is the gap between the calendar\u2019s parts - the rule writes gap - not padding inside anything."
     },
     {
       "name": "--dx-chat-message-editing-preview-border-width",
@@ -397,7 +320,7 @@
       "replacement": "--dx-text-editor-spin-button-margin-inline-end",
       "release": "26.2",
       "pr": 35107,
-      "note": "The rule writes margin-inline-end between the editor’s buttons."
+      "note": "The rule writes margin-inline-end between the editor\u2019s buttons."
     },
     {
       "name": "--dx-scheduler-workspace-cell-content-active",
