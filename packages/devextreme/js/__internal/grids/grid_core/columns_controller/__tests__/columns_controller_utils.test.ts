@@ -14,6 +14,7 @@ import {
   createColumnsFromDataSourceAdapter,
   createColumnsFromOptions,
   customizeTextForBooleanDataType,
+  digitsCount,
   findColumn,
   fireColumnsChanged,
   getAlignmentByDataType,
@@ -24,6 +25,7 @@ import {
   getSerializationFormat,
   getValueDataType,
   mergeColumns,
+  numberToString,
   processBandColumns,
   resolveChangeType,
   setFilterOperationsAsDefaultValues,
@@ -1773,5 +1775,24 @@ describe('getDataColumns', () => {
       expect(getDataColumns([[groupExpandColumn, band], [b, c]]))
         .toEqual([groupExpandColumn, b, c]);
     });
+  });
+});
+
+describe('digitsCount', () => {
+  it.each([
+    [10, 1],
+    [11, 2],
+  ])('should return the digits count of the largest index below %s', (count, expected) => {
+    expect(digitsCount(count)).toBe(expected);
+  });
+});
+
+describe('numberToString', () => {
+  it('should pad a number with leading zeros', () => {
+    expect(numberToString(5, 3)).toBe('005');
+  });
+
+  it('should not cut a number that is longer than the length', () => {
+    expect(numberToString(123, 2)).toBe('123');
   });
 });

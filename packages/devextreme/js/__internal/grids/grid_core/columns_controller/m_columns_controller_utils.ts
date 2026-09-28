@@ -933,24 +933,23 @@ export const processExpandColumns = (
   columns.splice(targetIndex, deleteCount, ...expandColumnsByType);
 };
 
-export const digitsCount = function (number) {
-  let i;
+export const digitsCount = (number: number): number => {
+  let count = 0;
+  let rest = number;
 
-  for (i = 0; number > 1; i++) {
-    number /= 10;
+  while (rest > 1) {
+    rest /= 10;
+    count += 1;
   }
 
-  return i;
+  return count;
 };
 
-export const numberToString = function (number, digitsCount) {
-  let str = number ? number.toString() : '0';
+export const numberToString = (number: number, length: number): string => {
+  const str = number.toString();
+  const leadingZeros = '0'.repeat(Math.max(length - str.length, 0));
 
-  while (str.length < digitsCount) {
-    str = `0${str}`;
-  }
-
-  return str;
+  return `${leadingZeros}${str}`;
 };
 
 export const getCommandColumnIndex = (

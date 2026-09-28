@@ -844,12 +844,17 @@ export class ColumnsController extends modules.Controller {
           }
         }
 
-        if (parentBandColumns.length) {
+        // normalizeIndexes gives every band and band child a numeric visibleIndex
+        if (parentBandColumns.length && isNumeric(targetIndex)) {
           targetIndex = numberToString(targetIndex, columnDigitsCount);
 
           for (let i = parentBandColumns.length - 1; i >= 0; i -= 1) {
             const { visibleIndex: parentVisibleIndex } = parentBandColumns[i];
-            targetIndex = `${numberToString(parentVisibleIndex, columnDigitsCount)}${targetIndex}`;
+
+            if (isNumeric(parentVisibleIndex)) {
+              const parentTargetIndex = numberToString(parentVisibleIndex, columnDigitsCount);
+              targetIndex = `${parentTargetIndex}${targetIndex}`;
+            }
           }
         }
 
