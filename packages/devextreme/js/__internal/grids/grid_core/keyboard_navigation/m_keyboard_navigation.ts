@@ -914,7 +914,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     let result = false;
 
     if (column) {
-      result = renderedVisibleColumns.indexOf(column) >= 0;
+      result = renderedVisibleColumns.includes(column);
     }
 
     return result;

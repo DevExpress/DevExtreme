@@ -1018,6 +1018,7 @@ describe('columnOptionCore', () => {
         selection: { mode: 'multiple', showCheckBoxesMode: 'always' },
       });
       const column = columnsController._commandColumns.find(({ type }) => type === 'selection');
+      if (!column) throw new Error('selection command column not found');
 
       columnOptionCore(columnsController, column, 'caption', 'New');
 
