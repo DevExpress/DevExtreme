@@ -15,7 +15,6 @@ if (!/localhost/.test(document.location.host)) {
   styleUrls: ['./app.component.css'],
   providers: [Service],
   preserveWhitespaces: true,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DxMultiViewModule,
     DxCheckBoxModule,
@@ -25,6 +24,12 @@ export class AppComponent {
   companies: Company[];
 
   itemCount: number;
+
+  selectedIndex = 0;
+
+  loop = false;
+
+  animationEnabled = true;
 
   constructor(service: Service) {
     this.companies = service.getCompanies();
