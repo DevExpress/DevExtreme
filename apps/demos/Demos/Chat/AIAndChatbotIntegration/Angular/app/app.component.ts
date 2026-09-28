@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { DxChatModule, DxButtonModule } from 'devextreme-angular';
 import type { DxChatTypes } from 'devextreme-angular/ui/chat';
@@ -38,7 +40,10 @@ export class AppComponent {
 
   isDisabled: boolean;
 
-  constructor(private readonly appService: AppService) {
+  constructor(
+    private readonly appService: AppService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+  ) {
     loadMessages(this.appService.getDictionary());
 
     this.dataSource = this.appService.dataSource;
@@ -62,6 +67,8 @@ export class AppComponent {
     } else {
       event?.target.focus();
     }
+
+    this.changeDetectorRef.detectChanges();
   }
 
   async onMessageEntered(e: DxChatTypes.MessageEnteredEvent) {
@@ -83,6 +90,7 @@ export class AppComponent {
 
     setTimeout(() => {
       this.copyButtonIcon = 'copy';
+      this.changeDetectorRef.detectChanges();
     }, 2500);
   }
 

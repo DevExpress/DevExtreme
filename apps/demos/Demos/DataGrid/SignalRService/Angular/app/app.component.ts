@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import { DxDataGridModule } from 'devextreme-angular';
 import { CustomStore } from 'devextreme-angular/common/data';
@@ -21,7 +23,7 @@ export class AppComponent {
 
   connectionStarted: boolean;
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     this.connectionStarted = false;
 
     const hubConnection = new HubConnectionBuilder()
@@ -44,6 +46,7 @@ export class AppComponent {
         });
         this.dataSource = store;
         this.connectionStarted = true;
+        this.changeDetectorRef.detectChanges();
       });
   }
 }
