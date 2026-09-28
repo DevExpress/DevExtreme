@@ -215,7 +215,7 @@ export async function runCommand(
   }
 
   if (target === 'grid') {
-    gridInstance?.instance.beginCustomLoading();
+    gridInstance?.instance.beginCustomLoading('');
 
     const { results: gridResults, error: gridError } = await buildGridResultsPromise(gridInstance, aiIntegration, text);
 
