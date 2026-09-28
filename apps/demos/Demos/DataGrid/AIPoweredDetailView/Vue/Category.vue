@@ -19,18 +19,18 @@ const categoryClass = `category__wrapper category-${id}__bg-color`;
 }
 
 .category-1__bg-color {
-  background-color: var(--dxds-color-bg-yellow-subtle, rgb(from var(--dx-color-warning) r g b / 24%));
+  background-color: rgb(from var(--dx-color-warning) r g b / 24%);
 }
 
 .category-2__bg-color {
-  background-color: var(--dxds-color-bg-blue-subtle, rgb(from var(--dx-color-primary) r g b / 24%));
+  background-color: rgb(from var(--dx-color-primary) r g b / 24%);
 }
 
 .category-3__bg-color {
-  background-color: var(--dxds-color-bg-red-subtle, rgb(from var(--dx-color-danger) r g b / 24%));
+  background-color: rgb(from var(--dx-color-danger) r g b / 24%);
 }
 
 .category-4__bg-color {
-  background-color: var(--dxds-color-bg-green-subtle, rgb(from var(--dx-color-success) r g b / 24%));
+  background-color: rgb(from var(--dx-color-success) r g b / 24%);
 }
 </style>
