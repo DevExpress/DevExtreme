@@ -8,6 +8,22 @@
     border-radius: 24px;
 }
 
+.category-1__bg-color {
+    background-color: rgb(from var(--dx-color-warning) r g b / 24%);
+}
+
+.category-2__bg-color {
+    background-color: rgb(from var(--dx-color-primary) r g b / 24%);
+}
+
+.category-3__bg-color {
+    background-color: rgb(from var(--dx-color-danger) r g b / 24%);
+}
+
+.category-4__bg-color {
+    background-color: rgb(from var(--dx-color-success) r g b / 24%);
+}
+
 .dx-command-expand .dx-icon-sparkle {
     cursor: pointer;
     text-align: center;
@@ -44,6 +60,11 @@
     height: var(--dx-component-height);
 }
 
+.submit-container {
+    height: var(--dx-component-height);
+    align-content: center;
+}
+
 .output-container {
     display: grid;
     align-items: center;
@@ -59,6 +80,7 @@
 
 .output-container .response-editor {
     border: none;
+    box-shadow: none;
     background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
@@ -88,90 +110,4 @@
     font-size: 20px;
     margin-right: 4px;
     vertical-align: middle;
-}
-
-.dx-theme-fluent {
-    .category-1__bg-color {
-        background-color: #F9E2AE;
-    }
-
-    .category-2__bg-color {
-        background-color: #B4D6FA;
-    }
-
-    .category-3__bg-color {
-        background-color: #F1BBBC;
-    }
-
-    .category-4__bg-color {
-        background-color: #9FD89F;
-    }
-
-    &.dx-color-scheme-blue-dark,
-    &.dx-color-scheme-saas-dark {
-        .category-1__bg-color {
-            background-color: #835B00;
-        }
-
-        .category-2__bg-color {
-            background-color: #0C3B5E;
-        }
-
-        .category-3__bg-color {
-            background-color: #751D1F;
-        }
-
-        .category-4__bg-color {
-            background-color: #0B5A08;
-        }
-    }
-}
-
-.dx-theme-material {
-    .category-1__bg-color {
-        background-color: rgb(from var(--dx-color-warning) r g b / 24%);
-    }
-
-    .category-2__bg-color {
-        background-color: rgb(from var(--dx-color-primary) r g b / 24%);
-    }
-
-    .category-3__bg-color {
-        background-color: rgb(from var(--dx-color-danger) r g b / 24%);
-    }
-
-    .category-4__bg-color {
-        background-color: rgb(from var(--dx-color-success) r g b / 24%);
-    }
-
-    .submit-container {
-        height: var(--dx-component-height);
-        align-content: center;
-    }
-
-    .output-container .response-editor {
-        box-shadow: none;
-    }
-}
-
-.dx-theme-generic {
-    .category-1__bg-color {
-        background-color: rgb(from var(--dx-color-warning) r g b / 40%);
-    }
-
-    .category-2__bg-color {
-        background-color: rgb(from var(--dx-color-primary) r g b / 40%);
-    }
-
-    .category-3__bg-color {
-        background-color: rgb(from var(--dx-color-danger) r g b / 40%);
-    }
-
-    .category-4__bg-color {
-        background-color: rgb(from var(--dx-color-success) r g b / 40%);
-    }
-
-    .output-initial-message {
-        color: #757575;
-    }
 }

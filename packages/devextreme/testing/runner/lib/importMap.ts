@@ -309,7 +309,6 @@ export function buildQunitImportMap({
 
     // Vendors (prefer ESM builds where available)
     inferno: `${NODE_MODULES}/inferno/dist/index.dev.esm.js`,
-    'inferno-hydrate': `${NODE_MODULES}/inferno-hydrate/dist/index.dev.esm.js`,
     'inferno-create-element': `${NODE_MODULES}/inferno-create-element/dist/index.dev.esm.js`,
     '@preact/signals-core': `${NODE_MODULES}/@preact/signals-core/dist/signals-core.module.js`,
 
