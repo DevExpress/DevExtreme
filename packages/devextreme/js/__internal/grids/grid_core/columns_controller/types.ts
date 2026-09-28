@@ -91,6 +91,8 @@ export interface InternalColumnOptions extends ValueSerializers {
 
 export type Column = ColumnBase & InternalColumnOptions;
 
+export type GroupColumn = Column & { groupIndex: number };
+
 export interface ColumnsChanges {
   changeTypes: {
     sorting?: boolean;

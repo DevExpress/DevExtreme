@@ -560,24 +560,26 @@ export function getColumnIndexByVisibleIndex(
   return column?.index ?? -1;
 }
 
-export const moveColumnToGroup = function (that: ColumnsController, column, groupIndex) {
-  const groupColumns = that.getGroupColumns();
-  let i;
+export const reserveGroupIndex = (
+  that: ColumnsController,
+  groupIndex: number | undefined,
+): number => {
+  const groupColumns: GroupColumn[] = that.getGroupColumns();
 
-  if (groupIndex >= 0) {
-    for (i = 0; i < groupColumns.length; i++) {
-      if (groupColumns[i].groupIndex >= groupIndex) {
-        groupColumns[i].groupIndex++;
+  if (groupIndex !== undefined && groupIndex >= 0) {
+    groupColumns.forEach((groupColumn) => {
+      if (groupColumn.groupIndex >= groupIndex) {
+        groupColumn.groupIndex += 1;
       }
-    }
-  } else {
-    groupIndex = 0;
-    for (i = 0; i < groupColumns.length; i++) {
-      groupIndex = Math.max(groupIndex, groupColumns[i].groupIndex + 1);
-    }
+    });
+
+    return groupIndex;
   }
 
-  return groupIndex;
+  return groupColumns.reduce(
+    (nextGroupIndex, groupColumn) => Math.max(nextGroupIndex, groupColumn.groupIndex + 1),
+    0,
+  );
 };
 
 function copyColumnStateField<T extends keyof ColumnUserState>(

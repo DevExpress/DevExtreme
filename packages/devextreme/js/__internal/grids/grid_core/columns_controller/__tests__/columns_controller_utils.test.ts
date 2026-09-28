@@ -28,6 +28,7 @@ import {
   mergeColumns,
   numberToString,
   processBandColumns,
+  reserveGroupIndex,
   resolveChangeType,
   setFilterOperationsAsDefaultValues,
   strictParseNumber,
@@ -1838,5 +1839,62 @@ describe('numberToString', () => {
 
   it('should not cut a number that is longer than the length', () => {
     expect(numberToString(123, 2)).toBe('123');
+  });
+});
+
+describe('reserveGroupIndex', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  const getGroupedColumnsController = (): Promise<ColumnsController> => getColumnsController({
+    columns: [{ dataField: 'a', groupIndex: 0 }, { dataField: 'b', groupIndex: 1 }, 'c'],
+  });
+
+  const getGroupIndexes = (columnsController: ColumnsController): (number | undefined)[] => {
+    const columns: Column[] = columnsController.getColumns();
+
+    return columns.map(({ groupIndex }) => groupIndex);
+  };
+
+  describe('when the group index is set', () => {
+    it.each([
+      [0, [1, 2, undefined]],
+      [1, [0, 2, undefined]],
+      [2, [0, 1, undefined]],
+    ])('should shift the group columns from the group index %s', async (groupIndex, expected) => {
+      const columnsController = await getGroupedColumnsController();
+
+      reserveGroupIndex(columnsController, groupIndex);
+
+      expect(getGroupIndexes(columnsController)).toEqual(expected);
+    });
+
+    it('should return the group index', async () => {
+      const columnsController = await getGroupedColumnsController();
+
+      expect(reserveGroupIndex(columnsController, 1)).toBe(1);
+    });
+  });
+
+  describe.each([undefined, -1])('when the group index is %s', (groupIndex) => {
+    it('should return the index after the last group column', async () => {
+      const columnsController = await getGroupedColumnsController();
+
+      expect(reserveGroupIndex(columnsController, groupIndex)).toBe(2);
+    });
+
+    it('should not change the group columns', async () => {
+      const columnsController = await getGroupedColumnsController();
+
+      reserveGroupIndex(columnsController, groupIndex);
+
+      expect(getGroupIndexes(columnsController)).toEqual([0, 1, undefined]);
+    });
+
+    it('should return 0 when the grid has no group columns', async () => {
+      const columnsController = await getColumnsController({ columns: ['a'] });
+
+      expect(reserveGroupIndex(columnsController, groupIndex)).toBe(0);
+    });
   });
 });

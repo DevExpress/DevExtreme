@@ -76,10 +76,10 @@ import {
   isFirstOrLastColumn,
   isSortOrderValid,
   mergeColumns,
-  moveColumnToGroup,
   numberToString,
   processBandColumns,
   processExpandColumns,
+  reserveGroupIndex,
   resetBandColumnsCache,
   resetColumnsCache,
   setFilterOperationsAsDefaultValues,
@@ -1026,7 +1026,7 @@ export class ColumnsController extends modules.Controller {
       }
 
       if (targetLocation === GROUP_LOCATION) {
-        options.groupIndex = moveColumnToGroup(that, column, targetGroupIndex);
+        options.groupIndex = reserveGroupIndex(that, targetGroupIndex);
         column.groupIndex = prevGroupIndex;
       } else if (toVisibleIndex >= 0) {
         const targetColumn = that._columns[toIndex];
