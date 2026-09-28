@@ -54,6 +54,7 @@ export interface InternalColumnOptions extends ValueSerializers {
   type?: string;
   defaultFilterOperations?: string[];
   defaultFilterOperation?: string;
+  defaultSelectedFilterOperation?: ColumnBase['selectedFilterOperation'];
   visibleWidth?: string | number;
   hidingPriority?: number;
   ai?: ColumnAIOptions;
