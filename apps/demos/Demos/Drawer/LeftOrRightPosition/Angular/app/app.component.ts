@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, ViewChild, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxListModule, DxRadioGroupModule, DxToolbarModule } from 'devextreme-angular';
 import { DxDrawerModule, DxDrawerComponent } from 'devextreme-angular/ui/drawer';
 import type { DxDrawerTypes } from 'devextreme-angular/ui/drawer';
@@ -43,7 +45,7 @@ export class AppComponent {
 
   isDrawerOpen = true;
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.text = service.getContent();
     this.navigation = service.getNavigationList();
   }
@@ -54,7 +56,10 @@ export class AppComponent {
     options: {
       icon: 'menu',
       stylingMode: 'text',
-      onClick: () => { this.isDrawerOpen = !this.isDrawerOpen; },
+      onClick: () => {
+        this.isDrawerOpen = !this.isDrawerOpen;
+        this.changeDetectorRef.detectChanges();
+      },
     },
   }];
 }

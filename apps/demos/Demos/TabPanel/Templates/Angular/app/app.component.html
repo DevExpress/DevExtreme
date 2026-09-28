@@ -3,6 +3,7 @@
   [height]="260"
   [dataSource]="companies"
   [selectedIndex]="0"
+  (selectedIndexChange)="onSelectedIndexChange()"
   [loop]="false"
   [animationEnabled]="true"
   [swipeEnabled]="true"

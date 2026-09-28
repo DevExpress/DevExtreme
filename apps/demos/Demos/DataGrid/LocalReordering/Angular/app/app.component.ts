@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxCheckBoxModule } from 'devextreme-angular';
 import { DxDataGridModule, type DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import {
@@ -29,7 +31,7 @@ export class AppComponent {
 
   showDragIcons = true;
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.tasks = service.getTasks();
 
     this.employees = service.getEmployees();
@@ -44,6 +46,8 @@ export class AppComponent {
 
     this.tasks.splice(fromIndex, 1);
     this.tasks.splice(toIndex, 0, e.itemData);
+
+    this.changeDetectorRef.detectChanges();
   };
 }
 
