@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "fonts": {
+    "dxicons": {
+      "copyright": "<confirmed copyright notice>",
+      "licenseDescription": "<confirmed license statement>",
+      "licenseUrl": "<stable URL of the applicable license>"
+    },
+    "dxiconsmaterial": {
+      "copyright": "<confirmed copyright notice>",
+      "licenseDescription": "<confirmed license statement>",
+      "licenseUrl": "<stable URL of the applicable license>"
+    },
+    "dxiconsfluent": {
+      "copyright": "<confirmed copyright notice>",
+      "licenseDescription": "<confirmed license statement>",
+      "licenseUrl": "<stable URL of the applicable license>"
+    }
+  }
+}

@@ -1,0 +1,3 @@
+# Global install (outside a venv), from the repository root:
+# python3 -m pip install -r packages/devextreme-scss/tools/fonts/requirements.txt
+fonttools[woff]

@@ -16,6 +16,7 @@
     "ts-jest": "29.4.12"
   },
   "scripts": {
+    "fonts:embed-license": "node tools/fonts/embed-license.mjs",
     "build": "pnpm --workspace-root nx build devextreme-scss",
     "lint": "stylelint scss/widgets",
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
