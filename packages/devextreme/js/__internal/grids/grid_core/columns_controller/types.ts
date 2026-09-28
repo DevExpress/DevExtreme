@@ -44,11 +44,6 @@ export interface UserStateApplierOptions {
   createColumn: (columnOptions: AddedColumn) => Column;
 }
 
-export interface ColumnsStateMatch {
-  stateIndexes: number[];
-  allColumnsHaveState: boolean;
-}
-
 export interface UserStateApplyResult {
   columns: Column[];
   hasAddedBands: boolean;
@@ -151,3 +146,5 @@ export type ColumnsControllerOptionChanged = OptionChanged
   | OptionChangedFor<ColumnsControllerOptions>
   | OptionChangedFor<Pick<DataGridProperties, 'grouping' | 'groupPanel'>>
   | ColumnOptionChanged;
+
+export type MatchCountById = Map<string, number>;

@@ -1,35 +1,39 @@
 import { isDefined, isString } from '@js/core/utils/type';
 
-import { applyColumnStateFields, checkUserStateColumn } from './m_columns_controller_utils';
+import { applyColumnStateFields, isUserStateColumn } from './m_columns_controller_utils';
 import type {
   Column,
-  ColumnsStateMatch,
   ColumnUserState,
+  MatchCountById,
   UserStateApplierOptions,
   UserStateApplyResult,
 } from './types';
 
 export class UserStateApplier {
-  private readonly matchCountById: Record<string, number> = {};
-
   constructor(private readonly options: UserStateApplierOptions) {}
 
   public apply(): UserStateApplyResult {
-    const { stateIndexes, allColumnsHaveState } = this.matchColumnsWithState();
-    const columns = this.applyStateToColumns(stateIndexes, allColumnsHaveState);
-    const hasAddedBands = this.appendAddedColumns(columns);
+    const matchCountById: MatchCountById = new Map();
+    const stateIndexes = this.matchColumnsWithState(matchCountById);
+    const columns = this.applyStateToColumns(stateIndexes);
+    const hasAddedBands = this.appendAddedColumns(columns, matchCountById);
 
     return { columns, hasAddedBands };
   }
 
-  private findMatchIndex(candidates: ColumnUserState[], target: ColumnUserState): number {
+  private findMatchIndex(
+    candidates: ColumnUserState[],
+    target: ColumnUserState,
+    matchCountById: MatchCountById,
+  ): number {
     const id = String(target.name || target.dataField);
-    let skipCount = this.matchCountById[id] ?? 0;
+    const matchCount = matchCountById.get(id) ?? 0;
+    let skipCount = matchCount;
 
     for (let index = 0; index < candidates.length; index += 1) {
-      if (checkUserStateColumn(target, candidates[index])) {
+      if (isUserStateColumn(target, candidates[index])) {
         if (!skipCount) {
-          this.matchCountById[id] = (this.matchCountById[id] ?? 0) + 1;
+          matchCountById.set(id, matchCount + 1);
           return index;
         }
 
@@ -40,20 +44,17 @@ export class UserStateApplier {
     return -1;
   }
 
-  private matchColumnsWithState(): ColumnsStateMatch {
+  private matchColumnsWithState(matchCountById: MatchCountById): number[] {
     const { columns, columnsUserState } = this.options;
-    const stateIndexes = columns.map((column) => this.findMatchIndex(columnsUserState, column));
 
-    return {
-      stateIndexes,
-      allColumnsHaveState: stateIndexes.every((stateIndex) => stateIndex >= 0),
-    };
+    return columns.map((column) => this.findMatchIndex(columnsUserState, column, matchCountById));
   }
 
-  private applyStateToColumns(stateIndexes: number[], allColumnsHaveState: boolean): Column[] {
+  private applyStateToColumns(stateIndexes: number[]): Column[] {
     const {
       columns, columnsUserState, hasUserState, ignoreColumnOptionNames,
     } = this.options;
+    const allColumnsHaveState = stateIndexes.every((stateIndex) => stateIndex >= 0);
     const canApplyState = hasUserState || allColumnsHaveState;
     const resultColumns: Column[] = [];
 
@@ -75,7 +76,7 @@ export class UserStateApplier {
     return resultColumns;
   }
 
-  private appendAddedColumns(resultColumns: Column[]): boolean {
+  private appendAddedColumns(resultColumns: Column[], matchCountById: MatchCountById): boolean {
     const {
       columns, columnsUserState, ignoreColumnOptionNames, createColumn,
     } = this.options;
@@ -84,7 +85,7 @@ export class UserStateApplier {
     columnsUserState.forEach((columnState) => {
       const { added } = columnState;
 
-      if (added && this.findMatchIndex(columns, columnState) < 0) {
+      if (added && this.findMatchIndex(columns, columnState, matchCountById) < 0) {
         const column = createColumn(added);
 
         applyColumnStateFields(column, columnState, ignoreColumnOptionNames);

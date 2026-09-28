@@ -119,13 +119,18 @@ export const createColumn = (
   return result;
 };
 
-export function checkUserStateColumn(
+export function isUserStateColumn(
   column: ColumnUserState | undefined,
   userStateColumn: ColumnUserState | undefined,
 ): boolean {
-  return !!column && !!userStateColumn
-    && userStateColumn.name === (column.name || column.dataField)
-    && (userStateColumn.dataField === column.dataField || !!column.name);
+  if (!column || !userStateColumn) {
+    return false;
+  }
+
+  const isNameMatched = userStateColumn.name === (column.name || column.dataField);
+  const isDataFieldMatched = userStateColumn.dataField === column.dataField;
+
+  return isNameMatched && (isDataFieldMatched || !!column.name);
 }
 
 export const createColumnsFromOptions = (
@@ -143,7 +148,7 @@ export const createColumnsFromOptions = (
   columnsOptions.forEach((columnOptions) => {
     const currentIndex = createdColumnCount + result.length;
     const userStateColumnOptions = that._columnsUserState
-      && checkUserStateColumn(columnOptions as ColumnUserState, that._columnsUserState[currentIndex])
+      && isUserStateColumn(columnOptions as ColumnUserState, that._columnsUserState[currentIndex])
       && that._columnsUserState[currentIndex];
     const column = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
 
@@ -783,7 +788,7 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
         if (isString(initialColumn)) {
           initialColumn = columns[columnIndex] = { dataField: initialColumn };
         }
-        if (initialColumn && checkUserStateColumn(initialColumn, column)) {
+        if (initialColumn && isUserStateColumn(initialColumn, column)) {
           // @ts-expect-error
           optionSetter(initialColumn, value, { functionsAsIs: true });
         }

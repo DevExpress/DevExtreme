@@ -132,6 +132,39 @@ describe('UserStateApplier', () => {
     });
   });
 
+  describe('when columns share a name of an object property', () => {
+    it('should match them with the entries in order', () => {
+      const { columns } = applyState({
+        columns: [dataColumn('constructor'), dataColumn('constructor')],
+        columnsUserState: [
+          savedColumn('constructor', { width: 10 }),
+          savedColumn('constructor', { width: 20 }),
+        ],
+      });
+
+      expect(columns.map(({ width }) => width)).toEqual([10, 20]);
+    });
+  });
+
+  describe('when the state is applied twice', () => {
+    it('should match the columns with the same entries', () => {
+      const initialColumns = [dataColumn('id'), dataColumn('id')];
+      const applier = new UserStateApplier({
+        columns: initialColumns,
+        columnsUserState: [savedColumn('id', { width: 10 }), savedColumn('id', { width: 20 })],
+        ignoreColumnOptionNames: [],
+        hasUserState: true,
+        createColumn: createPlainColumn,
+      });
+
+      applier.apply();
+      initialColumns.forEach((column) => { column.width = 100; });
+      const { columns } = applier.apply();
+
+      expect(columns.map(({ width }) => width)).toEqual([10, 20]);
+    });
+  });
+
   describe('when an entry has an added column', () => {
     it('should create the column and apply the entry to it', () => {
       const createColumn = jest.fn(createPlainColumn);
