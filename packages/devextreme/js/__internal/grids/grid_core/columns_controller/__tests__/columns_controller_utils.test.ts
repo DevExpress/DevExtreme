@@ -845,12 +845,12 @@ describe('columnOptionCore', () => {
     });
 
     it.each([
-      ['groupIndex', 0, 'grouping'],
-      ['calculateGroupValue', 'b', 'grouping'],
-      ['sortOrder', 'asc', 'sorting'],
-      ['calculateSortValue', 'b', 'sorting'],
-      ['caption', 'New', 'columns'],
-    ])('should record a %s change as a %s change', async (optionName, value, changeType) => {
+      ['groupIndex', 'grouping', 0],
+      ['calculateGroupValue', 'grouping', 'b'],
+      ['sortOrder', 'sorting', 'asc'],
+      ['calculateSortValue', 'sorting', 'b'],
+      ['caption', 'columns', 'New'],
+    ])('should record a %s change as a %s change', async (optionName, changeType, value) => {
       const { columnsController, columnsChanged } = await createGrid({ columns: [{ dataField: 'a' }] });
       const [column] = columnsController.getColumns();
 
