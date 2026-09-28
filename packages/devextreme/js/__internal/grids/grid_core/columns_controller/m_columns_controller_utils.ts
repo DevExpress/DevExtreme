@@ -1063,9 +1063,10 @@ export const isColumnFixed = (that: ColumnsController, column: Column): boolean 
   return !!column.fixed && column.fixedPosition !== StickyPosition.Sticky;
 };
 
-export const convertOwnerBandToColumnReference = (columns) => {
+export const convertOwnerBandToColumnReference = (columns: Column[]): void => {
   columns.forEach((column) => {
     if (isDefined(column.ownerBand)) {
+      // @ts-expect-error ownerBand holds the band column until updateColumnIndexes sets its index
       column.ownerBand = columns[column.ownerBand];
     }
   });
