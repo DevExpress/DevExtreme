@@ -77,7 +77,6 @@ overrides:
 catalog:
   axe-core: 4.13.0
   inferno: ^8.2.3
-  inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.31
