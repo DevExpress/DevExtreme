@@ -136,9 +136,6 @@ catalogs:
     inferno-create-element:
       specifier: ^8.2.3
       version: 8.2.3
-    inferno-hydrate:
-      specifier: ^8.2.3
-      version: 8.2.3
     inferno-server:
       specifier: ^8.2.3
       version: 8.2.3
@@ -1406,9 +1403,6 @@ importers:
         specifier: 'catalog:'
         version: 8.2.3
       inferno-create-element:
-        specifier: 'catalog:'
-        version: 8.2.3
-      inferno-hydrate:
         specifier: 'catalog:'
         version: 8.2.3
       jszip:
@@ -11801,9 +11795,6 @@ packages:
 
   inferno-create-element@8.2.3:
     resolution: {integrity: sha512-YEwX4OiFlgeTutvE16uCGxkaSVwZ1DklpAPX8okjVsGaLIWQrM8QIQFxn3mTLWSu70Uea+afQfKL5wE4hxn39Q==}
-
-  inferno-hydrate@8.2.3:
-    resolution: {integrity: sha512-AyCiswnjYg7D9veJdjiQg06Npp0/iXKhwOm2hjoY3cjadT3fIdz2XtDElLB7imU4icuJ3xOmXA8FgIfnSJfHrQ==}
 
   inferno-server@8.2.3:
     resolution: {integrity: sha512-swaDCaTYPplKwcBDbveu7xKIAooLXOOdfRoETTCIZwKyfKBGR3JnqsrwcL6miFR8TG6CNibvYKG8eSYHzkoA4Q==}
@@ -30039,10 +30030,6 @@ snapshots:
   indent-string@5.0.0: {}
 
   inferno-create-element@8.2.3:
-    dependencies:
-      inferno: 8.2.3
-
-  inferno-hydrate@8.2.3:
     dependencies:
       inferno: 8.2.3
 

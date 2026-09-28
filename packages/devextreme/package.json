@@ -61,7 +61,6 @@
     "devextreme-quill": "catalog:",
     "inferno": "catalog:",
     "inferno-create-element": "catalog:",
-    "inferno-hydrate": "catalog:",
     "jszip": "^3.10.1",
     "rrule": "^2.7.1",
     "zod": "catalog:",
