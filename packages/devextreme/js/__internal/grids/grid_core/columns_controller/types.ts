@@ -32,8 +32,6 @@ export type FilterField = Omit<Column, 'filterOperations'> & { filterOperations?
 
 export type ColumnUserState = Pick<Column, typeof USER_STATE_FIELD_NAMES[number]>;
 
-export type AddedColumn = string | (Column & { columns?: (Column | string)[] });
-
 export type ColumnSelector = ((data: RawItemData) => unknown) & {
   columnIndex?: number;
   filterValue?: unknown;
@@ -60,14 +58,17 @@ export interface InternalColumnOptions extends ValueSerializers {
   hidingPriority?: number;
   ai?: ColumnAIOptions;
   command?: string;
+  headerId?: string;
   showWhenGrouped?: boolean;
   rowspan?: number;
   colspan?: number;
   lastSortOrder?: ColumnBase['sortOrder'];
   bufferedFilterValue?: ColumnBase['filterValue'];
   bufferedSelectedFilterOperation?: ColumnBase['selectedFilterOperation'];
-  added?: AddedColumn;
+  added?: Column | string;
   lookup?: InternalColumnLookup;
+  columns?: (Column | string)[];
+  hasColumns?: boolean;
 }
 
 export type Column = ColumnBase & InternalColumnOptions;

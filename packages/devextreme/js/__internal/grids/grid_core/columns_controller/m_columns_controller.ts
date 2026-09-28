@@ -1593,7 +1593,7 @@ export class ColumnsController extends modules.Controller {
 
   private addColumn(options): void {
     const that = this;
-    let column = createColumn(that, options);
+    let column = createColumn(that, options) as Column;
     const index = that._columns.length;
 
     that._columns.push(column);
