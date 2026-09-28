@@ -230,6 +230,8 @@ describe('UserStateApplier', () => {
       expect(columns).toHaveLength(2);
     });
 
+    // TODO: pins the current behavior with a known bug,
+    // update the test after the fix (T1336036)
     it('should duplicate a column that was added at runtime and then declared', () => {
       const { columns } = applyState({
         columns: [dataColumn('id')],
