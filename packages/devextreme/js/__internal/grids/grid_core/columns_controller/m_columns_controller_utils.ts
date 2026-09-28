@@ -863,23 +863,29 @@ export const defaultSetCellValue = function (data, value) {
   data[path[dotCount]] = value;
 };
 
-export const getDataColumns = function (columns, rowIndex?, bandColumnID?) {
-  const result: any = [];
+export const getDataColumns = (
+  visibleColumnsByRow: Column[][],
+  rowIndex = 0,
+  bandColumnId?: number,
+): Column[] => {
+  const dataColumns: Column[] = [];
 
-  rowIndex = rowIndex || 0;
-  columns[rowIndex] && each(columns[rowIndex], (_, column) => {
-    if (column.ownerBand === bandColumnID || column.type === GROUP_COMMAND_COLUMN_NAME) {
-      if (!column.isBand || !column.colspan) {
-        if (!column.command || rowIndex < 1) {
-          result.push(column);
-        }
-      } else {
-        result.push.apply(result, getDataColumns(columns, rowIndex + 1, column.index));
-      }
+  visibleColumnsByRow[rowIndex]?.forEach((column) => {
+    if (column.ownerBand !== bandColumnId && column.type !== GROUP_COMMAND_COLUMN_NAME) {
+      return;
+    }
+
+    if (column.isBand && column.colspan) {
+      dataColumns.push(...getDataColumns(visibleColumnsByRow, rowIndex + 1, column.index));
+      return;
+    }
+
+    if (!column.command || rowIndex < 1) {
+      dataColumns.push(column);
     }
   });
 
-  return result;
+  return dataColumns;
 };
 
 export const getRowCount = function (that: ColumnsController) {

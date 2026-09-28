@@ -20,6 +20,7 @@ import {
   getChildrenByBandColumn,
   getCommandColumnIndex,
   getCustomizeTextByDataType,
+  getDataColumns,
   getSerializationFormat,
   getValueDataType,
   mergeColumns,
@@ -1708,6 +1709,69 @@ describe('getChildrenByBandColumn', () => {
 
       expect(getChildrenByBandColumn(0, { 0: [groupedColumn, e] }, false))
         .toEqual([groupedColumn, e]);
+    });
+  });
+});
+
+describe('getDataColumns', () => {
+  const a: Column = { dataField: 'a' };
+  const band: Column = { index: 1, isBand: true, colspan: 2 };
+  const b: Column = { dataField: 'b', ownerBand: 1 };
+  const c: Column = { dataField: 'c', ownerBand: 1 };
+  const e: Column = { dataField: 'e' };
+
+  it('should return no columns when there are no rows', () => {
+    expect(getDataColumns([])).toEqual([]);
+  });
+
+  it('should return the columns of the only row when there are no bands', () => {
+    expect(getDataColumns([[a, e]])).toEqual([a, e]);
+  });
+
+  it('should put the children of a band in place of the band', () => {
+    expect(getDataColumns([[a, band, e], [b, c]])).toEqual([a, b, c, e]);
+  });
+
+  it('should take only the own children of each band from the next row', () => {
+    const otherBand: Column = { index: 4, isBand: true, colspan: 1 };
+    const d: Column = { dataField: 'd', ownerBand: 4 };
+
+    expect(getDataColumns([[band, otherBand], [b, c, d]])).toEqual([b, c, d]);
+  });
+
+  it('should go down through the nested bands', () => {
+    const nestedBand: Column = {
+      index: 3, isBand: true, colspan: 1, ownerBand: 1,
+    };
+    const d: Column = { dataField: 'd', ownerBand: 3 };
+
+    expect(getDataColumns([[a, band], [b, nestedBand], [d]])).toEqual([a, b, d]);
+  });
+
+  it('should keep a band without visible children as a data column', () => {
+    const emptyBand: Column = { index: 1, isBand: true, colspan: 0 };
+
+    expect(getDataColumns([[a, emptyBand]])).toEqual([a, emptyBand]);
+  });
+
+  describe('when there are command columns', () => {
+    it('should keep the command columns of the first row', () => {
+      const selectColumn: Column = { type: 'selection', command: 'select' };
+
+      expect(getDataColumns([[selectColumn, a]])).toEqual([selectColumn, a]);
+    });
+
+    it('should skip the command columns of a band', () => {
+      const editColumn: Column = { type: 'buttons', command: 'edit', ownerBand: 1 };
+
+      expect(getDataColumns([[a, band], [b, editColumn]])).toEqual([a, b]);
+    });
+
+    it('should keep a groupExpand column of the first row even when it has an owner band', () => {
+      const groupExpandColumn: Column = { type: 'groupExpand', command: 'expand', ownerBand: 1 };
+
+      expect(getDataColumns([[groupExpandColumn, band], [b, c]]))
+        .toEqual([groupExpandColumn, b, c]);
     });
   });
 });
