@@ -801,7 +801,6 @@ export const columnOptionCore = function (
           columns[columnIndex as number] = initialColumn;
         }
         if (initialColumn && isUserStateColumn(initialColumn, column)) {
-          // @ts-expect-error
           optionSetter(initialColumn, value, { functionsAsIs: true });
         }
       }
