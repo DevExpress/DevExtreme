@@ -1660,39 +1660,60 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  public setUserState(state): void {
-    const that = this;
-    const dataSourceAdapter = that.appliedDataSourceAdapter;
+  private getIgnoreColumnOptionNames(): string[] {
+    const ignoreColumnOptionNames = this.option('stateStoring.ignoreColumnOptionNames');
 
-    let ignoreColumnOptionNames: any = that.option('stateStoring.ignoreColumnOptionNames');
+    if (ignoreColumnOptionNames) {
+      return ignoreColumnOptionNames;
+    }
+
+    const result: string[] = [];
+    const commonColumnSettings = this.getCommonSettings();
+
+    if (!this.option('columnChooser.enabled')) {
+      result.push('visible');
+    }
+    if (this.option('sorting.mode') === 'none') {
+      result.push('sortIndex', 'sortOrder');
+    }
+    if (!commonColumnSettings.allowGrouping) {
+      result.push('groupIndex');
+    }
+    if (!commonColumnSettings.allowFixing) {
+      result.push('fixed', 'fixedPosition');
+    }
+    if (!commonColumnSettings.allowResizing) {
+      result.push('width', 'visibleWidth');
+    }
+
+    const isFilterPanelHidden = !this.option('filterPanel.visible');
+
+    if (!this.option('filterRow.visible') && isFilterPanelHidden) {
+      result.push('filterValue', 'selectedFilterOperation');
+    }
+    if (!this.option('headerFilter.visible') && isFilterPanelHidden) {
+      result.push('filterValues', 'filterType');
+    }
+
+    return result;
+  }
+
+  public setUserState(state): void {
+    const dataSourceAdapter = this.appliedDataSourceAdapter;
+    const ignoreColumnOptionNames = this.getIgnoreColumnOptionNames();
 
     state?.forEach(this.setName);
 
-    if (!ignoreColumnOptionNames) {
-      ignoreColumnOptionNames = [];
-      const commonColumnSettings = that.getCommonSettings();
+    this._columnsUserState = state;
+    this._ignoreColumnOptionNames = ignoreColumnOptionNames;
+    this._hasUserState = !!state;
 
-      if (!that.option('columnChooser.enabled')) ignoreColumnOptionNames.push('visible');
-      if (that.option('sorting.mode') === 'none') ignoreColumnOptionNames.push('sortIndex', 'sortOrder');
-      if (!commonColumnSettings.allowGrouping) ignoreColumnOptionNames.push('groupIndex');
-      if (!commonColumnSettings.allowFixing) ignoreColumnOptionNames.push('fixed', 'fixedPosition');
-      if (!commonColumnSettings.allowResizing) ignoreColumnOptionNames.push('width', 'visibleWidth');
-
-      const isFilterPanelHidden = !that.option('filterPanel.visible');
-      if (!that.option('filterRow.visible') && isFilterPanelHidden) ignoreColumnOptionNames.push('filterValue', 'selectedFilterOperation');
-      if (!that.option('headerFilter.visible') && isFilterPanelHidden) ignoreColumnOptionNames.push('filterValues', 'filterType');
-    }
-
-    that._columnsUserState = state;
-    that._ignoreColumnOptionNames = ignoreColumnOptionNames;
-    that._hasUserState = !!state;
-
-    updateColumnChanges(that, 'filtering');
-    that.init(true);
+    updateColumnChanges(this, 'filtering');
+    this.init(true);
 
     if (dataSourceAdapter) {
-      dataSourceAdapter.sort(that.getSortDataSourceParameters());
-      dataSourceAdapter.group(that.getGroupDataSourceParameters());
+      dataSourceAdapter.sort(this.getSortDataSourceParameters());
+      dataSourceAdapter.group(this.getGroupDataSourceParameters());
     }
   }
 
