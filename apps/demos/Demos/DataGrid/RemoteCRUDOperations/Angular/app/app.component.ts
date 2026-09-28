@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom, Observable } from 'rxjs';
 import { DxDataGridModule, DxSelectBoxModule, DxButtonModule } from 'devextreme-angular';
@@ -14,7 +16,6 @@ const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
 @Component({
   selector: 'demo-app',
-  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   preserveWhitespaces: true,
@@ -48,7 +49,7 @@ export class AppComponent {
     load: () => this.sendRequest(`${URL}/ShippersLookup`),
   });
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private changeDetectorRef: ChangeDetectorRef) {
     this.dataSource = new CustomStore({
       key: 'OrderID',
       load: () => this.sendRequest(`${URL}/Orders`),
@@ -106,6 +107,7 @@ export class AppComponent {
     const time = formatDate(new Date(), 'HH:mm:ss');
 
     this.requests.unshift([time, method, url.slice(URL.length), args].join(' '));
+    this.changeDetectorRef.detectChanges();
   }
 
   clearRequests() {
