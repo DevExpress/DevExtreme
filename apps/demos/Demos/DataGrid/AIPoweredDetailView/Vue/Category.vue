@@ -18,76 +18,19 @@ const categoryClass = `category__wrapper category-${id}__bg-color`;
   border-radius: 24px;
 }
 
-.dx-theme-fluent {
-  .category-1__bg-color {
-    background-color: #F9E2AE;
-  }
-
-  .category-2__bg-color {
-    background-color: #B4D6FA;
-  }
-
-  .category-3__bg-color {
-    background-color: #F1BBBC;
-  }
-
-  .category-4__bg-color {
-    background-color: #9FD89F;
-  }
-
-  &.dx-color-scheme-blue-dark,
-  &.dx-color-scheme-saas-dark {
-    .category-1__bg-color {
-      background-color: #835B00;
-    }
-
-    .category-2__bg-color {
-      background-color: #0C3B5E;
-    }
-
-    .category-3__bg-color {
-      background-color: #751D1F;
-    }
-
-    .category-4__bg-color {
-      background-color: #0B5A08;
-    }
-  }
+.category-1__bg-color {
+  background-color: var(--dxds-color-bg-yellow-subtle, rgb(from var(--dx-color-warning) r g b / 24%));
 }
 
-.dx-theme-material {
-  .category-1__bg-color {
-    background-color: rgb(from var(--dx-color-warning) r g b / 24%);
-  }
-
-  .category-2__bg-color {
-    background-color: rgb(from var(--dx-color-primary) r g b / 24%);
-  }
-
-  .category-3__bg-color {
-    background-color: rgb(from var(--dx-color-danger) r g b / 24%);
-  }
-
-  .category-4__bg-color {
-    background-color: rgb(from var(--dx-color-success) r g b / 24%);
-  }
+.category-2__bg-color {
+  background-color: var(--dxds-color-bg-blue-subtle, rgb(from var(--dx-color-primary) r g b / 24%));
 }
 
-.dx-theme-generic {
-  .category-1__bg-color {
-    background-color: rgb(from var(--dx-color-warning) r g b / 40%);
-  }
+.category-3__bg-color {
+  background-color: var(--dxds-color-bg-red-subtle, rgb(from var(--dx-color-danger) r g b / 24%));
+}
 
-  .category-2__bg-color {
-    background-color: rgb(from var(--dx-color-primary) r g b / 40%);
-  }
-
-  .category-3__bg-color {
-    background-color: rgb(from var(--dx-color-danger) r g b / 40%);
-  }
-
-  .category-4__bg-color {
-    background-color: rgb(from var(--dx-color-success) r g b / 40%);
-  }
+.category-4__bg-color {
+  background-color: var(--dxds-color-bg-green-subtle, rgb(from var(--dx-color-success) r g b / 24%));
 }
 </style>
