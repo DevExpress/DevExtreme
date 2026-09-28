@@ -2,14 +2,14 @@ import type { AIIntegration } from 'devextreme-vue/common/ai-integration';
 import type {
   ClassificationResult,
   CommandResult,
-  EmployeeForm,
   ExecuteGridAssistantAction,
   FormAction,
+  FormInstance,
+  GridInstance,
   OperationOutcome,
   PushMessage,
   RouteMessageContext,
   RouterContext,
-  TaskGrid,
 } from './data.ts';
 import {
   ChatCommandError,
@@ -20,7 +20,7 @@ import {
   applyGridActions, buildGridPromptSection, buildGridResponseSchema, getGridColumnNames,
 } from './gridCommands.ts';
 
-export function extractJson(text: string): unknown {
+function extractJson(text: string): unknown {
   const match = text.match(/\{[\s\S]*\}/);
 
   try {
@@ -32,7 +32,7 @@ export function extractJson(text: string): unknown {
   }
 }
 
-export function executeAiCommand(text: string, aiIntegration: AIIntegration): Promise<unknown> {
+function executeAiCommand(text: string, aiIntegration: AIIntegration): Promise<unknown> {
   return new Promise((resolve, reject) => {
     aiIntegration.execute(
       { text },
@@ -64,7 +64,7 @@ ${JSON.stringify(buildGridResponseSchema())}
 If the request has nothing to do with the grid, respond with 'actions': [].`;
 }
 
-function buildFormActionPromptSection(form: EmployeeForm): string {
+function buildFormActionPromptSection(form: FormInstance): string {
   const fieldList = getFormFieldOptions(form)
     .map((f) => `${f.dataField} (${f.label})`)
     .join(', ');
@@ -77,10 +77,10 @@ If the request is about the form, also set \`formAction\` to one of:
 Set \`formAction\` to \`null\` if the request is not about the form.`;
 }
 
-export async function classifyRequest(
+async function classifyRequest(
   text: string,
   aiIntegration: AIIntegration,
-  form: EmployeeForm,
+  form: FormInstance,
 ): Promise<ClassificationResult> {
   const prompt = [
     `Decide which UI area should handle the user's request.
@@ -119,7 +119,7 @@ User request: '${text}'`,
 }
 
 function buildGridResultsPromise(
-  gridInstance: TaskGrid,
+  gridInstance: GridInstance,
   aiIntegration: AIIntegration,
   text: string,
 ): Promise<OperationOutcome> {
@@ -153,7 +153,7 @@ function buildGridResultsPromise(
 }
 
 function buildFormResultsPromise(
-  form: EmployeeForm,
+  form: FormInstance,
   formAction: FormAction | null,
   text: string,
 ): Promise<OperationOutcome> {
@@ -179,7 +179,7 @@ function formatSucceeded(succeeded: string[]): string {
   return succeeded.map((message) => `✅ Done. ${message}`).join('\n');
 }
 
-export function joinSucceededOrThrow(results: CommandResult[], fallbackError: Error | null): string {
+function joinSucceededOrThrow(results: CommandResult[], fallbackError: Error | null): string {
   const succeeded = results.filter((r) => r.status === 'success').map((r) => r.message);
   const failed = results.filter((r) => r.status === 'failure').map((r) => r.message);
 
@@ -194,7 +194,7 @@ export function joinSucceededOrThrow(results: CommandResult[], fallbackError: Er
     : formatSucceeded(succeeded);
 }
 
-export async function runCommand(
+async function runCommand(
   text: string,
   { form, gridInstance, aiIntegration }: RouterContext,
 ): Promise<string> {
@@ -215,9 +215,9 @@ export async function runCommand(
   }
 
   if (target === 'form') {
-    const { results: formResults, error: formError } = await buildFormResultsPromise(form, formAction, text);
+    const { results, error } = await buildFormResultsPromise(form, formAction ?? { type: 'smart_paste' }, text);
 
-    return joinSucceededOrThrow(formResults, formError);
+    return joinSucceededOrThrow(results, error);
   }
 
   if (target === 'grid') {
@@ -247,7 +247,7 @@ export async function runCommand(
   return joinSucceededOrThrow([...formResults, ...gridResults], gridError ?? formError);
 }
 
-export function reportAiResult(promise: Promise<string>, pushMessage: PushMessage): Promise<void> {
+function reportAiResult(promise: Promise<string>, pushMessage: PushMessage): Promise<void> {
   return promise
     .then((message) => {
       pushMessage({

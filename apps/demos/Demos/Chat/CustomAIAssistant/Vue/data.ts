@@ -53,8 +53,8 @@ export type SortOrder = 'asc' | 'desc';
 
 export type ScalarFilterValue = string | number | boolean | Date;
 
-export type EmployeeForm = dxForm;
-export type TaskGrid = dxDataGrid<Task, number>;
+export type FormInstance = dxForm;
+export type GridInstance = dxDataGrid<Task, number>;
 
 export interface GridCommandArgs {
   column?: string;
@@ -67,7 +67,7 @@ export interface GridCommandArgs {
 export interface GridCommand {
   description: string;
   schema: Record<string, unknown>;
-  execute: (grid: TaskGrid, args: GridCommandArgs, rawText?: string) => CommandResult;
+  execute: (grid: GridInstance, args: GridCommandArgs, rawText?: string) => CommandResult;
 }
 
 export interface ExecuteGridAssistantAction {
@@ -109,8 +109,8 @@ export type { AIResult };
 export type PushMessage = (message: DxChatTypes.TextMessage) => void;
 
 export interface RouterContext {
-  form: EmployeeForm;
-  gridInstance: TaskGrid;
+  form: FormInstance;
+  gridInstance: GridInstance;
   aiIntegration: AIIntegration;
 }
 
@@ -130,11 +130,15 @@ export const CLASSES = {
 };
 
 export const AI_SERVICE_CONFIG = {
+  dangerouslyAllowBrowser: true,
   deployment: 'demo-mini',
   apiVersion: '2024-02-01',
   endpoint: 'https://public-api.devexpress.com/demo-openai',
   apiKey: 'DEMO',
 };
+
+export const MAX_PROMPT_SIZE = 20000;
+export const RATE_LIMIT_RETRY_DELAY_MS = 30000;
 
 export const EMPTY_VIEW_MESSAGE = 'How can I help with this page?';
 

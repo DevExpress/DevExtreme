@@ -1,10 +1,10 @@
 import type { SmartPastedEvent } from 'devextreme/ui/form';
 import type {
-  AIResult, CommandResult, EmployeeForm, FormAction, FormFieldOption,
+  AIResult, CommandResult, FormAction, FormFieldOption, FormInstance,
 } from './data.ts';
 import { SMART_PASTE_TIMEOUT_MS } from './data.ts';
 
-export function getFormFieldOptions(form: EmployeeForm): FormFieldOption[] {
+export function getFormFieldOptions(form: FormInstance): FormFieldOption[] {
   return ((form.option('items') as { dataField?: string; label?: { text?: string } }[]) ?? [])
     .filter((item) => item.dataField)
     .map((item) => ({
@@ -14,7 +14,7 @@ export function getFormFieldOptions(form: EmployeeForm): FormFieldOption[] {
 }
 
 export function applyFormClearAction(
-  form: EmployeeForm,
+  form: FormInstance,
   formAction: FormAction | null,
 ): CommandResult | null {
   if (!formAction || formAction.type === 'smart_paste') return null;
@@ -49,7 +49,7 @@ export function applyFormClearAction(
   return null;
 }
 
-export function formatAiResultDetails(form: EmployeeForm, aiResult: AIResult): string {
+export function formatAiResultDetails(form: FormInstance, aiResult: AIResult): string {
   const labelByField = new Map(getFormFieldOptions(form).map((f) => [f.dataField, f.label]));
 
   return Object.keys(aiResult)
@@ -57,7 +57,7 @@ export function formatAiResultDetails(form: EmployeeForm, aiResult: AIResult): s
     .join(', ');
 }
 
-export function applyFormSmartPaste(form: EmployeeForm, text: string): Promise<CommandResult> {
+export function applyFormSmartPaste(form: FormInstance, text: string): Promise<CommandResult> {
   return new Promise((resolve) => {
     let settled = false;
     let timedOut = false;

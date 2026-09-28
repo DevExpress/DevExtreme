@@ -12,7 +12,7 @@
       @option-changed="onOptionChanged"
     >
       <DxSimpleItem
-        v-for="field in formFields"
+        v-for="field in formFieldsConfig"
         :key="field.dataField"
         :data-field="field.dataField"
         :label="field.label"
@@ -30,18 +30,18 @@
   </div>
 
   <DxToast
-    ref="toastRef"
+    v-model:visible="isToastVisible"
     :display-time="600"
     :close-on-click="true"
     message="Form data is saved."
     type="success"
   >
-  <DxPosition
-    of="#form-container"
-    :at="bottomCenterPosition"
-    :my="bottomCenterPosition"
-    offset="0 -20"
-  />
+    <DxPosition
+      of="#form-container"
+      :at="bottomCenterPosition"
+      :my="bottomCenterPosition"
+      offset="0 -20"
+    />
   </DxToast>
 </template>
 
@@ -49,7 +49,7 @@
 import { ref } from 'vue';
 import { DxForm, DxSimpleItem, DxButtonItem } from 'devextreme-vue/form';
 import type { DxFormTypes } from 'devextreme-vue/form';
-import { DxPosition, DxToast, type DxToastTypes } from 'devextreme-vue/toast';
+import { DxPosition, DxToast } from 'devextreme-vue/toast';
 import type { AIIntegration } from 'devextreme-vue/common/ai-integration';
 import { employee, formFieldsConfig } from './data.ts';
 import type { Employee } from './data.ts';
@@ -57,10 +57,9 @@ import type { Employee } from './data.ts';
 defineProps<{ aiIntegration: AIIntegration }>();
 
 const formRef = ref<InstanceType<typeof DxForm>>();
-const toastRef = ref<InstanceType<typeof DxToast>>();
+const isToastVisible = ref(false);
 
 const formData: Employee = { ...employee };
-const formFields = formFieldsConfig;
 
 const bottomCenterPosition = { x: 'center', y: 'bottom' } as const;
 
@@ -70,7 +69,7 @@ const saveButtonOptions = {
   disabled: true,
   useSubmitBehavior: true,
   width: '120px',
-  onClick: () => toastRef.value?.instance.show(),
+  onClick: () => { isToastVisible.value = true; },
 };
 
 function onOptionChanged(e: DxFormTypes.OptionChangedEvent): void {
@@ -88,13 +87,9 @@ defineExpose({
 
 <style>
 #form-container {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--dx-color-border);
   padding: 16px;
-  background-color: var(--form-background-color, #fff);
-}
-
-.dx-color-scheme-dark #form-container {
-  --form-background-color: var(--dx-component-color-bg);
+  background-color: var(--dx-component-color-bg);
 }
 
 .dx-layout-manager .dx-field-item.save-button {

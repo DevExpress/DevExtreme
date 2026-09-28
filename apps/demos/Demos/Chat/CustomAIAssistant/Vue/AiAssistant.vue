@@ -9,10 +9,8 @@
     :resize-enabled="true"
     :show-close-button="true"
     :shading="false"
-    @hiding="onPopupHiding"
-    @showing="onPopupShowing"
   >
-   <DxPosition
+    <DxPosition
       my="right top"
       at="right top"
       of=".demo-container"
@@ -41,15 +39,15 @@
         @message-entered="onMessageEntered"
       >
         <DxSuggestions
-          :items="suggestions"
+          :items="chatSuggestions"
           @item-click="onSuggestionClick"
         />
         <template #empty-view>
           <div class="dx-chat-messagelist-empty-image dx-ai-chat__empty-image"/>
-          <div class="ai-chat-empty-message">{{ emptyViewMessage }}</div>
+          <div class="ai-chat-empty-message">{{ EMPTY_VIEW_MESSAGE }}</div>
           <div
             class="ai-chat-empty-prompt"
-            v-html="emptyViewPromptHtml"
+            v-html="EMPTY_VIEW_PROMPT"
           />
         </template>
       </DxChat>
@@ -59,8 +57,8 @@
   <DxSpeedDialAction
     icon="sparkle"
     label="AI Assistant"
-    :visible="fabVisible"
-    @click="toggle"
+    :visible="!popupVisible"
+    @click="popupVisible = true"
   />
 </template>
 
@@ -71,28 +69,30 @@ import DxChat, { DxSuggestions } from 'devextreme-vue/chat';
 import type { DxChatTypes } from 'devextreme-vue/chat';
 import { DxSpeedDialAction } from 'devextreme-vue/speed-dial-action';
 import type { DxButtonTypes } from 'devextreme-vue/button';
-import type dxButton from 'devextreme/ui/button';
+import type { DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import { ArrayStore, DataSource } from 'devextreme-vue/common/data';
 import {
   CLASSES, chatSuggestions, EMPTY_VIEW_MESSAGE, EMPTY_VIEW_PROMPT,
 } from './data.ts';
 
-interface AiAssistantProps { disabled: boolean }
-interface AiAssistantEmits { (e: 'message-submitted', message: DxChatTypes.TextMessage): void }
+interface AiAssistantProps {
+  disabled: boolean;
+}
+interface AiAssistantEmits {
+  (e: 'message-submitted', message: DxChatTypes.TextMessage): void;
+}
+interface SuggestionItem extends DxButtonGroupTypes.Item {
+  prompt: string;
+}
 
 const props = defineProps<AiAssistantProps>();
 const emit = defineEmits<AiAssistantEmits>();
 
-const emptyViewMessage = EMPTY_VIEW_MESSAGE;
-const emptyViewPromptHtml = EMPTY_VIEW_PROMPT;
-const suggestions = chatSuggestions;
 const chatUser = { id: 'user' };
 const popupClass = { class: 'chat-popup' };
 
 const popupVisible = ref(false);
-const fabVisible = ref(true);
-const isClearDisabled = ref(true);
-const clearButtonInstance = ref<dxButton>();
+let clearButtonInstance: DxButtonTypes.InitializedEvent['component'] | undefined;
 
 const store = new ArrayStore({ key: 'id' });
 const dataSource = new DataSource({ store, paginate: false });
@@ -103,13 +103,12 @@ const clearButtonOptions: DxButtonTypes.Properties = {
   hint: 'Clear chat',
   onClick: () => clearChat(),
   onInitialized: (e: DxButtonTypes.InitializedEvent) => {
-    clearButtonInstance.value = e.component;
+    clearButtonInstance = e.component;
   },
 };
 
 function updateClearButtonState(): void {
-  isClearDisabled.value = dataSource.items().length === 0;
-  clearButtonInstance.value?.option('disabled', isClearDisabled.value);
+  clearButtonInstance?.option('disabled', dataSource.items().length === 0);
 }
 
 function pushMessage(message: Partial<DxChatTypes.TextMessage>): void {
@@ -131,27 +130,9 @@ function clearChat(): void {
   updateClearButtonState();
 }
 
-function toggle(): void {
-  popupVisible.value = !popupVisible.value;
-}
-
-function onPopupShowing(): void {
-  fabVisible.value = false;
-}
-
-function onPopupHiding(): void {
-  fabVisible.value = true;
-}
-
-function onSuggestionClick(e: { itemData?: { prompt?: string } }): void {
-  const { prompt } = e.itemData ?? {};
-
-  const message: DxChatTypes.TextMessage = {
-    id: Date.now() + Math.random(),
-    timestamp: new Date(),
-    author: { id: 'user' },
-    text: prompt,
-  };
+function onSuggestionClick(e: DxButtonGroupTypes.ItemClickEvent): void {
+  const { prompt } = e.itemData as SuggestionItem;
+  const message: DxChatTypes.TextMessage = { author: chatUser, text: prompt };
 
   pushMessage(message);
   emit('message-submitted', message);
@@ -163,7 +144,7 @@ function onMessageEntered(e: DxChatTypes.MessageEnteredEvent): void {
 
 watch(() => props.disabled, (disabled) => {
   if (disabled) {
-    clearButtonInstance.value?.option('disabled', true);
+    clearButtonInstance?.option('disabled', true);
     return;
   }
 

@@ -21,12 +21,8 @@ import type { DxChatTypes } from 'devextreme-vue/chat';
 import EmployeeForm from './EmployeeForm.vue';
 import TaskGrid from './TaskGrid.vue';
 import AiAssistant from './AiAssistant.vue';
-import { createAiIntegration } from './aiService.ts';
+import { aiIntegration } from './service.ts';
 import { routeMessage } from './chatRouter.ts';
-
-config({
-  editorStylingMode: 'filled',
-});
 
 config({
   floatingActionButtonConfig: {
@@ -37,6 +33,7 @@ config({
       offset: '-16 -16',
     },
   },
+  editorStylingMode: 'filled',
 });
 
 loadMessages({
@@ -49,7 +46,6 @@ const employeeFormRef = ref<InstanceType<typeof EmployeeForm>>();
 const taskGridRef = ref<InstanceType<typeof TaskGrid>>();
 const aiAssistantRef = ref<InstanceType<typeof AiAssistant>>();
 
-const aiIntegration = createAiIntegration();
 const chatDisabled = ref(false);
 
 async function onMessageSubmitted(message: DxChatTypes.TextMessage): Promise<void> {

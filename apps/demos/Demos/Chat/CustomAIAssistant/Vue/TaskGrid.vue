@@ -30,7 +30,7 @@
     <template #priority-cell="{ data }">
       <div
         class="priority-badge"
-        :style="{ background: priorityColor(data.value) }"
+        :style="{ background: colors[data.value as TaskPriority] }"
       >{{ data.value }}</div>
     </template>
     <DxColumn
@@ -56,10 +56,6 @@ const dataGridRef = ref<InstanceType<typeof DxDataGrid>>();
 const completionEditorOptions = {
   elementAttr: { 'aria-label': 'Completed' },
 };
-
-function priorityColor(value: TaskPriority): string {
-  return colors[value];
-}
 
 function calculateCompletionCellValue(rowData: Task): boolean {
   return rowData.Completion === 100;

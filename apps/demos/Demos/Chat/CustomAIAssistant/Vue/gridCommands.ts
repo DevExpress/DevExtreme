@@ -7,8 +7,8 @@ import type {
   GridCommand,
   GridCommandArgs,
   GridFilterValue,
+  GridInstance,
   Task,
-  TaskGrid,
 } from './data.ts';
 
 export function getFilterConditions(filterValue: unknown): FilterCondition[] {
@@ -34,7 +34,7 @@ export function combineFilterConditions(
     : conditions.flatMap((condition, index) => (index === 0 ? [condition] : ['and' as const, condition]));
 }
 
-export function getColumnOrFail(grid: TaskGrid, columnName: string | undefined): ColumnLookup {
+export function getColumnOrFail(grid: GridInstance, columnName: string | undefined): ColumnLookup {
   const column = grid.columnOption(columnName ?? '');
 
   if (!column) {
@@ -71,7 +71,7 @@ To filter a date column by a year and/or month (the same thing the grid's own he
       },
       required: ['column', 'operator', 'value'],
     },
-    execute(grid: TaskGrid, args: GridCommandArgs, rawText?: string): CommandResult {
+    execute(grid: GridInstance, args: GridCommandArgs, rawText?: string): CommandResult {
       const { column, failure } = getColumnOrFail(grid, args.column);
       if (failure) return failure;
 
@@ -131,7 +131,7 @@ To filter a date column by a year and/or month (the same thing the grid's own he
   clearFilter: {
     description: 'Clear all filters on the grid.',
     schema: { type: 'object', properties: {} },
-    execute(grid: TaskGrid): CommandResult {
+    execute(grid: GridInstance): CommandResult {
       try {
         grid.clearFilter();
         return { status: 'success', message: 'Filter cleared.' };
@@ -154,7 +154,7 @@ To filter a date column by a year and/or month (the same thing the grid's own he
       },
       required: ['column', 'sortOrder'],
     },
-    execute(grid: TaskGrid, args: GridCommandArgs): CommandResult {
+    execute(grid: GridInstance, args: GridCommandArgs): CommandResult {
       const { column, failure } = getColumnOrFail(grid, args.column);
       if (failure) return failure;
 
@@ -184,7 +184,7 @@ To filter a date column by a year and/or month (the same thing the grid's own he
   clearSorting: {
     description: 'Remove sorting from all columns.',
     schema: { type: 'object', properties: {} },
-    execute(grid: TaskGrid): CommandResult {
+    execute(grid: GridInstance): CommandResult {
       try {
         grid.clearSorting();
         return { status: 'success', message: 'Sorting cleared.' };
@@ -207,7 +207,7 @@ To filter a date column by a year and/or month (the same thing the grid's own he
       },
       required: ['column', 'visible'],
     },
-    execute(grid: TaskGrid, args: GridCommandArgs): CommandResult {
+    execute(grid: GridInstance, args: GridCommandArgs): CommandResult {
       const { column, failure } = getColumnOrFail(grid, args.column);
       if (failure) return failure;
 
@@ -266,12 +266,12 @@ Available grid commands:
 ${commandDescriptions}`;
 }
 
-export function getGridColumnNames(gridInstance: TaskGrid): string[] {
+export function getGridColumnNames(gridInstance: GridInstance): string[] {
   return (gridInstance.option('columns') as Column<Task, number>[]).map((column) => String(column.dataField));
 }
 
 export function applyGridActions(
-  grid: TaskGrid,
+  grid: GridInstance,
   actions: ExecuteGridAssistantAction[],
   rawText?: string,
 ): CommandResult[] {
