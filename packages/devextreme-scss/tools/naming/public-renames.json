@@ -127,13 +127,6 @@
       "note": "The filter chips are backgrounds; the name said content and had never painted text."
     },
     {
-      "name": "--dx-list-border-disabled",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The disabled list border is painted by the shared disabled border name; the list no longer carries one of its own."
-    },
-    {
       "name": "--dx-pivot-grid-accent-content",
       "replacement": "--dx-pivot-grid-accent-outline",
       "release": "26.2",
@@ -160,13 +153,6 @@
       "release": "26.2",
       "pr": 35107,
       "note": "The read-only dot is drawn with background-color; the pair is now split into the dot and the ring."
-    },
-    {
-      "name": "--dx-radio-button-icon-bg-focused",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "Fed the ripple, which this theme switches off - the name painted nothing."
     },
     {
       "name": "--dx-radio-button-icon-border-read-only",
@@ -216,13 +202,6 @@
       "release": "26.2",
       "pr": 35107,
       "note": "The same split in the danger hue; the ring is --dx-slider-invalid-border-focused."
-    },
-    {
-      "name": "--dx-splitter-resize-handle-content-hovered",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "Was read and never declared, so the hover rule was invalid and the grip kept its rest colour. The rule now reads the rest name."
     },
     {
       "name": "--dx-tabs-tab-basic-border-selected",
@@ -279,62 +258,6 @@
       "release": "26.2",
       "pr": 35107,
       "note": "A hovered tile is marked by its edge; the fill does not move."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-accent-content-focused",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-bg-disabled",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-bg-focused",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-border-disabled",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-border-focused",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-checked-border-focused",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-icon-disabled",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
-    },
-    {
-      "name": "--dx-tree-view-checkbox-indeterminate-bg-disabled",
-      "replacement": null,
-      "release": "26.2",
-      "pr": 35107,
-      "note": "The tree no longer restyles the check box inside it: a check box in a tree now reads its own names, identical to one standing outside."
     },
     {
       "name": "--dx-chat-message-box-file-cancel-button-secondary-content",
@@ -405,234 +328,6 @@
       "release": "26.2",
       "pr": 35107,
       "note": "It fills a pressed cell - the rule writes background-color - and the name said content while aliasing a border name."
-    },
-    {
-      "name": "--dx-switch-box-shadow",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob the switch never actually applies \u2014 any value you set had no visual effect."
-    },
-    {
-      "name": "--dx-switch-handle-on-box-shadow",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob the switch never actually applies \u2014 any value you set had no visual effect."
-    },
-    {
-      "name": "--dx-switch-handle-on-box-shadow-blur",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob the switch never actually applies \u2014 any value you set had no visual effect."
-    },
-    {
-      "name": "--dx-switch-handle-on-shadow",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob the switch never actually applies \u2014 any value you set had no visual effect."
-    },
-    {
-      "name": "--dx-scheduler-appointment-collector-height",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing in the Scheduler ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-color-shadow",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing in the theme ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-texteditor-color-text",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a leftover of an earlier naming convention; the text editor's text colour is not customizable through this name."
-    },
-    {
-      "name": "--dx-popup-toolbar-item-padding-inline",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a leftover of an earlier naming convention; the popup toolbar item spacing is not customizable through this name."
-    },
-    {
-      "name": "--dx-button-icon-text-padding-inline-start",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-grid-group-row-content",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-grid-summary-bg",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-menu-item-expanded-content",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-box-item-content-font-size",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-color-box-overlay-padding",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-data-grid-group-panel-item-margin-inline-end",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-data-grid-group-panel-item-rtl-margin-inline-end",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-diagram-image-icon-base-content",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-drop-down-list-min-height",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-file-manager-progress-box-close-button-margin-block-start",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-form-group-content-padding-block-end",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-html-editor-placeholder-content",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-list-delete-button-static-padding",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-load-panel-content-border",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-load-panel-content-border-radius",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-pagination-navigate-button-height",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-pagination-page-padding-inline",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-pagination-separator-padding-inline-end",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-pagination-separator-padding-inline-start",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-pivot-grid-drag-header-border",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-popup-dialog-message-padding",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-scheduler-dd-appointment-content-hovered",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-scheduler-group-header-agenda-font-size",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-scrollable-scroll-height",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-scrollable-scroll-width",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-stepper-step-accent-bg-hovered",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-time-view-field-number-box-spin-touch-friendly-width",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-time-view-field-number-box-width",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
-    },
-    {
-      "name": "--dx-toast-content-padding",
-      "replacement": null,
-      "release": "26.2",
-      "note": "This was a published knob nothing ever read \u2014 setting it had no visual effect."
     }
   ]
 }
