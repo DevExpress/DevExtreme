@@ -148,3 +148,11 @@ export type ColumnsControllerOptionChanged = OptionChanged
   | ColumnOptionChanged;
 
 export type MatchCountById = Map<string, number>;
+
+export type ColumnOptionGetter = (column: Column, options?: { functionsAsIs: boolean }) => unknown;
+
+export type ColumnOptionSetter = (
+  column: Column,
+  value: unknown,
+  options: { functionsAsIs: boolean },
+) => void;
