@@ -1,5 +1,4 @@
-/* eslint-disable prefer-destructuring */
-import type { DataType, HorizontalAlignment } from '@js/common';
+import type { DataType, HorizontalAlignment, SortOrder } from '@js/common';
 import type { Format } from '@js/common/core/localization';
 import numberLocalization from '@js/common/core/localization/number';
 import type { ColumnBase, ColumnCustomizeTextArg } from '@js/common/grids';
@@ -464,10 +463,12 @@ export const updateColumnIndexes = function (that: ColumnsController) {
   });
 };
 
-export const updateColumnGroupIndexes = function (that: ColumnsController, currentColumn?) {
-  normalizeIndexes(that._columns, 'groupIndex', currentColumn, (column) => {
+export const updateColumnGroupIndexes = (that: ColumnsController, currentColumn?: Column): void => {
+  normalizeIndexes(that._columns, 'groupIndex', currentColumn, (column: Column) => {
     const { grouped } = column;
+
     delete column.grouped;
+
     return grouped;
   });
 };
@@ -837,9 +838,9 @@ export const columnOptionCore = function (
   return undefined;
 };
 
-export function isSortOrderValid(sortOrder) {
-  return sortOrder === 'asc' || sortOrder === 'desc';
-}
+export const isSortOrderValid = (
+  sortOrder: string | undefined,
+): sortOrder is SortOrder => sortOrder === 'asc' || sortOrder === 'desc';
 
 export const addExpandColumn = function (that: ColumnsController) {
   const options = that._getExpandColumnOptions();
@@ -1090,21 +1091,22 @@ export const findColumn = (
   return undefined;
 };
 
-export const sortColumns = (columns, sortOrder) => {
-  if (sortOrder !== 'asc' && sortOrder !== 'desc') {
-    return columns;
+export const sortColumnsByCaption = (
+  columns: Pick<Column, 'caption'>[],
+  sortOrder: SortOrder | undefined,
+): void => {
+  if (!isSortOrderValid(sortOrder)) {
+    return;
   }
 
   const sign = sortOrder === 'asc' ? 1 : -1;
 
   columns.sort((column1, column2) => {
-    const caption1 = column1.caption || '';
-    const caption2 = column2.caption || '';
+    const caption1 = column1.caption ?? '';
+    const caption2 = column2.caption ?? '';
 
     return sign * caption1.localeCompare(caption2);
   });
-
-  return columns;
 };
 
 export const strictParseNumber = (text: string, format: Format): number | undefined => {

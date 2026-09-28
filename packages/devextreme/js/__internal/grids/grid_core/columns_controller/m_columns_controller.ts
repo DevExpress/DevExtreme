@@ -83,7 +83,7 @@ import {
   resetBandColumnsCache,
   resetColumnsCache,
   setFilterOperationsAsDefaultValues,
-  sortColumns,
+  sortColumnsByCaption,
   strictParseNumber,
   updateColumnChanges,
   updateColumnGroupIndexes,
@@ -955,7 +955,9 @@ export class ColumnsController extends modules.Controller {
 
     const sortOrder = this.option('columnChooser.sortOrder');
 
-    return sortColumns(columnChooserColumns, sortOrder);
+    sortColumnsByCaption(columnChooserColumns, sortOrder);
+
+    return columnChooserColumns;
   }
 
   /**

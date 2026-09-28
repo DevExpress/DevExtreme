@@ -87,6 +87,7 @@ export interface InternalColumnOptions extends ValueSerializers {
   lookup?: InternalColumnLookup;
   columns?: (Column | string)[];
   hasColumns?: boolean;
+  grouped?: boolean;
 }
 
 export type Column = ColumnBase & InternalColumnOptions;
