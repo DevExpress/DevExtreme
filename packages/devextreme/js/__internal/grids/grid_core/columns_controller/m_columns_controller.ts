@@ -1033,7 +1033,7 @@ export class ColumnsController extends modules.Controller {
 
         if (!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
           options.visibleIndex = MAX_SAFE_INTEGER;
-        } else if (isColumnFixed(that, column) ^ isColumnFixed(that, targetColumn)) {
+        } else if (isColumnFixed(that, column) !== isColumnFixed(that, targetColumn)) {
           options.visibleIndex = MAX_SAFE_INTEGER;
         } else {
           options.visibleIndex = targetColumn.visibleIndex;

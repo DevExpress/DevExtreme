@@ -1040,14 +1040,14 @@ export const mergeColumns = (
   return mergedColumns;
 };
 
-export const isColumnFixed = (that: ColumnsController, column) => {
+export const isColumnFixed = (that: ColumnsController, column: Column): boolean => {
   const isFixedCommandColumn = column.type && column.type !== AI_COLUMN_NAME;
 
-  if (!isFixedCommandColumn) {
-    return column.fixed && column.fixedPosition !== StickyPosition.Sticky;
+  if (isFixedCommandColumn) {
+    return !!that._isColumnFixing();
   }
 
-  return that._isColumnFixing();
+  return !!column.fixed && column.fixedPosition !== StickyPosition.Sticky;
 };
 
 export const convertOwnerBandToColumnReference = (columns) => {

@@ -24,6 +24,7 @@ import {
   getDataColumns,
   getSerializationFormat,
   getValueDataType,
+  isColumnFixed,
   mergeColumns,
   numberToString,
   processBandColumns,
@@ -666,6 +667,49 @@ describe('createColumnsFromDataSourceAdapter', () => {
 
   it('should return no columns when there are no items', async () => {
     expect(await getDataFields([])).toEqual([]);
+  });
+});
+
+describe('isColumnFixed', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  describe('when the column is not a command column', () => {
+    it('should return true for a fixed column', async () => {
+      const columnsController = await getColumnsController();
+
+      expect(isColumnFixed(columnsController, { fixed: true })).toBe(true);
+    });
+
+    it('should return false for a sticky column', async () => {
+      const columnsController = await getColumnsController();
+      const column: Column = { fixed: true, fixedPosition: 'sticky' };
+
+      expect(isColumnFixed(columnsController, column)).toBe(false);
+    });
+
+    it.each([
+      ['a data column', {}],
+      ['an AI column', { type: 'ai' }],
+    ])('should ignore the column fixing of the grid for %s', async (_, column: Column) => {
+      const columnsController = await getColumnsController();
+      jest.spyOn(columnsController, '_isColumnFixing').mockReturnValue(true);
+
+      expect(isColumnFixed(columnsController, column)).toBe(false);
+    });
+  });
+
+  describe('when the column is a command column', () => {
+    it.each([
+      [true, true],
+      [false, false],
+      [false, undefined],
+    ])('should return %s when the column fixing of the grid is %s', async (expected, isColumnFixing) => {
+      const columnsController = await getColumnsController();
+      jest.spyOn(columnsController, '_isColumnFixing').mockReturnValue(isColumnFixing);
+
+      expect(isColumnFixed(columnsController, { type: 'buttons' })).toBe(expected);
+    });
   });
 });
 
