@@ -227,7 +227,7 @@ export const getColumnByIndexes = (
   const bandColumnsCache = that.getBandColumnsCache();
 
   if (bandColumnsCache.isPlain) {
-    return (that._columns as Column[])[columnIndexes[0]];
+    return that._columns[columnIndexes[0]];
   }
 
   // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -1166,7 +1166,7 @@ const isFirstOrLastColumnCore = function (
       if (onlyWithinBandColumn && column) {
         res &&= col.ownerBand === column.ownerBand;
       } else if (fixedPosition) {
-        res &&= col.fixed && getColumnFixedPosition(that, col) === fixedPosition;
+        res &&= !!col.fixed && getColumnFixedPosition(that, col) === fixedPosition;
       }
 
       return res;

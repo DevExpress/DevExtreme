@@ -298,7 +298,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       const headerFilterController = this._headerFilterController;
       const $column = $target.closest('td');
       const columnIndex = this.getColumnIndexByElement($column);
-      if (columnIndex >= 0) {
+      if (isDefined(columnIndex) && columnIndex >= 0) {
         headerFilterController.showHeaderFilterMenu(columnIndex, false);
       }
     } else {
