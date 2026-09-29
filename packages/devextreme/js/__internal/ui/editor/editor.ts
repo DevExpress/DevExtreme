@@ -50,6 +50,7 @@ export interface EditorInternalProperties {
   validationMessageOffset?: { h: number; v: number };
   validationBoundary?: dxElementWrapper;
   validationTooltipOptions?: Record<string, unknown>;
+  _cached_validationTooltipOptions?: Record<string, unknown>;
   _showValidationMessage?: boolean;
   _onMarkupRendered?: () => void;
 }

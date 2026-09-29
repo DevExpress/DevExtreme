@@ -240,11 +240,7 @@ class FileManagerThumbnailListBox extends CollectionWidget<FileManagerThumbnailL
     this._templateManager.addDefaultTemplates({
       item: new BindableTemplate(
         ($container, data, itemModel): void => {
-          const $itemElement = this._getDefaultItemTemplate(
-            itemModel,
-            $container,
-          );
-          $container.append($itemElement);
+          this._getDefaultItemTemplate(itemModel, $container);
         },
         ['fileItem'],
         this.option('integrationOptions.watchMethod'),
