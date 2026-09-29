@@ -665,7 +665,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   public _targetPoint?: ColumnPoint | null;
 
-  private _resizingInfo: any;
+  protected _resizingInfo: any;
 
   protected _columnsController!: ColumnsController;
 

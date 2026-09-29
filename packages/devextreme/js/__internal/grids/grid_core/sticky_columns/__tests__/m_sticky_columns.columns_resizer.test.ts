@@ -9,6 +9,7 @@ import { stickyColumnsModule } from '../m_sticky_columns';
 const SUPER_OFFSET = 540;
 const CELL_LEFT = 419;
 const NEXT_CELL_LEFT = 399;
+const NEXT_COLUMN_INDEX = 4;
 
 const { columnsResizer } = stickyColumnsModule.extenders.controllers;
 
@@ -19,8 +20,11 @@ const $nextCell = {
 
 const $cell = {
   offset: () => ({ left: CELL_LEFT }),
-  next: () => $nextCell,
 } as unknown as dxElementWrapper;
+
+const columnElements = {
+  eq: (index: number) => (index === NEXT_COLUMN_INDEX ? $nextCell : { length: 0 }),
+};
 
 describe('sticky columns resizer separator offset', () => {
   let superGetSeparatorOffsetX: ReturnType<typeof jest.fn>;
@@ -47,7 +51,9 @@ describe('sticky columns resizer separator offset', () => {
     controller._columnHeadersView = {
       hasStickyColumns: (): boolean => hasStickyColumns,
       getContent: (): undefined => undefined,
+      getColumnElements: () => columnElements,
     };
+    controller._resizingInfo = { nextColumnIndex: NEXT_COLUMN_INDEX };
     controller.option = (): string => columnResizingMode;
     controller.addWidgetPrefix = (name: string): string => name;
 
