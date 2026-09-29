@@ -176,6 +176,7 @@ catalogs:
 
 overrides:
   js-yaml@<4.3.2: ^4.3.2
+  rollup@<4.59.0: ^4.59.0
   axios@<1.18.0: ^1.18.0
   qs: '>=6.16.0'
   minimatch@>=9.0.0 < 9.0.7: 9.0.9
@@ -188,6 +189,7 @@ overrides:
   '@babel/core@<7.29.1': ^7.29.1
   uuid@<14.0.0: ~14.0.0
   postcss@<8.5.23: ^8.5.23
+  webpack-dev-server@<5.2.6: ^5.2.6
   ip-address@<10.5.1: ~10.5.1
   http-proxy-middleware@>=0.16.0 <3.0.7: ^3.0.7
   smol-toml@<1.7.0: ^1.7.1
@@ -2349,14 +2351,14 @@ packages:
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
     peerDependencies:
       webpack: ^5.30.0
-      webpack-dev-server: ^5.0.2
+      webpack-dev-server: ^5.2.6
 
   '@angular-devkit/build-webpack@0.2201.7':
     resolution: {integrity: sha512-bSF5s9B0RFBdOhCIFrv2idqtxYESi7LL6YQFctFnx4FcQp+mTU+ZomE2byO7ZxW5T3nuu9JHVFX5W2/xN34cJQ==}
     engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
     peerDependencies:
       webpack: ^5.30.0
-      webpack-dev-server: ^5.0.2
+      webpack-dev-server: ^5.2.6
 
   '@angular-devkit/core@19.2.27':
     resolution: {integrity: sha512-3amNzoCVSKd7ah6l6lBQL4onwwJvqvam7FMoQBILrxtW5LB5ezh8gMSPuA4zJjKjoRzf9uoWdlzqv/84I52xZA==}
@@ -2467,7 +2469,7 @@ packages:
       less: ^4.2.0
       ng-packagr: ^22.0.0
       postcss: ^8.5.23
-      rollup: ^4.0.0
+      rollup: ^4.59.0
       tailwindcss: ^2.0.0 || ^3.0.0 || ^4.0.0
       tslib: ^2.3.0
       typescript: '>=6.0 <6.1'
@@ -7033,19 +7035,19 @@ packages:
     resolution: {integrity: sha512-QI5fsEvm9bDzt32k39wpOwZhVzRcL5ydcffUHMyLVaVaLeC70I8TJZ17F1z1eMoLu4E/UOcH9BWVkKpIKdrfiw==}
     engines: {node: '>=8.0.0'}
     peerDependencies:
-      rollup: ^1.20.0||^2.0.0
+      rollup: ^4.59.0
 
   '@rollup/plugin-commonjs@19.0.2':
     resolution: {integrity: sha512-gBjarfqlC7qs0AutpRW/hrFNm+cd2/QKxhwyFa+srbg1oX7rDsEU3l+W7LAUhsAp9mPJMAkXDhLbQaVwEaE8bA==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
-      rollup: ^2.38.3
+      rollup: ^4.59.0
 
   '@rollup/plugin-json@6.1.0':
     resolution: {integrity: sha512-EGI2te5ENk1coGeADSIwZ7G2Q8CJS2sF120T7jLw4xFw9n7wIOXHo+kIYRAoVpJAN+kmqZSoO3Fp4JtoNF4ReA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+      rollup: ^4.59.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -7054,19 +7056,19 @@ packages:
     resolution: {integrity: sha512-Lus8rbUo1eEcnS4yTFKLZrVumLPY+YayBdWXgFSHYhTT2iJbMhoaaBL3xl5NCdeRytErGr8tZ0L71BMRmnlwSw==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
-      rollup: ^2.42.0
+      rollup: ^4.59.0
 
   '@rollup/pluginutils@3.1.0':
     resolution: {integrity: sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
-      rollup: ^1.20.0||^2.0.0
+      rollup: ^4.59.0
 
   '@rollup/pluginutils@5.4.0':
     resolution: {integrity: sha512-MfPp06CjRLfXQ3wY0R8vJDYBy/MvVcc9OulEfR0B8Iv9ko+GCNaRZ+EpJYFl27LhKsZK0o420sYCRHCjfCgeUg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+      rollup: ^4.59.0
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -7326,7 +7328,7 @@ packages:
     resolution: {integrity: sha512-aFvgaNDAnKMjuyhPK5ialT22pPqMN0XfPBNPeeNVPYztngkdKBa8WFqF/umDd47HxAjebq+vn6uId1xHyOHH3g==}
     peerDependencies:
       esbuild: ^0.28.1
-      rollup: '*'
+      rollup: ^4.59.0
       storybook: ^10.2.10
       vite: '*'
       webpack: '*'
@@ -14854,7 +14856,7 @@ packages:
     resolution: {integrity: sha512-l//F3Zf7ID5GoOfLfD8kroBjQKEKpy1qfhtAdnpibFZMffPaylrg1CoDC2vGkPeTeyxUe4bVFCln2EFuL7IGGg==}
     engines: {node: '>=20'}
     peerDependencies:
-      rollup: ^3.29.4 || ^4
+      rollup: ^4.59.0
       typescript: ^4.5 || ^5.0 || ^6.0
 
   rollup@4.59.0:

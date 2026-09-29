@@ -20,6 +20,7 @@ minimumReleaseAgeExclude:
 
 overrides:
   "js-yaml@<4.3.2": "^4.3.2"
+  "rollup@<4.59.0": "^4.59.0"
   "axios@<1.18.0": ^1.18.0
   qs: ">=6.16.0"
   "minimatch@>=9.0.0 < 9.0.7": 9.0.9
@@ -32,6 +33,7 @@ overrides:
   "@babel/core@<7.29.1": ^7.29.1
   "uuid@<14.0.0": ~14.0.0
   "postcss@<8.5.23": ^8.5.23
+  "webpack-dev-server@<5.2.6": "^5.2.6"
   "ip-address@<10.5.1": "~10.5.1"
   "http-proxy-middleware@>=0.16.0 <3.0.7": ^3.0.7
   "smol-toml@<1.7.0": "^1.7.1"
