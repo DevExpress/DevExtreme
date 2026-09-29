@@ -19,14 +19,17 @@ import {
   fireColumnsChanged,
   getAlignmentByDataType,
   getChildrenByBandColumn,
+  getColumnByIndexes,
   getCommandColumnIndex,
   getCustomizeTextByDataType,
   getDataColumns,
   getSerializationFormat,
   getValueDataType,
+  isColumnFixed,
   mergeColumns,
   numberToString,
   processBandColumns,
+  reserveGroupIndex,
   resolveChangeType,
   setFilterOperationsAsDefaultValues,
   strictParseNumber,
@@ -666,6 +669,49 @@ describe('createColumnsFromDataSourceAdapter', () => {
 
   it('should return no columns when there are no items', async () => {
     expect(await getDataFields([])).toEqual([]);
+  });
+});
+
+describe('isColumnFixed', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  describe('when the column is not a command column', () => {
+    it('should return true for a fixed column', async () => {
+      const columnsController = await getColumnsController();
+
+      expect(isColumnFixed(columnsController, { fixed: true })).toBe(true);
+    });
+
+    it('should return false for a sticky column', async () => {
+      const columnsController = await getColumnsController();
+      const column: Column = { fixed: true, fixedPosition: 'sticky' };
+
+      expect(isColumnFixed(columnsController, column)).toBe(false);
+    });
+
+    it.each([
+      ['a data column', {}],
+      ['an AI column', { type: 'ai' }],
+    ])('should ignore the column fixing of the grid for %s', async (_, column: Column) => {
+      const columnsController = await getColumnsController();
+      jest.spyOn(columnsController, '_isColumnFixing').mockReturnValue(true);
+
+      expect(isColumnFixed(columnsController, column)).toBe(false);
+    });
+  });
+
+  describe('when the column is a command column', () => {
+    it.each([
+      [true, true],
+      [false, false],
+      [false, undefined],
+    ])('should return %s when the column fixing of the grid is %s', async (expected, isColumnFixing) => {
+      const columnsController = await getColumnsController();
+      jest.spyOn(columnsController, '_isColumnFixing').mockReturnValue(isColumnFixing);
+
+      expect(isColumnFixed(columnsController, { type: 'buttons' })).toBe(expected);
+    });
   });
 });
 
@@ -1794,5 +1840,118 @@ describe('numberToString', () => {
 
   it('should not cut a number that is longer than the length', () => {
     expect(numberToString(123, 2)).toBe('123');
+  });
+});
+
+describe('reserveGroupIndex', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  const getGroupedColumnsController = (): Promise<ColumnsController> => getColumnsController({
+    columns: [{ dataField: 'a', groupIndex: 0 }, { dataField: 'b', groupIndex: 1 }, 'c'],
+  });
+
+  const getGroupIndexes = (columnsController: ColumnsController): (number | undefined)[] => {
+    const columns: Column[] = columnsController.getColumns();
+
+    return columns.map(({ groupIndex }) => groupIndex);
+  };
+
+  describe('when the group index is set', () => {
+    it.each([
+      [0, [1, 2, undefined]],
+      [1, [0, 2, undefined]],
+      [2, [0, 1, undefined]],
+    ])('should shift the group columns from the group index %s', async (groupIndex, expected) => {
+      const columnsController = await getGroupedColumnsController();
+
+      reserveGroupIndex(columnsController, groupIndex);
+
+      expect(getGroupIndexes(columnsController)).toEqual(expected);
+    });
+
+    it('should return the group index', async () => {
+      const columnsController = await getGroupedColumnsController();
+
+      expect(reserveGroupIndex(columnsController, 1)).toBe(1);
+    });
+  });
+
+  describe.each([undefined, -1])('when the group index is %s', (groupIndex) => {
+    it('should return the index after the last group column', async () => {
+      const columnsController = await getGroupedColumnsController();
+
+      expect(reserveGroupIndex(columnsController, groupIndex)).toBe(2);
+    });
+
+    it('should not change the group columns', async () => {
+      const columnsController = await getGroupedColumnsController();
+
+      reserveGroupIndex(columnsController, groupIndex);
+
+      expect(getGroupIndexes(columnsController)).toEqual([0, 1, undefined]);
+    });
+
+    it('should return 0 when the grid has no group columns', async () => {
+      const columnsController = await getColumnsController({ columns: ['a'] });
+
+      expect(reserveGroupIndex(columnsController, groupIndex)).toBe(0);
+    });
+  });
+});
+
+describe('getColumnByIndexes', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  const getDataField = async (
+    columns: DataGridProperties['columns'],
+    columnIndexes: number[],
+  ): Promise<string | undefined> => {
+    const columnsController = await getColumnsController({ columns });
+
+    return getColumnByIndexes(columnsController, columnIndexes)?.dataField;
+  };
+
+  describe('when there are no band columns', () => {
+    it('should return the column at the index', async () => {
+      expect(await getDataField(['a', 'b', 'c'], [1])).toBe('b');
+    });
+
+    it('should take the position in the columns, not the visible index', async () => {
+      const columns = [{ dataField: 'a', visibleIndex: 1 }, { dataField: 'b', visibleIndex: 0 }];
+
+      expect(await getDataField(columns, [0])).toBe('a');
+    });
+
+    it('should return undefined for an index out of range', async () => {
+      expect(await getDataField(['a', 'b'], [5])).toBeUndefined();
+    });
+  });
+
+  describe('when there are band columns', () => {
+    const columns = ['a', { caption: 'Band', columns: ['b', 'c'] }, 'd'];
+
+    it('should count only the top-level columns for the first index', async () => {
+      expect(await getDataField(columns, [2])).toBe('d');
+    });
+
+    it('should return a band child by the band index and the child index', async () => {
+      expect(await getDataField(columns, [1, 1])).toBe('c');
+    });
+
+    it('should return a child of a nested band', async () => {
+      const nestedColumns = ['a', { caption: 'Outer', columns: ['b', { caption: 'Inner', columns: ['c', 'd'] }] }];
+
+      expect(await getDataField(nestedColumns, [1, 1, 1])).toBe('d');
+    });
+
+    it('should return undefined for a child index out of range', async () => {
+      expect(await getDataField(columns, [1, 5])).toBeUndefined();
+    });
+
+    it('should return undefined when there are no indexes', async () => {
+      expect(await getDataField(columns, [])).toBeUndefined();
+    });
   });
 });

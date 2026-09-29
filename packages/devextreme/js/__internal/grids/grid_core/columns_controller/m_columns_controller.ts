@@ -76,14 +76,14 @@ import {
   isFirstOrLastColumn,
   isSortOrderValid,
   mergeColumns,
-  moveColumnToGroup,
   numberToString,
   processBandColumns,
   processExpandColumns,
+  reserveGroupIndex,
   resetBandColumnsCache,
   resetColumnsCache,
   setFilterOperationsAsDefaultValues,
-  sortColumns,
+  sortColumnsByCaption,
   strictParseNumber,
   updateColumnChanges,
   updateColumnGroupIndexes,
@@ -955,7 +955,9 @@ export class ColumnsController extends modules.Controller {
 
     const sortOrder = this.option('columnChooser.sortOrder');
 
-    return sortColumns(columnChooserColumns, sortOrder);
+    sortColumnsByCaption(columnChooserColumns, sortOrder);
+
+    return columnChooserColumns;
   }
 
   /**
@@ -1026,14 +1028,14 @@ export class ColumnsController extends modules.Controller {
       }
 
       if (targetLocation === GROUP_LOCATION) {
-        options.groupIndex = moveColumnToGroup(that, column, targetGroupIndex);
+        options.groupIndex = reserveGroupIndex(that, targetGroupIndex);
         column.groupIndex = prevGroupIndex;
       } else if (toVisibleIndex >= 0) {
         const targetColumn = that._columns[toIndex];
 
         if (!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
           options.visibleIndex = MAX_SAFE_INTEGER;
-        } else if (isColumnFixed(that, column) ^ isColumnFixed(that, targetColumn)) {
+        } else if (isColumnFixed(that, column) !== isColumnFixed(that, targetColumn)) {
           options.visibleIndex = MAX_SAFE_INTEGER;
         } else {
           options.visibleIndex = targetColumn.visibleIndex;
