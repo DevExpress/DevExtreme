@@ -25,6 +25,7 @@ import { FunctionTemplate } from '@ts/core/templates/function_template';
 import { ensureDefined } from '@ts/core/utils/m_common';
 import { isDefined, isObject, isPlainObject } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type { DataSourceType } from '@ts/data/data_controller/data_controller';
 import DataController from '@ts/data/data_controller/data_controller';
@@ -381,7 +382,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       tabIndex,
     } = this.option();
 
-    const buttonGroupOptions: ButtonGroupProperties = {
+    const buttonGroupOptions: ButtonGroupProperties & Pick<WidgetProperties, 'onKeyboardHandled'> = {
       items: this._getButtonGroupItems(),
       width: '100%',
       height: '100%',
@@ -427,7 +428,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
     const { deferRendering, opened } = this.option();
 
-    const cachedDropDownOptions: PopupProperties = this._options.cache('dropDownOptions');
+    const cachedDropDownOptions = this._options.cache('dropDownOptions');
 
     const position: PositionConfig = {
       of: this.$element() as unknown as DxElement,
