@@ -87,9 +87,12 @@ export interface InternalColumnOptions extends ValueSerializers {
   lookup?: InternalColumnLookup;
   columns?: (Column | string)[];
   hasColumns?: boolean;
+  grouped?: boolean;
 }
 
 export type Column = ColumnBase & InternalColumnOptions;
+
+export type GroupColumn = Column & { groupIndex: number };
 
 export interface ColumnsChanges {
   changeTypes: {
