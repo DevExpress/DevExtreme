@@ -74,7 +74,17 @@ describe('sticky columns resizer separator offset', () => {
     expect(superGetSeparatorOffsetX).not.toHaveBeenCalled();
   });
 
-  it('returns the cell left edge for a right-pinned column in widget mode (T1335911)', () => {
+  it('returns the cell left edge when the resized column itself is pinned to the right in nextColumn mode (T1335911)', () => {
+    jest.spyOn(GridCoreStickyColumnsDom, 'isFixedCellPinnedToRight')
+      .mockImplementation((cell) => cell === $cell);
+
+    const controller = createController({ columnResizingMode: 'nextColumn' });
+
+    expect(controller.getSeparatorOffsetX($cell)).toBe(CELL_LEFT);
+    expect(superGetSeparatorOffsetX).not.toHaveBeenCalled();
+  });
+
+  it('returns the cell left edge when the resized column itself is pinned to the right in widget mode (T1335911)', () => {
     jest.spyOn(GridCoreStickyColumnsDom, 'isFixedCellPinnedToRight')
       .mockImplementation((cell) => cell === $cell);
 
@@ -82,6 +92,16 @@ describe('sticky columns resizer separator offset', () => {
 
     expect(controller.getSeparatorOffsetX($cell)).toBe(CELL_LEFT);
     expect(superGetSeparatorOffsetX).not.toHaveBeenCalled();
+  });
+
+  it('falls back to the base offset when only the next column is pinned to the right in widget mode (T1335911)', () => {
+    jest.spyOn(GridCoreStickyColumnsDom, 'isFixedCellPinnedToRight')
+      .mockImplementation((cell) => cell === $nextCell);
+
+    const controller = createController({ columnResizingMode: 'widget' });
+
+    expect(controller.getSeparatorOffsetX($cell)).toBe(SUPER_OFFSET);
+    expect(superGetSeparatorOffsetX).toHaveBeenCalledWith($cell);
   });
 
   it('falls back to the base offset when neither the cell nor its next column is pinned to the right (T1335911)', () => {
