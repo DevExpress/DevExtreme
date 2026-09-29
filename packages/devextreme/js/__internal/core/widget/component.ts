@@ -83,7 +83,7 @@ export class Component<
   TProperties extends ComponentProperties<TComponent> = ComponentProperties<TComponent>,
   // @ts-expect-error dxClass inheritance issue
 > extends (Class.inherit({}) as new() => {}) implements PublicComponent<TProperties> {
-  _deprecatedOptions!: Partial<TProperties>;
+  _deprecatedOptions!: Record<string, DeprecatedOptionInfo>;
 
   _options!: Options;
 
@@ -120,7 +120,7 @@ export class Component<
     this._deprecatedOptions = {};
   }
 
-  _getDeprecatedOptions(): Partial<TProperties> {
+  _getDeprecatedOptions(): Record<string, DeprecatedOptionInfo> {
     return this._deprecatedOptions;
   }
 
@@ -201,7 +201,7 @@ export class Component<
       this._options.onStartChange(() => this.beginUpdate());
       this._options.onEndChange(() => this.endUpdate());
       this._options.addRules(this._defaultOptionsRules());
-      this._options.validateOptions((opts: TProperties) => this._validateOptions(opts));
+      this._options.validateOptions((opts) => this._validateOptions(opts));
 
       if (options && options.onInitializing) {
         // @ts-expect-error
@@ -552,7 +552,7 @@ export class Component<
     this.endUpdate();
   }
 
-  _validateOptions(options: TProperties): TProperties {
+  _validateOptions(options: Record<string, unknown>): Record<string, unknown> {
     return options;
   }
 }

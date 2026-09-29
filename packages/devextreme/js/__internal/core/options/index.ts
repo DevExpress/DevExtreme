@@ -48,10 +48,9 @@ export class Options {
     options: object,
     defaultOptions: object,
     optionsByReference: Record<string, unknown>,
-    deprecatedOptions: Record<string, unknown>,
+    deprecatedOptions: Record<string, DeprecatedOptionInfo>,
   ) {
     this._default = defaultOptions;
-    // @ts-expect-error unknown values are not assignable to DeprecatedOptionInfo
     this._deprecated = deprecatedOptions;
 
     this._deprecatedNames = [];
@@ -195,8 +194,7 @@ export class Options {
     this._optionManager.onChanged(callBack);
   }
 
-  validateOptions<TOptions extends object>(callBack: (options: TOptions) => TOptions): void {
-    // @ts-expect-error (options: TOptions) => TOptions is not assignable to ValidateOptionsCallback
+  validateOptions(callBack: ValidateOptionsCallback): void {
     this._optionManager.onValidateOptions(callBack);
   }
 
