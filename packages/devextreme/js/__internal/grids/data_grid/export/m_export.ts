@@ -546,7 +546,7 @@ export class ExportController extends dataGridCore.ViewController {
 
       for (let j = 0; j < columns.length; j++) {
         const column = columns[j];
-        isCommand ||= ['detailExpand', 'buttons'].includes(column.type);
+        isCommand ||= ['detailExpand', 'buttons'].includes(column.type ?? '');
 
         if (this._needColumnExporting(column)) {
           if (item.values) {
@@ -661,7 +661,10 @@ export class ExportController extends dataGridCore.ViewController {
       initialColumnWidthsByColumnIndex = {};
       const columnsLastRowVisibleColumns = this._columnsController.getVisibleColumns(this._columnsController.getRowCount(), true);
       for (let i = 0; i < columnsLastRowVisibleColumns.length; i++) {
-        initialColumnWidthsByColumnIndex[columnsLastRowVisibleColumns[i].index] = columnWidths[i];
+        const columnIndex = columnsLastRowVisibleColumns[i].index;
+        if (isDefined(columnIndex)) {
+          initialColumnWidthsByColumnIndex[columnIndex] = columnWidths[i];
+        }
       }
     }
 
