@@ -274,7 +274,7 @@ const OVERRIDES = {
       // cardView's parameters
       '.dx-cardview-column-chooser-list', '.dx-cardview-column-chooser-plain'],
     // the delete-message confirmation popup lives outside .dx-chat
-    chat: ['.dx-chat', '.dx-messagelist-context-menu-content', '.dx-chat-confirmation-popup-wrapper'],
+    chat: ['.dx-chat', '.dx-messagelist-context-menu-content', '.dx-chat-confirmation-popup-wrapper', '.dx-chat-suggestions'],
     // the add-image dialog is a popup (and it renders a fileUploader of its own)
     'html-editor': ['.dx-htmleditor', '.dx-aidialog', '.dx-htmleditor-add-image-popup'],
     // the field and operation drop-downs are overlays
