@@ -6,8 +6,8 @@ import {
 } from '@ts/core/component_registrator_callbacks';
 import config from '@ts/core/config';
 import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
+import { Locker } from '@ts/core/utils/locker';
 import Callbacks from '@ts/core/utils/m_callbacks';
-import { Locker } from '@ts/core/utils/m_locker';
 import { isPlainObject } from '@ts/core/utils/m_type';
 import Draggable from '@ts/m_draggable';
 import Editor from '@ts/ui/editor/editor';
