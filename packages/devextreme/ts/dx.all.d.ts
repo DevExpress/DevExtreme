@@ -7450,12 +7450,12 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class FunctionTemplate {
-    render(template: {
-      container: unknown;
-      model?: object;
-      transclude?: boolean;
-    }): DxElement;
+  export class FunctionTemplate<
+    TOptions extends TemplateRenderOptions = TemplateRenderOptions
+  > {
+    constructor(render: (options: TOptions) => unknown);
+
+    render(options: TOptions): InternalElement<HTMLElement>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7501,12 +7501,16 @@ declare module DevExpress.core {
     | Array<unknown>
     | null
     | undefined;
-
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Template {
     constructor(options?: dxTemplateOptions);
+    constructor(element: UserDefinedElement | InternalElement<Element>);
+
+    render(options: TemplateRenderOptions): InternalElement<HTMLElement>;
+
+    source(): InternalElement<HTMLElement>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7514,6 +7518,17 @@ declare module DevExpress.core {
   export class TemplateManager {
     anonymousTemplateName: string;
     addDefaultTemplates(templates: Record<string, unknown>): void;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface TemplateRenderOptions {
+    container?: unknown;
+    model?: unknown;
+    index?: number;
+    transclude?: boolean;
+    renovated?: boolean;
+    onRendered?: () => void;
   }
   /**
    * [descr:UserDefinedElement]

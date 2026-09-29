@@ -153,7 +153,7 @@ export class CompactAppointmentsHelper {
   }
 
   private renderTemplate(template, items: AppointmentTooltipItem[], isCompact) {
-    return new (FunctionTemplate as any)((options) => template.render({
+    return new FunctionTemplate((options) => template.render({
       model: {
         appointmentCount: items.length,
         items: items.map((item) => item.appointment),
@@ -170,7 +170,7 @@ export class CompactAppointmentsHelper {
 
   private initButtonTemplate(count, isCompact) {
     this.instance._templateManager.addDefaultTemplates({
-      appointmentCollector: new (FunctionTemplate as any)((options) => this.createButtonTemplate(count, $(options.container), isCompact)),
+      appointmentCollector: new FunctionTemplate((options: { container: Element }) => this.createButtonTemplate(count, $(options.container), isCompact)),
     });
   }
 

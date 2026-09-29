@@ -78,8 +78,7 @@ const renderTemplateContent = (
     ...{ renovated: props.renovated },
     ...!props.transclude ? { model: data } : {},
     ...!props.transclude && Number.isFinite(index) ? { index } : {},
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  }) as any as (dxElementWrapper | DxElement | undefined);
+  }) as (dxElementWrapper | DxElement | undefined);
 
   if (rendered === undefined) {
     return [];

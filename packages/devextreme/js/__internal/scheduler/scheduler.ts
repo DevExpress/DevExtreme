@@ -1759,16 +1759,16 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     workSpaceOptions.onCellContextMenu = this.createSchedulerAction('onCellContextMenu');
     workSpaceOptions.skippedDays = this.getViewOption('hiddenWeekDays') as number[];
     workSpaceOptions.dataCellTemplate = workSpaceOptions.dataCellTemplate
-      ? this._getTemplate(workSpaceOptions.dataCellTemplate) as unknown as TemplateBase
+      ? this._getTemplate(workSpaceOptions.dataCellTemplate) as TemplateBase
       : null;
     workSpaceOptions.timeCellTemplate = workSpaceOptions.timeCellTemplate
-      ? this._getTemplate(workSpaceOptions.timeCellTemplate) as unknown as TemplateBase
+      ? this._getTemplate(workSpaceOptions.timeCellTemplate) as TemplateBase
       : null;
     workSpaceOptions.resourceCellTemplate = workSpaceOptions.resourceCellTemplate
-      ? this._getTemplate(workSpaceOptions.resourceCellTemplate) as unknown as TemplateBase
+      ? this._getTemplate(workSpaceOptions.resourceCellTemplate) as TemplateBase
       : null;
     workSpaceOptions.dateCellTemplate = workSpaceOptions.dateCellTemplate
-      ? this._getTemplate(workSpaceOptions.dateCellTemplate) as unknown as TemplateBase
+      ? this._getTemplate(workSpaceOptions.dateCellTemplate) as TemplateBase
       : null;
 
     return workSpaceOptions;
