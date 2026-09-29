@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DxTreeMapModule, DxSelectBoxModule } from 'devextreme-angular';
 import { PopulationByAge, Service } from './app.service';
@@ -8,7 +8,6 @@ if (!/localhost/.test(document.location.host)) {
 }
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'demo-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
@@ -23,6 +22,8 @@ export class AppComponent {
   getPopulationsByAge: PopulationByAge[];
 
   algorithms = ['sliceAndDice', 'squarified', 'strip', 'custom'];
+
+  algorithm = this.algorithms[2];
 
   constructor(service: Service) {
     this.getPopulationsByAge = service.getPopulationsByAge();

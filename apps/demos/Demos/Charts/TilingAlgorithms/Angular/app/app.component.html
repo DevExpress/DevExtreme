@@ -2,9 +2,7 @@
   id="treemap"
   [dataSource]="getPopulationsByAge"
   title="Population by Age Groups"
-  [layoutAlgorithm]="
-    selectbox.value === 'custom' ? customAlgorithm : selectbox.value
-  "
+  [layoutAlgorithm]="algorithm === 'custom' ? customAlgorithm : algorithm"
 >
   <dxo-tree-map-colorizer
     type="discrete"
@@ -22,11 +20,10 @@
   <div class="option">
     <span>Tiling Algorithm</span>
     <dx-select-box
-      #selectbox
       [items]="algorithms"
       [inputAttr]="{ 'aria-label': 'Algorithm' }"
       [width]="200"
-      [value]="algorithms[2]"
+      [(value)]="algorithm"
     >
     </dx-select-box>
   </div>
