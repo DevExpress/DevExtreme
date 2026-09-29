@@ -272,13 +272,11 @@ type ViewTypes = {
 export type ModuleType<T extends ModuleItem> = (new (...args: any[]) => T);
 
 type ControllersExtender = {
-  [P in keyof Controllers]: ((Base: ModuleType<Controllers[P]>) => ModuleType<Controllers[P]>)
-  | Record<string, any>;
+  [P in keyof Controllers]: (Base: ModuleType<any>) => ModuleType<Controllers[P]>;
 };
 
 type ViewsExtender = {
-  [P in keyof Views]: ((Base: ModuleType<Views[P]>) => ModuleType<Views[P]>)
-  | Record<string, any>;
+  [P in keyof Views]: (Base: ModuleType<any>) => ModuleType<Views[P]>;
 };
 
 export interface Module {

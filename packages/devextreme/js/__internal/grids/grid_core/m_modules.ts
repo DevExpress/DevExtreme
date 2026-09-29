@@ -389,13 +389,8 @@ function getExtendedTypes(
   Object.entries(moduleExtenders)
     .forEach(([name, extender]) => {
       const currentType = types[name];
-      if (currentType) {
-        if (isFunction(extender)) {
-          extendTypes[name] = extender(currentType);
-        } else {
-          const classType = currentType as { inherit: (type: unknown) => unknown };
-          extendTypes[name] = classType.inherit(extender);
-        }
+      if (currentType && isFunction(extender)) {
+        extendTypes[name] = extender(currentType);
       }
     });
   return extendTypes;
