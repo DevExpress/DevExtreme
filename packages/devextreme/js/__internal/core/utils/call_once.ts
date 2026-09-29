@@ -1,18 +1,15 @@
-const callOnce = function (handler) {
-  let result;
+export function callOnce<TThis, TArgs extends unknown[], TResult>(
+  handler: (this: TThis, ...args: TArgs) => TResult,
+): (this: TThis, ...args: TArgs) => TResult {
+  let wrappedHandler = function evaluate(this: TThis, ...args: TArgs): TResult {
+    const result = handler.apply(this, args);
 
-  let wrappedHandler = function () {
-    result = handler.apply(this, arguments);
-    wrappedHandler = function () {
-      return result;
-    };
+    wrappedHandler = (): TResult => result;
+
     return result;
   };
 
-  return function () {
-    // @ts-expect-error Iarguments not assignable to []
-    return wrappedHandler.apply(this, arguments);
+  return function callWrappedHandler(this: TThis, ...args: TArgs): TResult {
+    return wrappedHandler.apply(this, args);
   };
-};
-
-export { callOnce };
+}
