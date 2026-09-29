@@ -423,6 +423,18 @@ export default [
             'spellcheck/spell-checker': 'off',
         },
     },
+    // Rules for the vector map parsers (script fragments concatenated by the vectormap executor)
+    {
+        files: ['js/viz/vector_map.utils/*.ts'],
+        languageOptions: {
+            parser: tsParser,
+            sourceType: 'script',
+            parserOptions: {
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/viz/vector_map.utils`,
+            },
+        },
+    },
     // Rules for js/__internal folder
     {
         files: ['js/__internal/**/*'],
