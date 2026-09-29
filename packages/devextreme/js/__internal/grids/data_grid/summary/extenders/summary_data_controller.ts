@@ -175,7 +175,7 @@ export const summaryDataControllerExtender = (
   // The map is built once per _processItems cycle (via options) and discarded after.
   private _buildColumnLookupMap(): ColumnMap {
     const columnMap: ColumnMap = new Map();
-    const allColumns = this._columnsController.getColumns();
+    const allColumns = this._columnsController.getColumns() as Column[];
 
     for (const column of allColumns) {
       const copiedColumn = { ...column };
@@ -187,7 +187,7 @@ export const summaryDataControllerExtender = (
         column.name,
         column.dataField,
         column.caption,
-      ].filter((key) => (
+      ].filter((key): key is string | number => (
         key !== undefined && !columnMap.has(key)
       ));
 
@@ -271,7 +271,7 @@ export const summaryDataControllerExtender = (
     return this._calculateSummaryCells({
       summaryItems: summaryTotalItems,
       aggregates: totalAggregates,
-      visibleColumns: columnsController.getVisibleColumns(),
+      visibleColumns: columnsController.getVisibleColumns() as Column[],
       calculateTargetColumnIndex: (_, column): number => (
         isDataColumn(column) ? (column?.index ?? -1) : -1
       ),
