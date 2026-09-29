@@ -21,6 +21,7 @@ import {
   isDefined, isFunction, isPlainObject, isString,
 } from '@js/core/utils/type';
 import type { DxEvent, EventInfo, InitializedEventInfo } from '@js/events';
+import type { DeprecatedOptionInfo } from '@ts/core/options/index';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 const getEventName = (
@@ -228,7 +229,7 @@ export class Component<
 
   _logDeprecatedOptionWarning(
     option: string,
-    info: { since: string; message: string; alias?: string },
+    info: DeprecatedOptionInfo,
   ): void {
     const message = info.message || `Use the '${info.alias}' option instead`;
     errors.log('W0001', this.NAME, option, info.since, message);

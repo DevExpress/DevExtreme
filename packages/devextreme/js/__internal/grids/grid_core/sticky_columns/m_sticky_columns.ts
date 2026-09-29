@@ -219,7 +219,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
         const visibleColumnIndex = rtlEnabled ? columns.length - columnIndex - 1 : columnIndex;
         const offset = getStickyOffset(columnsController, columns, widths, columnIndex, offsets);
 
-        if (offsets) {
+        if (offsets && column.index !== undefined) {
           offsets[column.index] = offset;
         }
 

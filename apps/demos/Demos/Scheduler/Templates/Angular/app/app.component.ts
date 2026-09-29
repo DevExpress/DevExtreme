@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ViewChild,
   enableProdMode,
@@ -46,6 +47,8 @@ export class AppComponent {
   private formatDate = formatDate;
 
   private service = inject(Service);
+
+  private changeDetectorRef = inject(ChangeDetectorRef);
 
   data: Data[] = this.service.getData();
 
@@ -152,6 +155,8 @@ export class AppComponent {
       form.updateData('director', movie.director);
       this.updateEndDate(movie);
     }
+
+    this.changeDetectorRef.detectChanges();
   };
 
   onCustomEditorContentReady = (e: DxSelectBoxTypes.ContentReadyEvent): void => {
