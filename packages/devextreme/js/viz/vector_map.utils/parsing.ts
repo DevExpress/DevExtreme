@@ -1,170 +1,264 @@
-/* eslint-disable no-undef, no-var, one-var, import/no-commonjs*/
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-var */
+/* eslint-disable object-shorthand */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable prefer-template */
+/* eslint-disable vars-on-top */
 
-function noop() { }
-
-function eigen(x) { return x; }
-
-function isFunction(target) {
-    return typeof target === 'function';
+interface ParserStream {
+  pos: () => number;
+  skip: (count: number) => ParserStream;
+  ui8arr: (length: number) => number[];
+  ui8: () => number;
+  ui16LE: () => number;
+  ui32LE: () => number;
+  ui32BE: () => number;
+  f64LE: () => number;
 }
 
-function wrapSource(source) {
-    var buffer = wrapBuffer(source);
-    var position = 0;
-    var stream = {
-        pos: function() {
-            return position;
-        },
+type GeoJsonCoordinates = number[] | GeoJsonCoordinates[];
 
-        skip: function(count) {
-            position += count;
-            return stream;
-        },
+type CoordinatesRounder = (values: GeoJsonCoordinates) => GeoJsonCoordinates;
 
-        ui8arr: function(length) {
-            var i = 0;
-            var list = [];
-            list.length = length;
-            for(; i < length; ++i) {
-                list[i] = stream.ui8();
-            }
-            return list;
-        },
+interface GeoJsonFeature {
+  type: 'Feature';
+  geometry: {
+    type: string | null;
+    coordinates: GeoJsonCoordinates;
+  };
+  properties: DataBaseFileRecord | null;
+}
 
-        ui8: function() {
-            var val = ui8(buffer, position);
-            position += 1;
-            return val;
-        },
+interface GeoJsonFeatureCollection {
+  type: 'FeatureCollection';
+  features: GeoJsonFeature[];
+  // eslint-disable-next-line spellcheck/spell-checker
+  bbox?: number[];
+}
 
-        ui16LE: function() {
-            var val = ui16LE(buffer, position);
-            position += 2;
-            return val;
-        },
+interface ParseSourceFiles {
+  [key: string]: ArrayBuffer | null | undefined;
+  substr?: undefined;
+}
 
-        ui32LE: function() {
-            var val = ui32LE(buffer, position);
-            position += 4;
-            return val;
-        },
+type ParseSource = string | ParseSourceFiles;
 
-        ui32BE: function() {
-            var val = ui32BE(buffer, position);
-            position += 4;
-            return val;
-        },
+interface ParseParameters {
+  precision?: number;
+}
 
-        f64LE: function() {
-            var val = f64LE(buffer, position);
-            position += 8;
-            return val;
-        }
+type ParseCallback = (result: GeoJsonFeatureCollection | null, errors: string[] | null) => void;
+
+type ParseActionDone = (error: string | null, data: ArrayBuffer | null) => void;
+
+type ParseAction = (done: ParseActionDone) => void;
+
+declare const exports: { parse: typeof parse };
+
+function noop(): void { }
+
+function eigen<T>(x: T): T { return x; }
+
+function isFunction(target: unknown): target is Function {
+  return typeof target === 'function';
+}
+
+function wrapSource(source: ArrayBuffer): ParserStream {
+  var buffer = wrapBuffer(source);
+  var position = 0;
+  var stream: ParserStream = {
+    pos: function() {
+      return position;
+    },
+
+    skip: function(count) {
+      position += count;
+      return stream;
+    },
+
+    ui8arr: function(length) {
+      var i = 0;
+      var list: number[] = [];
+      list.length = length;
+      for (; i < length; ++i) {
+        list[i] = stream.ui8();
+      }
+      return list;
+    },
+
+    ui8: function() {
+      var val = ui8(buffer, position);
+      position += 1;
+      return val;
+    },
+
+    ui16LE: function() {
+      var val = ui16LE(buffer, position);
+      position += 2;
+      return val;
+    },
+
+    ui32LE: function() {
+      var val = ui32LE(buffer, position);
+      position += 4;
+      return val;
+    },
+
+    ui32BE: function() {
+      var val = ui32BE(buffer, position);
+      position += 4;
+      return val;
+    },
+
+    f64LE: function() {
+      var val = f64LE(buffer, position);
+      position += 8;
+      return val;
+    },
+  };
+  return stream;
+}
+
+function parseCore(
+  source: (ArrayBuffer | null)[],
+  roundCoordinates: CoordinatesRounder,
+  errors: string[],
+): GeoJsonFeatureCollection | null {
+  // @ts-expect-error parseShape returns undefined when the shp header cannot be read
+  var shapeData: Partial<ShapeParseResult> = source[0]
+    ? parseShape(wrapSource(source[0]), errors)
+    : {};
+  var dataBaseFileData: Partial<DataBaseFileParseResult> = source[1]
+    ? parseDBF(wrapSource(source[1]), errors)
+    : {};
+  var features = buildFeatures(
+    shapeData.shapes || [],
+    dataBaseFileData.records || [],
+    roundCoordinates,
+  );
+  var result: GeoJsonFeatureCollection | null;
+
+  if (features.length) {
+    result = {
+      type: 'FeatureCollection',
+      features: features,
     };
-    return stream;
+    // eslint-disable-next-line dot-notation, @typescript-eslint/dot-notation
+    result['bbox'] = shapeData.bBox;
+  } else {
+    result = null;
+  }
+  return result;
 }
 
-function parseCore(source, roundCoordinates, errors) {
-    var shapeData = source[0] ? parseShape(wrapSource(source[0]), errors) : {};
-    var dataBaseFileData = source[1] ? parseDBF(wrapSource(source[1]), errors) : {};
-    var features = buildFeatures(shapeData.shapes || [], dataBaseFileData.records || [], roundCoordinates);
-    var result;
-
-    if(features.length) {
-        result = {
-            type: 'FeatureCollection',
-            features: features
-        };
-        result['bbox'] = shapeData.bBox;
-    } else {
-        result = null;
-    }
-    return result;
+function buildFeatures(
+  shapeData: ShapeRecord[],
+  dataBaseFileData: DataBaseFileRecord[],
+  roundCoordinates: CoordinatesRounder,
+): GeoJsonFeature[] {
+  var features: GeoJsonFeature[] = [];
+  var i: number;
+  // eslint-disable-next-line no-multi-assign
+  var ii = features.length = Math.max(shapeData.length, dataBaseFileData.length);
+  var shape: Partial<ShapeRecord>;
+  for (i = 0; i < ii; ++i) {
+    shape = shapeData[i] || {};
+    features[i] = {
+      type: 'Feature',
+      geometry: {
+        type: shape.geoJSON_type || null,
+        coordinates: shape.coordinates ? roundCoordinates(shape.coordinates) : [],
+      },
+      properties: dataBaseFileData[i] || null,
+    };
+  }
+  return features;
 }
 
-function buildFeatures(shapeData, dataBaseFileData, roundCoordinates) {
-    var features = [];
-    var i;
-    var ii = features.length = Math.max(shapeData.length, dataBaseFileData.length);
-    var shape;
-    for(i = 0; i < ii; ++i) {
-        shape = shapeData[i] || {};
-        features[i] = {
-            type: 'Feature',
-            geometry: {
-                type: shape.geoJSON_type || null,
-                coordinates: shape.coordinates ? roundCoordinates(shape.coordinates) : []
-            },
-            properties: dataBaseFileData[i] || null
-        };
-    }
-    return features;
+function createCoordinatesRounder(precision: number): CoordinatesRounder {
+  var factor = Number('1E' + precision);
+  function round(x: number): number {
+    return Math.round(x * factor) / factor;
+  }
+  function process(values: GeoJsonCoordinates): GeoJsonCoordinates {
+    // @ts-expect-error the nesting depth is only known at run time
+    return values.map(values[0].length ? process : round);
+  }
+  return process;
 }
 
-function createCoordinatesRounder(precision) {
-    var factor = Number('1E' + precision);
-    function round(x) {
-        return Math.round(x * factor) / factor;
-    }
-    function process(values) {
-        return values.map(values[0].length ? process : round);
-    }
-    return process;
+function buildParseArgs(source: ParseSource): ParseAction[] {
+  source = source || {};
+  return ['shp', 'dbf'].map(function(key) {
+    return function(done: ParseActionDone) {
+      if (source.substr) {
+        key = '.' + key;
+        sendRequest(
+          source + (source.substr(-key.length).toLowerCase() === key ? '' : key),
+          function(e, response) {
+            done(e, response);
+          },
+        );
+      } else {
+        done(null, source[key] || null);
+      }
+    };
+  });
 }
 
-function buildParseArgs(source) {
-    source = source || {};
-    return ['shp', 'dbf'].map(function(key) {
-        return function(done) {
-            if(source.substr) {
-                key = '.' + key;
-                sendRequest(source + (source.substr(-key.length).toLowerCase() === key ? '' : key), function(e, response) {
-                    done(e, response);
-                });
-            } else {
-                done(null, source[key] || null);
-            }
-        };
+function parse(
+  source: ParseSource,
+  parameters?: ParseParameters | ParseCallback,
+  callback?: ParseCallback,
+): GeoJsonFeatureCollection | null | undefined {
+  var result: GeoJsonFeatureCollection | null | undefined;
+  when(buildParseArgs(source), function(errorArray, dataArray) {
+    callback = (isFunction(parameters) && parameters) || (isFunction(callback) && callback) || noop;
+    parameters = (!isFunction(parameters) && parameters) || {};
+    var errors: string[] = [];
+    errorArray.forEach(function(e) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      e && errors.push(e);
     });
-}
-
-function parse(source, parameters, callback) {
-    var result;
-    when(buildParseArgs(source), function(errorArray, dataArray) {
-        callback = (isFunction(parameters) && parameters) || (isFunction(callback) && callback) || noop;
-        parameters = (!isFunction(parameters) && parameters) || {};
-        var errors = [];
-        errorArray.forEach(function(e) {
-            e && errors.push(e);
-        });
-        result = parseCore(dataArray, parameters.precision >= 0 ? createCoordinatesRounder(parameters.precision) : eigen, errors);
-        // NOTE: The order of the error and the result is reversed because of backward compatibility
-        callback(result, errors.length ? errors : null);
-    });
-    return result;
+    result = parseCore(
+      dataArray,
+      // @ts-expect-error an undefined precision compares as false and selects eigen
+      parameters.precision >= 0 ? createCoordinatesRounder(parameters.precision) : eigen,
+      errors,
+    );
+    // NOTE: The order of the error and the result is reversed because of backward compatibility
+    callback(result, errors.length ? errors : null);
+  });
+  return result;
 }
 
 exports.parse = parse;
 
-function when(actions, callback) {
-    var errorArray = [];
-    var dataArray = [];
-    var counter = 1;
-    var lock = true;
-    actions.forEach(function(action, i) {
-        ++counter;
-        action(function(e, data) {
-            errorArray[i] = e;
-            dataArray[i] = data;
-            massDone();
-        });
+function when(
+  actions: ParseAction[],
+  callback: (errorArray: (string | null)[], dataArray: (ArrayBuffer | null)[]) => void,
+): void {
+  var errorArray: (string | null)[] = [];
+  var dataArray: (ArrayBuffer | null)[] = [];
+  var counter = 1;
+  var lock = true;
+  actions.forEach(function(action, i) {
+    ++counter;
+    action(function(e, data) {
+      errorArray[i] = e;
+      dataArray[i] = data;
+      massDone();
     });
-    lock = false;
-    massDone();
-    function massDone() {
-        --counter;
-        if(counter === 0 && !lock) {
-            callback(errorArray, dataArray);
-        }
+  });
+  lock = false;
+  massDone();
+  function massDone(): void {
+    --counter;
+    if (counter === 0 && !lock) {
+      callback(errorArray, dataArray);
     }
+  }
 }
