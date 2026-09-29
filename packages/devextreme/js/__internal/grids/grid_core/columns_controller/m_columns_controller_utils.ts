@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import type { DataType, HorizontalAlignment } from '@js/common';
 import type { Format } from '@js/common/core/localization';
 import numberLocalization from '@js/common/core/localization/number';
@@ -37,8 +38,8 @@ import {
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 import type {
-  Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionGetter, ColumnOptionSetter,
-  ColumnsChanges, ColumnUserState, DropLocationNames, ValueSerializers,
+  BandColumnsCache, Column, ColumnChangeType, ColumnIdentifier, ColumnIndex, ColumnOptionGetter,
+  ColumnOptionSetter, ColumnsChanges, ColumnUserState, DropLocationNames, ValueSerializers,
 } from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
@@ -191,23 +192,27 @@ export const getParentBandColumns = function (
   return result;
 };
 
-export const getChildrenByBandColumn = function (columnIndex, columnChildrenByIndex, recursive) {
-  let result: any = [];
-  const children = columnChildrenByIndex[columnIndex];
+export const getChildrenByBandColumn = (
+  columnIndex: number | undefined,
+  columnChildrenByIndex: BandColumnsCache['columnChildrenByIndex'],
+  recursive: boolean,
+): Column[] => {
+  const children: Column[] = [];
+  const directChildren = isDefined(columnIndex) ? columnChildrenByIndex[columnIndex] : undefined;
 
-  if (children) {
-    for (let i = 0; i < children.length; i++) {
-      const column = children[i];
-      if (!isDefined(column.groupIndex) || column.showWhenGrouped) {
-        result.push(column);
-        if (recursive && column.isBand) {
-          result = result.concat(getChildrenByBandColumn(column.index, columnChildrenByIndex, recursive));
-        }
-      }
+  directChildren?.forEach((column) => {
+    if (isDefined(column.groupIndex) && !column.showWhenGrouped) {
+      return;
     }
-  }
 
-  return result;
+    children.push(column);
+
+    if (recursive && column.isBand) {
+      children.push(...getChildrenByBandColumn(column.index, columnChildrenByIndex, recursive));
+    }
+  });
+
+  return children;
 };
 
 export const getColumnByIndexes = function (that: ColumnsController, columnIndexes) {
@@ -280,30 +285,34 @@ export const calculateColspan = function (that: ColumnsController, columnID) {
   return colspan;
 };
 
-export const processBandColumns = function (that: ColumnsController, columns, bandColumnsCache) {
-  let rowspan;
-
-  for (let i = 0; i < columns.length; i++) {
-    const column = columns[i];
-
-    if (column.visible || column.command) {
-      if (column.isBand) {
-        column.colspan = column.colspan || calculateColspan(that, column.index);
-      }
-
-      if (!column.isBand || !column.colspan) {
-        rowspan = that.getRowCount();
-
-        if (!column.command && (!isDefined(column.groupIndex) || column.showWhenGrouped)) {
-          rowspan -= getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex).length;
-        }
-
-        if (rowspan > 1) {
-          column.rowspan = rowspan;
-        }
-      }
+export const processBandColumns = (
+  that: ColumnsController,
+  columns: Column[],
+  bandColumnsCache: BandColumnsCache,
+): void => {
+  columns.forEach((column) => {
+    if (!column.visible && !column.command) {
+      return;
     }
-  }
+
+    if (column.isBand && !column.colspan) {
+      column.colspan = calculateColspan(that, column.index);
+    }
+
+    if (column.isBand && column.colspan) {
+      return;
+    }
+
+    let rowspan: number = that.getRowCount();
+
+    if (!column.command && (!isDefined(column.groupIndex) || column.showWhenGrouped)) {
+      rowspan -= getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex).length;
+    }
+
+    if (rowspan > 1) {
+      column.rowspan = rowspan;
+    }
+  });
 };
 
 export const getValueDataType = (value: unknown): Exclude<DataType, 'datetime'> | undefined => {
@@ -854,23 +863,29 @@ export const defaultSetCellValue = function (data, value) {
   data[path[dotCount]] = value;
 };
 
-export const getDataColumns = function (columns, rowIndex?, bandColumnID?) {
-  const result: any = [];
+export const getDataColumns = (
+  visibleColumnsByRow: Column[][],
+  rowIndex = 0,
+  bandColumnId?: number,
+): Column[] => {
+  const dataColumns: Column[] = [];
 
-  rowIndex = rowIndex || 0;
-  columns[rowIndex] && each(columns[rowIndex], (_, column) => {
-    if (column.ownerBand === bandColumnID || column.type === GROUP_COMMAND_COLUMN_NAME) {
-      if (!column.isBand || !column.colspan) {
-        if (!column.command || rowIndex < 1) {
-          result.push(column);
-        }
-      } else {
-        result.push.apply(result, getDataColumns(columns, rowIndex + 1, column.index));
-      }
+  visibleColumnsByRow[rowIndex]?.forEach((column) => {
+    if (column.ownerBand !== bandColumnId && column.type !== GROUP_COMMAND_COLUMN_NAME) {
+      return;
+    }
+
+    if (column.isBand && column.colspan) {
+      dataColumns.push(...getDataColumns(visibleColumnsByRow, rowIndex + 1, column.index));
+      return;
+    }
+
+    if (!column.command || rowIndex < 1) {
+      dataColumns.push(column);
     }
   });
 
-  return result;
+  return dataColumns;
 };
 
 export const getRowCount = function (that: ColumnsController) {
@@ -918,78 +933,111 @@ export const processExpandColumns = (
   columns.splice(targetIndex, deleteCount, ...expandColumnsByType);
 };
 
-export const digitsCount = function (number) {
-  let i;
+export const digitsCount = (number: number): number => {
+  let count = 0;
+  let rest = number;
 
-  for (i = 0; number > 1; i++) {
-    number /= 10;
+  while (rest > 1) {
+    rest /= 10;
+    count += 1;
   }
 
-  return i;
+  return count;
 };
 
-export const numberToString = function (number, digitsCount) {
-  let str = number ? number.toString() : '0';
+export const numberToString = (number: number, length: number): string => {
+  const str = number.toString();
+  const leadingZeros = '0'.repeat(Math.max(length - str.length, 0));
 
-  while (str.length < digitsCount) {
-    str = `0${str}`;
+  return `${leadingZeros}${str}`;
+};
+
+export const getCommandColumnIndex = (
+  column: Column,
+  commandColumns: Column[],
+  asExpandColumn = false,
+): number => {
+  if (!column.type && !column.command) {
+    return -1;
   }
 
-  return str;
+  const columnType = asExpandColumn ? 'expand' : column.type;
+
+  return commandColumns.reduce(
+    (foundIndex, commandColumn, index) => (
+      commandColumn.type === columnType || commandColumn.command === column.command
+        ? index
+        : foundIndex
+    ),
+    -1,
+  );
 };
 
-export const mergeColumns = (that: ColumnsController, columns, commandColumns, needToExtend?) => {
-  let column;
-  let commandColumnIndex;
-  let result = columns.slice().map((column) => extend({}, column));
+export const mergeColumns = (
+  that: ColumnsController,
+  columns: Column[],
+  commandColumns: Column[],
+  needToExtend?: boolean,
+): Column[] => {
   const isColumnFixing = that._isColumnFixing();
-  let defaultCommandColumns = commandColumns.slice().map((column) => extend({ fixed: isColumnFixing }, column));
-  const getCommandColumnIndex = (column) => commandColumns.reduce((result, commandColumn, index) => {
-    const columnType = needToExtend && column.type === GROUP_COMMAND_COLUMN_NAME ? 'expand' : column.type;
-    return commandColumn.type === columnType || commandColumn.command === column.command ? index : result;
-  }, -1);
-  const callbackFilter = (commandColumn) => commandColumn.command !== commandColumns[commandColumnIndex].command;
+  let defaultCommandColumns = commandColumns.map(
+    (commandColumn) => extend({ fixed: isColumnFixing }, commandColumn) as Column,
+  );
 
-  for (let i = 0; i < columns.length; i++) {
-    column = columns[i];
+  const mergedColumns = columns.map((column): Column => {
+    const isGroupExpandColumn = column.type === GROUP_COMMAND_COLUMN_NAME;
+    const commandColumnIndex = getCommandColumnIndex(
+      column,
+      commandColumns,
+      needToExtend && isGroupExpandColumn,
+    );
 
-    commandColumnIndex = column && (column.type || column.command) ? getCommandColumnIndex(column) : -1;
-    if (commandColumnIndex >= 0) {
-      if (needToExtend) {
-        result[i] = extend(
-          { fixed: isColumnFixing },
-          commandColumns[commandColumnIndex],
-          column,
-          {
-            calculateCellValue: commandColumns[commandColumnIndex].calculateCellValue,
-            cssClass: [
-              commandColumns[commandColumnIndex].cssClass ?? '',
-              column.cssClass ?? '',
-            ].join(' ').trim(),
-          },
-        );
-        if (column.type !== GROUP_COMMAND_COLUMN_NAME) {
-          defaultCommandColumns = defaultCommandColumns.filter(callbackFilter);
-        }
-      } else {
-        const columnOptions = {
-          visibleIndex: column.visibleIndex,
-          index: column.index,
-          headerId: column.headerId,
-          allowFixing: column.groupIndex === 0,
-          allowReordering: column.groupIndex === 0,
-          groupIndex: column.groupIndex,
-        };
-        result[i] = extend({}, column, commandColumns[commandColumnIndex], column.type === GROUP_COMMAND_COLUMN_NAME && columnOptions);
-      }
+    if (commandColumnIndex < 0) {
+      return extend({}, column) as Column;
     }
-  }
+
+    const commandColumn = commandColumns[commandColumnIndex];
+
+    if (needToExtend) {
+      if (!isGroupExpandColumn) {
+        defaultCommandColumns = defaultCommandColumns.filter(
+          ({ command }) => command !== commandColumn.command,
+        );
+      }
+
+      return extend(
+        { fixed: isColumnFixing },
+        commandColumn,
+        column,
+        {
+          calculateCellValue: commandColumn.calculateCellValue,
+          cssClass: [commandColumn.cssClass ?? '', column.cssClass ?? ''].join(' ').trim(),
+        },
+      ) as Column;
+    }
+
+    const columnOptions = {
+      visibleIndex: column.visibleIndex,
+      index: column.index,
+      headerId: column.headerId,
+      allowFixing: column.groupIndex === 0,
+      allowReordering: column.groupIndex === 0,
+      groupIndex: column.groupIndex,
+    };
+
+    return extend(
+      {},
+      column,
+      commandColumn,
+      isGroupExpandColumn && columnOptions,
+    ) as Column;
+  });
 
   if (columns.length && needToExtend && defaultCommandColumns.length) {
-    result = result.concat(defaultCommandColumns);
+    return mergedColumns.concat(defaultCommandColumns);
   }
 
-  return result;
+  return mergedColumns;
 };
 
 export const isColumnFixed = (that: ColumnsController, column) => {
