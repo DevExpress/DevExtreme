@@ -1,5 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  ChangeDetectorRef, Component, enableProdMode, provideZoneChangeDetection,
+} from '@angular/core';
 import { DxHtmlEditorModule, DxPopupModule } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { Service } from './app.service';
@@ -27,10 +29,13 @@ export class AppComponent {
   toolbarButtonOptions: DxButtonTypes.Properties = {
     text: 'Show markup',
     stylingMode: 'text',
-    onClick: () => { this.popupVisible = true; },
+    onClick: () => {
+      this.popupVisible = true;
+      this.changeDetectorRef.detectChanges();
+    },
   };
 
-  constructor(service: Service) {
+  constructor(service: Service, private changeDetectorRef: ChangeDetectorRef) {
     this.editorValue = service.getMarkup();
   }
 }

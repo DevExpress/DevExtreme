@@ -596,6 +596,51 @@ test('Column headers should have the correct scroll position after refreshing th
   },
 }));
 
+[false, true].forEach((useNative) => {
+  test(`Horizontal scroll position should not change during vertical scrolling when RTL and virtual scrolling are enabled (useNative = ${useNative}) (T1335898)`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    const initialScrollLeft = await dataGrid.getScrollLeft();
+
+    await dataGrid.scrollTo(t, { x: initialScrollLeft - 150 });
+
+    await t
+      .expect(dataGrid.getScrollLeft())
+      .eql(initialScrollLeft - 150);
+
+    // act
+    await dataGrid.scrollTo(t, { y: 1500 });
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.apiPageIndex())
+      .eql(1)
+      .expect(dataGrid.getDataRow(30).element.exists)
+      .ok()
+      .expect(dataGrid.getScrollLeft())
+      .eql(initialScrollLeft - 150);
+  }).before(async () => createWidget('dxDataGrid', {
+    width: 700,
+    height: 400,
+    rtlEnabled: true,
+    dataSource: getData(1000, 10),
+    columnWidth: 200,
+    scrolling: {
+      mode: 'virtual',
+      useNative,
+      // @ts-expect-error private option
+      updateTimeout: 0,
+    },
+  }));
+});
+
 test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

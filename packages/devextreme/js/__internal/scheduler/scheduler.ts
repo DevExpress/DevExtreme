@@ -56,7 +56,7 @@ import type {
   SelectionEndEvent,
 } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
-import type { Options } from '@ts/core/options/m_index';
+import type { Options } from '@ts/core/options/index';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { tabbable } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
