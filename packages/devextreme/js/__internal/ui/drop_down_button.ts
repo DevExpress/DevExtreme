@@ -49,10 +49,10 @@ const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
 export interface DropDownButtonProperties extends Properties {
-  buttonGroupOptions?: ButtonGroupItem;
+  buttonGroupOptions?: ButtonGroupProperties;
   grouped?: boolean;
   groupTemplate?: string;
-  _cached_buttonGroupOptions?: ButtonGroupItem;
+  _cached_buttonGroupOptions?: ButtonGroupProperties;
   _cached_dropDownOptions?: PopupProperties;
 }
 

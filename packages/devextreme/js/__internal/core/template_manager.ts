@@ -12,7 +12,6 @@ import {
   validateTemplateSource,
 } from '@js/core/utils/template_manager';
 import { isDefined, isFunction, isRenderer } from '@js/core/utils/type';
-import { EmptyTemplate } from '@ts/core/templates/empty_template';
 import { FunctionTemplate } from '@ts/core/templates/function_template';
 
 const TEXT_NODE = 3;
@@ -243,7 +242,7 @@ export class TemplateManager {
       );
 
       if (!isDefined(templateSourceResult)) {
-        return new EmptyTemplate();
+        return $();
       }
 
       let dispose = false;
